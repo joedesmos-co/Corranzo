@@ -1,0 +1,442 @@
+{
+  "id": "36-minecraft-p1-m1-sustained-overlapping-voices",
+  "source": "minecraft",
+  "sourceLabel": "Minecraft",
+  "sourcePdf": "/Users/ryland/Downloads/beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+  "page": 1,
+  "measure": 1,
+  "category": "sustained overlapping voices",
+  "manuallyVerified": true,
+  "expectedVoiceEventStructure": {
+    "noteCount": 14,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        5
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 3,
+    "chordToneCount": 7,
+    "stemDirections": {
+      "up": 6,
+      "down": 2,
+      "unspecified": 6
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 17,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 244,
+        "balancedWithImplicitGaps": false
+      },
+      "5": {
+        "writtenQuarters": 20,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 244,
+        "balancedWithImplicitGaps": false
+      }
+    }
+  },
+  "detectedNotesRestsSymbols": {
+    "vectorNoteCount": 6,
+    "vectorRestGlyphCount": 0,
+    "beamStemCandidateCounts": {
+      "noteheads": 6,
+      "stems": 6,
+      "beams": 0
+    }
+  },
+  "rawVoiceStemCandidates": [
+    {
+      "eventIndex": 0,
+      "startDivision": 0,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-0-201-395",
+          "midi": 50,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.6836,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.6836
+        }
+      ]
+    },
+    {
+      "eventIndex": 1,
+      "startDivision": 0,
+      "splitCandidate": false,
+      "reasons": [
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-1-201-319",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.98
+        },
+        {
+          "noteheadId": "n-1-2-201-327",
+          "midi": 67,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.98
+        }
+      ]
+    },
+    {
+      "eventIndex": 2,
+      "startDivision": 4,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-3-280-323",
+          "midi": 69,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.98
+        }
+      ]
+    },
+    {
+      "eventIndex": 3,
+      "startDivision": 8,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-4-328-383",
+          "midi": 55,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.98
+        }
+      ]
+    },
+    {
+      "eventIndex": 4,
+      "startDivision": 8,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-1-5-328-336",
+          "midi": 64,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.98,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.98
+        }
+      ]
+    }
+  ],
+  "generatedEventGraph": {
+    "units": [
+      {
+        "eventIndex": 0,
+        "startDivision": 0,
+        "durationDivisions": 12,
+        "voice": 2,
+        "staff": "bass",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          50
+        ]
+      },
+      {
+        "eventIndex": 1,
+        "startDivision": 0,
+        "durationDivisions": 12,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": "up",
+        "emitEventBeams": true,
+        "noteMidis": [
+          71,
+          67
+        ]
+      },
+      {
+        "eventIndex": 2,
+        "startDivision": 4,
+        "durationDivisions": 4,
+        "voice": 3,
+        "staff": "treble",
+        "stemDirection": "up",
+        "emitEventBeams": true,
+        "noteMidis": [
+          69
+        ]
+      },
+      {
+        "eventIndex": 3,
+        "startDivision": 8,
+        "durationDivisions": 8,
+        "voice": 4,
+        "staff": "bass",
+        "stemDirection": "down",
+        "emitEventBeams": true,
+        "noteMidis": [
+          55
+        ]
+      },
+      {
+        "eventIndex": 4,
+        "startDivision": 8,
+        "durationDivisions": 8,
+        "voice": 3,
+        "staff": "treble",
+        "stemDirection": "up",
+        "emitEventBeams": true,
+        "noteMidis": [
+          64
+        ]
+      }
+    ],
+    "diagnostics": {
+      "eventCount": 5,
+      "serializationUnitCount": 5,
+      "splitEventCount": 0,
+      "splitNoteCount": 0,
+      "overlappingVoiceEventCount": 3,
+      "polyphonicStaffs": [
+        "bass",
+        "treble"
+      ],
+      "rejectedReasons": {
+        "no-strong-stem-ownership": 1
+      },
+      "changedPitchCount": 0,
+      "changedOnsetCount": 0,
+      "changedDurationCount": 0,
+      "changedNoteCount": 0
+    }
+  },
+  "generatedBefore": {
+    "noteCount": 6,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1,
+        3
+      ],
+      "2": [
+        2,
+        4
+      ]
+    },
+    "sameStaffPolyphony": true,
+    "chordColumnCount": 1,
+    "chordToneCount": 2,
+    "stemDirections": {
+      "up": 4,
+      "down": 1,
+      "unspecified": 1
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "3": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "4": {
+        "writtenQuarters": 2,
+        "implicitGapQuarters": 2,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "generatedAfter": {
+    "noteCount": 6,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1,
+        3
+      ],
+      "2": [
+        2,
+        4
+      ]
+    },
+    "sameStaffPolyphony": true,
+    "chordColumnCount": 1,
+    "chordToneCount": 2,
+    "stemDirections": {
+      "up": 4,
+      "down": 1,
+      "unspecified": 1
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "3": {
+        "writtenQuarters": 3,
+        "implicitGapQuarters": 1,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "4": {
+        "writtenQuarters": 2,
+        "implicitGapQuarters": 2,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "emittedMusicXml": "<measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><note><pitch><step>B</step><octave>4</octave></pitch><duration>12</duration><voice>1</voice><type>half</type><dot/><staff>1</staff><stem>up</stem></note><note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>12</duration><voice>1</voice><type>half</type><dot/><staff>1</staff><stem>up</stem></note><backup><duration>12</duration></backup><note><pitch><step>D</step><octave>3</octave></pitch><duration>12</duration><voice>2</voice><type>half</type><dot/><staff>2</staff></note><backup><duration>8</duration></backup><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>3</voice><type>quarter</type><staff>1</staff><stem>up</stem></note><note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>3</voice><type>half</type><staff>1</staff><stem>up</stem></note><backup><duration>8</duration></backup><note><pitch><step>G</step><octave>3</octave></pitch><duration>8</duration><voice>4</voice><type>half</type><staff>2</staff><stem>down</stem></note></measure>",
+  "renderedResult": {
+    "beforeStemCount": 5,
+    "afterStemCount": 5,
+    "visibleImprovement": false
+  },
+  "playbackEventOrder": {
+    "before": [
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 50
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 71
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 1,
+        "durationQuarters": 1,
+        "midi": 69
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 2,
+        "midi": 55
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 2,
+        "midi": 64
+      }
+    ],
+    "after": [
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 50
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 67
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 0,
+        "durationQuarters": 3,
+        "midi": 71
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 1,
+        "durationQuarters": 1,
+        "midi": 69
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 2,
+        "midi": 55
+      },
+      {
+        "measureNumber": 1,
+        "quarterTime": 2,
+        "durationQuarters": 2,
+        "midi": 64
+      }
+    ],
+    "unchanged": true
+  },
+  "failureLayerBefore": "none/control",
+  "failureLayerAfter": "1 false voice assignment introduced",
+  "correctBefore": true,
+  "correctAfter": false,
+  "artifacts": {
+    "sourceCrop": "tmp/musical-structure-sprint-1/source-crops/36-minecraft-p1-m1-sustained-overlapping-voices.png",
+    "candidateOverlay": "tmp/musical-structure-sprint-1/candidate-overlays/36-minecraft-p1-m1-sustained-overlapping-voices.png",
+    "musicXmlSnippet": "tmp/musical-structure-sprint-1/musicxml-snippets/36-minecraft-p1-m1-sustained-overlapping-voices.musicxml",
+    "renderedBefore": "tmp/musical-structure-sprint-1/rendered-before/36-minecraft-p1-m1-sustained-overlapping-voices.png",
+    "renderedAfter": "tmp/musical-structure-sprint-1/rendered-after/36-minecraft-p1-m1-sustained-overlapping-voices.png",
+    "gallery": "tmp/musical-structure-sprint-1/gallery/36-minecraft-p1-m1-sustained-overlapping-voices.png"
+  }
+}

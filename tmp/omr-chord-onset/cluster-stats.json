@@ -1,0 +1,63 @@
+{
+  "byCode": {
+    "onset-mismatch": 233,
+    "missing-note": 65,
+    "extra-note": 91,
+    "incorrect-chord": 140
+  },
+  "byCluster": {
+    "onset-resnap-or-gap-pack": 53,
+    "note-dropped-during-packing": 103,
+    "nearby-voices-incorrectly-merged": 128,
+    "same-chord-split-across-onsets": 37,
+    "complete-chord-wrong-onset": 180,
+    "remaining-pitch-masquerading-as-chord": 25,
+    "evaluator-alignment-artifact": 3
+  },
+  "byFixture": {
+    "piano-beginner-single-vector": 7,
+    "piano-grand-voices-vector": 13,
+    "piano-rhythm-tuplets-vector": 33,
+    "piano-articulation-scan": 111,
+    "piano-dense-advanced-vector": 237,
+    "guitar-tab-sparse-vector": 33,
+    "guitar-standard-chords-vector": 33,
+    "guitar-paired-chords-vector": 62
+  },
+  "byFixtureCluster": {
+    "piano-beginner-single-vector::onset-resnap-or-gap-pack": 5,
+    "piano-beginner-single-vector::note-dropped-during-packing": 1,
+    "piano-beginner-single-vector::nearby-voices-incorrectly-merged": 1,
+    "piano-grand-voices-vector::onset-resnap-or-gap-pack": 2,
+    "piano-grand-voices-vector::same-chord-split-across-onsets": 11,
+    "piano-rhythm-tuplets-vector::onset-resnap-or-gap-pack": 17,
+    "piano-rhythm-tuplets-vector::complete-chord-wrong-onset": 8,
+    "piano-rhythm-tuplets-vector::note-dropped-during-packing": 4,
+    "piano-rhythm-tuplets-vector::nearby-voices-incorrectly-merged": 4,
+    "piano-articulation-scan::note-dropped-during-packing": 24,
+    "piano-articulation-scan::same-chord-split-across-onsets": 10,
+    "piano-articulation-scan::onset-resnap-or-gap-pack": 4,
+    "piano-articulation-scan::complete-chord-wrong-onset": 17,
+    "piano-articulation-scan::nearby-voices-incorrectly-merged": 55,
+    "piano-articulation-scan::remaining-pitch-masquerading-as-chord": 1,
+    "piano-dense-advanced-vector::complete-chord-wrong-onset": 131,
+    "piano-dense-advanced-vector::note-dropped-during-packing": 35,
+    "piano-dense-advanced-vector::nearby-voices-incorrectly-merged": 33,
+    "piano-dense-advanced-vector::remaining-pitch-masquerading-as-chord": 23,
+    "piano-dense-advanced-vector::same-chord-split-across-onsets": 15,
+    "guitar-tab-sparse-vector::onset-resnap-or-gap-pack": 23,
+    "guitar-tab-sparse-vector::nearby-voices-incorrectly-merged": 10,
+    "guitar-standard-chords-vector::complete-chord-wrong-onset": 20,
+    "guitar-standard-chords-vector::onset-resnap-or-gap-pack": 1,
+    "guitar-standard-chords-vector::remaining-pitch-masquerading-as-chord": 1,
+    "guitar-standard-chords-vector::note-dropped-during-packing": 4,
+    "guitar-standard-chords-vector::nearby-voices-incorrectly-merged": 4,
+    "guitar-standard-chords-vector::evaluator-alignment-artifact": 3,
+    "guitar-paired-chords-vector::complete-chord-wrong-onset": 4,
+    "guitar-paired-chords-vector::onset-resnap-or-gap-pack": 1,
+    "guitar-paired-chords-vector::nearby-voices-incorrectly-merged": 21,
+    "guitar-paired-chords-vector::same-chord-split-across-onsets": 1,
+    "guitar-paired-chords-vector::note-dropped-during-packing": 35
+  },
+  "total": 529
+}

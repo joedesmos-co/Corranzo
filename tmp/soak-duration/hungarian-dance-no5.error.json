@@ -1,0 +1,10 @@
+{
+  "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+  "stack": [
+    "Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+    "    at runPdfOmrPipelineBody (file:///Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:797:19)",
+    "    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+    "    at async runPdfOmrPipeline (file:///Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:242:12)",
+    "    at async file:///Users/ryland/Documents/scoreflow/[eval1]:33:20"
+  ]
+}

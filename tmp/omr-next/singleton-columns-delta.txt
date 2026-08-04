@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: omr-next-ledger-filter (3404694)
+after:  omr-next-singleton-columns (3404694)
+ACCEPT: YES
+
+Scoreboard deltas (mean)
+- overall: +0.0078  (0.6490 → 0.6569)
+- pitch: +0.0247  (0.6322 → 0.6568)
+- rhythm: +0.0079  (0.6745 → 0.6825)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: 0  (0.8536 → 0.8536)
+- measureStructure: +0.0222  (0.6939 → 0.7161)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+- guitar-techniques-paired-vector: rhythm +0.0714
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

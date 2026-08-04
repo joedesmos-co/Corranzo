@@ -1,0 +1,104 @@
+{
+  "id": "guitar-techniques-tab",
+  "title": "Guitar Techniques Paired Vector (notation + TAB)",
+  "sourceEdition": "Corranzo omr-fixtures — paired standard notation + six-line TAB",
+  "role": "real-guitar-tab-paired",
+  "pdf": "guitar-techniques-paired-vector.pdf",
+  "pdfTypeDeclared": "vector",
+  "pageCount": 1,
+  "pageSources": [
+    {
+      "page": 1,
+      "kind": "vector-unusual-fonts",
+      "textChars": 337,
+      "imageOps": 0,
+      "pathOps": 242,
+      "fonts": [
+        "g_d4_f3",
+        "g_d4_f1",
+        "g_d4_f5",
+        "g_d4_f7"
+      ]
+    }
+  ],
+  "scanQuality": null,
+  "pathGlyphDensity": 2.6666666666666665,
+  "omrCompletion": "Completed",
+  "pipeline": {
+    "omrFailed": false,
+    "noteCount": 32,
+    "measureCount": 12,
+    "overallConfidence": 0.9212041574822826,
+    "uncertainMeasures": 0,
+    "systems": 4,
+    "hist": {
+      "types": {
+        "quarter": 24,
+        "half": 4,
+        "whole": 4
+      },
+      "dots": 0,
+      "beams": 0,
+      "ties": 0,
+      "rests": 0,
+      "measures": 12,
+      "tabLines": 0,
+      "stringAttrs": 32,
+      "fretAttrs": 32
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 0,
+      "beam-short-lost-to-longer": 11,
+      "beam-confidence-rejected": 32
+    },
+    "tabDiagnostics": null,
+    "falseTabRouting": false,
+    "matchesGuitarFalseTabRouting": false,
+    "matchesRasterLowConfidenceRejection": false,
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "matchesFalseBeamSparseBeginner": false,
+    "provenanceRootCause": "no-clear-shared-rca",
+    "provenanceExported": false,
+    "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Guitar Techniques Paired Vector (notation + TAB)</work-title></work><part-list><score-part id=\"P1\"><part-name>Guitar</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem><notations><technical><string>1</string><fret>5</fret></technical></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>1</string><fret>7</fret></technical></notations></note><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem><notations><technical><string>1</string><fret>8</fret></technical></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>1</string><fret>7</fret></technical></notations></note></measure><measure number=\"2\"><note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration>"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-0c22c9eb-fb50-4b11-9da1-2fcc28135bc5",
+    "duration": 22,
+    "playableEventCount": 32,
+    "loopToggled": true,
+    "audible": {
+      "playClicked": true,
+      "audioContextState": "running",
+      "energySamples": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "startedPlayingFlag": false,
+      "pauseWorked": true,
+      "restartWorked": false,
+      "notes": []
+    },
+    "instrumentSwitch": {
+      "to": "Piano",
+      "stillPlayable": true
+    },
+    "navigation": {
+      "libraryRoundTrip": true,
+      "restoreSameScore": true,
+      "staleOverlay": false,
+      "reloadRestored": true
+    }
+  },
+  "elapsedMs": 9421
+}

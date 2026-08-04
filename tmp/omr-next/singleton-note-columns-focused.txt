@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: singleton-vector-note-columns
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 3404694
+createdAt: 2026-07-30T23:01:28.999Z
+fixtures: 2/2 ok
+
+Scoreboard (mean across fixtures)
+- overall: 70.4%
+- pitch: 74.6%
+- rhythm: 95.8%
+- sustain: 50.0%
+- articulation: 100.0%
+- measureStructure: 72.5%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- missing-note [pitch] ×39 across 1 fixtures
+- incorrect-chord [measure-structure] ×31 across 1 fixtures
+- extra-note [pitch] ×26 across 1 fixtures
+- duration-mismatch [rhythm] ×8 across 1 fixtures
+- incorrect-pitch [pitch] ×7 across 1 fixtures
+- onset-mismatch [rhythm] ×5 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- split-measure [measure-structure] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×2 across 2 fixtures
+
+Per-fixture summary
+- guitar-paired-chords-vector: overall=69.4% R=92% P=49% S=100% A=100% M=45% I=0%
+  worst measures: #6(split-measure|missing-note|missing-note), #1(extra-note|extra-note|extra-note), #7(split-measure|missing-note|missing-note)
+- guitar-techniques-paired-vector: overall=71.4% R=100% P=100% S=0% A=100% M=100% I=0%
+  worst measures: #4(missing-tie), #5(missing-tie), #1(tempo-mismatch)

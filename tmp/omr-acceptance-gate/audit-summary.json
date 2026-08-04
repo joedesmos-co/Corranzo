@@ -1,0 +1,3476 @@
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-brahms-lullaby/piano-brahms-lullaby.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-brahms-lullaby/piano-brahms-lullaby.pdf',
+  at: 1785290662987
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 66, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 66, systems: 2 }
+[omr-trace] phase=page-1 ms=103 end { systems: 2, measures: 13, notes: 66 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=8 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 13 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 53, measureCount: 13 }
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 8 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=8 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 8,
+  totalPages: 8,
+  cacheKey: 'url:/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf',
+  at: 1785290663237
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=8
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=8
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 252,
+  systems: 5,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 252, systems: 5 }
+[omr-trace] phase=page-1 ms=208 end { systems: 5, measures: 15, notes: 252 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=8
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=8
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 389,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-2:after-analyze { notes: 389, systems: 6 }
+[omr-trace] phase=page-2 ms=233 end { systems: 6, measures: 18, notes: 389 }
+[omr-trace] phase=page-3 start
+[omr-trace] pipeline:page-3:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=8
+[omr-debug] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-3:owned-render-buffer {
+  label: 'pipeline:page-3:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=8
+[omr-debug] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 3,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 398,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-3:after-analyze { notes: 398, systems: 6 }
+[omr-trace] phase=page-3 ms=262 end { systems: 6, measures: 16, notes: 398 }
+[omr-trace] phase=page-4 start
+[omr-trace] pipeline:page-4:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=8
+[omr-debug] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-4:owned-render-buffer {
+  label: 'pipeline:page-4:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=8
+[omr-debug] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 4,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 311,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-4:after-analyze { notes: 311, systems: 6 }
+[omr-trace] phase=page-4 ms=246 end { systems: 6, measures: 15, notes: 311 }
+[omr-trace] phase=page-5 start
+[omr-trace] pipeline:page-5:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=8
+[omr-debug] pipeline:page-5:after-pdf-render {
+  label: 'pipeline:page-5:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-5:owned-render-buffer {
+  label: 'pipeline:page-5:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-5:after-preprocess {
+  label: 'pipeline:page-5:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=8
+[omr-debug] pipeline:page-5:before-analyze {
+  label: 'pipeline:page-5:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 5,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-5 {
+  label: 'processOmrPage:done:page-5',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 348,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-5:after-analyze { notes: 348, systems: 6 }
+[omr-trace] phase=page-5 ms=239 end { systems: 6, measures: 18, notes: 348 }
+[omr-trace] phase=page-6 start
+[omr-trace] pipeline:page-6:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=6 totalPages=8
+[omr-debug] pipeline:page-6:after-pdf-render {
+  label: 'pipeline:page-6:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-6:owned-render-buffer {
+  label: 'pipeline:page-6:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=6 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-6:after-preprocess {
+  label: 'pipeline:page-6:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=6 totalPages=8
+[omr-debug] pipeline:page-6:before-analyze {
+  label: 'pipeline:page-6:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 6,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-6 {
+  label: 'processOmrPage:done:page-6',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 465,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-6:after-analyze { notes: 465, systems: 6 }
+[omr-trace] phase=page-6 ms=245 end { systems: 6, measures: 18, notes: 465 }
+[omr-trace] phase=page-7 start
+[omr-trace] pipeline:page-7:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=7 totalPages=8
+[omr-debug] pipeline:page-7:after-pdf-render {
+  label: 'pipeline:page-7:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-7:owned-render-buffer {
+  label: 'pipeline:page-7:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=7 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-7:after-preprocess {
+  label: 'pipeline:page-7:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=7 totalPages=8
+[omr-debug] pipeline:page-7:before-analyze {
+  label: 'pipeline:page-7:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 7,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-7 {
+  label: 'processOmrPage:done:page-7',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 441,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-7:after-analyze { notes: 441, systems: 6 }
+[omr-trace] phase=page-7 ms=244 end { systems: 6, measures: 18, notes: 441 }
+[omr-trace] phase=page-8 start
+[omr-trace] pipeline:page-8:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=8 totalPages=8
+[omr-debug] pipeline:page-8:after-pdf-render {
+  label: 'pipeline:page-8:after-pdf-render',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-8:owned-render-buffer {
+  label: 'pipeline:page-8:owned-render-buffer',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=8 totalPages=8
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-8:after-preprocess {
+  label: 'pipeline:page-8:after-preprocess',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=8 totalPages=8
+[omr-debug] pipeline:page-8:before-analyze {
+  label: 'pipeline:page-8:before-analyze',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  page: 8,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-8 {
+  label: 'processOmrPage:done:page-8',
+  width: 1000,
+  height: 1415,
+  length: 5660000,
+  bufferByteLength: 5660000,
+  detached: false,
+  probe: 255
+} {
+  notes: 204,
+  systems: 3,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-8:after-analyze { notes: 204, systems: 3 }
+[omr-trace] phase=page-8 ms=145 end { systems: 3, measures: 7, notes: 204 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=80 end
+[omr-trace] phase=post-process start
+[omr-trace] pipeline:opening-lead-note-merge {
+  appliedMeasures: 1,
+  minStackNotes: 3,
+  samples: [
+    {
+      measureNumber: 57,
+      fromDivision: 0,
+      toDivision: 1,
+      stackNoteCount: 3
+    }
+  ]
+}
+[omr-trace] pipeline:phantom-column-correction {
+  appliedMeasures: 3,
+  minStackNotes: 4,
+  samples: [
+    {
+      measureNumber: 25,
+      phantomStarts: [Array],
+      stackShifts: [Array],
+      droppedPhantomStarts: [],
+      pairs: [Array]
+    },
+    {
+      measureNumber: 29,
+      phantomStarts: [Array],
+      stackShifts: [Array],
+      droppedPhantomStarts: [],
+      pairs: [Array]
+    },
+    {
+      measureNumber: 89,
+      phantomStarts: [Array],
+      stackShifts: [Array],
+      droppedPhantomStarts: [],
+      pairs: [Array]
+    }
+  ]
+}
+[omr-trace] pipeline:terminal-same-clef-chord-quarter-correction {
+  appliedMeasures: 4,
+  appliedEvents: 4,
+  samples: [
+    {
+      measureNumber: 29,
+      startDivision: 12,
+      clef: 'treble',
+      noteCount: 2,
+      durationDivisions: 4
+    },
+    {
+      measureNumber: 33,
+      startDivision: 12,
+      clef: 'treble',
+      noteCount: 3,
+      durationDivisions: 4
+    },
+    {
+      measureNumber: 45,
+      startDivision: 12,
+      clef: 'treble',
+      noteCount: 3,
+      durationDivisions: 4
+    },
+    {
+      measureNumber: 89,
+      startDivision: 12,
+      clef: 'treble',
+      noteCount: 2,
+      durationDivisions: 4
+    }
+  ]
+}
+[omr-trace] phase=post-process ms=3 end { measureCount: 125 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=6 end
+[omr-trace] pipeline:measure-playback-report {
+  firstBadMeasure: 1,
+  flagged: [
+    1, 3,  4,  5,
+    8, 9, 10, 14
+  ]
+}
+[omr-trace] pipeline:success { noteCount: 2808, measureCount: 125 }
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf',
+  at: 1785290665277
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} {
+  applied: [ 'contrast', 'background-cleanup', 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0.5744726881681027 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} { applied: [ 'contrast', 'background-cleanup', 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} { notes: 101, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 101, systems: 2 }
+[omr-trace] phase=page-1 ms=400 end { systems: 2, measures: 5, notes: 101 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=2 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 5 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 49, measureCount: 5 }
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf',
+  at: 1785290665693
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 32,
+  systems: 4,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 32, systems: 4 }
+[omr-trace] phase=page-1 ms=80 end { systems: 4, measures: 12, notes: 32 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=4 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 12 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 32, measureCount: 12 }
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Downloads/iris-out-piano-arragement.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:/Users/ryland/Downloads/iris-out-piano-arragement.pdf',
+  at: 1785290665819
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 472,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 472, systems: 6 }
+[omr-trace] phase=page-1 ms=196 end { systems: 6, measures: 24, notes: 472 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 595,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-2:after-analyze { notes: 595, systems: 6 }
+[omr-trace] phase=page-2 ms=167 end { systems: 6, measures: 28, notes: 595 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=33 end
+[omr-trace] phase=post-process start
+[omr-trace] pipeline:opening-lead-note-merge {
+  appliedMeasures: 1,
+  minStackNotes: 3,
+  samples: [
+    {
+      measureNumber: 11,
+      fromDivision: 0,
+      toDivision: 1,
+      stackNoteCount: 3
+    }
+  ]
+}
+[omr-trace] phase=post-process ms=1 end { measureCount: 52 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=2 end
+[omr-trace] pipeline:measure-playback-report {
+  firstBadMeasure: 2,
+  flagged: [
+    2, 3, 4,  6,
+    7, 8, 9, 12
+  ]
+}
+[omr-trace] pipeline:success { noteCount: 1067, measureCount: 52 }
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-bach-chorale-bwv259/piano-bach-chorale-bwv259.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-bach-chorale-bwv259/piano-bach-chorale-bwv259.pdf',
+  at: 1785290666276
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 358, systems: 7 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 358, systems: 7 }
+[omr-trace] phase=page-1 ms=317 end { systems: 7, measures: 33, notes: 358 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=6 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 5 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=5 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 5,
+  totalPages: 5,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf',
+  at: 1785290666707
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=5
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=5
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=5
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 866, systems: 5 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 866, systems: 5 }
+[omr-trace] phase=page-1 ms=679 end { systems: 5, measures: 25, notes: 866 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=5
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=5
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=5
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1301, systems: 7 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 1301, systems: 7 }
+[omr-trace] phase=page-2 ms=817 end { systems: 7, measures: 35, notes: 1301 }
+[omr-trace] phase=page-3 start
+[omr-trace] pipeline:page-3:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=5
+[omr-debug] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-3:owned-render-buffer {
+  label: 'pipeline:page-3:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=5
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=5
+[omr-debug] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 3,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1048, systems: 6 }
+[omr-debug] pipeline:page-3:after-analyze { notes: 1048, systems: 6 }
+[omr-trace] phase=page-3 ms=752 end { systems: 6, measures: 30, notes: 1048 }
+[omr-trace] phase=page-4 start
+[omr-trace] pipeline:page-4:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=5
+[omr-debug] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-4:owned-render-buffer {
+  label: 'pipeline:page-4:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=5
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=5
+[omr-debug] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 4,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1144, systems: 7 }
+[omr-debug] pipeline:page-4:after-analyze { notes: 1144, systems: 7 }
+[omr-trace] phase=page-4 ms=902 end { systems: 7, measures: 31, notes: 1144 }
+[omr-trace] phase=page-5 start
+[omr-trace] pipeline:page-5:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=5
+[omr-debug] pipeline:page-5:after-pdf-render {
+  label: 'pipeline:page-5:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-5:owned-render-buffer {
+  label: 'pipeline:page-5:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=5
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-5:after-preprocess {
+  label: 'pipeline:page-5:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=5 totalPages=5
+[omr-debug] pipeline:page-5:before-analyze {
+  label: 'pipeline:page-5:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 5,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-5 {
+  label: 'processOmrPage:done:page-5',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 64, systems: 2 }
+[omr-debug] pipeline:page-5:after-analyze { notes: 64, systems: 2 }
+[omr-trace] phase=page-5 ms=69 end { systems: 2, measures: 9, notes: 64 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=50 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 3 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=3 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 3,
+  totalPages: 3,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf',
+  at: 1785290670075
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1049, systems: 6 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 1049, systems: 6 }
+[omr-trace] phase=page-1 ms=725 end { systems: 6, measures: 33, notes: 1049 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1348, systems: 7 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 1348, systems: 7 }
+[omr-trace] phase=page-2 ms=787 end { systems: 7, measures: 37, notes: 1348 }
+[omr-trace] phase=page-3 start
+[omr-trace] pipeline:page-3:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-3:owned-render-buffer {
+  label: 'pipeline:page-3:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 3,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 987, systems: 6 }
+[omr-debug] pipeline:page-3:after-analyze { notes: 987, systems: 6 }
+[omr-trace] phase=page-3 ms=711 end { systems: 6, measures: 34, notes: 987 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=38 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf',
+  at: 1785290672364
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 557, systems: 4 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 557, systems: 4 }
+[omr-trace] phase=page-1 ms=483 end { systems: 4, measures: 22, notes: 557 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=12 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/demo-minuet-in-g.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/demo-minuet-in-g.pdf',
+  at: 1785290672890
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 612, systems: 6 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 612, systems: 6 }
+[omr-trace] phase=page-1 ms=718 end { systems: 6, measures: 32, notes: 612 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=11 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 3 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=3 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 3,
+  totalPages: 3,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf',
+  at: 1785290673687
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=3
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 802, systems: 5 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 802, systems: 5 }
+[omr-trace] phase=page-1 ms=907 end { systems: 5, measures: 23, notes: 802 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=3
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 586, systems: 12 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 586, systems: 12 }
+[omr-trace] phase=page-2 ms=400 end { systems: 12, measures: 72, notes: 586 }
+[omr-trace] phase=page-3 start
+[omr-trace] pipeline:page-3:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-3:owned-render-buffer {
+  label: 'pipeline:page-3:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=3
+[omr-debug] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 3,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 889, systems: 5 }
+[omr-debug] pipeline:page-3:after-analyze { notes: 889, systems: 5 }
+[omr-trace] phase=page-3 ms=782 end { systems: 5, measures: 24, notes: 889 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=32 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/beethoven-pathetique-mutopia/beethoven-pathetique-mutopia.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 4 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=4 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 4,
+  totalPages: 4,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/beethoven-pathetique-mutopia/beethoven-pathetique-mutopia.pdf',
+  at: 1785290675915
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=4
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=4
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=4
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1350, systems: 6 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 1350, systems: 6 }
+[omr-trace] phase=page-1 ms=927 end { systems: 6, measures: 20, notes: 1350 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=4
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=4
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=4
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1358, systems: 7 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 1358, systems: 7 }
+[omr-trace] phase=page-2 ms=841 end { systems: 7, measures: 45, notes: 1358 }
+[omr-trace] phase=page-3 start
+[omr-trace] pipeline:page-3:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=4
+[omr-debug] pipeline:page-3:after-pdf-render {
+  label: 'pipeline:page-3:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-3:owned-render-buffer {
+  label: 'pipeline:page-3:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=4
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-3:after-preprocess {
+  label: 'pipeline:page-3:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=3 totalPages=4
+[omr-debug] pipeline:page-3:before-analyze {
+  label: 'pipeline:page-3:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 3,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-3 {
+  label: 'processOmrPage:done:page-3',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1328, systems: 7 }
+[omr-debug] pipeline:page-3:after-analyze { notes: 1328, systems: 7 }
+[omr-trace] phase=page-3 ms=724 end { systems: 7, measures: 41, notes: 1328 }
+[omr-trace] phase=page-4 start
+[omr-trace] pipeline:page-4:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=4
+[omr-debug] pipeline:page-4:after-pdf-render {
+  label: 'pipeline:page-4:after-pdf-render',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-4:owned-render-buffer {
+  label: 'pipeline:page-4:owned-render-buffer',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=4
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-4:after-preprocess {
+  label: 'pipeline:page-4:after-preprocess',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=4 totalPages=4
+[omr-debug] pipeline:page-4:before-analyze {
+  label: 'pipeline:page-4:before-analyze',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} {
+  page: 4,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-4 {
+  label: 'processOmrPage:done:page-4',
+  width: 1000,
+  height: 1414,
+  length: 5656000,
+  bufferByteLength: 5656000,
+  detached: false,
+  probe: 255
+} { notes: 1003, systems: 6 }
+[omr-debug] pipeline:page-4:after-analyze { notes: 1003, systems: 6 }
+[omr-trace] phase=page-4 ms=737 end { systems: 6, measures: 30, notes: 1003 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=77 end
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/twinkle-1880-loc/twinkle-1880-loc-music-p2.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/twinkle-1880-loc/twinkle-1880-loc-music-p2.pdf',
+  at: 1785290679289
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0.19270476963681768 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1271,
+  length: 5084000,
+  bufferByteLength: 5084000,
+  detached: false,
+  probe: 0
+} { notes: 667, systems: 10 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 667, systems: 10 }
+[omr-trace] phase=page-1 ms=273 end { systems: 10, measures: 54, notes: 667 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=8 end
+[
+  {
+    "id": "brahms-lullaby",
+    "role": "PASSING",
+    "outcome": "ACCEPTED_BY_PIPELINE",
+    "notes": 53,
+    "measures": 13,
+    "conf": 0.6587847751367615,
+    "npm": 4.076923076923077,
+    "uncertainRatio": 0.9230769230769231,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": false,
+    "reasons": [],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": null
+  },
+  {
+    "id": "evangelion",
+    "role": "PASSING",
+    "outcome": "ACCEPTED_BY_PIPELINE",
+    "notes": 2808,
+    "measures": 125,
+    "conf": 0.9090136450920546,
+    "npm": 22.464,
+    "uncertainRatio": 0,
+    "systemCoverage": 1,
+    "pagesWithSystems": 8,
+    "tooDifficult": false,
+    "reasons": [],
+    "layout": {
+      "inconsistent": false,
+      "spread": 3,
+      "warning": null
+    },
+    "failureCode": null
+  },
+  {
+    "id": "guitar-paired-scan",
+    "role": "PASSING",
+    "outcome": "ACCEPTED_BY_PIPELINE",
+    "notes": 49,
+    "measures": 5,
+    "conf": 0.638403042297826,
+    "npm": 9.8,
+    "uncertainRatio": 1,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": false,
+    "reasons": [],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": null
+  },
+  {
+    "id": "guitar-techniques-tab",
+    "role": "PASSING",
+    "outcome": "ACCEPTED_BY_PIPELINE",
+    "notes": 32,
+    "measures": 12,
+    "conf": 0.9212041574822826,
+    "npm": 2.6666666666666665,
+    "uncertainRatio": 0,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": false,
+    "reasons": [],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": null
+  },
+  {
+    "id": "iris-out",
+    "role": "PASSING",
+    "outcome": "ACCEPTED_BY_PIPELINE",
+    "notes": 1067,
+    "measures": 52,
+    "conf": 0.9033234100683157,
+    "npm": 20.51923076923077,
+    "uncertainRatio": 0,
+    "systemCoverage": 1,
+    "pagesWithSystems": 2,
+    "tooDifficult": false,
+    "reasons": [],
+    "layout": {
+      "inconsistent": false,
+      "spread": 0,
+      "warning": null
+    },
+    "failureCode": null
+  },
+  {
+    "id": "bach-chorale-bwv259",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 358,
+    "measures": 33,
+    "conf": 0.6414767103948311,
+    "npm": 10.848484848484848,
+    "uncertainRatio": 0.9090909090909091,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "turkish-march",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 4423,
+    "measures": 130,
+    "conf": 0.6523677817503,
+    "npm": 34.02307692307692,
+    "uncertainRatio": 0.9692307692307692,
+    "systemCoverage": 1,
+    "pagesWithSystems": 5,
+    "tooDifficult": true,
+    "reasons": [
+      "inconsistent-layout",
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": 5,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "fur-elise",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 3384,
+    "measures": 104,
+    "conf": 0.650210067068924,
+    "npm": 32.53846153846154,
+    "uncertainRatio": 0.9903846153846154,
+    "systemCoverage": 1,
+    "pagesWithSystems": 3,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": 1,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "handel-gavotte",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 557,
+    "measures": 22,
+    "conf": 0.6487235188189843,
+    "npm": 25.318181818181817,
+    "uncertainRatio": 0.9545454545454546,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "demo-minuet",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 612,
+    "measures": 32,
+    "conf": 0.6487377640156213,
+    "npm": 19.125,
+    "uncertainRatio": 1,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "chopin-mazurka",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 2277,
+    "measures": 119,
+    "conf": 0.6512828549635071,
+    "npm": 19.134453781512605,
+    "uncertainRatio": 0.957983193277311,
+    "systemCoverage": 1,
+    "pagesWithSystems": 3,
+    "tooDifficult": true,
+    "reasons": [
+      "inconsistent-layout",
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": 7,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "pathetique",
+    "role": "FALSE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 5039,
+    "measures": 136,
+    "conf": 0.6496361064638964,
+    "npm": 37.0514705882353,
+    "uncertainRatio": 1,
+    "systemCoverage": 1,
+    "pagesWithSystems": 4,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence",
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": 1,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  },
+  {
+    "id": "twinkle-1880-loc",
+    "role": "TRUE_REJECT",
+    "outcome": "REJECTED",
+    "notes": 667,
+    "measures": 54,
+    "conf": 0.6210687292760307,
+    "npm": 12.351851851851851,
+    "uncertainRatio": 0.6666666666666666,
+    "systemCoverage": 1,
+    "pagesWithSystems": 1,
+    "tooDifficult": true,
+    "reasons": [
+      "low-confidence"
+    ],
+    "layout": {
+      "inconsistent": false,
+      "spread": null,
+      "warning": null
+    },
+    "failureCode": "low-confidence"
+  }
+]

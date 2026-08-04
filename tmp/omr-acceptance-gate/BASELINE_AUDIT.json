@@ -1,0 +1,744 @@
+{
+  "generatedAt": "2026-07-29T02:04:39.572Z",
+  "firstFailingStage": "runPdfOmrPipelineBody → assessOmrDifficulty → hard reject after extraction",
+  "oldGateRules": {
+    "absoluteLowConfidence": 0.42,
+    "midConfidenceUncertain": "measureCount>=16 && uncertainRatio>0.6 && confidence<0.72 → LOW_CONFIDENCE → tooDifficult",
+    "midConfidenceDenseUncertain": "measureCount>=16 && notesPerMeasure>14 && uncertainRatio>0.5 → LOW_CONFIDENCE → tooDifficult",
+    "inconsistentLayout": "spread>4 && confidence<0.72 → INCONSISTENT_LAYOUT → tooDifficult when confidence<0.72",
+    "emptySparse": "MANY_EMPTY_PAGES + SPARSE_NOTES → tooDifficult"
+  },
+  "rows": [
+    {
+      "id": "brahms-lullaby",
+      "role": "PASSING",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-brahms-lullaby/piano-brahms-lullaby.pdf",
+      "elapsedMs": 262,
+      "pageCount": 1,
+      "outcome": "ACCEPTED_BY_PIPELINE",
+      "features": {
+        "noteCount": 53,
+        "measureCount": 13,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 2,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6587847751367615,
+        "uncertainMeasures": 12,
+        "notesPerMeasure": 4.076923076923077,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.9230769230769231,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6289230769230769,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [],
+        "tooDifficult": false,
+        "difficultyMessage": null,
+        "difficultyObject": {
+          "tooDifficult": false,
+          "reasons": [],
+          "notesPerMeasure": 5.076923076923077,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9230769230769231,
+          "message": null,
+          "confidence": 0.6587847751367615
+        }
+      },
+      "overallConfidence": 0.6587847751367615,
+      "noteCount": 53,
+      "measureCount": 13,
+      "uncertainMeasures": 12
+    },
+    {
+      "id": "evangelion",
+      "role": "PASSING",
+      "pdf": "/Users/ryland/Downloads/a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+      "elapsedMs": 2107,
+      "pageCount": 8,
+      "outcome": "ACCEPTED_BY_PIPELINE",
+      "features": {
+        "noteCount": 2808,
+        "measureCount": 125,
+        "rests": {
+          "detectedRestGlyphCount": 47,
+          "appliedRestEventCount": 16,
+          "skippedMixedRestCount": 31,
+          "skippedReasons": {
+            "overlaps-staff-notes": 31
+          }
+        },
+        "systems": 44,
+        "staves": null,
+        "pageCount": 8,
+        "pagesWithSystems": 8,
+        "overallConfidence": 0.9090136450920546,
+        "uncertainMeasures": 0,
+        "notesPerMeasure": 22.464,
+        "systemCoverage": 1,
+        "uncertainRatio": 0,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 3,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.864903289855071,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [],
+        "tooDifficult": false,
+        "difficultyMessage": null,
+        "difficultyObject": {
+          "tooDifficult": false,
+          "reasons": [],
+          "notesPerMeasure": 22.464,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "message": null,
+          "confidence": 0.9090136450920546
+        }
+      },
+      "overallConfidence": 0.9090136450920546,
+      "noteCount": 2808,
+      "measureCount": 125,
+      "uncertainMeasures": 0
+    },
+    {
+      "id": "guitar-paired-scan",
+      "role": "PASSING",
+      "pdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf",
+      "elapsedMs": 464,
+      "pageCount": 1,
+      "outcome": "ACCEPTED_BY_PIPELINE",
+      "features": {
+        "noteCount": 49,
+        "measureCount": 5,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 2,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.638403042297826,
+        "uncertainMeasures": 5,
+        "notesPerMeasure": 9.8,
+        "systemCoverage": 1,
+        "uncertainRatio": 1,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6175,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [],
+        "tooDifficult": false,
+        "difficultyMessage": null,
+        "difficultyObject": {
+          "tooDifficult": false,
+          "reasons": [],
+          "notesPerMeasure": 20.2,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "message": null,
+          "confidence": 0.638403042297826
+        }
+      },
+      "overallConfidence": 0.638403042297826,
+      "noteCount": 49,
+      "measureCount": 5,
+      "uncertainMeasures": 5
+    },
+    {
+      "id": "guitar-techniques-tab",
+      "role": "PASSING",
+      "pdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf",
+      "elapsedMs": 96,
+      "pageCount": 1,
+      "outcome": "ACCEPTED_BY_PIPELINE",
+      "features": {
+        "noteCount": 32,
+        "measureCount": 12,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 4,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.9212041574822826,
+        "uncertainMeasures": 0,
+        "notesPerMeasure": 2.6666666666666665,
+        "systemCoverage": 1,
+        "uncertainRatio": 0,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.8650000000000001,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [],
+        "tooDifficult": false,
+        "difficultyMessage": null,
+        "difficultyObject": {
+          "tooDifficult": false,
+          "reasons": [],
+          "notesPerMeasure": 2.6666666666666665,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "message": null,
+          "confidence": 0.9212041574822826
+        }
+      },
+      "overallConfidence": 0.9212041574822826,
+      "noteCount": 32,
+      "measureCount": 12,
+      "uncertainMeasures": 0
+    },
+    {
+      "id": "iris-out",
+      "role": "PASSING",
+      "pdf": "/Users/ryland/Downloads/iris-out-piano-arragement.pdf",
+      "elapsedMs": 468,
+      "pageCount": 2,
+      "outcome": "ACCEPTED_BY_PIPELINE",
+      "features": {
+        "noteCount": 1067,
+        "measureCount": 52,
+        "rests": {
+          "detectedRestGlyphCount": 32,
+          "appliedRestEventCount": 11,
+          "skippedMixedRestCount": 21,
+          "skippedReasons": {
+            "overlaps-staff-notes": 21
+          }
+        },
+        "systems": 12,
+        "staves": null,
+        "pageCount": 2,
+        "pagesWithSystems": 2,
+        "overallConfidence": 0.9033234100683157,
+        "uncertainMeasures": 0,
+        "notesPerMeasure": 20.51923076923077,
+        "systemCoverage": 1,
+        "uncertainRatio": 0,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 0,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.8649855769230773,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [],
+        "tooDifficult": false,
+        "difficultyMessage": null,
+        "difficultyObject": {
+          "tooDifficult": false,
+          "reasons": [],
+          "notesPerMeasure": 20.51923076923077,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "message": null,
+          "confidence": 0.9033234100683157
+        }
+      },
+      "overallConfidence": 0.9033234100683157,
+      "noteCount": 1067,
+      "measureCount": 52,
+      "uncertainMeasures": 0
+    },
+    {
+      "id": "bach-chorale-bwv259",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-bach-chorale-bwv259/piano-bach-chorale-bwv259.pdf",
+      "elapsedMs": 354,
+      "pageCount": 1,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 358,
+        "measureCount": 33,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 7,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6414767103948311,
+        "uncertainMeasures": 30,
+        "notesPerMeasure": 10.848484848484848,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.9090909090909091,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6327419354838709,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence"
+          ],
+          "notesPerMeasure": 10.848484848484848,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9090909090909091,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6414767103948311
+        }
+      },
+      "overallConfidence": 0.6414767103948311,
+      "noteCount": 358,
+      "measureCount": 33,
+      "uncertainMeasures": 30
+    },
+    {
+      "id": "turkish-march",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf",
+      "elapsedMs": 3386,
+      "pageCount": 5,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 4423,
+        "measureCount": 130,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 27,
+        "staves": null,
+        "pageCount": 5,
+        "pagesWithSystems": 5,
+        "overallConfidence": 0.6523677817503,
+        "uncertainMeasures": 126,
+        "notesPerMeasure": 34.02307692307692,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.9692307692307692,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 5,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6216511627906989,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "inconsistent-layout",
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "inconsistent-layout",
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 34.02307692307692,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9692307692307692,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6523677817503
+        }
+      },
+      "overallConfidence": 0.6523677817503,
+      "noteCount": 4423,
+      "measureCount": 130,
+      "uncertainMeasures": 126
+    },
+    {
+      "id": "fur-elise",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf",
+      "elapsedMs": 2356,
+      "pageCount": 3,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 3384,
+        "measureCount": 104,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 19,
+        "staves": null,
+        "pageCount": 3,
+        "pagesWithSystems": 3,
+        "overallConfidence": 0.650210067068924,
+        "uncertainMeasures": 103,
+        "notesPerMeasure": 32.53846153846154,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.9903846153846154,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 1,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6185485436893202,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 32.53846153846154,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9903846153846154,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.650210067068924
+        }
+      },
+      "overallConfidence": 0.650210067068924,
+      "noteCount": 3384,
+      "measureCount": 104,
+      "uncertainMeasures": 103
+    },
+    {
+      "id": "handel-gavotte",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf",
+      "elapsedMs": 516,
+      "pageCount": 1,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 557,
+        "measureCount": 22,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 4,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6487235188189843,
+        "uncertainMeasures": 21,
+        "notesPerMeasure": 25.318181818181817,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.9545454545454546,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6174999999999998,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 25.318181818181817,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9545454545454546,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6487235188189843
+        }
+      },
+      "overallConfidence": 0.6487235188189843,
+      "noteCount": 557,
+      "measureCount": 22,
+      "uncertainMeasures": 21
+    },
+    {
+      "id": "demo-minuet",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/demo-minuet-in-g.pdf",
+      "elapsedMs": 756,
+      "pageCount": 1,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 612,
+        "measureCount": 32,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 6,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6487377640156213,
+        "uncertainMeasures": 32,
+        "notesPerMeasure": 19.125,
+        "systemCoverage": 1,
+        "uncertainRatio": 1,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6174999999999998,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 19.125,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6487377640156213
+        }
+      },
+      "overallConfidence": 0.6487377640156213,
+      "noteCount": 612,
+      "measureCount": 32,
+      "uncertainMeasures": 32
+    },
+    {
+      "id": "chopin-mazurka",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf",
+      "elapsedMs": 2194,
+      "pageCount": 3,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 2277,
+        "measureCount": 119,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 22,
+        "staves": null,
+        "pageCount": 3,
+        "pagesWithSystems": 3,
+        "overallConfidence": 0.6512828549635071,
+        "uncertainMeasures": 114,
+        "notesPerMeasure": 19.134453781512605,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.957983193277311,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 7,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6255546218487402,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "inconsistent-layout",
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "inconsistent-layout",
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 19.134453781512605,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.957983193277311,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6512828549635071
+        }
+      },
+      "overallConfidence": 0.6512828549635071,
+      "noteCount": 2277,
+      "measureCount": 119,
+      "uncertainMeasures": 114
+    },
+    {
+      "id": "pathetique",
+      "role": "FALSE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/beethoven-pathetique-mutopia/beethoven-pathetique-mutopia.pdf",
+      "elapsedMs": 3424,
+      "pageCount": 4,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 5039,
+        "measureCount": 136,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 26,
+        "staves": null,
+        "pageCount": 4,
+        "pagesWithSystems": 4,
+        "overallConfidence": 0.6496361064638964,
+        "uncertainMeasures": 136,
+        "notesPerMeasure": 37.0514705882353,
+        "systemCoverage": 1,
+        "uncertainRatio": 1,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": 1,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6184264705882369,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence",
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence",
+            "low-confidence"
+          ],
+          "notesPerMeasure": 37.0514705882353,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6496361064638964
+        }
+      },
+      "overallConfidence": 0.6496361064638964,
+      "noteCount": 5039,
+      "measureCount": 136,
+      "uncertainMeasures": 136
+    },
+    {
+      "id": "twinkle-1880-loc",
+      "role": "TRUE_REJECT",
+      "pdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-stress/twinkle-1880-loc/twinkle-1880-loc-music-p2.pdf",
+      "elapsedMs": 330,
+      "pageCount": 1,
+      "outcome": "REJECTED",
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "failureCode": "low-confidence",
+      "features": {
+        "noteCount": 667,
+        "measureCount": 54,
+        "rests": {
+          "detectedRestGlyphCount": 0,
+          "appliedRestEventCount": 0,
+          "skippedMixedRestCount": 0,
+          "skippedReasons": {}
+        },
+        "systems": 10,
+        "staves": null,
+        "pageCount": 1,
+        "pagesWithSystems": 1,
+        "overallConfidence": 0.6210687292760307,
+        "uncertainMeasures": 36,
+        "notesPerMeasure": 12.351851851851851,
+        "systemCoverage": 1,
+        "uncertainRatio": 0.6666666666666666,
+        "layoutConsistency": {
+          "inconsistent": false,
+          "spread": null,
+          "warning": null
+        },
+        "legacyOverallConfidence": 0.6215135135135132,
+        "vectorPages": null,
+        "rasterPages": null,
+        "difficultyReasons": [
+          "low-confidence"
+        ],
+        "tooDifficult": true,
+        "difficultyMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "difficultyObject": {
+          "tooDifficult": true,
+          "reasons": [
+            "low-confidence"
+          ],
+          "notesPerMeasure": 12.351851851851851,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.6666666666666666,
+          "message": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+          "confidence": 0.6210687292760307
+        }
+      },
+      "overallConfidence": 0.6210687292760307,
+      "noteCount": 667,
+      "measureCount": 54,
+      "uncertainMeasures": 36
+    }
+  ]
+}

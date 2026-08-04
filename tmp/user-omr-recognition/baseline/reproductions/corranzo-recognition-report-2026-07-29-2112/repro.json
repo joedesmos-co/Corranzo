@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2112",
+  "source": "Ao no Sumika (Piano).pdf",
+  "ok": true,
+  "elapsedMs": 1305,
+  "pagesProcessed": 4,
+  "totalPages": 4,
+  "reported": {
+    "measures": 72,
+    "notes": 1123,
+    "confidence": 0.8967873818118823,
+    "acceptance": "accepted",
+    "tieStarts": 91,
+    "tieStops": 173,
+    "rests": 16
+  },
+  "reproduced": {
+    "measures": 73,
+    "notes": 1123,
+    "rests": 19,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 96,
+    "tieStops": 96,
+    "tieImbalance": 0
+  },
+  "delta": {
+    "measures": 1,
+    "notes": 0,
+    "tieImbalance": 82
+  },
+  "reproducesIssue": {
+    "tieImbalance": false,
+    "zeroRestsDense": false,
+    "any": false
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

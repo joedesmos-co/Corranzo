@@ -1,0 +1,36 @@
+OMR semantic corpus — baseline
+==============================
+label: exp7-trusted-optical-targeted
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 180be5b
+createdAt: 2026-08-04T02:08:21.635Z
+fixtures: 3/3 ok
+
+Scoreboard (mean across fixtures)
+- overall: 79.3%
+- pitch: 80.5%
+- rhythm: 99.4%
+- sustain: 66.7%
+- articulation: 100.0%
+- measureStructure: 81.8%
+- interpretation: 26.7%
+
+Top recurring recognition errors
+- incorrect-pitch [pitch] ×59 across 3 fixtures
+- incorrect-chord [measure-structure] ×56 across 3 fixtures
+- extra-note [pitch] ×24 across 1 fixtures
+- missing-note [pitch] ×24 across 1 fixtures
+- duration-mismatch [rhythm] ×6 across 1 fixtures
+- onset-mismatch [rhythm] ×3 across 1 fixtures
+- tempo-mismatch [interpretation] ×3 across 3 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-grand-voices-vector: overall=78.0% R=100% P=78% S=0% A=100% M=88% I=80%
+  worst measures: #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- piano-dense-advanced-vector: overall=77.2% R=98% P=74% S=100% A=100% M=69% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-standard-chords-vector: overall=82.7% R=100% P=90% S=100% A=100% M=89% I=0%
+  worst measures: #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #8(incorrect-pitch|incorrect-pitch|incorrect-pitch), #1(incorrect-pitch|incorrect-chord|tempo-mismatch)

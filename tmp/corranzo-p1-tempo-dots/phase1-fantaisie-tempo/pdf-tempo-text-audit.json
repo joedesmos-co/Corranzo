@@ -1,0 +1,482 @@
+{
+  "TEMPO_WORD_BPM": {
+    "grave": 45,
+    "largo": 50,
+    "lent": 54,
+    "lento": 54,
+    "adagio": 68,
+    "andante": 76,
+    "moderato": 108,
+    "allegretto": 112,
+    "allegro": 120,
+    "vivace": 144,
+    "presto": 168
+  },
+  "pages": [
+    {
+      "page": 1,
+      "itemCount": 1015,
+      "tempoish": [
+        {
+          "text": "(1810–1849)",
+          "x": 742.2,
+          "y": 1104.5,
+          "font": "g_d0_f1"
+        },
+        {
+          "text": "Opus posthumous 66",
+          "x": 353,
+          "y": 1109.7,
+          "font": "g_d0_f1"
+        },
+        {
+          "text": "25",
+          "x": 50.1,
+          "y": 176.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "21",
+          "x": 50.1,
+          "y": 300.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "18",
+          "x": 49.3,
+          "y": 425.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "15",
+          "x": 49.3,
+          "y": 555,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "12",
+          "x": 49.3,
+          "y": 680.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 722,
+          "y": 312.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "a tempo",
+          "x": 100.1,
+          "y": 186.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "Allegro agitato (",
+          "x": 121.4,
+          "y": 1080.4,
+          "font": "g_d0_f5"
+        },
+        {
+          "text": "= 84)",
+          "x": 220.6,
+          "y": 1080.4,
+          "font": "g_d0_f5"
+        }
+      ],
+      "candidates": [
+        {
+          "kind": "word",
+          "words": "a tempo",
+          "confidence": 0.78,
+          "source": "word:a tempo",
+          "beatUnit": null,
+          "dots": 0,
+          "markBpm": null,
+          "text": "a tempo",
+          "x0": 0.11885686484560572,
+          "x1": 0.1647378624703088,
+          "y0": 0.834651368597817,
+          "y1": 0.8437193786733836,
+          "midX": 0.14179736365795725,
+          "midY": 0.8391853736356003,
+          "aTempo": true
+        },
+        {
+          "kind": "word",
+          "words": "Allegro",
+          "bpm": 120,
+          "quarterBpm": 120,
+          "confidence": 0.74,
+          "source": "word:allegro",
+          "beatUnit": null,
+          "dots": 0,
+          "markBpm": null,
+          "text": "Allegro agitato (",
+          "x0": 0.14419211828978623,
+          "x1": 0.25195271805225655,
+          "y0": 0.08375414021830407,
+          "y1": 0.09282215029387075,
+          "midX": 0.1980724181710214,
+          "midY": 0.0882881452560873
+        },
+        {
+          "kind": "metronome",
+          "beatUnit": "quarter",
+          "dots": 0,
+          "markBpm": 84,
+          "bpm": 84,
+          "quarterBpm": 84,
+          "confidence": 0.84,
+          "source": "metronome-mark",
+          "midX": 0.15,
+          "midY": 0.12,
+          "x0": 0.1,
+          "x1": 0.25,
+          "y0": 0.1,
+          "y1": 0.14
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "itemCount": 921,
+      "tempoish": [
+        {
+          "text": "51",
+          "x": 49.9,
+          "y": 187.2,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "47",
+          "x": 50.1,
+          "y": 322.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "43",
+          "x": 50.1,
+          "y": 459.2,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "37",
+          "x": 50.1,
+          "y": 735.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "40",
+          "x": 50.1,
+          "y": 602.5,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "34",
+          "x": 50.1,
+          "y": 864.9,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "31",
+          "x": 50.1,
+          "y": 999.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "28",
+          "x": 50.3,
+          "y": 1125.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 724.7,
+          "y": 322.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 682.9,
+          "y": 735.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "a tempo",
+          "x": 104,
+          "y": 196.5,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "Largo",
+          "x": 384,
+          "y": 602.5,
+          "font": "g_d0_f5"
+        },
+        {
+          "text": "Moderato cantabile",
+          "x": 97.2,
+          "y": 471.9,
+          "font": "g_d0_f5"
+        }
+      ],
+      "candidates": [
+        {
+          "kind": "word",
+          "words": "a tempo",
+          "confidence": 0.78,
+          "source": "word:a tempo",
+          "beatUnit": null,
+          "dots": 0,
+          "markBpm": null,
+          "text": "a tempo",
+          "x0": 0.12356160308788598,
+          "x1": 0.16944260071258904,
+          "y0": 0.8259413148614609,
+          "y1": 0.8350093249370277,
+          "midX": 0.14650210190023752,
+          "midY": 0.8304753198992444,
+          "aTempo": true
+        },
+        {
+          "kind": "word",
+          "words": "Largo",
+          "confidence": 0.78,
+          "source": "word:largo",
+          "beatUnit": null,
+          "dots": 0,
+          "markBpm": null,
+          "text": "Largo",
+          "x0": 0.45603984323040386,
+          "x1": 0.4951555498812352,
+          "y0": 0.485025595298069,
+          "y1": 0.49409360537363567,
+          "midX": 0.4755976965558195,
+          "midY": 0.48955960033585233,
+          "bpm": 50,
+          "quarterBpm": 50
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "itemCount": 850,
+      "tempoish": [
+        {
+          "text": "80",
+          "x": 49.7,
+          "y": 172.2,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "77",
+          "x": 49.3,
+          "y": 304.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "74",
+          "x": 49.3,
+          "y": 439.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "67",
+          "x": 49.5,
+          "y": 715.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "71",
+          "x": 49.3,
+          "y": 582.9,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "63",
+          "x": 49.5,
+          "y": 849.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "59",
+          "x": 49.7,
+          "y": 993.4,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "55",
+          "x": 49.7,
+          "y": 1125.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 563.4,
+          "y": 172.2,
+          "font": "g_d0_f2"
+        }
+      ],
+      "candidates": []
+    },
+    {
+      "page": 4,
+      "itemCount": 1195,
+      "tempoish": [
+        {
+          "text": "109",
+          "x": 49.5,
+          "y": 172.4,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "106",
+          "x": 49.5,
+          "y": 297.2,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "103",
+          "x": 49.5,
+          "y": 417.3,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "99",
+          "x": 49.9,
+          "y": 532.9,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "96",
+          "x": 49.9,
+          "y": 653.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "93",
+          "x": 49.9,
+          "y": 779.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "90",
+          "x": 49.9,
+          "y": 896.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "87",
+          "x": 49.9,
+          "y": 1003.4,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "83",
+          "x": 49.9,
+          "y": 1125.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 677.6,
+          "y": 544.4,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "a tempo",
+          "x": 100.2,
+          "y": 426.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "Presto",
+          "x": 93.2,
+          "y": 1130.8,
+          "font": "g_d0_f5"
+        }
+      ],
+      "candidates": [
+        {
+          "kind": "word",
+          "words": "a tempo",
+          "confidence": 0.78,
+          "source": "word:a tempo",
+          "beatUnit": null,
+          "dots": 0,
+          "markBpm": null,
+          "text": "a tempo",
+          "x0": 0.11905882565320666,
+          "x1": 0.16493982327790976,
+          "y0": 0.632756026868178,
+          "y1": 0.6418240369437449,
+          "midX": 0.1419993244655582,
+          "midY": 0.6372900319059615,
+          "aTempo": true
+        }
+      ]
+    },
+    {
+      "page": 5,
+      "itemCount": 846,
+      "tempoish": [
+        {
+          "text": "134",
+          "x": 49.3,
+          "y": 201.7,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "131",
+          "x": 49.3,
+          "y": 322.6,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "128",
+          "x": 49.3,
+          "y": 457.8,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "121",
+          "x": 49.3,
+          "y": 717.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "125",
+          "x": 49.3,
+          "y": 588,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "118",
+          "x": 49.3,
+          "y": 855.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "115",
+          "x": 49.3,
+          "y": 988.1,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "112",
+          "x": 49.3,
+          "y": 1118.2,
+          "font": "g_d0_f2"
+        },
+        {
+          "text": "riten.",
+          "x": 490.1,
+          "y": 201.7,
+          "font": "g_d0_f2"
+        }
+      ],
+      "candidates": []
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
-  "generatedAt": "2026-07-09T02:38:55.368Z",
+  "generatedAt": "2026-08-01T02:20:37.581Z",
   "baseUrl": "http://127.0.0.1:4173",
+  "previewManaged": true,
   "scenarios": [
     {
       "id": "live-frame-regression-replay",
@@ -84,11 +85,11 @@
     },
     {
       "id": "quiet-room",
-      "quietCal": "Ready"
+      "quietCal": "Mic listening"
     },
     {
       "id": "noisy-room",
-      "noisyCal": "Ready",
+      "noisyCal": "Mic listening",
       "noisyStatus": ""
     }
   ],
@@ -174,10 +175,6 @@
       "detail": "No input — check mic"
     },
     {
-      "name": "Hear It does not dismiss mic panel",
-      "detail": ""
-    },
-    {
       "name": "leaving WFY hides mic panel and test UI",
       "detail": ""
     },
@@ -194,12 +191,12 @@
       "detail": ""
     },
     {
-      "name": "quiet room fixture calibrates without crash",
-      "detail": "Ready"
+      "name": "quiet room fixture — mic enabled without crash",
+      "detail": ""
     },
     {
-      "name": "noisy room fixture surfaces room guidance",
-      "detail": "Ready"
+      "name": "noisy room fixture — mic enabled without crash",
+      "detail": ""
     },
     {
       "name": "noisy room does not show false Last confirmed",
@@ -209,8 +206,11 @@
   "failures": [],
   "notes": [
     "Mic test panel not visible — may still be calibrating in fake stream",
+    "Hear It not visible — checkpoint may not be a note yet",
     "Mic off notice not shown on re-entry — may auto-resume in some builds",
-    "Guitar WFY mic panel visible after switch: true"
+    "Guitar WFY mic panel visible after switch: true",
+    "Quiet room calibration text: Mic listening",
+    "Noisy room calibration: Mic listening"
   ],
   "tuningChanged": false
 }

@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2101",
+  "source": "vivaldi-winter-rousseau-version-original.pdf",
+  "ok": true,
+  "elapsedMs": 1814,
+  "pagesProcessed": 8,
+  "totalPages": 8,
+  "reported": {
+    "measures": 145,
+    "notes": 2903,
+    "confidence": 0.9045574134520324,
+    "acceptance": "accepted",
+    "tieStarts": 8,
+    "tieStops": 14,
+    "rests": 120
+  },
+  "reproduced": {
+    "measures": 89,
+    "notes": 1542,
+    "rests": 67,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 0,
+    "tieStops": 0,
+    "tieImbalance": 0
+  },
+  "delta": {
+    "measures": -56,
+    "notes": -1361,
+    "tieImbalance": 6
+  },
+  "reproducesIssue": {
+    "tieImbalance": false,
+    "zeroRestsDense": false,
+    "any": false
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

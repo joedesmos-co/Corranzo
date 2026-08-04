@@ -1,0 +1,92 @@
+OMR semantic evaluation
+=======================
+schema v2 · evaluator v2.0.0 · 7d4d5df · mode=written
+Alignment confidence: 97% (8 matched, 0 missing, 0 extra)
+
+Overall semantic score
+
+Pitch ........... 70%  (62/88; cov 100%)
+Rhythm .......... 99%  (175/176; cov 100%)
+Sustain ......... 0%  (0/2; cov 100%)
+Articulation .... 100%  (24/24; cov 100%)
+Measure ......... 83%  (53/64; cov 100%)
+Interpretation .. 80%  (4/5; cov 100%)
+Playback ........ 100%  (0/0; cov 100%)
+
+Overall .......... 76%
+First divergence: measure 1
+
+Worst measures
+- Measure 6 (severity 33): Incorrect pitch C5 (expected C#5); Incorrect pitch C5 (expected C#5); Incorrect pitch G4 (expected A4)
+- Measure 8 (severity 28): Incorrect pitch A#4 (expected B4); Incorrect pitch F4 (expected F#4); Incorrect pitch A#4 (expected B4)
+- Measure 5 (severity 27): Incorrect pitch B4 (expected C5); Incorrect pitch F4 (expected G4); Incorrect pitch G4 (expected A4)
+- Measure 7 (severity 27): Incorrect pitch B4 (expected C5); Incorrect pitch F4 (expected G4); Incorrect pitch G4 (expected A4)
+- Measure 3 (severity 4): Missing tie
+
+Per-measure report
+
+Measure 1
+- Tempo 88 BPM missing or wrong at q=0
+
+Measure 3
+- Missing tie
+
+Measure 4
+- Missing tie
+
+Measure 5
+- Incorrect pitch B4 (expected C5)
+- Incorrect pitch F4 (expected G4)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch F3 (expected G3)
+- Incorrect pitch A4 (expected D5)
+- Incorrect pitch A4 (expected D5)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 6
+- Incorrect pitch C5 (expected C#5)
+- Incorrect pitch C5 (expected C#5)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch A4 (expected B4)
+- Incorrect pitch C5 (expected D5)
+- Incorrect pitch G3 (expected A3)
+- Incorrect pitch C5 (expected E5)
+- Incorrect pitch C5 (expected E5)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 7
+- Incorrect pitch B4 (expected C5)
+- Incorrect pitch F4 (expected G4)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch F3 (expected G3)
+- Incorrect pitch A4 (expected D5)
+- Incorrect pitch A4 (expected D5)
+- Incorrect chord
+- Incorrect chord
+- Incorrect chord
+
+Measure 8
+- Incorrect pitch A#4 (expected B4)
+- Incorrect pitch F4 (expected F#4)
+- Incorrect pitch A#4 (expected B4)
+- Incorrect pitch G4 (expected A4)
+- Incorrect pitch F4 (expected G#4)
+- Incorrect pitch F4 (expected G#4)
+- Quarter detected as half
+- Incorrect chord
+- Incorrect chord
+
+Top recurring defects:
+1. Incorrect pitch (26)
+2. Incorrect chord (11)
+3. Missing tie (2)
+4. Duration mismatch (1)
+5. Tempo change mismatch (1)
+
+Top defect classes: Pitch (26), Measure structure (11), Sustain (ties) (2), Rhythm (1), Interpretation (1)
+
+Totals: 41 defects · 88 truth notes · 88 generated notes · 8→8 measures

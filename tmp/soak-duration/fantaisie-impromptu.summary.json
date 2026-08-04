@@ -1,0 +1,33 @@
+{
+  "id": "fantaisie-impromptu",
+  "pageCount": 5,
+  "validation": {
+    "ok": false,
+    "message": "Generated playback failed — detected duration is too long (536 min). Regenerate from a cleaner PDF or upload MusicXML/MXL.",
+    "durationSeconds": 32174.628571424226,
+    "noteCount": 3034,
+    "measureCount": 193
+  },
+  "writtenMeasures": 193,
+  "writtenDurationSeconds": 840.9142857142857,
+  "durationSeconds": 32174.628571424226,
+  "durationMin": 536.24,
+  "noteCount": 3034,
+  "forwardRepeats": 0,
+  "backwardRepeats": 4,
+  "endings": 0,
+  "performed": {
+    "writtenMeasureCount": 193,
+    "performedMeasureCount": 7736,
+    "repeatSections": [],
+    "endings": [],
+    "endingPassCount": 2,
+    "hasRepeatMarks": true,
+    "fullyInterpreted": false,
+    "usesPerformedTimeline": true,
+    "navigationUnsupported": false,
+    "warning": "Some repeat marks could not be linked reliably. Measure display follows written score order."
+  },
+  "tempoBpm": 84,
+  "omrMs": 2705
+}

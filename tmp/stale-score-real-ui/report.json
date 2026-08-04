@@ -1,7 +1,7 @@
 {
   "report": {
     "A": {
-      "scoreId": "score-7707ff44-c737-42ce-9578-cc2af7157eea",
+      "scoreId": "score-845c5c49-3358-45b7-be55-5787596875cd",
       "pdfHash": "eb6a162e",
       "musicXmlHash": "a2d7bb82",
       "duration": 16,
@@ -10,7 +10,7 @@
       "measureCount": 8
     },
     "B": {
-      "scoreId": "score-2e6e9460-3aa8-42ce-94f4-ce40613bd443",
+      "scoreId": "score-3a749dfc-f208-43e4-8710-ab3acb790908",
       "pdfHash": "086cf386",
       "musicXmlHash": "86f9e9d3",
       "duration": 32,
@@ -19,15 +19,17 @@
       "measureCount": 8
     },
     "reload": {
-      "scoreId": "score-2e6e9460-3aa8-42ce-94f4-ce40613bd443",
+      "scoreId": "score-3a749dfc-f208-43e4-8710-ab3acb790908",
       "musicXmlHash": "86f9e9d3"
     },
     "instrumentSwitch": {
-      "before": "score-2e6e9460-3aa8-42ce-94f4-ce40613bd443",
-      "afterGuitar": "score-2e6e9460-3aa8-42ce-94f4-ce40613bd443",
-      "afterPiano": "score-2e6e9460-3aa8-42ce-94f4-ce40613bd443",
-      "guitarXml": "86f9e9d3",
-      "pianoXml": "86f9e9d3"
+      "before": "score-3a749dfc-f208-43e4-8710-ab3acb790908",
+      "beforeHash": "86f9e9d3",
+      "afterGuitar": null,
+      "afterPiano": null,
+      "guitarXml": null,
+      "pianoXml": null,
+      "onLibraryAfterGuitar": true
     }
   },
   "failures": []

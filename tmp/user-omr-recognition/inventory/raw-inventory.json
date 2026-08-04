@@ -1,0 +1,1041 @@
+[
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2100",
+    "zip": "corranzo-recognition-report-2026-07-29-2100.zip",
+    "sourceFile": "a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9056066579495581,
+    "produced": {
+      "measures": 125,
+      "notes": 2808,
+      "playableEvents": 2808,
+      "durationSeconds": 243.1077694235589,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=-3",
+      "multi-tempo=2"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": -3,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 76,
+        "quarterTime": 0
+      },
+      {
+        "bpm": 126,
+        "quarterTime": 16
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2100/original-score.pdf",
+    "pdfBytes": 132992,
+    "pdfHash": "577e5712"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2101",
+    "zip": "corranzo-recognition-report-2026-07-29-2101.zip",
+    "sourceFile": "vivaldi-winter-rousseau-version-original.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9045574134520324,
+    "produced": {
+      "measures": 145,
+      "notes": 2903,
+      "playableEvents": 2903,
+      "durationSeconds": 322.18261351863254,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=-4",
+      "multi-tempo=12"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": -4,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 136,
+        "quarterTime": 0
+      },
+      {
+        "bpm": 146,
+        "quarterTime": 88
+      },
+      {
+        "bpm": 136,
+        "quarterTime": 104
+      },
+      {
+        "bpm": 146,
+        "quarterTime": 108
+      },
+      {
+        "bpm": 136,
+        "quarterTime": 128
+      },
+      {
+        "bpm": 146,
+        "quarterTime": 132
+      },
+      {
+        "bpm": 136,
+        "quarterTime": 144
+      },
+      {
+        "bpm": 140,
+        "quarterTime": 172
+      },
+      {
+        "bpm": 146,
+        "quarterTime": 176
+      },
+      {
+        "bpm": 154,
+        "quarterTime": 208
+      },
+      {
+        "bpm": 136,
+        "quarterTime": 372
+      },
+      {
+        "bpm": 146,
+        "quarterTime": 512
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2101/original-score.pdf",
+    "pdfBytes": 206699,
+    "pdfHash": "ad0f3c6a"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2102",
+    "zip": "corranzo-recognition-report-2026-07-29-2102.zip",
+    "sourceFile": "la-campanella.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9036409843589477,
+    "produced": {
+      "measures": 155,
+      "notes": 4105,
+      "playableEvents": 4105,
+      "durationSeconds": 625.714285714284,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=5"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": 5,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 112,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2102/original-score.pdf",
+    "pdfBytes": 278704,
+    "pdfHash": "5f851e84"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2106",
+    "zip": "corranzo-recognition-report-2026-07-29-2106.zip",
+    "sourceFile": "merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9009237888778457,
+    "produced": {
+      "measures": 230,
+      "notes": 2409,
+      "playableEvents": 2409,
+      "durationSeconds": 359.1500377073907,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "2 measure(s) have uncertain rhythm."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "multi-tempo=12"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 3,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [],
+    "tempoEvents": [
+      {
+        "bpm": 100,
+        "quarterTime": 0
+      },
+      {
+        "bpm": 85,
+        "quarterTime": 12
+      },
+      {
+        "bpm": 100,
+        "quarterTime": 18
+      },
+      {
+        "bpm": 160,
+        "quarterTime": 78
+      },
+      {
+        "bpm": 130,
+        "quarterTime": 336
+      },
+      {
+        "bpm": 80,
+        "quarterTime": 345
+      },
+      {
+        "bpm": 95,
+        "quarterTime": 378
+      },
+      {
+        "bpm": 130,
+        "quarterTime": 435
+      },
+      {
+        "bpm": 150,
+        "quarterTime": 480
+      },
+      {
+        "bpm": 75,
+        "quarterTime": 531
+      },
+      {
+        "bpm": 160,
+        "quarterTime": 543
+      },
+      {
+        "bpm": 54,
+        "quarterTime": 630
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2106/original-score.pdf",
+    "pdfBytes": 131900,
+    "pdfHash": "ca42b189"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2112",
+    "zip": "corranzo-recognition-report-2026-07-29-2112.zip",
+    "sourceFile": "Ao no Sumika (Piano).pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.8967873818118823,
+    "produced": {
+      "measures": 72,
+      "notes": 1123,
+      "playableEvents": 1123,
+      "durationSeconds": 113.6842105263158,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=-4"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": -4,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 152,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2112/original-score.pdf",
+    "pdfBytes": 119308,
+    "pdfHash": "5f3f6dc3"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2113",
+    "zip": "corranzo-recognition-report-2026-07-29-2113.zip",
+    "sourceFile": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.898304895681949,
+    "produced": {
+      "measures": 63,
+      "notes": 1050,
+      "playableEvents": 1050,
+      "durationSeconds": 97.26315789473695,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [],
+    "tempoEvents": [
+      {
+        "bpm": 190,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2113/original-score.pdf",
+    "pdfBytes": 57461,
+    "pdfHash": "a5d2268b"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2114",
+    "zip": "corranzo-recognition-report-2026-07-29-2114.zip",
+    "sourceFile": "iris-out-piano-arragement.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.8994693585864031,
+    "produced": {
+      "measures": 115,
+      "notes": 2333,
+      "playableEvents": 2333,
+      "durationSeconds": 204.44444444444446,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=4"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": 4,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 135,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2114/original-score.pdf",
+    "pdfBytes": 112438,
+    "pdfHash": "7afcc389"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2116",
+    "zip": "corranzo-recognition-report-2026-07-29-2116.zip",
+    "sourceFile": "sweden-minecraft.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9051255508821128,
+    "produced": {
+      "measures": 23,
+      "notes": 277,
+      "playableEvents": 277,
+      "durationSeconds": 125.45454545454545,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [],
+    "tempoEvents": [
+      {
+        "bpm": 44,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2116/original-score.pdf",
+    "pdfBytes": 30664,
+    "pdfHash": "72233e6e"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2116 (1)",
+    "zip": "corranzo-recognition-report-2026-07-29-2116 (1).zip",
+    "sourceFile": "aria-math-c418-from-minecraft.pdf",
+    "instrument": "piano",
+    "page": null,
+    "measure": null,
+    "userCategory": "other",
+    "userDescription": "",
+    "acceptance": "accepted",
+    "confidenceBand": "high",
+    "confidence": 0.9065013636427256,
+    "produced": {
+      "measures": 194,
+      "notes": 1669,
+      "playableEvents": 1669,
+      "durationSeconds": 292.8301886792453,
+      "warnings": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "warningReasons": []
+    },
+    "expected": "(user left description empty; category=other — treat as general recognition quality complaint with PDF evidence)",
+    "summaryKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "available",
+      "parts",
+      "staveSummary",
+      "measures",
+      "timeSignatures",
+      "keySignatures",
+      "tempoEvents",
+      "repeatsEndings",
+      "noteTypeHistogram",
+      "pitchRange",
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "slurCounts",
+      "articulationCounts",
+      "eventDensity",
+      "malformedEventSummary",
+      "omrExtraction",
+      "noteSampleLimit"
+    ],
+    "diagnosticKeys": [
+      "restCount",
+      "chordCount",
+      "tieCounts",
+      "malformedEventSummary"
+    ],
+    "signals": [
+      "grand-staff",
+      "key-fifths=1"
+    ],
+    "staffStats": {
+      "hasStandardStaff": true,
+      "hasTabStaff": false,
+      "suggestedInstrumentId": null
+    },
+    "parts": [
+      {
+        "id": "P1",
+        "name": "Piano",
+        "staveCount": 2,
+        "hasTab": false
+      }
+    ],
+    "timeSignatures": [
+      {
+        "beats": 4,
+        "beatType": 4,
+        "quarterTime": 0
+      }
+    ],
+    "keySignatures": [
+      {
+        "fifths": 1,
+        "mode": "major",
+        "staff": null,
+        "quarterTime": 0
+      }
+    ],
+    "tempoEvents": [
+      {
+        "bpm": 159,
+        "quarterTime": 0
+      }
+    ],
+    "provenanceAvailable": false,
+    "provenanceKeys": [
+      "schema",
+      "schemaVersion",
+      "exportedAt",
+      "provenanceAvailable",
+      "reason",
+      "ownerScoreId",
+      "run",
+      "acceptance",
+      "rhythmProvenance"
+    ],
+    "pdfPath": "/Users/ryland/Documents/scoreflow/.local/recognition-reports/extracted/corranzo-recognition-report-2026-07-29-2116 (1)/original-score.pdf",
+    "pdfBytes": 113895,
+    "pdfHash": "b40407e5"
+  }
+]

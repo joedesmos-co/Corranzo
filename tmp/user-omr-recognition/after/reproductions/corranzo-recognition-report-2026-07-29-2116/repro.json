@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2116",
+  "source": "sweden-minecraft.pdf",
+  "ok": true,
+  "elapsedMs": 212,
+  "pagesProcessed": 1,
+  "totalPages": 1,
+  "reported": {
+    "measures": 23,
+    "notes": 277,
+    "confidence": 0.9051255508821128,
+    "acceptance": "accepted",
+    "tieStarts": 6,
+    "tieStops": 12,
+    "rests": 0
+  },
+  "reproduced": {
+    "measures": 23,
+    "notes": 277,
+    "rests": 0,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 6,
+    "tieStops": 12,
+    "tieImbalance": -6
+  },
+  "delta": {
+    "measures": 0,
+    "notes": 0,
+    "tieImbalance": 0
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": true,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

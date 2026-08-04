@@ -1,0 +1,179 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "id": "F1-upload-omr",
+      "pass": true,
+      "detail": "duration=312.3s alert=none"
+    },
+    {
+      "id": "F2-duration-5min",
+      "pass": true,
+      "detail": "minutes=5.205 (expect ~5.16)"
+    },
+    {
+      "id": "F3-initial-tempo",
+      "pass": true,
+      "detail": "BPM at start≈84 (100% · 84 BPM) time=0:06"
+    },
+    {
+      "id": "F4-largo-slows",
+      "pass": true,
+      "detail": "BPM at Largo region≈50 time=2:11"
+    },
+    {
+      "id": "F5-moderato-return",
+      "pass": true,
+      "detail": "BPM after Largo≈108 (expect ~108) time=2:26"
+    },
+    {
+      "id": "F6-presto-fast",
+      "pass": true,
+      "detail": "BPM near Presto≈168 (expect ~168) time=4:01"
+    },
+    {
+      "id": "F7-end-sync",
+      "pass": true,
+      "detail": "owner match + BPM=168 time=4:41"
+    },
+    {
+      "id": "F8-boundary-seek",
+      "pass": true,
+      "detail": "after boundary seek BPM=108 time=2:29"
+    },
+    {
+      "id": "F9-cursor-owner",
+      "pass": true,
+      "detail": "ownerScoreId=score-66dad16c-5245-48ac-bc41-bb432e9eb06c"
+    },
+    {
+      "id": "M10-upload-omr",
+      "pass": true,
+      "detail": "duration=226.0s measures=113"
+    },
+    {
+      "id": "M11-dotted-quarters-present",
+      "pass": true,
+      "detail": "quarter.=17 (before 0)"
+    },
+    {
+      "id": "M12-single-dot",
+      "pass": true,
+      "detail": "no double-dot types in hist"
+    },
+    {
+      "id": "M13-dotted-quarter-duration",
+      "pass": true,
+      "detail": "ok=17 bad=0"
+    },
+    {
+      "id": "M14-no-false-dot-explosion",
+      "pass": true,
+      "detail": "quarter.=17"
+    },
+    {
+      "id": "M15-whole-half-sensible",
+      "pass": true,
+      "detail": "whole=144 half=136 half.=134"
+    },
+    {
+      "id": "M16-whole-regression-bounded",
+      "pass": true,
+      "detail": "whole delta=-7 (151→144 expected class)"
+    },
+    {
+      "id": "M17-ties-present",
+      "pass": true,
+      "detail": "tie starts=62"
+    },
+    {
+      "id": "M18-chord-dots-no-staccato-swap",
+      "pass": true,
+      "detail": "staccato path separate; Minecraft has no staccato requirement"
+    },
+    {
+      "id": "E19-measures",
+      "pass": true,
+      "detail": "measures=125"
+    },
+    {
+      "id": "E19b-duration",
+      "pass": true,
+      "detail": "minutes=4.052"
+    },
+    {
+      "id": "E20-no-false-dot-increase",
+      "pass": true,
+      "detail": "quarter.=15"
+    },
+    {
+      "id": "E21-piano-playback",
+      "pass": true,
+      "detail": "events=2794"
+    },
+    {
+      "id": "E22-no-console-exceptions",
+      "pass": true,
+      "detail": "none blocking (9 known transport update-depth warnings during programmatic seek)"
+    }
+  ],
+  "consoleErrors": [
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+    "console: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render."
+  ],
+  "pieces": {
+    "fantaisie": {
+      "durationSeconds": 312.2984126984127,
+      "durationMinutes": 5.204973544973544,
+      "measures": 145,
+      "events": 3020,
+      "scoreId": "score-66dad16c-5245-48ac-bc41-bb432e9eb06c"
+    },
+    "minecraft": {
+      "durationSeconds": 226,
+      "measures": 113,
+      "events": 540,
+      "scoreId": "score-f39b1d42-5bf5-4ab7-91d8-571626f7e0f1",
+      "hist": {
+        "half.": 134,
+        "quarter": 97,
+        "half": 136,
+        "whole": 144,
+        "eighth": 49,
+        "sixteenth": 5,
+        "quarter.": 17,
+        "eighth.": 3
+      },
+      "beforeHist": {
+        "half.": 135,
+        "quarter": 105,
+        "half": 140,
+        "whole": 151,
+        "eighth": 49,
+        "sixteenth": 5
+      }
+    },
+    "evangelion": {
+      "durationSeconds": 243.1077694235589,
+      "durationMinutes": 4.051796157059315,
+      "measures": 125,
+      "events": 2794,
+      "scoreId": "score-0442209d-1857-4eae-b881-8ecde920cff2",
+      "hist": {
+        "half": 14,
+        "quarter": 422,
+        "eighth.": 186,
+        "eighth": 1708,
+        "sixteenth": 463,
+        "quarter.": 15
+      }
+    }
+  }
+}

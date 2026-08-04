@@ -1,0 +1,103 @@
+{
+  "id": "turkish-march-dense",
+  "title": "Mozart Turkish March",
+  "sourceEdition": "Corranzo practice-library — dense beamed piano",
+  "role": "dense-beamed-piano",
+  "pdf": "piano-mozart-turkish-march.pdf",
+  "pdfTypeDeclared": "vector",
+  "pageCount": 5,
+  "pageSources": [
+    {
+      "page": 1,
+      "kind": "vector-unusual-fonts",
+      "textChars": 896,
+      "imageOps": 0,
+      "pathOps": 1065,
+      "fonts": [
+        "g_d13_f2",
+        "g_d13_f1",
+        "g_d13_f3",
+        "g_d13_f4",
+        "g_d13_f6",
+        "g_d13_f7"
+      ]
+    },
+    {
+      "page": 2,
+      "kind": "vector-unusual-fonts",
+      "textChars": 864,
+      "imageOps": 0,
+      "pathOps": 1627,
+      "fonts": [
+        "g_d13_f1",
+        "g_d13_f3",
+        "g_d13_f6",
+        "g_d13_f4",
+        "g_d13_f5",
+        "g_d13_f8"
+      ]
+    },
+    {
+      "page": 3,
+      "kind": "vector-unusual-fonts",
+      "textChars": 746,
+      "imageOps": 0,
+      "pathOps": 1284,
+      "fonts": [
+        "g_d13_f1",
+        "g_d13_f3",
+        "g_d13_f6",
+        "g_d13_f4",
+        "g_d13_f5",
+        "g_d13_f7"
+      ]
+    },
+    {
+      "page": 4,
+      "kind": "vector-unusual-fonts",
+      "textChars": 726,
+      "imageOps": 0,
+      "pathOps": 1689,
+      "fonts": [
+        "g_d13_f1",
+        "g_d13_f6",
+        "g_d13_f3",
+        "g_d13_f5",
+        "g_d13_f4",
+        "g_d13_f7"
+      ]
+    },
+    {
+      "page": 5,
+      "kind": "vector",
+      "textChars": 149,
+      "imageOps": 0,
+      "pathOps": 211,
+      "fonts": [
+        "g_d13_f1",
+        "g_d13_f6",
+        "g_d13_f3"
+      ]
+    }
+  ],
+  "scanQuality": null,
+  "pathGlyphDensity": null,
+  "omrCompletion": "Failed",
+  "pipeline": {
+    "omrFailed": true,
+    "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+    "matchesRasterLowConfidenceRejection": true
+  },
+  "ui": {
+    "uiOk": false,
+    "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+    "scoreId": "score-7108ffd6-6444-4f6a-be54-3d2a8b78c06d",
+    "duration": null,
+    "playableEventCount": null,
+    "loopToggled": true,
+    "audible": null,
+    "instrumentSwitch": null,
+    "navigation": null
+  },
+  "elapsedMs": 8317
+}

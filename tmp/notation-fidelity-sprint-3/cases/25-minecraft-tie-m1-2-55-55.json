@@ -91,9 +91,9 @@
   "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/25-minecraft-tie-m1-2-55-55.musicxml",
   "renderedResult": {
     "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/25-minecraft-tie-m1-2-55-55.png",
-    "markingFound": true,
-    "path": "M 116.3 151.44 Q 165 135.856 213.7 151.44",
-    "placement": "above"
+    "markingFound": false,
+    "path": null,
+    "placement": null
   },
   "playbackAttackTrace": [
     {
@@ -101,7 +101,7 @@
       "midi": 55,
       "quarterTime": 2,
       "tieStart": true,
-      "tieStop": true,
+      "tieStop": false,
       "suppressPlaybackAttack": false
     },
     {
@@ -110,7 +110,7 @@
       "quarterTime": 4,
       "tieStart": false,
       "tieStop": true,
-      "suppressPlaybackAttack": true
+      "suppressPlaybackAttack": false
     }
   ],
   "correctBefore": false,

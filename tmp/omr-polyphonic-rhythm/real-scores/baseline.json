@@ -1,0 +1,228 @@
+{
+  "label": "baseline",
+  "sources": [
+    {
+      "id": "gymnopedie",
+      "title": "Sustained overlapping voices",
+      "pages": 1,
+      "summary": {
+        "measureCount": 25,
+        "rhythmicMeasureCount": 25,
+        "noteCount": 138,
+        "eventCount": 93,
+        "chordCount": 25,
+        "restCount": 6,
+        "visualRestEvidence": {
+          "detectedGlyphs": 31,
+          "appliedGlyphs": 6,
+          "skippedGlyphs": 25,
+          "skippedReasons": {
+            "overlaps-staff-notes": 25
+          }
+        },
+        "tieBalance": {
+          "starts": 5,
+          "stops": 5,
+          "delta": 0
+        },
+        "playbackDurationSeconds": 83.3333,
+        "acceptance": "accepted",
+        "acceptanceWarnings": [
+          "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+        ],
+        "flaggedPlaybackMeasures": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "perVoice": {
+          "P1:staff-1:voice-1": {
+            "eventCount": 39,
+            "pitchedEventCount": 33,
+            "restCount": 6,
+            "durationTotalQuarters": 94.5,
+            "onsetDistribution": {
+              "0": 19,
+              "1": 9,
+              "2": 9,
+              "0.25": 2
+            }
+          },
+          "P1:staff-2:voice-4": {
+            "eventCount": 25,
+            "pitchedEventCount": 25,
+            "restCount": 0,
+            "durationTotalQuarters": 75,
+            "onsetDistribution": {
+              "0": 25
+            }
+          },
+          "P1:staff-2:voice-2": {
+            "eventCount": 25,
+            "pitchedEventCount": 25,
+            "restCount": 0,
+            "durationTotalQuarters": 50,
+            "onsetDistribution": {
+              "1": 25
+            }
+          },
+          "P1:staff-1:voice-3": {
+            "eventCount": 4,
+            "pitchedEventCount": 4,
+            "restCount": 0,
+            "durationTotalQuarters": 12,
+            "onsetDistribution": {
+              "0": 4
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "la-campanella",
+      "title": "Dense polyphonic piano",
+      "pages": 2,
+      "summary": {
+        "measureCount": 49,
+        "rhythmicMeasureCount": 49,
+        "noteCount": 802,
+        "eventCount": 713,
+        "chordCount": 144,
+        "restCount": 77,
+        "visualRestEvidence": {
+          "detectedGlyphs": 102,
+          "appliedGlyphs": 77,
+          "skippedGlyphs": 25,
+          "skippedReasons": {
+            "overlaps-staff-notes": 23,
+            "duplicate-rest": 2
+          }
+        },
+        "tieBalance": {
+          "starts": 0,
+          "stops": 0,
+          "delta": 0
+        },
+        "playbackDurationSeconds": 105,
+        "acceptance": "accepted",
+        "acceptanceWarnings": [
+          "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+        ],
+        "flaggedPlaybackMeasures": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "perVoice": {
+          "P1:staff-2:voice-2": {
+            "eventCount": 247,
+            "pitchedEventCount": 181,
+            "restCount": 66,
+            "durationTotalQuarters": 135.5,
+            "onsetDistribution": {
+              "0": 37,
+              "1": 23,
+              "2": 20,
+              "3": 11,
+              "1.5": 27,
+              "2.5": 12,
+              "3.5": 18,
+              "0.5": 7,
+              "0.25": 7,
+              "3.25": 17,
+              "2.25": 16,
+              "2.75": 18,
+              "0.75": 11,
+              "1.75": 10,
+              "1.25": 10,
+              "3.75": 3
+            }
+          },
+          "P1:staff-1:voice-1": {
+            "eventCount": 454,
+            "pitchedEventCount": 443,
+            "restCount": 11,
+            "durationTotalQuarters": 167,
+            "onsetDistribution": {
+              "0": 44,
+              "1": 37,
+              "2": 25,
+              "3": 35,
+              "2.5": 34,
+              "3.5": 29,
+              "1.75": 31,
+              "2.25": 32,
+              "1.5": 29,
+              "1.25": 27,
+              "2.75": 26,
+              "0.75": 23,
+              "3.25": 24,
+              "0.5": 28,
+              "3.75": 25,
+              "0.25": 5
+            }
+          },
+          "P1:staff-1:voice-3": {
+            "eventCount": 12,
+            "pitchedEventCount": 12,
+            "restCount": 0,
+            "durationTotalQuarters": 3.75,
+            "onsetDistribution": {
+              "2": 1,
+              "3": 1,
+              "0.75": 2,
+              "1.25": 2,
+              "2.5": 1,
+              "3.25": 1,
+              "3.75": 1,
+              "1.75": 1,
+              "2.75": 1,
+              "3.5": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,4602 @@
+[
+  {
+    "fixture": "piano-beginner-single-vector",
+    "rows": [
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 1,
+        "on": 0,
+        "raw": 0.260101,
+        "selected": 0.254637,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5336163018867953,
+        "bounds": {
+          "x": 184,
+          "y": 326,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 1,
+        "on": 1,
+        "raw": 0.255051,
+        "selected": 0.25,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.493282566037739,
+        "bounds": {
+          "x": 210,
+          "y": 320,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 1,
+        "on": 2,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 238,
+          "y": 313,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 1,
+        "on": 3,
+        "raw": 0.244949,
+        "selected": 0.239954,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48781358490566074,
+        "bounds": {
+          "x": 264,
+          "y": 307,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 2,
+        "on": 0,
+        "raw": 0.239899,
+        "selected": 0.234544,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5229713207547173,
+        "bounds": {
+          "x": 339,
+          "y": 300,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 2,
+        "on": 1,
+        "raw": 0.244949,
+        "selected": 0.239954,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48781358490566074,
+        "bounds": {
+          "x": 375,
+          "y": 307,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 2,
+        "on": 2,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 411,
+          "y": 313,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 2,
+        "on": 3,
+        "raw": 0.255051,
+        "selected": 0.249614,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5309794716981161,
+        "bounds": {
+          "x": 447,
+          "y": 320,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 3,
+        "on": 0,
+        "raw": 0.260101,
+        "selected": 0.254637,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5336163018867953,
+        "bounds": {
+          "x": 539,
+          "y": 326,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 1,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 574,
+          "y": 313,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 3,
+        "on": 2,
+        "raw": 0.244949,
+        "selected": 0.239954,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48781358490566074,
+        "bounds": {
+          "x": 610,
+          "y": 307,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 3,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 646,
+          "y": 313,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 4,
+        "on": 0,
+        "raw": 0.255051,
+        "selected": 0.249614,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5309794716981161,
+        "bounds": {
+          "x": 738,
+          "y": 320,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 4,
+        "on": 1,
+        "raw": 0.260101,
+        "selected": 0.254637,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5336163018867953,
+        "bounds": {
+          "x": 774,
+          "y": 326,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "D4",
+        "g": "D4",
+        "m": 4,
+        "on": 2,
+        "raw": 0.265152,
+        "selected": 0.260046,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.4986538867924532,
+        "bounds": {
+          "x": 809,
+          "y": 333,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 4,
+        "on": 3,
+        "raw": 0.260101,
+        "selected": 0.254637,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5336163018867953,
+        "bounds": {
+          "x": 846,
+          "y": 326,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 5,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 184,
+          "y": 702,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 5,
+        "on": 1,
+        "raw": 0.545455,
+        "selected": 0.540572,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.476875622641507,
+        "bounds": {
+          "x": 210,
+          "y": 696,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 5,
+        "on": 2,
+        "raw": 0.540404,
+        "selected": 0.535162,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5119356981132049,
+        "bounds": {
+          "x": 238,
+          "y": 689,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 5,
+        "on": 3,
+        "raw": 0.535354,
+        "selected": 0.530139,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5092988679245258,
+        "bounds": {
+          "x": 264,
+          "y": 683,
+          "width": 16,
+          "height": 7
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 6,
+        "on": 0,
+        "raw": 0.530303,
+        "selected": 0.525116,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5065643773584854,
+        "bounds": {
+          "x": 339,
+          "y": 676,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 6,
+        "on": 1,
+        "raw": 0.535354,
+        "selected": 0.530139,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5092988679245258,
+        "bounds": {
+          "x": 375,
+          "y": 683,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 6,
+        "on": 2,
+        "raw": 0.540404,
+        "selected": 0.535162,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5119356981132049,
+        "bounds": {
+          "x": 411,
+          "y": 689,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 6,
+        "on": 3,
+        "raw": 0.545455,
+        "selected": 0.540185,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5146701886792454,
+        "bounds": {
+          "x": 447,
+          "y": 696,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 7,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 539,
+          "y": 702,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 7,
+        "on": 1,
+        "raw": 0.540404,
+        "selected": 0.535162,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5119356981132049,
+        "bounds": {
+          "x": 593,
+          "y": 689,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 8,
+        "on": 2,
+        "raw": 0.545455,
+        "selected": 0.540572,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.476875622641507,
+        "bounds": {
+          "x": 809,
+          "y": 696,
+          "width": 16,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 8,
+        "on": 2.75,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 846,
+          "y": 702,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 8,
+        "on": 1,
+        "raw": 0.535354,
+        "selected": 0.530139,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5092988679245258,
+        "bounds": {
+          "x": 756,
+          "y": 683,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 8,
+        "on": 1.5,
+        "raw": 0.540404,
+        "selected": 0.535162,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5119356981132049,
+        "bounds": {
+          "x": 774,
+          "y": 689,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-beginner-single-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 8,
+        "on": 0.75,
+        "raw": 0.530303,
+        "selected": 0.525116,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5065643773584854,
+        "bounds": {
+          "x": 738,
+          "y": 676,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      }
+    ]
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "rows": [
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D2",
+        "g": "D2",
+        "m": 2,
+        "on": 0,
+        "raw": 0.353535,
+        "selected": 0.348532,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.4885948679245267,
+        "bounds": {
+          "x": 339,
+          "y": 448,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 2,
+        "on": 0,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 339,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 2,
+        "on": 0,
+        "raw": 0.318182,
+        "selected": 0.312983,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5077363018867938,
+        "bounds": {
+          "x": 339,
+          "y": 402,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E2",
+        "g": "E2",
+        "m": 2,
+        "on": 1,
+        "raw": 0.348485,
+        "selected": 0.342349,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5992440754716962,
+        "bounds": {
+          "x": 375,
+          "y": 439,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 2,
+        "on": 1,
+        "raw": 0.328283,
+        "selected": 0.322257,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5885014339622623,
+        "bounds": {
+          "x": 375,
+          "y": 413,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#2",
+        "g": "F#2",
+        "m": 2,
+        "on": 2,
+        "raw": 0.343434,
+        "selected": 0.338485,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48332120754717384,
+        "bounds": {
+          "x": 411,
+          "y": 435,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#3",
+        "g": "C#3",
+        "m": 2,
+        "on": 2,
+        "raw": 0.323232,
+        "selected": 0.318006,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.510373132075473,
+        "bounds": {
+          "x": 411,
+          "y": 408,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 2,
+        "on": 3,
+        "raw": 0.338384,
+        "selected": 0.333076,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5183812830188718,
+        "bounds": {
+          "x": 447,
+          "y": 428,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 2,
+        "on": 3,
+        "raw": 0.318182,
+        "selected": 0.312983,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5077363018867938,
+        "bounds": {
+          "x": 447,
+          "y": 402,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "D4",
+        "g": "D#4",
+        "m": 2,
+        "on": 0,
+        "raw": 0.229798,
+        "selected": 0.234544,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.46349615094339636,
+        "bounds": {
+          "x": 339,
+          "y": 301,
+          "width": 12,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "G4",
+        "g": "F#4",
+        "m": 2,
+        "on": 2.5,
+        "raw": 0.224747,
+        "selected": 0.22643,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.1643624150943387,
+        "bounds": {
+          "x": 424,
+          "y": 292,
+          "width": 24,
+          "height": 3
+        },
+        "stems": 9,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "F#4",
+        "g": "D#4",
+        "m": 2,
+        "on": 0,
+        "raw": 0.229798,
+        "selected": 0.234544,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.46349615094339636,
+        "bounds": {
+          "x": 339,
+          "y": 301,
+          "width": 12,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#4",
+        "g": "F#4",
+        "m": 3,
+        "on": 0.5,
+        "raw": 0.219697,
+        "selected": 0.223725,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.39337600000000045,
+        "bounds": {
+          "x": 558,
+          "y": 287,
+          "width": 10,
+          "height": 6
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A#4",
+        "g": "A#4",
+        "m": 3,
+        "on": 0.5,
+        "raw": 0.209596,
+        "selected": 0.213679,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.39874732075471736,
+        "bounds": {
+          "x": 555,
+          "y": 274,
+          "width": 13,
+          "height": 6
+        },
+        "stems": 14,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D#5",
+        "g": "D#5",
+        "m": 3,
+        "on": 1,
+        "raw": 0.209596,
+        "selected": 0.201314,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.8088232452830202,
+        "bounds": {
+          "x": 576,
+          "y": 253,
+          "width": 15,
+          "height": 16
+        },
+        "stems": 16,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#2",
+        "g": "F#2",
+        "m": 3,
+        "on": 1,
+        "raw": 0.343434,
+        "selected": 0.338099,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.521018113207551,
+        "bounds": {
+          "x": 574,
+          "y": 434,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 7,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#2",
+        "g": "G#2",
+        "m": 3,
+        "on": 2,
+        "raw": 0.338384,
+        "selected": 0.333076,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5183812830188718,
+        "bounds": {
+          "x": 610,
+          "y": 428,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D#3",
+        "g": "D#3",
+        "m": 3,
+        "on": 2,
+        "raw": 0.318182,
+        "selected": 0.312983,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5077363018867938,
+        "bounds": {
+          "x": 610,
+          "y": 402,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 3,
+        "on": 3,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 646,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 3,
+        "on": 3,
+        "raw": 0.313131,
+        "selected": 0.30796,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5050018113207533,
+        "bounds": {
+          "x": 646,
+          "y": 395,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "A#4",
+        "m": 3,
+        "on": 1.5,
+        "raw": 0.209596,
+        "selected": 0.213679,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.39874732075471736,
+        "bounds": {
+          "x": 595,
+          "y": 274,
+          "width": 9,
+          "height": 6
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "C#5",
+        "m": 3,
+        "on": 3,
+        "raw": 0.209596,
+        "selected": 0.2017,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.771126339622643,
+        "bounds": {
+          "x": 650,
+          "y": 255,
+          "width": 11,
+          "height": 13
+        },
+        "stems": 13,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "B2",
+        "g": "C3",
+        "m": 3,
+        "on": 0,
+        "raw": 0.328283,
+        "selected": 0.316074,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 1.1923355471698094,
+        "bounds": {
+          "x": 540,
+          "y": 402,
+          "width": 18,
+          "height": 15
+        },
+        "stems": 4,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F#4",
+        "m": 3,
+        "on": 0,
+        "raw": 0.234848,
+        "selected": 0.22643,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.8221050566037746,
+        "bounds": {
+          "x": 534,
+          "y": 286,
+          "width": 24,
+          "height": 15
+        },
+        "stems": 6,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "D#5",
+        "g": "C#5",
+        "m": 3,
+        "on": 3,
+        "raw": 0.209596,
+        "selected": 0.2017,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.771126339622643,
+        "bounds": {
+          "x": 650,
+          "y": 255,
+          "width": 11,
+          "height": 13
+        },
+        "stems": 13,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C#3",
+        "g": "D#3",
+        "m": 3,
+        "on": 1,
+        "raw": 0.323232,
+        "selected": 0.314915,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.8122413584905686,
+        "bounds": {
+          "x": 574,
+          "y": 400,
+          "width": 13,
+          "height": 16
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C#5",
+        "g": "D#5",
+        "m": 3,
+        "on": 0,
+        "raw": 0.214646,
+        "selected": 0.200927,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 1.3398027169811333,
+        "bounds": {
+          "x": 534,
+          "y": 259,
+          "width": 24,
+          "height": 3
+        },
+        "stems": 7,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "A#4",
+        "m": 3,
+        "on": 1.5,
+        "raw": 0.209596,
+        "selected": 0.213679,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.39874732075471736,
+        "bounds": {
+          "x": 595,
+          "y": 274,
+          "width": 9,
+          "height": 6
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C#5",
+        "g": "D#5",
+        "m": 3,
+        "on": 1,
+        "raw": 0.209596,
+        "selected": 0.201314,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.8088232452830202,
+        "bounds": {
+          "x": 576,
+          "y": 253,
+          "width": 15,
+          "height": 16
+        },
+        "stems": 16,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "B4",
+        "g": "F#4",
+        "m": 3,
+        "on": 0.5,
+        "raw": 0.219697,
+        "selected": 0.223725,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.39337600000000045,
+        "bounds": {
+          "x": 558,
+          "y": 287,
+          "width": 10,
+          "height": 6
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F2",
+        "g": "F2",
+        "m": 4,
+        "on": 0,
+        "raw": 0.343434,
+        "selected": 0.338485,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48332120754717384,
+        "bounds": {
+          "x": 738,
+          "y": 435,
+          "width": 15,
+          "height": 7
+        },
+        "stems": 0,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 4,
+        "on": 0,
+        "raw": 0.323232,
+        "selected": 0.318006,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.510373132075473,
+        "bounds": {
+          "x": 738,
+          "y": 408,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F3",
+        "g": "F3",
+        "m": 4,
+        "on": 0,
+        "raw": 0.308081,
+        "selected": 0.302937,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5023649811320742,
+        "bounds": {
+          "x": 738,
+          "y": 389,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 4,
+        "on": 1,
+        "raw": 0.338384,
+        "selected": 0.333076,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5183812830188718,
+        "bounds": {
+          "x": 774,
+          "y": 428,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 4,
+        "on": 1,
+        "raw": 0.318182,
+        "selected": 0.312983,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5077363018867938,
+        "bounds": {
+          "x": 774,
+          "y": 402,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 4,
+        "on": 2,
+        "raw": 0.333333,
+        "selected": 0.327666,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5534413584905643,
+        "bounds": {
+          "x": 809,
+          "y": 420,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 4,
+        "on": 2,
+        "raw": 0.313131,
+        "selected": 0.30796,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5050018113207533,
+        "bounds": {
+          "x": 810,
+          "y": 395,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A#2",
+        "g": "A#2",
+        "m": 4,
+        "on": 3,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 845,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F3",
+        "g": "F3",
+        "m": 4,
+        "on": 3,
+        "raw": 0.308081,
+        "selected": 0.302937,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5023649811320742,
+        "bounds": {
+          "x": 846,
+          "y": 389,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "A#4",
+        "g": "A4",
+        "m": 4,
+        "on": 1.5,
+        "raw": 0.219697,
+        "selected": 0.214065,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5500232452830188,
+        "bounds": {
+          "x": 792,
+          "y": 273,
+          "width": 19,
+          "height": 9
+        },
+        "stems": 9,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "C#5",
+        "g": "F5",
+        "m": 4,
+        "on": 1,
+        "raw": 0.209596,
+        "selected": 0.194745,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 1.450354264150944,
+        "bounds": {
+          "x": 774,
+          "y": 249,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 6,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 5,
+        "on": 0,
+        "raw": 0.555556,
+        "selected": 0.559892,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.42345539622640527,
+        "bounds": {
+          "x": 184,
+          "y": 722,
+          "width": 19,
+          "height": 6
+        },
+        "stems": 6,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 5,
+        "on": 0.5,
+        "raw": 0.550505,
+        "selected": 0.554869,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.42618988679244574,
+        "bounds": {
+          "x": 200,
+          "y": 715,
+          "width": 17,
+          "height": 7
+        },
+        "stems": 10,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C5",
+        "g": "C5",
+        "m": 5,
+        "on": 1.5,
+        "raw": 0.540404,
+        "selected": 0.544049,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.35597207547169935,
+        "bounds": {
+          "x": 227,
+          "y": 701,
+          "width": 17,
+          "height": 7
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 5,
+        "on": 0,
+        "raw": 0.679293,
+        "selected": 0.674266,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.49093871698113156,
+        "bounds": {
+          "x": 184,
+          "y": 869,
+          "width": 11,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 5,
+        "on": 0,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 184,
+          "y": 843,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G3",
+        "g": "G3",
+        "m": 5,
+        "on": 0,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 183,
+          "y": 823,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 5,
+        "on": 1,
+        "raw": 0.674242,
+        "selected": 0.669243,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4882042264150911,
+        "bounds": {
+          "x": 210,
+          "y": 863,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 5,
+        "on": 2,
+        "raw": 0.669192,
+        "selected": 0.663833,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5233619622641502,
+        "bounds": {
+          "x": 237,
+          "y": 856,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#3",
+        "g": "F#3",
+        "m": 5,
+        "on": 2,
+        "raw": 0.64899,
+        "selected": 0.64374,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5127169811320723,
+        "bounds": {
+          "x": 238,
+          "y": 830,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 5,
+        "on": 3,
+        "raw": 0.664141,
+        "selected": 0.659196,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4829305660377327,
+        "bounds": {
+          "x": 264,
+          "y": 850,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G3",
+        "g": "G3",
+        "m": 5,
+        "on": 3,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 264,
+          "y": 823,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "G5",
+        "g": "G#5",
+        "m": 5,
+        "on": 2.5,
+        "raw": 0.540404,
+        "selected": 0.525502,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 1.4553349433962248,
+        "bounds": {
+          "x": 249,
+          "y": 677,
+          "width": 21,
+          "height": 7
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "E3",
+        "g": "F3",
+        "m": 5,
+        "on": 1,
+        "raw": 0.65404,
+        "selected": 0.645672,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.8172220377358408,
+        "bounds": {
+          "x": 209,
+          "y": 828,
+          "width": 14,
+          "height": 16
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "D5",
+        "g": "A4",
+        "m": 5,
+        "on": 0.5,
+        "raw": 0.550505,
+        "selected": 0.554869,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.42618988679244574,
+        "bounds": {
+          "x": 200,
+          "y": 715,
+          "width": 17,
+          "height": 7
+        },
+        "stems": 10,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "A5",
+        "g": "C5",
+        "m": 5,
+        "on": 1.5,
+        "raw": 0.540404,
+        "selected": 0.544049,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.35597207547169935,
+        "bounds": {
+          "x": 227,
+          "y": 701,
+          "width": 17,
+          "height": 7
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#5",
+        "g": "C#5",
+        "m": 6,
+        "on": 1,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 375,
+          "y": 702,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 6,
+        "on": 0,
+        "raw": 0.674242,
+        "selected": 0.669243,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4882042264150911,
+        "bounds": {
+          "x": 339,
+          "y": 863,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 6,
+        "on": 0,
+        "raw": 0.65404,
+        "selected": 0.648764,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5152561509433902,
+        "bounds": {
+          "x": 339,
+          "y": 836,
+          "width": 20,
+          "height": 8
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A3",
+        "g": "A3",
+        "m": 6,
+        "on": 0,
+        "raw": 0.638889,
+        "selected": 0.633694,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5073456603773635,
+        "bounds": {
+          "x": 339,
+          "y": 817,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 6,
+        "on": 1,
+        "raw": 0.669192,
+        "selected": 0.66306,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5988534339622656,
+        "bounds": {
+          "x": 375,
+          "y": 854,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#3",
+        "g": "F#3",
+        "m": 6,
+        "on": 1,
+        "raw": 0.64899,
+        "selected": 0.642968,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5881107924528264,
+        "bounds": {
+          "x": 375,
+          "y": 828,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#3",
+        "g": "C#3",
+        "m": 6,
+        "on": 2,
+        "raw": 0.664141,
+        "selected": 0.659196,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4829305660377327,
+        "bounds": {
+          "x": 411,
+          "y": 850,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#3",
+        "g": "G#3",
+        "m": 6,
+        "on": 2,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 411,
+          "y": 823,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 6,
+        "on": 3,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 447,
+          "y": 843,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A3",
+        "g": "A3",
+        "m": 6,
+        "on": 3,
+        "raw": 0.638889,
+        "selected": 0.633694,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5073456603773635,
+        "bounds": {
+          "x": 447,
+          "y": 817,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#5",
+        "g": "F#5",
+        "m": 6,
+        "on": 3,
+        "raw": 0.535354,
+        "selected": 0.527434,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7734701886792497,
+        "bounds": {
+          "x": 445,
+          "y": 676,
+          "width": 18,
+          "height": 14
+        },
+        "stems": 10,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#5",
+        "g": "F#5",
+        "m": 6,
+        "on": 3,
+        "raw": 0.535354,
+        "selected": 0.527434,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7734701886792497,
+        "bounds": {
+          "x": 445,
+          "y": 676,
+          "width": 18,
+          "height": 14
+        },
+        "stems": 10,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "A#4",
+        "m": 6,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.555255,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.4638867924528337,
+        "bounds": {
+          "x": 339,
+          "y": 716,
+          "width": 12,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "E5",
+        "g": "A#4",
+        "m": 6,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.555255,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.4638867924528337,
+        "bounds": {
+          "x": 339,
+          "y": 716,
+          "width": 12,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "B5",
+        "g": "D#5",
+        "m": 6,
+        "on": 1.5,
+        "raw": 0.535354,
+        "selected": 0.539413,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.39640347169811696,
+        "bounds": {
+          "x": 397,
+          "y": 696,
+          "width": 16,
+          "height": 5
+        },
+        "stems": 11,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#5",
+        "g": "C#5",
+        "m": 7,
+        "on": 0.5,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 558,
+          "y": 702,
+          "width": 10,
+          "height": 8
+        },
+        "stems": 11,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#5",
+        "g": "G#5",
+        "m": 7,
+        "on": 0.5,
+        "raw": 0.535354,
+        "selected": 0.526662,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.848864000000004,
+        "bounds": {
+          "x": 555,
+          "y": 674,
+          "width": 18,
+          "height": 16
+        },
+        "stems": 11,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#6",
+        "g": "C#6",
+        "m": 7,
+        "on": 2,
+        "raw": 0.515152,
+        "selected": 0.510046,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.49865388679245864,
+        "bounds": {
+          "x": 609,
+          "y": 657,
+          "width": 21,
+          "height": 7
+        },
+        "stems": 8,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#5",
+        "g": "G#5",
+        "m": 7,
+        "on": 2.5,
+        "raw": 0.540404,
+        "selected": 0.525502,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 1.4553349433962248,
+        "bounds": {
+          "x": 623,
+          "y": 677,
+          "width": 25,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#5",
+        "g": "C#5",
+        "m": 7,
+        "on": 3.5,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5172093584905633,
+        "bounds": {
+          "x": 664,
+          "y": 702,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 7,
+        "on": 0,
+        "raw": 0.669192,
+        "selected": 0.66306,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5988534339622656,
+        "bounds": {
+          "x": 538,
+          "y": 854,
+          "width": 13,
+          "height": 9
+        },
+        "stems": 7,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F#3",
+        "g": "F#3",
+        "m": 7,
+        "on": 0,
+        "raw": 0.64899,
+        "selected": 0.642968,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5881107924528264,
+        "bounds": {
+          "x": 539,
+          "y": 828,
+          "width": 12,
+          "height": 9
+        },
+        "stems": 7,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C#3",
+        "g": "C#3",
+        "m": 7,
+        "on": 1,
+        "raw": 0.664141,
+        "selected": 0.65881,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5206274716981097,
+        "bounds": {
+          "x": 574,
+          "y": 849,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#3",
+        "g": "G#3",
+        "m": 7,
+        "on": 1,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 574,
+          "y": 823,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D#3",
+        "g": "D#3",
+        "m": 7,
+        "on": 2,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 610,
+          "y": 843,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A#3",
+        "g": "A#3",
+        "m": 7,
+        "on": 2,
+        "raw": 0.638889,
+        "selected": 0.633694,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5073456603773635,
+        "bounds": {
+          "x": 610,
+          "y": 817,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 7,
+        "on": 3,
+        "raw": 0.65404,
+        "selected": 0.648764,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5152561509433902,
+        "bounds": {
+          "x": 646,
+          "y": 836,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B3",
+        "g": "B3",
+        "m": 7,
+        "on": 3,
+        "raw": 0.633838,
+        "selected": 0.628671,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.504611169811323,
+        "bounds": {
+          "x": 646,
+          "y": 810,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#5",
+        "g": "G#5",
+        "m": 7,
+        "on": 1,
+        "raw": 0.530303,
+        "selected": 0.524343,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5820558490566009,
+        "bounds": {
+          "x": 570,
+          "y": 674,
+          "width": 21,
+          "height": 10
+        },
+        "stems": 13,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G#5",
+        "g": "G#5",
+        "m": 7,
+        "on": 3,
+        "raw": 0.530303,
+        "selected": 0.524343,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5820558490566009,
+        "bounds": {
+          "x": 645,
+          "y": 674,
+          "width": 16,
+          "height": 10
+        },
+        "stems": 12,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "G5",
+        "g": "G#5",
+        "m": 7,
+        "on": 1,
+        "raw": 0.530303,
+        "selected": 0.524343,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5820558490566009,
+        "bounds": {
+          "x": 570,
+          "y": 674,
+          "width": 21,
+          "height": 10
+        },
+        "stems": 13,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "G5",
+        "g": "G#5",
+        "m": 7,
+        "on": 3,
+        "raw": 0.530303,
+        "selected": 0.524343,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5820558490566009,
+        "bounds": {
+          "x": 645,
+          "y": 674,
+          "width": 16,
+          "height": 10
+        },
+        "stems": 12,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "D#5",
+        "g": "C#5",
+        "m": 7,
+        "on": 3,
+        "raw": 0.545455,
+        "selected": 0.54289,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.25049886792453235,
+        "bounds": {
+          "x": 641,
+          "y": 696,
+          "width": 17,
+          "height": 14
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "F#5",
+        "g": "G#5",
+        "m": 7,
+        "on": 0.5,
+        "raw": 0.535354,
+        "selected": 0.526662,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.848864000000004,
+        "bounds": {
+          "x": 555,
+          "y": 674,
+          "width": 18,
+          "height": 16
+        },
+        "stems": 11,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": false,
+        "e": "A#5",
+        "g": "F#5",
+        "m": 7,
+        "on": 3.5,
+        "raw": 0.530303,
+        "selected": 0.527434,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.2801876226415107,
+        "bounds": {
+          "x": 667,
+          "y": 676,
+          "width": 13,
+          "height": 14
+        },
+        "stems": 8,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C6",
+        "g": "C6",
+        "m": 8,
+        "on": 2.5,
+        "raw": 0.515152,
+        "selected": 0.510046,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.49865388679245864,
+        "bounds": {
+          "x": 826,
+          "y": 657,
+          "width": 21,
+          "height": 7
+        },
+        "stems": 8,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 8,
+        "on": 0,
+        "raw": 0.664141,
+        "selected": 0.659196,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4829305660377327,
+        "bounds": {
+          "x": 738,
+          "y": 850,
+          "width": 15,
+          "height": 7
+        },
+        "stems": 0,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "G3",
+        "g": "G3",
+        "m": 8,
+        "on": 0,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 738,
+          "y": 823,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C4",
+        "g": "C4",
+        "m": 8,
+        "on": 0,
+        "raw": 0.628788,
+        "selected": 0.623648,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5019743396226438,
+        "bounds": {
+          "x": 733,
+          "y": 804,
+          "width": 24,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 8,
+        "on": 1,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 774,
+          "y": 843,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "A3",
+        "g": "A3",
+        "m": 8,
+        "on": 1,
+        "raw": 0.638889,
+        "selected": 0.633694,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5073456603773635,
+        "bounds": {
+          "x": 774,
+          "y": 817,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 8,
+        "on": 2,
+        "raw": 0.65404,
+        "selected": 0.648764,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5152561509433902,
+        "bounds": {
+          "x": 809,
+          "y": 836,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "B3",
+        "g": "B3",
+        "m": 8,
+        "on": 2,
+        "raw": 0.633838,
+        "selected": 0.628671,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.504611169811323,
+        "bounds": {
+          "x": 809,
+          "y": 810,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "F3",
+        "g": "F3",
+        "m": 8,
+        "on": 3,
+        "raw": 0.64899,
+        "selected": 0.64374,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5127169811320723,
+        "bounds": {
+          "x": 846,
+          "y": 830,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-dense-advanced-vector",
+        "correct": true,
+        "e": "C4",
+        "g": "C4",
+        "m": 8,
+        "on": 3,
+        "raw": 0.628788,
+        "selected": 0.623648,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5019743396226438,
+        "bounds": {
+          "x": 841,
+          "y": 804,
+          "width": 24,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      }
+    ]
+  },
+  {
+    "fixture": "piano-grand-voices-vector",
+    "rows": [
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D4",
+        "g": "D4",
+        "m": 1,
+        "on": 1,
+        "raw": 0.239899,
+        "selected": 0.23493,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.48527441509433983,
+        "bounds": {
+          "x": 210,
+          "y": 301,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 1,
+        "on": 2,
+        "raw": 0.224747,
+        "selected": 0.229134,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.4284360754716984,
+        "bounds": {
+          "x": 238,
+          "y": 294,
+          "width": 11,
+          "height": 6
+        },
+        "stems": 4,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 1,
+        "on": 3,
+        "raw": 0.229798,
+        "selected": 0.224498,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5176000000000001,
+        "bounds": {
+          "x": 264,
+          "y": 287,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "C2",
+        "g": "C2",
+        "m": 1,
+        "on": 0,
+        "raw": 0.358586,
+        "selected": 0.353168,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5291239245283057,
+        "bounds": {
+          "x": 184,
+          "y": 454,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 1,
+        "on": 0,
+        "raw": 0.338384,
+        "selected": 0.333076,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5183812830188718,
+        "bounds": {
+          "x": 184,
+          "y": 428,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F2",
+        "g": "F2",
+        "m": 1,
+        "on": 2,
+        "raw": 0.343434,
+        "selected": 0.338485,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48332120754717384,
+        "bounds": {
+          "x": 237,
+          "y": 435,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 1,
+        "on": 2,
+        "raw": 0.323232,
+        "selected": 0.318006,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.510373132075473,
+        "bounds": {
+          "x": 237,
+          "y": 408,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "G4",
+        "g": "E4",
+        "m": 1,
+        "on": 2,
+        "raw": 0.224747,
+        "selected": 0.229134,
+        "gap": 0.010239567233384851,
+        "shiftGaps": -0.4284360754716984,
+        "bounds": {
+          "x": 238,
+          "y": 294,
+          "width": 11,
+          "height": 6
+        },
+        "stems": 4,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 2,
+        "on": 1,
+        "raw": 0.234848,
+        "selected": 0.228748,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.595728301886792,
+        "bounds": {
+          "x": 375,
+          "y": 292,
+          "width": 20,
+          "height": 9
+        },
+        "stems": 6,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 2,
+        "on": 3,
+        "raw": 0.224747,
+        "selected": 0.219474,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5149631698113208,
+        "bounds": {
+          "x": 447,
+          "y": 281,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D2",
+        "g": "D2",
+        "m": 2,
+        "on": 0,
+        "raw": 0.353535,
+        "selected": 0.348532,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.4885948679245267,
+        "bounds": {
+          "x": 339,
+          "y": 448,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 2,
+        "on": 0,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 339,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 2,
+        "on": 2,
+        "raw": 0.338384,
+        "selected": 0.333076,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5183812830188718,
+        "bounds": {
+          "x": 411,
+          "y": 428,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 2,
+        "on": 2,
+        "raw": 0.318182,
+        "selected": 0.312983,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5077363018867938,
+        "bounds": {
+          "x": 411,
+          "y": 402,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F#4",
+        "g": "F#4",
+        "m": 3,
+        "on": 1,
+        "raw": 0.229798,
+        "selected": 0.224498,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5176000000000001,
+        "bounds": {
+          "x": 574,
+          "y": 287,
+          "width": 13,
+          "height": 8
+        },
+        "stems": 7,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 3,
+        "on": 3,
+        "raw": 0.219697,
+        "selected": 0.214451,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5123263396226416,
+        "bounds": {
+          "x": 646,
+          "y": 274,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E2",
+        "g": "E2",
+        "m": 3,
+        "on": 0,
+        "raw": 0.348485,
+        "selected": 0.343122,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.523752603773586,
+        "bounds": {
+          "x": 539,
+          "y": 441,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 3,
+        "on": 0,
+        "raw": 0.328283,
+        "selected": 0.323029,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.513107622641508,
+        "bounds": {
+          "x": 539,
+          "y": 415,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 3,
+        "on": 2,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 610,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 3,
+        "on": 2,
+        "raw": 0.313131,
+        "selected": 0.30796,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5050018113207533,
+        "bounds": {
+          "x": 610,
+          "y": 395,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F4",
+        "m": 3,
+        "on": 0,
+        "raw": 0.234848,
+        "selected": 0.22643,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.8221050566037746,
+        "bounds": {
+          "x": 539,
+          "y": 286,
+          "width": 19,
+          "height": 15
+        },
+        "stems": 0,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "B4",
+        "g": "C5",
+        "m": 3,
+        "on": 0,
+        "raw": 0.214646,
+        "selected": 0.209428,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5095918490566039,
+        "bounds": {
+          "x": 539,
+          "y": 268,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 4,
+        "on": 1,
+        "raw": 0.224747,
+        "selected": 0.219474,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5149631698113208,
+        "bounds": {
+          "x": 774,
+          "y": 281,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A#4",
+        "g": "A#4",
+        "m": 4,
+        "on": 3,
+        "raw": 0.219697,
+        "selected": 0.214451,
+        "gap": 0.010239567233384851,
+        "shiftGaps": 0.5123263396226416,
+        "bounds": {
+          "x": 845,
+          "y": 274,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F2",
+        "g": "F2",
+        "m": 4,
+        "on": 0,
+        "raw": 0.343434,
+        "selected": 0.338485,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.48332120754717384,
+        "bounds": {
+          "x": 738,
+          "y": 435,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 4,
+        "on": 0,
+        "raw": 0.323232,
+        "selected": 0.318006,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.510373132075473,
+        "bounds": {
+          "x": 738,
+          "y": 408,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A#2",
+        "g": "A#2",
+        "m": 4,
+        "on": 2,
+        "raw": 0.333333,
+        "selected": 0.328053,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5156467924528313,
+        "bounds": {
+          "x": 809,
+          "y": 421,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F3",
+        "g": "F3",
+        "m": 4,
+        "on": 2,
+        "raw": 0.308081,
+        "selected": 0.302937,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5023649811320742,
+        "bounds": {
+          "x": 810,
+          "y": 389,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 5,
+        "on": 0,
+        "raw": 0.679293,
+        "selected": 0.674266,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.49093871698113156,
+        "bounds": {
+          "x": 184,
+          "y": 869,
+          "width": 11,
+          "height": 8
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 5,
+        "on": 0,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 184,
+          "y": 843,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 5,
+        "on": 2,
+        "raw": 0.664141,
+        "selected": 0.659196,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4829305660377327,
+        "bounds": {
+          "x": 237,
+          "y": 850,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G3",
+        "g": "G3",
+        "m": 5,
+        "on": 2,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 237,
+          "y": 823,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "B4",
+        "m": 5,
+        "on": 3,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.4153347878787851,
+        "bounds": {
+          "x": 260,
+          "y": 699,
+          "width": 24,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "G4",
+        "m": 5,
+        "on": 1,
+        "raw": 0.560606,
+        "selected": 0.556801,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.29840424242424685,
+        "bounds": {
+          "x": 204,
+          "y": 716,
+          "width": 24,
+          "height": 10
+        },
+        "stems": 0,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 6,
+        "on": 0,
+        "raw": 0.674242,
+        "selected": 0.669243,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4882042264150911,
+        "bounds": {
+          "x": 339,
+          "y": 863,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 6,
+        "on": 0,
+        "raw": 0.65404,
+        "selected": 0.648764,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5152561509433902,
+        "bounds": {
+          "x": 339,
+          "y": 836,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 6,
+        "on": 2,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 411,
+          "y": 843,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A3",
+        "g": "A3",
+        "m": 6,
+        "on": 2,
+        "raw": 0.638889,
+        "selected": 0.633694,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5073456603773635,
+        "bounds": {
+          "x": 411,
+          "y": 817,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "G#4",
+        "m": 6,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.555641,
+        "gap": 0.012751159196290579,
+        "shiftGaps": -0.4027869090909112,
+        "bounds": {
+          "x": 339,
+          "y": 716,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "D5",
+        "g": "C5",
+        "m": 6,
+        "on": 3,
+        "raw": 0.545455,
+        "selected": 0.540185,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.4132957575757571,
+        "bounds": {
+          "x": 442,
+          "y": 696,
+          "width": 24,
+          "height": 7
+        },
+        "stems": 0,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "E5",
+        "g": "G#4",
+        "m": 6,
+        "on": 0,
+        "raw": 0.550505,
+        "selected": 0.555641,
+        "gap": 0.012751159196290579,
+        "shiftGaps": -0.4027869090909112,
+        "bounds": {
+          "x": 339,
+          "y": 716,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G2",
+        "g": "G2",
+        "m": 7,
+        "on": 0,
+        "raw": 0.679293,
+        "selected": 0.674266,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.49093871698113156,
+        "bounds": {
+          "x": 538,
+          "y": 869,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "D3",
+        "g": "D3",
+        "m": 7,
+        "on": 0,
+        "raw": 0.659091,
+        "selected": 0.653787,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5179906415094306,
+        "bounds": {
+          "x": 539,
+          "y": 843,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "C3",
+        "g": "C3",
+        "m": 7,
+        "on": 2,
+        "raw": 0.664141,
+        "selected": 0.659196,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4829305660377327,
+        "bounds": {
+          "x": 610,
+          "y": 850,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "G3",
+        "g": "G3",
+        "m": 7,
+        "on": 2,
+        "raw": 0.643939,
+        "selected": 0.638717,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5099824905660426,
+        "bounds": {
+          "x": 610,
+          "y": 823,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "B4",
+        "m": 7,
+        "on": 3,
+        "raw": 0.550505,
+        "selected": 0.545209,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.4153347878787851,
+        "bounds": {
+          "x": 641,
+          "y": 699,
+          "width": 25,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "G4",
+        "m": 7,
+        "on": 1,
+        "raw": 0.560606,
+        "selected": 0.556801,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.29840424242424685,
+        "bounds": {
+          "x": 570,
+          "y": 716,
+          "width": 24,
+          "height": 10
+        },
+        "stems": 0,
+        "rows": 0
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "F#4",
+        "g": "F#4",
+        "m": 8,
+        "on": 1,
+        "raw": 0.570707,
+        "selected": 0.56221,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.6663707878787857,
+        "bounds": {
+          "x": 769,
+          "y": 720,
+          "width": 24,
+          "height": 16
+        },
+        "stems": 3,
+        "rows": 1
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E2",
+        "g": "E2",
+        "m": 8,
+        "on": 0,
+        "raw": 0.689394,
+        "selected": 0.684312,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4963100377358403,
+        "bounds": {
+          "x": 738,
+          "y": 882,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "B2",
+        "g": "B2",
+        "m": 8,
+        "on": 0,
+        "raw": 0.669192,
+        "selected": 0.663833,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5233619622641502,
+        "bounds": {
+          "x": 738,
+          "y": 856,
+          "width": 11,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "A2",
+        "g": "A2",
+        "m": 8,
+        "on": 2,
+        "raw": 0.674242,
+        "selected": 0.669243,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.4882042264150911,
+        "bounds": {
+          "x": 809,
+          "y": 863,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": true,
+        "e": "E3",
+        "g": "E3",
+        "m": 8,
+        "on": 2,
+        "raw": 0.65404,
+        "selected": 0.648764,
+        "gap": 0.010239567233384872,
+        "shiftGaps": 0.5152561509433902,
+        "bounds": {
+          "x": 809,
+          "y": 836,
+          "width": 12,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-grand-voices-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "G4",
+        "m": 8,
+        "on": 3,
+        "raw": 0.560606,
+        "selected": 0.556801,
+        "gap": 0.012751159196290579,
+        "shiftGaps": 0.29840424242424685,
+        "bounds": {
+          "x": 841,
+          "y": 716,
+          "width": 24,
+          "height": 10
+        },
+        "stems": 0,
+        "rows": 0
+      }
+    ]
+  },
+  {
+    "fixture": "piano-rhythm-tuplets-vector",
+    "rows": [
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 1,
+        "on": 0,
+        "raw": 0.260101,
+        "selected": 0.254637,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5336163018867953,
+        "bounds": {
+          "x": 184,
+          "y": 326,
+          "width": 15,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 1,
+        "on": 0.5,
+        "raw": 0.255051,
+        "selected": 0.249614,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5309794716981161,
+        "bounds": {
+          "x": 193,
+          "y": 320,
+          "width": 16,
+          "height": 7
+        },
+        "stems": 7,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 1,
+        "on": 1,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 206,
+          "y": 313,
+          "width": 20,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 1,
+        "on": 1.5,
+        "raw": 0.244949,
+        "selected": 0.239567,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5256081509433965,
+        "bounds": {
+          "x": 227,
+          "y": 307,
+          "width": 9,
+          "height": 7
+        },
+        "stems": 7,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 1,
+        "on": 1.75,
+        "raw": 0.239899,
+        "selected": 0.234544,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5229713207547173,
+        "bounds": {
+          "x": 233,
+          "y": 300,
+          "width": 20,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "C5",
+        "g": "C5",
+        "m": 1,
+        "on": 2.25,
+        "raw": 0.234848,
+        "selected": 0.229521,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5202368301886795,
+        "bounds": {
+          "x": 254,
+          "y": 294,
+          "width": 9,
+          "height": 7
+        },
+        "stems": 7,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 1,
+        "on": 2.75,
+        "raw": 0.239899,
+        "selected": 0.232226,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7493480754717,
+        "bounds": {
+          "x": 260,
+          "y": 294,
+          "width": 20,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 1,
+        "on": 3,
+        "raw": 0.244949,
+        "selected": 0.239567,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5256081509433965,
+        "bounds": {
+          "x": 278,
+          "y": 307,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 2,
+        "on": 3,
+        "raw": 0.234848,
+        "selected": 0.232226,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.2560655094339638,
+        "bounds": {
+          "x": 454,
+          "y": 294,
+          "width": 21,
+          "height": 14
+        },
+        "stems": 9,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 2,
+        "on": 2,
+        "raw": 0.260101,
+        "selected": 0.252318,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7600907169811366,
+        "bounds": {
+          "x": 411,
+          "y": 320,
+          "width": 19,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 2,
+        "on": 3.25,
+        "raw": 0.244949,
+        "selected": 0.236862,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7897794716981149,
+        "bounds": {
+          "x": 469,
+          "y": 300,
+          "width": 17,
+          "height": 14
+        },
+        "stems": 3,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 2,
+        "on": 0.75,
+        "raw": 0.260101,
+        "selected": 0.251546,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.8354845283018909,
+        "bounds": {
+          "x": 339,
+          "y": 318,
+          "width": 20,
+          "height": 16
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F4",
+        "m": 2,
+        "on": 2,
+        "raw": 0.260101,
+        "selected": 0.252318,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7600907169811366,
+        "bounds": {
+          "x": 411,
+          "y": 320,
+          "width": 19,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "B4",
+        "m": 2,
+        "on": 3,
+        "raw": 0.234848,
+        "selected": 0.232226,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.2560655094339638,
+        "bounds": {
+          "x": 454,
+          "y": 294,
+          "width": 21,
+          "height": 14
+        },
+        "stems": 9,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F4",
+        "m": 2,
+        "on": 0.75,
+        "raw": 0.260101,
+        "selected": 0.251546,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.8354845283018909,
+        "bounds": {
+          "x": 339,
+          "y": 318,
+          "width": 20,
+          "height": 16
+        },
+        "stems": 0,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 3,
+        "on": 0,
+        "raw": 0.260101,
+        "selected": 0.252705,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7222961509433982,
+        "bounds": {
+          "x": 540,
+          "y": 326,
+          "width": 18,
+          "height": 3
+        },
+        "stems": 4,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 3,
+        "on": 0.3333333333333339,
+        "raw": 0.260101,
+        "selected": 0.252705,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7222961509433982,
+        "bounds": {
+          "x": 546,
+          "y": 326,
+          "width": 24,
+          "height": 3
+        },
+        "stems": 8,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 3,
+        "on": 0.6666666666666661,
+        "raw": 0.260101,
+        "selected": 0.252705,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7222961509433982,
+        "bounds": {
+          "x": 558,
+          "y": 326,
+          "width": 24,
+          "height": 3
+        },
+        "stems": 8,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 3,
+        "on": 1.333333333333334,
+        "raw": 0.255051,
+        "selected": 0.250386,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.45558566037736187,
+        "bounds": {
+          "x": 582,
+          "y": 320,
+          "width": 24,
+          "height": 9
+        },
+        "stems": 8,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 3,
+        "on": 1.666666666666666,
+        "raw": 0.255051,
+        "selected": 0.249614,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5309794716981161,
+        "bounds": {
+          "x": 594,
+          "y": 320,
+          "width": 24,
+          "height": 7
+        },
+        "stems": 8,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 3,
+        "on": 2,
+        "raw": 0.255051,
+        "selected": 0.249614,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5309794716981161,
+        "bounds": {
+          "x": 605,
+          "y": 320,
+          "width": 25,
+          "height": 7
+        },
+        "stems": 8,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 2.666666666666666,
+        "raw": 0.25,
+        "selected": 0.246522,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.3396627924528314,
+        "bounds": {
+          "x": 629,
+          "y": 313,
+          "width": 25,
+          "height": 13
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 3,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 641,
+          "y": 313,
+          "width": 25,
+          "height": 8
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 3.333333333333334,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 653,
+          "y": 313,
+          "width": 25,
+          "height": 8
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 3,
+        "on": 3.666666666666666,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 665,
+          "y": 313,
+          "width": 21,
+          "height": 8
+        },
+        "stems": 4,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F4",
+        "m": 3,
+        "on": 1,
+        "raw": 0.260101,
+        "selected": 0.252318,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7600907169811366,
+        "bounds": {
+          "x": 570,
+          "y": 320,
+          "width": 24,
+          "height": 14
+        },
+        "stems": 4,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "F4",
+        "g": "G4",
+        "m": 3,
+        "on": 2.333333333333334,
+        "raw": 0.255051,
+        "selected": 0.247295,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7574538867924575,
+        "bounds": {
+          "x": 617,
+          "y": 314,
+          "width": 25,
+          "height": 13
+        },
+        "stems": 7,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "G4",
+        "g": "G4",
+        "m": 4,
+        "on": 1,
+        "raw": 0.25,
+        "selected": 0.24459,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5283426415094342,
+        "bounds": {
+          "x": 756,
+          "y": 313,
+          "width": 20,
+          "height": 8
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "C5",
+        "g": "B4",
+        "m": 4,
+        "on": 3,
+        "raw": 0.239899,
+        "selected": 0.232226,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7493480754717,
+        "bounds": {
+          "x": 832,
+          "y": 294,
+          "width": 24,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 4,
+        "on": 3,
+        "raw": 0.239899,
+        "selected": 0.232226,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7493480754717,
+        "bounds": {
+          "x": 832,
+          "y": 294,
+          "width": 24,
+          "height": 14
+        },
+        "stems": 0,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "A4",
+        "g": "A4",
+        "m": 4,
+        "on": 1.5,
+        "raw": 0.244949,
+        "selected": 0.239567,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5256081509433965,
+        "bounds": {
+          "x": 774,
+          "y": 307,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 6,
+        "rows": 4
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "C5",
+        "g": "C5",
+        "m": 5,
+        "on": 0,
+        "raw": 0.525253,
+        "selected": 0.520093,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5039275471698061,
+        "bounds": {
+          "x": 183,
+          "y": 670,
+          "width": 13,
+          "height": 7
+        },
+        "stems": 4,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 7,
+        "on": 1,
+        "raw": 0.540404,
+        "selected": 0.544436,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.3937666415094378,
+        "bounds": {
+          "x": 557,
+          "y": 702,
+          "width": 20,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 7,
+        "on": 2,
+        "raw": 0.540404,
+        "selected": 0.544436,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.3937666415094378,
+        "bounds": {
+          "x": 611,
+          "y": 702,
+          "width": 20,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 7,
+        "on": 2.5,
+        "raw": 0.540404,
+        "selected": 0.544436,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.3937666415094378,
+        "bounds": {
+          "x": 628,
+          "y": 702,
+          "width": 21,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "E4",
+        "g": "E4",
+        "m": 7,
+        "on": 2.75,
+        "raw": 0.540404,
+        "selected": 0.544436,
+        "gap": 0.010239567233384844,
+        "shiftGaps": -0.3937666415094378,
+        "bounds": {
+          "x": 646,
+          "y": 702,
+          "width": 21,
+          "height": 6
+        },
+        "stems": 8,
+        "rows": 6
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "E4",
+        "g": "F4",
+        "m": 7,
+        "on": 1.5,
+        "raw": 0.550505,
+        "selected": 0.542504,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7813806792452872,
+        "bounds": {
+          "x": 570,
+          "y": 695,
+          "width": 24,
+          "height": 15
+        },
+        "stems": 0,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "G4",
+        "g": "F4",
+        "m": 7,
+        "on": 2,
+        "raw": 0.550505,
+        "selected": 0.542504,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7813806792452872,
+        "bounds": {
+          "x": 606,
+          "y": 695,
+          "width": 24,
+          "height": 15
+        },
+        "stems": 0,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "G4",
+        "g": "F4",
+        "m": 7,
+        "on": 2.5,
+        "raw": 0.550505,
+        "selected": 0.542504,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7813806792452872,
+        "bounds": {
+          "x": 624,
+          "y": 695,
+          "width": 24,
+          "height": 15
+        },
+        "stems": 0,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "G4",
+        "g": "F4",
+        "m": 7,
+        "on": 2.75,
+        "raw": 0.550505,
+        "selected": 0.542504,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.7813806792452872,
+        "bounds": {
+          "x": 642,
+          "y": 695,
+          "width": 24,
+          "height": 15
+        },
+        "stems": 0,
+        "rows": 5
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "B4",
+        "g": "B4",
+        "m": 8,
+        "on": 2,
+        "raw": 0.530303,
+        "selected": 0.52357,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.6575473207547164,
+        "bounds": {
+          "x": 809,
+          "y": 672,
+          "width": 21,
+          "height": 12
+        },
+        "stems": 0,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "C5",
+        "g": "C5",
+        "m": 8,
+        "on": 2.5,
+        "raw": 0.525253,
+        "selected": 0.520093,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5039275471698061,
+        "bounds": {
+          "x": 827,
+          "y": 670,
+          "width": 13,
+          "height": 7
+        },
+        "stems": 8,
+        "rows": 2
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": true,
+        "e": "F4",
+        "g": "F4",
+        "m": 8,
+        "on": 0.75,
+        "raw": 0.545455,
+        "selected": 0.540185,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.5146701886792454,
+        "bounds": {
+          "x": 738,
+          "y": 696,
+          "width": 12,
+          "height": 7
+        },
+        "stems": 3,
+        "rows": 3
+      },
+      {
+        "fixture": "piano-rhythm-tuplets-vector",
+        "correct": false,
+        "e": "A4",
+        "g": "G4",
+        "m": 8,
+        "on": 1.5,
+        "raw": 0.535354,
+        "selected": 0.532844,
+        "gap": 0.010239567233384844,
+        "shiftGaps": 0.24512754716981272,
+        "bounds": {
+          "x": 769,
+          "y": 683,
+          "width": 17,
+          "height": 14
+        },
+        "stems": 7,
+        "rows": 2
+      }
+    ]
+  }
+]

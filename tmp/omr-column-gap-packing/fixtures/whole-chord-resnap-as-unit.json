@@ -1,0 +1,104 @@
+{
+  "id": "whole-chord-resnap-as-unit",
+  "description": "Multi-note chord events on odd sixteenths; resnap should move whole chords",
+  "beats": 4,
+  "notes": [
+    {
+      "cx": 100,
+      "cy": 110,
+      "midi": 60,
+      "clef": "treble",
+      "positionInMeasure": 0.05,
+      "candidateId": "r0-0"
+    },
+    {
+      "cx": 101,
+      "cy": 90,
+      "midi": 64,
+      "clef": "treble",
+      "positionInMeasure": 0.051000000000000004,
+      "candidateId": "r0-1"
+    },
+    {
+      "cx": 140,
+      "cy": 110,
+      "midi": 61,
+      "clef": "treble",
+      "positionInMeasure": 0.16999999999999998,
+      "candidateId": "r1-0"
+    },
+    {
+      "cx": 141,
+      "cy": 90,
+      "midi": 65,
+      "clef": "treble",
+      "positionInMeasure": 0.17099999999999999,
+      "candidateId": "r1-1"
+    },
+    {
+      "cx": 180,
+      "cy": 110,
+      "midi": 62,
+      "clef": "treble",
+      "positionInMeasure": 0.29,
+      "candidateId": "r2-0"
+    },
+    {
+      "cx": 181,
+      "cy": 90,
+      "midi": 66,
+      "clef": "treble",
+      "positionInMeasure": 0.291,
+      "candidateId": "r2-1"
+    },
+    {
+      "cx": 220,
+      "cy": 110,
+      "midi": 63,
+      "clef": "treble",
+      "positionInMeasure": 0.41,
+      "candidateId": "r3-0"
+    },
+    {
+      "cx": 221,
+      "cy": 90,
+      "midi": 67,
+      "clef": "treble",
+      "positionInMeasure": 0.411,
+      "candidateId": "r3-1"
+    },
+    {
+      "cx": 100,
+      "cy": 200,
+      "midi": 40,
+      "clef": "bass",
+      "positionInMeasure": 0.05,
+      "candidateId": "bass0"
+    },
+    {
+      "cx": 140,
+      "cy": 200,
+      "midi": 42,
+      "clef": "bass",
+      "positionInMeasure": 0.17,
+      "candidateId": "bass1"
+    },
+    {
+      "cx": 180,
+      "cy": 200,
+      "midi": 43,
+      "clef": "bass",
+      "positionInMeasure": 0.29,
+      "candidateId": "bass2"
+    },
+    {
+      "cx": 220,
+      "cy": 200,
+      "midi": 45,
+      "clef": "bass",
+      "positionInMeasure": 0.41,
+      "candidateId": "bass3"
+    }
+  ],
+  "diagnosticOnly": true
+}

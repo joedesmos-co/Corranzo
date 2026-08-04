@@ -1,0 +1,49 @@
+{
+  "firstFailingStage": "runPdfOmrPipelineBody difficulty/low-confidence gate (after note extraction)",
+  "pattern": "overallConfidence ≈0.64–0.67 with hundreds–thousands of notes still hard-rejected",
+  "rejects": [
+    {
+      "id": "bach-chorale-bwv259",
+      "notes": 358,
+      "conf": 0.641,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "mozart-turkish-march",
+      "notes": 2167,
+      "conf": 0.648,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "handel-gavotte",
+      "notes": 557,
+      "conf": 0.649,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "demo-minuet-in-g",
+      "notes": 612,
+      "conf": 0.649,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "brahms-waltz-op39-3",
+      "notes": 122,
+      "conf": 0.669,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "chopin-mazurka-op6-1",
+      "notes": 1388,
+      "conf": 0.653,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "beethoven-pathetique-mutopia",
+      "notes": 2708,
+      "conf": 0.65,
+      "stage": "low-confidence"
+    }
+  ],
+  "counterexamplePassed": "piano-brahms-lullaby (notes=53, conf≈0.66)"
+}

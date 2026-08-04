@@ -1,0 +1,158 @@
+[
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2112",
+    "source": "Ao no Sumika (Piano).pdf",
+    "ok": true,
+    "elapsedMs": 1305,
+    "pagesProcessed": 4,
+    "totalPages": 4,
+    "reported": {
+      "measures": 72,
+      "notes": 1123,
+      "confidence": 0.8967873818118823,
+      "acceptance": "accepted",
+      "tieStarts": 91,
+      "tieStops": 173,
+      "rests": 16
+    },
+    "reproduced": {
+      "measures": 73,
+      "notes": 1123,
+      "rests": 19,
+      "acceptance": "accepted",
+      "confidence": null,
+      "tieStarts": 96,
+      "tieStops": 96,
+      "tieImbalance": 0
+    },
+    "delta": {
+      "measures": 1,
+      "notes": 0,
+      "tieImbalance": 82
+    },
+    "reproducesIssue": {
+      "tieImbalance": false,
+      "zeroRestsDense": false,
+      "any": false
+    },
+    "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+    "sharedRootCauseCandidate": "tie"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2113",
+    "source": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+    "ok": true,
+    "elapsedMs": 624,
+    "pagesProcessed": 3,
+    "totalPages": 3,
+    "reported": {
+      "measures": 63,
+      "notes": 1050,
+      "confidence": 0.898304895681949,
+      "acceptance": "accepted",
+      "tieStarts": 12,
+      "tieStops": 24,
+      "rests": 3
+    },
+    "reproduced": {
+      "measures": 61,
+      "notes": 1050,
+      "rests": 3,
+      "acceptance": "accepted",
+      "confidence": null,
+      "tieStarts": 12,
+      "tieStops": 12,
+      "tieImbalance": 0
+    },
+    "delta": {
+      "measures": -2,
+      "notes": 0,
+      "tieImbalance": 12
+    },
+    "reproducesIssue": {
+      "tieImbalance": false,
+      "zeroRestsDense": false,
+      "any": false
+    },
+    "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+    "sharedRootCauseCandidate": "tie"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2116",
+    "source": "sweden-minecraft.pdf",
+    "ok": true,
+    "elapsedMs": 192,
+    "pagesProcessed": 1,
+    "totalPages": 1,
+    "reported": {
+      "measures": 23,
+      "notes": 277,
+      "confidence": 0.9051255508821128,
+      "acceptance": "accepted",
+      "tieStarts": 6,
+      "tieStops": 12,
+      "rests": 0
+    },
+    "reproduced": {
+      "measures": 23,
+      "notes": 277,
+      "rests": 0,
+      "acceptance": "accepted",
+      "confidence": null,
+      "tieStarts": 6,
+      "tieStops": 6,
+      "tieImbalance": 0
+    },
+    "delta": {
+      "measures": 0,
+      "notes": 0,
+      "tieImbalance": 6
+    },
+    "reproducesIssue": {
+      "tieImbalance": false,
+      "zeroRestsDense": true,
+      "any": true
+    },
+    "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+    "sharedRootCauseCandidate": "tie"
+  },
+  {
+    "reportId": "corranzo-recognition-report-2026-07-29-2116 (1)",
+    "source": "aria-math-c418-from-minecraft.pdf",
+    "ok": true,
+    "elapsedMs": 1287,
+    "pagesProcessed": 6,
+    "totalPages": 6,
+    "reported": {
+      "measures": 194,
+      "notes": 1669,
+      "confidence": 0.9065013636427256,
+      "acceptance": "accepted",
+      "tieStarts": 51,
+      "tieStops": 100,
+      "rests": 101
+    },
+    "reproduced": {
+      "measures": 194,
+      "notes": 1669,
+      "rests": 101,
+      "acceptance": "accepted",
+      "confidence": null,
+      "tieStarts": 51,
+      "tieStops": 51,
+      "tieImbalance": 0
+    },
+    "delta": {
+      "measures": 0,
+      "notes": 0,
+      "tieImbalance": 49
+    },
+    "reproducesIssue": {
+      "tieImbalance": false,
+      "zeroRestsDense": false,
+      "any": false
+    },
+    "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+    "sharedRootCauseCandidate": "tie"
+  }
+]

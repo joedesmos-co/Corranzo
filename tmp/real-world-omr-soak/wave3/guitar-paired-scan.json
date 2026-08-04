@@ -1,0 +1,110 @@
+{
+  "id": "guitar-paired-scan",
+  "title": "Guitar Paired Scan (fixture)",
+  "sourceEdition": "Corranzo omr-fixtures — synthetic scan of paired notation+TAB",
+  "role": "second-true-raster",
+  "pdf": "guitar-paired-scan.pdf",
+  "pdfTypeDeclared": "raster",
+  "pageCount": 1,
+  "pageSources": [
+    {
+      "page": 1,
+      "kind": "raster",
+      "textChars": 0,
+      "imageOps": 1,
+      "pathOps": 0,
+      "fonts": []
+    }
+  ],
+  "scanQuality": {
+    "renderPx": {
+      "w": 918,
+      "h": 1188
+    },
+    "meanGray": 246.5,
+    "stdGray": 33.3,
+    "darkFraction": 0.036,
+    "contrast": 0.135,
+    "skewProxyDeg": 1.59,
+    "staffRidgePeaks": 72,
+    "staffVisibility": "good",
+    "resolutionNote": "918×1188 px @1.5× PDF viewport"
+  },
+  "pathGlyphDensity": 9.8,
+  "omrCompletion": "Completed",
+  "pipeline": {
+    "omrFailed": false,
+    "noteCount": 49,
+    "measureCount": 5,
+    "overallConfidence": 0.6246822726136124,
+    "uncertainMeasures": 5,
+    "systems": 2,
+    "hist": {
+      "types": {
+        "quarter": 46,
+        "eighth": 3
+      },
+      "dots": 24,
+      "beams": 0,
+      "ties": 1,
+      "rests": 0,
+      "measures": 5,
+      "tabLines": 0,
+      "stringAttrs": 0,
+      "fretAttrs": 0
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 0,
+      "beam-short-lost-to-longer": 0,
+      "beam-confidence-rejected": 0
+    },
+    "tabDiagnostics": null,
+    "matchesGuitarFalseTabRouting": false,
+    "matchesRasterLowConfidenceRejection": false,
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "matchesFalseBeamSparseBeginner": false,
+    "provenanceRootCause": "no-clear-shared-rca",
+    "provenanceExported": false,
+    "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Guitar Paired Scan (fixture)</work-title></work><part-list><score-part id=\"P1\"><part-name>Guitar</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><barline location=\"left\"><bar-style>heavy-light</bar-style><repeat direction=\"forward\"/></barline><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type></note><forward><duration>2</duration></forward><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-b10f9390-dc55-42bd-9124-520cc6d27ac8",
+    "duration": 20,
+    "playableEventCount": 114,
+    "loopToggled": true,
+    "audible": {
+      "playClicked": true,
+      "audioContextState": "running",
+      "energySamples": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "startedPlayingFlag": false,
+      "pauseWorked": true,
+      "restartWorked": false,
+      "notes": []
+    },
+    "instrumentSwitch": {
+      "to": "Piano",
+      "stillPlayable": true
+    },
+    "navigation": {
+      "libraryRoundTrip": true,
+      "restoreSameScore": true,
+      "staleOverlay": false,
+      "reloadRestored": true
+    }
+  },
+  "elapsedMs": 10790
+}

@@ -1,0 +1,640 @@
+{
+  "version": 1,
+  "kind": "real-world-omr-soak-wave3",
+  "baselineCommit": "541f607e230611e37f377f4a106f42ab57822c65",
+  "provenanceCommit": "69338f15301b8619b31eac552df3cc33c776c970",
+  "generatedAt": "2026-07-29T01:33:14.965Z",
+  "productionRecognitionChanges": false,
+  "records": [
+    {
+      "id": "guitar-paired-scan",
+      "title": "Guitar Paired Scan (fixture)",
+      "sourceEdition": "Corranzo omr-fixtures — synthetic scan of paired notation+TAB",
+      "role": "second-true-raster",
+      "pdf": "guitar-paired-scan.pdf",
+      "pdfTypeDeclared": "raster",
+      "pageCount": 1,
+      "pageSources": [
+        {
+          "page": 1,
+          "kind": "raster",
+          "textChars": 0,
+          "imageOps": 1,
+          "pathOps": 0,
+          "fonts": []
+        }
+      ],
+      "scanQuality": {
+        "renderPx": {
+          "w": 918,
+          "h": 1188
+        },
+        "meanGray": 246.5,
+        "stdGray": 33.3,
+        "darkFraction": 0.036,
+        "contrast": 0.135,
+        "skewProxyDeg": 1.59,
+        "staffRidgePeaks": 72,
+        "staffVisibility": "good",
+        "resolutionNote": "918×1188 px @1.5× PDF viewport"
+      },
+      "pathGlyphDensity": 9.8,
+      "omrCompletion": "Completed",
+      "pipeline": {
+        "omrFailed": false,
+        "noteCount": 49,
+        "measureCount": 5,
+        "overallConfidence": 0.6246822726136124,
+        "uncertainMeasures": 5,
+        "systems": 2,
+        "hist": {
+          "types": {
+            "quarter": 46,
+            "eighth": 3
+          },
+          "dots": 24,
+          "beams": 0,
+          "ties": 1,
+          "rests": 0,
+          "measures": 5,
+          "tabLines": 0,
+          "stringAttrs": 0,
+          "fretAttrs": 0
+        },
+        "categoryCounts": {
+          "dot-dy-near-miss": 0,
+          "open-glyph-packing-override": 0,
+          "measure-packing-override": 0,
+          "beam-short-lost-to-longer": 0,
+          "beam-confidence-rejected": 0
+        },
+        "tabDiagnostics": null,
+        "matchesGuitarFalseTabRouting": false,
+        "matchesRasterLowConfidenceRejection": false,
+        "matchesMinecraftSparseOpenRca": false,
+        "matchesHungarianDenseRhythmRca": false,
+        "matchesFalseBeamSparseBeginner": false,
+        "provenanceRootCause": "no-clear-shared-rca",
+        "provenanceExported": false,
+        "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Guitar Paired Scan (fixture)</work-title></work><part-list><score-part id=\"P1\"><part-name>Guitar</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><barline location=\"left\"><bar-style>heavy-light</bar-style><repeat direction=\"forward\"/></barline><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type></note><forward><duration>2</duration></forward><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>"
+      },
+      "ui": {
+        "uiOk": true,
+        "alert": null,
+        "scoreId": "score-b10f9390-dc55-42bd-9124-520cc6d27ac8",
+        "duration": 20,
+        "playableEventCount": 114,
+        "loopToggled": true,
+        "audible": {
+          "playClicked": true,
+          "audioContextState": "running",
+          "energySamples": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "startedPlayingFlag": false,
+          "pauseWorked": true,
+          "restartWorked": false,
+          "notes": []
+        },
+        "instrumentSwitch": {
+          "to": "Piano",
+          "stillPlayable": true
+        },
+        "navigation": {
+          "libraryRoundTrip": true,
+          "restoreSameScore": true,
+          "staleOverlay": false,
+          "reloadRestored": true
+        }
+      },
+      "elapsedMs": 10790
+    },
+    {
+      "id": "guitar-techniques-tab",
+      "title": "Guitar Techniques Paired Vector (notation + TAB)",
+      "sourceEdition": "Corranzo omr-fixtures — paired standard notation + six-line TAB",
+      "role": "real-guitar-tab-paired",
+      "pdf": "guitar-techniques-paired-vector.pdf",
+      "pdfTypeDeclared": "vector",
+      "pageCount": 1,
+      "pageSources": [
+        {
+          "page": 1,
+          "kind": "vector-unusual-fonts",
+          "textChars": 337,
+          "imageOps": 0,
+          "pathOps": 242,
+          "fonts": [
+            "g_d4_f3",
+            "g_d4_f1",
+            "g_d4_f5",
+            "g_d4_f7"
+          ]
+        }
+      ],
+      "scanQuality": null,
+      "pathGlyphDensity": 2.6666666666666665,
+      "omrCompletion": "Completed",
+      "pipeline": {
+        "omrFailed": false,
+        "noteCount": 32,
+        "measureCount": 12,
+        "overallConfidence": 0.9212041574822826,
+        "uncertainMeasures": 0,
+        "systems": 4,
+        "hist": {
+          "types": {
+            "quarter": 24,
+            "half": 4,
+            "whole": 4
+          },
+          "dots": 0,
+          "beams": 0,
+          "ties": 0,
+          "rests": 0,
+          "measures": 12,
+          "tabLines": 0,
+          "stringAttrs": 32,
+          "fretAttrs": 32
+        },
+        "categoryCounts": {
+          "dot-dy-near-miss": 0,
+          "open-glyph-packing-override": 0,
+          "measure-packing-override": 0,
+          "beam-short-lost-to-longer": 11,
+          "beam-confidence-rejected": 32
+        },
+        "tabDiagnostics": null,
+        "falseTabRouting": false,
+        "matchesGuitarFalseTabRouting": false,
+        "matchesRasterLowConfidenceRejection": false,
+        "matchesMinecraftSparseOpenRca": false,
+        "matchesHungarianDenseRhythmRca": false,
+        "matchesFalseBeamSparseBeginner": false,
+        "provenanceRootCause": "no-clear-shared-rca",
+        "provenanceExported": false,
+        "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Guitar Techniques Paired Vector (notation + TAB)</work-title></work><part-list><score-part id=\"P1\"><part-name>Guitar</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem><notations><technical><string>1</string><fret>5</fret></technical></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>1</string><fret>7</fret></technical></notations></note><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem><notations><technical><string>1</string><fret>8</fret></technical></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>1</string><fret>7</fret></technical></notations></note></measure><measure number=\"2\"><note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration>"
+      },
+      "ui": {
+        "uiOk": true,
+        "alert": null,
+        "scoreId": "score-0c22c9eb-fb50-4b11-9da1-2fcc28135bc5",
+        "duration": 22,
+        "playableEventCount": 32,
+        "loopToggled": true,
+        "audible": {
+          "playClicked": true,
+          "audioContextState": "running",
+          "energySamples": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "startedPlayingFlag": false,
+          "pauseWorked": true,
+          "restartWorked": false,
+          "notes": []
+        },
+        "instrumentSwitch": {
+          "to": "Piano",
+          "stillPlayable": true
+        },
+        "navigation": {
+          "libraryRoundTrip": true,
+          "restoreSameScore": true,
+          "staleOverlay": false,
+          "reloadRestored": true
+        }
+      },
+      "elapsedMs": 9421
+    },
+    {
+      "id": "iris-out-mixed-export",
+      "title": "Iris Out (piano arrangement)",
+      "sourceEdition": "Third-party arrangement PDF — multi-font / atypical export path",
+      "role": "mixed-or-unusual-export",
+      "pdf": "iris-out-piano-arragement.pdf",
+      "pdfTypeDeclared": "mixed",
+      "pageCount": 5,
+      "pageSources": [
+        {
+          "page": 1,
+          "kind": "vector-unusual-fonts",
+          "textChars": 889,
+          "imageOps": 0,
+          "pathOps": 1031,
+          "fonts": [
+            "g_d7_f3",
+            "g_d7_f4",
+            "g_d7_f5",
+            "g_d7_f6",
+            "g_d7_f7",
+            "g_d7_f1"
+          ]
+        },
+        {
+          "page": 2,
+          "kind": "vector-unusual-fonts",
+          "textChars": 1058,
+          "imageOps": 0,
+          "pathOps": 849,
+          "fonts": [
+            "g_d7_f4",
+            "g_d7_f5",
+            "g_d7_f7",
+            "g_d7_f1"
+          ]
+        },
+        {
+          "page": 3,
+          "kind": "vector-unusual-fonts",
+          "textChars": 925,
+          "imageOps": 0,
+          "pathOps": 945,
+          "fonts": [
+            "g_d7_f4",
+            "g_d7_f5",
+            "g_d7_f7",
+            "g_d7_f1"
+          ]
+        },
+        {
+          "page": 4,
+          "kind": "vector-unusual-fonts",
+          "textChars": 984,
+          "imageOps": 0,
+          "pathOps": 763,
+          "fonts": [
+            "g_d7_f4",
+            "g_d7_f5",
+            "g_d7_f7",
+            "g_d7_f1"
+          ]
+        },
+        {
+          "page": 5,
+          "kind": "vector-unusual-fonts",
+          "textChars": 715,
+          "imageOps": 0,
+          "pathOps": 497,
+          "fonts": [
+            "g_d7_f4",
+            "g_d7_f5",
+            "g_d7_f7",
+            "g_d7_f1"
+          ]
+        }
+      ],
+      "scanQuality": null,
+      "pathGlyphDensity": 20.51923076923077,
+      "omrCompletion": "Completed",
+      "pipeline": {
+        "omrFailed": false,
+        "noteCount": 1067,
+        "measureCount": 52,
+        "overallConfidence": 0.9033234100683157,
+        "uncertainMeasures": 0,
+        "systems": 12,
+        "hist": {
+          "types": {
+            "quarter": 200,
+            "eighth": 539,
+            "sixteenth": 319,
+            "half": 19,
+            "whole": 1
+          },
+          "dots": 18,
+          "beams": 185,
+          "ties": 2,
+          "rests": 11,
+          "measures": 52,
+          "tabLines": 0,
+          "stringAttrs": 0,
+          "fretAttrs": 0
+        },
+        "categoryCounts": {
+          "dot-dy-near-miss": 0,
+          "open-glyph-packing-override": 0,
+          "measure-packing-override": 80,
+          "beam-short-lost-to-longer": 22,
+          "beam-confidence-rejected": 625
+        },
+        "tabDiagnostics": null,
+        "matchesGuitarFalseTabRouting": false,
+        "matchesRasterLowConfidenceRejection": false,
+        "matchesMinecraftSparseOpenRca": false,
+        "matchesHungarianDenseRhythmRca": false,
+        "matchesFalseBeamSparseBeginner": true,
+        "provenanceRootCause": "false-beam-correction-sparse",
+        "provenanceExported": true,
+        "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Iris Out (piano arrangement)</work-title></work><part-list><score-part id=\"P1\"><part-name>Piano</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><key><fifths>4</fifths><mode>major</mode></key><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><direction><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>135</per-minute></metronome></direction-type><sound tempo=\"135\"/><offset>5</offset></direction><direction><direction-type><dynamics><mf/></dynamics></direction-type><offset>7</offset></direction><note><pitch><step>F</step><alter>2</alter><octave>2</octave></pitch><accidental>double-sharp</accidental><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><stem>up</stem></note><backup><duration>4</duration></backup><note><pitch><step>F</step><alter>2</alter><octave>5</octave></pitch><accidental>double-sharp</accidental><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><stem>down</stem></note><note><pitch><step>G</step><alter>1</alter><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</st"
+      },
+      "ui": {
+        "uiOk": true,
+        "alert": null,
+        "scoreId": "score-f5da32c6-1a21-41a5-add0-38bd399490fd",
+        "duration": 204.44444444444446,
+        "playableEventCount": 2310,
+        "loopToggled": true,
+        "audible": null,
+        "instrumentSwitch": {
+          "to": "Guitar",
+          "stillPlayable": true
+        },
+        "navigation": {
+          "libraryRoundTrip": true,
+          "restoreSameScore": true,
+          "staleOverlay": false,
+          "reloadRestored": true
+        }
+      },
+      "elapsedMs": 13881
+    },
+    {
+      "id": "bach-chorale-sparse",
+      "title": "Bach Chorale BWV 259",
+      "sourceEdition": "Corranzo practice-library Mutopia-style vector",
+      "role": "sparse-classical-piano",
+      "pdf": "piano-bach-chorale-bwv259.pdf",
+      "pdfTypeDeclared": "vector",
+      "pageCount": 1,
+      "pageSources": [
+        {
+          "page": 1,
+          "kind": "vector-unusual-fonts",
+          "textChars": 579,
+          "imageOps": 0,
+          "pathOps": 660,
+          "fonts": [
+            "g_d10_f2",
+            "g_d10_f1",
+            "g_d10_f3",
+            "g_d10_f4",
+            "g_d10_f5",
+            "g_d10_f6"
+          ]
+        }
+      ],
+      "scanQuality": null,
+      "pathGlyphDensity": null,
+      "omrCompletion": "Failed",
+      "pipeline": {
+        "omrFailed": true,
+        "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "matchesRasterLowConfidenceRejection": true
+      },
+      "ui": {
+        "uiOk": false,
+        "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+        "scoreId": "score-71bc17ca-bb83-4010-94ca-f4f595471b3f",
+        "duration": null,
+        "playableEventCount": null,
+        "loopToggled": true,
+        "audible": null,
+        "instrumentSwitch": null,
+        "navigation": null
+      },
+      "elapsedMs": 3399
+    },
+    {
+      "id": "turkish-march-dense",
+      "title": "Mozart Turkish March",
+      "sourceEdition": "Corranzo practice-library — dense beamed piano",
+      "role": "dense-beamed-piano",
+      "pdf": "piano-mozart-turkish-march.pdf",
+      "pdfTypeDeclared": "vector",
+      "pageCount": 5,
+      "pageSources": [
+        {
+          "page": 1,
+          "kind": "vector-unusual-fonts",
+          "textChars": 896,
+          "imageOps": 0,
+          "pathOps": 1065,
+          "fonts": [
+            "g_d13_f2",
+            "g_d13_f1",
+            "g_d13_f3",
+            "g_d13_f4",
+            "g_d13_f6",
+            "g_d13_f7"
+          ]
+        },
+        {
+          "page": 2,
+          "kind": "vector-unusual-fonts",
+          "textChars": 864,
+          "imageOps": 0,
+          "pathOps": 1627,
+          "fonts": [
+            "g_d13_f1",
+            "g_d13_f3",
+            "g_d13_f6",
+            "g_d13_f4",
+            "g_d13_f5",
+            "g_d13_f8"
+          ]
+        },
+        {
+          "page": 3,
+          "kind": "vector-unusual-fonts",
+          "textChars": 746,
+          "imageOps": 0,
+          "pathOps": 1284,
+          "fonts": [
+            "g_d13_f1",
+            "g_d13_f3",
+            "g_d13_f6",
+            "g_d13_f4",
+            "g_d13_f5",
+            "g_d13_f7"
+          ]
+        },
+        {
+          "page": 4,
+          "kind": "vector-unusual-fonts",
+          "textChars": 726,
+          "imageOps": 0,
+          "pathOps": 1689,
+          "fonts": [
+            "g_d13_f1",
+            "g_d13_f6",
+            "g_d13_f3",
+            "g_d13_f5",
+            "g_d13_f4",
+            "g_d13_f7"
+          ]
+        },
+        {
+          "page": 5,
+          "kind": "vector",
+          "textChars": 149,
+          "imageOps": 0,
+          "pathOps": 211,
+          "fonts": [
+            "g_d13_f1",
+            "g_d13_f6",
+            "g_d13_f3"
+          ]
+        }
+      ],
+      "scanQuality": null,
+      "pathGlyphDensity": null,
+      "omrCompletion": "Failed",
+      "pipeline": {
+        "omrFailed": true,
+        "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "matchesRasterLowConfidenceRejection": true
+      },
+      "ui": {
+        "uiOk": false,
+        "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+        "scoreId": "score-7108ffd6-6444-4f6a-be54-3d2a8b78c06d",
+        "duration": null,
+        "playableEventCount": null,
+        "loopToggled": true,
+        "audible": null,
+        "instrumentSwitch": null,
+        "navigation": null
+      },
+      "elapsedMs": 8317
+    }
+  ],
+  "replacementScores": [
+    {
+      "id": "brahms-lullaby-sparse",
+      "title": "Brahms Lullaby",
+      "sourceEdition": "practice-library Mutopia-style",
+      "role": "sparse-classical-piano",
+      "pdf": "piano-brahms-lullaby.pdf",
+      "pdfType": "vector",
+      "pipeline": {
+        "omrFailed": false,
+        "noteCount": 53,
+        "measureCount": 13,
+        "overallConfidence": 0.6587847751367615,
+        "uncertainMeasures": 12,
+        "hist": {
+          "beams": 0,
+          "ties": 4,
+          "dots": 24,
+          "measures": 13
+        },
+        "categoryCounts": {
+          "dot-dy-near-miss": 0,
+          "open-glyph-packing-override": 0,
+          "measure-packing-override": 0,
+          "beam-short-lost-to-longer": 0,
+          "beam-confidence-rejected": 0
+        },
+        "matchesMinecraftSparseOpenRca": false,
+        "matchesHungarianDenseRhythmRca": false,
+        "matchesFalseBeamSparseBeginner": false,
+        "provenanceRootCause": "no-clear-shared-rca"
+      },
+      "ui": {
+        "uiOk": true,
+        "alert": null,
+        "scoreId": "score-85f69cad-77bd-4a9b-aa80-2bf3894a8acb",
+        "duration": 20,
+        "playableEventCount": 41,
+        "loopToggled": true,
+        "audible": null,
+        "instrumentSwitch": {
+          "to": "Guitar",
+          "stillPlayable": true
+        },
+        "navigation": {
+          "libraryRoundTrip": true,
+          "restoreSameScore": true,
+          "reloadRestored": true,
+          "staleOverlay": false
+        }
+      }
+    },
+    {
+      "id": "fur-elise-denseish",
+      "title": "Für Elise",
+      "sourceEdition": "Downloads fur_Elise_WoO59-let.pdf",
+      "role": "dense-beamed-piano-alt",
+      "pdf": "fur_Elise_WoO59-let.pdf",
+      "pdfType": "vector",
+      "pipeline": {
+        "omrFailed": true,
+        "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+        "matchesMutopiaLowConfidenceReject": true
+      },
+      "ui": {
+        "uiOk": false,
+        "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+        "scoreId": "score-01de570b-fcc1-4c6b-a8bf-8b970425a53e",
+        "duration": null,
+        "playableEventCount": null,
+        "loopToggled": false,
+        "audible": null,
+        "instrumentSwitch": {
+          "to": "Guitar",
+          "stillPlayable": null
+        },
+        "navigation": null
+      }
+    }
+  ],
+  "mutopiaLowConfidenceCluster": [
+    {
+      "id": "bach-chorale-bwv259",
+      "notes": 358,
+      "conf": 0.641,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "mozart-turkish-march",
+      "notes": 2167,
+      "conf": 0.648,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "handel-gavotte",
+      "notes": 557,
+      "conf": 0.649,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "demo-minuet-in-g",
+      "notes": 612,
+      "conf": 0.649,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "brahms-waltz-op39-3",
+      "notes": 122,
+      "conf": 0.669,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "chopin-mazurka-op6-1",
+      "notes": 1388,
+      "conf": 0.653,
+      "stage": "low-confidence"
+    },
+    {
+      "id": "beethoven-pathetique-mutopia",
+      "notes": 2708,
+      "conf": 0.65,
+      "stage": "low-confidence"
+    }
+  ],
+  "note": "bach-chorale and turkish-march retained as Failed Mutopia-gate evidence; lullaby + fur-elise fill sparse/dense playable slots"
+}

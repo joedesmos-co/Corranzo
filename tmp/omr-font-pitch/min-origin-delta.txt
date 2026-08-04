@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: joint-polyphonic-candidate-4 (7d4d5df)
+after:  min-origin-anchor (73f0ef6)
+ACCEPT: YES
+
+Scoreboard deltas (mean)
+- overall: +0.0039  (0.6674 → 0.6712)
+- pitch: +0.0064  (0.6622 → 0.6686)
+- rhythm: +0.0012  (0.7452 → 0.7464)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: +0.0078  (0.8584 → 0.8661)
+- measureStructure: +0.0116  (0.7169 → 0.7285)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+- piano-dense-advanced-vector: rhythm +0.0106
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

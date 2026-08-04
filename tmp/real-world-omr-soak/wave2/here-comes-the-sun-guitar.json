@@ -1,0 +1,100 @@
+{
+  "id": "here-comes-the-sun-guitar",
+  "title": "Here Comes The Sun (Beatles) — Guitar chord melody",
+  "sourceEdition": "GuitarPDF.com export",
+  "role": "guitar-different-source",
+  "pdf": "Here-Comes-The-Sun_The-Beatles_GuitarPDF-1.pdf",
+  "pdfType": "vector",
+  "pageCount": 2,
+  "pagesSampled": 2,
+  "pathDensity": "medium",
+  "instrument": "guitar",
+  "glyphExtractionQuality": "Good",
+  "staffSystemCount": 17,
+  "overallVisual": "Usable with errors",
+  "playback": "Usable with errors",
+  "pitch": "Usable with errors",
+  "rhythm": "Usable with errors",
+  "longValues": "Usable with errors",
+  "dots": "Good",
+  "rests": "Usable with errors",
+  "chords": "Usable with errors",
+  "voices": "Usable with errors",
+  "beams": "Usable with errors",
+  "tiesSlurs": "Usable with errors",
+  "accidentalsKey": "Usable with errors",
+  "articulations": "Usable with errors",
+  "tempoRepeats": "Usable with errors",
+  "rendererOnly": "None observed",
+  "lagChoppiness": "Good",
+  "severity": "Medium–low",
+  "reproducibility": "High",
+  "provenanceRootCause": "no-clear-shared-rca",
+  "matchesMinecraftSparseOpenRca": false,
+  "matchesHungarianDenseRhythmRca": false,
+  "newSharedMechanism": null,
+  "pipeline": {
+    "noteCount": 441,
+    "measureCount": 51,
+    "overallConfidence": 0.5995923560891063,
+    "uncertainMeasures": 0,
+    "systems": 17,
+    "pagesSampled": 2,
+    "pageCountFull": 2,
+    "hist": {
+      "types": {
+        "eighth": 332,
+        "16th": 44,
+        "whole": 1,
+        "quarter": 56,
+        "half": 9
+      },
+      "dottedQuarter": 0,
+      "dots": 0,
+      "beams": 0,
+      "ties": 0,
+      "rests": 1,
+      "measures": 51
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 0,
+      "beam-short-lost-to-longer": 0,
+      "beam-duration-overwritten": 0,
+      "beam-confidence-rejected": 0
+    },
+    "mostFrequentFailureCategory": "none-dominant",
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "provenanceRootCause": "no-clear-shared-rca",
+    "newSharedMechanismCandidate": null,
+    "provenanceExported": false,
+    "pathDensity": "medium"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-62f3f55b-c8e3-4c80-a660-c6b665dbb025",
+    "duration": 124,
+    "playableEventCount": 591,
+    "transport": {
+      "play": false,
+      "stop": false,
+      "seek": false,
+      "restart": false,
+      "loopToggle": false,
+      "choppy": false,
+      "errors": [
+        "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: /^Stop$/i }).first()\n"
+      ]
+    },
+    "instrumentSwitch": {
+      "to": "piano",
+      "stillPlayable": true
+    },
+    "consoleErrors": []
+  },
+  "error": null,
+  "elapsedMs": 37852
+}

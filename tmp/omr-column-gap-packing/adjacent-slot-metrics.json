@@ -1,0 +1,266 @@
+{
+  "geometryDiagnostics": [
+    {
+      "id": "reunite-chord",
+      "attempted": 2,
+      "accepted": 2,
+      "rejected": 0,
+      "reasons": {},
+      "samples": [
+        {
+          "decision": "accept",
+          "reason": "stem-and-stack",
+          "detail": {
+            "minDx": 3,
+            "maxDx": 3,
+            "dxGate": 10
+          }
+        },
+        {
+          "decision": "accept",
+          "reason": "stem-and-stack",
+          "detail": {
+            "minDx": 2,
+            "maxDx": 5,
+            "dxGate": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "opposing",
+      "attempted": 1,
+      "accepted": 0,
+      "rejected": 1,
+      "reasons": {
+        "opposing-stems-independent-voice": 1
+      },
+      "samples": [
+        {
+          "decision": "reject",
+          "reason": "opposing-stems-independent-voice",
+          "detail": null
+        }
+      ]
+    },
+    {
+      "id": "adjacent-sixteenths",
+      "attempted": 3,
+      "accepted": 0,
+      "rejected": 3,
+      "reasons": {
+        "dx-above-threshold": 3
+      },
+      "samples": [
+        {
+          "decision": "reject",
+          "reason": "dx-above-threshold",
+          "detail": {
+            "minDx": 29,
+            "dxGate": 10
+          }
+        },
+        {
+          "decision": "reject",
+          "reason": "dx-above-threshold",
+          "detail": {
+            "minDx": 30,
+            "dxGate": 10
+          }
+        },
+        {
+          "decision": "reject",
+          "reason": "dx-above-threshold",
+          "detail": {
+            "minDx": 29,
+            "dxGate": 10
+          }
+        }
+      ]
+    }
+  ],
+  "before": {
+    "overall": 0.6280888888888889,
+    "pitch": 0.6147777777777778,
+    "rhythm": 0.6656222222222223,
+    "defects": {
+      "onset-mismatch": 256,
+      "duration-mismatch": 244,
+      "incorrect-chord": 199,
+      "incorrect-pitch": 173,
+      "missing-note": 163,
+      "extra-note": 154,
+      "missing-accent": 36,
+      "missing-staccato": 33,
+      "split-measure": 12,
+      "tempo-mismatch": 9,
+      "incorrect-tie": 6,
+      "missing-tie": 6,
+      "missing-rest": 5,
+      "repeat-mismatch": 4,
+      "volta-mismatch": 4,
+      "extra-measure": 3,
+      "missing-dot": 3,
+      "extra-rest": 2,
+      "dotted-rhythm-error": 1,
+      "voice-mismatch": 1
+    },
+    "per": {
+      "piano-beginner-single-vector": {
+        "overall": 0.8258,
+        "pitch": 0.9394,
+        "rhythm": 0.8413,
+        "incorrectChord": 0,
+        "onset": 5
+      },
+      "piano-grand-voices-vector": {
+        "overall": 0.7464,
+        "pitch": 0.7045,
+        "rhythm": 0.892,
+        "incorrectChord": 11,
+        "onset": 2
+      },
+      "piano-rhythm-tuplets-vector": {
+        "overall": 0.6421,
+        "pitch": 0.9091,
+        "rhythm": 0.6763,
+        "incorrectChord": 2,
+        "onset": 25
+      },
+      "piano-articulation-scan": {
+        "overall": 0.427,
+        "pitch": 0.2677,
+        "rhythm": 0.6959,
+        "incorrectChord": 37,
+        "onset": 21
+      },
+      "piano-dense-advanced-vector": {
+        "overall": 0.5366,
+        "pitch": 0.4513,
+        "rhythm": 0.4136,
+        "incorrectChord": 85,
+        "onset": 134
+      },
+      "guitar-tab-sparse-vector": {
+        "overall": 0.685,
+        "pitch": 0.7,
+        "rhythm": 0.1719,
+        "incorrectChord": 2,
+        "onset": 23
+      },
+      "guitar-standard-chords-vector": {
+        "overall": 0.4561,
+        "pitch": 0.3007,
+        "rhythm": 0.4828,
+        "incorrectChord": 31,
+        "onset": 39
+      },
+      "guitar-paired-chords-vector": {
+        "overall": 0.69,
+        "pitch": 0.4825,
+        "rhythm": 0.8882,
+        "incorrectChord": 31,
+        "onset": 7
+      },
+      "guitar-techniques-paired-vector": {
+        "overall": 0.6438,
+        "pitch": 0.7778,
+        "rhythm": 0.9286,
+        "incorrectChord": 0,
+        "onset": 0
+      }
+    }
+  },
+  "after": {
+    "overall": 0.6289,
+    "pitch": 0.6150666666666668,
+    "rhythm": 0.6720333333333334,
+    "defects": {
+      "onset-mismatch": 250,
+      "duration-mismatch": 239,
+      "incorrect-chord": 199,
+      "incorrect-pitch": 172,
+      "missing-note": 163,
+      "extra-note": 154,
+      "missing-accent": 36,
+      "missing-staccato": 33,
+      "split-measure": 12,
+      "tempo-mismatch": 9,
+      "incorrect-tie": 6,
+      "missing-tie": 6,
+      "missing-rest": 5,
+      "repeat-mismatch": 4,
+      "volta-mismatch": 4,
+      "extra-measure": 3,
+      "missing-dot": 3,
+      "extra-rest": 2,
+      "dotted-rhythm-error": 1,
+      "voice-mismatch": 1
+    },
+    "per": {
+      "piano-beginner-single-vector": {
+        "overall": 0.8258,
+        "pitch": 0.9394,
+        "rhythm": 0.8413,
+        "incorrectChord": 0,
+        "onset": 5
+      },
+      "piano-grand-voices-vector": {
+        "overall": 0.7443,
+        "pitch": 0.6966,
+        "rhythm": 0.8851,
+        "incorrectChord": 11,
+        "onset": 2
+      },
+      "piano-rhythm-tuplets-vector": {
+        "overall": 0.6421,
+        "pitch": 0.9091,
+        "rhythm": 0.6763,
+        "incorrectChord": 2,
+        "onset": 24
+      },
+      "piano-articulation-scan": {
+        "overall": 0.427,
+        "pitch": 0.2677,
+        "rhythm": 0.6959,
+        "incorrectChord": 37,
+        "onset": 21
+      },
+      "piano-dense-advanced-vector": {
+        "overall": 0.5382,
+        "pitch": 0.4513,
+        "rhythm": 0.425,
+        "incorrectChord": 85,
+        "onset": 132
+      },
+      "guitar-tab-sparse-vector": {
+        "overall": 0.685,
+        "pitch": 0.7,
+        "rhythm": 0.1719,
+        "incorrectChord": 2,
+        "onset": 23
+      },
+      "guitar-standard-chords-vector": {
+        "overall": 0.4598,
+        "pitch": 0.3007,
+        "rhythm": 0.5086,
+        "incorrectChord": 31,
+        "onset": 38
+      },
+      "guitar-paired-chords-vector": {
+        "overall": 0.6941,
+        "pitch": 0.493,
+        "rhythm": 0.9156,
+        "incorrectChord": 31,
+        "onset": 5
+      },
+      "guitar-techniques-paired-vector": {
+        "overall": 0.6438,
+        "pitch": 0.7778,
+        "rhythm": 0.9286,
+        "incorrectChord": 0,
+        "onset": 0
+      }
+    }
+  }
+}

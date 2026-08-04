@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2100",
+  "source": "a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+  "ok": true,
+  "elapsedMs": 2490,
+  "pagesProcessed": 8,
+  "totalPages": 8,
+  "reported": {
+    "measures": 125,
+    "notes": 2808,
+    "confidence": 0.9056066579495581,
+    "acceptance": "accepted",
+    "tieStarts": 14,
+    "tieStops": 25,
+    "rests": 16
+  },
+  "reproduced": {
+    "measures": 125,
+    "notes": 2808,
+    "rests": 16,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 14,
+    "tieStops": 25,
+    "tieImbalance": -11
+  },
+  "delta": {
+    "measures": 0,
+    "notes": 0,
+    "tieImbalance": 0
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": false,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

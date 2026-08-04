@@ -1,8 +1,8 @@
 # Real Mic Browser QA Report
 
-**Generated:** 2026-07-09T02:38:55.368Z
+**Generated:** 2026-08-01T02:20:37.581Z
 
-**Passed:** 28 · **Failed:** 0
+**Passed:** 27 · **Failed:** 0
 
 ## What worked
 - frame replay: next different note advances while previous rings
@@ -25,13 +25,12 @@
 - recent mic trace export contains live browser frames — frames=102
 - mic shows actionable status after grant — No input — check mic
 - mic calibration status line present — No input — check mic
-- Hear It does not dismiss mic panel
 - leaving WFY hides mic panel and test UI
 - instrument switch does not show stale Last confirmed mic feedback
 - ipad WFY mic layout — no horizontal overflow
 - mobile WFY mic layout — no horizontal overflow
-- quiet room fixture calibrates without crash — Ready
-- noisy room fixture surfaces room guidance — Ready
+- quiet room fixture — mic enabled without crash
+- noisy room fixture — mic enabled without crash
 - noisy room does not show false Last confirmed
 
 ## What failed
@@ -39,8 +38,11 @@
 
 ## Notes
 - Mic test panel not visible — may still be calibrating in fake stream
+- Hear It not visible — checkpoint may not be a note yet
 - Mic off notice not shown on re-entry — may auto-resume in some builds
 - Guitar WFY mic panel visible after switch: true
+- Quiet room calibration text: Mic listening
+- Noisy room calibration: Mic listening
 
 ## Documented failures (no threshold tuning)
 - (none — all clip scenarios passed or were informational)

@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: user-omr-baseline-994dca6 (994dca6)
+after:  user-omr-after-tie-flags (994dca6)
+ACCEPT: NO
+
+Scoreboard deltas (mean)
+- overall: +0  (0.6184 → 0.6184)
+- pitch: 0  (0.5855 → 0.5855)
+- rhythm: 0  (0.6448 → 0.6448)
+- sustain: 0  (0.4667 → 0.4667)
+- articulation: 0  (0.8399 → 0.8399)
+- measureStructure: 0  (0.6587 → 0.6587)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+(none)
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

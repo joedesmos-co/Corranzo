@@ -1,0 +1,64 @@
+{
+  "id": "chord-column-split-during-onset-snap",
+  "description": "Visually stacked chord (Δcx≤5) straddling adjacent sixteenth beat-slots; dense group-count snap assigns different onsets; coalesce cannot reunite",
+  "beats": 4,
+  "notes": [
+    {
+      "cx": 100,
+      "cy": 120,
+      "midi": 60,
+      "clef": "treble",
+      "positionInMeasure": 0.22,
+      "candidateId": "c-low"
+    },
+    {
+      "cx": 103,
+      "cy": 100,
+      "midi": 64,
+      "clef": "treble",
+      "positionInMeasure": 0.31,
+      "candidateId": "c-mid"
+    },
+    {
+      "cx": 105,
+      "cy": 80,
+      "midi": 67,
+      "clef": "treble",
+      "positionInMeasure": 0.32,
+      "candidateId": "c-high"
+    },
+    {
+      "cx": 170,
+      "cy": 100,
+      "midi": 62,
+      "clef": "treble",
+      "positionInMeasure": 0.45,
+      "candidateId": "n2"
+    },
+    {
+      "cx": 230,
+      "cy": 100,
+      "midi": 64,
+      "clef": "treble",
+      "positionInMeasure": 0.6,
+      "candidateId": "n3"
+    },
+    {
+      "cx": 290,
+      "cy": 100,
+      "midi": 65,
+      "clef": "treble",
+      "positionInMeasure": 0.75,
+      "candidateId": "n4"
+    },
+    {
+      "cx": 350,
+      "cy": 100,
+      "midi": 67,
+      "clef": "treble",
+      "positionInMeasure": 0.9,
+      "candidateId": "n5"
+    }
+  ],
+  "diagnosticOnly": true
+}

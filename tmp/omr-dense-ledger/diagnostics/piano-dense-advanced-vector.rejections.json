@@ -1,0 +1,5109 @@
+[
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 6,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m6:x244:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m6:col18",
+    "midi": 79,
+    "pitchLabel": "G5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 671,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 238,
+        "runEnd": 248,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 673,
+        "longestRunPx": 28,
+        "lengthRelativeToSystem": 0.028,
+        "lengthRelativeToLocalWindow": 0.5833,
+        "runStart": 231,
+        "runEnd": 258,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 675,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 238,
+        "runEnd": 247,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 677,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 224,
+        "runEnd": 246,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 679,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 224,
+        "runEnd": 235,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 681,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 224,
+        "runEnd": 235,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 683,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 224,
+        "runEnd": 248,
+        "aboveStaff": false,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 13,
+        "lengthRelativeToSystem": 0.013,
+        "lengthRelativeToLocalWindow": 0.2708,
+        "runStart": 236,
+        "runEnd": 248,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.011,
+      0.028,
+      0.01,
+      0.011,
+      0.012,
+      0.012,
+      0.011,
+      0.013
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1.5
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.823,
+      1,
+      0.734,
+      0.645,
+      0,
+      0,
+      0.823,
+      0.823
+    ],
+    "repeatedRowCount": 8,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 240,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 242,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 240,
+          "y": 670,
+          "w": 10,
+          "h": 15
+        },
+        "area": 86,
+        "aspectRatio": 0.667,
+        "widthRatio": 0.755,
+        "heightRatio": 1.132,
+        "xOriginOffset": 0.01,
+        "yOriginOffset": 0.202,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 253,
+          "y": 676,
+          "w": 8,
+          "h": 8
+        },
+        "area": 59,
+        "aspectRatio": 1,
+        "widthRatio": 0.604,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.916,
+        "yOriginOffset": 0.013,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 2,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 240,
+      "right": 260,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 221,
+      "rightSupport": 268
+    },
+    "truthAligned": true,
+    "expectedMidi": 49,
+    "expectedPitchLabel": "C#3",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 30,
+    "staffStepErrorApprox": 30
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 7,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 1.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m7:x400:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m7:col30",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": false
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "no-head-sized-component",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 660,
+        "longestRunPx": 21,
+        "lengthRelativeToSystem": 0.021,
+        "lengthRelativeToLocalWindow": 0.4375,
+        "runStart": 404,
+        "runEnd": 424,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 413,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 411,
+        "runEnd": 422,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 411,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 393,
+        "runEnd": 419,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 387,
+        "runEnd": 413,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 31,
+        "lengthRelativeToSystem": 0.031,
+        "lengthRelativeToLocalWindow": 0.6458,
+        "runStart": 383,
+        "runEnd": 413,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 382,
+        "runEnd": 402,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 411,
+        "runEnd": 424,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 377,
+        "runEnd": 424,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 21,
+        "lengthRelativeToSystem": 0.021,
+        "lengthRelativeToLocalWindow": 0.4375,
+        "runStart": 380,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 393,
+        "runEnd": 417,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.021,
+      0.009,
+      0.012,
+      0.011,
+      0.01,
+      0.027,
+      0.031,
+      0.02,
+      0.014,
+      0.014,
+      0.021,
+      0.014
+    ],
+    "rowVerticalSpacingPx": [
+      4,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.167,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0.656,
+      0,
+      1,
+      1,
+      1
+    ],
+    "repeatedRowCount": 12,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 396,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 262,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 414,
+          "y": 664,
+          "w": 1,
+          "h": 7
+        },
+        "area": 7,
+        "aspectRatio": 0.143,
+        "widthRatio": 0.075,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.038,
+        "yOriginOffset": 0.957,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 411,
+          "y": 665,
+          "w": 2,
+          "h": 5
+        },
+        "area": 8,
+        "aspectRatio": 0.4,
+        "widthRatio": 0.151,
+        "heightRatio": 0.377,
+        "xOriginOffset": 0.849,
+        "yOriginOffset": 0.957,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 396,
+          "y": 670,
+          "w": 11,
+          "h": 15
+        },
+        "area": 60,
+        "aspectRatio": 0.733,
+        "widthRatio": 0.83,
+        "heightRatio": 1.132,
+        "xOriginOffset": 0.057,
+        "yOriginOffset": 0.202,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 408,
+          "y": 677,
+          "w": 5,
+          "h": 8
+        },
+        "area": 19,
+        "aspectRatio": 0.625,
+        "widthRatio": 0.377,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.736,
+        "yOriginOffset": -0.062,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 414,
+          "y": 677,
+          "w": 1,
+          "h": 7
+        },
+        "area": 6,
+        "aspectRatio": 0.143,
+        "widthRatio": 0.075,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.038,
+        "yOriginOffset": -0.024,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 0,
+    "suppressedStaffOrLedgerRows": 7,
+    "suppressedStemColumns": 4,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "ledger-fragments-masking-notehead-body",
+    "window": {
+      "left": 396,
+      "right": 416,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 377,
+      "rightSupport": 424
+    },
+    "truthAligned": true,
+    "expectedMidi": 80,
+    "expectedPitchLabel": "G#5",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 0,
+    "staffStepErrorApprox": 0
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 7,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m7:x418:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m7:col32",
+    "midi": 81,
+    "pitchLabel": "A5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 660,
+        "longestRunPx": 28,
+        "lengthRelativeToSystem": 0.028,
+        "lengthRelativeToLocalWindow": 0.5833,
+        "runStart": 404,
+        "runEnd": 431,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 413,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 411,
+        "runEnd": 422,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 411,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 394,
+        "runEnd": 419,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 394,
+        "runEnd": 413,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 394,
+        "runEnd": 439,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 425,
+        "runEnd": 438,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 411,
+        "runEnd": 427,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.028,
+      0.009,
+      0.012,
+      0.011,
+      0.009,
+      0.02,
+      0.02,
+      0.014,
+      0.017
+    ],
+    "rowVerticalSpacingPx": [
+      4,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      1,
+      0.71,
+      0.873,
+      0.785,
+      0.607,
+      0.074,
+      1,
+      0,
+      1
+    ],
+    "repeatedRowCount": 9,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 413,
+          "y": 646,
+          "w": 22,
+          "h": 33
+        },
+        "area": 233,
+        "aspectRatio": 0.667,
+        "widthRatio": 1.66,
+        "heightRatio": 2.491,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 413,
+          "y": 663,
+          "w": 10,
+          "h": 8
+        },
+        "area": 63,
+        "aspectRatio": 1.25,
+        "widthRatio": 0.755,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.022,
+        "yOriginOffset": 0.501,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 413,
+          "y": 670,
+          "w": 12,
+          "h": 9
+        },
+        "area": 39,
+        "aspectRatio": 1.333,
+        "widthRatio": 0.906,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.053,
+        "yOriginOffset": -0.065,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 426,
+          "y": 670,
+          "w": 9,
+          "h": 9
+        },
+        "area": 37,
+        "aspectRatio": 1,
+        "widthRatio": 0.679,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.921,
+        "yOriginOffset": -0.065,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 3,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 1,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 413,
+      "right": 434,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 394,
+      "rightSupport": 441
+    },
+    "truthAligned": true,
+    "expectedMidi": 51,
+    "expectedPitchLabel": "D#3",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 30,
+    "staffStepErrorApprox": 30
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 7,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m7:x436:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m7:col33",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": true
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 660,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 412,
+        "runEnd": 431,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 413,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 412,
+        "runEnd": 422,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 412,
+        "runEnd": 421,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 412,
+        "runEnd": 438,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 423,
+        "runEnd": 449,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 28,
+        "lengthRelativeToSystem": 0.028,
+        "lengthRelativeToLocalWindow": 0.5833,
+        "runStart": 422,
+        "runEnd": 449,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 425,
+        "runEnd": 438,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 412,
+        "runEnd": 427,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 412,
+        "runEnd": 425,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 412,
+        "runEnd": 446,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 431,
+        "runEnd": 457,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.02,
+      0.009,
+      0.011,
+      0.01,
+      0.008,
+      0.027,
+      0.028,
+      0.014,
+      0.016,
+      0.014,
+      0.012,
+      0.027
+    ],
+    "rowVerticalSpacingPx": [
+      4,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.08,
+      0,
+      0,
+      0,
+      0.701,
+      1,
+      1,
+      0.701,
+      0,
+      0,
+      1,
+      0.92
+    ],
+    "repeatedRowCount": 12,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 431,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 208,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 431,
+          "y": 659,
+          "w": 1,
+          "h": 2
+        },
+        "area": 2,
+        "aspectRatio": 0.5,
+        "widthRatio": 0.075,
+        "heightRatio": 0.151,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 431,
+          "y": 670,
+          "w": 12,
+          "h": 15
+        },
+        "area": 92,
+        "aspectRatio": 0.8,
+        "widthRatio": 0.906,
+        "heightRatio": 1.132,
+        "xOriginOffset": 0.058,
+        "yOriginOffset": 0.202,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 444,
+          "y": 677,
+          "w": 8,
+          "h": 8
+        },
+        "area": 28,
+        "aspectRatio": 1,
+        "widthRatio": 0.604,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.888,
+        "yOriginOffset": -0.062,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 5,
+    "suppressedStemColumns": 1,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 431,
+      "right": 451,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 412,
+      "rightSupport": 459
+    },
+    "truthAligned": true,
+    "expectedMidi": 80,
+    "expectedPitchLabel": "G#5",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 0,
+    "staffStepErrorApprox": 0
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 1,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x584:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col44",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": false
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 656,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 583,
+        "runEnd": 593,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 657,
+        "longestRunPx": 5,
+        "lengthRelativeToSystem": 0.005,
+        "lengthRelativeToLocalWindow": 0.1042,
+        "runStart": 585,
+        "runEnd": 589,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 25,
+        "lengthRelativeToSystem": 0.025,
+        "lengthRelativeToLocalWindow": 0.5208,
+        "runStart": 583,
+        "runEnd": 607,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 583,
+        "runEnd": 593,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 585,
+        "runEnd": 602,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 592,
+        "runEnd": 603,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 583,
+        "runEnd": 603,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 22,
+        "lengthRelativeToSystem": 0.022,
+        "lengthRelativeToLocalWindow": 0.4583,
+        "runStart": 581,
+        "runEnd": 602,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 30,
+        "lengthRelativeToSystem": 0.03,
+        "lengthRelativeToLocalWindow": 0.625,
+        "runStart": 565,
+        "runEnd": 594,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 31,
+        "lengthRelativeToSystem": 0.031,
+        "lengthRelativeToLocalWindow": 0.6458,
+        "runStart": 565,
+        "runEnd": 595,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 18,
+        "lengthRelativeToSystem": 0.018,
+        "lengthRelativeToLocalWindow": 0.375,
+        "runStart": 577,
+        "runEnd": 594,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 13,
+        "lengthRelativeToSystem": 0.013,
+        "lengthRelativeToLocalWindow": 0.2708,
+        "runStart": 560,
+        "runEnd": 604,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 560,
+        "runEnd": 571,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 560,
+        "runEnd": 607,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 560,
+        "runEnd": 600,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.011,
+      0.005,
+      0.025,
+      0.011,
+      0.011,
+      0.012,
+      0.02,
+      0.022,
+      0.03,
+      0.031,
+      0.018,
+      0.013,
+      0.012,
+      0.048,
+      0.016
+    ],
+    "rowVerticalSpacingPx": [
+      1.5,
+      2.5,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.562,
+      0.355,
+      0.562,
+      0.562,
+      0.384,
+      0,
+      0.562,
+      0.739,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1
+    ],
+    "repeatedRowCount": 15,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 579,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 447,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 586,
+          "y": 655,
+          "w": 6,
+          "h": 3
+        },
+        "area": 16,
+        "aspectRatio": 2,
+        "widthRatio": 0.453,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.363,
+        "yOriginOffset": 1.787,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 581,
+          "y": 656,
+          "w": 1,
+          "h": 2
+        },
+        "area": 2,
+        "aspectRatio": 0.5,
+        "widthRatio": 0.075,
+        "heightRatio": 0.151,
+        "xOriginOffset": -0.203,
+        "yOriginOffset": 1.749,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 586,
+          "y": 661,
+          "w": 6,
+          "h": 3
+        },
+        "area": 18,
+        "aspectRatio": 2,
+        "widthRatio": 0.453,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.363,
+        "yOriginOffset": 1.334,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 581,
+          "y": 662,
+          "w": 1,
+          "h": 2
+        },
+        "area": 2,
+        "aspectRatio": 0.5,
+        "widthRatio": 0.075,
+        "heightRatio": 0.151,
+        "xOriginOffset": -0.203,
+        "yOriginOffset": 1.296,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 596,
+          "y": 663,
+          "w": 4,
+          "h": 5
+        },
+        "area": 19,
+        "aspectRatio": 0.8,
+        "widthRatio": 0.302,
+        "heightRatio": 0.377,
+        "xOriginOffset": 1.042,
+        "yOriginOffset": 1.108,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 579,
+          "y": 671,
+          "w": 3,
+          "h": 13
+        },
+        "area": 23,
+        "aspectRatio": 0.231,
+        "widthRatio": 0.226,
+        "heightRatio": 0.981,
+        "xOriginOffset": -0.279,
+        "yOriginOffset": 0.202,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 586,
+          "y": 671,
+          "w": 6,
+          "h": 5
+        },
+        "area": 16,
+        "aspectRatio": 1.2,
+        "widthRatio": 0.453,
+        "heightRatio": 0.377,
+        "xOriginOffset": 0.363,
+        "yOriginOffset": 0.504,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 596,
+          "y": 677,
+          "w": 4,
+          "h": 7
+        },
+        "area": 20,
+        "aspectRatio": 0.571,
+        "widthRatio": 0.302,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.042,
+        "yOriginOffset": -0.024,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 586,
+          "y": 683,
+          "w": 6,
+          "h": 1
+        },
+        "area": 6,
+        "aspectRatio": 6,
+        "widthRatio": 0.453,
+        "heightRatio": 0.075,
+        "xOriginOffset": 0.363,
+        "yOriginOffset": -0.251,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 3,
+    "suppressedStaffOrLedgerRows": 10,
+    "suppressedStemColumns": 8,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 579,
+      "right": 599,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 560,
+      "rightSupport": 607
+    },
+    "truthAligned": true,
+    "expectedMidi": 50,
+    "expectedPitchLabel": "D3",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 30,
+    "staffStepErrorApprox": 30
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 1.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x600:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col45",
+    "midi": 82,
+    "pitchLabel": "A#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": false
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 656,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 583,
+        "runEnd": 593,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 658,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 41,
+        "lengthRelativeToSystem": 0.041,
+        "lengthRelativeToLocalWindow": 0.8542,
+        "runStart": 583,
+        "runEnd": 623,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 583,
+        "runEnd": 593,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 585,
+        "runEnd": 602,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 592,
+        "runEnd": 603,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 583,
+        "runEnd": 603,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 22,
+        "lengthRelativeToSystem": 0.022,
+        "lengthRelativeToLocalWindow": 0.4583,
+        "runStart": 581,
+        "runEnd": 602,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 604,
+        "runEnd": 623,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 23,
+        "lengthRelativeToSystem": 0.023,
+        "lengthRelativeToLocalWindow": 0.4792,
+        "runStart": 579,
+        "runEnd": 623,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 18,
+        "lengthRelativeToSystem": 0.018,
+        "lengthRelativeToLocalWindow": 0.375,
+        "runStart": 577,
+        "runEnd": 619,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 13,
+        "lengthRelativeToSystem": 0.013,
+        "lengthRelativeToLocalWindow": 0.2708,
+        "runStart": 592,
+        "runEnd": 604,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.011,
+      0.009,
+      0.041,
+      0.011,
+      0.011,
+      0.012,
+      0.02,
+      0.022,
+      0.02,
+      0.023,
+      0.018,
+      0.013
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      0,
+      1,
+      0,
+      0.714,
+      0.803,
+      0.803,
+      0.714,
+      0.109,
+      1,
+      1,
+      0.891
+    ],
+    "repeatedRowCount": 12,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 595,
+          "y": 646,
+          "w": 21,
+          "h": 33
+        },
+        "area": 299,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 595,
+          "y": 654,
+          "w": 1,
+          "h": 3
+        },
+        "area": 3,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.075,
+        "heightRatio": 0.226,
+        "xOriginOffset": -0.347,
+        "yOriginOffset": 1.369,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 610,
+          "y": 657,
+          "w": 6,
+          "h": 7
+        },
+        "area": 22,
+        "aspectRatio": 0.857,
+        "widthRatio": 0.453,
+        "heightRatio": 0.528,
+        "xOriginOffset": 0.974,
+        "yOriginOffset": 0.992,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 595,
+          "y": 661,
+          "w": 9,
+          "h": 7
+        },
+        "area": 42,
+        "aspectRatio": 1.286,
+        "widthRatio": 0.679,
+        "heightRatio": 0.528,
+        "xOriginOffset": -0.045,
+        "yOriginOffset": 0.69,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 595,
+          "y": 671,
+          "w": 11,
+          "h": 8
+        },
+        "area": 29,
+        "aspectRatio": 1.375,
+        "widthRatio": 0.83,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.031,
+        "yOriginOffset": -0.103,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 608,
+          "y": 671,
+          "w": 8,
+          "h": 8
+        },
+        "area": 28,
+        "aspectRatio": 1,
+        "widthRatio": 0.604,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.899,
+        "yOriginOffset": -0.103,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 4,
+    "suppressedStaffOrLedgerRows": 8,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 595,
+      "right": 615,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 576,
+      "rightSupport": 623
+    },
+    "truthAligned": true,
+    "expectedMidi": 84,
+    "expectedPitchLabel": "C6",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": -2,
+    "staffStepErrorApprox": -2
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x617:y667",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col47",
+    "midi": 84,
+    "pitchLabel": "C6",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": false
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 11,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 642,
+        "longestRunPx": 5,
+        "lengthRelativeToSystem": 0.005,
+        "lengthRelativeToLocalWindow": 0.1042,
+        "runStart": 603,
+        "runEnd": 607,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 658,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 594,
+        "runEnd": 641,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 610,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 594,
+        "runEnd": 618,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 628,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 623,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 610,
+        "runEnd": 637,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 671,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 610,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.005,
+      0.009,
+      0.048,
+      0.011,
+      0.009,
+      0.012,
+      0.016,
+      0.014,
+      0.011
+    ],
+    "rowVerticalSpacingPx": [
+      15.5,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1.5
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      0.71,
+      1,
+      0.754,
+      0.576,
+      0,
+      0,
+      1,
+      0.754
+    ],
+    "repeatedRowCount": 9,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 613,
+          "y": 640,
+          "w": 21,
+          "h": 32
+        },
+        "area": 217,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 613,
+          "y": 656,
+          "w": 8,
+          "h": 8
+        },
+        "area": 39,
+        "aspectRatio": 1,
+        "widthRatio": 0.604,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.048,
+        "yOriginOffset": 0.536,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 626,
+          "y": 663,
+          "w": 8,
+          "h": 9
+        },
+        "area": 49,
+        "aspectRatio": 0.889,
+        "widthRatio": 0.604,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.933,
+        "yOriginOffset": -0.03,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 613,
+          "y": 664,
+          "w": 11,
+          "h": 8
+        },
+        "area": 27,
+        "aspectRatio": 1.375,
+        "widthRatio": 0.83,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.065,
+        "yOriginOffset": -0.067,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 3,
+    "suppressedStaffOrLedgerRows": 2,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 613,
+      "right": 633,
+      "top": 640,
+      "bottom": 671,
+      "leftSupport": 594,
+      "rightSupport": 641
+    },
+    "truthAligned": true,
+    "expectedMidi": 59,
+    "expectedPitchLabel": "B3",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 25,
+    "staffStepErrorApprox": 25
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x617:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col47",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": true
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 658,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 594,
+        "runEnd": 641,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 610,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 594,
+        "runEnd": 618,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 628,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 623,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 610,
+        "runEnd": 637,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 604,
+        "runEnd": 630,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 30,
+        "lengthRelativeToSystem": 0.03,
+        "lengthRelativeToLocalWindow": 0.625,
+        "runStart": 601,
+        "runEnd": 630,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 603,
+        "runEnd": 619,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 594,
+        "runEnd": 604,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 628,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 594,
+        "runEnd": 637,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 609,
+        "runEnd": 620,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.009,
+      0.048,
+      0.011,
+      0.009,
+      0.012,
+      0.016,
+      0.014,
+      0.027,
+      0.03,
+      0.017,
+      0.011,
+      0.012,
+      0.017,
+      0.012
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.71,
+      1,
+      0.754,
+      0.576,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0.665,
+      0,
+      0,
+      1,
+      0.754
+    ],
+    "repeatedRowCount": 14,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 613,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 340,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 613,
+          "y": 680,
+          "w": 8,
+          "h": 5
+        },
+        "area": 19,
+        "aspectRatio": 1.6,
+        "widthRatio": 0.604,
+        "heightRatio": 0.377,
+        "headSized": true
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 614,
+          "y": 656,
+          "w": 7,
+          "h": 8
+        },
+        "area": 34,
+        "aspectRatio": 0.875,
+        "widthRatio": 0.528,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.011,
+        "yOriginOffset": 1.523,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 614,
+          "y": 664,
+          "w": 10,
+          "h": 19
+        },
+        "area": 55,
+        "aspectRatio": 0.526,
+        "widthRatio": 0.755,
+        "heightRatio": 1.434,
+        "xOriginOffset": 0.103,
+        "yOriginOffset": 0.504,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 626,
+          "y": 665,
+          "w": 4,
+          "h": 6
+        },
+        "area": 17,
+        "aspectRatio": 0.667,
+        "widthRatio": 0.302,
+        "heightRatio": 0.453,
+        "xOriginOffset": 0.782,
+        "yOriginOffset": 0.919,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 626,
+          "y": 674,
+          "w": 4,
+          "h": 9
+        },
+        "area": 17,
+        "aspectRatio": 0.444,
+        "widthRatio": 0.302,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.782,
+        "yOriginOffset": 0.127,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 614,
+          "y": 683,
+          "w": 7,
+          "h": 2
+        },
+        "area": 14,
+        "aspectRatio": 3.5,
+        "widthRatio": 0.528,
+        "heightRatio": 0.151,
+        "xOriginOffset": -0.011,
+        "yOriginOffset": -0.289,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 1,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 7,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 613,
+      "right": 633,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 594,
+      "rightSupport": 641
+    },
+    "truthAligned": true,
+    "expectedMidi": 52,
+    "expectedPitchLabel": "E3",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": 28,
+    "staffStepErrorApprox": 28
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x635:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col48",
+    "midi": 82,
+    "pitchLabel": "A#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": true
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 658,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 37,
+        "lengthRelativeToSystem": 0.037,
+        "lengthRelativeToLocalWindow": 0.7708,
+        "runStart": 612,
+        "runEnd": 648,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 620,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 612,
+        "runEnd": 638,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 628,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 623,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 624,
+        "runEnd": 637,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 640,
+        "runEnd": 659,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 21,
+        "lengthRelativeToSystem": 0.021,
+        "lengthRelativeToLocalWindow": 0.4375,
+        "runStart": 639,
+        "runEnd": 659,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 624,
+        "runEnd": 658,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 631,
+        "runEnd": 656,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.009,
+      0.037,
+      0.009,
+      0.009,
+      0.012,
+      0.016,
+      0.014,
+      0.02,
+      0.021,
+      0.017,
+      0.014
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      1,
+      0,
+      0.759,
+      0.848,
+      0.848,
+      0.67,
+      0.063,
+      0.152,
+      1,
+      0.862
+    ],
+    "repeatedRowCount": 11,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 631,
+          "y": 646,
+          "w": 21,
+          "h": 33
+        },
+        "area": 261,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 633,
+          "y": 663,
+          "w": 9,
+          "h": 16
+        },
+        "area": 77,
+        "aspectRatio": 0.563,
+        "widthRatio": 0.679,
+        "heightRatio": 1.208,
+        "xOriginOffset": 0.145,
+        "yOriginOffset": 0.199,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 631,
+          "y": 664,
+          "w": 1,
+          "h": 7
+        },
+        "area": 7,
+        "aspectRatio": 0.143,
+        "widthRatio": 0.075,
+        "heightRatio": 0.528,
+        "xOriginOffset": -0.308,
+        "yOriginOffset": 0.464,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 644,
+          "y": 670,
+          "w": 8,
+          "h": 9
+        },
+        "area": 33,
+        "aspectRatio": 0.889,
+        "widthRatio": 0.604,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.937,
+        "yOriginOffset": -0.065,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 631,
+          "y": 674,
+          "w": 1,
+          "h": 5
+        },
+        "area": 5,
+        "aspectRatio": 0.2,
+        "widthRatio": 0.075,
+        "heightRatio": 0.377,
+        "xOriginOffset": -0.308,
+        "yOriginOffset": -0.216,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 3,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 631,
+      "right": 651,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 612,
+      "rightSupport": 659
+    },
+    "truthAligned": true,
+    "expectedMidi": 84,
+    "expectedPitchLabel": "C6",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": -2,
+    "staffStepErrorApprox": -2
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 8,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 3,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m8:x657:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m8:col50",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": true
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 660,
+        "longestRunPx": 15,
+        "lengthRelativeToSystem": 0.015,
+        "lengthRelativeToLocalWindow": 0.3125,
+        "runStart": 634,
+        "runEnd": 648,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 665,
+        "longestRunPx": 6,
+        "lengthRelativeToSystem": 0.006,
+        "lengthRelativeToLocalWindow": 0.125,
+        "runStart": 634,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 667,
+        "longestRunPx": 6,
+        "lengthRelativeToSystem": 0.006,
+        "lengthRelativeToLocalWindow": 0.125,
+        "runStart": 634,
+        "runEnd": 639,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 5,
+        "lengthRelativeToSystem": 0.005,
+        "lengthRelativeToLocalWindow": 0.1042,
+        "runStart": 634,
+        "runEnd": 638,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 671,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 650,
+        "runEnd": 660,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 673,
+        "longestRunPx": 28,
+        "lengthRelativeToSystem": 0.028,
+        "lengthRelativeToLocalWindow": 0.5833,
+        "runStart": 639,
+        "runEnd": 666,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 675,
+        "longestRunPx": 13,
+        "lengthRelativeToSystem": 0.013,
+        "lengthRelativeToLocalWindow": 0.2708,
+        "runStart": 648,
+        "runEnd": 660,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 677,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 634,
+        "runEnd": 658,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 679,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 646,
+        "runEnd": 657,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 681,
+        "longestRunPx": 17,
+        "lengthRelativeToSystem": 0.017,
+        "lengthRelativeToLocalWindow": 0.3542,
+        "runStart": 640,
+        "runEnd": 657,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 683,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 642,
+        "runEnd": 655,
+        "aboveStaff": false,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 664,
+        "runEnd": 674,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.015,
+      0.006,
+      0.006,
+      0.005,
+      0.011,
+      0.028,
+      0.013,
+      0.017,
+      0.012,
+      0.017,
+      0.014,
+      0.011
+    ],
+    "rowVerticalSpacingPx": [
+      5,
+      2,
+      1.5,
+      2.5,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1.5
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      0,
+      0,
+      0,
+      0.757,
+      1,
+      0.757,
+      0.579,
+      0.49,
+      0.49,
+      0.313,
+      0
+    ],
+    "repeatedRowCount": 12,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 653,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 196,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 653,
+          "y": 670,
+          "w": 8,
+          "h": 14
+        },
+        "area": 63,
+        "aspectRatio": 0.571,
+        "widthRatio": 0.604,
+        "heightRatio": 1.057,
+        "xOriginOffset": -0.046,
+        "yOriginOffset": 0.24,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 666,
+          "y": 676,
+          "w": 8,
+          "h": 9
+        },
+        "area": 45,
+        "aspectRatio": 0.889,
+        "widthRatio": 0.604,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.935,
+        "yOriginOffset": -0.024,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 2,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 653,
+      "right": 673,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 634,
+      "rightSupport": 681
+    },
+    "truthAligned": true,
+    "expectedMidi": 81,
+    "expectedPitchLabel": "A5",
+    "expectedAccidental": null,
+    "pitchErrorSemitones": -1,
+    "staffStepErrorApprox": -1,
+    "failureClassHint": "possible-accidental-shaped-residual"
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 0.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x763:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col58",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": false
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 660,
+        "longestRunPx": 21,
+        "lengthRelativeToSystem": 0.021,
+        "lengthRelativeToLocalWindow": 0.4375,
+        "runStart": 767,
+        "runEnd": 787,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 664,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 776,
+        "runEnd": 783,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 774,
+        "runEnd": 785,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 774,
+        "runEnd": 784,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 756,
+        "runEnd": 782,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 750,
+        "runEnd": 776,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 31,
+        "lengthRelativeToSystem": 0.031,
+        "lengthRelativeToLocalWindow": 0.6458,
+        "runStart": 746,
+        "runEnd": 776,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 757,
+        "runEnd": 765,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 740,
+        "runEnd": 784,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 774,
+        "runEnd": 785,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 16,
+        "lengthRelativeToSystem": 0.016,
+        "lengthRelativeToLocalWindow": 0.3333,
+        "runStart": 740,
+        "runEnd": 782,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 755,
+        "runEnd": 766,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.021,
+      0.008,
+      0.012,
+      0.011,
+      0.01,
+      0.027,
+      0.031,
+      0.009,
+      0.01,
+      0.012,
+      0.016,
+      0.011
+    ],
+    "rowVerticalSpacingPx": [
+      4,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.15,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0.673,
+      1,
+      0,
+      1,
+      0.761
+    ],
+    "repeatedRowCount": 12,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 759,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 165,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 774,
+          "y": 676,
+          "w": 6,
+          "h": 8
+        },
+        "area": 39,
+        "aspectRatio": 0.75,
+        "widthRatio": 0.453,
+        "heightRatio": 0.604,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 759,
+          "y": 680,
+          "w": 8,
+          "h": 5
+        },
+        "area": 18,
+        "aspectRatio": 1.6,
+        "widthRatio": 0.604,
+        "heightRatio": 0.377,
+        "headSized": true
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 774,
+          "y": 665,
+          "w": 2,
+          "h": 6
+        },
+        "area": 9,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.151,
+        "heightRatio": 0.453,
+        "xOriginOffset": 0.864,
+        "yOriginOffset": 0.919,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 759,
+          "y": 670,
+          "w": 8,
+          "h": 7
+        },
+        "area": 36,
+        "aspectRatio": 1.143,
+        "widthRatio": 0.604,
+        "heightRatio": 0.528,
+        "xOriginOffset": -0.042,
+        "yOriginOffset": 0.504,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 774,
+          "y": 678,
+          "w": 2,
+          "h": 6
+        },
+        "area": 9,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.151,
+        "heightRatio": 0.453,
+        "xOriginOffset": 0.864,
+        "yOriginOffset": -0.062,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 759,
+          "y": 680,
+          "w": 8,
+          "h": 5
+        },
+        "area": 18,
+        "aspectRatio": 1.6,
+        "widthRatio": 0.604,
+        "heightRatio": 0.377,
+        "xOriginOffset": -0.042,
+        "yOriginOffset": -0.175,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 2,
+    "headSizedAfterSuppress": 2,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 5,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 759,
+      "right": 779,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 740,
+      "rightSupport": 787
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 1,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x781:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col59",
+    "midi": 81,
+    "pitchLabel": "A5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 658,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 793,
+        "runEnd": 802,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 38,
+        "lengthRelativeToSystem": 0.038,
+        "lengthRelativeToLocalWindow": 0.7917,
+        "runStart": 767,
+        "runEnd": 804,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 792,
+        "runEnd": 802,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 776,
+        "runEnd": 800,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 774,
+        "runEnd": 785,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 774,
+        "runEnd": 784,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 757,
+        "runEnd": 782,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 757,
+        "runEnd": 776,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 757,
+        "runEnd": 802,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 757,
+        "runEnd": 801,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 775,
+        "runEnd": 784,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.01,
+      0.038,
+      0.011,
+      0.008,
+      0.012,
+      0.011,
+      0.009,
+      0.02,
+      0.02,
+      0.01,
+      0.01
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      1,
+      0,
+      0.944,
+      0.855,
+      0.767,
+      0.589,
+      0.056,
+      1,
+      1,
+      0.767
+    ],
+    "repeatedRowCount": 11,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 777,
+          "y": 646,
+          "w": 21,
+          "h": 33
+        },
+        "area": 204,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 777,
+          "y": 676,
+          "w": 8,
+          "h": 3
+        },
+        "area": 21,
+        "aspectRatio": 2.667,
+        "widthRatio": 0.604,
+        "heightRatio": 0.226,
+        "headSized": true
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 792,
+          "y": 657,
+          "w": 6,
+          "h": 7
+        },
+        "area": 26,
+        "aspectRatio": 0.857,
+        "widthRatio": 0.453,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.019,
+        "yOriginOffset": 0.992,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 777,
+          "y": 663,
+          "w": 9,
+          "h": 8
+        },
+        "area": 55,
+        "aspectRatio": 1.125,
+        "widthRatio": 0.679,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0,
+        "yOriginOffset": 0.501,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 792,
+          "y": 670,
+          "w": 6,
+          "h": 7
+        },
+        "area": 26,
+        "aspectRatio": 0.857,
+        "widthRatio": 0.453,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.019,
+        "yOriginOffset": 0.011,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 777,
+          "y": 676,
+          "w": 8,
+          "h": 3
+        },
+        "area": 21,
+        "aspectRatio": 2.667,
+        "widthRatio": 0.604,
+        "heightRatio": 0.226,
+        "xOriginOffset": -0.037,
+        "yOriginOffset": -0.291,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 1,
+    "headSizedAfterSuppress": 4,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 1,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 777,
+      "right": 797,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 757,
+      "rightSupport": 804
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 1.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x799:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col60",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 654,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 810,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 656,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 810,
+        "runEnd": 819,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 658,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 793,
+        "runEnd": 802,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 775,
+        "runEnd": 822,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 792,
+        "runEnd": 802,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 776,
+        "runEnd": 800,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 775,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 810,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 775,
+        "runEnd": 801,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 27,
+        "lengthRelativeToSystem": 0.027,
+        "lengthRelativeToLocalWindow": 0.5625,
+        "runStart": 785,
+        "runEnd": 811,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 28,
+        "lengthRelativeToSystem": 0.028,
+        "lengthRelativeToLocalWindow": 0.5833,
+        "runStart": 785,
+        "runEnd": 812,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 792,
+        "runEnd": 822,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 775,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 775,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 13,
+        "lengthRelativeToSystem": 0.013,
+        "lengthRelativeToLocalWindow": 0.2708,
+        "runStart": 775,
+        "runEnd": 822,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 793,
+        "runEnd": 802,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.012,
+      0.01,
+      0.01,
+      0.048,
+      0.011,
+      0.008,
+      0.012,
+      0.011,
+      0.008,
+      0.027,
+      0.028,
+      0.01,
+      0.01,
+      0.012,
+      0.013,
+      0.01
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      0,
+      0.799,
+      1,
+      0.807,
+      0.629,
+      1,
+      0,
+      0.718,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0.799
+    ],
+    "repeatedRowCount": 16,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 794,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 273,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 809,
+          "y": 676,
+          "w": 6,
+          "h": 8
+        },
+        "area": 32,
+        "aspectRatio": 0.75,
+        "widthRatio": 0.453,
+        "heightRatio": 0.604,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 794,
+          "y": 683,
+          "w": 9,
+          "h": 2
+        },
+        "area": 17,
+        "aspectRatio": 4.5,
+        "widthRatio": 0.679,
+        "heightRatio": 0.151,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 810,
+          "y": 653,
+          "w": 1,
+          "h": 3
+        },
+        "area": 3,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.075,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.864,
+        "yOriginOffset": 1.938,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 794,
+          "y": 656,
+          "w": 9,
+          "h": 8
+        },
+        "area": 43,
+        "aspectRatio": 1.125,
+        "widthRatio": 0.679,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.041,
+        "yOriginOffset": 1.523,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 810,
+          "y": 666,
+          "w": 1,
+          "h": 3
+        },
+        "area": 3,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.075,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.864,
+        "yOriginOffset": 0.957,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 794,
+          "y": 670,
+          "w": 9,
+          "h": 7
+        },
+        "area": 41,
+        "aspectRatio": 1.286,
+        "widthRatio": 0.679,
+        "heightRatio": 0.528,
+        "xOriginOffset": -0.041,
+        "yOriginOffset": 0.504,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 809,
+          "y": 679,
+          "w": 2,
+          "h": 3
+        },
+        "area": 4,
+        "aspectRatio": 0.667,
+        "widthRatio": 0.151,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.827,
+        "yOriginOffset": -0.024,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 794,
+          "y": 683,
+          "w": 9,
+          "h": 2
+        },
+        "area": 17,
+        "aspectRatio": 4.5,
+        "widthRatio": 0.679,
+        "heightRatio": 0.151,
+        "xOriginOffset": -0.041,
+        "yOriginOffset": -0.289,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 1,
+    "headSizedAfterSuppress": 2,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 6,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 794,
+      "right": 814,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 775,
+      "rightSupport": 822
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x816:y660",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col62",
+    "midi": 84,
+    "pitchLabel": "C6",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 3
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 12,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 651,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 812,
+        "runEnd": 819,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 653,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 810,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 655,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 810,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 657,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 794,
+        "runEnd": 818,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 659,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 793,
+        "runEnd": 840,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 661,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 793,
+        "runEnd": 840,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 663,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 793,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 665,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 811,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.008,
+      0.012,
+      0.011,
+      0.008,
+      0.048,
+      0.048,
+      0.01,
+      0.01
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.622,
+      0.901,
+      0.812,
+      0.634,
+      1,
+      1,
+      1,
+      0.799
+    ],
+    "repeatedRowCount": 8,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 812,
+          "y": 633,
+          "w": 21,
+          "h": 33
+        },
+        "area": 211,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 812,
+          "y": 650,
+          "w": 10,
+          "h": 8
+        },
+        "area": 63,
+        "aspectRatio": 1.25,
+        "widthRatio": 0.755,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.001,
+        "yOriginOffset": 0.496,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 828,
+          "y": 657,
+          "w": 5,
+          "h": 7
+        },
+        "area": 21,
+        "aspectRatio": 0.714,
+        "widthRatio": 0.377,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.02,
+        "yOriginOffset": 0.005,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 812,
+          "y": 663,
+          "w": 9,
+          "h": 3
+        },
+        "area": 23,
+        "aspectRatio": 3,
+        "widthRatio": 0.679,
+        "heightRatio": 0.226,
+        "xOriginOffset": -0.037,
+        "yOriginOffset": -0.297,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 2,
+    "suppressedStaffOrLedgerRows": 2,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 812,
+      "right": 832,
+      "top": 633,
+      "bottom": 665,
+      "leftSupport": 793,
+      "rightSupport": 840
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x816:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col62",
+    "midi": 81,
+    "pitchLabel": "A5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "component-outside-font-origin-range",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": null,
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 651,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 812,
+        "runEnd": 819,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 653,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 810,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 655,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 810,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 657,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 794,
+        "runEnd": 818,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 659,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 793,
+        "runEnd": 840,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 661,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 793,
+        "runEnd": 840,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 663,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 793,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 665,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 811,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 667,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 810,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 669,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 810,
+        "runEnd": 819,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 671,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 828,
+        "runEnd": 838,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 673,
+        "longestRunPx": 23,
+        "lengthRelativeToSystem": 0.023,
+        "lengthRelativeToLocalWindow": 0.4792,
+        "runStart": 818,
+        "runEnd": 840,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 675,
+        "longestRunPx": 18,
+        "lengthRelativeToSystem": 0.018,
+        "lengthRelativeToLocalWindow": 0.375,
+        "runStart": 820,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 677,
+        "longestRunPx": 14,
+        "lengthRelativeToSystem": 0.014,
+        "lengthRelativeToLocalWindow": 0.2917,
+        "runStart": 812,
+        "runEnd": 827,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 811,
+        "runEnd": 820,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.008,
+      0.012,
+      0.011,
+      0.008,
+      0.048,
+      0.048,
+      0.01,
+      0.01,
+      0.012,
+      0.01,
+      0.011,
+      0.023,
+      0.018,
+      0.014,
+      0.01
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1.5
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0.622,
+      0.901,
+      0.812,
+      0.634,
+      1,
+      1,
+      1,
+      0.799,
+      0.901,
+      0.723,
+      0,
+      0.366,
+      0.188,
+      0.898,
+      0.799
+    ],
+    "repeatedRowCount": 15,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 812,
+          "y": 646,
+          "w": 21,
+          "h": 33
+        },
+        "area": 355,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 820,
+          "y": 652,
+          "w": 2,
+          "h": 3
+        },
+        "area": 4,
+        "aspectRatio": 0.667,
+        "widthRatio": 0.151,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.303,
+        "yOriginOffset": 1.52,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 828,
+          "y": 657,
+          "w": 5,
+          "h": 7
+        },
+        "area": 21,
+        "aspectRatio": 0.714,
+        "widthRatio": 0.377,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.02,
+        "yOriginOffset": 0.992,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 820,
+          "y": 665,
+          "w": 2,
+          "h": 3
+        },
+        "area": 4,
+        "aspectRatio": 0.667,
+        "widthRatio": 0.151,
+        "heightRatio": 0.226,
+        "xOriginOffset": 0.303,
+        "yOriginOffset": 0.539,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 825,
+          "y": 670,
+          "w": 8,
+          "h": 9
+        },
+        "area": 29,
+        "aspectRatio": 0.889,
+        "widthRatio": 0.604,
+        "heightRatio": 0.679,
+        "xOriginOffset": 0.907,
+        "yOriginOffset": -0.065,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 820,
+          "y": 671,
+          "w": 3,
+          "h": 8
+        },
+        "area": 8,
+        "aspectRatio": 0.375,
+        "widthRatio": 0.226,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.341,
+        "yOriginOffset": -0.103,
+        "headSized": false
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 1,
+    "suppressedStaffOrLedgerRows": 5,
+    "suppressedStemColumns": 10,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "notehead-merged-with-ledger-fragments",
+    "window": {
+      "left": 812,
+      "right": 832,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 793,
+      "rightSupport": 840
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 2.5,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x834:y680",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col63",
+    "midi": 80,
+    "pitchLabel": "G#5",
+    "accidental": {
+      "type": "sharp",
+      "alter": 1,
+      "confidence": 0.9,
+      "courtesy": true
+    },
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 1
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 9,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 654,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 811,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 656,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 811,
+        "runEnd": 819,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 658,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 829,
+        "runEnd": 838,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 48,
+        "lengthRelativeToSystem": 0.048,
+        "lengthRelativeToLocalWindow": 1,
+        "runStart": 811,
+        "runEnd": 858,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 828,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 812,
+        "runEnd": 836,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 811,
+        "runEnd": 821,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 845,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 811,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 30,
+        "lengthRelativeToSystem": 0.03,
+        "lengthRelativeToLocalWindow": 0.625,
+        "runStart": 818,
+        "runEnd": 847,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 31,
+        "lengthRelativeToSystem": 0.031,
+        "lengthRelativeToLocalWindow": 0.6458,
+        "runStart": 818,
+        "runEnd": 848,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 18,
+        "lengthRelativeToSystem": 0.018,
+        "lengthRelativeToLocalWindow": 0.375,
+        "runStart": 814,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 845,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 680,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 845,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 682,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 811,
+        "runEnd": 855,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 684,
+        "longestRunPx": 26,
+        "lengthRelativeToSystem": 0.026,
+        "lengthRelativeToLocalWindow": 0.5417,
+        "runStart": 827,
+        "runEnd": 852,
+        "aboveStaff": false,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.011,
+      0.009,
+      0.01,
+      0.048,
+      0.01,
+      0.008,
+      0.011,
+      0.012,
+      0.01,
+      0.03,
+      0.031,
+      0.018,
+      0.012,
+      0.012,
+      0.02,
+      0.026
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      0,
+      0.799,
+      1,
+      0.728,
+      0.64,
+      0,
+      0,
+      0.728,
+      1,
+      1,
+      0.728,
+      0,
+      0,
+      1,
+      1
+    ],
+    "repeatedRowCount": 16,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 830,
+          "y": 653,
+          "w": 21,
+          "h": 32
+        },
+        "area": 344,
+        "aspectRatio": 0.656,
+        "widthRatio": 1.585,
+        "heightRatio": 2.415,
+        "headSized": false
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 830,
+          "y": 656,
+          "w": 6,
+          "h": 8
+        },
+        "area": 31,
+        "aspectRatio": 0.75,
+        "widthRatio": 0.453,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.146,
+        "yOriginOffset": 1.523,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 837,
+          "y": 657,
+          "w": 2,
+          "h": 6
+        },
+        "area": 5,
+        "aspectRatio": 0.333,
+        "widthRatio": 0.151,
+        "heightRatio": 0.453,
+        "xOriginOffset": 0.232,
+        "yOriginOffset": 1.523,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 845,
+          "y": 664,
+          "w": 5,
+          "h": 7
+        },
+        "area": 24,
+        "aspectRatio": 0.714,
+        "widthRatio": 0.377,
+        "heightRatio": 0.528,
+        "xOriginOffset": 0.949,
+        "yOriginOffset": 0.957,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 830,
+          "y": 670,
+          "w": 6,
+          "h": 7
+        },
+        "area": 24,
+        "aspectRatio": 0.857,
+        "widthRatio": 0.453,
+        "heightRatio": 0.528,
+        "xOriginOffset": -0.146,
+        "yOriginOffset": 0.504,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 837,
+          "y": 670,
+          "w": 4,
+          "h": 15
+        },
+        "area": 17,
+        "aspectRatio": 0.267,
+        "widthRatio": 0.302,
+        "heightRatio": 1.132,
+        "xOriginOffset": 0.307,
+        "yOriginOffset": 0.202,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 843,
+          "y": 677,
+          "w": 7,
+          "h": 8
+        },
+        "area": 29,
+        "aspectRatio": 0.875,
+        "widthRatio": 0.528,
+        "heightRatio": 0.604,
+        "xOriginOffset": 0.873,
+        "yOriginOffset": -0.062,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 830,
+          "y": 680,
+          "w": 6,
+          "h": 5
+        },
+        "area": 9,
+        "aspectRatio": 1.2,
+        "widthRatio": 0.453,
+        "heightRatio": 0.377,
+        "xOriginOffset": -0.146,
+        "yOriginOffset": -0.175,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 0,
+    "headSizedAfterSuppress": 4,
+    "suppressedStaffOrLedgerRows": 7,
+    "suppressedStemColumns": 4,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 830,
+      "right": 850,
+      "top": 653,
+      "bottom": 684,
+      "leftSupport": 811,
+      "rightSupport": 858
+    }
+  },
+  {
+    "fixture": "piano-dense-advanced-vector",
+    "page": 1,
+    "system": 1,
+    "staff": 1,
+    "measure": 9,
+    "voice": 1,
+    "clef": "treble",
+    "onsetQuarters": 3,
+    "noteCandidateId": "piano-dense-advanced-vector:p1:m9:x852:y673",
+    "glyphId": "U+E0A4",
+    "pathId": null,
+    "chordColumnId": "piano-dense-advanced-vector:m9:col64",
+    "midi": 81,
+    "pitchLabel": "A5",
+    "accidental": null,
+    "register": "high-extreme",
+    "ledger": {
+      "direction": "above",
+      "count": 2
+    },
+    "finalFallbackSource": "glyph-metrics-fallback",
+    "inkRejectedReason": "ambiguous-components",
+    "suppressionRuleTriggered": "horizontal-run>=max(gap*1.02, localWindow*0.82)",
+    "ambiguityRuleTriggered": "vertically-competing-head-sized-components",
+    "generatedStaffPosition": 10,
+    "localStaffSpacingPx": 13.25,
+    "localStaffSlopeApprox": 0.05305305305305305,
+    "ledgerRowCandidates": [
+      {
+        "y": 658,
+        "longestRunPx": 10,
+        "lengthRelativeToSystem": 0.01,
+        "lengthRelativeToLocalWindow": 0.2083,
+        "runStart": 829,
+        "runEnd": 838,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 660,
+        "longestRunPx": 38,
+        "lengthRelativeToSystem": 0.038,
+        "lengthRelativeToLocalWindow": 0.7917,
+        "runStart": 829,
+        "runEnd": 866,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 662,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 829,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 664,
+        "longestRunPx": 8,
+        "lengthRelativeToSystem": 0.008,
+        "lengthRelativeToLocalWindow": 0.1667,
+        "runStart": 829,
+        "runEnd": 855,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 666,
+        "longestRunPx": 11,
+        "lengthRelativeToSystem": 0.011,
+        "lengthRelativeToLocalWindow": 0.2292,
+        "runStart": 846,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 668,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 845,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 670,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 829,
+        "runEnd": 854,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 672,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 829,
+        "runEnd": 876,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      },
+      {
+        "y": 674,
+        "longestRunPx": 20,
+        "lengthRelativeToSystem": 0.02,
+        "lengthRelativeToLocalWindow": 0.4167,
+        "runStart": 829,
+        "runEnd": 873,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 676,
+        "longestRunPx": 9,
+        "lengthRelativeToSystem": 0.009,
+        "lengthRelativeToLocalWindow": 0.1875,
+        "runStart": 829,
+        "runEnd": 837,
+        "aboveStaff": true,
+        "halfSpaceAligned": false
+      },
+      {
+        "y": 678,
+        "longestRunPx": 12,
+        "lengthRelativeToSystem": 0.012,
+        "lengthRelativeToLocalWindow": 0.25,
+        "runStart": 845,
+        "runEnd": 856,
+        "aboveStaff": true,
+        "halfSpaceAligned": true
+      }
+    ],
+    "rowLengthsRelativeToSystem": [
+      0.01,
+      0.038,
+      0.009,
+      0.008,
+      0.011,
+      0.012,
+      0.009,
+      0.02,
+      0.02,
+      0.009,
+      0.012
+    ],
+    "rowVerticalSpacingPx": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rowHorizontalOverlapWithNotehead": [
+      0,
+      1,
+      0,
+      0.734,
+      0.822,
+      0.822,
+      0.645,
+      1,
+      1,
+      0,
+      0.822
+    ],
+    "repeatedRowCount": 11,
+    "rowSpanClass": "one-notehead",
+    "rawInkComponents": [
+      {
+        "bounds": {
+          "x": 848,
+          "y": 646,
+          "w": 21,
+          "h": 33
+        },
+        "area": 202,
+        "aspectRatio": 0.636,
+        "widthRatio": 1.585,
+        "heightRatio": 2.491,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 848,
+          "y": 676,
+          "w": 9,
+          "h": 3
+        },
+        "area": 23,
+        "aspectRatio": 3,
+        "widthRatio": 0.679,
+        "heightRatio": 0.226,
+        "headSized": true
+      }
+    ],
+    "componentsAfterSuppress": [
+      {
+        "bounds": {
+          "x": 848,
+          "y": 663,
+          "w": 9,
+          "h": 8
+        },
+        "area": 61,
+        "aspectRatio": 1.125,
+        "widthRatio": 0.679,
+        "heightRatio": 0.604,
+        "xOriginOffset": -0.028,
+        "yOriginOffset": 0.501,
+        "headSized": true
+      },
+      {
+        "bounds": {
+          "x": 864,
+          "y": 670,
+          "w": 5,
+          "h": 7
+        },
+        "area": 21,
+        "aspectRatio": 0.714,
+        "widthRatio": 0.377,
+        "heightRatio": 0.528,
+        "xOriginOffset": 1.029,
+        "yOriginOffset": 0.011,
+        "headSized": false
+      },
+      {
+        "bounds": {
+          "x": 848,
+          "y": 676,
+          "w": 9,
+          "h": 3
+        },
+        "area": 23,
+        "aspectRatio": 3,
+        "widthRatio": 0.679,
+        "heightRatio": 0.226,
+        "xOriginOffset": -0.028,
+        "yOriginOffset": -0.291,
+        "headSized": true
+      }
+    ],
+    "headSizedBeforeSuppress": 1,
+    "headSizedAfterSuppress": 2,
+    "suppressedStaffOrLedgerRows": 4,
+    "suppressedStemColumns": 2,
+    "accidentalCandidatesNearby": [],
+    "failureClass": "several-chord-heads-treated-as-ambiguous-group",
+    "window": {
+      "left": 848,
+      "right": 868,
+      "top": 646,
+      "bottom": 678,
+      "leftSupport": 829,
+      "rightSupport": 876
+    }
+  }
+]

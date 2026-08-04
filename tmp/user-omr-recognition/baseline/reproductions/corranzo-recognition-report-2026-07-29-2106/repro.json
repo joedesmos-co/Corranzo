@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2106",
+  "source": "merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+  "ok": true,
+  "elapsedMs": 1620,
+  "pagesProcessed": 7,
+  "totalPages": 7,
+  "reported": {
+    "measures": 230,
+    "notes": 2409,
+    "confidence": 0.9009237888778457,
+    "acceptance": "accepted",
+    "tieStarts": 79,
+    "tieStops": 134,
+    "rests": 0
+  },
+  "reproduced": {
+    "measures": 229,
+    "notes": 2409,
+    "rests": 0,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 81,
+    "tieStops": 138,
+    "tieImbalance": -57
+  },
+  "delta": {
+    "measures": -1,
+    "notes": 0,
+    "tieImbalance": -2
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": true,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

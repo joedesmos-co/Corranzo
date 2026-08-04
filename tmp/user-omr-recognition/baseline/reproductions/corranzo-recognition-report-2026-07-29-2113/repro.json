@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2113",
+  "source": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+  "ok": true,
+  "elapsedMs": 624,
+  "pagesProcessed": 3,
+  "totalPages": 3,
+  "reported": {
+    "measures": 63,
+    "notes": 1050,
+    "confidence": 0.898304895681949,
+    "acceptance": "accepted",
+    "tieStarts": 12,
+    "tieStops": 24,
+    "rests": 3
+  },
+  "reproduced": {
+    "measures": 61,
+    "notes": 1050,
+    "rests": 3,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 12,
+    "tieStops": 12,
+    "tieImbalance": 0
+  },
+  "delta": {
+    "measures": -2,
+    "notes": 0,
+    "tieImbalance": 12
+  },
+  "reproducesIssue": {
+    "tieImbalance": false,
+    "zeroRestsDense": false,
+    "any": false
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

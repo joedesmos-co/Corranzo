@@ -1,0 +1,32 @@
+OMR semantic corpus — baseline
+==============================
+label: single-staff-ledger-filter
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 3404694
+createdAt: 2026-07-30T22:59:13.020Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 63.9%
+- pitch: 45.5%
+- rhythm: 51.5%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 50.0%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- missing-note [pitch] ×50 across 1 fixtures
+- onset-mismatch [rhythm] ×44 across 1 fixtures
+- incorrect-chord [measure-structure] ×28 across 1 fixtures
+- duration-mismatch [rhythm] ×19 across 1 fixtures
+- incorrect-pitch [pitch] ×10 across 1 fixtures
+- extra-note [pitch] ×6 across 1 fixtures
+- merged-measure [measure-structure] ×1 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-standard-chords-vector: overall=63.9% R=52% P=45% S=100% A=100% M=50% I=0%
+  worst measures: #6(merged-measure|missing-note|missing-note), #8(missing-note|missing-note|missing-note), #4(missing-note|missing-note|missing-note)

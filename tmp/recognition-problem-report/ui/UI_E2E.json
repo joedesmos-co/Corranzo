@@ -1,0 +1,141 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:5173",
+  "results": [
+    {
+      "id": "warning-banner-export-without-pdf",
+      "ok": true,
+      "steps": [
+        {
+          "name": "omr-finished",
+          "ok": true,
+          "bodySnippet": "Beta\nPiano\nGuitar\nLibrary\nPractice\nProgress\nHelp\nVIEW\nScore\nVisual\n\nCorranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. C"
+        },
+        {
+          "name": "privacy-copy",
+          "ok": true
+        },
+        {
+          "name": "download-name",
+          "ok": true,
+          "filename": "corranzo-recognition-report-2026-07-31-2209.zip"
+        },
+        {
+          "name": "success-no-pdf",
+          "ok": true
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/01-warning-banner.png",
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/02-warning-exported.png"
+      ]
+    },
+    {
+      "id": "explicit-pdf-inclusion-confirmation",
+      "ok": true,
+      "steps": [
+        {
+          "name": "export-disabled-before-confirm",
+          "ok": true
+        },
+        {
+          "name": "export-enabled-after-confirm",
+          "ok": true
+        },
+        {
+          "name": "download",
+          "ok": true
+        },
+        {
+          "name": "success-with-pdf",
+          "ok": true
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/03-pdf-included.png"
+      ]
+    },
+    {
+      "id": "accepted-score-report-from-help",
+      "ok": true,
+      "steps": [
+        {
+          "name": "dialog-open",
+          "ok": true
+        },
+        {
+          "name": "escape-closes",
+          "ok": true
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/04-accepted-help.png"
+      ]
+    },
+    {
+      "id": "score-replacement-resets-dialog",
+      "ok": true,
+      "steps": [
+        {
+          "name": "replacement-omr-ready",
+          "ok": true
+        },
+        {
+          "name": "dialog-closed-after-replace",
+          "ok": true
+        },
+        {
+          "name": "draft-reset-contract",
+          "ok": true,
+          "via": "unit:recognitionProblemReport ownerScoreId reset"
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/05-before-replace.png",
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/06-after-replace.png"
+      ]
+    },
+    {
+      "id": "failed-omr-report",
+      "ok": true,
+      "steps": [
+        {
+          "name": "saw-failure",
+          "ok": true
+        },
+        {
+          "name": "failure-report-visible",
+          "ok": true
+        },
+        {
+          "name": "default-failed-category",
+          "ok": true
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/07-failed-omr.png"
+      ]
+    },
+    {
+      "id": "escape-and-focus-restore",
+      "ok": true,
+      "steps": [
+        {
+          "name": "focus-restored",
+          "ok": true,
+          "focused": "Report recognition problem"
+        }
+      ],
+      "error": null,
+      "screenshots": [
+        "/Users/ryland/Documents/scoreflow/tmp/recognition-problem-report/ui/08-focus-restore.png"
+      ]
+    }
+  ],
+  "createdAt": "2026-08-01T02:12:28.659Z"
+}

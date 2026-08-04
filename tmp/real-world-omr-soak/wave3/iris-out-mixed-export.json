@@ -1,0 +1,142 @@
+{
+  "id": "iris-out-mixed-export",
+  "title": "Iris Out (piano arrangement)",
+  "sourceEdition": "Third-party arrangement PDF — multi-font / atypical export path",
+  "role": "mixed-or-unusual-export",
+  "pdf": "iris-out-piano-arragement.pdf",
+  "pdfTypeDeclared": "mixed",
+  "pageCount": 5,
+  "pageSources": [
+    {
+      "page": 1,
+      "kind": "vector-unusual-fonts",
+      "textChars": 889,
+      "imageOps": 0,
+      "pathOps": 1031,
+      "fonts": [
+        "g_d7_f3",
+        "g_d7_f4",
+        "g_d7_f5",
+        "g_d7_f6",
+        "g_d7_f7",
+        "g_d7_f1"
+      ]
+    },
+    {
+      "page": 2,
+      "kind": "vector-unusual-fonts",
+      "textChars": 1058,
+      "imageOps": 0,
+      "pathOps": 849,
+      "fonts": [
+        "g_d7_f4",
+        "g_d7_f5",
+        "g_d7_f7",
+        "g_d7_f1"
+      ]
+    },
+    {
+      "page": 3,
+      "kind": "vector-unusual-fonts",
+      "textChars": 925,
+      "imageOps": 0,
+      "pathOps": 945,
+      "fonts": [
+        "g_d7_f4",
+        "g_d7_f5",
+        "g_d7_f7",
+        "g_d7_f1"
+      ]
+    },
+    {
+      "page": 4,
+      "kind": "vector-unusual-fonts",
+      "textChars": 984,
+      "imageOps": 0,
+      "pathOps": 763,
+      "fonts": [
+        "g_d7_f4",
+        "g_d7_f5",
+        "g_d7_f7",
+        "g_d7_f1"
+      ]
+    },
+    {
+      "page": 5,
+      "kind": "vector-unusual-fonts",
+      "textChars": 715,
+      "imageOps": 0,
+      "pathOps": 497,
+      "fonts": [
+        "g_d7_f4",
+        "g_d7_f5",
+        "g_d7_f7",
+        "g_d7_f1"
+      ]
+    }
+  ],
+  "scanQuality": null,
+  "pathGlyphDensity": 20.51923076923077,
+  "omrCompletion": "Completed",
+  "pipeline": {
+    "omrFailed": false,
+    "noteCount": 1067,
+    "measureCount": 52,
+    "overallConfidence": 0.9033234100683157,
+    "uncertainMeasures": 0,
+    "systems": 12,
+    "hist": {
+      "types": {
+        "quarter": 200,
+        "eighth": 539,
+        "sixteenth": 319,
+        "half": 19,
+        "whole": 1
+      },
+      "dots": 18,
+      "beams": 185,
+      "ties": 2,
+      "rests": 11,
+      "measures": 52,
+      "tabLines": 0,
+      "stringAttrs": 0,
+      "fretAttrs": 0
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 80,
+      "beam-short-lost-to-longer": 22,
+      "beam-confidence-rejected": 625
+    },
+    "tabDiagnostics": null,
+    "matchesGuitarFalseTabRouting": false,
+    "matchesRasterLowConfidenceRejection": false,
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "matchesFalseBeamSparseBeginner": true,
+    "provenanceRootCause": "false-beam-correction-sparse",
+    "provenanceExported": true,
+    "musicXmlSnippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><score-partwise version=\"3.1\"><work><work-title>Iris Out (piano arrangement)</work-title></work><part-list><score-part id=\"P1\"><part-name>Piano</part-name></score-part></part-list><part id=\"P1\"><measure number=\"1\"><attributes><divisions>4</divisions><key><fifths>4</fifths><mode>major</mode></key><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves><clef number=\"1\"><sign>G</sign><line>2</line></clef><clef number=\"2\"><sign>F</sign><line>4</line></clef></attributes><direction><words>Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.</words></direction><direction><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>135</per-minute></metronome></direction-type><sound tempo=\"135\"/><offset>5</offset></direction><direction><direction-type><dynamics><mf/></dynamics></direction-type><offset>7</offset></direction><note><pitch><step>F</step><alter>2</alter><octave>2</octave></pitch><accidental>double-sharp</accidental><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</staff><stem>up</stem></note><backup><duration>4</duration></backup><note><pitch><step>F</step><alter>2</alter><octave>5</octave></pitch><accidental>double-sharp</accidental><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><stem>down</stem></note><note><pitch><step>G</step><alter>1</alter><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><staff>2</st"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-f5da32c6-1a21-41a5-add0-38bd399490fd",
+    "duration": 204.44444444444446,
+    "playableEventCount": 2310,
+    "loopToggled": true,
+    "audible": null,
+    "instrumentSwitch": {
+      "to": "Guitar",
+      "stillPlayable": true
+    },
+    "navigation": {
+      "libraryRoundTrip": true,
+      "restoreSameScore": true,
+      "staleOverlay": false,
+      "reloadRestored": true
+    }
+  },
+  "elapsedMs": 13881
+}

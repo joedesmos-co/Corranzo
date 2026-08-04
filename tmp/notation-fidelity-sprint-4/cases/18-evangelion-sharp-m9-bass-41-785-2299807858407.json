@@ -221,7 +221,7 @@
     "fifths": -3,
     "keyAlteration": null
   },
-  "musicXmlSnippet": "<note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><accidental>sharp</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato/></articulations></notations></note>",
+  "musicXmlSnippet": "<note><chord/><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><accidental>sharp</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note>",
   "renderedResult": {
     "writtenPitch": {
       "step": "F",
@@ -240,7 +240,7 @@
   },
   "soundingMidiBefore": 42,
   "soundingMidiAfter": 42,
-  "playbackSignatureUnchanged": true,
+  "playbackSignatureUnchanged": false,
   "failureLayerBefore": "MusicXML omitted printed accidental semantics",
   "failureLayerAfter": "none",
   "correctBefore": false,

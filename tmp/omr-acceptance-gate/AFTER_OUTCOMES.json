@@ -1,0 +1,761 @@
+{
+  "generatedAt": "2026-07-29T02:11:50.806Z",
+  "rows": [
+    {
+      "id": "brahms-lullaby",
+      "role": "PASSING",
+      "expect": "accepted",
+      "outcome": "accepted",
+      "match": true,
+      "noteCount": 53,
+      "measureCount": 13,
+      "overallConfidence": 0.6587847751367615,
+      "quality": {
+        "acceptance": "accepted",
+        "confidenceBand": "mid",
+        "warningReasons": [],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 2,
+          "noteCount": 66,
+          "measureCount": 13,
+          "uncertainMeasures": 12,
+          "notesPerMeasure": 5.076923076923077,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9230769230769231,
+          "overallConfidence": 0.6587847751367615,
+          "meanPageConfidence": 0.6298750000000002,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "playbackOk": true,
+      "playbackDuration": 32,
+      "playbackNotes": 53,
+      "warningReasons": []
+    },
+    {
+      "id": "evangelion",
+      "role": "PASSING",
+      "expect": "accepted",
+      "outcome": "accepted",
+      "match": true,
+      "noteCount": 2808,
+      "measureCount": 125,
+      "overallConfidence": 0.9090136450920546,
+      "quality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "warningReasons": [],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 8,
+          "pagesWithSystems": 8,
+          "systems": 44,
+          "noteCount": 2808,
+          "measureCount": 125,
+          "uncertainMeasures": 0,
+          "notesPerMeasure": 22.464,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "overallConfidence": 0.9090136450920546,
+          "meanPageConfidence": 0.8649117023953302,
+          "layoutSpread": 3,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "playbackOk": true,
+      "playbackDuration": 243.1077694235589,
+      "playbackNotes": 2808,
+      "warningReasons": []
+    },
+    {
+      "id": "guitar-paired-scan",
+      "role": "PASSING",
+      "expect": "accepted",
+      "outcome": "accepted",
+      "match": true,
+      "noteCount": 49,
+      "measureCount": 5,
+      "overallConfidence": 0.638403042297826,
+      "quality": {
+        "acceptance": "accepted",
+        "confidenceBand": "mid",
+        "warningReasons": [],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 2,
+          "noteCount": 101,
+          "measureCount": 5,
+          "uncertainMeasures": 5,
+          "notesPerMeasure": 20.2,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "overallConfidence": 0.638403042297826,
+          "meanPageConfidence": 0.6175000000000002,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "playbackOk": true,
+      "playbackDuration": 20,
+      "playbackNotes": 49,
+      "warningReasons": []
+    },
+    {
+      "id": "guitar-techniques-tab",
+      "role": "PASSING",
+      "expect": "accepted",
+      "outcome": "accepted",
+      "match": true,
+      "noteCount": 32,
+      "measureCount": 12,
+      "overallConfidence": 0.9212041574822826,
+      "quality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "warningReasons": [],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage"
+        ],
+        "negativeEvidence": [
+          "low-page-confidence"
+        ],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": false
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 4,
+          "noteCount": 32,
+          "measureCount": 12,
+          "uncertainMeasures": 0,
+          "notesPerMeasure": 2.6666666666666665,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "overallConfidence": 0.9212041574822826,
+          "meanPageConfidence": 0.43250000000000005,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "playbackOk": true,
+      "playbackDuration": 24,
+      "playbackNotes": 32,
+      "warningReasons": []
+    },
+    {
+      "id": "iris-out",
+      "role": "PASSING",
+      "expect": "accepted",
+      "outcome": "accepted",
+      "match": true,
+      "noteCount": 1067,
+      "measureCount": 52,
+      "overallConfidence": 0.9033234100683157,
+      "quality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "warningReasons": [],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 2,
+          "pagesWithSystems": 2,
+          "systems": 12,
+          "noteCount": 1067,
+          "measureCount": 52,
+          "uncertainMeasures": 0,
+          "notesPerMeasure": 20.51923076923077,
+          "systemCoverage": 1,
+          "uncertainRatio": 0,
+          "overallConfidence": 0.9033234100683157,
+          "meanPageConfidence": 0.8649875000000002,
+          "layoutSpread": 0,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "playbackOk": true,
+      "playbackDuration": 175.99999999999972,
+      "playbackNotes": 1067,
+      "warningReasons": []
+    },
+    {
+      "id": "bach-chorale-bwv259",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 202,
+      "measureCount": 33,
+      "overallConfidence": 0.6414767103948311,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 7,
+          "noteCount": 358,
+          "measureCount": 33,
+          "uncertainMeasures": 30,
+          "notesPerMeasure": 10.848484848484848,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9090909090909091,
+          "overallConfidence": 0.6414767103948311,
+          "meanPageConfidence": 0.634857142857143,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 62,
+      "playbackNotes": 202,
+      "warningReasons": [
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "turkish-march",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 2200,
+      "measureCount": 130,
+      "overallConfidence": 0.6523677817503,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "inconsistent-layout",
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 5,
+          "pagesWithSystems": 5,
+          "systems": 27,
+          "noteCount": 4423,
+          "measureCount": 130,
+          "uncertainMeasures": 126,
+          "notesPerMeasure": 34.02307692307692,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9692307692307692,
+          "overallConfidence": 0.6523677817503,
+          "meanPageConfidence": 0.6292374999999999,
+          "layoutSpread": 5,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 514.2857142857138,
+      "playbackNotes": 2200,
+      "warningReasons": [
+        "inconsistent-layout",
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "fur-elise",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 1721,
+      "measureCount": 104,
+      "overallConfidence": 0.650210067068924,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 3,
+          "pagesWithSystems": 3,
+          "systems": 19,
+          "noteCount": 3384,
+          "measureCount": 104,
+          "uncertainMeasures": 103,
+          "notesPerMeasure": 32.53846153846154,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9903846153846154,
+          "overallConfidence": 0.650210067068924,
+          "meanPageConfidence": 0.6183571428571427,
+          "layoutSpread": 1,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 206,
+      "playbackNotes": 1721,
+      "warningReasons": [
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "handel-gavotte",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 334,
+      "measureCount": 22,
+      "overallConfidence": 0.6487235188189843,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 4,
+          "noteCount": 557,
+          "measureCount": 22,
+          "uncertainMeasures": 21,
+          "notesPerMeasure": 25.318181818181817,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.9545454545454546,
+          "overallConfidence": 0.6487235188189843,
+          "meanPageConfidence": 0.6174999999999999,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 45,
+      "playbackNotes": 334,
+      "warningReasons": [
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "demo-minuet",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 442,
+      "measureCount": 32,
+      "overallConfidence": 0.6487377640156213,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 6,
+          "noteCount": 612,
+          "measureCount": 32,
+          "uncertainMeasures": 32,
+          "notesPerMeasure": 19.125,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "overallConfidence": 0.6487377640156213,
+          "meanPageConfidence": 0.6174999999999998,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 64,
+      "playbackNotes": 442,
+      "warningReasons": [
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "chopin-mazurka",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 1339,
+      "measureCount": 119,
+      "overallConfidence": 0.6512828549635071,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "inconsistent-layout",
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 3,
+          "pagesWithSystems": 3,
+          "systems": 22,
+          "noteCount": 2277,
+          "measureCount": 119,
+          "uncertainMeasures": 114,
+          "notesPerMeasure": 19.134453781512605,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.957983193277311,
+          "overallConfidence": 0.6512828549635071,
+          "meanPageConfidence": 0.6219374999999999,
+          "layoutSpread": 7,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 238,
+      "playbackNotes": 1339,
+      "warningReasons": [
+        "inconsistent-layout",
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "pathetique",
+      "role": "FALSE_REJECT",
+      "expect": "warning",
+      "outcome": "warning",
+      "match": true,
+      "noteCount": 2638,
+      "measureCount": 136,
+      "overallConfidence": 0.6496361064638964,
+      "quality": {
+        "acceptance": "warning",
+        "confidenceBand": "mid",
+        "warningReasons": [
+          "low-confidence"
+        ],
+        "rejectReasons": [],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory",
+          "plausible-page-confidence",
+          "mid-confidence-structural-salvage"
+        ],
+        "negativeEvidence": [],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": true
+        },
+        "extractionSummary": {
+          "pageCount": 4,
+          "pagesWithSystems": 4,
+          "systems": 26,
+          "noteCount": 5039,
+          "measureCount": 136,
+          "uncertainMeasures": 136,
+          "notesPerMeasure": 37.0514705882353,
+          "systemCoverage": 1,
+          "uncertainRatio": 1,
+          "overallConfidence": 0.6496361064638964,
+          "meanPageConfidence": 0.6181428571428572,
+          "layoutSpread": 1,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": "Corranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing."
+      },
+      "playbackOk": true,
+      "playbackDuration": 325.3333333333333,
+      "playbackNotes": 2638,
+      "warningReasons": [
+        "low-confidence"
+      ]
+    },
+    {
+      "id": "twinkle-1880-loc",
+      "role": "TRUE_REJECT",
+      "expect": "rejected",
+      "outcome": "rejected",
+      "match": true,
+      "noteCount": 667,
+      "measureCount": 54,
+      "overallConfidence": 0.6210687292760307,
+      "quality": {
+        "acceptance": "rejected",
+        "confidenceBand": "mid",
+        "warningReasons": [],
+        "rejectReasons": [
+          "low-confidence"
+        ],
+        "positiveEvidence": [
+          "has-pages",
+          "valid-systems",
+          "nonzero-notes",
+          "sufficient-page-coverage",
+          "substantial-note-inventory"
+        ],
+        "negativeEvidence": [
+          "low-page-confidence",
+          "insufficient-structural-evidence"
+        ],
+        "safetyChecks": {
+          "hasPages": true,
+          "hasSystems": true,
+          "hasNotes": true,
+          "sufficientPageCoverage": true,
+          "absoluteConfidenceFloor": true,
+          "meanPageConfidenceFloor": false
+        },
+        "extractionSummary": {
+          "pageCount": 1,
+          "pagesWithSystems": 1,
+          "systems": 10,
+          "noteCount": 667,
+          "measureCount": 54,
+          "uncertainMeasures": 36,
+          "notesPerMeasure": 12.351851851851851,
+          "systemCoverage": 1,
+          "uncertainRatio": 0.6666666666666666,
+          "overallConfidence": 0.6210687292760307,
+          "meanPageConfidence": 0.4961214285714285,
+          "layoutSpread": null,
+          "layoutInconsistent": false
+        },
+        "ownerScoreId": null,
+        "sourceIdentity": null,
+        "warningMessage": null
+      },
+      "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+      "playbackOk": false
+    }
+  ]
+}

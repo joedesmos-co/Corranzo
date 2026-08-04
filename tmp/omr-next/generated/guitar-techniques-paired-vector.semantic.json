@@ -1,0 +1,906 @@
+{
+  "schemaVersion": 2,
+  "evaluatorVersion": "2.0.0",
+  "kind": "semantic-musicxml-evaluation",
+  "mode": "written",
+  "gitCommit": "3404694",
+  "scores": {
+    "pitch": 0.7778,
+    "rhythm": 0.9286,
+    "sustain": 0,
+    "articulation": 1,
+    "measureStructure": 0.8,
+    "interpretation": 0,
+    "playback": 1
+  },
+  "scorePercents": {
+    "pitch": "78%",
+    "rhythm": "93%",
+    "sustain": "0%",
+    "articulation": "100%",
+    "measureStructure": "80%",
+    "interpretation": "0%",
+    "playback": "100%"
+  },
+  "classes": {
+    "pitch": {
+      "numerator": 28,
+      "denominator": 36,
+      "truePositives": 28,
+      "falsePositives": 4,
+      "falseNegatives": 4,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 32,
+      "compared": 36,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.7778,
+      "percent": "78%",
+      "reliable": true,
+      "displayPercent": "78%"
+    },
+    "rhythm": {
+      "numerator": 52,
+      "denominator": 56,
+      "truePositives": 52,
+      "falsePositives": 0,
+      "falseNegatives": 4,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 56,
+      "compared": 56,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.9286,
+      "percent": "93%",
+      "reliable": true,
+      "displayPercent": "93%"
+    },
+    "sustain": {
+      "numerator": 0,
+      "denominator": 2,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 2,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 2,
+      "compared": 2,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0,
+      "percent": "0%",
+      "reliable": true,
+      "displayPercent": "0%"
+    },
+    "articulation": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "measureStructure": {
+      "numerator": 16,
+      "denominator": 20,
+      "truePositives": 16,
+      "falsePositives": 0,
+      "falseNegatives": 4,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 20,
+      "compared": 20,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.8,
+      "percent": "80%",
+      "reliable": true,
+      "displayPercent": "80%"
+    },
+    "interpretation": {
+      "numerator": 0,
+      "denominator": 1,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 1,
+      "compared": 1,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0,
+      "percent": "0%",
+      "reliable": true,
+      "displayPercent": "0%"
+    },
+    "playback": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    }
+  },
+  "overall": 0.6438,
+  "overallPercent": "64%",
+  "labels": {
+    "pitch": "Pitch",
+    "rhythm": "Rhythm",
+    "sustain": "Sustain (ties)",
+    "articulation": "Articulation",
+    "measureStructure": "Measure structure",
+    "interpretation": "Interpretation",
+    "playback": "Playback"
+  },
+  "alignment": {
+    "confidence": 0.9528,
+    "matchedCount": 8,
+    "unmatchedTruthCount": 0,
+    "unmatchedGeneratedCount": 0,
+    "totalCost": 5.4,
+    "pairs": [
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "split",
+        "truthMeasureNumbers": [
+          2
+        ],
+        "generatedMeasureNumbers": [
+          2,
+          3
+        ],
+        "cost": 1.35
+      },
+      {
+        "kind": "split",
+        "truthMeasureNumbers": [
+          3
+        ],
+        "generatedMeasureNumbers": [
+          4,
+          5
+        ],
+        "cost": 1.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          4
+        ],
+        "generatedMeasureNumbers": [
+          6
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          5
+        ],
+        "generatedMeasureNumbers": [
+          7
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "split",
+        "truthMeasureNumbers": [
+          6
+        ],
+        "generatedMeasureNumbers": [
+          8,
+          9
+        ],
+        "cost": 1.35
+      },
+      {
+        "kind": "split",
+        "truthMeasureNumbers": [
+          7
+        ],
+        "generatedMeasureNumbers": [
+          10,
+          11
+        ],
+        "cost": 1.35
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          8
+        ],
+        "generatedMeasureNumbers": [
+          12
+        ],
+        "cost": 0
+      }
+    ]
+  },
+  "measures": [
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "message": "Tempo 88 BPM missing or wrong at q=0",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "Tempo 88 BPM missing or wrong at q=0"
+      ],
+      "severity": 2
+    },
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2,
+        3
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 2 → 2,3",
+          "measureNumber": 2
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A4",
+          "measureNumber": 2
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A4",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "Split measure 2 → 2,3",
+        "Missing note A4",
+        "Extra note A4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        4,
+        5
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 3 → 4,5",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 3
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Split measure 3 → 4,5",
+        "Missing note E4",
+        "Extra note E4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 4,
+      "truthMeasureNumbers": [
+        4
+      ],
+      "generatedMeasureNumbers": [
+        6
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 4
+        }
+      ],
+      "summary": [
+        "Missing tie"
+      ],
+      "severity": 4
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Missing tie"
+      ],
+      "severity": 4
+    },
+    {
+      "measureNumber": 6,
+      "truthMeasureNumbers": [
+        6
+      ],
+      "generatedMeasureNumbers": [
+        8,
+        9
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 6 → 8,9",
+          "measureNumber": 6
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A4",
+          "measureNumber": 6
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A4",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 6
+        }
+      ],
+      "summary": [
+        "Split measure 6 → 8,9",
+        "Missing note A4",
+        "Extra note A4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        10,
+        11
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 7 → 10,11",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 7
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Split measure 7 → 10,11",
+        "Missing note E4",
+        "Extra note E4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    }
+  ],
+  "worstMeasures": [
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2,
+        3
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 2 → 2,3",
+          "measureNumber": 2
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A4",
+          "measureNumber": 2
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A4",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "Split measure 2 → 2,3",
+        "Missing note A4",
+        "Extra note A4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        4,
+        5
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 3 → 4,5",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 3
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Split measure 3 → 4,5",
+        "Missing note E4",
+        "Extra note E4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 6,
+      "truthMeasureNumbers": [
+        6
+      ],
+      "generatedMeasureNumbers": [
+        8,
+        9
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 6 → 8,9",
+          "measureNumber": 6
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A4",
+          "measureNumber": 6
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A4",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 6
+        }
+      ],
+      "summary": [
+        "Split measure 6 → 8,9",
+        "Missing note A4",
+        "Extra note A4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        10,
+        11
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 1.35,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 7 → 10,11",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 7
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as half",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Split measure 7 → 10,11",
+        "Missing note E4",
+        "Extra note E4",
+        "Quarter detected as half"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 4,
+      "truthMeasureNumbers": [
+        4
+      ],
+      "generatedMeasureNumbers": [
+        6
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 4
+        }
+      ],
+      "summary": [
+        "Missing tie"
+      ],
+      "severity": 4
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Missing tie"
+      ],
+      "severity": 4
+    },
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "message": "Tempo 88 BPM missing or wrong at q=0",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "Tempo 88 BPM missing or wrong at q=0"
+      ],
+      "severity": 2
+    }
+  ],
+  "firstDivergence": {
+    "measureNumber": 1,
+    "truthMeasureNumbers": [
+      1
+    ],
+    "generatedMeasureNumbers": [
+      1
+    ],
+    "alignment": "match",
+    "unmatched": false,
+    "defectCount": 1
+  },
+  "topDefects": [
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 4
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 4
+    },
+    {
+      "code": "missing-note",
+      "class": "pitch",
+      "label": "Missing note",
+      "count": 4
+    },
+    {
+      "code": "split-measure",
+      "class": "measure-structure",
+      "label": "Split measure",
+      "count": 4
+    },
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "label": "Missing tie",
+      "count": 2
+    },
+    {
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "label": "Tempo change mismatch",
+      "count": 1
+    }
+  ],
+  "topDefectClasses": [
+    {
+      "class": "pitch",
+      "label": "Pitch",
+      "count": 8
+    },
+    {
+      "class": "measure-structure",
+      "label": "Measure structure",
+      "count": 4
+    },
+    {
+      "class": "rhythm",
+      "label": "Rhythm",
+      "count": 4
+    },
+    {
+      "class": "sustain",
+      "label": "Sustain (ties)",
+      "count": 2
+    },
+    {
+      "class": "interpretation",
+      "label": "Interpretation",
+      "count": 1
+    }
+  ],
+  "totals": {
+    "truthNoteCount": 32,
+    "generatedNoteCount": 32,
+    "truthRestCount": 0,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 8,
+    "generatedMeasureCount": 12,
+    "defectCount": 19
+  },
+  "tolerances": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "units": "Primary comparison uses normalized quarter-note units (MusicXML duration/divisions). Seconds are used only in performed-playback mode."
+  },
+  "unsupportedFeatures": [
+    "ornaments (trills, turns, mordents)",
+    "fermata / breath marks",
+    "dynamics as scored values (p/f continuum)",
+    "hairpins / wedges",
+    "octave-shift (ottava)",
+    "cue notes / grace-note playback semantics",
+    "cross-staff beaming encoding details",
+    "figured bass / harmony realization",
+    "lyrics / text directions (except D.C./D.S./Fine words)",
+    "multiple <part> alignment beyond primary written sequence",
+    "score-timewise documents",
+    "microtonal / non-MIDI pitch systems"
+  ],
+  "playback": {
+    "truthDurationSeconds": 21.818181818181817,
+    "generatedDurationSeconds": 24,
+    "truthWrittenDurationSeconds": 21.818181818181817,
+    "generatedWrittenDurationSeconds": 24
+  },
+  "options": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "alignmentGapPenalty": 2.5,
+    "alignmentMaxPairCost": 4.5,
+    "minReliableCoverage": 0.25,
+    "mode": "written",
+    "topDefectLimit": 20,
+    "worstMeasureLimit": 10,
+    "enharmonicPolicy": "midi"
+  }
+}

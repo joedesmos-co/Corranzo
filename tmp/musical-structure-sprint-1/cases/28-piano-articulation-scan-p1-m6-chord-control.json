@@ -1,0 +1,676 @@
+{
+  "id": "28-piano-articulation-scan-p1-m6-chord-control",
+  "source": "piano-articulation-scan",
+  "sourceLabel": "piano-articulation-scan",
+  "sourcePdf": "/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf",
+  "page": 1,
+  "measure": 6,
+  "category": "chord control",
+  "manuallyVerified": true,
+  "expectedVoiceEventStructure": {
+    "noteCount": 11,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 4,
+    "chordToneCount": 9,
+    "stemDirections": {
+      "up": 0,
+      "down": 0,
+      "unspecified": 11
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "detectedNotesRestsSymbols": {
+    "vectorNoteCount": null,
+    "vectorRestGlyphCount": null,
+    "beamStemCandidateCounts": {
+      "noteheads": 18,
+      "stems": 13,
+      "beams": 0
+    }
+  },
+  "rawVoiceStemCandidates": [
+    {
+      "eventIndex": 0,
+      "startDivision": 0,
+      "splitCandidate": false,
+      "reasons": [
+        "beamed-and-unbeamed-notes",
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-6-0-343-697",
+          "midi": 72,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6655,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6655
+        },
+        {
+          "noteheadId": "n-6-1-344-709",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6655,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6655
+        },
+        {
+          "noteheadId": "n-6-2-344-871",
+          "midi": 43,
+          "clef": "bass",
+          "stemDirection": "up",
+          "stemConfidence": 0.7382,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.7382
+        },
+        {
+          "noteheadId": "n-6-3-346-844",
+          "midi": 50,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-6-4-352-696",
+          "midi": 72,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.7018,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.7018
+        },
+        {
+          "noteheadId": "n-6-5-353-707",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6836,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.6836
+        },
+        {
+          "noteheadId": "n-6-6-353-715",
+          "midi": 69,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-6-7-355-844",
+          "midi": 50,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-6-8-355-856",
+          "midi": 48,
+          "clef": "bass",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        }
+      ]
+    },
+    {
+      "eventIndex": 1,
+      "startDivision": 4,
+      "splitCandidate": false,
+      "reasons": [
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-6-9-379-709",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.72,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.72
+        },
+        {
+          "noteheadId": "n-6-10-388-708",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.7018,
+          "beamGroupId": null,
+          "beamCount": 2,
+          "confidence": 0.7018
+        }
+      ]
+    },
+    {
+      "eventIndex": 2,
+      "startDivision": 8,
+      "splitCandidate": false,
+      "reasons": [
+        "beamed-and-unbeamed-notes",
+        "mixed-stem-directions",
+        "multiple-likely-voices"
+      ],
+      "ownerships": [
+        {
+          "noteheadId": "n-6-11-415-697",
+          "midi": 72,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6836,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6836
+        },
+        {
+          "noteheadId": "n-6-12-415-850",
+          "midi": 48,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.72,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.72
+        },
+        {
+          "noteheadId": "n-6-13-416-709",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6655,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6655
+        },
+        {
+          "noteheadId": "n-6-14-424-837",
+          "midi": 52,
+          "clef": "bass",
+          "stemDirection": "down",
+          "stemConfidence": 0.72,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.72
+        },
+        {
+          "noteheadId": "n-6-15-425-703",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": null,
+          "stemConfidence": null,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.5
+        },
+        {
+          "noteheadId": "n-6-16-426-697",
+          "midi": 72,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.7382,
+          "beamGroupId": null,
+          "beamCount": 1,
+          "confidence": 0.7382
+        }
+      ]
+    },
+    {
+      "eventIndex": 3,
+      "startDivision": 12,
+      "splitCandidate": false,
+      "reasons": [],
+      "ownerships": [
+        {
+          "noteheadId": "n-6-17-451-703",
+          "midi": 71,
+          "clef": "treble",
+          "stemDirection": "up",
+          "stemConfidence": 0.6655,
+          "beamGroupId": null,
+          "beamCount": 0,
+          "confidence": 0.6655
+        }
+      ]
+    }
+  ],
+  "generatedEventGraph": {
+    "units": [
+      {
+        "eventIndex": 0,
+        "startDivision": 0,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          72,
+          71,
+          43,
+          50,
+          72,
+          71,
+          69,
+          50,
+          48
+        ]
+      },
+      {
+        "eventIndex": 1,
+        "startDivision": 4,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": "up",
+        "emitEventBeams": true,
+        "noteMidis": [
+          71,
+          71
+        ]
+      },
+      {
+        "eventIndex": 2,
+        "startDivision": 8,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          72,
+          48,
+          71,
+          52,
+          71,
+          72
+        ]
+      },
+      {
+        "eventIndex": 3,
+        "startDivision": 12,
+        "durationDivisions": 4,
+        "voice": 1,
+        "staff": "treble",
+        "stemDirection": null,
+        "emitEventBeams": true,
+        "noteMidis": [
+          71
+        ]
+      }
+    ],
+    "diagnostics": {
+      "eventCount": 4,
+      "serializationUnitCount": 4,
+      "splitEventCount": 0,
+      "splitNoteCount": 0,
+      "overlappingVoiceEventCount": 0,
+      "polyphonicStaffs": [],
+      "rejectedReasons": {
+        "partial-stem-ownership": 2,
+        "no-strong-stem-ownership": 1
+      },
+      "changedPitchCount": 0,
+      "changedOnsetCount": 0,
+      "changedDurationCount": 0,
+      "changedNoteCount": 0
+    }
+  },
+  "generatedBefore": {
+    "noteCount": 18,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 5,
+    "chordToneCount": 17,
+    "stemDirections": {
+      "up": 2,
+      "down": 0,
+      "unspecified": 16
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 0,
+        "implicitGapQuarters": 4,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "generatedAfter": {
+    "noteCount": 18,
+    "restCount": 0,
+    "voicesByStaff": {
+      "1": [
+        1
+      ],
+      "2": [
+        2
+      ]
+    },
+    "sameStaffPolyphony": false,
+    "chordColumnCount": 5,
+    "chordToneCount": 17,
+    "stemDirections": {
+      "up": 2,
+      "down": 0,
+      "unspecified": 16
+    },
+    "beamNoteCount": 0,
+    "tupletMemberCount": 0,
+    "crossStaffVoices": [],
+    "balance": {
+      "1": {
+        "writtenQuarters": 4,
+        "implicitGapQuarters": 0,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      },
+      "2": {
+        "writtenQuarters": 0,
+        "implicitGapQuarters": 4,
+        "overfullQuarters": 0,
+        "balancedWithImplicitGaps": true
+      }
+    }
+  },
+  "emittedMusicXml": "<measure number=\"6\"><direction><words>OMR rhythm uncertain</words></direction><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><chord/><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff></note><note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><stem>up</stem><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><stem>up</stem></note><note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff></note><note><chord/><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>quarter</type><dot/><staff>2</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><articulations><staccato/></articulations></notations></note><note><chord/><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><tie type=\"start\"/><voice>1</voice><type>quarter</type><dot/><staff>1</staff><notations><tied type=\"start\"/></notations></note><note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><articulations><staccato/></articulations></notations></note></measure>",
+  "renderedResult": {
+    "beforeStemCount": 6,
+    "afterStemCount": 6,
+    "visibleImprovement": false
+  },
+  "playbackEventOrder": {
+    "before": [
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 43
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 50
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 50
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 69
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 21,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 21,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 52
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 23,
+        "durationQuarters": 1,
+        "midi": 71
+      }
+    ],
+    "after": [
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 43
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 50
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 50
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 69
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 20,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 21,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 21,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 48
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 52
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 71
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 22,
+        "durationQuarters": 1,
+        "midi": 72
+      },
+      {
+        "measureNumber": 6,
+        "quarterTime": 23,
+        "durationQuarters": 1,
+        "midi": 71
+      }
+    ],
+    "unchanged": true
+  },
+  "failureLayerBefore": "none/control",
+  "failureLayerAfter": "none/control",
+  "correctBefore": true,
+  "correctAfter": true,
+  "artifacts": {
+    "sourceCrop": "tmp/musical-structure-sprint-1/source-crops/28-piano-articulation-scan-p1-m6-chord-control.png",
+    "candidateOverlay": "tmp/musical-structure-sprint-1/candidate-overlays/28-piano-articulation-scan-p1-m6-chord-control.png",
+    "musicXmlSnippet": "tmp/musical-structure-sprint-1/musicxml-snippets/28-piano-articulation-scan-p1-m6-chord-control.musicxml",
+    "renderedBefore": "tmp/musical-structure-sprint-1/rendered-before/28-piano-articulation-scan-p1-m6-chord-control.png",
+    "renderedAfter": "tmp/musical-structure-sprint-1/rendered-after/28-piano-articulation-scan-p1-m6-chord-control.png",
+    "gallery": "tmp/musical-structure-sprint-1/gallery/28-piano-articulation-scan-p1-m6-chord-control.png"
+  }
+}

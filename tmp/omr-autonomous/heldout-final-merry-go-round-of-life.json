@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "kind": "heldout-final-pdf-omr-audit",
+  "generatedAt": "2026-08-04T02:14:52.335Z",
+  "startedAt": "2026-08-04T02:14:48.357Z",
+  "id": "merry-go-round-of-life",
+  "title": "Merry-Go-Round of Life — Howl’s Moving Castle",
+  "pdf": "/Users/ryland/Downloads/merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+  "pdfBasename": "merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+  "pdfSha256": "5ed9045d6ceb5cfe47a6004a317d824ab2d881c92272d62dd1ac56c421b112d0",
+  "sourceAtStart": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceAtEnd": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceStable": true,
+  "pages": 7,
+  "processedPages": 7,
+  "notes": 2594,
+  "measures": 229,
+  "confidence": 0.8551190476190477,
+  "pipelineOverallConfidence": 0.9007993160329447,
+  "uncertainMeasures": 2,
+  "acceptance": "accepted",
+  "warnings": [
+    "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+    "2 measure(s) have uncertain rhythm."
+  ],
+  "fatalFailureCount": 0,
+  "partialFailureCount": 0,
+  "failureCount": 0,
+  "fatalError": null,
+  "partialFailures": [],
+  "elapsedMs": 3964,
+  "peakRssKiB": 590064,
+  "peakRssMiB": 576.234,
+  "calibration": {
+    "notehead": {
+      "eligibleSampleCount": 0,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 0,
+      "appliedCount": 0,
+      "byInkRejectionReason": {}
+    },
+    "accidentalPath": {
+      "attemptedPageCount": 0,
+      "directCandidateCount": 0,
+      "rawSampleCount": 0,
+      "eligibleSampleCount": 0,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 0,
+      "appliedCount": 0
+    }
+  },
+  "pageCalibrations": [
+    {
+      "page": 1,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 336,
+      "measures": 35,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 2,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 498,
+      "measures": 38,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 3,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 448,
+      "measures": 35,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 4,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 356,
+      "measures": 34,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 5,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 379,
+      "measures": 36,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 6,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 503,
+      "measures": 38,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 7,
+      "source": "vector-glyphs",
+      "systems": 2,
+      "notes": 76,
+      "measures": 13,
+      "uncertainMeasures": 2,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    }
+  ],
+  "performance": {
+    "totalMs": 3674.418083000001,
+    "phases": [
+      {
+        "phase": "pdf-load",
+        "ms": 0.05937499999998863
+      },
+      {
+        "phase": "page-1",
+        "ms": 527.8530410000001
+      },
+      {
+        "phase": "page-2",
+        "ms": 618.7017500000001
+      },
+      {
+        "phase": "page-3",
+        "ms": 591.9667919999999
+      },
+      {
+        "phase": "page-4",
+        "ms": 504.936375
+      },
+      {
+        "phase": "page-5",
+        "ms": 514.9646669999997
+      },
+      {
+        "phase": "page-6",
+        "ms": 632.9612500000003
+      },
+      {
+        "phase": "page-7",
+        "ms": 143.95495800000026
+      },
+      {
+        "phase": "omr-v3-confidence",
+        "ms": 128.34775000000036
+      },
+      {
+        "phase": "post-process",
+        "ms": 3.337167000000136
+      },
+      {
+        "phase": "build-musicxml",
+        "ms": 7.334957999999915
+      }
+    ],
+    "renderedPixelCopiesAvoided": 7,
+    "passThroughCopiesAvoided": 1,
+    "preprocessingCopies": 6,
+    "analysisHandoffCopies": 7
+  }
+}

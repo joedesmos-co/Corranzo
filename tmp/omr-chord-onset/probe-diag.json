@@ -1,0 +1,33 @@
+{
+  "pageKeys": [
+    "page",
+    "confidence",
+    "systems"
+  ],
+  "systemKeys": [
+    "systemIndex",
+    "confidence",
+    "measureCount",
+    "measures"
+  ],
+  "measureKeys": [
+    "measureNumber",
+    "confidence",
+    "pitchConfidence",
+    "rhythmConfidence",
+    "uncertain",
+    "rhythmApproximate",
+    "timingModel",
+    "detectedNoteheads",
+    "emittedNoteheads",
+    "dedupedDuringGrouping",
+    "musicalEventReconstruction",
+    "beamStem"
+  ],
+  "eventSample": [],
+  "musicalKeys": [
+    "keySignature",
+    "timeSignature",
+    "tempo"
+  ]
+}

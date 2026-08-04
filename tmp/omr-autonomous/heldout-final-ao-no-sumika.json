@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "kind": "heldout-final-pdf-omr-audit",
+  "generatedAt": "2026-08-04T02:14:43.081Z",
+  "startedAt": "2026-08-04T02:14:40.736Z",
+  "id": "ao-no-sumika",
+  "title": "Ao no Sumika (Piano)",
+  "pdf": "/Users/ryland/Downloads/Ao no Sumika (Piano).pdf",
+  "pdfBasename": "Ao no Sumika (Piano).pdf",
+  "pdfSha256": "296e98cdf91a0d063dcd3a49576e2d021452fbf9818f2c8482293211b19c589b",
+  "sourceAtStart": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceAtEnd": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceStable": true,
+  "pages": 4,
+  "processedPages": 4,
+  "notes": 1123,
+  "measures": 73,
+  "confidence": 0.8528244047619049,
+  "pipelineOverallConfidence": 0.8918619525353807,
+  "uncertainMeasures": 2,
+  "acceptance": "accepted",
+  "warnings": [
+    "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+    "2 measure(s) have uncertain rhythm."
+  ],
+  "fatalFailureCount": 0,
+  "partialFailureCount": 0,
+  "failureCount": 0,
+  "fatalError": null,
+  "partialFailures": [],
+  "elapsedMs": 2331.767,
+  "peakRssKiB": 436496,
+  "peakRssMiB": 426.266,
+  "calibration": {
+    "notehead": {
+      "eligibleSampleCount": 1,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 1,
+      "appliedCount": 0,
+      "byInkRejectionReason": {}
+    },
+    "accidentalPath": {
+      "attemptedPageCount": 0,
+      "directCandidateCount": 0,
+      "rawSampleCount": 0,
+      "eligibleSampleCount": 0,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 0,
+      "appliedCount": 0
+    }
+  },
+  "pageCalibrations": [
+    {
+      "page": 1,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 229,
+      "measures": 17,
+      "uncertainMeasures": 1,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 2,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 314,
+      "measures": 17,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 1,
+        "accepted": [],
+        "rejected": [
+          {
+            "key": "g_d1_f3\u001f",
+            "sampleCount": 1,
+            "reason": "insufficient-samples"
+          }
+        ],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 3,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 266,
+      "measures": 18,
+      "uncertainMeasures": 1,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 4,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 314,
+      "measures": 21,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    }
+  ],
+  "performance": {
+    "totalMs": 2035.1721649999997,
+    "phases": [
+      {
+        "phase": "pdf-load",
+        "ms": 0.059750000000008185
+      },
+      {
+        "phase": "page-1",
+        "ms": 490.40204199999994
+      },
+      {
+        "phase": "page-2",
+        "ms": 512.103666
+      },
+      {
+        "phase": "page-3",
+        "ms": 441.94458399999985
+      },
+      {
+        "phase": "page-4",
+        "ms": 538.894583
+      },
+      {
+        "phase": "omr-v3-confidence",
+        "ms": 43.646416000000045
+      },
+      {
+        "phase": "post-process",
+        "ms": 3.6202910000001793
+      },
+      {
+        "phase": "build-musicxml",
+        "ms": 4.500832999999602
+      }
+    ],
+    "renderedPixelCopiesAvoided": 4,
+    "passThroughCopiesAvoided": 0,
+    "preprocessingCopies": 4,
+    "analysisHandoffCopies": 4
+  }
+}

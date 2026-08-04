@@ -1,0 +1,27 @@
+{
+  "id": "fur-elise-denseish",
+  "title": "Für Elise",
+  "sourceEdition": "Downloads fur_Elise_WoO59-let.pdf",
+  "role": "dense-beamed-piano-alt",
+  "pdf": "fur_Elise_WoO59-let.pdf",
+  "pdfType": "vector",
+  "pipeline": {
+    "omrFailed": true,
+    "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+    "matchesMutopiaLowConfidenceReject": true
+  },
+  "ui": {
+    "uiOk": false,
+    "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+    "scoreId": "score-01de570b-fcc1-4c6b-a8bf-8b970425a53e",
+    "duration": null,
+    "playableEventCount": null,
+    "loopToggled": false,
+    "audible": null,
+    "instrumentSwitch": {
+      "to": "Guitar",
+      "stillPlayable": null
+    },
+    "navigation": null
+  }
+}

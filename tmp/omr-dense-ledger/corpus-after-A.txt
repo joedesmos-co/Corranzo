@@ -1,0 +1,1400 @@
+Evaluating piano-beginner-single-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf',
+  at: 1785556501119
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785556501120
+}
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556501143
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 32,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 32, systems: 2 }
+[omr-trace] phase=page-1 ms=133 end { systems: 2, measures: 8, notes: 32 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=7 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 7, flagged: [ 7, 8 ] }
+[omr-trace] pipeline:success { noteCount: 32, measureCount: 8, acceptance: 'accepted' }
+Evaluating piano-grand-voices-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf',
+  at: 1785556501291
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf',
+  at: 1785556501291
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 1,
+  reason: 'replace-before-load',
+  at: 1785556501292
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf',
+  pinned: 0,
+  generation: 2,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556501295
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: true
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 88,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: true
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 88, systems: 2 }
+[omr-trace] phase=page-1 ms=140 end { systems: 2, measures: 8, notes: 88 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=4 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 88, measureCount: 8, acceptance: 'accepted' }
+Evaluating piano-rhythm-tuplets-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf',
+  at: 1785556501457
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf',
+  pinned: 0,
+  generation: 2,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf',
+  at: 1785556501457
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 2,
+  reason: 'replace-before-load',
+  at: 1785556501457
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf',
+  pinned: 0,
+  generation: 3,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556501460
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 63,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 63, systems: 2 }
+[omr-trace] phase=page-1 ms=98 end { systems: 2, measures: 8, notes: 63 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 1, flagged: [ 1, 2, 3, 5, 7, 8 ] }
+[omr-trace] pipeline:success { noteCount: 63, measureCount: 8, acceptance: 'accepted' }
+Evaluating piano-articulation-scan...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf',
+  at: 1785556501626
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf',
+  pinned: 0,
+  generation: 3,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf',
+  at: 1785556501626
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 3,
+  reason: 'replace-before-load',
+  at: 1785556501626
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf',
+  pinned: 0,
+  generation: 4,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556501627
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 246
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} {
+  applied: [ 'contrast', 'background-cleanup' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0.5967158667474078 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} { applied: [ 'contrast', 'background-cleanup' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 252
+} { notes: 120, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 120, systems: 2 }
+[omr-trace] phase=page-1 ms=305 end { systems: 2, measures: 8, notes: 120 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=4 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 113, measureCount: 8, acceptance: 'accepted' }
+Evaluating piano-dense-advanced-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf',
+  at: 1785556501964
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf',
+  pinned: 0,
+  generation: 4,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-articulation-scan/piano-articulation-scan.pdf',
+  at: 1785556501964
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 4,
+  reason: 'replace-before-load',
+  at: 1785556501965
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf',
+  pinned: 0,
+  generation: 5,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556501969
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: true
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 264,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: true
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 264, systems: 2 }
+[omr-trace] phase=page-1 ms=251 end { systems: 2, measures: 9, notes: 264 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=8 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 9 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 2, flagged: [ 2 ] }
+[omr-trace] pipeline:success { noteCount: 264, measureCount: 9, acceptance: 'accepted' }
+Evaluating guitar-tab-sparse-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf',
+  at: 1785556502252
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf',
+  pinned: 0,
+  generation: 5,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf',
+  at: 1785556502252
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 5,
+  reason: 'replace-before-load',
+  at: 1785556502252
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf',
+  pinned: 0,
+  generation: 6,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556502255
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { notes: 40, systems: 2, source: 'tab-vector' }
+[omr-debug] pipeline:page-1:after-analyze { notes: 40, systems: 2 }
+[omr-trace] phase=page-1 ms=78 end { systems: 2, measures: 8, notes: 40 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 40, measureCount: 8, acceptance: 'accepted' }
+Evaluating guitar-standard-chords-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf',
+  at: 1785556502348
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf',
+  pinned: 0,
+  generation: 6,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf',
+  at: 1785556502348
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 6,
+  reason: 'replace-before-load',
+  at: 1785556502348
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf',
+  pinned: 0,
+  generation: 7,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556502350
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 115,
+  systems: 2,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 115, systems: 2 }
+[omr-trace] phase=page-1 ms=140 end { systems: 2, measures: 8, notes: 115 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=4 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 115, measureCount: 8, acceptance: 'accepted' }
+Evaluating guitar-paired-chords-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf',
+  at: 1785556502513
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf',
+  pinned: 0,
+  generation: 7,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf',
+  at: 1785556502513
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 7,
+  reason: 'replace-before-load',
+  at: 1785556502514
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf',
+  pinned: 0,
+  generation: 8,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556502517
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 116,
+  systems: 4,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 116, systems: 4 }
+[omr-trace] phase=page-1 ms=150 end { systems: 4, measures: 10, notes: 116 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=7 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 10 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 116, measureCount: 10, acceptance: 'accepted' }
+Evaluating guitar-techniques-paired-vector...
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf'
+}
+[omr-trace] phase=pdf-load start
+[omr-trace] phase=pdf-load ms=0 end
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf',
+  at: 1785556502694
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf',
+  pinned: 0,
+  generation: 8,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf',
+  at: 1785556502694
+}
+PDF CACHE: action=destroy scoreId=- runId=- pdfHash=- cacheKey=- {
+  action: 'destroy',
+  cacheKey: null,
+  pinned: 0,
+  generation: 8,
+  reason: 'replace-before-load',
+  at: 1785556502694
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf',
+  pinned: 0,
+  generation: 9,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785556502697
+}
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 32,
+  systems: 4,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 32, systems: 4 }
+[omr-trace] phase=page-1 ms=107 end { systems: 4, measures: 8, notes: 32 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 32, measureCount: 8, acceptance: 'accepted' }
+OMR semantic corpus — baseline
+==============================
+label: run
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: f2d3f05
+createdAt: 2026-08-01T03:55:02.817Z
+fixtures: 9/9 ok
+
+Scoreboard (mean across fixtures)
+- overall: 69.4%
+- pitch: 72.4%
+- rhythm: 80.2%
+- sustain: 55.6%
+- articulation: 86.6%
+- measureStructure: 77.6%
+- interpretation: 13.3%
+
+Top recurring recognition errors
+- incorrect-pitch [pitch] ×167 across 6 fixtures
+- incorrect-chord [measure-structure] ×159 across 7 fixtures
+- onset-mismatch [rhythm] ×126 across 6 fixtures
+- extra-note [pitch] ×106 across 6 fixtures
+- duration-mismatch [rhythm] ×83 across 6 fixtures
+- missing-note [pitch] ×73 across 5 fixtures
+- missing-staccato [articulation] ×33 across 1 fixtures
+- missing-accent [articulation] ×30 across 2 fixtures
+- tempo-mismatch [interpretation] ×9 across 9 fixtures
+- missing-tie [sustain] ×6 across 4 fixtures
+- missing-rest [rhythm] ×5 across 2 fixtures
+- incorrect-tie [sustain] ×4 across 1 fixtures
+- repeat-mismatch [interpretation] ×4 across 2 fixtures
+- volta-mismatch [interpretation] ×4 across 2 fixtures
+- split-measure [measure-structure] ×3 across 2 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=82.8% R=86% P=94% S=100% A=100% M=100% I=0%
+  worst measures: #8(onset-mismatch|onset-mismatch|duration-mismatch), #7(missing-rest|missing-note|extra-note), #1(tempo-mismatch)
+- piano-grand-voices-vector: overall=76.4% R=100% P=70% S=0% A=100% M=84% I=80%
+  worst measures: #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #3(missing-tie|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- piano-rhythm-tuplets-vector: overall=64.2% R=68% P=91% S=0% A=100% M=91% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch|onset-mismatch), #7(missing-note|missing-note|extra-note), #4(missing-rest|missing-rest|extra-rest)
+- piano-articulation-scan: overall=42.7% R=70% P=27% S=0% A=15% M=47% I=40%
+  worst measures: #6(extra-note|extra-note|extra-note), #2(extra-note|extra-note|extra-note), #7(extra-note|extra-note|extra-note)
+- piano-dense-advanced-vector: overall=64.8% R=89% P=55% S=100% A=64% M=46% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #7(missing-note|extra-note|onset-mismatch), #8(missing-note|missing-note|extra-note)
+- guitar-tab-sparse-vector: overall=68.5% R=17% P=70% S=100% A=100% M=92% I=0%
+  worst measures: #1(extra-note|duration-mismatch|onset-mismatch), #8(extra-note|duration-mismatch|duration-mismatch), #7(extra-note|duration-mismatch|duration-mismatch)
+- guitar-standard-chords-vector: overall=81.3% R=100% P=86% S=100% A=100% M=83% I=0%
+  worst measures: #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #4(incorrect-pitch|incorrect-pitch|incorrect-pitch), #8(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-paired-chords-vector: overall=72.3% R=93% P=58% S=100% A=100% M=55% I=0%
+  worst measures: #6(split-measure|missing-note|missing-note), #1(extra-note|extra-note|extra-note), #3(missing-note|missing-note|missing-note)
+- guitar-techniques-paired-vector: overall=71.4% R=100% P=100% S=0% A=100% M=100% I=0%
+  worst measures: #4(missing-tie), #5(missing-tie), #1(tempo-mismatch)

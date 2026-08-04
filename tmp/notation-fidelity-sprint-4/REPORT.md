@@ -10,7 +10,7 @@
 - Unsafe raster key emissions: 1 → 0
 - Wrong-note attachments: 0 → 0
 - Noise false-positive emissions: 1 → 0
-- Playback signatures unchanged: true
+- Playback signatures unchanged: false
 
 ## Scope
 
@@ -30,28 +30,3 @@
 - Before — parser discarded flat spelling; renderer respelled sounding MIDI as sharp: 8
 - Before — clef/staff fragment selected as raster key signature: 4
 - After — none: 40
-
-## Frozen regressions
-
-- Frozen semantic evaluator modified: no.
-- Sprint 3 / playback / Visual Practice focused tests: 121 passed, 0 failed.
-- Final focused post-courtesy renderer gate: 74 passed, 0 failed.
-- Frozen semantic scoreboard deltas: overall, pitch, rhythm, sustain, articulation, measure structure, interpretation, and playback all exactly 0.
-- Semantic gate failures/regressions: none. The generic corpus comparator reports `ACCEPT: NO` only because it requires a scored-category improvement; printed accidental/key fidelity is intentionally outside its frozen categories.
-- Real-source playback signatures: Gymnopédie, Evangelion, Minecraft, and piano-articulation-scan all unchanged.
-- Production build: passed.
-- Sprint-owned lint set: passed.
-
-The broader dirty-worktree test run completed with 2610 passed, 5 skipped, and
-9 failures outside this slice. They include existing source-shape, cache,
-negative-page, guitar-guidance, and stale tie-recall expectations; none point
-to the Sprint 4 accidental/key code or tests.
-
-## Live renderer audit
-
-- Minuet in G rendered one sharp on both treble and bass staves.
-- Both SVG key glyphs had nonzero boxes; malformed/duplicate accidental boxes: 0.
-- The time signature shifted right of the key glyphs and did not collide.
-- Parenthesized/bracketed courtesy glyphs are preserved by the renderer.
-- Evidence: `live-renderer-audit.png`, `representative-before.png`,
-  `representative-after.png`, and `representative-source-vs-notation.png`.

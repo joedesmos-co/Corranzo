@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-07-29T02:30:26.568Z",
+  "base": "http://127.0.0.1:5173",
+  "rows": [
+    {
+      "id": "mutopia-false-reject-bach",
+      "expectAcceptance": "warning",
+      "screenshot": "/Users/ryland/Documents/scoreflow/tmp/omr-acceptance-gate/ui/mutopia-false-reject-bach.png",
+      "bodySnippet": "Beta\nPiano\nGuitar\nLibrary\nPractice\nProgress\nHelp\nVIEW\nScore\nVisual\n\nCorranzo generated this score, but recognition confidence was lower than usual. Some notes, rhythms, or markings may be incorrect. Compare with the original PDF while practicing.\n\nDISMISS\n‹\n1/1\n›\n⤢\n✎\n⋯\nSaved\nPIANO-BACH-CHORALE-BWV259\nPLAY\nTEMPO\n100% · 120 BPM\nMetronome\n▶\nPlay\n0:00\n0:00\nMODE\nPlay Along\nWait For You\nCURSOR\nOn\nLOOP\nOff\n▸\nPiano ready\nFollowing score\nChoose input\nSESSION STATS\nSaved locally\n▸\nADVANCED\nFiles, playback, cursor\n▸\nPrivacy Policy\nTerms of Service\nContact\nCorranzo Beta v0.2.0\nFeedback: joedesmos.co@gmail.com\nUploads and practice stats stay on your device.\nBuilt for piano and guitar practice.\nHow should Corranzo hear you?\nUse Microphone\nUse MIDI Keyboard",
+      "hasWarningCopy": true,
+      "hasTooDifficult": false,
+      "hasReadyNotes": false,
+      "inPractice": true,
+      "preparationFailed": false,
+      "ok": true,
+      "replacementWarningToAccepted": {
+        "hasWarningCopy": false,
+        "hasTooDifficult": false,
+        "hasReadyNotes": false,
+        "inPractice": true,
+        "preparationFailed": false,
+        "ok": true
+      }
+    },
+    {
+      "id": "passing-brahms",
+      "expectAcceptance": "accepted",
+      "screenshot": "/Users/ryland/Documents/scoreflow/tmp/omr-acceptance-gate/ui/passing-brahms.png",
+      "bodySnippet": "Beta\nPiano\nGuitar\nLibrary\nPractice\nProgress\nHelp\nVIEW\nScore\nVisual\n‹\n1/1\n›\n⤢\n✎\n⋯\nSaved\nPIANO-BRAHMS-LULLABY\nPLAY\nTEMPO\n100% · 120 BPM\nMetronome\n▶\nPlay\n0:00\n0:00\nMODE\nPlay Along\nWait For You\nCURSOR\nOn\nLOOP\nOff\n▸\nPiano ready\nFollowing score\nChoose input\nSESSION STATS\nSaved locally\n▸\nADVANCED\nFiles, playback, cursor\n▸\nPrivacy Policy\nTerms of Service\nContact\nCorranzo Beta v0.2.0\nFeedback: joedesmos.co@gmail.com\nUploads and practice stats stay on your device.\nBuilt for piano and guitar practice.\nHow should Corranzo hear you?\nUse Microphone\nUse MIDI Keyboard",
+      "hasWarningCopy": false,
+      "hasTooDifficult": false,
+      "hasReadyNotes": false,
+      "inPractice": true,
+      "preparationFailed": false,
+      "ok": true,
+      "replacementAcceptedToWarning": {
+        "hasWarningCopy": true,
+        "hasTooDifficult": false,
+        "hasReadyNotes": false,
+        "inPractice": true,
+        "preparationFailed": false,
+        "ok": true
+      }
+    },
+    {
+      "id": "true-reject-twinkle",
+      "expectAcceptance": "rejected",
+      "screenshot": "/Users/ryland/Documents/scoreflow/tmp/omr-acceptance-gate/ui/true-reject-twinkle.png",
+      "bodySnippet": "Beta\nPiano\nGuitar\nLibrary\nPractice\nProgress\nHelp\n\nStart practicing\n\nChoose a built-in piece, or add your own files.\n\nPractice Library\nMy Uploads\n\nYOUR FILES\n\nMy Uploads\nSEARCH\n\nAdd files\n\nUpload your own piece\n\nPDF sets up automatically. Timing and MIDI are optional.\n\nAdd your files\nChoose a PDF. Corranzo sets it up automatically; timing and MIDI are optional.\nChoose files\nPDF: Ready\nTiming: Optional\nSound: Optional\n\nPDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]\n\nPREPARING SCORE\nLOCAL\n\nPreparation failed — see the details below, then try again or upload MusicXML/MXL.\n\nTry again\n\nPDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]\n\nOMR diagnosticsCopy diagnostic JSONExport provenance JSONTrace onDebug onProvenance offV3 compare offPrefer V3 off\n\nCorranzo is preparing this score automatically.\n\nUpload one file at a time\n\nPiano - Uploaded - Needs timing\n\ntwinkle-1880-loc-music-p2\n\nTiming file not added yet\n\nPDF loaded. Add a timing file for Practice, loops, and Wait For You.\n\nStart Practice\nRemove\n\nMIDI optional\n\nSetting up your music Corranzo is generating practice timing from your PDF.\n\nWhy a timing file helps\nPrivacy Policy\nTerms of Service\nContact\nCorranzo Beta v0.2.0\nFeedback: joedesmos.co@gmail.com\nUploads and practice stats stay on your device.\nBuilt for piano and guitar practice.",
+      "hasWarningCopy": false,
+      "hasTooDifficult": true,
+      "hasReadyNotes": false,
+      "inPractice": false,
+      "preparationFailed": true,
+      "ok": true
+    }
+  ]
+}

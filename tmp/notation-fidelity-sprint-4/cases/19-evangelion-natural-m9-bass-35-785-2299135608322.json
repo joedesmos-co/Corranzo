@@ -221,7 +221,7 @@
     "fifths": -3,
     "keyAlteration": -1
   },
-  "musicXmlSnippet": "<note><chord/><pitch><step>B</step><octave>1</octave></pitch><accidental>natural</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><staccato/></articulations></notations></note>",
+  "musicXmlSnippet": "<note><chord/><pitch><step>B</step><octave>1</octave></pitch><accidental>natural</accidental><duration>2</duration><voice>2</voice><type>eighth</type><staff>2</staff><notations><articulations><accent placement=\"below\"/></articulations></notations></note>",
   "renderedResult": {
     "writtenPitch": {
       "step": "B",
@@ -240,7 +240,7 @@
   },
   "soundingMidiBefore": 35,
   "soundingMidiAfter": 35,
-  "playbackSignatureUnchanged": true,
+  "playbackSignatureUnchanged": false,
   "failureLayerBefore": "MusicXML omitted printed accidental semantics",
   "failureLayerAfter": "none",
   "correctBefore": false,

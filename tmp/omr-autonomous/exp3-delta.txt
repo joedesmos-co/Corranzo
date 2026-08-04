@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: autonomous-baseline (beeb5f0)
+after:  autonomous-exp3 (beeb5f0)
+ACCEPT: NO
+
+Scoreboard deltas (mean)
+- overall: +0.0135  (0.6944 → 0.7079)
+- pitch: +0.0266  (0.7233 → 0.7499)
+- rhythm: +0.0076  (0.8047 → 0.8123)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: +0.0356  (0.8703 → 0.9060)
+- measureStructure: +0.025  (0.7734 → 0.7984)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+- piano-dense-advanced-vector: rhythm +0.0682
+
+Regressions / gate failures
+- guitar-standard-chords-vector: measure -0.0156; measureStructure -0.0156
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

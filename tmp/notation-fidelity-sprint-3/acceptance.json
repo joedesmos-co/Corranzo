@@ -67,7 +67,7 @@
       "baselinePlaybackAttacks": 138,
       "currentPageOnePlaybackAttacks": 133,
       "playbackAttackDelta": -5,
-      "writtenPageOneSignatureUnchanged": true
+      "writtenPageOneSignatureUnchanged": false
     },
     "minecraft": {
       "pages": 3,
@@ -101,9 +101,9 @@
         "slurLinks": 0
       },
       "baselinePlaybackAttacks": 105,
-      "currentPageOnePlaybackAttacks": 85,
-      "playbackAttackDelta": -20,
-      "writtenPageOneSignatureUnchanged": true
+      "currentPageOnePlaybackAttacks": 101,
+      "playbackAttackDelta": -4,
+      "writtenPageOneSignatureUnchanged": false
     },
     "evangelion": {
       "pages": 8,
@@ -141,7 +141,7 @@
       "baselinePlaybackAttacks": 252,
       "currentPageOnePlaybackAttacks": 247,
       "playbackAttackDelta": -5,
-      "writtenPageOneSignatureUnchanged": true
+      "writtenPageOneSignatureUnchanged": false
     },
     "piano-articulation-scan": {
       "pages": 1,
@@ -211,8 +211,8 @@
     }
   },
   "playbackValidation": {
-    "writtenSignaturesUnchanged": true,
-    "recoveredTieContinuationAttacks": 30,
+    "writtenSignaturesUnchanged": false,
+    "recoveredTieContinuationAttacks": 14,
     "unrelatedAttackDelta": 0
   },
   "cases": [
@@ -2436,7 +2436,7 @@
       "playbackAttackTrace": [
         {
           "measureNumber": 5,
-          "midi": 66,
+          "midi": 78,
           "quarterTime": 13,
           "tieStart": false,
           "tieStop": false,
@@ -2444,7 +2444,7 @@
         },
         {
           "measureNumber": 5,
-          "midi": 78,
+          "midi": 66,
           "quarterTime": 13,
           "tieStart": false,
           "tieStop": false,
@@ -2948,7 +2948,7 @@
       "playbackAttackTrace": [
         {
           "measureNumber": 44,
-          "midi": 66,
+          "midi": 78,
           "quarterTime": 130,
           "tieStart": false,
           "tieStop": false,
@@ -2956,7 +2956,7 @@
         },
         {
           "measureNumber": 44,
-          "midi": 78,
+          "midi": 66,
           "quarterTime": 130,
           "tieStart": false,
           "tieStop": false,
@@ -3933,9 +3933,9 @@
       "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/25-minecraft-tie-m1-2-55-55.musicxml",
       "renderedResult": {
         "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/25-minecraft-tie-m1-2-55-55.png",
-        "markingFound": true,
-        "path": "M 116.3 151.44 Q 165 135.856 213.7 151.44",
-        "placement": "above"
+        "markingFound": false,
+        "path": null,
+        "placement": null
       },
       "playbackAttackTrace": [
         {
@@ -3943,7 +3943,7 @@
           "midi": 55,
           "quarterTime": 2,
           "tieStart": true,
-          "tieStop": true,
+          "tieStop": false,
           "suppressPlaybackAttack": false
         },
         {
@@ -3952,7 +3952,7 @@
           "quarterTime": 4,
           "tieStart": false,
           "tieStop": true,
-          "suppressPlaybackAttack": true
+          "suppressPlaybackAttack": false
         }
       ],
       "correctBefore": false,
@@ -4053,9 +4053,9 @@
       "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/26-minecraft-tie-m15-16-64-64.musicxml",
       "renderedResult": {
         "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/26-minecraft-tie-m15-16-64-64.png",
-        "markingFound": true,
-        "path": "M 3196.3 94.56 Q 3245 110.14399999999995 3293.7 94.56",
-        "placement": "below"
+        "markingFound": false,
+        "path": null,
+        "placement": null
       },
       "playbackAttackTrace": [
         {
@@ -4063,7 +4063,7 @@
           "midi": 64,
           "quarterTime": 58,
           "tieStart": true,
-          "tieStop": true,
+          "tieStop": false,
           "suppressPlaybackAttack": false
         },
         {
@@ -4072,7 +4072,7 @@
           "quarterTime": 60,
           "tieStart": false,
           "tieStop": true,
-          "suppressPlaybackAttack": true
+          "suppressPlaybackAttack": false
         }
       ],
       "correctBefore": false,
@@ -4205,9 +4205,9 @@
       "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/27-minecraft-tie-m15-16-71-71.musicxml",
       "renderedResult": {
         "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/27-minecraft-tie-m15-16-71-71.png",
-        "markingFound": true,
-        "path": "M 3196.3 49.44 Q 3245 33.85600000000005 3293.7 49.44",
-        "placement": "above"
+        "markingFound": false,
+        "path": null,
+        "placement": null
       },
       "playbackAttackTrace": [
         {
@@ -4223,7 +4223,7 @@
           "midi": 71,
           "quarterTime": 58,
           "tieStart": true,
-          "tieStop": true,
+          "tieStop": false,
           "suppressPlaybackAttack": false
         },
         {
@@ -4232,7 +4232,7 @@
           "quarterTime": 60,
           "tieStart": false,
           "tieStop": true,
-          "suppressPlaybackAttack": true
+          "suppressPlaybackAttack": false
         }
       ],
       "correctBefore": false,
@@ -4333,9 +4333,9 @@
       "emittedMusicXml": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/musicxml-snippets/28-minecraft-tie-m1-2-64-64.musicxml",
       "renderedResult": {
         "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/28-minecraft-tie-m1-2-64-64.png",
-        "markingFound": true,
-        "path": "M 116.3 94.56 Q 165 110.144 213.7 94.56",
-        "placement": "below"
+        "markingFound": false,
+        "path": null,
+        "placement": null
       },
       "playbackAttackTrace": [
         {
@@ -4343,7 +4343,7 @@
           "midi": 64,
           "quarterTime": 2,
           "tieStart": true,
-          "tieStop": true,
+          "tieStop": false,
           "suppressPlaybackAttack": false
         },
         {
@@ -4352,7 +4352,7 @@
           "quarterTime": 4,
           "tieStart": false,
           "tieStop": true,
-          "suppressPlaybackAttack": true
+          "suppressPlaybackAttack": false
         }
       ],
       "correctBefore": false,
@@ -4486,7 +4486,7 @@
       "renderedResult": {
         "image": "/Users/ryland/Documents/scoreflow/tmp/notation-fidelity-sprint-3/rendered-results/29-evangelion-tie-m4-5-63-63.png",
         "markingFound": true,
-        "path": "M 1243.8 148.56 Q 1313.4868421052631 170.8597894736842 1383.1736842105263 148.56",
+        "path": "M 1243.8 142.56 Q 1313.4868421052631 164.8597894736842 1383.1736842105263 142.56",
         "placement": "below"
       },
       "playbackAttackTrace": [

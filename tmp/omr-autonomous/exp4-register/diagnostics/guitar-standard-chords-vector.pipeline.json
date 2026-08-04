@@ -1,0 +1,3217 @@
+{
+  "measures": [
+    {
+      "measureNumber": 1,
+      "page": 1,
+      "system": 0,
+      "noteCount": 10,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 67
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 69
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 65
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 67
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 67
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 67
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 1,
+        "page": 1,
+        "detectedNoteheads": 10,
+        "emittedNoteheads": 10,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [],
+        "selectedAttachments": [],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 0,
+          "inkCandidates": 0,
+          "accepted": 0,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 2,
+      "page": 1,
+      "system": 0,
+      "noteCount": 10,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 66
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 61
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 2,
+        "page": 1,
+        "detectedNoteheads": 10,
+        "emittedNoteheads": 10,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [
+          {
+            "glyphIndex": 1,
+            "noteIndex": 2,
+            "score": 44.72,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 323.5294117647058,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 314.0930973626429,
+                "y1": 332.9657261667687,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 65,
+              "cx": 363.9705882352941,
+              "cy": 330.03535353535347,
+              "anchorY": 330.03535353535347
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 3,
+            "score": 47.76,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 363.9705882352941,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 1,
+            "score": 58.27,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 323.5294117647058,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 314.0930973626429,
+                "y1": 332.9657261667687,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 64,
+              "cx": 346.42156862745094,
+              "cy": 336.57070707070704,
+              "anchorY": 329.86363636363626
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 0,
+            "score": 74.78,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 59,
+              "cx": 346.0294117647059,
+              "cy": 356.17676767676767,
+              "anchorY": 356.17676767676767
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 2,
+            "score": 94.25,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 65,
+              "cx": 363.9705882352941,
+              "cy": 330.03535353535347,
+              "anchorY": 330.03535353535347
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 1,
+            "score": 108.95,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 64,
+              "cx": 346.42156862745094,
+              "cy": 336.57070707070704,
+              "anchorY": 329.86363636363626
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 3,
+            "score": 123.74,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 323.5294117647058,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 314.0930973626429,
+                "y1": 332.9657261667687,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 363.9705882352941,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          }
+        ],
+        "selectedAttachments": [
+          {
+            "noteIndex": 2,
+            "type": "sharp",
+            "alter": 1,
+            "score": 44.72,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 323.5294117647058,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 314.0930973626429,
+                "y1": 332.9657261667687,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 65,
+              "cx": 363.9705882352941,
+              "cy": 330.03535353535347,
+              "anchorY": 330.03535353535347
+            }
+          },
+          {
+            "noteIndex": 3,
+            "type": "sharp",
+            "alter": 1,
+            "score": 47.76,
+            "glyph": {
+              "text": "",
+              "x": 335.66176969241474,
+              "y": 343.1372549019607,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 328.4558813556347,
+                "x1": 342.86765802919473,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.411776673560041,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 2,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 363.9705882352941,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          }
+        ],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 2,
+          "inkCandidates": 0,
+          "accepted": 2,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 3,
+      "page": 1,
+      "system": 0,
+      "noteCount": 13,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 61
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 57
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 3,
+        "page": 1,
+        "detectedNoteheads": 13,
+        "emittedNoteheads": 13,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [
+          {
+            "glyphIndex": 0,
+            "noteIndex": 4,
+            "score": 48.15,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 563.7091503267974,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 1,
+            "score": 57.86,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 59,
+              "cx": 545.375816993464,
+              "cy": 356.17676767676767,
+              "anchorY": 349.46969696969694
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 0,
+            "score": 89.97,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 64,
+              "cx": 545.375816993464,
+              "cy": 336.57070707070704,
+              "anchorY": 336.57070707070704
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 3,
+            "score": 124.82,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 563.3169934640523,
+              "cy": 362.71212121212125,
+              "anchorY": 356.0050505050505
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 2,
+            "score": 155.89,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 55,
+              "cx": 545.375816993464,
+              "cy": 369.2474747474747,
+              "anchorY": 362.5404040404039
+            }
+          }
+        ],
+        "selectedAttachments": [
+          {
+            "noteIndex": 4,
+            "type": "sharp",
+            "alter": 1,
+            "score": 48.15,
+            "glyph": {
+              "text": "",
+              "x": 535.0081749211729,
+              "y": 343.1372549019607,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 527.8023115170547,
+                "x1": 542.2140383252911,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 3,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 563.7091503267974,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          }
+        ],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 1,
+          "inkCandidates": 0,
+          "accepted": 1,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op243",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op258",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op983",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 4,
+      "page": 1,
+      "system": 0,
+      "noteCount": 17,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 61
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 57
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 54
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 52
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 4,
+        "page": 1,
+        "detectedNoteheads": 17,
+        "emittedNoteheads": 17,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [
+          {
+            "glyphIndex": 1,
+            "noteIndex": 6,
+            "score": 25.23,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 762.6633986928105,
+              "cy": 375.7828282828283,
+              "anchorY": 369.0757575757575
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 4,
+            "score": 47.76,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 762.6633986928105,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 2,
+            "score": 55.17,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 55,
+              "cx": 744.7222222222222,
+              "cy": 369.2474747474747,
+              "anchorY": 362.5404040404039
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 3,
+            "score": 56.31,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 52,
+              "cx": 744.7222222222222,
+              "cy": 382.31818181818176,
+              "anchorY": 375.61111111111103
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 1,
+            "score": 57.86,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 59,
+              "cx": 744.7222222222222,
+              "cy": 356.17676767676767,
+              "anchorY": 349.46969696969694
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 0,
+            "score": 108.56,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 64,
+              "cx": 744.7222222222222,
+              "cy": 336.57070707070704,
+              "anchorY": 329.86363636363626
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 5,
+            "score": 122.13,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 762.6633986928105,
+              "cy": 362.71212121212125,
+              "anchorY": 356.0050505050505
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 5,
+            "score": 124.82,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 762.6633986928105,
+              "cy": 362.71212121212125,
+              "anchorY": 356.0050505050505
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 1,
+            "score": 153.2,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 59,
+              "cx": 744.7222222222222,
+              "cy": 356.17676767676767,
+              "anchorY": 349.46969696969694
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 2,
+            "score": 155.89,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 55,
+              "cx": 744.7222222222222,
+              "cy": 369.2474747474747,
+              "anchorY": 362.5404040404039
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 4,
+            "score": 205.56,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 762.6633986928105,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 6,
+            "score": 222.85,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 762.6633986928105,
+              "cy": 375.7828282828283,
+              "anchorY": 369.0757575757575
+            }
+          }
+        ],
+        "selectedAttachments": [
+          {
+            "noteIndex": 6,
+            "type": "sharp",
+            "alter": 1,
+            "score": 25.23,
+            "glyph": {
+              "text": "",
+              "x": 738,
+              "y": 369,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 727,
+                "x1": 749,
+                "y0": 359,
+                "y1": 379,
+                "width": 23,
+                "height": 21
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 762.6633986928105,
+              "cy": 375.7828282828283,
+              "anchorY": 369.0757575757575
+            }
+          },
+          {
+            "noteIndex": 4,
+            "type": "sharp",
+            "alter": 1,
+            "score": 47.76,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 343.1372549019607,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 333.7009404998978,
+                "y1": 352.57356930402364,
+                "width": 14.41172680823638,
+                "height": 18.87262880412584
+              }
+            },
+            "note": {
+              "measureNumber": 4,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 762.6633986928105,
+              "cy": 349.6414141414141,
+              "anchorY": 349.6414141414141
+            }
+          }
+        ],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 1,
+          "inkCandidates": 1,
+          "accepted": 2,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op243",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op258",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op397",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op983",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op1161",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 5,
+      "page": 1,
+      "system": 1,
+      "noteCount": 10,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 57
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 5,
+        "page": 1,
+        "detectedNoteheads": 10,
+        "emittedNoteheads": 10,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [],
+        "selectedAttachments": [],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 0,
+          "inkCandidates": 0,
+          "accepted": 0,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 6,
+      "page": 1,
+      "system": 1,
+      "noteCount": 13,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 58
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 53
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 45
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 54
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 58
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 53
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 45
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 53
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 45
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 58
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 53
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 45
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 6,
+        "page": 1,
+        "detectedNoteheads": 13,
+        "emittedNoteheads": 13,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [
+          {
+            "glyphIndex": 0,
+            "noteIndex": 3,
+            "score": 45.13,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 363.9705882352941,
+              "cy": 751.5656565656566,
+              "anchorY": 751.5656565656566
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 3,
+            "score": 45.13,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 363.9705882352941,
+              "cy": 751.5656565656566,
+              "anchorY": 751.5656565656566
+            }
+          },
+          {
+            "glyphIndex": 2,
+            "noteIndex": 3,
+            "score": 45.13,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 363.9705882352941,
+              "cy": 751.5656565656566,
+              "anchorY": 751.5656565656566
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 1,
+            "score": 68.53,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 52,
+              "cx": 346.0294117647059,
+              "cy": 758.10101010101,
+              "anchorY": 758.10101010101
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 1,
+            "score": 68.53,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 52,
+              "cx": 346.0294117647059,
+              "cy": 758.10101010101,
+              "anchorY": 758.10101010101
+            }
+          },
+          {
+            "glyphIndex": 2,
+            "noteIndex": 1,
+            "score": 68.53,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 52,
+              "cx": 346.0294117647059,
+              "cy": 758.10101010101,
+              "anchorY": 758.10101010101
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 0,
+            "score": 94.54,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 346.0294117647059,
+              "cy": 738.4949494949495,
+              "anchorY": 738.4949494949495
+            }
+          },
+          {
+            "glyphIndex": 1,
+            "noteIndex": 0,
+            "score": 94.54,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 346.0294117647059,
+              "cy": 738.4949494949495,
+              "anchorY": 738.4949494949495
+            }
+          },
+          {
+            "glyphIndex": 2,
+            "noteIndex": 0,
+            "score": 94.54,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "fontName": null,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 346.0294117647059,
+              "cy": 738.4949494949495,
+              "anchorY": 738.4949494949495
+            }
+          }
+        ],
+        "selectedAttachments": [
+          {
+            "noteIndex": 3,
+            "type": "sharp",
+            "alter": 1,
+            "score": 45.13,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 363.9705882352941,
+              "cy": 751.5656565656566,
+              "anchorY": 751.5656565656566
+            }
+          },
+          {
+            "noteIndex": 1,
+            "type": "sharp",
+            "alter": 1,
+            "score": 68.53,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 52,
+              "cx": 346.0294117647059,
+              "cy": 758.10101010101,
+              "anchorY": 758.10101010101
+            }
+          },
+          {
+            "noteIndex": 0,
+            "type": "sharp",
+            "alter": 1,
+            "score": 94.54,
+            "glyph": {
+              "text": "",
+              "x": 339,
+              "y": 745.5,
+              "source": "vector-ink",
+              "candidateId": null,
+              "reason": "ink-sharp-cross",
+              "bounds": {
+                "x0": 328,
+                "x1": 350,
+                "y0": 736,
+                "y1": 755,
+                "width": 23,
+                "height": 20
+              }
+            },
+            "note": {
+              "measureNumber": 6,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 346.0294117647059,
+              "cy": 738.4949494949495,
+              "anchorY": 738.4949494949495
+            }
+          }
+        ],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 0,
+          "inkCandidates": 3,
+          "accepted": 3,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 7,
+      "page": 1,
+      "system": 1,
+      "noteCount": 17,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 3,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 4,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 57
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 48
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 50
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 7,
+        "page": 1,
+        "detectedNoteheads": 17,
+        "emittedNoteheads": 17,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [],
+        "selectedAttachments": [],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 0,
+          "inkCandidates": 0,
+          "accepted": 0,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op243",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op258",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op983",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "measureNumber": 8,
+      "page": 1,
+      "system": 1,
+      "noteCount": 25,
+      "duplicateOwnershipCount": 0,
+      "chordDiagnostics": {
+        "onsetCount": 5,
+        "noteEventCount": 5,
+        "sequentialSameXCount": 0,
+        "fragmentedOnsetCount": 0,
+        "onsets": [
+          {
+            "startDivision": 0,
+            "eventCount": 1,
+            "noteCount": 6,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 2,
+            "eventCount": 1,
+            "noteCount": 5,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 4,
+            "eventCount": 1,
+            "noteCount": 6,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 8,
+            "eventCount": 1,
+            "noteCount": 2,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          },
+          {
+            "startDivision": 12,
+            "eventCount": 1,
+            "noteCount": 6,
+            "clefs": [
+              "treble"
+            ],
+            "voices": [
+              1
+            ],
+            "fragmentedSameClef": false
+          }
+        ],
+        "forwardCount": 0,
+        "backupCount": 0,
+        "sequence": [
+          {
+            "type": "note",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "chord",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 40
+          },
+          {
+            "type": "note",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 61
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 57
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 53
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 48
+          },
+          {
+            "type": "chord",
+            "startDivision": 2,
+            "durationDivisions": 2,
+            "voice": 1,
+            "midi": 41
+          },
+          {
+            "type": "note",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "chord",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 40
+          },
+          {
+            "type": "note",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "chord",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 40
+          },
+          {
+            "type": "note",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 64
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 59
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 55
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 52
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 47
+          },
+          {
+            "type": "chord",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "voice": 1,
+            "midi": 40
+          }
+        ]
+      },
+      "noteMatching": {
+        "measureNumber": 8,
+        "page": 1,
+        "detectedNoteheads": 25,
+        "emittedNoteheads": 25,
+        "dedupedDuringGrouping": 0
+      },
+      "accidentalDiagnostics": {
+        "detectedCandidates": [
+          {
+            "glyphIndex": 0,
+            "noteIndex": 6,
+            "score": 46.76,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 762.6633986928105,
+              "cy": 725.4242424242424,
+              "anchorY": 725.4242424242424
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 1,
+            "score": 73.11,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 59,
+              "cx": 744.7222222222222,
+              "cy": 731.959595959596,
+              "anchorY": 731.959595959596
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 0,
+            "score": 106.64,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 64,
+              "cx": 744.7222222222222,
+              "cy": 712.3535353535353,
+              "anchorY": 705.6464646464647
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 7,
+            "score": 124.56,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 57,
+              "cx": 762.6633986928105,
+              "cy": 738.4949494949495,
+              "anchorY": 731.7878787878788
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 2,
+            "score": 155.64,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 55,
+              "cx": 744.7222222222222,
+              "cy": 745.030303030303,
+              "anchorY": 738.3232323232322
+            }
+          },
+          {
+            "glyphIndex": 0,
+            "noteIndex": 8,
+            "score": 222.59,
+            "type": "sharp",
+            "alter": 1,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "fontName": null,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 53,
+              "cx": 762.6633986928105,
+              "cy": 751.5656565656566,
+              "anchorY": 744.8585858585858
+            }
+          }
+        ],
+        "selectedAttachments": [
+          {
+            "noteIndex": 6,
+            "type": "sharp",
+            "alter": 1,
+            "score": 46.76,
+            "glyph": {
+              "text": "",
+              "x": 734.354580149931,
+              "y": 718.954248366013,
+              "source": "vector-path",
+              "candidateId": null,
+              "reason": null,
+              "bounds": {
+                "x0": 727.1487167458129,
+                "x1": 741.5604435540492,
+                "y0": 709.5179838292738,
+                "y1": 728.3905129027521,
+                "width": 14.41172680823638,
+                "height": 18.87252907347829
+              }
+            },
+            "note": {
+              "measureNumber": 8,
+              "clef": "treble",
+              "naturalMidi": 60,
+              "cx": 762.6633986928105,
+              "cy": 725.4242424242424,
+              "anchorY": 725.4242424242424
+            }
+          }
+        ],
+        "rejectedGlyphCount": 0,
+        "pathInk": {
+          "pathCandidates": 1,
+          "inkCandidates": 0,
+          "accepted": 1,
+          "rejected": [
+            {
+              "id": "pdf-acc-p1-op127",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op243",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op258",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op397",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op983",
+              "reason": "key-signature-region"
+            },
+            {
+              "id": "pdf-acc-p1-op1161",
+              "reason": "key-signature-region"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

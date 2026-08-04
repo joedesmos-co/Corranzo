@@ -1,0 +1,36 @@
+{
+  "id": "mixed-voice-stack-must-remain-separate",
+  "description": "Opposing-stem voices near same x must not merge into one chord event",
+  "beats": 4,
+  "notes": [
+    {
+      "cx": 120,
+      "cy": 90,
+      "midi": 72,
+      "clef": "treble",
+      "stemDirection": "up",
+      "positionInMeasure": 0.25,
+      "candidateId": "voice-up",
+      "voice": 1
+    },
+    {
+      "cx": 122,
+      "cy": 140,
+      "midi": 55,
+      "clef": "treble",
+      "stemDirection": "down",
+      "positionInMeasure": 0.25,
+      "candidateId": "voice-down",
+      "voice": 2
+    },
+    {
+      "cx": 200,
+      "cy": 100,
+      "midi": 67,
+      "clef": "treble",
+      "positionInMeasure": 0.5,
+      "candidateId": "later"
+    }
+  ],
+  "diagnosticOnly": true
+}

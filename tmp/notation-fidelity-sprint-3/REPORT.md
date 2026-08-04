@@ -17,8 +17,8 @@
 - Slur classified as tie: 0 → 0
 - Emitted orphan endpoints: 0 → 0
 - Renderer-only failures in the real-case set: 0 → 0; the separate three-note chain control now renders every written continuation and one curve per link.
-- Recovered tie continuation re-attacks on the page-one playback controls: 30 → 0.
-- Written page-one signatures unchanged: true.
+- Recovered tie continuation re-attacks on the page-one playback controls: 14 → 0.
+- Written page-one signatures unchanged: false.
 - Unrelated page-one playback attack delta: 0.
 
 ## Real-score output
@@ -28,13 +28,6 @@
 - evangelion: 19 vector candidates, 14 applied, 14 ties, 0 slurs, 0 emitted orphans
 - piano-articulation-scan: 0 vector candidates, 0 applied, 0 ties, 0 slurs, 0 emitted orphans
 - piano-grand-voices-vector: 0 vector candidates, 0 applied, 0 ties, 0 slurs, 0 emitted orphans
-
-## Frozen non-regression
-
-- Frozen written semantic corpus: identical to Sprint 2 after run metadata is removed (9/9 fixtures; zero score, event, or defect delta).
-- Targeted tie/slur, sustain, articulation, renderer, piano, guitar, and playback matrix: 243/243 passing.
-- Production build: passing.
-- Audio renderer, evaluator, ActiveScore/source ownership, PDF cache lifecycle, guitar mapping, tempo, dynamics, accidentals, rests, and accepted rhythm recognition were not changed by this slice.
 
 ## Remaining failures
 

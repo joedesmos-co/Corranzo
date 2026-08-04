@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "kind": "heldout-final-pdf-omr-audit",
+  "generatedAt": "2026-08-04T02:14:48.256Z",
+  "startedAt": "2026-08-04T02:14:46.385Z",
+  "id": "aizo",
+  "title": "Jujutsu Kaisen Season 3 Opening 1 — AIZO",
+  "pdf": "/Users/ryland/Downloads/jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+  "pdfBasename": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+  "pdfSha256": "b055d6541ad4724d4ca121d9774562420eb2c0d360a705eab6faf654511ddfec",
+  "sourceAtStart": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceAtEnd": {
+    "head": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21",
+    "workingTreeSha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "id": "50a3ea39ce45d61dde470d636ee27f6ed44a2e21:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+    "untrackedProductionFiles": []
+  },
+  "sourceStable": true,
+  "pages": 3,
+  "processedPages": 3,
+  "notes": 1075,
+  "measures": 61,
+  "confidence": 0.8650000000000002,
+  "pipelineOverallConfidence": 0.9049477494655346,
+  "uncertainMeasures": 0,
+  "acceptance": "accepted",
+  "warnings": [
+    "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+  ],
+  "fatalFailureCount": 0,
+  "partialFailureCount": 0,
+  "failureCount": 0,
+  "fatalError": null,
+  "partialFailures": [],
+  "elapsedMs": 1857.244,
+  "peakRssKiB": 384896,
+  "peakRssMiB": 375.875,
+  "calibration": {
+    "notehead": {
+      "eligibleSampleCount": 0,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 0,
+      "appliedCount": 0,
+      "byInkRejectionReason": {}
+    },
+    "accidentalPath": {
+      "attemptedPageCount": 0,
+      "directCandidateCount": 0,
+      "rawSampleCount": 0,
+      "eligibleSampleCount": 0,
+      "acceptedModelCount": 0,
+      "rejectedModelCount": 0,
+      "appliedCount": 0
+    }
+  },
+  "pageCalibrations": [
+    {
+      "page": 1,
+      "source": "vector-glyphs",
+      "systems": 5,
+      "notes": 408,
+      "measures": 23,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 2,
+      "source": "vector-glyphs",
+      "systems": 6,
+      "notes": 512,
+      "measures": 28,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    },
+    {
+      "page": 3,
+      "source": "vector-glyphs",
+      "systems": 2,
+      "notes": 155,
+      "measures": 10,
+      "uncertainMeasures": 0,
+      "noteheadFallbackCalibration": {
+        "scope": "page-font-glyph",
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0,
+        "byInkRejectionReason": {}
+      },
+      "accidentalPathCalibration": {
+        "scope": "page-vector-path-type",
+        "attempted": false,
+        "directCandidateCount": 0,
+        "rawSampleCount": 0,
+        "eligibleSampleCount": 0,
+        "accepted": [],
+        "rejected": [],
+        "appliedCount": 0
+      }
+    }
+  ],
+  "performance": {
+    "totalMs": 1673.6638749999997,
+    "phases": [
+      {
+        "phase": "pdf-load",
+        "ms": 0.05683300000001168
+      },
+      {
+        "phase": "page-1",
+        "ms": 632.96625
+      },
+      {
+        "phase": "page-2",
+        "ms": 732.2790419999999
+      },
+      {
+        "phase": "page-3",
+        "ms": 258.410167
+      },
+      {
+        "phase": "omr-v3-confidence",
+        "ms": 44.14129200000002
+      },
+      {
+        "phase": "post-process",
+        "ms": 1.681332999999995
+      },
+      {
+        "phase": "build-musicxml",
+        "ms": 4.1289580000000115
+      }
+    ],
+    "renderedPixelCopiesAvoided": 3,
+    "passThroughCopiesAvoided": 1,
+    "preprocessingCopies": 2,
+    "analysisHandoffCopies": 3
+  }
+}

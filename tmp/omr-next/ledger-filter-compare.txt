@@ -1,0 +1,23 @@
+OMR semantic corpus — before/after
+=================================
+before: omr-next-baseline-3404694 (3404694)
+after:  omr-next-ledger-filter (3404694)
+ACCEPT: YES
+
+Scoreboard deltas (mean)
+- overall: +0.0201  (0.6289 → 0.6490)
+- pitch: +0.0171  (0.6151 → 0.6322)
+- rhythm: +0.0025  (0.6720 → 0.6745)
+- sustain: +0.1111  (0.4444 → 0.5556)
+- articulation: 0  (0.8536 → 0.8536)
+- measureStructure: +0.0101  (0.6838 → 0.6939)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+- piano-beginner-single-vector: rhythm +0.0158
+- guitar-standard-chords-vector: rhythm +0.0068
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

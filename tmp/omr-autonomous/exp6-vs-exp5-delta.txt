@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: exp5-duplicate-clusters (fba1f27)
+after:  exp6-page-accidental-offset (39eb37e)
+ACCEPT: NO
+
+Scoreboard deltas (mean)
+- overall: +0.0008  (0.7098 → 0.7106)
+- pitch: +0.0031  (0.7538 → 0.7569)
+- rhythm: 0  (0.8123 → 0.8123)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: 0  (0.9060 → 0.9060)
+- measureStructure: +0.0025  (0.8078 → 0.8103)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+(none)
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

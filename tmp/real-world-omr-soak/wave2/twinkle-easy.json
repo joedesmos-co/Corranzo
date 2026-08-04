@@ -1,0 +1,98 @@
+{
+  "id": "twinkle-easy",
+  "title": "Twinkle Twinkle Little Star (easy modern edition)",
+  "sourceEdition": "Contemporary easy piano PDF",
+  "role": "very-simple-beginner",
+  "pdf": "twinkle-twinkle-little-star-easy.pdf",
+  "pdfType": "vector",
+  "pageCount": 1,
+  "pagesSampled": 1,
+  "pathDensity": "medium",
+  "instrument": "piano",
+  "glyphExtractionQuality": "Good",
+  "staffSystemCount": 3,
+  "overallVisual": "Usable with errors",
+  "playback": "Usable with errors",
+  "pitch": "Usable with errors",
+  "rhythm": "Usable with errors",
+  "longValues": "Usable with errors",
+  "dots": "Good",
+  "rests": "Usable with errors",
+  "chords": "Usable with errors",
+  "voices": "Usable with errors",
+  "beams": "Poor",
+  "tiesSlurs": "Usable with errors",
+  "accidentalsKey": "Usable with errors",
+  "articulations": "Usable with errors",
+  "tempoRepeats": "Usable with errors",
+  "rendererOnly": "None observed",
+  "lagChoppiness": "Good",
+  "severity": "Medium–low",
+  "reproducibility": "High",
+  "provenanceRootCause": "beam-short-lost-partial",
+  "matchesMinecraftSparseOpenRca": false,
+  "matchesHungarianDenseRhythmRca": false,
+  "newSharedMechanism": null,
+  "pipeline": {
+    "noteCount": 86,
+    "measureCount": 12,
+    "overallConfidence": 0.9463829960464504,
+    "uncertainMeasures": 0,
+    "systems": 3,
+    "pagesSampled": 1,
+    "pageCountFull": 1,
+    "hist": {
+      "types": {
+        "quarter": 72,
+        "half": 10,
+        "eighth": 4
+      },
+      "dottedQuarter": 0,
+      "dots": 0,
+      "beams": 0,
+      "ties": 0,
+      "rests": 0,
+      "measures": 12
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 2,
+      "measure-packing-override": 2,
+      "beam-short-lost-to-longer": 25,
+      "beam-duration-overwritten": 1,
+      "beam-confidence-rejected": 86
+    },
+    "mostFrequentFailureCategory": "beam-confidence-rejected",
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "provenanceRootCause": "beam-short-lost-partial",
+    "newSharedMechanismCandidate": null,
+    "provenanceExported": true,
+    "pathDensity": "medium"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-22a627e8-a2cd-46e3-a5c3-8c3e80626c38",
+    "duration": 40,
+    "playableEventCount": 86,
+    "transport": {
+      "play": false,
+      "stop": false,
+      "seek": false,
+      "restart": false,
+      "loopToggle": false,
+      "choppy": false,
+      "errors": [
+        "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: /^Stop$/i }).first()\n"
+      ]
+    },
+    "instrumentSwitch": {
+      "to": "guitar",
+      "stillPlayable": true
+    },
+    "consoleErrors": []
+  },
+  "error": null,
+  "elapsedMs": 36251
+}

@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: commit-77e5aec (77e5aec)
+after:  exp6-safety (77e5aec)
+ACCEPT: NO
+
+Scoreboard deltas (mean)
+- overall: -0.0001  (0.7106 → 0.7105)
+- pitch: -0.0008  (0.7569 → 0.7561)
+- rhythm: 0  (0.8123 → 0.8123)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: 0  (0.9060 → 0.9060)
+- measureStructure: 0  (0.8103 → 0.8103)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+(none)
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

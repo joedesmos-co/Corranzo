@@ -1,0 +1,23 @@
+[
+  {
+    "id": "twinkle-1880-scan-ui",
+    "ok": false,
+    "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]"
+  },
+  {
+    "id": "piano-articulation-scan-ui",
+    "ok": true,
+    "alert": null,
+    "dur": 32,
+    "events": 224,
+    "transport": {
+      "play": false,
+      "stop": false,
+      "seek": true,
+      "restart": false,
+      "loop": null,
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: /^Stop$/i }).first()\n"
+    },
+    "guitarStill": 224
+  }
+]

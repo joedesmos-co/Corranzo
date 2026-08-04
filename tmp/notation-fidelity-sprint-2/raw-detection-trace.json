@@ -2898,12 +2898,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -3237,12 +3232,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               },
               {
                 "midi": 59,
@@ -3276,12 +3266,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           }
@@ -3332,12 +3317,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -4053,12 +4033,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               },
               {
                 "midi": 59,
@@ -4092,12 +4067,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           }
@@ -4148,12 +4118,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -5088,12 +5053,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -5542,12 +5502,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -6177,12 +6132,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -6597,12 +6547,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           }
@@ -7009,12 +6954,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -7670,10 +7610,10 @@
           {
             "type": "note",
             "startDivision": 8,
-            "durationDivisions": 4,
-            "durationType": "quarter",
-            "dotted": false,
-            "beams": 0,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -7704,12 +7644,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -7719,7 +7654,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -7760,7 +7695,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -7914,7 +7849,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -7955,7 +7890,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -7996,7 +7931,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 82,
@@ -8037,7 +7972,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 80,
@@ -8153,7 +8088,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -8194,7 +8129,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -8235,7 +8170,7 @@
             "durationDivisions": 4,
             "durationType": "quarter",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -8611,10 +8546,10 @@
           {
             "type": "note",
             "startDivision": 8,
-            "durationDivisions": 4,
-            "durationType": "quarter",
-            "dotted": false,
-            "beams": 0,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 84,
@@ -8645,12 +8580,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -8660,7 +8590,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -8691,12 +8621,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -8896,8 +8821,8 @@
             "startDivision": 0,
             "durationDivisions": 3,
             "durationType": "eighth",
-            "dotted": false,
-            "beams": 0,
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 82,
@@ -8982,7 +8907,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 82,
@@ -9023,7 +8948,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -9064,7 +8989,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 82,
@@ -9214,7 +9139,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 82,
@@ -9255,7 +9180,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 84,
@@ -9488,7 +9413,7 @@
             "durationDivisions": 4,
             "durationType": "quarter",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 63,
@@ -9519,12 +9444,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -9543,7 +9463,7 @@
             "durationDivisions": 4,
             "durationType": "quarter",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 38,
@@ -10154,12 +10074,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               },
               {
                 "midi": 60,
@@ -10193,12 +10108,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               },
               {
                 "midi": 56,
@@ -10232,12 +10142,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -10322,12 +10227,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -11420,12 +11320,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               },
               {
                 "midi": 63,
@@ -11459,12 +11354,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -12484,7 +12374,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 65,
@@ -12528,7 +12418,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 63,
@@ -12607,8 +12497,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12646,8 +12537,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12685,8 +12577,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12734,8 +12627,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12773,8 +12667,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12822,8 +12717,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12861,8 +12757,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12900,8 +12797,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12949,8 +12847,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -12988,8 +12887,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13037,8 +12937,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13073,8 +12974,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13112,8 +13014,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13145,7 +13048,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -13167,8 +13071,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13187,7 +13092,8 @@
                 "accidental": {
                   "type": "sharp",
                   "alter": 1,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -13209,8 +13115,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13232,7 +13139,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -13254,8 +13162,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13300,8 +13209,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13336,8 +13246,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13382,8 +13293,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13418,8 +13330,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13576,8 +13489,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13615,8 +13529,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13689,7 +13604,8 @@
                 "accidental": {
                   "type": "flat",
                   "alter": -1,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -13726,7 +13642,8 @@
                 "accidental": {
                   "type": "flat",
                   "alter": -1,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -13792,8 +13709,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -13828,8 +13746,9 @@
                 "slurStart": false,
                 "slurStop": false,
                 "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
+                  "type": "accent",
+                  "placement": "below",
+                  "confidence": 0.84,
                   "source": "vector-glyph",
                   "glyph": ""
                 }
@@ -14130,7 +14049,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -14212,7 +14131,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 70,
@@ -14612,7 +14531,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -14652,8 +14571,8 @@
             "startDivision": 4,
             "durationDivisions": 3,
             "durationType": "eighth",
-            "dotted": false,
-            "beams": 0,
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -14684,12 +14603,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -14784,7 +14698,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 70,
@@ -15190,7 +15104,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -15230,8 +15144,8 @@
             "startDivision": 3,
             "durationDivisions": 3,
             "durationType": "eighth",
-            "dotted": false,
-            "beams": 0,
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 80,
@@ -15262,12 +15176,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -15359,7 +15268,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -15472,10 +15381,10 @@
           {
             "type": "note",
             "startDivision": 8,
-            "durationDivisions": 4,
-            "durationType": "quarter",
-            "dotted": false,
-            "beams": 0,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -15506,12 +15415,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -15521,7 +15425,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -15647,7 +15551,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -15770,7 +15674,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -15810,8 +15714,8 @@
             "startDivision": 3,
             "durationDivisions": 3,
             "durationType": "eighth",
-            "dotted": false,
-            "beams": 0,
+            "dotted": true,
+            "beams": 1,
             "notes": [
               {
                 "midi": 80,
@@ -15842,12 +15746,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -15939,7 +15838,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -16219,7 +16118,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 72,
@@ -16260,7 +16159,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 74,
@@ -16383,7 +16282,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -16424,7 +16323,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -16550,7 +16449,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 74,
@@ -16833,7 +16732,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 75,
@@ -16874,7 +16773,7 @@
             "durationDivisions": 1,
             "durationType": "sixteenth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -16997,7 +16896,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 80,
@@ -17028,12 +16927,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -17043,7 +16937,7 @@
             "durationDivisions": 3,
             "durationType": "eighth",
             "dotted": true,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 79,
@@ -17166,7 +17060,7 @@
             "durationDivisions": 2,
             "durationType": "eighth",
             "dotted": false,
-            "beams": 0,
+            "beams": 1,
             "notes": [
               {
                 "midi": 77,
@@ -17539,12 +17433,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -17882,12 +17771,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -18219,12 +18103,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -18752,12 +18631,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -19241,12 +19115,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -19648,12 +19517,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -20055,12 +19919,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -20591,12 +20450,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21077,12 +20931,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21324,12 +21173,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21486,12 +21330,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21535,12 +21374,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21663,12 +21497,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21712,12 +21541,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -21918,12 +21742,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -22017,7 +21836,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -22086,12 +21906,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -22195,7 +22010,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -22317,7 +22133,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -22879,7 +22696,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {
@@ -23030,12 +22848,7 @@
                 "tieStop": false,
                 "slurStart": false,
                 "slurStop": false,
-                "articulation": {
-                  "type": "staccato",
-                  "confidence": 0.82,
-                  "source": "vector-glyph",
-                  "glyph": ""
-                }
+                "articulation": null
               }
             ]
           },
@@ -23163,7 +22976,8 @@
                 "accidental": {
                   "type": "natural",
                   "alter": 0,
-                  "confidence": 0.9
+                  "confidence": 0.9,
+                  "courtesy": false
                 },
                 "pitchAlteration": {
                   "writtenPitch": {

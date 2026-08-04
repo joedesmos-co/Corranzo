@@ -1,0 +1,252 @@
+{
+  "classes": {
+    "staffStillWrong": 10,
+    "possibleAccidental": 5,
+    "other": 0
+  },
+  "rows": [
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 6,
+      "expected": "C#5 F5 G#5",
+      "generated": "C#5 F5 F5",
+      "missing": [
+        "G#5"
+      ],
+      "extra": [
+        "F5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 6,
+      "expected": "E5 G#5 B5",
+      "generated": "C#5 F5 G#5",
+      "missing": [
+        "E5",
+        "B5"
+      ],
+      "extra": [
+        "C#5",
+        "F5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 6,
+      "expected": "D5 F#5 A5",
+      "generated": "C#5 F#5",
+      "missing": [
+        "D5",
+        "A5"
+      ],
+      "extra": [
+        "C#5"
+      ],
+      "stage": "notehead_detection_or_pitch_filter",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 7,
+      "expected": "C#5 F5 G#5",
+      "generated": "C#5 F5 F#5",
+      "missing": [
+        "G#5"
+      ],
+      "extra": [
+        "F#5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "possible-accidental"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 7,
+      "expected": "D#5 G5 A#5",
+      "generated": "D#5 F#5 A#5",
+      "missing": [
+        "G5"
+      ],
+      "extra": [
+        "F#5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 7,
+      "expected": "E5 G#5 B5",
+      "generated": "C#5 F5 G#5",
+      "missing": [
+        "E5",
+        "B5"
+      ],
+      "extra": [
+        "C#5",
+        "F5"
+      ],
+      "stage": "ledger_line_ownership_or_pitch_anchor",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 7,
+      "expected": "E5 G#5 B5",
+      "generated": "F#5 G#5",
+      "missing": [
+        "E5",
+        "B5"
+      ],
+      "extra": [
+        "F#5"
+      ],
+      "stage": "notehead_detection_or_pitch_filter",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 7,
+      "expected": "D#5 G5 A#5",
+      "generated": "C#5 D#5 F#5",
+      "missing": [
+        "G5",
+        "A#5"
+      ],
+      "extra": [
+        "C#5",
+        "F#5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "D5 F#5 A5",
+      "generated": "D5 F#5 A#5",
+      "missing": [
+        "A5"
+      ],
+      "extra": [
+        "A#5"
+      ],
+      "stage": "ledger_line_ownership_or_pitch_anchor",
+      "anchors": null,
+      "failureHint": "possible-accidental"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "F5 A5 C6",
+      "generated": "F#5 C6",
+      "missing": [
+        "F5",
+        "A5"
+      ],
+      "extra": [
+        "F#5"
+      ],
+      "stage": "notehead_detection_or_pitch_filter",
+      "anchors": null,
+      "failureHint": "possible-accidental"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "F5 A5 C6",
+      "generated": "D5 F#5 C6",
+      "missing": [
+        "F5",
+        "A5"
+      ],
+      "extra": [
+        "D5",
+        "F#5"
+      ],
+      "stage": "pitch_mapping",
+      "anchors": null,
+      "failureHint": "possible-accidental"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "D5 F#5 A5",
+      "generated": "D5 E5 F#5 A#5",
+      "missing": [
+        "A5"
+      ],
+      "extra": [
+        "E5",
+        "A#5"
+      ],
+      "stage": "chord_column_grouping",
+      "anchors": null,
+      "failureHint": "possible-accidental"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "G5 B5 D6",
+      "generated": "G5 A#5 C6",
+      "missing": [
+        "B5",
+        "D6"
+      ],
+      "extra": [
+        "A#5",
+        "C6"
+      ],
+      "stage": "ledger_line_ownership_or_pitch_anchor",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "E5 G#5 B5",
+      "generated": "E5 G#5 A#5",
+      "missing": [
+        "B5"
+      ],
+      "extra": [
+        "A#5"
+      ],
+      "stage": "ledger_line_ownership_or_pitch_anchor",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    },
+    {
+      "fixture": "piano-dense-advanced-vector",
+      "measure": 8,
+      "expected": "E5 G#5 B5",
+      "generated": "D5 F#5 A#5",
+      "missing": [
+        "E5",
+        "G#5",
+        "B5"
+      ],
+      "extra": [
+        "D5",
+        "F#5",
+        "A#5"
+      ],
+      "stage": "ledger_line_ownership_or_pitch_anchor",
+      "anchors": null,
+      "failureHint": "staff-or-other"
+    }
+  ]
+}

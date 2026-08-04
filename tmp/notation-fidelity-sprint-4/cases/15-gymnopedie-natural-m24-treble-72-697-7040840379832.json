@@ -61,7 +61,7 @@
     "fifths": 2,
     "keyAlteration": 1
   },
-  "musicXmlSnippet": "<note><pitch><step>C</step><octave>5</octave></pitch><accidental>natural</accidental><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>",
+  "musicXmlSnippet": "<note><pitch><step>C</step><octave>5</octave></pitch><accidental>natural</accidental><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><stem>down</stem></note>",
   "renderedResult": {
     "writtenPitch": {
       "step": "C",
@@ -80,7 +80,7 @@
   },
   "soundingMidiBefore": 72,
   "soundingMidiAfter": 72,
-  "playbackSignatureUnchanged": true,
+  "playbackSignatureUnchanged": false,
   "failureLayerBefore": "MusicXML omitted printed accidental semantics",
   "failureLayerAfter": "none",
   "correctBefore": false,

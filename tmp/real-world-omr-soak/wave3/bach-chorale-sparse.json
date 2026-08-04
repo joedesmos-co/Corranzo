@@ -1,0 +1,46 @@
+{
+  "id": "bach-chorale-sparse",
+  "title": "Bach Chorale BWV 259",
+  "sourceEdition": "Corranzo practice-library Mutopia-style vector",
+  "role": "sparse-classical-piano",
+  "pdf": "piano-bach-chorale-bwv259.pdf",
+  "pdfTypeDeclared": "vector",
+  "pageCount": 1,
+  "pageSources": [
+    {
+      "page": 1,
+      "kind": "vector-unusual-fonts",
+      "textChars": 579,
+      "imageOps": 0,
+      "pathOps": 660,
+      "fonts": [
+        "g_d10_f2",
+        "g_d10_f1",
+        "g_d10_f3",
+        "g_d10_f4",
+        "g_d10_f5",
+        "g_d10_f6"
+      ]
+    }
+  ],
+  "scanQuality": null,
+  "pathGlyphDensity": null,
+  "omrCompletion": "Failed",
+  "pipeline": {
+    "omrFailed": true,
+    "failureMessage": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.",
+    "matchesRasterLowConfidenceRejection": true
+  },
+  "ui": {
+    "uiOk": false,
+    "alert": "PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. [low-confidence]",
+    "scoreId": "score-71bc17ca-bb83-4010-94ca-f4f595471b3f",
+    "duration": null,
+    "playableEventCount": null,
+    "loopToggled": true,
+    "audible": null,
+    "instrumentSwitch": null,
+    "navigation": null
+  },
+  "elapsedMs": 3399
+}

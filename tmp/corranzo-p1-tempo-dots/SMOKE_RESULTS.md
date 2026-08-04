@@ -11,7 +11,7 @@ Overall: **PASS**
 - [x] **F6-presto-fast** — BPM near Presto≈168 (expect ~168) time=4:01
 - [x] **F7-end-sync** — owner match + BPM=168 time=4:41
 - [x] **F8-boundary-seek** — after boundary seek BPM=108 time=2:29
-- [x] **F9-cursor-owner** — ownerScoreId=score-01571e66-0240-4c90-ace6-81023cdc3089
+- [x] **F9-cursor-owner** — ownerScoreId=score-66dad16c-5245-48ac-bc41-bb432e9eb06c
 - [x] **M10-upload-omr** — duration=226.0s measures=113
 - [x] **M11-dotted-quarters-present** — quarter.=17 (before 0)
 - [x] **M12-single-dot** — no double-dot types in hist
@@ -35,13 +35,13 @@ Overall: **PASS**
     "durationMinutes": 5.204973544973544,
     "measures": 145,
     "events": 3020,
-    "scoreId": "score-01571e66-0240-4c90-ace6-81023cdc3089"
+    "scoreId": "score-66dad16c-5245-48ac-bc41-bb432e9eb06c"
   },
   "minecraft": {
     "durationSeconds": 226,
     "measures": 113,
     "events": 540,
-    "scoreId": "score-1532089d-32c0-49a2-8a4f-c9bfd2721809",
+    "scoreId": "score-f39b1d42-5bf5-4ab7-91d8-571626f7e0f1",
     "hist": {
       "half.": 134,
       "quarter": 97,
@@ -66,7 +66,7 @@ Overall: **PASS**
     "durationMinutes": 4.051796157059315,
     "measures": 125,
     "events": 2794,
-    "scoreId": "score-50455fed-3487-41a6-b2d5-e9d466a2e244",
+    "scoreId": "score-0442209d-1857-4eae-b881-8ecde920cff2",
     "hist": {
       "half": 14,
       "quarter": 422,

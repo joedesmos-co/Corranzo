@@ -1,0 +1,51 @@
+{
+  "id": "brahms-lullaby-sparse",
+  "title": "Brahms Lullaby",
+  "sourceEdition": "practice-library Mutopia-style",
+  "role": "sparse-classical-piano",
+  "pdf": "piano-brahms-lullaby.pdf",
+  "pdfType": "vector",
+  "pipeline": {
+    "omrFailed": false,
+    "noteCount": 53,
+    "measureCount": 13,
+    "overallConfidence": 0.6587847751367615,
+    "uncertainMeasures": 12,
+    "hist": {
+      "beams": 0,
+      "ties": 4,
+      "dots": 24,
+      "measures": 13
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 0,
+      "beam-short-lost-to-longer": 0,
+      "beam-confidence-rejected": 0
+    },
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "matchesFalseBeamSparseBeginner": false,
+    "provenanceRootCause": "no-clear-shared-rca"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-85f69cad-77bd-4a9b-aa80-2bf3894a8acb",
+    "duration": 20,
+    "playableEventCount": 41,
+    "loopToggled": true,
+    "audible": null,
+    "instrumentSwitch": {
+      "to": "Guitar",
+      "stillPlayable": true
+    },
+    "navigation": {
+      "libraryRoundTrip": true,
+      "restoreSameScore": true,
+      "reloadRestored": true,
+      "staleOverlay": false
+    }
+  }
+}

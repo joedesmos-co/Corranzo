@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2116 (1)",
+  "source": "aria-math-c418-from-minecraft.pdf",
+  "ok": true,
+  "elapsedMs": 1277,
+  "pagesProcessed": 6,
+  "totalPages": 6,
+  "reported": {
+    "measures": 194,
+    "notes": 1669,
+    "confidence": 0.9065013636427256,
+    "acceptance": "accepted",
+    "tieStarts": 51,
+    "tieStops": 100,
+    "rests": 101
+  },
+  "reproduced": {
+    "measures": 194,
+    "notes": 1669,
+    "rests": 101,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 51,
+    "tieStops": 100,
+    "tieImbalance": -49
+  },
+  "delta": {
+    "measures": 0,
+    "notes": 0,
+    "tieImbalance": 0
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": false,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

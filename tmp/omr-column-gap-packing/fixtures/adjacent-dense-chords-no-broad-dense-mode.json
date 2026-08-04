@@ -1,0 +1,64 @@
+{
+  "id": "adjacent-dense-chords-no-broad-dense-mode",
+  "description": "Four adjacent two-note chords; document whether group count alone triggers dense-rhythm mode",
+  "beats": 4,
+  "notes": [
+    {
+      "cx": 80,
+      "cy": 110,
+      "midi": 60,
+      "positionInMeasure": 0.1,
+      "candidateId": "a1"
+    },
+    {
+      "cx": 81,
+      "cy": 90,
+      "midi": 64,
+      "positionInMeasure": 0.1,
+      "candidateId": "a2"
+    },
+    {
+      "cx": 140,
+      "cy": 110,
+      "midi": 62,
+      "positionInMeasure": 0.3,
+      "candidateId": "b1"
+    },
+    {
+      "cx": 141,
+      "cy": 90,
+      "midi": 65,
+      "positionInMeasure": 0.3,
+      "candidateId": "b2"
+    },
+    {
+      "cx": 200,
+      "cy": 110,
+      "midi": 64,
+      "positionInMeasure": 0.5,
+      "candidateId": "c1"
+    },
+    {
+      "cx": 201,
+      "cy": 90,
+      "midi": 67,
+      "positionInMeasure": 0.5,
+      "candidateId": "c2"
+    },
+    {
+      "cx": 260,
+      "cy": 110,
+      "midi": 65,
+      "positionInMeasure": 0.7,
+      "candidateId": "d1"
+    },
+    {
+      "cx": 261,
+      "cy": 90,
+      "midi": 69,
+      "positionInMeasure": 0.7,
+      "candidateId": "d2"
+    }
+  ],
+  "diagnosticOnly": true
+}

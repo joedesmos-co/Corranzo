@@ -1,0 +1,256 @@
+
+/Users/ryland/Documents/scoreflow/src/App.jsx
+   106:3   error    'bundleHasActiveFile' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+   240:3   error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  238 |   // pdfIdentity is derived so sync readers can enforce companion ownership.
+  239 |   const liveBundleRef = useRef(null)
+> 240 |   liveBundleRef.current = {
+      |   ^^^^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  241 |     pdfFile,
+  242 |     instrumentId: activeInstrumentRef.current,
+  243 |     pdfBuffer,                                                                                                                                                                                                                                                                                                                                                  react-hooks/refs
+   240:27  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  238 |   // pdfIdentity is derived so sync readers can enforce companion ownership.
+  239 |   const liveBundleRef = useRef(null)
+> 240 |   liveBundleRef.current = {
+      |                           ^
+> 241 |     pdfFile,
+      | ^^^^^^^^^^^^
+> 242 |     instrumentId: activeInstrumentRef.current,
+      …
+      | ^^^^^^^^^^^^
+> 253 |     demoPieceActive,
+      | ^^^^^^^^^^^^
+> 254 |   }
+      | ^^^^ Cannot access ref value during render
+  255 |
+  256 |   // ActiveScore mirror of legacy App fields. Ref is updated in an effect and
+  257 |   // also bumped synchronously inside PDF replacement / OMR apply                                                          react-hooks/refs
+   242:19  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  240 |   liveBundleRef.current = {
+  241 |     pdfFile,
+> 242 |     instrumentId: activeInstrumentRef.current,
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  243 |     pdfBuffer,
+  244 |     pdfMeta,
+  245 |     pdfIdentity: buildPdfSourceIdentity(pdfMeta),                                                                                                                                                                                                                                                                                                                                                                         react-hooks/refs
+   251:20  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  249 |     midiSource,
+  250 |     musicXmlSource,
+> 251 |     practicePrefs: practicePrefsRef.current,
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  252 |     pdfSoftWarning,
+  253 |     demoPieceActive,
+  254 |   }                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/refs
+   332:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  330 |       )
+  331 |       if (reconciled.musicXmlRejected) {
+> 332 |         setMusicXmlSource(null)
+      |         ^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  333 |         if (liveBundleRef.current) {
+  334 |           liveBundleRef.current.musicXmlSource = null
+  335 |         }  react-hooks/set-state-in-effect
+   444:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  442 |   useEffect(() => {
+  443 |     if (activeView === 'practice') {
+> 444 |       setPracticePdfReady(false)
+      |       ^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  445 |     }
+  446 |   }, [activeView, pdfFile])
+  447 |                                                            react-hooks/set-state-in-effect
+   488:53  warning  The ref value 'instrumentBundleStoreRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'instrumentBundleStoreRef.current' to a variable inside the effect, and use that variable in the cleanup function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+   960:7   error    Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  958 |         return discardStale(stillOwns)
+  959 |       }
+> 960 |       currentBundle.musicXmlSource = reconciled.musicXmlSource
+      |       ^^^^^^^^^^^^^ `liveBundleRef` cannot be modified
+  961 |       currentBundle.midiSource = reconciled.midiSource
+  962 |       setMusicXmlSource(reconciled.musicXmlSource)
+  963 |       setMidiSource(reconciled.midiSource)                                                                                                                                                                                                                                                                                                                                                                                                                                                       react-hooks/immutability
+  2193:35  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  2191 |   const uploadedPracticePieces = useMemo(
+  2192 |     () =>
+> 2193 |       buildUploadedPracticePieces(getInstrumentSessionBundles(), {
+       |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ This function accesses a ref value
+  2194 |         activeInstrumentId: instrumentId,
+  2195 |       }),
+  2196 |     [                                                                                                                                                                                                                                                                                                                                          react-hooks/refs
+  2196:5   warning  React Hook useMemo has unnecessary dependencies: 'demoPieceActive', 'fileName', 'initialPracticePrefs', 'instrumentBundleRevision', 'midiSource', 'musicXmlSource', 'pageNumber', 'pdfBuffer', 'pdfFile', 'pdfMeta', and 'pdfSoftWarning'. Either exclude them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  react-hooks/exhaustive-deps
+  2671:45  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  2669 |             onDeleteUploadedPiece={handleDeleteUploadedPiece}
+  2670 |             onClassifiedUpload={gatedClassifiedUpload}
+> 2671 |             onFileSelect={wrapUpload('pdf', handleFileSelect)}
+       |                                             ^^^^^^^^^^^^^^^^ Passing a ref to a function may read its value during render
+  2672 |             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
+  2673 |             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
+  2674 |             onClearMidi={handleClearMidi}                                                                                                                        react-hooks/refs
+  2672:46  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  2670 |             onClassifiedUpload={gatedClassifiedUpload}
+  2671 |             onFileSelect={wrapUpload('pdf', handleFileSelect)}
+> 2672 |             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
+       |                                              ^^^^^^^^^^^^^^^^ Passing a ref to a function may read its value during render
+  2673 |             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
+  2674 |             onClearMidi={handleClearMidi}
+  2675 |             onClearMusicXml={handleClearMusicXml}                                                                                                                                   react-hooks/refs
+  2673:54  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  2671 |             onFileSelect={wrapUpload('pdf', handleFileSelect)}
+  2672 |             onMidiSelect={wrapUpload('midi', handleMidiSelect)}
+> 2673 |             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
+       |                                                      ^^^^^^^^^^^^^^^^^^^^ Passing a ref to a function may read its value during render
+  2674 |             onClearMidi={handleClearMidi}
+  2675 |             onClearMusicXml={handleClearMusicXml}
+  2676 |             onOmrGenerated={handleOmrGenerated}                                                                                                                              react-hooks/refs
+  2697:37  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  2695 |       )}
+  2696 |
+> 2697 |       {activeView === 'practice' && renderPracticeContent()}
+       |                                     ^^^^^^^^^^^^^^^^^^^^^ This function accesses a ref value
+  2698 |
+  2699 |       {activeView === 'profile' && (
+  2700 |         <Suspense                                                                                                                                                                                                                                                                                                                                                                                                  react-hooks/refs
+
+/Users/ryland/Documents/scoreflow/src/components/library/PdfOmrPlaybackPanel.jsx
+   97:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+   95 |     abortRef.current?.abort()
+   96 |     activeRunRef.current = nextOmrTraceRunId()
+>  97 |     setError(null)
+      |     ^^^^^^^^ Avoid calling setState() directly within an effect
+   98 |     setSummary(null)
+   99 |     setHasDiagnostics(false)
+  100 |     resetOmrPanelState({ setIsGenerating, setStatus, setProgressLabel })  react-hooks/set-state-in-effect
+  120:3  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  118 |
+  119 |   const onGeneratedRef = useRef(onGenerated)
+> 120 |   onGeneratedRef.current = onGenerated
+      |   ^^^^^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  121 |   const onFeedbackRef = useRef(onFeedback)
+  122 |   onFeedbackRef.current = onFeedback
+  123 |                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/refs
+  122:3  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  120 |   onGeneratedRef.current = onGenerated
+  121 |   const onFeedbackRef = useRef(onFeedback)
+> 122 |   onFeedbackRef.current = onFeedback
+      |   ^^^^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  123 |
+  124 |   const handleGenerate = useCallback(async () => {
+  125 |     const runId = nextOmrTraceRunId()                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/refs
+  419:6  warning  React Hook useCallback has a missing dependency: 'onFeedback'. Either include it or remove the dependency array. If 'onFeedback' changes too often, find the parent component that defines it and wrap that definition in useCallback                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  react-hooks/exhaustive-deps
+  424:3  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  422 |   // safe without re-arming whenever callback identities churn.
+  423 |   const handleGenerateRef = useRef(handleGenerate)
+> 424 |   handleGenerateRef.current = handleGenerate
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  425 |   const onAutoStartConsumedRef = useRef(onAutoStartConsumed)
+  426 |   onAutoStartConsumedRef.current = onAutoStartConsumed
+  427 |                                                                                                                                                                                                                                                                                                           react-hooks/refs
+  426:3  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  424 |   handleGenerateRef.current = handleGenerate
+  425 |   const onAutoStartConsumedRef = useRef(onAutoStartConsumed)
+> 426 |   onAutoStartConsumedRef.current = onAutoStartConsumed
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  427 |
+  428 |   useEffect(() => {
+  429 |     if (!autoStartKey || autoStartedKeyRef.current === autoStartKey) {                                                                                                                                                                                                                                                                                                                              react-hooks/refs
+
+/Users/ryland/Documents/scoreflow/src/components/practice/OmrQualityWarningBanner.jsx
+  23:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  21 |
+  22 |   useEffect(() => {
+> 23 |     setLocalDismissedKey(null)
+     |     ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  24 |   }, [scoreKey, acceptance])
+  25 |
+  26 |   if (acceptance !== OMR_ACCEPTANCE.WARNING) {  react-hooks/set-state-in-effect
+
+/Users/ryland/Documents/scoreflow/src/components/practice/PracticeView.jsx
+  49:3  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  47 |   const pdfScrollRef = useRef(null)
+  48 |   const sessionRef = useRef(session)
+> 49 |   sessionRef.current = session
+     |   ^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  50 |
+  51 |   const [viewMode, setViewMode] = useState(() => loadPracticeViewMode())
+  52 |   const isVisualView = viewMode === PRACTICE_VIEW_MODE.VISUAL  react-hooks/refs
+
+/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js
+  1156:7  error  The value assigned to 'musicXml' is not used in subsequent statements               no-useless-assignment
+  1159:7  error  The value assigned to 'omrV3RuntimePromotion' is not used in subsequent statements  no-useless-assignment
+
+/Users/ryland/Documents/scoreflow/tests/omrQualityWarningBanner.test.js
+  9:14  error  'process' is not defined  no-undef
+
+✖ 26 problems (23 errors, 3 warnings)
+

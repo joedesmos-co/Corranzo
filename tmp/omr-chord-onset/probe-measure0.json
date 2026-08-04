@@ -1,0 +1,148 @@
+{
+  "measureNumber": 1,
+  "confidence": 0.865,
+  "pitchConfidence": 0.92,
+  "rhythmConfidence": 0.82,
+  "uncertain": false,
+  "rhythmApproximate": false,
+  "timingModel": null,
+  "detectedNoteheads": 11,
+  "emittedNoteheads": 11,
+  "dedupedDuringGrouping": 0,
+  "musicalEventReconstruction": {
+    "adjustedEventCount": 0,
+    "adjustedNoteCount": 0,
+    "reasons": {}
+  },
+  "beamStem": {
+    "noteCount": 11,
+    "stemCandidateCount": 9,
+    "beamCandidateCount": 0,
+    "rhythmicGroupCount": 11,
+    "stemAttachedNoteCount": 9,
+    "beamAttachedNoteCount": 0,
+    "stemAttachmentRate": 0.8182,
+    "beamAttachmentRate": 0,
+    "averageConfidence": 0.7144,
+    "disagreementCount": 1,
+    "disagreementRate": 0.0909,
+    "ownership": {
+      "noteCount": 11,
+      "notesWithStemDirection": 9,
+      "notesWithBeams": 1,
+      "notesWithoutBeams": 10,
+      "notesWithBeamGroup": 0,
+      "beamGroupCount": 0,
+      "stemDirections": {
+        "down": 2,
+        "up": 7
+      },
+      "voiceRoles": {
+        "beamed-eighth-voice": 1,
+        "stemmed-sustain-or-quarter-voice": 8,
+        "unattached-or-rest-like-notehead": 2
+      },
+      "eventCount": 6,
+      "mixedOwnershipEventCount": 1,
+      "splitCandidateEventCount": 0,
+      "splitCandidateNoteCount": 0,
+      "mixedOwnershipReasons": {
+        "beamed-and-unbeamed-notes": 1,
+        "multiple-likely-voices": 1
+      },
+      "splitCandidateReasons": {},
+      "splitCandidateSamples": [],
+      "mixedOwnershipSamples": [
+        {
+          "eventIndex": 3,
+          "measureNumber": 1,
+          "startDivision": 8,
+          "durationDivisions": 8,
+          "noteheadIds": [
+            "n-1-8-244-418",
+            "n-1-9-244-444"
+          ],
+          "noteCount": 2,
+          "notesWithBeams": 1,
+          "notesWithoutBeams": 1,
+          "stemDirections": [
+            "down"
+          ],
+          "beamGroupIds": [],
+          "voiceIds": [
+            "lower:down:beamed-eighth-voice:rg-1-8",
+            "lower:unknown-stem:unattached-or-rest-like-notehead:rg-1-11"
+          ],
+          "voiceRoles": [
+            "beamed-eighth-voice",
+            "unattached-or-rest-like-notehead"
+          ],
+          "beamedExpectedDivisions": null,
+          "eventLongerThanBeamUnit": false,
+          "mixedOwnership": true,
+          "splitCandidate": false,
+          "reasons": [
+            "beamed-and-unbeamed-notes",
+            "multiple-likely-voices"
+          ],
+          "ownerships": [
+            {
+              "noteheadId": "n-1-8-244-418",
+              "measureNumber": 1,
+              "staffRole": "lower",
+              "clef": "bass",
+              "midi": 48,
+              "stemDirection": "down",
+              "attachedStemId": "n-1-8-244-418-stem",
+              "attachedStemIds": [
+                "n-1-8-244-418-stem"
+              ],
+              "attachedBeamIds": [],
+              "beamCandidateCount": 0,
+              "beamCount": 1,
+              "beamLevel": 1,
+              "beamGroupId": null,
+              "rhythmicGroupId": "rg-1-8",
+              "expectedDivisions": null,
+              "likelyVoiceId": "lower:down:beamed-eighth-voice:rg-1-8",
+              "likelyVoiceRole": "beamed-eighth-voice",
+              "stemConfidence": 0.7745,
+              "beamConfidence": null,
+              "confidence": 0.7745
+            },
+            {
+              "noteheadId": "n-1-9-244-444",
+              "measureNumber": 1,
+              "staffRole": "lower",
+              "clef": "bass",
+              "midi": 41,
+              "stemDirection": null,
+              "attachedStemId": null,
+              "attachedStemIds": [],
+              "attachedBeamIds": [],
+              "beamCandidateCount": 0,
+              "beamCount": 0,
+              "beamLevel": 0,
+              "beamGroupId": null,
+              "rhythmicGroupId": "rg-1-11",
+              "expectedDivisions": null,
+              "likelyVoiceId": "lower:unknown-stem:unattached-or-rest-like-notehead:rg-1-11",
+              "likelyVoiceRole": "unattached-or-rest-like-notehead",
+              "stemConfidence": null,
+              "beamConfidence": null,
+              "confidence": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    "disagreements": {
+      "graphBeamedButCurrentLong": 0,
+      "currentShortWithoutBeamGraph": 0,
+      "currentBeamProbeWithoutGraph": 1,
+      "samples": [],
+      "total": 1,
+      "rate": 0.0909
+    }
+  }
+}

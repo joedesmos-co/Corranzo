@@ -1,0 +1,1878 @@
+{
+  "traces": [
+    {
+      "id": "chord-column-split-during-onset-snap",
+      "beats": 4,
+      "totalDivisions": 16,
+      "chordMergeX": 28,
+      "fixedCoalesceWindow": 10,
+      "denseMeasureByGroupCount": true,
+      "usePositionStarts": true,
+      "denseRhythmEntered": true,
+      "denseRhythmRule": "groups.length (7) > beats (4)",
+      "groupCount": 7,
+      "columns": [
+        {
+          "columnId": "diag-col-0",
+          "noteIds": [
+            "c-low"
+          ],
+          "midis": [
+            60
+          ],
+          "xSpan": 0,
+          "cx": 100,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "noteIds": [
+            "c-mid"
+          ],
+          "midis": [
+            64
+          ],
+          "xSpan": 0,
+          "cx": 103,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "noteIds": [
+            "c-high"
+          ],
+          "midis": [
+            67
+          ],
+          "xSpan": 0,
+          "cx": 105,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "noteIds": [
+            "n2"
+          ],
+          "midis": [
+            62
+          ],
+          "xSpan": 0,
+          "cx": 170,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-4",
+          "noteIds": [
+            "n3"
+          ],
+          "midis": [
+            64
+          ],
+          "xSpan": 0,
+          "cx": 230,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-5",
+          "noteIds": [
+            "n4"
+          ],
+          "midis": [
+            65
+          ],
+          "xSpan": 0,
+          "cx": 290,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-6",
+          "noteIds": [
+            "n5"
+          ],
+          "midis": [
+            67
+          ],
+          "xSpan": 0,
+          "cx": 350,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        }
+      ],
+      "groupOnsets": [
+        {
+          "columnId": "diag-col-0",
+          "positionInMeasure": 0.22,
+          "prePackOnset": 4,
+          "noteIds": [
+            "c-low"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "positionInMeasure": 0.31,
+          "prePackOnset": 5,
+          "noteIds": [
+            "c-mid"
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "positionInMeasure": 0.32,
+          "prePackOnset": 5,
+          "noteIds": [
+            "c-high"
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "positionInMeasure": 0.45,
+          "prePackOnset": 7,
+          "noteIds": [
+            "n2"
+          ]
+        },
+        {
+          "columnId": "diag-col-4",
+          "positionInMeasure": 0.6,
+          "prePackOnset": 10,
+          "noteIds": [
+            "n3"
+          ]
+        },
+        {
+          "columnId": "diag-col-5",
+          "positionInMeasure": 0.75,
+          "prePackOnset": 12,
+          "noteIds": [
+            "n4"
+          ]
+        },
+        {
+          "columnId": "diag-col-6",
+          "positionInMeasure": 0.9,
+          "prePackOnset": 14,
+          "noteIds": [
+            "n5"
+          ]
+        }
+      ],
+      "perNoteIndependentOnset": [
+        {
+          "candidateId": "c-low",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.22,
+          "onsetSparse": 4,
+          "onsetDense": 4
+        },
+        {
+          "candidateId": "c-mid",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.31,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "c-high",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.32,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "n2",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.45,
+          "onsetSparse": 8,
+          "onsetDense": 7
+        },
+        {
+          "candidateId": "n3",
+          "diagColumnId": "diag-col-4",
+          "positionInMeasure": 0.6,
+          "onsetSparse": 10,
+          "onsetDense": 10
+        },
+        {
+          "candidateId": "n4",
+          "diagColumnId": "diag-col-5",
+          "positionInMeasure": 0.75,
+          "onsetSparse": 12,
+          "onsetDense": 12
+        },
+        {
+          "candidateId": "n5",
+          "diagColumnId": "diag-col-6",
+          "positionInMeasure": 0.9,
+          "onsetSparse": 14,
+          "onsetDense": 14
+        }
+      ],
+      "independentSplit": [],
+      "visualSplits": [
+        {
+          "noteIds": [
+            "c-low",
+            "c-mid"
+          ],
+          "midis": [
+            60,
+            64
+          ],
+          "dx": 3,
+          "positions": [
+            0.22,
+            0.31
+          ],
+          "onsets": [
+            4,
+            5
+          ],
+          "eventIds": [
+            "evt-0",
+            "evt-1"
+          ]
+        },
+        {
+          "noteIds": [
+            "c-low",
+            "c-high"
+          ],
+          "midis": [
+            60,
+            67
+          ],
+          "dx": 5,
+          "positions": [
+            0.22,
+            0.32
+          ],
+          "onsets": [
+            4,
+            5
+          ],
+          "eventIds": [
+            "evt-0",
+            "evt-1"
+          ]
+        }
+      ],
+      "stages": {
+        "postPack": [
+          {
+            "eventId": "evt-0",
+            "startDivision": 4,
+            "durationDivisions": 1,
+            "noteIds": [
+              "c-low"
+            ],
+            "midis": [
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ],
+            "cx": 100,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-1",
+            "startDivision": 5,
+            "durationDivisions": 2,
+            "noteIds": [
+              "c-high",
+              "c-mid"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2",
+              "diag-col-1"
+            ],
+            "cx": 104,
+            "xSpan": 2
+          },
+          {
+            "eventId": "evt-2",
+            "startDivision": 7,
+            "durationDivisions": 4,
+            "noteIds": [
+              "n2"
+            ],
+            "midis": [
+              62
+            ],
+            "columns": [
+              "diag-col-3"
+            ],
+            "cx": 170,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-3",
+            "startDivision": 10,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n3"
+            ],
+            "midis": [
+              64
+            ],
+            "columns": [
+              "diag-col-4"
+            ],
+            "cx": 230,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-4",
+            "startDivision": 12,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n4"
+            ],
+            "midis": [
+              65
+            ],
+            "columns": [
+              "diag-col-5"
+            ],
+            "cx": 290,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-5",
+            "startDivision": 14,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n5"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-6"
+            ],
+            "cx": 350,
+            "xSpan": 0
+          }
+        ],
+        "postCoalesce": [
+          {
+            "eventId": "coal-0",
+            "startDivision": 4,
+            "durationDivisions": 1,
+            "noteIds": [
+              "c-low"
+            ],
+            "midis": [
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "coal-1",
+            "startDivision": 5,
+            "durationDivisions": 2,
+            "noteIds": [
+              "c-high",
+              "c-mid"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2",
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "coal-2",
+            "startDivision": 7,
+            "durationDivisions": 4,
+            "noteIds": [
+              "n2"
+            ],
+            "midis": [
+              62
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          },
+          {
+            "eventId": "coal-3",
+            "startDivision": 10,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n3"
+            ],
+            "midis": [
+              64
+            ],
+            "columns": [
+              "diag-col-4"
+            ]
+          },
+          {
+            "eventId": "coal-4",
+            "startDivision": 12,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n4"
+            ],
+            "midis": [
+              65
+            ],
+            "columns": [
+              "diag-col-5"
+            ]
+          },
+          {
+            "eventId": "coal-5",
+            "startDivision": 14,
+            "durationDivisions": 2,
+            "noteIds": [
+              "n5"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-6"
+            ]
+          }
+        ],
+        "postResnap": [
+          {
+            "eventId": "resnap-0",
+            "startDivision": 4,
+            "durationDivisions": 1,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "c-low"
+            ],
+            "midis": [
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "resnap-1",
+            "startDivision": 5,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "c-high",
+              "c-mid"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2",
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "resnap-2",
+            "startDivision": 7,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "n2"
+            ],
+            "midis": [
+              62
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          },
+          {
+            "eventId": "resnap-3",
+            "startDivision": 10,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "n3"
+            ],
+            "midis": [
+              64
+            ],
+            "columns": [
+              "diag-col-4"
+            ]
+          },
+          {
+            "eventId": "resnap-4",
+            "startDivision": 12,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "n4"
+            ],
+            "midis": [
+              65
+            ],
+            "columns": [
+              "diag-col-5"
+            ]
+          },
+          {
+            "eventId": "resnap-5",
+            "startDivision": 14,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "n5"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-6"
+            ]
+          }
+        ]
+      },
+      "splitColumns": [],
+      "failingTransition": "groupsShareBeatSlot beat-slot gate → separate groups → dense sixteenth onset snap → coalesce requires identical startDivision",
+      "producedEventCount": 6
+    },
+    {
+      "id": "mixed-voice-stack-must-remain-separate",
+      "beats": 4,
+      "totalDivisions": 16,
+      "chordMergeX": 11,
+      "fixedCoalesceWindow": 10,
+      "denseMeasureByGroupCount": false,
+      "usePositionStarts": false,
+      "denseRhythmEntered": false,
+      "denseRhythmRule": "sparse / sequential quarter path",
+      "groupCount": 2,
+      "columns": [
+        {
+          "columnId": "diag-col-0",
+          "noteIds": [
+            "voice-up",
+            "voice-down"
+          ],
+          "midis": [
+            72,
+            55
+          ],
+          "xSpan": 2,
+          "cx": 121,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            "up",
+            "down"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "noteIds": [
+            "later"
+          ],
+          "midis": [
+            67
+          ],
+          "xSpan": 0,
+          "cx": 200,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        }
+      ],
+      "groupOnsets": [
+        {
+          "columnId": "diag-col-0",
+          "positionInMeasure": 0.25,
+          "prePackOnset": 4,
+          "noteIds": [
+            "voice-up",
+            "voice-down"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "positionInMeasure": 0.5,
+          "prePackOnset": 8,
+          "noteIds": [
+            "later"
+          ]
+        }
+      ],
+      "perNoteIndependentOnset": [
+        {
+          "candidateId": "voice-up",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.25,
+          "onsetSparse": 4,
+          "onsetDense": 4
+        },
+        {
+          "candidateId": "voice-down",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.25,
+          "onsetSparse": 4,
+          "onsetDense": 4
+        },
+        {
+          "candidateId": "later",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.5,
+          "onsetSparse": 8,
+          "onsetDense": 8
+        }
+      ],
+      "independentSplit": [],
+      "visualSplits": [],
+      "stages": {
+        "postPack": [
+          {
+            "eventId": "evt-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "noteIds": [
+              "voice-up",
+              "voice-down"
+            ],
+            "midis": [
+              72,
+              55
+            ],
+            "columns": [
+              "diag-col-0"
+            ],
+            "cx": 121,
+            "xSpan": 2
+          },
+          {
+            "eventId": "evt-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "noteIds": [
+              "later"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-1"
+            ],
+            "cx": 200,
+            "xSpan": 0
+          }
+        ],
+        "postCoalesce": [
+          {
+            "eventId": "coal-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "noteIds": [
+              "voice-up",
+              "voice-down"
+            ],
+            "midis": [
+              72,
+              55
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "coal-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "noteIds": [
+              "later"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          }
+        ],
+        "postResnap": [
+          {
+            "eventId": "resnap-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "voice-up",
+              "voice-down"
+            ],
+            "midis": [
+              72,
+              55
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "resnap-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "later"
+            ],
+            "midis": [
+              67
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          }
+        ]
+      },
+      "splitColumns": [],
+      "failingTransition": null,
+      "producedEventCount": 2
+    },
+    {
+      "id": "adjacent-dense-chords-no-broad-dense-mode",
+      "beats": 4,
+      "totalDivisions": 16,
+      "chordMergeX": 24.887500000000003,
+      "fixedCoalesceWindow": 10,
+      "denseMeasureByGroupCount": false,
+      "usePositionStarts": false,
+      "denseRhythmEntered": false,
+      "denseRhythmRule": "sparse / sequential quarter path",
+      "groupCount": 4,
+      "columns": [
+        {
+          "columnId": "diag-col-0",
+          "noteIds": [
+            "a1",
+            "a2"
+          ],
+          "midis": [
+            60,
+            64
+          ],
+          "xSpan": 1,
+          "cx": 80.5,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "noteIds": [
+            "b1",
+            "b2"
+          ],
+          "midis": [
+            62,
+            65
+          ],
+          "xSpan": 1,
+          "cx": 140.5,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "noteIds": [
+            "c1",
+            "c2"
+          ],
+          "midis": [
+            64,
+            67
+          ],
+          "xSpan": 1,
+          "cx": 200.5,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "noteIds": [
+            "d1",
+            "d2"
+          ],
+          "midis": [
+            65,
+            69
+          ],
+          "xSpan": 1,
+          "cx": 260.5,
+          "staff": [
+            1
+          ],
+          "stemDirections": [
+            null
+          ]
+        }
+      ],
+      "groupOnsets": [
+        {
+          "columnId": "diag-col-0",
+          "positionInMeasure": 0.1,
+          "prePackOnset": 2,
+          "noteIds": [
+            "a1",
+            "a2"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "positionInMeasure": 0.3,
+          "prePackOnset": 6,
+          "noteIds": [
+            "b1",
+            "b2"
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "positionInMeasure": 0.5,
+          "prePackOnset": 8,
+          "noteIds": [
+            "c1",
+            "c2"
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "positionInMeasure": 0.7,
+          "prePackOnset": 12,
+          "noteIds": [
+            "d1",
+            "d2"
+          ]
+        }
+      ],
+      "perNoteIndependentOnset": [
+        {
+          "candidateId": "a1",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.1,
+          "onsetSparse": 2,
+          "onsetDense": 2
+        },
+        {
+          "candidateId": "a2",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.1,
+          "onsetSparse": 2,
+          "onsetDense": 2
+        },
+        {
+          "candidateId": "b1",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.3,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "b2",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.3,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "c1",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.5,
+          "onsetSparse": 8,
+          "onsetDense": 8
+        },
+        {
+          "candidateId": "c2",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.5,
+          "onsetSparse": 8,
+          "onsetDense": 8
+        },
+        {
+          "candidateId": "d1",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.7,
+          "onsetSparse": 12,
+          "onsetDense": 11
+        },
+        {
+          "candidateId": "d2",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.7,
+          "onsetSparse": 12,
+          "onsetDense": 11
+        }
+      ],
+      "independentSplit": [],
+      "visualSplits": [],
+      "stages": {
+        "postPack": [
+          {
+            "eventId": "evt-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "noteIds": [
+              "a2",
+              "a1"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ],
+            "cx": 80.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "noteIds": [
+              "b2",
+              "b1"
+            ],
+            "midis": [
+              65,
+              62
+            ],
+            "columns": [
+              "diag-col-1"
+            ],
+            "cx": 140.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-2",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "noteIds": [
+              "c2",
+              "c1"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2"
+            ],
+            "cx": 200.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-3",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "noteIds": [
+              "d2",
+              "d1"
+            ],
+            "midis": [
+              69,
+              65
+            ],
+            "columns": [
+              "diag-col-3"
+            ],
+            "cx": 260.5,
+            "xSpan": 1
+          }
+        ],
+        "postCoalesce": [
+          {
+            "eventId": "coal-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "noteIds": [
+              "a2",
+              "a1"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "coal-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "noteIds": [
+              "b2",
+              "b1"
+            ],
+            "midis": [
+              65,
+              62
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "coal-2",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "noteIds": [
+              "c2",
+              "c1"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "coal-3",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "noteIds": [
+              "d2",
+              "d1"
+            ],
+            "midis": [
+              69,
+              65
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          }
+        ],
+        "postResnap": [
+          {
+            "eventId": "resnap-0",
+            "startDivision": 0,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "a2",
+              "a1"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "resnap-1",
+            "startDivision": 4,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "b2",
+              "b1"
+            ],
+            "midis": [
+              65,
+              62
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "resnap-2",
+            "startDivision": 8,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "c2",
+              "c1"
+            ],
+            "midis": [
+              67,
+              64
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "resnap-3",
+            "startDivision": 12,
+            "durationDivisions": 4,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "d2",
+              "d1"
+            ],
+            "midis": [
+              69,
+              65
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          }
+        ]
+      },
+      "splitColumns": [],
+      "failingTransition": null,
+      "producedEventCount": 4
+    },
+    {
+      "id": "whole-chord-resnap-as-unit",
+      "beats": 4,
+      "totalDivisions": 16,
+      "chordMergeX": 16.637500000000003,
+      "fixedCoalesceWindow": 10,
+      "denseMeasureByGroupCount": false,
+      "usePositionStarts": true,
+      "denseRhythmEntered": true,
+      "denseRhythmRule": "shouldInferRhythmFromPositions=true (min gap < 0.55×quarter or groups>beats)",
+      "groupCount": 4,
+      "columns": [
+        {
+          "columnId": "diag-col-0",
+          "noteIds": [
+            "r0-0",
+            "r0-1",
+            "bass0"
+          ],
+          "midis": [
+            60,
+            64,
+            40
+          ],
+          "xSpan": 1,
+          "cx": 100.33333333333333,
+          "staff": [
+            1,
+            2
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "noteIds": [
+            "r1-0",
+            "r1-1",
+            "bass1"
+          ],
+          "midis": [
+            61,
+            65,
+            42
+          ],
+          "xSpan": 1,
+          "cx": 140.33333333333334,
+          "staff": [
+            1,
+            2
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "noteIds": [
+            "r2-0",
+            "r2-1",
+            "bass2"
+          ],
+          "midis": [
+            62,
+            66,
+            43
+          ],
+          "xSpan": 1,
+          "cx": 180.33333333333334,
+          "staff": [
+            1,
+            2
+          ],
+          "stemDirections": [
+            null
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "noteIds": [
+            "r3-0",
+            "r3-1",
+            "bass3"
+          ],
+          "midis": [
+            63,
+            67,
+            45
+          ],
+          "xSpan": 1,
+          "cx": 220.33333333333334,
+          "staff": [
+            1,
+            2
+          ],
+          "stemDirections": [
+            null
+          ]
+        }
+      ],
+      "groupOnsets": [
+        {
+          "columnId": "diag-col-0",
+          "positionInMeasure": 0.05033333333333334,
+          "prePackOnset": 2,
+          "noteIds": [
+            "r0-0",
+            "r0-1",
+            "bass0"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "positionInMeasure": 0.17033333333333334,
+          "prePackOnset": 4,
+          "noteIds": [
+            "r1-0",
+            "r1-1",
+            "bass1"
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "positionInMeasure": 0.29033333333333333,
+          "prePackOnset": 6,
+          "noteIds": [
+            "r2-0",
+            "r2-1",
+            "bass2"
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "positionInMeasure": 0.41033333333333327,
+          "prePackOnset": 8,
+          "noteIds": [
+            "r3-0",
+            "r3-1",
+            "bass3"
+          ]
+        }
+      ],
+      "perNoteIndependentOnset": [
+        {
+          "candidateId": "r0-0",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.05,
+          "onsetSparse": 2,
+          "onsetDense": 1
+        },
+        {
+          "candidateId": "r0-1",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.051000000000000004,
+          "onsetSparse": 2,
+          "onsetDense": 1
+        },
+        {
+          "candidateId": "r1-0",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.16999999999999998,
+          "onsetSparse": 4,
+          "onsetDense": 3
+        },
+        {
+          "candidateId": "r1-1",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.17099999999999999,
+          "onsetSparse": 4,
+          "onsetDense": 3
+        },
+        {
+          "candidateId": "r2-0",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.29,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "r2-1",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.291,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "r3-0",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.41,
+          "onsetSparse": 8,
+          "onsetDense": 7
+        },
+        {
+          "candidateId": "r3-1",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.411,
+          "onsetSparse": 8,
+          "onsetDense": 7
+        },
+        {
+          "candidateId": "bass0",
+          "diagColumnId": "diag-col-0",
+          "positionInMeasure": 0.05,
+          "onsetSparse": 2,
+          "onsetDense": 1
+        },
+        {
+          "candidateId": "bass1",
+          "diagColumnId": "diag-col-1",
+          "positionInMeasure": 0.17,
+          "onsetSparse": 4,
+          "onsetDense": 3
+        },
+        {
+          "candidateId": "bass2",
+          "diagColumnId": "diag-col-2",
+          "positionInMeasure": 0.29,
+          "onsetSparse": 6,
+          "onsetDense": 5
+        },
+        {
+          "candidateId": "bass3",
+          "diagColumnId": "diag-col-3",
+          "positionInMeasure": 0.41,
+          "onsetSparse": 8,
+          "onsetDense": 7
+        }
+      ],
+      "independentSplit": [],
+      "visualSplits": [],
+      "stages": {
+        "postPack": [
+          {
+            "eventId": "evt-0",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass0"
+            ],
+            "midis": [
+              40
+            ],
+            "columns": [
+              "diag-col-0"
+            ],
+            "cx": 100,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-1",
+            "startDivision": 0,
+            "durationDivisions": 12,
+            "noteIds": [
+              "r0-1",
+              "r0-0"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ],
+            "cx": 100.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-2",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass1"
+            ],
+            "midis": [
+              42
+            ],
+            "columns": [
+              "diag-col-1"
+            ],
+            "cx": 140,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-3",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "noteIds": [
+              "r1-1",
+              "r1-0"
+            ],
+            "midis": [
+              65,
+              61
+            ],
+            "columns": [
+              "diag-col-1"
+            ],
+            "cx": 140.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-4",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass2"
+            ],
+            "midis": [
+              43
+            ],
+            "columns": [
+              "diag-col-2"
+            ],
+            "cx": 180,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-5",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "noteIds": [
+              "r2-1",
+              "r2-0"
+            ],
+            "midis": [
+              66,
+              62
+            ],
+            "columns": [
+              "diag-col-2"
+            ],
+            "cx": 180.5,
+            "xSpan": 1
+          },
+          {
+            "eventId": "evt-6",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "noteIds": [
+              "bass3"
+            ],
+            "midis": [
+              45
+            ],
+            "columns": [
+              "diag-col-3"
+            ],
+            "cx": 220,
+            "xSpan": 0
+          },
+          {
+            "eventId": "evt-7",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "noteIds": [
+              "r3-1",
+              "r3-0"
+            ],
+            "midis": [
+              67,
+              63
+            ],
+            "columns": [
+              "diag-col-3"
+            ],
+            "cx": 220.5,
+            "xSpan": 1
+          }
+        ],
+        "postCoalesce": [
+          {
+            "eventId": "coal-0",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass0"
+            ],
+            "midis": [
+              40
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "coal-1",
+            "startDivision": 0,
+            "durationDivisions": 12,
+            "noteIds": [
+              "r0-1",
+              "r0-0"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "coal-2",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass1"
+            ],
+            "midis": [
+              42
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "coal-3",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "noteIds": [
+              "r1-1",
+              "r1-0"
+            ],
+            "midis": [
+              65,
+              61
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "coal-4",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "noteIds": [
+              "bass2"
+            ],
+            "midis": [
+              43
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "coal-5",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "noteIds": [
+              "r2-1",
+              "r2-0"
+            ],
+            "midis": [
+              66,
+              62
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "coal-6",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "noteIds": [
+              "bass3"
+            ],
+            "midis": [
+              45
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          },
+          {
+            "eventId": "coal-7",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "noteIds": [
+              "r3-1",
+              "r3-0"
+            ],
+            "midis": [
+              67,
+              63
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          }
+        ],
+        "postResnap": [
+          {
+            "eventId": "resnap-0",
+            "startDivision": 0,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "bass0"
+            ],
+            "midis": [
+              40
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "resnap-1",
+            "startDivision": 0,
+            "durationDivisions": 12,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "r0-1",
+              "r0-0"
+            ],
+            "midis": [
+              64,
+              60
+            ],
+            "columns": [
+              "diag-col-0"
+            ]
+          },
+          {
+            "eventId": "resnap-2",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "bass1"
+            ],
+            "midis": [
+              42
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "resnap-3",
+            "startDivision": 4,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "r1-1",
+              "r1-0"
+            ],
+            "midis": [
+              65,
+              61
+            ],
+            "columns": [
+              "diag-col-1"
+            ]
+          },
+          {
+            "eventId": "resnap-4",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "bass2"
+            ],
+            "midis": [
+              43
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "resnap-5",
+            "startDivision": 6,
+            "durationDivisions": 2,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "r2-1",
+              "r2-0"
+            ],
+            "midis": [
+              66,
+              62
+            ],
+            "columns": [
+              "diag-col-2"
+            ]
+          },
+          {
+            "eventId": "resnap-6",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "bass3"
+            ],
+            "midis": [
+              45
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          },
+          {
+            "eventId": "resnap-7",
+            "startDivision": 8,
+            "durationDivisions": 8,
+            "denseChordOnsetResnapped": false,
+            "noteIds": [
+              "r3-1",
+              "r3-0"
+            ],
+            "midis": [
+              67,
+              63
+            ],
+            "columns": [
+              "diag-col-3"
+            ]
+          }
+        ]
+      },
+      "splitColumns": [
+        {
+          "columnId": "diag-col-0",
+          "eventIds": [
+            "evt-1",
+            "evt-0"
+          ],
+          "onsets": [
+            0
+          ],
+          "noteIds": [
+            "r0-0",
+            "r0-1",
+            "bass0"
+          ]
+        },
+        {
+          "columnId": "diag-col-1",
+          "eventIds": [
+            "evt-3",
+            "evt-2"
+          ],
+          "onsets": [
+            4
+          ],
+          "noteIds": [
+            "r1-0",
+            "r1-1",
+            "bass1"
+          ]
+        },
+        {
+          "columnId": "diag-col-2",
+          "eventIds": [
+            "evt-5",
+            "evt-4"
+          ],
+          "onsets": [
+            6
+          ],
+          "noteIds": [
+            "r2-0",
+            "r2-1",
+            "bass2"
+          ]
+        },
+        {
+          "columnId": "diag-col-3",
+          "eventIds": [
+            "evt-7",
+            "evt-6"
+          ],
+          "onsets": [
+            8
+          ],
+          "noteIds": [
+            "r3-0",
+            "r3-1",
+            "bass3"
+          ]
+        }
+      ],
+      "failingTransition": "post-group event construction / coalesce (same-onset + |Δcx|≤10 required) or clef split",
+      "producedEventCount": 8
+    }
+  ]
+}

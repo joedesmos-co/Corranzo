@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2102",
+  "source": "la-campanella.pdf",
+  "ok": true,
+  "elapsedMs": 3311,
+  "pagesProcessed": 10,
+  "totalPages": 10,
+  "reported": {
+    "measures": 155,
+    "notes": 4105,
+    "confidence": 0.9036409843589477,
+    "acceptance": "accepted",
+    "tieStarts": 6,
+    "tieStops": 12,
+    "rests": 119
+  },
+  "reproduced": {
+    "measures": 154,
+    "notes": 4103,
+    "rests": 117,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 6,
+    "tieStops": 12,
+    "tieImbalance": -6
+  },
+  "delta": {
+    "measures": -1,
+    "notes": -2,
+    "tieImbalance": 0
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": false,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

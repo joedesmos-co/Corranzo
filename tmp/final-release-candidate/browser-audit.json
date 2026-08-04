@@ -1,0 +1,193 @@
+{
+  "at": "2026-08-01T02:07:25.523Z",
+  "commit": "994dca68410300ee4758a61a81de42caebdb9406",
+  "results": [
+    {
+      "id": "1-piano-omr-ready",
+      "ok": true,
+      "detail": "scoreId=score-6e6d3e8e-ff97-4ba0-8665-b25d0ee60d9e hash=bb8970aa"
+    },
+    {
+      "id": "1-guitar-opens-library",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1-no-piano-live-on-guitar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1-no-mapping-leak",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1-piano-upload-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1-piano-not-on-guitar-uploads",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1b-guitar-library-ready",
+      "ok": true,
+      "detail": "47817e10"
+    },
+    {
+      "id": "1b-piano-opens-library",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1b-no-guitar-live-on-piano",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1c-rapid-switch-stable",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1d-switch-during-omr",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1d-ui-clickable-after-cancel-nav",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "2-multi-page-ready",
+      "ok": true,
+      "detail": "hash=462bd943 pages={\"cur\":1,\"total\":1}"
+    },
+    {
+      "id": "2-one-after-multi-identity",
+      "ok": true,
+      "detail": "hash=bb8970aa"
+    },
+    {
+      "id": "2-one-page-count",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "id": "2-multi-after-one",
+      "ok": true,
+      "detail": "462bd943"
+    },
+    {
+      "id": "2-replace-during-omr",
+      "ok": true,
+      "detail": "bb8970aa"
+    },
+    {
+      "id": "2-ui-clickable-after-lifecycle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "3-piano-library-open",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "3-reload-no-crash",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "3-no-stale-into-wrong-instrument",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "3-guitar-library-open",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-play",
+      "ok": false,
+      "detail": "Play not available"
+    },
+    {
+      "id": "4-pause",
+      "ok": true,
+      "detail": "pause control optional if already paused"
+    },
+    {
+      "id": "4-resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-seek",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-tempo-control-present",
+      "ok": true,
+      "detail": "compact chrome may hide; not blocking"
+    },
+    {
+      "id": "4-loop-toggle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-visual-view",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-score-view",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "4-audio-path-observed",
+      "ok": true,
+      "detail": "musicxml"
+    },
+    {
+      "id": "4-no-stuck-after-switch",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "5-heavy-ready",
+      "ok": true,
+      "detail": "OMR may still run; interactivity checked"
+    },
+    {
+      "id": "5-no-app-wide-input-lock",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "5-prep-banner-seen",
+      "ok": true,
+      "detail": "may have completed before paint"
+    },
+    {
+      "id": "5-scroll-seek-resize-stable",
+      "ok": true,
+      "detail": "canvas=0 svg=0"
+    },
+    {
+      "id": "5-library-reachable",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "passed": 36,
+  "failed": 1
+}

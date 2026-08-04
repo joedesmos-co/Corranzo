@@ -1,0 +1,29 @@
+{
+  "git": "994dca6",
+  "evaluator": "2.0.0 / schema 2",
+  "mode": "written",
+  "label": "user-omr-baseline-994dca6",
+  "overall": 61.8,
+  "pitch": 58.5,
+  "rhythm": 64.5,
+  "sustain": 46.7,
+  "articulation": 84,
+  "measureStructure": 65.9,
+  "interpretation": 13.3,
+  "mismatchCounts": {
+    "duration-mismatch": 280,
+    "incorrect-chord": 217,
+    "missing-note": 209,
+    "extra-note": 198,
+    "onset-mismatch": 193,
+    "incorrect-pitch": 179,
+    "missing-accent": 37,
+    "missing-staccato": 37,
+    "split-measure": 11,
+    "tempo-mismatch": 9,
+    "incorrect-tie": 7,
+    "missing-tie": 6
+  },
+  "userReportsReproducingTieImbalance": 8,
+  "userReportsTotal": 9
+}

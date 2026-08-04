@@ -1,0 +1,39 @@
+{
+  "reportId": "corranzo-recognition-report-2026-07-29-2114",
+  "source": "iris-out-piano-arragement.pdf",
+  "ok": true,
+  "elapsedMs": 1143,
+  "pagesProcessed": 5,
+  "totalPages": 5,
+  "reported": {
+    "measures": 115,
+    "notes": 2333,
+    "confidence": 0.8994693585864031,
+    "acceptance": "accepted",
+    "tieStarts": 24,
+    "tieStops": 47,
+    "rests": 28
+  },
+  "reproduced": {
+    "measures": 113,
+    "notes": 2333,
+    "rests": 30,
+    "acceptance": "accepted",
+    "confidence": null,
+    "tieStarts": 24,
+    "tieStops": 47,
+    "tieImbalance": -23
+  },
+  "delta": {
+    "measures": -2,
+    "notes": 0,
+    "tieImbalance": 0
+  },
+  "reproducesIssue": {
+    "tieImbalance": true,
+    "zeroRestsDense": false,
+    "any": true
+  },
+  "likelyPipelineStage": "vector-tie-pairing (detectVectorTies.applyTieMarks)",
+  "sharedRootCauseCandidate": "tie"
+}

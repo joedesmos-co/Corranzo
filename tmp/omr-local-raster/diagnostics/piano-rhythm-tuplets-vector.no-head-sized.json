@@ -1,0 +1,2600 @@
+{
+  "records": [
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 0.75,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x355:y330",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col30",
+      "register": "high-normal",
+      "generatedMidi": 65,
+      "generatedPitchLabel": "F4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 355,
+        "y": 330.03535353535347
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.25178381152866564,
+        "rawYNorm": 0.25505050505050497,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 362.29,
+          "y": 323.28
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        303,
+        304,
+        316,
+        317,
+        329,
+        330
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 361,
+            "y": 305,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 0.453,
+          "yOriginOffset": 1.889,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 364,
+            "y": 305,
+            "w": 8,
+            "h": 16
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.208,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.943,
+          "yOriginOffset": 1.323,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 355,
+            "y": 314,
+            "w": 7,
+            "h": 13
+          },
+          "widthRatio": 0.528,
+          "heightRatio": 0.981,
+          "fillRatio": 0.495,
+          "xOriginOffset": 0.226,
+          "yOriginOffset": 0.757,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 351,
+            "y": 320,
+            "w": 2,
+            "h": 8
+          },
+          "widthRatio": 0.151,
+          "heightRatio": 0.604,
+          "fillRatio": 0.938,
+          "xOriginOffset": -0.264,
+          "yOriginOffset": 0.493,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 4,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 328,
+        "totalAreaAfter": 125
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 355,
+          "right": 381,
+          "top": 306,
+          "bottom": 330,
+          "width": 27,
+          "height": 25
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.887
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 362.29,
+          "y": 323.28
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 53
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 300,
+        "inkRatio": 0.4444,
+        "inkBounds": {
+          "x": 355,
+          "y": 306,
+          "w": 27,
+          "h": 25
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 0.75,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x346:y337",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col29",
+      "register": "high-normal",
+      "generatedMidi": 64,
+      "generatedPitchLabel": "E4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 346.0294117647059,
+        "y": 336.57070707070704
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2568343165791707,
+        "rawYNorm": 0.26010101010101006,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 353.32,
+          "y": 329.81
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        316,
+        317,
+        329,
+        330
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 355,
+            "y": 310,
+            "w": 8,
+            "h": 17
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.283,
+          "fillRatio": 0.419,
+          "xOriginOffset": 0.941,
+          "yOriginOffset": 1.402,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 342,
+            "y": 320,
+            "w": 11,
+            "h": 14
+          },
+          "widthRatio": 0.83,
+          "heightRatio": 1.057,
+          "fillRatio": 0.442,
+          "xOriginOffset": 0.073,
+          "yOriginOffset": 0.76,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 2,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 243,
+        "totalAreaAfter": 125
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 346,
+          "right": 372,
+          "top": 313,
+          "bottom": 336,
+          "width": 27,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 353.32,
+          "y": 329.81
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 277,
+        "inkRatio": 0.4275,
+        "inkBounds": {
+          "x": 346,
+          "y": 313,
+          "w": 27,
+          "h": 21
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 1,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x364:y324",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col30",
+      "register": "high-normal",
+      "generatedMidi": 67,
+      "generatedPitchLabel": "G4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 363.9705882352941,
+        "y": 323.5
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2467333064781607,
+        "rawYNorm": 0.25,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 371.26,
+          "y": 316.74
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        303,
+        304,
+        316,
+        317
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 361,
+            "y": 297,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.224,
+          "yOriginOffset": 2,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 368,
+            "y": 297,
+            "w": 3,
+            "h": 2
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.151,
+          "fillRatio": 0.667,
+          "xOriginOffset": 0.38,
+          "yOriginOffset": 1.962,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 373,
+            "y": 297,
+            "w": 8,
+            "h": 17
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.283,
+          "fillRatio": 0.456,
+          "xOriginOffset": 0.946,
+          "yOriginOffset": 1.396,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 364,
+            "y": 298,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.556,
+          "xOriginOffset": 0.078,
+          "yOriginOffset": 1.849,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 359,
+            "y": 302,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.375,
+          "yOriginOffset": 1.623,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 361,
+            "y": 305,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.224,
+          "yOriginOffset": 1.396,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c6",
+          "bounds": {
+            "x": 364,
+            "y": 306,
+            "w": 7,
+            "h": 15
+          },
+          "widthRatio": 0.528,
+          "heightRatio": 1.132,
+          "fillRatio": 0.505,
+          "xOriginOffset": 0.229,
+          "yOriginOffset": 0.792,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c7",
+          "bounds": {
+            "x": 359,
+            "y": 314,
+            "w": 3,
+            "h": 11
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.83,
+          "fillRatio": 0.515,
+          "xOriginOffset": -0.3,
+          "yOriginOffset": 0.34,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 8,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 311,
+        "totalAreaAfter": 144
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 363,
+          "right": 390,
+          "top": 300,
+          "bottom": 323,
+          "width": 28,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.113,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 371.26,
+          "y": 316.74
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 59,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 311,
+        "inkRatio": 0.4628,
+        "inkBounds": {
+          "x": 363,
+          "y": 300,
+          "w": 28,
+          "h": 23
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 1,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x373:y317",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col31",
+      "register": "high-normal",
+      "generatedMidi": 69,
+      "generatedPitchLabel": "A4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 372.94117647058823,
+        "y": 316.9646464646464
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2416828014276556,
+        "rawYNorm": 0.24494949494949492,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 380.23,
+          "y": 310.21
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        290,
+        291,
+        303,
+        304,
+        316,
+        317
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 373,
+            "y": 292,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.556,
+          "xOriginOffset": 0.08,
+          "yOriginOffset": 1.809,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 379,
+            "y": 292,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 0.457,
+          "yOriginOffset": 1.884,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 382,
+            "y": 292,
+            "w": 8,
+            "h": 16
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.208,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.948,
+          "yOriginOffset": 1.318,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 368,
+            "y": 296,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.556,
+          "xOriginOffset": -0.297,
+          "yOriginOffset": 1.507,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 373,
+            "y": 300,
+            "w": 7,
+            "h": 14
+          },
+          "widthRatio": 0.528,
+          "heightRatio": 1.057,
+          "fillRatio": 0.51,
+          "xOriginOffset": 0.231,
+          "yOriginOffset": 0.79,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 368,
+            "y": 307,
+            "w": 3,
+            "h": 8
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.604,
+          "fillRatio": 0.917,
+          "xOriginOffset": -0.297,
+          "yOriginOffset": 0.488,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 6,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 356,
+        "totalAreaAfter": 147
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 372,
+          "right": 399,
+          "top": 293,
+          "bottom": 317,
+          "width": 28,
+          "height": 25
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.113,
+          "height": 1.887
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 380.23,
+          "y": 310.21
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 59,
+          "height": 53
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 349,
+        "inkRatio": 0.4986,
+        "inkBounds": {
+          "x": 372,
+          "y": 293,
+          "w": 28,
+          "h": 25
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 1.5,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x382:y310",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col32",
+      "register": "high-normal",
+      "generatedMidi": 71,
+      "generatedPitchLabel": "B4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 381.9117647058823,
+        "y": 310.42929292929296
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2366322963771506,
+        "rawYNorm": 0.23989898989898992,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 389.2,
+          "y": 303.67
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        290,
+        291,
+        303,
+        304
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 386,
+            "y": 284,
+            "w": 3,
+            "h": 2
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.151,
+          "fillRatio": 0.833,
+          "xOriginOffset": 0.384,
+          "yOriginOffset": 1.957,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 382,
+            "y": 285,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.556,
+          "xOriginOffset": 0.082,
+          "yOriginOffset": 1.844,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 390,
+            "y": 285,
+            "w": 4,
+            "h": 5
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.377,
+          "fillRatio": 0.45,
+          "xOriginOffset": 0.724,
+          "yOriginOffset": 1.768,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 377,
+            "y": 289,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.371,
+          "yOriginOffset": 1.617,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 379,
+            "y": 292,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.22,
+          "yOriginOffset": 1.391,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 382,
+            "y": 293,
+            "w": 7,
+            "h": 15
+          },
+          "widthRatio": 0.528,
+          "heightRatio": 1.132,
+          "fillRatio": 0.505,
+          "xOriginOffset": 0.233,
+          "yOriginOffset": 0.787,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c6",
+          "bounds": {
+            "x": 390,
+            "y": 294,
+            "w": 8,
+            "h": 14
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.057,
+          "fillRatio": 0.482,
+          "xOriginOffset": 0.875,
+          "yOriginOffset": 0.749,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c7",
+          "bounds": {
+            "x": 377,
+            "y": 301,
+            "w": 3,
+            "h": 10
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.755,
+          "fillRatio": 0.533,
+          "xOriginOffset": -0.295,
+          "yOriginOffset": 0.372,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 8,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 311,
+        "totalAreaAfter": 144
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 381,
+          "right": 408,
+          "top": 287,
+          "bottom": 310,
+          "width": 28,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.113,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 389.2,
+          "y": 303.67
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 59,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 334,
+        "inkRatio": 0.497,
+        "inkBounds": {
+          "x": 381,
+          "y": 287,
+          "w": 28,
+          "h": 24
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 2,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x427:y330",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col36",
+      "register": "high-normal",
+      "generatedMidi": 65,
+      "generatedPitchLabel": "F4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 426.7647058823529,
+        "y": 330.03535353535347
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.25178381152866564,
+        "rawYNorm": 0.25505050505050497,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 434.05,
+          "y": 323.28
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        303,
+        304,
+        316,
+        317,
+        329,
+        330
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 433,
+            "y": 305,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 0.471,
+          "yOriginOffset": 1.889,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 435,
+            "y": 305,
+            "w": 9,
+            "h": 16
+          },
+          "widthRatio": 0.679,
+          "heightRatio": 1.208,
+          "fillRatio": 0.521,
+          "xOriginOffset": 0.923,
+          "yOriginOffset": 1.323,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 426,
+            "y": 314,
+            "w": 8,
+            "h": 13
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 0.981,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.206,
+          "yOriginOffset": 0.757,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 422,
+            "y": 320,
+            "w": 3,
+            "h": 8
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.604,
+          "fillRatio": 0.958,
+          "xOriginOffset": -0.284,
+          "yOriginOffset": 0.493,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 4,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 322,
+        "totalAreaAfter": 151
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 426,
+          "right": 452,
+          "top": 306,
+          "bottom": 330,
+          "width": 27,
+          "height": 25
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.887
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 434.05,
+          "y": 323.28
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 53
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 294,
+        "inkRatio": 0.4356,
+        "inkBounds": {
+          "x": 426,
+          "y": 306,
+          "w": 27,
+          "h": 25
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 2,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x418:y337",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col35",
+      "register": "high-normal",
+      "generatedMidi": 64,
+      "generatedPitchLabel": "E4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 417.7941176470588,
+        "y": 336.57070707070704
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2568343165791707,
+        "rawYNorm": 0.26010101010101006,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 425.08,
+          "y": 329.81
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        316,
+        317,
+        329,
+        330
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 413,
+            "y": 310,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.362,
+          "yOriginOffset": 2.005,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 416,
+            "y": 310,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.135,
+          "yOriginOffset": 2.005,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 426,
+            "y": 310,
+            "w": 9,
+            "h": 17
+          },
+          "widthRatio": 0.679,
+          "heightRatio": 1.283,
+          "fillRatio": 0.418,
+          "xOriginOffset": 0.921,
+          "yOriginOffset": 1.402,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 413,
+            "y": 320,
+            "w": 12,
+            "h": 14
+          },
+          "widthRatio": 0.906,
+          "heightRatio": 1.057,
+          "fillRatio": 0.446,
+          "xOriginOffset": 0.053,
+          "yOriginOffset": 0.76,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 3,
+        "componentCountAfterMask": 4,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 246,
+        "totalAreaAfter": 141
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 417,
+          "right": 443,
+          "top": 313,
+          "bottom": 336,
+          "width": 27,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 425.08,
+          "y": 329.81
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 273,
+        "inkRatio": 0.4213,
+        "inkBounds": {
+          "x": 417,
+          "y": 313,
+          "w": 27,
+          "h": 21
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 2.5,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x436:y324",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col36",
+      "register": "high-normal",
+      "generatedMidi": 67,
+      "generatedPitchLabel": "G4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 435.7352941176471,
+        "y": 323.5
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2467333064781607,
+        "rawYNorm": 0.25,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 443.02,
+          "y": 316.74
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        303,
+        304,
+        316,
+        317
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 433,
+            "y": 297,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.206,
+          "yOriginOffset": 2,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 435,
+            "y": 297,
+            "w": 4,
+            "h": 4
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.302,
+          "fillRatio": 0.438,
+          "xOriginOffset": 0.058,
+          "yOriginOffset": 1.887,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 440,
+            "y": 297,
+            "w": 3,
+            "h": 2
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.151,
+          "fillRatio": 0.833,
+          "xOriginOffset": 0.397,
+          "yOriginOffset": 1.962,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 444,
+            "y": 299,
+            "w": 8,
+            "h": 15
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.132,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.888,
+          "yOriginOffset": 1.321,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 431,
+            "y": 302,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.357,
+          "yOriginOffset": 1.623,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 433,
+            "y": 305,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.206,
+          "yOriginOffset": 1.396,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c6",
+          "bounds": {
+            "x": 435,
+            "y": 305,
+            "w": 8,
+            "h": 16
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.208,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.209,
+          "yOriginOffset": 0.83,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c7",
+          "bounds": {
+            "x": 431,
+            "y": 314,
+            "w": 3,
+            "h": 10
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.755,
+          "fillRatio": 0.533,
+          "xOriginOffset": -0.282,
+          "yOriginOffset": 0.377,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 8,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 279,
+        "totalAreaAfter": 155
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 435,
+          "right": 461,
+          "top": 300,
+          "bottom": 323,
+          "width": 27,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 443.02,
+          "y": 316.74
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 289,
+        "inkRatio": 0.446,
+        "inkBounds": {
+          "x": 435,
+          "y": 300,
+          "w": 27,
+          "h": 21
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 2.75,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x454:y310",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col38",
+      "register": "high-normal",
+      "generatedMidi": 71,
+      "generatedPitchLabel": "B4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 453.67647058823525,
+        "y": 310.42929292929296
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2366322963771506,
+        "rawYNorm": 0.23989898989898992,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 460.96,
+          "y": 303.67
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        290,
+        291,
+        303,
+        304
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 451,
+            "y": 284,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.202,
+          "yOriginOffset": 1.995,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 453,
+            "y": 284,
+            "w": 4,
+            "h": 4
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.302,
+          "fillRatio": 0.438,
+          "xOriginOffset": 0.062,
+          "yOriginOffset": 1.881,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 458,
+            "y": 284,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.667,
+          "xOriginOffset": 0.402,
+          "yOriginOffset": 1.919,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 462,
+            "y": 286,
+            "w": 4,
+            "h": 3
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.226,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.741,
+          "yOriginOffset": 1.768,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 451,
+            "y": 292,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.202,
+          "yOriginOffset": 1.391,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 453,
+            "y": 292,
+            "w": 8,
+            "h": 16
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.208,
+          "fillRatio": 0.484,
+          "xOriginOffset": 0.213,
+          "yOriginOffset": 0.825,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c6",
+          "bounds": {
+            "x": 462,
+            "y": 294,
+            "w": 8,
+            "h": 14
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.057,
+          "fillRatio": 0.464,
+          "xOriginOffset": 0.892,
+          "yOriginOffset": 0.749,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c7",
+          "bounds": {
+            "x": 449,
+            "y": 301,
+            "w": 3,
+            "h": 10
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.755,
+          "fillRatio": 0.533,
+          "xOriginOffset": -0.277,
+          "yOriginOffset": 0.372,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 8,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 275,
+        "totalAreaAfter": 151
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 453,
+          "right": 479,
+          "top": 287,
+          "bottom": 310,
+          "width": 27,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 460.96,
+          "y": 303.67
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 310,
+        "inkRatio": 0.4784,
+        "inkBounds": {
+          "x": 453,
+          "y": 287,
+          "w": 27,
+          "h": 24
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "measure": 2,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 2.75,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m2:x445:y317",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m2:col37",
+      "register": "high-normal",
+      "generatedMidi": 69,
+      "generatedPitchLabel": "A4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 444.7058823529412,
+        "y": 316.9646464646464
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.2416828014276556,
+        "rawYNorm": 0.24494949494949492,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "no-head-sized-component",
+      "localStaffSpacingPx": 13.249999999999986,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 451.99,
+          "y": 310.21
+        },
+        "widthRangePx": [
+          5.564999999999994,
+          13.912499999999985
+        ],
+        "heightRangePx": [
+          2.914999999999997,
+          9.27499999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        290,
+        291,
+        303,
+        304,
+        316,
+        317
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 444,
+            "y": 292,
+            "w": 4,
+            "h": 2
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.151,
+          "fillRatio": 0.75,
+          "xOriginOffset": 0.06,
+          "yOriginOffset": 1.846,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 451,
+            "y": 292,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 0.475,
+          "yOriginOffset": 1.884,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 453,
+            "y": 292,
+            "w": 8,
+            "h": 16
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.208,
+          "fillRatio": 0.484,
+          "xOriginOffset": 0.89,
+          "yOriginOffset": 1.318,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 440,
+            "y": 296,
+            "w": 3,
+            "h": 3
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.226,
+          "fillRatio": 0.667,
+          "xOriginOffset": -0.28,
+          "yOriginOffset": 1.507,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 444,
+            "y": 299,
+            "w": 8,
+            "h": 15
+          },
+          "widthRatio": 0.604,
+          "heightRatio": 1.132,
+          "fillRatio": 0.5,
+          "xOriginOffset": 0.211,
+          "yOriginOffset": 0.828,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 440,
+            "y": 307,
+            "w": 3,
+            "h": 8
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.604,
+          "fillRatio": 0.958,
+          "xOriginOffset": -0.28,
+          "yOriginOffset": 0.488,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 6,
+        "headSizedBefore": 0,
+        "headSizedAfter": 0,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 323,
+        "totalAreaAfter": 158
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 444,
+          "right": 470,
+          "top": 293,
+          "bottom": 317,
+          "width": 27,
+          "height": 25
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.887
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 451.99,
+          "y": 310.21
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 53
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 320,
+        "inkRatio": 0.4741,
+        "inkBounds": {
+          "x": 444,
+          "y": 293,
+          "w": 27,
+          "h": 25
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 8,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 1,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m8:x772:y699",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m8:col64",
+      "register": "high-normal",
+      "generatedMidi": 67,
+      "generatedPitchLabel": "G4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 771.6339869281046,
+        "y": 699.2828282828283
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.5371373468822012,
+        "rawYNorm": 0.5404040404040404,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": "component-outside-font-origin-range",
+      "localStaffSpacingPx": 13.25,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 778.92,
+          "y": 692.53
+        },
+        "widthRangePx": [
+          5.5649999999999995,
+          13.912500000000001
+        ],
+        "heightRangePx": [
+          2.915,
+          9.274999999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        679,
+        692
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 767,
+            "y": 680,
+            "w": 12,
+            "h": 17
+          },
+          "widthRatio": 0.906,
+          "heightRatio": 1.283,
+          "fillRatio": 0.412,
+          "xOriginOffset": 0.065,
+          "yOriginOffset": 0.852,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 787,
+            "y": 680,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 1.16,
+          "yOriginOffset": 1.455,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 780,
+            "y": 683,
+            "w": 6,
+            "h": 7
+          },
+          "widthRatio": 0.453,
+          "heightRatio": 0.528,
+          "fillRatio": 0.762,
+          "xOriginOffset": 0.82,
+          "yOriginOffset": 1.002,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 3,
+        "headSizedBefore": 0,
+        "headSizedAfter": 1,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 1,
+        "totalAreaBefore": 178,
+        "totalAreaAfter": 117
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": false,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 771,
+          "right": 797,
+          "top": 675,
+          "bottom": 699,
+          "width": 27,
+          "height": 25
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.887
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 778.92,
+          "y": 692.53
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 53
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 171,
+        "inkRatio": 0.2533,
+        "inkBounds": {
+          "x": 771,
+          "y": 675,
+          "w": 27,
+          "h": 22
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "filled-notehead-under-ledger-lines"
+    },
+    {
+      "fixture": "piano-rhythm-tuplets-vector",
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 8,
+      "voice": 1,
+      "clef": "treble",
+      "onsetQuarters": 1.5,
+      "noteCandidateId": "piano-rhythm-tuplets-vector:p1:m8:x781:y693",
+      "chordColumnId": "piano-rhythm-tuplets-vector:m8:col65",
+      "register": "high-normal",
+      "generatedMidi": 69,
+      "generatedPitchLabel": "A4",
+      "visualExpectedPitchLabel": null,
+      "fontName": "g_d5_f3",
+      "glyph": "",
+      "glyphId": "U+E0A4",
+      "glyphOrigin": {
+        "x": 780.6045751633987,
+        "y": 692.7474747474747
+      },
+      "glyphTransform": null,
+      "currentFallbackAnchor": {
+        "source": "glyph-metrics-fallback",
+        "yNorm": 0.5320868418316961,
+        "rawYNorm": 0.5353535353535354,
+        "rejectedReason": "no-head-sized-component",
+        "confidence": 0.45
+      },
+      "confirmRejectedReason": null,
+      "localStaffSpacingPx": 13.25,
+      "expectedLocalNoteheadRegion": {
+        "centerPx": {
+          "x": 787.89,
+          "y": 685.99
+        },
+        "widthRangePx": [
+          5.5649999999999995,
+          13.912500000000001
+        ],
+        "heightRangePx": [
+          2.915,
+          9.274999999999999
+        ]
+      },
+      "ledgerRows": [],
+      "suppressedStaffRows": [
+        666,
+        679,
+        692
+      ],
+      "vectorComponentsAfterMask": [
+        {
+          "id": "c0",
+          "bounds": {
+            "x": 778,
+            "y": 667,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.197,
+          "yOriginOffset": 1.943,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c1",
+          "bounds": {
+            "x": 786,
+            "y": 667,
+            "w": 2,
+            "h": 2
+          },
+          "widthRatio": 0.151,
+          "heightRatio": 0.151,
+          "fillRatio": 0.75,
+          "xOriginOffset": 0.445,
+          "yOriginOffset": 1.905,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c2",
+          "bounds": {
+            "x": 789,
+            "y": 668,
+            "w": 4,
+            "h": 4
+          },
+          "widthRatio": 0.302,
+          "heightRatio": 0.302,
+          "fillRatio": 0.438,
+          "xOriginOffset": 0.747,
+          "yOriginOffset": 1.755,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c3",
+          "bounds": {
+            "x": 776,
+            "y": 680,
+            "w": 3,
+            "h": 10
+          },
+          "widthRatio": 0.226,
+          "heightRatio": 0.755,
+          "fillRatio": 0.7,
+          "xOriginOffset": -0.272,
+          "yOriginOffset": 0.622,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c4",
+          "bounds": {
+            "x": 787,
+            "y": 680,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": 0.483,
+          "yOriginOffset": 0.962,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c5",
+          "bounds": {
+            "x": 780,
+            "y": 683,
+            "w": 6,
+            "h": 7
+          },
+          "widthRatio": 0.453,
+          "heightRatio": 0.528,
+          "fillRatio": 0.762,
+          "xOriginOffset": 0.143,
+          "yOriginOffset": 0.509,
+          "likelyHeadFragment": true,
+          "looksStem": false,
+          "looksLedger": false
+        },
+        {
+          "id": "c6",
+          "bounds": {
+            "x": 776,
+            "y": 693,
+            "w": 1,
+            "h": 1
+          },
+          "widthRatio": 0.075,
+          "heightRatio": 0.075,
+          "fillRatio": 1,
+          "xOriginOffset": -0.348,
+          "yOriginOffset": -0.019,
+          "likelyHeadFragment": false,
+          "looksStem": false,
+          "looksLedger": false
+        }
+      ],
+      "connectivity": {
+        "componentCountBefore": 1,
+        "componentCountAfterMask": 7,
+        "headSizedBefore": 0,
+        "headSizedAfter": 1,
+        "likelyHeadFragmentsBefore": 0,
+        "likelyHeadFragmentsAfter": 2,
+        "totalAreaBefore": 171,
+        "totalAreaAfter": 66
+      },
+      "stemCandidate": null,
+      "beamCandidate": null,
+      "accidentalCandidatesNearby": [],
+      "visualSourceHints": {
+        "filledHeadLikely": true,
+        "openHeadLikely": false,
+        "stackedChordHeadLikely": true,
+        "compositeNoteStemLikely": false
+      },
+      "proposedRasterCrop": {
+        "analysisCropBoundsPx": {
+          "left": 780,
+          "right": 806,
+          "top": 669,
+          "bottom": 692,
+          "width": 27,
+          "height": 24
+        },
+        "cropExtentsStaffSpaces": {
+          "left": 0.55,
+          "right": 1.35,
+          "above": 1.25,
+          "below": 0.45,
+          "width": 2.038,
+          "height": 1.811
+        },
+        "expectedNoteheadCenterPx": {
+          "x": 787.89,
+          "y": 685.99
+        },
+        "analysisPxPerStaffSpace": 13.25,
+        "proposedLocalScaleFactor": 2.113,
+        "proposedRasterCropPx": {
+          "width": 57,
+          "height": 51
+        },
+        "proposedDpiApprox": 248.6,
+        "analysisDpiApprox": 117.6,
+        "maxCropSideClampPx": 220,
+        "targetPxPerStaffSpace": 28
+      },
+      "cropInkAtAnalysisResolution": {
+        "inkPixels": 109,
+        "inkRatio": 0.1682,
+        "inkBounds": {
+          "x": 780,
+          "y": 669,
+          "w": 27,
+          "h": 24
+        },
+        "recoverableLikely": true
+      },
+      "rasterCaseGroup": "stacked-chord-heads"
+    }
+  ],
+  "pageCropBudgets": {
+    "1": {
+      "candidates": 12,
+      "recoverable": 12,
+      "totalCropPixelsAtTarget": 35764
+    }
+  }
+}

@@ -1,0 +1,3176 @@
+{
+  "noteCount": 264,
+  "measureCount": 9,
+  "localRasterRecovery": {
+    "pages": [
+      {
+        "page": 1,
+        "candidates": 22,
+        "attempts": 22,
+        "accepted": 3,
+        "rejected": 19,
+        "metricFallbacks": 19,
+        "cleanupCount": 22,
+        "candidateLimitReached": false,
+        "segmentationMs": 24.81508800000006,
+        "pageCache": {
+          "key": "url:/Users/ryland/Documents/scoreflow/benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf|page:1|scale:2.113|rotation:0",
+          "hit": false,
+          "miss": true,
+          "rasterScale": 2.1136012364760433,
+          "targetWidth": 2114,
+          "renderMs": 32.40824999999995,
+          "sharedCropHits": 21
+        },
+        "candidateDiagnostics": [
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 48,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 43,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 36,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 65,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 1,
+            "midi": 60,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 69,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 65,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 64,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 45,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 71,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 38,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 67,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 64,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 72,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 69,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 47,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 40,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 74,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 71,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 72,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 66,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 48,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 41,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 71,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 64,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 69,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 2,
+            "midi": 66,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": "p1:m2:x284.73:y310.429",
+            "measureNumber": 2,
+            "midi": 62,
+            "source": "local-raster-filled-notehead",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": true,
+              "skipped": false,
+              "cropBounds": {
+                "source": {
+                  "left": 276.11789215686275,
+                  "right": 302.61789215686275,
+                  "top": 287.10929292929296,
+                  "bottom": 309.63429292929294,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "raster": {
+                  "left": 583,
+                  "right": 640,
+                  "top": 606,
+                  "bottom": 655,
+                  "width": 57,
+                  "height": 49,
+                  "corners": [
+                    {
+                      "x": 583.7132240196079,
+                      "y": 606.8345565391161
+                    },
+                    {
+                      "x": 639.7342240196078,
+                      "y": 606.8345565391161
+                    },
+                    {
+                      "x": 639.7342240196078,
+                      "y": 654.443424390739
+                    },
+                    {
+                      "x": 583.7132240196079,
+                      "y": 654.443424390739
+                    }
+                  ]
+                }
+              },
+              "rasterScale": 2.114,
+              "processingMs": 2.058667000000014,
+              "confidence": 0.75962414819938,
+              "rejected": false,
+              "opticalCenter": {
+                "x": 283.43592445780394,
+                "y": 303.9640825677458
+              },
+              "selected": {
+                "widthRatio": 0.9283108983945042,
+                "heightRatio": 0.5712682451658487,
+                "areaRatio": 0.402835081669603,
+                "density": 0.7596153846153846,
+                "originDistance": 0.10016376373118424,
+                "maskedLedgerPixels": 150,
+                "maskedStemPixels": 151,
+                "componentCount": 1
+              },
+              "finalAnchorSource": "local-raster-filled-notehead",
+              "request": {
+                "id": "p1:m2:x284.73:y310.429",
+                "page": 1,
+                "pageSource": "vector-pdf",
+                "candidateKind": "notehead",
+                "instrumentId": "piano",
+                "glyphOrigin": {
+                  "x": 284.7303921568627,
+                  "y": 310.42929292929296
+                },
+                "glyphIdentity": 57508,
+                "expectedCenter": {
+                  "x": 292.01789215686273,
+                  "y": 303.67179292929296
+                },
+                "sourceBounds": {
+                  "left": 276.11789215686275,
+                  "right": 302.61789215686275,
+                  "top": 287.10929292929296,
+                  "bottom": 309.63429292929294,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "sourceWidth": 1000,
+                "sourceHeight": 1294,
+                "gapPx": 13.25,
+                "requestedScale": 2.1132075471698113,
+                "exteriorDistance": 0.5035315418334312,
+                "ledgerDirection": "below",
+                "staffLinesPx": [
+                  244,
+                  257.25,
+                  270.5,
+                  283.75,
+                  297
+                ],
+                "ledgerRowsPx": [],
+                "suppressedStaffRowsPx": [
+                  284,
+                  297
+                ],
+                "chordColumnId": null,
+                "ordinaryVectorAnchorFailed": true,
+                "ledgerMaskedVectorAnchorFailed": true,
+                "rejectedReason": "no-head-sized-component"
+              }
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 50,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 45,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 38,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 66,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": "p1:m3:x346.029:y310.429",
+            "measureNumber": 3,
+            "midi": 62,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": true,
+              "skipped": false,
+              "cropBounds": {
+                "source": {
+                  "left": 337.41691176470596,
+                  "right": 363.91691176470596,
+                  "top": 287.10929292929296,
+                  "bottom": 309.63429292929294,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "raster": {
+                  "left": 713,
+                  "right": 770,
+                  "top": 606,
+                  "bottom": 655,
+                  "width": 57,
+                  "height": 49,
+                  "corners": [
+                    {
+                      "x": 713.2993514705884,
+                      "y": 606.8345565391161
+                    },
+                    {
+                      "x": 769.3203514705884,
+                      "y": 606.8345565391161
+                    },
+                    {
+                      "x": 769.3203514705884,
+                      "y": 654.443424390739
+                    },
+                    {
+                      "x": 713.2993514705884,
+                      "y": 654.443424390739
+                    }
+                  ]
+                }
+              },
+              "rasterScale": 2.114,
+              "processingMs": 1.4484580000000733,
+              "confidence": 0,
+              "rejected": true,
+              "rejectionReason": "no-confident-filled-body",
+              "segmentation": {
+                "accepted": false,
+                "reason": "no-confident-filled-body",
+                "confidence": 0,
+                "processingMs": 1.4484580000000733,
+                "maskedLedgerPixels": 99,
+                "maskedStemPixels": 117,
+                "componentCount": 0,
+                "rejectedComponents": [
+                  {
+                    "bounds": {
+                      "left": 0,
+                      "right": 56,
+                      "top": 0,
+                      "bottom": 44
+                    },
+                    "widthRatio": 2.035143123403336,
+                    "heightRatio": 1.6066919395289496,
+                    "areaRatio": 1.5565241605018523,
+                    "density": 0.4760233918128655,
+                    "originDistance": 0.6633093131621067,
+                    "originOffset": {
+                      "x": -0.24702008378498505,
+                      "y": -0.6155975334051013
+                    },
+                    "glyphOriginOffset": {
+                      "x": 0.3030317943193821,
+                      "y": -0.6155975334051013
+                    },
+                    "confidence": 0.09422034316807434
+                  }
+                ]
+              },
+              "finalAnchorSource": "glyph-metrics-fallback",
+              "request": {
+                "id": "p1:m3:x346.029:y310.429",
+                "page": 1,
+                "pageSource": "vector-pdf",
+                "candidateKind": "notehead",
+                "instrumentId": "piano",
+                "glyphOrigin": {
+                  "x": 346.0294117647059,
+                  "y": 310.42929292929296
+                },
+                "glyphIdentity": 57508,
+                "expectedCenter": {
+                  "x": 353.31691176470594,
+                  "y": 303.67179292929296
+                },
+                "sourceBounds": {
+                  "left": 337.41691176470596,
+                  "right": 363.91691176470596,
+                  "top": 287.10929292929296,
+                  "bottom": 309.63429292929294,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "sourceWidth": 1000,
+                "sourceHeight": 1294,
+                "gapPx": 13.25,
+                "requestedScale": 2.1132075471698113,
+                "exteriorDistance": 0.5035315418334312,
+                "ledgerDirection": "below",
+                "staffLinesPx": [
+                  244,
+                  257.25,
+                  270.5,
+                  283.75,
+                  297
+                ],
+                "ledgerRowsPx": [],
+                "suppressedStaffRowsPx": [
+                  284,
+                  297
+                ],
+                "chordColumnId": null,
+                "ordinaryVectorAnchorFailed": true,
+                "ledgerMaskedVectorAnchorFailed": true,
+                "rejectedReason": "no-head-sized-component"
+              }
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 72,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 65,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 47,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 40,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 73,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 75,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 72,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 68,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 49,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 42,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 76,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 73,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 75,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 72,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 50,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 43,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 73,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 66,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 72,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 3,
+            "midi": 65,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 47,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 40,
+            "source": "ledger-masked-ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ledger-masked-ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 72,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 68,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 65,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 73,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 49,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": "p1:m4:x581.258:y444.404",
+            "measureNumber": 4,
+            "midi": 42,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": true,
+              "skipped": false,
+              "cropBounds": {
+                "source": {
+                  "left": 572.6456699346406,
+                  "right": 599.1456699346406,
+                  "top": 421.0840404040404,
+                  "bottom": 443.6090404040404,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "raster": {
+                  "left": 1210,
+                  "right": 1267,
+                  "top": 890,
+                  "bottom": 938,
+                  "width": 57,
+                  "height": 48,
+                  "corners": [
+                    {
+                      "x": 1210.5729462418303,
+                      "y": 890.003748458308
+                    },
+                    {
+                      "x": 1266.5939462418305,
+                      "y": 890.003748458308
+                    },
+                    {
+                      "x": 1266.5939462418305,
+                      "y": 937.6126163099308
+                    },
+                    {
+                      "x": 1210.5729462418303,
+                      "y": 937.6126163099308
+                    }
+                  ]
+                }
+              },
+              "rasterScale": 2.114,
+              "processingMs": 1.0339579999999842,
+              "confidence": 0,
+              "rejected": true,
+              "rejectionReason": "no-confident-filled-body",
+              "segmentation": {
+                "accepted": false,
+                "reason": "no-confident-filled-body",
+                "confidence": 0,
+                "processingMs": 1.0339579999999842,
+                "maskedLedgerPixels": 123,
+                "maskedStemPixels": 98,
+                "componentCount": 0,
+                "rejectedComponents": [
+                  {
+                    "bounds": {
+                      "left": 4,
+                      "right": 49,
+                      "top": 2,
+                      "bottom": 43
+                    },
+                    "widthRatio": 1.6423962048518168,
+                    "heightRatio": 1.4995791435603545,
+                    "areaRatio": 1.0466063356036226,
+                    "density": 0.4249482401656315,
+                    "originDistance": 0.38231191504607553,
+                    "originOffset": {
+                      "x": -0.1937568917416227,
+                      "y": -0.3295764968695777
+                    },
+                    "glyphOriginOffset": {
+                      "x": 0.35629498636274504,
+                      "y": -0.3295764968695777
+                    },
+                    "confidence": 0.16984183066622857
+                  }
+                ]
+              },
+              "finalAnchorSource": "glyph-metrics-fallback",
+              "request": {
+                "id": "p1:m4:x581.258:y444.404",
+                "page": 1,
+                "pageSource": "vector-pdf",
+                "candidateKind": "notehead",
+                "instrumentId": "piano",
+                "glyphOrigin": {
+                  "x": 581.2581699346406,
+                  "y": 444.4040404040404
+                },
+                "glyphIdentity": 57508,
+                "expectedCenter": {
+                  "x": 588.5456699346406,
+                  "y": 437.6465404040404
+                },
+                "sourceBounds": {
+                  "left": 572.6456699346406,
+                  "right": 599.1456699346406,
+                  "top": 421.0840404040404,
+                  "bottom": 443.6090404040404,
+                  "width": 26.5,
+                  "height": 22.524999999999977
+                },
+                "sourceWidth": 1000,
+                "sourceHeight": 1294,
+                "gapPx": 13.249999999999986,
+                "requestedScale": 2.1132075471698135,
+                "exteriorDistance": 0.5016256908709759,
+                "ledgerDirection": "below",
+                "staffLinesPx": [
+                  378.00000000000006,
+                  391.25,
+                  404.5,
+                  417.75000000000006,
+                  431
+                ],
+                "ledgerRowsPx": [],
+                "suppressedStaffRowsPx": [
+                  418,
+                  431
+                ],
+                "chordColumnId": null,
+                "ordinaryVectorAnchorFailed": true,
+                "ledgerMaskedVectorAnchorFailed": true,
+                "rejectedReason": "no-head-sized-component"
+              }
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 75,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 74,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 68,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 73,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 70,
+            "source": "glyph-metrics-fallback",
+            "rejectedReason": "no-head-sized-component",
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "outside-configured-ledger-region",
+              "finalAnchorSource": "glyph-metrics-fallback"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 51,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 44,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          },
+          {
+            "candidateId": null,
+            "measureNumber": 4,
+            "midi": 78,
+            "source": "ink-notehead-geometry",
+            "rejectedReason": null,
+            "rasterFallback": {
+              "invoked": false,
+              "skipped": true,
+              "skipReason": "reliable-vector-anchor",
+              "finalAnchorSource": "ink-notehead-geometry"
+            }
+          }
+        ],
+        "attemptDiagnostics": [
+          {
+            "candidateId": "p1:m2:x284.73:y310.429",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 276.11789215686275,
+                "right": 302.61789215686275,
+                "top": 287.10929292929296,
+                "bottom": 309.63429292929294,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 583,
+                "right": 640,
+                "top": 606,
+                "bottom": 655,
+                "width": 57,
+                "height": 49,
+                "corners": [
+                  {
+                    "x": 583.7132240196079,
+                    "y": 606.8345565391161
+                  },
+                  {
+                    "x": 639.7342240196078,
+                    "y": 606.8345565391161
+                  },
+                  {
+                    "x": 639.7342240196078,
+                    "y": 654.443424390739
+                  },
+                  {
+                    "x": 583.7132240196079,
+                    "y": 654.443424390739
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 2.058667000000014,
+            "confidence": 0.75962414819938,
+            "rejected": false,
+            "opticalCenter": {
+              "x": 283.43592445780394,
+              "y": 303.9640825677458
+            },
+            "selected": {
+              "widthRatio": 0.9283108983945042,
+              "heightRatio": 0.5712682451658487,
+              "areaRatio": 0.402835081669603,
+              "density": 0.7596153846153846,
+              "originDistance": 0.10016376373118424,
+              "maskedLedgerPixels": 150,
+              "maskedStemPixels": 151,
+              "componentCount": 1
+            },
+            "finalAnchorSource": "local-raster-filled-notehead"
+          },
+          {
+            "candidateId": "p1:m3:x346.029:y310.429",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 337.41691176470596,
+                "right": 363.91691176470596,
+                "top": 287.10929292929296,
+                "bottom": 309.63429292929294,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 713,
+                "right": 770,
+                "top": 606,
+                "bottom": 655,
+                "width": 57,
+                "height": 49,
+                "corners": [
+                  {
+                    "x": 713.2993514705884,
+                    "y": 606.8345565391161
+                  },
+                  {
+                    "x": 769.3203514705884,
+                    "y": 606.8345565391161
+                  },
+                  {
+                    "x": 769.3203514705884,
+                    "y": 654.443424390739
+                  },
+                  {
+                    "x": 713.2993514705884,
+                    "y": 654.443424390739
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.4484580000000733,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.4484580000000733,
+              "maskedLedgerPixels": 99,
+              "maskedStemPixels": 117,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 44
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.6066919395289496,
+                  "areaRatio": 1.5565241605018523,
+                  "density": 0.4760233918128655,
+                  "originDistance": 0.6633093131621067,
+                  "originOffset": {
+                    "x": -0.24702008378498505,
+                    "y": -0.6155975334051013
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.3030317943193821,
+                    "y": -0.6155975334051013
+                  },
+                  "confidence": 0.09422034316807434
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m4:x581.258:y444.404",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 572.6456699346406,
+                "right": 599.1456699346406,
+                "top": 421.0840404040404,
+                "bottom": 443.6090404040404,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1210,
+                "right": 1267,
+                "top": 890,
+                "bottom": 938,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1210.5729462418303,
+                    "y": 890.003748458308
+                  },
+                  {
+                    "x": 1266.5939462418305,
+                    "y": 890.003748458308
+                  },
+                  {
+                    "x": 1266.5939462418305,
+                    "y": 937.6126163099308
+                  },
+                  {
+                    "x": 1210.5729462418303,
+                    "y": 937.6126163099308
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.0339579999999842,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.0339579999999842,
+              "maskedLedgerPixels": 123,
+              "maskedStemPixels": 98,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 4,
+                    "right": 49,
+                    "top": 2,
+                    "bottom": 43
+                  },
+                  "widthRatio": 1.6423962048518168,
+                  "heightRatio": 1.4995791435603545,
+                  "areaRatio": 1.0466063356036226,
+                  "density": 0.4249482401656315,
+                  "originDistance": 0.38231191504607553,
+                  "originOffset": {
+                    "x": -0.1937568917416227,
+                    "y": -0.3295764968695777
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.35629498636274504,
+                    "y": -0.3295764968695777
+                  },
+                  "confidence": 0.16984183066622857
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m7:x384.346:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 375.7339052287582,
+                "right": 402.2339052287582,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 794,
+                "right": 851,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 794.3014756535948,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 850.3224756535948,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 850.3224756535948,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 794.3014756535948,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.2784169999999904,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.2784169999999904,
+              "maskedLedgerPixels": 101,
+              "maskedStemPixels": 101,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 15,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.178240755654563,
+                  "areaRatio": 1.3512822359803138,
+                  "density": 0.5635300372142478,
+                  "originDistance": 0.1655440852302702,
+                  "originOffset": {
+                    "x": -0.14230912408682642,
+                    "y": -0.08457515803335634
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.40774275401754073,
+                    "y": -0.08457515803335634
+                  },
+                  "confidence": 0.3171691479242267
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m7:x400.245:y679.677",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 391.6325980392157,
+                "right": 418.1325980392157,
+                "top": 656.3567676767676,
+                "bottom": 678.8817676767676,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 827,
+                "right": 884,
+                "top": 1387,
+                "bottom": 1435,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 827.911312254902,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 883.932312254902,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 883.932312254902,
+                    "y": 1434.885343582658
+                  },
+                  {
+                    "x": 827.911312254902,
+                    "y": 1434.885343582658
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.0567080000000715,
+            "confidence": 0.5436282104242404,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.5436282104242404,
+              "processingMs": 1.0567080000000715,
+              "componentCount": 2,
+              "selectedComponent": {
+                "widthRatio": 0.9997194290402354,
+                "heightRatio": 0.6783810411344454,
+                "areaRatio": 0.5162917977094595,
+                "density": 0.7612781954887218,
+                "originDistance": 0.1938394188367318
+              },
+              "maskedLedgerPixels": 146,
+              "maskedStemPixels": 234
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m7:x417.794:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 409.18161764705883,
+                "right": 435.68161764705883,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 865,
+                "right": 922,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 865.0099397058824,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 921.0309397058824,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 921.0309397058824,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 865.0099397058824,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.3260419999999158,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.3260419999999158,
+              "maskedLedgerPixels": 43,
+              "maskedStemPixels": 52,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 3,
+                    "right": 28,
+                    "top": 1,
+                    "bottom": 16
+                  },
+                  "widthRatio": 0.9283108983945042,
+                  "heightRatio": 0.5712682451658487,
+                  "areaRatio": 0.4015602871073574,
+                  "density": 0.7572115384615384,
+                  "originDistance": 0.9517069963727262,
+                  "originOffset": {
+                    "x": -0.637020767630374,
+                    "y": -0.9477249702310317
+                  },
+                  "glyphOriginOffset": {
+                    "x": -0.0869688895260027,
+                    "y": -0.9477249702310317
+                  },
+                  "confidence": 0.5251982520069465
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 15,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.178240755654563,
+                  "areaRatio": 1.302840042614982,
+                  "density": 0.5433280170122275,
+                  "originDistance": 0.08969214813612579,
+                  "originOffset": {
+                    "x": -0.053564628111325334,
+                    "y": -0.07194103177303025
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.4964872499930459,
+                    "y": -0.07194103177303025
+                  },
+                  "confidence": 0.33437483517710853
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 9,
+                    "top": 23,
+                    "bottom": 23
+                  },
+                  "widthRatio": 0.35704265322865547,
+                  "heightRatio": 0.035704265322865546,
+                  "areaRatio": 0.012747945622455792,
+                  "density": 1,
+                  "originDistance": 0.652974237827501,
+                  "originOffset": {
+                    "x": -1.0397988845345096,
+                    "y": -0.43188334647115517
+                  },
+                  "glyphOriginOffset": {
+                    "x": -0.48974700643013835,
+                    "y": -0.43188334647115517
+                  },
+                  "confidence": 0.292099993794731
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x565.752:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 557.1391339869282,
+                "right": 583.6391339869282,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1177,
+                "right": 1234,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1177.792129248366,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1233.8131292483663,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1233.8131292483663,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1177.792129248366,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.145667000000003,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.145667000000003,
+              "maskedLedgerPixels": 84,
+              "maskedStemPixels": 132,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 52,
+                    "right": 56,
+                    "top": 2,
+                    "bottom": 3
+                  },
+                  "widthRatio": 0.17852132661432774,
+                  "heightRatio": 0.07140853064573109,
+                  "areaRatio": 0.012747945622455792,
+                  "density": 1,
+                  "originDistance": 1.3579276853968278,
+                  "originOffset": {
+                    "x": 0.6996347459897179,
+                    "y": -1.163820785589899
+                  },
+                  "glyphOriginOffset": {
+                    "x": 1.2496866240940931,
+                    "y": -1.163820785589899
+                  },
+                  "confidence": 0.25717071941263137
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 2,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.6423962048518153,
+                  "areaRatio": 1.6674312874172175,
+                  "density": 0.4988558352402746,
+                  "originDistance": 0.26269212755065,
+                  "originOffset": {
+                    "x": -0.19886800429120133,
+                    "y": -0.17163528409485532
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.35118387381317395,
+                    "y": -0.17163528409485532
+                  },
+                  "confidence": 0.24985875170190333
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x581.258:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 572.6456699346406,
+                "right": 599.1456699346406,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1210,
+                "right": 1267,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1210.5729462418303,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1266.5939462418305,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1266.5939462418305,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1210.5729462418303,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.4394999999999527,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.4394999999999527,
+              "maskedLedgerPixels": 145,
+              "maskedStemPixels": 113,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 4,
+                    "right": 11,
+                    "top": 16,
+                    "bottom": 24
+                  },
+                  "widthRatio": 0.28563412258292437,
+                  "heightRatio": 0.32133838790578995,
+                  "areaRatio": 0.07903726285922591,
+                  "density": 0.8611111111111112,
+                  "originDistance": 0.6742729145977142,
+                  "originOffset": {
+                    "x": -0.9700640807181947,
+                    "y": -0.5274786374968919
+                  },
+                  "glyphOriginOffset": {
+                    "x": -0.42001220261382755,
+                    "y": -0.5274786374968919
+                  },
+                  "confidence": 0.3217202111031375
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.7138047354975463,
+                  "areaRatio": 1.9211154053040878,
+                  "density": 0.5508040935672515,
+                  "originDistance": 0.35769748505210647,
+                  "originOffset": {
+                    "x": -0.07556932581766847,
+                    "y": -0.34962375177905886
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.47448255228669867,
+                    "y": -0.34962375177905886
+                  },
+                  "confidence": 0.24163095216486744
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x583.693:y679.677",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 575.0803104575165,
+                "right": 601.5803104575165,
+                "top": 656.3567676767676,
+                "bottom": 678.8817676767676,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1215,
+                "right": 1272,
+                "top": 1387,
+                "bottom": 1435,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1215.71977630719,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1271.74077630719,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1271.74077630719,
+                    "y": 1434.885343582658
+                  },
+                  {
+                    "x": 1215.71977630719,
+                    "y": 1434.885343582658
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.2384589999999207,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.2384589999999207,
+              "maskedLedgerPixels": 104,
+              "maskedStemPixels": 153,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.7138047354975463,
+                  "areaRatio": 1.842078142444862,
+                  "density": 0.5281432748538012,
+                  "originDistance": 0.29874235340215255,
+                  "originOffset": {
+                    "x": -0.13306408328360805,
+                    "y": -0.26747138810749393
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.4169877948207591,
+                    "y": -0.26747138810749393
+                  },
+                  "confidence": 0.2515243902021257
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x599.199:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 590.5868464052288,
+                "right": 617.0868464052288,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1248,
+                "right": 1305,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1248.5005933006537,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1304.5215933006536,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1304.5215933006536,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1248.5005933006537,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.2548750000000837,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.2548750000000837,
+              "maskedLedgerPixels": 35,
+              "maskedStemPixels": 163,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 44,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 2
+                  },
+                  "widthRatio": 0.4641554491972521,
+                  "heightRatio": 0.10711279596859664,
+                  "areaRatio": 0.04716739880308643,
+                  "density": 0.9487179487179487,
+                  "originDistance": 1.3488419548832553,
+                  "originOffset": {
+                    "x": 0.5788065232528757,
+                    "y": -1.2183421637180583
+                  },
+                  "glyphOriginOffset": {
+                    "x": 1.128858401357243,
+                    "y": -1.2183421637180583
+                  },
+                  "confidence": 0.2765316618267361
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.7138047354975463,
+                  "areaRatio": 1.9134666379306144,
+                  "density": 0.5486111111111112,
+                  "originDistance": 0.39467408035466606,
+                  "originOffset": {
+                    "x": -0.3514504077168903,
+                    "y": -0.3410646356099289
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.19860147038747686,
+                    "y": -0.3410646356099289
+                  },
+                  "confidence": 0.22722288662787582
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x599.592:y673.141",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 590.9790032679739,
+                "right": 617.4790032679739,
+                "top": 649.821414141414,
+                "bottom": 672.346414141414,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1249,
+                "right": 1306,
+                "top": 1373,
+                "bottom": 1422,
+                "width": 57,
+                "height": 49,
+                "corners": [
+                  {
+                    "x": 1249.329612908497,
+                    "y": 1373.4633444179037
+                  },
+                  {
+                    "x": 1305.3506129084967,
+                    "y": 1373.4633444179037
+                  },
+                  {
+                    "x": 1305.3506129084967,
+                    "y": 1421.0722122695265
+                  },
+                  {
+                    "x": 1249.329612908497,
+                    "y": 1421.0722122695265
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.8335419999998521,
+            "confidence": 0.5008921147954165,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.5008921147954165,
+              "processingMs": 0.8335419999998521,
+              "componentCount": 1,
+              "selectedComponent": {
+                "widthRatio": 0.5712682451658487,
+                "heightRatio": 0.5712682451658487,
+                "areaRatio": 0.26388247438483486,
+                "density": 0.80859375,
+                "originDistance": 0.7158766719402587
+              },
+              "maskedLedgerPixels": 84,
+              "maskedStemPixels": 214
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x617.141:y679.677",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 608.528022875817,
+                "right": 635.028022875817,
+                "top": 656.3567676767676,
+                "bottom": 678.8817676767676,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1286,
+                "right": 1343,
+                "top": 1387,
+                "bottom": 1435,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1286.428240359477,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1342.449240359477,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1342.449240359477,
+                    "y": 1434.885343582658
+                  },
+                  {
+                    "x": 1286.428240359477,
+                    "y": 1434.885343582658
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.2401669999999285,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.2401669999999285,
+              "maskedLedgerPixels": 135,
+              "maskedStemPixels": 77,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 4,
+                    "right": 27,
+                    "top": 1,
+                    "bottom": 16
+                  },
+                  "widthRatio": 0.8569023677487732,
+                  "heightRatio": 0.5712682451658487,
+                  "areaRatio": 0.3849879577981649,
+                  "density": 0.7864583333333334,
+                  "originDistance": 0.9568502689378293,
+                  "originOffset": {
+                    "x": -0.6473270540333526,
+                    "y": -0.9518928391969257
+                  },
+                  "glyphOriginOffset": {
+                    "x": -0.09727517592896927,
+                    "y": -0.9518928391969257
+                  },
+                  "confidence": 0.5880936923042088
+                },
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 15,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.178240755654563,
+                  "areaRatio": 1.3015652480527364,
+                  "density": 0.542796384901648,
+                  "originDistance": 0.09504681007606135,
+                  "originOffset": {
+                    "x": -0.06492853894936383,
+                    "y": -0.06941311789233949
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.48512333915501954,
+                    "y": -0.06941311789233949
+                  },
+                  "confidence": 0.332181340823442
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x635.082:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 626.4691993464053,
+                "right": 652.9691993464053,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1324,
+                "right": 1381,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1324.3558874183009,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1380.3768874183008,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1380.3768874183008,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1324.3558874183009,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.4101670000000013,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.4101670000000013,
+              "maskedLedgerPixels": 0,
+              "maskedStemPixels": 91,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 1,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.6781004701746807,
+                  "areaRatio": 1.8917951303724394,
+                  "density": 0.5539380365808138,
+                  "originDistance": 0.3932621189423664,
+                  "originOffset": {
+                    "x": -0.24731303604727153,
+                    "y": -0.30576356289806816
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.3027388420570956,
+                    "y": -0.30576356289806816
+                  },
+                  "confidence": 0.230394655471155
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x653.023:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 644.4103758169935,
+                "right": 670.9103758169935,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1362,
+                "right": 1419,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1362.2835344771242,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1418.304534477124,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1418.304534477124,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1362.2835344771242,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.9572920000000522,
+            "confidence": 0.22076490555979658,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.22076490555979658,
+              "processingMs": 0.9572920000000522,
+              "componentCount": 1,
+              "selectedComponent": {
+                "widthRatio": 0.5355639798429832,
+                "heightRatio": 0.6069725104887143,
+                "areaRatio": 0.14532658009599603,
+                "density": 0.4470588235294118,
+                "originDistance": 0.678151123768683
+              },
+              "maskedLedgerPixels": 87,
+              "maskedStemPixels": 144
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m8:x675.049:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 666.4365196078431,
+                "right": 692.9365196078431,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1408,
+                "right": 1465,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1408.8468024509802,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1464.8678024509804,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1464.8678024509804,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1408.8468024509802,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.3529999999998381,
+            "confidence": 0.43947720969503135,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.43947720969503135,
+              "processingMs": 0.3529999999998381,
+              "componentCount": 1,
+              "selectedComponent": {
+                "widthRatio": 1.0711279596859664,
+                "heightRatio": 0.7140853064573109,
+                "areaRatio": 0.49844467383802143,
+                "density": 0.6516666666666666,
+                "originDistance": 0.17621702127776523
+              },
+              "maskedLedgerPixels": 0,
+              "maskedStemPixels": 144
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m9:x744.722:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 736.1097222222222,
+                "right": 762.6097222222222,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1556,
+                "right": 1613,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1556.135952777778,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1612.1569527777779,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1612.1569527777779,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1556.135952777778,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.8305420000001504,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 0.8305420000001504,
+              "maskedLedgerPixels": 41,
+              "maskedStemPixels": 111,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 56,
+                    "top": 15,
+                    "bottom": 47
+                  },
+                  "widthRatio": 2.035143123403336,
+                  "heightRatio": 1.178240755654563,
+                  "areaRatio": 1.2696953839965968,
+                  "density": 0.529505582137161,
+                  "originDistance": 0.15001326301457196,
+                  "originOffset": {
+                    "x": -0.11867576448910233,
+                    "y": -0.09176078684931958
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.43137611361526484,
+                    "y": -0.09176078684931958
+                  },
+                  "confidence": 0.3057480163833346
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m9:x780.605:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 771.9920751633988,
+                "right": 798.4920751633988,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1631,
+                "right": 1689,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 58,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1631.991246895425,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1688.012246895425,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1688.012246895425,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1631.991246895425,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.803957999999966,
+            "confidence": 0.7108890657137574,
+            "rejected": false,
+            "opticalCenter": {
+              "x": 779.3567296983341,
+              "y": 679.8628028602504
+            },
+            "selected": {
+              "widthRatio": 0.9283108983945042,
+              "heightRatio": 0.6069725104887143,
+              "areaRatio": 0.402835081669603,
+              "density": 0.7149321266968326,
+              "originDistance": 0.09909502632617698,
+              "maskedLedgerPixels": 50,
+              "maskedStemPixels": 141,
+              "componentCount": 2
+            },
+            "finalAnchorSource": "local-raster-filled-notehead"
+          },
+          {
+            "candidateId": "p1:m9:x798.546:y679.677",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 789.933251633987,
+                "right": 816.433251633987,
+                "top": 656.3567676767676,
+                "bottom": 678.8817676767676,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1669,
+                "right": 1726,
+                "top": 1387,
+                "bottom": 1435,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1669.9188939542485,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1725.9398939542484,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1725.9398939542484,
+                    "y": 1434.885343582658
+                  },
+                  {
+                    "x": 1669.9188939542485,
+                    "y": 1434.885343582658
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.9394170000000486,
+            "confidence": 0.8184508852063196,
+            "rejected": false,
+            "opticalCenter": {
+              "x": 797.1834660246357,
+              "y": 673.377961335463
+            },
+            "selected": {
+              "widthRatio": 0.8569023677487732,
+              "heightRatio": 0.5712682451658487,
+              "areaRatio": 0.3837131632359193,
+              "density": 0.7838541666666666,
+              "originDistance": 0.10849387696060828,
+              "maskedLedgerPixels": 176,
+              "maskedStemPixels": 144,
+              "componentCount": 2
+            },
+            "finalAnchorSource": "local-raster-filled-notehead"
+          },
+          {
+            "candidateId": "p1:m9:x816.487:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 807.8744281045751,
+                "right": 834.3744281045751,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1707,
+                "right": 1764,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1707.8465410130718,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1763.867541013072,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1763.867541013072,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1707.8465410130718,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.2183340000001408,
+            "confidence": 0,
+            "rejected": true,
+            "rejectionReason": "no-confident-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "no-confident-filled-body",
+              "confidence": 0,
+              "processingMs": 1.2183340000001408,
+              "maskedLedgerPixels": 75,
+              "maskedStemPixels": 99,
+              "componentCount": 0,
+              "rejectedComponents": [
+                {
+                  "bounds": {
+                    "left": 0,
+                    "right": 10,
+                    "top": 23,
+                    "bottom": 23
+                  },
+                  "widthRatio": 0.39274691855152105,
+                  "heightRatio": 0.035704265322865546,
+                  "areaRatio": 0.014022740184701371,
+                  "density": 1,
+                  "originDistance": 0.6620358369290081,
+                  "originOffset": {
+                    "x": -1.0518169869144243,
+                    "y": -0.43188334647115517
+                  },
+                  "glyphOriginOffset": {
+                    "x": -0.5017651088100571,
+                    "y": -0.43188334647115517
+                  },
+                  "confidence": 0.28955489005945156
+                },
+                {
+                  "bounds": {
+                    "left": 45,
+                    "right": 56,
+                    "top": 0,
+                    "bottom": 2
+                  },
+                  "widthRatio": 0.4284511838743866,
+                  "heightRatio": 0.10711279596859664,
+                  "areaRatio": 0.04461780967859527,
+                  "density": 0.9722222222222222,
+                  "originDistance": 1.3486906811381945,
+                  "originOffset": {
+                    "x": 0.57833775554098,
+                    "y": -1.218397305440565
+                  },
+                  "glyphOriginOffset": {
+                    "x": 1.1283896336453472,
+                    "y": -1.218397305440565
+                  },
+                  "confidence": 0.27509751794420984
+                },
+                {
+                  "bounds": {
+                    "left": 4,
+                    "right": 56,
+                    "top": 1,
+                    "bottom": 47
+                  },
+                  "widthRatio": 1.892326062111874,
+                  "heightRatio": 1.6781004701746807,
+                  "areaRatio": 1.5871192299957462,
+                  "density": 0.4997992773986351,
+                  "originDistance": 0.386347879477326,
+                  "originOffset": {
+                    "x": -0.21005666903751688,
+                    "y": -0.3242543442569267
+                  },
+                  "glyphOriginOffset": {
+                    "x": 0.33999520906685027,
+                    "y": -0.3242543442569267
+                  },
+                  "confidence": 0.2058144020874802
+                }
+              ]
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m9:x816.487:y673.141",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 807.8744281045751,
+                "right": 834.3744281045751,
+                "top": 649.821414141414,
+                "bottom": 672.346414141414,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1707,
+                "right": 1764,
+                "top": 1373,
+                "bottom": 1422,
+                "width": 57,
+                "height": 49,
+                "corners": [
+                  {
+                    "x": 1707.8465410130718,
+                    "y": 1373.4633444179037
+                  },
+                  {
+                    "x": 1763.867541013072,
+                    "y": 1373.4633444179037
+                  },
+                  {
+                    "x": 1763.867541013072,
+                    "y": 1421.0722122695265
+                  },
+                  {
+                    "x": 1707.8465410130718,
+                    "y": 1421.0722122695265
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.9577090000000226,
+            "confidence": 0.5881713563569648,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.5881713563569648,
+              "processingMs": 0.9577090000000226,
+              "componentCount": 2,
+              "selectedComponent": {
+                "widthRatio": 0.9283108983945042,
+                "heightRatio": 0.7140853064573109,
+                "areaRatio": 0.45127727503493503,
+                "density": 0.6807692307692308,
+                "originDistance": 0.09368650034991316
+              },
+              "maskedLedgerPixels": 126,
+              "maskedStemPixels": 147
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m9:x834.428:y679.677",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 825.8156045751634,
+                "right": 852.3156045751634,
+                "top": 656.3567676767676,
+                "bottom": 678.8817676767676,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1745,
+                "right": 1802,
+                "top": 1387,
+                "bottom": 1435,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1745.7741880718957,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1801.7951880718954,
+                    "y": 1387.2764757310351
+                  },
+                  {
+                    "x": 1801.7951880718954,
+                    "y": 1434.885343582658
+                  },
+                  {
+                    "x": 1745.7741880718957,
+                    "y": 1434.885343582658
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 1.012124999999969,
+            "confidence": 0.5176033309369232,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.5176033309369232,
+              "processingMs": 1.012124999999969,
+              "componentCount": 2,
+              "selectedComponent": {
+                "widthRatio": 1.0354236943631008,
+                "heightRatio": 0.6783810411344454,
+                "areaRatio": 0.5175665922717051,
+                "density": 0.7368421052631579,
+                "originDistance": 0.17610249833895397
+              },
+              "maskedLedgerPixels": 173,
+              "maskedStemPixels": 144
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          },
+          {
+            "candidateId": "p1:m9:x852.369:y686.212",
+            "invoked": true,
+            "skipped": false,
+            "cropBounds": {
+              "source": {
+                "left": 843.7567810457516,
+                "right": 870.2567810457516,
+                "top": 662.8921212121212,
+                "bottom": 685.4171212121212,
+                "width": 26.5,
+                "height": 22.524999999999977
+              },
+              "raster": {
+                "left": 1783,
+                "right": 1840,
+                "top": 1401,
+                "bottom": 1449,
+                "width": 57,
+                "height": 48,
+                "corners": [
+                  {
+                    "x": 1783.7018351307188,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1839.722835130719,
+                    "y": 1401.0896070441665
+                  },
+                  {
+                    "x": 1839.722835130719,
+                    "y": 1448.6984748957893
+                  },
+                  {
+                    "x": 1783.7018351307188,
+                    "y": 1448.6984748957893
+                  }
+                ]
+              }
+            },
+            "rasterScale": 2.114,
+            "processingMs": 0.9780840000000808,
+            "confidence": 0.4377430257146654,
+            "rejected": true,
+            "rejectionReason": "low-confidence-filled-body",
+            "segmentation": {
+              "accepted": false,
+              "reason": "low-confidence-filled-body",
+              "confidence": 0.4377430257146654,
+              "processingMs": 0.9780840000000808,
+              "componentCount": 2,
+              "selectedComponent": {
+                "widthRatio": 1.0711279596859664,
+                "heightRatio": 0.7140853064573109,
+                "areaRatio": 0.49844467383802143,
+                "density": 0.6516666666666666,
+                "originDistance": 0.18103419900100393
+              },
+              "maskedLedgerPixels": 0,
+              "maskedStemPixels": 137
+            },
+            "finalAnchorSource": "glyph-metrics-fallback"
+          }
+        ]
+      }
+    ],
+    "candidates": 22,
+    "attempts": 22,
+    "accepted": 3,
+    "rejected": 19,
+    "metricFallbacks": 19,
+    "candidateLimitPages": 0,
+    "cacheHits": 0,
+    "cacheMisses": 1,
+    "pageRasterizationMs": 32.40824999999995,
+    "segmentationMs": 24.81508800000006
+  }
+}

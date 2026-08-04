@@ -1,0 +1,99 @@
+{
+  "id": "spider-dance",
+  "title": "Spider Dance (Undertale)",
+  "sourceEdition": "Game arrangement fixture (Corranzo public fixtures)",
+  "role": "different-franchise-source",
+  "pdf": "spider-dance-undertale.pdf",
+  "pdfType": "vector",
+  "pageCount": 4,
+  "pagesSampled": 2,
+  "pathDensity": "high",
+  "instrument": "piano",
+  "glyphExtractionQuality": "Good",
+  "staffSystemCount": 10,
+  "overallVisual": "Usable with errors",
+  "playback": "Usable with errors",
+  "pitch": "Usable with errors",
+  "rhythm": "Usable with errors",
+  "longValues": "Usable with errors",
+  "dots": "Good",
+  "rests": "Usable with errors",
+  "chords": "Usable with errors",
+  "voices": "Usable with errors",
+  "beams": "Usable with errors",
+  "tiesSlurs": "Usable with errors",
+  "accidentalsKey": "Usable with errors",
+  "articulations": "Usable with errors",
+  "tempoRepeats": "Usable with errors",
+  "rendererOnly": "None observed",
+  "lagChoppiness": "Good",
+  "severity": "Medium–low",
+  "reproducibility": "High",
+  "provenanceRootCause": "beam-confidence-probe-noise",
+  "matchesMinecraftSparseOpenRca": false,
+  "matchesHungarianDenseRhythmRca": false,
+  "newSharedMechanism": null,
+  "pipeline": {
+    "noteCount": 545,
+    "measureCount": 27,
+    "overallConfidence": 0.9040054463443693,
+    "uncertainMeasures": 0,
+    "systems": 10,
+    "pagesSampled": 2,
+    "pageCountFull": 4,
+    "hist": {
+      "types": {
+        "eighth": 248,
+        "quarter": 41,
+        "sixteenth": 254,
+        "half": 2
+      },
+      "dottedQuarter": 0,
+      "dots": 7,
+      "beams": 265,
+      "ties": 0,
+      "rests": 0,
+      "measures": 27
+    },
+    "categoryCounts": {
+      "dot-dy-near-miss": 0,
+      "open-glyph-packing-override": 0,
+      "measure-packing-override": 32,
+      "beam-short-lost-to-longer": 6,
+      "beam-duration-overwritten": 3,
+      "beam-confidence-rejected": 429
+    },
+    "mostFrequentFailureCategory": "beam-confidence-rejected",
+    "matchesMinecraftSparseOpenRca": false,
+    "matchesHungarianDenseRhythmRca": false,
+    "provenanceRootCause": "beam-confidence-probe-noise",
+    "newSharedMechanismCandidate": null,
+    "provenanceExported": false,
+    "pathDensity": "high"
+  },
+  "ui": {
+    "uiOk": true,
+    "alert": null,
+    "scoreId": "score-5c811a6d-1565-4ca5-aea1-e594691cbc7e",
+    "duration": 96,
+    "playableEventCount": 1021,
+    "transport": {
+      "play": false,
+      "stop": false,
+      "seek": false,
+      "restart": false,
+      "loopToggle": false,
+      "choppy": false,
+      "errors": [
+        "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: /^Stop$/i }).first()\n"
+      ]
+    },
+    "instrumentSwitch": {
+      "to": "guitar",
+      "stillPlayable": true
+    },
+    "consoleErrors": []
+  },
+  "error": null,
+  "elapsedMs": 37417
+}

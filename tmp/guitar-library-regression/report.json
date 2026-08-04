@@ -2,45 +2,45 @@
   "scenarios": {
     "pianoLibrary": {
       "auth": {
-        "scoreId": "score-3adb69e2-12f3-4e99-bf12-774f0b36a3d0",
-        "ownerScoreId": "score-3adb69e2-12f3-4e99-bf12-774f0b36a3d0",
-        "pdfMetaIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785154830943",
+        "scoreId": "score-80d97ad8-b1cb-445f-9869-2b35a80a5dee",
+        "ownerScoreId": "score-80d97ad8-b1cb-445f-9869-2b35a80a5dee",
+        "pdfMetaIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785551109220",
         "pdfContentHash": "fd1f9cc1",
         "musicXmlHash": "c89ec10f",
         "musicXmlByteLength": 38458,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785154830943",
+        "ownerPdfIdentity": "Menuet in F, K.2 - Piano.pdf::189619::1785551109220",
         "practiceSessionEpoch": 1,
         "sourceType": "library",
         "libraryPieceId": "piano-mozart-menuet-k2",
-        "at": 1785154830964
+        "at": 1785551109233
       },
       "duration": 72,
       "events": 130
     },
     "guitarLibrary": {
       "auth": {
-        "scoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
+        "scoreId": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "ownerScoreId": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785551114602",
         "pdfContentHash": "9bf80570",
         "musicXmlHash": "47817e10",
         "musicXmlByteLength": 135493,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
-        "practiceSessionEpoch": 1,
+        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785551114602",
+        "practiceSessionEpoch": 2,
         "sourceType": "library",
         "libraryPieceId": "guitar-aguado-op03-1",
-        "at": 1785154836383
+        "at": 1785551114616
       },
       "duration": 48,
       "events": 325,
       "guitarTrace": {
         "instrumentId": "guitar",
         "timingContentHash": "47817e10",
-        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "ownerScoreId": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
         "playableEventCount": 325,
         "firstEvents": [
           {
@@ -95,58 +95,59 @@
         "duration": 48,
         "mappingMethod": "measure-aligned",
         "audioSource": "midi",
-        "at": 1785154836539
+        "at": 1785551114768
       },
       "owners": {
-        "activeScoreIdentity": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "authoritativeMusicXmlOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "playbackTimelineOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
-        "guitarMappingOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "practicePromptOwner": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
+        "activeScoreIdentity": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "authoritativeMusicXmlOwner": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "playbackTimelineOwner": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785551114602",
+        "guitarMappingOwner": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "practicePromptOwner": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
         "contentHash": "47817e10",
         "aligned": false,
-        "at": 1785154836468
+        "at": 1785551114694
       }
     },
     "reloadGuitarLibrary": {
       "beforeReload": "47817e10",
       "after": {
-        "scoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "ownerScoreId": "score-56d25588-aaf5-4fe9-868f-5da8dde7c9ea",
-        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
+        "scoreId": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "ownerScoreId": "score-fac64eb6-6c11-4f64-873a-a531e2846caa",
+        "pdfMetaIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785551114602",
         "pdfContentHash": "9bf80570",
         "musicXmlHash": "47817e10",
         "musicXmlByteLength": 135493,
         "measureCount": null,
         "durationSeconds": null,
-        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785154836364",
+        "ownerPdfIdentity": "Petites Pièces Op. 3 No. 1 - Guitar.pdf::182151::1785551114602",
         "practiceSessionEpoch": 1,
         "sourceType": "upload",
-        "at": 1785154839395
+        "at": 1785551117628
       }
     },
-    "instrumentSwitchCarry": {
-      "pianoHash": "a2d7bb82",
-      "pianoOwner": "piano-beginner-single-vector.pdf::5584::1784174777906",
-      "afterGuitar": "a2d7bb82",
-      "backToPiano": "a2d7bb82",
-      "guitarEvents": 32
+    "instrumentSwitchClear": {
+      "pianoHash": "bb8970aa",
+      "pianoOwner": "piano-beginner-single-vector.pdf::5584::1785410912242",
+      "afterGuitar": null,
+      "afterGuitarScoreId": null,
+      "onLibrary": true,
+      "backToPianoHash": null,
+      "reopenedHash": null,
+      "guitarEvents": 0
     },
     "guitarReplaceWhileActive": {
-      "before": "a2d7bb82",
-      "after": "0e7583ec",
-      "beforeOwner": "piano-beginner-single-vector.pdf::5584::1784174777906",
-      "afterOwner": "piano-articulation-scan.pdf::197253::1784174777906"
+      "after": "51fb484c",
+      "afterOwner": "piano-articulation-scan.pdf::200561::1785410912505"
     },
     "rapidReplaceGuitar": {
-      "hash": "0e7583ec",
-      "owner": "piano-articulation-scan.pdf::197253::1784174777906",
-      "gate": "piano-articulation-scan.pdf::197253::1784174777906",
-      "events": 224
+      "hash": "51fb484c",
+      "owner": "piano-articulation-scan.pdf::200561::1785410912505",
+      "gate": "piano-articulation-scan.pdf::200561::1785410912505",
+      "events": 238
     },
     "libraryThenUser": {
       "library": "c89ec10f",
-      "user": "86f9e9d3",
+      "user": "462bd943",
       "libraryAgain": "c89ec10f"
     }
   },

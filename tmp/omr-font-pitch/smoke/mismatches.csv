@@ -1,0 +1,13 @@
+fixture,code,class,measure,staff,voice,expectedPitch,generatedPitch,expectedOnset,generatedOnset,expectedDuration,generatedDuration,pitchDeltaSemitones,onsetDiffQuarters,durationDiffQuarters,clusterHint,likelyPipelineStage,source
+piano-beginner-single-vector,onset-mismatch,rhythm,7,1,1,G4,G4,1.5,1,0.5,1,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-beginner-single-vector,duration-mismatch,rhythm,7,1,1,G4,G4,1.5,1,0.5,1,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-beginner-single-vector,missing-rest,rhythm,7,1,1,rest,,2,,1,,,,,other,unknown / late MusicXML,event-match
+piano-beginner-single-vector,missing-note,pitch,7,1,1,A4,,3,,1,,,,,missing-or-extra-extraction,symbol_detection,event-match
+piano-beginner-single-vector,extra-note,pitch,7,1,1,,A4,,2,,2,,,,missing-or-extra-extraction,symbol_detection,event-match
+piano-beginner-single-vector,onset-mismatch,rhythm,8,1,1,E4,E4,3,2.75,1,1,0,0.25,0,voice-onset-assignment,rhythm_packing,event-match
+piano-beginner-single-vector,onset-mismatch,rhythm,8,1,1,A4,A4,0.5,1,0.5,0.5,0,0.5,0,voice-onset-assignment,rhythm_packing,event-match
+piano-beginner-single-vector,onset-mismatch,rhythm,8,1,1,G4,G4,1,1.5,1,0.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-beginner-single-vector,duration-mismatch,rhythm,8,1,1,G4,G4,1,1.5,1,0.5,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-beginner-single-vector,onset-mismatch,rhythm,8,1,1,B4,B4,0,0.75,0.5,0.25,0,0.75,0.25,voice-onset-assignment,rhythm_packing,event-match
+piano-beginner-single-vector,duration-mismatch,rhythm,8,1,1,B4,B4,0,0.75,0.5,0.25,0,0.75,0.25,duration-inference,duration_inference,event-match
+piano-beginner-single-vector,tempo-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
