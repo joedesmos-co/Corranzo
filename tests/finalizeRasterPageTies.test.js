@@ -138,7 +138,7 @@ describe('finalizeRasterPageTies', () => {
     expect(records[0].events[0].notes[0].tieStart).toBeUndefined()
   })
 
-  it('keeps one late staccato enrich orphan-start for cross-bar written ties', () => {
+  it('drops late staccato enrich orphans instead of inventing unpaired tie starts', () => {
     const records = [
       {
         measureNumber: 3,
@@ -166,16 +166,17 @@ describe('finalizeRasterPageTies', () => {
           {
             type: 'note',
             startDivision: 0,
-            notes: [{ midi: 69, clef: 'treble', cx: 560, cy: 205 }],
+            // Different pitch — PDF curve is a slur, not a same-pitch tie.
+            notes: [{ midi: 70, clef: 'treble', cx: 560, cy: 205 }],
           },
         ],
       },
     ]
 
     const { diagnostics } = finalizeRasterPageTies(records)
-    expect(diagnostics.orphanStartKeepCount).toBe(1)
-    expect(records[0].events[0].notes[0].tieStart).toBe(true)
-    expect(records[0].events[0].notes[1].tieStart).toBeUndefined()
+    expect(diagnostics.orphanStartKeepCount).toBe(0)
+    expect(diagnostics.appliedTieCount).toBe(0)
+    expect(records[0].events[0].notes[0].tieStart).toBeUndefined()
     expect(records[1].events[0].notes[0].tieStop).toBeUndefined()
   })
 })

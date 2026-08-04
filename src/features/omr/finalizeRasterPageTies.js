@@ -194,56 +194,10 @@ export function finalizeRasterPageTies(measureRecords = []) {
   }
 
 
-  // Narrow orphan-start keep: highest-midi staccato enrich candidate late in a
-  // non-final measure with no later same-pitch on that staff. Recovers the
-  // artic-scan cross-bar written start (mispitched/mis-articulated head) without
-  // reopening early-measure staccato FP floods.
-  const maxMeasure = instances.reduce(
-    (max, inst) => Math.max(max, inst.measureNumber),
-    0,
-  )
-  const orphanKeep = new Map()
-  for (const fromIndex of candidates) {
-    const from = instances[fromIndex]
-    if (from.note.tieStart || from.note.tieStop) {
-      continue
-    }
-    if (from.articType !== 'staccato') {
-      continue
-    }
-    if (from.measureNumber >= maxMeasure) {
-      continue
-    }
-    if ((from.startDivision ?? 0) < 4) {
-      continue
-    }
-    const notes = from.event.notes ?? []
-    const topMidi = Math.max(...notes.map((note) => note.midi ?? -Infinity))
-    if (from.midi !== topMidi) {
-      continue
-    }
-    const laterSame = instances.some(
-      (inst, idx) =>
-        idx > fromIndex &&
-        inst.measureNumber === from.measureNumber &&
-        inst.clef === from.clef &&
-        inst.midi === from.midi &&
-        isLaterOnset(from, inst),
-    )
-    if (laterSame) {
-      continue
-    }
-    const prev = orphanKeep.get(from.measureNumber)
-    if (!prev || from.midi > prev.midi) {
-      orphanKeep.set(from.measureNumber, { fromIndex, midi: from.midi })
-    }
-  }
-  let orphanStartKeepCount = 0
-  for (const { fromIndex } of orphanKeep.values()) {
-    const from = instances[fromIndex]
-    from.note.tieStart = true
-    orphanStartKeepCount += 1
-  }
+  // Do not keep unpaired enrich starts. The artic-scan cross-bar curve is a
+  // different-pitch slur (A4→A♯4 in MusicXML, mislabeled as tied); re-stamping
+  // late staccato orphans created incorrect-tie FPs without a valid same-pitch
+  // stop. Same-pitch pairs are already applied above.
 
   return {
     diagnostics: {
@@ -251,7 +205,7 @@ export function finalizeRasterPageTies(measureRecords = []) {
       appliedTieCount,
       droppedOrphanCount,
       droppedStaccatoCount,
-      orphanStartKeepCount,
+      orphanStartKeepCount: 0,
     },
   }
 }
