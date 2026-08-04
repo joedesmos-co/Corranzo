@@ -1,4 +1,5 @@
 import {
+  OMR_CHORD_MERGE_X,
   OMR_DIVISIONS_PER_QUARTER,
   OMR_DURATION_DIVISIONS,
 } from './omrRhythmConstants.js'
@@ -165,6 +166,24 @@ function sameStaffVoiceEvidence(events, clef, totalDivisions) {
   return false
 }
 
+function mixedStemChordIsIndependentVoices(byDirection) {
+  const durations = []
+  for (const notes of byDirection.values()) {
+    const values = notes.map(noteheadDuration)
+    if (!values.length || values.some((value) => value == null)) return false
+    if (!values.every((value) => value === values[0])) return false
+    durations.push(values[0])
+  }
+  // Only peel a same-column mixed-stem stack when one direction is sustained
+  // (half/whole) and differs from the other. Guitar chord engraving routinely
+  // flips the top tone's stem without creating an independent voice.
+  return (
+    durations.length >= 2 &&
+    new Set(durations).size > 1 &&
+    durations.some((value) => value >= OMR_DURATION_DIVISIONS.half)
+  )
+}
+
 function splitEventByDirection(event, splitClefs) {
   if (
     event?.type !== 'note' ||
@@ -182,6 +201,11 @@ function splitEventByDirection(event, splitClefs) {
     byDirection.set(direction, notes)
   }
   if (byDirection.size < 2) return [event]
+  const xs = (event.notes ?? []).map((note) => note.cx).filter(Number.isFinite)
+  const spread = xs.length ? Math.max(...xs) - Math.min(...xs) : 0
+  if (spread <= OMR_CHORD_MERGE_X && !mixedStemChordIsIndependentVoices(byDirection)) {
+    return [event]
+  }
   return [...byDirection.entries()].map(([direction, notes]) => ({
     ...event,
     notes,

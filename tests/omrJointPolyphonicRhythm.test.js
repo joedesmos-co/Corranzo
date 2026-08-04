@@ -152,6 +152,33 @@ describe('joint polyphonic rhythm packing geometry', () => {
     ])
   })
 
+  it('keeps mixed-stem guitar chord stacks as one attack when neither stem is sustained', () => {
+    const columns = [10, 28, 46, 80, 114].map((x, index) => {
+      const event = noteEvent({
+        x,
+        start: index * 2,
+        duration: 2,
+        direction: 'up',
+        midis: [40, 47, 52, 55, 59],
+        beams: index < 2 ? 1 : 0,
+      })
+      event.notes.push(
+        noteEvent({
+          x,
+          direction: 'down',
+          duration: 2,
+          midis: [64],
+        }).notes[0],
+      )
+      return event
+    })
+    const result = packJointPolyphonicRhythm(columns, { totalDivisions: 16 })
+    expect(result.applied).toBe(false)
+    expect(result.events).toHaveLength(5)
+    expect(result.events.every((event) => event.notes.length === 6)).toBe(true)
+    expect(result.events.every((event) => !event.jointPolyphonicVoiceSplit)).toBe(true)
+  })
+
   it('splits opposing stems at the same onset into independent lanes', () => {
     const shared = noteEvent({
       x: 10,
