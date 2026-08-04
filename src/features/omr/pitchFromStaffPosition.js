@@ -722,6 +722,14 @@ export function resolveNoteheadAnchor(
   const maskedLedgerRows = new Set(
     partitioned.acceptedLedgerRows.map((row) => row.y),
   )
+  // When the glyph origin sits on a local ledger stroke, masking that row strips
+  // the owned notehead ink and can snap the anchor to the nearest staff line.
+  const effectiveMaskedLedgerRows = new Set(maskedLedgerRows)
+  for (const row of partitioned.acceptedLedgerRows) {
+    if (Math.abs(row.y - glyphY) <= gapPx * 0.35) {
+      effectiveMaskedLedgerRows.delete(row.y)
+    }
+  }
 
   const suppressedColumns = new Set()
   const verticalSupportThreshold = Math.max(
@@ -735,7 +743,7 @@ export function resolveNoteheadAnchor(
         continue
       }
       if (
-        maskedLedgerRows.has(y) &&
+        effectiveMaskedLedgerRows.has(y) &&
         verticalInkExtent(imageData, x, y, inkThreshold) <= 2
       ) {
         continue
@@ -756,7 +764,7 @@ export function resolveNoteheadAnchor(
     top,
     bottom,
     suppressedRows,
-    maskedLedgerRows,
+    maskedLedgerRows: effectiveMaskedLedgerRows,
     suppressedColumns,
     inkThreshold,
   }).map((component) => {
@@ -882,6 +890,18 @@ export function resolveNoteheadAnchor(
     }
 
     selected = compact[0]
+  }
+
+  if (
+    selected &&
+    glyphY > staffBottomPx + gapPx * 0.25 &&
+    selected.centerY < glyphY - gapPx * 0.35 &&
+    Math.abs(selected.centerY - staffBottomPx) <= gapPx * 0.35
+  ) {
+    return anchorDiagnostics(fallback, {
+      ...diagnosticsBase,
+      extra: { rejectedReason: 'below-staff-ink-snapped-to-line' },
+    })
   }
 
   const confidence = selectedFromCompetition

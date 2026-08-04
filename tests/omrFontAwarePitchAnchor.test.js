@@ -150,6 +150,26 @@ describe("font-aware notehead pitch anchors", () => {
     ).toBe(true);
   });
 
+  it("centers a note on one ledger line below the staff", () => {
+    const page = image();
+    staff(page, LINES);
+    horizontal(page, 98, 122, 200);
+    ellipse(page, 110, 190, 8, 5);
+    const anchor = resolveNoteheadAnchor(
+      glyph(110, 202, { height: 42 }),
+      page,
+      LINES,
+    );
+    expect(anchor.yNorm * page.height).toBeCloseTo(190, 1);
+    expect(
+      midiFromStaffPosition(
+        anchor.yNorm,
+        LINES.map((y) => y / page.height),
+        "treble",
+      ),
+    ).toBe(62);
+  });
+
   it("uses the owned head when multiple ledger lines are present", () => {
     const page = image();
     staff(page, LINES);
