@@ -194,6 +194,53 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
 
   const preferredStart = Math.round(rest.positionInMeasure * totalDivisions)
   if (overlapsInterval(preferredStart, 1, intervals)) {
+    const glyphDuration =
+      OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
+    if (glyphDuration <= OMR_DURATION_DIVISIONS.eighth) {
+      const colliding = notesOnStaff.filter((event) => {
+        const start = event.startDivision ?? 0
+        const end = start + (event.durationDivisions ?? 1)
+        return preferredStart >= start && preferredStart < end
+      })
+      if (colliding.length === 1) {
+        const noteEvent = colliding[0]
+        const noteCx = noteEvent.cx ?? noteEvent.notes?.[0]?.cx
+        if (Number.isFinite(rest.cx) && Number.isFinite(noteCx) && rest.cx < noteCx - 1) {
+          const startDivision = Math.max(0, preferredStart)
+          const durationDivisions = Math.min(
+            glyphDuration,
+            Math.max(1, (noteEvent.startDivision ?? 0) + (noteEvent.durationDivisions ?? 1) - startDivision),
+          )
+          const shiftedStart = startDivision + durationDivisions
+          const shiftedEvents = events.map((event) => {
+            if (event !== noteEvent) {
+              return event
+            }
+            const remaining = Math.max(
+              1,
+              (event.durationDivisions ?? 1) - durationDivisions,
+            )
+            return {
+              ...event,
+              startDivision: shiftedStart,
+              durationDivisions: remaining,
+              ...restDurationMeta(remaining),
+              subdivisionRestShifted: true,
+            }
+          })
+          if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
+            return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }
+          }
+          return {
+            applied: true,
+            events: [
+              ...shiftedEvents,
+              createRestEvent(rest, startDivision, durationDivisions, measureBox),
+            ],
+          }
+        }
+      }
+    }
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
   }
 
@@ -248,6 +295,16 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     gapDuration >= OMR_DIVISIONS_PER_QUARTER &&
     durationDivisions < gapDuration &&
     gapDuration - durationDivisions <= OMR_DURATION_DIVISIONS.eighth
+  ) {
+    durationDivisions = gapDuration
+  }
+  const measureEnd = totalDivisions
+  const isTerminalGap = gap.gapEnd >= measureEnd && startDivision + glyphDuration < measureEnd
+  if (
+    !openingPickupRest &&
+    isTerminalGap &&
+    gapDuration > durationDivisions &&
+    gapDuration - durationDivisions <= OMR_DIVISIONS_PER_QUARTER
   ) {
     durationDivisions = gapDuration
   }

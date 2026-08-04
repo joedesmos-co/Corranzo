@@ -640,6 +640,18 @@ export function shouldInferRhythmFromPositions(groups, beats) {
   if (Number.isFinite(minGap) && minGap < quarterSpacing * 0.55) {
     return true
   }
+  let maxGap = 0
+  for (let index = 1; index < positions.length; index += 1) {
+    maxGap = Math.max(maxGap, positions[index] - positions[index - 1])
+  }
+  // Sparse half+quarter (and similar) ties sit far apart on the X axis but still
+  // beat the sequential quarter index (0,4) when only two groups are present.
+  if (
+    groups.length <= Math.max(1, beats - 2) &&
+    maxGap >= quarterSpacing * 1.5
+  ) {
+    return true
+  }
   return false
 }
 
@@ -3039,6 +3051,82 @@ export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
 }
 
 /**
+ * After a dotted-eighth base is recovered, the next attack often sits on the
+ * written release rather than a later quarter-grid snap.
+ */
+export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 2 || noteEvents.length > 6) {
+    return events
+  }
+  const dottedEighthDivisions = Math.round(OMR_DURATION_DIVISIONS.eighth * 1.5)
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const startByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) =>
+        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+        (left.cx ?? 0) - (right.cx ?? 0),
+    )
+    for (let index = 0; index < sorted.length - 1; index += 1) {
+      const current = sorted[index]
+      const next = sorted[index + 1]
+      if (!current.dottedSubdivisionBaseRefined) {
+        continue
+      }
+      const currentDuration = current.durationDivisions ?? 0
+      if (currentDuration !== dottedEighthDivisions) {
+        continue
+      }
+      const writtenEnd = (current.startDivision ?? 0) + currentDuration
+      const nextStart = next.startDivision ?? 0
+      const nextPosition =
+        next.positionInMeasure ?? next.notes?.[0]?.positionInMeasure ?? null
+      const currentPosition =
+        current.positionInMeasure ?? current.notes?.[0]?.positionInMeasure ?? null
+      if (
+        !Number.isFinite(nextPosition) ||
+        !Number.isFinite(currentPosition) ||
+        nextPosition <= currentPosition
+      ) {
+        continue
+      }
+      if (
+        nextStart > writtenEnd &&
+        nextStart <= writtenEnd + OMR_DURATION_DIVISIONS.eighth + 1
+      ) {
+        startByEvent.set(next, writtenEnd)
+      }
+    }
+  }
+
+  if (!startByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        subdivisionFollowerAligned: true,
+      }
+    }),
+  )
+}
+
+/**
  * Position snap can collapse consecutive sixteenth attacks onto one onset.
  * Split same-start single-note events or two-note dyads when horizontal order
  * proves sequential subdivision rather than a harmonic stack.
@@ -3066,11 +3154,24 @@ export function splitSnappedSequentialSixteenths(events, totalDivisions) {
       const terminalTail =
         start >= totalDivisions - OMR_DIVISIONS_PER_QUARTER &&
         duration >= OMR_DIVISIONS_PER_QUARTER
+      const leftPosition =
+        sortedNotes[0]?.positionInMeasure ?? event.positionInMeasure ?? null
+      const rightPosition =
+        sortedNotes[1]?.positionInMeasure ?? event.positionInMeasure ?? null
+      const positionGap =
+        Number.isFinite(leftPosition) && Number.isFinite(rightPosition)
+          ? rightPosition - leftPosition
+          : 0
+      const sequentialByPosition =
+        positionGap >= 0.012 &&
+        positionGap <= (OMR_DIVISIONS_PER_QUARTER / totalDivisions) * 0.55
       if (
         dx > 0 &&
         dx <= OMR_CHORD_MERGE_X &&
         start + sixteenth < totalDivisions &&
-        (duration >= OMR_DIVISIONS_PER_QUARTER || terminalTail)
+        (duration >= OMR_DIVISIONS_PER_QUARTER ||
+          terminalTail ||
+          (sequentialByPosition && duration >= sixteenth))
       ) {
         const leadingStart = terminalTail ? Math.max(0, start - sixteenth) : start
         const trailingStart = terminalTail ? start : start + sixteenth
@@ -3598,6 +3699,11 @@ function buildNoteEventsFromGroups(
   if (!denseMeasure) {
     events = track('dotted-subdivision-base', 'refineDottedSubdivisionBaseDurations', () =>
       refineDottedSubdivisionBaseDurations(events, totalDivisions),
+    )
+    events = track(
+      'dotted-subdivision-follower',
+      'alignSubdivisionFollowersAfterDottedEighth',
+      () => alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions),
     )
   }
   if (denseMeasure) {
