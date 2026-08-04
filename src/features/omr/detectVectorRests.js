@@ -39,10 +39,19 @@ function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) 
 }
 
 function nearNotehead(glyph, noteheads, radius = NOTEHEAD_EXCLUSION_RADIUS) {
-  return noteheads.some(
-    (note) =>
-      Math.abs(note.cx - glyph.x) <= radius && Math.abs(note.cy - glyph.y) <= radius,
-  )
+  return noteheads.some((note) => {
+    const dx = glyph.x - note.cx
+    const dy = Math.abs(glyph.y - note.cy)
+    if (dy > radius) {
+      return false
+    }
+    // Rests engraved immediately left of an attack must survive (tuplets m4
+    // 16th rest sits ~9px left of B4). Only reject glyphs centered on a head.
+    if (dx < -2) {
+      return Math.abs(dx) <= radius * 0.35 && dy <= radius * 0.35
+    }
+    return Math.abs(dx) <= radius
+  })
 }
 
 function measurePosition(glyph, measureBox, imageData) {
@@ -192,7 +201,24 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     }
   }
 
-  const preferredStart = Math.round(rest.positionInMeasure * totalDivisions)
+  let preferredStart = Math.round(rest.positionInMeasure * totalDivisions)
+  // When a rest glyph sits to the right of a notehead whose duration still
+  // covers the geometric preferred onset (common after deferJointPacking),
+  // the written rest belongs after that attack — snap to the note end.
+  for (const event of notesOnStaff) {
+    const start = event.startDivision ?? 0
+    const end = start + (event.durationDivisions ?? 1)
+    const noteCx = event.cx ?? event.notes?.[0]?.cx
+    if (
+      preferredStart >= start &&
+      preferredStart < end &&
+      Number.isFinite(rest.cx) &&
+      Number.isFinite(noteCx) &&
+      rest.cx > noteCx + 1
+    ) {
+      preferredStart = end
+    }
+  }
   if (overlapsInterval(preferredStart, 1, intervals)) {
     const glyphDuration =
       OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
@@ -202,42 +228,101 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         const end = start + (event.durationDivisions ?? 1)
         return preferredStart >= start && preferredStart < end
       })
-      if (colliding.length === 1) {
-        const noteEvent = colliding[0]
-        const noteCx = noteEvent.cx ?? noteEvent.notes?.[0]?.cx
-        if (Number.isFinite(rest.cx) && Number.isFinite(noteCx) && rest.cx < noteCx - 1) {
-          const startDivision = Math.max(0, preferredStart)
-          const durationDivisions = Math.min(
-            glyphDuration,
-            Math.max(1, (noteEvent.startDivision ?? 0) + (noteEvent.durationDivisions ?? 1) - startDivision),
-          )
-          const shiftedStart = startDivision + durationDivisions
-          const shiftedEvents = events.map((event) => {
-            if (event !== noteEvent) {
-              return event
-            }
-            const remaining = Math.max(
-              1,
-              (event.durationDivisions ?? 1) - durationDivisions,
-            )
-            return {
-              ...event,
-              startDivision: shiftedStart,
-              durationDivisions: remaining,
-              ...restDurationMeta(remaining),
-              subdivisionRestShifted: true,
-            }
+      const rightOfRest = colliding
+        .map((event) => ({
+          event,
+          noteCx: event.cx ?? event.notes?.[0]?.cx,
+        }))
+        .filter(
+          (entry) =>
+            Number.isFinite(rest.cx) &&
+            Number.isFinite(entry.noteCx) &&
+            rest.cx < entry.noteCx - 1,
+        )
+        .sort((left, right) => left.noteCx - right.noteCx)
+
+      // Notes packed onto the rest's onset (tuplets m4 B4/C5): insert rest and
+      // unpack the column left-to-right without carving their written durations.
+      const startingHere = rightOfRest.filter(
+        (entry) => (entry.event.startDivision ?? 0) === preferredStart,
+      )
+      if (startingHere.length >= 1) {
+        const startDivision = Math.max(0, preferredStart)
+        const durationDivisions = Math.min(glyphDuration, Math.max(1, glyphDuration))
+        let cursor = startDivision + durationDivisions
+        const shiftedByEvent = new Map()
+        for (const { event } of startingHere) {
+          const written = Math.max(1, event.durationDivisions ?? 1)
+          shiftedByEvent.set(event, {
+            startDivision: cursor,
+            durationDivisions: written,
           })
-          if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
-            return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }
+          cursor += written
+        }
+        const shiftedEvents = events.map((event) => {
+          const shifted = shiftedByEvent.get(event)
+          if (!shifted) {
+            return event
           }
           return {
-            applied: true,
-            events: [
-              ...shiftedEvents,
-              createRestEvent(rest, startDivision, durationDivisions, measureBox),
-            ],
+            ...event,
+            startDivision: shifted.startDivision,
+            durationDivisions: shifted.durationDivisions,
+            ...restDurationMeta(shifted.durationDivisions),
+            subdivisionRestShifted: true,
           }
+        })
+        if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
+          return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }
+        }
+        return {
+          applied: true,
+          events: [
+            ...shiftedEvents,
+            createRestEvent(rest, startDivision, durationDivisions, measureBox),
+          ],
+        }
+      }
+
+      // Single note that began earlier and spans the rest: carve from the front.
+      if (rightOfRest.length === 1) {
+        const noteEvent = rightOfRest[0].event
+        const startDivision = Math.max(0, preferredStart)
+        const durationDivisions = Math.min(
+          glyphDuration,
+          Math.max(
+            1,
+            (noteEvent.startDivision ?? 0) +
+              (noteEvent.durationDivisions ?? 1) -
+              startDivision,
+          ),
+        )
+        const shiftedStart = startDivision + durationDivisions
+        const shiftedEvents = events.map((event) => {
+          if (event !== noteEvent) {
+            return event
+          }
+          const remaining = Math.max(
+            1,
+            (event.durationDivisions ?? 1) - durationDivisions,
+          )
+          return {
+            ...event,
+            startDivision: shiftedStart,
+            durationDivisions: remaining,
+            ...restDurationMeta(remaining),
+            subdivisionRestShifted: true,
+          }
+        })
+        if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
+          return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }
+        }
+        return {
+          applied: true,
+          events: [
+            ...shiftedEvents,
+            createRestEvent(rest, startDivision, durationDivisions, measureBox),
+          ],
         }
       }
     }

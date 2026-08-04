@@ -98,6 +98,18 @@ describe('restsForMeasure', () => {
     expect(rests).toHaveLength(0)
   })
 
+  it('keeps a short rest engraved immediately left of the following attack', () => {
+    const noteheads = [{ cx: 520, cy: 170, clef: 'treble' }]
+    const rests = restsForMeasure(
+      [{ text: '\ue4e7', x: 510, y: 170 }],
+      imageData,
+      measureBox,
+      noteheads,
+    )
+    expect(rests).toHaveLength(1)
+    expect(rests[0].durationType).toBe('sixteenth')
+  })
+
   it('does not treat isolated non-rest articulation codepoints as rests', () => {
     // U+E4A2 staccato (not the quarter-rest codepoint) must stay ignored.
     const rests = restsForMeasure([{ text: '\ue4a2', x: 520, y: 170 }], imageData, measureBox, [])
@@ -242,6 +254,62 @@ describe('insertMixedMeasureRests', () => {
     const rest = events.find((event) => event.type === 'rest')
     expect(rest?.startDivision).toBe(4)
     expect(rest?.durationDivisions).toBe(4)
+  })
+
+  it('unpacks a same-onset column when a short rest sits just left of it', () => {
+    const noteEvents = [
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 6,
+        durationType: 'quarter',
+        dotted: true,
+        cx: 780,
+        notes: [{ ...trebleNote(0.35, 69), cx: 780 }],
+      },
+      {
+        type: 'note',
+        startDivision: 10,
+        durationDivisions: 1,
+        durationType: 'sixteenth',
+        cx: 843,
+        notes: [{ ...trebleNote(0.66, 71), cx: 843 }],
+      },
+      {
+        type: 'note',
+        startDivision: 10,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        cx: 852,
+        notes: [{ ...trebleNote(0.7, 72), cx: 852 }],
+      },
+    ]
+    const { events, appliedCount } = insertMixedMeasureRests(
+      noteEvents,
+      [
+        {
+          cx: 834,
+          cy: 170,
+          positionInMeasure: 10 / 16,
+          durationType: 'sixteenth',
+          clef: 'treble',
+          source: 'vector-glyph',
+          confidence: 0.88,
+        },
+      ],
+      { measureBox, totalDivisions: 16 },
+    )
+    expect(appliedCount).toBe(1)
+    const rest = events.find((event) => event.type === 'rest' && event.durationDivisions === 1)
+    expect(rest?.startDivision).toBe(10)
+    const notes = events
+      .filter((event) => event.type === 'note')
+      .sort((left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0))
+    expect(notes.map((event) => [event.startDivision, event.durationDivisions, event.notes[0].midi])).toEqual([
+      [4, 6, 69],
+      [11, 1, 71],
+      [12, 4, 72],
+    ])
   })
 })
 
