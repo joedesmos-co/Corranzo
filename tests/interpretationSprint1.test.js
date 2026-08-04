@@ -3,6 +3,7 @@ import {
   detectRepeatBarline,
   detectVoltaEnding,
   finalizeEndingStops,
+  finalizeRepeatMarkings,
   shouldEmitEnding,
   shouldEmitRepeat,
 } from '../src/features/omr/detectOmrRepeatBarline.js'
@@ -82,6 +83,37 @@ describe('interpretation sprint 1 — repeats and endings', () => {
       'right',
     )
     expect(marking).toBeNull()
+  })
+
+  it('suppresses system-break repeat false positives on TAB layouts', () => {
+    const records = [
+      {
+        measureNumber: 1,
+        systemIndex: 0,
+        repeatMarking: { forwardRepeat: true, confidence: 0.84 },
+      },
+      {
+        measureNumber: 4,
+        systemIndex: 0,
+        repeatMarking: { backwardRepeat: true, confidence: 0.84 },
+      },
+      {
+        measureNumber: 5,
+        systemIndex: 1,
+        repeatMarking: { forwardRepeat: true, confidence: 0.84 },
+      },
+      {
+        measureNumber: 8,
+        systemIndex: 1,
+        endingMarking: { endingStartNumbers: [2], endingStop: true, confidence: 0.88 },
+        repeatMarking: { backwardRepeat: true, confidence: 0.84 },
+      },
+    ]
+    finalizeRepeatMarkings(records)
+    expect(records[0].repeatMarking?.forwardRepeat).toBe(true)
+    expect(records[1].repeatMarking).toBeNull()
+    expect(records[2].repeatMarking).toBeNull()
+    expect(records[3].repeatMarking?.backwardRepeat).toBe(true)
   })
 
   it('binds volta labels from PDF text and finalizes ending stops', () => {

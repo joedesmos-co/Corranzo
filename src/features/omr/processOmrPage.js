@@ -13,6 +13,7 @@ import { detectKeySignature } from './detectOmrKeySignature.js'
 import {
   detectMeasureStructureMarkings,
   finalizeEndingStops,
+  finalizeRepeatMarkings,
 } from './detectOmrRepeatBarline.js'
 import {
   detectPedalFromText,
@@ -102,6 +103,59 @@ function measureGridEntriesForSystem(
       }
     })
     .filter(Boolean)
+}
+
+function structureBandForSystem(systemIndex, systems, systemRoles) {
+  const system = systems[systemIndex]
+  const role = systemRoles?.[systemIndex]
+  if (!system) {
+    return null
+  }
+  if (role?.kind === 'notation') {
+    const tabIndex = systemRoles.findIndex(
+      (candidate) => candidate?.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+    )
+    if (tabIndex >= 0 && systems[tabIndex]) {
+      return { y0: system.y0, y1: systems[tabIndex].y1 }
+    }
+  }
+  if (role?.kind === 'tab' && role.pairedWithIndex != null && systems[role.pairedWithIndex]) {
+    const notationSystem = systems[role.pairedWithIndex]
+    return { y0: notationSystem.y0, y1: system.y1 }
+  }
+  return { y0: system.y0, y1: system.y1 }
+}
+
+function voltaBandForSystem(systemIndex, systems, systemRoles) {
+  const repeatBand = structureBandForSystem(systemIndex, systems, systemRoles)
+  if (!repeatBand) {
+    return null
+  }
+  const role = systemRoles?.[systemIndex]
+  if (role?.tabStave) {
+    return { ...repeatBand, y0: repeatBand.y0 - 0.04 }
+  }
+  return repeatBand
+}
+
+function staffLineYsForStructure(systemIndex, systemRoles, measureBox) {
+  const role = systemRoles?.[systemIndex]
+  if (role?.tabStave?.lineYs?.length) {
+    return role.tabStave.lineYs
+  }
+  const treble = measureBox?.staffLines?.treble
+  if (Array.isArray(treble) && treble.length >= 5) {
+    return treble
+  }
+  return null
+}
+
+function structureMarkingOptions(systemIndex, systems, systemRoles, measureBox) {
+  return {
+    structureBand: structureBandForSystem(systemIndex, systems, systemRoles),
+    voltaBand: voltaBandForSystem(systemIndex, systems, systemRoles),
+    staffLineYs: staffLineYsForStructure(systemIndex, systemRoles, measureBox),
+  }
 }
 
 function tabMeasureBoxesForOutput(measureBoxes, byMeasure) {
@@ -559,6 +613,27 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             tabDiagnostics.tabEmptyMeasures += 1
           }
         }
+
+        for (let boxIndex = 0; boxIndex < systemMeasures.length; boxIndex += 1) {
+          const measureRecord = systemMeasures[boxIndex]
+          const measureBox = emittedMeasureBoxes[boxIndex]
+          if (!measureBox) {
+            continue
+          }
+          const structure = detectMeasureStructureMarkings(
+            imageData,
+            measureBox,
+            inkThreshold,
+            {
+              isFirstInSystem: boxIndex === 0,
+              pageText,
+              ...structureMarkingOptions(targetIndex, systems, systemRoles, measureBox),
+            },
+          )
+          measureRecord.repeatMarking = structure.repeatMarking
+          measureRecord.endingMarking = structure.endingMarking
+        }
+        finalizeEndingStops(systemMeasures)
       }
 
       pageEntry.systems.push({
@@ -591,6 +666,24 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         })
       }
     }
+
+    finalizeRepeatMarkings(measureRhythms)
+
+    attachDynamicsToMeasureRecords({
+      measureRecords: measureRhythms,
+      systemMeasureBoxes,
+      pageText,
+      imageData,
+      inkThreshold,
+      detectHairpins: false,
+      rejectAsciiLetterDynamics: true,
+    })
+    attachTemposToMeasureRecords({
+      measureRecords: measureRhythms,
+      systemMeasureBoxes,
+      pageText,
+      pageNumber: page,
+    })
 
     const result = {
       pageEntry,
@@ -736,6 +829,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             {
               isFirstInSystem: boxIndex === 0,
               pageText,
+              ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
             },
           )
           measureRecord.repeatMarking = structure.repeatMarking
@@ -775,6 +869,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         ),
       )
     }
+
+    finalizeRepeatMarkings(measureRhythms)
 
     attachDynamicsToMeasureRecords({
       measureRecords: measureRhythms,
@@ -984,6 +1080,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         {
           isFirstInSystem: boxIndex === 0,
           pageText,
+          ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
         },
       )
       const dynamic = null
@@ -1027,6 +1124,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       ),
     )
   }
+
+  finalizeRepeatMarkings(measureRhythms)
 
   attachDynamicsToMeasureRecords({
     measureRecords: measureRhythms,

@@ -33,6 +33,29 @@ function normalizeMeasureBox(measureBox) {
   }
 }
 
+function structureDetectionBox(measureBox, structureBand = null) {
+  const box = normalizeMeasureBox(measureBox)
+  if (!structureBand) {
+    return box
+  }
+  const band = normalizeMeasureBox(structureBand)
+  return {
+    ...box,
+    y0: band.y0,
+    y1: band.y1,
+  }
+}
+
+function normalizedStaffLineYs(staffLineYs, imageHeight) {
+  if (!Array.isArray(staffLineYs) || staffLineYs.length < 5 || !imageHeight) {
+    return null
+  }
+  return staffLineYs
+    .filter(Number.isFinite)
+    .map((value) => (value <= 1 ? value * imageHeight : value))
+    .sort((left, right) => left - right)
+}
+
 /**
  * Compact blob suitable for a repeat colon dot.
  * Rejects staff-line Y positions by probing horizontally into the measure
@@ -127,11 +150,66 @@ function colonInBand(imageData, x, bandTop, bandBottom, threshold, musicDirectio
 }
 
 /**
+ * TAB and other dense single-staff bands fake many dot blobs on staff lines.
+ * Restrict colon search to staff spaces when line geometry is known.
+ */
+function colonInStaffSpaces(imageData, x, staffLineYs, threshold, musicDirection = 0) {
+  const lines = normalizedStaffLineYs(staffLineYs, imageData.height)
+  if (!lines || lines.length < 6) {
+    return false
+  }
+  const spaceCenters = []
+  for (let index = 0; index < lines.length - 1; index += 1) {
+    const centerY = (lines[index] + lines[index + 1]) / 2
+    let bestY = null
+    let bestDist = Infinity
+    for (let y = Math.round(centerY) - 3; y <= Math.round(centerY) + 3; y += 1) {
+      // TAB strings are horizontal — skip along-staff rejection used for notation.
+      if (!dotNear(imageData, x, y, threshold, 0)) {
+        continue
+      }
+      const dist = Math.abs(y - centerY)
+      if (dist < bestDist) {
+        bestDist = dist
+        bestY = y
+      }
+    }
+    if (bestY != null) {
+      spaceCenters.push(bestY)
+    }
+  }
+  if (spaceCenters.length < 2) {
+    return false
+  }
+  let best = null
+  for (let i = 0; i < spaceCenters.length; i += 1) {
+    for (let j = i + 1; j < spaceCenters.length; j += 1) {
+      const sep = Math.abs(spaceCenters[j] - spaceCenters[i])
+      if (sep < 5 || sep > 16) {
+        continue
+      }
+      if (!best || sep > best.sep) {
+        best = { sep }
+      }
+    }
+  }
+  return Boolean(best)
+}
+
+/**
  * Repeat dots form a colon (:).
  * Multi-staff systems prefer the inter-staff gap (system-wide colon).
  * Per-staff colons are accepted after rejecting staff-line Y samples.
  */
-function repeatColonNear(imageData, x, y0, y1, threshold, musicDirection = 0) {
+function repeatColonNear(
+  imageData,
+  x,
+  y0,
+  y1,
+  threshold,
+  musicDirection = 0,
+  staffLineYs = null,
+) {
   if (verticalBarStrength(imageData, x, y0, y1, threshold) >= 0.4) {
     return false
   }
@@ -152,6 +230,13 @@ function repeatColonNear(imageData, x, y0, y1, threshold, musicDirection = 0) {
       colonInBand(imageData, x, top, top + height * 0.4, threshold, musicDirection) &&
       colonInBand(imageData, x, top + height * 0.6, bottom, threshold, musicDirection)
     )
+  }
+
+  if (
+    (normalizedStaffLineYs(staffLineYs, imageData.height)?.length ?? 0) >= 6 &&
+    colonInStaffSpaces(imageData, x, staffLineYs, threshold, musicDirection)
+  ) {
+    return true
   }
 
   // Single-staff / synthetic: short along-staff probe rejects line crossings
@@ -220,13 +305,20 @@ function findDoubleBarNearEdge(imageData, cx, y0, y1, threshold) {
  * Requires a double bar pair AND a vertically stacked repeat colon.
  * Ordinary final/double barlines without dots do not match.
  */
-export function detectRepeatBarline(imageData, measureBox, inkThreshold, edge = 'right') {
+export function detectRepeatBarline(
+  imageData,
+  measureBox,
+  inkThreshold,
+  edge = 'right',
+  { structureBand = null, staffLineYs = null } = {},
+) {
   const { width, height } = imageData
   const box = normalizeMeasureBox(measureBox)
+  const band = structureDetectionBox(measureBox, structureBand)
   const xNorm = edge === 'right' ? box.x1 : box.x0
   const cx = Math.round(xNorm * width)
-  const y0 = box.y0 * height
-  const y1 = box.y1 * height
+  const y0 = band.y0 * height
+  const y1 = band.y1 * height
 
   const pair = findDoubleBarNearEdge(imageData, cx, y0, y1, inkThreshold)
   if (!pair) {
@@ -235,21 +327,36 @@ export function detectRepeatBarline(imageData, measureBox, inkThreshold, edge = 
 
   const leftBarX = Math.min(pair.left.peakX, pair.right.peakX)
   const rightBarX = Math.max(pair.left.peakX, pair.right.peakX)
+  const tabStaff =
+    (normalizedStaffLineYs(staffLineYs, imageData.height)?.length ?? 0) >= 6
 
   if (edge === 'right') {
     // Backward: dots left of the thin bar (closer to music).
-    const candidates = [
-      leftBarX - 5,
-      leftBarX - 6,
-      leftBarX - 7,
-      leftBarX - 8,
-      leftBarX - 9,
-      leftBarX - 10,
-      leftBarX - 12,
-      leftBarX - 14,
-    ]
+    const candidates = tabStaff
+      ? [
+          leftBarX - 1,
+          leftBarX - 2,
+          leftBarX - 3,
+          leftBarX - 4,
+          leftBarX - 5,
+          leftBarX - 6,
+          leftBarX - 8,
+          leftBarX - 10,
+        ]
+      : [
+          leftBarX - 5,
+          leftBarX - 6,
+          leftBarX - 7,
+          leftBarX - 8,
+          leftBarX - 9,
+          leftBarX - 10,
+          leftBarX - 12,
+          leftBarX - 14,
+        ]
     if (
-      !candidates.some((x) => repeatColonNear(imageData, x, y0, y1, inkThreshold, -1))
+      !candidates.some((x) =>
+        repeatColonNear(imageData, x, y0, y1, inkThreshold, -1, staffLineYs),
+      )
     ) {
       return null
     }
@@ -257,16 +364,20 @@ export function detectRepeatBarline(imageData, measureBox, inkThreshold, edge = 
   }
 
   // Forward: dots right of the double bar — never sample inside the bar runs.
-  const candidates = [
-    rightBarX + 5,
-    rightBarX + 7,
-    rightBarX + 9,
-    rightBarX + 11,
-    rightBarX + 14,
-    rightBarX + 18,
-  ]
+  const candidates = tabStaff
+    ? [
+        rightBarX + 1,
+        rightBarX + 2,
+        rightBarX + 3,
+        rightBarX + 4,
+        rightBarX + 5,
+        rightBarX + 7,
+        rightBarX + 9,
+        rightBarX + 11,
+      ]
+    : [rightBarX + 5, rightBarX + 7, rightBarX + 9, rightBarX + 11, rightBarX + 14, rightBarX + 18]
   const hasDots = candidates.some((x) =>
-    repeatColonNear(imageData, x, y0, y1, inkThreshold, 1),
+    repeatColonNear(imageData, x, y0, y1, inkThreshold, 1, staffLineYs),
   )
   if (!hasDots) {
     return null
@@ -360,8 +471,15 @@ function detectVoltaStopHook(imageData, measureBox, inkThreshold) {
  * Prefer PDF text labels ("1.", "2."). Ink-only digit heuristics are too
  * weak on clean scores and create false endings — leave them off for now.
  */
-export function detectVoltaEnding(imageData, measureBox, inkThreshold, pageText = null) {
-  const fromText = detectVoltaFromText(pageText, measureBox, imageData)
+export function detectVoltaEnding(
+  imageData,
+  measureBox,
+  inkThreshold,
+  pageText = null,
+  { structureBand = null, voltaBand = null } = {},
+) {
+  const bandBox = structureDetectionBox(measureBox, voltaBand ?? structureBand)
+  const fromText = detectVoltaFromText(pageText, bandBox, imageData)
   if (!fromText) {
     return null
   }
@@ -435,11 +553,24 @@ export function detectMeasureStructureMarkings(
   imageData,
   measureBox,
   inkThreshold,
-  { isFirstInSystem = false, pageText = null } = {},
+  {
+    isFirstInSystem = false,
+    pageText = null,
+    structureBand = null,
+    voltaBand = null,
+    staffLineYs = null,
+  } = {},
 ) {
-  const repeatRight = detectRepeatBarline(imageData, measureBox, inkThreshold, 'right')
+  const structureOptions = { structureBand, voltaBand, staffLineYs }
+  const repeatRight = detectRepeatBarline(
+    imageData,
+    measureBox,
+    inkThreshold,
+    'right',
+    structureOptions,
+  )
   const repeatLeft = isFirstInSystem
-    ? detectRepeatBarline(imageData, measureBox, inkThreshold, 'left')
+    ? detectRepeatBarline(imageData, measureBox, inkThreshold, 'left', structureOptions)
     : null
   const repeatMarking =
     repeatRight || repeatLeft
@@ -449,7 +580,13 @@ export function detectMeasureStructureMarkings(
           confidence: Math.max(repeatLeft?.confidence ?? 0, repeatRight?.confidence ?? 0),
         }
       : null
-  const endingMarking = detectVoltaEnding(imageData, measureBox, inkThreshold, pageText)
+  const endingMarking = detectVoltaEnding(
+    imageData,
+    measureBox,
+    inkThreshold,
+    pageText,
+    structureOptions,
+  )
   return { repeatMarking, endingMarking }
 }
 
@@ -476,5 +613,48 @@ export function finalizeEndingStops(measureRecords) {
       }
     }
   }
+  return measureRecords
+}
+
+/**
+ * Suppress repeat marks that match system-break barlines instead of repeat sections.
+ * TAB layouts often engrave double bars at system breaks that resemble repeats.
+ */
+export function finalizeRepeatMarkings(measureRecords) {
+  if (!Array.isArray(measureRecords) || !measureRecords.length) {
+    return measureRecords
+  }
+
+  for (let index = 0; index < measureRecords.length; index += 1) {
+    const measure = measureRecords[index]
+    const repeat = measure?.repeatMarking
+    if (!repeat) {
+      continue
+    }
+
+    const prev = measureRecords[index - 1]
+    const isFirstInSystem = !prev || prev.systemIndex !== measure.systemIndex
+    const next = measureRecords[index + 1]
+    const systemBreak = Boolean(next && next.systemIndex !== measure.systemIndex)
+    const hasEnding = Boolean(measure.endingMarking?.endingStartNumbers?.length)
+
+    if (repeat.forwardRepeat && measure.systemIndex > 0 && isFirstInSystem) {
+      if (repeat.backwardRepeat) {
+        measure.repeatMarking = { backwardRepeat: true, confidence: repeat.confidence }
+      } else {
+        measure.repeatMarking = null
+      }
+      continue
+    }
+
+    if (repeat.backwardRepeat && systemBreak && !hasEnding) {
+      if (repeat.forwardRepeat) {
+        measure.repeatMarking = { forwardRepeat: true, confidence: repeat.confidence }
+      } else {
+        measure.repeatMarking = null
+      }
+    }
+  }
+
   return measureRecords
 }
