@@ -7,6 +7,7 @@ import {
   MIN_MEASURE_SPAN_FRAC,
   rebuildSpansFromNoteColumnGaps,
   rejectVectorNoteColumns,
+  rejectBarlinesInsideNoteColumnPacks,
   shouldUseVectorNoteColumnHints,
   snapMeasureSpansToNoteColumnGaps,
   splitWideMeasureSpans,
@@ -217,6 +218,30 @@ describe('rebuildSpansFromNoteColumnGaps', () => {
     const result = rebuildSpansFromNoteColumnGaps(spans, columns, { x0: 0.1, x1: 0.9 })
     expect(result.rebuilt).toBe(false)
     expect(result.spans).toEqual(spans)
+  })
+})
+
+describe('rejectBarlinesInsideNoteColumnPacks', () => {
+  it('rejects a stem barline sitting mid-pack in dense piano opening', () => {
+    const columns = [
+      0.1905, 0.2034, 0.2167, 0.2303, 0.244, 0.2578, 0.2713, 0.2847,
+      0.346, 0.3641, 0.382, 0.4,
+    ]
+    const { barlines, rejectedCount } = rejectBarlinesInsideNoteColumnPacks(
+      [0.198, 0.313, 0.512],
+      columns.map((x) => ({ x, width: 0.013 })),
+    )
+    expect(rejectedCount).toBe(1)
+    expect(barlines).toEqual([0.313, 0.512])
+  })
+
+  it('keeps real barlines at large column-pack gaps', () => {
+    const columns = [0.1896, 0.2035, 0.2165, 0.2434, 0.2713, 0.3461, 0.364, 0.3819]
+    const barlines = [0.313, 0.512, 0.711]
+    expect(rejectBarlinesInsideNoteColumnPacks(barlines, columns.map((x) => ({ x })))).toEqual({
+      barlines,
+      rejectedCount: 0,
+    })
   })
 })
 

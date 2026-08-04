@@ -28,6 +28,10 @@ const VECTOR_SINGLETON_COLUMN_CLUSTER_DISTANCE = 0.006
 export const VECTOR_NOTE_COLUMN_CLUSTER_DISTANCE = 0.01
 /** Trailing chord columns stolen across a late barline leave a gap ≥ this × median. */
 const NOTE_COLUMN_GAP_SNAP_MIN_RATIO = 2
+/** Barlines closer than this to an in-pack column centroid are likely stems. */
+const IN_PACK_BARLINE_MAX_DISTANCE = 0.008
+/** Column gap ≥ median × this marks a measure pack boundary. */
+const PACK_BOUNDARY_GAP_RATIO = 2
 /** Search the rightmost fraction of the left span for a stolen opening column. */
 const NOTE_COLUMN_GAP_SNAP_SEARCH_LEFT_FRAC = 0.45
 const NOTE_COLUMN_GAP_SNAP_MIN_COLUMNS = 4
@@ -172,6 +176,56 @@ export function rejectVectorNoteColumns(barlines, noteheadXNorms = [], imageWidt
     barlines: filtered,
     rejectedCount: barlines.length - filtered.length,
     candidateOffsets,
+  }
+}
+
+/**
+ * Dense chordal systems can mis-detect a note stem as a barline mid-pack.
+ * Reject barlines that sit on a column centroid when neighboring columns
+ * are tightly spaced (not at a large inter-measure gap).
+ */
+export function rejectBarlinesInsideNoteColumnPacks(barlines, noteColumnXNorms = []) {
+  const columns = clusterVectorNoteheadColumns(noteColumnXNorms).map((column) => column.x)
+  if (columns.length < 4 || barlines.length === 0) {
+    return { barlines, rejectedCount: 0 }
+  }
+  const gaps = []
+  for (let index = 1; index < columns.length; index += 1) {
+    gaps.push(columns[index] - columns[index - 1])
+  }
+  const medianGap = median(gaps)
+  if (!(medianGap > 0)) {
+    return { barlines, rejectedCount: 0 }
+  }
+  const maxDistance = Math.min(IN_PACK_BARLINE_MAX_DISTANCE, medianGap * 0.55)
+  const boundaryThreshold = medianGap * PACK_BOUNDARY_GAP_RATIO
+  const isPackBoundary = (columnIndex) => {
+    const gapBefore =
+      columnIndex > 0 ? columns[columnIndex] - columns[columnIndex - 1] : Infinity
+    const gapAfter =
+      columnIndex < columns.length - 1
+        ? columns[columnIndex + 1] - columns[columnIndex]
+        : Infinity
+    return gapBefore >= boundaryThreshold || gapAfter >= boundaryThreshold
+  }
+  const filtered = barlines.filter((barlineX) => {
+    let nearestIndex = 0
+    let nearestDistance = Infinity
+    for (let index = 0; index < columns.length; index += 1) {
+      const distance = Math.abs(barlineX - columns[index])
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        nearestIndex = index
+      }
+    }
+    if (nearestDistance > maxDistance) {
+      return true
+    }
+    return isPackBoundary(nearestIndex)
+  })
+  return {
+    barlines: filtered,
+    rejectedCount: barlines.length - filtered.length,
   }
 }
 
@@ -629,7 +683,14 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     vectorNoteheadXNorms,
     imageData.width,
   )
-  const barlines = vectorFiltered.barlines.filter(
+  const columnHints = Array.isArray(noteColumnXNorms) && noteColumnXNorms.length
+    ? noteColumnXNorms
+    : vectorNoteheadXNorms
+  const inPackFiltered = rejectBarlinesInsideNoteColumnPacks(
+    vectorFiltered.barlines,
+    columnHints,
+  )
+  const barlines = inPackFiltered.barlines.filter(
     (x) => x > x0Content + 0.02 && x < x1Content - 0.02,
   )
   const reliability = assessBarlineReliability(barlines, contentBounds, barlineDiagnostics)
@@ -662,9 +723,6 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   })
   spans = trailingNarrow.spans
 
-  const columnHints = Array.isArray(noteColumnXNorms) && noteColumnXNorms.length
-    ? noteColumnXNorms
-    : vectorNoteheadXNorms
   let rebuiltFromNoteColumnGaps = 0
   if (
     reliability?.confident === false &&
@@ -703,6 +761,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     barlineRejectedSummary: summarizeBarlineRejections(barlineDiagnostics?.rejected),
     barlineThinningRemoved: barlineDiagnostics?.thinningRemoved ?? 0,
     vectorNoteColumnRejected: vectorFiltered.rejectedCount,
+    inPackBarlinesRejected: inPackFiltered.rejectedCount,
     vectorNoteColumnCandidates: vectorFiltered.candidateOffsets,
     barlineDensityAmbiguous: barlineDiagnostics?.densityAmbiguous === true,
     reliabilityReason: reliability.reason,
