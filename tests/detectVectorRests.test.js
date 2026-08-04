@@ -161,6 +161,49 @@ describe('insertMixedMeasureRests', () => {
     expect(skipped[0]?.reason).toBe(VECTOR_REST_SKIP_REASONS.WHOLE_REST_WITH_STAFF_NOTES)
   })
 
+  it('places an opening pickup rest at the barline before the first attack', () => {
+    const noteEvents = [
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 2,
+        durationType: 'eighth',
+        positionInMeasure: 0.26,
+        notes: [{ ...trebleNote(0.26, 67), positionInMeasure: 0.26 }],
+      },
+      {
+        type: 'note',
+        startDivision: 6,
+        durationDivisions: 6,
+        durationType: 'quarter',
+        dotted: true,
+        positionInMeasure: 0.35,
+        notes: [{ ...trebleNote(0.35, 69), positionInMeasure: 0.35, dotted: true }],
+      },
+    ]
+    const { events, appliedCount } = insertMixedMeasureRests(
+      noteEvents,
+      [
+        {
+          cx: 220,
+          cy: 170,
+          positionInMeasure: 0.17,
+          durationType: 'eighth',
+          clef: 'treble',
+          source: 'vector-glyph',
+          confidence: 0.88,
+        },
+      ],
+      { measureBox, totalDivisions: 16 },
+    )
+    expect(appliedCount).toBe(1)
+    const rest = events.find((event) => event.type === 'rest')
+    expect(rest?.startDivision).toBe(0)
+    expect(rest?.durationDivisions).toBe(2)
+    const firstNote = events.find((event) => event.type === 'note')
+    expect(firstNote?.startDivision).toBe(2)
+  })
+
   it('inserts a partial rest only into a clear staff gap', () => {
     const noteEvents = [
       {

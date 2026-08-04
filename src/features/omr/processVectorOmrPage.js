@@ -1644,6 +1644,8 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
           } else if (
             sameClefSpan <= OMR_DURATION_DIVISIONS.eighth + 1 &&
             index + 1 < sorted.length &&
+            !hasDottedEvidence(sorted[index + 1]?.notes) &&
+            !sorted[index + 1]?.dotted &&
             !hasBeamEvidenceForNotes(sorted[index + 1].notes) &&
             countSameClefEventsInSpan(sorted, index, quarterFloor) <= 2 &&
             index + 2 < sorted.length
@@ -2960,6 +2962,201 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
   return remapped
 }
 
+/**
+ * Filled heads with augmentation dots but no beam evidence default to quarter
+ * bases during enrich. When the next attack sits a subdivision tail away, the
+ * written value is a dotted eighth, not a dotted quarter.
+ */
+export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 2 || noteEvents.length > 6) {
+    return events
+  }
+  const dottedQuarterDivisions = Math.round(OMR_DIVISIONS_PER_QUARTER * 1.5)
+  const dottedEighthDivisions = Math.round(OMR_DURATION_DIVISIONS.eighth * 1.5)
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const durationByEvent = new Map()
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) =>
+        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+        (left.cx ?? left.notes?.[0]?.cx ?? 0) - (right.cx ?? right.notes?.[0]?.cx ?? 0),
+    )
+    for (let index = 0; index < sorted.length - 1; index += 1) {
+      const current = sorted[index]
+      const next = sorted[index + 1]
+      if (!hasDottedEvidence(current.notes) && !current.dotted) {
+        continue
+      }
+      if (hasBeamEvidenceForNotes(current.notes)) {
+        continue
+      }
+      const currentDuration = current.durationDivisions ?? 0
+      if (currentDuration !== dottedQuarterDivisions) {
+        continue
+      }
+      const currentPosition =
+        current.positionInMeasure ?? current.notes?.[0]?.positionInMeasure ?? null
+      const nextPosition =
+        next.positionInMeasure ?? next.notes?.[0]?.positionInMeasure ?? null
+      if (!Number.isFinite(currentPosition) || !Number.isFinite(nextPosition)) {
+        continue
+      }
+      const positionGap = nextPosition - currentPosition
+      if (positionGap <= 0 || positionGap > 0.22) {
+        continue
+      }
+      durationByEvent.set(current, dottedEighthDivisions)
+    }
+  }
+
+  if (!durationByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const durationDivisions = durationByEvent.get(event)
+      if (durationDivisions == null) {
+        return event
+      }
+      return {
+        ...event,
+        durationDivisions,
+        ...durationMeta(durationDivisions, { allowDotted: true }),
+        dottedSubdivisionBaseRefined: true,
+      }
+    }),
+  )
+}
+
+/**
+ * Position snap can collapse consecutive sixteenth attacks onto one onset.
+ * Split same-start single-note events or two-note dyads when horizontal order
+ * proves sequential subdivision rather than a harmonic stack.
+ */
+export function splitSnappedSequentialSixteenths(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 1 || noteEvents.length > 6) {
+    return events
+  }
+  const sixteenth = OMR_DURATION_DIVISIONS.sixteenth
+  const output = []
+
+  for (const event of events) {
+    if (event.type !== 'note') {
+      output.push(event)
+      continue
+    }
+
+    const notes = event.notes ?? []
+    if (notes.length === 2) {
+      const sortedNotes = [...notes].sort((left, right) => (left.cx ?? 0) - (right.cx ?? 0))
+      const dx = Math.abs((sortedNotes[1].cx ?? 0) - (sortedNotes[0].cx ?? 0))
+      const start = event.startDivision ?? 0
+      const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      const terminalTail =
+        start >= totalDivisions - OMR_DIVISIONS_PER_QUARTER &&
+        duration >= OMR_DIVISIONS_PER_QUARTER
+      if (
+        dx > 0 &&
+        dx <= OMR_CHORD_MERGE_X &&
+        start + sixteenth < totalDivisions &&
+        (duration >= OMR_DIVISIONS_PER_QUARTER || terminalTail)
+      ) {
+        const leadingStart = terminalTail ? Math.max(0, start - sixteenth) : start
+        const trailingStart = terminalTail ? start : start + sixteenth
+        const trailingDuration = terminalTail
+          ? duration
+          : Math.max(sixteenth, duration - sixteenth)
+        output.push({
+          ...event,
+          notes: [sortedNotes[0]],
+          cx: sortedNotes[0].cx,
+          startDivision: leadingStart,
+          durationDivisions: sixteenth,
+          ...durationMeta(sixteenth),
+          snappedSequentialSixteenthSplit: true,
+        })
+        output.push({
+          ...event,
+          notes: [sortedNotes[1]],
+          cx: sortedNotes[1].cx,
+          startDivision: trailingStart,
+          durationDivisions: trailingDuration,
+          ...durationMeta(trailingDuration),
+          snappedSequentialSixteenthSplit: true,
+        })
+        continue
+      }
+    }
+
+    output.push(event)
+  }
+
+  const noteOnly = output.filter((event) => event.type === 'note')
+  const byStartClef = new Map()
+  for (const event of noteOnly) {
+    const start = event.startDivision ?? 0
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    const key = `${clef}:${start}`
+    if (!byStartClef.has(key)) {
+      byStartClef.set(key, [])
+    }
+    byStartClef.get(key).push(event)
+  }
+
+  const startByEvent = new Map()
+  for (const group of byStartClef.values()) {
+    if (group.length !== 2) {
+      continue
+    }
+    if (group.some((entry) => (entry.notes?.length ?? 0) !== 1)) {
+      continue
+    }
+    const sorted = [...group].sort(
+      (left, right) => (left.notes?.[0]?.cx ?? 0) - (right.notes?.[0]?.cx ?? 0),
+    )
+    const left = sorted[0]
+    const right = sorted[1]
+    const dx = Math.abs((right.notes?.[0]?.cx ?? 0) - (left.notes?.[0]?.cx ?? 0))
+    if (dx <= 0 || dx > OMR_CHORD_MERGE_X) {
+      continue
+    }
+    const start = left.startDivision ?? 0
+    if (start + sixteenth >= totalDivisions) {
+      continue
+    }
+    startByEvent.set(left, start)
+    startByEvent.set(right, start + sixteenth)
+  }
+
+  if (!startByEvent.size) {
+    return sortVectorRhythmEvents(output)
+  }
+
+  return sortVectorRhythmEvents(
+    output.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        snappedSequentialSixteenthSplit: true,
+      }
+    }),
+  )
+}
+
 function dedupeNotesByMidi(notes = []) {
   return dedupeNoteheads(notes)
 }
@@ -3390,9 +3587,19 @@ function buildNoteEventsFromGroups(
       refineSparseChordColumnOnsets(events, beats, totalDivisions),
     )
   }
+  if (!denseMeasure) {
+    events = track('split-sequential-sixteenths', 'splitSnappedSequentialSixteenths', () =>
+      splitSnappedSequentialSixteenths(events, totalDivisions),
+    )
+  }
   events = track('chord-coalesce', 'coalesceSameOnsetChordEvents', () =>
     coalesceSameOnsetChordEvents(events),
   )
+  if (!denseMeasure) {
+    events = track('dotted-subdivision-base', 'refineDottedSubdivisionBaseDurations', () =>
+      refineDottedSubdivisionBaseDurations(events, totalDivisions),
+    )
+  }
   if (denseMeasure) {
     events = track('dense-chord-resnap', 'resnapDenseChordOnsets', () =>
       resnapDenseChordOnsets(events, totalDivisions),

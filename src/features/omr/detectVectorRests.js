@@ -123,6 +123,28 @@ function overlapsRest(start, duration, rests) {
   })
 }
 
+function firstNoteOnStaff(events, clef) {
+  const notes = staffNoteEvents(events, clef)
+  if (!notes.length) {
+    return null
+  }
+  return notes.reduce((best, event) =>
+    (event.startDivision ?? 0) < (best.startDivision ?? 0) ? event : best,
+  )
+}
+
+function firstNotePositionOnStaff(events, clef) {
+  const first = firstNoteOnStaff(events, clef)
+  if (!first) {
+    return null
+  }
+  return (
+    first.positionInMeasure ??
+    first.notes?.[0]?.positionInMeasure ??
+    null
+  )
+}
+
 function createRestEvent(rest, startDivision, durationDivisions, measureBox) {
   return {
     type: 'rest',
@@ -175,15 +197,31 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
   }
 
-  const gap = findGapContaining(intervals, preferredStart, totalDivisions)
+  const firstNotePosition = firstNotePositionOnStaff(events, clef)
+  const firstNoteStart = firstNoteOnStaff(events, clef)?.startDivision ?? totalDivisions
+  const openingPickupRest =
+    Number.isFinite(firstNotePosition) &&
+    rest.positionInMeasure + 0.02 < firstNotePosition &&
+    rest.positionInMeasure < 0.35
+
+  let gap = findGapContaining(intervals, preferredStart, totalDivisions)
+  if (openingPickupRest) {
+    const openingGap = findGapContaining(intervals, 0, totalDivisions)
+    if (openingGap && openingGap.gapStart === 0 && openingGap.gapEnd > openingGap.gapStart) {
+      gap = openingGap
+    }
+  }
   if (!gap) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.NO_STAFF_GAP }
   }
 
-  const startDivision = Math.max(
+  let startDivision = Math.max(
     gap.gapStart,
     Math.min(gap.gapEnd - 1, preferredStart),
   )
+  if (openingPickupRest && gap.gapStart === 0) {
+    startDivision = 0
+  }
   if (startDivision < gap.gapStart || startDivision >= gap.gapEnd) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.NO_STAFF_GAP }
   }
@@ -198,7 +236,15 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
   const glyphDuration =
     OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
   let durationDivisions = Math.min(gapDuration, Math.max(1, glyphDuration))
+  if (openingPickupRest && startDivision === 0) {
+    durationDivisions = Math.min(
+      glyphDuration,
+      Math.max(1, firstNoteStart - startDivision),
+      gapDuration,
+    )
+  }
   if (
+    !openingPickupRest &&
     gapDuration >= OMR_DIVISIONS_PER_QUARTER &&
     durationDivisions < gapDuration &&
     gapDuration - durationDivisions <= OMR_DURATION_DIVISIONS.eighth
@@ -214,6 +260,81 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     applied: true,
     events: [...events, createRestEvent(rest, startDivision, durationDivisions, measureBox)],
   }
+}
+
+/**
+ * When an opening pickup rest lands at the barline, shift delayed note onsets
+ * left by the same pickup offset so the rest+attack grid matches the engraving.
+ */
+export function rebalanceOpeningPickupRests(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (!noteEvents.length) {
+    return events
+  }
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.clef ?? event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  const shiftByEvent = new Map()
+  for (const [clef, clefNotes] of byClef.entries()) {
+    const openingRest = events.find(
+      (event) =>
+        event.type === 'rest' &&
+        (event.clef ?? 'treble') === clef &&
+        (event.startDivision ?? 0) === 0,
+    )
+    if (!openingRest) {
+      continue
+    }
+    const restDuration = openingRest.durationDivisions ?? 0
+    if (!(restDuration > 0)) {
+      continue
+    }
+    const sortedNotes = [...clefNotes].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    const firstStart = sortedNotes[0]?.startDivision ?? 0
+    const firstPosition =
+      sortedNotes[0]?.positionInMeasure ??
+      sortedNotes[0]?.notes?.[0]?.positionInMeasure ??
+      null
+    if (
+      firstStart <= restDuration ||
+      firstStart > restDuration + OMR_DURATION_DIVISIONS.eighth + 1 ||
+      !(Number.isFinite(firstPosition) && firstPosition < 0.35)
+    ) {
+      continue
+    }
+    const delta = firstStart - restDuration
+    if (!(delta > 0)) {
+      continue
+    }
+    for (const event of sortedNotes) {
+      shiftByEvent.set(event, Math.max(0, (event.startDivision ?? 0) - delta))
+    }
+  }
+
+  if (!shiftByEvent.size) {
+    return events
+  }
+
+  return sortStaffAwareEvents(
+    events.map((event) => {
+      if (!shiftByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: shiftByEvent.get(event),
+        openingPickupRestRebalanced: true,
+      }
+    }),
+  )
 }
 
 /**
@@ -238,6 +359,8 @@ export function insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDi
       durationType: rest.durationType,
     })
   }
+
+  events = rebalanceOpeningPickupRests(events, totalDivisions)
 
   return {
     events: sortStaffAwareEvents(events),
