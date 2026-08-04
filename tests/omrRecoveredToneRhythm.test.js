@@ -4,6 +4,8 @@ import {
   buildVectorEvents,
   coalesceSameOnsetChordEvents,
   refineSparseChordColumnStarts,
+  refineSparsePickupColumnOnsets,
+  resolveWrittenDurationOverlaps,
   shouldInferRhythmFromPositions,
   snapUniformSubdivisionStarts,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -137,6 +139,76 @@ describe('refineSparseChordColumnStarts', () => {
 
   it('leaves an already quarter-spaced tail alone', () => {
     expect(refineSparseChordColumnStarts([0, 2, 4, 8, 12], 4, 16)).toEqual([0, 2, 4, 8, 12])
+  })
+
+  it('rebuilds a delayed monophonic pickup opening when the head sits in the first beat', () => {
+    expect(
+      refineSparseChordColumnStarts([3, 4, 6, 8, 11], 4, 16, { firstPosition: 0.17 }),
+    ).toEqual([0, 2, 4, 8, 12])
+  })
+})
+
+describe('refineSparsePickupColumnOnsets', () => {
+  it('expands two opening eighths plus quarters onto the pickup grid', () => {
+    const notes = [
+      chordTone({ cx: 745, cy: 686, midi: 71, positionInMeasure: 0.171 }),
+      chordTone({ cx: 763, cy: 693, midi: 69, positionInMeasure: 0.22 }),
+      chordTone({ cx: 781, cy: 699, midi: 67, positionInMeasure: 0.348 }),
+      chordTone({ cx: 816, cy: 706, midi: 65, positionInMeasure: 0.527 }),
+      chordTone({ cx: 852, cy: 712, midi: 64, positionInMeasure: 0.705 }),
+    ]
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 }).filter(
+      (event) => event.type === 'note',
+    )
+    const refined = refineSparsePickupColumnOnsets(events, 4, 16).filter(
+      (event) => event.type === 'note',
+    )
+    expect(refined.map((event) => event.startDivision)).toEqual([0, 2, 4, 8, 12])
+  })
+})
+
+describe('resolveWrittenDurationOverlaps', () => {
+  it('pushes a follower past a dotted predecessor written release', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 6,
+        durationType: 'quarter',
+        dotted: true,
+        notes: [{ clef: 'treble', midi: 64, dotted: true }],
+      },
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        notes: [{ clef: 'treble', midi: 67 }],
+      },
+      {
+        type: 'note',
+        startDivision: 12,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        notes: [{ clef: 'treble', midi: 69 }],
+      },
+    ]
+    const resolved = resolveWrittenDurationOverlaps(events, 16).filter(
+      (event) => event.type === 'note',
+    )
+    expect(resolved.map((event) => event.startDivision)).toEqual([0, 6, 12])
+    expect(resolved[1].durationDivisions).toBe(2)
+  })
+})
+
+describe('shouldInferRhythmFromPositions', () => {
+  it('uses positions when a sparse measure contains a dotted attack', () => {
+    const groups = [
+      { notes: [{ positionInMeasure: 0.17, dotted: true }] },
+      { notes: [{ positionInMeasure: 0.44 }] },
+      { notes: [{ positionInMeasure: 0.66 }] },
+    ]
+    expect(shouldInferRhythmFromPositions(groups, 4)).toBe(true)
   })
 })
 

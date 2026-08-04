@@ -197,7 +197,14 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
   // every rest to the full gap invents long rests and shifts later onsets.
   const glyphDuration =
     OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
-  const durationDivisions = Math.min(gapDuration, Math.max(1, glyphDuration))
+  let durationDivisions = Math.min(gapDuration, Math.max(1, glyphDuration))
+  if (
+    gapDuration >= OMR_DIVISIONS_PER_QUARTER &&
+    durationDivisions < gapDuration &&
+    gapDuration - durationDivisions <= OMR_DURATION_DIVISIONS.eighth
+  ) {
+    durationDivisions = gapDuration
+  }
 
   if (overlapsRest(startDivision, durationDivisions, restsOnStaff)) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.DUPLICATE_REST }

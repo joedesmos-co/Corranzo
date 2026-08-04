@@ -621,6 +621,13 @@ export function shouldInferRhythmFromPositions(groups, beats) {
   if (groups.length > beats) {
     return true
   }
+  if (
+    groups.some((group) =>
+      (group.notes ?? []).some((note) => note.dotted === true),
+    )
+  ) {
+    return true
+  }
   const positions = sortedGroupPositions(groups)
   if (positions.length !== groups.length || positions.length < 2) {
     return false
@@ -1196,6 +1203,24 @@ function hasDottedEvidence(notes = []) {
   return notes.some((note) => note.dotted === true)
 }
 
+function followsDottedSubdivisionTail(clefEvents, index) {
+  if (index <= 0) {
+    return false
+  }
+  const previous = clefEvents[index - 1]
+  const current = clefEvents[index]
+  if (!hasDottedEvidence(previous?.notes) && !previous?.dotted) {
+    return false
+  }
+  const previousStart = previous.startDivision ?? 0
+  const previousDuration =
+    dottedWrittenDurationDivisions(previous.notes) ??
+    previous.durationDivisions ??
+    OMR_DIVISIONS_PER_QUARTER
+  const currentStart = current.startDivision ?? 0
+  return currentStart === previousStart + previousDuration
+}
+
 function hasStemEvidence(notes = []) {
   return notes.some((note) => note.stem)
 }
@@ -1607,6 +1632,7 @@ export function extendDurationsPerClefVoice(events, totalDivisions) {
           }
         }
         if (
+          !followsDottedSubdivisionTail(sorted, index) &&
           hasConfidentQuarterInference(event.notes ?? [], globalDuration) &&
           !hasBeamEvidenceForNotes(event.notes) &&
           !sameClefSubdivisionRun(sorted, index) &&
@@ -1734,6 +1760,9 @@ export function applySameClefBeatQuarterFloors(events, totalDivisions) {
     for (let index = 0; index < sorted.length; index += 1) {
       const event = sorted[index]
       const duration = event.durationDivisions ?? OMR_DIVISIONS_PER_QUARTER
+      if (followsDottedSubdivisionTail(sorted, index)) {
+        continue
+      }
       const floor = sameClefBeatQuarterFloor(sorted, index, totalDivisions, duration)
       if (floor != null && floor > duration) {
         durationByEvent.set(event, floor)
@@ -2422,9 +2451,18 @@ function startDivisionFromPosition(
   // Secondary beams prove a sixteenth grid; otherwise keep Sprint-1 snap rules.
   // Do not force primary-beamed notes onto an eighth grid here — false beam ink
   // on quarters (Sprint 2 regression) shortened gaps and capped Q→eighth.
+  const hasDotted = (notes ?? []).some((note) => note.dotted === true)
   const hasSecondaryBeam = (notes ?? []).some((note) => (note.beams ?? 0) >= 2)
-  if (!denseMeasure && !hasSecondaryBeam) {
+  if (!denseMeasure && !hasSecondaryBeam && !hasDotted) {
     return snapStartDivision(raw, totalDivisions)
+  }
+  if (hasDotted && !denseMeasure && raw >= totalDivisions * 0.45) {
+    const quarterGrid = OMR_DIVISIONS_PER_QUARTER
+    const clamped = Math.max(0, Math.min(totalDivisions - 1, raw))
+    return Math.max(
+      0,
+      Math.min(totalDivisions - 1, Math.round(clamped / quarterGrid) * quarterGrid),
+    )
   }
   const grid = Math.max(1, OMR_DIVISIONS_PER_QUARTER / 4)
   const clamped = Math.max(0, Math.min(totalDivisions - 1, raw))
@@ -2620,15 +2658,24 @@ export function alignOpeningEventStarts(events, beats = 4) {
  * Applies only to the common "one extra column" chart shape (beats+1 attacks),
  * e.g. two opening eighths then quarters in 4/4 → [0,2,4,8,12].
  */
-export function refineSparseChordColumnStarts(starts, beats, totalDivisions) {
+export function refineSparseChordColumnStarts(
+  starts,
+  beats,
+  totalDivisions,
+  { firstPosition = null } = {},
+) {
   const eighth = OMR_DURATION_DIVISIONS.eighth
   const quarter = OMR_DIVISIONS_PER_QUARTER
+  const openingInFirstBeat =
+    Number.isFinite(firstPosition) && firstPosition < 1 / Math.max(1, beats)
   if (
     !Array.isArray(starts) ||
     starts.length !== beats + 1 ||
-    (starts[0] ?? 0) !== 0 ||
     totalDivisions < beats * quarter
   ) {
+    return starts
+  }
+  if ((starts[0] ?? 0) !== 0 && !openingInFirstBeat) {
     return starts
   }
   const pickups = starts.length - beats
@@ -2649,6 +2696,9 @@ export function refineSparseChordColumnStarts(starts, beats, totalDivisions) {
   const compressed = starts.some((start, index) => start < ideal[index])
   if (!compressed) {
     return starts
+  }
+  if (openingInFirstBeat) {
+    return ideal
   }
   // Do not rewrite grids that already overshoot the ideal (true late entries).
   if (starts.some((start, index) => start > ideal[index] + eighth)) {
@@ -2675,7 +2725,11 @@ export function refineSparseChordColumnOnsets(events, beats = 4, totalDivisions 
     return events
   }
   const starts = sorted.map((event) => event.startDivision ?? 0)
-  const nextStarts = refineSparseChordColumnStarts(starts, beats, totalDivisions)
+  const firstPosition =
+    sorted[0]?.positionInMeasure ?? sorted[0]?.notes?.[0]?.positionInMeasure ?? null
+  const nextStarts = refineSparseChordColumnStarts(starts, beats, totalDivisions, {
+    firstPosition,
+  })
   if (nextStarts.every((start, index) => start === starts[index])) {
     return events
   }
@@ -2714,6 +2768,194 @@ export function refineSparseChordColumnOnsets(events, beats = 4, totalDivisions 
         allowDotted: hasDottedEvidence(event.notes) || event.dotted,
       }),
     })
+  }
+  return remapped
+}
+
+/**
+ * Monophonic beats+1 pickup packs (e.g. two beamed eighths then quarters in 4/4).
+ * Uses the same ideal grid as chord-column refine when the opening attack sits in
+ * the first beat but dense snap left the grid delayed.
+ */
+export function refineSparsePickupColumnOnsets(events, beats = 4, totalDivisions = 16) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length !== beats + 1) {
+    return events
+  }
+  const sorted = [...noteEvents].sort(
+    (left, right) =>
+      (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+      (left.cx ?? 0) - (right.cx ?? 0),
+  )
+  const multiNote = sorted.filter((event) => (event.notes?.length ?? 0) >= 2).length
+  if (multiNote >= Math.ceil(sorted.length * 0.5)) {
+    return events
+  }
+  const firstPosition =
+    sorted[0]?.positionInMeasure ?? sorted[0]?.notes?.[0]?.positionInMeasure ?? null
+  const starts = sorted.map((event) => event.startDivision ?? 0)
+  const nextStarts = refineSparseChordColumnStarts(starts, beats, totalDivisions, {
+    firstPosition,
+  })
+  if (nextStarts.every((start, index) => start === starts[index])) {
+    return events
+  }
+  const startByEvent = new Map(sorted.map((event, index) => [event, nextStarts[index]]))
+  const remapped = sortVectorRhythmEvents(
+    events.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        sparsePickupColumnRefined: true,
+      }
+    }),
+  )
+  const refinedNotes = remapped
+    .filter((event) => event.type === 'note')
+    .sort(
+      (left, right) =>
+        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+        (left.cx ?? 0) - (right.cx ?? 0),
+    )
+  for (let index = 0; index < refinedNotes.length; index += 1) {
+    const event = refinedNotes[index]
+    const start = event.startDivision ?? 0
+    const nextStart =
+      index + 1 < refinedNotes.length
+        ? refinedNotes[index + 1].startDivision ?? totalDivisions
+        : totalDivisions
+    const duration = Math.max(1, Math.min(nextStart - start, totalDivisions - start))
+    Object.assign(event, {
+      durationDivisions: duration,
+      ...durationMeta(duration, {
+        allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+      }),
+    })
+  }
+  return remapped
+}
+
+/**
+ * When a sparse voice assigns quarter-grid onsets but a dotted predecessor
+ * extends past the next attack, push later onsets to the written release and
+ * re-gap durations on that voice.
+ */
+export function resolveWrittenDurationOverlaps(events, totalDivisions) {
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 2 || noteEvents.length > 5) {
+    return events
+  }
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+  const startByEvent = new Map()
+  let changed = false
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
+    )
+    for (let index = 0; index < sorted.length - 1; index += 1) {
+      const current = sorted[index]
+      const next = sorted[index + 1]
+      if (!hasDottedEvidence(current.notes) && !current.dotted) {
+        continue
+      }
+      const start = startByEvent.get(current) ?? current.startDivision ?? 0
+      const dottedWritten = dottedWrittenDurationDivisions(current.notes)
+      const glyphCap = glyphAuthoritativeDurationDivisions(current.notes ?? [], {
+        allowDotted: hasDottedEvidence(current.notes) || current.dotted,
+      })
+      const duration =
+        dottedWritten ??
+        glyphCap ??
+        current.durationDivisions ??
+        OMR_DIVISIONS_PER_QUARTER
+      const writtenEnd = start + duration
+      const nextStart = startByEvent.get(next) ?? next.startDivision ?? 0
+      if (nextStart < writtenEnd) {
+        startByEvent.set(next, writtenEnd)
+        changed = true
+      } else if (
+        nextStart > writtenEnd &&
+        nextStart <= writtenEnd + OMR_DURATION_DIVISIONS.eighth
+      ) {
+        startByEvent.set(next, writtenEnd)
+        changed = true
+      }
+    }
+  }
+  if (!changed) {
+    return events
+  }
+  const remapped = sortVectorRhythmEvents(
+    events.map((event) => {
+      if (!startByEvent.has(event)) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision: startByEvent.get(event),
+        writtenOverlapResolved: true,
+      }
+    }),
+  )
+  for (const [clef, clefEvents] of byClef.entries()) {
+    const sorted = remapped
+      .filter(
+        (event) =>
+          event.type === 'note' && (event.notes?.[0]?.clef ?? 'treble') === clef,
+      )
+      .sort(
+        (left, right) =>
+          (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+          (left.cx ?? 0) - (right.cx ?? 0),
+      )
+    void clefEvents
+    for (let index = 0; index < sorted.length; index += 1) {
+      const event = sorted[index]
+      const start = event.startDivision ?? 0
+      const nextStart =
+        index + 1 < sorted.length
+          ? sorted[index + 1].startDivision ?? totalDivisions
+          : totalDivisions
+      const glyphCap = glyphAuthoritativeDurationDivisions(event.notes ?? [], {
+        allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+      })
+      const beamFloor = inferredBeamDurationFloor(event.notes)
+      let duration = Math.max(1, Math.min(nextStart - start, totalDivisions - start))
+      if (index > 0) {
+        const previous = sorted[index - 1]
+        const previousDotted =
+          hasDottedEvidence(previous.notes) || previous.dotted === true
+        const span = nextStart - start
+        if (
+          previousDotted &&
+          span >= OMR_DIVISIONS_PER_QUARTER + OMR_DURATION_DIVISIONS.eighth
+        ) {
+          duration = Math.min(duration, OMR_DURATION_DIVISIONS.eighth)
+        }
+      }
+      if (beamFloor != null && duration < beamFloor) {
+        duration = Math.min(beamFloor, totalDivisions - start)
+      }
+      if (glyphCap != null && duration > glyphCap) {
+        duration = glyphCap
+      }
+      Object.assign(event, {
+        durationDivisions: duration,
+        ...durationMeta(duration, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
+      })
+    }
   }
   return remapped
 }
@@ -2969,6 +3211,12 @@ function buildNoteEventsFromGroups(
         }
       })
       .sort((left, right) => left.startDivision - right.startDivision)
+    if (usePositionStarts && groups.length) {
+      const firstPosition = groupAnchorPosition(groups[0])
+      if (Number.isFinite(firstPosition) && firstPosition < 1 / Math.max(1, beats)) {
+        groups[0].startDivision = 0
+      }
+    }
   }
 
   const rhythmStarts = groups.map((group, index) => {
@@ -2989,6 +3237,26 @@ function buildNoteEventsFromGroups(
     beats,
     totalDivisions,
   )
+  if (usePositionStarts && groups.length >= 2) {
+    for (let index = 1; index < alignedStarts.length; index += 1) {
+      const previousNotes = groups[index - 1]?.notes ?? []
+      if (!hasDottedEvidence(previousNotes)) {
+        continue
+      }
+      const previousStart = alignedStarts[index - 1]
+      const previousDuration =
+        dottedWrittenDurationDivisions(previousNotes) ??
+        glyphAuthoritativeDurationDivisions(previousNotes, { allowDotted: true }) ??
+        OMR_DIVISIONS_PER_QUARTER
+      const writtenEnd = previousStart + previousDuration
+      if (
+        alignedStarts[index] > writtenEnd &&
+        alignedStarts[index] <= writtenEnd + OMR_DURATION_DIVISIONS.eighth
+      ) {
+        alignedStarts[index] = writtenEnd
+      }
+    }
+  }
 
   let events = splitMixedClefEvents(
     groups.map((group, index) => {
@@ -3055,6 +3323,18 @@ function buildNoteEventsFromGroups(
             }
           }
         }
+        if (
+          index > 0 &&
+          hasDottedEvidence(groups[index - 1]?.notes) &&
+          nextAlignedStart - startDivision >=
+            OMR_DIVISIONS_PER_QUARTER + OMR_DURATION_DIVISIONS.eighth
+        ) {
+          snappedDuration = Math.min(
+            snappedDuration,
+            OMR_DURATION_DIVISIONS.eighth,
+            measureRemaining,
+          )
+        }
       }
       const meta = durationMeta(snappedDuration, { allowDotted })
       const positionInMeasure =
@@ -3103,6 +3383,9 @@ function buildNoteEventsFromGroups(
     events = track('opening-onset-align', 'alignOpeningEventStarts', () =>
       alignOpeningEventStarts(events, beats),
     )
+    events = track('sparse-pickup-column-refine', 'refineSparsePickupColumnOnsets', () =>
+      refineSparsePickupColumnOnsets(events, beats, totalDivisions),
+    )
     events = track('sparse-chord-column-refine', 'refineSparseChordColumnOnsets', () =>
       refineSparseChordColumnOnsets(events, beats, totalDivisions),
     )
@@ -3133,9 +3416,19 @@ function buildNoteEventsFromGroups(
   events = track('same-clef-beat-quarter-floor', 'applySameClefBeatQuarterFloors', () =>
     applySameClefBeatQuarterFloors(events, totalDivisions),
   )
+  if (!denseMeasure) {
+    events = track('written-overlap-resolve', 'resolveWrittenDurationOverlaps', () =>
+      resolveWrittenDurationOverlaps(events, totalDivisions),
+    )
+  }
   if (jointPacking) {
     events = track('joint-polyphonic-pack', 'packJointPolyphonicRhythm', () =>
       packJointPolyphonicRhythm(events, { totalDivisions }).events,
+    )
+  }
+  if (!denseMeasure) {
+    events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
+      resolveWrittenDurationOverlaps(events, totalDivisions),
     )
   }
   return track('clamp-measure', 'clampMeasureEventDurations', () =>
