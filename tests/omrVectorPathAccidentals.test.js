@@ -526,6 +526,76 @@ describe('detectVectorPathAccidentals geometry', () => {
     expect(glyphs).toHaveLength(0)
   })
 
+  it('keeps beat-1 path accidentals left of playableStart when a note owns them', () => {
+    const imageData = blankImage()
+    const playableX = measureBox.playableX0 * imageData.width
+    const sharpX = playableX - 8
+    const noteX = sharpX + 28
+    fillRect(imageData, noteX - 6, 94, 12, 12)
+    const notes = [{ cx: noteX, cy: 100, yNorm: 0.5, clef: 'treble', naturalMidi: 65 }]
+    const { glyphs, diagnostics } = detectVectorPathAccidentals({
+      imageData,
+      notes,
+      measureBox,
+      inkThreshold: 170,
+      pathCandidates: [
+        {
+          candidateId: 'beat1-sharp',
+          text: PATH_ACCIDENTAL_GLYPHS.sharp,
+          type: 'sharp',
+          alter: 1,
+          confidence: 0.9,
+          reason: 'path-cross',
+          x: sharpX,
+          y: 100,
+          bounds: {
+            x0: sharpX - 6,
+            x1: sharpX + 6,
+            y0: 90,
+            y1: 110,
+            width: 12,
+            height: 20,
+          },
+        },
+      ],
+      accidentalGlyphs: ACCIDENTAL_GLYPHS,
+    })
+    expect(diagnostics.rejected.some((entry) => entry.reason === 'key-signature-region')).toBe(
+      false,
+    )
+    expect(glyphs).toEqual([
+      expect.objectContaining({ pathCandidateId: 'beat1-sharp', source: 'vector-path' }),
+    ])
+  })
+
+  it('emits one ink sharp for a chord stack and assigns it to the aligned tone', () => {
+    const imageData = blankImage()
+    drawSharp(imageData, 120, 120, 16)
+    fillRect(imageData, 150, 84, 12, 12)
+    fillRect(imageData, 150, 114, 12, 12)
+    fillRect(imageData, 150, 144, 12, 12)
+    const notes = [
+      { cx: 156, cy: 90, yNorm: 90 / 200, clef: 'treble', naturalMidi: 69 },
+      { cx: 156, cy: 120, yNorm: 120 / 200, clef: 'treble', naturalMidi: 65 },
+      { cx: 156, cy: 150, yNorm: 150 / 200, clef: 'treble', naturalMidi: 60 },
+    ]
+    const { glyphs } = detectVectorPathAccidentals({
+      imageData,
+      notes,
+      measureBox,
+      inkThreshold: 170,
+      accidentalGlyphs: ACCIDENTAL_GLYPHS,
+    })
+    const inkSharps = glyphs.filter(
+      (glyph) => glyph.source === 'vector-ink' && glyph.text === PATH_ACCIDENTAL_GLYPHS.sharp,
+    )
+    expect(inkSharps).toHaveLength(1)
+    const assigned = assignLocalAccidentals(glyphs, imageData, measureBox, notes, ACCIDENTAL_GLYPHS)
+    expect(assigned.get(1)?.type).toBe('sharp')
+    expect(assigned.get(0)).toBeUndefined()
+    expect(assigned.get(2)).toBeUndefined()
+  })
+
   it('does not treat a stem as a flat', () => {
     const imageData = blankImage()
     fillRect(imageData, 168, 70, 2, 50) // stem

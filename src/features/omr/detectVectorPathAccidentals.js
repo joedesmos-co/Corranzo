@@ -831,8 +831,38 @@ export function detectVectorPathAccidentals({
 
   for (const candidate of pathCandidates) {
     if (candidate.x < playableStart - 2) {
-      diagnostics.rejected.push({ id: candidate.candidateId, reason: 'key-signature-region' })
-      continue
+      // Cursor playableStart can sit after beat-1 note accidentals. Only treat
+      // left-of-playable marks as key signature when no notehead in this measure
+      // can own them.
+      const attachesToNote = notes.some((note) => {
+        const lineYs =
+          note.clef === 'treble' ? measureBox.staffLines?.treble : measureBox.staffLines?.bass
+        if (!lineYs?.length) {
+          return false
+        }
+        const window = accidentalMatchWindow(measureBox, lineYs, imageData)
+        return (
+          accidentalMatchScore(
+            note,
+            {
+              x: candidate.x,
+              y: candidate.y,
+              source: 'vector-path',
+              accidentalType: candidate.type,
+              bounds: candidate.bounds,
+              pathCandidateId: candidate.candidateId,
+              reason: candidate.reason,
+            },
+            window,
+            lineYs,
+            imageData,
+          ) != null
+        )
+      })
+      if (!attachesToNote) {
+        diagnostics.rejected.push({ id: candidate.candidateId, reason: 'key-signature-region' })
+        continue
+      }
     }
     if (candidate.x < measureLeft - 4 || candidate.x > measureRight + 4) {
       continue
@@ -942,8 +972,28 @@ export function detectVectorPathAccidentals({
       }
     }
     if (best) {
-      diagnostics.inkCandidates += 1
-      glyphs.push(best)
+      // Chord notes share one left-of-stack sharp blob; keep a single ink glyph
+      // owned by the vertically nearest note instead of emitting duplicates that
+      // later attach to every chord tone via greedy assignment.
+      const duplicateIndex = glyphs.findIndex(
+        (glyph) =>
+          glyph.source === 'vector-ink' &&
+          Math.hypot(glyph.x - best.x, glyph.y - best.y) <= staffGap * 0.45,
+      )
+      if (duplicateIndex >= 0) {
+        const existing = glyphs[duplicateIndex]
+        const existingNote = notes[existing.noteIndexHint]
+        const existingDy = Number.isFinite(existingNote?.cy)
+          ? Math.abs(existingNote.cy - best.y)
+          : Infinity
+        const newDy = Math.abs(note.cy - best.y)
+        if (newDy + 1e-6 < existingDy) {
+          glyphs[duplicateIndex] = best
+        }
+      } else {
+        diagnostics.inkCandidates += 1
+        glyphs.push(best)
+      }
     }
   }
 
