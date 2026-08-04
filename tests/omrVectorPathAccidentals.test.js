@@ -568,6 +568,54 @@ describe('detectVectorPathAccidentals geometry', () => {
     ])
   })
 
+  it('keeps deep ledger-line path sharps below the staff band', () => {
+    const imageData = blankImage(400, 400)
+    const deepMeasureBox = {
+      ...measureBox,
+      staffLines: { treble: [0.2, 0.22, 0.24, 0.26, 0.28] },
+    }
+    const staffBottom = 0.28 * imageData.height
+    const notes = [
+      { cx: 200, cy: staffBottom + 40, yNorm: (staffBottom + 40) / imageData.height, clef: 'treble', naturalMidi: 48 },
+      { cx: 200, cy: staffBottom + 70, yNorm: (staffBottom + 70) / imageData.height, clef: 'treble', naturalMidi: 43 },
+    ]
+    const { glyphs } = detectVectorPathAccidentals({
+      imageData,
+      notes,
+      measureBox: deepMeasureBox,
+      inkThreshold: 170,
+      pathCandidates: [
+        {
+          candidateId: 'ledger-sharp-a',
+          text: PATH_ACCIDENTAL_GLYPHS.sharp,
+          type: 'sharp',
+          alter: 1,
+          confidence: 0.9,
+          reason: 'path-cross',
+          x: 170,
+          y: staffBottom + 40,
+          bounds: { x0: 164, x1: 176, y0: staffBottom + 30, y1: staffBottom + 50, width: 12, height: 20 },
+        },
+        {
+          candidateId: 'ledger-sharp-b',
+          text: PATH_ACCIDENTAL_GLYPHS.sharp,
+          type: 'sharp',
+          alter: 1,
+          confidence: 0.9,
+          reason: 'path-cross',
+          x: 170,
+          y: staffBottom + 70,
+          bounds: { x0: 164, x1: 176, y0: staffBottom + 60, y1: staffBottom + 80, width: 12, height: 20 },
+        },
+      ],
+      accidentalGlyphs: ACCIDENTAL_GLYPHS,
+    })
+    expect(glyphs.map((glyph) => glyph.pathCandidateId).sort()).toEqual([
+      'ledger-sharp-a',
+      'ledger-sharp-b',
+    ])
+  })
+
   it('emits one ink sharp for a chord stack and assigns it to the aligned tone', () => {
     const imageData = blankImage()
     drawSharp(imageData, 120, 120, 16)

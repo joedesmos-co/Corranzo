@@ -812,14 +812,23 @@ export function detectVectorPathAccidentals({
   const playableStart = (measureBox.playableX0 ?? measureBox.x0) * imageData.width
   const measureLeft = measureBox.x0 * imageData.width
   const measureRight = measureBox.x1 * imageData.width
+  const trebleLines = measureBox.staffLines?.treble ?? [measureBox.y0]
+  const bassLines = measureBox.staffLines?.bass ?? [measureBox.y1]
   const measureTop = Math.min(
-    ...(measureBox.staffLines?.treble ?? [measureBox.y0]).map((y) => y * imageData.height),
-    ...(measureBox.staffLines?.bass ?? [measureBox.y1]).map((y) => y * imageData.height),
+    ...trebleLines.map((y) => y * imageData.height),
+    ...bassLines.map((y) => y * imageData.height),
   )
   const measureBottom = Math.max(
-    ...(measureBox.staffLines?.treble ?? [measureBox.y0]).map((y) => y * imageData.height),
-    ...(measureBox.staffLines?.bass ?? [measureBox.y1]).map((y) => y * imageData.height),
+    ...trebleLines.map((y) => y * imageData.height),
+    ...bassLines.map((y) => y * imageData.height),
   )
+  const staffGapGuess = staffGapPixels(
+    measureBox.staffLines?.treble ?? measureBox.staffLines?.bass,
+    imageData,
+  )
+  // Ledger-line sharp stacks sit well below the staff; a fixed 30px pad drops
+  // all but the top accidental on dense guitar chords.
+  const verticalAccidentalPad = Math.max(30, staffGapGuess * 8)
 
   const glyphMap =
     accidentalGlyphs ??
@@ -867,7 +876,7 @@ export function detectVectorPathAccidentals({
     if (candidate.x < measureLeft - 4 || candidate.x > measureRight + 4) {
       continue
     }
-    if (candidate.y < measureTop - 30 || candidate.y > measureBottom + 30) {
+    if (candidate.y < measureTop - verticalAccidentalPad || candidate.y > measureBottom + verticalAccidentalPad) {
       continue
     }
     diagnostics.pathCandidates += 1
