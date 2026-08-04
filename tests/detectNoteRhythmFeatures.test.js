@@ -7,8 +7,11 @@ import { describe, expect, it } from 'vitest'
 import {
   countBeams,
   countFlags,
+  detectDot,
+  detectStem,
   enrichNoteheadRhythm,
   inferNoteDuration,
+  isHollowNotehead,
   measureBeamStrength,
 } from '../src/features/omr/detectNoteRhythmFeatures.js'
 
@@ -26,6 +29,33 @@ function makeImage(width, height, paint) {
   paint(setInk)
   return { width, height, data }
 }
+
+describe('raster notehead hollowness', () => {
+  it('distinguishes an enclosed open center from an antialiased filled center', () => {
+    const hollow = makeImage(40, 40, (ink) => {
+      for (let x = 17; x <= 23; x += 1) {
+        ink(x, 18)
+        ink(x, 22)
+      }
+      for (let y = 18; y <= 22; y += 1) {
+        ink(17, y)
+        ink(23, y)
+      }
+      // A staff line may pass through the center without filling the head.
+      for (let x = 19; x <= 21; x += 1) ink(x, 20)
+    })
+    expect(isHollowNotehead(hollow, 20, 20, 200)).toBe(true)
+
+    const filled = makeImage(40, 40, (ink) => {
+      for (const [dx, dy] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0]]) {
+        ink(20 + dx, 20 + dy)
+      }
+      for (let x = 17; x <= 23; x += 1) ink(x, 18)
+      for (let x = 17; x <= 23; x += 1) ink(x, 22)
+    })
+    expect(isHollowNotehead(filled, 20, 20, 200)).toBe(false)
+  })
+})
 
 describe('inferNoteDuration beam classification', () => {
   it('uses whole/half notehead glyphs over stem ink', () => {
@@ -82,6 +112,37 @@ describe('inferNoteDuration beam classification', () => {
         beamStrength: 10,
       }).durationType,
     ).toBe('sixteenth')
+  })
+
+  it('does not reinterpret a filled head as a half note because its stem is long', () => {
+    expect(
+      inferNoteDuration({
+        hollow: false,
+        stem: { length: 38, direction: 'up' },
+        beams: 0,
+        dotted: false,
+      }).durationType,
+    ).toBe('quarter')
+  })
+})
+
+describe('detectStem ownership', () => {
+  it('finds an up-stem on a bass-register head without using register as direction', () => {
+    const image = makeImage(90, 90, (ink) => {
+      for (let y = 35; y <= 62; y += 1) ink(48, y)
+    })
+    const stem = detectStem(image, 42, 62, 200, 40, 12)
+    expect(stem).toMatchObject({ direction: 'up', side: 'right', x: 48 })
+    expect(stem.length).toBeGreaterThanOrEqual(27)
+  })
+
+  it('finds a conventional down-stem on the left side', () => {
+    const image = makeImage(90, 90, (ink) => {
+      for (let y = 28; y <= 58; y += 1) ink(34, y)
+    })
+    const stem = detectStem(image, 40, 28, 200, 45, 12)
+    expect(stem).toMatchObject({ direction: 'down', side: 'left', x: 34 })
+    expect(stem.length).toBeGreaterThanOrEqual(30)
   })
 })
 
@@ -169,5 +230,52 @@ describe('enrichNoteheadRhythm persists beamStrength', () => {
     expect(enriched.beamStrength).toBeGreaterThanOrEqual(8)
     expect(enriched.beams).toBe(1)
     expect(enriched.durationType).toBe('eighth')
+  })
+
+  it('does not classify a staff line at the stem tip as a beam', () => {
+    const image = makeImage(80, 80, (ink) => {
+      for (let y = 38; y <= 42; y += 1) {
+        for (let x = 17; x <= 23; x += 1) ink(x, y)
+      }
+      for (let y = 20; y <= 38; y += 1) ink(24, y)
+      for (let x = 0; x < 80; x += 1) ink(x, 20)
+    })
+    const enriched = enrichNoteheadRhythm(
+      image,
+      {
+        cx: 20,
+        cy: 40,
+        clef: 'treble',
+        pitchMapping: { lineYs: [20, 28, 36, 44, 52].map((y) => y / 80) },
+      },
+      { y0: 0.2, y1: 0.8 },
+      200,
+      { left: 0, right: 79, top: 0, bottom: 79 },
+    )
+    expect(enriched.beamStrength).toBe(0)
+    expect(enriched.beams).toBe(0)
+    expect(enriched.durationType).toBe('quarter')
+  })
+})
+
+describe('augmentation-dot isolation', () => {
+  it('finds a compact scale-aware dot beyond a right-side stem', () => {
+    const image = makeImage(80, 60, (ink) => {
+      ink(36, 30)
+      ink(37, 30)
+      ink(36, 31)
+    })
+    expect(detectDot(image, 20, 30, 200, 12, { x: 27 })).toBe(true)
+  })
+
+  it('rejects a stem or continuous staff row in the dot search band', () => {
+    const stemImage = makeImage(80, 60, (ink) => {
+      for (let y = 20; y <= 40; y += 1) ink(31, y)
+    })
+    expect(detectDot(stemImage, 20, 30, 200, 12, { x: 31 })).toBe(false)
+    const lineImage = makeImage(80, 60, (ink) => {
+      for (let x = 0; x < 80; x += 1) ink(x, 30)
+    })
+    expect(detectDot(lineImage, 20, 30, 200, 12)).toBe(false)
   })
 })

@@ -4,11 +4,9 @@ import {
   OMR_RHYTHM_CONFIDENCE,
 } from './omrRhythmConstants.js'
 
-const STEM_OFFSET = 4
-const MAX_STEM_SCAN = 42
+const DEFAULT_STAFF_SPACE = 8
+const MAX_STEM_SCAN_SPACES = 4.5
 const BEAM_SCAN_X = 28
-const DOT_OFFSET_X = 9
-const DOT_WINDOW = 4
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -31,7 +29,10 @@ export function isHollowNotehead(imageData, cx, cy, threshold) {
       if (!inkAt(imageData, x, y, threshold)) {
         continue
       }
-      const onEdge = x <= cx - 2 || x >= cx + 2 || y <= cy - 1 || y >= cy + 1
+      // Use the full 3×3 interior. Slanted filled heads can leave the lower
+      // three pixels antialiased while five interior pixels remain black; the
+      // old single-row probe misread those as an open half-note center.
+      const onEdge = Math.abs(x - cx) >= 2 || Math.abs(y - cy) >= 2
       if (onEdge) {
         edgeDark += 1
       } else {
@@ -39,36 +40,90 @@ export function isHollowNotehead(imageData, cx, cy, threshold) {
       }
     }
   }
-  return edgeDark >= 4 && centerDark <= 2
+  // A one-pixel staff line can cross an otherwise open center, contributing
+  // exactly three interior pixels. Filled heads retain more two-dimensional
+  // center ink, so this remains distinct from the five-pixel slanted-fill case.
+  return edgeDark >= 4 && centerDark <= 3
 }
 
-export function detectStem(imageData, cx, cy, threshold, staffMidY) {
-  const stemUp = cy <= staffMidY
-  const stemX = cx + STEM_OFFSET
-  let length = 0
-  const direction = stemUp ? -1 : 1
-  const startOffset = 3
+export function detectStem(
+  imageData,
+  cx,
+  cy,
+  threshold,
+  staffMidY,
+  staffSpace = DEFAULT_STAFF_SPACE,
+) {
+  const scale = Number.isFinite(staffSpace) && staffSpace >= 3
+    ? staffSpace
+    : DEFAULT_STAFF_SPACE
+  const startOffset = Math.max(2, Math.round(scale * 0.18))
+  const maxStemScan = Math.max(18, Math.round(scale * MAX_STEM_SCAN_SPACES))
+  const minStemRun = Math.max(5, Math.round(scale * 0.55))
+  const expectedDirection = cy <= staffMidY ? -1 : 1
+  const absoluteOffsets = [...new Set([
+    Math.max(3, Math.round(scale * 0.34)),
+    Math.max(3, Math.round(scale * 0.42)),
+    Math.max(4, Math.round(scale * 0.5)),
+    Math.max(4, Math.round(scale * 0.58)),
+    Math.max(4, Math.round(scale * 0.66)),
+    Math.max(5, Math.round(scale * 0.74)),
+  ])]
+  const candidates = []
 
-  for (let step = startOffset; step <= MAX_STEM_SCAN; step += 1) {
-    const y = cy + direction * step
-    if (inkAt(imageData, stemX, y, threshold) || inkAt(imageData, stemX - 1, y, threshold)) {
-      length = step - startOffset + 1
-    } else if (length > 0) {
-      break
+  for (const absoluteOffset of absoluteOffsets) {
+    for (const side of [-1, 1]) {
+      const stemX = Math.round(cx + side * absoluteOffset)
+      for (const direction of [-1, 1]) {
+        let lastInkStep = 0
+        let inkCount = 0
+        let misses = 0
+        for (let step = startOffset; step <= maxStemScan; step += 1) {
+          const y = cy + direction * step
+          const hasInk =
+            inkAt(imageData, stemX, y, threshold) ||
+            inkAt(imageData, stemX - side, y, threshold)
+          if (hasInk) {
+            lastInkStep = step
+            inkCount += 1
+            misses = 0
+          } else if (lastInkStep > 0 && misses < 1) {
+            // Scans and deskewing can leave a one-pixel break in a real stem.
+            misses += 1
+          } else if (lastInkStep > 0) {
+            break
+          }
+        }
+        const runLength = lastInkStep > 0 ? lastInkStep - startOffset + 1 : 0
+        if (runLength < minStemRun || inkCount / Math.max(1, runLength) < 0.72) {
+          continue
+        }
+        const conventionalSide = direction < 0 ? 1 : -1
+        const score =
+          runLength +
+          (side === conventionalSide ? scale * 0.18 : 0) +
+          (direction === expectedDirection ? scale * 0.04 : 0)
+        candidates.push({
+          x: stemX,
+          tipY: cy + direction * lastInkStep,
+          length: lastInkStep,
+          direction: direction < 0 ? 'up' : 'down',
+          side: side > 0 ? 'right' : 'left',
+          inkRatio: inkCount / Math.max(1, runLength),
+          score,
+        })
+      }
     }
   }
 
-  if (length < 4) {
+  if (!candidates.length) {
     return null
   }
-
-  const tipY = cy + direction * (startOffset + length - 1)
-  return {
-    x: stemX,
-    tipY,
-    length: startOffset + length,
-    direction: stemUp ? 'up' : 'down',
-  }
+  const best = candidates.sort(
+    (left, right) => right.score - left.score || right.inkRatio - left.inkRatio,
+  )[0]
+  const { score: _score, ...stem } = best
+  return stem
 }
 
 /**
@@ -194,21 +249,45 @@ export function countBeams(imageData, stem, threshold, bounds) {
   return 1
 }
 
-export function detectDot(imageData, cx, cy, threshold) {
-  const dotX = cx + DOT_OFFSET_X
-  let dark = 0
-  for (let y = cy - 1; y <= cy + 1; y += 1) {
-    for (let x = dotX - 1; x <= dotX + 1; x += 1) {
-      if (inkAt(imageData, x, y, threshold)) {
-        dark += 1
+export function detectDot(
+  imageData,
+  cx,
+  cy,
+  threshold,
+  staffSpace = DEFAULT_STAFF_SPACE,
+  stem = null,
+) {
+  const scale = Number.isFinite(staffSpace) && staffSpace >= 3
+    ? staffSpace
+    : DEFAULT_STAFF_SPACE
+  const xStart = Math.max(6, Math.round(scale * 0.88))
+  const xEnd = Math.max(xStart, Math.round(scale * 1.55))
+  const yRange = Math.max(2, Math.round(scale * 0.35))
+  const isolationProbe = Math.max(4, Math.round(scale * 0.42))
+  for (let yCenter = Math.round(cy) - yRange; yCenter <= Math.round(cy) + yRange; yCenter += 1) {
+    for (let dotX = Math.round(cx) + xStart; dotX <= Math.round(cx) + xEnd; dotX += 1) {
+      if (stem && Math.abs(dotX - stem.x) <= scale * 0.35) continue
+      if (!inkAt(imageData, dotX, yCenter, threshold)) continue
+      let dark = 0
+      for (let y = yCenter - 1; y <= yCenter + 1; y += 1) {
+        for (let x = dotX - 1; x <= dotX + 1; x += 1) {
+          if (inkAt(imageData, x, y, threshold)) dark += 1
+        }
       }
+      if (dark < 2 || dark > 7) continue
+      // Staff lines, stems, and beams continue well beyond a compact dot.
+      if (
+        inkAt(imageData, dotX - isolationProbe, yCenter, threshold) ||
+        inkAt(imageData, dotX + isolationProbe, yCenter, threshold) ||
+        inkAt(imageData, dotX, yCenter - isolationProbe, threshold) ||
+        inkAt(imageData, dotX, yCenter + isolationProbe, threshold)
+      ) {
+        continue
+      }
+      return true
     }
   }
-  if (dark < 2 || dark > 6) {
-    return false
-  }
-  // A dot sits beside the note, not on a stem or beam.
-  return !inkAt(imageData, dotX, cy - 4, threshold) && !inkAt(imageData, dotX, cy + 4, threshold)
+  return false
 }
 
 export function detectTieToNext(imageData, cx, cy, threshold, bounds) {
@@ -266,9 +345,6 @@ export function inferNoteDuration({
   } else if (beams >= 1 || beamStrength >= 8) {
     durationType = 'eighth'
     confidence = 0.76
-  } else if (stem.length > 30) {
-    durationType = 'half'
-    confidence = 0.58
   } else {
     durationType = 'quarter'
     confidence = 0.8
@@ -294,10 +370,47 @@ export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThresho
     typeof notehead.hollowGlyph === 'boolean'
       ? notehead.hollowGlyph
       : isHollowNotehead(imageData, notehead.cx, notehead.cy, inkThreshold)
-  const stem = detectStem(imageData, notehead.cx, notehead.cy, inkThreshold, staffMidY)
-  const beamStrength = measureBeamStrength(imageData, stem, inkThreshold)
-  const beams = countBeams(imageData, stem, inkThreshold, bounds)
-  const dotted = detectDot(imageData, notehead.cx, notehead.cy, inkThreshold)
+  const pitchLines = notehead?.pitchMapping?.lineYs ??
+    (notehead?.clef === 'bass'
+      ? measureBox?.staffLines?.bass
+      : measureBox?.staffLines?.treble)
+  const sortedPitchLines = [...(pitchLines ?? [])]
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  const staffSpace = sortedPitchLines.length >= 2
+    ? ((sortedPitchLines.at(-1) - sortedPitchLines[0]) * imageData.height) /
+      (sortedPitchLines.length - 1)
+    : DEFAULT_STAFF_SPACE
+  const stem = detectStem(
+    imageData,
+    notehead.cx,
+    notehead.cy,
+    inkThreshold,
+    staffMidY,
+    staffSpace,
+  )
+  const rawBeamStrength = measureBeamStrength(imageData, stem, inkThreshold)
+  // A stem that terminates on a staff row can make that infinite row look like
+  // a primary beam. The notehead's own staff geometry is independent evidence;
+  // suppress only tip rows coincident with a canonical staff line.
+  const beamTipOnStaffLine = Boolean(
+    stem &&
+    sortedPitchLines.some(
+      (line) => Math.abs(line * imageData.height - stem.tipY) <= Math.max(1, staffSpace * 0.14),
+    ),
+  )
+  const beamStrength = beamTipOnStaffLine ? 0 : rawBeamStrength
+  const beams = beamTipOnStaffLine
+    ? 0
+    : countBeams(imageData, stem, inkThreshold, bounds)
+  const dotted = detectDot(
+    imageData,
+    notehead.cx,
+    notehead.cy,
+    inkThreshold,
+    staffSpace,
+    stem,
+  )
   const tieStart = detectTieToNext(imageData, notehead.cx, notehead.cy, inkThreshold, bounds)
   const rhythm = inferNoteDuration({
     hollow,
