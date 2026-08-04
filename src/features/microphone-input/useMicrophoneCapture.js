@@ -3,6 +3,13 @@ import { setupAudioVisibilityResume } from '../audio/audioLifecycle.js'
 import { isMicrophoneSupported } from './micEnvironment.js'
 import { MIC_PERMISSION, MIC_SUPPORT } from './micInputConstants.js'
 
+/**
+ * Keep enough recent time-domain history for deep-piano-bass scoring. The live
+ * detector still derives level, attack, and high/middle pitch features from
+ * the latest 2,048 samples, so this does not lengthen every register's window.
+ */
+export const MIC_CAPTURE_ANALYSER_FFT_SIZE = 8192
+
 function stopStream(stream) {
   if (!stream) {
     return
@@ -229,7 +236,7 @@ export default function useMicrophoneCapture({ active = false } = {}) {
       context = createAudioContext()
       const source = context.createMediaStreamSource(stream)
       const analyser = context.createAnalyser()
-      analyser.fftSize = 2048
+      analyser.fftSize = MIC_CAPTURE_ANALYSER_FFT_SIZE
       analyser.smoothingTimeConstant = 0.85
       source.connect(analyser)
 

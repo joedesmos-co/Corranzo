@@ -15,6 +15,19 @@ export function hannWindow(length) {
   return window
 }
 
+/**
+ * One-sided Hann ramp for a trailing live-history buffer. Unlike a symmetric
+ * analysis window it gives the newest samples full weight, avoiding half a
+ * window of group delay while still tapering stale history at the left edge.
+ */
+export function causalHannWindow(length) {
+  const window = new Float32Array(length)
+  for (let index = 0; index < length; index += 1) {
+    window[index] = 0.5 * (1 - Math.cos((Math.PI * index) / Math.max(1, length - 1)))
+  }
+  return window
+}
+
 export function applyWindow(samples, window) {
   const length = Math.min(samples.length, window.length)
   const out = new Float32Array(length)
@@ -39,7 +52,13 @@ export function windowRms(samples) {
  * Goertzel magnitude at a single frequency (normalized by window length).
  */
 export function goertzelMagnitude(samples, sampleRate, targetHz) {
-  if (!samples?.length || !sampleRate || !targetHz) {
+  if (
+    !samples?.length ||
+    !sampleRate ||
+    !targetHz ||
+    targetHz <= 0 ||
+    targetHz >= sampleRate / 2
+  ) {
     return 0
   }
   const omega = (2 * Math.PI * targetHz) / sampleRate

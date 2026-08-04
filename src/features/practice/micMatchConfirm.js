@@ -19,6 +19,15 @@ export const MIC_MATCH_MIN_CLARITY = 0.5
 
 /** Consecutive confident frames required before committing an advance. */
 export const MIC_MATCH_CONFIRM_FRAMES = 3
+/** Long-window deep-bass evidence is stable but short notes may expose only two live hops. */
+export const MIC_DEEP_BASS_CONFIRM_FRAMES = 2
+export const MIC_DEEP_BASS_CONFIRM_MAX_MIDI = 32
+
+export function micConfirmFramesForExpectedMidis(expectedMidis = []) {
+  return expectedMidis.length === 1 && expectedMidis[0] <= MIC_DEEP_BASS_CONFIRM_MAX_MIDI
+    ? MIC_DEEP_BASS_CONFIRM_FRAMES
+    : MIC_MATCH_CONFIRM_FRAMES
+}
 
 /** Guitar rolling chord / double-stop: need 2+ confident frames to block noise. */
 export const GUITAR_ROLLING_CHORD_CONFIRM_FRAMES = 2
@@ -30,6 +39,8 @@ export const GUITAR_ROLLING_CHORD_CONFIRM_FRAMES = 2
  * whole semitones through the window, so drifting frames restart the count.
  */
 export const MIC_MATCH_PITCH_DRIFT_CENTS = 25
+/** Above this frequency the integer-period tracker is too subharmonic-prone to veto V2. */
+export const MIC_PITCH_CORROBORATION_MAX_HZ = 1200
 
 export function createMatchConfirmState() {
   return { key: '', count: 0, anchorCents: null }
@@ -68,10 +79,16 @@ export function confirmConfidentMatch(
     return false
   }
   if (confident && key === state.key) {
+    const rawDistance =
+      pitchCents != null && state.anchorCents != null
+        ? Math.abs(pitchCents - state.anchorCents)
+        : 0
+    const octaveRemainder = rawDistance % 1200
+    const octaveInvariantDistance = Math.min(octaveRemainder, 1200 - octaveRemainder)
     const drifted =
       pitchCents != null &&
       state.anchorCents != null &&
-      Math.abs(pitchCents - state.anchorCents) > driftLimitCents
+      octaveInvariantDistance > driftLimitCents
     if (drifted) {
       state.anchorCents = pitchCents
       state.count = 1
@@ -133,6 +150,7 @@ export function frameConfidentForMatch(frame, { minClarity = MIC_MATCH_MIN_CLARI
     const magnitudes = note?.harmonicMagnitudes
     const fundamental = magnitudes?.[0] ?? 0
     const second = magnitudes?.[1] ?? 0
+    const third = magnitudes?.[2] ?? 0
     if (
       note?.isBass &&
       (note.confidence ?? 0) >= 0.35 &&
@@ -140,6 +158,16 @@ export function frameConfidentForMatch(frame, { minClarity = MIC_MATCH_MIN_CLARI
       (note.harmonicSupport ?? 0) >= 1.2 &&
       fundamental > 0 &&
       second >= fundamental * 1.5
+    ) {
+      return true
+    }
+    if (
+      (note?.midi ?? Infinity) <= 32 &&
+      !note?.deepBassOctaveArtifact &&
+      (note.confidence ?? 0) >= 0.27 &&
+      (note.ratio ?? 0) >= 1.5 &&
+      (note.harmonicSupport ?? 0) >= 0.9 &&
+      third >= Math.max(fundamental, second) * 1.5
     ) {
       return true
     }
@@ -193,7 +221,7 @@ export function frameCorroboratesSingleNote(
     centsTolerance = 35,
     slackCents = MIC_PITCH_CORROBORATION_SLACK_CENTS,
     minTrackedHz = MIC_AC_MIN_TRACKED_HZ,
-    maxTrackedHz = MIC_AC_MAX_TRACKED_HZ,
+    maxTrackedHz = Math.min(MIC_AC_MAX_TRACKED_HZ, MIC_PITCH_CORROBORATION_MAX_HZ),
   } = {},
 ) {
   const midiFloat = frame?.midiFloat
@@ -211,4 +239,34 @@ export function frameCorroboratesSingleNote(
   const wrapped = (((midiFloat - expectedMidi) % 12) + 12) % 12
   const distanceCents = Math.min(wrapped, 12 - wrapped) * 100
   return distanceCents <= centsTolerance + slackCents
+}
+
+/**
+ * Use raw-pitch stability only where autocorrelation has enough samples per
+ * period to be a trustworthy confirmation anchor. Outside that band the exact
+ * spectral family and octave guards remain authoritative.
+ */
+export function pitchCentsForMicConfirmation(
+  frame,
+  expectedMidi,
+  {
+    minTrackedHz = MIC_AC_MIN_TRACKED_HZ,
+    maxTrackedHz = MIC_PITCH_CORROBORATION_MAX_HZ,
+  } = {},
+) {
+  const midiFloat = frame?.midiFloat
+  if (!Number.isFinite(midiFloat) || !Number.isFinite(expectedMidi)) {
+    return null
+  }
+  const expectedFrequency = midiToFrequency(expectedMidi)
+  const estimateFrequency = midiToFrequency(midiFloat)
+  if (
+    expectedFrequency < minTrackedHz ||
+    expectedFrequency > maxTrackedHz ||
+    estimateFrequency < minTrackedHz ||
+    estimateFrequency > MIC_AC_MAX_TRACKED_HZ
+  ) {
+    return null
+  }
+  return midiFloat * 100
 }

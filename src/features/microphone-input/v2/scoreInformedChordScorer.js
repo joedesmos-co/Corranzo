@@ -49,6 +49,12 @@ export const SCORE_INFORMED_DEFAULTS = {
   guitarHighStringFundamentalWeight: 1.28,
   guitarHighStringNoiseFloorFactor: 0.42,
   guitarHighStringMinFundamentalEnergy: 0.001,
+  deepBassOctaveGuardMaxMidi: 32,
+  deepBassOddEvenMinRatio: 0.28,
+  deepBassUpperDominanceRatio: 1.2,
+  highOctaveGuardMinMidi: 84,
+  highLowerOctaveDominanceRatio: 0.82,
+  highLowerOctaveNoiseRatio: 1.8,
 }
 
 function adaptiveHarmonicWeight(harmonic, midi, stringNum = null) {
@@ -269,8 +275,13 @@ export function scoreExpectedNote(samples, sampleRate, midi, options = {}) {
   const harmonicMagnitudes = []
 
   for (let harmonic = 1; harmonic <= harmonicCount; harmonic += 1) {
+    const targetHz = f0 * harmonic
+    if (targetHz >= sampleRate / 2) {
+      harmonicMagnitudes.push(0)
+      continue
+    }
     const weight = adaptiveHarmonicWeight(harmonic, midi, stringNum)
-    const magnitude = goertzelMagnitude(samples, sampleRate, f0 * harmonic)
+    const magnitude = goertzelMagnitude(samples, sampleRate, targetHz)
     harmonicMagnitudes.push(magnitude)
     harmonicEnergy += magnitude * weight
     weightSum += weight
@@ -290,6 +301,17 @@ export function scoreExpectedNote(samples, sampleRate, midi, options = {}) {
   const detectionRatio = options.detectionRatio ?? SCORE_INFORMED_DEFAULTS.detectionRatio
   const minConfidence = options.minConfidence ?? SCORE_INFORMED_DEFAULTS.minConfidence
   const detected = ratio >= detectionRatio && confidence >= minConfidence
+  const oddUpperEnergy =
+    (harmonicMagnitudes[2] ?? 0) + (harmonicMagnitudes[4] ?? 0)
+  const evenUpperEnergy =
+    (harmonicMagnitudes[1] ?? 0) +
+    (harmonicMagnitudes[3] ?? 0) +
+    (harmonicMagnitudes[5] ?? 0)
+  const oddEvenRatio = oddUpperEnergy / (evenUpperEnergy + 1e-8)
+  const lowerOctaveFundamentalEnergy =
+    midi >= (options.highOctaveGuardMinMidi ?? SCORE_INFORMED_DEFAULTS.highOctaveGuardMinMidi)
+      ? goertzelMagnitude(samples, sampleRate, f0 / 2)
+      : 0
 
   return {
     midi,
@@ -301,6 +323,10 @@ export function scoreExpectedNote(samples, sampleRate, midi, options = {}) {
     harmonicEnergy: weightedMean,
     harmonicSupport,
     harmonicMagnitudes,
+    oddUpperEnergy,
+    evenUpperEnergy,
+    oddEvenRatio,
+    lowerOctaveFundamentalEnergy,
     isBass,
     bassBoosted: isBass,
   }
@@ -401,6 +427,32 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
           ? (options.guitarHighStringMinFundamentalEnergy ??
             SCORE_INFORMED_DEFAULTS.guitarHighStringMinFundamentalEnergy)
           : 0
+      const deepBassOctaveArtifact =
+        note.midi <=
+          (options.deepBassOctaveGuardMaxMidi ??
+            SCORE_INFORMED_DEFAULTS.deepBassOctaveGuardMaxMidi) &&
+        (note.harmonicMagnitudes?.[1] ?? 0) >=
+          (note.fundamentalEnergy ?? 0) *
+            (options.deepBassUpperDominanceRatio ??
+              SCORE_INFORMED_DEFAULTS.deepBassUpperDominanceRatio) &&
+        (note.oddEvenRatio ?? 0) <
+          (options.deepBassOddEvenMinRatio ??
+            SCORE_INFORMED_DEFAULTS.deepBassOddEvenMinRatio)
+      const highLowerOctaveArtifact =
+        note.midi >=
+          (options.highOctaveGuardMinMidi ??
+            SCORE_INFORMED_DEFAULTS.highOctaveGuardMinMidi) &&
+        (note.lowerOctaveFundamentalEnergy ?? 0) >=
+          Math.max(
+            (note.fundamentalEnergy ?? 0) *
+              (options.highLowerOctaveDominanceRatio ??
+                SCORE_INFORMED_DEFAULTS.highLowerOctaveDominanceRatio),
+            noiseFloor *
+              (options.highLowerOctaveNoiseRatio ??
+                SCORE_INFORMED_DEFAULTS.highLowerOctaveNoiseRatio),
+          )
+      note.deepBassOctaveArtifact = deepBassOctaveArtifact
+      note.highLowerOctaveArtifact = highLowerOctaveArtifact
 
       note.detected =
         note.ratio >= effectiveDetectionRatio &&
@@ -409,7 +461,9 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         (note.fundamentalEnergy ?? 0) >= minFundamentalEnergy &&
         !octaveLeakageGuard &&
         !adjacentLeakageGuard &&
-        !octaveHarmonicFromLowPeer
+        !octaveHarmonicFromLowPeer &&
+        !deepBassOctaveArtifact &&
+        !highLowerOctaveArtifact
 
       if (highStringMaskingRelief && isUpperString && !note.detected) {
         const probeNoiseFloor =

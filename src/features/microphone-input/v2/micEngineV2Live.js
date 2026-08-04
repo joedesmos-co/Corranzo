@@ -15,7 +15,15 @@ import {
   SCORE_INFORMED_DEFAULTS,
   scoreInformedChordWindow,
 } from './scoreInformedChordScorer.js'
-import { DEFAULT_FFT_SIZE, hannWindow } from './micSpectralAnalysis.js'
+import {
+  causalHannWindow,
+  DEFAULT_FFT_SIZE,
+  hannWindow,
+} from './micSpectralAnalysis.js'
+
+export const MIC_ENGINE_SIGNAL_FRAME_SIZE = DEFAULT_FFT_SIZE
+export const MIC_ENGINE_DEEP_BASS_FRAME_SIZE = 8192
+export const MIC_ENGINE_DEEP_BASS_MAX_MIDI = 32
 
 export const MIC_ENGINE_V2_LIVE_DEFAULTS = {
   stableFrameThreshold: SCORE_INFORMED_DEFAULTS.stableFrameThreshold,
@@ -32,11 +40,39 @@ export function createMicEngineV2RuntimeState() {
   return {
     fftSize: DEFAULT_FFT_SIZE,
     window: hannWindow(DEFAULT_FFT_SIZE),
+    windowsBySize: new Map([[DEFAULT_FFT_SIZE, hannWindow(DEFAULT_FFT_SIZE)]]),
     perNoteTracks: new Map(),
     lastDetectedMidis: [],
     v2Unavailable: false,
     v2UnavailableReason: null,
   }
+}
+
+export function scoreFrameSizeForExpectedMidis(expectedMidis = [], availableSamples = DEFAULT_FFT_SIZE) {
+  const desired =
+    expectedMidis.length === 1 && expectedMidis[0] <= MIC_ENGINE_DEEP_BASS_MAX_MIDI
+      ? MIC_ENGINE_DEEP_BASS_FRAME_SIZE
+      : DEFAULT_FFT_SIZE
+  if (availableSamples >= desired) {
+    return desired
+  }
+  return Math.min(DEFAULT_FFT_SIZE, availableSamples)
+}
+
+function scoreWindowForSize(state, size) {
+  if (size === state.fftSize) {
+    return state.window
+  }
+  if (!state.windowsBySize) {
+    state.windowsBySize = new Map()
+  }
+  if (!state.windowsBySize.has(size)) {
+    state.windowsBySize.set(
+      size,
+      size > MIC_ENGINE_SIGNAL_FRAME_SIZE ? causalHannWindow(size) : hannWindow(size),
+    )
+  }
+  return state.windowsBySize.get(size)
 }
 
 export function resetMicEngineV2RuntimeState(state) {
@@ -151,7 +187,11 @@ export function processMicEngineV2Tick({
     }
   }
 
-  const signalFrame = analyzeMicFrame(buffer, sampleRate, noiseFloor, {
+  const signalBuffer =
+    buffer.length > MIC_ENGINE_SIGNAL_FRAME_SIZE
+      ? buffer.subarray(buffer.length - MIC_ENGINE_SIGNAL_FRAME_SIZE)
+      : buffer
+  const signalFrame = analyzeMicFrame(signalBuffer, sampleRate, noiseFloor, {
     centsTolerance,
     gateOptions,
   })
@@ -173,9 +213,10 @@ export function processMicEngineV2Tick({
 
   if (expectedMidis.length > 0) {
     try {
+      const scoreFrameSize = scoreFrameSizeForExpectedMidis(expectedMidis, buffer.length)
       const scored = scoreInformedChordWindow(buffer, sampleRate, expectedMidis, {
-        fftSize: runtimeState.fftSize,
-        window: runtimeState.window,
+        fftSize: scoreFrameSize,
+        window: scoreWindowForSize(runtimeState, scoreFrameSize),
         expectedStringFrets: expectedStringFrets ?? undefined,
       })
       v2Notes = scored.notes ?? []
@@ -248,6 +289,8 @@ export function processMicEngineV2Tick({
     v2Unavailable: runtimeState.v2Unavailable,
     expectedMidis: expectedMidis.length ? [...expectedMidis] : [],
     expectedStringFrets: expectedStringFrets ?? null,
+    signalFrameSize: signalBuffer.length,
+    scoreFrameSize: scoreFrameSizeForExpectedMidis(expectedMidis, buffer.length),
   }
 
   let stableMidi = null

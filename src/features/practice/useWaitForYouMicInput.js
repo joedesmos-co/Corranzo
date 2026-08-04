@@ -42,6 +42,8 @@ import {
   frameConfidentForMatch,
   frameCorroboratesSingleNote,
   GUITAR_ROLLING_CHORD_CONFIRM_FRAMES,
+  micConfirmFramesForExpectedMidis,
+  pitchCentsForMicConfirmation,
   resetMatchConfirmState,
 } from './micMatchConfirm.js'
 import {
@@ -702,6 +704,7 @@ export default function useWaitForYouMicInput({
           frequency: frame.frequency ?? null,
           midiFloat: frame.midiFloat ?? null,
           spectralEnergy: frame.spectralEnergy ?? null,
+          transientRms: frame.transientRms ?? null,
           crestFactor: frame.crestFactor ?? null,
           zeroCrossingRate: frame.zeroCrossingRate ?? null,
           signalShape: frame.signalShape ?? null,
@@ -765,6 +768,7 @@ export default function useWaitForYouMicInput({
       updateMicAttackRelease(attackLatchRef.current, Boolean(frame.gateOpen), {
         rms: frame.filteredRms ?? frame.rms ?? null,
         spectralEnergy: frame.spectralEnergy ?? null,
+        transientRms: frame.transientRms ?? null,
       })
       if (
         frame.calibrating ||
@@ -930,7 +934,12 @@ export default function useWaitForYouMicInput({
         const key = `${currentCheckpoint.id}:v2:${[...frame.v2DetectedMidis]
           .sort((left, right) => left - right)
           .join(',')}`
-        const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+        const pitchCents =
+          expectedMidis.length === 1
+            ? pitchCentsForMicConfirmation(frame, expectedMidis[0])
+            : frame.midiFloat != null
+              ? frame.midiFloat * 100
+              : null
         const corroborated =
           expectedMidis.length !== 1 ||
           frameCorroboratesSingleNote(frame, expectedMidis[0], {
@@ -941,7 +950,7 @@ export default function useWaitForYouMicInput({
         const guitarChordConfirmThreshold =
           v2Preview.isGuitarChordShape || v2Preview.isRollingChordMic
             ? GUITAR_ROLLING_CHORD_CONFIRM_FRAMES
-            : undefined
+            : micConfirmFramesForExpectedMidis(expectedMidis)
         if (
           confirmConfidentMatch(key, rollingChordFrameConfident && corroborated, {
             pitchCents,

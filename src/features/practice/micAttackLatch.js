@@ -30,9 +30,21 @@ export const MIC_ATTACK_REARM_SMALL_RISE_RATIO = 1.08
 /** Bass hammer/pluck transient relative to the ringing frame's recent floor. */
 export const MIC_ATTACK_REARM_TRANSIENT_RATIO = 1.55
 export const MIC_ATTACK_REARM_TRANSIENT_MARGIN = 0.00035
+export const MIC_ATTACK_REARM_DERIVATIVE_RATIO = 1.35
+export const MIC_ATTACK_REARM_DERIVATIVE_MARGIN = 0.00075
 export const MIC_ATTACK_REARM_LOW_MIDI_MAX = 59
 export const MIC_ATTACK_REARM_MIN_FRAMES = 6
+export const MIC_ATTACK_REARM_DIFFERENT_LOW_MIN_FRAMES = 3
 export const MIC_ATTACK_REARM_LOW_RMS_RATIO = 1.45
+/** High-register attacks need an absolute derivative envelope, not brightness. */
+export const MIC_ATTACK_REARM_HIGH_MIDI_MIN = 84
+export const MIC_ATTACK_REARM_HIGH_TRANSIENT_RATIO = 1.1
+export const MIC_ATTACK_REARM_HIGH_TRANSIENT_MARGIN = 0.006
+export const MIC_ATTACK_REARM_HIGH_MIN_FRAMES = 3
+export const MIC_ATTACK_REARM_HIGH_SCORE_CONFIDENCE = 0.36
+export const MIC_ATTACK_REARM_HIGH_SCORE_RATIO = 1.45
+/** Deep-bass neighbors need a physical attack; short-window score leakage is not enough. */
+export const MIC_ATTACK_SCORE_TRANSITION_MIN_MIDI = 33
 
 export function createMicAttackLatchState() {
   return {
@@ -41,6 +53,9 @@ export function createMicAttackLatchState() {
     consumedMidis: [],
     envelopeRms: null,
     envelopeSpectralEnergy: null,
+    envelopeTransientRms: null,
+    lastRms: null,
+    previousFrameRms: null,
     framesSinceConsumed: 0,
   }
 }
@@ -54,6 +69,9 @@ export function resetMicAttackLatch(state) {
   state.consumedMidis = []
   state.envelopeRms = null
   state.envelopeSpectralEnergy = null
+  state.envelopeTransientRms = null
+  state.lastRms = null
+  state.previousFrameRms = null
   state.framesSinceConsumed = 0
 }
 
@@ -64,6 +82,7 @@ export function updateMicAttackRelease(
     releaseFrames = MIC_ATTACK_RELEASE_FRAMES,
     rms = null,
     spectralEnergy = null,
+    transientRms = null,
   } = {},
 ) {
   if (!state) {
@@ -74,6 +93,8 @@ export function updateMicAttackRelease(
     // Track the ringing note's decaying envelope (running minimum since the
     // consume). A later frame that jumps back above this floor is a new attack.
     if (state.awaitingRelease && rms != null && Number.isFinite(rms)) {
+      state.previousFrameRms = state.lastRms
+      state.lastRms = rms
       state.envelopeRms = state.envelopeRms == null ? rms : Math.min(state.envelopeRms, rms)
     }
     if (state.awaitingRelease) {
@@ -83,6 +104,12 @@ export function updateMicAttackRelease(
           state.envelopeSpectralEnergy == null
             ? spectralEnergy
             : Math.min(state.envelopeSpectralEnergy, spectralEnergy)
+      }
+      if (transientRms != null && Number.isFinite(transientRms)) {
+        state.envelopeTransientRms =
+          state.envelopeTransientRms == null
+            ? transientRms
+            : Math.min(state.envelopeTransientRms, transientRms)
       }
     }
     return
@@ -106,6 +133,9 @@ export function markMicAttackConsumed(state, { consumedMidis = [] } = {}) {
   state.consumedMidis = consumedMidis.filter((midi) => Number.isFinite(midi))
   state.envelopeRms = null
   state.envelopeSpectralEnergy = null
+  state.envelopeTransientRms = null
+  state.lastRms = null
+  state.previousFrameRms = null
   state.framesSinceConsumed = 0
 }
 
@@ -153,15 +183,21 @@ function hasLowNoteTransientEvidence(
     lowRmsRatio,
     scoreConfidence,
     scoreRatio,
+    differentNoteMinFrames = MIC_ATTACK_REARM_DIFFERENT_LOW_MIN_FRAMES,
+    derivativeRatio = MIC_ATTACK_REARM_DERIVATIVE_RATIO,
+    derivativeMargin = MIC_ATTACK_REARM_DERIVATIVE_MARGIN,
   },
 ) {
-  if ((state.framesSinceConsumed ?? 0) < minFrames) {
-    return false
-  }
   const lowExpected = expectedMidis.filter(
     (midi) => Number.isFinite(midi) && midi <= lowMidiMax,
   )
   if (!lowExpected.length) {
+    return false
+  }
+  const consumed = new Set(state.consumedMidis ?? [])
+  const changesPitch = lowExpected.some((midi) => !consumed.has(midi))
+  const requiredFrames = changesPitch ? differentNoteMinFrames : minFrames
+  if ((state.framesSinceConsumed ?? 0) < requiredFrames) {
     return false
   }
   const noteEvidence = bestExpectedNoteEvidence(frame, lowExpected)
@@ -186,6 +222,25 @@ function hasLowNoteTransientEvidence(
       spectralEnergy - baseline >= transientMargin,
   )
   const rms = frame.filteredRms ?? frame.rms
+  const previousRms = state.previousFrameRms ?? state.lastRms
+  const risingAttackEdge = Boolean(
+    Number.isFinite(rms) &&
+      Number.isFinite(previousRms) &&
+      rms >= previousRms * 1.003 &&
+      rms - previousRms >= 0.0002,
+  )
+  const transientRms = frame.transientRms
+  const transientRmsBaseline = state.envelopeTransientRms
+  const derivativeTracked = Boolean(
+    Number.isFinite(transientRms) &&
+      Number.isFinite(transientRmsBaseline) &&
+      transientRmsBaseline > 0,
+  )
+  const derivativeRise = Boolean(
+    derivativeTracked &&
+      transientRms >= transientRmsBaseline * derivativeRatio &&
+      transientRms - transientRmsBaseline >= derivativeMargin,
+  )
   const rmsBaseline = state.envelopeRms
   const lowEnergyRise = Boolean(
     Number.isFinite(rms) &&
@@ -193,7 +248,60 @@ function hasLowNoteTransientEvidence(
       rmsBaseline > 0 &&
       rms >= rmsBaseline * lowRmsRatio,
   )
-  return transientRise || lowEnergyRise
+  // Older/offline callers do not provide absolute derivative RMS; retain the
+  // accepted bass behavior there. Live capture uses the derivative/rising-edge
+  // guard so a note's falling edge cannot masquerade as another hammer attack.
+  const credibleAttackEdge = !derivativeTracked || risingAttackEdge
+  return (
+    (transientRise && credibleAttackEdge) ||
+    (derivativeRise && risingAttackEdge) ||
+    lowEnergyRise
+  )
+}
+
+function hasHighNoteTransientEvidence(
+  state,
+  frame,
+  expectedMidis,
+  {
+    highMidiMin,
+    minFrames,
+    transientRatio,
+    transientMargin,
+    scoreConfidence,
+    scoreRatio,
+  },
+) {
+  if ((state.framesSinceConsumed ?? 0) < minFrames) {
+    return false
+  }
+  const highExpected = expectedMidis.filter(
+    (midi) => Number.isFinite(midi) && midi >= highMidiMin,
+  )
+  if (!highExpected.length) {
+    return false
+  }
+  const noteEvidence = bestExpectedNoteEvidence(frame, highExpected)
+  if (
+    !noteEvidence ||
+    (noteEvidence.confidence ?? 0) < scoreConfidence ||
+    (noteEvidence.ratio ?? 0) < scoreRatio ||
+    (noteEvidence.harmonicSupport ?? 0) < 0.35
+  ) {
+    return false
+  }
+  if (frame.signalShape !== 'sustained' && frame.signalShape !== 'distorted') {
+    return false
+  }
+  const transientRms = frame.transientRms
+  const baseline = state.envelopeTransientRms
+  return Boolean(
+    Number.isFinite(transientRms) &&
+      Number.isFinite(baseline) &&
+      baseline > 0 &&
+      transientRms >= baseline * transientRatio &&
+      transientRms - baseline >= transientMargin,
+  )
 }
 
 /**
@@ -217,6 +325,13 @@ export function getMicAttackRearmReason(
     lowMidiMax = MIC_ATTACK_REARM_LOW_MIDI_MAX,
     minFrames = MIC_ATTACK_REARM_MIN_FRAMES,
     lowRmsRatio = MIC_ATTACK_REARM_LOW_RMS_RATIO,
+    highMidiMin = MIC_ATTACK_REARM_HIGH_MIDI_MIN,
+    highTransientRatio = MIC_ATTACK_REARM_HIGH_TRANSIENT_RATIO,
+    highTransientMargin = MIC_ATTACK_REARM_HIGH_TRANSIENT_MARGIN,
+    highMinFrames = MIC_ATTACK_REARM_HIGH_MIN_FRAMES,
+    highScoreConfidence = MIC_ATTACK_REARM_HIGH_SCORE_CONFIDENCE,
+    highScoreRatio = MIC_ATTACK_REARM_HIGH_SCORE_RATIO,
+    scoreTransitionMinMidi = MIC_ATTACK_SCORE_TRANSITION_MIN_MIDI,
   } = {},
 ) {
   if (!state?.awaitingRelease || !frame?.gateOpen) {
@@ -255,6 +370,24 @@ export function getMicAttackRearmReason(
     return 'low-note-transient'
   }
 
+  // A high sustained waveform already has large normalized first-difference
+  // energy, so the bass brightness ratio is not meaningful here. Compare the
+  // absolute derivative RMS against its decaying envelope and require strong
+  // current expected-note evidence. A steady held note only lowers the running
+  // envelope and cannot use this path.
+  if (
+    hasHighNoteTransientEvidence(state, frame, expectedMidis, {
+      highMidiMin,
+      minFrames: highMinFrames,
+      transientRatio: highTransientRatio,
+      transientMargin: highTransientMargin,
+      scoreConfidence: highScoreConfidence,
+      scoreRatio: highScoreRatio,
+    })
+  ) {
+    return 'high-note-transient'
+  }
+
   // 2. Different-note dominance: the next checkpoint expects a note the
   // previous advance did not consume, the detector hears it, and the
   // independent pitch tracker sits on it (the ringing note lost dominance).
@@ -285,7 +418,9 @@ export function getMicAttackRearmReason(
   // can masquerade as the next note.
   const consumedMidis = [...consumed]
   const nonOctaveNewExpected = newExpected.filter(
-    (midi) => !octaveRelatedToAny(midi, consumedMidis),
+    (midi) =>
+      midi >= scoreTransitionMinMidi &&
+      !octaveRelatedToAny(midi, consumedMidis),
   )
   const noteEvidence = bestExpectedNoteEvidence(frame, nonOctaveNewExpected)
   const smallRise =

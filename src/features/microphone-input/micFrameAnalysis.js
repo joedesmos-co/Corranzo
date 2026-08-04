@@ -74,6 +74,10 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
   const crestFactor = rms > 0 ? peak / rms : 0
   const zeroCrossingRate = samples.length > 1 ? zeroCrossings / (samples.length - 1) : 0
   const spectralEnergy = sumSquares > 0 ? diffSquares / sumSquares : 0
+  // Absolute first-difference RMS is an attack-magnitude envelope. Keep it
+  // separate from `spectralEnergy`, which is normalized by the frame's total
+  // energy and therefore behaves more like a brightness/shape measure.
+  const transientRms = Math.sqrt(diffSquares / Math.max(1, samples.length - 1))
 
   const filtered = new Float32Array(samples)
   highPassInPlace(filtered)
@@ -102,6 +106,7 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
     crestFactor,
     zeroCrossingRate,
     spectralEnergy,
+    transientRms,
   })
 
   const signalQuality = classifyMicSignalQuality({
@@ -127,6 +132,7 @@ export function analyzeMicFrame(samples, sampleRate, noiseFloorTracker, options 
     crestFactor,
     zeroCrossingRate,
     spectralEnergy,
+    transientRms,
     signalShape,
     pitch,
     frequency: pitch?.frequency ?? null,

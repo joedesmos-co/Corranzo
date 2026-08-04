@@ -12,6 +12,7 @@ import {
 } from './micCalibration.js'
 import {
   createMicEngineV2RuntimeState,
+  MIC_ENGINE_SIGNAL_FRAME_SIZE,
   processMicEngineV2Tick,
   resetMicEngineV2RuntimeState,
 } from './v2/micEngineV2Live.js'
@@ -130,10 +131,14 @@ export default function useMicEngineV2Detector({
         const buffer = getTimeDomainBuffer?.()
         if (analyser && buffer?.length) {
           analyser.getFloatTimeDomainData(buffer)
+          const signalBuffer =
+            buffer.length > MIC_ENGINE_SIGNAL_FRAME_SIZE
+              ? buffer.subarray(buffer.length - MIC_ENGINE_SIGNAL_FRAME_SIZE)
+              : buffer
 
           const calibration = calibrationRef.current
           const calibrating = calibration != null && !calibration.done
-          const previewFrame = analyzeMicFrame(buffer, sampleRate, analyzerRef.current.noiseFloor, {
+          const previewFrame = analyzeMicFrame(signalBuffer, sampleRate, analyzerRef.current.noiseFloor, {
             centsTolerance,
             gateOptions: profileRef.current.gate,
           })

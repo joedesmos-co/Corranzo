@@ -8,6 +8,7 @@ import { MIC_SIGNAL_SHAPE } from '../microphone-input/micSignalShape.js'
 export const MIC_HARMONIC_HIGH_LOW_MAX = 0.45
 /** Low piano register where a decaying middle tone commonly lands on h4+. */
 export const MIC_INDEPENDENT_BASS_ANCHOR_MAX_MIDI = 47
+export const MIC_EXTREME_HIGH_HARMONIC_MIN_MIDI = 84
 
 /** Partials after the peak must decay — formant speech piles energy on h4+. */
 function harmonicDecayAfterStrongest(magnitudes, strongestIndex) {
@@ -37,7 +38,12 @@ function hasElectricHarmonicRichProfile(note, frame) {
   if (shape === MIC_SIGNAL_SHAPE.NOISY || shape === MIC_SIGNAL_SHAPE.QUIET) {
     return false
   }
-  const zcrLimit = shape === MIC_SIGNAL_SHAPE.DISTORTED ? 0.3 : 0.18
+  const extremeHigh = (note.midi ?? -Infinity) >= MIC_EXTREME_HIGH_HARMONIC_MIN_MIDI
+  const zcrLimit = extremeHigh
+    ? 0.5
+    : shape === MIC_SIGNAL_SHAPE.DISTORTED
+      ? 0.3
+      : 0.18
   if ((frame?.zeroCrossingRate ?? 0) >= zcrLimit) {
     return false
   }
@@ -55,10 +61,87 @@ function hasElectricHarmonicRichProfile(note, frame) {
     return false
   }
 
+  const coherentDeepBassThird =
+    (note.midi ?? Infinity) <= 32 &&
+    strongestIndex === 2 &&
+    !note.deepBassOctaveArtifact &&
+    (note.oddEvenRatio ?? 0) >= 0.45 &&
+    (note.confidence ?? 0) >= 0.27 &&
+    (note.ratio ?? 0) >= 1.5
+  if (coherentDeepBassThird) {
+    return true
+  }
+
   const v2Confidence = frame?.v2MeanConfidence ?? 0
   const distortedLike =
     shape === MIC_SIGNAL_SHAPE.DISTORTED || (frame?.spectralEnergy ?? 0) >= 0.1
+  if (
+    extremeHigh &&
+    strongestIndex >= 1 &&
+    !note.highLowerOctaveArtifact &&
+    (note.confidence ?? 0) >= 0.28 &&
+    (note.ratio ?? 0) >= 1.45
+  ) {
+    return true
+  }
   return strongestIndex >= 1 && (distortedLike || v2Confidence >= 0.35)
+}
+
+function hasCoherentExtremeHighProfile(v2Notes = [], frame = null) {
+  return v2Notes.some((note) => {
+    if (
+      !note?.detected ||
+      (note.midi ?? -Infinity) < MIC_EXTREME_HIGH_HARMONIC_MIN_MIDI ||
+      note.highLowerOctaveArtifact
+    ) {
+      return false
+    }
+    const magnitudes = note.harmonicMagnitudes
+    if (!Array.isArray(magnitudes) || magnitudes.length < 2) {
+      return false
+    }
+    let strongestIndex = 0
+    for (let index = 1; index < magnitudes.length; index += 1) {
+      if ((magnitudes[index] ?? 0) > (magnitudes[strongestIndex] ?? 0)) {
+        strongestIndex = index
+      }
+    }
+    return (
+      strongestIndex <= 2 &&
+      harmonicDecayAfterStrongest(magnitudes, strongestIndex) &&
+      (note.confidence ?? 0) >= 0.28 &&
+      (note.ratio ?? 0) >= 1.45 &&
+      (frame?.zeroCrossingRate ?? 0) < 0.5
+    )
+  })
+}
+
+function hasCoherentDeepBassThirdProfile(v2Notes = []) {
+  return v2Notes.some((note) => {
+    const magnitudes = note?.harmonicMagnitudes
+    if (
+      !note?.detected ||
+      (note.midi ?? Infinity) > 32 ||
+      note.deepBassOctaveArtifact ||
+      !Array.isArray(magnitudes) ||
+      magnitudes.length < 3
+    ) {
+      return false
+    }
+    let strongestIndex = 0
+    for (let index = 1; index < magnitudes.length; index += 1) {
+      if ((magnitudes[index] ?? 0) > (magnitudes[strongestIndex] ?? 0)) {
+        strongestIndex = index
+      }
+    }
+    return (
+      strongestIndex === 2 &&
+      harmonicDecayAfterStrongest(magnitudes, strongestIndex) &&
+      (note.oddEvenRatio ?? 0) >= 0.45 &&
+      (note.confidence ?? 0) >= 0.27 &&
+      (note.ratio ?? 0) >= 1.5
+    )
+  })
 }
 
 function hasIndependentBassFundamentalAnchor(note, frame, strongestIndex) {
@@ -165,13 +248,17 @@ export function isMusicalMicFrame(frame) {
   const zeroCrossingRate = frame.zeroCrossingRate ?? 0
   const spectralEnergy = frame.spectralEnergy ?? 0
   const crestFactor = frame.crestFactor ?? 0
+  const coherentExtremeHigh = hasCoherentExtremeHighProfile(frame.v2Notes ?? [], frame)
+  const coherentDeepBassThird = hasCoherentDeepBassThirdProfile(frame.v2Notes ?? [])
 
   // Formant-heavy speech: weak pitch clarity on broadband voiced energy.
   if (
     zeroCrossingRate >= 0.2 &&
     spectralEnergy >= 0.12 &&
     clarity < 0.55 &&
-    crestFactor < 7
+    crestFactor < 7 &&
+    !coherentExtremeHigh &&
+    !coherentDeepBassThird
   ) {
     return false
   }
