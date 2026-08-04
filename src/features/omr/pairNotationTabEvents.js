@@ -358,21 +358,27 @@ export function pairNotationTabInMeasure(
 
   const tabClusters = clusterTabOnsets(tabNotes, { xTolerance })
   const confidences = []
-  let nextEvents = []
+  const pairedByIndex = new Map()
 
-  for (const event of events) {
-    if (event.type !== 'note' || !(event.notes?.length > 0)) {
-      nextEvents.push(event)
-      continue
-    }
+  // Pair larger same-onset voices first so a singleton does not monopolize a
+  // shared TAB cluster before residual digits can serve the chord stack.
+  const noteEventOrder = events
+    .map((event, index) => ({ event, index }))
+    .filter(({ event }) => event.type === 'note' && event.notes?.length > 0)
+    .sort(
+      (left, right) =>
+        (right.event.notes?.length ?? 0) - (left.event.notes?.length ?? 0) ||
+        left.index - right.index,
+    )
 
+  for (const { event, index } of noteEventOrder) {
     diagnostics.notationEvents += 1
     diagnostics.notationNotes += event.notes.length
 
     let bestCluster = null
     let bestScore = 0
     for (const cluster of tabClusters) {
-      if (cluster.used) {
+      if (cluster.used || !(cluster.notes?.length > 0)) {
         continue
       }
       const score = scoreOnsetPair(event, cluster, { totalDivisions, xTolerance })
@@ -385,7 +391,7 @@ export function pairNotationTabInMeasure(
     if (!bestCluster || bestScore < MIN_ONSET_PAIR_SCORE) {
       diagnostics.unpairedNotationNotes += event.notes.length
       diagnostics.lowConfidenceOnsets += 1
-      nextEvents.push({
+      pairedByIndex.set(index, {
         ...event,
         notes: event.notes.map((note) => ({ ...note, notationTabUnpaired: true })),
         notationTabOnsetConfidence: bestScore,
@@ -393,26 +399,38 @@ export function pairNotationTabInMeasure(
       continue
     }
 
-    bestCluster.used = true
     diagnostics.onsetPairs += 1
     const { assignments, unmatchedNotation, unmatchedTab } = assignNotesInCluster(
       event.notes,
       bestCluster.notes,
       pairingOptions,
     )
+    // Keep residual digits on the cluster so a second same-onset voice event
+    // (common when notation splits a chord across voices) can still pair.
+    bestCluster.notes = unmatchedTab
+    if (bestCluster.notes.length === 0) {
+      bestCluster.used = true
+    }
     diagnostics.pairedNotes += assignments.length
     diagnostics.unpairedNotationNotes += unmatchedNotation.length
-    diagnostics.unusedTabDigits += unmatchedTab.length
     if (bestScore < LOW_CONFIDENCE_THRESHOLD) {
       diagnostics.lowConfidenceOnsets += 1
     }
     confidences.push(bestScore, ...assignments.map((entry) => entry.confidence))
-    nextEvents.push(combineEvent(event, assignments, bestScore))
+    pairedByIndex.set(index, combineEvent(event, assignments, bestScore))
   }
 
-  diagnostics.unusedTabDigits += tabClusters
-    .filter((cluster) => !cluster.used)
-    .reduce((sum, cluster) => sum + cluster.notes.length, 0)
+  const nextEvents = events.map((event, index) => {
+    if (pairedByIndex.has(index)) {
+      return pairedByIndex.get(index)
+    }
+    return event
+  })
+
+  diagnostics.unusedTabDigits = tabClusters.reduce(
+    (sum, cluster) => sum + (cluster.notes?.length ?? 0),
+    0,
+  )
 
   diagnostics.averageConfidence = confidences.length ? average(confidences) : 0
   const pairedRatio =

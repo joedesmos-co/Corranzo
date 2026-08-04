@@ -138,4 +138,32 @@ describe('notation + TAB pairing engine', () => {
       }),
     )
   })
+
+  it('shares one TAB onset cluster across same-onset multi-voice notation events', () => {
+    const events = [
+      noteEvent(0, [{ midi: 57, cx: 100 }], 100),
+      noteEvent(
+        0,
+        [
+          { midi: 64, cx: 100 },
+          { midi: 60, cx: 100 },
+          { midi: 55, cx: 100 },
+        ],
+        100,
+      ),
+    ]
+    const tabNotes = [
+      tabNote({ string: 1, fret: 3, midi: 67, x: 100, positionInMeasure: 0.05 }),
+      tabNote({ string: 2, fret: 3, midi: 62, x: 100, positionInMeasure: 0.05 }),
+      tabNote({ string: 3, fret: 2, midi: 57, x: 100, positionInMeasure: 0.05 }),
+      tabNote({ string: 4, fret: 0, midi: 50, x: 100, positionInMeasure: 0.05 }),
+    ]
+
+    const { events: paired, diagnostics } = pairNotationTabInMeasure(events, tabNotes)
+    expect(diagnostics.pairedNotes).toBe(4)
+    expect(diagnostics.unusedTabDigits).toBe(0)
+    expect(diagnostics.unpairedNotationNotes).toBe(0)
+    expect(paired).toHaveLength(2)
+    expect(paired.every((event) => event.notes.every((note) => note.string != null))).toBe(true)
+  })
 })
