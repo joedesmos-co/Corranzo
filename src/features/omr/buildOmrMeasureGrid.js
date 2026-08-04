@@ -24,6 +24,13 @@ const VECTOR_STEM_OFFSET_RATIO_MAX = 0.5
 const WIDE_SPAN_SPLIT_MIN_RATIO = 1.68
 const WIDE_SPAN_SPLIT_MAX_PARTS = 3
 const VECTOR_SINGLETON_COLUMN_CLUSTER_DISTANCE = 0.006
+/** Cluster chordally stacked heads into one column for gap-aware barline snaps. */
+export const VECTOR_NOTE_COLUMN_CLUSTER_DISTANCE = 0.01
+/** Trailing chord columns stolen across a late barline leave a gap ≥ this × median. */
+const NOTE_COLUMN_GAP_SNAP_MIN_RATIO = 2
+/** Search the rightmost fraction of the left span for a stolen opening column. */
+const NOTE_COLUMN_GAP_SNAP_SEARCH_LEFT_FRAC = 0.45
+const NOTE_COLUMN_GAP_SNAP_MIN_COLUMNS = 4
 
 function average(values) {
   if (!values.length) {
@@ -186,6 +193,129 @@ export function shouldUseVectorNoteColumnHints(noteheadXNorms = []) {
     }
   }
   return true
+}
+
+/**
+ * Collapse vertically stacked chord heads into column centroids.
+ * Safe for chordal textures where per-head stem rejection is ambiguous.
+ */
+export function clusterVectorNoteheadColumns(
+  noteheadXNorms = [],
+  clusterDistance = VECTOR_NOTE_COLUMN_CLUSTER_DISTANCE,
+) {
+  const positions = noteheadXNorms
+    .map((entry) => {
+      if (Number.isFinite(entry)) {
+        return { x: entry, width: null, count: 1 }
+      }
+      if (!Number.isFinite(entry?.x)) {
+        return null
+      }
+      return {
+        x: entry.x,
+        width: Number.isFinite(entry.width) ? entry.width : null,
+        count: 1,
+      }
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.x - right.x)
+  if (!positions.length) {
+    return []
+  }
+  const columns = [{ ...positions[0] }]
+  for (let index = 1; index < positions.length; index += 1) {
+    const note = positions[index]
+    const current = columns[columns.length - 1]
+    if (note.x - current.x <= clusterDistance) {
+      const nextCount = current.count + note.count
+      current.x = (current.x * current.count + note.x * note.count) / nextCount
+      current.count = nextCount
+      if (Number.isFinite(note.width)) {
+        current.width = Number.isFinite(current.width)
+          ? Math.max(current.width, note.width)
+          : note.width
+      }
+      continue
+    }
+    columns.push({ ...note })
+  }
+  return columns.map(({ x, width, count }) => ({ x, width, count }))
+}
+
+/**
+ * Late barlines often sit just after the next measure's opening chord column.
+ * When note columns show a gap much larger than the local median immediately
+ * left of a boundary, snap that boundary into the gap midpoint so the stolen
+ * opening column rejoins the following measure.
+ */
+export function snapMeasureSpansToNoteColumnGaps(
+  spans,
+  noteColumnXNorms = [],
+  {
+    minGapRatio = NOTE_COLUMN_GAP_SNAP_MIN_RATIO,
+    searchLeftFrac = NOTE_COLUMN_GAP_SNAP_SEARCH_LEFT_FRAC,
+    minColumns = NOTE_COLUMN_GAP_SNAP_MIN_COLUMNS,
+    minSpanFrac = MIN_MEASURE_SPAN_FRAC,
+  } = {},
+) {
+  if (spans.length < 2 || noteColumnXNorms.length < minColumns) {
+    return { spans, snappedCount: 0 }
+  }
+  const columns = clusterVectorNoteheadColumns(noteColumnXNorms).map((column) => column.x)
+  if (columns.length < minColumns) {
+    return { spans, snappedCount: 0 }
+  }
+  const gaps = []
+  for (let index = 1; index < columns.length; index += 1) {
+    gaps.push(columns[index] - columns[index - 1])
+  }
+  const medianGap = median(gaps)
+  if (!(medianGap > 0)) {
+    return { spans, snappedCount: 0 }
+  }
+  const minGap = medianGap * minGapRatio
+  const result = spans.map((span) => ({ ...span }))
+  let snappedCount = 0
+  for (let index = 0; index < result.length - 1; index += 1) {
+    const left = result[index]
+    const right = result[index + 1]
+    const boundary = left.x1
+    const spanWidth = left.x1 - left.x0
+    if (!(spanWidth > 0)) {
+      continue
+    }
+    const searchLeft = left.x0 + spanWidth * (1 - searchLeftFrac)
+    let bestGap = null
+    for (let columnIndex = 1; columnIndex < columns.length; columnIndex += 1) {
+      const leftX = columns[columnIndex - 1]
+      const rightX = columns[columnIndex]
+      if (leftX < searchLeft || rightX > boundary + medianGap * 0.35) {
+        continue
+      }
+      const gap = rightX - leftX
+      if (gap < minGap) {
+        continue
+      }
+      if (!bestGap || gap > bestGap.gap) {
+        bestGap = { gap, mid: (leftX + rightX) / 2 }
+      }
+    }
+    if (!bestGap) {
+      continue
+    }
+    const nextLeftWidth = bestGap.mid - left.x0
+    const nextRightWidth = right.x1 - bestGap.mid
+    if (nextLeftWidth < minSpanFrac || nextRightWidth < minSpanFrac) {
+      continue
+    }
+    if (Math.abs(bestGap.mid - boundary) < medianGap * 0.15) {
+      continue
+    }
+    left.x1 = bestGap.mid
+    right.x0 = bestGap.mid
+    snappedCount += 1
+  }
+  return { spans: result, snappedCount }
 }
 
 /**
@@ -400,6 +530,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   measureNumberStart = 1,
   darkThreshold = 150,
   vectorNoteheadXNorms = [],
+  noteColumnXNorms = null,
 }) {
   const x0Content = contentBounds.x0 ?? contentBounds.left / imageData.width
   const x1Content = contentBounds.x1 ?? contentBounds.right / imageData.width
@@ -447,6 +578,12 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   })
   spans = trailingNarrow.spans
 
+  const columnHints = Array.isArray(noteColumnXNorms) && noteColumnXNorms.length
+    ? noteColumnXNorms
+    : vectorNoteheadXNorms
+  const gapSnap = snapMeasureSpansToNoteColumnGaps(spans, columnHints)
+  spans = gapSnap.spans
+
   if (spans.length === 0) {
     spans = fallbackSpans({ x0: x0Content, x1: x1Content })
   }
@@ -478,6 +615,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     mergedNarrowSpans: narrowMerge.mergedCount + narrowAfter.mergedCount,
     recoveredMissingBarlines: wideSpanRecovery.splitCount,
     mergedTrailingSpans: trailingNarrow.mergedCount,
+    snappedNoteColumnGaps: gapSnap.snappedCount,
     collapsedPairs,
     suspiciousShortMeasures,
     spanWidthPercents,

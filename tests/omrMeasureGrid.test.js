@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import {
   collapseUniformOversampledSpans,
+  clusterVectorNoteheadColumns,
   mergeNarrowMeasureSpans,
   mergeTrailingNarrowMeasureSpans,
   MIN_MEASURE_SPAN_FRAC,
   rejectVectorNoteColumns,
   shouldUseVectorNoteColumnHints,
+  snapMeasureSpansToNoteColumnGaps,
   splitWideMeasureSpans,
 } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
@@ -125,6 +127,54 @@ describe('splitWideMeasureSpans', () => {
       { x0: 0.61, x1: 1 },
     ]
     expect(splitWideMeasureSpans(spans)).toEqual({ spans, splitCount: 0 })
+  })
+})
+
+describe('snapMeasureSpansToNoteColumnGaps', () => {
+  it('clusters vertically stacked chord heads into column centroids', () => {
+    const columns = clusterVectorNoteheadColumns([
+      { x: 0.2, width: 0.012 },
+      { x: 0.201, width: 0.012 },
+      { x: 0.203, width: 0.012 },
+      { x: 0.35, width: 0.012 },
+      { x: 0.3515, width: 0.012 },
+    ])
+    expect(columns).toHaveLength(2)
+    expect(columns[0].count).toBe(3)
+    expect(columns[1].count).toBe(2)
+  })
+
+  it('snaps a late barline into the large gap before a stolen opening chord column', () => {
+    // Guitar-paired system-0 pattern: four chord columns, then a large gap, then
+    // the next measure's opening column sitting just left of a late barline.
+    const spans = [
+      { x0: 0.119, x1: 0.353 },
+      { x0: 0.353, x1: 0.552 },
+      { x0: 0.552, x1: 0.752 },
+      { x0: 0.752, x1: 0.911 },
+    ]
+    const columns = [0.1905, 0.2175, 0.2444, 0.2713, 0.346, 0.3819, 0.4178, 0.4537, 0.5454]
+    const { spans: snapped, snappedCount } = snapMeasureSpansToNoteColumnGaps(spans, columns)
+    expect(snappedCount).toBeGreaterThan(0)
+    expect(snapped[0].x1).toBeGreaterThan(0.2713)
+    expect(snapped[0].x1).toBeLessThan(0.346)
+    expect(snapped[0].x1).toBe(snapped[1].x0)
+    // Opening stolen column rejoins measure 2.
+    expect(0.346).toBeGreaterThanOrEqual(snapped[1].x0)
+    expect(0.346).toBeLessThan(snapped[1].x1)
+  })
+
+  it('leaves evenly spaced chord columns unchanged', () => {
+    const spans = [
+      { x0: 0.1, x1: 0.3 },
+      { x0: 0.3, x1: 0.5 },
+      { x0: 0.5, x1: 0.7 },
+      { x0: 0.7, x1: 0.9 },
+    ]
+    const columns = [0.15, 0.2, 0.25, 0.35, 0.4, 0.45, 0.55, 0.6, 0.65, 0.75, 0.8, 0.85]
+    const { spans: snapped, snappedCount } = snapMeasureSpansToNoteColumnGaps(spans, columns)
+    expect(snappedCount).toBe(0)
+    expect(snapped).toEqual(spans)
   })
 })
 

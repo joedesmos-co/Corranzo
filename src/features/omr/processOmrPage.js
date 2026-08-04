@@ -2,6 +2,7 @@ import { detectContentBounds } from '../score-follow/detectStaffSystems.js'
 import { detectStaffLineSystems } from '../score-follow/detectStaffLines.js'
 import {
   buildMeasureBoxesForSystemWithDiagnostics,
+  clusterVectorNoteheadColumns,
   shouldUseVectorNoteColumnHints,
 } from './buildOmrMeasureGrid.js'
 import { detectNoteheadsInMeasure } from './detectOmrNoteheads.js'
@@ -363,6 +364,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       }))
     const useVectorNoteColumnHints =
       !tabAnalysisActive || shouldUseVectorNoteColumnHints(systemVectorNoteheads)
+    const noteColumns = clusterVectorNoteheadColumns(systemVectorNoteheads)
     const { measureBoxes, diagnostics: gridDiagnostics } = buildMeasureBoxesForSystemWithDiagnostics({
       page,
       systemIndex,
@@ -372,6 +374,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       measureNumberStart: measureCounter,
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
       vectorNoteheadXNorms: useVectorNoteColumnHints ? systemVectorNoteheads : [],
+      noteColumnXNorms: noteColumns,
     })
 
     measureCounter += measureBoxes.length
