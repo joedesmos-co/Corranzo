@@ -393,6 +393,133 @@ function isAtSystemEdge(endpoint, edge, bounds, imageData) {
     : endpoint.x >= bounds.x1 - tolerance
 }
 
+function isAtMeasureEdge(endpoint, edge, measureBox, imageData) {
+  if (!measureBox || !Number.isFinite(endpoint?.x)) {
+    return false
+  }
+  const width = imageData.width
+  const x0 = (measureBox.playableX0 ?? measureBox.x0) * width
+  const x1 = measureBox.x1 * width
+  const tolerance = Math.max(10, width * 0.016)
+  return edge === 'left'
+    ? endpoint.x <= x0 + tolerance
+    : endpoint.x >= x1 - tolerance
+}
+
+/**
+ * Cross-bar written ties usually land on the same beat in the next measure, or
+ * on the first beat of the next system when the source is the last beat.
+ */
+function isStructuralCrossBarPair(from, to) {
+  if ((from.clef ?? 'treble') !== (to.clef ?? 'treble')) {
+    return false
+  }
+  if (to.measureNumber === from.measureNumber + 1) {
+    if (
+      from.systemIndex != null &&
+      to.systemIndex != null &&
+      from.systemIndex !== to.systemIndex
+    ) {
+      return to.startDivision === 0 && (from.startDivision ?? 0) >= 8
+    }
+    return to.startDivision === from.startDivision
+  }
+  if (
+    from.systemIndex != null &&
+    to.systemIndex != null &&
+    to.systemIndex > from.systemIndex &&
+    to.startDivision === 0 &&
+    (from.startDivision ?? 0) >= 8
+  ) {
+    return true
+  }
+  return false
+}
+
+function findCrossBarTieDestination(instances, from) {
+  const nextMeasure = from.measureNumber + 1
+  const sameMeasureCandidates = instances.filter(
+    (candidate) =>
+      candidate.clef === from.clef &&
+      candidate.measureNumber === nextMeasure &&
+      (from.systemIndex == null || candidate.systemIndex === from.systemIndex) &&
+      candidate.startDivision === from.startDivision,
+  )
+  if (sameMeasureCandidates.length === 1) {
+    return sameMeasureCandidates[0]
+  }
+  if (sameMeasureCandidates.length > 1) {
+    return [...sameMeasureCandidates].sort(
+      (left, right) =>
+        Math.abs(left.cy - from.cy) - Math.abs(right.cy - from.cy) ||
+        left.midi - right.midi,
+    )[0]
+  }
+
+  const nextMeasureStartCandidates = instances.filter(
+    (candidate) =>
+      candidate.clef === from.clef &&
+      candidate.measureNumber === nextMeasure &&
+      candidate.startDivision === 0,
+  )
+  if (nextMeasureStartCandidates.length === 1) {
+    return nextMeasureStartCandidates[0]
+  }
+  if (nextMeasureStartCandidates.length > 1) {
+    return [...nextMeasureStartCandidates].sort(
+      (left, right) =>
+        Math.abs(left.cy - from.cy) - Math.abs(right.cy - from.cy) ||
+        left.midi - right.midi,
+    )[0]
+  }
+
+  const nextSystemCandidates = instances.filter(
+    (candidate) =>
+      candidate.clef === from.clef &&
+      from.systemIndex != null &&
+      candidate.systemIndex != null &&
+      candidate.systemIndex > from.systemIndex &&
+      candidate.measureNumber > from.measureNumber &&
+      candidate.startDivision === 0,
+  )
+  if (nextSystemCandidates.length === 1) {
+    return nextSystemCandidates[0]
+  }
+  if (nextSystemCandidates.length > 1) {
+    return [...nextSystemCandidates].sort(
+      (left, right) =>
+        left.measureNumber - right.measureNumber ||
+        left.systemIndex - right.systemIndex ||
+        Math.abs(left.cy - from.cy) - Math.abs(right.cy - from.cy),
+    )[0]
+  }
+
+  return findNextSamePitchInstance(instances, from.instanceIndex)?.instance ?? null
+}
+
+function classifyCrossBarCurvePair(instances, from, to, curve, measureBoxByNumber, imageData) {
+  if (!from || !to) {
+    return { classification: 'diagnostic', failureReason: 'missing-cross-bar-endpoint' }
+  }
+  if (!isLaterOnset(from, to)) {
+    return { classification: 'diagnostic', failureReason: 'non-forward-onset' }
+  }
+  const tieLike = curveLooksTieLike(curve, from, measureBoxByNumber, imageData)
+  if (
+    isStructuralCrossBarPair(from, to) &&
+    (tieLike || from.midi === to.midi || nextOnsetIsDirect(instances, from, to))
+  ) {
+    return { classification: 'tie', failureReason: null, allowPitchMismatch: from.midi !== to.midi }
+  }
+  if (tieLike && from.midi !== to.midi && !isStructuralCrossBarPair(from, to)) {
+    return {
+      classification: 'diagnostic',
+      failureReason: 'tie-like-curve-with-pitch-mismatch',
+    }
+  }
+  return { classification: 'slur', failureReason: null }
+}
+
 function classifyStitchedCurvePair(
   instances,
   from,
@@ -423,6 +550,17 @@ function classifyStitchedCurvePair(
   ) {
     return { classification: 'tie', failureReason: null }
   }
+  if (
+    tieLike &&
+    isStructuralCrossBarPair(from, to) &&
+    (nextOnsetIsDirect(instances, from, to) || isLaterOnset(from, to))
+  ) {
+    return {
+      classification: 'tie',
+      failureReason: null,
+      allowPitchMismatch: from.midi !== to.midi,
+    }
+  }
   if (tieLike && from.midi !== to.midi) {
     return {
       classification: 'diagnostic',
@@ -442,6 +580,8 @@ function collectPdfVectorCurvePairs({
   const directPairs = []
   const outgoingFragments = []
   const incomingFragments = []
+  const measureOutgoingFragments = []
+  const measureIncomingFragments = []
   const systemBounds = systemHorizontalBounds(measureBoxByNumber, imageData)
 
   for (const curve of vectorCurves) {
@@ -509,6 +649,13 @@ function collectPdfVectorCurvePairs({
     }
 
     if (nearestStart) {
+      const startBox = measureBoxByNumber.get(nearestStart.measureNumber)
+      if (startBox && isAtMeasureEdge(curve.end, 'right', startBox, imageData)) {
+        diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
+        diagnostic.classification = 'outgoing-measure-fragment'
+        measureOutgoingFragments.push({ curve, attachment: startCandidates[0], diagnostic })
+        continue
+      }
       const bounds = systemBounds.get(nearestStart.systemIndex)
       if (isAtSystemEdge(curve.end, 'right', bounds, imageData)) {
         diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
@@ -516,8 +663,59 @@ function collectPdfVectorCurvePairs({
         outgoingFragments.push({ curve, attachment: startCandidates[0], diagnostic })
         continue
       }
+      const tieLike = curveLooksTieLike(
+        curve,
+        nearestStart,
+        measureBoxByNumber,
+        imageData,
+      )
+      const nextSamePitch = findNextSamePitchInstance(
+        instances,
+        nearestStart.instanceIndex,
+      )?.instance
+      if (
+        tieLike &&
+        nextSamePitch &&
+        nextSamePitch.measureNumber === nearestStart.measureNumber &&
+        isLaterOnset(nearestStart, nextSamePitch)
+      ) {
+        const decision = classifyCurvePair(
+          instances,
+          nearestStart,
+          nextSamePitch,
+          curve,
+          measureBoxByNumber,
+          imageData,
+        )
+        if (decision.classification === 'tie') {
+          diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
+          diagnostic.selectedEnd = {
+            measureNumber: nextSamePitch.measureNumber,
+            midi: nextSamePitch.midi,
+          }
+          diagnostic.classification = 'tie'
+          diagnostic.failureReason = null
+          directPairs.push({
+            from: nearestStart,
+            to: nextSamePitch,
+            source: 'pdf-vector-path',
+            candidateIds: [curve.candidateId],
+            archDirection: curve.archDirection,
+            classification: 'tie',
+            matchScore: startCandidates[0].score + 8,
+          })
+          continue
+        }
+      }
     }
     if (nearestEnd) {
+      const endBox = measureBoxByNumber.get(nearestEnd.measureNumber)
+      if (endBox && isAtMeasureEdge(curve.start, 'left', endBox, imageData)) {
+        diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
+        diagnostic.classification = 'incoming-measure-fragment'
+        measureIncomingFragments.push({ curve, attachment: endCandidates[0], diagnostic })
+        continue
+      }
       const bounds = systemBounds.get(nearestEnd.systemIndex)
       if (isAtSystemEdge(curve.start, 'left', bounds, imageData)) {
         diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
@@ -603,6 +801,132 @@ function collectPdfVectorCurvePairs({
     if (!used) {
       fragment.diagnostic.failureReason = 'orphan-system-fragment'
     }
+  }
+
+  const usedMeasureOutgoing = new Set()
+  const usedMeasureIncoming = new Set()
+  for (const outgoing of measureOutgoingFragments) {
+    const from = outgoing.attachment.instance
+    let matched = false
+    for (const incoming of measureIncomingFragments) {
+      if (
+        usedMeasureOutgoing.has(outgoing.curve.candidateId) ||
+        usedMeasureIncoming.has(incoming.curve.candidateId)
+      ) {
+        continue
+      }
+      const to = incoming.attachment.instance
+      const decision = classifyCrossBarCurvePair(
+        instances,
+        from,
+        to,
+        outgoing.curve,
+        measureBoxByNumber,
+        imageData,
+      )
+      if (decision.classification !== 'tie' && decision.classification !== 'slur') {
+        continue
+      }
+      usedMeasureOutgoing.add(outgoing.curve.candidateId)
+      usedMeasureIncoming.add(incoming.curve.candidateId)
+      outgoing.diagnostic.classification = `${decision.classification}-measure-start-fragment`
+      outgoing.diagnostic.failureReason = null
+      incoming.diagnostic.classification = `${decision.classification}-measure-stop-fragment`
+      incoming.diagnostic.failureReason = null
+      stitchedPairs.push({
+        from,
+        to,
+        source: 'pdf-vector-path-measure-continuation',
+        candidateIds: [outgoing.curve.candidateId, incoming.curve.candidateId],
+        archDirection: outgoing.curve.archDirection,
+        classification: decision.classification,
+        allowPitchMismatch: Boolean(decision.allowPitchMismatch),
+        matchScore: 12,
+      })
+      matched = true
+      break
+    }
+    if (matched || usedMeasureOutgoing.has(outgoing.curve.candidateId)) {
+      continue
+    }
+    const inferred = findCrossBarTieDestination(instances, from)
+    if (!inferred) {
+      outgoing.diagnostic.failureReason = 'orphan-measure-fragment'
+      continue
+    }
+    const decision = classifyCrossBarCurvePair(
+      instances,
+      from,
+      inferred,
+      outgoing.curve,
+      measureBoxByNumber,
+      imageData,
+    )
+    if (decision.classification !== 'tie' && decision.classification !== 'slur') {
+      outgoing.diagnostic.failureReason = 'orphan-measure-fragment'
+      continue
+    }
+    usedMeasureOutgoing.add(outgoing.curve.candidateId)
+    outgoing.diagnostic.classification = `${decision.classification}-measure-start-fragment`
+    outgoing.diagnostic.failureReason = null
+    outgoing.diagnostic.selectedEnd = attachmentDiagnostic({
+      instance: inferred,
+      score: 0,
+      dx: 0,
+      dy: 0,
+      anchor: 'notehead',
+      anchorY: inferred.cy,
+    })
+    stitchedPairs.push({
+      from,
+      to: inferred,
+      source: 'pdf-vector-path-measure-continuation',
+      candidateIds: [outgoing.curve.candidateId],
+      archDirection: outgoing.curve.archDirection,
+      classification: decision.classification,
+      allowPitchMismatch: Boolean(decision.allowPitchMismatch),
+      matchScore: 14,
+    })
+  }
+  for (const incoming of measureIncomingFragments) {
+    if (!usedMeasureIncoming.has(incoming.curve.candidateId)) {
+      incoming.diagnostic.failureReason = 'orphan-measure-fragment'
+    }
+  }
+
+  for (const outgoing of outgoingFragments) {
+    if (usedOutgoing.has(outgoing.curve.candidateId)) {
+      continue
+    }
+    const from = outgoing.attachment.instance
+    const inferred = findCrossBarTieDestination(instances, from)
+    if (!inferred) {
+      continue
+    }
+    const decision = classifyCrossBarCurvePair(
+      instances,
+      from,
+      inferred,
+      outgoing.curve,
+      measureBoxByNumber,
+      imageData,
+    )
+    if (decision.classification !== 'tie' && decision.classification !== 'slur') {
+      continue
+    }
+    usedOutgoing.add(outgoing.curve.candidateId)
+    outgoing.diagnostic.classification = `${decision.classification}-system-start-fragment`
+    outgoing.diagnostic.failureReason = null
+    stitchedPairs.push({
+      from,
+      to: inferred,
+      source: 'pdf-vector-path-system-continuation',
+      candidateIds: [outgoing.curve.candidateId],
+      archDirection: outgoing.curve.archDirection,
+      classification: decision.classification,
+      allowPitchMismatch: Boolean(decision.allowPitchMismatch),
+      matchScore: 16,
+    })
   }
 
   const systemIndices = instances
@@ -1202,7 +1526,7 @@ function applyTieMarks(measureRecords, tiePairs) {
     if (!fromEvent || !toEvent || !fromNote || !toNote) {
       continue
     }
-    if (!canTieNotePair(fromNote, toNote)) {
+    if (!canTieNotePair(fromNote, toNote) && !pair.allowPitchMismatch) {
       continue
     }
     // Raster dots remain unsafe tie evidence. An original PDF Bézier is direct

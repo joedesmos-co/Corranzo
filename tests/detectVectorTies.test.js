@@ -813,4 +813,58 @@ describe('exclusive vector tie pairing geometry', () => {
     expect(measureRecords[0].events[1].notes[0].tieStop).toBeUndefined()
     expect(measureRecords[0].events[2].notes[0].tieStop).toBeUndefined()
   })
+
+  it('infers a cross-system tie from an outgoing open-cubic measure fragment', () => {
+    const measureRecords = [
+      {
+        measureNumber: 4,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 12,
+            durationDivisions: 4,
+            notes: [{ midi: 62, clef: 'treble', cx: 852, cy: 302 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 5,
+        page: 1,
+        systemIndex: 2,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 69, clef: 'treble', cx: 191, cy: 742 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [4, staffBox(4, 0, 0.68, 0.92)],
+        [5, staffBox(5, 2, 0.08, 0.32)],
+      ]),
+      vectorCurves: [
+        {
+          candidateId: 'open-outgoing',
+          source: 'pdf-vector-path',
+          strokeStyle: 'open-cubic',
+          start: { x: 847, y: 309, tangent: { dx: 1, dy: 0 } },
+          end: { x: 911, y: 309, tangent: { dx: 1, dy: 0 } },
+          bounds: { x0: 847, x1: 911, y0: 309, y1: 309, width: 64, height: 1 },
+          archDirection: 'below',
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+  })
 })
