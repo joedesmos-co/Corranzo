@@ -477,10 +477,13 @@ function recoverUniformBeatGrid(items, totalDivisions, beats) {
   )
   const gaps = positions.slice(1).map((position, index) => position - positions[index])
   const meanGap = average(gaps)
+  // Factor-2/4 monophonic packs often carry dense-snap stutter (±1 sixteenth).
+  // Keep tuplet (factor 3) and beat (factor 1) grids strict.
+  const gapTolerance = factor === 2 || factor === 4 ? 0.45 : 0.2
   if (
     !Number.isFinite(meanGap) ||
     meanGap <= EPSILON ||
-    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > 0.2)
+    gaps.some((gap) => Math.abs(gap - meanGap) / meanGap > gapTolerance)
   ) {
     return { items, recoveredCount: 0 }
   }

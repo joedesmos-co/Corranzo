@@ -5,6 +5,7 @@ import {
   coalesceSameOnsetChordEvents,
   refineSparseChordColumnStarts,
   shouldInferRhythmFromPositions,
+  snapUniformSubdivisionStarts,
 } from '../src/features/omr/processVectorOmrPage.js'
 import { OMR_DIVISIONS_PER_QUARTER } from '../src/features/omr/omrRhythmConstants.js'
 import { packJointPolyphonicRhythm } from '../src/features/omr/jointPolyphonicRhythm.js'
@@ -92,6 +93,40 @@ describe('alignOpeningGroupStart', () => {
     ]
     // Single recovered orphan + later chord is not chord-dominated at the opening.
     expect(alignOpeningGroupStart(starts, groups, 4, true)).toEqual(starts)
+  })
+
+  it('rebuilds an eight-dyad pack delayed by dense snap onto the eighth grid', () => {
+    const starts = [3, 4, 6, 7, 8, 10, 11, 13]
+    const groups = starts.map((start, index) => ({
+      positionInMeasure: 0.08 + index * 0.11,
+      notes: [
+        chordTone({ cx: 500 + index * 18, cy: 700, midi: 64, positionInMeasure: 0.08 + index * 0.11 }),
+        chordTone({ cx: 500 + index * 18, cy: 720, midi: 67, positionInMeasure: 0.08 + index * 0.11 }),
+      ],
+    }))
+    expect(alignOpeningGroupStart(starts, groups, 4, true)).toEqual([0, 2, 4, 6, 8, 10, 12, 14])
+  })
+})
+
+describe('snapUniformSubdivisionStarts', () => {
+  it('rebuilds a stuttering monophonic eighth pack onto a uniform grid', () => {
+    const starts = [0, 2, 4, 6, 7, 9, 11, 12]
+    const groups = starts.map((start, index) => ({
+      positionInMeasure: 0.05 + index * 0.12,
+      notes: [chordTone({ cx: 180 + index * 14, cy: 330, midi: 64 + index, positionInMeasure: 0.05 + index * 0.12 })],
+    }))
+    expect(snapUniformSubdivisionStarts(starts, groups, 4, 16)).toEqual([
+      0, 2, 4, 6, 8, 10, 12, 14,
+    ])
+  })
+
+  it('keeps a already-uniform eighth pack unchanged', () => {
+    const starts = [0, 2, 4, 6, 8, 10, 12, 14]
+    const groups = starts.map((start, index) => ({
+      positionInMeasure: index / 8,
+      notes: [chordTone({ cx: 180 + index * 14, cy: 330, midi: 64, positionInMeasure: index / 8 })],
+    }))
+    expect(snapUniformSubdivisionStarts(starts, groups, 4, 16)).toEqual(starts)
   })
 })
 

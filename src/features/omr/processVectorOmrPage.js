@@ -650,7 +650,26 @@ function vectorChordMergeXPx(notes, beats) {
   }
   const slotsPerMeasure = Math.max(4, beats * 4)
   const slotWidthPx = span / slotsPerMeasure
-  return Math.max(OMR_CHORD_MERGE_X, Math.min(28, slotWidthPx * 2.2))
+  const baseMergeX = Math.max(OMR_CHORD_MERGE_X, Math.min(28, slotWidthPx * 2.2))
+  // Dense monophonic runs (sixteenths) produce many ~slot-width neighbors.
+  // Cap merge width below the typical inter-onset gap so sequential attacks are
+  // not glued into false dyads, while near-coincident chord stacks still merge.
+  const sortedCx = [...cxValues].sort((left, right) => left - right)
+  const positiveGaps = []
+  for (let index = 1; index < sortedCx.length; index += 1) {
+    const gap = sortedCx[index] - sortedCx[index - 1]
+    if (gap > 0.75) {
+      positiveGaps.push(gap)
+    }
+  }
+  if (positiveGaps.length >= 4) {
+    const medianGap = medianNumber(positiveGaps)
+    if (Number.isFinite(medianGap) && medianGap > 0) {
+      const calibrated = Math.max(OMR_CHORD_MERGE_X * 0.35, medianGap * 0.45)
+      return Math.min(baseMergeX, calibrated)
+    }
+  }
+  return baseMergeX
 }
 
 function groupsShareBeatSlot(left, right, slotsPerMeasure, chordMergeX = OMR_CHORD_MERGE_X) {
@@ -1113,6 +1132,26 @@ function sameClefSubdivisionRun(clefEvents, index) {
   const quarterSpan = OMR_DIVISIONS_PER_QUARTER
   if (countSameClefEventsInSpan(clefEvents, index, quarterSpan) >= 3) {
     return true
+  }
+  // Ordinary eighth runs place only two attacks per quarter. A half-note window
+  // with four attacks (or a measure-wide ≤eighth chain) is still a subdivision
+  // pack — do not promote pairs to overlapping quarters.
+  if (countSameClefEventsInSpan(clefEvents, index, quarterSpan * 2) >= 4) {
+    return true
+  }
+  if (clefEvents.length >= 6) {
+    const gaps = []
+    for (let cursor = 1; cursor < clefEvents.length; cursor += 1) {
+      gaps.push(
+        (clefEvents[cursor].startDivision ?? 0) - (clefEvents[cursor - 1].startDivision ?? 0),
+      )
+    }
+    const eighthGap = OMR_DURATION_DIVISIONS.eighth + 1
+    const mostlyEighth =
+      gaps.filter((gap) => gap > 0 && gap <= eighthGap).length >= Math.ceil(gaps.length * 0.75)
+    if (mostlyEighth) {
+      return true
+    }
   }
   const start = clefEvents[index]?.startDivision ?? 0
   const prev = index > 0 ? clefEvents[index - 1] : null
@@ -2428,10 +2467,18 @@ export function alignOpeningGroupStart(starts, groups, beats, usePositionStarts)
   }
 
   const openingIsChord = (groups[0]?.notes?.length ?? 0) >= 2
+  const multiNoteGroups = groups.filter((group) => (group.notes?.length ?? 0) >= 2).length
+  // Eight evenly spaced dyad columns in 4/4 are ordinary eighth chords, not a
+  // dense sixteenth texture. Allow the same opening translate used for sparse
+  // chord packs so the whole grid is not left delayed by a dense-snap offset.
+  const eighthDyadPack =
+    groups.length === beats * 2 &&
+    openingIsChord &&
+    multiNoteGroups >= Math.ceil(groups.length * 0.75)
   // Dense tuplet / sixteenth textures (many attacks per bar) must keep their
   // relative grid. Only translate sparse chord-column packs where recovered
   // ledger tones share a handful of visual columns.
-  const sparseChordPack = groups.length <= beats + 2
+  const sparseChordPack = groups.length <= beats + 2 || eighthDyadPack
   const eighthAlignedCount = starts.filter((start) => start % eighthGrid === 0).length
   const mostlyEighthAligned = eighthAlignedCount >= Math.ceil(starts.length * 0.75)
   // Only translate whole grids for visual chord columns. Monophonic sixteenth /
@@ -2439,12 +2486,17 @@ export function alignOpeningGroupStart(starts, groups, beats, usePositionStarts)
   if (sparseChordPack && mostlyEighthAligned && openingIsChord) {
     return starts.map((start) => Math.max(0, start - firstStart))
   }
+  if (eighthDyadPack) {
+    // Noisy dense snap leaves irregular pairs (3,4,6,7…). Column count already
+    // proves an eighth grid — rebuild from the barline rather than translating
+    // residual sixteenth stutter.
+    return groups.map((_, index) => index * eighthGrid)
+  }
 
   // Dense snap can park a chord column on an odd sixteenth (e.g. 3). Translate
   // by the eighth floor so every tone of the visual chord moves together without
   // inventing a monophonic sixteenth grid shift. Require the opening group itself
   // to be a chord so lone recovered orphans are not force-pulled to the barline.
-  const multiNoteGroups = groups.filter((group) => (group.notes?.length ?? 0) >= 2).length
   const chordDominated =
     sparseChordPack &&
     openingIsChord &&
@@ -2469,6 +2521,47 @@ export function alignOpeningGroupStart(starts, groups, beats, usePositionStarts)
     return [0, ...starts.slice(1)]
   }
   return starts
+}
+
+/**
+ * When column count exactly matches an eighth (×2) or sixteenth (×4) pack and
+ * geometry spans most of the measure, replace noisy dense-snap starts with a
+ * uniform subdivision grid. Preserves intentional sparse/irregular packs.
+ */
+export function snapUniformSubdivisionStarts(
+  starts,
+  groups,
+  beats,
+  totalDivisions = Math.max(1, beats) * OMR_DIVISIONS_PER_QUARTER,
+) {
+  if (!starts?.length || !groups?.length || starts.length !== groups.length) {
+    return starts
+  }
+  if (![2, 4].includes(groups.length / Math.max(1, beats))) {
+    return starts
+  }
+  const positions = groups
+    .map((group) => group.positionInMeasure ?? group.notes?.[0]?.positionInMeasure)
+    .filter(Number.isFinite)
+  if (positions.length !== groups.length) {
+    return starts
+  }
+  const span = Math.max(...positions) - Math.min(...positions)
+  if (span < 0.55) {
+    return starts
+  }
+  const slot = totalDivisions / groups.length
+  if (!(slot > 0)) {
+    return starts
+  }
+  const uniform = groups.map((_, index) => index * slot)
+  const irregular = starts.some(
+    (start, index) => Math.abs(start - uniform[index]) > slot * 0.51,
+  )
+  if (!irregular && starts[0] === 0) {
+    return starts
+  }
+  return uniform
 }
 
 /**
@@ -2890,15 +2983,27 @@ function buildNoteEventsFromGroups(
       Math.round((index / Math.max(1, groups.length)) * totalDivisions),
     )
   })
-  const starts = alignOpeningGroupStart(rhythmStarts, groups, beats, usePositionStarts)
+  const alignedStarts = snapUniformSubdivisionStarts(
+    alignOpeningGroupStart(rhythmStarts, groups, beats, usePositionStarts),
+    groups,
+    beats,
+    totalDivisions,
+  )
 
   let events = splitMixedClefEvents(
     groups.map((group, index) => {
-      const startDivision = starts[index]
+      const startDivision = alignedStarts[index]
+      const nextAlignedStart =
+        index + 1 < alignedStarts.length ? alignedStarts[index + 1] : totalDivisions
       const rhythmStart = rhythmStarts[index]
       const nextRhythmStart =
         index + 1 < rhythmStarts.length ? rhythmStarts[index + 1] : totalDivisions
-      let durationDivisions = Math.max(1, nextRhythmStart - rhythmStart)
+      // When opening/subdivision alignment rewrites the onset grid, durations must
+      // follow the aligned starts — not the pre-align residual gaps.
+      let durationDivisions = Math.max(
+        1,
+        usePositionStarts ? nextAlignedStart - startDivision : nextRhythmStart - rhythmStart,
+      )
       if (!usePositionStarts && groups.length <= beats) {
         if (groups.length < beats) {
           if (groups.length === 1) {
