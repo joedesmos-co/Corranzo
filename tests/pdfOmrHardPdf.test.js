@@ -100,6 +100,14 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     expect(estimate.improvement).toBeGreaterThan(0.025)
   })
 
+  it('accepts a strongly supported quarter-degree staff correction', () => {
+    const skewed = rhythmicPianoPage()
+    deskewImageData(skewed, 0.25)
+    const estimate = estimateDeskewAngle(skewed)
+    expect(estimate.angle).toBe(-0.25)
+    expect(estimate.improvement).toBeGreaterThan(0.025)
+  })
+
   it('produces playback from a scanned synthetic page after preprocessing', async () => {
     const page = scannedPianoPage({ measuresPerSystem: 4 })
     const progress = []

@@ -229,7 +229,12 @@ export function estimateDeskewAngle(imageData) {
     }
   }
   const improvement = zeroScore > 0 ? (bestScore - zeroScore) / zeroScore : 0
-  const accepted = Math.abs(bestAngle) >= 0.5 && improvement >= 0.025
+  // The search grid resolves quarter-degree steps. Rejecting every estimate
+  // below 0.5 degrees discarded a strongly supported 0.25-degree correction,
+  // even though that amount moves staff geometry by several pixels across a
+  // full-width page and is enough to change written pitch. The improvement
+  // gate still prevents deskewing clean pages on weak/noisy evidence.
+  const accepted = Math.abs(bestAngle) >= 0.25 && improvement >= 0.025
   return {
     angle: accepted ? bestAngle : 0,
     confidence: accepted ? Math.min(0.95, 0.6 + improvement) : 0,

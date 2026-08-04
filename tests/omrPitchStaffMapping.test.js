@@ -41,6 +41,33 @@ describe('normalizedStaffLineYs', () => {
   it('returns null when fewer than five rows are available', () => {
     expect(normalizedStaffLineYs([134, 140, 146, 152], 1000)).toBeNull()
   })
+
+  it('collapses thick scan rows and rejects a shorter volta line above the staff', () => {
+    const height = 1000
+    const rows = [
+      100, 101,
+      114, 115, 116,
+      128, 129, 130,
+      142, 143, 144,
+      156, 157, 158,
+      170, 171, 172,
+    ]
+    const run = new Float32Array(height)
+    const dark = new Float32Array(height)
+    for (const row of rows) {
+      const volta = row <= 101
+      run[row] = volta ? 0.4 : 0.92
+      dark[row] = volta ? 0.42 : 0.94
+    }
+
+    expect(normalizedStaffLineYs(rows, height, { run, dark })).toEqual([
+      0.115,
+      0.129,
+      0.143,
+      0.157,
+      0.171,
+    ])
+  })
 })
 
 describe('filterViableStaves', () => {

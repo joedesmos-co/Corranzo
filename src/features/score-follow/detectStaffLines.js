@@ -131,21 +131,48 @@ export function computeHorizontalRunCoverage(imageData, contentBounds, darkThres
   return computeRowStaffScores(imageData, contentBounds, darkThreshold).run
 }
 
-function normalizedStaffLineYs(rows, height) {
+function collapseAdjacentStaffRows(rows, rowScores = null) {
+  const sorted = [...new Set(rows)].sort((left, right) => left - right)
+  if (!sorted.length) {
+    return []
+  }
+  const groups = []
+  let current = [sorted[0]]
+  for (let index = 1; index < sorted.length; index += 1) {
+    if (sorted[index] - sorted[index - 1] > 1) {
+      groups.push(current)
+      current = []
+    }
+    current.push(sorted[index])
+  }
+  groups.push(current)
+
+  return groups.map((group) => {
+    const center = (group[0] + group[group.length - 1]) / 2
+    const strengths = group.map((row) => {
+      const run = Number(rowScores?.run?.[row] ?? 0)
+      const dark = Number(rowScores?.dark?.[row] ?? 0)
+      return run * 0.8 + dark * 0.2
+    })
+    return {
+      center,
+      strength: strengths.length ? Math.max(...strengths) : 0,
+    }
+  })
+}
+
+function normalizedStaffLineYs(rows, height, rowScores = null) {
   if (!rows?.length) {
     return null
   }
-  if (rows.length === 5) {
-    return rows.map((row) => row / height)
-  }
-  if (rows.length < 5) {
+  const bands = collapseAdjacentStaffRows(rows, rowScores)
+  if (bands.length < 5) {
     return null
   }
-  const ys = rows.map((row) => row / height)
   let best = null
-  for (let start = 0; start <= ys.length - 5; start += 1) {
-    const slice = ys.slice(start, start + 5)
-    const gaps = slice.slice(1).map((y, index) => y - slice[index])
+  for (let start = 0; start <= bands.length - 5; start += 1) {
+    const slice = bands.slice(start, start + 5)
+    const gaps = slice.slice(1).map((line, index) => line.center - slice[index].center)
     const minGap = Math.min(...gaps)
     const maxGap = Math.max(...gaps)
     if (maxGap <= 0 || minGap / maxGap < 0.75) {
@@ -153,14 +180,20 @@ function normalizedStaffLineYs(rows, height) {
     }
     const mean = gaps.reduce((sum, gap) => sum + gap, 0) / gaps.length
     const variance = gaps.reduce((sum, gap) => sum + (gap - mean) ** 2, 0) / gaps.length
-    if (!best || variance < best.variance) {
-      best = { lines: slice, variance }
+    const normalizedVariance = variance / Math.max(1, mean ** 2)
+    const strength = slice.reduce((sum, line) => sum + line.strength, 0) / slice.length
+    // Brackets, ledger lines, and text can form an extra regularly spaced row.
+    // Prefer the five-line hypothesis with page-wide row evidence, while the
+    // normalized variance keeps geometry primary when no row scores exist.
+    const score = normalizedVariance * 4 + (rowScores ? 1 - strength : 0)
+    if (!best || score < best.score) {
+      best = { lines: slice.map((line) => line.center / height), score }
     }
   }
   return best?.lines ?? null
 }
 
-function clusterStaffLineRows(lineRows, height, minGapNorm) {
+function clusterStaffLineRows(lineRows, height, minGapNorm, rowScores = null) {
   if (lineRows.length === 0) {
     return []
   }
@@ -186,7 +219,7 @@ function clusterStaffLineRows(lineRows, height, minGapNorm) {
         center: (y0 + y1) / 2,
         lineCount: rows.length,
         detectedLineYs,
-        lineYs: normalizedStaffLineYs(rows, height),
+        lineYs: normalizedStaffLineYs(rows, height, rowScores),
       }
     })
     .filter((stave) => stave.lineCount >= 2)
@@ -205,7 +238,7 @@ function runStaffLinePass(imageData, contentBounds, height, pass, minGapNorm) {
       lineRows.push(y)
     }
   }
-  const staves = clusterStaffLineRows(lineRows, height, minGapNorm)
+  const staves = clusterStaffLineRows(lineRows, height, minGapNorm, { run, dark })
   return {
     staves,
     trace: {

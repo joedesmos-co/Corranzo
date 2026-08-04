@@ -171,10 +171,13 @@ export function estimateSystemStaffLineCount(system) {
     ? system.staves[0]
     : null
   const explicitLineCount =
-    collapseDetectedLineCount(stave?.lineYs) ??
+    // Preserve all independently detected rows for five-line notation versus
+    // six-line TAB classification. `lineYs` may intentionally hold only the
+    // best canonical five-line pitch model within a thicker/six-row cluster.
     collapseDetectedLineCount(stave?.detectedLineYs) ??
-    collapseDetectedLineCount(system?.lineYs) ??
-    collapseDetectedLineCount(system?.detectedLineYs)
+    collapseDetectedLineCount(stave?.lineYs) ??
+    collapseDetectedLineCount(system?.detectedLineYs) ??
+    collapseDetectedLineCount(system?.lineYs)
   if (explicitLineCount != null) {
     return explicitLineCount
   }

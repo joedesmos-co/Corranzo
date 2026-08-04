@@ -48,6 +48,12 @@ import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
 import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
 import { normalizeNoncanonicalArticulationGlyphs } from './normalizeNoncanonicalArticulationGlyphs.js'
+import { buildRasterNoteheadPitchCalibration } from './rasterNoteheadPitchCalibration.js'
+import {
+  detectRasterNoteheadInstances,
+  fuseRasterNoteheadInstances,
+  mergeRasterDetectionPasses,
+} from './detectRasterNoteheadInstances.js'
 import {
   attachTabPositionsToEvents,
   buildTabMeasureEvents,
@@ -839,6 +845,57 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     return result
   }
 
+  const uncalibratedRasterNoteheads = systemMeasureBoxes.map((measureBoxes) =>
+    measureBoxes.map((measureBox) =>
+      detectNoteheadsInMeasure(imageData, measureBox, inkThreshold, noteheadOptions),
+    ),
+  )
+  const rasterPitchCalibration = buildRasterNoteheadPitchCalibration(
+    uncalibratedRasterNoteheads.flat(2),
+    imageData.height,
+  )
+  const calibratedRasterNoteheads = rasterPitchCalibration.applied
+    ? systemMeasureBoxes.map((measureBoxes) =>
+        measureBoxes.map((measureBox) => {
+          const calibratedOptions = {
+            ...noteheadOptions,
+            pitchAnchorOffsetRatio: rasterPitchCalibration.offsetRatio,
+          }
+          const normalNotes = detectNoteheadsInMeasure(
+            imageData,
+            measureBox,
+            inkThreshold,
+            { ...calibratedOptions, dense: false },
+          )
+          const denseNotes = detectNoteheadsInMeasure(
+            imageData,
+            measureBox,
+            inkThreshold,
+            { ...calibratedOptions, dense: true },
+          )
+          return mergeRasterDetectionPasses(normalNotes, denseNotes, imageData.height)
+        }),
+      )
+    : uncalibratedRasterNoteheads
+  const morphologyNoteheads = noteheadOptions.dense || rasterPitchCalibration.applied
+    ? systemMeasureBoxes.map((measureBoxes) =>
+        measureBoxes.map((measureBox) =>
+          detectRasterNoteheadInstances(imageData, measureBox, inkThreshold),
+        ),
+      )
+    : null
+  const rasterNoteheads = morphologyNoteheads
+    ? calibratedRasterNoteheads.map((measureBoxes, systemIndex) =>
+        measureBoxes.map((legacyNotes, boxIndex) =>
+          fuseRasterNoteheadInstances(
+            legacyNotes,
+            morphologyNoteheads[systemIndex]?.[boxIndex] ?? [],
+            imageData.height,
+          ),
+        ),
+      )
+    : calibratedRasterNoteheads
+
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const measureBoxes = systemMeasureBoxes[systemIndex] ?? []
     const staffClefs = detectStaffClefsFromGlyphs(
@@ -867,7 +924,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
 
     for (let boxIndex = 0; boxIndex < measureBoxes.length; boxIndex += 1) {
       const measureBox = measureBoxes[boxIndex]
-      let noteheads = detectNoteheadsInMeasure(imageData, measureBox, inkThreshold, noteheadOptions)
+      let noteheads = rasterNoteheads[systemIndex]?.[boxIndex] ?? []
       if (!noteheads.length) {
         continue
       }
@@ -1003,6 +1060,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     dense: noteheadOptions.dense,
     staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
     rasterTieDiagnostics: rasterTieResult.diagnostics,
+    rasterPitchCalibration,
   }
   if (captureOmrV3Shadow) {
     result.omrV3ShadowInput = buildOmrV3ShadowInput({

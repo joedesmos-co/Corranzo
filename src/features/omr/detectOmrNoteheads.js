@@ -129,6 +129,29 @@ function fillRatio(imageData, cx, cy, threshold, bounds, halfW, halfH) {
   return total > 0 ? dark / total : 0
 }
 
+function compactWideRowCount(imageData, cx, cy, threshold, bounds, halfW, halfH, minWidth) {
+  const { data, width } = imageData
+  let wideRows = 0
+  for (let y = cy - halfH; y <= cy + halfH; y += 1) {
+    if (y < bounds.top || y > bounds.bottom) {
+      continue
+    }
+    let rowInk = 0
+    for (let x = cx - halfW; x <= cx + halfW; x += 1) {
+      if (x < bounds.left || x > bounds.right) {
+        continue
+      }
+      if (isInk(data, (y * width + x) * 4, threshold)) {
+        rowInk += 1
+      }
+    }
+    if (rowInk >= minWidth) {
+      wideRows += 1
+    }
+  }
+  return wideRows
+}
+
 // Bounding box of ink within a local window — distinguishes a compact notehead
 // (filled or hollow) from a dot/speck (tiny) or a stroke fragment (elongated).
 function inkBoundingBox(imageData, cx, cy, threshold, radiusX, radiusY) {
@@ -190,6 +213,49 @@ function horizontalRunCovering(imageData, cx, cy, threshold, left, right, search
   return b - a + 1
 }
 
+function rasterCandidateQuality(note) {
+  const verticalRun = Number(note?.detectionEvidence?.verticalRun ?? Infinity)
+  const midFill = Number(note?.detectionEvidence?.midFill ?? 0)
+  const staffStepResidual = Number(note?.detectionEvidence?.staffStepResidual ?? Infinity)
+  return {
+    verticalRun: Number.isFinite(verticalRun) ? verticalRun : Infinity,
+    midFill: Number.isFinite(midFill) ? midFill : 0,
+    staffStepResidual: Number.isFinite(staffStepResidual) ? staffStepResidual : Infinity,
+  }
+}
+
+function dedupeSamePitchRasterCandidates(notes, staffSpace) {
+  const xTolerance = Math.max(5, staffSpace * 0.85)
+  const ranked = [...notes].sort((left, right) => {
+    const a = rasterCandidateQuality(left)
+    const b = rasterCandidateQuality(right)
+    return (
+      a.staffStepResidual - b.staffStepResidual ||
+      a.verticalRun - b.verticalRun ||
+      b.midFill - a.midFill ||
+      left.cx - right.cx
+    )
+  })
+  const kept = []
+  for (const note of ranked) {
+    const duplicate = kept.some((entry) => {
+      const closeX = Math.abs(entry.cx - note.cx) <= xTolerance
+      const samePitch = entry.midi === note.midi && entry.clef === note.clef
+      const sameRasterBlob =
+        entry.clef === note.clef &&
+        ((closeX &&
+          Math.abs(entry.cy - note.cy) < Math.max(2, staffSpace * 0.46)) ||
+          (Math.abs(entry.cx - note.cx) <= Math.max(2, staffSpace * 0.24) &&
+            Math.abs(entry.cy - note.cy) < Math.max(2, staffSpace * 0.5)))
+      return closeX && (samePitch || sameRasterBlob)
+    })
+    if (!duplicate) {
+      kept.push(note)
+    }
+  }
+  return kept.sort((left, right) => left.cx - right.cx || left.cy - right.cy)
+}
+
 /**
  * Detect filled notehead blobs inside a measure box (experimental, local-only).
  */
@@ -199,22 +265,32 @@ export function detectNoteheadsInMeasure(
   inkThreshold = 170,
   options = {},
 ) {
-  const { dense = false, skipDenseFallback = false } = options
+  const {
+    dense = false,
+    skipDenseFallback = false,
+    pitchAnchorOffsetRatio = 0,
+    expandLedgerBounds = dense,
+  } = options
   const step = dense ? 2 : 3
   const maxVerticalRatio = dense ? 0.28 : 0.34
   const { width, height } = imageData
+  const ss = staffSpacePx(measureBox, height)
+  // Staff-system bounds commonly stop on the outer staff lines. Notes on
+  // legitimate ledger lines extend beyond that box and were previously never
+  // presented to the raster detector. Search a scale-aware margin while the
+  // existing compact-shape, barline and beam gates continue to reject noise.
+  const ledgerMarginNorm = expandLedgerBounds ? (ss * 2.75) / height : 0
   const bounds = contentPixelBounds(imageData, {
     x0: measureBox.playableX0 ?? measureBox.x0,
     x1: measureBox.x1,
-    y0: measureBox.y0,
-    y1: measureBox.y1,
+    y0: Math.max(0, measureBox.y0 - ledgerMarginNorm),
+    y1: Math.min(1, measureBox.y1 + ledgerMarginNorm),
   })
 
   // Notehead shape gates, scaled to the staff so they hold whether a page packs
   // 2 systems or 12. These reject the dominant raster false positives (beams,
   // ledger lines, ties, stems, dots, articulations, text) without piece-specific
   // tuning and without changing any rejection threshold downstream.
-  const ss = staffSpacePx(measureBox, height)
   // "mid" box ~ one notehead: large enough that a hollow head's ring still fills
   // it, so half/whole notes are not mistaken for sparse noise.
   const midHalfW = clampInt(ss * 0.75, 2, 12)
@@ -311,7 +387,42 @@ export function detectNoteheadsInMeasure(
       // 2. Sparse neighbourhood = thin stroke fragment or faint speck (a notehead,
       //    filled or hollow, fills a notehead-sized box well above this). This is
       //    the primary discriminator against beam/stem/text false positives.
-      if (fillRatio(imageData, cx, cy, inkThreshold, bounds, midHalfW, midHalfH) < minMidFill) {
+      const midFill = fillRatio(
+        imageData,
+        cx,
+        cy,
+        inkThreshold,
+        bounds,
+        midHalfW,
+        midHalfH,
+      )
+      if (midFill < minMidFill) {
+        return null
+      }
+      const wideRows = compactWideRowCount(
+        imageData,
+        cx,
+        cy,
+        inkThreshold,
+        bounds,
+        midHalfW,
+        midHalfH,
+        Math.max(4, Math.round(ss * 0.4)),
+      )
+      if (wideRows < Math.max(3, Math.round(ss * 0.28))) {
+        return null
+      }
+      const localVerticalRun = maxVerticalInkRun(
+        imageData,
+        cx,
+        inkThreshold,
+        bounds.top,
+        bounds.bottom,
+      )
+      if (
+        localVerticalRun > ss * 2.5 &&
+        wideRows < Math.max(5, Math.round(ss * 0.42))
+      ) {
         return null
       }
       // 3. Over-dense neighbourhood = inside a beam body, thick text or barline.
@@ -329,8 +440,17 @@ export function detectNoteheadsInMeasure(
       if (aspect < minAspect || aspect > maxAspect) {
         return null
       }
+      const originalTop = Math.floor(measureBox.y0 * height)
+      const originalBottom = Math.ceil(measureBox.y1 * height)
+      const outsideSystemBounds = cy < originalTop || cy > originalBottom
+      if (
+        outsideSystemBounds &&
+        (wideRows < Math.max(5, Math.round(ss * 0.55)) || aspect < 0.45 || aspect > 2.5)
+      ) {
+        return null
+      }
 
-      const yNorm = item.cy / height
+      const yNorm = (item.cy - ss * pitchAnchorOffsetRatio) / height
       const xNorm = item.cx / width
       const pitchMapping = resolvePitchFromGrandStaff(
         yNorm,
@@ -344,6 +464,17 @@ export function detectNoteheadsInMeasure(
       }
       const lineYs = pitchMapping.lineYs
       const ledger = estimateLedgerLineCount(yNorm, lineYs)
+      const sortedLineYs = [...lineYs].sort((left, right) => left - right)
+      const lineGap =
+        sortedLineYs.length >= 5
+          ? (sortedLineYs[sortedLineYs.length - 1] - sortedLineYs[0]) /
+            (sortedLineYs.length - 1)
+          : 0
+      const stepCoordinate =
+        lineGap > 0
+          ? (sortedLineYs[sortedLineYs.length - 1] - yNorm) / (lineGap / 2)
+          : 0
+      const staffStepResidual = Math.abs(stepCoordinate - Math.round(stepCoordinate))
       const positionInMeasure = (item.cx - bounds.left) / Math.max(1, measureWidth)
       return {
         midi,
@@ -357,6 +488,14 @@ export function detectNoteheadsInMeasure(
         positionInMeasure,
         measureNumber: measureBox.measureNumber,
         page: measureBox.page,
+        detectionEvidence: {
+          source: 'raster-shape',
+          midFill,
+          wideRows,
+          staffStepResidual,
+          verticalRun: localVerticalRun,
+          pitchAnchorOffsetRatio,
+        },
       }
     })
     .filter(Boolean)
@@ -377,5 +516,5 @@ export function detectNoteheadsInMeasure(
     }
   }
 
-  return detected.sort((left, right) => left.cx - right.cx || left.cy - right.cy)
+  return dedupeSamePitchRasterCandidates(detected, ss)
 }

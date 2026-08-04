@@ -56,8 +56,8 @@ function measureBox() {
     },
   }
 }
-function detect(img) {
-  return detectNoteheadsInMeasure(img, measureBox(), 170, {})
+function detect(img, options = {}) {
+  return detectNoteheadsInMeasure(img, measureBox(), 170, options)
 }
 
 describe('raster notehead detector rejects non-notehead ink', () => {
@@ -71,7 +71,7 @@ describe('raster notehead detector rejects non-notehead ink', () => {
     rect(img, cx + 4, cy - 36, cx + 26, cy - 33) // beam at the stem tip
     hLine(img, 36, cx - 7, cx + 7) // ledger line above the staff
     vLine(img, 232, 40, 144) // right barline
-    const notes = detect(img)
+    const notes = detect(img, { expandLedgerBounds: true })
     expect(notes.length).toBe(1)
     expect(Math.abs(notes[0].cx - cx)).toBeLessThanOrEqual(4)
   })
@@ -100,5 +100,28 @@ describe('raster notehead detector rejects non-notehead ink', () => {
     staff(img)
     rect(img, 104, 36, 144, 37) // a thin horizontal stroke above the staff
     expect(detect(img).length).toBe(0)
+  })
+
+  it('does not duplicate one head when a thick stem creates a second raster peak', () => {
+    const img = blankMeasure()
+    staff(img)
+    const cx = 120
+    const cy = 60
+    filledHead(img, cx, cy)
+    rect(img, cx + 4, cy - 30, cx + 6, cy)
+
+    const notes = detect(img)
+    expect(notes).toHaveLength(1)
+    expect(notes[0].midi).toBeDefined()
+  })
+
+  it('recovers a compact ledger note just beyond the outer staff-system bound', () => {
+    const img = blankMeasure()
+    staff(img)
+    filledHead(img, 120, 164) // 14px below the legacy y1=150 bound
+    hLine(img, 164, 112, 128)
+
+    const notes = detect(img, { expandLedgerBounds: true })
+    expect(notes.some((note) => Math.abs(note.cy - 164) <= 4)).toBe(true)
   })
 })

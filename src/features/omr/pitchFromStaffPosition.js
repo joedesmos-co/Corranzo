@@ -189,6 +189,12 @@ export function estimateGrandStaffLines(system) {
     const treble = measuredStaves[0]
     const bass = measuredStaves[1]
     function measuredLinesForStaff(stave) {
+      const canonical = Array.isArray(stave?.lineYs)
+        ? stave.lineYs.filter(Number.isFinite).sort((left, right) => left - right)
+        : []
+      if (canonical.length === 5 && canonical[4] > canonical[0]) {
+        return canonical
+      }
       const lineGap = (stave.y1 - stave.y0) / 4
       return [0, 1, 2, 3, 4].map((i) => stave.y0 + i * lineGap)
     }
