@@ -182,6 +182,39 @@ describe('assignLocalAccidentals', () => {
     expect(assignments.get(1)).toBeUndefined()
   })
 
+  it('matches accidentals to a high-confidence ink notehead optical center', () => {
+    const notes = [
+      {
+        cx: 330,
+        cy: 350,
+        yNorm: 0.318,
+        clef: 'bass',
+        naturalMidi: 53,
+        noteheadAnchor: {
+          source: 'ink-notehead-geometry',
+          confidence: 0.96,
+        },
+      },
+      {
+        cx: 330,
+        cy: 323,
+        yNorm: 0.35,
+        clef: 'bass',
+        naturalMidi: 48,
+      },
+    ]
+    const assignments = assignLocalAccidentals(
+      [{ text: '\uE262', x: 290, y: 318 }],
+      imageData,
+      measureBox,
+      notes,
+      ACCIDENTAL_GLYPHS,
+    )
+
+    expect(assignments.get(0)?.type).toBe('sharp')
+    expect(assignments.get(1)).toBeUndefined()
+  })
+
   it('uses a page-calibrated path offset to select the engraved owner column', () => {
     const notes = [
       {

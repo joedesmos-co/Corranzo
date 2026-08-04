@@ -357,7 +357,7 @@ function accidentalMatchResult(
       )
     : null
   const anchorDetails = accidentalAnchorDetails(note, imageData, {
-    useTrustedOptical: Boolean(pathModel),
+    useTrustedOptical: true,
   })
   const noteAnchorY = anchorDetails.y
   const dy = Math.abs(noteAnchorY - glyph.y)
