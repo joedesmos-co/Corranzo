@@ -3,6 +3,10 @@ import {
   midiFromStaffPosition,
   resolveNoteheadAnchor,
 } from "../src/features/omr/pitchFromStaffPosition.js";
+import {
+  applyNoteheadFallbackCalibration,
+  buildNoteheadFallbackCalibrations,
+} from "../src/features/omr/noteheadFallbackCalibration.js";
 
 function image(width = 240, height = 280) {
   const data = new Uint8ClampedArray(width * height * 4);
@@ -287,5 +291,51 @@ describe("font-aware notehead pitch anchors", () => {
     );
     expect(anchor.source).toBe("glyph-metrics-fallback");
     expect(anchor.rejectedReason).toBe("legacy-font-profile-unavailable");
+  });
+
+  it("places a tall upper-treble metric fallback on the E-line not the F-line", () => {
+    const page = image(1000, 1172);
+    const lineYs = [222, 233, 244, 255, 266];
+    staff(page, lineYs);
+    ellipse(page, 590, 227, 8, 5);
+    const noteGlyph = glyph(590, 234, { width: 18, height: 25 });
+    const normalized = lineYs.map((y) => y / page.height);
+    const anchor = resolveNoteheadAnchor(noteGlyph, page, normalized);
+    expect(midiFromStaffPosition(anchor.yNorm, normalized, "treble")).toBe(76);
+    expect(midiFromStaffPosition(anchor.yNorm, normalized, "treble")).not.toBe(77);
+  });
+
+  it("self-calibrates rejected dense-chord fallbacks to the same staff step", () => {
+    const page = image(1000, 1172);
+    const lineYs = [222, 233, 244, 255, 266];
+    staff(page, lineYs);
+    for (const centerY of [210, 227, 244, 261, 278, 227, 244]) {
+      ellipse(page, 520, centerY, 8, 5);
+    }
+    const normalized = lineYs.map((y) => y / page.height);
+    const gapNorm = (lineYs[4] - lineYs[0]) / 4 / page.height;
+    const heightNorm = 25 / page.height;
+    const samples = [210, 227, 244, 261, 278, 227, 244].map((centerY) => ({
+      glyph: glyph(520, centerY + 7, { width: 18, height: 25 }),
+      source: "ink-notehead-geometry",
+      confidence: 0.96,
+      originToCenterSpaces: 0.51,
+      glyphHeightSpaces: heightNorm / gapNorm,
+    }));
+    const calibration = buildNoteheadFallbackCalibrations(samples);
+    const denseGlyph = glyph(590, 234, { width: 18, height: 25 });
+    const rejected = resolveNoteheadAnchor(denseGlyph, page, normalized);
+    const calibrated = applyNoteheadFallbackCalibration({
+      anchor: {
+        ...rejected,
+        rejectedReason: "ambiguous-components",
+      },
+      glyph: denseGlyph,
+      imageData: page,
+      lineYs: normalized,
+      calibration,
+    });
+    expect(calibrated.source).toBe("self-calibrated-glyph-fallback");
+    expect(midiFromStaffPosition(calibrated.yNorm, normalized, "treble")).toBe(76);
   });
 });

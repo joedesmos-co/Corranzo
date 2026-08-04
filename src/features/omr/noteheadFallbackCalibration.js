@@ -7,6 +7,7 @@ const TRUSTED_ANCHOR_SOURCES = new Set([
 const CALIBRATABLE_REJECTION_REASONS = new Set([
   'no-head-sized-component',
   'component-outside-font-origin-range',
+  'ambiguous-components',
 ])
 
 const MIN_SAMPLES = 6
@@ -306,11 +307,13 @@ export function applyNoteheadFallbackCalibration({
   const yNorm = rawYNorm - model.originToCenterSpaces * gapNorm
   const correctionSpaces =
     Math.abs(Number(anchor.fallbackYNorm) - yNorm) / gapNorm
+  const minCorrectionSpaces =
+    anchor.rejectedReason === 'ambiguous-components' ? 0 : 0.06
   if (
     !Number.isFinite(yNorm) ||
     yNorm < 0 ||
     yNorm > 1 ||
-    correctionSpaces < 0.06 ||
+    correctionSpaces < minCorrectionSpaces ||
     correctionSpaces > 0.45
   ) {
     return anchor

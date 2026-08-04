@@ -137,6 +137,29 @@ describe('self-calibrated notehead fallback', () => {
     expect(calibrated.calibration.sampleCount).toBe(6)
   })
 
+  it('applies page calibration when ink recovery is ambiguous in dense chords', () => {
+    const result = buildNoteheadFallbackCalibrations(
+      [0.49, 0.5, 0.5, 0.51, 0.51, 0.52].map((offset) =>
+        trustedSample(offset),
+      ),
+    )
+    const calibrated = applyNoteheadFallbackCalibration({
+      anchor: metricAnchor({
+        rejectedReason: 'ambiguous-components',
+        yNorm: 0.196,
+        fallbackYNorm: 0.196,
+        rawYNorm: 0.1995,
+        localStaffGapNorm: 0.01,
+      }),
+      glyph: glyph({ y: 234, height: 18, width: 18 }),
+      imageData: { width: 1000, height: 1172 },
+      lineYs: [0.189, 0.199, 0.209, 0.219, 0.229],
+      calibration: result,
+    })
+    expect(calibrated.source).toBe('self-calibrated-glyph-fallback')
+    expect(calibrated.inkRejectedReason).toBe('ambiguous-components')
+  })
+
   it('leaves unknown fonts and unsafe rejection classes conservative', () => {
     const result = buildNoteheadFallbackCalibrations(
       [0.49, 0.5, 0.5, 0.51, 0.51, 0.52].map((offset) =>
@@ -155,7 +178,7 @@ describe('self-calibrated notehead fallback', () => {
     ).toBe(baseline)
     expect(
       applyNoteheadFallbackCalibration({
-        anchor: metricAnchor({ rejectedReason: 'ambiguous-components' }),
+        anchor: metricAnchor({ rejectedReason: 'missing-image-geometry' }),
         glyph: glyph(),
         imageData: { width: 240, height: 280 },
         lineYs: [0.4, 0.5, 0.6, 0.7, 0.8],
