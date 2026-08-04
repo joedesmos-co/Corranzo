@@ -847,7 +847,7 @@ export function resolveNoteheadAnchor(
       best.xOriginOffset >= -0.32 &&
       best.xOriginOffset <= 0.95 &&
       best.yOriginOffset >= 0.35 &&
-      best.yOriginOffset <= 1.15
+      best.yOriginOffset <= 1
     if (clearWinner && inRelaxedOriginBand) {
       selected = best
       selectedFromCompetition = true
