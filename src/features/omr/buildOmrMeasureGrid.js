@@ -31,6 +31,11 @@ const NOTE_COLUMN_GAP_SNAP_MIN_RATIO = 2
 /** Search the rightmost fraction of the left span for a stolen opening column. */
 const NOTE_COLUMN_GAP_SNAP_SEARCH_LEFT_FRAC = 0.45
 const NOTE_COLUMN_GAP_SNAP_MIN_COLUMNS = 4
+/** Rebuild entire unreliable grids when large column gaps imply a cleaner measure count. */
+const NOTE_COLUMN_GAP_REBUILD_MIN_RATIO = 2
+const NOTE_COLUMN_GAP_REBUILD_MIN_COLUMNS = 8
+const NOTE_COLUMN_GAP_REBUILD_MIN_MEASURES = 2
+const NOTE_COLUMN_GAP_REBUILD_MAX_MEASURES = 8
 
 function average(values) {
   if (!values.length) {
@@ -319,6 +324,85 @@ export function snapMeasureSpansToNoteColumnGaps(
 }
 
 /**
+ * When barline detection is unreliable and note columns form clear packs separated
+ * by large gaps, rebuild measure spans from those gaps instead of trusting a
+ * density-thinned false grid (common on lower paired-guitar systems).
+ */
+export function rebuildSpansFromNoteColumnGaps(
+  spans,
+  noteColumnXNorms = [],
+  contentBounds,
+  {
+    minGapRatio = NOTE_COLUMN_GAP_REBUILD_MIN_RATIO,
+    minColumns = NOTE_COLUMN_GAP_REBUILD_MIN_COLUMNS,
+    minMeasures = NOTE_COLUMN_GAP_REBUILD_MIN_MEASURES,
+    maxMeasures = NOTE_COLUMN_GAP_REBUILD_MAX_MEASURES,
+    minSpanFrac = MIN_MEASURE_SPAN_FRAC,
+  } = {},
+) {
+  const x0Content = contentBounds?.x0 ?? spans[0]?.x0
+  const x1Content = contentBounds?.x1 ?? spans[spans.length - 1]?.x1
+  const contentWidth = Math.max(1e-6, (x1Content ?? 1) - (x0Content ?? 0))
+  if (
+    !Number.isFinite(x0Content) ||
+    !Number.isFinite(x1Content) ||
+    noteColumnXNorms.length < minColumns
+  ) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  const columns = clusterVectorNoteheadColumns(noteColumnXNorms).map((column) => column.x)
+  if (columns.length < minColumns) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  const gaps = []
+  for (let index = 1; index < columns.length; index += 1) {
+    gaps.push({
+      index,
+      gap: columns[index] - columns[index - 1],
+      mid: (columns[index] + columns[index - 1]) / 2,
+    })
+  }
+  const medianGap = median(gaps.map((entry) => entry.gap))
+  if (!(medianGap > 0)) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  const boundaryGaps = gaps
+    .filter((entry) => entry.gap >= medianGap * minGapRatio)
+    .sort((left, right) => left.mid - right.mid)
+  const proposedCount = boundaryGaps.length + 1
+  if (
+    proposedCount < minMeasures ||
+    proposedCount > maxMeasures ||
+    proposedCount >= spans.length ||
+    proposedCount < 2
+  ) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  // Prefer rebuilds that actually reduce false fragmentation.
+  if (proposedCount > spans.length - 1) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  const boundaries = [x0Content, ...boundaryGaps.map((entry) => entry.mid), x1Content]
+  const rebuilt = []
+  for (let index = 0; index < boundaries.length - 1; index += 1) {
+    const x0 = boundaries[index]
+    const x1 = boundaries[index + 1]
+    if (x1 - x0 < minSpanFrac * contentWidth * 0.85) {
+      return { spans, rebuilt: false, measureCount: spans.length }
+    }
+    rebuilt.push({ x0, x1 })
+  }
+  if (rebuilt.length !== proposedCount) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  const widths = rebuilt.map((span) => (span.x1 - span.x0) / contentWidth)
+  if (coefficientOfVariation(widths) > 0.55) {
+    return { spans, rebuilt: false, measureCount: spans.length }
+  }
+  return { spans: rebuilt, rebuilt: true, measureCount: rebuilt.length }
+}
+
+/**
  * Merge measure slivers produced by stem columns mistaken for barlines.
  */
 export function mergeNarrowMeasureSpans(spans, contentWidth, minFrac = MIN_MEASURE_SPAN_FRAC) {
@@ -581,6 +665,20 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   const columnHints = Array.isArray(noteColumnXNorms) && noteColumnXNorms.length
     ? noteColumnXNorms
     : vectorNoteheadXNorms
+  let rebuiltFromNoteColumnGaps = 0
+  if (
+    reliability?.confident === false &&
+    UNRELIABLE_BARLINE_REASONS.has(reliability.reason)
+  ) {
+    const rebuilt = rebuildSpansFromNoteColumnGaps(spans, columnHints, {
+      x0: x0Content,
+      x1: x1Content,
+    })
+    if (rebuilt.rebuilt) {
+      spans = rebuilt.spans
+      rebuiltFromNoteColumnGaps = rebuilt.measureCount
+    }
+  }
   const gapSnap = snapMeasureSpansToNoteColumnGaps(spans, columnHints)
   spans = gapSnap.spans
 
@@ -616,6 +714,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     recoveredMissingBarlines: wideSpanRecovery.splitCount,
     mergedTrailingSpans: trailingNarrow.mergedCount,
     snappedNoteColumnGaps: gapSnap.snappedCount,
+    rebuiltFromNoteColumnGaps,
     collapsedPairs,
     suspiciousShortMeasures,
     spanWidthPercents,

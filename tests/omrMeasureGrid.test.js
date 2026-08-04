@@ -5,6 +5,7 @@ import {
   mergeNarrowMeasureSpans,
   mergeTrailingNarrowMeasureSpans,
   MIN_MEASURE_SPAN_FRAC,
+  rebuildSpansFromNoteColumnGaps,
   rejectVectorNoteColumns,
   shouldUseVectorNoteColumnHints,
   snapMeasureSpansToNoteColumnGaps,
@@ -175,6 +176,47 @@ describe('snapMeasureSpansToNoteColumnGaps', () => {
     const { spans: snapped, snappedCount } = snapMeasureSpansToNoteColumnGaps(spans, columns)
     expect(snappedCount).toBe(0)
     expect(snapped).toEqual(spans)
+  })
+})
+
+describe('rebuildSpansFromNoteColumnGaps', () => {
+  it('rebuilds an over-fragmented unreliable grid from large column gaps', () => {
+    const spans = [
+      { x0: 0.119, x1: 0.251 },
+      { x0: 0.251, x1: 0.357 },
+      { x0: 0.357, x1: 0.512 },
+      { x0: 0.512, x1: 0.624 },
+      { x0: 0.624, x1: 0.712 },
+      { x0: 0.712, x1: 0.911 },
+    ]
+    const columns = [
+      0.1905, 0.2175, 0.2444, 0.2713,
+      0.346, 0.3819, 0.4178, 0.4537,
+      0.5454, 0.5813, 0.6171, 0.653,
+      0.7447, 0.7806, 0.8165, 0.8524,
+    ]
+    const { spans: rebuilt, rebuilt: didRebuild, measureCount } = rebuildSpansFromNoteColumnGaps(
+      spans,
+      columns,
+      { x0: 0.119, x1: 0.911 },
+    )
+    expect(didRebuild).toBe(true)
+    expect(measureCount).toBe(4)
+    expect(rebuilt).toHaveLength(4)
+    expect(rebuilt.every((span) => span.x1 - span.x0 > 0.12)).toBe(true)
+  })
+
+  it('does not rebuild when column gaps do not imply fewer measures', () => {
+    const spans = [
+      { x0: 0.1, x1: 0.3 },
+      { x0: 0.3, x1: 0.5 },
+      { x0: 0.5, x1: 0.7 },
+      { x0: 0.7, x1: 0.9 },
+    ]
+    const columns = [0.15, 0.2, 0.25, 0.35, 0.4, 0.45, 0.55, 0.6, 0.65, 0.75, 0.8, 0.85]
+    const result = rebuildSpansFromNoteColumnGaps(spans, columns, { x0: 0.1, x1: 0.9 })
+    expect(result.rebuilt).toBe(false)
+    expect(result.spans).toEqual(spans)
   })
 })
 
