@@ -445,7 +445,50 @@ export function pairNotationTabInMeasure(
     // measureBox reserved for future x-normalization diagnostics
   }
 
-  return { events: nextEvents, diagnostics }
+  return {
+    events: mergeSameOnsetNotationEvents(nextEvents),
+    diagnostics,
+  }
+}
+
+/**
+ * Notation often splits one printed chord across voice events at the same
+ * onset. After TAB digits are shared across those voices, merge them back into
+ * a single chord event so duration packing cannot stretch a singleton bass into
+ * a half note while the upper tones remain quarters.
+ */
+function mergeSameOnsetNotationEvents(events) {
+  const merged = []
+  for (const event of events) {
+    if (event?.type !== 'note') {
+      merged.push(event)
+      continue
+    }
+    const previous = merged[merged.length - 1]
+    if (
+      previous?.type === 'note' &&
+      previous.startDivision === event.startDivision
+    ) {
+      previous.notes = [...(previous.notes ?? []), ...(event.notes ?? [])]
+      previous.durationDivisions = Math.min(
+        previous.durationDivisions ?? event.durationDivisions ?? 0,
+        event.durationDivisions ?? previous.durationDivisions ?? 0,
+      )
+      if (event.durationType && previous.durationDivisions === event.durationDivisions) {
+        previous.durationType = event.durationType
+      }
+      previous.notationTabPairedCount =
+        (previous.notationTabPairedCount ?? 0) + (event.notationTabPairedCount ?? 0)
+      previous.notationTabExpectedCount =
+        (previous.notationTabExpectedCount ?? 0) + (event.notationTabExpectedCount ?? 0)
+      continue
+    }
+    merged.push({
+      ...event,
+      notes: [...(event.notes ?? [])],
+    })
+  }
+  return merged
 }
 
 export function pairNotationTabEvents(events, tabNotes, options = {}) {
