@@ -393,6 +393,48 @@ function isLikelyTabFretGlyph(glyph, tabStave, imageData) {
 }
 
 /**
+ * Printed measure numbers sit above the TAB staff. Fret digits sit on string
+ * lines. Reject glyphs clearly above the top string before they become frets.
+ */
+function glyphIsAboveTabStaff(yNorm, lineYs) {
+  if (!lineYs?.length) {
+    return false
+  }
+  const top = lineYs[0]
+  const gap = tabLineGap(lineYs)
+  return yNorm < top - gap * 0.08
+}
+
+/**
+ * Engraved bar numbers often land near the top string after text baseline
+ * conversion. Drop the leftmost digit in a measure when it equals that
+ * measure's number and sits on string 1 while other frets exist further right.
+ */
+function rejectPrintedMeasureNumberDigits(notes) {
+  if (!notes?.length) {
+    return notes
+  }
+  const byMeasure = groupTabNotesByMeasure(notes)
+  const rejected = new Set()
+  for (const [measureNumber, measureNotes] of byMeasure) {
+    if (measureNotes.length < 2) {
+      continue
+    }
+    const sorted = [...measureNotes].sort((left, right) => left.x - right.x)
+    const leftmost = sorted[0]
+    if (
+      leftmost.string === 1 &&
+      leftmost.fret === measureNumber &&
+      leftmost.positionInMeasure <= 0.15 &&
+      sorted.some((note) => note.x > leftmost.x + 1e-6)
+    ) {
+      rejected.add(leftmost)
+    }
+  }
+  return rejected.size ? notes.filter((note) => !rejected.has(note)) : notes
+}
+
+/**
  * Extract fret digits on one TAB staff into tab notes.
  *
  * @param {Array} glyphs      Positioned page glyphs (textGlyphsToImage output,
@@ -415,11 +457,15 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
     if (!isLikelyTabFretGlyph(glyph, tabStave, imageData)) {
       continue
     }
-    const string = stringForY(glyph.y / imageData.height, tabStave.lineYs)
+    const yNorm = glyph.y / imageData.height
+    if (glyphIsAboveTabStaff(yNorm, tabStave.lineYs)) {
+      continue
+    }
+    const string = stringForY(yNorm, tabStave.lineYs, { maxDistanceFactor: 0.55 })
     if (string == null) {
       continue
     }
-    digits.push({ ...glyph, string })
+    digits.push({ ...glyph, string, yNorm })
   }
   digits.sort((left, right) => left.string - right.string || left.x - right.x)
 
@@ -438,6 +484,7 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       last.text += digit.text
       last.lastX = digit.x
       last.xSum += digit.x
+      last.ySum += digit.y
       last.count += 1
       continue
     }
@@ -447,6 +494,7 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       firstX: digit.x,
       lastX: digit.x,
       xSum: digit.x,
+      ySum: digit.y,
       count: 1,
     })
   }
@@ -483,7 +531,7 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
   notes.sort(
     (left, right) => left.measureNumber - right.measureNumber || left.x - right.x,
   )
-  return notes
+  return rejectPrintedMeasureNumberDigits(notes)
 }
 
 function findMeasureBoxForX(measureBoxes, xNorm) {
@@ -576,7 +624,15 @@ function buildTabTimingBuckets(groups, { beats = 4 } = {}) {
 
   const maxOnsets = tabMaxOnsetsForMeasure(beats, totalDivisions)
   const compressed = groups.length > maxOnsets
-  const slotCount = groups.length <= beats ? beats : maxOnsets
+  // Even measure packing: use beat slots when sparse, one slot per onset when
+  // denser (up to the sixteenth grid), and only compress beyond maxOnsets.
+  // Jumping straight to maxOnsets for beats+1 ghosts used to smear quarters
+  // across a sixteenth grid.
+  const slotCount = compressed
+    ? maxOnsets
+    : groups.length <= beats
+      ? beats
+      : groups.length
   const buckets = Array.from({ length: slotCount }, (_, slot) => ({
     slot,
     positionInMeasure: slotCount > 1 ? slot / (slotCount - 1) : 0,

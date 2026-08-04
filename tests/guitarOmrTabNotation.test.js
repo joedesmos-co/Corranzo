@@ -219,6 +219,61 @@ describe('guitar OMR tablature detection', () => {
     expect(notes.map((note) => note.fret)).toEqual([3])
   })
 
+  it('rejects printed measure numbers above the TAB staff as frets', () => {
+    const tabStave = {
+      lineYs: [0.2, 0.22, 0.24, 0.26, 0.28, 0.3],
+    }
+    const imageData = { width: 1000, height: 1000 }
+    const gap = 0.02
+    const aboveStaffY = (tabStave.lineYs[0] - gap * 0.5) * imageData.height
+    const string1Y = tabStave.lineYs[0] * imageData.height
+    const string2Y = tabStave.lineYs[1] * imageData.height
+
+    const notes = extractTabDigitNotes(
+      [
+        { text: '3', sourceText: '3', x: 150, y: aboveStaffY, width: 8, height: 12 },
+        { text: '0', sourceText: '0', x: 200, y: string1Y, width: 8, height: 12 },
+        { text: '1', sourceText: '1', x: 200, y: string2Y, width: 8, height: 12 },
+      ],
+      tabStave,
+      [{ measureNumber: 3, x0: 0.1, playableX0: 0.1, x1: 0.5 }],
+      imageData,
+    )
+
+    expect(notes.map((note) => ({ string: note.string, fret: note.fret }))).toEqual([
+      { string: 1, fret: 0 },
+      { string: 2, fret: 1 },
+    ])
+  })
+
+  it('rejects leftmost measure-number digits that land on the top string', () => {
+    const tabStave = {
+      lineYs: [0.2, 0.22, 0.24, 0.26, 0.28, 0.3],
+    }
+    const imageData = { width: 1000, height: 1000 }
+    const string1Y = tabStave.lineYs[0] * imageData.height
+    const string2Y = tabStave.lineYs[1] * imageData.height
+
+    const notes = extractTabDigitNotes(
+      [
+        // Engraved "3" near the barline on the top string (measure number).
+        { text: '3', sourceText: '3', x: 120, y: string1Y, width: 8, height: 12 },
+        // Real opening fret 3 later in the same measure on string 1.
+        { text: '3', sourceText: '3', x: 220, y: string1Y, width: 8, height: 12 },
+        { text: '3', sourceText: '3', x: 220, y: string2Y, width: 8, height: 12 },
+      ],
+      tabStave,
+      [{ measureNumber: 3, x0: 0.1, playableX0: 0.1, x1: 0.5 }],
+      imageData,
+    )
+
+    expect(notes).toHaveLength(2)
+    expect(notes.map((note) => ({ string: note.string, fret: note.fret, x: note.x }))).toEqual([
+      { string: 1, fret: 3, x: 220 },
+      { string: 2, fret: 3, x: 220 },
+    ])
+  })
+
   it('clusters adjacent TAB digits on one string into multi-digit frets', () => {
     const tabStave = {
       lineYs: [0.2, 0.22, 0.24, 0.26, 0.28, 0.3],
@@ -536,6 +591,7 @@ describe('guitar OMR tablature detection', () => {
       expect.objectContaining({
         kind: 'tab-approximate-even',
         maxOnsets: 16,
+        slotCount: 12,
         groupCount: 12,
         eventCount: 12,
         coalesced: false,
@@ -544,6 +600,33 @@ describe('guitar OMR tablature detection', () => {
     )
     expect(events).toHaveLength(12)
     expect(events.every((event) => event.durationDivisions >= 1)).toBe(true)
+    // Equal packing across the measure — not smeared onto a vacant sixteenth grid.
+    expect(events.map((event) => event.startDivision)).toEqual([
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+    ])
+  })
+
+  it('packs five TAB onsets evenly instead of jumping to a sixteenth grid', () => {
+    const measureNotes = Array.from({ length: 5 }, (_, index) => ({
+      string: (index % 6) + 1,
+      fret: index,
+      midi: 60 + index,
+      x: 100 + index * 40,
+      positionInMeasure: index / 4,
+    }))
+
+    const { events, timingModel } = buildTabMeasureEvents(measureNotes)
+
+    expect(timingModel).toEqual(
+      expect.objectContaining({
+        groupCount: 5,
+        eventCount: 5,
+        slotCount: 5,
+        compressed: false,
+      }),
+    )
+    expect(events.map((event) => event.startDivision)).toEqual([0, 3, 6, 9, 12])
+    expect(events.reduce((sum, event) => sum + event.durationDivisions, 0)).toBe(16)
   })
 
   it('compresses only over-dense TAB measures beyond the safe sixteenth grid', () => {
