@@ -604,6 +604,14 @@ async function runPdfOmrPipelineBody({
         vectorAugmentationDotPaths: Array.isArray(vectorCurves?.augmentationDotPaths)
           ? vectorCurves.augmentationDotPaths
           : [],
+        vectorBarlineComponents: {
+          verticalBars: Array.isArray(vectorCurves?.verticalBarPaths)
+            ? vectorCurves.verticalBarPaths
+            : [],
+          compactDots: Array.isArray(vectorCurves?.compactDotPaths)
+            ? vectorCurves.compactDotPaths
+            : [],
+        },
         stavesPerSystem,
         instrument,
         keySignature,

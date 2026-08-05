@@ -151,11 +151,12 @@ function staffLineYsForStructure(systemIndex, systemRoles, measureBox) {
   return null
 }
 
-function structureMarkingOptions(systemIndex, systems, systemRoles, measureBox) {
+function structureMarkingOptions(systemIndex, systems, systemRoles, measureBox, vectorBarlineComponents = null) {
   return {
     structureBand: structureBandForSystem(systemIndex, systems, systemRoles),
     voltaBand: voltaBandForSystem(systemIndex, systems, systemRoles),
     staffLineYs: staffLineYsForStructure(systemIndex, systemRoles, measureBox),
+    vectorBarlineComponents,
   }
 }
 
@@ -283,6 +284,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     vectorCurves = [],
     vectorAccidentalPaths = [],
     vectorAugmentationDotPaths = [],
+    vectorBarlineComponents = null,
     stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
     dense = false,
     keySignature: inheritedKeySignature = null,
@@ -300,6 +302,19 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   const tabStringCount = instrument?.strings?.count ?? 6
   const tabTuning = instrument?.strings?.tuning ?? null
   const tabFretCount = instrument?.strings?.fretCount ?? 24
+
+  const resolvedVectorBarlineComponents =
+    vectorBarlineComponents &&
+    (vectorBarlineComponents.verticalBars?.length || vectorBarlineComponents.compactDots?.length)
+      ? vectorBarlineComponents
+      : {
+          verticalBars: Array.isArray(vectorCurves?.verticalBarPaths)
+            ? vectorCurves.verticalBarPaths
+            : [],
+          compactDots: Array.isArray(vectorCurves?.compactDotPaths)
+            ? vectorCurves.compactDotPaths
+            : [],
+        }
 
   // Legacy music fonts (e.g. MScore in musescore.com/TCPDF exports) draw
   // noteheads/clefs at pre-SMuFL codepoints. Normalize them to SMuFL so such
@@ -628,7 +643,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             {
               isFirstInSystem: boxIndex === 0,
               pageText,
-              ...structureMarkingOptions(targetIndex, systems, systemRoles, measureBox),
+              ...structureMarkingOptions(
+                targetIndex,
+                systems,
+                systemRoles,
+                measureBox,
+                resolvedVectorBarlineComponents,
+              ),
             },
           )
           measureRecord.repeatMarking = structure.repeatMarking
@@ -831,7 +852,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             {
               isFirstInSystem: boxIndex === 0,
               pageText,
-              ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
+              ...structureMarkingOptions(
+                systemIndex,
+                systems,
+                systemRoles,
+                measureBox,
+                resolvedVectorBarlineComponents,
+              ),
             },
           )
           measureRecord.repeatMarking = structure.repeatMarking
@@ -1082,7 +1109,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         {
           isFirstInSystem: boxIndex === 0,
           pageText,
-          ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
+          ...structureMarkingOptions(
+            systemIndex,
+            systems,
+            systemRoles,
+            measureBox,
+            resolvedVectorBarlineComponents,
+          ),
         },
       )
       const dynamic = null
