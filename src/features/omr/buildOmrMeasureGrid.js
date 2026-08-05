@@ -626,8 +626,9 @@ function spansToMeasureBoxes(spans, {
   systemIndex,
   system,
   measureNumberStart,
+  systemRole = null,
 }) {
-  const staffLines = estimateGrandStaffLines(system)
+  const staffLines = estimateGrandStaffLines(system, { systemRole })
   return spans.map((span, index) => ({
     page,
     systemIndex,
@@ -669,6 +670,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   darkThreshold = 150,
   vectorNoteheadXNorms = [],
   noteColumnXNorms = null,
+  systemRole = null,
 }) {
   const x0Content = contentBounds.x0 ?? contentBounds.left / imageData.width
   const x1Content = contentBounds.x1 ?? contentBounds.right / imageData.width
@@ -749,6 +751,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     systemIndex,
     system,
     measureNumberStart,
+    systemRole,
   })
 
   const spanWidthPercents = summarizeSpanWidths(spans, contentWidth)

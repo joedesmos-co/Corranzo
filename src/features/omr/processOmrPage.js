@@ -540,6 +540,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
       vectorNoteheadXNorms: useVectorNoteColumnHints ? systemVectorNoteheads : [],
       noteColumnXNorms: noteColumns,
+      systemRole: role,
     })
 
     const splitBoxes = applyVectorRepeatColumnSplitsToSystemBoxes({
