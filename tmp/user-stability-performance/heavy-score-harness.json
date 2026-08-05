@@ -1,35 +1,35 @@
 {
-  "at": "2026-08-04T02:15:31.561Z",
+  "at": "2026-08-05T02:43:41.653Z",
   "scores": [
     {
       "label": "small",
       "skipped": false,
       "noteCount": 32,
       "measureCount": 8,
-      "coldParseMs": 4.834959000000001,
-      "hotParseMs": 0.038375000000002046,
+      "coldParseMs": 6.772167000000003,
+      "hotParseMs": 0.1329589999999996,
       "fromCache": true,
-      "coldVisualGroupsMs": 1.2018750000000011,
-      "hotVisualGroupsMs": 0.006917000000001394,
+      "coldVisualGroupsMs": 2.616416000000001,
+      "hotVisualGroupsMs": 0.009250000000001535,
       "visualGroupCount": 32,
       "windowedGroupCount": 18,
-      "windowedMs": 0.031209000000000486,
+      "windowedMs": 0.035583000000002585,
       "prepMarks": [
         {
           "stage": "timing-parse",
-          "at": 30.621084,
+          "at": 42.231542,
           "contentHash": "e8b5401a",
           "fileName": "small.musicxml",
-          "durationMs": 4.696875000000002,
+          "durationMs": 6.610042,
           "noteCount": 32,
           "measureCount": 8
         },
         {
           "stage": "timing-parse-cache-hit",
-          "at": 30.740125,
+          "at": 42.462375,
           "contentHash": "e8b5401a",
           "fileName": "small.musicxml",
-          "durationMs": 0.026832999999999885
+          "durationMs": 0.11925000000000097
         }
       ]
     },
@@ -38,30 +38,30 @@
       "skipped": false,
       "noteCount": 88,
       "measureCount": 8,
-      "coldParseMs": 3.6457090000000036,
-      "hotParseMs": 0.057250000000003354,
+      "coldParseMs": 7.870042000000005,
+      "hotParseMs": 0.10104199999999963,
       "fromCache": true,
-      "coldVisualGroupsMs": 0.8432079999999971,
-      "hotVisualGroupsMs": 0.002540999999993687,
+      "coldVisualGroupsMs": 2.1613749999999996,
+      "hotVisualGroupsMs": 0.004083000000001391,
       "visualGroupCount": 54,
       "windowedGroupCount": 17,
-      "windowedMs": 0.004958999999999492,
+      "windowedMs": 0.00549999999999784,
       "prepMarks": [
         {
           "stage": "timing-parse",
-          "at": 35.640417,
+          "at": 52.999792,
           "contentHash": "267e6c24",
           "fileName": "medium-evangelion-scale.musicxml",
-          "durationMs": 3.633541000000001,
+          "durationMs": 7.840707999999999,
           "noteCount": 88,
           "measureCount": 8
         },
         {
           "stage": "timing-parse-cache-hit",
-          "at": 35.703,
+          "at": 53.113458,
           "contentHash": "267e6c24",
           "fileName": "medium-evangelion-scale.musicxml",
-          "durationMs": 0.05108300000000554
+          "durationMs": 0.08562500000000028
         }
       ]
     },
@@ -70,39 +70,39 @@
       "skipped": false,
       "noteCount": 802,
       "measureCount": 49,
-      "coldParseMs": 20.353749999999998,
-      "hotParseMs": 0.4796670000000063,
+      "coldParseMs": 47.257374999999996,
+      "hotParseMs": 0.4968329999999952,
       "fromCache": true,
-      "coldVisualGroupsMs": 2.074416999999997,
-      "hotVisualGroupsMs": 0.0027079999999983784,
+      "coldVisualGroupsMs": 3.3372499999999974,
+      "hotVisualGroupsMs": 0.004082999999994286,
       "visualGroupCount": 313,
       "windowedGroupCount": 35,
-      "windowedMs": 0.008459000000001993,
+      "windowedMs": 0.023082999999999743,
       "prepMarks": [
         {
           "stage": "timing-parse",
-          "at": 56.911042,
+          "at": 102.553333,
           "contentHash": "d32ec873",
           "fileName": "dense-la-campanella.musicxml",
-          "durationMs": 20.337457999999998,
+          "durationMs": 47.23745900000001,
           "noteCount": 802,
           "measureCount": 49
         },
         {
           "stage": "timing-parse-cache-hit",
-          "at": 57.399375,
+          "at": 103.061292,
           "contentHash": "d32ec873",
           "fileName": "dense-la-campanella.musicxml",
-          "durationMs": 0.4730000000000061
+          "durationMs": 0.4882910000000038
         }
       ]
     }
   ],
   "relative": {
-    "denseParseOverSmall": 4.209704777227685,
-    "denseVisualOverSmall": 1.72598398335933,
-    "cacheParseSpeedup": 125.99241693810407,
-    "cacheVisualSpeedup": 766.032865583914
+    "denseParseOverSmall": 6.978176261749005,
+    "denseVisualOverSmall": 1.275504354047673,
+    "cacheParseSpeedup": 50.934250408020695,
+    "cacheVisualSpeedup": 817.3524369347705
   },
   "assertions": {
     "hotParseUsesCache": true,

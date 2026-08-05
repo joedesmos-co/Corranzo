@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: deskew-optical-offset-probe
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:09:35.002Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 45.7%
+- pitch: 35.8%
+- rhythm: 70.8%
+- sustain: 0.0%
+- articulation: 26.5%
+- measureStructure: 46.8%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×31 across 1 fixtures
+- missing-note [pitch] ×28 across 1 fixtures
+- duration-mismatch [rhythm] ×22 across 1 fixtures
+- extra-note [pitch] ×21 across 1 fixtures
+- incorrect-pitch [pitch] ×21 across 1 fixtures
+- missing-staccato [articulation] ×19 across 1 fixtures
+- onset-mismatch [rhythm] ×13 across 1 fixtures
+- missing-accent [articulation] ×6 across 1 fixtures
+- incorrect-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- merged-measure [measure-structure] ×1 across 1 fixtures
+- missing-tie [sustain] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=45.7% R=71% P=36% S=0% A=26% M=47% I=40%
+  worst measures: #3(merged-measure|missing-note|missing-note), #8(missing-note|extra-note|extra-note), #6(missing-note|extra-note|missing-staccato)

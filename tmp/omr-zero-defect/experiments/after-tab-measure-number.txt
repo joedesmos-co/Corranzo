@@ -1,0 +1,39 @@
+OMR semantic corpus — baseline
+==============================
+label: tab-measure-number
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: c52a38a
+createdAt: 2026-08-04T15:29:11.611Z
+fixtures: 4/4 ok
+
+Scoreboard (mean across fixtures)
+- overall: 80.3%
+- pitch: 94.4%
+- rhythm: 99.0%
+- sustain: 75.0%
+- articulation: 100.0%
+- measureStructure: 93.8%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-pitch [pitch] ×24 across 2 fixtures
+- incorrect-chord [measure-structure] ×15 across 2 fixtures
+- duration-mismatch [rhythm] ×8 across 2 fixtures
+- repeat-mismatch [interpretation] ×4 across 2 fixtures
+- tempo-mismatch [interpretation] ×4 across 4 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- extra-note [pitch] ×1 across 1 fixtures
+- missing-note [pitch] ×1 across 1 fixtures
+- onset-mismatch [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-tab-sparse-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(repeat-mismatch|tempo-mismatch), #8(repeat-mismatch|volta-mismatch), #7(volta-mismatch)
+- guitar-standard-chords-vector: overall=81.8% R=99% P=88% S=100% A=100% M=86% I=0%
+  worst measures: #8(missing-note|extra-note|duration-mismatch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #1(incorrect-pitch|incorrect-chord|tempo-mismatch)
+- guitar-paired-chords-vector: overall=82.3% R=97% P=90% S=100% A=100% M=89% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch|incorrect-pitch), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|duration-mismatch)
+- guitar-techniques-paired-vector: overall=71.4% R=100% P=100% S=0% A=100% M=100% I=0%
+  worst measures: #4(missing-tie), #5(missing-tie), #1(tempo-mismatch)

@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: revalidate-head-45239ca (45239ca)
+after:  after-gap-rebuild (7557401)
+ACCEPT: YES
+
+Scoreboard deltas (mean)
+- overall: +0.0113  (0.7351 → 0.7464)
+- pitch: +0.0347  (0.8578 → 0.8924)
+- rhythm: +0.0064  (0.8134 → 0.8197)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: 0  (0.9079 → 0.9079)
+- measureStructure: +0.0381  (0.8777 → 0.9158)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+- guitar-paired-chords-vector: rhythm +0.0574
+
+Regressions / gate failures
+(none)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

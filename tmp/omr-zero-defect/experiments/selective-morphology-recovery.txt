@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: selective-morphology-recovery
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:31:19.742Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 51.3%
+- pitch: 65.2%
+- rhythm: 55.6%
+- sustain: 0.0%
+- articulation: 17.3%
+- measureStructure: 81.3%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×37 across 1 fixtures
+- duration-mismatch [rhythm] ×32 across 1 fixtures
+- onset-mismatch [rhythm] ×32 across 1 fixtures
+- missing-note [pitch] ×16 across 1 fixtures
+- incorrect-pitch [pitch] ×14 across 1 fixtures
+- incorrect-chord [measure-structure] ×12 across 1 fixtures
+- missing-accent [articulation] ×6 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- extra-note [pitch] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=51.3% R=56% P=65% S=0% A=17% M=81% I=40%
+  worst measures: #4(extra-note|missing-staccato|missing-accent), #3(missing-note|missing-note|missing-note), #6(missing-note|missing-note|missing-note)

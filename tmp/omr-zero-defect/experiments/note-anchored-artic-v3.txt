@@ -1,0 +1,29 @@
+OMR semantic corpus — baseline
+==============================
+label: note-anchored-artic-v3
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 5252f36
+createdAt: 2026-08-05T00:09:34.446Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 70.3%
+- pitch: 100.0%
+- rhythm: 81.8%
+- sustain: 0.0%
+- articulation: 70.0%
+- measureStructure: 100.0%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- duration-mismatch [rhythm] ×32 across 1 fixtures
+- missing-accent [articulation] ×6 across 1 fixtures
+- missing-staccato [articulation] ×3 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=70.3% R=82% P=100% S=0% A=70% M=100% I=40%
+  worst measures: #3(missing-accent|missing-accent|missing-accent), #1(missing-staccato|missing-staccato|missing-staccato), #4(missing-tie|duration-mismatch|duration-mismatch)

@@ -1,0 +1,31 @@
+OMR semantic corpus — baseline
+==============================
+label: paired-gap-snap
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 45239ca
+createdAt: 2026-08-04T12:50:17.181Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 77.5%
+- pitch: 71.9%
+- rhythm: 98.1%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 72.4%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×14 across 1 fixtures
+- extra-note [pitch] ×12 across 1 fixtures
+- incorrect-pitch [pitch] ×12 across 1 fixtures
+- missing-note [pitch] ×12 across 1 fixtures
+- duration-mismatch [rhythm] ×4 across 1 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- split-measure [measure-structure] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-paired-chords-vector: overall=77.5% R=98% P=72% S=100% A=100% M=72% I=0%
+  worst measures: #6(split-measure|missing-note|missing-note), #2(duration-mismatch|duration-mismatch|incorrect-pitch), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch)

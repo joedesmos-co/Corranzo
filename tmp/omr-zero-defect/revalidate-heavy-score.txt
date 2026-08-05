@@ -1,0 +1,115 @@
+{
+  "at": "2026-08-04T12:37:48.763Z",
+  "scores": [
+    {
+      "label": "small",
+      "skipped": false,
+      "noteCount": 32,
+      "measureCount": 8,
+      "coldParseMs": 4.970708999999999,
+      "hotParseMs": 0.11487500000000139,
+      "fromCache": true,
+      "coldVisualGroupsMs": 1.2810419999999993,
+      "hotVisualGroupsMs": 0.006834000000001339,
+      "visualGroupCount": 32,
+      "windowedGroupCount": 18,
+      "windowedMs": 0.03070900000000165,
+      "prepMarks": [
+        {
+          "stage": "timing-parse",
+          "at": 29.660083,
+          "contentHash": "e8b5401a",
+          "fileName": "small.musicxml",
+          "durationMs": 4.832583999999997,
+          "noteCount": 32,
+          "measureCount": 8
+        },
+        {
+          "stage": "timing-parse-cache-hit",
+          "at": 29.855375,
+          "contentHash": "e8b5401a",
+          "fileName": "small.musicxml",
+          "durationMs": 0.10366700000000151
+        }
+      ]
+    },
+    {
+      "label": "medium-evangelion-scale",
+      "skipped": false,
+      "noteCount": 88,
+      "measureCount": 8,
+      "coldParseMs": 3.689791999999997,
+      "hotParseMs": 0.056165999999997496,
+      "fromCache": true,
+      "coldVisualGroupsMs": 0.943833000000005,
+      "hotVisualGroupsMs": 0.0023339999999976158,
+      "visualGroupCount": 54,
+      "windowedGroupCount": 17,
+      "windowedMs": 0.0051660000000026685,
+      "prepMarks": [
+        {
+          "stage": "timing-parse",
+          "at": 34.874792,
+          "contentHash": "267e6c24",
+          "fileName": "medium-evangelion-scale.musicxml",
+          "durationMs": 3.6742920000000012,
+          "noteCount": 88,
+          "measureCount": 8
+        },
+        {
+          "stage": "timing-parse-cache-hit",
+          "at": 34.939167,
+          "contentHash": "267e6c24",
+          "fileName": "medium-evangelion-scale.musicxml",
+          "durationMs": 0.04954199999999531
+        }
+      ]
+    },
+    {
+      "label": "dense-la-campanella",
+      "skipped": false,
+      "noteCount": 802,
+      "measureCount": 49,
+      "coldParseMs": 21.049916000000003,
+      "hotParseMs": 0.5246670000000009,
+      "fromCache": true,
+      "coldVisualGroupsMs": 2.317416999999999,
+      "hotVisualGroupsMs": 0.0028329999999954225,
+      "visualGroupCount": 313,
+      "windowedGroupCount": 35,
+      "windowedMs": 0.012124999999997499,
+      "prepMarks": [
+        {
+          "stage": "timing-parse",
+          "at": 56.942292,
+          "contentHash": "d32ec873",
+          "fileName": "dense-la-campanella.musicxml",
+          "durationMs": 21.030749999999998,
+          "noteCount": 802,
+          "measureCount": 49
+        },
+        {
+          "stage": "timing-parse-cache-hit",
+          "at": 57.477167,
+          "contentHash": "d32ec873",
+          "fileName": "dense-la-campanella.musicxml",
+          "durationMs": 0.5156669999999934
+        }
+      ]
+    }
+  ],
+  "relative": {
+    "denseParseOverSmall": 4.23479145530346,
+    "denseVisualOverSmall": 1.8090093845478916,
+    "cacheParseSpeedup": 43.27058977149022,
+    "cacheVisualSpeedup": 818.0081186035098
+  },
+  "assertions": {
+    "hotParseUsesCache": true,
+    "visualWindowSmallerThanFull": true,
+    "denseParseRelativeBudget": true,
+    "visualCacheSpeedup": true
+  },
+  "ok": true
+}
+PASS heavy-score-performance-harness

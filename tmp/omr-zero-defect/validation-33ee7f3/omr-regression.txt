@@ -1,0 +1,3641 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ✓ tests/omrNoteheadShape.test.js (6 tests) 276ms
+ ❯ tests/omrVectorRhythm.test.js (77 tests | 4 failed) 34ms
+   ✓ durationMeta snaps a division span to the nearest note value > maps exact standard spans 2ms
+   ✓ glyphAuthoritativeDurationDivisions > maps whole and half open-head glyphs to fixed divisions 0ms
+   ✓ glyphAuthoritativeDurationDivisions > does not invent open-head duration for pure black heads 0ms
+   ✓ glyphAuthoritativeDurationDivisions > prefers glyph duration over a large sparse gap that would invent a dotted half 3ms
+   ✓ glyphAuthoritativeDurationDivisions > keeps a whole glyph as a whole on a sparse measure 0ms
+   ✓ dottedWrittenDurationDivisions > returns null without augmentation-dot evidence 0ms
+   ✓ dottedWrittenDurationDivisions > prefers written dotted-quarter over a large sparse gap 1ms
+   ✓ dottedWrittenDurationDivisions > still keeps dotted half when the open half glyph is authoritative 0ms
+   ✓ shouldInferRhythmFromPositions > keeps quarter indexing when onsets sit on the beat grid 0ms
+   ✓ shouldInferRhythmFromPositions > switches to position rhythm when spacing is finer than quarters 0ms
+   ✓ normalizeDenseVectorLaneSpacing > recovers a quarter plus four eighths from shifted 3/4 vector columns 0ms
+   ✓ normalizeDenseVectorLaneSpacing > leaves explicit beam evidence authoritative 0ms
+   ✓ normalizeDenseVectorLaneSpacing > does not erase a late opening or a long rest-sized gap 0ms
+   ✓ normalizeDenseVectorLaneSpacing > leaves ambiguous complete-looking 4/4 lanes unchanged 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps near-zero position columns on beat 0 instead of snapping to beat 2 0ms
+   × buildVectorEvents infers duration from gap to next onset > aligns the opening column to beat 0 when clef padding shifts position to 0.125 10ms
+     → expected 4 to be 2 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > renders four spaced onsets in 4/4 as four quarters (not stretched) 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > renders eighth-note spacing when onsets are finer than quarter index slots 1ms
+   ✓ buildVectorEvents infers duration from gap to next onset > merges dense chord fragments that share a beat slot before rhythm inference 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > snaps dense measures to sixteenth divisions instead of coarser eighth slots 0ms
+   × buildVectorEvents infers duration from gap to next onset > splits mixed-clef groups into overlapping bass and treble durations 1ms
+     → expected undefined to be 8 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a closing upper voice on its own beat when merging chord fragments 0ms
+   × buildVectorEvents infers duration from gap to next onset > extends a same-beat treble tone that reappears in the next harmony 0ms
+     → expected 5 to be 12 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a high same-start treble when its pitch class returns in the inner chord 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a same-start melody when only bass and an inner chord fill the bar 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a same-start pickup to a half when the closing tone lands on the final beat 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a semitone pickup cluster short while the shared harmony becomes a half 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a same-beat upper neighbor short when it does not return in the next harmony 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends opening bass when the next group is upper-register content without treble clef tags 0ms
+   × buildVectorEvents infers duration from gap to next onset > extends a same-start pedal doubling that matches the opening bass pitch class 0ms
+     → expected 5 to be 12 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > extends bass across intervening treble onsets on the same staff voice 0ms
+   ✓ extendDurationsPerClefVoice > lengthens bass when the next global onset belongs to treble 0ms
+   ✓ extendDurationsPerClefVoice > does not stretch beamed eighths across a foreign-clef onset 0ms
+   ✓ extendDurationsPerClefVoice > preserves filled-head enrich duration instead of stretching across a foreign clef 0ms
+   ✓ extendDurationsPerClefVoice > still lengthens bass without filled-head enrich evidence when a foreign clef interrupts 0ms
+   ✓ extendDurationsPerClefVoice > lengthens stem-inferred quarters when the next same-clef onset is a beat away 0ms
+   ✓ extendDurationsPerClefVoice > recovers gap-collapsed quarters when enrich stem evidence is confident 0ms
+   ✓ extendDurationsPerClefVoice > does not promote subdivision runs that pack three-plus attacks into a beat 0ms
+   ✓ extendDurationsPerClefVoice > extends across a non-beamed same-clef fragment to reach a quarter 0ms
+   ✓ extendDurationsPerClefVoice > does not stretch beamed notes across a foreign-clef onset 0ms
+   ✓ extendDurationsPerClefVoice > extends treble to a half beat across same-pitch chord fragments 0ms
+   ✓ extendDurationsPerClefVoice > does not extend beamed eighth runs even when pitches repeat 0ms
+   ✓ extendDurationsPerClefVoice > does not extend sixteenth-grid gaps at beat zero 0ms
+   ✓ extendDurationsPerClefVoice > extends split same-onset chord tones from an eighth to a quarter on the beat grid 0ms
+   ✓ extendDurationsPerClefVoice > extends a same-clef harmonic chord from an eighth to a quarter on the beat grid 0ms
+   ✓ extendDurationsPerClefVoice > does not extend single-voice eighths that re-enter on the offbeat 0ms
+   ✓ extendDurationsPerClefVoice > extends the last bass attack in a measure to a half beat 0ms
+   ✓ extendDurationsPerClefVoice > extends terminal same-clef chord eighths on the beat grid to quarters 0ms
+   ✓ extendDurationsPerClefVoice > does not extend terminal beamed chord eighths to quarters 0ms
+   ✓ extendDurationsPerClefVoice > applies terminal chord quarters after upstream onset realignment 0ms
+   ✓ extendDurationsPerClefVoice > extends an opening bass chord over a same-clef inner voice 0ms
+   ✓ extendDurationsPerClefVoice > does not treat beamed opening bass chords as sustained half notes 0ms
+   ✓ extendDurationsPerClefVoice > caps plain opening bass notes before a dense subdivision run 0ms
+   ✓ extendDurationsPerClefVoice > keeps opening bass notes when long-tone ink evidence is present 0ms
+   ✓ extendDurationsPerClefVoice > caps unsupported upper-chord five-division overhangs to a quarter 0ms
+   ✓ extendDurationsPerClefVoice > keeps five-division upper chords when longer ink evidence is present 0ms
+   ✓ extendDurationsPerClefVoice > refines emitted unsupported upper-chord five-division overhangs 0ms
+   ✓ refineEventDurationsFromBeamEvidence > caps beamed notes that were stretched too long 0ms
+   ✓ refineEventDurationsFromBeamEvidence > floors primary-beamed notes that were gap-compressed to sixteenths 0ms
+   ✓ refineEventDurationsFromBeamEvidence > does not floor from tip-row strength alone without beams 0ms
+   ✓ refineEventDurationsFromBeamEvidence > allows sixteenth floor when secondary beams are present 0ms
+   ✓ refineEventDurationsFromBeamEvidence > leaves non-beamed durations unchanged 0ms
+   ✓ resnapFlooredBeamOnsets > snaps odd sixteenth onsets back to the eighth grid after flooring 0ms
+   ✓ hasBeamEvidenceForNotes > detects beam count and strength 0ms
+   ✓ per-clef rhythm helpers > detects shared harmonic pitch between chord fragments 0ms
+   ✓ per-clef rhythm helpers > detects dense subdivision runs 0ms
+   ✓ per-clef rhythm helpers > requires stemmed non-beamed noteheads for quarter inference 0ms
+   ✓ summarizeVectorRhythmDiagnostics > reports voice assignments and overlapping duration groups 1ms
+   ✓ extendPenultimateHalfBeforeFinalQuarter > extends a dense beat-1 chord to a half before a beat-2 closing note 0ms
+   ✓ extendPenultimateHalfBeforeFinalQuarter > leaves evenly spaced single-note beats unchanged 0ms
+   ✓ extendCombinedGrandStaffOpening > extends a lone opening bass through a later treble entry 0ms
+   ✓ extendCombinedGrandStaffOpening > keeps a quarter opening treble when the voice rearticulates before the closing echo 0ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > writes extended bass and treble durations with backup/forward in one voice 4ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > emits MusicXML staff numbers from recognized clefs so grand-staff pairing works 1ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > emits grand-staff staff tags for balanced raster dual-clef pages 1ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > does not emit grand staff for a lone miscleffed bass head on a treble page 1ms
+   ✓ buildOmrMusicXml guitar sounding pitch > emits staff-derived midi as sounding pitch without a second 8vb shift 0ms
+ ✓ tests/semanticMusicXmlEvaluator.hardening.test.js (23 tests) 257ms
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888029950
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888029952
+}
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888029952
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888029953
+}
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888029952
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888029954
+}
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888029955
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888029956
+}
+
+stderr | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+Warning: Please use the `legacy` build in Node.js environments.
+
+stderr | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+Warning: Please use the `legacy` build in Node.js environments.
+
+stderr | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+Warning: Please use the `legacy` build in Node.js environments.
+
+stderr | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+Warning: Please use the `legacy` build in Node.js environments.
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} { notes: 0, systems: 0 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+[omr-trace] phase=page-1 ms=88 end { systems: 0, measures: 0, notes: 0 }
+
+stderr | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover so it cannot emit playable events
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-systems errorName=Error errorMessage=PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. readablePages=0 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-systems',
+  errorName: 'Error',
+  errorMessage: 'PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.',
+  errorCode: 'no-systems',
+  stack: 'Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:811:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/omrNegativePage.test.js:101:7\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 0,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 0,
+    pagesWithSystems: 0,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785888030047
+}
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030049
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030050
+}
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030056
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030058
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > flags scanned-looking pages and applies preprocessing
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+
+stderr | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+Warning: Please use the `legacy` build in Node.js environments.
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > leaves already-clean digital pages pixel-identical
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030154
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030160
+}
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] phase=page-1 ms=186 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=18 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=2 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030180
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030180
+}
+
+ ✓ tests/omrAccuracyEvaluator.test.js (6 tests) 134ms
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] phase=page-1 ms=179 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=20 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=2 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030182
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030182
+}
+
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+Warning: Please use the `legacy` build in Node.js environments.
+
+ ✓ tests/semanticMusicXmlEvaluator.test.js (4 tests) 151ms
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { notes: 96, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 96, systems: 2 }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > does not damage a healthy music page
+[omr-trace] phase=page-1 ms=175 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=12 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785888030263
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030263
+}
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > pipeline returns diagnostics with page/system/measure confidence
+[omr-trace] phase=page-1 ms=185 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=11 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+[omr-trace] phase=pdf-load ms=1 end
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030268
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030268
+}
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte
+[omr-trace] phase=page-1 ms=84 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] phase=omr-v3-shadow start
+[omr-trace] phase=omr-v3-shadow ms=5 end
+[omr-trace] phase=omr-v3-independent-shadow start
+[omr-trace] phase=omr-v3-independent-shadow ms=8 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030290
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030290
+}
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+[omr-trace] phase=page-1 ms=4 end { systems: 0, measures: 0, notes: 0 }
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page
+[omr-trace] phase=page-1 ms=290 end { systems: 2, measures: 8, notes: 96 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=31 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 8 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 96, measureCount: 8, acceptance: 'accepted' }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 620,
+  length: 1140800,
+  bufferByteLength: 1140800,
+  detached: false,
+  probe: 255
+} { notes: 0, systems: 0 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-trace] phase=page-1 ms=37 end { systems: 0, measures: 0, notes: 0 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stderr | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > owns a zero-symbol rejection independently while retaining the V2 observation
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-systems errorName=Error errorMessage=PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. readablePages=0 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-systems',
+  errorName: 'Error',
+  errorMessage: 'PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.',
+  errorCode: 'no-systems',
+  stack: 'Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:811:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/omrV3Rollout.test.js:65:7\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 0,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 0,
+    pagesWithSystems: 0,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785888030300
+}
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030300
+}
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030301
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030302
+}
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030316
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030316
+}
+
+stdout | tests/omrV3Comparison.test.js > OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report
+[omr-trace] phase=page-1 ms=89 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=7 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] phase=omr-v3-shadow start
+[omr-trace] phase=omr-v3-shadow ms=5 end
+[omr-trace] phase=omr-v3-independent-shadow start
+[omr-trace] phase=omr-v3-independent-shadow ms=11 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+ ✓ tests/omrV3Comparison.test.js (5 tests) 382ms
+   ✓ OMR V3 comparison mode > keeps V2 user-visible in comparison mode while attaching a structured report  369ms
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/omrNegativePage.test.js > OMR negative-page / decorative cover isolation > isolates a decorative cover beside a healthy music page without wiping music
+[omr-trace] phase=page-2 ms=76 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=1 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+ ✓ tests/omrNegativePage.test.js (6 tests) 436ms
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 6, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 6, systems: 1 }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 5, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 5, systems: 1 }
+
+stdout | tests/omrV3Rollout.test.js > OMR V3 disabled-by-default rollout > suppresses shadow analysis with the rollback switch
+[omr-trace] phase=page-1 ms=93 end { systems: 1, measures: 2, notes: 5 }
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 5, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrMusical.test.js > experimental PDF OMR musical details (v3) > musical synthetic page produces mapped pitch and repeat metadata
+[omr-trace] phase=page-1 ms=130 end { systems: 1, measures: 3, notes: 6 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=1 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 3 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 1, flagged: [ 1 ] }
+[omr-trace] pipeline:success { noteCount: 6, measureCount: 3, acceptance: 'accepted' }
+
+ ✓ tests/omrV3Rollout.test.js (4 tests) 452ms
+   ✓ OMR V3 disabled-by-default rollout > runs V3 beside production while preserving production MusicXML byte-for-byte  339ms
+ ✓ tests/pdfOmrMusical.test.js (17 tests) 461ms
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 0, systems: 2 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 2 }
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+[omr-trace] phase=page-1 ms=107 end { systems: 2, measures: 8, notes: 0 }
+
+stderr | tests/pdfOmr.test.js > experimental PDF OMR (local-only) > fails gracefully when no noteheads are present
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-notes errorName=Error errorMessage=No noteheads detected. Experimental OMR works best on clean engraved scores. readablePages=1 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-notes',
+  errorName: 'Error',
+  errorMessage: 'No noteheads detected. Experimental OMR works best on clean engraved scores.',
+  errorCode: 'no-notes',
+  stack: 'Error: No noteheads detected. Experimental OMR works best on clean engraved scores.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:833:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/pdfOmr.test.js:107:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 1,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 8,
+    pagesWithSystems: 1,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785888030439
+}
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+[omr-trace] phase=pdf-load ms=1 end
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030444
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030445
+}
+
+ ✓ tests/omrTieRecall.test.js (9 tests) 119ms
+ ✓ tests/omrRhythmShadow.test.js (14 tests) 341ms
+ ✓ tests/omrBenchmarkDashboard.test.js (20 tests) 63ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { applied: [ 'contrast', 'despeckle', 'staff-recovery' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { notes: 12, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 12, systems: 1 }
+
+ ✓ tests/omrBeamStemReconstruction.test.js (8 tests) 21ms
+ ✓ tests/omrV3Shadow.test.js (4 tests) 20ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] phase=page-1 ms=429 end { systems: 1, measures: 4, notes: 12 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=26 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 4 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=3 end
+[omr-trace] pipeline:success { noteCount: 12, measureCount: 4, acceptance: 'accepted' }
+
+ ✓ tests/omrPhase6VoiceSerializationShadow.test.js (8 tests) 31ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030697
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030697
+}
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 0, systems: 0 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] phase=page-1 ms=30 end { systems: 0, measures: 0, notes: 0 }
+
+stdout | tests/pdfOmr.test.js > experimental PDF OMR rhythm (v2) > infers quarter and half durations on a rhythmic synthetic page
+[omr-trace] phase=page-1 ms=276 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=5 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 4 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 19, measureCount: 4, acceptance: 'accepted' }
+
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-systems errorName=Error errorMessage=PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. readablePages=0 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-systems',
+  errorName: 'Error',
+  errorMessage: 'PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.',
+  errorCode: 'no-systems',
+  stack: 'Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:811:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/pdfOmrHardPdf.test.js:228:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 0,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 0,
+    pagesWithSystems: 0,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785888030732
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785888030734
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030734
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030774
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030774
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-debug] pipeline:page-1:after-analyze { notes: 4, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] phase=page-1 ms=6 end { systems: 1, measures: 2, notes: 4 }
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 1, flagged: [ 1 ] }
+[omr-trace] pipeline:success { noteCount: 4, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030783
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030783
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-debug] pipeline:page-1:after-analyze { notes: 4, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > keeps default and explicit-off OMR output byte-identical
+[omr-trace] phase=page-1 ms=6 end { systems: 1, measures: 2, notes: 4 }
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 1, flagged: [ 1 ] }
+[omr-trace] pipeline:success { noteCount: 4, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030796
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030796
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-debug] pipeline:page-1:after-analyze { notes: 4, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] phase=page-1 ms=7 end { systems: 1, measures: 2, notes: 4 }
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:measure-playback-report { firstBadMeasure: 1, flagged: [ 1 ] }
+[omr-trace] pipeline:success { noteCount: 4, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030804
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030804
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-debug] pipeline:page-1:after-analyze { notes: 4, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > promotes only eligible durations when enabled and preserves note/measure/onset invariants
+[omr-trace] phase=page-1 ms=8 end { systems: 1, measures: 2, notes: 4 }
+[omr-trace] phase=post-process start
+[omr-trace] pipeline:scoregraph-clip-promotion { promotedMeasureCount: 1, promotedDecisions: 1 }
+[omr-trace] phase=post-process ms=4 end { measureCount: 2 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 4, measureCount: 2, acceptance: 'accepted' }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030818
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030818
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-debug] pipeline:page-1:after-analyze { notes: 2, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] phase=page-1 ms=5 end { systems: 1, measures: 1, notes: 2 }
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 1 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 2, measureCount: 1, acceptance: 'accepted' }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] pipeline:enter { preprocessPages: false }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785888030824
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030825
+}
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-debug] pipeline:page-1:after-analyze { notes: 2, systems: 1 }
+
+stdout | tests/pdfOmr.test.js > ScoreGraph clip promotion pipeline gate > leaves no-violation scores unchanged even when promotion diagnostics are enabled
+[omr-trace] phase=page-1 ms=3 end { systems: 1, measures: 1, notes: 2 }
+[omr-trace] phase=post-process start
+[omr-trace] pipeline:scoregraph-clip-promotion { promotedMeasureCount: 0, promotedDecisions: 0 }
+[omr-trace] phase=post-process ms=0 end { measureCount: 1 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 2, measureCount: 1, acceptance: 'accepted' }
+
+ ✓ tests/pdfOmr.test.js (11 tests) 891ms
+   ✓ experimental PDF OMR (local-only) > detects noteheads on a dense synthetic piano page  369ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] phase=page-1 ms=142 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030876
+}
+
+ ✓ tests/detectVectorAccent.test.js (7 tests) 22ms
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=2 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=2 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 2,
+  totalPages: 2,
+  stage: 20,
+  errorName: 'AbortError',
+  errorMessage: 'OMR generation cancelled.',
+  errorCode: 20,
+  stack: 'AbortError: OMR generation cancelled.\n' +
+    '    at new DOMException (node:internal/per_context/domexception:76:18)\n' +
+    '    at throwIfCancelled (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:101:11)\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:549:5)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/pdfOmrHardPdf.test.js:246:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: null,
+  analysisResultSummary: { message: 'OMR generation cancelled.' },
+  at: 1785888030878
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785888030879
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888030879
+}
+
+ ✓ tests/notationFidelitySprint5.test.js (8 tests) 39ms
+ ✓ tests/omrPhase5RolloutGate.test.js (6 tests) 49ms
+ ✓ tests/omrDiagnostics.test.js (28 tests) 86ms
+ ✓ tests/omrMeasureGrid.test.js (19 tests) 97ms
+ ❯ tests/notationFidelitySprint3.test.js (7 tests | 1 failed) 77ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > extracts a closed cubic tie/slur lens in viewport coordinates 2ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > retains short low-aspect continuation lenses but rejects non-cubic paths 0ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > attaches simultaneous vector ties per pitch instead of chord-wide 12ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > emits a slur for different pitches and preserves both playback attacks 27ms
+   × Notation Fidelity Sprint 3 PDF path source > stitches explicit right/left system fragments into one tie 15ms
+     → expected +0 to be 1 // Object.is equality
+   ✓ Notation Fidelity Sprint 3 PDF path source > pairs page fragments after page records are assembled and emits no orphans 7ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > renders every written note and every link in a three-note tie chain 13ms
+ ✓ tests/detectVectorTies.test.js (19 tests) 119ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=page-1 ms=316 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888031196
+}
+
+ ✓ tests/omrV3Voices.test.js (19 tests) 91ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=page-2 ms=5 end { recovered: true, stage: 'recognition' }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=7 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 4 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 19, measureCount: 4, acceptance: 'accepted' }
+
+ ✓ tests/omrPitchStaffMapping.test.js (16 tests) 22ms
+ ✓ tests/omrV3Guitar.test.js (15 tests) 72ms
+ ✓ tests/omrV3Ownership.test.js (9 tests) 26ms
+ ✓ tests/omrScoreGraphEmit.test.js (5 tests) 23ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > processOmrPageAnalysis enables dense noteheads on scanned pages
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} { notes: 5, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785888031360
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888031360
+}
+
+ ✓ tests/omrPhase7DurationCoupledLane.test.js (8 tests) 18ms
+ ✓ tests/omrPhase3DurationSplit.test.js (6 tests) 26ms
+ ✓ tests/omrMeasureGridAnchors.test.js (5 tests) 21ms
+ ✓ tests/omrScoreGraphSolver.test.js (18 tests) 20ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=page-1 ms=128 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888031487
+}
+
+ ✓ tests/notationFidelitySprint1.test.js (8 tests) 29ms
+ ✓ tests/detectVectorRests.test.js (14 tests) 35ms
+ ✓ tests/omrPhase1Regression.test.js (3 tests) 16ms
+ ✓ tests/notationFidelitySprint4.test.js (8 tests) 17ms
+ ✓ tests/omrPhase6bQualification.test.js (4 tests) 13ms
+ ✓ tests/omrPhase4TieSustainConstraints.test.js (8 tests) 32ms
+ ✓ tests/detectVectorStaccato.test.js (12 tests) 34ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { applied: [ 'contrast', 'despeckle', 'staff-recovery' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { notes: 9, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-2:after-analyze { notes: 9, systems: 1 }
+
+ ✓ tests/omrV3Structure.test.js (14 tests) 10ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=page-2 ms=258 end { systems: 1, measures: 2, notes: 9 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=4 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 6 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 28, measureCount: 6, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] client:runPdfOmrClient:enter { useWorker: false }
+[omr-trace] client:pdfSource-before-normalize { type: 'url', pdfFileUrl: false, appBufferAttached: null }
+[omr-trace] client:pdfSource-after-clone { via: 'url' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785888031758
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888031759
+}
+
+ ✓ tests/omrMeasurePlaybackReport.test.js (4 tests) 22ms
+ ✓ tests/omrV3Measures.test.js (9 tests) 46ms
+ ✓ tests/omrAccidentalPathCalibration.test.js (12 tests) 12ms
+ ✓ tests/notationFidelitySprint2.test.js (8 tests) 75ms
+ ✓ tests/omrFontAwarePitchAnchor.test.js (18 tests) 27ms
+ ✓ tests/rasterNoteheadInstances.test.js (9 tests) 12ms
+ ✓ tests/omrVectorPathAccidentals.test.js (25 tests) 18ms
+ ✓ tests/omrV3MusicXml.test.js (4 tests) 40ms
+ ✓ tests/omrViewerRecovery.test.js (9 tests) 5ms
+ ✓ tests/omrV3Ir.test.js (6 tests) 11ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+ ✓ tests/omrSimpleScoreRegression.test.js (11 tests) 45ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=page-1 ms=316 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785888032086
+}
+
+ ✓ tests/omrScoreGraph.test.js (10 tests) 5ms
+ ✓ tests/omrColumnGapPackingDiagnostic.test.js (4 tests) 7ms
+ ✓ tests/omrRecoveredToneRhythm.test.js (23 tests) 19ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { notes: 39, systems: 1 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 39, systems: 1 }
+
+ ✓ tests/omrRhythmProvenance.test.js (5 tests) 3ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=page-2 ms=91 end { systems: 1, measures: 3, notes: 39 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 7 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 58, measureCount: 7, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] client:runPdfOmrClient:exit
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > reuses available app bytes without fetching the duplicate blob URL
+[omr-trace] client:pdfSource-before-normalize { type: 'array-buffer', pdfFileUrl: true, appBufferAttached: true }
+[omr-trace] client:pdfSource-after-clone { byteLength: 4, via: 'app-bytes' }
+
+ ✓ tests/pdfOmrHardPdf.test.js (24 tests) 2203ms
+   ✓ experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing  497ms
+   ✓ experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails  332ms
+   ✓ experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs  398ms
+   ✓ experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors  420ms
+ ✓ tests/omrAdjacentSlotChordGrouping.test.js (15 tests) 9ms
+ ✓ tests/omrMeasureNoteMatching.test.js (3 tests) 6ms
+ ✓ tests/omrExtremeRegisterChords.test.js (9 tests) 2ms
+ ✓ tests/omrChordGrouping.test.js (15 tests) 9ms
+ ✓ tests/omrSemanticDefectClass.test.js (5 tests) 5ms
+ ✓ tests/omrConfidenceBreakdown.test.js (2 tests) 2ms
+ ✓ tests/omrDenseLedgerClassifier.test.js (13 tests) 8ms
+ ✓ tests/omrStaffGapNormalization.test.js (6 tests) 4ms
+ ✓ tests/omrAcceptanceGate.test.js (10 tests) 3ms
+ ✓ tests/omrPipelineStageDiagnostics.test.js (1 test) 3ms
+ ✓ tests/omrJointPolyphonicRhythm.test.js (11 tests) 5ms
+ ✓ tests/omrNoteMatching.test.js (5 tests) 9ms
+ ✓ tests/rasterNoteheadPitchCalibration.test.js (3 tests) 2ms
+ ✓ tests/detectNoteRhythmFeatures.test.js (15 tests) 4ms
+ ✓ tests/rasterStaffLaneRhythm.test.js (4 tests) 3ms
+ ✓ tests/omrNoteheadFallbackCalibration.test.js (8 tests) 8ms
+ ✓ tests/omrPitchAlteration.test.js (13 tests) 3ms
+ ✓ tests/rasterAccidentalOwnership.test.js (5 tests) 21ms
+ ✓ tests/omrMeasureVisualExtents.test.js (3 tests) 3ms
+ ✓ tests/omrV3Confidence.test.js (2 tests) 8ms
+ ✓ tests/omrV3Evaluation.test.js (5 tests) 22ms
+ ✓ tests/omrQualityWarningBanner.test.js (4 tests) 4ms
+ ✓ tests/omrDurationErrorAnalysis.test.js (2 tests) 1ms
+ ✓ tests/omrUiGuard.test.js (2 tests) 3ms
+ ✓ tests/finalizeRasterPageTies.test.js (6 tests) 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/notationFidelitySprint3.test.js > Notation Fidelity Sprint 3 PDF path source > stitches explicit right/left system fragments into one tie
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/notationFidelitySprint3.test.js:238:48
+    236|     })
+    237| 
+    238|     expect(result.diagnostics.appliedTieCount).toBe(1)
+       |                                                ^
+    239|     expect(result.diagnostics.appliedTiePairs[0].source).toBe(
+    240|       'pdf-vector-path-system-continuation',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > aligns the opening column to beat 0 when clef padding shifts position to 0.125
+AssertionError: expected 4 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 4
+
+ ❯ tests/omrVectorRhythm.test.js:326:41
+    324|     )
+    325|     expect(events[0].startDivision).toBe(0)
+    326|     expect(events[0].durationDivisions).toBe(2)
+       |                                         ^
+    327|   })
+    328| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > splits mixed-clef groups into overlapping bass and treble durations
+AssertionError: expected undefined to be 8 // Object.is equality
+
+- Expected: 
+8
+
++ Received: 
+undefined
+
+ ❯ tests/omrVectorRhythm.test.js:426:42
+    424|     expect(bass?.durationDivisions).toBe(12)
+    425|     expect(openingTreble?.durationDivisions).toBe(4)
+    426|     expect(innerBass?.durationDivisions).toBe(8)
+       |                                          ^
+    427|     expect(closingTreble?.durationDivisions).toBe(4)
+    428|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > extends a same-beat treble tone that reappears in the next harmony
+AssertionError: expected 5 to be 12 // Object.is equality
+
+- Expected
++ Received
+
+- 12
++ 5
+
+ ❯ tests/omrVectorRhythm.test.js:463:39
+    461|     )
+    462|     const treble = events.find((event) => event.notes?.[0]?.midi === 6…
+    463|     expect(treble?.durationDivisions).toBe(12)
+       |                                       ^
+    464|   })
+    465| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > extends a same-start pedal doubling that matches the opening bass pitch class
+AssertionError: expected 5 to be 12 // Object.is equality
+
+- Expected
++ Received
+
+- 12
++ 5
+
+ ❯ tests/omrVectorRhythm.test.js:582:39
+    580|     )
+    581|     const treble = events.find((event) => event.notes?.[0]?.midi === 6…
+    582|     expect(treble?.durationDivisions).toBe(12)
+       |                                       ^
+    583|   })
+    584| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  2 failed | 79 passed (81)
+      Tests  5 failed | 831 passed (836)
+   Start at  20:00:29
+   Duration  3.69s (transform 1.39s, setup 0ms, collect 10.54s, tests 7.76s, environment 8ms, prepare 3.35s)
+

@@ -1,0 +1,31 @@
+OMR semantic corpus — baseline
+==============================
+label: c5d5-fix
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 417850e
+createdAt: 2026-08-04T16:13:01.094Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 77.5%
+- pitch: 74.7%
+- rhythm: 98.8%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 68.9%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×41 across 1 fixtures
+- incorrect-pitch [pitch] ×25 across 1 fixtures
+- extra-note [pitch] ×24 across 1 fixtures
+- missing-note [pitch] ×24 across 1 fixtures
+- duration-mismatch [rhythm] ×3 across 1 fixtures
+- onset-mismatch [rhythm] ×3 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-dense-advanced-vector: overall=77.5% R=99% P=75% S=100% A=100% M=69% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch)

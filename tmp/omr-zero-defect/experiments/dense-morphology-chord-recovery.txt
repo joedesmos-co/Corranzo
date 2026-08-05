@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: dense-morphology-chord-recovery
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:54:53.353Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 61.1%
+- pitch: 93.3%
+- rhythm: 81.8%
+- sustain: 0.0%
+- articulation: 16.9%
+- measureStructure: 95.4%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×47 across 1 fixtures
+- duration-mismatch [rhythm] ×28 across 1 fixtures
+- missing-accent [articulation] ×12 across 1 fixtures
+- incorrect-chord [measure-structure] ×3 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- missing-note [pitch] ×3 across 1 fixtures
+- onset-mismatch [rhythm] ×3 across 1 fixtures
+- extra-note [pitch] ×2 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- incorrect-pitch [pitch] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=61.1% R=82% P=93% S=0% A=17% M=95% I=40%
+  worst measures: #8(missing-note|missing-staccato|missing-accent), #2(extra-note|missing-accent|missing-staccato), #6(extra-note|missing-staccato|missing-accent)

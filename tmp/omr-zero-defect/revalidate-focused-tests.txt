@@ -1,0 +1,1227 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ✓ tests/rasterNoteheadPitchCalibration.test.js (3 tests) 2ms
+ ✓ tests/detectNoteRhythmFeatures.test.js (15 tests) 4ms
+ ✓ tests/rasterAccidentalOwnership.test.js (5 tests) 3ms
+ ✓ tests/rasterNoteheadInstances.test.js (9 tests) 12ms
+ ✓ tests/rasterStaffLaneRhythm.test.js (4 tests) 3ms
+ ✓ tests/omrPitchStaffMapping.test.js (16 tests) 21ms
+ ✓ tests/omrNoteheadShape.test.js (6 tests) 254ms
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > flags scanned-looking pages and applies preprocessing
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > leaves already-clean digital pages pixel-identical
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785846968172
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968173
+}
+
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+Warning: Please use the `legacy` build in Node.js environments.
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { applied: [ 'contrast', 'despeckle', 'staff-recovery' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { notes: 12, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 12, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > produces playback from a scanned synthetic page after preprocessing
+[omr-trace] phase=page-1 ms=147 end { systems: 1, measures: 4, notes: 12 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=6 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 4 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:success { noteCount: 12, measureCount: 4, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] pipeline:pdf-load-success { totalPages: 1 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic',
+  at: 1785846968364
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968364
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 0, systems: 0 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 0, systems: 0 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+[omr-trace] phase=page-1 ms=13 end { systems: 0, measures: 0, notes: 0 }
+
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pipeline throws too-difficult error for empty pages
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-systems errorName=Error errorMessage=PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL. readablePages=0 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-systems',
+  errorName: 'Error',
+  errorMessage: 'PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.',
+  errorCode: 'no-systems',
+  stack: 'Error: PDF too difficult for local generation. Try a cleaner digital export or upload MusicXML/MXL.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:811:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/pdfOmrHardPdf.test.js:228:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 0,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 0,
+    pagesWithSystems: 0,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785846968380
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785846968381
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968381
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+[omr-trace] phase=page-1 ms=83 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968465
+}
+
+stderr | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > supports cancellation between pages
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=2 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=2 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 2,
+  totalPages: 2,
+  stage: 20,
+  errorName: 'AbortError',
+  errorMessage: 'OMR generation cancelled.',
+  errorCode: 20,
+  stack: 'AbortError: OMR generation cancelled.\n' +
+    '    at new DOMException (node:internal/per_context/domexception:76:18)\n' +
+    '    at throwIfCancelled (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:101:11)\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:549:5)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/pdfOmrHardPdf.test.js:246:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: null,
+  analysisResultSummary: { message: 'OMR generation cancelled.' },
+  at: 1785846968466
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785846968466
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968466
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=page-1 ms=80 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968547
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > keeps recognized pages when one page analysis fails
+[omr-trace] phase=page-2 ms=2 end { recovered: true, stage: 'recognition' }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=2 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 4 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 19, measureCount: 4, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > processOmrPageAnalysis enables dense noteheads on scanned pages
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} { notes: 5, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785846968651
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968651
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=page-1 ms=87 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968739
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 242
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  applied: [ 'contrast', 'despeckle', 'staff-recovery' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { applied: [ 'contrast', 'despeckle', 'staff-recovery' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 231
+} { notes: 9, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-debug] pipeline:page-2:after-analyze { notes: 9, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > pixel clones keep source buffers attached across sequential page handoffs
+[omr-trace] phase=page-2 ms=143 end { systems: 1, measures: 2, notes: 9 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=3 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 6 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 28, measureCount: 6, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] client:runPdfOmrClient:enter { useWorker: false }
+[omr-trace] client:pdfSource-before-normalize { type: 'url', pdfFileUrl: false, appBufferAttached: null }
+[omr-trace] client:pdfSource-after-clone { via: 'url' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start { sourceType: 'url', cacheKey: 'url:synthetic' }
+[omr-trace] phase=pdf-load start
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:synthetic',
+  at: 1785846968889
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968889
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 460,
+  height: 640,
+  length: 1177600,
+  bufferByteLength: 1177600,
+  detached: false,
+  probe: 255
+} { notes: 19, systems: 1 }
+[omr-debug] pipeline:page-1:after-analyze { notes: 19, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=page-1 ms=85 end { systems: 1, measures: 4, notes: 19 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic {
+  action: 'miss',
+  cacheKey: 'url:synthetic',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785846968974
+}
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 480,
+  height: 660,
+  length: 1267200,
+  bufferByteLength: 1267200,
+  detached: false,
+  probe: 255
+} { notes: 39, systems: 1 }
+[omr-debug] pipeline:page-2:after-analyze { notes: 39, systems: 1 }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] phase=page-2 ms=33 end { systems: 1, measures: 3, notes: 39 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=2 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 7 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=0 end
+[omr-trace] pipeline:success { noteCount: 58, measureCount: 7, acceptance: 'accepted' }
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > runPdfOmrClient processes multiple pages without detached buffer errors
+[omr-trace] client:runPdfOmrClient:exit
+
+stdout | tests/pdfOmrHardPdf.test.js > experimental PDF OMR v4 (harder PDFs) > reuses available app bytes without fetching the duplicate blob URL
+[omr-trace] client:pdfSource-before-normalize { type: 'array-buffer', pdfFileUrl: true, appBufferAttached: true }
+[omr-trace] client:pdfSource-after-clone { byteLength: 4, via: 'app-bytes' }
+
+ ✓ tests/pdfOmrHardPdf.test.js (24 tests) 906ms
+
+ Test Files  8 passed (8)
+      Tests  82 passed (82)
+   Start at  08:36:07
+   Duration  1.55s (transform 409ms, setup 0ms, collect 1.01s, tests 1.21s, environment 1ms, prepare 377ms)
+

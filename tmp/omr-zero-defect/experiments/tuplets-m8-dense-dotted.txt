@@ -1,0 +1,28 @@
+OMR semantic corpus — baseline
+==============================
+label: tuplets-m8-dense-dotted
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: f0c0c37
+createdAt: 2026-08-05T00:14:04.281Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 85.1%
+- pitch: 100.0%
+- rhythm: 95.8%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 100.0%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- duration-mismatch [rhythm] ×2 across 1 fixtures
+- onset-mismatch [rhythm] ×2 across 1 fixtures
+- dotted-rhythm-error [rhythm] ×1 across 1 fixtures
+- missing-rest [rhythm] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-rhythm-tuplets-vector: overall=85.1% R=96% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #8(missing-rest|dotted-rhythm-error|onset-mismatch), #1(tempo-mismatch)

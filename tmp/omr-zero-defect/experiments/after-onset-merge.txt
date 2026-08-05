@@ -1,0 +1,36 @@
+OMR semantic corpus — baseline
+==============================
+label: after-onset-merge
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 3ff28ab
+createdAt: 2026-08-04T15:45:00.683Z
+fixtures: 3/3 ok
+
+Scoreboard (mean across fixtures)
+- overall: 80.3%
+- pitch: 98.3%
+- rhythm: 99.6%
+- sustain: 66.7%
+- articulation: 100.0%
+- measureStructure: 97.9%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×4 across 1 fixtures
+- incorrect-pitch [pitch] ×4 across 1 fixtures
+- tempo-mismatch [interpretation] ×3 across 3 fixtures
+- duration-mismatch [rhythm] ×2 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- extra-note [pitch] ×1 across 1 fixtures
+- missing-note [pitch] ×1 across 1 fixtures
+- onset-mismatch [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-standard-chords-vector: overall=83.9% R=99% P=95% S=100% A=100% M=94% I=0%
+  worst measures: #8(missing-note|extra-note|duration-mismatch), #7(incorrect-pitch|incorrect-chord), #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(repeat-mismatch|tempo-mismatch), #8(repeat-mismatch)
+- guitar-techniques-paired-vector: overall=71.4% R=100% P=100% S=0% A=100% M=100% I=0%
+  worst measures: #4(missing-tie), #5(missing-tie), #1(tempo-mismatch)

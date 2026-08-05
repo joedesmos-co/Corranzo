@@ -1,0 +1,331 @@
+{
+  "head": "f091ee7",
+  "means": {
+    "overall": 88.2,
+    "classes": {
+      "pitch": 98.9,
+      "rhythm": 97.8,
+      "sustain": 88.9,
+      "articulation": 100,
+      "measureStructure": 97.7,
+      "interpretation": 34.1,
+      "playback": 100
+    }
+  },
+  "topDefects": [
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "count": 33,
+      "fixtureCount": 2,
+      "fixtures": [
+        "piano-articulation-scan",
+        "piano-rhythm-tuplets-vector"
+      ]
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "count": 26,
+      "fixtureCount": 1,
+      "fixtures": [
+        "piano-dense-advanced-vector"
+      ]
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "count": 26,
+      "fixtureCount": 1,
+      "fixtures": [
+        "piano-dense-advanced-vector"
+      ]
+    },
+    {
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "count": 9,
+      "fixtureCount": 9,
+      "fixtures": [
+        "guitar-paired-chords-vector",
+        "guitar-standard-chords-vector",
+        "guitar-tab-sparse-vector",
+        "guitar-techniques-paired-vector",
+        "piano-articulation-scan",
+        "piano-beginner-single-vector",
+        "piano-dense-advanced-vector",
+        "piano-grand-voices-vector",
+        "piano-rhythm-tuplets-vector"
+      ]
+    },
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "count": 1,
+      "fixtureCount": 1,
+      "fixtures": [
+        "piano-articulation-scan"
+      ]
+    },
+    {
+      "code": "rest-duration-error",
+      "class": "rhythm",
+      "count": 1,
+      "fixtureCount": 1,
+      "fixtures": [
+        "piano-rhythm-tuplets-vector"
+      ]
+    },
+    {
+      "code": "tie-vs-slur-confusion",
+      "class": "sustain",
+      "count": 1,
+      "fixtureCount": 1,
+      "fixtures": [
+        "piano-articulation-scan"
+      ]
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "piano-beginner-single-vector",
+      "overall": "86%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "0%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "32/32"
+    },
+    {
+      "id": "piano-grand-voices-vector",
+      "overall": "97%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "80%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "88/88"
+    },
+    {
+      "id": "piano-rhythm-tuplets-vector",
+      "overall": "86%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "99%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "0%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 1
+        },
+        {
+          "code": "rest-duration-error",
+          "class": "rhythm",
+          "label": "Rest duration incorrect",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "63/63"
+    },
+    {
+      "id": "piano-articulation-scan",
+      "overall": "80%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "82%",
+        "sustain": "0%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "80%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 32
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        },
+        {
+          "code": "tie-vs-slur-confusion",
+          "class": "sustain",
+          "label": "Tie vs slur confusion",
+          "count": 1
+        }
+      ],
+      "notes": "88/88"
+    },
+    {
+      "id": "piano-dense-advanced-vector",
+      "overall": "81%",
+      "classes": {
+        "pitch": "90%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "80%",
+        "interpretation": "0%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 26
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 26
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "264/264"
+    },
+    {
+      "id": "guitar-tab-sparse-vector",
+      "overall": "97%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "80%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "32/32"
+    },
+    {
+      "id": "guitar-standard-chords-vector",
+      "overall": "86%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "0%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "115/115"
+    },
+    {
+      "id": "guitar-paired-chords-vector",
+      "overall": "95%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "67%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "116/116"
+    },
+    {
+      "id": "guitar-techniques-paired-vector",
+      "overall": "86%",
+      "classes": {
+        "pitch": "100%",
+        "rhythm": "100%",
+        "sustain": "100%",
+        "articulation": "100%",
+        "measureStructure": "100%",
+        "interpretation": "0%",
+        "playback": "100%"
+      },
+      "topDefects": [
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "notes": "32/32"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+OMR semantic corpus — baseline
+==============================
+label: validate-33ee7f3
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 33ee7f3
+createdAt: 2026-08-05T00:00:33.533Z
+fixtures: 9/9 ok
+
+Scoreboard (mean across fixtures)
+- overall: 86.2%
+- pitch: 98.9%
+- rhythm: 97.5%
+- sustain: 88.9%
+- articulation: 90.7%
+- measureStructure: 97.7%
+- interpretation: 29.6%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×49 across 1 fixtures
+- duration-mismatch [rhythm] ×34 across 2 fixtures
+- incorrect-chord [measure-structure] ×26 across 1 fixtures
+- incorrect-pitch [pitch] ×26 across 1 fixtures
+- missing-accent [articulation] ×12 across 1 fixtures
+- tempo-mismatch [interpretation] ×9 across 9 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- onset-mismatch [rhythm] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- dotted-rhythm-error [rhythm] ×1 across 1 fixtures
+- missing-rest [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- piano-grand-voices-vector: overall=97.1% R=100% P=100% S=100% A=100% M=100% I=80%
+  worst measures: #1(tempo-mismatch)
+- piano-rhythm-tuplets-vector: overall=85.1% R=96% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #8(missing-rest|dotted-rhythm-error|onset-mismatch), #1(tempo-mismatch)
+- piano-articulation-scan: overall=62.6% R=82% P=100% S=0% A=16% M=100% I=40%
+  worst measures: #4(missing-staccato|missing-accent|missing-accent), #8(missing-accent|missing-staccato|missing-accent), #6(missing-staccato|missing-accent|missing-accent)
+- piano-dense-advanced-vector: overall=81.4% R=100% P=90% S=100% A=100% M=80% I=0%
+  worst measures: #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-tab-sparse-vector: overall=97.1% R=100% P=100% S=100% A=100% M=100% I=80%
+  worst measures: #1(tempo-mismatch)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=95.2% R=100% P=100% S=100% A=100% M=100% I=67%
+  worst measures: #1(tempo-mismatch)
+- guitar-techniques-paired-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)

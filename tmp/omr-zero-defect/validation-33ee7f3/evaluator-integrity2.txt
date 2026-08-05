@@ -1,0 +1,14 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ✓ tests/omrSemanticDefectClass.test.js (5 tests) 2ms
+ ✓ tests/semanticMusicXmlEvaluator.test.js (4 tests) 95ms
+ ✓ tests/semanticMusicXmlEvaluator.hardening.test.js (23 tests) 183ms
+ ✓ tests/staticIntegrity.test.js (1 test) 6115ms
+   ✓ static integrity > src/ has no undefined identifiers (would be runtime ReferenceErrors)  6115ms
+
+ Test Files  4 passed (4)
+      Tests  33 passed (33)
+   Start at  20:03:59
+   Duration  6.38s (transform 66ms, setup 0ms, collect 324ms, tests 6.40s, environment 0ms, prepare 127ms)
+

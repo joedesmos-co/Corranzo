@@ -1,0 +1,257 @@
+[
+  {
+    "tag": "TARGET_m1F4_m2G4",
+    "from": "F4@m1",
+    "to": "G4@m2",
+    "dx": 183,
+    "segs": {
+      "seg1Start": 274,
+      "seg1End": 307,
+      "seg2Start": 317,
+      "seg2End": 441
+    },
+    "p1": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 2,
+        "above": 2
+      },
+      "mid": {
+        "below": 0,
+        "above": 0
+      },
+      "columns": 34
+    },
+    "p2": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 58,
+        "above": 125
+      },
+      "mid": {
+        "below": 23,
+        "above": 41
+      }
+    },
+    "direct": false,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 69,
+        "above": 60
+      },
+      "mid": {
+        "below": 29,
+        "above": 21
+      },
+      "columns": 168
+    }
+  },
+  {
+    "tag": "TARGET_m3A4_m4As4",
+    "from": "A4@m3",
+    "to": "A#4@m4",
+    "dx": 201,
+    "segs": {
+      "seg1Start": 656,
+      "seg1End": 705,
+      "seg2Start": 715,
+      "seg2End": 841
+    },
+    "p1": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 2,
+        "above": 2
+      },
+      "mid": {
+        "below": 0,
+        "above": 0
+      },
+      "columns": 50
+    },
+    "p2": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 33,
+        "above": 39
+      },
+      "mid": {
+        "below": 12,
+        "above": 2
+      }
+    },
+    "direct": false,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 41,
+        "above": 43
+      },
+      "mid": {
+        "below": 23,
+        "above": 14
+      },
+      "columns": 186
+    }
+  },
+  {
+    "tag": "distractor_F4_E4",
+    "from": "F4@m1",
+    "to": "E4@m2",
+    "dx": 112,
+    "segs": {
+      "seg1Start": 274,
+      "seg1End": 307,
+      "seg2Start": 317,
+      "seg2End": 370
+    },
+    "p1": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 2
+      },
+      "mid": {
+        "below": 0,
+        "above": 0
+      },
+      "columns": 34
+    },
+    "p2": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 18,
+        "above": 21
+      },
+      "mid": {
+        "below": 15,
+        "above": 15
+      }
+    },
+    "direct": false,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 22,
+        "above": 32
+      },
+      "mid": {
+        "below": 11,
+        "above": 19
+      },
+      "columns": 97
+    }
+  },
+  {
+    "tag": "distractor_A4_G4",
+    "from": "A4@m3",
+    "to": "G4@m4",
+    "dx": 128,
+    "segs": {
+      "seg1Start": 656,
+      "seg1End": 705,
+      "seg2Start": 715,
+      "seg2End": 768
+    },
+    "p1": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 4,
+        "above": 2
+      },
+      "mid": {
+        "below": 0,
+        "above": 0
+      },
+      "columns": 50
+    },
+    "p2": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 14,
+        "above": 14
+      },
+      "mid": {
+        "below": 14,
+        "above": 14
+      }
+    },
+    "direct": false,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 24,
+        "above": 18
+      },
+      "mid": {
+        "below": 10,
+        "above": 2
+      },
+      "columns": 113
+    }
+  },
+  {
+    "tag": "same_m3_Fs_A",
+    "from": "F#4@m3",
+    "to": "A4@m3",
+    "dx": 70,
+    "segs": {
+      "seg1Start": 586,
+      "seg1End": 705,
+      "seg2Start": 516,
+      "seg2End": 640
+    },
+    "p1": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 36,
+        "above": 36
+      },
+      "mid": {
+        "below": 15,
+        "above": 15
+      },
+      "columns": 120
+    },
+    "p2": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 56,
+        "above": 52
+      },
+      "mid": {
+        "below": 23,
+        "above": 15
+      }
+    },
+    "direct": true,
+    "full": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 55,
+        "above": 35
+      },
+      "mid": {
+        "below": 19,
+        "above": 16
+      },
+      "columns": 55
+    }
+  }
+]

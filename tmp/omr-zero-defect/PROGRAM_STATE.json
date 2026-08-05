@@ -1,0 +1,90 @@
+{
+  "program": "CORRANZO AUTONOMOUS ZERO-DEFECT OMR PROGRAM",
+  "status": "closed",
+  "stop_condition": "SOURCE-FAITHFUL ZERO-DEFECT SUCCESS ON THE FROZEN CORPUS",
+  "zero_defect_reached": false,
+  "source_faithful_zero_defects_reached": true,
+  "original_starting_head": "2366c3727d1c0794a57a2b1ef4ff185a7ce7ab29",
+  "final_head": "f091ee76a74d4d0265218a051e07ef4a6880b894",
+  "final_production_head": "f091ee76a74d4d0265218a051e07ef4a6880b894",
+  "closeout_freeze_test_commit": "613fa73b043d99a3c783740fa27df6b01ae06439",
+  "campaign_start_head": "2366c3727d1c0794a57a2b1ef4ff185a7ce7ab29",
+  "current_head": "613fa73b043d99a3c783740fa27df6b01ae06439",
+  "closeout_at": "2026-08-05T02:46:00Z",
+  "original_baseline_metrics": {
+    "head": "2366c37",
+    "overall_percent": 71.1,
+    "pitch_percent": 75.7,
+    "rhythm_percent": 81.2,
+    "sustain_percent": 55.6,
+    "articulation_percent": 90.6,
+    "measure_structure_percent": 81.2,
+    "interpretation_percent": 13.3,
+    "incorrect_chord": 122
+  },
+  "final_untouched_metrics": {
+    "overall_percent": 88.2,
+    "pitch_percent": 98.9,
+    "rhythm_percent": 97.8,
+    "sustain_percent": 88.9,
+    "articulation_percent": 100.0,
+    "measure_structure_percent": 97.7,
+    "interpretation_percent": 34.1,
+    "incorrect_chord": 26,
+    "volta_mismatch": 0,
+    "incorrect_tie": 0
+  },
+  "final_source_faithful_metrics": {
+    "source_supported_defects_remaining": 0,
+    "source_faithful_incorrect_chord": 0,
+    "scan_notes": "88/88",
+    "scan_pitch_percent": 100.0,
+    "scan_measure_structure_percent": 100.0,
+    "scan_articulation_percent": 100.0,
+    "guitar_paired_prm": "100/100/100",
+    "guitar_standard_prm": "100/100/100",
+    "incorrect_tie": 0,
+    "unexpected_scan_accent": 0
+  },
+  "protected_outcomes": {
+    "freeze_test": "tests/sourceFaithfulZeroDefectBaseline.test.js",
+    "guitar-paired-chords-vector": "P/R/M 100%",
+    "guitar-standard-chords-vector": "P/R/M 100%",
+    "scan_articulation_percent": 100,
+    "scan_notes": "88/88"
+  },
+  "benchmark_truth_defects_remaining": [
+    "unprinted tempo expectations ×9",
+    "dense hidden-natural expectations ≈26 pitch + ≈26 chord",
+    "scan half-versus-quarter durations ≈32",
+    "PDF slur encoded as MusicXML tie (missing-tie×1 + tie-vs-slur×1)",
+    "tuplets m8 rest/C5 glyph contradictions ×2"
+  ],
+  "source_supported_remaining": [],
+  "rejected_experiments": [
+    "joint raster articulation instances",
+    "terminal rest capacity shrink to force quarter when PDF is U+E4E6 eighth",
+    "row-probe curve contamination for staccato",
+    "emitting ties for different-pitch slur bows",
+    "hidden-natural imitation on dense fixture",
+    "half durations on filled scan bass heads",
+    "inventing unprinted tempos"
+  ],
+  "known_preexisting_suite_failures": [
+    "tests/omrVectorRhythm.test.js ×4",
+    "tests/notationFidelitySprint3.test.js ×1"
+  ],
+  "next_recommended_phase": "Validation on unseen holdout scores — not further optimization against the frozen nine-fixture corpus",
+  "validation_closeout": {
+    "corpus_9_of_9": true,
+    "focused_program_tests": "136 passed",
+    "freeze_baseline": "5 passed",
+    "omr_regression": "908 passed; 5 known failures",
+    "full_unit_suite": "3021 passed; 5 failed; 5 skipped",
+    "production_build": true,
+    "evaluator_self_check": true,
+    "heavy_score_harness": true,
+    "protections_guitar_mic_playback_ownership_reports_warnings_voltas": true
+  },
+  "last_checkpoint": "2026-08-05T02:46:00Z"
+}

@@ -1,0 +1,6893 @@
+{
+  "pipelineTablature": {
+    "tabStaves": 2,
+    "tabNotes": 116,
+    "tabPositionalMeasures": 0,
+    "tabApproximateRhythmMeasures": 0,
+    "tabCompressedTimingMeasures": 0,
+    "tabEmptyMeasures": 0,
+    "attachedPositions": 94,
+    "pairedNotes": 94,
+    "unpairedNotationNotes": 22,
+    "unusedTabDigits": 22,
+    "lowConfidenceMeasures": 0,
+    "pairingConfidence": 0.6008562243186168,
+    "tabOnly": false,
+    "rhythmApproximate": false,
+    "unsupportedMarkers": [],
+    "capoText": null,
+    "warnings": []
+  },
+  "semanticClasses": {
+    "pitch": {
+      "score": 0.8966,
+      "n": 104,
+      "d": 116
+    },
+    "rhythm": {
+      "score": 0.9741,
+      "n": 226,
+      "d": 232
+    },
+    "sustain": {
+      "score": 1,
+      "n": 0,
+      "d": 0
+    },
+    "articulation": {
+      "score": 1,
+      "n": 0,
+      "d": 0
+    },
+    "measureStructure": {
+      "score": 0.8929,
+      "n": 50,
+      "d": 56
+    },
+    "interpretation": {
+      "score": 0,
+      "n": 0,
+      "d": 3
+    },
+    "playback": {
+      "score": 1,
+      "n": 0,
+      "d": 0
+    }
+  },
+  "measureCompare": [
+    {
+      "measure": 1,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 4,
+      "partialTabChords": 0,
+      "rows": []
+    },
+    {
+      "measure": 2,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 2,
+      "partialTabChords": 2,
+      "rows": [
+        {
+          "chordIndex": 0,
+          "truth": {
+            "onset": 4,
+            "midis": [
+              50,
+              57,
+              62,
+              67
+            ],
+            "labels": [
+              "G4",
+              "D4",
+              "A3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "frets": [
+              3,
+              3,
+              2,
+              0
+            ]
+          },
+          "generated": {
+            "onset": 4,
+            "midis": [
+              55,
+              57,
+              60,
+              64
+            ],
+            "labels": [
+              "A3",
+              "E4",
+              "C4",
+              "G3"
+            ],
+            "strings": [
+              3,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              2,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        },
+        {
+          "chordIndex": 2,
+          "truth": {
+            "onset": 6,
+            "midis": [
+              50,
+              57,
+              62,
+              67
+            ],
+            "labels": [
+              "G4",
+              "D4",
+              "A3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "frets": [
+              3,
+              3,
+              2,
+              0
+            ]
+          },
+          "generated": {
+            "onset": 6,
+            "midis": [
+              55,
+              57,
+              60,
+              64
+            ],
+            "labels": [
+              "A3",
+              "E4",
+              "C4",
+              "G3"
+            ],
+            "strings": [
+              3,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              2,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        }
+      ]
+    },
+    {
+      "measure": 3,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 2,
+      "partialTabChords": 2,
+      "rows": [
+        {
+          "chordIndex": 0,
+          "truth": {
+            "onset": 8,
+            "midis": [
+              52,
+              57,
+              60,
+              64,
+              69
+            ],
+            "labels": [
+              "A4",
+              "E4",
+              "C4",
+              "A3",
+              "E3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "frets": [
+              5,
+              5,
+              5,
+              7,
+              7
+            ]
+          },
+          "generated": {
+            "onset": 8,
+            "midis": [
+              57,
+              60,
+              60,
+              64,
+              67
+            ],
+            "labels": [
+              "C4",
+              "G4",
+              "E4",
+              "C4",
+              "A3"
+            ],
+            "strings": [
+              3,
+              null,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              5,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        },
+        {
+          "chordIndex": 2,
+          "truth": {
+            "onset": 10,
+            "midis": [
+              52,
+              57,
+              60,
+              64,
+              69
+            ],
+            "labels": [
+              "A4",
+              "E4",
+              "C4",
+              "A3",
+              "E3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "frets": [
+              5,
+              5,
+              5,
+              7,
+              7
+            ]
+          },
+          "generated": {
+            "onset": 10,
+            "midis": [
+              57,
+              60,
+              60,
+              64,
+              67
+            ],
+            "labels": [
+              "C4",
+              "G4",
+              "E4",
+              "C4",
+              "A3"
+            ],
+            "strings": [
+              3,
+              null,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              5,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        }
+      ]
+    },
+    {
+      "measure": 4,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 4,
+      "partialTabChords": 0,
+      "rows": []
+    },
+    {
+      "measure": 5,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 4,
+      "partialTabChords": 0,
+      "rows": []
+    },
+    {
+      "measure": 6,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 4,
+      "partialTabChords": 0,
+      "rows": []
+    },
+    {
+      "measure": 7,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 2,
+      "partialTabChords": 2,
+      "rows": [
+        {
+          "chordIndex": 0,
+          "truth": {
+            "onset": 24,
+            "midis": [
+              50,
+              54,
+              57,
+              62,
+              66
+            ],
+            "labels": [
+              "F#4",
+              "D4",
+              "A3",
+              "F#3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "frets": [
+              2,
+              3,
+              2,
+              4,
+              5
+            ]
+          },
+          "generated": {
+            "onset": 24,
+            "midis": [
+              50,
+              53,
+              57,
+              62,
+              66
+            ],
+            "labels": [
+              "F#4",
+              "D4",
+              "A3",
+              "F3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              null,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              2,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        },
+        {
+          "chordIndex": 2,
+          "truth": {
+            "onset": 26,
+            "midis": [
+              50,
+              54,
+              57,
+              62,
+              66
+            ],
+            "labels": [
+              "F#4",
+              "D4",
+              "A3",
+              "F#3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "frets": [
+              2,
+              3,
+              2,
+              4,
+              5
+            ]
+          },
+          "generated": {
+            "onset": 26,
+            "midis": [
+              50,
+              53,
+              57,
+              62,
+              66
+            ],
+            "labels": [
+              "F#4",
+              "D4",
+              "A3",
+              "F3",
+              "D3"
+            ],
+            "strings": [
+              1,
+              null,
+              null,
+              null,
+              null
+            ],
+            "frets": [
+              2,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "pitchMatch": false,
+          "genHasFullTab": false,
+          "genPartialTab": true
+        }
+      ]
+    },
+    {
+      "measure": 8,
+      "truthChordCount": 4,
+      "generatedChordCount": 4,
+      "matchedChords": 4,
+      "partialTabChords": 0,
+      "rows": []
+    }
+  ],
+  "captured": {
+    "tabDiagnostics": {
+      "tabStaves": 2,
+      "tabNotes": 116,
+      "tabPositionalMeasures": 0,
+      "attachedPositions": 94,
+      "pairedNotes": 94,
+      "unpairedNotationNotes": 22,
+      "unusedTabDigits": 22,
+      "lowConfidenceMeasures": 0,
+      "pairingConfidence": 0.6008562243186168,
+      "warnings": []
+    },
+    "systems": 4,
+    "roles": [
+      {
+        "i": 0,
+        "kind": "notation",
+        "tabStave": false,
+        "pairedWithIndex": null,
+        "source": "notehead-glyphs",
+        "tabLineCount": null
+      },
+      {
+        "i": 1,
+        "kind": "tab",
+        "tabStave": true,
+        "pairedWithIndex": 0,
+        "source": "tab-clef-text",
+        "tabLineCount": 6
+      },
+      {
+        "i": 2,
+        "kind": "notation",
+        "tabStave": false,
+        "pairedWithIndex": null,
+        "source": "notehead-glyphs",
+        "tabLineCount": null
+      },
+      {
+        "i": 3,
+        "kind": "tab",
+        "tabStave": true,
+        "pairedWithIndex": 2,
+        "source": "tab-clef-text",
+        "tabLineCount": 6
+      }
+    ],
+    "boxes": [
+      [
+        {
+          "systemIndex": 0,
+          "measureNumber": 1,
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        },
+        {
+          "systemIndex": 0,
+          "measureNumber": 2,
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        {
+          "systemIndex": 0,
+          "measureNumber": 3,
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        {
+          "systemIndex": 0,
+          "measureNumber": 4,
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      ],
+      [],
+      [
+        {
+          "systemIndex": 2,
+          "measureNumber": 5,
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        },
+        {
+          "systemIndex": 2,
+          "measureNumber": 6,
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        },
+        {
+          "systemIndex": 2,
+          "measureNumber": 7,
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        {
+          "systemIndex": 2,
+          "measureNumber": 8,
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      ],
+      []
+    ],
+    "totals": {
+      "tabDigits": 116,
+      "attached": 94,
+      "unpairedNotation": 22,
+      "unusedTabs": 22,
+      "measureMismatchUnpaired": 8,
+      "measureMismatchUnused": 8
+    },
+    "pairingReplay": [
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "box": {
+          "x0": 0.119,
+          "x1": 0.30865196078431373,
+          "playableX0": 0.18348166666666665
+        },
+        "notationColumns": [
+          0.1905392156862745,
+          0.21745098039215682,
+          0.24436274509803924,
+          0.2712745098039216
+        ],
+        "tabCount": 10,
+        "notationNoteCount": 10,
+        "diagnostics": {
+          "notationEvents": 4,
+          "notationNotes": 10,
+          "tabDigits": 10,
+          "pairedNotes": 10,
+          "unpairedNotationNotes": 0,
+          "unusedTabDigits": 0,
+          "lowConfidenceOnsets": 4,
+          "onsetPairs": 4,
+          "averageConfidence": 0.7904925303454713,
+          "measureConfidence": 0.9266723856209149
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.3750592330291986
+          },
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.3750592330291986
+          },
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 3,
+            "fret": 0,
+            "midi": 55,
+            "pos": 0.3750592330291986
+          },
+          {
+            "xNorm": 0.2170424836601307,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.516960031705825
+          },
+          {
+            "xNorm": 0.2170424836601307,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.516960031705825
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.6588608303824514
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.6588608303824514
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 3,
+            "fret": 0,
+            "midi": 55,
+            "pos": 0.6588608303824514
+          },
+          {
+            "xNorm": 0.2708660130718954,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.8007616290590778
+          },
+          {
+            "xNorm": 0.2708660130718954,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.8007616290590778
+          }
+        ]
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "box": {
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964,
+          "playableX0": 0.30865196078431373
+        },
+        "notationColumns": [
+          0.3460294117647059,
+          0.38191176470588234,
+          0.41779411764705876,
+          0.45367647058823524
+        ],
+        "tabCount": 13,
+        "notationNoteCount": 13,
+        "diagnostics": {
+          "notationEvents": 6,
+          "notationNotes": 13,
+          "tabDigits": 13,
+          "pairedNotes": 7,
+          "unpairedNotationNotes": 6,
+          "unusedTabDigits": 6,
+          "lowConfidenceOnsets": 2,
+          "onsetPairs": 4,
+          "averageConfidence": 0.8996519805921035,
+          "measureConfidence": 0.6648781932072362
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 1,
+            "fret": 3,
+            "midi": 67,
+            "pos": 0.19368231819543716
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.19368231819543716
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.19368231819543716
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 4,
+            "fret": 0,
+            "midi": 50,
+            "pos": 0.19368231819543716
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 1,
+            "fret": 3,
+            "midi": 67,
+            "pos": 0.38167187433120714
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.38167187433120714
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.38167187433120714
+          },
+          {
+            "xNorm": 0.4173856209150327,
+            "string": 1,
+            "fret": 3,
+            "midi": 67,
+            "pos": 0.5696614304669777
+          },
+          {
+            "xNorm": 0.4173856209150327,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.5696614304669777
+          },
+          {
+            "xNorm": 0.4173856209150327,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.5696614304669777
+          },
+          {
+            "xNorm": 0.4173856209150327,
+            "string": 4,
+            "fret": 0,
+            "midi": 50,
+            "pos": 0.5696614304669777
+          },
+          {
+            "xNorm": 0.4532679738562091,
+            "string": 1,
+            "fret": 3,
+            "midi": 67,
+            "pos": 0.7576509866027478
+          },
+          {
+            "xNorm": 0.4532679738562091,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.7576509866027478
+          }
+        ]
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "box": {
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077,
+          "playableX0": 0.49952614379084964
+        },
+        "notationColumns": [
+          0.545375816993464,
+          0.5812581699346406,
+          0.6171405228758169,
+          0.6530228758169934
+        ],
+        "tabCount": 16,
+        "notationNoteCount": 16,
+        "diagnostics": {
+          "notationEvents": 6,
+          "notationNotes": 16,
+          "tabDigits": 16,
+          "pairedNotes": 8,
+          "unpairedNotationNotes": 8,
+          "unusedTabDigits": 8,
+          "lowConfidenceOnsets": 2,
+          "onsetPairs": 4,
+          "averageConfidence": 0.8936839524571756,
+          "measureConfidence": 0.6377893833600115
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 1,
+            "fret": 5,
+            "midi": 69,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 2,
+            "fret": 5,
+            "midi": 64,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 3,
+            "fret": 5,
+            "midi": 60,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 4,
+            "fret": 7,
+            "midi": 57,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 5,
+            "fret": 7,
+            "midi": 52,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 1,
+            "fret": 5,
+            "midi": 69,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 2,
+            "fret": 5,
+            "midi": 64,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 3,
+            "fret": 5,
+            "midi": 60,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 4,
+            "fret": 7,
+            "midi": 57,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 1,
+            "fret": 5,
+            "midi": 69,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 2,
+            "fret": 5,
+            "midi": 64,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 3,
+            "fret": 5,
+            "midi": 60,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 4,
+            "fret": 7,
+            "midi": 57,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 5,
+            "fret": 7,
+            "midi": 52,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6526143790849672,
+            "string": 1,
+            "fret": 5,
+            "midi": 69,
+            "pos": 0.7679508196721312
+          },
+          {
+            "xNorm": 0.6526143790849672,
+            "string": 2,
+            "fret": 5,
+            "midi": 64,
+            "pos": 0.7679508196721312
+          }
+        ]
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "box": {
+          "x0": 0.6988725490196077,
+          "x1": 0.911,
+          "playableX0": 0.6988725490196077
+        },
+        "notationColumns": [
+          0.7447222222222222,
+          0.7806045751633988,
+          0.8164869281045751,
+          0.8523692810457516
+        ],
+        "tabCount": 19,
+        "notationNoteCount": 19,
+        "diagnostics": {
+          "notationEvents": 4,
+          "notationNotes": 19,
+          "tabDigits": 19,
+          "pairedNotes": 19,
+          "unpairedNotationNotes": 0,
+          "unusedTabDigits": 0,
+          "lowConfidenceOnsets": 0,
+          "onsetPairs": 4,
+          "averageConfidence": 0.9131926600109689,
+          "measureConfidence": 0.9696174310038391
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 1,
+            "fret": 12,
+            "midi": 76,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 2,
+            "fret": 12,
+            "midi": 71,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 3,
+            "fret": 12,
+            "midi": 67,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 4,
+            "fret": 14,
+            "midi": 64,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 5,
+            "fret": 14,
+            "midi": 59,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7443137254901961,
+            "string": 6,
+            "fret": 12,
+            "midi": 52,
+            "pos": 0.21421638859361355
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 1,
+            "fret": 12,
+            "midi": 76,
+            "pos": 0.38337107732125536
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 2,
+            "fret": 12,
+            "midi": 71,
+            "pos": 0.38337107732125536
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 3,
+            "fret": 12,
+            "midi": 67,
+            "pos": 0.38337107732125536
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 4,
+            "fret": 14,
+            "midi": 64,
+            "pos": 0.38337107732125536
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 5,
+            "fret": 14,
+            "midi": 59,
+            "pos": 0.38337107732125536
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 1,
+            "fret": 12,
+            "midi": 76,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 2,
+            "fret": 12,
+            "midi": 71,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 3,
+            "fret": 12,
+            "midi": 67,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 4,
+            "fret": 14,
+            "midi": 64,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 5,
+            "fret": 14,
+            "midi": 59,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8160784313725491,
+            "string": 6,
+            "fret": 12,
+            "midi": 52,
+            "pos": 0.5525257660488982
+          },
+          {
+            "xNorm": 0.8519607843137256,
+            "string": 1,
+            "fret": 12,
+            "midi": 76,
+            "pos": 0.7216804547765406
+          },
+          {
+            "xNorm": 0.8519607843137256,
+            "string": 2,
+            "fret": 12,
+            "midi": 71,
+            "pos": 0.7216804547765406
+          }
+        ]
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "box": {
+          "x0": 0.077,
+          "x1": 0.3091625816993464,
+          "playableX0": 0.15593527777777777
+        },
+        "notationColumns": [
+          0.1905392156862745,
+          0.21745098039215682,
+          0.24436274509803924,
+          0.2712745098039216
+        ],
+        "tabCount": 10,
+        "notationNoteCount": 10,
+        "diagnostics": {
+          "notationEvents": 4,
+          "notationNotes": 10,
+          "tabDigits": 10,
+          "pairedNotes": 10,
+          "unpairedNotationNotes": 0,
+          "unusedTabDigits": 0,
+          "lowConfidenceOnsets": 4,
+          "onsetPairs": 4,
+          "averageConfidence": 0.7676353874883285,
+          "measureConfidence": 0.9186723856209149
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 1,
+            "fret": 7,
+            "midi": 71,
+            "pos": 0.4872909239989161
+          },
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 2,
+            "fret": 8,
+            "midi": 67,
+            "pos": 0.4872909239989161
+          },
+          {
+            "xNorm": 0.19013071895424835,
+            "string": 3,
+            "fret": 7,
+            "midi": 62,
+            "pos": 0.4872909239989161
+          },
+          {
+            "xNorm": 0.2170424836601307,
+            "string": 1,
+            "fret": 7,
+            "midi": 71,
+            "pos": 0.6032086765880627
+          },
+          {
+            "xNorm": 0.2170424836601307,
+            "string": 2,
+            "fret": 8,
+            "midi": 67,
+            "pos": 0.6032086765880627
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 1,
+            "fret": 7,
+            "midi": 71,
+            "pos": 0.719126429177209
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 2,
+            "fret": 8,
+            "midi": 67,
+            "pos": 0.719126429177209
+          },
+          {
+            "xNorm": 0.24395424836601304,
+            "string": 3,
+            "fret": 7,
+            "midi": 62,
+            "pos": 0.719126429177209
+          },
+          {
+            "xNorm": 0.2708660130718954,
+            "string": 1,
+            "fret": 7,
+            "midi": 71,
+            "pos": 0.8350441817663555
+          },
+          {
+            "xNorm": 0.2708660130718954,
+            "string": 2,
+            "fret": 8,
+            "midi": 67,
+            "pos": 0.8350441817663555
+          }
+        ]
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "box": {
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964,
+          "playableX0": 0.3091625816993464
+        },
+        "notationColumns": [
+          0.3460294117647059,
+          0.38191176470588234,
+          0.41779411764705876,
+          0.45367647058823524
+        ],
+        "tabCount": 13,
+        "notationNoteCount": 13,
+        "diagnostics": {
+          "notationEvents": 4,
+          "notationNotes": 13,
+          "tabDigits": 13,
+          "pairedNotes": 13,
+          "unpairedNotationNotes": 0,
+          "unusedTabDigits": 0,
+          "lowConfidenceOnsets": 0,
+          "onsetPairs": 4,
+          "averageConfidence": 0.9155069462769727,
+          "measureConfidence": 0.9704274311969405
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 1,
+            "fret": 10,
+            "midi": 74,
+            "pos": 0.19151949528980058
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 2,
+            "fret": 10,
+            "midi": 69,
+            "pos": 0.19151949528980058
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 3,
+            "fret": 9,
+            "midi": 64,
+            "pos": 0.19151949528980058
+          },
+          {
+            "xNorm": 0.3456209150326797,
+            "string": 4,
+            "fret": 12,
+            "midi": 62,
+            "pos": 0.19151949528980058
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 1,
+            "fret": 10,
+            "midi": 74,
+            "pos": 0.38001330443552683
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 2,
+            "fret": 10,
+            "midi": 69,
+            "pos": 0.38001330443552683
+          },
+          {
+            "xNorm": 0.38150326797385614,
+            "string": 3,
+            "fret": 9,
+            "midi": 64,
+            "pos": 0.38001330443552683
+          },
+          {
+            "xNorm": 0.4173856209150326,
+            "string": 1,
+            "fret": 10,
+            "midi": 74,
+            "pos": 0.5685071135812534
+          },
+          {
+            "xNorm": 0.4173856209150326,
+            "string": 2,
+            "fret": 10,
+            "midi": 69,
+            "pos": 0.5685071135812534
+          },
+          {
+            "xNorm": 0.4173856209150326,
+            "string": 4,
+            "fret": 12,
+            "midi": 62,
+            "pos": 0.5685071135812534
+          },
+          {
+            "xNorm": 0.4173856209150327,
+            "string": 3,
+            "fret": 9,
+            "midi": 64,
+            "pos": 0.5685071135812537
+          },
+          {
+            "xNorm": 0.45326797385620915,
+            "string": 1,
+            "fret": 10,
+            "midi": 74,
+            "pos": 0.7570009227269803
+          },
+          {
+            "xNorm": 0.45326797385620915,
+            "string": 2,
+            "fret": 10,
+            "midi": 69,
+            "pos": 0.7570009227269803
+          }
+        ]
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "box": {
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077,
+          "playableX0": 0.49952614379084964
+        },
+        "notationColumns": [
+          0.545375816993464,
+          0.5812581699346406,
+          0.6171405228758169,
+          0.6530228758169934
+        ],
+        "tabCount": 16,
+        "notationNoteCount": 16,
+        "diagnostics": {
+          "notationEvents": 6,
+          "notationNotes": 16,
+          "tabDigits": 16,
+          "pairedNotes": 8,
+          "unpairedNotationNotes": 8,
+          "unusedTabDigits": 8,
+          "lowConfidenceOnsets": 2,
+          "onsetPairs": 4,
+          "averageConfidence": 0.9070172857905089,
+          "measureConfidence": 0.642456050026678
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 1,
+            "fret": 2,
+            "midi": 66,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 4,
+            "fret": 4,
+            "midi": 54,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5449673202614379,
+            "string": 5,
+            "fret": 5,
+            "midi": 50,
+            "pos": 0.2279508196721314
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 1,
+            "fret": 2,
+            "midi": 66,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.5808496732026144,
+            "string": 4,
+            "fret": 4,
+            "midi": 54,
+            "pos": 0.40795081967213154
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 1,
+            "fret": 2,
+            "midi": 66,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 3,
+            "fret": 2,
+            "midi": 57,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 4,
+            "fret": 4,
+            "midi": 54,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6167320261437907,
+            "string": 5,
+            "fret": 5,
+            "midi": 50,
+            "pos": 0.587950819672131
+          },
+          {
+            "xNorm": 0.6526143790849672,
+            "string": 1,
+            "fret": 2,
+            "midi": 66,
+            "pos": 0.7679508196721312
+          },
+          {
+            "xNorm": 0.6526143790849672,
+            "string": 2,
+            "fret": 3,
+            "midi": 62,
+            "pos": 0.7679508196721312
+          }
+        ]
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "box": {
+          "x0": 0.6988725490196077,
+          "x1": 0.932,
+          "playableX0": 0.6988725490196077
+        },
+        "notationColumns": [
+          0.7447222222222222,
+          0.7806045751633988,
+          0.8164869281045751,
+          0.8523692810457516
+        ],
+        "tabCount": 19,
+        "notationNoteCount": 19,
+        "diagnostics": {
+          "notationEvents": 4,
+          "notationNotes": 19,
+          "tabDigits": 19,
+          "pairedNotes": 19,
+          "unpairedNotationNotes": 0,
+          "unusedTabDigits": 0,
+          "lowConfidenceOnsets": 0,
+          "onsetPairs": 4,
+          "averageConfidence": 0.9169561477282996,
+          "measureConfidence": 0.9709346517049049
+        },
+        "tabDigits": [
+          {
+            "xNorm": 0.744313725490196,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.744313725490196,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.744313725490196,
+            "string": 3,
+            "fret": 0,
+            "midi": 55,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.744313725490196,
+            "string": 4,
+            "fret": 2,
+            "midi": 52,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.744313725490196,
+            "string": 5,
+            "fret": 3,
+            "midi": 48,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.744313725490196,
+            "string": 6,
+            "fret": 3,
+            "midi": 43,
+            "pos": 0.19491988729551304
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.3488372093023257
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.3488372093023257
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 3,
+            "fret": 0,
+            "midi": 55,
+            "pos": 0.3488372093023257
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 4,
+            "fret": 2,
+            "midi": 52,
+            "pos": 0.3488372093023257
+          },
+          {
+            "xNorm": 0.7801960784313725,
+            "string": 5,
+            "fret": 3,
+            "midi": 48,
+            "pos": 0.3488372093023257
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 3,
+            "fret": 0,
+            "midi": 55,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 4,
+            "fret": 2,
+            "midi": 52,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 5,
+            "fret": 3,
+            "midi": 48,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.816078431372549,
+            "string": 6,
+            "fret": 3,
+            "midi": 43,
+            "pos": 0.5027545313091384
+          },
+          {
+            "xNorm": 0.8519607843137257,
+            "string": 1,
+            "fret": 0,
+            "midi": 64,
+            "pos": 0.6566718533159519
+          },
+          {
+            "xNorm": 0.8519607843137257,
+            "string": 2,
+            "fret": 1,
+            "midi": 60,
+            "pos": 0.6566718533159519
+          }
+        ]
+      }
+    ],
+    "unpairedNotation": [
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3460294117647059,
+        "midi": 64,
+        "notationMidi": null,
+        "label": "E4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03737745098039219,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.3456209150326797,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3460294117647059,
+        "midi": 60,
+        "notationMidi": null,
+        "label": "C4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03737745098039219,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.3456209150326797,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3460294117647059,
+        "midi": 55,
+        "notationMidi": null,
+        "label": "G3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03737745098039219,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.3456209150326797,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.41779411764705876,
+        "midi": 64,
+        "notationMidi": null,
+        "label": "E4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.4173856209150327,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.41779411764705876,
+        "midi": 60,
+        "notationMidi": null,
+        "label": "C4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.4173856209150327,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.41779411764705876,
+        "midi": 55,
+        "notationMidi": null,
+        "label": "G3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalTab": {
+          "measure": 2,
+          "xNorm": 0.4173856209150327,
+          "string": 1,
+          "fret": 3,
+          "midi": 67,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.545375816993464,
+        "midi": 67,
+        "notationMidi": null,
+        "label": "G4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.545375816993464,
+        "midi": 64,
+        "notationMidi": null,
+        "label": "E4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.545375816993464,
+        "midi": 60,
+        "notationMidi": null,
+        "label": "C4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.545375816993464,
+        "midi": 57,
+        "notationMidi": null,
+        "label": "A3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6171405228758169,
+        "midi": 67,
+        "notationMidi": null,
+        "label": "G4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6171405228758169,
+        "midi": 64,
+        "notationMidi": null,
+        "label": "E4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6171405228758169,
+        "midi": 60,
+        "notationMidi": null,
+        "label": "C4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6171405228758169,
+        "midi": 57,
+        "notationMidi": null,
+        "label": "A3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.545375816993464,
+        "midi": 62,
+        "notationMidi": null,
+        "label": "D4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.545375816993464,
+        "midi": 57,
+        "notationMidi": null,
+        "label": "A3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.545375816993464,
+        "midi": 53,
+        "notationMidi": null,
+        "label": "F3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.545375816993464,
+        "midi": 50,
+        "notationMidi": null,
+        "label": "D3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.5449673202614379,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6171405228758169,
+        "midi": 62,
+        "notationMidi": null,
+        "label": "D4",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6171405228758169,
+        "midi": 57,
+        "notationMidi": null,
+        "label": "A3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6171405228758169,
+        "midi": 53,
+        "notationMidi": null,
+        "label": "F3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6171405228758169,
+        "midi": 50,
+        "notationMidi": null,
+        "label": "D3",
+        "string": null,
+        "fret": null,
+        "soundingPitch": false,
+        "unpaired": true,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalTab": {
+          "measure": 3,
+          "xNorm": 0.6167320261437907,
+          "string": 1,
+          "fret": 5,
+          "midi": 69,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "notationMeasure": 7,
+          "tabMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      }
+    ],
+    "unusedTabs": [
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3456209150326797,
+        "midi": 67,
+        "label": "G4",
+        "string": 1,
+        "fret": 3,
+        "positionInMeasure": 0.19368231819543716,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "boundary": {
+          "distance": 0.03696895424836599,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3456209150326797,
+        "midi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "positionInMeasure": 0.19368231819543716,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "boundary": {
+          "distance": 0.03696895424836599,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3456209150326797,
+        "midi": 50,
+        "label": "D3",
+        "string": 4,
+        "fret": 0,
+        "positionInMeasure": 0.19368231819543716,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "boundary": {
+          "distance": 0.03696895424836599,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.3460294117647059,
+          "distance": 0.00040849673202619785
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.4173856209150327,
+        "midi": 67,
+        "label": "G4",
+        "string": 1,
+        "fret": 3,
+        "positionInMeasure": 0.5696614304669777,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.4173856209150327,
+        "midi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "positionInMeasure": 0.5696614304669777,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.4173856209150327,
+        "midi": 50,
+        "label": "D3",
+        "string": 4,
+        "fret": 0,
+        "positionInMeasure": 0.5696614304669777,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 2,
+          "xNorm": 0.41779411764705876,
+          "distance": 0.00040849673202608683
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5449673202614379,
+        "midi": 69,
+        "label": "A4",
+        "string": 1,
+        "fret": 5,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5449673202614379,
+        "midi": 64,
+        "label": "E4",
+        "string": 2,
+        "fret": 5,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5449673202614379,
+        "midi": 57,
+        "label": "A3",
+        "string": 4,
+        "fret": 7,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5449673202614379,
+        "midi": 52,
+        "label": "E3",
+        "string": 5,
+        "fret": 7,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6167320261437907,
+        "midi": 69,
+        "label": "A4",
+        "string": 1,
+        "fret": 5,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6167320261437907,
+        "midi": 64,
+        "label": "E4",
+        "string": 2,
+        "fret": 5,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6167320261437907,
+        "midi": 57,
+        "label": "A3",
+        "string": 4,
+        "fret": 7,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6167320261437907,
+        "midi": 52,
+        "label": "E3",
+        "string": 5,
+        "fret": 7,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": null
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5449673202614379,
+        "midi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5449673202614379,
+        "midi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5449673202614379,
+        "midi": 54,
+        "label": "F#3",
+        "string": 4,
+        "fret": 4,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5449673202614379,
+        "midi": 50,
+        "label": "D3",
+        "string": 5,
+        "fret": 5,
+        "positionInMeasure": 0.2279508196721314,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.04544117647058826,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.545375816993464,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6167320261437907,
+        "midi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6167320261437907,
+        "midi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6167320261437907,
+        "midi": 54,
+        "label": "F#3",
+        "string": 4,
+        "fret": 4,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6167320261437907,
+        "midi": 50,
+        "label": "D3",
+        "string": 5,
+        "fret": 5,
+        "positionInMeasure": 0.587950819672131,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "boundary": {
+          "distance": 0.08214052287581697,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        },
+        "nearestGlobalNotationColumn": {
+          "measure": 3,
+          "xNorm": 0.6171405228758169,
+          "distance": 0.00040849673202614234
+        },
+        "measureMismatch": {
+          "tabMeasure": 7,
+          "notationMeasure": 3,
+          "distance": 0.00040849673202614234
+        }
+      }
+    ],
+    "attached": [
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.1905392156862745,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0715392156862745,
+          "side": "left",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.1905392156862745,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0715392156862745,
+          "side": "left",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.1905392156862745,
+        "midi": 55,
+        "notationMidi": 55,
+        "label": "G3",
+        "string": 3,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0715392156862745,
+          "side": "left",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.21745098039215682,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.21745098039215682,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0912009803921569,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.21745098039215682,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.21745098039215682,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0912009803921569,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.24436274509803924,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06428921568627449,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.24436274509803924,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06428921568627449,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.24436274509803924,
+        "midi": 55,
+        "notationMidi": 55,
+        "label": "G3",
+        "string": 3,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06428921568627449,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.2712745098039216,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.2712745098039216,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.037377450980392135,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 1,
+        "targetIndex": 0,
+        "xNorm": 0.2712745098039216,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.2712745098039216,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.037377450980392135,
+          "side": "right",
+          "x0": 0.119,
+          "x1": 0.30865196078431373
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.3460294117647059,
+        "midi": 57,
+        "notationMidi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03737745098039219,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.38191176470588234,
+        "midi": 57,
+        "notationMidi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07325980392156861,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.38191176470588234,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 1,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07325980392156861,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.38191176470588234,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07325980392156861,
+          "side": "left",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.41779411764705876,
+        "midi": 57,
+        "notationMidi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.45367647058823524,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.45367647058823524,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 2,
+        "targetIndex": 0,
+        "xNorm": 0.45367647058823524,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 1,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.45367647058823524,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "right",
+          "x0": 0.30865196078431373,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.545375816993464,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 3,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5812581699346406,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 3,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5812581699346406,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 2,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5812581699346406,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 1,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.5812581699346406,
+        "midi": 57,
+        "notationMidi": 57,
+        "label": "A3",
+        "string": 4,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6171405228758169,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 3,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6530228758169934,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 2,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6530228758169934,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261435,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 3,
+        "targetIndex": 0,
+        "xNorm": 0.6530228758169934,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 1,
+        "fret": 5,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6530228758169934,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261435,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 76,
+        "notationMidi": 76,
+        "label": "E5",
+        "string": 1,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 2,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 4,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 3,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 59,
+        "notationMidi": 59,
+        "label": "B3",
+        "string": 5,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7447222222222222,
+        "midi": 52,
+        "notationMidi": 52,
+        "label": "E3",
+        "string": 6,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7806045751633988,
+        "midi": 76,
+        "notationMidi": 76,
+        "label": "E5",
+        "string": 1,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7806045751633988,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 2,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7806045751633988,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 4,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7806045751633988,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 3,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.7806045751633988,
+        "midi": 59,
+        "notationMidi": 59,
+        "label": "B3",
+        "string": 5,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 76,
+        "notationMidi": 76,
+        "label": "E5",
+        "string": 1,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 2,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 4,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 3,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 59,
+        "notationMidi": 59,
+        "label": "B3",
+        "string": 5,
+        "fret": 14,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8164869281045751,
+        "midi": 52,
+        "notationMidi": 52,
+        "label": "E3",
+        "string": 6,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.0945130718954249,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8523692810457516,
+        "midi": 76,
+        "notationMidi": 76,
+        "label": "E5",
+        "string": 1,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8523692810457516,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.05863071895424843,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 4,
+        "targetIndex": 0,
+        "xNorm": 0.8523692810457516,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 2,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8523692810457516,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.05863071895424843,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.911
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.1905392156862745,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 1,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.1135392156862745,
+          "side": "left",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.1905392156862745,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 2,
+        "fret": 8,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.1135392156862745,
+          "side": "left",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.1905392156862745,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 3,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.1905392156862745,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.1135392156862745,
+          "side": "left",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.21745098039215682,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 1,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.21745098039215682,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.09171160130718958,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.21745098039215682,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 2,
+        "fret": 8,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.21745098039215682,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.09171160130718958,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.24436274509803924,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 1,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06479983660130717,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.24436274509803924,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 2,
+        "fret": 8,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06479983660130717,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.24436274509803924,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 3,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.24436274509803924,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.06479983660130717,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.2712745098039216,
+        "midi": 71,
+        "notationMidi": 71,
+        "label": "B4",
+        "string": 1,
+        "fret": 7,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.2712745098039216,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03788807189542481,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 5,
+        "targetIndex": 2,
+        "xNorm": 0.2712745098039216,
+        "midi": 67,
+        "notationMidi": 67,
+        "label": "G4",
+        "string": 2,
+        "fret": 8,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.2712745098039216,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03788807189542481,
+          "side": "right",
+          "x0": 0.077,
+          "x1": 0.3091625816993464
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.3460294117647059,
+        "midi": 74,
+        "notationMidi": 74,
+        "label": "D5",
+        "string": 1,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03686683006535951,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.3460294117647059,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 2,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03686683006535951,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.3460294117647059,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 3,
+        "fret": 9,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.03686683006535951,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.3501143790849673,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 4,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.3460294117647059,
+          "distance": 0.004084967320261368
+        },
+        "boundary": {
+          "distance": 0.04095179738562088,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.38191176470588234,
+        "midi": 74,
+        "notationMidi": 74,
+        "label": "D5",
+        "string": 1,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07274918300653593,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.38191176470588234,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 2,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07274918300653593,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.38191176470588234,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 3,
+        "fret": 9,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.38191176470588234,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07274918300653593,
+          "side": "left",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.41779411764705876,
+        "midi": 74,
+        "notationMidi": 74,
+        "label": "D5",
+        "string": 1,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.41779411764705876,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 2,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.41779411764705876,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 3,
+        "fret": 9,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379088,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.42187908496732024,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 4,
+        "fret": 12,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.41779411764705876,
+          "distance": 0.004084967320261479
+        },
+        "boundary": {
+          "distance": 0.0776470588235294,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.45367647058823524,
+        "midi": 74,
+        "notationMidi": 74,
+        "label": "D5",
+        "string": 1,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.45367647058823524,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 6,
+        "targetIndex": 2,
+        "xNorm": 0.45367647058823524,
+        "midi": 69,
+        "notationMidi": 69,
+        "label": "A4",
+        "string": 2,
+        "fret": 10,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.45367647058823524,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "right",
+          "x0": 0.3091625816993464,
+          "x1": 0.49952614379084964
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.545375816993464,
+        "midi": 66,
+        "notationMidi": 66,
+        "label": "F#4",
+        "string": 1,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.545375816993464,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.045849673202614405,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5812581699346406,
+        "midi": 66,
+        "notationMidi": 66,
+        "label": "F#4",
+        "string": 1,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5812581699346406,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5812581699346406,
+        "midi": 57,
+        "notationMidi": 57,
+        "label": "A3",
+        "string": 3,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.5812581699346406,
+        "midi": 54,
+        "notationMidi": 54,
+        "label": "F#3",
+        "string": 4,
+        "fret": 4,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.5812581699346406,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379099,
+          "side": "left",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6171405228758169,
+        "midi": 66,
+        "notationMidi": 66,
+        "label": "F#4",
+        "string": 1,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6171405228758169,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379083,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6530228758169934,
+        "midi": 66,
+        "notationMidi": 66,
+        "label": "F#4",
+        "string": 1,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6530228758169934,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261435,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 7,
+        "targetIndex": 2,
+        "xNorm": 0.6530228758169934,
+        "midi": 62,
+        "notationMidi": 62,
+        "label": "D4",
+        "string": 2,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.6530228758169934,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261435,
+          "side": "right",
+          "x0": 0.49952614379084964,
+          "x1": 0.6988725490196077
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 55,
+        "notationMidi": 55,
+        "label": "G3",
+        "string": 3,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 52,
+        "notationMidi": 52,
+        "label": "E3",
+        "string": 4,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 48,
+        "notationMidi": 48,
+        "label": "C3",
+        "string": 5,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7447222222222222,
+        "midi": 43,
+        "notationMidi": 43,
+        "label": "G2",
+        "string": 6,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7447222222222222,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.04584967320261446,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7806045751633988,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7806045751633988,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7806045751633988,
+        "midi": 55,
+        "notationMidi": 55,
+        "label": "G3",
+        "string": 3,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7806045751633988,
+        "midi": 52,
+        "notationMidi": 52,
+        "label": "E3",
+        "string": 4,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.7806045751633988,
+        "midi": 48,
+        "notationMidi": 48,
+        "label": "C3",
+        "string": 5,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.7806045751633988,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.08173202614379105,
+          "side": "left",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 55,
+        "notationMidi": 55,
+        "label": "G3",
+        "string": 3,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 52,
+        "notationMidi": 52,
+        "label": "E3",
+        "string": 4,
+        "fret": 2,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 48,
+        "notationMidi": 48,
+        "label": "C3",
+        "string": 5,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8164869281045751,
+        "midi": 43,
+        "notationMidi": 43,
+        "label": "G2",
+        "string": 6,
+        "fret": 3,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8164869281045751,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.11551307189542492,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8523692810457516,
+        "midi": 64,
+        "notationMidi": 64,
+        "label": "E4",
+        "string": 1,
+        "fret": 0,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8523692810457516,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07963071895424845,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      },
+      {
+        "measure": 8,
+        "targetIndex": 2,
+        "xNorm": 0.8523692810457516,
+        "midi": 60,
+        "notationMidi": 60,
+        "label": "C4",
+        "string": 2,
+        "fret": 1,
+        "soundingPitch": true,
+        "unpaired": false,
+        "nearestNotationColumn": {
+          "xNorm": 0.8523692810457516,
+          "distance": 0
+        },
+        "boundary": {
+          "distance": 0.07963071895424845,
+          "side": "right",
+          "x0": 0.6988725490196077,
+          "x1": 0.932
+        }
+      }
+    ],
+    "allTabNotes": [
+      {
+        "measureNumber": 1,
+        "xNorm": 0.19013071895424835,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.3750592330291986,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.19013071895424835,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.3750592330291986,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.19013071895424835,
+        "string": 3,
+        "fret": 0,
+        "midi": 55,
+        "pos": 0.3750592330291986,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.2170424836601307,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.516960031705825,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.2170424836601307,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.516960031705825,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.24395424836601304,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.6588608303824514,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.24395424836601304,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.6588608303824514,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.24395424836601304,
+        "string": 3,
+        "fret": 0,
+        "midi": 55,
+        "pos": 0.6588608303824514,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.2708660130718954,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.8007616290590778,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 1,
+        "xNorm": 0.2708660130718954,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.8007616290590778,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.3456209150326797,
+        "string": 1,
+        "fret": 3,
+        "midi": 67,
+        "pos": 0.19368231819543716,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.3456209150326797,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.19368231819543716,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.3456209150326797,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.19368231819543716,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.3456209150326797,
+        "string": 4,
+        "fret": 0,
+        "midi": 50,
+        "pos": 0.19368231819543716,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.38150326797385614,
+        "string": 1,
+        "fret": 3,
+        "midi": 67,
+        "pos": 0.38167187433120714,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.38150326797385614,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.38167187433120714,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.38150326797385614,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.38167187433120714,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4173856209150327,
+        "string": 1,
+        "fret": 3,
+        "midi": 67,
+        "pos": 0.5696614304669777,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4173856209150327,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.5696614304669777,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4173856209150327,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.5696614304669777,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4173856209150327,
+        "string": 4,
+        "fret": 0,
+        "midi": 50,
+        "pos": 0.5696614304669777,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4532679738562091,
+        "string": 1,
+        "fret": 3,
+        "midi": 67,
+        "pos": 0.7576509866027478,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 2,
+        "xNorm": 0.4532679738562091,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.7576509866027478,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5449673202614379,
+        "string": 1,
+        "fret": 5,
+        "midi": 69,
+        "pos": 0.2279508196721314,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5449673202614379,
+        "string": 2,
+        "fret": 5,
+        "midi": 64,
+        "pos": 0.2279508196721314,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5449673202614379,
+        "string": 3,
+        "fret": 5,
+        "midi": 60,
+        "pos": 0.2279508196721314,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5449673202614379,
+        "string": 4,
+        "fret": 7,
+        "midi": 57,
+        "pos": 0.2279508196721314,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5449673202614379,
+        "string": 5,
+        "fret": 7,
+        "midi": 52,
+        "pos": 0.2279508196721314,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5808496732026144,
+        "string": 1,
+        "fret": 5,
+        "midi": 69,
+        "pos": 0.40795081967213154,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5808496732026144,
+        "string": 2,
+        "fret": 5,
+        "midi": 64,
+        "pos": 0.40795081967213154,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5808496732026144,
+        "string": 3,
+        "fret": 5,
+        "midi": 60,
+        "pos": 0.40795081967213154,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.5808496732026144,
+        "string": 4,
+        "fret": 7,
+        "midi": 57,
+        "pos": 0.40795081967213154,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6167320261437907,
+        "string": 1,
+        "fret": 5,
+        "midi": 69,
+        "pos": 0.587950819672131,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6167320261437907,
+        "string": 2,
+        "fret": 5,
+        "midi": 64,
+        "pos": 0.587950819672131,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6167320261437907,
+        "string": 3,
+        "fret": 5,
+        "midi": 60,
+        "pos": 0.587950819672131,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6167320261437907,
+        "string": 4,
+        "fret": 7,
+        "midi": 57,
+        "pos": 0.587950819672131,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6167320261437907,
+        "string": 5,
+        "fret": 7,
+        "midi": 52,
+        "pos": 0.587950819672131,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6526143790849672,
+        "string": 1,
+        "fret": 5,
+        "midi": 69,
+        "pos": 0.7679508196721312,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 3,
+        "xNorm": 0.6526143790849672,
+        "string": 2,
+        "fret": 5,
+        "midi": 64,
+        "pos": 0.7679508196721312,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 1,
+        "fret": 12,
+        "midi": 76,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 2,
+        "fret": 12,
+        "midi": 71,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 3,
+        "fret": 12,
+        "midi": 67,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 4,
+        "fret": 14,
+        "midi": 64,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 5,
+        "fret": 14,
+        "midi": 59,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7443137254901961,
+        "string": 6,
+        "fret": 12,
+        "midi": 52,
+        "pos": 0.21421638859361355,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7801960784313725,
+        "string": 1,
+        "fret": 12,
+        "midi": 76,
+        "pos": 0.38337107732125536,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7801960784313725,
+        "string": 2,
+        "fret": 12,
+        "midi": 71,
+        "pos": 0.38337107732125536,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7801960784313725,
+        "string": 3,
+        "fret": 12,
+        "midi": 67,
+        "pos": 0.38337107732125536,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7801960784313725,
+        "string": 4,
+        "fret": 14,
+        "midi": 64,
+        "pos": 0.38337107732125536,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.7801960784313725,
+        "string": 5,
+        "fret": 14,
+        "midi": 59,
+        "pos": 0.38337107732125536,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 1,
+        "fret": 12,
+        "midi": 76,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 2,
+        "fret": 12,
+        "midi": 71,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 3,
+        "fret": 12,
+        "midi": 67,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 4,
+        "fret": 14,
+        "midi": 64,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 5,
+        "fret": 14,
+        "midi": 59,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8160784313725491,
+        "string": 6,
+        "fret": 12,
+        "midi": 52,
+        "pos": 0.5525257660488982,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8519607843137256,
+        "string": 1,
+        "fret": 12,
+        "midi": 76,
+        "pos": 0.7216804547765406,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 4,
+        "xNorm": 0.8519607843137256,
+        "string": 2,
+        "fret": 12,
+        "midi": 71,
+        "pos": 0.7216804547765406,
+        "systemIndex": 1,
+        "targetIndex": 0
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.19013071895424835,
+        "string": 1,
+        "fret": 7,
+        "midi": 71,
+        "pos": 0.4872909239989161,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.19013071895424835,
+        "string": 2,
+        "fret": 8,
+        "midi": 67,
+        "pos": 0.4872909239989161,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.19013071895424835,
+        "string": 3,
+        "fret": 7,
+        "midi": 62,
+        "pos": 0.4872909239989161,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.2170424836601307,
+        "string": 1,
+        "fret": 7,
+        "midi": 71,
+        "pos": 0.6032086765880627,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.2170424836601307,
+        "string": 2,
+        "fret": 8,
+        "midi": 67,
+        "pos": 0.6032086765880627,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.24395424836601304,
+        "string": 1,
+        "fret": 7,
+        "midi": 71,
+        "pos": 0.719126429177209,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.24395424836601304,
+        "string": 2,
+        "fret": 8,
+        "midi": 67,
+        "pos": 0.719126429177209,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.24395424836601304,
+        "string": 3,
+        "fret": 7,
+        "midi": 62,
+        "pos": 0.719126429177209,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.2708660130718954,
+        "string": 1,
+        "fret": 7,
+        "midi": 71,
+        "pos": 0.8350441817663555,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 5,
+        "xNorm": 0.2708660130718954,
+        "string": 2,
+        "fret": 8,
+        "midi": 67,
+        "pos": 0.8350441817663555,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.3456209150326797,
+        "string": 1,
+        "fret": 10,
+        "midi": 74,
+        "pos": 0.19151949528980058,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.3456209150326797,
+        "string": 2,
+        "fret": 10,
+        "midi": 69,
+        "pos": 0.19151949528980058,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.3456209150326797,
+        "string": 3,
+        "fret": 9,
+        "midi": 64,
+        "pos": 0.19151949528980058,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.3456209150326797,
+        "string": 4,
+        "fret": 12,
+        "midi": 62,
+        "pos": 0.19151949528980058,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.38150326797385614,
+        "string": 1,
+        "fret": 10,
+        "midi": 74,
+        "pos": 0.38001330443552683,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.38150326797385614,
+        "string": 2,
+        "fret": 10,
+        "midi": 69,
+        "pos": 0.38001330443552683,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.38150326797385614,
+        "string": 3,
+        "fret": 9,
+        "midi": 64,
+        "pos": 0.38001330443552683,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.4173856209150326,
+        "string": 1,
+        "fret": 10,
+        "midi": 74,
+        "pos": 0.5685071135812534,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.4173856209150326,
+        "string": 2,
+        "fret": 10,
+        "midi": 69,
+        "pos": 0.5685071135812534,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.4173856209150326,
+        "string": 4,
+        "fret": 12,
+        "midi": 62,
+        "pos": 0.5685071135812534,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.4173856209150327,
+        "string": 3,
+        "fret": 9,
+        "midi": 64,
+        "pos": 0.5685071135812537,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.45326797385620915,
+        "string": 1,
+        "fret": 10,
+        "midi": 74,
+        "pos": 0.7570009227269803,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 6,
+        "xNorm": 0.45326797385620915,
+        "string": 2,
+        "fret": 10,
+        "midi": 69,
+        "pos": 0.7570009227269803,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5449673202614379,
+        "string": 1,
+        "fret": 2,
+        "midi": 66,
+        "pos": 0.2279508196721314,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5449673202614379,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.2279508196721314,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5449673202614379,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.2279508196721314,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5449673202614379,
+        "string": 4,
+        "fret": 4,
+        "midi": 54,
+        "pos": 0.2279508196721314,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5449673202614379,
+        "string": 5,
+        "fret": 5,
+        "midi": 50,
+        "pos": 0.2279508196721314,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5808496732026144,
+        "string": 1,
+        "fret": 2,
+        "midi": 66,
+        "pos": 0.40795081967213154,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5808496732026144,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.40795081967213154,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5808496732026144,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.40795081967213154,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.5808496732026144,
+        "string": 4,
+        "fret": 4,
+        "midi": 54,
+        "pos": 0.40795081967213154,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6167320261437907,
+        "string": 1,
+        "fret": 2,
+        "midi": 66,
+        "pos": 0.587950819672131,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6167320261437907,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.587950819672131,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6167320261437907,
+        "string": 3,
+        "fret": 2,
+        "midi": 57,
+        "pos": 0.587950819672131,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6167320261437907,
+        "string": 4,
+        "fret": 4,
+        "midi": 54,
+        "pos": 0.587950819672131,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6167320261437907,
+        "string": 5,
+        "fret": 5,
+        "midi": 50,
+        "pos": 0.587950819672131,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6526143790849672,
+        "string": 1,
+        "fret": 2,
+        "midi": 66,
+        "pos": 0.7679508196721312,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 7,
+        "xNorm": 0.6526143790849672,
+        "string": 2,
+        "fret": 3,
+        "midi": 62,
+        "pos": 0.7679508196721312,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 3,
+        "fret": 0,
+        "midi": 55,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 4,
+        "fret": 2,
+        "midi": 52,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 5,
+        "fret": 3,
+        "midi": 48,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.744313725490196,
+        "string": 6,
+        "fret": 3,
+        "midi": 43,
+        "pos": 0.19491988729551304,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.7801960784313725,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.3488372093023257,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.7801960784313725,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.3488372093023257,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.7801960784313725,
+        "string": 3,
+        "fret": 0,
+        "midi": 55,
+        "pos": 0.3488372093023257,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.7801960784313725,
+        "string": 4,
+        "fret": 2,
+        "midi": 52,
+        "pos": 0.3488372093023257,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.7801960784313725,
+        "string": 5,
+        "fret": 3,
+        "midi": 48,
+        "pos": 0.3488372093023257,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 3,
+        "fret": 0,
+        "midi": 55,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 4,
+        "fret": 2,
+        "midi": 52,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 5,
+        "fret": 3,
+        "midi": 48,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.816078431372549,
+        "string": 6,
+        "fret": 3,
+        "midi": 43,
+        "pos": 0.5027545313091384,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.8519607843137257,
+        "string": 1,
+        "fret": 0,
+        "midi": 64,
+        "pos": 0.6566718533159519,
+        "systemIndex": 3,
+        "targetIndex": 2
+      },
+      {
+        "measureNumber": 8,
+        "xNorm": 0.8519607843137257,
+        "string": 2,
+        "fret": 1,
+        "midi": 60,
+        "pos": 0.6566718533159519,
+        "systemIndex": 3,
+        "targetIndex": 2
+      }
+    ],
+    "onsetFailures": [
+      {
+        "measure": 2,
+        "notationXNorm": 0.3460294117647059,
+        "notationPos": 0.1958224543080943,
+        "noteCount": 1,
+        "noteMidis": [
+          57
+        ],
+        "nearestTabX": {
+          "xNorm": 0.3456,
+          "distance": 0.00042941176470590037
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          67,
+          62,
+          57,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          3,
+          3,
+          2,
+          0
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.42941176470590037
+      },
+      {
+        "measure": 2,
+        "notationXNorm": 0.3460294117647059,
+        "notationPos": 0.1958224543080943,
+        "noteCount": 3,
+        "noteMidis": [
+          64,
+          60,
+          55
+        ],
+        "nearestTabX": {
+          "xNorm": 0.3456,
+          "distance": 0.00042941176470590037
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          67,
+          62,
+          57,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          3,
+          3,
+          2,
+          0
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.42941176470590037
+      },
+      {
+        "measure": 2,
+        "notationXNorm": 0.3819117647058823,
+        "notationPos": 0.3838120104438642,
+        "noteCount": 3,
+        "noteMidis": [
+          57,
+          67,
+          62
+        ],
+        "nearestTabX": {
+          "xNorm": 0.3815,
+          "distance": 0.0004117647058822782
+        },
+        "tabCountAtNearest": 3,
+        "tabMidis": [
+          67,
+          62,
+          57
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3
+        ],
+        "tabFrets": [
+          3,
+          3,
+          2
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.4117647058822782
+      },
+      {
+        "measure": 2,
+        "notationXNorm": 0.41779411764705876,
+        "notationPos": 0.5718015665796344,
+        "noteCount": 1,
+        "noteMidis": [
+          57
+        ],
+        "nearestTabX": {
+          "xNorm": 0.4174,
+          "distance": 0.00039411764705876706
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          67,
+          62,
+          57,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          3,
+          3,
+          2,
+          0
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.39411764705876706
+      },
+      {
+        "measure": 2,
+        "notationXNorm": 0.41779411764705876,
+        "notationPos": 0.5718015665796344,
+        "noteCount": 3,
+        "noteMidis": [
+          64,
+          60,
+          55
+        ],
+        "nearestTabX": {
+          "xNorm": 0.4174,
+          "distance": 0.00039411764705876706
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          67,
+          62,
+          57,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          3,
+          3,
+          2,
+          0
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.39411764705876706
+      },
+      {
+        "measure": 2,
+        "notationXNorm": 0.45367647058823524,
+        "notationPos": 0.7597911227154046,
+        "noteCount": 2,
+        "noteMidis": [
+          62,
+          67
+        ],
+        "nearestTabX": {
+          "xNorm": 0.4533,
+          "distance": 0.0003764705882352559
+        },
+        "tabCountAtNearest": 2,
+        "tabMidis": [
+          67,
+          62
+        ],
+        "tabStrings": [
+          1,
+          2
+        ],
+        "tabFrets": [
+          3,
+          3
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.3764705882352559
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.545375816993464,
+        "notationPos": 0.2300000000000001,
+        "noteCount": 1,
+        "noteMidis": [
+          60
+        ],
+        "nearestTabX": {
+          "xNorm": 0.545,
+          "distance": 0.00037581699346400654
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          69,
+          64,
+          60,
+          57,
+          52
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          5,
+          5,
+          5,
+          7,
+          7
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.37581699346400654
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.545375816993464,
+        "notationPos": 0.2300000000000001,
+        "noteCount": 4,
+        "noteMidis": [
+          67,
+          64,
+          60,
+          57
+        ],
+        "nearestTabX": {
+          "xNorm": 0.545,
+          "distance": 0.00037581699346400654
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          69,
+          64,
+          60,
+          57,
+          52
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          5,
+          5,
+          5,
+          7,
+          7
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.37581699346400654
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.5812581699346406,
+        "notationPos": 0.4100000000000007,
+        "noteCount": 4,
+        "noteMidis": [
+          60,
+          64,
+          69,
+          57
+        ],
+        "nearestTabX": {
+          "xNorm": 0.5808,
+          "distance": 0.0004581699346406509
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          69,
+          64,
+          60,
+          57
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          5,
+          5,
+          5,
+          7
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.4581699346406509
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.6171405228758169,
+        "notationPos": 0.5900000000000002,
+        "noteCount": 1,
+        "noteMidis": [
+          60
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6167,
+          "distance": 0.0004405228758168622
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          69,
+          64,
+          60,
+          57,
+          52
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          5,
+          5,
+          5,
+          7,
+          7
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.4405228758168622
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.6171405228758169,
+        "notationPos": 0.5900000000000002,
+        "noteCount": 4,
+        "noteMidis": [
+          67,
+          64,
+          60,
+          57
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6167,
+          "distance": 0.0004405228758168622
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          69,
+          64,
+          60,
+          57,
+          52
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          5,
+          5,
+          5,
+          7,
+          7
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.4405228758168622
+      },
+      {
+        "measure": 3,
+        "notationXNorm": 0.6530228758169934,
+        "notationPos": 0.7700000000000002,
+        "noteCount": 2,
+        "noteMidis": [
+          64,
+          69
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6526,
+          "distance": 0.0004228758169934066
+        },
+        "tabCountAtNearest": 2,
+        "tabMidis": [
+          69,
+          64
+        ],
+        "tabStrings": [
+          1,
+          2
+        ],
+        "tabFrets": [
+          5,
+          5
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.4228758169934066
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.545375816993464,
+        "notationPos": 0.2300000000000001,
+        "noteCount": 1,
+        "noteMidis": [
+          66
+        ],
+        "nearestTabX": {
+          "xNorm": 0.545,
+          "distance": 0.00037581699346400654
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          66,
+          62,
+          57,
+          54,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          2,
+          3,
+          2,
+          4,
+          5
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.37581699346400654
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.545375816993464,
+        "notationPos": 0.2300000000000001,
+        "noteCount": 4,
+        "noteMidis": [
+          62,
+          57,
+          53,
+          50
+        ],
+        "nearestTabX": {
+          "xNorm": 0.545,
+          "distance": 0.00037581699346400654
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          66,
+          62,
+          57,
+          54,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          2,
+          3,
+          2,
+          4,
+          5
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.37581699346400654
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.5812581699346406,
+        "notationPos": 0.4100000000000007,
+        "noteCount": 4,
+        "noteMidis": [
+          66,
+          62,
+          57,
+          54
+        ],
+        "nearestTabX": {
+          "xNorm": 0.5808,
+          "distance": 0.0004581699346406509
+        },
+        "tabCountAtNearest": 4,
+        "tabMidis": [
+          66,
+          62,
+          57,
+          54
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "tabFrets": [
+          2,
+          3,
+          2,
+          4
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.4581699346406509
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.6171405228758169,
+        "notationPos": 0.5900000000000002,
+        "noteCount": 1,
+        "noteMidis": [
+          66
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6167,
+          "distance": 0.0004405228758168622
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          66,
+          62,
+          57,
+          54,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          2,
+          3,
+          2,
+          4,
+          5
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.4405228758168622
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.6171405228758169,
+        "notationPos": 0.5900000000000002,
+        "noteCount": 4,
+        "noteMidis": [
+          62,
+          57,
+          53,
+          50
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6167,
+          "distance": 0.0004405228758168622
+        },
+        "tabCountAtNearest": 5,
+        "tabMidis": [
+          66,
+          62,
+          57,
+          54,
+          50
+        ],
+        "tabStrings": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tabFrets": [
+          2,
+          3,
+          2,
+          4,
+          5
+        ],
+        "sizeMismatch": true,
+        "xDistancePx": 0.4405228758168622
+      },
+      {
+        "measure": 7,
+        "notationXNorm": 0.6530228758169934,
+        "notationPos": 0.7700000000000002,
+        "noteCount": 2,
+        "noteMidis": [
+          66,
+          62
+        ],
+        "nearestTabX": {
+          "xNorm": 0.6526,
+          "distance": 0.0004228758169934066
+        },
+        "tabCountAtNearest": 2,
+        "tabMidis": [
+          66,
+          62
+        ],
+        "tabStrings": [
+          1,
+          2
+        ],
+        "tabFrets": [
+          2,
+          3
+        ],
+        "sizeMismatch": false,
+        "xDistancePx": 0.4228758169934066
+      }
+    ],
+    "glyphCount": 510
+  }
+}

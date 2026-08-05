@@ -1,0 +1,1225 @@
+{
+  "schemaVersion": 2,
+  "evaluatorVersion": "2.0.0",
+  "kind": "semantic-musicxml-evaluation",
+  "mode": "written",
+  "gitCommit": "83c48f3",
+  "scores": {
+    "pitch": 1,
+    "rhythm": 0.8182,
+    "sustain": 0,
+    "articulation": 0.8571,
+    "measureStructure": 1,
+    "interpretation": 0.4,
+    "playback": 1
+  },
+  "scorePercents": {
+    "pitch": "100%",
+    "rhythm": "82%",
+    "sustain": "0%",
+    "articulation": "86%",
+    "measureStructure": "100%",
+    "interpretation": "40%",
+    "playback": "100%"
+  },
+  "classes": {
+    "pitch": {
+      "numerator": 88,
+      "denominator": 88,
+      "truePositives": 88,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 88,
+      "compared": 88,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "rhythm": {
+      "numerator": 144,
+      "denominator": 176,
+      "truePositives": 144,
+      "falsePositives": 0,
+      "falseNegatives": 32,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 176,
+      "compared": 176,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.8182,
+      "percent": "82%",
+      "reliable": true,
+      "displayPercent": "82%"
+    },
+    "sustain": {
+      "numerator": 0,
+      "denominator": 2,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 2,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 2,
+      "compared": 2,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0,
+      "percent": "0%",
+      "reliable": true,
+      "displayPercent": "0%"
+    },
+    "articulation": {
+      "numerator": 24,
+      "denominator": 28,
+      "truePositives": 24,
+      "falsePositives": 4,
+      "falseNegatives": 0,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 24,
+      "compared": 28,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.8571,
+      "percent": "86%",
+      "reliable": true,
+      "displayPercent": "86%"
+    },
+    "measureStructure": {
+      "numerator": 64,
+      "denominator": 64,
+      "truePositives": 64,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 64,
+      "compared": 64,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "interpretation": {
+      "numerator": 2,
+      "denominator": 5,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 3,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 5,
+      "compared": 5,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.4,
+      "percent": "40%",
+      "reliable": true,
+      "displayPercent": "40%"
+    },
+    "playback": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 1,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    }
+  },
+  "overall": 0.725,
+  "overallPercent": "73%",
+  "labels": {
+    "pitch": "Pitch",
+    "rhythm": "Rhythm",
+    "sustain": "Sustain (ties)",
+    "articulation": "Articulation",
+    "measureStructure": "Measure structure",
+    "interpretation": "Interpretation",
+    "playback": "Playback"
+  },
+  "alignment": {
+    "confidence": 1,
+    "matchedCount": 8,
+    "unmatchedTruthCount": 0,
+    "unmatchedGeneratedCount": 0,
+    "totalCost": 0,
+    "pairs": [
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          2
+        ],
+        "generatedMeasureNumbers": [
+          2
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          3
+        ],
+        "generatedMeasureNumbers": [
+          3
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          4
+        ],
+        "generatedMeasureNumbers": [
+          4
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          5
+        ],
+        "generatedMeasureNumbers": [
+          5
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          6
+        ],
+        "generatedMeasureNumbers": [
+          6
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          7
+        ],
+        "generatedMeasureNumbers": [
+          7
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          8
+        ],
+        "generatedMeasureNumbers": [
+          8
+        ],
+        "cost": 0
+      }
+    ]
+  },
+  "measures": [
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "message": "Tempo 88 BPM missing or wrong at q=0",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Tempo 88 BPM missing or wrong at q=0"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "Unexpected accent",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        3
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Unexpected accent",
+        "Unexpected accent",
+        "Missing tie",
+        "Unexpected accent",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 26
+    },
+    {
+      "measureNumber": 4,
+      "truthMeasureNumbers": [
+        4
+      ],
+      "generatedMeasureNumbers": [
+        4
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        }
+      ],
+      "summary": [
+        "Missing tie",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 20
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        5
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 16
+    },
+    {
+      "measureNumber": 6,
+      "truthMeasureNumbers": [
+        6
+      ],
+      "generatedMeasureNumbers": [
+        6
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 16
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Volta mismatch"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 8,
+      "truthMeasureNumbers": [
+        8
+      ],
+      "generatedMeasureNumbers": [
+        8
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 8
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Volta mismatch"
+      ],
+      "severity": 18
+    }
+  ],
+  "worstMeasures": [
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        3
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Unexpected accent",
+        "Unexpected accent",
+        "Missing tie",
+        "Unexpected accent",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 26
+    },
+    {
+      "measureNumber": 4,
+      "truthMeasureNumbers": [
+        4
+      ],
+      "generatedMeasureNumbers": [
+        4
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 4
+        }
+      ],
+      "summary": [
+        "Missing tie",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 20
+    },
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "message": "Tempo 88 BPM missing or wrong at q=0",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Tempo 88 BPM missing or wrong at q=0"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "message": "Unexpected accent",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "Unexpected accent",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Volta mismatch"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 8,
+      "truthMeasureNumbers": [
+        8
+      ],
+      "generatedMeasureNumbers": [
+        8
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 8
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "message": "Volta mismatch",
+          "measureNumber": 8
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Volta mismatch"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        5
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 16
+    },
+    {
+      "measureNumber": 6,
+      "truthMeasureNumbers": [
+        6
+      ],
+      "generatedMeasureNumbers": [
+        6
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Half detected as quarter",
+          "measureNumber": 6
+        }
+      ],
+      "summary": [
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter",
+        "Half detected as quarter"
+      ],
+      "severity": 16
+    }
+  ],
+  "firstDivergence": {
+    "measureNumber": 1,
+    "truthMeasureNumbers": [
+      1
+    ],
+    "generatedMeasureNumbers": [
+      1
+    ],
+    "alignment": "match",
+    "unmatched": false,
+    "defectCount": 5
+  },
+  "topDefects": [
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 32
+    },
+    {
+      "code": "missing-accent",
+      "class": "articulation",
+      "label": "Missing accent",
+      "count": 4
+    },
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "label": "Missing tie",
+      "count": 2
+    },
+    {
+      "code": "volta-mismatch",
+      "class": "interpretation",
+      "label": "Volta mismatch",
+      "count": 2
+    },
+    {
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "label": "Tempo change mismatch",
+      "count": 1
+    }
+  ],
+  "topDefectClasses": [
+    {
+      "class": "rhythm",
+      "label": "Rhythm",
+      "count": 32
+    },
+    {
+      "class": "articulation",
+      "label": "Articulation",
+      "count": 4
+    },
+    {
+      "class": "interpretation",
+      "label": "Interpretation",
+      "count": 3
+    },
+    {
+      "class": "sustain",
+      "label": "Sustain (ties)",
+      "count": 2
+    }
+  ],
+  "totals": {
+    "truthNoteCount": 88,
+    "generatedNoteCount": 88,
+    "truthRestCount": 0,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 8,
+    "generatedMeasureCount": 8,
+    "defectCount": 41
+  },
+  "tolerances": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "units": "Primary comparison uses normalized quarter-note units (MusicXML duration/divisions). Seconds are used only in performed-playback mode."
+  },
+  "unsupportedFeatures": [
+    "ornaments (trills, turns, mordents)",
+    "fermata / breath marks",
+    "dynamics as scored values (p/f continuum)",
+    "hairpins / wedges",
+    "octave-shift (ottava)",
+    "cue notes / grace-note playback semantics",
+    "cross-staff beaming encoding details",
+    "figured bass / harmony realization",
+    "lyrics / text directions (except D.C./D.S./Fine words)",
+    "multiple <part> alignment beyond primary written sequence",
+    "score-timewise documents",
+    "microtonal / non-MIDI pitch systems"
+  ],
+  "playback": {
+    "truthDurationSeconds": 38.18181818181818,
+    "generatedDurationSeconds": 32,
+    "truthWrittenDurationSeconds": 21.818181818181817,
+    "generatedWrittenDurationSeconds": 16
+  },
+  "options": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "alignmentGapPenalty": 2.5,
+    "alignmentMaxPairCost": 4.5,
+    "minReliableCoverage": 0.25,
+    "mode": "written",
+    "topDefectLimit": 20,
+    "worstMeasureLimit": 10,
+    "enharmonicPolicy": "midi"
+  }
+}

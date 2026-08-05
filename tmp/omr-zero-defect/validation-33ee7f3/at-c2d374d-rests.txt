@@ -1,0 +1,198 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ❯ tests/notationFidelitySprint3.test.js (7 tests | 1 failed) 20ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > extracts a closed cubic tie/slur lens in viewport coordinates 1ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > retains short low-aspect continuation lenses but rejects non-cubic paths 0ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > attaches simultaneous vector ties per pitch instead of chord-wide 7ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > emits a slur for different pitches and preserves both playback attacks 5ms
+   × Notation Fidelity Sprint 3 PDF path source > stitches explicit right/left system fragments into one tie 3ms
+     → expected +0 to be 1 // Object.is equality
+   ✓ Notation Fidelity Sprint 3 PDF path source > pairs page fragments after page records are assembled and emits no orphans 0ms
+   ✓ Notation Fidelity Sprint 3 PDF path source > renders every written note and every link in a three-note tie chain 3ms
+ ❯ tests/omrVectorRhythm.test.js (77 tests | 4 failed) 22ms
+   ✓ durationMeta snaps a division span to the nearest note value > maps exact standard spans 1ms
+   ✓ glyphAuthoritativeDurationDivisions > maps whole and half open-head glyphs to fixed divisions 0ms
+   ✓ glyphAuthoritativeDurationDivisions > does not invent open-head duration for pure black heads 0ms
+   ✓ glyphAuthoritativeDurationDivisions > prefers glyph duration over a large sparse gap that would invent a dotted half 2ms
+   ✓ glyphAuthoritativeDurationDivisions > keeps a whole glyph as a whole on a sparse measure 0ms
+   ✓ dottedWrittenDurationDivisions > returns null without augmentation-dot evidence 0ms
+   ✓ dottedWrittenDurationDivisions > prefers written dotted-quarter over a large sparse gap 1ms
+   ✓ dottedWrittenDurationDivisions > still keeps dotted half when the open half glyph is authoritative 0ms
+   ✓ shouldInferRhythmFromPositions > keeps quarter indexing when onsets sit on the beat grid 0ms
+   ✓ shouldInferRhythmFromPositions > switches to position rhythm when spacing is finer than quarters 0ms
+   ✓ normalizeDenseVectorLaneSpacing > recovers a quarter plus four eighths from shifted 3/4 vector columns 0ms
+   ✓ normalizeDenseVectorLaneSpacing > leaves explicit beam evidence authoritative 0ms
+   ✓ normalizeDenseVectorLaneSpacing > does not erase a late opening or a long rest-sized gap 0ms
+   ✓ normalizeDenseVectorLaneSpacing > leaves ambiguous complete-looking 4/4 lanes unchanged 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps near-zero position columns on beat 0 instead of snapping to beat 2 0ms
+   × buildVectorEvents infers duration from gap to next onset > aligns the opening column to beat 0 when clef padding shifts position to 0.125 5ms
+     → expected 4 to be 2 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > renders four spaced onsets in 4/4 as four quarters (not stretched) 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > renders eighth-note spacing when onsets are finer than quarter index slots 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > merges dense chord fragments that share a beat slot before rhythm inference 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > snaps dense measures to sixteenth divisions instead of coarser eighth slots 0ms
+   × buildVectorEvents infers duration from gap to next onset > splits mixed-clef groups into overlapping bass and treble durations 1ms
+     → expected undefined to be 8 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a closing upper voice on its own beat when merging chord fragments 0ms
+   × buildVectorEvents infers duration from gap to next onset > extends a same-beat treble tone that reappears in the next harmony 0ms
+     → expected 5 to be 12 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a high same-start treble when its pitch class returns in the inner chord 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a same-start melody when only bass and an inner chord fill the bar 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends a same-start pickup to a half when the closing tone lands on the final beat 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a semitone pickup cluster short while the shared harmony becomes a half 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > keeps a same-beat upper neighbor short when it does not return in the next harmony 0ms
+   ✓ buildVectorEvents infers duration from gap to next onset > extends opening bass when the next group is upper-register content without treble clef tags 0ms
+   × buildVectorEvents infers duration from gap to next onset > extends a same-start pedal doubling that matches the opening bass pitch class 0ms
+     → expected 5 to be 12 // Object.is equality
+   ✓ buildVectorEvents infers duration from gap to next onset > extends bass across intervening treble onsets on the same staff voice 0ms
+   ✓ extendDurationsPerClefVoice > lengthens bass when the next global onset belongs to treble 0ms
+   ✓ extendDurationsPerClefVoice > does not stretch beamed eighths across a foreign-clef onset 0ms
+   ✓ extendDurationsPerClefVoice > preserves filled-head enrich duration instead of stretching across a foreign clef 0ms
+   ✓ extendDurationsPerClefVoice > still lengthens bass without filled-head enrich evidence when a foreign clef interrupts 0ms
+   ✓ extendDurationsPerClefVoice > lengthens stem-inferred quarters when the next same-clef onset is a beat away 0ms
+   ✓ extendDurationsPerClefVoice > recovers gap-collapsed quarters when enrich stem evidence is confident 0ms
+   ✓ extendDurationsPerClefVoice > does not promote subdivision runs that pack three-plus attacks into a beat 0ms
+   ✓ extendDurationsPerClefVoice > extends across a non-beamed same-clef fragment to reach a quarter 0ms
+   ✓ extendDurationsPerClefVoice > does not stretch beamed notes across a foreign-clef onset 0ms
+   ✓ extendDurationsPerClefVoice > extends treble to a half beat across same-pitch chord fragments 0ms
+   ✓ extendDurationsPerClefVoice > does not extend beamed eighth runs even when pitches repeat 0ms
+   ✓ extendDurationsPerClefVoice > does not extend sixteenth-grid gaps at beat zero 0ms
+   ✓ extendDurationsPerClefVoice > extends split same-onset chord tones from an eighth to a quarter on the beat grid 0ms
+   ✓ extendDurationsPerClefVoice > extends a same-clef harmonic chord from an eighth to a quarter on the beat grid 0ms
+   ✓ extendDurationsPerClefVoice > does not extend single-voice eighths that re-enter on the offbeat 0ms
+   ✓ extendDurationsPerClefVoice > extends the last bass attack in a measure to a half beat 0ms
+   ✓ extendDurationsPerClefVoice > extends terminal same-clef chord eighths on the beat grid to quarters 0ms
+   ✓ extendDurationsPerClefVoice > does not extend terminal beamed chord eighths to quarters 0ms
+   ✓ extendDurationsPerClefVoice > applies terminal chord quarters after upstream onset realignment 0ms
+   ✓ extendDurationsPerClefVoice > extends an opening bass chord over a same-clef inner voice 0ms
+   ✓ extendDurationsPerClefVoice > does not treat beamed opening bass chords as sustained half notes 0ms
+   ✓ extendDurationsPerClefVoice > caps plain opening bass notes before a dense subdivision run 0ms
+   ✓ extendDurationsPerClefVoice > keeps opening bass notes when long-tone ink evidence is present 0ms
+   ✓ extendDurationsPerClefVoice > caps unsupported upper-chord five-division overhangs to a quarter 0ms
+   ✓ extendDurationsPerClefVoice > keeps five-division upper chords when longer ink evidence is present 0ms
+   ✓ extendDurationsPerClefVoice > refines emitted unsupported upper-chord five-division overhangs 0ms
+   ✓ refineEventDurationsFromBeamEvidence > caps beamed notes that were stretched too long 0ms
+   ✓ refineEventDurationsFromBeamEvidence > floors primary-beamed notes that were gap-compressed to sixteenths 0ms
+   ✓ refineEventDurationsFromBeamEvidence > does not floor from tip-row strength alone without beams 0ms
+   ✓ refineEventDurationsFromBeamEvidence > allows sixteenth floor when secondary beams are present 0ms
+   ✓ refineEventDurationsFromBeamEvidence > leaves non-beamed durations unchanged 0ms
+   ✓ resnapFlooredBeamOnsets > snaps odd sixteenth onsets back to the eighth grid after flooring 0ms
+   ✓ hasBeamEvidenceForNotes > detects beam count and strength 0ms
+   ✓ per-clef rhythm helpers > detects shared harmonic pitch between chord fragments 0ms
+   ✓ per-clef rhythm helpers > detects dense subdivision runs 0ms
+   ✓ per-clef rhythm helpers > requires stemmed non-beamed noteheads for quarter inference 0ms
+   ✓ summarizeVectorRhythmDiagnostics > reports voice assignments and overlapping duration groups 0ms
+   ✓ extendPenultimateHalfBeforeFinalQuarter > extends a dense beat-1 chord to a half before a beat-2 closing note 0ms
+   ✓ extendPenultimateHalfBeforeFinalQuarter > leaves evenly spaced single-note beats unchanged 0ms
+   ✓ extendCombinedGrandStaffOpening > extends a lone opening bass through a later treble entry 0ms
+   ✓ extendCombinedGrandStaffOpening > keeps a quarter opening treble when the voice rearticulates before the closing echo 0ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > writes extended bass and treble durations with backup/forward in one voice 5ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > emits MusicXML staff numbers from recognized clefs so grand-staff pairing works 1ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > emits grand-staff staff tags for balanced raster dual-clef pages 0ms
+   ✓ buildOmrMusicXml overlapping grand-staff rhythm > does not emit grand staff for a lone miscleffed bass head on a treble page 0ms
+   ✓ buildOmrMusicXml guitar sounding pitch > emits staff-derived midi as sounding pitch without a second 8vb shift 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/notationFidelitySprint3.test.js > Notation Fidelity Sprint 3 PDF path source > stitches explicit right/left system fragments into one tie
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/notationFidelitySprint3.test.js:238:48
+    236|     })
+    237| 
+    238|     expect(result.diagnostics.appliedTieCount).toBe(1)
+       |                                                ^
+    239|     expect(result.diagnostics.appliedTiePairs[0].source).toBe(
+    240|       'pdf-vector-path-system-continuation',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > aligns the opening column to beat 0 when clef padding shifts position to 0.125
+AssertionError: expected 4 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 4
+
+ ❯ tests/omrVectorRhythm.test.js:326:41
+    324|     )
+    325|     expect(events[0].startDivision).toBe(0)
+    326|     expect(events[0].durationDivisions).toBe(2)
+       |                                         ^
+    327|   })
+    328| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > splits mixed-clef groups into overlapping bass and treble durations
+AssertionError: expected undefined to be 8 // Object.is equality
+
+- Expected: 
+8
+
++ Received: 
+undefined
+
+ ❯ tests/omrVectorRhythm.test.js:426:42
+    424|     expect(bass?.durationDivisions).toBe(12)
+    425|     expect(openingTreble?.durationDivisions).toBe(4)
+    426|     expect(innerBass?.durationDivisions).toBe(8)
+       |                                          ^
+    427|     expect(closingTreble?.durationDivisions).toBe(4)
+    428|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > extends a same-beat treble tone that reappears in the next harmony
+AssertionError: expected 5 to be 12 // Object.is equality
+
+- Expected
++ Received
+
+- 12
++ 5
+
+ ❯ tests/omrVectorRhythm.test.js:463:39
+    461|     )
+    462|     const treble = events.find((event) => event.notes?.[0]?.midi === 6…
+    463|     expect(treble?.durationDivisions).toBe(12)
+       |                                       ^
+    464|   })
+    465| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/omrVectorRhythm.test.js > buildVectorEvents infers duration from gap to next onset > extends a same-start pedal doubling that matches the opening bass pitch class
+AssertionError: expected 5 to be 12 // Object.is equality
+
+- Expected
++ Received
+
+- 12
++ 5
+
+ ❯ tests/omrVectorRhythm.test.js:582:39
+    580|     )
+    581|     const treble = events.find((event) => event.notes?.[0]?.midi === 6…
+    582|     expect(treble?.durationDivisions).toBe(12)
+       |                                       ^
+    583|   })
+    584| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  5 failed | 79 passed (84)
+   Start at  20:01:27
+   Duration  355ms (transform 178ms, setup 0ms, collect 381ms, tests 42ms, environment 0ms, prepare 65ms)
+

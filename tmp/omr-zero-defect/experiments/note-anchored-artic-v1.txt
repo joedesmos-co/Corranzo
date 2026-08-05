@@ -1,0 +1,36 @@
+OMR semantic corpus — baseline
+==============================
+label: note-anchored-artic-v1
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 5252f36
+createdAt: 2026-08-05T00:06:24.454Z
+fixtures: 4/4 ok
+
+Scoreboard (mean across fixtures)
+- overall: 82.2%
+- pitch: 100.0%
+- rhythm: 95.5%
+- sustain: 75.0%
+- articulation: 78.0%
+- measureStructure: 100.0%
+- interpretation: 26.7%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×33 across 1 fixtures
+- duration-mismatch [rhythm] ×32 across 1 fixtures
+- missing-accent [articulation] ×22 across 1 fixtures
+- missing-tenuto [articulation] ×10 across 1 fixtures
+- tempo-mismatch [interpretation] ×4 across 4 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- piano-articulation-scan: overall=62.0% R=82% P=100% S=0% A=12% M=100% I=40%
+  worst measures: #4(missing-staccato|missing-accent|missing-staccato), #7(missing-staccato|missing-tenuto|missing-staccato), #2(missing-staccato|missing-accent|missing-staccato)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=95.2% R=100% P=100% S=100% A=100% M=100% I=67%
+  worst measures: #1(tempo-mismatch)

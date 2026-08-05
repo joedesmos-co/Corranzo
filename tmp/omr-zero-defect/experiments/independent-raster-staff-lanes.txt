@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: independent-raster-staff-lanes
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:19:31.952Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 49.5%
+- pitch: 41.3%
+- rhythm: 67.4%
+- sustain: 20.0%
+- articulation: 22.5%
+- measureStructure: 55.2%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×30 across 1 fixtures
+- incorrect-pitch [pitch] ×26 across 1 fixtures
+- onset-mismatch [rhythm] ×25 across 1 fixtures
+- missing-staccato [articulation] ×23 across 1 fixtures
+- duration-mismatch [rhythm] ×20 across 1 fixtures
+- missing-note [pitch] ×19 across 1 fixtures
+- extra-note [pitch] ×16 across 1 fixtures
+- missing-accent [articulation] ×8 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- missing-tie [sustain] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=49.5% R=67% P=41% S=20% A=23% M=55% I=40%
+  worst measures: #8(missing-note|extra-note|extra-note), #4(missing-note|missing-note|extra-note), #6(missing-note|extra-note|missing-staccato)

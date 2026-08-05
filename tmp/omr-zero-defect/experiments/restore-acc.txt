@@ -1,0 +1,33 @@
+OMR semantic corpus — baseline
+==============================
+label: restore-acc
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 3ff28ab
+createdAt: 2026-08-04T15:37:59.781Z
+fixtures: 2/2 ok
+
+Scoreboard (mean across fixtures)
+- overall: 84.6%
+- pitch: 97.4%
+- rhythm: 98.0%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 96.9%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- duration-mismatch [rhythm] ×8 across 2 fixtures
+- incorrect-chord [measure-structure] ×4 across 1 fixtures
+- incorrect-pitch [pitch] ×4 across 1 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×2 across 2 fixtures
+- extra-note [pitch] ×1 across 1 fixtures
+- missing-note [pitch] ×1 across 1 fixtures
+- onset-mismatch [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-standard-chords-vector: overall=83.9% R=99% P=95% S=100% A=100% M=94% I=0%
+  worst measures: #8(missing-note|extra-note|duration-mismatch), #7(incorrect-pitch|incorrect-chord), #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=85.3% R=97% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch), #3(duration-mismatch|duration-mismatch), #7(duration-mismatch|duration-mismatch)

@@ -1,0 +1,6 @@
+fixture,code,class,measure,staff,voice,expectedPitch,generatedPitch,expectedOnset,generatedOnset,expectedDuration,generatedDuration,pitchDeltaSemitones,onsetDiffQuarters,durationDiffQuarters,clusterHint,likelyPipelineStage,source
+piano-rhythm-tuplets-vector,onset-mismatch,rhythm,4,1,1,rest,rest,2.5,3,0.25,0.25,0,0.5,0,voice-onset-assignment,rhythm_packing,event-match
+piano-rhythm-tuplets-vector,onset-mismatch,rhythm,8,1,1,rest,rest,3,3.5,1,0.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-rhythm-tuplets-vector,duration-mismatch,rhythm,8,1,1,C5,C5,2.5,2.5,0.5,1,0,0,0.5,duration-inference,duration_inference,event-match
+piano-rhythm-tuplets-vector,tempo-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
+piano-rhythm-tuplets-vector,rest-duration-error,rhythm,8,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact

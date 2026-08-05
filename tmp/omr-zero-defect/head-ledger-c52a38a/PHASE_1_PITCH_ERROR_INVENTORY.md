@@ -1,0 +1,80 @@
+# Phase 1 — Font-aware pitch error inventory
+
+- Commit: `c52a38a`
+- Evaluator: frozen 2.0.0 / schema 2
+- Fixtures: 9/9
+- Incorrect-pitch mismatches: **54**
+
+## Mechanism counts
+
+| Mechanism | Mismatches |
+|---|---:|
+| accidental-error | 31 |
+| wrong-staff-step-anchor | 23 |
+| ledger-line-ownership | 20 |
+| glyph-center-offset | 5 |
+| evaluator-alignment-symptom-or-unresolved | 2 |
+| octave-displacement | 2 |
+
+Categories can overlap when the same note is both outside the staff and vertically mis-anchored.
+
+## Complete record map
+
+| # | Fixture | Page/System | Staff/Voice | Measure | Expected → generated | Δ semitones / steps / octaves | Clef | Source | Font/glyph | Box | Anchor raw → selected → expected | Staff position generated → expected | Ledger support | Accidental provenance | Confidence | First divergence | Categories |
+|---:|---|---|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | piano-dense-advanced-vector | 1/0 | 1/1 | 2 | G4 → G#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 391.275,266.316 17.157×24.508 | 0.224747 → 0.219474 → factor 0.2988 | 2 → 2 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 2 | piano-dense-advanced-vector | 1/0 | 1/1 | 2 | A4 → A#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 409.216,259.78 17.157×24.508 | 0.219697 → 0.214498 → factor 0.2974 | 3 → 3 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 3 | piano-dense-advanced-vector | 1/0 | 1/1 | 2 | G4 → G#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 427.157,266.316 17.157×24.508 | 0.224747 → 0.219549 → factor 0.2988 | 2 → 2 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 4 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | A4 → A#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 590.621,259.78 17.157×24.508 | 0.219697 → 0.214498 → factor 0.2974 | 3 → 3 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 5 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | E5 → F5 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 590.621,233.639 17.941×24.508 | 0.199495 → 0.196195 → factor 0.2916 | 7 → 7 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error, wrong-staff-step-anchor |
+| 6 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | A4 → A#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 626.503,259.78 17.157×24.508 | 0.219697 → 0.214498 → factor 0.2974 | 3 → 3 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 7 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | E5 → F5 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 626.503,233.639 17.157×24.508 | 0.199495 → 0.194296 → factor 0.2916 | 7 → 7 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error, wrong-staff-step-anchor |
+| 8 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | C5 → C#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 644.444,246.71 17.157×24.508 | 0.209596 → 0.204397 → factor 0.2945 | 5 → 5 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 9 | piano-dense-advanced-vector | 1/0 | 1/1 | 3 | C5 → D5 | 2 / 1 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 572.68,246.71 17.157×24.508 | 0.209596 → 0.198609 → factor 0.2945 | 6 → 5 | 0/0 | — | 0.92 | pitch_mapping (0.85) | glyph-center-offset, wrong-staff-step-anchor |
+| 10 | piano-dense-advanced-vector | 1/0 | 1/1 | 4 | C5 → C#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 807.908,246.71 17.157×24.508 | 0.209596 → 0.204397 → factor 0.2945 | 5 → 5 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 11 | piano-dense-advanced-vector | 1/0 | 1/1 | 4 | A4 → A#4 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 843.791,259.78 17.157×24.508 | 0.219697 → 0.214498 → factor 0.2974 | 3 → 3 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 12 | piano-dense-advanced-vector | 1/1 | 1/1 | 5 | C#5 → C5 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 195.417,687.846 17.157×24.508 | 0.550505 → 0.545256 → factor 0.2924 | 5 → 5 | 0/0 | — | 0.92 | pitch_mapping (0.85) | evaluator-alignment-symptom-or-unresolved |
+| 13 | piano-dense-advanced-vector | 1/1 | 1/1 | 5 | D5 → D#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 235.784,681.311 17.157×24.508 | 0.545455 → 0.540206 → factor 0.2935 | 6 → 6 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 14 | piano-dense-advanced-vector | 1/1 | 1/1 | 5 | E5 → F5 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 249.24,674.775 17.157×24.508 | 0.540404 → 0.537121 → factor 0.2946 | 7 → 7 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error, wrong-staff-step-anchor |
+| 15 | piano-dense-advanced-vector | 1/1 | 1/1 | 5 | E5 → F5 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 276.152,674.775 17.157×24.508 | 0.540404 → 0.535162 → factor 0.2946 | 7 → 7 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error, wrong-staff-step-anchor |
+| 16 | piano-dense-advanced-vector | 1/1 | 1/1 | 6 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 373.333,668.24 17.157×24.508 | 0.535354 → 0.530105 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 17 | piano-dense-advanced-vector | 1/1 | 1/1 | 6 | D5 → D#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 391.275,681.311 17.157×24.508 | 0.545455 → 0.540206 → factor 0.2935 | 6 → 6 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 18 | piano-dense-advanced-vector | 1/1 | 1/1 | 6 | D5 → D#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 427.157,681.311 17.157×24.508 | 0.545455 → 0.540206 → factor 0.2935 | 6 → 6 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 19 | piano-dense-advanced-vector | 1/1 | 1/1 | 6 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 445.098,668.24 17.157×24.508 | 0.535354 → 0.530105 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 20 | piano-dense-advanced-vector | 1/1 | 1/1 | 7 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 554.739,668.24 17.157×24.508 | 0.535354 → 0.530105 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 21 | piano-dense-advanced-vector | 1/1 | 1/1 | 7 | G5 → G#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 572.68,661.705 17.157×24.508 | 0.530303 → 0.525054 → factor 0.2968 | 9 → 9 | 1/1 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 22 | piano-dense-advanced-vector | 1/1 | 1/1 | 7 | G5 → G#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 644.444,661.705 17.157×24.508 | 0.530303 → 0.525054 → factor 0.2968 | 9 → 9 | 1/1 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 23 | piano-dense-advanced-vector | 1/1 | 1/1 | 7 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 662.386,668.24 17.157×24.508 | 0.535354 → 0.530105 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 24 | piano-dense-advanced-vector | 1/1 | 1/1 | 8 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 789.967,668.24 17.157×24.508 | 0.535354 → 0.530139 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 25 | piano-dense-advanced-vector | 1/1 | 1/1 | 8 | G5 → G#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 807.908,661.705 17.157×24.508 | 0.530303 → 0.525054 → factor 0.2968 | 9 → 9 | 1/1 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 26 | piano-dense-advanced-vector | 1/1 | 1/1 | 8 | F5 → F#5 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d9_f3 U+E0A4 black | 825.85,668.24 17.157×24.508 | 0.535354 → 0.530105 → factor 0.2957 | 8 → 8 | 0/0 | — | 0.92 | accidental_state (0.95) | accidental-error |
+| 27 | guitar-tab-sparse-vector | 1/0 | 1/1 | 1 | E4 → F4 | 1 / 1 / 0 | treble | raster-or-path | — — — | — | — → — → factor — | 1 → 0 | 0/0 | — | — | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 28 | guitar-tab-sparse-vector | 1/0 | 1/1 | 1 | C4 → E4 | 4 / 2 / 0 | treble | raster-or-path | — — — | — | — → — → factor — | 0 → -2 | 0/0 | — | — | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 29 | guitar-tab-sparse-vector | 1/1 | 1/1 | 5 | C4 → E4 | 4 / 2 / 0 | treble | raster-or-path | — — — | — | — → — → factor — | 0 → -2 | 0/0 | — | — | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 30 | guitar-tab-sparse-vector | 1/1 | 1/1 | 5 | E4 → A4 | 5 / 3 / 0 | treble | raster-or-path | — — — | — | — → — → factor — | 3 → 0 | 0/0 | — | — | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 31 | guitar-standard-chords-vector | 1/0 | 1/1 | 1 | F#4 → F4 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 195.417,305.528 17.157×24.508 | 0.255051 → 0.251784 → factor 0.2718 | 1 → 1 | 0/0 | — | 0.92 | pitch_mapping (0.85) | evaluator-alignment-symptom-or-unresolved |
+| 32 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | E3 → F3 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 337.451,733.593 17.157×24.508 | 0.585859 → 0.580757 → factor 0.2336 | -7 → -7 | 3/4 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership, wrong-staff-step-anchor |
+| 33 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | A3 → A#3 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 337.451,713.987 17.157×24.508 | 0.570707 → 0.565301 → factor 0.2446 | -4 → -4 | 1/2 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 34 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | E3 → F3 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 373.333,733.593 17.157×24.508 | 0.585859 → 0.580757 → factor 0.2336 | -7 → -7 | 2/4 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership, wrong-staff-step-anchor |
+| 35 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | A3 → A#3 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 373.333,713.987 17.157×24.508 | 0.570707 → 0.565301 → factor 0.2446 | -4 → -4 | 1/2 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 36 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | E3 → F3 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 409.216,733.593 17.157×24.508 | 0.585859 → 0.580757 → factor 0.2336 | -7 → -7 | 1/4 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership, wrong-staff-step-anchor |
+| 37 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | E3 → F3 | 1 / 1 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 445.098,733.593 17.157×24.508 | 0.585859 → 0.580757 → factor 0.2336 | -7 → -7 | 2/4 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership, wrong-staff-step-anchor |
+| 38 | guitar-standard-chords-vector | 1/1 | 1/1 | 6 | A3 → A#3 | 1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 445.098,713.987 17.157×24.508 | 0.570707 → 0.565301 → factor 0.2446 | -4 → -4 | 1/2 | — | 0.92 | accidental_state (0.95) | accidental-error, ledger-line-ownership |
+| 39 | guitar-standard-chords-vector | 1/1 | 1/1 | 7 | C#3 → C3 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 554.739,746.664 17.157×24.508 | 0.59596 → 0.590776 → factor 0.2262 | -9 → -9 | 3/5 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+| 40 | guitar-standard-chords-vector | 1/1 | 1/1 | 8 | F#2 → F2 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 754.085,772.806 17.157×24.508 | 0.616162 → 0.610896 → factor 0.2116 | -13 → -13 | 6/7 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+| 41 | guitar-standard-chords-vector | 1/1 | 1/1 | 8 | C#3 → C3 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 754.085,746.664 17.157×24.508 | 0.59596 → 0.590804 → factor 0.2262 | -9 → -9 | 5/5 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+| 42 | guitar-standard-chords-vector | 1/1 | 1/1 | 8 | F#3 → F3 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d13_f3 U+E0A4 black | 754.085,727.058 17.157×24.508 | 0.580808 → 0.575625 → factor 0.2372 | -6 → -6 | 3/3 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+| 43 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | D4 → C4 | -2 / -1 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 337.451,297.359 17.157×24.508 | 0.248737 → 0.243818 → factor 0.474 | -2 → -1 | 0/1 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership, glyph-center-offset, wrong-staff-step-anchor |
+| 44 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | D4 → C4 | -2 / -1 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 409.216,297.359 17.157×24.508 | 0.248737 → 0.243818 → factor 0.474 | -2 → -1 | 0/1 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership, glyph-center-offset, wrong-staff-step-anchor |
+| 45 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | G4 → E4 | -3 / -2 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 337.451,277.753 17.157×24.508 | 0.233586 → 0.230664 → factor 0.6839 | 0 → 2 | 0/0 | — | 0.92 | pitch_mapping (0.85) | glyph-center-offset, wrong-staff-step-anchor |
+| 46 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | G4 → E4 | -3 / -2 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 409.216,277.753 17.157×24.508 | 0.233586 → 0.230664 → factor 0.6839 | 0 → 2 | 0/0 | — | 0.92 | pitch_mapping (0.85) | glyph-center-offset, wrong-staff-step-anchor |
+| 47 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | D3 → G3 | 5 / 3 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 337.451,323.5 17.157×24.508 | 0.268939 → 0.266018 → factor -0.8158 | -5 → -8 | 0/3 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership, wrong-staff-step-anchor |
+| 48 | guitar-paired-chords-vector | 1/0 | 1/1 | 2 | D3 → G3 | 5 / 3 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 409.216,323.5 17.157×24.508 | 0.268939 → 0.266018 → factor -0.8158 | -5 → -8 | 0/3 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership, wrong-staff-step-anchor |
+| 49 | guitar-paired-chords-vector | 1/0 | 1/1 | 3 | A4 → G4 | -2 / -1 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 536.797,271.217 17.157×24.508 | 0.228535 → 0.223338 → factor 0.7538 | 2 → 3 | 0/0 | — | 0.92 | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 50 | guitar-paired-chords-vector | 1/0 | 1/1 | 3 | A4 → G4 | -2 / -1 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 608.562,271.217 17.157×24.508 | 0.228535 → 0.223338 → factor 0.7538 | 2 → 3 | 0/0 | — | 0.92 | pitch_mapping (0.85) | wrong-staff-step-anchor |
+| 51 | guitar-paired-chords-vector | 1/0 | 1/1 | 3 | E3 → C4 | 8 / 5 / 1 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 536.797,251.611 17.157×24.508 | 0.213384 → 0.210462 → factor -3.4125 | 4 → -7 | 0/0 | — | 0.92 | pitch_mapping (0.85) | octave-displacement, wrong-staff-step-anchor |
+| 52 | guitar-paired-chords-vector | 1/0 | 1/1 | 3 | E3 → C4 | 8 / 5 / 1 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 608.562,251.611 17.157×24.508 | 0.213384 → 0.210462 → factor -3.4125 | 4 → -7 | 0/0 | — | 0.92 | pitch_mapping (0.85) | octave-displacement, wrong-staff-step-anchor |
+| 53 | guitar-paired-chords-vector | 1/2 | 1/1 | 7 | F#3 → F3 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 536.797,776.073 17.157×24.508 | 0.618687 → 0.613738 → factor 0.2379 | -6 → -6 | 2/3 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+| 54 | guitar-paired-chords-vector | 1/2 | 1/1 | 7 | F#3 → F3 | -1 / 0 / 0 | treble | pdf-text-glyph | g_d15_f4 U+E0A4 black | 608.562,776.073 17.157×24.508 | 0.618687 → 0.613738 → factor 0.2379 | -6 → -6 | 2/3 | — | 0.92 | pitch_mapping (0.85) | ledger-line-ownership |
+
+The machine-readable companion `pitch_error_inventory.json` contains the complete staff-line coordinate arrays, ledger candidates, vector projection, note candidate/glyph IDs, ownership, accidental provenance, and confidence objects for every row.

@@ -1,0 +1,22 @@
+OMR semantic corpus — before/after
+=================================
+before: after-gap-snap (45239ca)
+after:  after-gap-rebuild (7557401)
+ACCEPT: NO
+
+Scoreboard deltas (mean)
+- overall: +0.0054  (0.7410 → 0.7464)
+- pitch: +0.0198  (0.8727 → 0.8924)
+- rhythm: -0.0007  (0.8205 → 0.8197)
+- sustain: 0  (0.5556 → 0.5556)
+- articulation: 0  (0.9079 → 0.9079)
+- measureStructure: +0.0188  (0.8971 → 0.9158)
+- interpretation: 0  (0.1333 → 0.1333)
+
+Largest rhythm improvements
+(none)
+
+Regressions / gate failures
+- guitar-paired-chords-vector: rhythm -0.0067 (within 1% budget)
+
+Phase-1 scoreboard keys: overall, pitch, rhythm, sustain, articulation, measureStructure, interpretation

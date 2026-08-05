@@ -1,0 +1,46 @@
+OMR semantic corpus — baseline
+==============================
+label: after-joint-chord-guard
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: b3414aa
+createdAt: 2026-08-04T15:52:00.661Z
+fixtures: 5/5 ok
+
+Scoreboard (mean across fixtures)
+- overall: 78.7%
+- pitch: 92.3%
+- rhythm: 91.4%
+- sustain: 60.0%
+- articulation: 100.0%
+- measureStructure: 91.3%
+- interpretation: 16.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×45 across 2 fixtures
+- onset-mismatch [rhythm] ×30 across 2 fixtures
+- duration-mismatch [rhythm] ×29 across 2 fixtures
+- incorrect-pitch [pitch] ×29 across 1 fixtures
+- extra-note [pitch] ×28 across 2 fixtures
+- missing-note [pitch] ×28 across 2 fixtures
+- tempo-mismatch [interpretation] ×5 across 5 fixtures
+- missing-rest [rhythm] ×3 across 1 fixtures
+- missing-tie [sustain] ×3 across 2 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- dotted-rhythm-error [rhythm] ×1 across 1 fixtures
+- extra-rest [rhythm] ×1 across 1 fixtures
+- rest-duration-error [rhythm] ×1 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+- voice-mismatch [measure-structure] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-grand-voices-vector: overall=82.9% R=100% P=100% S=0% A=100% M=100% I=80%
+  worst measures: #3(missing-tie), #4(missing-tie), #1(tempo-mismatch)
+- piano-rhythm-tuplets-vector: overall=62.2% R=59% P=88% S=0% A=100% M=89% I=0%
+  worst measures: #7(missing-note|missing-note|extra-note), #2(duration-mismatch|onset-mismatch|onset-mismatch), #1(duration-mismatch|onset-mismatch|duration-mismatch)
+- piano-dense-advanced-vector: overall=77.1% R=98% P=73% S=100% A=100% M=68% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(repeat-mismatch|tempo-mismatch), #8(repeat-mismatch)

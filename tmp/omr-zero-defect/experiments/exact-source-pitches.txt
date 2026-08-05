@@ -1,0 +1,31 @@
+OMR semantic corpus — baseline
+==============================
+label: exact-source-pitches
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T05:04:14.338Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 62.5%
+- pitch: 100.0%
+- rhythm: 80.1%
+- sustain: 0.0%
+- articulation: 17.1%
+- measureStructure: 100.0%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×46 across 1 fixtures
+- duration-mismatch [rhythm] ×31 across 1 fixtures
+- missing-accent [articulation] ×12 across 1 fixtures
+- onset-mismatch [rhythm] ×4 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=62.5% R=80% P=100% S=0% A=17% M=100% I=40%
+  worst measures: #4(missing-staccato|missing-accent|missing-accent), #8(missing-accent|missing-staccato|missing-accent), #6(missing-staccato|missing-accent|missing-accent)

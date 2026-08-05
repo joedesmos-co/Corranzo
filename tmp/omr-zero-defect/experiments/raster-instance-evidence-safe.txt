@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: raster-instance-evidence-safe
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:48:16.623Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 58.1%
+- pitch: 91.0%
+- rhythm: 65.7%
+- sustain: 0.0%
+- articulation: 18.2%
+- measureStructure: 92.2%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×43 across 1 fixtures
+- duration-mismatch [rhythm] ×37 across 1 fixtures
+- onset-mismatch [rhythm] ×20 across 1 fixtures
+- missing-accent [articulation] ×11 across 1 fixtures
+- incorrect-chord [measure-structure] ×5 across 1 fixtures
+- missing-note [pitch] ×5 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- incorrect-pitch [pitch] ×2 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- extra-note [pitch] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=58.1% R=66% P=91% S=0% A=18% M=92% I=40%
+  worst measures: #8(missing-note|extra-note|missing-staccato), #4(missing-staccato|missing-accent|missing-accent), #6(missing-staccato|missing-accent|missing-accent)

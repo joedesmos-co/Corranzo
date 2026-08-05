@@ -1,0 +1,349 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "verify-standard",
+  "mode": "written",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "frozen": true,
+  "gitCommit": "3ff28ab",
+  "createdAt": "2026-08-04T15:37:29.635Z",
+  "fixtures": [
+    {
+      "id": "guitar-standard-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-standard",
+      "overall": 0.8179,
+      "overallPercent": "82%",
+      "classes": {
+        "pitch": {
+          "score": 0.8793,
+          "percent": "88%",
+          "numerator": 102,
+          "denominator": 116,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.9868,
+          "percent": "99%",
+          "numerator": 225,
+          "denominator": 228,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.8594,
+          "percent": "86%",
+          "numerator": 55,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 1,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 115,
+        "generatedNoteCount": 115,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 27
+      },
+      "alignmentConfidence": 0.9852,
+      "topDefects": [
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 12
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 9
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 2
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 1
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 1
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 14
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 9
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 3
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 1
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 8,
+          "severity": 36,
+          "summary": [
+            "Missing note E4",
+            "Extra note E4",
+            "Eighth detected as quarter",
+            "Incorrect pitch F2 (expected F#2)",
+            "Incorrect pitch C3 (expected C#3)",
+            "Incorrect pitch F3 (expected F#3)",
+            "Eighth detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "onset-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 33,
+          "summary": [
+            "Incorrect pitch F3 (expected E3)",
+            "Incorrect pitch A#3 (expected A3)",
+            "Incorrect pitch F3 (expected E3)",
+            "Incorrect pitch A#3 (expected A3)",
+            "Incorrect pitch F3 (expected E3)",
+            "Incorrect pitch F3 (expected E3)",
+            "Incorrect pitch A#3 (expected A3)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 8,
+          "summary": [
+            "Incorrect pitch F4 (expected F#4)",
+            "Incorrect chord",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "incorrect-chord",
+            "tempo-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 6,
+          "summary": [
+            "Incorrect pitch C3 (expected C#3)",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "incorrect-chord"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 3
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 1,
+    "okCount": 1,
+    "failedCount": 0,
+    "meanOverall": 0.8179,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.8793,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.9868,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.8594,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 12,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 9,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-standard-chords-vector"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+OMR semantic corpus — baseline
+==============================
+label: paired-gap-rebuild
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 7557401
+createdAt: 2026-08-04T12:52:30.265Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 82.3%
+- pitch: 89.7%
+- rhythm: 97.4%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 89.3%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-pitch [pitch] ×12 across 1 fixtures
+- duration-mismatch [rhythm] ×6 across 1 fixtures
+- incorrect-chord [measure-structure] ×6 across 1 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- guitar-paired-chords-vector: overall=82.3% R=97% P=90% S=100% A=100% M=89% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch|incorrect-pitch), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|duration-mismatch)

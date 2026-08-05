@@ -1,0 +1,63 @@
+{
+  "head": "f091ee76a74d4d0265218a051e07ef4a6880b894",
+  "status": "closed",
+  "stop_condition": "SOURCE-FAITHFUL ZERO-DEFECT SUCCESS ON THE FROZEN CORPUS",
+  "updatedAt": "2026-08-05T02:46:00Z",
+  "original_corpus": {
+    "overall_percent": 88.2,
+    "pitch_percent": 98.9,
+    "rhythm_percent": 97.8,
+    "sustain_percent": 88.9,
+    "articulation_percent": 100.0,
+    "measure_structure_percent": 97.7,
+    "interpretation_percent": 34.1,
+    "incorrect_chord": 26,
+    "incorrect_pitch": 26,
+    "duration_mismatch": 33,
+    "tempo_mismatch": 9,
+    "missing_tie": 1,
+    "tie_vs_slur_confusion": 1,
+    "rest_duration_error": 1,
+    "volta_mismatch": 0,
+    "incorrect_tie": 0,
+    "missing_accent": 0,
+    "missing_staccato": 0,
+    "missing_rest": 0,
+    "onset_mismatch": 0
+  },
+  "source_faithful": {
+    "source_supported_defects_remaining": 0,
+    "incorrect_chord": 0,
+    "unexpected_scan_accent": 0,
+    "incorrect_tie": 0,
+    "scan_notes": "88/88",
+    "scan_pitch_percent": 100,
+    "scan_measure_structure_percent": 100,
+    "scan_articulation_percent": 100,
+    "scan_slurs_emitted": ["m1 F4→m2 G4", "m3 A4→m4 A♯4"],
+    "scan_voltas_emitted": ["m7 ending 1 start/stop", "m8 ending 2 start/stop"],
+    "guitar_paired_prm": "100/100/100",
+    "guitar_standard_prm": "100/100/100"
+  },
+  "benchmark_truth": {
+    "unprinted_tempo": 9,
+    "dense_hidden_naturals_pitch": 26,
+    "dense_hidden_naturals_chord": 26,
+    "scan_half_vs_quarter_durations": 32,
+    "scan_slur_as_tie_musicxml": 2,
+    "tuplets_m8_quarter_rest_vs_printed_eighth": 1,
+    "tuplets_m8_C5_eighth_vs_printed_unflagged_quarter": 1
+  },
+  "source_supported_remaining_high_value": [],
+  "source_supported_resolved": [
+    "raster-noteheads-pitch-chords-scan",
+    "raster-accidentals-lanes-barlines",
+    "guitar-tab-paired-standard-ownership",
+    "vector-stroke-ties",
+    "repeats-voltas-vector-and-scan",
+    "scan-articulations-staccato-accent",
+    "scan-slur-emission",
+    "tuplets-source-supported-rest-onset-dot"
+  ],
+  "audit_doc": "SOURCE_FAITHFUL_BENCHMARK_AUDIT.md"
+}

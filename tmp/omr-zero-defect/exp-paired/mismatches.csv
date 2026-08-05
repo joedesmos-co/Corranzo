@@ -1,0 +1,10 @@
+fixture,code,class,measure,staff,voice,expectedPitch,generatedPitch,expectedOnset,generatedOnset,expectedDuration,generatedDuration,pitchDeltaSemitones,onsetDiffQuarters,durationDiffQuarters,clusterHint,likelyPipelineStage,source
+guitar-paired-chords-vector,duration-mismatch,rhythm,2,1,1,D3,D3,0,0,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,duration-mismatch,rhythm,2,1,1,D3,D3,2,2,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,duration-mismatch,rhythm,3,1,1,A3,A3,0,0,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,duration-mismatch,rhythm,3,1,1,A3,A3,2,2,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,duration-mismatch,rhythm,7,1,1,F#3,F#3,0,0,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,duration-mismatch,rhythm,7,1,1,F#3,F#3,2,2,1,2,0,0,1,duration-inference,duration_inference,event-match
+guitar-paired-chords-vector,repeat-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
+guitar-paired-chords-vector,tempo-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
+guitar-paired-chords-vector,repeat-mismatch,interpretation,8,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact

@@ -1,0 +1,32 @@
+OMR semantic corpus — baseline
+==============================
+label: tuplet-rest-v5
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: c2d374d
+createdAt: 2026-08-04T17:40:17.395Z
+fixtures: 3/3 ok
+
+Scoreboard (mean across fixtures)
+- overall: 88.7%
+- pitch: 100.0%
+- rhythm: 98.6%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 100.0%
+- interpretation: 22.2%
+
+Top recurring recognition errors
+- tempo-mismatch [interpretation] ×3 across 3 fixtures
+- duration-mismatch [rhythm] ×2 across 1 fixtures
+- onset-mismatch [rhythm] ×2 across 1 fixtures
+- dotted-rhythm-error [rhythm] ×1 across 1 fixtures
+- missing-rest [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-rhythm-tuplets-vector: overall=85.1% R=96% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #8(missing-rest|dotted-rhythm-error|onset-mismatch), #1(tempo-mismatch)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=95.2% R=100% P=100% S=100% A=100% M=100% I=67%
+  worst measures: #1(tempo-mismatch)

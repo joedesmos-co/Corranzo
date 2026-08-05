@@ -1,0 +1,40 @@
+OMR semantic corpus — baseline
+==============================
+label: after-joint-articulation
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 15422cd
+createdAt: 2026-08-04T17:26:17.051Z
+fixtures: 5/5 ok
+
+Scoreboard (mean across fixtures)
+- overall: 82.0%
+- pitch: 98.0%
+- rhythm: 96.4%
+- sustain: 80.0%
+- articulation: 82.0%
+- measureStructure: 95.9%
+- interpretation: 21.3%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×37 across 1 fixtures
+- duration-mismatch [rhythm] ×32 across 1 fixtures
+- incorrect-chord [measure-structure] ×26 across 1 fixtures
+- incorrect-pitch [pitch] ×26 across 1 fixtures
+- missing-accent [articulation] ×16 across 1 fixtures
+- tempo-mismatch [interpretation] ×5 across 5 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- missing-tie [sustain] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- piano-articulation-scan: overall=61.7% R=82% P=100% S=0% A=10% M=100% I=40%
+  worst measures: #8(missing-staccato|missing-accent|missing-staccato), #3(missing-staccato|missing-staccato|missing-staccato), #2(missing-staccato|missing-accent|missing-staccato)
+- piano-dense-advanced-vector: overall=81.4% R=100% P=90% S=100% A=100% M=80% I=0%
+  worst measures: #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=95.2% R=100% P=100% S=100% A=100% M=100% I=67%
+  worst measures: #1(tempo-mismatch)

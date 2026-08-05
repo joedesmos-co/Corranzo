@@ -1,0 +1,831 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ✓ tests/notationTabPairing.test.js (7 tests) 3ms
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > warns when dense TAB-only playback is compressed to the safe timing grid
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic-dense-tab-only',
+  at: 1785848109664
+}
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > warns when dense TAB-only playback is compressed to the safe timing grid
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic-dense-tab-only {
+  action: 'miss',
+  cacheKey: 'url:synthetic-dense-tab-only',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109665
+}
+
+stderr | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > warns when dense TAB-only playback is compressed to the safe timing grid
+Warning: Please use the `legacy` build in Node.js environments.
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > warns when dense TAB-only playback is compressed to the safe timing grid
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf'
+}
+[omr-trace] phase=pdf-load start
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > returns honest full-pipeline warnings for TAB-only approximate timing
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic-tab-only',
+  at: 1785848109755
+}
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > returns honest full-pipeline warnings for TAB-only approximate timing
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic-tab-only {
+  action: 'miss',
+  cacheKey: 'url:synthetic-tab-only',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109755
+}
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  at: 1785848109754
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Downloads/wet-hands-minecraft.pdf {
+  action: 'miss',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109755
+}
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > returns honest full-pipeline warnings for TAB-only approximate timing
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > rejects TAB staff lines without readable frets using a TAB-specific message
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic-tab-no-frets',
+  at: 1785848109778
+}
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > rejects TAB staff lines without readable frets using a TAB-specific message
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic-tab-no-frets {
+  action: 'miss',
+  cacheKey: 'url:synthetic-tab-no-frets',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109778
+}
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+Warning: Please use the `legacy` build in Node.js environments.
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+PDF CACHE: action=load scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Downloads/wet-hands-minecraft.pdf {
+  action: 'load',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785848109787
+}
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > rejects TAB staff lines without readable frets using a TAB-specific message
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stderr | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > rejects TAB staff lines without readable frets using a TAB-specific message
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-notes errorName=Error errorMessage=TAB staff lines were detected, but Corranzo could not read enough fret digits or barlines for playback. Try a cleaner digital TAB PDF or upload MusicXML/MXL for accurate timing. readablePages=1 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-notes',
+  errorName: 'Error',
+  errorMessage: 'TAB staff lines were detected, but Corranzo could not read enough fret digits or barlines for playback. Try a cleaner digital TAB PDF or upload MusicXML/MXL for accurate timing.',
+  errorCode: 'no-notes',
+  stack: 'Error: TAB staff lines were detected, but Corranzo could not read enough fret digits or barlines for playback. Try a cleaner digital TAB PDF or upload MusicXML/MXL for accurate timing.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:822:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/guitarOmrTabNotation.test.js:706:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 1,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 0,
+    pagesWithSystems: 1,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785848109804
+}
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > falls through glyph-less six-line pages to notation instead of TAB-no-frets
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic-six-line-no-glyphs',
+  at: 1785848109806
+}
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > falls through glyph-less six-line pages to notation instead of TAB-no-frets
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic-six-line-no-glyphs {
+  action: 'miss',
+  cacheKey: 'url:synthetic-six-line-no-glyphs',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109806
+}
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > falls through glyph-less six-line pages to notation instead of TAB-no-frets
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stderr | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > falls through glyph-less six-line pages to notation instead of TAB-no-frets
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-notes errorName=Error errorMessage=No noteheads detected. Experimental OMR works best on clean engraved scores. readablePages=1 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-notes',
+  errorName: 'Error',
+  errorMessage: 'No noteheads detected. Experimental OMR works best on clean engraved scores.',
+  errorCode: 'no-notes',
+  stack: 'Error: No noteheads detected. Experimental OMR works best on clean engraved scores.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:833:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/guitarOmrTabNotation.test.js:771:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 1,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 2,
+    pagesWithSystems: 1,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785848109837
+}
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > does not commit TAB-only for six-line geometry with only non-TAB title glyphs
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=1 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 1,
+  totalPages: 1,
+  cacheKey: 'url:synthetic-six-line-title-only',
+  at: 1785848109838
+}
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > does not commit TAB-only for six-line geometry with only non-TAB title glyphs
+PDF CACHE: action=miss scoreId=- runId=- pdfHash=- cacheKey=url:synthetic-six-line-title-only {
+  action: 'miss',
+  cacheKey: 'url:synthetic-six-line-title-only',
+  pinned: 0,
+  generation: 0,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  previousKey: null,
+  at: 1785848109838
+}
+
+stdout | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > does not commit TAB-only for six-line geometry with only non-TAB title glyphs
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=1
+
+stderr | tests/guitarOmrTabNotation.test.js > guitar OMR tablature detection > does not commit TAB-only for six-line geometry with only non-TAB title glyphs
+OMR FAILURE: scoreId=null runId=null pdfHash=null pageCount=1 stage=no-notes errorName=Error errorMessage=No noteheads detected. Experimental OMR works best on clean engraved scores. readablePages=1 totalPages=1 {
+  scoreId: null,
+  runId: null,
+  pdfHash: null,
+  pageCount: 1,
+  totalPages: 1,
+  stage: 'no-notes',
+  errorName: 'Error',
+  errorMessage: 'No noteheads detected. Experimental OMR works best on clean engraved scores.',
+  errorCode: 'no-notes',
+  stack: 'Error: No noteheads detected. Experimental OMR works best on clean engraved scores.\n' +
+    '    at runPdfOmrPipelineBody (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:833:19)\n' +
+    '    at runPdfOmrPipeline (/Users/ryland/Documents/scoreflow/src/features/omr/runPdfOmrPipeline.js:249:12)\n' +
+    '    at /Users/ryland/Documents/scoreflow/tests/guitarOmrTabNotation.test.js:794:5\n' +
+    '    at file:///Users/ryland/Documents/scoreflow/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  readablePages: 1,
+  analysisResultSummary: {
+    notes: 0,
+    measures: 2,
+    pagesWithSystems: 1,
+    overallConfidence: null,
+    reasons: null
+  },
+  at: 1785848109870
+}
+
+ ❯ tests/guitarOmrTabNotation.test.js (27 tests | 1 failed) 335ms
+   ✓ guitar OMR tablature detection > uses raw six-line staff positions for TAB even when pitch lineYs are five-line 1ms
+   ✓ guitar OMR tablature detection > does not classify five-line notation staves as TAB 0ms
+   ✓ guitar OMR tablature detection > uses vector glyph evidence to correct ledger-line and interrupted-TAB ambiguity 0ms
+   ✓ guitar OMR tablature detection > collapses doubled raster rows before classifying six-line TAB staves 0ms
+   ✓ guitar OMR tablature detection > keeps first-beat TAB digits left of the cursor playable start 0ms
+   ✓ guitar OMR tablature detection > rejects chord symbols, lyric numbers, and watermark digits as TAB frets 0ms
+   ✓ guitar OMR tablature detection > clusters adjacent TAB digits on one string into multi-digit frets 0ms
+   ✓ guitar OMR tablature detection > detects unsupported TAB-only text annotations without applying them silently 0ms
+   ✓ guitar OMR tablature detection > reads a paired notation-over-TAB system from the notation measure boxes 43ms
+   ✓ guitar OMR tablature detection > does not let leading unsupported notation bands shift generated TAB measure numbers 41ms
+   ✓ guitar OMR tablature detection > pairs a spacious notation-over-TAB layout when barline structure matches 0ms
+   ✓ guitar OMR tablature detection > keeps barline numbering when a TAB bar has no fret digits 18ms
+   ✓ guitar OMR tablature detection > preserves interior empty TAB measures without inventing trailing padding bars 20ms
+   ✓ guitar OMR tablature detection > merges TAB notes that quantize to the same onset into one chord event 0ms
+   ✓ guitar OMR tablature detection > keeps repeated notes on the same string separate when x positions differ 0ms
+   ✓ guitar OMR tablature detection > uses bounded even timing for dense TAB-only measures 0ms
+   ✓ guitar OMR tablature detection > compresses only over-dense TAB measures beyond the safe sixteenth grid 0ms
+   ✓ guitar OMR tablature detection > warns when dense TAB-only playback is compressed to the safe timing grid 74ms
+   ✓ guitar OMR tablature detection > marks TAB-only page analysis as approximate and warns about repeat/capo text 17ms
+   ✓ guitar OMR tablature detection > returns honest full-pipeline warnings for TAB-only approximate timing 23ms
+   ✓ guitar OMR tablature detection > rejects TAB staff lines without readable frets using a TAB-specific message 27ms
+   ✓ guitar OMR tablature detection > does not treat glyph-less six-line geometry as confirmed TAB 0ms
+   ✓ guitar OMR tablature detection > still confirms TAB from six-line geometry when page text is present 0ms
+   ✓ guitar OMR tablature detection > falls through glyph-less six-line pages to notation instead of TAB-no-frets 32ms
+   ✓ guitar OMR tablature detection > does not commit TAB-only for six-line geometry with only non-TAB title glyphs 33ms
+   × findMeasureBoxForX near snapped boundaries > keeps a near-boundary TAB digit with the nearest notation column measure 1ms
+     → expected 1 to be 2 // Object.is equality
+   ✓ findMeasureBoxForX near snapped boundaries > preserves strict containment away from boundaries 0ms
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 144,
+  systems: 8,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 144, systems: 8 }
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-trace] phase=page-1 ms=418 end { systems: 8, measures: 13, notes: 144 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+PDF CACHE: action=hit scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Downloads/wet-hands-minecraft.pdf {
+  action: 'hit',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785848110173
+}
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 79,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-2:after-analyze { notes: 79, systems: 6 }
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates
+[omr-trace] phase=page-2 ms=214 end { systems: 6, measures: 10, notes: 79 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=18 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=1 end { measureCount: 23 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=2 end
+[omr-trace] pipeline:measure-playback-report {
+  firstBadMeasure: 1,
+  flagged: [
+     1,  2,  3, 7,
+    11, 12, 16
+  ]
+}
+[omr-trace] pipeline:success { noteCount: 223, measureCount: 23, acceptance: 'accepted' }
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-trace] pipeline:enter { preprocessPages: true }
+[omr-trace] pipeline:pdf-load-start {
+  sourceType: 'url',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf'
+}
+[omr-trace] phase=pdf-load start
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-trace] phase=pdf-load ms=0 end
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-trace] pipeline:pdf-load-success { totalPages: 2 }
+OMR JOB START: scoreId=null generation=null pdfHash=null runId=null pageCount=2 {
+  scoreId: null,
+  generation: null,
+  pdfHash: null,
+  runId: null,
+  pageCount: 2,
+  totalPages: 2,
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  at: 1785848110479
+}
+[omr-trace] phase=page-1 start
+[omr-trace] pipeline:page-1:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+PDF CACHE: action=hit scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Downloads/wet-hands-minecraft.pdf {
+  action: 'hit',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785848110480
+}
+
+stderr | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-debug] pipeline:page-1:after-pdf-render {
+  label: 'pipeline:page-1:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-1:owned-render-buffer {
+  label: 'pipeline:page-1:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:output {
+  label: 'preprocess:output',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  applied: [ 'despeckle' ],
+  deskew: { angle: 0, confidence: 0, improvement: 0 }
+}
+[omr-debug] pipeline:page-1:after-preprocess {
+  label: 'pipeline:page-1:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [ 'despeckle' ] }
+OMR PROGRESS: scoreId=null runId=null currentPage=1 totalPages=2
+[omr-debug] pipeline:page-1:before-analyze {
+  label: 'pipeline:page-1:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 1,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-1 {
+  label: 'processOmrPage:done:page-1',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 144,
+  systems: 8,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-1:after-analyze { notes: 144, systems: 8 }
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-trace] phase=page-1 ms=314 end { systems: 8, measures: 13, notes: 144 }
+[omr-trace] phase=page-2 start
+[omr-trace] pipeline:page-2:loop-start
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+PDF CACHE: action=hit scoreId=- runId=- pdfHash=- cacheKey=url:/Users/ryland/Downloads/wet-hands-minecraft.pdf {
+  action: 'hit',
+  cacheKey: 'url:/Users/ryland/Downloads/wet-hands-minecraft.pdf',
+  pinned: 0,
+  generation: 1,
+  scoreId: null,
+  pdfHash: null,
+  runId: null,
+  at: 1785848110793
+}
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-debug] pipeline:page-2:after-pdf-render {
+  label: 'pipeline:page-2:after-pdf-render',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:owned-render-buffer {
+  label: 'pipeline:page-2:owned-render-buffer',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] preprocess:input {
+  label: 'preprocess:input',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] preprocess:skipped-zero-copy {
+  label: 'preprocess:skipped-zero-copy',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] pipeline:page-2:after-preprocess {
+  label: 'pipeline:page-2:after-preprocess',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} { applied: [] }
+OMR PROGRESS: scoreId=null runId=null currentPage=2 totalPages=2
+[omr-debug] pipeline:page-2:before-analyze {
+  label: 'pipeline:page-2:before-analyze',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} 
+[omr-debug] processOmrPage:start {
+  label: 'processOmrPage:start',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  page: 2,
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] processOmrPage:done:page-2 {
+  label: 'processOmrPage:done:page-2',
+  width: 1000,
+  height: 1294,
+  length: 5176000,
+  bufferByteLength: 5176000,
+  detached: false,
+  probe: 255
+} {
+  notes: 79,
+  systems: 6,
+  source: 'vector-glyphs',
+  legacyFontGlyphsApplied: undefined,
+  articulationGlyphsNormalized: undefined
+}
+[omr-debug] pipeline:page-2:after-analyze { notes: 79, systems: 6 }
+
+stdout | tests/wetHandsNotationTabOmr.test.js > Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets
+[omr-trace] phase=page-2 ms=189 end { systems: 6, measures: 10, notes: 79 }
+[omr-trace] phase=omr-v3-confidence start
+[omr-trace] phase=omr-v3-confidence ms=10 end
+[omr-trace] phase=post-process start
+[omr-trace] phase=post-process ms=0 end { measureCount: 23 }
+[omr-trace] phase=build-musicxml start
+[omr-trace] phase=build-musicxml ms=1 end
+[omr-trace] pipeline:measure-playback-report {
+  firstBadMeasure: 1,
+  flagged: [
+     1,  2,  3, 7,
+    11, 12, 16
+  ]
+}
+[omr-trace] pipeline:success { noteCount: 223, measureCount: 23, acceptance: 'accepted' }
+
+ ✓ tests/wetHandsNotationTabOmr.test.js (2 tests) 1455ms
+   ✓ Wet Hands notation + TAB OMR regression > pairs most notation notes with TAB frets and avoids TAB-only duplicates  909ms
+   ✓ Wet Hands notation + TAB OMR regression > surfaces low-confidence pairing honestly instead of inventing frets  545ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/guitarOmrTabNotation.test.js > findMeasureBoxForX near snapped boundaries > keeps a near-boundary TAB digit with the nearest notation column measure
+AssertionError: expected 1 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ tests/guitarOmrTabNotation.test.js:820:32
+    818|       notationAnchorXsByMeasure: anchors,
+    819|     })
+    820|     expect(box?.measureNumber).toBe(2)
+       |                                ^
+    821|   })
+    822| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 35 passed (36)
+   Start at  08:55:09
+   Duration  1.94s (transform 264ms, setup 0ms, collect 670ms, tests 1.79s, environment 0ms, prepare 95ms)
+

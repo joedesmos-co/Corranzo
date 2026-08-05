@@ -1,0 +1,39 @@
+OMR semantic corpus — baseline
+==============================
+label: after-keysig-gate
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 3ff28ab
+createdAt: 2026-08-04T15:41:40.856Z
+fixtures: 4/4 ok
+
+Scoreboard (mean across fixtures)
+- overall: 82.3%
+- pitch: 90.5%
+- rhythm: 95.0%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 90.5%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- incorrect-chord [measure-structure] ×46 across 2 fixtures
+- incorrect-pitch [pitch] ×33 across 2 fixtures
+- extra-note [pitch] ×26 across 3 fixtures
+- missing-note [pitch] ×26 across 3 fixtures
+- duration-mismatch [rhythm] ×17 across 4 fixtures
+- onset-mismatch [rhythm] ×9 across 3 fixtures
+- tempo-mismatch [interpretation] ×4 across 4 fixtures
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- missing-rest [rhythm] ×1 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=82.8% R=86% P=94% S=100% A=100% M=100% I=0%
+  worst measures: #8(onset-mismatch|onset-mismatch|duration-mismatch), #7(missing-rest|missing-note|extra-note), #1(tempo-mismatch)
+- piano-dense-advanced-vector: overall=77.1% R=98% P=73% S=100% A=100% M=68% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-standard-chords-vector: overall=83.9% R=99% P=95% S=100% A=100% M=94% I=0%
+  worst measures: #8(missing-note|extra-note|duration-mismatch), #7(incorrect-pitch|incorrect-chord), #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=85.3% R=97% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch), #3(duration-mismatch|duration-mismatch), #7(duration-mismatch|duration-mismatch)

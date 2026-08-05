@@ -1,0 +1,4129 @@
+{
+  "scoreGraph": {
+    "version": 2,
+    "measures": [
+      {
+        "measureNumber": 1,
+        "page": 1,
+        "systemIndex": 0,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 124.09477124183006,
+                "notes": [
+                  {
+                    "midi": 65,
+                    "string": 1,
+                    "fret": 1,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 124.09477124183006
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 6,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 6,
+                "durationDivisions": 2,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 190.13071895424835,
+                "notes": [
+                  {
+                    "midi": 64,
+                    "string": 1,
+                    "fret": 0,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 190.13071895424835
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 2,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 217.0424836601307,
+                "notes": [
+                  {
+                    "midi": 60,
+                    "string": 2,
+                    "fret": 1,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 217.0424836601307
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 10,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 10,
+                "durationDivisions": 2,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 243.95424836601305,
+                "notes": [
+                  {
+                    "midi": 57,
+                    "string": 3,
+                    "fret": 2,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 243.95424836601305
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 12,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 12,
+                "durationDivisions": 4,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 270.8660130718954,
+                "notes": [
+                  {
+                    "midi": 52,
+                    "string": 4,
+                    "fret": 2,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 270.8660130718954
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 65,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 64,
+              "clef": "treble",
+              "onsetDivision": 6,
+              "durationDivisions": 2,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 60,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 2,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 57,
+              "clef": "treble",
+              "onsetDivision": 10,
+              "durationDivisions": 2,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 52,
+              "clef": "treble",
+              "onsetDivision": 12,
+              "durationDivisions": 4,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m1-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 65,
+            "pitch": {
+              "step": "F",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 6,
+            "durationSource": "gap-to-next-onset",
+            "releaseSource": "gap-to-next-onset",
+            "tieSustainSource": null,
+            "gapToNextOnset": 6,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 124.09,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m1-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 64,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 6,
+            "durationDivisions": 2,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 2,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 2,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 190.13,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m1-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 60,
+            "pitch": {
+              "step": "C",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 2,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 2,
+            "soundingReleaseDivision": 10,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 10,
+            "gapSpanDivisions": 2,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 217.04,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m1-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 57,
+            "pitch": {
+              "step": "A",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 10,
+            "durationDivisions": 2,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 2,
+            "soundingReleaseDivision": 12,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 12,
+            "gapSpanDivisions": 2,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 243.95,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m1-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 52,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 12,
+            "durationDivisions": 4,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 4,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 4,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 270.87,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m1-e0n0",
+            "to": "p1m1-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m1-e1n0",
+            "to": "p1m1-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m1-e2n0",
+            "to": "p1m1-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m1-e3n0",
+            "to": "p1m1-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m1-e4n0",
+            "to": "p1m1-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 2,
+        "page": 1,
+        "systemIndex": 0,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 323.44117647058823,
+                "notes": [
+                  {
+                    "midi": 66,
+                    "string": 1,
+                    "fret": 2,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 323.44117647058823
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 345.6209150326797,
+                "notes": [
+                  {
+                    "midi": 76,
+                    "string": 1,
+                    "fret": 12,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 345.6209150326797
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 381.50326797385617,
+                "notes": [
+                  {
+                    "midi": 69,
+                    "string": 2,
+                    "fret": 10,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 381.50326797385617
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 417.38562091503263,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 3,
+                    "fret": 12,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 417.38562091503263
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 453.26797385620915,
+                "notes": [
+                  {
+                    "midi": 60,
+                    "string": 4,
+                    "fret": 10,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 453.26797385620915
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 66,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 76,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 69,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 60,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m2-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 66,
+            "pitch": {
+              "step": "F",
+              "alter": 1,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 323.44,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m2-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 76,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 5
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 345.62,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m2-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 69,
+            "pitch": {
+              "step": "A",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 381.5,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m2-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 417.39,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m2-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 60,
+            "pitch": {
+              "step": "C",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 453.27,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m2-e0n0",
+            "to": "p1m2-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m2-e1n0",
+            "to": "p1m2-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m2-e2n0",
+            "to": "p1m2-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m2-e3n0",
+            "to": "p1m2-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m2-e4n0",
+            "to": "p1m2-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 3,
+        "page": 1,
+        "systemIndex": 0,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 522.7875816993464,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 1,
+                    "fret": 3,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 522.7875816993464
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 544.9673202614379,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 1,
+                    "fret": 3,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 544.9673202614379
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 580.8496732026143,
+                "notes": [
+                  {
+                    "midi": 62,
+                    "string": 2,
+                    "fret": 3,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 580.8496732026143
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 616.7320261437908,
+                "notes": [
+                  {
+                    "midi": 59,
+                    "string": 3,
+                    "fret": 4,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 616.7320261437908
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 652.6143790849673,
+                "notes": [
+                  {
+                    "midi": 55,
+                    "string": 4,
+                    "fret": 5,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 652.6143790849673
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 62,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 59,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 55,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m3-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 522.79,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m3-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 544.97,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m3-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 62,
+            "pitch": {
+              "step": "D",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 580.85,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m3-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 59,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 616.73,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m3-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 55,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 652.61,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m3-e0n0",
+            "to": "p1m3-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m3-e1n0",
+            "to": "p1m3-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m3-e2n0",
+            "to": "p1m3-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m3-e3n0",
+            "to": "p1m3-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m3-e4n0",
+            "to": "p1m3-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 4,
+        "page": 1,
+        "systemIndex": 0,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 722.1339869281046,
+                "notes": [
+                  {
+                    "midi": 68,
+                    "string": 1,
+                    "fret": 4,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 722.1339869281046
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 744.313725490196,
+                "notes": [
+                  {
+                    "midi": 71,
+                    "string": 1,
+                    "fret": 7,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 744.313725490196
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 780.1960784313725,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 2,
+                    "fret": 8,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 780.1960784313725
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 816.078431372549,
+                "notes": [
+                  {
+                    "midi": 62,
+                    "string": 3,
+                    "fret": 7,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 816.078431372549
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 851.9607843137256,
+                "notes": [
+                  {
+                    "midi": 59,
+                    "string": 4,
+                    "fret": 9,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 851.9607843137256
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 68,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 71,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 62,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 59,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m4-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 68,
+            "pitch": {
+              "step": "G",
+              "alter": 1,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 722.13,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m4-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 71,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 744.31,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m4-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 780.2,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m4-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 62,
+            "pitch": {
+              "step": "D",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 816.08,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m4-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 59,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 851.96,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m4-e0n0",
+            "to": "p1m4-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m4-e1n0",
+            "to": "p1m4-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m4-e2n0",
+            "to": "p1m4-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m4-e3n0",
+            "to": "p1m4-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m4-e4n0",
+            "to": "p1m4-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 5,
+        "page": 1,
+        "systemIndex": 1,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 0,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 0,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 124.09477124183006,
+                "notes": [
+                  {
+                    "midi": 69,
+                    "string": 1,
+                    "fret": 5,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 124.09477124183006
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 190.13071895424835,
+                "notes": [
+                  {
+                    "midi": 64,
+                    "string": 1,
+                    "fret": 0,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 190.13071895424835
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 2,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 217.0424836601307,
+                "notes": [
+                  {
+                    "midi": 60,
+                    "string": 2,
+                    "fret": 1,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 217.0424836601307
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 10,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 10,
+                "durationDivisions": 2,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 243.95424836601305,
+                "notes": [
+                  {
+                    "midi": 57,
+                    "string": 3,
+                    "fret": 2,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 243.95424836601305
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 12,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 12,
+                "durationDivisions": 4,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 270.8660130718954,
+                "notes": [
+                  {
+                    "midi": 52,
+                    "string": 4,
+                    "fret": 2,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 270.8660130718954
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 69,
+              "clef": "treble",
+              "onsetDivision": 0,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 64,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 60,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 2,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 57,
+              "clef": "treble",
+              "onsetDivision": 10,
+              "durationDivisions": 2,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 52,
+              "clef": "treble",
+              "onsetDivision": 12,
+              "durationDivisions": 4,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m5-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 69,
+            "pitch": {
+              "step": "A",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 0,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 5,
+            "durationSource": "gap-to-next-onset",
+            "releaseSource": "gap-to-next-onset",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 124.09,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m5-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 64,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 190.13,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m5-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 60,
+            "pitch": {
+              "step": "C",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 2,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 2,
+            "soundingReleaseDivision": 10,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 10,
+            "gapSpanDivisions": 2,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 217.04,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m5-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 57,
+            "pitch": {
+              "step": "A",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 10,
+            "durationDivisions": 2,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 2,
+            "soundingReleaseDivision": 12,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 12,
+            "gapSpanDivisions": 2,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 243.95,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m5-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 52,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 12,
+            "durationDivisions": 4,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 4,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 4,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 270.87,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m5-e0n0",
+            "to": "p1m5-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m5-e1n0",
+            "to": "p1m5-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m5-e2n0",
+            "to": "p1m5-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m5-e3n0",
+            "to": "p1m5-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m5-e4n0",
+            "to": "p1m5-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 6,
+        "page": 1,
+        "systemIndex": 1,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 323.44117647058823,
+                "notes": [
+                  {
+                    "midi": 70,
+                    "string": 1,
+                    "fret": 6,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 323.44117647058823
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 345.6209150326797,
+                "notes": [
+                  {
+                    "midi": 76,
+                    "string": 1,
+                    "fret": 12,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 345.6209150326797
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 381.50326797385617,
+                "notes": [
+                  {
+                    "midi": 69,
+                    "string": 2,
+                    "fret": 10,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 381.50326797385617
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 417.38562091503263,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 3,
+                    "fret": 12,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 417.38562091503263
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 453.26797385620915,
+                "notes": [
+                  {
+                    "midi": 60,
+                    "string": 4,
+                    "fret": 10,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 453.26797385620915
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 70,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 76,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 69,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 60,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m6-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 70,
+            "pitch": {
+              "step": "A",
+              "alter": 1,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 323.44,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m6-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 76,
+            "pitch": {
+              "step": "E",
+              "alter": null,
+              "octave": 5
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 345.62,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m6-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 69,
+            "pitch": {
+              "step": "A",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 381.5,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m6-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 417.39,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m6-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 60,
+            "pitch": {
+              "step": "C",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 453.27,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m6-e0n0",
+            "to": "p1m6-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m6-e1n0",
+            "to": "p1m6-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m6-e2n0",
+            "to": "p1m6-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m6-e3n0",
+            "to": "p1m6-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m6-e4n0",
+            "to": "p1m6-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 7,
+        "page": 1,
+        "systemIndex": 1,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 522.7875816993464,
+                "notes": [
+                  {
+                    "midi": 71,
+                    "string": 1,
+                    "fret": 7,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 522.7875816993464
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 544.9673202614379,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 1,
+                    "fret": 3,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 544.9673202614379
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 580.8496732026143,
+                "notes": [
+                  {
+                    "midi": 62,
+                    "string": 2,
+                    "fret": 3,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 580.8496732026143
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 616.7320261437908,
+                "notes": [
+                  {
+                    "midi": 59,
+                    "string": 3,
+                    "fret": 4,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 616.7320261437908
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 652.6143790849673,
+                "notes": [
+                  {
+                    "midi": 55,
+                    "string": 4,
+                    "fret": 5,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 652.6143790849673
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 71,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 62,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 59,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 55,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m7-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 71,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 522.79,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m7-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 544.97,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m7-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 62,
+            "pitch": {
+              "step": "D",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 580.85,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m7-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 59,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 616.73,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m7-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 55,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 652.61,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m7-e0n0",
+            "to": "p1m7-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m7-e1n0",
+            "to": "p1m7-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m7-e2n0",
+            "to": "p1m7-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m7-e3n0",
+            "to": "p1m7-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m7-e4n0",
+            "to": "p1m7-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "measureNumber": 8,
+        "page": 1,
+        "systemIndex": 1,
+        "totalDivisions": 16,
+        "voiceBudget": {
+          "totalDivisions": 16,
+          "observedEnd": 16,
+          "overflowDivision": 0,
+          "underflowDivision": 0,
+          "tileComplete": true
+        },
+        "voiceDiagnostics": {
+          "overflowCount": 0,
+          "underflowGap": 0,
+          "perVoice": [
+            {
+              "voice": 1,
+              "endDivision": 16
+            }
+          ],
+          "overflowEvents": []
+        },
+        "geometry": null,
+        "onsetColumns": [
+          {
+            "startDivision": 1,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 1,
+                "durationDivisions": 1,
+                "durationType": "16th",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 722.1339869281046,
+                "notes": [
+                  {
+                    "midi": 72,
+                    "string": 1,
+                    "fret": 8,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 722.1339869281046
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 2,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 2,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 744.313725490196,
+                "notes": [
+                  {
+                    "midi": 71,
+                    "string": 1,
+                    "fret": 7,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 744.313725490196
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 5,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 5,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 780.1960784313725,
+                "notes": [
+                  {
+                    "midi": 67,
+                    "string": 2,
+                    "fret": 8,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 780.1960784313725
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 8,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 8,
+                "durationDivisions": 3,
+                "durationType": "eighth",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 816.078431372549,
+                "notes": [
+                  {
+                    "midi": 62,
+                    "string": 3,
+                    "fret": 7,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 816.078431372549
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          },
+          {
+            "startDivision": 11,
+            "events": [
+              {
+                "type": "note",
+                "startDivision": 11,
+                "durationDivisions": 5,
+                "durationType": "quarter",
+                "dotted": false,
+                "rhythmApproximate": true,
+                "timingModel": {
+                  "kind": "tab-approximate-even",
+                  "approximate": true,
+                  "groupCount": 5,
+                  "eventCount": 5,
+                  "maxOnsets": 16,
+                  "slotCount": 16,
+                  "coalesced": false,
+                  "compressed": false
+                },
+                "cx": 851.9607843137256,
+                "notes": [
+                  {
+                    "midi": 59,
+                    "string": 4,
+                    "fret": 9,
+                    "soundingPitch": true,
+                    "clef": "treble",
+                    "cx": 851.9607843137256
+                  }
+                ]
+              }
+            ],
+            "noteCount": 1,
+            "hasBeam": false
+          }
+        ],
+        "staffLaneDiagnostics": {
+          "hasTreble": true,
+          "hasBass": false,
+          "isGrandStaff": false,
+          "nodeCount": 5,
+          "accompanimentCount": 0,
+          "latePhaseCount": 0,
+          "crossStaffPairHints": [],
+          "nodes": [
+            {
+              "midi": 72,
+              "clef": "treble",
+              "onsetDivision": 1,
+              "durationDivisions": 1,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 71,
+              "clef": "treble",
+              "onsetDivision": 2,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 67,
+              "clef": "treble",
+              "onsetDivision": 5,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 62,
+              "clef": "treble",
+              "onsetDivision": 8,
+              "durationDivisions": 3,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            },
+            {
+              "midi": 59,
+              "clef": "treble",
+              "onsetDivision": 11,
+              "durationDivisions": 5,
+              "staff": "treble",
+              "voiceId": "treble-melody",
+              "staffLane": "melody",
+              "accompanimentLane": false,
+              "latePhaseEligible": false
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "p1m8-e0n0",
+            "kind": "notehead",
+            "eventIndex": 0,
+            "midi": 72,
+            "pitch": {
+              "step": "C",
+              "alter": null,
+              "octave": 5
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 1,
+            "durationDivisions": 1,
+            "durationType": "16th",
+            "writtenDurationDivisions": 1,
+            "soundingReleaseDivision": 2,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 2,
+            "gapSpanDivisions": 1,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 722.13,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m8-e1n0",
+            "kind": "notehead",
+            "eventIndex": 1,
+            "midi": 71,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 2,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 5,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 5,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 744.31,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m8-e2n0",
+            "kind": "notehead",
+            "eventIndex": 2,
+            "midi": 67,
+            "pitch": {
+              "step": "G",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 5,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 8,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 8,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 780.2,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m8-e3n0",
+            "kind": "notehead",
+            "eventIndex": 3,
+            "midi": 62,
+            "pitch": {
+              "step": "D",
+              "alter": null,
+              "octave": 4
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 8,
+            "durationDivisions": 3,
+            "durationType": "eighth",
+            "writtenDurationDivisions": 3,
+            "soundingReleaseDivision": 11,
+            "durationSource": "event-notation",
+            "releaseSource": "written-end",
+            "tieSustainSource": null,
+            "gapToNextOnset": 11,
+            "gapSpanDivisions": 3,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 816.08,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          },
+          {
+            "id": "p1m8-e4n0",
+            "kind": "notehead",
+            "eventIndex": 4,
+            "midi": 59,
+            "pitch": {
+              "step": "B",
+              "alter": null,
+              "octave": 3
+            },
+            "clef": "treble",
+            "voice": 1,
+            "staff": "treble",
+            "voiceId": "treble-melody",
+            "staffLane": "melody",
+            "accompanimentLane": false,
+            "latePhaseEligible": false,
+            "onsetDivision": 11,
+            "durationDivisions": 5,
+            "durationType": "quarter",
+            "writtenDurationDivisions": 5,
+            "soundingReleaseDivision": 16,
+            "durationSource": "event-notation",
+            "releaseSource": "measure-boundary",
+            "tieSustainSource": null,
+            "gapToNextOnset": null,
+            "gapSpanDivisions": 5,
+            "dotted": false,
+            "tieStart": false,
+            "tieStop": false,
+            "articulation": null,
+            "beams": null,
+            "cx": 851.96,
+            "cy": null,
+            "confidence": null,
+            "source": "vector-event"
+          }
+        ],
+        "edges": [
+          {
+            "kind": "note_in_voice",
+            "from": "p1m8-e0n0",
+            "to": "p1m8-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m8-e1n0",
+            "to": "p1m8-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m8-e2n0",
+            "to": "p1m8-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m8-e3n0",
+            "to": "p1m8-voice1",
+            "weight": 1,
+            "source": "clef"
+          },
+          {
+            "kind": "note_in_voice",
+            "from": "p1m8-e4n0",
+            "to": "p1m8-voice1",
+            "weight": 1,
+            "source": "clef"
+          }
+        ],
+        "provenance": {
+          "hasBeamStemGraph": false,
+          "geometryBridge": {
+            "matched": 0,
+            "total": 0
+          }
+        }
+      }
+    ]
+  },
+  "measures": [
+    {
+      "measureNumber": 1,
+      "page": 1,
+      "system": 0,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 2,
+      "page": 1,
+      "system": 0,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 3,
+      "page": 1,
+      "system": 0,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 4,
+      "page": 1,
+      "system": 0,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 5,
+      "page": 1,
+      "system": 1,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 6,
+      "page": 1,
+      "system": 1,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 7,
+      "page": 1,
+      "system": 1,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    },
+    {
+      "measureNumber": 8,
+      "page": 1,
+      "system": 1,
+      "noteCount": 5,
+      "noteMatching": null,
+      "chordDiagnostics": null,
+      "rhythmDiagnostics": null,
+      "reconstruction": null,
+      "accidentalDiagnostics": null
+    }
+  ]
+}

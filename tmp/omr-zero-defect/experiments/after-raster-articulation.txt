@@ -1,0 +1,41 @@
+OMR semantic corpus — baseline
+==============================
+label: after-raster-articulation
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: c017923
+createdAt: 2026-08-04T16:03:56.498Z
+fixtures: 4/4 ok
+
+Scoreboard (mean across fixtures)
+- overall: 77.0%
+- pitch: 93.3%
+- rhythm: 95.1%
+- sustain: 50.0%
+- articulation: 78.2%
+- measureStructure: 92.0%
+- interpretation: 30.0%
+
+Top recurring recognition errors
+- missing-accent [articulation] ×71 across 1 fixtures
+- incorrect-chord [measure-structure] ×42 across 1 fixtures
+- duration-mismatch [rhythm] ×35 across 2 fixtures
+- incorrect-pitch [pitch] ×29 across 1 fixtures
+- extra-note [pitch] ×24 across 1 fixtures
+- missing-note [pitch] ×24 across 1 fixtures
+- missing-staccato [articulation] ×12 across 1 fixtures
+- missing-tie [sustain] ×4 across 2 fixtures
+- tempo-mismatch [interpretation] ×4 across 4 fixtures
+- onset-mismatch [rhythm] ×3 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- split-measure [measure-structure] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-grand-voices-vector: overall=82.9% R=100% P=100% S=0% A=100% M=100% I=80%
+  worst measures: #3(missing-tie), #4(missing-tie), #1(tempo-mismatch)
+- piano-articulation-scan: overall=62.1% R=82% P=100% S=0% A=13% M=100% I=40%
+  worst measures: #3(missing-staccato|missing-accent|missing-staccato), #7(missing-staccato|missing-accent|missing-staccato), #1(missing-staccato|missing-accent|missing-staccato)
+- piano-dense-advanced-vector: overall=77.2% R=99% P=73% S=100% A=100% M=68% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)

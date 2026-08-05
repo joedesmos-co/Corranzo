@@ -1,0 +1,1800 @@
+{
+  "head": "5252f36",
+  "scanFixture": "piano-articulation-scan",
+  "noteCount": 88,
+  "truthMusicXmlCounts": {
+    "staccato": 12,
+    "accent": 12,
+    "tenuto": 0
+  },
+  "genMusicXmlCounts": {
+    "staccato": 61,
+    "accent": 0
+  },
+  "articMismatchCodes": {
+    "missing-staccato": 8,
+    "missing-accent": 4
+  },
+  "truthArticEvents": [
+    {
+      "measure": 1,
+      "midi": 60,
+      "label": "C4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 62,
+      "label": "D4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 66,
+      "label": "F#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 65,
+      "label": "F4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 72,
+      "label": "C5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 74,
+      "label": "D5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 73,
+      "label": "C#5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 76,
+      "label": "E5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 74,
+      "label": "D5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "expected": [
+        "accent"
+      ]
+    }
+  ],
+  "genArticEvents": [
+    {
+      "measure": 1,
+      "midi": 60,
+      "label": "C4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 62,
+      "label": "D4",
+      "onsetQuarters": 1,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 65,
+      "label": "F4",
+      "onsetQuarters": 3,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 36,
+      "label": "C2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 41,
+      "label": "F2",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 1,
+      "midi": 48,
+      "label": "C3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 66,
+      "label": "F#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 66,
+      "label": "F#4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 38,
+      "label": "D2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 2,
+      "midi": 45,
+      "label": "A2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 64,
+      "label": "E4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 3,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 40,
+      "label": "E2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 45,
+      "label": "A2",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 3,
+      "midi": 52,
+      "label": "E3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 65,
+      "label": "F4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 72,
+      "label": "C5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 72,
+      "label": "C5",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 41,
+      "label": "F2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 48,
+      "label": "C3",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 4,
+      "midi": 46,
+      "label": "A#2",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 74,
+      "label": "D5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 1,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 72,
+      "label": "C5",
+      "onsetQuarters": 3,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 48,
+      "label": "C3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 5,
+      "midi": 55,
+      "label": "G3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 76,
+      "label": "E5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 1,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 73,
+      "label": "C#5",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 76,
+      "label": "E5",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 45,
+      "label": "A2",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 6,
+      "midi": 52,
+      "label": "E3",
+      "onsetQuarters": 0,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 67,
+      "label": "G4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 74,
+      "label": "D5",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 1,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 74,
+      "label": "D5",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 72,
+      "label": "C5",
+      "onsetQuarters": 3,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 48,
+      "label": "C3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 7,
+      "midi": 55,
+      "label": "G3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 71,
+      "label": "B4",
+      "onsetQuarters": 0,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 66,
+      "label": "F#4",
+      "onsetQuarters": 1,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 68,
+      "label": "G#4",
+      "onsetQuarters": 2,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 69,
+      "label": "A4",
+      "onsetQuarters": 3,
+      "staff": 1,
+      "voice": 1,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 45,
+      "label": "A2",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    },
+    {
+      "measure": 8,
+      "midi": 52,
+      "label": "E3",
+      "onsetQuarters": 2,
+      "staff": 2,
+      "voice": 2,
+      "generated": [
+        "staccato"
+      ]
+    }
+  ],
+  "beat1TrebleInventory": [
+    {
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 1,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        64,
+        67,
+        60
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 64,
+          "cx": 185,
+          "cy": 298
+        },
+        {
+          "midi": 67,
+          "cx": 186,
+          "cy": 287
+        },
+        {
+          "midi": 60,
+          "cx": 188,
+          "cy": 313
+        }
+      ],
+      "chordTopCy": 287,
+      "chordCx": 186,
+      "expected": [
+        "staccato"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "matched",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m1-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m1-beat1-treble.png",
+        "x0": 150,
+        "y0": 217,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "staccato-dot-in-staff-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 2,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        69,
+        66,
+        62
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 69,
+          "cx": 341,
+          "cy": 277
+        },
+        {
+          "midi": 66,
+          "cx": 341,
+          "cy": 290
+        },
+        {
+          "midi": 62,
+          "cx": 341,
+          "cy": 303
+        }
+      ],
+      "chordTopCy": 277,
+      "chordCx": 341,
+      "expected": [
+        "accent"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "misclassified-or-wrong-owner",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m2-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m2-beat1-treble.png",
+        "x0": 305,
+        "y0": 207,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "accent-wedge-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 3,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        64,
+        68,
+        71
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 64,
+          "cx": 539,
+          "cy": 300
+        },
+        {
+          "midi": 68,
+          "cx": 540,
+          "cy": 280
+        },
+        {
+          "midi": 71,
+          "cx": 541,
+          "cy": 270
+        }
+      ],
+      "chordTopCy": 270,
+      "chordCx": 540,
+      "expected": [
+        "staccato"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "matched",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m3-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m3-beat1-treble.png",
+        "x0": 504,
+        "y0": 200,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "staccato-dot-in-staff-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 1,
+      "staff": 1,
+      "measure": 4,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        72,
+        69,
+        65
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 72,
+          "cx": 740,
+          "cy": 264
+        },
+        {
+          "midi": 69,
+          "cx": 740,
+          "cy": 277
+        },
+        {
+          "midi": 65,
+          "cx": 740,
+          "cy": 290
+        }
+      ],
+      "chordTopCy": 264,
+      "chordCx": 740,
+      "expected": [
+        "accent"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "misclassified-or-wrong-owner",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m4-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m4-beat1-treble.png",
+        "x0": 704,
+        "y0": 194,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "accent-wedge-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "measure": 5,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        74,
+        71,
+        67
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 74,
+          "cx": 188,
+          "cy": 700
+        },
+        {
+          "midi": 71,
+          "cx": 188,
+          "cy": 712
+        },
+        {
+          "midi": 67,
+          "cx": 189,
+          "cy": 728
+        }
+      ],
+      "chordTopCy": 700,
+      "chordCx": 188,
+      "expected": [
+        "staccato"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "matched",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m5-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m5-beat1-treble.png",
+        "x0": 152,
+        "y0": 630,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "staccato-dot-in-staff-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "measure": 6,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        76,
+        73,
+        69
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 76,
+          "cx": 343,
+          "cy": 692
+        },
+        {
+          "midi": 73,
+          "cx": 343,
+          "cy": 705
+        },
+        {
+          "midi": 69,
+          "cx": 343,
+          "cy": 718
+        }
+      ],
+      "chordTopCy": 692,
+      "chordCx": 343,
+      "expected": [
+        "accent"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "misclassified-or-wrong-owner",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m6-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m6-beat1-treble.png",
+        "x0": 307,
+        "y0": 622,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "accent-wedge-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "measure": 7,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        74,
+        71,
+        67
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 74,
+          "cx": 543,
+          "cy": 699
+        },
+        {
+          "midi": 71,
+          "cx": 543,
+          "cy": 711
+        },
+        {
+          "midi": 67,
+          "cx": 543,
+          "cy": 724
+        }
+      ],
+      "chordTopCy": 699,
+      "chordCx": 543,
+      "expected": [
+        "staccato"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "matched",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m7-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m7-beat1-treble.png",
+        "x0": 507,
+        "y0": 629,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "staccato-dot-in-staff-above-chord"
+    },
+    {
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "measure": 8,
+      "event": "treble-beat1-chord",
+      "voice": 1,
+      "onsetDivision": 0,
+      "midis": [
+        68,
+        71,
+        64
+      ],
+      "noteheadCenters": [
+        {
+          "midi": 68,
+          "cx": 740,
+          "cy": 728
+        },
+        {
+          "midi": 71,
+          "cx": 742,
+          "cy": 711
+        },
+        {
+          "midi": 64,
+          "cx": 744,
+          "cy": 741
+        }
+      ],
+      "chordTopCy": 711,
+      "chordCx": 742,
+      "expected": [
+        "accent"
+      ],
+      "generatedOnNodes": [
+        "staccato"
+      ],
+      "generatedMusicXml": [
+        "staccato",
+        "staccato"
+      ],
+      "firstFailingStage": "misclassified-or-wrong-owner",
+      "crop": "tmp/omr-zero-defect/scan-artic-inventory/crops/m8-beat1-treble.png",
+      "cropBounds": {
+        "file": "tmp/omr-zero-defect/scan-artic-inventory/crops/m8-beat1-treble.png",
+        "x0": 706,
+        "y0": 641,
+        "w": 72,
+        "h": 86
+      },
+      "pdfVisualClass": "accent-wedge-above-chord"
+    }
+  ],
+  "nonBeat1GeneratedArtics": [
+    {
+      "measure": 1,
+      "midi": 36,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 189,
+      "cy": 461,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 62,
+      "clef": "treble",
+      "onset": 4,
+      "cx": 213,
+      "cy": 304,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 67,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 239,
+      "cy": 284,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 64,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 239,
+      "cy": 297,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 48,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 240,
+      "cy": 411,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 41,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 240,
+      "cy": 438,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 1,
+      "midi": 65,
+      "clef": "treble",
+      "onset": 12,
+      "cx": 266,
+      "cy": 291,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 2,
+      "midi": 45,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 342,
+      "cy": 424,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 2,
+      "midi": 38,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 342,
+      "cy": 450,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 2,
+      "midi": 69,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 413,
+      "cy": 277,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 2,
+      "midi": 66,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 413,
+      "cy": 291,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 3,
+      "midi": 40,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 544,
+      "cy": 447,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 3,
+      "midi": 68,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 612,
+      "cy": 283,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 3,
+      "midi": 52,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 613,
+      "cy": 398,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 3,
+      "midi": 45,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 613,
+      "cy": 424,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 3,
+      "midi": 69,
+      "clef": "treble",
+      "onset": 12,
+      "cx": 648,
+      "cy": 277,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 4,
+      "midi": 48,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 740,
+      "cy": 411,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 4,
+      "midi": 41,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 740,
+      "cy": 437,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 4,
+      "midi": 72,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 811,
+      "cy": 263,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 4,
+      "midi": 46,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 812,
+      "cy": 423,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 5,
+      "midi": 69,
+      "clef": "treble",
+      "onset": 4,
+      "cx": 215,
+      "cy": 719,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 5,
+      "midi": 71,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 242,
+      "cy": 712,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 5,
+      "midi": 55,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 242,
+      "cy": 827,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 5,
+      "midi": 48,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 242,
+      "cy": 852,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 5,
+      "midi": 72,
+      "clef": "treble",
+      "onset": 12,
+      "cx": 269,
+      "cy": 705,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 6,
+      "midi": 52,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 344,
+      "cy": 839,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 6,
+      "midi": 45,
+      "clef": "bass",
+      "onset": 0,
+      "cx": 344,
+      "cy": 865,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 6,
+      "midi": 71,
+      "clef": "treble",
+      "onset": 4,
+      "cx": 382,
+      "cy": 708,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 6,
+      "midi": 76,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 415,
+      "cy": 693,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 6,
+      "midi": 73,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 415,
+      "cy": 705,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 69,
+      "clef": "treble",
+      "onset": 4,
+      "cx": 579,
+      "cy": 718,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 74,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 614,
+      "cy": 699,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 71,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 614,
+      "cy": 708,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 55,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 615,
+      "cy": 826,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 48,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 615,
+      "cy": 852,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 7,
+      "midi": 72,
+      "clef": "treble",
+      "onset": 12,
+      "cx": 650,
+      "cy": 705,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 8,
+      "midi": 66,
+      "clef": "treble",
+      "onset": 4,
+      "cx": 773,
+      "cy": 733,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 8,
+      "midi": 68,
+      "clef": "treble",
+      "onset": 8,
+      "cx": 814,
+      "cy": 724,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 8,
+      "midi": 52,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 815,
+      "cy": 839,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 8,
+      "midi": 45,
+      "clef": "bass",
+      "onset": 8,
+      "cx": 815,
+      "cy": 864,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    },
+    {
+      "measure": 8,
+      "midi": 69,
+      "clef": "treble",
+      "onset": 12,
+      "cx": 850,
+      "cy": 718,
+      "generated": "staccato",
+      "class": "likely-false-positive-or-wrong-column"
+    }
+  ],
+  "legacyDetector": "detectStaccatoOnNote 5x5 ink-count; no accent path on raster"
+}

@@ -1,0 +1,99 @@
+# Paired guitar TAB unpair inventory (c52a38a)
+
+## Verdict
+
+**First failing stage: pairing heuristics** (`pairNotationTabInMeasure`), not measure assignment and not pitch emission.
+
+Pipeline at HEAD: **94/116 attached**, **22 unpaired notation**, **22 unused TAB digits**. Overall 82.3% / Pitch 89.7%. Measure ownership is 8/8.
+
+Residual wrong pitches on m2/m3/m7 are staff pitches left on unpaired voice events because TAB sounding overwrite never ran for those notes.
+
+## Truth vs generated chords (m1–m8)
+
+| Measure | Match | Failure mode |
+|--------|-------|--------------|
+| m1 | 4/4 | — |
+| m2 | 2/4 | chords 0,2 partial TAB → staff pitches E4+C4+G3 kept; truth G4+D4+A3+D3 |
+| m3 | 2/4 | chords 0,2 partial TAB → staff pitches; truth A4+E4+C4+A3+E3 |
+| m4 | 4/4 | — |
+| m5 | 4/4 | — |
+| m6 | 4/4 | — |
+| m7 | 2/4 | chords 0,2 partial TAB; F3 vs F#3 on unpaired voice |
+| m8 | 4/4 | — |
+
+Generated partial-TAB signature (example m2 chord 0): strings=`[3,null,null,null]` frets=`[2,null,null,null]` — only the single-note voice got TAB.
+
+## Per-measure pairing (replay)
+
+| Measure | tabs | notes | paired | unpairedN | unusedT |
+|---------|------|-------|--------|-----------|---------|
+| m1 | 10 | 10 | 10 | 0 | 0 |
+| m2 | 13 | 13 | 7 | 6 | 6 |
+| m3 | 16 | 16 | 8 | 8 | 8 |
+| m4 | 19 | 19 | 19 | 0 | 0 |
+| m5 | 10 | 10 | 10 | 0 | 0 |
+| m6 | 13 | 13 | 13 | 0 | 0 |
+| m7 | 16 | 16 | 8 | 8 | 8 |
+| m8 | 19 | 19 | 19 | 0 | 0 |
+
+22 = 6+8+8 exactly on m2/m3/m7.
+
+## Inventory: unpaired notation / unused TAB
+
+X alignment is excellent (ΔxNorm ≈ 0.0004 ≈ 0.4px). Same-measure. Boundary distances are comfortable (not near-barline).
+
+### m2 (6 unpaired / 6 unused) — both failing columns are multi-voice splits
+
+At x≈0.346 and x≈0.418, notation emits **two events at the same onset**:
+- voice A: 1 note (A3) → pairs, consumes entire TAB cluster
+- voice B: 3 notes (E4,C4,G3 staff) → cluster already `used` → all unpaired
+
+TAB at those X: s1f3,s2f3,s3f2,s4f0 (G4,D4,A3,D3). After 1-note claims cluster, 3 digits unused.
+
+Columns that are a **single** event (x≈0.382 n=3, x≈0.454 n=2) pair 100%.
+
+### m3 (8/8) — same pattern, 1+4 vs 5-tab clusters
+
+Failing columns x≈0.545 and x≈0.617: events 1-note + 4-note; TAB has 5 digits. Single-event columns pair fully.
+
+### m7 (8/8) — same pattern on system 2
+
+Identical 1+4 split. Apparent “measureMismatch” nearest-tab→m3 is a **false positive** from shared xNorm across systems; TAB measure assignment is correct (m7).
+
+## Why gap rebuild regressed pairing (116→94)
+
+Before gap snaps, late barlines shifted measure ownership but apparently kept same-onset multi-voice events and TAB digits co-grouped such that pairing still hit 116/116 (or different voice packaging). After correct measure spans, denser same-onset multi-voice packaging at m2/m3/m7 opening/third chords exposes the all-or-nothing cluster booking bug. Measure assignment itself is now correct; pairing is the residual.
+
+Near-boundary `findMeasureBoxForX` was correctly rejected: digits are not near boundaries relative to the failure (Δ to notation column 0.0004).
+
+## Root cause (code)
+
+`src/features/omr/pairNotationTabEvents.js` → `pairNotationTabInMeasure`:
+
+```js
+bestCluster.used = true  // after FIRST notation event claims the onset cluster
+```
+
+Same-onset multi-voice notation events cannot share one TAB digit cluster. The smaller voice event often wins first; remaining digits are counted unused; the larger voice keeps staff pitches (pitch emission is working as designed for unpaired notes).
+
+Call chain: `processOmrPage.js` (mixed TAB attach) → `attachTabPositionsToEvents` → `pairNotationTabEvents` → `pairNotationTabInMeasure`.
+
+## Recommended smallest production fix
+
+**File:** `src/features/omr/pairNotationTabEvents.js`  
+**Function:** `pairNotationTabInMeasure`
+
+1. After `assignNotesInCluster`, keep residual tabs on the cluster instead of marking the whole cluster used:
+   - `bestCluster.notes = unmatchedTab`
+   - `bestCluster.used = bestCluster.notes.length === 0`
+2. Do **not** increment `unusedTabDigits` from per-event `unmatchedTab`; only count leftovers after all events (existing final unused-cluster pass), so a later same-onset voice can claim residuals.
+3. Optional hardening: process notation events sorted by `notes.length` descending so the larger voice claims first (better MIDI/X assignment before residuals).
+4. Add unit test in `tests/notationTabPairing.test.js`: two same-onset events (1-note + 3-note) vs 4 TAB digits at one X → expect 4 paired / 0 unused.
+
+Expected fixture impact: m2/m3/m7 unpaired → 0; attached 94→116; residual incorrect pitches from missing TAB overwrite should clear (Pitch toward 100% on those chords). No measure-grid changes.
+
+## Artifacts
+
+- `tmp/omr-zero-defect/experiments/paired-tab-unpair-inventory.json`
+- `tmp/omr-zero-defect/experiments/paired-tab-unpair.json` (semantic eval)
+- `tmp/omr-zero-defect/experiments/paired-tab-unpair-inventory.mjs` (diagnostic runner)

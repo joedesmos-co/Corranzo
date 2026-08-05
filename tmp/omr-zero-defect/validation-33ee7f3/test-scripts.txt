@@ -1,0 +1,197 @@
+
+> scoreflow-v2@0.0.0 test:scripts
+> node scripts/test-pitch-detection.mjs && node scripts/test-auto-align-heuristics.mjs && node scripts/test-note-target-position.mjs && node scripts/test-auto-setup-pipeline.mjs && node scripts/diagnose-alignment.mjs --check && node scripts/diagnose-alignment.mjs --compare && node scripts/diagnose-alignment.mjs --detect && node scripts/calibrate-demo-anchors.mjs --validate-minuet && node scripts/benchmark-alignment-corpus.mjs --ci-only --json /tmp/alignment-benchmark-ci.json
+
+pitch-detection: all checks passed
+All conservative auto-align heuristic checks passed.
+note-target-position: all checks passed
+auto-setup-pipeline: all checks passed.
+Alignment report — Minuet in G (Demo)
+Piece: minuet-in-g
+Layout confidence: Exact follow
+Recommended action: Auto-follow
+  · Exact follow: PDF staff/barlines agree with the score.
+
+Measures: 32 | Detected barlines: 32 | Systems: 6 | Mean conf: 1.00 | Min conf: 1.00
+
+Model:
+  Pickup: no
+  Repeats/voltas: no
+  Tempo changes: 0
+  Time-signature changes: 0
+  Page/system: aligned
+
+System  Page  Detected  Expected  Δ    Conf   
+----------------------------------------------
+1       —     5         5         0    1.00   
+2       —     5         5         0    1.00   
+3       —     6         6         0    1.00   
+4       —     5         5         0    1.00   
+5       —     5         5         0    1.00   
+6       —     6         6         0    1.00   
+
+diagnose-alignment: self-check passed (demo Minuet reconciles exactly).
+============================================================
+Minuet in G  [Public Domain]
+Anchor comparison: 32 measures | max err 0.0000 | avg err 0.0000
+  missing(gen/ref): 0/0 | page mismatch: 0 | system mismatch: 0
+  measureStartX   max 0.0000 | avg 0.0000 | n=32
+  playableStartX  max 0.0000 | avg 0.0000 | n=32
+  playableEndX    max 0.0000 | avg 0.0000 | n=32
+  systemEndX      max 0.0000 | avg 0.0000 | n=32
+  trust: trusted 32 | confirm 0 | manual 0 | conf mean/min 1.0000/1.0000
+  Promotion: Ready for promotion
+    · max error 0.0000, avg error 0.0000 (ready ≤ 0.005/0.002, review ≤ 0.02/0.01).
+  Promotion gate: USE GENERATED (ready)
+
+============================================================
+Repeats + voltas (synthetic)  [N/A (generated)]
+Anchor comparison: no reference anchors (not comparable).
+  generated 5 | trusted 5 | confirm 0 | manual 0
+  Promotion gate: fall back (not-safe-fallback)
+
+============================================================
+Multi-page (synthetic)  [N/A (generated)]
+Anchor comparison: no reference anchors (not comparable).
+  generated 6 | trusted 6 | confirm 0 | manual 0
+  Promotion gate: fall back (not-safe-fallback)
+
+============================================================
+Dense / fast (synthetic)  [N/A (generated)]
+Anchor comparison: no reference anchors (not comparable).
+  generated 12 | trusted 12 | confirm 0 | manual 0
+  Promotion gate: fall back (not-safe-fallback)
+
+============================================================
+Promotion readiness (fixtures with trusted reference anchors):
+  minuet-in-g: ready
+
+Overall: READY for promotion
+============================================================
+clean-1page  (stage=staff-lines, alloc=barline-counts)
+  systems: detected 3 / expected 3  |  confidence 1
+    sys0 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys1 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys2 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+  measures: detected anchors 12 / expected 12  |  unreliable barline count 0
+  GEOMETRY (boundary + system-end): max err 0.0000 | avg err 0.0000 → READY
+
+============================================================
+clean-multipage  (stage=staff-lines, alloc=barline-counts)
+  systems: detected 6 / expected 6  |  confidence 1
+    sys0 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys1 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys2 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys3 p2: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys4 p2: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys5 p2: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+  measures: detected anchors 24 / expected 24  |  unreliable barline count 0
+  GEOMETRY (boundary + system-end): max err 0.0000 | avg err 0.0000 → READY
+
+============================================================
+light-classical  (stage=staff-lines, alloc=barline-counts)
+  systems: detected 4 / expected 4  |  confidence 1
+    sys0 p1: barlines=5 accepted=5 raw=336 measEst=4 barlineConfident=true
+      rejected: weak-run=304, margin=21
+    sys1 p1: barlines=5 accepted=5 raw=336 measEst=4 barlineConfident=true
+      rejected: weak-run=304, margin=21
+    sys2 p1: barlines=5 accepted=5 raw=336 measEst=4 barlineConfident=true
+      rejected: weak-run=304, margin=21
+    sys3 p1: barlines=5 accepted=5 raw=336 measEst=4 barlineConfident=true
+      rejected: weak-run=304, margin=21
+  measures: detected anchors 16 / expected 16  |  unreliable barline count 0
+  GEOMETRY (boundary + system-end): max err 0.0000 | avg err 0.0000 → READY
+
+============================================================
+uneven-measures  (stage=staff-lines, alloc=barline-counts)
+  systems: detected 2 / expected 2  |  confidence 1
+    sys0 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+    sys1 p1: barlines=5 accepted=5 raw=399 measEst=4 barlineConfident=true
+      rejected: weak-run=364, margin=19
+  measures: detected anchors 8 / expected 8  |  unreliable barline count 0
+  GEOMETRY (boundary + system-end): max err 0.0017 | avg err 0.0006 → READY
+
+============================================================
+dense-notation  (stage=staff-lines, alloc=breaks-or-even)
+  systems: detected 5 / expected 5  |  confidence 1
+    sys0 p1: barlines=8 accepted=8 raw=417 measEst=null barlineConfident=false (density-thinned)
+      rejected: weak-run=299, margin=20, too-dense=22
+    sys1 p1: barlines=8 accepted=8 raw=417 measEst=null barlineConfident=false (density-thinned)
+      rejected: weak-run=299, margin=20, too-dense=22
+    sys2 p1: barlines=8 accepted=8 raw=417 measEst=null barlineConfident=false (density-thinned)
+      rejected: weak-run=299, margin=20, too-dense=22
+    sys3 p1: barlines=8 accepted=8 raw=417 measEst=null barlineConfident=false (density-thinned)
+      rejected: weak-run=299, margin=20, too-dense=22
+    sys4 p1: barlines=8 accepted=8 raw=417 measEst=null barlineConfident=false (density-thinned)
+      rejected: weak-run=299, margin=20, too-dense=22
+  measures: detected anchors 30 / expected 30  |  unreliable barline count 5
+  GEOMETRY (boundary + system-end): max err 0.0017 | avg err 0.0006 → READY
+
+============================================================
+PDF geometry detection: all expected-READY cases pass against ground truth.
+pieceId: minuet-in-g
+anchors: 32
+source: pymupdf-barline
+comparison: max err 0.0000 | avg err 0.0000
+readiness: ready
+
+Anchor comparison: 32 measures | max err 0.0000 | avg err 0.0000
+  missing(gen/ref): 0/0 | page mismatch: 0 | system mismatch: 0
+  measureStartX   max 0.0000 | avg 0.0000 | n=32
+  playableStartX  max 0.0000 | avg 0.0000 | n=32
+  playableEndX    max 0.0000 | avg 0.0000 | n=32
+  systemEndX      max 0.0000 | avg 0.0000 | n=32
+  trust: trusted 0 | confirm 0 | manual 0 | conf mean/min —/—
+  Promotion: Ready for promotion
+    · max error 0.0000, avg error 0.0000 (ready ≤ 0.005/0.002, review ≤ 0.02/0.01).
+
+validate-minuet (round-trip): passed (READY).
+Running alignment benchmark on 7 piece(s) (CI subset)…
+
+  · synthetic-clean-1page… ok (ready)
+  · synthetic-multipage… ok (ready)
+  · synthetic-dense… ok (needs-review)
+  · synthetic-light-classical… ok (ready)
+  · synthetic-uneven… ok (ready)
+  · synthetic-repeats-voltas… ok (not-safe)
+  · minuet-in-g… ok (needs-review)
+
+=== Alignment corpus benchmark ===
+Pieces: 7 total | 7 ran | 0 skipped | 0 errors
+
+Readiness:
+  READY: 4
+  NEEDS_REVIEW: 2
+  NOT_SAFE: 1
+
+Alignment action:
+  auto: 0 | confirm: 6 | manual: 1
+
+Top blockers:
+  2× pdf-layout-mismatch
+  1× page-mismatch
+  1× weak-systems
+  1× dense-false-barlines
+  1× missing-barlines
+  1× calibration-incomplete
+  1× measure-count-mismatch
+
+Source alignment (granular):
+  2× pdf-layout-mismatch
+  1× measure-count-mismatch
+
+Timing source:
+  6× synthetic
+  1× real-musicxml
+
+Wrote JSON → /tmp/alignment-benchmark-ci.json

@@ -1,0 +1,436 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "paired-gap-snap",
+  "mode": "written",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "frozen": true,
+  "gitCommit": "45239ca",
+  "createdAt": "2026-08-04T12:50:17.181Z",
+  "fixtures": [
+    {
+      "id": "guitar-paired-chords-vector",
+      "ok": true,
+      "instrumentId": "guitar",
+      "tier": "guitar-paired-dense",
+      "overall": 0.7748,
+      "overallPercent": "77%",
+      "classes": {
+        "pitch": {
+          "score": 0.7188,
+          "percent": "72%",
+          "numerator": 92,
+          "denominator": 128,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.9808,
+          "percent": "98%",
+          "numerator": 204,
+          "denominator": 208,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.7241,
+          "percent": "72%",
+          "numerator": 42,
+          "denominator": 58,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 3,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 116,
+        "generatedNoteCount": 116,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 10,
+        "defectCount": 59
+      },
+      "alignmentConfidence": 0.954,
+      "topDefects": [
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 14
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 12
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 12
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 12
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 4
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "label": "Repeat mismatch",
+          "count": 2
+        },
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "label": "Split measure",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 36
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 16
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 4
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 3
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 6,
+          "severity": 84,
+          "summary": [
+            "Split measure 6 → 6,7",
+            "Missing note D4",
+            "Missing note E4",
+            "Missing note D4",
+            "Missing note E4",
+            "Missing note A4",
+            "Missing note D5",
+            "Missing note A4",
+            "Missing note D5",
+            "Extra note D4",
+            "Extra note E4",
+            "Extra note A4",
+            "Extra note D5",
+            "Extra note D4",
+            "Extra note E4",
+            "Extra note A4",
+            "Extra note D5",
+            "Extra note A4",
+            "Extra note D5",
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch B4 (expected D5)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 32,
+          "summary": [
+            "Quarter detected as half",
+            "Quarter detected as half",
+            "Incorrect pitch C4 (expected D4)",
+            "Incorrect pitch C4 (expected D4)",
+            "Incorrect pitch E4 (expected G4)",
+            "Incorrect pitch E4 (expected G4)",
+            "Incorrect pitch G3 (expected D3)",
+            "Incorrect pitch G3 (expected D3)",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "duration-mismatch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 26,
+          "summary": [
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch G4 (expected A4)",
+            "Incorrect pitch C4 (expected E3)",
+            "Quarter detected as half",
+            "Incorrect pitch C4 (expected E3)",
+            "Quarter detected as half",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "incorrect-pitch",
+            "duration-mismatch",
+            "incorrect-chord",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 21,
+          "summary": [
+            "Split measure 7 → 8,9",
+            "Missing note D4",
+            "Missing note F#4",
+            "Extra note D4",
+            "Extra note F#4",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "incorrect-chord",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 9,
+          "summary": [
+            "Missing note G4",
+            "Missing note B4",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "incorrect-chord"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 4,
+          "summary": [
+            "Repeat mismatch",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "repeat-mismatch",
+            "tempo-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 2,
+          "summary": [
+            "Repeat mismatch"
+          ],
+          "defectCodes": [
+            "repeat-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 2
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 1,
+    "okCount": 1,
+    "failedCount": 0,
+    "meanOverall": 0.7748,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.7188,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.9808,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.7241,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 14,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 12,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 12,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 12,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 4,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "repeat-mismatch",
+        "class": "interpretation",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "split-measure",
+        "class": "measure-structure",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "guitar-paired-chords-vector"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+OMR semantic corpus — baseline
+==============================
+label: head-c52a38a
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: c52a38a
+createdAt: 2026-08-04T15:23:56.223Z
+fixtures: 9/9 ok
+
+Scoreboard (mean across fixtures)
+- overall: 74.6%
+- pitch: 89.2%
+- rhythm: 82.0%
+- sustain: 55.6%
+- articulation: 90.8%
+- measureStructure: 91.6%
+- interpretation: 13.3%
+
+Top recurring recognition errors
+- duration-mismatch [rhythm] ×102 across 7 fixtures
+- incorrect-chord [measure-structure] ×62 across 5 fixtures
+- onset-mismatch [rhythm] ×59 across 5 fixtures
+- incorrect-pitch [pitch] ×56 across 4 fixtures
+- missing-staccato [articulation] ×46 across 1 fixtures
+- extra-note [pitch] ×38 across 5 fixtures
+- missing-note [pitch] ×30 across 4 fixtures
+- missing-accent [articulation] ×12 across 1 fixtures
+- tempo-mismatch [interpretation] ×9 across 9 fixtures
+- missing-tie [sustain] ×7 across 4 fixtures
+- missing-rest [rhythm] ×4 across 2 fixtures
+- repeat-mismatch [interpretation] ×4 across 2 fixtures
+- volta-mismatch [interpretation] ×4 across 2 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- dotted-rhythm-error [rhythm] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-beginner-single-vector: overall=82.8% R=86% P=94% S=100% A=100% M=100% I=0%
+  worst measures: #8(onset-mismatch|onset-mismatch|duration-mismatch), #7(missing-rest|missing-note|extra-note), #1(tempo-mismatch)
+- piano-grand-voices-vector: overall=82.9% R=100% P=100% S=0% A=100% M=100% I=80%
+  worst measures: #3(missing-tie), #4(missing-tie), #1(tempo-mismatch)
+- piano-rhythm-tuplets-vector: overall=62.2% R=59% P=88% S=0% A=100% M=89% I=0%
+  worst measures: #7(missing-note|missing-note|extra-note), #2(duration-mismatch|onset-mismatch|onset-mismatch), #1(duration-mismatch|onset-mismatch|duration-mismatch)
+- piano-articulation-scan: overall=62.7% R=82% P=100% S=0% A=17% M=100% I=40%
+  worst measures: #4(missing-staccato|missing-accent|missing-accent), #8(missing-accent|missing-staccato|missing-accent), #6(missing-staccato|missing-accent|missing-accent)
+- piano-dense-advanced-vector: overall=77.1% R=98% P=74% S=100% A=100% M=68% I=0%
+  worst measures: #1(split-measure|missing-note|missing-note), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #5(incorrect-pitch|incorrect-pitch|incorrect-pitch)
+- guitar-tab-sparse-vector: overall=68.5% R=17% P=70% S=100% A=100% M=92% I=0%
+  worst measures: #1(extra-note|duration-mismatch|onset-mismatch), #8(extra-note|duration-mismatch|duration-mismatch), #7(extra-note|duration-mismatch|duration-mismatch)
+- guitar-standard-chords-vector: overall=81.8% R=99% P=88% S=100% A=100% M=86% I=0%
+  worst measures: #8(missing-note|extra-note|duration-mismatch), #6(incorrect-pitch|incorrect-pitch|incorrect-pitch), #1(incorrect-pitch|incorrect-chord|tempo-mismatch)
+- guitar-paired-chords-vector: overall=82.3% R=97% P=90% S=100% A=100% M=89% I=0%
+  worst measures: #2(duration-mismatch|duration-mismatch|incorrect-pitch), #3(incorrect-pitch|incorrect-pitch|incorrect-pitch), #7(incorrect-pitch|incorrect-pitch|duration-mismatch)
+- guitar-techniques-paired-vector: overall=71.4% R=100% P=100% S=0% A=100% M=100% I=0%
+  worst measures: #4(missing-tie), #5(missing-tie), #1(tempo-mismatch)

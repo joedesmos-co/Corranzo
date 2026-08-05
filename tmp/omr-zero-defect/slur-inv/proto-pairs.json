@@ -1,0 +1,862 @@
+[
+  {
+    "from": "m1:D4",
+    "to": "m1:F4",
+    "dx": 53,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 7,
+        "above": 15
+      },
+      "midCovered": {
+        "below": 5,
+        "above": 11
+      },
+      "columns": 38,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  },
+  {
+    "from": "m1:D4",
+    "to": "m2:E4",
+    "dx": 165,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 12,
+        "above": 60
+      },
+      "midCovered": {
+        "below": 2,
+        "above": 17
+      },
+      "columns": 150,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 30
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 10,
+        "above": 23
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m1:F4",
+    "to": "m2:E4",
+    "dx": 112,
+    "intervening": 0,
+    "full": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 22,
+        "above": 45
+      },
+      "midCovered": {
+        "below": 11,
+        "above": 19
+      },
+      "columns": 97,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 8
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 18,
+        "above": 30
+      }
+    },
+    "accept": true
+  },
+  {
+    "from": "m1:F4",
+    "to": "m2:G4",
+    "dx": 183,
+    "intervening": 1,
+    "full": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 67,
+        "above": 100
+      },
+      "midCovered": {
+        "below": 29,
+        "above": 41
+      },
+      "columns": 168,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 1,
+        "above": 32
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 59,
+        "above": 126
+      }
+    },
+    "accept": true
+  },
+  {
+    "from": "m2:E4",
+    "to": "m2:G4",
+    "dx": 71,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 6,
+        "above": 23
+      },
+      "midCovered": {
+        "below": 0,
+        "above": 12
+      },
+      "columns": 56,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  },
+  {
+    "from": "m2:E4",
+    "to": "m3:F#4",
+    "dx": 200,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 21,
+        "above": 74
+      },
+      "midCovered": {
+        "below": 0,
+        "above": 10
+      },
+      "columns": 185,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 3,
+        "above": 36
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "above",
+      "covered": {
+        "below": 15,
+        "above": 31
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m2:G4",
+    "to": "m3:F#4",
+    "dx": 129,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 30,
+        "above": 34
+      },
+      "midCovered": {
+        "below": 7,
+        "above": 16
+      },
+      "columns": 114,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 26,
+        "above": 24
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m2:G4",
+    "to": "m3:A4",
+    "dx": 199,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 71,
+        "above": 42
+      },
+      "midCovered": {
+        "below": 37,
+        "above": 16
+      },
+      "columns": 184,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 1,
+        "above": 1
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 63,
+        "above": 41
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m3:F#4",
+    "to": "m3:A4",
+    "dx": 70,
+    "intervening": 0,
+    "full": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 55,
+        "above": 21
+      },
+      "midCovered": {
+        "below": 19,
+        "above": 12
+      },
+      "columns": 55,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": true
+  },
+  {
+    "from": "m3:F#4",
+    "to": "m4:G4",
+    "dx": 198,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 67,
+        "above": 183
+      },
+      "midCovered": {
+        "below": 46,
+        "above": 61
+      },
+      "columns": 183,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 50,
+        "above": 36
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 12,
+        "above": 14
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m3:A4",
+    "to": "m4:G4",
+    "dx": 128,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 55,
+        "above": 18
+      },
+      "midCovered": {
+        "below": 15,
+        "above": 2
+      },
+      "columns": 113,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 36,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 14,
+        "above": 14
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m3:A4",
+    "to": "m4:A#4",
+    "dx": 201,
+    "intervening": 1,
+    "full": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 186,
+        "above": 43
+      },
+      "midCovered": {
+        "below": 62,
+        "above": 14
+      },
+      "columns": 186,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 36,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 29,
+        "above": 39
+      }
+    },
+    "accept": true
+  },
+  {
+    "from": "m4:G4",
+    "to": "m4:A#4",
+    "dx": 73,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 6,
+        "above": 26
+      },
+      "midCovered": {
+        "below": 3,
+        "above": 17
+      },
+      "columns": 58,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  },
+  {
+    "from": "m5:A4",
+    "to": "m5:C5",
+    "dx": 54,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 12,
+        "above": 15
+      },
+      "midCovered": {
+        "below": 9,
+        "above": 10
+      },
+      "columns": 39,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  },
+  {
+    "from": "m5:A4",
+    "to": "m6:B4",
+    "dx": 167,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 20,
+        "above": 62
+      },
+      "midCovered": {
+        "below": 3,
+        "above": 16
+      },
+      "columns": 152,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 3,
+        "above": 31
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 14,
+        "above": 23
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m5:C5",
+    "to": "m6:B4",
+    "dx": 113,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 21,
+        "above": 32
+      },
+      "midCovered": {
+        "below": 11,
+        "above": 21
+      },
+      "columns": 98,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 17,
+        "above": 23
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m5:C5",
+    "to": "m6:D5",
+    "dx": 182,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 68,
+        "above": 49
+      },
+      "midCovered": {
+        "below": 28,
+        "above": 19
+      },
+      "columns": 167,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 1,
+        "above": 1
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 60,
+        "above": 45
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m6:B4",
+    "to": "m6:D5",
+    "dx": 69,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 18,
+        "above": 19
+      },
+      "midCovered": {
+        "below": 10,
+        "above": 14
+      },
+      "columns": 54,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  },
+  {
+    "from": "m6:B4",
+    "to": "m7:A4",
+    "dx": 197,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 15,
+        "above": 51
+      },
+      "midCovered": {
+        "below": 0,
+        "above": 7
+      },
+      "columns": 182,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 35
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 13,
+        "above": 13
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m6:D5",
+    "to": "m7:A4",
+    "dx": 128,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 16,
+        "above": 18
+      },
+      "midCovered": {
+        "below": 3,
+        "above": 5
+      },
+      "columns": 113,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 1
+      }
+    },
+    "right": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 13,
+        "above": 14
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m6:D5",
+    "to": "m7:C5",
+    "dx": 199,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 44,
+        "above": 31
+      },
+      "midCovered": {
+        "below": 22,
+        "above": 13
+      },
+      "columns": 184,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 1
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 126,
+        "above": 27
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m7:A4",
+    "to": "m7:C5",
+    "dx": 71,
+    "intervening": 0,
+    "full": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 56,
+        "above": 56
+      },
+      "midCovered": {
+        "below": 18,
+        "above": 18
+      },
+      "columns": 56,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": true
+  },
+  {
+    "from": "m7:A4",
+    "to": "m8:F#4",
+    "dx": 194,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 31,
+        "above": 63
+      },
+      "midCovered": {
+        "below": 0,
+        "above": 12
+      },
+      "columns": 179,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 0,
+        "above": 31
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 26,
+        "above": 24
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m7:C5",
+    "to": "m8:F#4",
+    "dx": 123,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 38,
+        "above": 22
+      },
+      "midCovered": {
+        "below": 15,
+        "above": 7
+      },
+      "columns": 108,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 1,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 30,
+        "above": 16
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m7:C5",
+    "to": "m8:A4",
+    "dx": 200,
+    "intervening": 1,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 75,
+        "above": 34
+      },
+      "midCovered": {
+        "below": 36,
+        "above": 13
+      },
+      "columns": 185,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "left": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 1,
+        "above": 2
+      }
+    },
+    "right": {
+      "passes": true,
+      "side": "below",
+      "covered": {
+        "below": 67,
+        "above": 30
+      }
+    },
+    "accept": false
+  },
+  {
+    "from": "m8:F#4",
+    "to": "m8:A4",
+    "dx": 77,
+    "intervening": 0,
+    "full": {
+      "passes": false,
+      "side": null,
+      "covered": {
+        "below": 9,
+        "above": 28
+      },
+      "midCovered": {
+        "below": 0,
+        "above": 10
+      },
+      "columns": 62,
+      "bandMax": 29,
+      "bandMin": 3
+    },
+    "accept": false
+  }
+]

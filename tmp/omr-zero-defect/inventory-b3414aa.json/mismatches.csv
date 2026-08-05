@@ -1,0 +1,9 @@
+fixture,code,class,measure,staff,voice,expectedPitch,generatedPitch,expectedOnset,generatedOnset,expectedDuration,generatedDuration,pitchDeltaSemitones,onsetDiffQuarters,durationDiffQuarters,clusterHint,likelyPipelineStage,source
+guitar-standard-chords-vector,duration-mismatch,rhythm,8,1,1,E4,E4,0,0,0.5,1,0,0,0.5,duration-inference,duration_inference,event-match
+guitar-standard-chords-vector,onset-mismatch,rhythm,8,1,1,C#4,C#4,0.5,1,0.5,1,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+guitar-standard-chords-vector,duration-mismatch,rhythm,8,1,1,C#4,C#4,0.5,1,0.5,1,0,0.5,0.5,duration-inference,duration_inference,event-match
+guitar-standard-chords-vector,missing-note,pitch,8,1,1,E4,,1,,1,,,,,missing-or-extra-extraction,symbol_detection,event-match
+guitar-standard-chords-vector,extra-note,pitch,8,1,1,,E4,,2,,1,,,,missing-or-extra-extraction,symbol_detection,event-match
+guitar-standard-chords-vector,incorrect-chord,measure-structure,8,1,1,,,,,,,,,,chord-grouping,chord_grouping,chord-integrity
+guitar-standard-chords-vector,incorrect-chord,measure-structure,8,1,1,,,,,,,,,,chord-grouping,chord_grouping,chord-integrity
+guitar-standard-chords-vector,tempo-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact

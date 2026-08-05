@@ -1,0 +1,60 @@
+fixture,code,class,measure,staff,voice,expectedPitch,generatedPitch,expectedOnset,generatedOnset,expectedDuration,generatedDuration,pitchDeltaSemitones,onsetDiffQuarters,durationDiffQuarters,clusterHint,likelyPipelineStage,source
+piano-articulation-scan,incorrect-tie,sustain,1,1,1,F4,F4,3,3,1,1,0,0,0,sustain-tie,sustain_association,event-match
+piano-articulation-scan,duration-mismatch,rhythm,1,2,2,F2,F2,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,1,2,2,C3,C3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,missing-note,pitch,1,2,2,C2,,0,,2,,,,,missing-or-extra-extraction,symbol_detection,event-match
+piano-articulation-scan,missing-note,pitch,1,2,2,G2,,0,,2,,,,,missing-or-extra-extraction,symbol_detection,event-match
+piano-articulation-scan,incorrect-chord,measure-structure,1,,,,,,,,,,,,chord-grouping,chord_grouping,chord-integrity
+piano-articulation-scan,duration-mismatch,rhythm,2,2,2,D2,D2,0,0,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,2,2,2,A2,A2,0,0,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,2,2,2,G2,G2,2,2,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,2,2,2,D3,D3,2,2,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,missing-tie,sustain,3,1,1,A4,A4,3,3,1,1,0,0,0,sustain-tie,sustain_association,event-match
+piano-articulation-scan,duration-mismatch,rhythm,3,2,2,A2,A2,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,3,2,2,E3,E3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,incorrect-pitch,pitch,3,1,1,F#4,G#4,1,1,1,1,2,0,0,accidental-or-staff-position,pitch_mapping,event-match
+piano-articulation-scan,missing-tie,sustain,4,1,1,A#4,A#4,3,3,1,1,0,0,0,sustain-tie,sustain_association,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,1,1,G4,G4,1,1,1,0.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,2,2,F2,F2,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,2,2,C3,C3,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,onset-mismatch,rhythm,4,1,1,A4,A4,2,1.5,1,1.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,1,1,A4,A4,2,1.5,1,1.5,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,onset-mismatch,rhythm,4,1,1,C5,C5,2,1.5,1,1.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,1,1,C5,C5,2,1.5,1,1.5,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,onset-mismatch,rhythm,4,2,2,A#2,A#2,2,1.5,2,1.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,2,2,A#2,A#2,2,1.5,2,1.5,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,onset-mismatch,rhythm,4,2,2,F3,F3,2,1.5,2,1.5,0,0.5,0.5,voice-onset-assignment,rhythm_packing,event-match
+piano-articulation-scan,duration-mismatch,rhythm,4,2,2,F3,F3,2,1.5,2,1.5,0,0.5,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,5,2,2,G2,G2,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,5,2,2,D3,D3,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,5,2,2,C3,C3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,5,2,2,G3,G3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,incorrect-tie,sustain,5,2,2,G3,G3,2,2,2,1.5,0,0,0.5,sustain-tie,sustain_association,event-match
+piano-articulation-scan,duration-mismatch,rhythm,6,2,2,A2,A2,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,6,2,2,E3,E3,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,6,2,2,D3,D3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,6,2,2,A3,A3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,incorrect-tie,sustain,7,1,1,A4,A4,1,1,1,1,0,0,0,sustain-tie,sustain_association,event-match
+piano-articulation-scan,duration-mismatch,rhythm,7,2,2,C3,C3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,7,2,2,G3,G3,2,2,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,7,2,2,G2,G2,0,0,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,7,2,2,D3,D3,0,0,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,8,2,2,E2,E2,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,8,2,2,B2,B2,0,0,2,1.5,0,0,0.5,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,8,2,2,A2,A2,2,2,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,duration-mismatch,rhythm,8,2,2,E3,E3,2,2,2,1,0,0,1,duration-inference,duration_inference,event-match
+piano-articulation-scan,missing-staccato,articulation,1,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,tempo-mismatch,interpretation,1,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
+piano-articulation-scan,missing-accent,articulation,2,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,2,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,3,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,4,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-accent,articulation,4,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,5,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,6,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-accent,articulation,6,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,7,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,volta-mismatch,interpretation,7,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact
+piano-articulation-scan,missing-accent,articulation,8,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,missing-staccato,articulation,8,,,,,,,,,,,,articulation,articulation glyph association,evaluator-compact
+piano-articulation-scan,volta-mismatch,interpretation,8,,,,,,,,,,,,other,unknown / late MusicXML,evaluator-compact

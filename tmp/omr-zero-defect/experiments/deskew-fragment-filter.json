@@ -1,0 +1,640 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "deskew-fragment-filter",
+  "mode": "written",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "frozen": true,
+  "gitCommit": "2366c37",
+  "createdAt": "2026-08-04T04:08:14.972Z",
+  "fixtures": [
+    {
+      "id": "piano-articulation-scan",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-scan",
+      "overall": 0.4487,
+      "overallPercent": "45%",
+      "classes": {
+        "pitch": {
+          "score": 0.3396,
+          "percent": "34%",
+          "numerator": 36,
+          "denominator": 106,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.7,
+          "percent": "70%",
+          "numerator": 84,
+          "denominator": 120,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 4,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0.25,
+          "percent": "25%",
+          "numerator": 9,
+          "denominator": 36,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 0.4516,
+          "percent": "45%",
+          "numerator": 28,
+          "denominator": 62,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0.4,
+          "percent": "40%",
+          "numerator": 2,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 78,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 174
+      },
+      "alignmentConfidence": 0.8976,
+      "topDefects": [
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "label": "Incorrect chord",
+          "count": 32
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "label": "Missing note",
+          "count": 28
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "label": "Incorrect pitch",
+          "count": 24
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 23
+        },
+        {
+          "code": "missing-staccato",
+          "class": "articulation",
+          "label": "Missing staccato",
+          "count": 21
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "label": "Extra note",
+          "count": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "label": "Onset timing difference",
+          "count": 13
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 6
+        },
+        {
+          "code": "incorrect-tie",
+          "class": "sustain",
+          "label": "Incorrect tie",
+          "count": 3
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "merged-measure",
+          "class": "measure-structure",
+          "label": "Merged measure",
+          "count": 1
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "pitch",
+          "label": "Pitch",
+          "count": 70
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 36
+        },
+        {
+          "class": "measure-structure",
+          "label": "Measure structure",
+          "count": 34
+        },
+        {
+          "class": "articulation",
+          "label": "Articulation",
+          "count": 27
+        },
+        {
+          "class": "sustain",
+          "label": "Sustain (ties)",
+          "count": 4
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 3
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 3,
+          "severity": 110,
+          "summary": [
+            "Merged measures 3,4 → 4",
+            "Missing note E4",
+            "Missing note F#4",
+            "Missing note E2",
+            "Missing note F4",
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note G4",
+            "Missing note A4",
+            "Missing note C5",
+            "Missing note A#4",
+            "Missing note F2",
+            "Missing note C3",
+            "Missing note A#2",
+            "Missing note F3",
+            "Extra note D5",
+            "Extra note A2",
+            "Missing tie",
+            "Incorrect pitch A4 (expected G#4)",
+            "Incorrect pitch C5 (expected B4)",
+            "Missing staccato",
+            "Incorrect pitch A4 (expected G#4)",
+            "Incorrect pitch C5 (expected B4)",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Incorrect pitch F3 (expected E3)",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "merged-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 86,
+          "summary": [
+            "Missing note G#4",
+            "Extra note C5",
+            "Extra note G2",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Incorrect pitch F4 (expected F#4)",
+            "Onset off by 0.5 quarters",
+            "Half detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Incorrect pitch C5 (expected A4)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch E4 (expected G#4)",
+            "Missing accent",
+            "Incorrect pitch C3 (expected E2)",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "onset-mismatch",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 81,
+          "summary": [
+            "Split measure 2 → 2,3",
+            "Missing note D4",
+            "Missing note A4",
+            "Missing note A4",
+            "Missing note D2",
+            "Missing note G2",
+            "Missing note D3",
+            "Extra note A2",
+            "Extra note G2",
+            "Extra note D3",
+            "Extra note G4",
+            "Extra note F4",
+            "Extra note A4",
+            "Extra note F4",
+            "Incorrect pitch G4 (expected F#4)",
+            "Missing accent",
+            "Incorrect pitch E4 (expected F#4)",
+            "Incorrect pitch E4 (expected G4)",
+            "Incorrect pitch G2 (expected A2)",
+            "Half detected as quarter",
+            "Incorrect pitch A4 (expected E4)",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "split-measure",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "extra-note"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 81,
+          "summary": [
+            "Missing note C#5",
+            "Extra note E5",
+            "Unexpected staccato",
+            "Missing accent",
+            "Onset off by 0.5 quarters",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Incorrect pitch C5 (expected B4)",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Incorrect pitch C5 (expected C#5)",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch B4 (expected A4)",
+            "Missing accent",
+            "Half detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Incorrect pitch D3 (expected E3)",
+            "Half detected as quarter",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "missing-staccato",
+            "missing-accent",
+            "onset-mismatch",
+            "onset-mismatch",
+            "missing-staccato",
+            "duration-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 67,
+          "summary": [
+            "Extra note E5",
+            "Extra note B4",
+            "Extra note C5",
+            "Incorrect tie",
+            "Incorrect pitch C5 (expected B4)",
+            "Unexpected staccato",
+            "Quarter detected as half",
+            "Incorrect tie",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Incorrect pitch F4 (expected G4)",
+            "Incorrect pitch C5 (expected D5)",
+            "Incorrect pitch F3 (expected G3)",
+            "Half detected as quarter",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "incorrect-tie",
+            "incorrect-pitch",
+            "missing-staccato",
+            "duration-mismatch",
+            "incorrect-tie"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 59,
+          "summary": [
+            "Missing note B4",
+            "Extra note G4",
+            "Extra note E5",
+            "Extra note E3",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Incorrect pitch C5 (expected B4)",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Incorrect pitch F3 (expected G3)",
+            "Half detected as quarter",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "extra-note",
+            "extra-note",
+            "extra-note",
+            "missing-staccato",
+            "missing-staccato",
+            "incorrect-pitch",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 48,
+          "summary": [
+            "Missing note D4",
+            "Missing note E4",
+            "Missing note G4",
+            "Missing note C2",
+            "Missing note F2",
+            "Onset off by 0.5 quarters",
+            "Incorrect tie",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Onset off by 0.5 quarters",
+            "Unexpected staccato",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Incorrect chord",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "missing-note",
+            "onset-mismatch",
+            "incorrect-tie",
+            "duration-mismatch"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 15
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 1,
+    "okCount": 1,
+    "failedCount": 0,
+    "meanOverall": 0.4487,
+    "classes": {
+      "pitch": {
+        "meanScore": 0.3396,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.7,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.25,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 0.4516,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0.4,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "incorrect-chord",
+        "class": "measure-structure",
+        "count": 32,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-note",
+        "class": "pitch",
+        "count": 28,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "incorrect-pitch",
+        "class": "pitch",
+        "count": 24,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 23,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-staccato",
+        "class": "articulation",
+        "count": 21,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "extra-note",
+        "class": "pitch",
+        "count": 18,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "onset-mismatch",
+        "class": "rhythm",
+        "count": 13,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-accent",
+        "class": "articulation",
+        "count": 6,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "incorrect-tie",
+        "class": "sustain",
+        "count": 3,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "volta-mismatch",
+        "class": "interpretation",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "merged-measure",
+        "class": "measure-structure",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-tie",
+        "class": "sustain",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      }
+    ]
+  }
+}

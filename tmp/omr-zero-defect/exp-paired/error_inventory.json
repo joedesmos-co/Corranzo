@@ -1,0 +1,3989 @@
+{
+  "kind": "omr-semantic-mismatch-inventory",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "gitCommit": "3ff28ab",
+  "createdAt": "2026-08-04T15:43:19.380Z",
+  "fixtureCount": 1,
+  "mismatchCount": 9,
+  "byCode": {
+    "duration-mismatch": 6,
+    "repeat-mismatch": 2,
+    "tempo-mismatch": 1
+  },
+  "byCluster": {
+    "duration-inference": 6,
+    "other": 3
+  },
+  "byFixture": {
+    "guitar-paired-chords-vector": 9
+  },
+  "fixtures": [
+    {
+      "id": "guitar-paired-chords-vector",
+      "ok": true,
+      "overall": 0.8534,
+      "classes": {
+        "pitch": {
+          "numerator": 116,
+          "denominator": 116,
+          "truePositives": 116,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 116,
+          "compared": 116,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 1,
+          "percent": "100%",
+          "reliable": true,
+          "displayPercent": "100%"
+        },
+        "rhythm": {
+          "numerator": 226,
+          "denominator": 232,
+          "truePositives": 226,
+          "falsePositives": 0,
+          "falseNegatives": 6,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 232,
+          "compared": 232,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 0.9741,
+          "percent": "97%",
+          "reliable": true,
+          "displayPercent": "97%"
+        },
+        "sustain": {
+          "numerator": 0,
+          "denominator": 0,
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 0,
+          "compared": 0,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 1,
+          "percent": "100%",
+          "reliable": true,
+          "displayPercent": "100%"
+        },
+        "articulation": {
+          "numerator": 0,
+          "denominator": 0,
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 0,
+          "compared": 0,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 1,
+          "percent": "100%",
+          "reliable": true,
+          "displayPercent": "100%"
+        },
+        "measureStructure": {
+          "numerator": 56,
+          "denominator": 56,
+          "truePositives": 56,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 56,
+          "compared": 56,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 1,
+          "percent": "100%",
+          "reliable": true,
+          "displayPercent": "100%"
+        },
+        "interpretation": {
+          "numerator": 0,
+          "denominator": 3,
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 3,
+          "ignored": 0,
+          "unsupported": 0,
+          "presentInTruth": 3,
+          "compared": 3,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 0,
+          "percent": "0%",
+          "reliable": true,
+          "displayPercent": "0%"
+        },
+        "playback": {
+          "numerator": 0,
+          "denominator": 0,
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "ignored": 1,
+          "unsupported": 0,
+          "presentInTruth": 0,
+          "compared": 0,
+          "coverage": 1,
+          "coveragePercent": "100%",
+          "score": 1,
+          "percent": "100%",
+          "reliable": true,
+          "displayPercent": "100%"
+        }
+      },
+      "mismatchCount": 9,
+      "byCode": {
+        "duration-mismatch": 6,
+        "repeat-mismatch": 2,
+        "tempo-mismatch": 1
+      },
+      "noteCounts": {
+        "truth": 116,
+        "generated": 116
+      }
+    }
+  ],
+  "mismatches": [
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 2,
+      "truthMeasure": 2,
+      "generatedMeasure": 2,
+      "expected": {
+        "id": "P1-m2-n13",
+        "midi": 50,
+        "label": "D3",
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m2-n10",
+        "midi": 50,
+        "label": "D3",
+        "onsetQuarters": 0,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m2-n13",
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m2-n10",
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "D3",
+      "generatedPitch": "D3",
+      "expectedOnset": 0,
+      "generatedOnset": 0,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        50
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 337.451,
+        "y": 258.146,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.215513,
+        "rawPdfTextBaselineYNorm": 0.218434,
+        "fullBoundingBoxCenterYNorm": 0.208964,
+        "anchorAdjustmentInGlyphHeights": 0.1543,
+        "idealAnchorAdjustmentInGlyphHeights": -3.4825,
+        "glyphHeightToStaffSpaceRatio": 1.4853,
+        "anchorDiagnostics": {
+          "yNorm": 0.2155126506107911,
+          "fallbackYNorm": 0.2155126506107911,
+          "rawYNorm": 0.21843434343434345,
+          "source": "glyph-metrics-fallback",
+          "confidence": 0.45,
+          "visualBounds": null,
+          "suppressedStaffOrLedgerRows": 4,
+          "suppressedStemColumns": 2,
+          "rejectedReason": "component-outside-font-origin-range",
+          "suppressedOrMaskedRowCount": 4,
+          "localStaffGapNorm": 0.012751159196290572,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.79,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              262,
+              263,
+              275,
+              276
+            ],
+            "ambiguousRows": [
+              277
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          }
+        }
+      },
+      "staffLineCoordinates": [
+        0.18238,
+        0.195131,
+        0.207883,
+        0.220634,
+        0.233385
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.215513,
+      "generatedStaffPosition": 3,
+      "expectedStaffPosition": -8,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 1,
+      "noteCandidateIds": [
+        "n-2-0-346-283"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m2:x346:y283"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-2-0-346-283-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:beamed-eighth-voice:rg-2-1",
+        "likelyVoiceRole": "beamed-eighth-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 1,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "A",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 69,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 69,
+        "keyAlteration": null,
+        "localAccidental": null,
+        "measureAccidentalState": null
+      },
+      "confidenceScores": {
+        "candidate": 0.76,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.76,
+      "durationProvenance": {
+        "detectedType": "eighth",
+        "detectedDivisions": 2,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 1,
+        "beamStrength": 8,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 69,
+        "emittedMidi": 50,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.2155126506107911,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 69,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.18238021638330756,
+            0.19513137557959814,
+            0.2078825347758887,
+            0.22063369397217927,
+            0.23338485316846985
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.005121043361388161,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "A",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 69,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 69,
+          "keyAlteration": null,
+          "localAccidental": null,
+          "measureAccidentalState": null
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 0,
+        "eventOnsetDivisions": 0,
+        "eventMidis": [
+          50
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 2 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 2,
+      "truthMeasure": 2,
+      "generatedMeasure": 2,
+      "expected": {
+        "id": "P1-m2-n20",
+        "midi": 50,
+        "label": "D3",
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m2-n17",
+        "midi": 50,
+        "label": "D3",
+        "onsetQuarters": 2,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m2-n20",
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m2-n17",
+          "midi": 50,
+          "label": "D3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "D3",
+      "generatedPitch": "D3",
+      "expectedOnset": 2,
+      "generatedOnset": 2,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        50
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 409.216,
+        "y": 258.146,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.215513,
+        "rawPdfTextBaselineYNorm": 0.218434,
+        "fullBoundingBoxCenterYNorm": 0.208964,
+        "anchorAdjustmentInGlyphHeights": 0.1543,
+        "idealAnchorAdjustmentInGlyphHeights": -3.4825,
+        "glyphHeightToStaffSpaceRatio": 1.4853,
+        "anchorDiagnostics": {
+          "yNorm": 0.2155126506107911,
+          "fallbackYNorm": 0.2155126506107911,
+          "rawYNorm": 0.21843434343434345,
+          "source": "glyph-metrics-fallback",
+          "confidence": 0.45,
+          "visualBounds": null,
+          "suppressedStaffOrLedgerRows": 4,
+          "suppressedStemColumns": 1,
+          "rejectedReason": "component-outside-font-origin-range",
+          "suppressedOrMaskedRowCount": 4,
+          "localStaffGapNorm": 0.012751159196290572,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.79,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              262,
+              263,
+              275,
+              276
+            ],
+            "ambiguousRows": [
+              277
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          }
+        }
+      },
+      "staffLineCoordinates": [
+        0.18238,
+        0.195131,
+        0.207883,
+        0.220634,
+        0.233385
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.215513,
+      "generatedStaffPosition": 3,
+      "expectedStaffPosition": -8,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 0,
+      "noteCandidateIds": [
+        "n-2-7-418-283"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m2:x418:y283"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-2-7-418-283-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:stemmed-sustain-or-quarter-voice:rg-2-8",
+        "likelyVoiceRole": "stemmed-sustain-or-quarter-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 0,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "A",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 69,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 69,
+        "keyAlteration": null,
+        "localAccidental": null,
+        "measureAccidentalState": null
+      },
+      "confidenceScores": {
+        "candidate": 0.8,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.8,
+      "durationProvenance": {
+        "detectedType": "quarter",
+        "detectedDivisions": 4,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 0,
+        "beamStrength": 7,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 69,
+        "emittedMidi": 50,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.2155126506107911,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 69,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.18238021638330756,
+            0.19513137557959814,
+            0.2078825347758887,
+            0.22063369397217927,
+            0.23338485316846985
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.005121043361388161,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "A",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 69,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 69,
+          "keyAlteration": null,
+          "localAccidental": null,
+          "measureAccidentalState": null
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 3,
+        "eventOnsetDivisions": 8,
+        "eventMidis": [
+          50
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 69
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 4 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 3,
+      "truthMeasure": 3,
+      "generatedMeasure": 3,
+      "expected": {
+        "id": "P1-m3-n26",
+        "midi": 57,
+        "label": "A3",
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m3-n23",
+        "midi": 57,
+        "label": "A3",
+        "onsetQuarters": 0,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m3-n26",
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m3-n23",
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "A3",
+      "generatedPitch": "A3",
+      "expectedOnset": 0,
+      "generatedOnset": 0,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        57
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 536.797,
+        "y": 251.611,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.210462,
+        "rawPdfTextBaselineYNorm": 0.213384,
+        "fullBoundingBoxCenterYNorm": 0.203914,
+        "anchorAdjustmentInGlyphHeights": 0.1543,
+        "idealAnchorAdjustmentInGlyphHeights": -2.4026,
+        "glyphHeightToStaffSpaceRatio": 1.4853,
+        "anchorDiagnostics": {
+          "yNorm": 0.21046214556028603,
+          "fallbackYNorm": 0.21046214556028603,
+          "rawYNorm": 0.21338383838383837,
+          "source": "glyph-metrics-fallback",
+          "confidence": 0.45,
+          "visualBounds": null,
+          "suppressedStaffOrLedgerRows": 5,
+          "suppressedStemColumns": 2,
+          "rejectedReason": "component-outside-font-origin-range",
+          "suppressedOrMaskedRowCount": 5,
+          "localStaffGapNorm": 0.012751159196290572,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.742857142857143,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              250,
+              262,
+              263,
+              275,
+              276
+            ],
+            "ambiguousRows": [
+              269,
+              270
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          }
+        }
+      },
+      "staffLineCoordinates": [
+        0.18238,
+        0.195131,
+        0.207883,
+        0.220634,
+        0.233385
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.210462,
+      "generatedStaffPosition": 4,
+      "expectedStaffPosition": -4,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 0,
+      "noteCandidateIds": [
+        "n-3-0-545-276"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m3:x545:y276"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-3-0-545-276-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:stemmed-sustain-or-quarter-voice:rg-3-1",
+        "likelyVoiceRole": "stemmed-sustain-or-quarter-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 0,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "B",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 71,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 71,
+        "keyAlteration": null,
+        "localAccidental": null,
+        "measureAccidentalState": null
+      },
+      "confidenceScores": {
+        "candidate": 0.8,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.8,
+      "durationProvenance": {
+        "detectedType": "quarter",
+        "detectedDivisions": 4,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 0,
+        "beamStrength": 2,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 71,
+        "emittedMidi": 57,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.21046214556028603,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 71,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.18238021638330756,
+            0.19513137557959814,
+            0.2078825347758887,
+            0.22063369397217927,
+            0.23338485316846985
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.002579610784397335,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "B",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 71,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 71,
+          "keyAlteration": null,
+          "localAccidental": null,
+          "measureAccidentalState": null
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 0,
+        "eventOnsetDivisions": 0,
+        "eventMidis": [
+          57
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 4 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 3,
+      "truthMeasure": 3,
+      "generatedMeasure": 3,
+      "expected": {
+        "id": "P1-m3-n35",
+        "midi": 57,
+        "label": "A3",
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m3-n32",
+        "midi": 57,
+        "label": "A3",
+        "onsetQuarters": 2,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 0,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m3-n35",
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m3-n32",
+          "midi": 57,
+          "label": "A3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "A3",
+      "generatedPitch": "A3",
+      "expectedOnset": 2,
+      "generatedOnset": 2,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        57
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 608.562,
+        "y": 251.611,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.210462,
+        "rawPdfTextBaselineYNorm": 0.213384,
+        "fullBoundingBoxCenterYNorm": 0.203914,
+        "anchorAdjustmentInGlyphHeights": 0.1543,
+        "idealAnchorAdjustmentInGlyphHeights": -2.4026,
+        "glyphHeightToStaffSpaceRatio": 1.4853,
+        "anchorDiagnostics": {
+          "yNorm": 0.21046214556028603,
+          "fallbackYNorm": 0.21046214556028603,
+          "rawYNorm": 0.21338383838383837,
+          "source": "glyph-metrics-fallback",
+          "confidence": 0.45,
+          "visualBounds": null,
+          "suppressedStaffOrLedgerRows": 5,
+          "suppressedStemColumns": 2,
+          "rejectedReason": "component-outside-font-origin-range",
+          "suppressedOrMaskedRowCount": 5,
+          "localStaffGapNorm": 0.012751159196290572,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.6937500000000001,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              250,
+              262,
+              263,
+              275,
+              276
+            ],
+            "ambiguousRows": [
+              268,
+              269,
+              270
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          }
+        }
+      },
+      "staffLineCoordinates": [
+        0.18238,
+        0.195131,
+        0.207883,
+        0.220634,
+        0.233385
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.210462,
+      "generatedStaffPosition": 4,
+      "expectedStaffPosition": -4,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 0,
+      "noteCandidateIds": [
+        "n-3-9-617-276"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m3:x617:y276"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-3-9-617-276-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:stemmed-sustain-or-quarter-voice:rg-3-10",
+        "likelyVoiceRole": "stemmed-sustain-or-quarter-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 0,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "B",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 71,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 71,
+        "keyAlteration": null,
+        "localAccidental": null,
+        "measureAccidentalState": null
+      },
+      "confidenceScores": {
+        "candidate": 0.8,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.8,
+      "durationProvenance": {
+        "detectedType": "quarter",
+        "detectedDivisions": 4,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 0,
+        "beamStrength": 2,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 71,
+        "emittedMidi": 57,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.21046214556028603,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 71,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.18238021638330756,
+            0.19513137557959814,
+            0.2078825347758887,
+            0.22063369397217927,
+            0.23338485316846985
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.002579610784397335,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "B",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 71,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 71,
+          "keyAlteration": null,
+          "localAccidental": null,
+          "measureAccidentalState": null
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 3,
+        "eventOnsetDivisions": 8,
+        "eventMidis": [
+          57
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 71
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 67
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 4 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 7,
+      "truthMeasure": 7,
+      "generatedMeasure": 7,
+      "expected": {
+        "id": "P1-m7-n84",
+        "midi": 54,
+        "label": "F#3",
+        "onsetQuarters": 0,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m7-n81",
+        "midi": 54,
+        "label": "F#3",
+        "onsetQuarters": 0,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m7-n84",
+          "midi": 54,
+          "label": "F#3",
+          "onsetQuarters": 0,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m7-n81",
+          "midi": 54,
+          "label": "F#3",
+          "onsetQuarters": 0,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "F#3",
+      "generatedPitch": "F#3",
+      "expectedOnset": 0,
+      "generatedOnset": 0,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        54
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 536.797,
+        "y": 730.326,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.578053,
+        "rawPdfTextBaselineYNorm": 0.583333,
+        "fullBoundingBoxCenterYNorm": 0.573864,
+        "anchorAdjustmentInGlyphHeights": 0.2788,
+        "idealAnchorAdjustmentInGlyphHeights": -1.6288,
+        "glyphHeightToStaffSpaceRatio": 1.8496,
+        "anchorDiagnostics": {
+          "yNorm": 0.5780525502318392,
+          "fallbackYNorm": 0.5800666398114941,
+          "rawYNorm": 0.5833333333333334,
+          "source": "ink-notehead-geometry",
+          "confidence": 0.96,
+          "visualBounds": {
+            "x": 541,
+            "y": 744,
+            "width": 6,
+            "height": 9
+          },
+          "suppressedStaffOrLedgerRows": 4,
+          "suppressedOrMaskedRowCount": 4,
+          "suppressedStemColumns": 6,
+          "localStaffGapNorm": 0.010239567233384853,
+          "rejectedReason": null,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.5192307692307693,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              728,
+              741,
+              754,
+              755
+            ],
+            "ambiguousRows": [
+              743,
+              745,
+              746,
+              747,
+              748,
+              749,
+              750,
+              751,
+              759
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          },
+          "competingHeadCandidates": null
+        }
+      },
+      "staffLineCoordinates": [
+        0.542504,
+        0.552743,
+        0.562983,
+        0.573223,
+        0.583462
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.578053,
+      "generatedStaffPosition": 1,
+      "expectedStaffPosition": -6,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 1,
+      "noteCandidateIds": [
+        "n-7-0-545-755"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m7:x545:y755"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-7-0-545-755-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:beamed-eighth-voice:rg-7-1",
+        "likelyVoiceRole": "beamed-eighth-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 1,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "F",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 65,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 65,
+        "keyAlteration": null,
+        "localAccidental": "sharp",
+        "localAccidentalAlter": 1,
+        "accidentalSource": "vector-path",
+        "measureAccidentalState": 1
+      },
+      "confidenceScores": {
+        "candidate": 0.76,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.76,
+      "durationProvenance": {
+        "detectedType": "eighth",
+        "detectedDivisions": 2,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 1,
+        "beamStrength": 8,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 65,
+        "emittedMidi": 54,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.5780525502318392,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 65,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.5425038639876353,
+            0.5527434312210201,
+            0.562982998454405,
+            0.5732225656877898,
+            0.5834621329211747
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.0048299845440493705,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "F",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 65,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 65,
+          "keyAlteration": null,
+          "localAccidental": "sharp",
+          "localAccidentalAlter": 1,
+          "accidentalSource": "vector-path",
+          "measureAccidentalState": 1
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 0,
+        "eventOnsetDivisions": 0,
+        "eventMidis": [
+          54
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 50
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 50
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 2 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "measure": 7,
+      "truthMeasure": 7,
+      "generatedMeasure": 7,
+      "expected": {
+        "id": "P1-m7-n93",
+        "midi": 54,
+        "label": "F#3",
+        "onsetQuarters": 2,
+        "durationQuarters": 1,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": true,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "generated": {
+        "id": "P1-m7-n90",
+        "midi": 54,
+        "label": "F#3",
+        "onsetQuarters": 2,
+        "durationQuarters": 2,
+        "voice": 1,
+        "staff": 1,
+        "isRest": false,
+        "isChord": false,
+        "tieStart": false,
+        "tieStop": false,
+        "dots": 0,
+        "accidental": null,
+        "stemDirection": null,
+        "beams": null,
+        "staccato": false,
+        "accent": false
+      },
+      "pitchDeltaSemitones": 0,
+      "onsetDiffQuarters": 0,
+      "durationDiffQuarters": 1,
+      "source": "event-match",
+      "page": 1,
+      "system": 2,
+      "staff": 1,
+      "voice": 1,
+      "expectedNotes": [
+        {
+          "id": "P1-m7-n93",
+          "midi": 54,
+          "label": "F#3",
+          "onsetQuarters": 2,
+          "durationQuarters": 1,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": true,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "generatedNotes": [
+        {
+          "id": "P1-m7-n90",
+          "midi": 54,
+          "label": "F#3",
+          "onsetQuarters": 2,
+          "durationQuarters": 2,
+          "voice": 1,
+          "staff": 1,
+          "isRest": false,
+          "isChord": false,
+          "tieStart": false,
+          "tieStop": false,
+          "dots": 0,
+          "accidental": null,
+          "stemDirection": null,
+          "beams": null,
+          "staccato": false,
+          "accent": false
+        }
+      ],
+      "expectedPitch": "F#3",
+      "generatedPitch": "F#3",
+      "expectedOnset": 2,
+      "generatedOnset": 2,
+      "expectedDuration": 1,
+      "generatedDuration": 2,
+      "expectedChord": [
+        54
+      ],
+      "generatedChord": null,
+      "pitchDifference": 0,
+      "semitoneDifference": 0,
+      "diatonicStaffStepDifference": 0,
+      "octaveDifference": 0,
+      "activeClef": "treble",
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": {
+        "x": 608.562,
+        "y": 730.326,
+        "width": 17.157,
+        "height": 24.508
+      },
+      "noteheadPathOrGlyphSource": "pdf-text-glyph",
+      "computedNoteheadCenter": {
+        "selectedYNorm": 0.578384,
+        "rawPdfTextBaselineYNorm": 0.583333,
+        "fullBoundingBoxCenterYNorm": 0.573864,
+        "anchorAdjustmentInGlyphHeights": 0.2613,
+        "idealAnchorAdjustmentInGlyphHeights": -1.6288,
+        "glyphHeightToStaffSpaceRatio": 1.8496,
+        "anchorDiagnostics": {
+          "yNorm": 0.5783843067459761,
+          "fallbackYNorm": 0.5800666398114941,
+          "rawYNorm": 0.5833333333333334,
+          "source": "self-calibrated-glyph-fallback",
+          "confidence": 0.851539292294009,
+          "visualBounds": null,
+          "suppressedStaffOrLedgerRows": 4,
+          "suppressedStemColumns": 5,
+          "rejectedReason": null,
+          "suppressedOrMaskedRowCount": 4,
+          "localStaffGapNorm": 0.010239567233384853,
+          "ledgerClassifier": {
+            "result": "staff-like-suppressed",
+            "confidence": 0.5192307692307693,
+            "acceptedLedgerRows": [],
+            "suppressedStaffRows": [
+              728,
+              741,
+              754,
+              755
+            ],
+            "ambiguousRows": [
+              743,
+              745,
+              746,
+              747,
+              748,
+              749,
+              750,
+              751,
+              759
+            ],
+            "maskedLedgerStrokeRows": [],
+            "featuresUsed": [
+              "lengthRelativeToSystem",
+              "lengthRelativeToLocalWindow",
+              "staffBandMembership",
+              "halfSpaceAlignment",
+              "noteheadOrChordProximity"
+            ]
+          },
+          "inkRejectedReason": "no-head-sized-component",
+          "calibration": {
+            "scope": "page-font-glyph",
+            "fontName": "g_d1_f4",
+            "glyph": "",
+            "originToCenterSpaces": 0.483324,
+            "sampleCount": 15,
+            "inlierCount": 15,
+            "inlierFraction": 1,
+            "madSpaces": 0.010673,
+            "maxLeaveOneOutResidual": 0.037736,
+            "glyphHeightSpaces": 1.849628,
+            "correctionSpaces": 0.164297,
+            "confidence": 0.851539,
+            "sources": [
+              "ink-notehead-geometry",
+              "ledger-masked-ink-notehead-geometry"
+            ]
+          }
+        }
+      },
+      "staffLineCoordinates": [
+        0.542504,
+        0.552743,
+        0.562983,
+        0.573223,
+        0.583462
+      ],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": 0.578384,
+      "generatedStaffPosition": 1,
+      "expectedStaffPosition": -6,
+      "vectorTransform": {
+        "kind": "pdf-text-origin-to-analysis-image",
+        "scaleX": 1.633987,
+        "scaleY": 1.633838,
+        "yAxisInverted": true,
+        "fullPdfTextMatrixAvailable": false
+      },
+      "fontOrGlyphIdentity": {
+        "fontName": "g_d1_f4",
+        "glyphIdentity": "U+E0A4",
+        "glyphKind": "black"
+      },
+      "pitchErrorCategories": [],
+      "expectedChordMembership": true,
+      "generatedChordMembership": false,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": "down",
+      "expectedBeamState": null,
+      "generatedBeamState": 1,
+      "noteCandidateIds": [
+        "n-7-9-617-755"
+      ],
+      "glyphIds": [
+        "vector-glyph:p1:m7:x617:y755"
+      ],
+      "stemOwnership": {
+        "attachedStemId": "n-7-9-617-755-stem",
+        "stemDirection": "down",
+        "likelyVoiceId": "upper:down:beamed-eighth-voice:rg-7-10",
+        "likelyVoiceRole": "beamed-eighth-voice",
+        "confidence": 0.98
+      },
+      "beamOwnership": {
+        "attachedBeamIds": [],
+        "beamGroupId": null,
+        "beamCount": 1,
+        "expectedDivisions": null,
+        "confidence": 0.98
+      },
+      "accidentalProvenance": {
+        "writtenPitch": {
+          "step": "F",
+          "alter": null,
+          "octave": 4
+        },
+        "naturalMidi": 65,
+        "keySignatureFifths": 0,
+        "keyDefaultMidi": 65,
+        "keyAlteration": null,
+        "localAccidental": "sharp",
+        "localAccidentalAlter": 1,
+        "accidentalSource": "vector-path",
+        "measureAccidentalState": 1
+      },
+      "confidenceScores": {
+        "candidate": 0.76,
+        "pitch": 0.92,
+        "rhythm": 0.9,
+        "measure": 0.865,
+        "stem": 0.98,
+        "beam": null
+      },
+      "noteheadGlyphClassification": "black",
+      "generatedConfidence": 0.76,
+      "durationProvenance": {
+        "detectedType": "eighth",
+        "detectedDivisions": 2,
+        "emittedDivisions": 8,
+        "dotted": false,
+        "beams": 1,
+        "beamStrength": 8,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": 65,
+        "emittedMidi": 54,
+        "clef": "treble",
+        "pitchMapping": {
+          "yNorm": 0.5783843067459761,
+          "staffRole": "upper",
+          "clef": "treble",
+          "clefSign": "treble",
+          "midi": 65,
+          "alternateStaffRole": "lower",
+          "alternateClef": "bass",
+          "alternateClefSign": "bass",
+          "alternateMidi": null,
+          "lineYs": [
+            0.5425038639876353,
+            0.5527434312210201,
+            0.562982998454405,
+            0.5732225656877898,
+            0.5834621329211747
+          ],
+          "staffClefs": {
+            "upper": "treble",
+            "lower": "bass"
+          },
+          "trebleLineDistance": 0.005077826175198585,
+          "bassLineDistance": null,
+          "ambiguous": false,
+          "staffBounds": null
+        },
+        "alteration": {
+          "writtenPitch": {
+            "step": "F",
+            "alter": null,
+            "octave": 4
+          },
+          "naturalMidi": 65,
+          "keySignatureFifths": 0,
+          "keyDefaultMidi": 65,
+          "keyAlteration": null,
+          "localAccidental": "sharp",
+          "localAccidentalAlter": 1,
+          "accidentalSource": "vector-path",
+          "measureAccidentalState": 1
+        }
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": 3,
+        "eventOnsetDivisions": 8,
+        "eventMidis": [
+          54
+        ],
+        "eventNoteCount": 1,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 6,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 4,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 2,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 2,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "backup",
+              "to": 0,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 50
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 8,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "backup",
+              "to": 8,
+              "amount": 8
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 57
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 53
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 50
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 66
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 62
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": "treble",
+        "detectedStaffRole": "upper",
+        "emittedStaff": 1,
+        "graphStaffLane": null
+      },
+      "clusterHint": "duration-inference",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "duration_inference",
+        "rule": "glyph/beam inference followed by gap extension and normalization",
+        "evidence": "Detector duration 2 divisions; event duration 8 divisions.",
+        "confidence": 0.85
+      },
+      "likelyPipelineStage": "duration_inference",
+      "provenanceNote": "Joined to detector/event geometry by measure, MIDI, onset, duration, staff, and nearest notehead coordinates."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "measure": 1,
+      "message": "Repeat mismatch",
+      "expected": null,
+      "generated": null,
+      "source": "evaluator-compact",
+      "page": 1,
+      "system": 0,
+      "staff": null,
+      "voice": null,
+      "expectedNotes": [],
+      "generatedNotes": [],
+      "expectedPitch": null,
+      "generatedPitch": null,
+      "expectedOnset": null,
+      "generatedOnset": null,
+      "expectedDuration": null,
+      "generatedDuration": null,
+      "expectedChord": null,
+      "generatedChord": null,
+      "pitchDifference": null,
+      "semitoneDifference": null,
+      "diatonicStaffStepDifference": null,
+      "octaveDifference": null,
+      "activeClef": null,
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": null,
+      "noteheadPathOrGlyphSource": null,
+      "computedNoteheadCenter": null,
+      "staffLineCoordinates": [],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": null,
+      "generatedStaffPosition": null,
+      "expectedStaffPosition": null,
+      "vectorTransform": null,
+      "fontOrGlyphIdentity": null,
+      "pitchErrorCategories": [],
+      "expectedChordMembership": null,
+      "generatedChordMembership": null,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": null,
+      "expectedBeamState": null,
+      "generatedBeamState": null,
+      "noteCandidateIds": [],
+      "glyphIds": [],
+      "stemOwnership": null,
+      "beamOwnership": null,
+      "accidentalProvenance": null,
+      "confidenceScores": {
+        "candidate": null,
+        "pitch": null,
+        "rhythm": null,
+        "measure": 0.8650000000000001,
+        "stem": null,
+        "beam": null
+      },
+      "noteheadGlyphClassification": null,
+      "generatedConfidence": null,
+      "durationProvenance": {
+        "detectedType": null,
+        "detectedDivisions": null,
+        "emittedDivisions": null,
+        "dotted": false,
+        "beams": null,
+        "beamStrength": null,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": null,
+        "emittedMidi": null,
+        "clef": null,
+        "pitchMapping": null,
+        "alteration": null
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": null,
+        "eventOnsetDivisions": null,
+        "eventMidis": [],
+        "eventNoteCount": null,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 4,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 0,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 59
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": null,
+        "detectedStaffRole": null,
+        "emittedStaff": null,
+        "graphStaffLane": null
+      },
+      "clusterHint": "other",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "unknown / late MusicXML",
+        "rule": "first demonstrable divergence not available below measure level",
+        "evidence": "Repeat mismatch",
+        "confidence": 0.4
+      },
+      "likelyPipelineStage": "unknown / late MusicXML",
+      "provenanceNote": "No unique generated candidate exists; divergence is classified from measure-level detector/emission counts."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "tempo-mismatch",
+      "class": "interpretation",
+      "measure": 1,
+      "message": "Tempo 88 BPM missing or wrong at q=0",
+      "expected": null,
+      "generated": null,
+      "source": "evaluator-compact",
+      "page": 1,
+      "system": 0,
+      "staff": null,
+      "voice": null,
+      "expectedNotes": [],
+      "generatedNotes": [],
+      "expectedPitch": null,
+      "generatedPitch": null,
+      "expectedOnset": null,
+      "generatedOnset": null,
+      "expectedDuration": null,
+      "generatedDuration": null,
+      "expectedChord": null,
+      "generatedChord": null,
+      "pitchDifference": null,
+      "semitoneDifference": null,
+      "diatonicStaffStepDifference": null,
+      "octaveDifference": null,
+      "activeClef": null,
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": null,
+      "noteheadPathOrGlyphSource": null,
+      "computedNoteheadCenter": null,
+      "staffLineCoordinates": [],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": null,
+      "generatedStaffPosition": null,
+      "expectedStaffPosition": null,
+      "vectorTransform": null,
+      "fontOrGlyphIdentity": null,
+      "pitchErrorCategories": [],
+      "expectedChordMembership": null,
+      "generatedChordMembership": null,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": null,
+      "expectedBeamState": null,
+      "generatedBeamState": null,
+      "noteCandidateIds": [],
+      "glyphIds": [],
+      "stemOwnership": null,
+      "beamOwnership": null,
+      "accidentalProvenance": null,
+      "confidenceScores": {
+        "candidate": null,
+        "pitch": null,
+        "rhythm": null,
+        "measure": 0.8650000000000001,
+        "stem": null,
+        "beam": null
+      },
+      "noteheadGlyphClassification": null,
+      "generatedConfidence": null,
+      "durationProvenance": {
+        "detectedType": null,
+        "detectedDivisions": null,
+        "emittedDivisions": null,
+        "dotted": false,
+        "beams": null,
+        "beamStrength": null,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": null,
+        "emittedMidi": null,
+        "clef": null,
+        "pitchMapping": null,
+        "alteration": null
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": null,
+        "eventOnsetDivisions": null,
+        "eventMidis": [],
+        "eventNoteCount": null,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 4,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 1,
+              "noteCount": 3,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 0,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 59
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 65
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": null,
+        "detectedStaffRole": null,
+        "emittedStaff": null,
+        "graphStaffLane": null
+      },
+      "clusterHint": "other",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "unknown / late MusicXML",
+        "rule": "first demonstrable divergence not available below measure level",
+        "evidence": "Tempo 88 BPM missing or wrong at q=0",
+        "confidence": 0.4
+      },
+      "likelyPipelineStage": "unknown / late MusicXML",
+      "provenanceNote": "No unique generated candidate exists; divergence is classified from measure-level detector/emission counts."
+    },
+    {
+      "fixture": "guitar-paired-chords-vector",
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "measure": 8,
+      "message": "Repeat mismatch",
+      "expected": null,
+      "generated": null,
+      "source": "evaluator-compact",
+      "page": 1,
+      "system": 2,
+      "staff": null,
+      "voice": null,
+      "expectedNotes": [],
+      "generatedNotes": [],
+      "expectedPitch": null,
+      "generatedPitch": null,
+      "expectedOnset": null,
+      "generatedOnset": null,
+      "expectedDuration": null,
+      "generatedDuration": null,
+      "expectedChord": null,
+      "generatedChord": null,
+      "pitchDifference": null,
+      "semitoneDifference": null,
+      "diatonicStaffStepDifference": null,
+      "octaveDifference": null,
+      "activeClef": null,
+      "activeKeySignature": {
+        "fifths": 0,
+        "mode": "major",
+        "confidence": 0
+      },
+      "noteheadBoundingBox": null,
+      "noteheadPathOrGlyphSource": null,
+      "computedNoteheadCenter": null,
+      "staffLineCoordinates": [],
+      "nearestLedgerLineCandidates": [],
+      "selectedStaffAnchor": null,
+      "generatedStaffPosition": null,
+      "expectedStaffPosition": null,
+      "vectorTransform": null,
+      "fontOrGlyphIdentity": null,
+      "pitchErrorCategories": [],
+      "expectedChordMembership": null,
+      "generatedChordMembership": null,
+      "expectedAccidental": null,
+      "generatedAccidental": null,
+      "expectedStemDirection": null,
+      "generatedStemDirection": null,
+      "expectedBeamState": null,
+      "generatedBeamState": null,
+      "noteCandidateIds": [],
+      "glyphIds": [],
+      "stemOwnership": null,
+      "beamOwnership": null,
+      "accidentalProvenance": null,
+      "confidenceScores": {
+        "candidate": null,
+        "pitch": null,
+        "rhythm": null,
+        "measure": 0.8650000000000002,
+        "stem": null,
+        "beam": null
+      },
+      "noteheadGlyphClassification": null,
+      "generatedConfidence": null,
+      "durationProvenance": {
+        "detectedType": null,
+        "detectedDivisions": null,
+        "emittedDivisions": null,
+        "dotted": false,
+        "beams": null,
+        "beamStrength": null,
+        "packing": null
+      },
+      "pitchProvenance": {
+        "naturalMidi": null,
+        "emittedMidi": null,
+        "clef": null,
+        "pitchMapping": null,
+        "alteration": null
+      },
+      "chordGroupingProvenance": {
+        "eventIndex": null,
+        "eventOnsetDivisions": null,
+        "eventMidis": [],
+        "eventNoteCount": null,
+        "measureDiagnostics": {
+          "onsetCount": 4,
+          "noteEventCount": 4,
+          "sequentialSameXCount": 0,
+          "fragmentedOnsetCount": 0,
+          "onsets": [
+            {
+              "startDivision": 0,
+              "eventCount": 1,
+              "noteCount": 6,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 4,
+              "eventCount": 1,
+              "noteCount": 5,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 8,
+              "eventCount": 1,
+              "noteCount": 6,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            },
+            {
+              "startDivision": 12,
+              "eventCount": 1,
+              "noteCount": 2,
+              "clefs": [
+                "treble"
+              ],
+              "voices": [
+                1
+              ],
+              "fragmentedSameClef": false
+            }
+          ],
+          "forwardCount": 0,
+          "backupCount": 0,
+          "sequence": [
+            {
+              "type": "note",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 52
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 48
+            },
+            {
+              "type": "chord",
+              "startDivision": 0,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 43
+            },
+            {
+              "type": "note",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 52
+            },
+            {
+              "type": "chord",
+              "startDivision": 4,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 48
+            },
+            {
+              "type": "note",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 55
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 52
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 48
+            },
+            {
+              "type": "chord",
+              "startDivision": 8,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 43
+            },
+            {
+              "type": "note",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 64
+            },
+            {
+              "type": "chord",
+              "startDivision": 12,
+              "durationDivisions": 4,
+              "voice": 1,
+              "midi": 60
+            }
+          ]
+        },
+        "reconstruction": {
+          "adjustedEventCount": 0,
+          "adjustedNoteCount": 0,
+          "reasons": {}
+        }
+      },
+      "staffAssignmentProvenance": {
+        "detectedClef": null,
+        "detectedStaffRole": null,
+        "emittedStaff": null,
+        "graphStaffLane": null
+      },
+      "clusterHint": "other",
+      "firstPipelineStageWhereDivergenceAppears": {
+        "stage": "unknown / late MusicXML",
+        "rule": "first demonstrable divergence not available below measure level",
+        "evidence": "Repeat mismatch",
+        "confidence": 0.4
+      },
+      "likelyPipelineStage": "unknown / late MusicXML",
+      "provenanceNote": "No unique generated candidate exists; divergence is classified from measure-level detector/emission counts."
+    }
+  ],
+  "provenanceCoverage": {
+    "withPage": 9,
+    "withCandidateIds": 6,
+    "withGlyphIds": 6,
+    "withStemOwnership": 6,
+    "withBeamOwnership": 6,
+    "withAccidentalProvenance": 6,
+    "withFirstDivergence": 9
+  }
+}

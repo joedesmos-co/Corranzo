@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: morphology-instance-fusion-active
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:30:05.761Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 53.6%
+- pitch: 59.0%
+- rhythm: 56.2%
+- sustain: 25.0%
+- articulation: 18.0%
+- measureStructure: 76.9%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-staccato [articulation] ×35 across 1 fixtures
+- onset-mismatch [rhythm] ×33 across 1 fixtures
+- duration-mismatch [rhythm] ×31 across 1 fixtures
+- incorrect-pitch [pitch] ×17 across 1 fixtures
+- incorrect-chord [measure-structure] ×15 across 1 fixtures
+- missing-note [pitch] ×15 across 1 fixtures
+- extra-note [pitch] ×7 across 1 fixtures
+- missing-accent [articulation] ×6 across 1 fixtures
+- incorrect-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- missing-tie [sustain] ×1 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=53.6% R=56% P=59% S=25% A=18% M=77% I=40%
+  worst measures: #2(missing-note|missing-note|missing-note), #3(missing-note|missing-note|missing-note), #6(missing-note|missing-note|extra-note)

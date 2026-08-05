@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: optical-body-balance
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:21:32.332Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 45.9%
+- pitch: 39.6%
+- rhythm: 64.4%
+- sustain: 0.0%
+- articulation: 27.6%
+- measureStructure: 50.0%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- missing-note [pitch] ×36 across 1 fixtures
+- incorrect-chord [measure-structure] ×29 across 1 fixtures
+- onset-mismatch [rhythm] ×21 across 1 fixtures
+- duration-mismatch [rhythm] ×16 across 1 fixtures
+- missing-staccato [articulation] ×15 across 1 fixtures
+- extra-note [pitch] ×13 across 1 fixtures
+- incorrect-pitch [pitch] ×12 across 1 fixtures
+- missing-accent [articulation] ×6 across 1 fixtures
+- incorrect-tie [sustain] ×3 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- merged-measure [measure-structure] ×1 across 1 fixtures
+- missing-tie [sustain] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=45.9% R=64% P=40% S=0% A=28% M=50% I=40%
+  worst measures: #3(merged-measure|missing-note|missing-note), #2(split-measure|missing-note|missing-note), #8(missing-note|missing-note|missing-note)

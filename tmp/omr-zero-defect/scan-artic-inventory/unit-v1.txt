@@ -1,0 +1,151 @@
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js (18 tests | 6 failed) 8ms
+   ✓ assignNoteAnchoredRasterArticulations > detects staccato above an up-stem-like chord column 1ms
+   × assignNoteAnchoredRasterArticulations > detects staccato below a down-stem-like column 3ms
+     → expected undefined to be 'staccato' // Object.is equality
+   ✓ assignNoteAnchoredRasterArticulations > broadcasts a chord staccato to mates 0ms
+   × assignNoteAnchoredRasterArticulations > detects an accent wedge above a note 1ms
+     → expected +0 to be 1 // Object.is equality
+   × assignNoteAnchoredRasterArticulations > detects an accent below a note 0ms
+     → expected undefined to be 'accent' // Object.is equality
+   × assignNoteAnchoredRasterArticulations > broadcasts a chord accent 0ms
+     → expected false to be true // Object.is equality
+   × assignNoteAnchoredRasterArticulations > detects tenuto above when supported 0ms
+     → expected undefined to be 'tenuto' // Object.is equality
+   ✓ assignNoteAnchoredRasterArticulations > does not treat an augmentation-dot-like mark beside the head as staccato 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a full staff line as tenuto 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a ledger-like short dense row spanning the crop as tenuto 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a stem hairline 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a beam-like thick horizontal band as accent when it spans the patch 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a slur-like long thin arc fragment as accent 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects accidental-like ink left of the head 0ms
+   ✓ assignNoteAnchoredRasterArticulations > rejects a text-like digit blob above the staff as articulation 0ms
+   × assignNoteAnchoredRasterArticulations > keeps separate ownership for two nearby voice columns 0ms
+     → expected undefined to be 'accent' // Object.is equality
+   ✓ assignNoteAnchoredRasterArticulations > does not invent articulations from an empty ambiguous patch 0ms
+   ✓ assignNoteAnchoredRasterArticulations > leaves the legacy vector-oriented detectStaccatoOnNote helper intact 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > detects staccato below a down-stem-like column
+AssertionError: expected undefined to be 'staccato' // Object.is equality
+
+- Expected: 
+"staccato"
+
++ Received: 
+undefined
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:54:45
+     52|     const noteheads = [{ cx: 84, cy: 112, clef: 'treble' }]
+     53|     assignNoteAnchoredRasterArticulations(imageData, noteheads, measur…
+     54|     expect(noteheads[0].articulation?.type).toBe('staccato')
+       |                                             ^
+     55|     expect(noteheads[0].articulation?.placement).toBe('below')
+     56|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > detects an accent wedge above a note
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:79:34
+     77|     const noteheads = [{ cx: 84, cy: 122, clef: 'treble' }]
+     78|     const result = assignNoteAnchoredRasterArticulations(imageData, no…
+     79|     expect(result.accentColumns).toBe(1)
+       |                                  ^
+     80|     expect(noteheads[0].accentArticulation?.type).toBe('accent')
+     81|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > detects an accent below a note
+AssertionError: expected undefined to be 'accent' // Object.is equality
+
+- Expected: 
+"accent"
+
++ Received: 
+undefined
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:89:51
+     87|     const noteheads = [{ cx: 84, cy: 112, clef: 'treble' }]
+     88|     assignNoteAnchoredRasterArticulations(imageData, noteheads, measur…
+     89|     expect(noteheads[0].accentArticulation?.type).toBe('accent')
+       |                                                   ^
+     90|     expect(noteheads[0].accentArticulation?.placement).toBe('below')
+     91|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > broadcasts a chord accent
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:103:83
+    101|     ]
+    102|     assignNoteAnchoredRasterArticulations(imageData, noteheads, measur…
+    103|     expect(noteheads.every((note) => note.accentArticulation?.type ===…
+       |                                                                                   ^
+    104|   })
+    105| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > detects tenuto above when supported
+AssertionError: expected undefined to be 'tenuto' // Object.is equality
+
+- Expected: 
+"tenuto"
+
++ Received: 
+undefined
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:112:45
+    110|     const noteheads = [{ cx: 84, cy: 122, clef: 'treble' }]
+    111|     assignNoteAnchoredRasterArticulations(imageData, noteheads, measur…
+    112|     expect(noteheads[0].articulation?.type).toBe('tenuto')
+       |                                             ^
+    113|   })
+    114| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  tests/omrNoteAnchoredRasterArticulations.test.js > assignNoteAnchoredRasterArticulations > keeps separate ownership for two nearby voice columns
+AssertionError: expected undefined to be 'accent' // Object.is equality
+
+- Expected: 
+"accent"
+
++ Received: 
+undefined
+
+ ❯ tests/omrNoteAnchoredRasterArticulations.test.js:209:51
+    207|     assignNoteAnchoredRasterArticulations(imageData, noteheads, measur…
+    208|     expect(noteheads[0].articulation?.type).toBe('staccato')
+    209|     expect(noteheads[1].accentArticulation?.type).toBe('accent')
+       |                                                   ^
+    210|   })
+    211| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 12 passed (18)
+   Start at  20:06:22
+   Duration  176ms (transform 19ms, setup 0ms, collect 24ms, tests 8ms, environment 0ms, prepare 24ms)
+

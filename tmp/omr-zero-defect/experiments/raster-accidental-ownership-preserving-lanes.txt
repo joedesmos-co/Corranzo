@@ -1,0 +1,35 @@
+OMR semantic corpus — baseline
+==============================
+label: raster-accidental-ownership-preserving-lanes
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 2366c37
+createdAt: 2026-08-04T04:44:02.905Z
+fixtures: 1/1 ok
+
+Scoreboard (mean across fixtures)
+- overall: 56.0%
+- pitch: 87.9%
+- rhythm: 58.9%
+- sustain: 0.0%
+- articulation: 17.6%
+- measureStructure: 87.9%
+- interpretation: 40.0%
+
+Top recurring recognition errors
+- duration-mismatch [rhythm] ×45 across 1 fixtures
+- missing-staccato [articulation] ×44 across 1 fixtures
+- onset-mismatch [rhythm] ×24 across 1 fixtures
+- missing-accent [articulation] ×12 across 1 fixtures
+- incorrect-chord [measure-structure] ×8 across 1 fixtures
+- incorrect-pitch [pitch] ×4 across 1 fixtures
+- missing-note [pitch] ×4 across 1 fixtures
+- extra-note [pitch] ×3 across 1 fixtures
+- incorrect-tie [sustain] ×2 across 1 fixtures
+- missing-tie [sustain] ×2 across 1 fixtures
+- volta-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×1 across 1 fixtures
+
+Per-fixture summary
+- piano-articulation-scan: overall=56.0% R=59% P=88% S=0% A=18% M=88% I=40%
+  worst measures: #1(missing-note|missing-note|extra-note), #8(extra-note|missing-staccato|duration-mismatch), #4(missing-staccato|missing-accent|missing-accent)

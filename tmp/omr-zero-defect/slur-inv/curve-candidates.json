@@ -1,0 +1,771 @@
+{
+  "candidates": [
+    {
+      "from": {
+        "m": 1,
+        "l": "D4",
+        "midi": 62,
+        "cx": 213,
+        "cy": 304,
+        "div": 4,
+        "sys": 0
+      },
+      "to": {
+        "m": 1,
+        "l": "F4",
+        "midi": 65,
+        "cx": 266,
+        "cy": 291,
+        "div": 12,
+        "sys": 0
+      },
+      "dx": 53,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 11,
+          "above": 15
+        },
+        "mid": {
+          "below": 9,
+          "above": 11
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 1,
+        "l": "F4",
+        "midi": 65,
+        "cx": 266,
+        "cy": 291,
+        "div": 12,
+        "sys": 0
+      },
+      "to": {
+        "m": 2,
+        "l": "E4",
+        "midi": 64,
+        "cx": 378,
+        "cy": 300,
+        "div": 4,
+        "sys": 0
+      },
+      "dx": 112,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": false,
+        "direct": false,
+        "side1": null,
+        "side2": null,
+        "segs": {
+          "seg1Start": 274,
+          "seg1End": 307,
+          "seg2Start": 317,
+          "seg2End": 370
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 2,
+        "l": "E4",
+        "midi": 64,
+        "cx": 378,
+        "cy": 300,
+        "div": 4,
+        "sys": 0
+      },
+      "to": {
+        "m": 2,
+        "l": "G4",
+        "midi": 67,
+        "cx": 449,
+        "cy": 284,
+        "div": 12,
+        "sys": 0
+      },
+      "dx": 71,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 16,
+          "above": 22
+        },
+        "mid": {
+          "below": 7,
+          "above": 11
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 2,
+        "l": "G4",
+        "midi": 67,
+        "cx": 449,
+        "cy": 284,
+        "div": 12,
+        "sys": 0
+      },
+      "to": {
+        "m": 3,
+        "l": "F#4",
+        "midi": 66,
+        "cx": 578,
+        "cy": 292,
+        "div": 4,
+        "sys": 0
+      },
+      "dx": 129,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": true,
+        "direct": false,
+        "side1": null,
+        "side2": "above",
+        "segs": {
+          "seg1Start": 457,
+          "seg1End": 506,
+          "seg2Start": 516,
+          "seg2End": 570
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 3,
+        "l": "F#4",
+        "midi": 66,
+        "cx": 578,
+        "cy": 292,
+        "div": 4,
+        "sys": 0
+      },
+      "to": {
+        "m": 3,
+        "l": "A4",
+        "midi": 69,
+        "cx": 648,
+        "cy": 277,
+        "div": 12,
+        "sys": 0
+      },
+      "dx": 70,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": true,
+      "cross": {
+        "kind": "same",
+        "probePasses": true,
+        "side": "below",
+        "covered": {
+          "below": 55,
+          "above": 35
+        },
+        "mid": {
+          "below": 19,
+          "above": 16
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 3,
+        "l": "A4",
+        "midi": 69,
+        "cx": 648,
+        "cy": 277,
+        "div": 12,
+        "sys": 0
+      },
+      "to": {
+        "m": 4,
+        "l": "G4",
+        "midi": 67,
+        "cx": 776,
+        "cy": 283,
+        "div": 4,
+        "sys": 0
+      },
+      "dx": 128,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": false,
+        "direct": false,
+        "side1": null,
+        "side2": null,
+        "segs": {
+          "seg1Start": 656,
+          "seg1End": 705,
+          "seg2Start": 715,
+          "seg2End": 768
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 4,
+        "l": "G4",
+        "midi": 67,
+        "cx": 776,
+        "cy": 283,
+        "div": 4,
+        "sys": 0
+      },
+      "to": {
+        "m": 4,
+        "l": "A#4",
+        "midi": 70,
+        "cx": 849,
+        "cy": 280,
+        "div": 12,
+        "sys": 0
+      },
+      "dx": 73,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 6,
+          "above": 26
+        },
+        "mid": {
+          "below": 3,
+          "above": 17
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 5,
+        "l": "A4",
+        "midi": 69,
+        "cx": 215,
+        "cy": 719,
+        "div": 4,
+        "sys": 1
+      },
+      "to": {
+        "m": 5,
+        "l": "C5",
+        "midi": 72,
+        "cx": 269,
+        "cy": 705,
+        "div": 12,
+        "sys": 1
+      },
+      "dx": 54,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 12,
+          "above": 16
+        },
+        "mid": {
+          "below": 9,
+          "above": 11
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 5,
+        "l": "C5",
+        "midi": 72,
+        "cx": 269,
+        "cy": 705,
+        "div": 12,
+        "sys": 1
+      },
+      "to": {
+        "m": 6,
+        "l": "B4",
+        "midi": 71,
+        "cx": 382,
+        "cy": 708,
+        "div": 4,
+        "sys": 1
+      },
+      "dx": 113,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": false,
+        "direct": false,
+        "side1": null,
+        "side2": null,
+        "segs": {
+          "seg1Start": 277,
+          "seg1End": 309,
+          "seg2Start": 319,
+          "seg2End": 374
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 6,
+        "l": "B4",
+        "midi": 71,
+        "cx": 382,
+        "cy": 708,
+        "div": 4,
+        "sys": 1
+      },
+      "to": {
+        "m": 6,
+        "l": "D5",
+        "midi": 74,
+        "cx": 451,
+        "cy": 700,
+        "div": 12,
+        "sys": 1
+      },
+      "dx": 69,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 22,
+          "above": 22
+        },
+        "mid": {
+          "below": 13,
+          "above": 14
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 6,
+        "l": "D5",
+        "midi": 74,
+        "cx": 451,
+        "cy": 700,
+        "div": 12,
+        "sys": 1
+      },
+      "to": {
+        "m": 7,
+        "l": "A4",
+        "midi": 69,
+        "cx": 579,
+        "cy": 718,
+        "div": 4,
+        "sys": 1
+      },
+      "dx": 128,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": false,
+        "direct": false,
+        "side1": null,
+        "side2": null,
+        "segs": {
+          "seg1Start": 459,
+          "seg1End": 508,
+          "seg2Start": 518,
+          "seg2End": 571
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 7,
+        "l": "A4",
+        "midi": 69,
+        "cx": 579,
+        "cy": 718,
+        "div": 4,
+        "sys": 1
+      },
+      "to": {
+        "m": 7,
+        "l": "C5",
+        "midi": 72,
+        "cx": 650,
+        "cy": 705,
+        "div": 12,
+        "sys": 1
+      },
+      "dx": 71,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 32,
+          "above": 15
+        },
+        "mid": {
+          "below": 13,
+          "above": 11
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 7,
+        "l": "C5",
+        "midi": 72,
+        "cx": 650,
+        "cy": 705,
+        "div": 12,
+        "sys": 1
+      },
+      "to": {
+        "m": 8,
+        "l": "F#4",
+        "midi": 66,
+        "cx": 773,
+        "cy": 733,
+        "div": 4,
+        "sys": 1
+      },
+      "dx": 123,
+      "crossBar": true,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "cross",
+        "p1": false,
+        "p2": true,
+        "direct": false,
+        "side1": null,
+        "side2": "below",
+        "segs": {
+          "seg1Start": 658,
+          "seg1End": 708,
+          "seg2Start": 718,
+          "seg2End": 765
+        }
+      }
+    },
+    {
+      "from": {
+        "m": 8,
+        "l": "F#4",
+        "midi": 66,
+        "cx": 773,
+        "cy": 733,
+        "div": 4,
+        "sys": 1
+      },
+      "to": {
+        "m": 8,
+        "l": "A4",
+        "midi": 69,
+        "cx": 850,
+        "cy": 718,
+        "div": 12,
+        "sys": 1
+      },
+      "dx": 77,
+      "crossBar": false,
+      "crossSystem": false,
+      "inkArcPass": false,
+      "cross": {
+        "kind": "same",
+        "probePasses": false,
+        "side": null,
+        "covered": {
+          "below": 13,
+          "above": 28
+        },
+        "mid": {
+          "below": 1,
+          "above": 10
+        }
+      }
+    }
+  ],
+  "monoTreble": [
+    {
+      "measureNumber": 1,
+      "systemIndex": 0,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 62,
+      "label": "D4",
+      "clef": "treble",
+      "cx": 213,
+      "cy": 304,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 1,
+      "systemIndex": 0,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 65,
+      "label": "F4",
+      "clef": "treble",
+      "cx": 266,
+      "cy": 291,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 2,
+      "systemIndex": 0,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 64,
+      "label": "E4",
+      "clef": "treble",
+      "cx": 378,
+      "cy": 300,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 2,
+      "systemIndex": 0,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 67,
+      "label": "G4",
+      "clef": "treble",
+      "cx": 449,
+      "cy": 284,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 3,
+      "systemIndex": 0,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 66,
+      "label": "F#4",
+      "clef": "treble",
+      "cx": 578,
+      "cy": 292,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 3,
+      "systemIndex": 0,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 69,
+      "label": "A4",
+      "clef": "treble",
+      "cx": 648,
+      "cy": 277,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 4,
+      "systemIndex": 0,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 67,
+      "label": "G4",
+      "clef": "treble",
+      "cx": 776,
+      "cy": 283,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 4,
+      "systemIndex": 0,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 70,
+      "label": "A#4",
+      "clef": "treble",
+      "cx": 849,
+      "cy": 280,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 5,
+      "systemIndex": 1,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 69,
+      "label": "A4",
+      "clef": "treble",
+      "cx": 215,
+      "cy": 719,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 5,
+      "systemIndex": 1,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 72,
+      "label": "C5",
+      "clef": "treble",
+      "cx": 269,
+      "cy": 705,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 6,
+      "systemIndex": 1,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 71,
+      "label": "B4",
+      "clef": "treble",
+      "cx": 382,
+      "cy": 708,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 6,
+      "systemIndex": 1,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 74,
+      "label": "D5",
+      "clef": "treble",
+      "cx": 451,
+      "cy": 700,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 7,
+      "systemIndex": 1,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 69,
+      "label": "A4",
+      "clef": "treble",
+      "cx": 579,
+      "cy": 718,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 7,
+      "systemIndex": 1,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 72,
+      "label": "C5",
+      "clef": "treble",
+      "cx": 650,
+      "cy": 705,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 8,
+      "systemIndex": 1,
+      "eventIndex": 2,
+      "noteIndex": 0,
+      "startDivision": 4,
+      "midi": 66,
+      "label": "F#4",
+      "clef": "treble",
+      "cx": 773,
+      "cy": 733,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    },
+    {
+      "measureNumber": 8,
+      "systemIndex": 1,
+      "eventIndex": 5,
+      "noteIndex": 0,
+      "startDivision": 12,
+      "midi": 69,
+      "label": "A4",
+      "clef": "treble",
+      "cx": 850,
+      "cy": 718,
+      "eventNoteCount": 1,
+      "beams": 0,
+      "artic": null
+    }
+  ],
+  "genNotes": 88
+}

@@ -1,0 +1,472 @@
+{
+  "kind": "semantic-corpus-evaluation",
+  "label": "note-anchored-artic-v2",
+  "mode": "written",
+  "evaluatorVersion": "2.0.0",
+  "schemaVersion": 2,
+  "frozen": true,
+  "gitCommit": "5252f36",
+  "createdAt": "2026-08-05T00:06:58.181Z",
+  "fixtures": [
+    {
+      "id": "piano-articulation-scan",
+      "ok": true,
+      "instrumentId": "piano",
+      "tier": "piano-scan",
+      "overall": 0.6337,
+      "overallPercent": "63%",
+      "classes": {
+        "pitch": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 88,
+          "denominator": 88,
+          "coverage": 1,
+          "reliable": true
+        },
+        "rhythm": {
+          "score": 0.8182,
+          "percent": "82%",
+          "numerator": 144,
+          "denominator": 176,
+          "coverage": 1,
+          "reliable": true
+        },
+        "sustain": {
+          "score": 0,
+          "percent": "0%",
+          "numerator": 0,
+          "denominator": 2,
+          "coverage": 1,
+          "reliable": true
+        },
+        "articulation": {
+          "score": 0.2174,
+          "percent": "22%",
+          "numerator": 15,
+          "denominator": 69,
+          "coverage": 1,
+          "reliable": true
+        },
+        "measureStructure": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 64,
+          "denominator": 64,
+          "coverage": 1,
+          "reliable": true
+        },
+        "interpretation": {
+          "score": 0.4,
+          "percent": "40%",
+          "numerator": 2,
+          "denominator": 5,
+          "coverage": 1,
+          "reliable": true
+        },
+        "playback": {
+          "score": 1,
+          "percent": "100%",
+          "numerator": 0,
+          "denominator": 0,
+          "coverage": 1,
+          "reliable": true
+        }
+      },
+      "totals": {
+        "truthNoteCount": 88,
+        "generatedNoteCount": 88,
+        "truthRestCount": 0,
+        "generatedRestCount": 0,
+        "truthMeasureCount": 8,
+        "generatedMeasureCount": 8,
+        "defectCount": 91
+      },
+      "alignmentConfidence": 1,
+      "topDefects": [
+        {
+          "code": "missing-staccato",
+          "class": "articulation",
+          "label": "Missing staccato",
+          "count": 35
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "label": "Duration mismatch",
+          "count": 32
+        },
+        {
+          "code": "missing-accent",
+          "class": "articulation",
+          "label": "Missing accent",
+          "count": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "label": "Missing tie",
+          "count": 2
+        },
+        {
+          "code": "volta-mismatch",
+          "class": "interpretation",
+          "label": "Volta mismatch",
+          "count": 2
+        },
+        {
+          "code": "tempo-mismatch",
+          "class": "interpretation",
+          "label": "Tempo change mismatch",
+          "count": 1
+        }
+      ],
+      "topDefectClasses": [
+        {
+          "class": "articulation",
+          "label": "Articulation",
+          "count": 54
+        },
+        {
+          "class": "rhythm",
+          "label": "Rhythm",
+          "count": 32
+        },
+        {
+          "class": "interpretation",
+          "label": "Interpretation",
+          "count": 3
+        },
+        {
+          "class": "sustain",
+          "label": "Sustain (ties)",
+          "count": 2
+        }
+      ],
+      "worstMeasures": [
+        {
+          "measureNumber": 4,
+          "severity": 42,
+          "summary": [
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Missing tie",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 2,
+          "severity": 38,
+          "summary": [
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected accent",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-accent",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 6,
+          "severity": 38,
+          "summary": [
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected staccato",
+            "Missing accent",
+            "Unexpected accent",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-staccato",
+            "missing-accent",
+            "missing-accent",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 3,
+          "severity": 30,
+          "summary": [
+            "Unexpected accent",
+            "Unexpected accent",
+            "Missing tie",
+            "Unexpected accent",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected accent",
+            "Half detected as quarter",
+            "Unexpected accent"
+          ],
+          "defectCodes": [
+            "missing-accent",
+            "missing-accent",
+            "missing-tie",
+            "missing-accent",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "missing-accent"
+          ]
+        },
+        {
+          "measureNumber": 7,
+          "severity": 30,
+          "summary": [
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected accent",
+            "Half detected as quarter",
+            "Unexpected accent",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "missing-staccato",
+            "missing-staccato",
+            "missing-staccato",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "missing-accent"
+          ]
+        },
+        {
+          "measureNumber": 1,
+          "severity": 26,
+          "summary": [
+            "Unexpected staccato",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Tempo 88 BPM missing or wrong at q=0"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "missing-staccato",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "missing-staccato",
+            "duration-mismatch",
+            "missing-staccato"
+          ]
+        },
+        {
+          "measureNumber": 8,
+          "severity": 24,
+          "summary": [
+            "Unexpected accent",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Volta mismatch"
+          ],
+          "defectCodes": [
+            "missing-accent",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "missing-staccato",
+            "duration-mismatch",
+            "missing-staccato",
+            "volta-mismatch"
+          ]
+        },
+        {
+          "measureNumber": 5,
+          "severity": 22,
+          "summary": [
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Half detected as quarter",
+            "Unexpected staccato",
+            "Half detected as quarter",
+            "Unexpected staccato"
+          ],
+          "defectCodes": [
+            "missing-staccato",
+            "duration-mismatch",
+            "duration-mismatch",
+            "duration-mismatch",
+            "missing-staccato",
+            "duration-mismatch",
+            "missing-staccato"
+          ]
+        }
+      ],
+      "firstDivergence": {
+        "measureNumber": 1,
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "alignment": "match",
+        "unmatched": false,
+        "defectCount": 9
+      }
+    }
+  ],
+  "aggregate": {
+    "fixtureCount": 1,
+    "okCount": 1,
+    "failedCount": 0,
+    "meanOverall": 0.6337,
+    "classes": {
+      "pitch": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "rhythm": {
+        "meanScore": 0.8182,
+        "meanCoverage": 1
+      },
+      "sustain": {
+        "meanScore": 0,
+        "meanCoverage": 1
+      },
+      "articulation": {
+        "meanScore": 0.2174,
+        "meanCoverage": 1
+      },
+      "measureStructure": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      },
+      "interpretation": {
+        "meanScore": 0.4,
+        "meanCoverage": 1
+      },
+      "playback": {
+        "meanScore": 1,
+        "meanCoverage": 1
+      }
+    },
+    "topDefects": [
+      {
+        "code": "missing-staccato",
+        "class": "articulation",
+        "count": 35,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "duration-mismatch",
+        "class": "rhythm",
+        "count": 32,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-accent",
+        "class": "articulation",
+        "count": 19,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "missing-tie",
+        "class": "sustain",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "volta-mismatch",
+        "class": "interpretation",
+        "count": 2,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      },
+      {
+        "code": "tempo-mismatch",
+        "class": "interpretation",
+        "count": 1,
+        "fixtureCount": 1,
+        "fixtures": [
+          "piano-articulation-scan"
+        ]
+      }
+    ]
+  }
+}

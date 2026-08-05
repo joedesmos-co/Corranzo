@@ -1,0 +1,27 @@
+OMR semantic corpus — baseline
+==============================
+label: c5d5-fix
+mode: written
+evaluator: frozen 2.0.0 / schema 2
+git: 417850e
+createdAt: 2026-08-04T16:12:57.146Z
+fixtures: 2/2 ok
+
+Scoreboard (mean across fixtures)
+- overall: 85.7%
+- pitch: 100.0%
+- rhythm: 100.0%
+- sustain: 100.0%
+- articulation: 100.0%
+- measureStructure: 100.0%
+- interpretation: 0.0%
+
+Top recurring recognition errors
+- repeat-mismatch [interpretation] ×2 across 1 fixtures
+- tempo-mismatch [interpretation] ×2 across 2 fixtures
+
+Per-fixture summary
+- guitar-standard-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(tempo-mismatch)
+- guitar-paired-chords-vector: overall=85.7% R=100% P=100% S=100% A=100% M=100% I=0%
+  worst measures: #1(repeat-mismatch|tempo-mismatch), #8(repeat-mismatch)
