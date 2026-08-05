@@ -116,7 +116,7 @@ function normalizeMeasureBox(measureBox) {
   }
 }
 
-function staffGapFromLines(staffLineYs, fallback = 12) {
+export function staffGapFromLines(staffLineYs, fallback = 12) {
   if (!Array.isArray(staffLineYs) || staffLineYs.length < 2) {
     return fallback
   }
@@ -132,9 +132,16 @@ function staffGapFromLines(staffLineYs, fallback = 12) {
   return Math.max(4, gaps[Math.floor(gaps.length / 2)] || fallback)
 }
 
+/** MuseScore / SMuFL repeat-dot codepoints observed on holdout PDFs. */
+export const REPEAT_DOT_CODEPOINTS = new Set([0xe043, 0xe044])
+
 /**
  * Extract vertical bar candidates and compact filled dots from a pdf.js
  * operator list. Coordinates are in the same pixel space as the rendered page.
+ *
+ * MuseScore thick/thin barlines are often zero-width stroked paths whose visual
+ * weight comes from setLineWidth (e.g. lw=25 thick vs lw=8 thin) — path bbox
+ * width alone is not enough.
  */
 export function extractPdfVectorBarlineComponentsFromOperatorList({
   operatorList,
@@ -162,15 +169,20 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
       ops.closeEOFillStroke,
     ].filter(Number.isFinite),
   )
-  const paintOperations = new Set(
+  const strokeOperations = new Set(
     [
-      ...fillOperations,
       ops.stroke,
       ops.closeStroke,
+      ops.fillStroke,
+      ops.eoFillStroke,
+      ops.closeFillStroke,
+      ops.closeEOFillStroke,
     ].filter(Number.isFinite),
   )
+  const paintOperations = new Set([...fillOperations, ...strokeOperations])
 
   let currentTransform = [1, 0, 0, 1, 0, 0]
+  let lineWidth = 1
   const transformStack = []
   const verticalBars = []
   const compactDots = []
@@ -180,17 +192,23 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
     const operation = operatorList.fnArray[operatorIndex]
     const args = operatorList.argsArray[operatorIndex]
     if (operation === ops.save) {
-      transformStack.push([...currentTransform])
+      transformStack.push({ transform: [...currentTransform], lineWidth })
       continue
     }
     if (operation === ops.restore) {
-      if (transformStack.length) {
-        currentTransform = transformStack.pop()
+      const restored = transformStack.pop()
+      if (restored) {
+        currentTransform = restored.transform
+        lineWidth = restored.lineWidth
       }
       continue
     }
     if (operation === ops.transform) {
       currentTransform = multiplyTransforms(currentTransform, args)
+      continue
+    }
+    if (operation === ops.setLineWidth) {
+      lineWidth = Number(args?.[0]) || lineWidth
       continue
     }
     if (operation !== ops.constructPath) {
@@ -202,20 +220,34 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
       continue
     }
     const filled = fillOperations.has(paintOperation)
+    const stroked = strokeOperations.has(paintOperation)
     const pageTransform = multiplyTransforms(viewportTransform, currentTransform)
     const parsed = parseTransformedPath(args?.[1], pageTransform)
     if (!parsed?.bounds) {
       continue
     }
     const { bounds } = parsed
-    const { width, height } = bounds
-    if (!(width > 0) || !(height > 0)) {
+    let { width, height } = bounds
+    // Effective stroke width in page pixels (CTM scale × lineWidth).
+    const strokeScale = Math.hypot(currentTransform[0], currentTransform[1])
+    const pageLineWidth = stroked
+      ? Math.abs(lineWidth * strokeScale * (viewportTransform[0] || 1))
+      : 0
+    const effectiveWidth = Math.max(width, pageLineWidth)
+    if (!(height > 0) || !(effectiveWidth > 0)) {
       continue
     }
 
-    const aspect = height / Math.max(width, 1e-6)
     const cx = (bounds.x0 + bounds.x1) / 2
     const cy = (bounds.y0 + bounds.y1) / 2
+    const expandedBounds = {
+      x0: cx - effectiveWidth / 2,
+      x1: cx + effectiveWidth / 2,
+      y0: bounds.y0,
+      y1: bounds.y1,
+      width: effectiveWidth,
+      height,
+    }
 
     // Compact filled dots: circular paths or small filled outline rectangles.
     const nearSquare = width / Math.max(height, 1e-6)
@@ -227,7 +259,7 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
       height <= staffGapGuess * 0.7 &&
       nearSquare >= 0.55 &&
       nearSquare <= 1.8 &&
-      aspect < 2.2
+      height / Math.max(width, 1e-6) < 2.2
     if (compact) {
       compactDots.push({
         candidateId: `pdf-rpt-dot-p${pageNumber}-op${operatorIndex}`,
@@ -246,13 +278,23 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
       })
     }
 
-    // Vertical bar components: tall thin or thick filled/stroked paths.
+    // Vertical bar components: tall filled rects OR tall stroked lines.
+    const aspect = height / Math.max(effectiveWidth, 1e-6)
     const isVertical =
-      aspect >= 4 &&
+      aspect >= 3.5 &&
       height >= staffGapGuess * 2.8 &&
-      width <= staffGapGuess * 1.8 &&
-      width >= Math.max(0.4, staffGapGuess * 0.02)
+      effectiveWidth <= staffGapGuess * 1.8 &&
+      effectiveWidth >= Math.max(0.35, staffGapGuess * 0.02) &&
+      // Nearly vertical segment (path width tiny or already a thin rect).
+      (width <= staffGapGuess * 0.5 || width <= effectiveWidth * 1.2)
     if (!isVertical) {
+      continue
+    }
+    // Reject wavy arpeggio-like paths.
+    if (
+      (parsed.curveCount ?? 0) > 2 &&
+      !((parsed.lineCount ?? 0) >= 3 && (parsed.curveCount ?? 0) <= 4)
+    ) {
       continue
     }
 
@@ -263,11 +305,13 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
       operatorIndex,
       paintOperation,
       filled,
-      stroked: !filled,
+      stroked,
+      lineWidth,
+      pageLineWidth,
       x: cx,
       y: cy,
-      bounds,
-      width,
+      bounds: expandedBounds,
+      width: effectiveWidth,
       height,
       aspect,
       curveCount: parsed.curveCount,
@@ -276,12 +320,88 @@ export function extractPdfVectorBarlineComponentsFromOperatorList({
     })
   }
 
-  // Drop wavy arpeggio-like paths (tall bbox but curved).
-  const cleanBars = verticalBars.filter(
-    (bar) => (bar.curveCount ?? 0) <= 2 || ((bar.lineCount ?? 0) >= 3 && (bar.curveCount ?? 0) <= 4),
-  )
+  return { verticalBars, compactDots }
+}
 
-  return { verticalBars: cleanBars, compactDots }
+/**
+ * Convert PDF text-layer SMuFL repeat dots into compactDot candidates in image
+ * pixel space (same convention as textGlyphsToImage).
+ *
+ * MuseScore often emits two U+E043/U+E044 chars in one run for a colon; we
+ * synthesize a vertical pair around the glyph center.
+ */
+export function extractRepeatDotGlyphsFromPageText(
+  pageText,
+  imageWidth,
+  imageHeight,
+  { staffGap = 12 } = {},
+) {
+  if (!Array.isArray(pageText) || !imageWidth || !imageHeight) {
+    return []
+  }
+  const dots = []
+  let glyphIndex = 0
+  for (const item of pageText) {
+    const text = String(item.text ?? '')
+    if (!text.length || !Number.isFinite(item.pageWidth) || !Number.isFinite(item.pageHeight)) {
+      continue
+    }
+    const codes = [...text].map((ch) => ch.codePointAt(0))
+    const repeatCodes = codes.filter((cp) => REPEAT_DOT_CODEPOINTS.has(cp))
+    if (!repeatCodes.length) {
+      continue
+    }
+    const scaleX = imageWidth / item.pageWidth
+    const scaleY = imageHeight / item.pageHeight
+    const x = (item.x + (item.width ?? 0) / 2) * scaleX
+    const y = imageHeight - (item.y ?? 0) * scaleY
+    const radius = Math.max(staffGap * 0.18, Math.min(staffGap * 0.35, (item.height ?? 0) * scaleY * 0.12 || staffGap * 0.2))
+
+    if (repeatCodes.length >= 2) {
+      const upper = y - staffGap * 0.5
+      const lower = y + staffGap * 0.5
+      for (const [yy, suffix] of [
+        [upper, 'a'],
+        [lower, 'b'],
+      ]) {
+        dots.push({
+          candidateId: `pdf-rpt-glyph-p${item.page ?? 0}-${glyphIndex}-${suffix}`,
+          source: 'vector-glyph',
+          x,
+          y: yy,
+          radius,
+          bounds: {
+            x0: x - radius,
+            x1: x + radius,
+            y0: yy - radius,
+            y1: yy + radius,
+            width: radius * 2,
+            height: radius * 2,
+          },
+          codepoint: repeatCodes[0],
+        })
+      }
+    } else {
+      dots.push({
+        candidateId: `pdf-rpt-glyph-p${item.page ?? 0}-${glyphIndex}`,
+        source: 'vector-glyph',
+        x,
+        y,
+        radius,
+        bounds: {
+          x0: x - radius,
+          x1: x + radius,
+          y0: y - radius,
+          y1: y + radius,
+          width: radius * 2,
+          height: radius * 2,
+        },
+        codepoint: repeatCodes[0],
+      })
+    }
+    glyphIndex += 1
+  }
+  return dots
 }
 
 /**
@@ -297,27 +417,34 @@ export function normalizeVectorBarComponents(verticalBars = [], { staffGap = 12 
   const merged = []
   let group = [bars[0]]
   const flush = () => {
-    const x0 = Math.min(...group.map((bar) => bar.bounds.x0))
-    const x1 = Math.max(...group.map((bar) => bar.bounds.x1))
+    const rawX0 = Math.min(...group.map((bar) => bar.bounds.x0))
+    const rawX1 = Math.max(...group.map((bar) => bar.bounds.x1))
     const y0 = Math.min(...group.map((bar) => bar.bounds.y0))
     const y1 = Math.max(...group.map((bar) => bar.bounds.y1))
-    const width = x1 - x0
+    const width = Math.max(
+      rawX1 - rawX0,
+      ...group.map((bar) => bar.width ?? bar.bounds.width ?? 0),
+    )
     const height = y1 - y0
+    const cx = (rawX0 + rawX1) / 2
+    const x0 = cx - width / 2
+    const x1 = cx + width / 2
     const kind =
-      width >= staffGap * 0.32
+      width >= staffGap * 0.28
         ? 'thick'
-        : width <= staffGap * 0.22
+        : width <= staffGap * 0.2
           ? 'thin'
-          : width >= staffGap * 0.26
+          : width >= staffGap * 0.24
             ? 'thick'
             : 'uncertain'
     merged.push({
       kind,
-      x: (x0 + x1) / 2,
+      x: cx,
       width,
       height,
       bounds: { x0, x1, y0, y1, width, height },
       filled: group.some((bar) => bar.filled),
+      stroked: group.some((bar) => bar.stroked),
       members: group.map((bar) => bar.candidateId),
       staffCoverage: height / Math.max(staffGap * 4, 1),
     })
@@ -330,8 +457,7 @@ export function normalizeVectorBarComponents(verticalBars = [], { staffGap = 12 
     const yOverlap =
       Math.min(prev.bounds.y1, next.bounds.y1) - Math.max(prev.bounds.y0, next.bounds.y0)
     const sameColumn =
-      xGap <= Math.max(1.5, staffGap * 0.08) &&
-      xGap >= -Math.max(1, staffGap * 0.05) &&
+      Math.abs(next.x - prev.x) <= Math.max(2, staffGap * 0.12) &&
       yOverlap >= staffGap * 1.5
     // Adjacent filled fragments that together form one thick bar.
     const adjacentThickParts =
@@ -416,6 +542,8 @@ export function findVectorRepeatDotPair(
     staffLineYs = null,
     staffGap = 12,
     maxDistance = null,
+    bandY0 = null,
+    bandY1 = null,
   } = {},
 ) {
   if (!Number.isFinite(barX) || !['left', 'right'].includes(side)) {
@@ -428,11 +556,16 @@ export function findVectorRepeatDotPair(
 
   const sideDots = compactDots.filter((dot) => {
     const dx = side === 'left' ? barX - dot.x : dot.x - barX
-    if (dx < staffGap * 0.15 || dx > maxDist) {
+    if (dx < staffGap * 0.12 || dx > maxDist) {
       return false
     }
     if (dot.radius > staffGap * 0.45 || dot.radius < staffGap * 0.08) {
       return false
+    }
+    if (Number.isFinite(bandY0) && Number.isFinite(bandY1)) {
+      if (dot.y < bandY0 - staffGap * 0.6 || dot.y > bandY1 + staffGap * 0.6) {
+        return false
+      }
     }
     return true
   })
@@ -465,10 +598,15 @@ export function findVectorRepeatDotPair(
         }
         // Each dot must sit in a staff space (not on a staff line). The pair
         // midpoint often lands on the middle line — that is expected.
-        const dotOnLine = (dotY) =>
-          lines.some((line) => Math.abs(dotY - line) < staffGap * 0.18)
-        if (dotOnLine(a.y) || dotOnLine(b.y)) {
-          continue
+        // Glyph-synthesized pairs are already placed in spaces; skip line gate.
+        const glyphSourced =
+          a.source === 'vector-glyph' || b.source === 'vector-glyph'
+        if (!glyphSourced) {
+          const dotOnLine = (dotY) =>
+            lines.some((line) => Math.abs(dotY - line) < staffGap * 0.18)
+          if (dotOnLine(a.y) || dotOnLine(b.y)) {
+            continue
+          }
         }
       }
       const score = 1 / (1 + xSep) + 1 / (1 + Math.abs(ySep - staffGap))
@@ -537,7 +675,6 @@ export function classifyVectorRepeatDirection({
 
   let forward = false
   let backward = false
-  let conflict = false
 
   if (structure === 'thin-thick-thin') {
     if (leftDots) backward = true
@@ -546,23 +683,14 @@ export function classifyVectorRepeatDirection({
       return null
     }
   } else if (structure === 'thin-thick') {
-    if (leftDots) {
-      backward = true
-    } else if (rightDots) {
-      // Unusual; abstain unless edge role strongly says forward.
-      conflict = edge !== 'left'
-      if (edge === 'left') forward = true
-    }
+    // Canonical backward: thin then thick, dots on the left.
+    if (leftDots) backward = true
   } else if (structure === 'thick-thin') {
-    if (rightDots) {
-      forward = true
-    } else if (leftDots) {
-      conflict = edge !== 'right'
-      if (edge === 'right') backward = true
-    }
+    // Canonical forward: thick then thin, dots on the right.
+    if (rightDots) forward = true
   }
 
-  if (conflict || (!forward && !backward)) {
+  if (!forward && !backward) {
     return null
   }
 
@@ -693,23 +821,38 @@ export function detectVectorRepeatAtEdge({
     side: 'left',
     staffLineYs: pixelStaffYs,
     staffGap,
+    bandY0: y0,
+    bandY1: y1,
   })
   const rightDots = findVectorRepeatDotPair(compactDots, {
     barX: rightBarX,
     side: 'right',
     staffLineYs: pixelStaffYs,
     staffGap,
+    bandY0: y0,
+    bandY1: y1,
   })
+
+  // Edge role must match structure: forward only on left edge, backward on right
+  // (thin-thick-thin may emit both for back-to-back boundaries).
+  if (edge === 'left' && classified.structure === 'thin-thick' && !rightDots) {
+    // thin-thick without right dots is a backward form — not a left-edge forward.
+  }
+  if (edge === 'right' && classified.structure === 'thick-thin' && !leftDots) {
+    // thick-thin without left dots is a forward form — not a right-edge backward.
+  }
 
   let multiStaffAgreement = false
   if (Array.isArray(multiStaffBars) && multiStaffBars.length) {
     const otherNear = multiStaffBars.filter(
-      (bar) => Math.abs(bar.x - edgeX) <= searchPad && Math.abs(bar.x - (bars[0]?.x ?? edgeX)) <= staffGap * 0.4,
+      (bar) =>
+        Math.abs(bar.x - edgeX) <= searchPad &&
+        Math.abs(bar.x - (bars[0]?.x ?? edgeX)) <= staffGap * 0.4,
     )
     multiStaffAgreement = otherNear.length > 0
   }
 
-  return classifyVectorRepeatDirection({
+  const marking = classifyVectorRepeatDirection({
     structure: classified.structure,
     bars,
     leftDots,
@@ -718,6 +861,58 @@ export function detectVectorRepeatAtEdge({
     multiStaffAgreement,
     voltaContext,
   })
+  if (!marking) {
+    return null
+  }
+  // Shared bar columns sit on both adjacent measure boxes. Keep the hit only
+  // when the bar cluster is nearer this edge than the opposite measure edge.
+  const clusterX =
+    bars.reduce((sum, bar) => sum + bar.x, 0) / Math.max(bars.length, 1)
+  const leftEdgeX = box.x0 * imageWidth
+  const rightEdgeX = box.x1 * imageWidth
+  const distLeft = Math.abs(clusterX - leftEdgeX)
+  const distRight = Math.abs(clusterX - rightEdgeX)
+  if (edge === 'left' && distRight + staffGap * 0.15 < distLeft) {
+    return null
+  }
+  if (edge === 'right' && distLeft + staffGap * 0.15 < distRight) {
+    return null
+  }
+  const backToBack =
+    classified.structure === 'thin-thick-thin' && Boolean(leftDots) && Boolean(rightDots)
+  if (backToBack) {
+    marking.backToBack = true
+  }
+  // Keep only the direction that belongs on this edge unless back-to-back.
+  if (edge === 'left' && marking.backwardRepeat && !marking.forwardRepeat) {
+    return null
+  }
+  if (edge === 'right' && marking.forwardRepeat && !marking.backwardRepeat) {
+    return null
+  }
+  if (edge === 'left' && marking.forwardRepeat && marking.backwardRepeat) {
+    return {
+      forwardRepeat: true,
+      confidence: marking.confidence,
+      source: marking.source,
+      structure: marking.structure,
+      evidenceFamilies: marking.evidenceFamilies,
+      bars: marking.bars,
+      backToBack,
+    }
+  }
+  if (edge === 'right' && marking.forwardRepeat && marking.backwardRepeat) {
+    return {
+      backwardRepeat: true,
+      confidence: marking.confidence,
+      source: marking.source,
+      structure: marking.structure,
+      evidenceFamilies: marking.evidenceFamilies,
+      bars: marking.bars,
+      backToBack,
+    }
+  }
+  return marking
 }
 
 /**
@@ -740,6 +935,8 @@ export function fuseVectorRepeatMarkings(markings = []) {
     confidence,
     source: 'vector-path',
     staffCount: usable.length,
+    structure: usable.find((mark) => mark.structure)?.structure,
+    backToBack: usable.some((mark) => mark.backToBack) || undefined,
     evidenceFamilies: [
       ...new Set(usable.flatMap((mark) => mark.evidenceFamilies ?? [])),
       ...(usable.length > 1 ? ['multi-staff-fusion'] : []),

@@ -151,12 +151,39 @@ function staffLineYsForStructure(systemIndex, systemRoles, measureBox) {
   return null
 }
 
-function structureMarkingOptions(systemIndex, systems, systemRoles, measureBox, vectorBarlineComponents = null) {
+/**
+ * Vector repeats stay on for piano and for notation (or mixed) systems on
+ * fretted scores (Guaraldi). Pure TAB systems keep the raster path only —
+ * TAB system-break double bars are a known false-positive family.
+ */
+function enableVectorRepeatBarlinesForSystem(tabCapable, systemIndex, systemRoles) {
+  if (!tabCapable) {
+    return true
+  }
+  const role = systemRoles?.[systemIndex]
+  if (!role) {
+    return false
+  }
+  if (role.kind === 'tab' || role.tabStave) {
+    return false
+  }
+  return role.kind === 'notation' || role.kind === 'mixed'
+}
+
+function structureMarkingOptions(
+  systemIndex,
+  systems,
+  systemRoles,
+  measureBox,
+  vectorBarlineComponents = null,
+  { enableVectorRepeatBarlines = true } = {},
+) {
   return {
     structureBand: structureBandForSystem(systemIndex, systems, systemRoles),
     voltaBand: voltaBandForSystem(systemIndex, systems, systemRoles),
     staffLineYs: staffLineYsForStructure(systemIndex, systemRoles, measureBox),
-    vectorBarlineComponents,
+    vectorBarlineComponents: enableVectorRepeatBarlines ? vectorBarlineComponents : null,
+    enableVectorRepeatBarlines,
   }
 }
 
@@ -649,6 +676,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
                 systemRoles,
                 measureBox,
                 resolvedVectorBarlineComponents,
+                {
+                  enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                    tabCapable,
+                    targetIndex,
+                    systemRoles,
+                  ),
+                },
               ),
             },
           )
@@ -858,6 +892,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
                 systemRoles,
                 measureBox,
                 resolvedVectorBarlineComponents,
+                {
+                  enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                    tabCapable,
+                    systemIndex,
+                    systemRoles,
+                  ),
+                },
               ),
             },
           )
@@ -1115,6 +1156,13 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             systemRoles,
             measureBox,
             resolvedVectorBarlineComponents,
+            {
+              enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                tabCapable,
+                systemIndex,
+                systemRoles,
+              ),
+            },
           ),
         },
       )

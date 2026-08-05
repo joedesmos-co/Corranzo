@@ -89,6 +89,46 @@ describe('vector-native repeat barlines', () => {
     expect(hit?.source).toBe('vector-path')
   })
 
+  it('glyph colon pair + stroked thick/thin recovers backward', () => {
+    const verticalBars = [
+      { ...bar(200, 40, 201.3, 88, { id: 'thin' }), width: 1.3, stroked: true },
+      { ...bar(205, 40, 209.2, 88, { id: 'thick' }), width: 4.2, stroked: true },
+    ]
+    const compactDots = [
+      { ...dot(190, 58, 2.2), source: 'vector-glyph' },
+      { ...dot(190, 70, 2.2), source: 'vector-glyph' },
+    ]
+    const hit = detectVectorRepeatAtEdge({
+      verticalBars,
+      compactDots,
+      measureBox: { x0: 0.4, x1: 0.53, y0: 0.15, y1: 0.5 },
+      imageWidth: 400,
+      imageHeight: 200,
+      edge: 'right',
+      staffLineYs: STAFF,
+    })
+    expect(hit?.backwardRepeat).toBe(true)
+  })
+
+  it('rejects left-edge hit when bar cluster is nearer the right edge', () => {
+    // Shared boundary column near x=210 on a wide measure — left edge must abstain.
+    const verticalBars = [
+      bar(206, 40, 210, 88, { id: 'thick' }),
+      bar(211, 40, 212.5, 88, { id: 'thin' }),
+    ]
+    const compactDots = [dot(216, 58), dot(216, 70)]
+    const hit = detectVectorRepeatAtEdge({
+      verticalBars,
+      compactDots,
+      measureBox: { x0: 0.1, x1: 0.55, y0: 0.15, y1: 0.5 },
+      imageWidth: 400,
+      imageHeight: 200,
+      edge: 'left',
+      staffLineYs: STAFF,
+    })
+    expect(hit).toBeNull()
+  })
+
   it('2. backward repeat with filled rectangular thick bar', () => {
     const verticalBars = [bar(200, 40, 201.5, 88, { id: 'thin' }), bar(205, 40, 211, 88, { id: 'thick' })]
     const compactDots = [dot(190, 58), dot(190, 70)]

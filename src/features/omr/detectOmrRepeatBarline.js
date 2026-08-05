@@ -4,7 +4,9 @@ import { detectUnsafeRepeatExpansion } from '../musicxml/parseMeasureRepeats.js'
 import { detectVoltaFromRaster } from './detectRasterVoltaEnding.js'
 import {
   detectVectorRepeatAtEdge,
+  extractRepeatDotGlyphsFromPageText,
   fuseVectorRepeatMarkings,
+  staffGapFromLines,
 } from './detectVectorRepeatBarlines.js'
 
 function inkAt(imageData, x, y, threshold) {
@@ -575,6 +577,7 @@ export function detectMeasureStructureMarkings(
     voltaBand = null,
     staffLineYs = null,
     vectorBarlineComponents = null,
+    enableVectorRepeatBarlines = true,
   } = {},
 ) {
   const structureOptions = { structureBand, voltaBand, staffLineYs }
@@ -588,7 +591,26 @@ export function detectMeasureStructureMarkings(
   const voltaContext = Boolean(endingMarking?.endingStartNumbers?.length)
 
   let repeatMarking = null
-  const components = vectorBarlineComponents
+  const enableVector = enableVectorRepeatBarlines !== false
+  const baseComponents = enableVector ? vectorBarlineComponents : null
+  const staffGap = staffGapFromLines(
+    (staffLineYs ?? []).map((value) =>
+      value <= 1 && imageData?.height ? value * imageData.height : value,
+    ),
+    Math.max(8, (imageData?.width ?? 1000) * 0.014),
+  )
+  const glyphDots = enableVector
+    ? extractRepeatDotGlyphsFromPageText(pageText, imageData?.width, imageData?.height, {
+        staffGap,
+      })
+    : []
+  const components =
+    enableVector && (baseComponents || glyphDots.length)
+      ? {
+          verticalBars: baseComponents?.verticalBars ?? [],
+          compactDots: [...(baseComponents?.compactDots ?? []), ...glyphDots],
+        }
+      : null
   if (
     components &&
     (components.verticalBars?.length || components.compactDots?.length) &&
@@ -606,38 +628,20 @@ export function detectMeasureStructureMarkings(
       voltaContext,
       multiStaffBars: components.verticalBars,
     })
-    const vectorLeft = isFirstInSystem
-      ? detectVectorRepeatAtEdge({
-          verticalBars: components.verticalBars,
-          compactDots: components.compactDots,
-          measureBox,
-          imageWidth: imageData.width,
-          imageHeight: imageData.height,
-          edge: 'left',
-          staffLineYs,
-          structureBand,
-          voltaContext,
-          multiStaffBars: components.verticalBars,
-        })
-      : null
-    // Also allow left-edge forward detection when not first-in-system but the
-    // measure opens after an internal section boundary (vector left dots).
-    const vectorLeftInternal =
-      !isFirstInSystem && !vectorLeft
-        ? detectVectorRepeatAtEdge({
-            verticalBars: components.verticalBars,
-            compactDots: components.compactDots,
-            measureBox,
-            imageWidth: imageData.width,
-            imageHeight: imageData.height,
-            edge: 'left',
-            staffLineYs,
-            structureBand,
-            voltaContext,
-            multiStaffBars: components.verticalBars,
-          })
-        : null
-    const leftHit = vectorLeft ?? (vectorLeftInternal?.forwardRepeat ? vectorLeftInternal : null)
+    const vectorLeft = detectVectorRepeatAtEdge({
+      verticalBars: components.verticalBars,
+      compactDots: components.compactDots,
+      measureBox,
+      imageWidth: imageData.width,
+      imageHeight: imageData.height,
+      edge: 'left',
+      staffLineYs,
+      structureBand,
+      voltaContext,
+      multiStaffBars: components.verticalBars,
+    })
+    // Left-edge hits are only forward (or forward half of back-to-back).
+    const leftHit = vectorLeft?.forwardRepeat ? vectorLeft : null
     repeatMarking = fuseVectorRepeatMarkings([leftHit, vectorRight].filter(Boolean))
   }
 
@@ -696,6 +700,10 @@ export function finalizeEndingStops(measureRecords) {
  * TAB layouts often engrave double bars at system breaks that resemble repeats.
  * High-confidence vector-native repeats keep system-boundary marks (Korobeiniki /
  * Mario section repeats are source-faithful at system ends/starts).
+ *
+ * Also completes back-to-back :||: boundaries: when measure N owns a vector
+ * thin-thick-thin backward with right-side dots, measure N+1 receives the
+ * matching forward on its left barline.
  */
 export function finalizeRepeatMarkings(measureRecords) {
   if (!Array.isArray(measureRecords) || !measureRecords.length) {
@@ -742,6 +750,30 @@ export function finalizeRepeatMarkings(measureRecords) {
         measure.repeatMarking = null
       }
     }
+  }
+
+  // Propagate forward half of vector back-to-back repeats onto the next measure.
+  for (let index = 0; index < measureRecords.length - 1; index += 1) {
+    const measure = measureRecords[index]
+    const next = measureRecords[index + 1]
+    const repeat = measure?.repeatMarking
+    if (!isProtectedVectorRepeat(repeat) || !repeat?.backwardRepeat || !repeat?.backToBack) {
+      continue
+    }
+    if (next.repeatMarking?.forwardRepeat) {
+      continue
+    }
+    const forwardMark = {
+      forwardRepeat: true,
+      confidence: repeat.confidence,
+      source: 'vector-path',
+      structure: repeat.structure,
+      backToBack: true,
+      evidenceFamilies: [
+        ...new Set([...(repeat.evidenceFamilies || []), 'back-to-back-propagate']),
+      ],
+    }
+    next.repeatMarking = fuseVectorRepeatMarkings([next.repeatMarking, forwardMark].filter(Boolean))
   }
 
   return measureRecords
