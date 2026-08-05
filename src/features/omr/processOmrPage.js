@@ -8,6 +8,7 @@ import {
 import { detectNoteheadsInMeasure } from './detectOmrNoteheads.js'
 import { assembleMeasureRhythm } from './assembleOmrMeasureRhythm.js'
 import { finalizeRasterPageTies } from './finalizeRasterPageTies.js'
+import { finalizeRasterPageSlurs } from './finalizeRasterPageSlurs.js'
 import { refineMeasurePitches } from './detectOmrAccidentals.js'
 import { detectKeySignature } from './detectOmrKeySignature.js'
 import {
@@ -1145,6 +1146,21 @@ export function processOmrPageAnalysis(imageData, options = {}) {
 
   const rasterTieResult = finalizeRasterPageTies(measureRhythms)
 
+  const measureBoxByNumber = new Map()
+  for (const boxes of systemMeasureBoxes) {
+    for (const box of boxes ?? []) {
+      if (box?.measureNumber != null) {
+        measureBoxByNumber.set(box.measureNumber, box)
+      }
+    }
+  }
+  const rasterSlurResult = finalizeRasterPageSlurs({
+    measureRecords: measureRhythms,
+    measureBoxByNumber,
+    imageData,
+    inkThreshold,
+  })
+
   const result = {
     pageEntry,
     measureRhythms,
@@ -1162,6 +1178,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     dense: noteheadOptions.dense,
     staffGapNormalization: staffGapNormalizationResult.staffGapNormalization,
     rasterTieDiagnostics: rasterTieResult.diagnostics,
+    rasterSlurDiagnostics: rasterSlurResult.diagnostics,
     rasterPitchCalibration,
   }
   if (captureOmrV3Shadow) {
