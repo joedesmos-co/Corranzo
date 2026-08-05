@@ -213,9 +213,14 @@ function collectPatchBlobs(
         cy: top + (minY + maxY) / 2,
         leftInk,
         rightInk,
+        // Slur/tie arcs usually continue past the note-local crop; true accents
+        // stay isolated inside it.
+        touchesLeftEdge: minX <= 1,
+        touchesRightEdge: maxX >= width - 2,
+        cropWidth: width,
       }
       // Spans almost the full crop → staff/beam/slur fragment.
-      if (blob.width >= width * 0.85) continue
+      if (blob.width >= width * 0.75) continue
       // Stem hairline.
       if (blob.width <= 2 && blob.height >= staffSpace * 0.75) continue
       blobs.push(blob)
@@ -240,28 +245,36 @@ function classifyBlob(blob, staffSpace, columnCx) {
     Math.abs((blob.leftInk ?? 0) - (blob.rightInk ?? 0)) /
     Math.max(1, (blob.leftInk ?? 0) + (blob.rightInk ?? 0))
 
+  // Crop-edge contact ⇒ the component continues outside the note-local patch
+  // (slur/tie/beam). Never classify those fragments as articulations.
+  if (blob.touchesLeftEdge || blob.touchesRightEdge) {
+    return null
+  }
+
   // Accent: filled wedge *or* hollow chevron (scan accents are often outline `>`).
-  // Do not require wide aspect — printed accents can be near-square in raster.
+  const minAccentHeight = Math.max(4, Math.ceil(staffSpace * 0.36))
   const accentSize =
-    blob.width >= staffSpace * 0.4 &&
-    blob.width <= staffSpace * 2.4 &&
-    blob.height >= Math.max(3, staffSpace * 0.22) &&
-    blob.height <= staffSpace * 1.15 &&
-    blob.area >= Math.max(8, staffSpace * staffSpace * 0.04) &&
-    blob.area <= staffSpace * staffSpace * 1.35
+    blob.width >= staffSpace * 0.35 &&
+    blob.width <= staffSpace * 1.45 &&
+    blob.height >= minAccentHeight &&
+    blob.height <= staffSpace * 1.05 &&
+    blob.area >= Math.max(8, staffSpace * staffSpace * 0.035) &&
+    blob.area <= staffSpace * staffSpace * 0.95 &&
+    // Flat horizontal bands are slur/ledger crumbs, not wedges.
+    blob.height / blob.width >= 0.55
   const accentShape =
-    (aspect >= 0.7 && aspect <= 2.8 && fill >= 0.16 && fill <= 0.72) ||
-    (aspect >= 1.2 && aspect <= 3.2 && fill >= 0.35 && fill <= 0.95)
-  // Prefer true wedges/chevrons: strong left-right imbalance, wide aspect, or
-  // hollow fill. Symmetric filled blocks that only pass size are usually noise.
+    (aspect >= 0.75 && aspect <= 2.2 && fill >= 0.16 && fill <= 0.7) ||
+    (aspect >= 1.05 && aspect <= 2.2 && fill >= 0.35 && fill <= 0.9)
+  // True wedges are nearly centered and usually left/right imbalanced; long
+  // aspect alone is not enough (accepts clipped slur crumbs).
   const accentAsymmetry =
-    sideBalance >= 0.12 || aspect >= 1.45 || (fill <= 0.5 && aspect >= 0.85)
+    sideBalance >= 0.13 ||
+    (aspect >= 0.85 && aspect <= 1.4 && fill <= 0.58 && sideBalance >= 0.08)
   if (
     accentSize &&
     accentShape &&
     accentAsymmetry &&
-    // Accents are centered on the chord; left-shifted accidentals / digits abstain.
-    dx <= staffSpace * 0.48
+    dx <= staffSpace * 0.32
   ) {
     return {
       type: 'accent',
@@ -275,11 +288,14 @@ function classifyBlob(blob, staffSpace, columnCx) {
         aspect,
         sideBalance,
         dx,
+        touchesLeftEdge: blob.touchesLeftEdge,
+        touchesRightEdge: blob.touchesRightEdge,
       },
     }
   }
 
   // Staccato: compact roughly round mark, centered, not beside-head augmentation.
+  // Slur-arc crumbs are often hollowish (fill < ~0.7); engraved dots are denser.
   if (
     blob.width >= 2 &&
     blob.height >= 2 &&
@@ -289,7 +305,7 @@ function classifyBlob(blob, staffSpace, columnCx) {
     blob.area <= Math.max(16, staffSpace * staffSpace * 0.16) &&
     aspect >= 0.55 &&
     aspect <= 1.85 &&
-    fill >= 0.45 &&
+    fill >= 0.72 &&
     dx <= staffSpace * 0.4
   ) {
     return {
@@ -370,6 +386,12 @@ function classifyColumnPatch(imageData, column, measureBox, inkThreshold, staffY
         candidates.push({ blob, mark: null, reason: 'too-far-from-chord' })
         continue
       }
+      // Slur-junction crumbs hug the notehead; engraved staccato dots sit a
+      // clearer staff-space gap above/below the chord extreme.
+      if (mark.type === 'staccato' && dy < staffSpace * 2.05) {
+        candidates.push({ blob, mark: null, reason: 'staccato-too-near-head' })
+        continue
+      }
       const score =
         Math.abs(blob.cx - column.cx) +
         dy * 0.35 +
@@ -393,6 +415,23 @@ function classifyColumnPatch(imageData, column, measureBox, inkThreshold, staffY
       }
     }
   }
+
+  // Multiple staccato-sized crumbs in one column ⇒ slur/beam fragmentation, not
+  // a single engraved dot. True staccato columns have one clear mark.
+  if (best?.type === 'staccato') {
+    const staccatoHits = candidates.filter((c) => c.mark?.type === 'staccato')
+    if (staccatoHits.length >= 2) {
+      return {
+        mark: null,
+        candidates: [
+          ...candidates,
+          { mark: null, reason: 'ambiguous-multi-staccato-crumbs' },
+        ],
+        staffSpace,
+      }
+    }
+  }
+
   return { mark: best, candidates, staffSpace }
 }
 
