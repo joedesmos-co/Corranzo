@@ -1,6 +1,7 @@
 import { isInk } from './omrInk.js'
 import { OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
 import { detectUnsafeRepeatExpansion } from '../musicxml/parseMeasureRepeats.js'
+import { detectVoltaFromRaster } from './detectRasterVoltaEnding.js'
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -468,27 +469,28 @@ function detectVoltaStopHook(imageData, measureBox, inkThreshold) {
 
 /**
  * Detect a simple first/second ending bracket above the system.
- * Prefer PDF text labels ("1.", "2."). Ink-only digit heuristics are too
- * weak on clean scores and create false endings — leave them off for now.
+ * Prefer PDF text labels ("1.", "2."). When the text layer is empty (scans),
+ * fall back to joint raster evidence: bracket + start hook + local digit.
+ * Bare ink-digit heuristics without a bracket remain disabled (FP-prone).
  */
 export function detectVoltaEnding(
   imageData,
   measureBox,
   inkThreshold,
   pageText = null,
-  { structureBand = null, voltaBand = null } = {},
+  { structureBand = null, voltaBand = null, staffLineYs = null } = {},
 ) {
   const bandBox = structureDetectionBox(measureBox, voltaBand ?? structureBand)
   const fromText = detectVoltaFromText(pageText, bandBox, imageData)
-  if (!fromText) {
-    return null
+  if (fromText) {
+    const endingStop = detectVoltaStopHook(imageData, measureBox, inkThreshold)
+    return {
+      ...fromText,
+      endingStop: endingStop || undefined,
+      confidence: Math.max(fromText.confidence, endingStop ? 0.9 : fromText.confidence),
+    }
   }
-  const endingStop = detectVoltaStopHook(imageData, measureBox, inkThreshold)
-  return {
-    ...fromText,
-    endingStop: endingStop || undefined,
-    confidence: Math.max(fromText.confidence, endingStop ? 0.9 : fromText.confidence),
-  }
+  return detectVoltaFromRaster(imageData, measureBox, inkThreshold, { staffLineYs })
 }
 
 export function shouldEmitEnding(ending) {
