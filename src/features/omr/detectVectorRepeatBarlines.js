@@ -945,6 +945,292 @@ export function fuseVectorRepeatMarkings(markings = []) {
 }
 
 /**
+ * Detect repeat barline columns from vector geometry alone (no measure edges).
+ * Geometry identifies the boundary; callers assign ownership by direction.
+ */
+export function detectVectorRepeatColumns({
+  verticalBars = [],
+  compactDots = [],
+  imageWidth,
+  imageHeight,
+  bandY0 = 0,
+  bandY1 = null,
+  staffLineYs = null,
+  voltaContext = false,
+} = {}) {
+  if (!imageWidth || !verticalBars.length) {
+    return []
+  }
+  const y1 = Number.isFinite(bandY1) ? bandY1 : imageHeight
+  const staffGap = staffGapFromLines(
+    (staffLineYs ?? []).map((value) => (value <= 1 ? value * imageHeight : value)),
+    Math.max(8, imageWidth * 0.014),
+  )
+  const inBand = verticalBars.filter(
+    (bar) =>
+      bar.bounds.y1 >= bandY0 - staffGap * 0.5 && bar.bounds.y0 <= y1 + staffGap * 0.5,
+  )
+  if (!inBand.length) {
+    return []
+  }
+
+  const normalized = normalizeVectorBarComponents(inBand, { staffGap }).sort((a, b) => a.x - b.x)
+  const columns = []
+  const consumed = new Set()
+  for (let start = 0; start < normalized.length; start += 1) {
+    if (consumed.has(start)) {
+      continue
+    }
+    const window = [normalized[start]]
+    consumed.add(start)
+    for (let j = start + 1; j < normalized.length; j += 1) {
+      if (consumed.has(j)) {
+        continue
+      }
+      const gap = normalized[j].bounds.x0 - window[window.length - 1].bounds.x1
+      if (gap > staffGap * 0.55) {
+        break
+      }
+      window.push(normalized[j])
+      consumed.add(j)
+      if (window.length >= 4) {
+        break
+      }
+    }
+    if (window.length < 2 && window[0]?.kind !== 'thick') {
+      continue
+    }
+
+    const classified = classifyNormalizedBarStructure(window, { staffGap })
+    let structure = classified.structure
+    let bars = classified.bars
+    if (
+      structure === 'none' ||
+      structure === 'thin' ||
+      structure === 'double-thin' ||
+      structure === 'uncertain'
+    ) {
+      if (window.length < 2) {
+        continue
+      }
+      const sorted = [...window].sort((a, b) => a.x - b.x)
+      const widths = sorted.map((bar) => bar.width)
+      const minW = Math.min(...widths)
+      const maxW = Math.max(...widths)
+      if (!(maxW >= minW * 2.2 && maxW >= staffGap * 0.28)) {
+        continue
+      }
+      const thickIndex = widths.indexOf(maxW)
+      structure =
+        thickIndex === 0
+          ? 'thick-thin'
+          : sorted.length >= 3 && thickIndex === 1
+            ? 'thin-thick-thin'
+            : 'thin-thick'
+      bars = sorted.map((bar, index) => ({
+        ...bar,
+        kind: index === thickIndex || bar.width === maxW ? 'thick' : 'thin',
+      }))
+    }
+
+    const leftBarX = Math.min(...bars.map((bar) => bar.bounds.x0))
+    const rightBarX = Math.max(...bars.map((bar) => bar.bounds.x1))
+    const pixelStaffYs = (staffLineYs ?? [])
+      .map((value) => (value <= 1 ? value * imageHeight : value))
+      .filter(Number.isFinite)
+    const leftDots = findVectorRepeatDotPair(compactDots, {
+      barX: leftBarX,
+      side: 'left',
+      staffLineYs: pixelStaffYs,
+      staffGap,
+      bandY0,
+      bandY1: y1,
+    })
+    const rightDots = findVectorRepeatDotPair(compactDots, {
+      barX: rightBarX,
+      side: 'right',
+      staffLineYs: pixelStaffYs,
+      staffGap,
+      bandY0,
+      bandY1: y1,
+    })
+    const marking = classifyVectorRepeatDirection({
+      structure,
+      bars,
+      leftDots,
+      rightDots,
+      multiStaffAgreement: false,
+      voltaContext,
+    })
+    if (!marking) {
+      continue
+    }
+    const backToBack =
+      structure === 'thin-thick-thin' && Boolean(leftDots) && Boolean(rightDots)
+    const columnX = bars.reduce((sum, bar) => sum + bar.x, 0) / bars.length
+    if (columns.some((col) => Math.abs(col.x - columnX) <= staffGap * 0.35)) {
+      continue
+    }
+    columns.push({
+      x: columnX,
+      structure,
+      forwardRepeat: Boolean(marking.forwardRepeat),
+      backwardRepeat: Boolean(marking.backwardRepeat),
+      backToBack: backToBack || undefined,
+      confidence: marking.confidence,
+      source: 'vector-path',
+      evidenceFamilies: marking.evidenceFamilies,
+      bars: marking.bars,
+    })
+  }
+  return columns.sort((a, b) => a.x - b.x)
+}
+
+/**
+ * Split measure boxes that contain a vector repeat column in their interior.
+ * Forward/backward ownership then attaches cleanly to the new shared edges.
+ *
+ * Cuts too close to an existing edge are ignored — snapping would invent
+ * micro-measures that steal repeat ownership (Mario final-system sliver).
+ * Both resulting segments must be wide enough to be a real engraved bar.
+ */
+export function splitMeasureBoxesAtRepeatColumns(
+  measureBoxes = [],
+  columns = [],
+  imageWidth,
+  { edgeMarginNorm = 0.012, minSegmentNorm = 0.04 } = {},
+) {
+  if (!measureBoxes?.length || !columns?.length || !imageWidth) {
+    return measureBoxes
+  }
+  const minSeg = Math.max(edgeMarginNorm * 1.5, minSegmentNorm)
+  const splits = []
+  for (const box of measureBoxes) {
+    const x0 = box.x0 ?? box.xStart ?? 0
+    const x1 = box.x1 ?? box.xEnd ?? 1
+    const interior = columns
+      .map((col) => col.x / imageWidth)
+      .filter((xNorm) => xNorm > x0 + edgeMarginNorm && xNorm < x1 - edgeMarginNorm)
+      .sort((a, b) => a - b)
+    if (!interior.length) {
+      splits.push({ ...box, x0, x1, xStart: x0, xEnd: x1 })
+      continue
+    }
+    let cursor = x0
+    let end = x1
+    for (const cut of interior) {
+      if (cut - cursor < minSeg) {
+        continue
+      }
+      if (end - cut < minSeg) {
+        // Repeat column sits near the existing right edge — snap the edge to
+        // the column so ownership aligns, without inventing a micro-measure.
+        end = cut
+        continue
+      }
+      splits.push({
+        ...box,
+        x0: cursor,
+        x1: cut,
+        xStart: cursor,
+        xEnd: cut,
+      })
+      cursor = cut
+    }
+    if (end - cursor >= minSeg * 0.75) {
+      splits.push({
+        ...box,
+        x0: cursor,
+        x1: end,
+        xStart: cursor,
+        xEnd: end,
+      })
+    } else if (splits.length && cursor > x0) {
+      // Absorb a too-short tail into the previous split segment.
+      const prev = splits[splits.length - 1]
+      prev.x1 = end
+      prev.xEnd = end
+    } else {
+      splits.push({ ...box, x0, x1: end, xStart: x0, xEnd: end })
+    }
+  }
+  const startNumber = measureBoxes[0]?.measureNumber ?? 1
+  return splits.map((box, index) => ({
+    ...box,
+    measureNumber: startNumber + index,
+    measureIndex: index,
+  }))
+}
+
+/**
+ * Assign vector repeat columns onto measure records by direction:
+ * forward → nearest following LEFT edge; backward → nearest preceding RIGHT edge.
+ */
+export function assignVectorRepeatColumnsToMeasures(
+  measureRecords = [],
+  columns = [],
+  { imageWidth, getBox = (measure) => measure.measureBox || measure.box } = {},
+) {
+  if (!measureRecords?.length || !columns?.length || !imageWidth) {
+    return measureRecords
+  }
+  const boxes = measureRecords.map((measure, index) => {
+    const box = getBox(measure, index) || {}
+    return {
+      index,
+      measure,
+      x0: (box.x0 ?? box.xStart ?? 0) * imageWidth,
+      x1: (box.x1 ?? box.xEnd ?? 1) * imageWidth,
+    }
+  })
+
+  for (const column of columns) {
+    const markBase = {
+      confidence: column.confidence,
+      source: 'vector-path',
+      structure: column.structure,
+      backToBack: column.backToBack,
+      evidenceFamilies: [
+        ...new Set([...(column.evidenceFamilies || []), 'column-nearest-edge']),
+      ],
+    }
+    if (column.backwardRepeat) {
+      let best = null
+      for (const entry of boxes) {
+        const dist = Math.abs(entry.x1 - column.x)
+        if (!best || dist < best.dist) {
+          best = { entry, dist }
+        }
+      }
+      if (best && best.dist <= imageWidth * 0.08) {
+        const existing = best.entry.measure.repeatMarking
+        best.entry.measure.repeatMarking = fuseVectorRepeatMarkings([
+          existing,
+          { ...markBase, backwardRepeat: true },
+        ])
+      }
+    }
+    if (column.forwardRepeat) {
+      let best = null
+      for (const entry of boxes) {
+        const dist = Math.abs(entry.x0 - column.x)
+        if (!best || dist < best.dist) {
+          best = { entry, dist }
+        }
+      }
+      if (best && best.dist <= imageWidth * 0.08) {
+        const existing = best.entry.measure.repeatMarking
+        best.entry.measure.repeatMarking = fuseVectorRepeatMarkings([
+          existing,
+          { ...markBase, forwardRepeat: true },
+        ])
+      }
+    }
+  }
+  return measureRecords
+}
+
+/**
  * Convenience: components object for pipeline wiring.
  */
 export function emptyVectorBarlineComponents() {

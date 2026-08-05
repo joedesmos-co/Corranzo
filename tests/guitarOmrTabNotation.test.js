@@ -843,6 +843,58 @@ describe('guitar OMR tablature detection', () => {
     expect(roles[0].tabStave).toBeTruthy()
   })
 
+  it('keeps continuation TAB as tab when notation noteheads leak into the evidence pad', () => {
+    const notation = {
+      y0: 0.2,
+      y1: 0.24,
+      lineCount: 5,
+      lineYs: [0.2, 0.21, 0.22, 0.23, 0.24],
+      detectedLineYs: [0.2, 0.21, 0.22, 0.23, 0.24],
+      barlineCount: 6,
+    }
+    const tab = {
+      y0: 0.27,
+      y1: 0.33,
+      lineCount: 6,
+      lineYs: [0.27, 0.282, 0.294, 0.306, 0.318, 0.33],
+      detectedLineYs: [0.27, 0.282, 0.294, 0.306, 0.318, 0.33],
+      barlineCount: 6,
+    }
+    const imageData = makeWhitePage()
+    const glyphs = [
+      ...Array.from({ length: 8 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 200 + index * 40,
+        y: 0.22 * imageData.height,
+      })),
+      // Leaked noteheads into the TAB pad (continuation systems omit TAB clef).
+      ...Array.from({ length: 4 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 220 + index * 50,
+        y: 0.265 * imageData.height,
+      })),
+      ...Array.from({ length: 6 }, (_value, index) => ({
+        text: String(index % 5),
+        sourceText: String(index % 5),
+        x: 240 + index * 45,
+        y: 0.294 * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+    const roles = resolveGuitarSystemRoles([notation, tab], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+    expect(roles[0]).toEqual(
+      expect.objectContaining({ kind: 'notation', source: 'notehead-glyphs' }),
+    )
+    expect(roles[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', pairedWithIndex: 0, source: 'staff-geometry' }),
+    )
+  })
+
   it('falls through glyph-less six-line pages to notation instead of TAB-no-frets', async () => {
     const page = makeWhitePage()
     const tabStaff = drawStaff(page, 100, 6)

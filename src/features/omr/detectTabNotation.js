@@ -235,9 +235,6 @@ export function resolveGuitarSystemRoles(
     if (textEvidence.explicitTab && inferredTabStave) {
       return { kind: 'tab', tabStave: inferredTabStave, source: 'tab-clef-text' }
     }
-    if (textEvidence.noteheadCount >= 3) {
-      return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
-    }
     if (tabStaves.length > 0) {
       // Geometry-only 6-line bands need page text before we commit to TAB when
       // the caller actually searched for glyphs (empty array). Pure raster piano
@@ -252,7 +249,21 @@ export function resolveGuitarSystemRoles(
           source: 'staff-geometry-unconfirmed',
         }
       }
+      // Ledger lines can make five-line notation look six-line. Strong notehead
+      // evidence with scarce fret digits keeps those bands as notation.
+      // Continuation TAB systems omit the TAB clef and often admit a few
+      // leaked noteheads in the evidence pad — fret digits must win so pairing
+      // (and the notation+TAB repeat structure band) stays intact.
+      const ledgerInflatedNotation =
+        textEvidence.noteheadCount >= 3 &&
+        textEvidence.digitCount < Math.max(3, Math.ceil(textEvidence.noteheadCount * 0.5))
+      if (ledgerInflatedNotation) {
+        return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
+      }
       return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
+    }
+    if (textEvidence.noteheadCount >= 3) {
+      return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
     }
     return { kind: 'notation', tabStave: null, source: 'staff-geometry' }
   })
