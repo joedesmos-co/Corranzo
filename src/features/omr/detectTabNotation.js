@@ -67,6 +67,16 @@ export function classifySystemStaves(system, { stringCount = 6 } = {}) {
 function resolveTabLineYs(stave, stringCount) {
   const detectedLineYs = Array.isArray(stave?.detectedLineYs) ? stave.detectedLineYs : null
   if (detectedLineYs?.length === stringCount) {
+    // Near-duplicate rows inside an exact six-line claim must be collapsed.
+    // Returning the raw six (old early-return) assigns two frets to one string
+    // and merges them into illegal multi-digit frets such as "88".
+    const collapsed = collapseNearbyStaffLineYs(detectedLineYs)
+    if (collapsed?.length === stringCount) {
+      return collapsed
+    }
+    if (collapsed?.length === stringCount - 1 && collapsed.length >= 2) {
+      return respaceTabLineYs(collapsed[0], collapsed[collapsed.length - 1], stringCount)
+    }
     return detectedLineYs
   }
   const collapsedDetectedLineYs = collapseNearbyStaffLineYs(detectedLineYs)
@@ -108,6 +118,16 @@ function collapseNearbyStaffLineYs(lineYs) {
 
 function average(values) {
   return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
+function respaceTabLineYs(top, bottom, stringCount) {
+  if (!Number.isFinite(top) || !Number.isFinite(bottom) || !(bottom > top) || stringCount < 2) {
+    return null
+  }
+  return Array.from(
+    { length: stringCount },
+    (_value, index) => top + ((bottom - top) * index) / (stringCount - 1),
+  )
 }
 
 /** True when any detected system contains a tablature staff. */

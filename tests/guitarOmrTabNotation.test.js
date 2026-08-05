@@ -178,6 +178,94 @@ describe('guitar OMR tablature detection', () => {
     expect(systemsContainTablature([system], { stringCount: 6 })).toBe(true)
   })
 
+  it('collapses a near-duplicate inside an exact six-row TAB run and re-spaces irregular gaps', () => {
+    // Guaraldi-like: six detections with one near-duplicate pair and a double-wide gap.
+    const detectedLineYs = [
+      0.2036775106082037,
+      0.22135785007072137,
+      0.23055162659123055,
+      0.23903818953323905,
+      0.23974540311173975,
+      0.24823196605374823,
+    ]
+    const system = {
+      lineCount: 6,
+      detectedLineYs,
+      lineYs: null,
+    }
+
+    const classified = classifySystemStaves(system, { stringCount: 6 })
+    const lineYs = classified.tabStaves[0].lineYs
+    expect(lineYs).toHaveLength(6)
+    expect(lineYs[0]).toBeCloseTo(detectedLineYs[0], 5)
+    expect(lineYs[5]).toBeCloseTo(detectedLineYs[5], 5)
+    const gaps = lineYs.slice(1).map((y, index) => y - lineYs[index])
+    const median = [...gaps].sort((left, right) => left - right)[Math.floor(gaps.length / 2)]
+    for (const gap of gaps) {
+      expect(gap).toBeGreaterThan(0.003)
+      expect(gap / median).toBeLessThan(1.2)
+    }
+  })
+
+  it('does not promote ledger-inflated seven-row notation bands into TAB via respace', () => {
+    const notation = {
+      lineCount: 7,
+      detectedLineYs: [
+        0.15205091937765206,
+        0.15770862800565771,
+        0.15841584158415842,
+        0.16407355021216408,
+        0.16973125884016974,
+        0.17043847241867044,
+        0.1760961810466761,
+      ],
+      lineYs: [
+        0.15205091937765206,
+        0.15806223479490805,
+        0.16407355021216408,
+        0.17008486562942007,
+        0.1760961810466761,
+      ],
+    }
+    const classified = classifySystemStaves(notation, { stringCount: 6 })
+    expect(classified.tabStaves).toHaveLength(0)
+    expect(classified.notationStaves).toHaveLength(1)
+  })
+
+  it('keeps vertically stacked chord frets as separate strings instead of illegal multi-digit frets', () => {
+    const detectedLineYs = [
+      0.2036775106082037,
+      0.22135785007072137,
+      0.23055162659123055,
+      0.23903818953323905,
+      0.23974540311173975,
+      0.24823196605374823,
+    ]
+    const classified = classifySystemStaves(
+      { lineCount: 6, detectedLineYs, lineYs: null },
+      { stringCount: 6 },
+    )
+    const tabStave = classified.tabStaves[0]
+    const imageData = { width: 999, height: 1414 }
+    const x = 239
+    const notes = extractTabDigitNotes(
+      [
+        { text: '8', sourceText: '8', x, y: 306, width: 8.5, height: 15 },
+        { text: '8', sourceText: '8', x, y: 319, width: 8.5, height: 15 },
+        { text: '8', sourceText: '8', x, y: 332, width: 8.5, height: 15 },
+        { text: '8', sourceText: '8', x: 219, y: 357, width: 8.5, height: 15 },
+      ],
+      tabStave,
+      [{ measureNumber: 1, x0: 0.15, playableX0: 0.15, x1: 0.45 }],
+      imageData,
+    )
+
+    expect(notes).toHaveLength(4)
+    expect(notes.every((note) => note.fret === 8)).toBe(true)
+    expect(new Set(notes.map((note) => note.string)).size).toBe(4)
+    expect(notes.some((note) => note.fret > 24)).toBe(false)
+  })
+
   it('keeps first-beat TAB digits left of the cursor playable start', () => {
     const tabStave = {
       lineYs: [0.2, 0.28, 0.36, 0.44, 0.52, 0.6],
