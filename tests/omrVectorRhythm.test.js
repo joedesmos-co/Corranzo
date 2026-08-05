@@ -25,6 +25,9 @@ import {
   shouldInferRhythmFromPositions,
   unsupportedUpperChordOverhangCap,
   resnapFlooredBeamOnsets,
+  refineDottedSubdivisionBaseDurations,
+  alignSubdivisionFollowersAfterDottedEighth,
+  resolveWrittenDurationOverlaps,
 } from '../src/features/omr/processVectorOmrPage.js'
 import { summarizeVectorRhythmDiagnostics } from '../src/features/omr/vectorRhythmDiagnostics.js'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
@@ -1786,6 +1789,130 @@ describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
     })
     expect(xml).not.toContain('<staves>2</staves>')
     expect(xml).not.toMatch(/<staff>2<\/staff>/)
+  })
+})
+
+
+describe('dotted subdivision recovery on dense-like measures', () => {
+  it('refines a dotted quarter to dotted eighth when the next attack is close', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 6,
+        durationType: 'quarter',
+        dotted: true,
+        positionInMeasure: 0.16,
+        notes: [
+          {
+            midi: 65,
+            clef: 'treble',
+            dotted: true,
+            durationDivisions: 6,
+            durationType: 'quarter',
+            beams: 0,
+            positionInMeasure: 0.16,
+            cx: 740,
+          },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 6,
+        durationDivisions: 1,
+        durationType: 'sixteenth',
+        positionInMeasure: 0.3,
+        notes: [
+          {
+            midi: 67,
+            clef: 'treble',
+            durationDivisions: 1,
+            durationType: 'sixteenth',
+            beams: 0,
+            positionInMeasure: 0.3,
+            cx: 770,
+          },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 7,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        positionInMeasure: 0.35,
+        notes: [
+          {
+            midi: 69,
+            clef: 'treble',
+            durationDivisions: 4,
+            durationType: 'quarter',
+            beams: 0,
+            positionInMeasure: 0.35,
+            cx: 780,
+          },
+        ],
+      },
+    ]
+    const refined = refineDottedSubdivisionBaseDurations(events, 16)
+    expect(refined[0].durationDivisions).toBe(3)
+    expect(refined[0].durationType).toBe('eighth')
+    expect(refined[0].dotted).toBe(true)
+    expect(refined[0].dottedSubdivisionBaseRefined).toBe(true)
+    expect(refined[0].notes[0].durationDivisions).toBe(3)
+
+    const aligned = alignSubdivisionFollowersAfterDottedEighth(refined, 16)
+    expect(aligned[1].startDivision).toBe(3)
+    expect(aligned[2].startDivision).toBe(4)
+    expect(aligned[2].durationDivisions).toBe(4)
+
+    const resolved = resolveWrittenDurationOverlaps(aligned, 16)
+    expect(resolved[0].durationDivisions).toBe(3)
+    expect(resolved[1].startDivision).toBe(3)
+    expect(resolved[1].durationDivisions).toBe(1)
+  })
+
+  it('does not invent a dotted eighth without a close follower', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 6,
+        durationType: 'quarter',
+        dotted: true,
+        positionInMeasure: 0.1,
+        notes: [
+          {
+            midi: 65,
+            clef: 'treble',
+            dotted: true,
+            durationDivisions: 6,
+            beams: 0,
+            positionInMeasure: 0.1,
+            cx: 100,
+          },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 8,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        positionInMeasure: 0.6,
+        notes: [
+          {
+            midi: 67,
+            clef: 'treble',
+            durationDivisions: 4,
+            beams: 0,
+            positionInMeasure: 0.6,
+            cx: 400,
+          },
+        ],
+      },
+    ]
+    const refined = refineDottedSubdivisionBaseDurations(events, 16)
+    expect(refined[0].durationDivisions).toBe(6)
+    expect(refined[0].dottedSubdivisionBaseRefined).toBeUndefined()
   })
 })
 

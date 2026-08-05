@@ -2883,7 +2883,11 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
         continue
       }
       const start = startByEvent.get(current) ?? current.startDivision ?? 0
-      const dottedWritten = dottedWrittenDurationDivisions(current.notes)
+      // Prefer the event duration after dotted-eighth base recovery — note-level
+      // enrich can still say dotted quarter and would undo the refine.
+      const dottedWritten = current.dottedSubdivisionBaseRefined
+        ? current.durationDivisions
+        : dottedWrittenDurationDivisions(current.notes)
       const glyphCap = glyphAuthoritativeDurationDivisions(current.notes ?? [], {
         allowDotted: hasDottedEvidence(current.notes) || current.dotted,
       })
@@ -2956,6 +2960,22 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
         ) {
           duration = Math.min(duration, OMR_DURATION_DIVISIONS.eighth)
         }
+      }
+      // Do not stretch short subdivision enrich values across whitespace after a
+      // dotted-eighth recovery — that re-creates false quarters and eats rests.
+      const writtenShort = Math.min(
+        ...(event.notes ?? [])
+          .map((note) => note.durationDivisions)
+          .filter((value) => Number.isFinite(value) && value > 0),
+        Infinity,
+      )
+      if (
+        Number.isFinite(writtenShort) &&
+        writtenShort <= OMR_DURATION_DIVISIONS.eighth &&
+        duration > writtenShort &&
+        !(hasDottedEvidence(event.notes) || event.dotted)
+      ) {
+        duration = writtenShort
       }
       if (beamFloor != null && duration < beamFloor) {
         duration = Math.min(beamFloor, totalDivisions - start)
@@ -3040,11 +3060,20 @@ export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
       if (durationDivisions == null) {
         return event
       }
+      const meta = durationMeta(durationDivisions, { allowDotted: true })
       return {
         ...event,
         durationDivisions,
-        ...durationMeta(durationDivisions, { allowDotted: true }),
+        ...meta,
         dottedSubdivisionBaseRefined: true,
+        // Keep note-level written values in sync so later overlap repair does not
+        // re-read the pre-refine dotted-quarter enrich and undo this recovery.
+        notes: (event.notes ?? []).map((note) => ({
+          ...note,
+          durationDivisions,
+          durationType: meta.durationType,
+          dotted: true,
+        })),
       }
     }),
   )
@@ -3070,6 +3099,7 @@ export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivision
   }
 
   const startByEvent = new Map()
+  const durationByEvent = new Map()
   for (const clefEvents of byClef.values()) {
     const sorted = [...clefEvents].sort(
       (left, right) =>
@@ -3105,22 +3135,80 @@ export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivision
       ) {
         startByEvent.set(next, writtenEnd)
       }
+      // Pack immediately following attacks that sit in the same tight horizontal
+      // cluster after the dotted-eighth tail (common: 16th then longer value).
+      let cursor =
+        (startByEvent.get(next) ?? next.startDivision ?? 0) +
+        (next.durationDivisions ?? OMR_DURATION_DIVISIONS.sixteenth)
+      let prevPosition = nextPosition
+      let prevCx = next.cx ?? next.notes?.[0]?.cx ?? null
+      for (let follow = index + 2; follow < sorted.length; follow += 1) {
+        const later = sorted[follow]
+        const laterPosition =
+          later.positionInMeasure ?? later.notes?.[0]?.positionInMeasure ?? null
+        const laterCx = later.cx ?? later.notes?.[0]?.cx ?? null
+        const positionGap =
+          Number.isFinite(laterPosition) && Number.isFinite(prevPosition)
+            ? laterPosition - prevPosition
+            : null
+        const cxGap =
+          Number.isFinite(laterCx) && Number.isFinite(prevCx) ? laterCx - prevCx : null
+        // Prefer measure-fraction gap; fall back to ~1 staff-space in pixels when
+        // positionInMeasure was overwritten by onset/totalDivisions.
+        const closeInPosition =
+          positionGap != null && positionGap > 0 && positionGap <= 0.12
+        const closeInCx = cxGap != null && cxGap > 0 && cxGap <= 18
+        if (!closeInPosition && !closeInCx) {
+          break
+        }
+        const laterStart = later.startDivision ?? 0
+        if (laterStart > cursor) {
+          startByEvent.set(later, cursor)
+        }
+        const placedStart = startByEvent.get(later) ?? laterStart
+        // Prefer stem/flag enrich duration over a prior crushed gap value so a
+        // quarter after a 16th tail is not emitted as another 16th.
+        const enrichDuration = Math.max(
+          later.durationDivisions ?? 0,
+          ...(later.notes ?? [])
+            .filter((note) => (note.beams ?? 0) < 1)
+            .map((note) => note.durationDivisions)
+            .filter((value) => Number.isFinite(value) && value > 0),
+          OMR_DURATION_DIVISIONS.sixteenth,
+        )
+        if (enrichDuration > (later.durationDivisions ?? 0)) {
+          durationByEvent.set(later, enrichDuration)
+        }
+        cursor = placedStart + enrichDuration
+        prevPosition = laterPosition
+        prevCx = laterCx
+      }
     }
   }
 
-  if (!startByEvent.size) {
+  if (!startByEvent.size && !durationByEvent.size) {
     return events
   }
 
   return sortVectorRhythmEvents(
     events.map((event) => {
-      if (!startByEvent.has(event)) {
+      const startDivision = startByEvent.has(event)
+        ? startByEvent.get(event)
+        : event.startDivision
+      const durationDivisions = durationByEvent.has(event)
+        ? durationByEvent.get(event)
+        : event.durationDivisions
+      if (startDivision === event.startDivision && durationDivisions === event.durationDivisions) {
         return event
       }
       return {
         ...event,
-        startDivision: startByEvent.get(event),
-        subdivisionFollowerAligned: true,
+        startDivision,
+        durationDivisions,
+        ...durationMeta(durationDivisions, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
+        subdivisionFollowerAligned: startByEvent.has(event) || undefined,
       }
     }),
   )
@@ -3696,21 +3784,23 @@ function buildNoteEventsFromGroups(
   events = track('chord-coalesce', 'coalesceSameOnsetChordEvents', () =>
     coalesceSameOnsetChordEvents(events),
   )
-  if (!denseMeasure) {
-    events = track('dotted-subdivision-base', 'refineDottedSubdivisionBaseDurations', () =>
-      refineDottedSubdivisionBaseDurations(events, totalDivisions),
-    )
-    events = track(
-      'dotted-subdivision-follower',
-      'alignSubdivisionFollowersAfterDottedEighth',
-      () => alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions),
-    )
-  }
   if (denseMeasure) {
     events = track('dense-chord-resnap', 'resnapDenseChordOnsets', () =>
       resnapDenseChordOnsets(events, totalDivisions),
     )
   }
+  // Dotted-eighth recovery is geometry-based (augmentation dot + close follower).
+  // Dense measures with 5 onsets (groups > beats) previously skipped this and
+  // left dotted eighths classified as dotted quarters (tuplets m8).
+  // Run after dense-chord-resnap so resnap cannot undo the refined onsets.
+  events = track('dotted-subdivision-base', 'refineDottedSubdivisionBaseDurations', () =>
+    refineDottedSubdivisionBaseDurations(events, totalDivisions),
+  )
+  events = track(
+    'dotted-subdivision-follower',
+    'alignSubdivisionFollowersAfterDottedEighth',
+    () => alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions),
+  )
   events = track('grand-staff-opening', 'extendCombinedGrandStaffOpening', () =>
     extendCombinedGrandStaffOpening(events, totalDivisions),
   )
@@ -3729,21 +3819,19 @@ function buildNoteEventsFromGroups(
   events = track('same-clef-beat-quarter-floor', 'applySameClefBeatQuarterFloors', () =>
     applySameClefBeatQuarterFloors(events, totalDivisions),
   )
-  if (!denseMeasure) {
-    events = track('written-overlap-resolve', 'resolveWrittenDurationOverlaps', () =>
-      resolveWrittenDurationOverlaps(events, totalDivisions),
-    )
-  }
+  // Re-gap after dotted-eighth recovery on both sparse and dense measures so
+  // followers land on the written release and terminal rests keep capacity.
+  events = track('written-overlap-resolve', 'resolveWrittenDurationOverlaps', () =>
+    resolveWrittenDurationOverlaps(events, totalDivisions),
+  )
   if (jointPacking) {
     events = track('joint-polyphonic-pack', 'packJointPolyphonicRhythm', () =>
       packJointPolyphonicRhythm(events, { totalDivisions }).events,
     )
   }
-  if (!denseMeasure) {
-    events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
-      resolveWrittenDurationOverlaps(events, totalDivisions),
-    )
-  }
+  events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
+    resolveWrittenDurationOverlaps(events, totalDivisions),
+  )
   return track('clamp-measure', 'clampMeasureEventDurations', () =>
     clampMeasureEventDurations(events, totalDivisions),
   )
