@@ -4,7 +4,7 @@ import {
   systemConfidenceFromMeasures,
 } from './buildOmrDiagnostics.js'
 import { restsForMeasure, summarizeVectorRestDiagnostics, insertMixedMeasureRests, buildEmptyMeasureRestEvents } from './detectVectorRests.js'
-import { recoverDigitGatedTripletEvents } from './recoverDigitGatedTriplets.js'
+import { recoverVectorTupletEvents } from './recoverDigitGatedTriplets.js'
 import { assignVectorStaccato, assignVectorAugmentationDots, summarizeVectorStaccatoDiagnostics } from './detectVectorStaccato.js'
 import { assignVectorAccent, summarizeVectorAccentDiagnostics } from './detectVectorAccent.js'
 import {
@@ -3890,6 +3890,7 @@ export function buildVectorMeasureRecord({
   vectorAugmentationDotPaths = [],
   noteheadFallbackCalibration = null,
   accidentalPathCalibration = null,
+  enableLocalTupletGroups = true,
 }) {
   const {
     notes,
@@ -4004,12 +4005,13 @@ export function buildVectorMeasureRecord({
     }).events
   }
 
-  const tupletRecovery = recoverDigitGatedTripletEvents(events, {
+  const tupletRecovery = recoverVectorTupletEvents(events, {
     glyphs,
     measureBox,
     imageData,
     beats,
     totalDivisions,
+    enableLocalGroups: enableLocalTupletGroups,
   })
   if (tupletRecovery.recovered) {
     events = tupletRecovery.events
@@ -4296,6 +4298,7 @@ export function processVectorPageSystems({
   inheritedTimeSignature = null,
   inkThreshold = 170,
   captureDetectorObservations = false,
+  enableLocalTupletGroups = true,
 }) {
   const glyphs = textGlyphsToImage(pageText, imageData)
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
@@ -4360,6 +4363,7 @@ export function processVectorPageSystems({
         vectorAccidentalPaths,
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
+        enableLocalTupletGroups,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -4402,6 +4406,7 @@ export function processVectorPageSystems({
         vectorAccidentalPaths,
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
+        enableLocalTupletGroups,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
@@ -4460,6 +4465,7 @@ export function processVectorPageSystems({
           vectorAugmentationDotPaths,
           noteheadFallbackCalibration,
           accidentalPathCalibration,
+          enableLocalTupletGroups,
         })
         noteCount += record.vectorNoteCount ?? 0
         return record

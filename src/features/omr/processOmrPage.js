@@ -740,6 +740,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inheritedTimeSignature,
       inkThreshold,
       captureDetectorObservations: captureOmrV3RawSymbols,
+      enableLocalTupletGroups: !tabCapable,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions

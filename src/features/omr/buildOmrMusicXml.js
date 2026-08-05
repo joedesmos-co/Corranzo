@@ -430,8 +430,16 @@ function noteXml(
     timeModification?.actualNotes && timeModification?.normalNotes
       ? `<time-modification><actual-notes>${timeModification.actualNotes}</actual-notes><normal-notes>${timeModification.normalNotes}</normal-notes></time-modification>`
       : ''
+  const tupletNotationParts = []
+  if (!chord && timeModification?.tupletStart) {
+    tupletNotationParts.push('<tuplet type="start"/>')
+  }
+  if (!chord && timeModification?.tupletStop) {
+    tupletNotationParts.push('<tuplet type="stop"/>')
+  }
   const articulationParts = []
   const standaloneNotationParts = []
+  standaloneNotationParts.push(...tupletNotationParts)
   const articulationByType = new Map()
   for (const candidate of [
     ...(notationArticulations ?? []),
@@ -820,7 +828,11 @@ export function buildOmrMusicXml({
         const staff = grandStaff ? noteStaff : null
         const timeModification =
           event.timeModification ?? note.timeModification ?? null
-        const writtenType = timeModification != null ? 'eighth' : type
+        // Preserve written note type under tuplets (eighth runs and quarter+eighth).
+        const writtenType =
+          timeModification != null
+            ? event.durationType ?? note.durationType ?? type
+            : type
         inner += noteXml(note, {
           chord: index > 0,
           duration,
