@@ -875,7 +875,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inkThreshold,
       captureDetectorObservations: captureOmrV3RawSymbols,
       enableLocalTupletGroups: !tabCapable,
-      allowInkStaccatoFallback,
+      allowInkStaccatoFallback: allowInkStaccatoFallback && !tabCapable,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions

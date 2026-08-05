@@ -123,11 +123,12 @@ describe('assignVectorStaccato', () => {
       data[index + 1] = 0
       data[index + 2] = 0
     }
-    // Isolated 2×2 ink blob above the notehead.
-    paint(40, 28)
-    paint(41, 28)
-    paint(40, 29)
-    paint(41, 29)
+    // Isolated compact ink blob above the notehead (4–7 dark in 3×3).
+    paint(40, 26)
+    paint(41, 26)
+    paint(40, 27)
+    paint(41, 27)
+    paint(39, 27)
     const localImage = { width, height, data }
     const localBox = {
       ...measureBox,
@@ -136,6 +137,11 @@ describe('assignVectorStaccato', () => {
       x1: 1,
       y0: 0,
       y1: 1,
+      staffLines: {
+        treble: [0.4, 0.5, 0.6, 0.7, 0.8],
+        bass: [],
+        splitY: 0.9,
+      },
     }
     const note = {
       cx: 40,
@@ -156,6 +162,60 @@ describe('assignVectorStaccato', () => {
     expect(appliedStaccatoCount).toBeGreaterThanOrEqual(1)
     expect(assignments.get(0)?.type).toBe('staccato')
     expect(assignments.get(0)?.source).toBe('ink-path')
+  })
+
+  it('rejects ink hits that coincide with period / rhythm-dot glyphs', () => {
+    const width = 80
+    const height = 80
+    const data = new Uint8ClampedArray(width * height * 4)
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255
+      data[i + 1] = 255
+      data[i + 2] = 255
+      data[i + 3] = 255
+    }
+    const paint = (x, y) => {
+      const index = (y * width + x) * 4
+      data[index] = 0
+      data[index + 1] = 0
+      data[index + 2] = 0
+    }
+    paint(40, 26)
+    paint(41, 26)
+    paint(40, 27)
+    paint(41, 27)
+    paint(39, 27)
+    const localImage = { width, height, data }
+    const localBox = {
+      ...measureBox,
+      x0: 0,
+      playableX0: 0,
+      x1: 1,
+      y0: 0,
+      y1: 1,
+      staffLines: {
+        treble: [0.4, 0.5, 0.6, 0.7, 0.8],
+        bass: [],
+        splitY: 0.9,
+      },
+    }
+    const note = {
+      cx: 40,
+      cy: 45,
+      clef: 'treble',
+      midi: 60,
+      naturalMidi: 60,
+      positionInMeasure: 0.4,
+      noteheadFont: { glyph: '\ue0a4' },
+    }
+    const { assignments, detectedStaccatoCount } = assignVectorStaccato(
+      [{ text: '.', x: 40, y: 26 }],
+      [note],
+      localBox,
+      localImage,
+    )
+    expect(detectedStaccatoCount).toBe(0)
+    expect(assignments.size).toBe(0)
   })
 
   it('skips ink fallback on legacy-normalized noteheads', () => {

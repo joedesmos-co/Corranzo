@@ -4216,6 +4216,91 @@ function distinctDirectAccidentalPathCount(pathCandidates = []) {
 }
 
 /**
+ * Path-drawn staccato is dense on scores that actually print it. Sparse
+ * page-level ink hits are almost always fixture/noise false positives, so
+ * drop ink-path staccato when the page lacks a quorum of ink detections.
+ */
+const INK_STACCATO_PAGE_QUORUM = 8
+
+function isInkPathStaccato(articulation) {
+  return (
+    articulation?.type === 'staccato' &&
+    (articulation.source === 'ink-path' || articulation.source === 'note-anchored-raster-patch')
+  )
+}
+
+function stripSparseInkPathStaccato(measureRecords = [], quorum = INK_STACCATO_PAGE_QUORUM) {
+  let inkDetected = 0
+  for (const record of measureRecords) {
+    for (const candidate of record.vectorStaccatoDiagnostics?.detectedCandidates ?? []) {
+      if (candidate?.source === 'ink-path' || candidate?.source === 'note-anchored-raster-patch') {
+        inkDetected += 1
+      }
+    }
+  }
+  if (inkDetected >= quorum) {
+    return { stripped: false, inkDetected }
+  }
+  for (const record of measureRecords) {
+    const diagnostics = record.vectorStaccatoDiagnostics
+    if (diagnostics) {
+      const keepCandidates = (diagnostics.detectedCandidates ?? []).filter(
+        (candidate) =>
+          candidate?.source !== 'ink-path' &&
+          candidate?.source !== 'note-anchored-raster-patch',
+      )
+      const keepAttachments = (diagnostics.selectedAttachments ?? []).filter(
+        (attachment) =>
+          attachment?.source !== 'ink-path' &&
+          attachment?.glyph?.source !== 'ink-path' &&
+          attachment?.source !== 'note-anchored-raster-patch',
+      )
+      const removed = (diagnostics.detectedCandidates?.length ?? 0) - keepCandidates.length
+      diagnostics.detectedCandidates = keepCandidates
+      diagnostics.selectedAttachments = keepAttachments
+      diagnostics.detectedStaccatoCount = Math.max(
+        0,
+        (diagnostics.detectedStaccatoCount ?? 0) - removed,
+      )
+      diagnostics.appliedStaccatoCount = keepAttachments.length
+      diagnostics.inkQuorumStripped = removed > 0
+      diagnostics.inkDetectedBeforeQuorum = inkDetected
+    }
+    for (const event of record.events ?? []) {
+      if (isInkPathStaccato(event.articulation)) {
+        event.articulation = null
+      }
+      if (Array.isArray(event.notationArticulations)) {
+        event.notationArticulations = event.notationArticulations.filter(
+          (articulation) => !isInkPathStaccato(articulation),
+        )
+      }
+      for (const note of event.notes ?? []) {
+        if (isInkPathStaccato(note.articulation)) {
+          note.articulation = null
+        }
+        if (Array.isArray(note.notationArticulations)) {
+          note.notationArticulations = note.notationArticulations.filter(
+            (articulation) => !isInkPathStaccato(articulation),
+          )
+        }
+      }
+    }
+    for (const note of record.detectorObservations?.noteheads ?? []) {
+      if (isInkPathStaccato(note.articulation)) {
+        note.articulation = null
+      }
+      if (Array.isArray(note.notationArticulations)) {
+        note.notationArticulations = note.notationArticulations.filter(
+          (articulation) => !isInkPathStaccato(articulation),
+        )
+      }
+    }
+  }
+  return { stripped: true, inkDetected }
+}
+
+/**
  * Learn page/type engraving distance using only direct vector accidentals and
  * independently trusted notehead anchors. Expected notes and evaluator output
  * never enter this pass.
@@ -4487,6 +4572,9 @@ export function processVectorPageSystems({
   }
 
   const flatRecords = measureRecordsBySystem.flat()
+  if (allowInkStaccatoFallback) {
+    stripSparseInkPathStaccato(flatRecords)
+  }
   const orphanDiagnostics = orphanResult.diagnostics
   const measureBoxByNumberForTies = new Map(
     systemMeasureBoxes.flat().map((measureBox) => [measureBox.measureNumber, measureBox]),

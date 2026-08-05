@@ -33,6 +33,37 @@ function inkAt(imageData, x, y, threshold = DEFAULT_INK_STACCATO_THRESHOLD) {
   return isInk(data, (py * width + px) * 4, threshold)
 }
 
+function isAuthenticSmuflNotehead(note) {
+  if (note?.noteheadFont?.legacyNormalized) {
+    return false
+  }
+  const glyph = note?.noteheadFont?.glyph ?? null
+  return glyph === '\ue0a4' || glyph === '\ue0a3' || glyph === '\ue0a2'
+}
+
+function isReservedDotGlyph(glyph) {
+  const text = glyph?.text ?? ''
+  return text === RHYTHM_DOT_GLYPH || text === '.' || text === '\u002e'
+}
+
+function nearReservedDotGlyph(x, y, glyphs, staffSpace) {
+  const maxDist = Math.max(4, (staffSpace ?? 8) * 0.85)
+  for (const glyph of glyphs ?? []) {
+    if (!isReservedDotGlyph(glyph)) {
+      continue
+    }
+    if (!Number.isFinite(glyph.x) || !Number.isFinite(glyph.y)) {
+      continue
+    }
+    const dx = glyph.x - x
+    const dy = glyph.y - y
+    if (dx * dx + dy * dy <= maxDist * maxDist) {
+      return true
+    }
+  }
+  return false
+}
+
 /**
  * Compact isolated ink near a notehead, above or below (never beside).
  * Used when engravers draw staccato as path/ink without SMuFL E4A2/E4A3 text.
@@ -42,30 +73,23 @@ export function detectInkStaccatoNearNote(
   note,
   staffSpace,
   threshold = DEFAULT_INK_STACCATO_THRESHOLD,
+  options = {},
 ) {
   if (!imageData?.data?.length || !note || !Number.isFinite(note.cx) || !Number.isFinite(note.cy)) {
     return null
   }
-  // Only attach ink staccato to authentic SMuFL notehead text glyphs.
-  // Legacy-font remaps (tile/piano PDFs) and path-only encodings leave compact
-  // ink fragments that false-trigger as staccato when treated as E0A4.
-  if (note.noteheadFont?.legacyNormalized) {
-    return null
-  }
-  const glyph = note.noteheadFont?.glyph ?? null
-  const standardNotehead =
-    glyph === '\ue0a4' || glyph === '\ue0a3' || glyph === '\ue0a2'
-  if (!standardNotehead) {
+  if (!isAuthenticSmuflNotehead(note)) {
     return null
   }
   const scale = Number.isFinite(staffSpace) && staffSpace >= 3 ? staffSpace : 8
   const cx = Math.round(note.cx)
   const cy = Math.round(note.cy)
-  const xPad = Math.max(1, Math.round(scale * 0.45))
-  const isolationProbe = Math.max(3, Math.round(scale * 0.42))
-  const minDy = Math.max(4, Math.round(scale * 0.85))
-  const maxDy = Math.max(minDy + 2, Math.round(scale * 2.6))
-  const gapClear = Math.max(2, Math.round(scale * 0.3))
+  const xPad = Math.max(1, Math.round(scale * 0.35))
+  const isolationProbe = Math.max(3, Math.round(scale * 0.45))
+  const minDy = Math.max(5, Math.round(scale * 0.95))
+  const maxDy = Math.max(minDy + 2, Math.round(scale * 2.2))
+  const gapClear = Math.max(2, Math.round(scale * 0.35))
+  const reservedGlyphs = options.glyphs ?? []
 
   for (const dir of [-1, 1]) {
     const placement = dir < 0 ? 'above' : 'below'
@@ -85,7 +109,7 @@ export function detectInkStaccatoNearNote(
           }
         }
         // Compact filled dot: a few dark pixels, not a stem/beam run.
-        if (dark < 3 || dark > 7) {
+        if (dark < 4 || dark > 7) {
           continue
         }
         if (
@@ -107,8 +131,10 @@ export function detectInkStaccatoNearNote(
         if (!gapOk) {
           continue
         }
-        // Reject augmentation-dot geometry (beside the head).
         if (isAugmentationDotRelativeToNote({ x: dotX, y: yCenter }, note)) {
+          continue
+        }
+        if (nearReservedDotGlyph(dotX, yCenter, reservedGlyphs, scale)) {
           continue
         }
         return {
@@ -122,6 +148,27 @@ export function detectInkStaccatoNearNote(
     }
   }
   return null
+}
+
+/**
+ * Measure-scoped ink staccato assignments for notes lacking SMuFL articulations.
+ */
+export function detectInkStaccatoAssignments(imageData, notes, measureBox, options = {}) {
+  const hits = new Map()
+  if (!imageData?.data?.length || !notes?.length || !measureBox) {
+    return hits
+  }
+  const threshold = options.inkThreshold ?? DEFAULT_INK_STACCATO_THRESHOLD
+  const glyphs = options.glyphs ?? []
+  for (let index = 0; index < notes.length; index += 1) {
+    const note = notes[index]
+    const staffSpace = staffSpacePixelsForArticulation(measureBox, imageData, note?.clef)
+    const hit = detectInkStaccatoNearNote(imageData, note, staffSpace, threshold, { glyphs })
+    if (hit) {
+      hits.set(index, hit)
+    }
+  }
+  return hits
 }
 
 function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) {
@@ -295,32 +342,25 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData, optio
   }
 
   // Path/ink fallback: only when this page has no SMuFL staccato text glyphs and
-  // the document did not emit SMuFL staccato on another page.
+  // the document did not emit SMuFL staccato on another page. Use the tuned
+  // note-anchored raster blob classifier (not a bare ink-count probe).
   if (
     allowInkStaccatoFallback &&
     !hasSmuflStaccatoGlyph &&
     imageData?.data?.length &&
     notes?.length
   ) {
-    for (let index = 0; index < notes.length; index += 1) {
+    const inkHits = detectInkStaccatoAssignments(imageData, notes, measureBox, {
+      glyphs: glyphList,
+    })
+    for (const [index, hit] of inkHits) {
       if (assignments.has(index)) {
         continue
       }
       const note = notes[index]
       const staffSpace = staffSpacePixels(measureBox, imageData, note?.clef)
-      const hit = detectInkStaccatoNearNote(imageData, note, staffSpace)
-      if (!hit) {
-        continue
-      }
-      if (!isStaccatoRelativeToNote(hit, note, staffSpace)) {
-        rejectedCandidates.push({
-          glyph: hit,
-          type: 'staccato',
-          placement: hit.placement,
-          reason: 'ink-not-staccato-relative',
-        })
-        continue
-      }
+      // Raster patch classifier already enforced staccato geometry; do not
+      // re-apply glyph-relative gates designed for SMuFL text anchors.
       detectedStaccatoCount += 1
       detectedCandidates.push({
         glyph: hit,
