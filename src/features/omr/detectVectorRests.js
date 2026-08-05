@@ -39,15 +39,14 @@ function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) 
 }
 
 function nearNotehead(glyph, noteheads, radius = NOTEHEAD_EXCLUSION_RADIUS) {
+  const meta = VECTOR_REST_GLYPHS.get(glyph.text)
+  const sixteenth = meta?.durationType === 'sixteenth'
   return noteheads.some((note) => {
     const dx = glyph.x - note.cx
     const dy = Math.abs(glyph.y - note.cy)
-    if (dy > radius) {
-      return false
-    }
-    // Rests engraved immediately left of an attack must survive (tuplets m4
-    // 16th rest sits ~9px left of B4). Only reject glyphs centered on a head.
-    if (dx < -2) {
+    if (dy > radius) return false
+    // Only sixteenth rests left of a head are retained (tuplets m4).
+    if (sixteenth && dx < -2 && dx >= -radius * 1.6) {
       return Math.abs(dx) <= radius * 0.35 && dy <= radius * 0.35
     }
     return Math.abs(dx) <= radius
@@ -202,21 +201,25 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
   }
 
   let preferredStart = Math.round(rest.positionInMeasure * totalDivisions)
-  // When a rest glyph sits to the right of a notehead whose duration still
-  // covers the geometric preferred onset (common after deferJointPacking),
-  // the written rest belongs after that attack — snap to the note end.
-  for (const event of notesOnStaff) {
-    const start = event.startDivision ?? 0
-    const end = start + (event.durationDivisions ?? 1)
-    const noteCx = event.cx ?? event.notes?.[0]?.cx
-    if (
-      preferredStart >= start &&
-      preferredStart < end &&
-      Number.isFinite(rest.cx) &&
-      Number.isFinite(noteCx) &&
-      rest.cx > noteCx + 1
-    ) {
-      preferredStart = end
+  const isSixteenth = rest.durationType === 'sixteenth'
+  const isEighth = rest.durationType === 'eighth'
+  // Snap short rests past a left notehead that still spans the geometric slot.
+  // Unpack same-onset columns only for sixteenths (tuplets m4). Eighth near-
+  // notehead retention / unpack regressed Wet Hands F1.
+  if (isSixteenth || isEighth) {
+    for (const event of notesOnStaff) {
+      const start = event.startDivision ?? 0
+      const end = start + (event.durationDivisions ?? 1)
+      const noteCx = event.cx ?? event.notes?.[0]?.cx
+      if (
+        preferredStart >= start &&
+        preferredStart < end &&
+        Number.isFinite(rest.cx) &&
+        Number.isFinite(noteCx) &&
+        rest.cx > noteCx + 1
+      ) {
+        preferredStart = end
+      }
     }
   }
   if (overlapsInterval(preferredStart, 1, intervals)) {
@@ -241,11 +244,11 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         )
         .sort((left, right) => left.noteCx - right.noteCx)
 
-      // Notes packed onto the rest's onset (tuplets m4 B4/C5): insert rest and
-      // unpack the column left-to-right without carving their written durations.
-      const startingHere = rightOfRest.filter(
-        (entry) => (entry.event.startDivision ?? 0) === preferredStart,
-      )
+      const startingHere = isSixteenth
+        ? rightOfRest.filter(
+            (entry) => (entry.event.startDivision ?? 0) === preferredStart,
+          )
+        : []
       if (startingHere.length >= 1) {
         const startDivision = Math.max(0, preferredStart)
         const durationDivisions = Math.min(glyphDuration, Math.max(1, glyphDuration))
@@ -261,9 +264,7 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         }
         const shiftedEvents = events.map((event) => {
           const shifted = shiftedByEvent.get(event)
-          if (!shifted) {
-            return event
-          }
+          if (!shifted) return event
           return {
             ...event,
             startDivision: shifted.startDivision,
@@ -284,7 +285,6 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         }
       }
 
-      // Single note that began earlier and spans the rest: carve from the front.
       if (rightOfRest.length === 1) {
         const noteEvent = rightOfRest[0].event
         const startDivision = Math.max(0, preferredStart)
@@ -299,13 +299,8 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         )
         const shiftedStart = startDivision + durationDivisions
         const shiftedEvents = events.map((event) => {
-          if (event !== noteEvent) {
-            return event
-          }
-          const remaining = Math.max(
-            1,
-            (event.durationDivisions ?? 1) - durationDivisions,
-          )
+          if (event !== noteEvent) return event
+          const remaining = Math.max(1, (event.durationDivisions ?? 1) - durationDivisions)
           return {
             ...event,
             startDivision: shiftedStart,
