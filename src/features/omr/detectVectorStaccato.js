@@ -4,6 +4,7 @@ import {
   staffSpacePixelsForArticulation,
 } from './articulationGeometry.js'
 import { isOmrProvenanceEnabled } from './omrDiagnosticFlags.js'
+import { isInk } from './omrInk.js'
 
 /**
  * SMuFL articulation glyphs in vector PDF text (Bravura / Bravura Text).
@@ -16,6 +17,112 @@ const VECTOR_STACCATO_GLYPHS = new Set(['\ue4a2', '\ue4a3'])
 
 /** SMuFL augmentation dot. It is never authoritative staccato evidence. */
 const RHYTHM_DOT_GLYPH = '\ue1e7'
+
+const DEFAULT_INK_STACCATO_THRESHOLD = 170
+
+function inkAt(imageData, x, y, threshold = DEFAULT_INK_STACCATO_THRESHOLD) {
+  const { data, width, height } = imageData ?? {}
+  if (!data?.length || !width || !height) {
+    return false
+  }
+  const px = Math.round(x)
+  const py = Math.round(y)
+  if (px < 0 || py < 0 || px >= width || py >= height) {
+    return false
+  }
+  return isInk(data, (py * width + px) * 4, threshold)
+}
+
+/**
+ * Compact isolated ink near a notehead, above or below (never beside).
+ * Used when engravers draw staccato as path/ink without SMuFL E4A2/E4A3 text.
+ */
+export function detectInkStaccatoNearNote(
+  imageData,
+  note,
+  staffSpace,
+  threshold = DEFAULT_INK_STACCATO_THRESHOLD,
+) {
+  if (!imageData?.data?.length || !note || !Number.isFinite(note.cx) || !Number.isFinite(note.cy)) {
+    return null
+  }
+  // Only attach ink staccato to authentic SMuFL notehead text glyphs.
+  // Legacy-font remaps (tile/piano PDFs) and path-only encodings leave compact
+  // ink fragments that false-trigger as staccato when treated as E0A4.
+  if (note.noteheadFont?.legacyNormalized) {
+    return null
+  }
+  const glyph = note.noteheadFont?.glyph ?? null
+  const standardNotehead =
+    glyph === '\ue0a4' || glyph === '\ue0a3' || glyph === '\ue0a2'
+  if (!standardNotehead) {
+    return null
+  }
+  const scale = Number.isFinite(staffSpace) && staffSpace >= 3 ? staffSpace : 8
+  const cx = Math.round(note.cx)
+  const cy = Math.round(note.cy)
+  const xPad = Math.max(1, Math.round(scale * 0.45))
+  const isolationProbe = Math.max(3, Math.round(scale * 0.42))
+  const minDy = Math.max(4, Math.round(scale * 0.85))
+  const maxDy = Math.max(minDy + 2, Math.round(scale * 2.6))
+  const gapClear = Math.max(2, Math.round(scale * 0.3))
+
+  for (const dir of [-1, 1]) {
+    const placement = dir < 0 ? 'above' : 'below'
+    for (let dy = minDy; dy <= maxDy; dy += 1) {
+      const yCenter = cy + dir * dy
+      for (let dx = -xPad; dx <= xPad; dx += 1) {
+        const dotX = cx + dx
+        if (!inkAt(imageData, dotX, yCenter, threshold)) {
+          continue
+        }
+        let dark = 0
+        for (let y = yCenter - 1; y <= yCenter + 1; y += 1) {
+          for (let x = dotX - 1; x <= dotX + 1; x += 1) {
+            if (inkAt(imageData, x, y, threshold)) {
+              dark += 1
+            }
+          }
+        }
+        // Compact filled dot: a few dark pixels, not a stem/beam run.
+        if (dark < 3 || dark > 7) {
+          continue
+        }
+        if (
+          inkAt(imageData, dotX - isolationProbe, yCenter, threshold) ||
+          inkAt(imageData, dotX + isolationProbe, yCenter, threshold) ||
+          inkAt(imageData, dotX, yCenter - isolationProbe, threshold) ||
+          inkAt(imageData, dotX, yCenter + isolationProbe, threshold)
+        ) {
+          continue
+        }
+        // Require a clear white gap between the notehead body and the mark.
+        let gapOk = true
+        for (let g = 2; g <= gapClear; g += 1) {
+          if (inkAt(imageData, dotX, cy + dir * g, threshold)) {
+            gapOk = false
+            break
+          }
+        }
+        if (!gapOk) {
+          continue
+        }
+        // Reject augmentation-dot geometry (beside the head).
+        if (isAugmentationDotRelativeToNote({ x: dotX, y: yCenter }, note)) {
+          continue
+        }
+        return {
+          x: dotX,
+          y: yCenter,
+          placement,
+          source: 'ink-path',
+          confidence: 0.78,
+        }
+      }
+    }
+  }
+  return null
+}
 
 function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) {
   const xNorm = glyph.x / imageData.width
@@ -98,8 +205,15 @@ function staccatoMatchScore(note, glyph, measureBox, imageData) {
 
 /**
  * Bind staccato-related glyphs to the nearest qualifying notehead in a measure.
+ * When the measure has no SMuFL E4A2/E4A3 glyphs, fall back to compact ink dots
+ * above/below noteheads (path-drawn staccato on born-digital scores).
+ *
+ * @param {object} [options]
+ * @param {boolean} [options.allowInkStaccatoFallback=true] Document-level gate:
+ *   set false when any page of the score already emits SMuFL staccato glyphs.
  */
-export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
+export function assignVectorStaccato(glyphs, notes, measureBox, imageData, options = {}) {
+  const allowInkStaccatoFallback = options.allowInkStaccatoFallback !== false
   const assignments = new Map()
   let detectedStaccatoCount = 0
   const claimedGlyphs = new Set()
@@ -107,7 +221,10 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
   const selectedAttachments = []
   const rejectedCandidates = []
 
-  for (const glyph of glyphs ?? []) {
+  const glyphList = glyphs ?? []
+  const hasSmuflStaccatoGlyph = glyphList.some((glyph) => isStaccatoCandidateGlyph(glyph))
+
+  for (const glyph of glyphList) {
     if (!isStaccatoCandidateGlyph(glyph)) {
       continue
     }
@@ -173,6 +290,65 @@ export function assignVectorStaccato(glyphs, notes, measureBox, imageData) {
         noteIndex: bestIndex,
         note: notes[bestIndex],
         score: bestScore,
+      })
+    }
+  }
+
+  // Path/ink fallback: only when this page has no SMuFL staccato text glyphs and
+  // the document did not emit SMuFL staccato on another page.
+  if (
+    allowInkStaccatoFallback &&
+    !hasSmuflStaccatoGlyph &&
+    imageData?.data?.length &&
+    notes?.length
+  ) {
+    for (let index = 0; index < notes.length; index += 1) {
+      if (assignments.has(index)) {
+        continue
+      }
+      const note = notes[index]
+      const staffSpace = staffSpacePixels(measureBox, imageData, note?.clef)
+      const hit = detectInkStaccatoNearNote(imageData, note, staffSpace)
+      if (!hit) {
+        continue
+      }
+      if (!isStaccatoRelativeToNote(hit, note, staffSpace)) {
+        rejectedCandidates.push({
+          glyph: hit,
+          type: 'staccato',
+          placement: hit.placement,
+          reason: 'ink-not-staccato-relative',
+        })
+        continue
+      }
+      detectedStaccatoCount += 1
+      detectedCandidates.push({
+        glyph: hit,
+        type: 'staccato',
+        placement: hit.placement,
+        source: 'ink-path',
+      })
+      const articulation = {
+        type: 'staccato',
+        placement: hit.placement,
+        confidence: hit.confidence,
+        source: 'ink-path',
+      }
+      assignments.set(index, articulation)
+      broadcastArticulationToChordMates(
+        assignments,
+        notes,
+        index,
+        articulation,
+        staffSpace,
+      )
+      selectedAttachments.push({
+        glyph: hit,
+        type: 'staccato',
+        placement: hit.placement,
+        noteIndex: index,
+        note,
+        score: Math.abs(hit.x - note.cx) + Math.abs(hit.y - note.cy) * 0.75,
       })
     }
   }

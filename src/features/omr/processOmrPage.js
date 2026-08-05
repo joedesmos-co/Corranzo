@@ -386,6 +386,11 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     captureOmrV3Shadow = false,
     /** Capture detector observations for an independent V3 qualification shadow. */
     captureOmrV3RawSymbols = false,
+    /**
+     * When false, skip ink/path staccato fallback (document already has SMuFL
+     * staccato glyphs on some page).
+     */
+    allowInkStaccatoFallback = true,
   } = options
 
   const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
@@ -870,6 +875,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inkThreshold,
       captureDetectorObservations: captureOmrV3RawSymbols,
       enableLocalTupletGroups: !tabCapable,
+      allowInkStaccatoFallback,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions

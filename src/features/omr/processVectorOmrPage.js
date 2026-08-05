@@ -350,6 +350,7 @@ function noteheadsForMeasure(
   vectorAugmentationDotPaths = [],
   noteheadFallbackCalibration = null,
   accidentalPathCalibration = null,
+  allowInkStaccatoFallback = true,
 ) {
   const notes = []
   const consumed = new Set()
@@ -466,7 +467,9 @@ function noteheadsForMeasure(
     ...(localAccidentals.diagnostics ?? {}),
     pathInk: pathAccidentalResult.diagnostics,
   }
-  const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData)
+  const staccatoResult = assignVectorStaccato(glyphs, sortedNotes, measureBox, imageData, {
+    allowInkStaccatoFallback,
+  })
   const accentResult = assignVectorAccent(glyphs, sortedNotes, measureBox, imageData)
   const notationArticulationResult = assignVectorNotationArticulations(
     glyphs,
@@ -3891,6 +3894,7 @@ export function buildVectorMeasureRecord({
   noteheadFallbackCalibration = null,
   accidentalPathCalibration = null,
   enableLocalTupletGroups = true,
+  allowInkStaccatoFallback = true,
 }) {
   const {
     notes,
@@ -3911,6 +3915,7 @@ export function buildVectorMeasureRecord({
     vectorAugmentationDotPaths,
     noteheadFallbackCalibration,
     accidentalPathCalibration,
+    allowInkStaccatoFallback,
   )
   const rawDetectedRests = restsForMeasure(
     glyphs,
@@ -4299,6 +4304,7 @@ export function processVectorPageSystems({
   inkThreshold = 170,
   captureDetectorObservations = false,
   enableLocalTupletGroups = true,
+  allowInkStaccatoFallback = true,
 }) {
   const glyphs = textGlyphsToImage(pageText, imageData)
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
@@ -4364,6 +4370,7 @@ export function processVectorPageSystems({
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
         enableLocalTupletGroups,
+        allowInkStaccatoFallback,
       })
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -4407,6 +4414,7 @@ export function processVectorPageSystems({
         vectorAugmentationDotPaths,
         noteheadFallbackCalibration,
         enableLocalTupletGroups,
+        allowInkStaccatoFallback,
       })
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
@@ -4466,6 +4474,7 @@ export function processVectorPageSystems({
           noteheadFallbackCalibration,
           accidentalPathCalibration,
           enableLocalTupletGroups,
+          allowInkStaccatoFallback,
         })
         noteCount += record.vectorNoteCount ?? 0
         return record

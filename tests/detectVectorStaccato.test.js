@@ -107,6 +107,156 @@ describe('assignVectorStaccato', () => {
     expect(assignments.size).toBe(0)
   })
 
+  it('falls back to compact ink dots above/below when no SMuFL staccato glyphs exist', () => {
+    const width = 80
+    const height = 80
+    const data = new Uint8ClampedArray(width * height * 4)
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255
+      data[i + 1] = 255
+      data[i + 2] = 255
+      data[i + 3] = 255
+    }
+    const paint = (x, y) => {
+      const index = (y * width + x) * 4
+      data[index] = 0
+      data[index + 1] = 0
+      data[index + 2] = 0
+    }
+    // Isolated 2×2 ink blob above the notehead.
+    paint(40, 28)
+    paint(41, 28)
+    paint(40, 29)
+    paint(41, 29)
+    const localImage = { width, height, data }
+    const localBox = {
+      ...measureBox,
+      x0: 0,
+      playableX0: 0,
+      x1: 1,
+      y0: 0,
+      y1: 1,
+    }
+    const note = {
+      cx: 40,
+      cy: 45,
+      clef: 'treble',
+      midi: 60,
+      naturalMidi: 60,
+      positionInMeasure: 0.4,
+      noteheadFont: { glyph: '\ue0a4' },
+    }
+    const { assignments, detectedStaccatoCount, appliedStaccatoCount } = assignVectorStaccato(
+      [],
+      [note],
+      localBox,
+      localImage,
+    )
+    expect(detectedStaccatoCount).toBeGreaterThanOrEqual(1)
+    expect(appliedStaccatoCount).toBeGreaterThanOrEqual(1)
+    expect(assignments.get(0)?.type).toBe('staccato')
+    expect(assignments.get(0)?.source).toBe('ink-path')
+  })
+
+  it('skips ink fallback on legacy-normalized noteheads', () => {
+    const width = 80
+    const height = 80
+    const data = new Uint8ClampedArray(width * height * 4)
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255
+      data[i + 1] = 255
+      data[i + 2] = 255
+      data[i + 3] = 255
+    }
+    const paint = (x, y) => {
+      const index = (y * width + x) * 4
+      data[index] = 0
+      data[index + 1] = 0
+      data[index + 2] = 0
+    }
+    paint(40, 28)
+    paint(41, 28)
+    paint(40, 29)
+    paint(41, 29)
+    const localImage = { width, height, data }
+    const localBox = {
+      ...measureBox,
+      x0: 0,
+      playableX0: 0,
+      x1: 1,
+      y0: 0,
+      y1: 1,
+    }
+    const note = {
+      cx: 40,
+      cy: 45,
+      clef: 'treble',
+      midi: 60,
+      naturalMidi: 60,
+      positionInMeasure: 0.4,
+      noteheadFont: { glyph: '\ue0a4', legacyNormalized: true },
+    }
+    const { assignments, detectedStaccatoCount } = assignVectorStaccato(
+      [],
+      [note],
+      localBox,
+      localImage,
+    )
+    expect(detectedStaccatoCount).toBe(0)
+    expect(assignments.size).toBe(0)
+  })
+
+  it('does not run ink fallback when SMuFL staccato glyphs are present', () => {
+    const width = 80
+    const height = 80
+    const data = new Uint8ClampedArray(width * height * 4)
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255
+      data[i + 1] = 255
+      data[i + 2] = 255
+      data[i + 3] = 255
+    }
+    const paint = (x, y) => {
+      const index = (y * width + x) * 4
+      data[index] = 0
+      data[index + 1] = 0
+      data[index + 2] = 0
+    }
+    paint(40, 28)
+    paint(41, 28)
+    paint(40, 29)
+    paint(41, 29)
+    const localImage = { width, height, data }
+    const localBox = {
+      ...measureBox,
+      x0: 0,
+      playableX0: 0,
+      x1: 1,
+      y0: 0,
+      y1: 1,
+    }
+    const note = {
+      cx: 40,
+      cy: 45,
+      clef: 'treble',
+      midi: 60,
+      naturalMidi: 60,
+      positionInMeasure: 0.4,
+    }
+    // Unrelated SMuFL glyph far away — still disables ink fallback for the measure.
+    const { assignments, detectedStaccatoCount } = assignVectorStaccato(
+      [{ text: '\ue4a2', x: 10, y: 10 }],
+      [note],
+      localBox,
+      localImage,
+    )
+    expect(assignments.get(0)?.source).not.toBe('ink-path')
+    // Glyph may be rejected for geometry; ink must not fill in.
+    const inkApplied = [...assignments.values()].some((a) => a.source === 'ink-path')
+    expect(inkApplied).toBe(false)
+    expect(detectedStaccatoCount).toBeLessThanOrEqual(1)
+  })
+
   it('never treats a quarter-rest glyph as staccato', () => {
     const { assignments, detectedStaccatoCount } = assignVectorStaccato(
       [{ text: '\ue4e5', x: 300, y: 140 }],
