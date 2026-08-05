@@ -1,0 +1,113 @@
+{
+  "updatedAt": "2026-08-05T12:50:00Z",
+  "gitHead": "648651a48781c566b0a45bc848654b98bd1d7260",
+  "productionOmrCommit": "648651a48781c566b0a45bc848654b98bd1d7260",
+  "phase": "tuplet-milestone-accepted; repeat-barline-campaign-next",
+  "repairGate": {
+    "reached": true,
+    "criteria": [
+      "A"
+    ],
+    "familiesReady": [
+      "vector-piano-tuplet-omission",
+      "vector-repeat-barline-omission"
+    ]
+  },
+  "clusters": [
+    {
+      "id": "vector-piano-tuplet-omission",
+      "rootCauseFamily": "tuplet-detection / time-modification emission",
+      "status": "accepted-fixed",
+      "strictScoresAffected": [
+        "piano-pokemon-rby-title",
+        "piano-super-mario-bros-theme"
+      ],
+      "developmentScoresAffected": [
+        "piano-pokemon-rby-title",
+        "piano-super-mario-bros-theme"
+      ],
+      "sealedScoresAffected": [],
+      "confidence": "high",
+      "evidence": "Pok\u00e9mon tm=68 starts/stops=15; Mario tm=34 starts/stops=8; MusicXML time-modification+tuplet; development false-tuplet scan clean",
+      "visualSupport": "T4 PDF visual audit \u2014 brackets and numeral 3 visible",
+      "repairAllowed": true,
+      "notes": "Local digit-gated 3:2; TAB local disabled. Sealed piano structural tm delta recorded without tuning.",
+      "acceptedCommit": "648651a48781c566b0a45bc848654b98bd1d7260"
+    },
+    {
+      "id": "vector-repeat-barline-omission",
+      "rootCauseFamily": "repeat-barline detection on born-digital vector piano",
+      "status": "gate-A-confirmed-ready-for-repair",
+      "strictScoresAffected": [
+        "piano-korobeiniki-tetris-tiles",
+        "piano-super-mario-bros-theme",
+        "guitar-guaraldi-pumpkin-waltz"
+      ],
+      "developmentScoresAffected": [
+        "piano-korobeiniki-tetris-tiles",
+        "piano-super-mario-bros-theme",
+        "guitar-guaraldi-pumpkin-waltz"
+      ],
+      "sealedScoresAffected": [],
+      "confidence": "high",
+      "evidence": "PDF end/start repeats visible; generated XML has 0 <repeat> on Korobeiniki and Mario; Guaraldi has endings but no <repeat>",
+      "visualSupport": "T4 PDF visual + prior Guaraldi structural notes",
+      "repairAllowed": true,
+      "notes": "Next repair target after accepted tuplet commit"
+    },
+    {
+      "id": "tab-notation-pairing-residual",
+      "rootCauseFamily": "voice-assignment / notation-tab-pairing",
+      "status": "candidate-insufficient-development-witnesses",
+      "strictScoresAffected": [
+        "guitar-guaraldi-pumpkin-waltz",
+        "guitar-bach-prelude-c-guitartab",
+        "guitar-undertale-home-tab"
+      ],
+      "developmentScoresAffected": [
+        "guitar-guaraldi-pumpkin-waltz"
+      ],
+      "sealedScoresAffected": [
+        "guitar-bach-prelude-c-guitartab",
+        "guitar-undertale-home-tab"
+      ],
+      "confidence": "medium",
+      "evidence": "pairingConfidence\u22480.49\u20130.54; unpaired notation notes; sealed witnesses must not drive tuning",
+      "repairAllowed": false,
+      "notes": "Need second development paired score with audited events, or treat only after sealed unblinding policy"
+    },
+    {
+      "id": "tab-only-approximate-rhythm",
+      "rootCauseFamily": "TAB-only rhythm policy",
+      "status": "unsupported-or-policy",
+      "strictScoresAffected": [
+        "guitar-pirates-caribbean-tab",
+        "guitar-gravity-falls-theme-tab",
+        "guitar-pachelbel-canon-d-tab",
+        "guitar-bts-save-me-tab"
+      ],
+      "developmentScoresAffected": [
+        "guitar-pirates-caribbean-tab",
+        "guitar-gravity-falls-theme-tab",
+        "guitar-pachelbel-canon-d-tab"
+      ],
+      "confidence": "high",
+      "evidence": "rhythmApproximate=true on TAB-only outputs",
+      "repairAllowed": false,
+      "notes": "Program forbids repairing approximate TAB rhythm policy from holdout observations alone"
+    },
+    {
+      "id": "mario-staccato-omission",
+      "rootCauseFamily": "staccato articulation on dense piano",
+      "status": "candidate-single-or-mixed",
+      "developmentScoresAffected": [
+        "piano-super-mario-bros-theme",
+        "guitar-gravity-falls-theme-tab"
+      ],
+      "confidence": "low",
+      "evidence": "Mario PDF staccato dense but 0 generated; Gravity Falls expected staccato missing; Pok\u00e9mon staccato succeeded (38)",
+      "repairAllowed": false,
+      "notes": "Not clearly the same root cause across unrelated scores; Pok\u00e9mon counterexample"
+    }
+  ]
+}

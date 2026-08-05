@@ -1,0 +1,190 @@
+{
+  "at": "2026-08-05T12:14:56.813Z",
+  "results": [
+    {
+      "fileName": "canon-in-d-pachelbel-guitar-tab.pdf",
+      "ext": ".pdf",
+      "bytes": 123682,
+      "sha256": "eeb769a7328265cbb9897732ac1e20d94bde806d1c94647634f8310913e16c96",
+      "tokens": [
+        "canon",
+        "pachelbel"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"canon\" (20 paths)",
+      "sampleHits": [
+        "./docs/omr-architecture-v2.md",
+        "./docs/OMR_V3_IR_SPEC.md",
+        "./docs/OMR_V3_FINAL_REPORT.md",
+        "./docs/OMR_SEMANTIC_EVALUATOR.md",
+        "./docs/OMR_ENGINE_V2_PLAN.md",
+        "./docs/OMR_SEMANTIC_DEFECT_TAXONOMY.md",
+        "./docs/OMR_RECOGNITION_QUALITY.md",
+        "./scripts/omr-semantic-mismatch-inventory.mjs",
+        "./src/features/omr/detectNoteRhythmFeatures.js",
+        "./src/features/omr/processOmrPage.js",
+        "./src/features/omr/pitchFromStaffPosition.js",
+        "./src/features/omr/omrDiagnosticGrouping.js"
+      ],
+      "primaryToken": "canon",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "gravity-falls-theme-tab.pdf",
+      "ext": ".pdf",
+      "bytes": 22686,
+      "sha256": "d4ba9f101d4f29f3d2073c18bedf674adaa3e42863bda8c7e65b9becfb336cf5",
+      "tokens": [
+        "gravity",
+        "falls"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"falls\" (9 paths)",
+      "sampleHits": [
+        "./docs/omr-phase3c-promotion-design.md",
+        "./docs/OMR_V3_ACCURACY_BASELINE.md",
+        "./docs/OMR_V3_PRODUCTION_QUALIFICATION_REPORT.md",
+        "./tests/omrMeasureVisualExtents.test.js",
+        "./tests/omrBenchmarkDashboard.test.js",
+        "./tmp/omr-acceptance-gate/FULL_SUITE.txt",
+        "./tests/omrScoreGraphSolver.test.js",
+        "./tests/guitarOmrTabNotation.test.js",
+        "./tests/benchmarkTimingSource.test.js"
+      ],
+      "primaryToken": "falls",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "home-undertale-ost-012-tab-for-solo-guitar.pdf",
+      "ext": ".pdf",
+      "bytes": 57682,
+      "sha256": "e2a59cd9adfbc9c06ab50c6651d7e1e4fe1356de4c7a1cfe09dc6a29dd2584aa",
+      "tokens": [
+        "home",
+        "undertale"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"undertale\" (3 paths)",
+      "sampleHits": [
+        "./tmp/real-world-omr-soak/run-wave2-soak.mjs",
+        "./public/fixtures/corranzo-calibration-report-2.json",
+        "./tmp/real-world-omr-soak/wave2/spider-dance.json"
+      ],
+      "primaryToken": "undertale",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "in-the-pool-chainsaw-man-the-movie-reze-arc-ost.pdf",
+      "ext": ".pdf",
+      "bytes": 88861,
+      "sha256": "fe980bf620d6e821c89988c5c342ba8bcfcd4a81d342d874aa62f37ccdb24999",
+      "tokens": [
+        "pool",
+        "chainsaw",
+        "reze"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"pool\" (7 paths)",
+      "sampleHits": [
+        "./benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf",
+        "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+        "./src/features/omr/v3/omrV3Voices.js",
+        "./tmp/omr-autonomous/AUTONOMOUS_EXPERIMENT_LOG.md",
+        "./tmp/omr-benchmark-iter/all-errors1/current-error-rerank.json",
+        "./tmp/omr-zero-defect/build-defect-ledger-head.mjs",
+        "./tmp/omr-zero-defect/build-defect-ledger.mjs"
+      ],
+      "primaryToken": "pool",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "korobeiniki-tetris-theme-piano-tiles-version.pdf",
+      "ext": ".pdf",
+      "bytes": 49503,
+      "sha256": "09bf784b684eef5baa399de5ccb92836dd9e350d1eb4462e14d6b152ee10da16",
+      "tokens": [
+        "korobeiniki",
+        "tetris",
+        "tiles"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"tiles\" (2 paths)",
+      "sampleHits": [
+        "./docs/OMR_ENGINE_V2_PLAN.md",
+        "./docs/OMR_V3_PROMOTION_REPORT.md"
+      ],
+      "primaryToken": "tiles",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "pokemon-red-and-blue-title-theme-for-piano.pdf",
+      "ext": ".pdf",
+      "bytes": 46654,
+      "sha256": "f8ad96511dd1c25e94dd55a0c63fb4d29d779ce695476cd7d858341ea46b84aa",
+      "tokens": [
+        "pokemon"
+      ],
+      "category": "A",
+      "reason": "No repo/tmp-campaign references for distinctive tokens [pokemon]",
+      "sampleHits": [],
+      "primaryToken": "pokemon",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "save-me-bts-guitar-tabs.pdf",
+      "ext": ".pdf",
+      "bytes": 42547,
+      "sha256": "217e16810477c04e2f7d838c56f7186813ef88a103d724a86b1d11b103eb5d4c",
+      "tokens": [
+        "save"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"save\" (12 paths)",
+      "sampleHits": [
+        "./scripts/notation-fidelity-sprint3-probe.mjs",
+        "./scripts/evaluate-omr-accuracy.mjs",
+        "./docs/OMR_BENCHMARK_DASHBOARD.md",
+        "./scripts/omr-benchmark-dashboard.mjs",
+        "./docs/OMR_BEAM_STEM_RECONSTRUCTION.md",
+        "./scripts/capture-real-mic-fixture.mjs",
+        "./scripts/omr-real-pdf-cache-regression.mjs",
+        "./scripts/notation-fidelity-sprint4-probe.mjs",
+        "./scripts/build-omr-benchmark-font.py",
+        "./scripts/omr-pagecount-replacement-regression.mjs",
+        "./scripts/generate-omr-benchmark-corpus.py",
+        "./docs/OMR_RECOGNITION_QUALITY.md"
+      ],
+      "primaryToken": "save",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    },
+    {
+      "fileName": "super-mario-bros-main-theme.pdf",
+      "ext": ".pdf",
+      "bytes": 47462,
+      "sha256": "381c62726406a5d44fb710191d320cb4cc7e3fb420ce1df700a25348b7288e52",
+      "tokens": [
+        "super",
+        "mario",
+        "bros"
+      ],
+      "category": "C",
+      "reason": "Prior OMR/product references via \"super\" (13 paths)",
+      "sampleHits": [
+        "./tmp/notation-fidelity-sprint-2/truth/minecraft.musicxml",
+        "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+        "./tmp/corranzo-omr-recognition-campaign/PHASE1_FANTAISIE_REPORT.md",
+        "./src/features/playback/pianoAudioBenchmark.js",
+        "./tmp/corranzo-omr-recognition-campaign/CAMPAIGN_REPORT.md",
+        "./docs/OMR_V3_ACCURACY_REPORT.md",
+        "./docs/alignment-benchmark.md",
+        "./docs/omr-phase3-solver-design.md",
+        "./tmp/omr-local-raster/build-local-raster-inventory.mjs",
+        "./tmp/omr-local-raster/PHASE_1_LOCAL_RASTER_INVENTORY.md",
+        "./tmp/omr-local-raster/LOCAL_RASTER_FILLED_HEAD_REPORT.md",
+        "./tmp/omr-local-raster/PHASE_2_LOCAL_RASTER_DESIGN.md"
+      ],
+      "primaryToken": "super",
+      "localPath": "[private-Downloads/corranzo-holdout-intake-redacted]"
+    }
+  ]
+}

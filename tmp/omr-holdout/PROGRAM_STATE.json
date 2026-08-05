@@ -1,0 +1,29 @@
+{
+  "program": "CORRANZO OMR UNSEEN-HOLDOUT GENERALIZATION PROGRAM",
+  "updatedAt": "2026-08-05T13:00:00Z",
+  "gitHead": "648651a48781c566b0a45bc848654b98bd1d7260",
+  "startingHeadThisPhase": "fc7af582af21514b3d718de7ac81f8a1248e0c9b",
+  "productionOmrBaselineCommit": "f091ee76a74d4d0265218a051e07ef4a6880b894",
+  "freezeTestCommit": "613fa73b043d99a3c783740fa27df6b01ae06439",
+  "status": "tuplet_accepted_repeat_inventory_done_first_repeat_experiment_reverted",
+  "strictHoldoutCount": 11,
+  "evaluationCount": 4,
+  "developmentCount": 7,
+  "repairGateReached": true,
+  "repairStarted": true,
+  "acceptedCommits": [
+    {
+      "sha": "648651a48781c566b0a45bc848654b98bd1d7260",
+      "message": "fix(omr): recognize vector tuplet groups"
+    }
+  ],
+  "rejectedExperiments": [
+    {
+      "id": "vector-repeat-merged-thick-v1",
+      "target": "vector-repeat-barline-omission",
+      "result": "reverted",
+      "reason": "Korobeiniki/Mario still 0 in pipeline; pdfOmrMusical synthetic repeat fixture regressed"
+    }
+  ],
+  "nextAction": "Retry vector repeat detection with a materially different hypothesis (PDF vector path/glyph colon + thick-bar classify without weakening separated-pair scan path). Witnesses: piano-korobeiniki-tetris-tiles, piano-super-mario-bros-theme, guitar-guaraldi-pumpkin-waltz."
+}

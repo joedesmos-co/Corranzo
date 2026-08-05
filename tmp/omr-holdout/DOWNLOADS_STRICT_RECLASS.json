@@ -1,0 +1,671 @@
+[
+  {
+    "name": "10th Grade CEW-Industrial Revolution.pdf",
+    "kind": "non-music",
+    "category": "exclude"
+  },
+  {
+    "name": "5-levels-of-chords-substitutions-with-twinkle-twinkle-little-star.pdf",
+    "kind": "music-candidate",
+    "primary": "substitutions",
+    "tokens": [
+      "substitutions",
+      "twinkle",
+      "twinkle",
+      "little"
+    ],
+    "hitCount": 5,
+    "omrHitCount": 5,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/omr-autonomous/heldout-final-summary.json",
+      "./tmp/omr-autonomous/heldout-final-twinkle-chord-substitutions.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs, ./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md, ./tmp/omr-autonomous/heldout-final-summary.md, ./tmp/omr-autonomous/heldout-final-summary.json"
+  },
+  {
+    "name": "Ao no Sumika (Piano).pdf",
+    "kind": "music-candidate",
+    "primary": "sumika",
+    "tokens": [
+      "sumika"
+    ],
+    "hitCount": 23,
+    "omrHitCount": 22,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/omr-chord-onset/user-reports/ao-no-sumika.json",
+      "./tmp/omr-chord-onset/user-reports/summary.json",
+      "./tmp/omr-autonomous/heldout-final-summary.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs, ./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md, ./tmp/omr-autonomous/heldout-final-summary.md, ./tmp/omr-chord-onset/user-reports/ao-no-sumika.json"
+  },
+  {
+    "name": "Copy of Academic 2024 Review Answers.pdf",
+    "kind": "non-music",
+    "category": "exclude"
+  },
+  {
+    "name": "HAlg2 - Final Multiple Choice Practice - Key.pdf",
+    "kind": "non-music",
+    "category": "exclude"
+  },
+  {
+    "name": "HAlg2 - Final Open Ended Practice - Key.pdf",
+    "kind": "non-music",
+    "category": "exclude"
+  },
+  {
+    "name": "HAlg2 - Review Game - Key.pdf",
+    "kind": "non-music",
+    "category": "exclude"
+  },
+  {
+    "name": "Here-Comes-The-Sun_The-Beatles_GuitarPDF-1.pdf",
+    "kind": "music-candidate",
+    "primary": "guitarpdf",
+    "tokens": [
+      "guitarpdf",
+      "beatles",
+      "comes"
+    ],
+    "hitCount": 2,
+    "omrHitCount": 2,
+    "sampleHits": [
+      "./tmp/real-world-omr-soak/run-wave2-soak.mjs",
+      "./tmp/real-world-omr-soak/wave2/here-comes-the-sun-guitar.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/real-world-omr-soak/run-wave2-soak.mjs, ./tmp/real-world-omr-soak/wave2/here-comes-the-sun-guitar.json"
+  },
+  {
+    "name": "a-cruel-angels-thesis-neon-genesis-evangelion.pdf",
+    "kind": "music-candidate",
+    "primary": "evangelion",
+    "tokens": [
+      "evangelion",
+      "genesis",
+      "angels",
+      "thesis",
+      "cruel"
+    ],
+    "hitCount": 19,
+    "omrHitCount": 16,
+    "sampleHits": [
+      "./scripts/analyze-omr-note-matching.mjs",
+      "./scripts/tmp-analyze-duration-errors.mjs",
+      "./scripts/notation-fidelity-sprint3-probe.mjs",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/analyze-omr-note-matching.mjs, ./scripts/notation-fidelity-sprint3-probe.mjs, ./scripts/notation-fidelity-sprint5-probe.mjs, ./scripts/omr-quality-dense-rhythm-probe.mjs"
+  },
+  {
+    "name": "aria-math-c418-from-minecraft.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft"
+    ],
+    "hitCount": 25,
+    "omrHitCount": 22,
+    "sampleHits": [
+      "./scripts/notation-fidelity-sprint3-probe.mjs",
+      "./scripts/omr-real-pdf-cache-regression.mjs",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./scripts/notation-fidelity-sprint2-probe.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/notation-fidelity-sprint3-probe.mjs, ./scripts/omr-real-pdf-cache-regression.mjs, ./scripts/notation-fidelity-sprint5-probe.mjs, ./scripts/omr-quality-campaign-probe.mjs"
+  },
+  {
+    "name": "beginner-minecraft-piano-themes-in-c-minecraft (1).pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "minecraft",
+      "beginner",
+      "themes"
+    ],
+    "hitCount": 25,
+    "omrHitCount": 23,
+    "sampleHits": [
+      "./tmp/omr-v3-promotion-phase4/omr-v3-shadow-report.json",
+      "./scripts/notation-fidelity-sprint3-probe.mjs",
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./tests/wetHandsNotationTabOmr.test.js"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-v3-promotion-phase4/omr-v3-shadow-report.json, ./scripts/notation-fidelity-sprint3-probe.mjs, ./tmp/omr-autonomous/heldout-final-run.mjs, ./scripts/notation-fidelity-sprint5-probe.mjs"
+  },
+  {
+    "name": "beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "minecraft",
+      "beginner",
+      "themes"
+    ],
+    "hitCount": 25,
+    "omrHitCount": 21,
+    "sampleHits": [
+      "./docs/ACTIVESCORE_ARCHITECTURE.md",
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/notation-fidelity-sprint-3/probe-console.txt",
+      "./tmp/notation-fidelity-sprint-3/full-real-summary.json",
+      "./benchmarks/omr-benchmark.manifest.json",
+      "./benchmarks/omr-notation-fidelity-validation/cases.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs, ./tmp/notation-fidelity-sprint-3/probe-console.txt, ./tmp/notation-fidelity-sprint-3/full-real-summary.json, ./benchmarks/omr-benchmark.manifest.json"
+  },
+  {
+    "name": "carol-of-the-bells.pdf",
+    "kind": "music-candidate",
+    "primary": "carol",
+    "tokens": [
+      "carol",
+      "bells"
+    ],
+    "hitCount": 17,
+    "omrHitCount": 12,
+    "sampleHits": [
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./src/features/score-follow/smartScoreCalibration.js",
+      "./tmp/omr-quality-dense-rhythm/validation-summary.json",
+      "./tmp/omr-quality-dense-rhythm/baseline/generated/carol-of-the-bells.musicxml",
+      "./tmp/omr-quality-dense-rhythm/REPORT.md"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-quality-campaign-probe.mjs, ./scripts/omr-quality-dense-rhythm-probe.mjs, ./tmp/omr-quality-dense-rhythm/validation-summary.json, ./tmp/omr-quality-dense-rhythm/baseline/generated/carol-of-the-bells.musicxml"
+  },
+  {
+    "name": "etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+    "kind": "music-candidate",
+    "primary": "campanella",
+    "tokens": [
+      "campanella",
+      "etude",
+      "liszt"
+    ],
+    "hitCount": 18,
+    "omrHitCount": 15,
+    "sampleHits": [
+      "./docs/OMR_V3_ACCURACY_REPORT.md",
+      "./benchmarks/omr-benchmark.manifest.json",
+      "./docs/OMR_V3_ACCURACY_STRESS_VALIDATION.md",
+      "./public/fixtures/corranzo-calibration-report (2).json",
+      "./tests/omrBenchmarkDashboard.test.js",
+      "./tmp/omr-v3-promotion-phase5/tie-sustain-constraint-trace.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./docs/OMR_V3_ACCURACY_REPORT.md, ./benchmarks/omr-benchmark.manifest.json, ./docs/OMR_V3_ACCURACY_STRESS_VALIDATION.md, ./tests/omrBenchmarkDashboard.test.js"
+  },
+  {
+    "name": "fantaisie-impromptu-in-c-minor-chopin.pdf",
+    "kind": "music-candidate",
+    "primary": "fantaisie",
+    "tokens": [
+      "fantaisie",
+      "impromptu",
+      "chopin"
+    ],
+    "hitCount": 9,
+    "omrHitCount": 5,
+    "sampleHits": [
+      "./tmp/corranzo-p1-tempo-dots/run-smoke-checklist.mjs",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./tmp/corranzo-p1-tempo-dots/SMOKE_CHECKLIST.md",
+      "./tmp/corranzo-omr-recognition-campaign/phase1-fantaisie/generated.musicxml",
+      "./tmp/corranzo-omr-recognition-campaign/SMOKE_CHECKLIST.md"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-quality-dense-rhythm-probe.mjs, ./scripts/omr-quality-campaign-probe.mjs, ./tmp/corranzo-omr-recognition-campaign/phase1-fantaisie/generated.musicxml, ./tmp/corranzo-omr-recognition-campaign/SMOKE_CHECKLIST.md"
+  },
+  {
+    "name": "fur_Elise_WoO59-let.pdf",
+    "kind": "music-candidate",
+    "primary": "elise",
+    "tokens": [
+      "elise",
+      "woo59"
+    ],
+    "hitCount": 4,
+    "omrHitCount": 2,
+    "sampleHits": [
+      "./benchmarks/alignment-corpus.manifest.json",
+      "./public/fixtures/practice-library/manifest.json",
+      "./tmp/real-world-omr-soak/wave3/WAVE3_RECORDS.json",
+      "./tmp/real-world-omr-soak/wave3/fur-elise-denseish.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/real-world-omr-soak/wave3/WAVE3_RECORDS.json, ./tmp/real-world-omr-soak/wave3/fur-elise-denseish.json"
+  },
+  {
+    "name": "gymnopedie-no-1-satie.pdf",
+    "kind": "music-candidate",
+    "primary": "gymnopedie",
+    "tokens": [
+      "gymnopedie",
+      "satie"
+    ],
+    "hitCount": 17,
+    "omrHitCount": 14,
+    "sampleHits": [
+      "./scripts/omr-polyphonic-real-score-validate.mjs",
+      "./scripts/notation-fidelity-sprint3-probe.mjs",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./scripts/notation-fidelity-sprint2-probe.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-polyphonic-real-score-validate.mjs, ./scripts/notation-fidelity-sprint3-probe.mjs, ./scripts/notation-fidelity-sprint5-probe.mjs, ./scripts/omr-quality-campaign-probe.mjs"
+  },
+  {
+    "name": "https:www.guitarpdf.com:wp-content:uploads:2025:09:Here-Comes-The-Sun_The-Beatles_GuitarPDF-1.pdf",
+    "kind": "music-candidate",
+    "primary": "guitarpdf",
+    "tokens": [
+      "guitarpdf",
+      "guitarpdf",
+      "content",
+      "uploads",
+      "beatles",
+      "https"
+    ],
+    "hitCount": 2,
+    "omrHitCount": 2,
+    "sampleHits": [
+      "./tmp/real-world-omr-soak/run-wave2-soak.mjs",
+      "./tmp/real-world-omr-soak/wave2/here-comes-the-sun-guitar.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/real-world-omr-soak/run-wave2-soak.mjs, ./tmp/real-world-omr-soak/wave2/here-comes-the-sun-guitar.json"
+  },
+  {
+    "name": "hungarian-dance-no5.pdf",
+    "kind": "music-candidate",
+    "primary": "hungarian",
+    "tokens": [
+      "hungarian",
+      "dance"
+    ],
+    "hitCount": 20,
+    "omrHitCount": 5,
+    "sampleHits": [
+      "./src/dev/fixturePaths.js",
+      "./public/fixtures/README.md",
+      "./public/fixtures/hungarian-dance-no5/hungarian-dance-no5.anchors.json",
+      "./tests/practiceLibrary.test.js",
+      "./tests/demoAnchorCalibration.test.js",
+      "./tests/helpers/syntheticScore.js"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-pagecount-replacement-regression.mjs, ./scripts/omr-quality-campaign-probe.mjs, ./scripts/notation-fidelity-sprint4-probe.mjs, ./scripts/omr-quality-dense-rhythm-probe.mjs"
+  },
+  {
+    "name": "iris-out-piano-arragement.pdf",
+    "kind": "ambiguous",
+    "category": "B",
+    "reason": "no distinctive tokens"
+  },
+  {
+    "name": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+    "kind": "music-candidate",
+    "primary": "jujutsu",
+    "tokens": [
+      "jujutsu",
+      "kaisen"
+    ],
+    "hitCount": 13,
+    "omrHitCount": 13,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/omr-autonomous/heldout-final-summary.json",
+      "./tmp/user-omr-recognition/after/tie-before-after.json",
+      "./tmp/omr-autonomous/heldout-final-aizo.json",
+      "./tmp/user-omr-recognition/after/reproductions/all-reproductions.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs, ./tmp/omr-autonomous/heldout-final-summary.md, ./tmp/omr-autonomous/heldout-final-summary.json, ./tmp/user-omr-recognition/after/tie-before-after.json"
+  },
+  {
+    "name": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
+    "kind": "music-candidate",
+    "primary": "campanella",
+    "tokens": [
+      "campanella",
+      "paganini",
+      "grandes",
+      "etudes",
+      "franz",
+      "liszt"
+    ],
+    "hitCount": 5,
+    "omrHitCount": 4,
+    "sampleHits": [
+      "./scripts/final-release-candidate-audit.mjs",
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json",
+      "./tmp/omr-v3-promotion-phase5/fixtures/campanella-grandes.json",
+      "./tmp/omr-v3-promotion-phase5/report.json",
+      "./tmp/omr-v3-promotion-phase5/report.md"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json, ./tmp/omr-v3-promotion-phase5/fixtures/campanella-grandes.json, ./tmp/omr-v3-promotion-phase5/report.json, ./tmp/omr-v3-promotion-phase5/report.md"
+  },
+  {
+    "name": "la-campanella.pdf",
+    "kind": "music-candidate",
+    "primary": "campanella",
+    "tokens": [
+      "campanella"
+    ],
+    "hitCount": 25,
+    "omrHitCount": 19,
+    "sampleHits": [
+      "./ACCURACY_ROADMAP.md",
+      "./scripts/omr-polyphonic-real-score-validate.mjs",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./docs/OMR_V3_ACCURACY_REPORT.md",
+      "./scripts/final-release-candidate-audit.mjs",
+      "./scripts/omr-quality-campaign-probe.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-polyphonic-real-score-validate.mjs, ./scripts/notation-fidelity-sprint5-probe.mjs, ./docs/OMR_V3_ACCURACY_REPORT.md, ./scripts/omr-quality-campaign-probe.mjs"
+  },
+  {
+    "name": "merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+    "kind": "music-candidate",
+    "primary": "moving",
+    "tokens": [
+      "moving",
+      "castle",
+      "merry",
+      "round",
+      "howls"
+    ],
+    "hitCount": 1,
+    "omrHitCount": 1,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs"
+  },
+  {
+    "name": "minecraft-theme-sweden-calm.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "sweden",
+      "theme"
+    ],
+    "hitCount": 1,
+    "omrHitCount": 1,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs"
+  },
+  {
+    "name": "minecraft-title-theme-very-easy.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "title",
+      "theme"
+    ],
+    "hitCount": 8,
+    "omrHitCount": 7,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tests/wetHandsNotationTabOmr.test.js",
+      "./tests/notationFidelitySprint1.test.js",
+      "./tmp/omr-autonomous/heldout-final-sweden.json",
+      "./tmp/omr-chord-onset/CHORD_ONSET_OWNERSHIP_REPORT.md",
+      "./tmp/notation-fidelity-sprint-3/minecraft.musicxml"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs, ./tests/wetHandsNotationTabOmr.test.js, ./tmp/omr-autonomous/heldout-final-sweden.json, ./tmp/omr-chord-onset/CHORD_ONSET_OWNERSHIP_REPORT.md"
+  },
+  {
+    "name": "pirates-of-the-caribbean-hes-a-pirate-guitar-tab.pdf",
+    "kind": "music-candidate",
+    "primary": "caribbean",
+    "tokens": [
+      "caribbean",
+      "pirates",
+      "pirate"
+    ],
+    "hitCount": 0,
+    "omrHitCount": 0,
+    "sampleHits": [],
+    "category": "A",
+    "reason": "No repo references for distinctive token \"caribbean\" outside holdout tmp — never referenced by tracked OMR work"
+  },
+  {
+    "name": "prelude-in-c-major-bach-guitartab.pdf",
+    "kind": "music-candidate",
+    "primary": "guitartab",
+    "tokens": [
+      "guitartab",
+      "prelude"
+    ],
+    "hitCount": 0,
+    "omrHitCount": 0,
+    "sampleHits": [],
+    "category": "A",
+    "reason": "No repo references for distinctive token \"guitartab\" outside holdout tmp — never referenced by tracked OMR work"
+  },
+  {
+    "name": "sonate-no-14-moonlight-3rd-movement.pdf",
+    "kind": "music-candidate",
+    "primary": "moonlight",
+    "tokens": [
+      "moonlight",
+      "movement",
+      "sonate"
+    ],
+    "hitCount": 15,
+    "omrHitCount": 12,
+    "sampleHits": [
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./tmp/omr-quality-dense-rhythm/after/generated/moonlight-3.musicxml",
+      "./tmp/omr-quality-dense-rhythm/baseline/generated/moonlight-3.musicxml",
+      "./tmp/corranzo-dot-dense-rhythm/soak/run-soak.mjs",
+      "./tmp/corranzo-dot-dense-rhythm/soak/moonlight-3-provenance.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./scripts/omr-quality-campaign-probe.mjs, ./scripts/omr-quality-dense-rhythm-probe.mjs, ./tmp/omr-quality-dense-rhythm/after/generated/moonlight-3.musicxml, ./tmp/omr-quality-dense-rhythm/baseline/generated/moonlight-3.musicxml"
+  },
+  {
+    "name": "sweden-minecraft.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "sweden"
+    ],
+    "hitCount": 1,
+    "omrHitCount": 1,
+    "sampleHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-autonomous/heldout-final-run.mjs"
+  },
+  {
+    "name": "the-great-pumpkin-waltz-vince-guaraldi-guitar-chord-melody.pdf",
+    "kind": "music-candidate",
+    "primary": "guaraldi",
+    "tokens": [
+      "guaraldi",
+      "pumpkin",
+      "melody",
+      "great",
+      "waltz",
+      "vince"
+    ],
+    "hitCount": 0,
+    "omrHitCount": 0,
+    "sampleHits": [],
+    "category": "A",
+    "reason": "No repo references for distinctive token \"guaraldi\" outside holdout tmp — never referenced by tracked OMR work"
+  },
+  {
+    "name": "twinkle-twinkle-little-star-easy.pdf",
+    "kind": "music-candidate",
+    "primary": "twinkle",
+    "tokens": [
+      "twinkle",
+      "twinkle",
+      "little"
+    ],
+    "hitCount": 25,
+    "omrHitCount": 21,
+    "sampleHits": [
+      "./ACCURACY_ROADMAP.md",
+      "./OMR_ENGINE.md",
+      "./docs/OMR_V2_STOP_CONTINUE_DECISION.md",
+      "./docs/PRODUCTION_VALIDATION_PLAN.md",
+      "./scripts/recognition-problem-report-ui-e2e.mjs",
+      "./docs/OMR_V3_CURSOR_HANDOFF.md"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./OMR_ENGINE.md, ./docs/OMR_V2_STOP_CONTINUE_DECISION.md, ./scripts/recognition-problem-report-ui-e2e.mjs, ./docs/OMR_V3_CURSOR_HANDOFF.md"
+  },
+  {
+    "name": "vivaldi-winter-rousseau-version-original.pdf",
+    "kind": "music-candidate",
+    "primary": "rousseau",
+    "tokens": [
+      "rousseau",
+      "vivaldi",
+      "winter"
+    ],
+    "hitCount": 20,
+    "omrHitCount": 18,
+    "sampleHits": [
+      "./scripts/compare-piece-calibration.mjs",
+      "./tmp/omr-engine-after-winter-failure.txt",
+      "./tmp/user-omr-recognition/after/tie-before-after.json",
+      "./tmp/omr-accuracy-after-winter.txt",
+      "./tmp/user-omr-recognition/after/reproductions/all-reproductions.json",
+      "./tmp/user-omr-recognition/inventory/raw-inventory.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-engine-after-winter-failure.txt, ./tmp/user-omr-recognition/after/tie-before-after.json, ./tmp/omr-accuracy-after-winter.txt, ./tmp/user-omr-recognition/after/reproductions/all-reproductions.json"
+  },
+  {
+    "name": "wet-hands-minecraft (1).pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "hands"
+    ],
+    "hitCount": 1,
+    "omrHitCount": 1,
+    "sampleHits": [
+      "./tmp/omr-acceptance-gate/FULL_SUITE.txt"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-acceptance-gate/FULL_SUITE.txt"
+  },
+  {
+    "name": "wet-hands-minecraft (2).pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "hands"
+    ],
+    "hitCount": 4,
+    "omrHitCount": 4,
+    "sampleHits": [
+      "./benchmarks/omr-benchmark.manifest.json",
+      "./tests/wetHandsNotationTabOmr.test.js",
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json",
+      "./tmp/omr-v3-promotion-phase3/omr-v3-shadow-report.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./benchmarks/omr-benchmark.manifest.json, ./tests/wetHandsNotationTabOmr.test.js, ./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json, ./tmp/omr-v3-promotion-phase3/omr-v3-shadow-report.json"
+  },
+  {
+    "name": "wet-hands-minecraft (3).pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "hands"
+    ],
+    "hitCount": 3,
+    "omrHitCount": 3,
+    "sampleHits": [
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json",
+      "./tests/wetHandsNotationTabOmr.test.js",
+      "./benchmarks/omr-benchmark.manifest.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json, ./tests/wetHandsNotationTabOmr.test.js, ./benchmarks/omr-benchmark.manifest.json"
+  },
+  {
+    "name": "wet-hands-minecraft (4).pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "hands"
+    ],
+    "hitCount": 3,
+    "omrHitCount": 3,
+    "sampleHits": [
+      "./tests/wetHandsNotationTabOmr.test.js",
+      "./tmp/omr-v3-promotion-phase2/omr-v3-shadow-report.json",
+      "./tmp/omr-v3-promotion-phase3/omr-v3-shadow-report.json"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tests/wetHandsNotationTabOmr.test.js, ./tmp/omr-v3-promotion-phase2/omr-v3-shadow-report.json, ./tmp/omr-v3-promotion-phase3/omr-v3-shadow-report.json"
+  },
+  {
+    "name": "wet-hands-minecraft.pdf",
+    "kind": "music-candidate",
+    "primary": "minecraft",
+    "tokens": [
+      "minecraft",
+      "hands"
+    ],
+    "hitCount": 3,
+    "omrHitCount": 3,
+    "sampleHits": [
+      "./tests/wetHandsNotationTabOmr.test.js",
+      "./benchmarks/omr-benchmark.manifest.json",
+      "./tmp/omr-v3-promotion-phase5/report.md"
+    ],
+    "category": "C",
+    "reason": "Prior OMR/campaign references: ./tests/wetHandsNotationTabOmr.test.js, ./benchmarks/omr-benchmark.manifest.json, ./tmp/omr-v3-promotion-phase5/report.md"
+  }
+]

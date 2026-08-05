@@ -1,0 +1,40 @@
+{
+  "frozenAt": "2026-08-05T12:18:54.263Z",
+  "gitHead": "fc7af582af21514b3d718de7ac81f8a1248e0c9b",
+  "method": "preserve-prior-assignments; new-scores stratified round-robin by strata(piano,guitar-tab-only,guitar-paired) then lex within strata; seal until overall ~floor(n*0.4)",
+  "evaluationHoldoutIds": [
+    "guitar-bach-prelude-c-guitartab",
+    "guitar-bts-save-me-tab",
+    "guitar-undertale-home-tab",
+    "piano-chainsaw-reze-in-the-pool"
+  ],
+  "developmentHoldoutIds": [
+    "guitar-gravity-falls-theme-tab",
+    "guitar-guaraldi-pumpkin-waltz",
+    "guitar-pachelbel-canon-d-tab",
+    "guitar-pirates-caribbean-tab",
+    "piano-korobeiniki-tetris-tiles",
+    "piano-pokemon-rby-title",
+    "piano-super-mario-bros-theme"
+  ],
+  "strataSealedNew": [
+    {
+      "id": "guitar-bts-save-me-tab",
+      "strata": "guitar-tab-only"
+    },
+    {
+      "id": "guitar-undertale-home-tab",
+      "strata": "guitar-paired"
+    },
+    {
+      "id": "piano-chainsaw-reze-in-the-pool",
+      "strata": "piano"
+    }
+  ],
+  "rules": [
+    "Evaluation holdouts sealed during production development",
+    "Do not inspect expected semantic answers while tuning",
+    "Do not move scores between splits after seeing results",
+    "Prior sealed assignments preserved when expanding pack"
+  ]
+}

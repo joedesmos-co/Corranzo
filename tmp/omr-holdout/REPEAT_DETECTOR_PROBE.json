@@ -1,0 +1,81 @@
+[
+  {
+    "holdoutId": "piano-korobeiniki-tetris-tiles",
+    "pages": [
+      {
+        "page": 1,
+        "systems": 5,
+        "notes": 296,
+        "markedMeasures": [],
+        "rawDetectorHits": [],
+        "source": null
+      },
+      {
+        "page": 2,
+        "systems": 5,
+        "notes": 313,
+        "markedMeasures": [],
+        "rawDetectorHits": [],
+        "source": null
+      }
+    ]
+  },
+  {
+    "holdoutId": "piano-super-mario-bros-theme",
+    "pages": [
+      {
+        "page": 1,
+        "systems": 5,
+        "notes": 316,
+        "markedMeasures": [],
+        "rawDetectorHits": [],
+        "source": null
+      },
+      {
+        "page": 2,
+        "systems": 5,
+        "notes": 318,
+        "markedMeasures": [],
+        "rawDetectorHits": [],
+        "source": null
+      }
+    ]
+  },
+  {
+    "holdoutId": "guitar-guaraldi-pumpkin-waltz",
+    "pages": [
+      {
+        "page": 1,
+        "systems": 5,
+        "notes": 260,
+        "markedMeasures": [
+          {
+            "measureNumber": 12,
+            "systemIndex": 1,
+            "repeatMarking": null,
+            "endingMarking": {
+              "endingStartNumbers": [
+                2
+              ],
+              "confidence": 0.88,
+              "endingStop": true
+            }
+          }
+        ],
+        "rawDetectorHits": [
+          {
+            "measureNumber": 12,
+            "repeatMarking": null,
+            "endingMarking": {
+              "endingStartNumbers": [
+                2
+              ],
+              "confidence": 0.88
+            }
+          }
+        ],
+        "source": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,391 @@
+{
+  "aggregates": {
+    "strict": {
+      "ok": 11,
+      "total": 11,
+      "notes": 6388,
+      "elapsedMs": 10592,
+      "crashes": 0,
+      "rejected": 0
+    },
+    "development": {
+      "ok": 7,
+      "total": 7,
+      "notes": 2831,
+      "elapsedMs": 3908,
+      "crashes": 0,
+      "rejected": 0
+    },
+    "evaluation": {
+      "ok": 4,
+      "total": 4,
+      "notes": 3557,
+      "elapsedMs": 6684,
+      "crashes": 0,
+      "rejected": 0
+    },
+    "weak": {
+      "ok": 1,
+      "total": 1,
+      "notes": 2471,
+      "elapsedMs": 3609,
+      "crashes": 0,
+      "rejected": 0
+    }
+  },
+  "strict": [
+    {
+      "id": "guitar-bach-prelude-c-guitartab",
+      "split": "evaluation",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 3,
+      "notes": 1169,
+      "measures": 85,
+      "ms": 2246,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "Tempo defaulted to 120 BPM."
+      ],
+      "tab": {
+        "pairingConfidence": 0.5401744110697967,
+        "unpaired": 20,
+        "unused": 19,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "guitar-bts-save-me-tab",
+      "split": "evaluation",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 2,
+      "notes": 104,
+      "measures": 35,
+      "ms": 464,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "Tempo defaulted to 120 BPM."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": true,
+        "rhythmApproximate": true
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "guitar-gravity-falls-theme-tab",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 1,
+      "notes": 72,
+      "measures": 16,
+      "ms": 153,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": true,
+        "rhythmApproximate": true
+      },
+      "passageChecks": {
+        "tier": "T4",
+        "generatedHasTuplets": false,
+        "expectTuplets": false,
+        "generatedHasStaccato": false,
+        "expectStaccato": true,
+        "generatedHasRepeats": true,
+        "expectRepeats": false,
+        "generatedHasTies": false,
+        "expectTies": false,
+        "note": "Feature presence only — not pitch/rhythm Overall"
+      },
+      "repeats": 1,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "guitar-guaraldi-pumpkin-waltz",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 1,
+      "notes": 211,
+      "measures": 23,
+      "ms": 353,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "tab": {
+        "pairingConfidence": 0.49033586118454175,
+        "unpaired": 18,
+        "unused": 7,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 18
+    },
+    {
+      "id": "guitar-pachelbel-canon-d-tab",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 1,
+      "notes": 307,
+      "measures": 35,
+      "ms": 377,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": true,
+        "rhythmApproximate": true
+      },
+      "passageChecks": {
+        "tier": "T4",
+        "generatedHasTuplets": false,
+        "expectTuplets": false,
+        "generatedHasStaccato": false,
+        "expectStaccato": false,
+        "generatedHasRepeats": true,
+        "expectRepeats": false,
+        "generatedHasTies": false,
+        "expectTies": false,
+        "note": "Feature presence only — not pitch/rhythm Overall"
+      },
+      "repeats": 1,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "guitar-pirates-caribbean-tab",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 2,
+      "notes": 331,
+      "measures": 62,
+      "ms": 414,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "Tempo defaulted to 120 BPM."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": true,
+        "rhythmApproximate": true
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "guitar-undertale-home-tab",
+      "split": "evaluation",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 3,
+      "notes": 427,
+      "measures": 38,
+      "ms": 811,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "Tempo defaulted to 120 BPM."
+      ],
+      "tab": {
+        "pairingConfidence": 0.5150567180575298,
+        "unpaired": 100,
+        "unused": 35,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "piano-chainsaw-reze-in-the-pool",
+      "split": "evaluation",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 6,
+      "notes": 1857,
+      "measures": 67,
+      "ms": 3163,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality.",
+        "1 measure(s) have uncertain rhythm."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": null,
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "piano-korobeiniki-tetris-tiles",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 2,
+      "notes": 609,
+      "measures": 45,
+      "ms": 902,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": {
+        "tier": "T4",
+        "generatedHasTuplets": false,
+        "expectTuplets": false,
+        "generatedHasStaccato": false,
+        "expectStaccato": false,
+        "generatedHasRepeats": false,
+        "expectRepeats": true,
+        "generatedHasTies": true,
+        "expectTies": false,
+        "note": "Feature presence only — not pitch/rhythm Overall"
+      },
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    },
+    {
+      "id": "piano-pokemon-rby-title",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 1,
+      "notes": 667,
+      "measures": 33,
+      "ms": 824,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": {
+        "tier": "T4",
+        "generatedHasTuplets": false,
+        "expectTuplets": true,
+        "generatedHasStaccato": true,
+        "expectStaccato": true,
+        "generatedHasRepeats": false,
+        "expectRepeats": false,
+        "generatedHasTies": true,
+        "expectTies": true,
+        "note": "Feature presence only — not pitch/rhythm Overall"
+      },
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 38
+    },
+    {
+      "id": "piano-super-mario-bros-theme",
+      "split": "development",
+      "ok": true,
+      "acceptance": "accepted",
+      "error": null,
+      "pages": 2,
+      "notes": 634,
+      "measures": 49,
+      "ms": 885,
+      "warns": [
+        "Generated from PDF — may contain mistakes. Upload MusicXML/MXL for best quality."
+      ],
+      "tab": {
+        "pairingConfidence": 1,
+        "unpaired": 0,
+        "unused": 0,
+        "tabOnly": false,
+        "rhythmApproximate": false
+      },
+      "passageChecks": {
+        "tier": "T4",
+        "generatedHasTuplets": false,
+        "expectTuplets": true,
+        "generatedHasStaccato": false,
+        "expectStaccato": true,
+        "generatedHasRepeats": false,
+        "expectRepeats": true,
+        "generatedHasTies": true,
+        "expectTies": true,
+        "note": "Feature presence only — not pitch/rhythm Overall"
+      },
+      "repeats": 0,
+      "tuplets": 0,
+      "staccato": 0
+    }
+  ],
+  "weak": [
+    {
+      "id": "piano-iris-out-arrangement",
+      "ok": true,
+      "error": null,
+      "notes": 2471,
+      "ms": 3609
+    }
+  ],
+  "frozenControl": {
+    "source": "tmp/omr-holdout/phase0-frozen-corpus.json",
+    "overall": 0.8820333333333333,
+    "pitch": 0.9890555555555556,
+    "articulation": 1,
+    "fixtureCount": 9,
+    "note": "Control from Phase 0 at same HEAD; not re-tuned"
+  }
+}

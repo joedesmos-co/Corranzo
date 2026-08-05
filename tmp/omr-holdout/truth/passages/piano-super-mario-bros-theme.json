@@ -1,0 +1,44 @@
+{
+  "holdoutId": "piano-super-mario-bros-theme",
+  "authority": "pdf-visual",
+  "tier": "T4",
+  "pdfSha256": "381c62726406a5d44fb710191d320cb4cc7e3fb420ce1df700a25348b7288e52",
+  "derivedFromCorranzo": false,
+  "passages": [
+    {
+      "id": "global-page1",
+      "pages": [1],
+      "facts": {
+        "instrument": "piano",
+        "grandStaff": true,
+        "keySignatureFifths": 0,
+        "printedTimeSignature": false,
+        "impliedMeter": "4/4",
+        "tempoBpm": 180,
+        "staccatoPresent": true,
+        "tupletsPresent": true,
+        "repeatsPresent": true,
+        "tiesPresent": true,
+        "denseAccidentals": true,
+        "rendering": "vector",
+        "skew": "none"
+      }
+    },
+    {
+      "id": "opening-syncopation",
+      "measures": [1, 2, 3, 4],
+      "facts": {
+        "syncopation": true,
+        "staccatoChords": true,
+        "restsPresent": true
+      }
+    },
+    {
+      "id": "triplet-examples",
+      "measures": [5, 6, 24, 25],
+      "facts": {
+        "tripletBrackets": true
+      }
+    }
+  ]
+}

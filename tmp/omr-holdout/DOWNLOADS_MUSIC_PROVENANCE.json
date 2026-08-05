@@ -1,0 +1,362 @@
+[
+  {
+    "file": "5-levels-of-chords-substitutions-with-twinkle-twinkle-little-star.pdf",
+    "tokens": [
+      "levels",
+      "chords",
+      "substitutions",
+      "twinkle"
+    ],
+    "repoHits": [
+      "./scripts/capture-real-mic-fixture.mjs",
+      "./tests/practiceLibrary.test.js",
+      "./tests/anchorComparison.test.js",
+      "./tests/playbackSemanticsSprint1.test.js",
+      "./src/features/score-follow/anchorComparison.js",
+      "./tests/notationFidelitySprint2.test.js",
+      "./tests/audioReadiness.test.js",
+      "./tmp/omr-autonomous/heldout-final-run.mjs"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "Ao no Sumika (Piano).pdf",
+    "tokens": [
+      "sumika",
+      "piano"
+    ],
+    "repoHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-chord-onset/user-reports/ao-no-sumika.json",
+      "./tmp/omr-chord-onset/user-reports/summary.json",
+      "./tmp/omr-chord-onset/CHORD_ONSET_OWNERSHIP_REPORT.md",
+      "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/user-stability-performance/STABILITY_PERFORMANCE_REPORT.md",
+      "./tmp/user-omr-recognition/after/tie-before-after.json"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "Here-Comes-The-Sun_The-Beatles_GuitarPDF-1.pdf",
+    "tokens": [
+      "comes",
+      "beatles",
+      "guitarpdf"
+    ],
+    "repoHits": [
+      "./src/App.jsx",
+      "./src/components/practice/VisualPracticeView.jsx",
+      "./ACCURACY_ROADMAP.md",
+      "./OMR_ENGINE.md",
+      "./src/context/PracticeSessionContext.jsx",
+      "./tests/scoreFollowVisibility.test.js",
+      "./docs/omr-architecture-v2.md",
+      "./src/utils/pdfViewerScroll.js"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "beginner-minecraft-piano-themes-in-c-minecraft (1).pdf",
+    "tokens": [
+      "beginner",
+      "minecraft",
+      "piano",
+      "themes"
+    ],
+    "repoHits": [
+      "./src/dev/fixturePaths.js",
+      "./src/components/practice/VisualPracticeView.jsx",
+      "./ACCURACY_ROADMAP.md",
+      "./OMR_ENGINE.md",
+      "./tests/practiceLibrary.test.js",
+      "./tests/practicePreparationPerf.test.js",
+      "./tests/timingMapCache.test.js",
+      "./tmp/after-pitch-sprint-2.txt"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "beginner-minecraft-piano-themes-in-c-minecraft.pdf",
+    "tokens": [
+      "beginner",
+      "minecraft",
+      "piano",
+      "themes"
+    ],
+    "repoHits": [
+      "./src/dev/fixturePaths.js",
+      "./src/components/practice/VisualPracticeView.jsx",
+      "./ACCURACY_ROADMAP.md",
+      "./OMR_ENGINE.md",
+      "./docs/PRODUCTION_VALIDATION_PLAN.md",
+      "./docs/OMR_V3_STRESS_CORPUS.md",
+      "./docs/OMR_ACCURACY_EXPANSION_SPRINT.md",
+      "./docs/MIC_ENGINE_V2_RESEARCH.md"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "carol-of-the-bells.pdf",
+    "tokens": [
+      "carol",
+      "bells"
+    ],
+    "repoHits": [
+      "./scripts/omr-quality-campaign-probe.mjs",
+      "./tests/alignmentFixtures.test.js",
+      "./scripts/omr-quality-dense-rhythm-probe.mjs",
+      "./tests/fixtures/alignmentFixtures.js",
+      "./docs/AUTO_ALIGN_NEXTGEN_PLAN.md",
+      "./docs/ACTIVESCORE_ARCHITECTURE.md",
+      "./docs/AUTO_ALIGN_BROWSER_CHECKLIST.md",
+      "./docs/AUTO_ALIGN_FIXTURES.md"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "etude-s-1413-in-g-minor-la-campanella-liszt.pdf",
+    "tokens": [
+      "etude",
+      "minor",
+      "campanella",
+      "liszt"
+    ],
+    "repoHits": [
+      "./docs/OMR_V3_ACCURACY_REPORT.md",
+      "./docs/OMR_V3_ACCURACY_STRESS_VALIDATION.md",
+      "./tmp/omr-v3-promotion-phase5/tie-sustain-constraint-trace.json",
+      "./tests/practiceLibrary.test.js",
+      "./tmp/omr-v3-promotion-phase5/report.md",
+      "./tmp/omr-v3-promotion-phase5/duration-split-trace.json",
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.md",
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "fur_Elise_WoO59-let.pdf",
+    "tokens": [
+      "elise",
+      "woo59"
+    ],
+    "repoHits": [
+      "./tests/practiceLibrary.test.js",
+      "./tests/benchmarkTimingSource.test.js",
+      "./benchmarks/alignment-corpus.manifest.json",
+      "./tests/omrQualityWarningBanner.test.js",
+      "./public/fixtures/practice-library/manifest.json",
+      "./public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.musicxml",
+      "./tmp/omr-acceptance-gate/audit-baseline.mjs",
+      "./tmp/omr-acceptance-gate/verify-summary.json"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "https:www.guitarpdf.com:wp-content:uploads:2025:09:Here-Comes-The-Sun_The-Beatles_GuitarPDF-1.pdf",
+    "tokens": [
+      "https",
+      "guitarpdf",
+      "content",
+      "uploads"
+    ],
+    "repoHits": [
+      "./src/components/legal/PrivacyPolicyPage.jsx",
+      "./index.html",
+      "./vite.config.js",
+      "./public/robots.txt",
+      "./tests/pdfOmrHardPdf.test.js",
+      "./tests/demoFixtureLoading.test.js",
+      "./scripts/build-demo-fixtures.mjs",
+      "./scripts/import-uiowa-mic-fixtures.mjs"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "iris-out-piano-arragement.pdf",
+    "tokens": [
+      "piano",
+      "arragement"
+    ],
+    "repoHits": [
+      "./src/dev/DevSampleLoadPanel.jsx",
+      "./src/dev/fixturePaths.js",
+      "./src/App.jsx",
+      "./src/components/practice/PracticeStatusStrip.jsx",
+      "./src/components/practice/PracticeScopeSection.jsx",
+      "./src/components/practice/VisualPracticeView.jsx",
+      "./src/components/practice/WaitForYouInputSourceModal.jsx",
+      "./src/components/profile/ProfileView.jsx"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "jujutsu-kaisen-season-3-opening-1-aizo-king-gnu.pdf",
+    "tokens": [
+      "jujutsu",
+      "kaisen",
+      "season",
+      "opening"
+    ],
+    "repoHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/user-omr-recognition/after/tie-before-after.json",
+      "./tmp/user-omr-recognition/after/reproductions/all-reproductions.json",
+      "./tmp/omr-semantic-repair/SEMANTIC_REPAIR_CAMPAIGN_REPORT.md",
+      "./tmp/user-omr-recognition/after/reproductions/corranzo-recognition-report-2026-07-29-2113/repro.json",
+      "./tmp/user-omr-recognition/inventory/raw-inventory.json",
+      "./tmp/user-omr-recognition/inventory/phase1-complete.json"
+    ],
+    "transcriptHits": 1,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
+    "tokens": [
+      "campanella",
+      "grandes",
+      "etudes",
+      "paganini"
+    ],
+    "repoHits": [
+      "./ACCURACY_ROADMAP.md",
+      "./tests/practicePreparationPerf.test.js",
+      "./tests/omrBenchmarkDashboard.test.js",
+      "./tmp/omr-v3-promotion-phase5/tie-sustain-constraint-trace.json",
+      "./tmp/omr-v3-promotion-phase5/duration-split-trace.json",
+      "./tmp/omr-v3-promotion-phase5/omr-v3-shadow-report.json",
+      "./scripts/notation-fidelity-sprint5-probe.mjs",
+      "./tmp/omr-v3-promotion-phase3/tie-sustain-constraint-trace.json"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "merry-go-round-of-life-howls-moving-castle-piano-tutorial.pdf",
+    "tokens": [
+      "merry",
+      "round",
+      "howls",
+      "moving"
+    ],
+    "repoHits": [
+      "./tmp/omr-autonomous/heldout-final-run.mjs",
+      "./tmp/omr-autonomous/AUTONOMOUS_OMR_CAMPAIGN_REPORT.md",
+      "./tmp/omr-autonomous/heldout-final-summary.md",
+      "./tmp/omr-autonomous/heldout-final-merry-go-round-of-life.json",
+      "./tmp/omr-chord-onset/user-reports/summary.json",
+      "./tmp/omr-chord-onset/CHORD_ONSET_OWNERSHIP_REPORT.md",
+      "./tmp/omr-holdout/HOLDOUT_CANDIDATES_RAW.json",
+      "./tmp/user-stability-performance/STABILITY_PERFORMANCE_REPORT.md"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "pirates-of-the-caribbean-hes-a-pirate-guitar-tab.pdf",
+    "tokens": [
+      "pirates",
+      "caribbean",
+      "pirate",
+      "guitar"
+    ],
+    "repoHits": [
+      "./tmp/omr-holdout/HOLDOUT_CANDIDATES_RAW.json"
+    ],
+    "transcriptHits": 0,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "prelude-in-c-major-bach-guitartab.pdf",
+    "tokens": [
+      "prelude",
+      "major",
+      "guitartab"
+    ],
+    "repoHits": [
+      "./src/components/profile/ManualPracticeLog.jsx",
+      "./tests/practiceLibrary.test.js",
+      "./tests/profileStats.test.js",
+      "./package-lock.json",
+      "./scripts/mic-accuracy-replay.mjs",
+      "./public/fixtures/practice-library/manifest.json",
+      "./benchmarks/alignment-corpus.manifest.json",
+      "./public/fixtures/practice-library/guitar-bach-prelude-bwv999/guitar-bach-prelude-bwv999.musicxml"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "the-great-pumpkin-waltz-vince-guaraldi-guitar-chord-melody.pdf",
+    "tokens": [
+      "great",
+      "pumpkin",
+      "waltz",
+      "vince"
+    ],
+    "repoHits": [
+      "./tests/practicePreparationPerf.test.js",
+      "./tests/rasterNoteheadPitchCalibration.test.js",
+      "./tests/semanticMusicXmlEvaluator.hardening.test.js",
+      "./tests/omrExtremeRegisterChords.test.js",
+      "./tests/detectVectorRests.test.js",
+      "./tests/pdfOmrHardPdf.test.js",
+      "./tests/omrAccidentalPathCalibration.test.js",
+      "./tests/practiceLibrary.test.js"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "twinkle-twinkle-little-star-easy.pdf",
+    "tokens": [
+      "twinkle",
+      "twinkle",
+      "little"
+    ],
+    "repoHits": [
+      "./ACCURACY_ROADMAP.md",
+      "./OMR_ENGINE.md",
+      "./docs/OMR_V3_CURSOR_PROGRESS.md",
+      "./docs/OMR_BENCHMARK_DASHBOARD.md",
+      "./tests/practiceLibrary.test.js",
+      "./docs/OMR_ENGINE_V2_PLAN.md",
+      "./scripts/recognition-problem-report-ui-e2e.mjs",
+      "./docs/PRODUCTION_VALIDATION_PLAN.md"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  },
+  {
+    "file": "vivaldi-winter-rousseau-version-original.pdf",
+    "tokens": [
+      "vivaldi",
+      "winter",
+      "rousseau",
+      "version"
+    ],
+    "repoHits": [
+      "./tmp/omr-engine-after-winter-failure.txt",
+      "./tmp/user-stability-performance/STABILITY_PERFORMANCE_REPORT.md",
+      "./scripts/compare-piece-calibration.mjs",
+      "./benchmarks/alignment-corpus.manifest.json",
+      "./tmp/omr-holdout/HOLDOUT_CANDIDATES_RAW.json",
+      "./tmp/omr-fix2-overdetect-before.txt",
+      "./tmp/omr-accuracy-after-winter.txt",
+      "./tmp/user-omr-recognition/after/tie-before-after.json"
+    ],
+    "transcriptHits": 5,
+    "provisionalCategory": "C-or-B"
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "holdoutId": "piano-pokemon-rby-title",
+  "authority": "pdf-visual",
+  "tier": "T4",
+  "pdfSha256": "f8ad96511dd1c25e94dd55a0c63fb4d29d779ce695476cd7d858341ea46b84aa",
+  "derivedFromCorranzo": false,
+  "passages": [
+    {
+      "id": "global",
+      "pages": [1],
+      "facts": {
+        "instrument": "piano",
+        "grandStaff": true,
+        "keySignatureFifths": 0,
+        "timeSignature": "4/4",
+        "measureCountVisible": 35,
+        "rendering": "vector",
+        "skew": "none",
+        "tupletsPresent": true,
+        "staccatoPresent": true,
+        "tiesPresent": true,
+        "arpeggioRollsPresent": true,
+        "tempoChangesVisible": true
+      }
+    },
+    {
+      "id": "m1-header",
+      "measures": [1],
+      "facts": {
+        "tempoBpm": 180,
+        "tempoTextContains": "fast",
+        "dynamic": "f",
+        "lhStaccatoEighthPedal": true,
+        "denseRhChords": true,
+        "accidentalsPresent": true
+      }
+    },
+    {
+      "id": "m9-11-tempo-tuplets",
+      "measures": [9, 10, 11],
+      "facts": {
+        "tempoBpm": 120,
+        "tempoTextContains": "regular speed",
+        "dynamicAtTempoChange": "mf",
+        "arpeggioRolls": true,
+        "tripletBrackets": true,
+        "polyphony": true
+      }
+    }
+  ]
+}

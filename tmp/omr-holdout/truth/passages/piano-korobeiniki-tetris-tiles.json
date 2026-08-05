@@ -1,0 +1,44 @@
+{
+  "holdoutId": "piano-korobeiniki-tetris-tiles",
+  "authority": "pdf-visual",
+  "tier": "T4",
+  "pdfSha256": "09bf784b684eef5baa399de5ccb92836dd9e350d1eb4462e14d6b152ee10da16",
+  "derivedFromCorranzo": false,
+  "passages": [
+    {
+      "id": "global-page1",
+      "pages": [1],
+      "facts": {
+        "instrument": "piano",
+        "grandStaff": true,
+        "keySignatureFifths": 0,
+        "timeSignature": "4/4",
+        "tempoBpm": 170,
+        "pedalBrackets": true,
+        "repeatsPresent": true,
+        "meterChangesPresent": true,
+        "rendering": "vector",
+        "skew": "none"
+      }
+    },
+    {
+      "id": "m1",
+      "measures": [1],
+      "facts": {
+        "dynamic": "f",
+        "rhMelody": true,
+        "lhAccompaniment": true
+      }
+    },
+    {
+      "id": "repeat-and-meter",
+      "measures": [8, 20, 21],
+      "facts": {
+        "endRepeatNearM8": true,
+        "meterChangeIncludes2_4NearM20": true,
+        "dynamicFfNearClimax": true,
+        "highLedgerLines": true
+      }
+    }
+  ]
+}

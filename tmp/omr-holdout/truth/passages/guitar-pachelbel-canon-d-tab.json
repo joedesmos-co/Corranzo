@@ -1,0 +1,28 @@
+{
+  "holdoutId": "guitar-pachelbel-canon-d-tab",
+  "authority": "pdf-visual",
+  "tier": "T4",
+  "pdfSha256": "eeb769a7328265cbb9897732ac1e20d94bde806d1c94647634f8310913e16c96",
+  "derivedFromCorranzo": false,
+  "passages": [
+    {
+      "id": "global",
+      "pages": [1],
+      "facts": {
+        "instrument": "guitar",
+        "tabOnly": true,
+        "standardNotation": false,
+        "rhythmicStems": "above-tab",
+        "tempoBpm": 60,
+        "timeSignature": "4/4",
+        "capo": 2,
+        "chordSymbols": true,
+        "decorativeRasterHeader": true,
+        "coloredFingeringAnnotations": true,
+        "measureCountApprox": 16,
+        "rendering": "vector-mixed-header-raster",
+        "skew": "none"
+      }
+    }
+  ]
+}
