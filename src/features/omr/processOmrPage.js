@@ -17,8 +17,8 @@ import {
 } from './detectOmrRepeatBarline.js'
 import {
   detectPedalFromText,
-  detectStaccatoOnNote,
 } from './detectOmrExpression.js'
+import { assignNoteAnchoredRasterArticulations } from './detectNoteAnchoredRasterArticulations.js'
 import { attachDynamicsToMeasureRecords } from './detectOmrDynamics.js'
 import { attachTemposToMeasureRecords } from './parseOmrTempoMarking.js'
 import {
@@ -1034,12 +1034,12 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         inkThreshold,
       })
 
-      for (const notehead of noteheads) {
-        const articulation = detectStaccatoOnNote(imageData, notehead, inkThreshold)
-        if (articulation) {
-          notehead.articulation = articulation
-        }
-      }
+      assignNoteAnchoredRasterArticulations(
+        imageData,
+        noteheads,
+        measureBox,
+        inkThreshold,
+      )
 
       const rhythm = assembleMeasureRhythm(imageData, measureBox, noteheads, inkThreshold, {
         // Always capture enriched heads so the raster beam/stem graph can use the
