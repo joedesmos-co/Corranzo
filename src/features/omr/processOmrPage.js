@@ -530,6 +530,23 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     const useVectorNoteColumnHints =
       !tabAnalysisActive || shouldUseVectorNoteColumnHints(systemVectorNoteheads)
     const noteColumns = clusterVectorNoteheadColumns(systemVectorNoteheads)
+    const pairedTabIndex = systemRoles?.findIndex(
+      (candidate) => candidate?.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+    )
+    const pairedTabRole = pairedTabIndex >= 0 ? systemRoles[pairedTabIndex] : null
+    const partnerSystem =
+      pairedTabRole?.tabStave &&
+      Number.isFinite(pairedTabRole.tabStave.y0) &&
+      Number.isFinite(pairedTabRole.tabStave.y1)
+        ? {
+            ...systems[pairedTabIndex],
+            y0: pairedTabRole.tabStave.y0,
+            y1: pairedTabRole.tabStave.y1,
+            center: (pairedTabRole.tabStave.y0 + pairedTabRole.tabStave.y1) / 2,
+          }
+        : pairedTabIndex >= 0
+          ? systems[pairedTabIndex]
+          : null
     const { measureBoxes, diagnostics: gridDiagnostics } = buildMeasureBoxesForSystemWithDiagnostics({
       page,
       systemIndex,
@@ -541,6 +558,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       vectorNoteheadXNorms: useVectorNoteColumnHints ? systemVectorNoteheads : [],
       noteColumnXNorms: noteColumns,
       systemRole: role,
+      partnerSystem,
     })
 
     const splitBoxes = applyVectorRepeatColumnSplitsToSystemBoxes({

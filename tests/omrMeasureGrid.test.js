@@ -335,6 +335,59 @@ describe('buildMeasureBoxesForSystemWithDiagnostics', () => {
     expect(diagnostics.barlineRejectedSummary).toBeTruthy()
     expect(diagnostics.spanWidthPercents.length).toBe(measureBoxes.length)
   })
+
+  it('prefers a confident paired TAB barline grid when notation collapses to one mega-measure', () => {
+    const width = 1000
+    const height = 400
+    const data = new Uint8ClampedArray(width * height * 4)
+    data.fill(255)
+    const page = { width, height, data }
+    const setInk = (x, y) => {
+      const index = (Math.round(y) * width + Math.round(x)) * 4
+      page.data[index] = 20
+      page.data[index + 1] = 20
+      page.data[index + 2] = 20
+    }
+    const drawH = (y, x0, x1) => {
+      for (let x = x0; x <= x1; x += 1) setInk(x, y)
+    }
+    const drawV = (x, y0, y1) => {
+      for (let y = y0; y <= y1; y += 1) setInk(x, y)
+    }
+    // Notation staff: staff lines only — no usable barlines → one mega-measure.
+    for (let line = 0; line < 5; line += 1) drawH(40 + line * 8, 60, 940)
+    // TAB staff with four clean measures.
+    for (let line = 0; line < 6; line += 1) drawH(140 + line * 10, 60, 940)
+    for (const x of [60, 280, 500, 720, 940]) drawV(x, 140, 190)
+
+    const contentBounds = { left: 60, right: 940, x0: 0.06, x1: 0.94, width: 880 }
+    const notationSystem = { y0: 40 / height, y1: 72 / height, center: 56 / height }
+    const tabSystem = { y0: 140 / height, y1: 190 / height, center: 165 / height }
+
+    const withoutPartner = buildMeasureBoxesForSystemWithDiagnostics({
+      page: 1,
+      systemIndex: 0,
+      system: notationSystem,
+      contentBounds,
+      imageData: page,
+      measureNumberStart: 1,
+      darkThreshold: 150,
+    })
+    expect(withoutPartner.measureBoxes.length).toBeLessThanOrEqual(2)
+
+    const withPartner = buildMeasureBoxesForSystemWithDiagnostics({
+      page: 1,
+      systemIndex: 0,
+      system: notationSystem,
+      contentBounds,
+      imageData: page,
+      measureNumberStart: 1,
+      darkThreshold: 150,
+      partnerSystem: tabSystem,
+    })
+    expect(withPartner.diagnostics.usedPartnerBarlines).toBe(true)
+    expect(withPartner.measureBoxes).toHaveLength(4)
+  })
 })
 
 describe('omrMeasureGridDiagnostics formatting', () => {

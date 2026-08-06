@@ -659,6 +659,12 @@ function countSuspiciousSpans(spans, contentWidth, minFrac = MIN_MEASURE_SPAN_FR
 
 /**
  * Build normalized measure rectangles from a detected grand-staff system.
+ *
+ * When `partnerSystem` is a paired TAB band with a confident barline grid and
+ * the notation band's own grid is unreliable (or collapses to a single
+ * mega-measure while the partner implies ≥2), prefer the partner barlines.
+ * Paired notation+TAB engrave the same measures; TAB is often cleaner because
+ * fret columns do not mimic barlines the way dense chord stems do.
  */
 export function buildMeasureBoxesForSystemWithDiagnostics({
   page,
@@ -671,11 +677,175 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   vectorNoteheadXNorms = [],
   noteColumnXNorms = null,
   systemRole = null,
+  partnerSystem = null,
 }) {
   const x0Content = contentBounds.x0 ?? contentBounds.left / imageData.width
   const x1Content = contentBounds.x1 ?? contentBounds.right / imageData.width
   const contentWidth = Math.max(1e-6, x1Content - x0Content)
 
+  const primary = detectAndSpanBarlines({
+    imageData,
+    contentBounds,
+    system,
+    darkThreshold,
+    vectorNoteheadXNorms,
+    noteColumnXNorms,
+    x0Content,
+    x1Content,
+    contentWidth,
+  })
+
+  let spans = primary.spans
+  let reliability = primary.reliability
+  let barlines = primary.barlines
+  let barlineDiagnostics = primary.barlineDiagnostics
+  let vectorFiltered = primary.vectorFiltered
+  let inPackFiltered = primary.inPackFiltered
+  let initialMeasureCount = primary.initialMeasureCount
+  let wideSpanRecovery = primary.wideSpanRecovery
+  let narrowMerge = primary.narrowMerge
+  let collapsedPairs = primary.collapsedPairs
+  let narrowAfter = primary.narrowAfter
+  let trailingNarrow = primary.trailingNarrow
+  let rebuiltFromNoteColumnGaps = primary.rebuiltFromNoteColumnGaps
+  let gapSnap = primary.gapSnap
+  let usedPartnerBarlines = false
+
+  const partnerEligible =
+    partnerSystem &&
+    Number.isFinite(partnerSystem.y0) &&
+    Number.isFinite(partnerSystem.y1) &&
+    partnerSystem.y1 > partnerSystem.y0
+
+  if (partnerEligible) {
+    const partner = detectAndSpanBarlines({
+      imageData,
+      contentBounds,
+      system: partnerSystem,
+      // TAB bands should not reject barlines via notation notehead packs.
+      darkThreshold,
+      vectorNoteheadXNorms: [],
+      noteColumnXNorms: [],
+      x0Content,
+      x1Content,
+      contentWidth,
+    })
+    if (
+      shouldPreferPartnerBarlineSpans({
+        primarySpans: spans,
+        primaryReliability: reliability,
+        partnerSpans: partner.spans,
+        partnerReliability: partner.reliability,
+      })
+    ) {
+      spans = partner.spans
+      reliability = partner.reliability
+      barlines = partner.barlines
+      barlineDiagnostics = partner.barlineDiagnostics
+      vectorFiltered = partner.vectorFiltered
+      inPackFiltered = partner.inPackFiltered
+      initialMeasureCount = partner.initialMeasureCount
+      wideSpanRecovery = partner.wideSpanRecovery
+      narrowMerge = partner.narrowMerge
+      collapsedPairs = partner.collapsedPairs
+      narrowAfter = partner.narrowAfter
+      trailingNarrow = partner.trailingNarrow
+      rebuiltFromNoteColumnGaps = partner.rebuiltFromNoteColumnGaps
+      gapSnap = partner.gapSnap
+      usedPartnerBarlines = true
+    }
+  }
+
+  if (spans.length === 0) {
+    spans = fallbackSpans({ x0: x0Content, x1: x1Content })
+  }
+
+  const measureBoxes = spansToMeasureBoxes(spans, {
+    page,
+    systemIndex,
+    system,
+    measureNumberStart,
+    systemRole,
+  })
+
+  const spanWidthPercents = summarizeSpanWidths(spans, contentWidth)
+  const suspiciousShortMeasures = countSuspiciousSpans(spans, contentWidth)
+
+  const diagnostics = {
+    page,
+    systemIndex,
+    barlineCount: barlines.length,
+    barlineRejectedSummary: summarizeBarlineRejections(barlineDiagnostics?.rejected),
+    barlineThinningRemoved: barlineDiagnostics?.thinningRemoved ?? 0,
+    vectorNoteColumnRejected: vectorFiltered.rejectedCount,
+    inPackBarlinesRejected: inPackFiltered.rejectedCount,
+    vectorNoteColumnCandidates: vectorFiltered.candidateOffsets,
+    barlineDensityAmbiguous: barlineDiagnostics?.densityAmbiguous === true,
+    reliabilityReason: reliability.reason,
+    reliabilityConfident: reliability.confident,
+    measureWidthFrac: reliability.measureWidthFrac,
+    initialMeasureCount,
+    finalMeasureCount: measureBoxes.length,
+    mergedNarrowSpans: narrowMerge.mergedCount + narrowAfter.mergedCount,
+    recoveredMissingBarlines: wideSpanRecovery.splitCount,
+    mergedTrailingSpans: trailingNarrow.mergedCount,
+    snappedNoteColumnGaps: gapSnap.snappedCount,
+    rebuiltFromNoteColumnGaps,
+    collapsedPairs,
+    suspiciousShortMeasures,
+    spanWidthPercents,
+    usedPartnerBarlines,
+  }
+
+  return { measureBoxes, diagnostics }
+}
+
+function shouldPreferPartnerBarlineSpans({
+  primarySpans,
+  primaryReliability,
+  partnerSpans,
+  partnerReliability,
+}) {
+  if (!partnerReliability?.confident || partnerSpans.length < 2) {
+    return false
+  }
+  if (!(primarySpans.length < partnerSpans.length)) {
+    return false
+  }
+
+  const primaryUnreliable =
+    primaryReliability?.confident === false &&
+    UNRELIABLE_BARLINE_REASONS.has(primaryReliability.reason)
+  const megaMeasure =
+    primarySpans.length === 1 &&
+    primarySpans[0].x1 - primarySpans[0].x0 >= 0.7
+
+  if (!primaryUnreliable && !megaMeasure) {
+    return false
+  }
+
+  // Dense guitar stems often collapse a system to one mega-measure or a short
+  // under-count (≤3). Do not replace an already-plausible multi-measure notation
+  // grid (≥4) just because a paired TAB reports a different confident count —
+  // that remaps voltas/endings on scores whose notation grid was already usable.
+  if (primarySpans.length >= 4 && !megaMeasure) {
+    return false
+  }
+
+  return true
+}
+
+function detectAndSpanBarlines({
+  imageData,
+  contentBounds,
+  system,
+  darkThreshold,
+  vectorNoteheadXNorms,
+  noteColumnXNorms,
+  x0Content,
+  x1Content,
+  contentWidth,
+}) {
   const { positions: rawBarlines, diagnostics: barlineDiagnostics } =
     detectSystemBarlinesWithDiagnostics(imageData, contentBounds, system, {
       darkThreshold,
@@ -742,47 +912,22 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   const gapSnap = snapMeasureSpansToNoteColumnGaps(spans, columnHints)
   spans = gapSnap.spans
 
-  if (spans.length === 0) {
-    spans = fallbackSpans({ x0: x0Content, x1: x1Content })
-  }
-
-  const measureBoxes = spansToMeasureBoxes(spans, {
-    page,
-    systemIndex,
-    system,
-    measureNumberStart,
-    systemRole,
-  })
-
-  const spanWidthPercents = summarizeSpanWidths(spans, contentWidth)
-  const suspiciousShortMeasures = countSuspiciousSpans(spans, contentWidth)
-
-  const diagnostics = {
-    page,
-    systemIndex,
-    barlineCount: barlines.length,
-    barlineRejectedSummary: summarizeBarlineRejections(barlineDiagnostics?.rejected),
-    barlineThinningRemoved: barlineDiagnostics?.thinningRemoved ?? 0,
-    vectorNoteColumnRejected: vectorFiltered.rejectedCount,
-    inPackBarlinesRejected: inPackFiltered.rejectedCount,
-    vectorNoteColumnCandidates: vectorFiltered.candidateOffsets,
-    barlineDensityAmbiguous: barlineDiagnostics?.densityAmbiguous === true,
-    reliabilityReason: reliability.reason,
-    reliabilityConfident: reliability.confident,
-    measureWidthFrac: reliability.measureWidthFrac,
+  return {
+    spans,
+    reliability,
+    barlines,
+    barlineDiagnostics,
+    vectorFiltered,
+    inPackFiltered,
     initialMeasureCount,
-    finalMeasureCount: measureBoxes.length,
-    mergedNarrowSpans: narrowMerge.mergedCount + narrowAfter.mergedCount,
-    recoveredMissingBarlines: wideSpanRecovery.splitCount,
-    mergedTrailingSpans: trailingNarrow.mergedCount,
-    snappedNoteColumnGaps: gapSnap.snappedCount,
-    rebuiltFromNoteColumnGaps,
+    wideSpanRecovery,
+    narrowMerge,
     collapsedPairs,
-    suspiciousShortMeasures,
-    spanWidthPercents,
+    narrowAfter,
+    trailingNarrow,
+    rebuiltFromNoteColumnGaps,
+    gapSnap,
   }
-
-  return { measureBoxes, diagnostics }
 }
 
 /**
