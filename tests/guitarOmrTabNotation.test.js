@@ -227,6 +227,82 @@ describe('guitar OMR tablature detection', () => {
     }
   })
 
+  it('extends collapsed geometry TAB bottoms to the printed fret-digit span', () => {
+    // Near-dup collapse+respace stops at ~0.553 while engraved power-chord
+    // frets sit on three lower string bands (~0.549 / 0.558 / 0.566). Without
+    // digit-span refinement every digit maps onto one string.
+    const notation = {
+      y0: 0.47,
+      y1: 0.5,
+      lineCount: 5,
+      lineYs: [0.47, 0.477, 0.484, 0.491, 0.5],
+      detectedLineYs: [0.47, 0.477, 0.484, 0.491, 0.5],
+      barlineCount: 5,
+    }
+    const geometryTab = {
+      y0: 0.5177,
+      y1: 0.5537,
+      lineCount: 6,
+      detectedLineYs: [0.5177, 0.5269, 0.5354, 0.5361, 0.553, 0.5537],
+      barlineCount: 5,
+    }
+    const imageData = makeWhitePage()
+    const measureBoxes = [
+      { measureNumber: 1, x0: 0.1, x1: 0.9, playableX0: 0.12 },
+    ]
+    const glyphs = [
+      ...Array.from({ length: 4 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 200 + index * 40,
+        y: 0.484 * imageData.height,
+      })),
+      // Three-string power-chord columns below the collapsed geometry bottom.
+      ...Array.from({ length: 8 }, (_value, index) => {
+        const col = index % 4
+        const stringBand = Math.floor(index / 4) // 0..1 first; add third below
+        return {
+          text: stringBand === 0 ? '5' : '7',
+          sourceText: stringBand === 0 ? '5' : '7',
+          x: 180 + col * 60,
+          y: (0.5486 + stringBand * 0.0089) * imageData.height,
+          width: 8,
+          height: 10,
+        }
+      }),
+      ...Array.from({ length: 4 }, (_value, index) => ({
+        text: '7',
+        sourceText: '7',
+        x: 180 + index * 60,
+        y: 0.5664 * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+    const roles = resolveGuitarSystemRoles([notation, geometryTab], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+    expect(roles[1]).toEqual(
+      expect.objectContaining({
+        kind: 'tab',
+        pairedWithIndex: 0,
+        source: 'fret-digit-glyphs',
+      }),
+    )
+    const lineYs = roles[1].tabStave.lineYs
+    expect(lineYs).toHaveLength(6)
+    expect(lineYs[0]).toBeCloseTo(0.5177, 3)
+    expect(lineYs[5]).toBeGreaterThan(0.56)
+    const frets = extractTabDigitNotes(glyphs, roles[1].tabStave, measureBoxes, imageData)
+    const byString = frets.reduce((hist, note) => {
+      hist[note.string] = (hist[note.string] || 0) + 1
+      return hist
+    }, {})
+    expect(frets.length).toBeGreaterThanOrEqual(8)
+    expect(Object.keys(byString).length).toBeGreaterThanOrEqual(3)
+  })
+
   it('does not promote ledger-inflated seven-row notation bands into TAB via respace', () => {
     const notation = {
       lineCount: 7,

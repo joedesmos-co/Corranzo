@@ -301,6 +301,53 @@ function recoverTruncatedTabFromDigits(system, glyphs, imageData, stringCount) {
 }
 
 /**
+ * Geometry TAB whose resolved lineYs stop above the printed fret digits.
+ * Expand the bottom from digit evidence and rebuild six-line spacing so
+ * extractTabDigitNotes can own every string in a chord column.
+ */
+function refineGeometryTabFromDigitSpan(
+  system,
+  geometryStave,
+  glyphs,
+  imageData,
+  stringCount,
+) {
+  if (!geometryStave?.lineYs?.length || !glyphs?.length || !imageData) {
+    return null
+  }
+  const geoBottom = geometryStave.lineYs[geometryStave.lineYs.length - 1]
+  const geoTop = geometryStave.lineYs[0]
+  // Seed expansion from the geometry top so a collapsed/respaced stave that
+  // still reports a short system.y1 can reach digits below the last line.
+  const seed = {
+    ...system,
+    y0: Math.min(system?.y0 ?? geoTop, geoTop),
+    y1: Math.max(system?.y1 ?? geoBottom, geoBottom),
+    detectedLineYs: geometryStave.detectedLineYs ?? system?.detectedLineYs,
+  }
+  const recovered = recoverTruncatedTabFromDigits(seed, glyphs, imageData, stringCount)
+  if (!recovered?.tabStave?.lineYs?.length) {
+    return null
+  }
+  const recoveredBottom = recovered.tabStave.lineYs[recovered.tabStave.lineYs.length - 1]
+  // Only replace geometry when digits require a meaningfully lower bottom.
+  // Intact geometry staves that already cover their digit band stay put.
+  if (!(recoveredBottom > geoBottom + 0.004)) {
+    return null
+  }
+  return {
+    kind: 'tab',
+    tabStave: {
+      ...geometryStave,
+      ...recovered.tabStave,
+      // Preserve the geometry-confirmed top string anchor.
+      lineYs: respaceTabLineYs(geoTop, recoveredBottom, stringCount) ?? recovered.tabStave.lineYs,
+    },
+    source: 'fret-digit-glyphs',
+  }
+}
+
+/**
  * Resolve guitar system roles using both staff geometry and vector glyph
  * evidence. Text evidence corrects two generic detector ambiguities:
  * ledger lines can make five-line notation look six-line, while fret-digit
@@ -368,7 +415,22 @@ export function resolveGuitarSystemRoles(
       if (ledgerInflatedNotation) {
         return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
       }
-      return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
+      // Near-duplicate collapse + respace can leave a geometry TAB shorter than
+      // the printed fret-digit band (digits sit below the last synthetic line).
+      // Reuse the truncated-continuation digit-span rebuild so string ownership
+      // covers every engraved fret column — same helper, geometry entry path.
+      const geometryStave = tabStaves[0]
+      const digitRefined = refineGeometryTabFromDigitSpan(
+        system,
+        geometryStave,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+      if (digitRefined) {
+        return digitRefined
+      }
+      return { kind: 'tab', tabStave: geometryStave, source: 'staff-geometry' }
     }
     // Truncated continuation TAB: staff detection kept only the top rows while
     // fret digits occupy the full printed band. Prefer digits over leaked
