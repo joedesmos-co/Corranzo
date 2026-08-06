@@ -207,6 +207,26 @@ describe('guitar OMR tablature detection', () => {
     }
   })
 
+  it('respaces when two near-duplicate pairs collapse an exact six-row TAB claim to four rows', () => {
+    // Foo-like geometry TAB: two near-dup ghosts leave a double-wide gap so
+    // frets would otherwise pile onto the bottom string.
+    const detectedLineYs = [0.5177, 0.5269, 0.5354, 0.5361, 0.553, 0.5537]
+    const classified = classifySystemStaves(
+      { lineCount: 6, detectedLineYs, lineYs: null },
+      { stringCount: 6 },
+    )
+    const lineYs = classified.tabStaves[0].lineYs
+    expect(lineYs).toHaveLength(6)
+    expect(lineYs[0]).toBeCloseTo(0.5177, 4)
+    expect(lineYs[5]).toBeCloseTo(0.55335, 4)
+    const gaps = lineYs.slice(1).map((y, index) => y - lineYs[index])
+    const median = [...gaps].sort((left, right) => left - right)[Math.floor(gaps.length / 2)]
+    for (const gap of gaps) {
+      expect(gap).toBeGreaterThan(0.003)
+      expect(gap / median).toBeLessThan(1.15)
+    }
+  })
+
   it('does not promote ledger-inflated seven-row notation bands into TAB via respace', () => {
     const notation = {
       lineCount: 7,

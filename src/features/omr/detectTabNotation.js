@@ -70,12 +70,21 @@ function resolveTabLineYs(stave, stringCount) {
     // Near-duplicate rows inside an exact six-line claim must be collapsed.
     // Returning the raw six (old early-return) assigns two frets to one string
     // and merges them into illegal multi-digit frets such as "88".
+    // Multiple near-dup pairs can collapse below stringCount−1 (e.g. 6→4);
+    // respace from the outer unique rows rather than keeping the raw claim.
     const collapsed = collapseNearbyStaffLineYs(detectedLineYs)
     if (collapsed?.length === stringCount) {
       return collapsed
     }
-    if (collapsed?.length === stringCount - 1 && collapsed.length >= 2) {
-      return respaceTabLineYs(collapsed[0], collapsed[collapsed.length - 1], stringCount)
+    if (collapsed?.length >= 2 && collapsed.length < stringCount) {
+      const respaced = respaceTabLineYs(
+        collapsed[0],
+        collapsed[collapsed.length - 1],
+        stringCount,
+      )
+      if (respaced) {
+        return respaced
+      }
     }
     return detectedLineYs
   }
