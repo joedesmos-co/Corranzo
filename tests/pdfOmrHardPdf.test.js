@@ -53,6 +53,45 @@ describe('experimental PDF OMR v4 (harder PDFs)', () => {
     expect(applied).toContain('contrast')
   })
 
+  it('does not treat dense digital engraving edge-variance as scan noise', () => {
+    // High edge variance from dense staff/note antialiasing must not alone
+    // classify a sharp white-background page as scanned — despeckle on those
+    // pages erases thin TAB staff peaks before near-duplicate normalization.
+    const denseDigital = rhythmicPianoPage({
+      width: 520,
+      height: 720,
+      measuresPerSystem: 6,
+    })
+    // Sprinkle midtone antialias along staff rows to inflate edge variance
+    // without introducing paper texture or collapsed contrast.
+    const { width, height, data } = denseDigital
+    for (let y = 40; y < height - 40; y += 3) {
+      for (let x = 20; x < width - 20; x += 1) {
+        const index = (y * width + x) * 4
+        if (data[index] > 240) {
+          data[index] = 248
+          data[index + 1] = 248
+          data[index + 2] = 248
+        }
+      }
+    }
+    const quality = estimatePageScanQuality(denseDigital)
+    expect(quality.contrastSpread).toBeGreaterThanOrEqual(220)
+    expect(quality.backgroundLuminance).toBeGreaterThanOrEqual(250)
+    expect(quality.looksLikeCleanDigital).toBe(true)
+    expect(quality.isLikelyScanned).toBe(false)
+
+    const { applied, imageData } = preprocessOmrPageImage(denseDigital)
+    expect(applied).toEqual([])
+    expect(imageData).toBe(denseDigital)
+  })
+
+  it('does not despeckle sharp high-contrast pages even when preprocess is forced', () => {
+    const clean = rhythmicPianoPage()
+    const { applied } = preprocessOmrPageImage(clean, { force: true })
+    expect(applied).not.toContain('despeckle')
+  })
+
   it('leaves already-clean digital pages pixel-identical', () => {
     const clean = rhythmicPianoPage()
     const before = clean.data.slice()
