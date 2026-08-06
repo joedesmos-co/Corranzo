@@ -983,6 +983,91 @@ describe('guitar OMR tablature detection', () => {
     )
   })
 
+  it('recovers truncated continuation TAB from fret-digit vertical span', () => {
+    // Staff detection kept only the top three TAB rows; digits occupy the full
+    // printed band. Role assignment must expand bounds and pair with notation.
+    const notation = {
+      y0: 0.2,
+      y1: 0.224,
+      lineCount: 5,
+      lineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      detectedLineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      barlineCount: 5,
+    }
+    const truncatedTab = {
+      y0: 0.26,
+      y1: 0.278,
+      lineCount: 3,
+      detectedLineYs: [0.26, 0.269, 0.278],
+      barlineCount: 5,
+    }
+    const imageData = makeWhitePage()
+    const glyphs = [
+      ...Array.from({ length: 6 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 180 + index * 40,
+        y: 0.212 * imageData.height,
+      })),
+      ...Array.from({ length: 12 }, (_value, index) => ({
+        text: String(index % 4),
+        sourceText: String(index % 4),
+        x: 160 + (index % 6) * 50,
+        y: (0.265 + Math.floor(index / 6) * 0.028) * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+    const roles = resolveGuitarSystemRoles([notation, truncatedTab], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+    expect(roles[0]).toEqual(expect.objectContaining({ kind: 'notation' }))
+    expect(roles[1]).toEqual(
+      expect.objectContaining({
+        kind: 'tab',
+        pairedWithIndex: 0,
+        source: 'fret-digit-glyphs',
+      }),
+    )
+    expect(roles[1].tabStave.lineYs).toHaveLength(6)
+    expect(roles[1].tabStave.y1 - roles[1].tabStave.y0).toBeGreaterThan(0.03)
+  })
+
+  it('does not promote notation-only systems that merely sit near digits', () => {
+    const notation = {
+      y0: 0.2,
+      y1: 0.224,
+      lineCount: 5,
+      lineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      detectedLineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      barlineCount: 4,
+    }
+    const imageData = makeWhitePage()
+    const glyphs = [
+      ...Array.from({ length: 8 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 180 + index * 40,
+        y: 0.212 * imageData.height,
+      })),
+      // Measure numbers / tempo text near the staff are not a TAB band.
+      ...Array.from({ length: 3 }, (_value, index) => ({
+        text: String(index + 1),
+        sourceText: String(index + 1),
+        x: 120 + index * 30,
+        y: 0.19 * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+    const roles = resolveGuitarSystemRoles([notation], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+    expect(roles[0]).toEqual(expect.objectContaining({ kind: 'notation' }))
+  })
+
   it('falls through glyph-less six-line pages to notation instead of TAB-no-frets', async () => {
     const page = makeWhitePage()
     const tabStaff = drawStaff(page, 100, 6)

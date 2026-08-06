@@ -221,6 +221,77 @@ function textEvidenceForSystem(system, glyphs, imageData) {
 }
 
 /**
+ * When staff-line detection only captures the top of a TAB band, fret digits
+ * still occupy the full printed height. Keep the detected top (it aligns with
+ * string 1) and extend the bottom to the digit span, then rebuild six-line
+ * geometry from those outer bounds — do not extrapolate missing lines upward
+ * from an incomplete detection cluster.
+ */
+function expandSystemToDigitSpan(system, glyphs, imageData, { maxBelow = 0.055 } = {}) {
+  if (!glyphs?.length || !imageData || !system) {
+    return null
+  }
+  const top = system.y0 ?? 0
+  const digitYs = []
+  for (const glyph of glyphs) {
+    if (!DIGIT_RE.test(glyph.text ?? '') || !sourceTextLooksLikeTabDigits(glyph)) {
+      continue
+    }
+    const yNorm = glyph.y / imageData.height
+    // Digits belonging to this TAB sit at or below the detected top. Ignore
+    // chord/fret labels above the staff and the next system farther below.
+    if (yNorm < top - 0.002 || yNorm > top + maxBelow) {
+      continue
+    }
+    digitYs.push(yNorm)
+  }
+  if (digitYs.length < 4) {
+    return null
+  }
+  digitYs.sort((left, right) => left - right)
+  // Robust bottom: prefer the upper-quantile so a stray lyric/digit farther
+  // down cannot stretch the staff into the next system.
+  const qIndex = Math.min(digitYs.length - 1, Math.floor(digitYs.length * 0.9))
+  const digitBottom = digitYs[qIndex]
+  const y0 = top
+  const y1 = Math.max(system.y1 ?? digitBottom, digitBottom)
+  const height = y1 - y0
+  if (!(height >= 0.028) || height > 0.06) {
+    return null
+  }
+  return {
+    ...system,
+    y0,
+    y1,
+    center: (y0 + y1) / 2,
+  }
+}
+
+function recoverTruncatedTabFromDigits(system, glyphs, imageData, stringCount) {
+  const expanded = expandSystemToDigitSpan(system, glyphs, imageData)
+  if (!expanded) {
+    return null
+  }
+  const collapsed = collapseNearbyStaffLineYs(expanded.detectedLineYs)
+  let lineYs = null
+  if (collapsed?.length === stringCount) {
+    lineYs = collapsed
+  } else if (collapsed?.length === stringCount - 1 && collapsed.length >= 2) {
+    lineYs = respaceTabLineYs(collapsed[0], collapsed[collapsed.length - 1], stringCount)
+  } else {
+    lineYs = respaceTabLineYs(expanded.y0, expanded.y1, stringCount)
+  }
+  if (!lineYs?.length) {
+    return null
+  }
+  return {
+    kind: 'tab',
+    tabStave: { ...expanded, lineYs, detectedLineYs: collapsed ?? expanded.detectedLineYs },
+    source: 'fret-digit-glyphs',
+  }
+}
+
+/**
  * Resolve guitar system roles using both staff geometry and vector glyph
  * evidence. Text evidence corrects two generic detector ambiguities:
  * ledger lines can make five-line notation look six-line, while fret-digit
@@ -237,9 +308,17 @@ export function resolveGuitarSystemRoles(
     const inferredTabLineYs = textEvidence.explicitTab
       ? inferTabLineYs(system, stringCount)
       : null
-    const inferredTabStave = inferredTabLineYs
+    let inferredTabStave = inferredTabLineYs
       ? { ...system, lineYs: inferredTabLineYs }
       : null
+    if (textEvidence.explicitTab) {
+      const recovered = recoverTruncatedTabFromDigits(system, glyphs, imageData, stringCount)
+      if (recovered?.tabStave) {
+        inferredTabStave = recovered.tabStave
+      } else if (inferredTabLineYs) {
+        inferredTabStave = { ...system, lineYs: inferredTabLineYs }
+      }
+    }
 
     // Preserve already-trustworthy multi-stave geometry. Glyph padding is
     // deliberately wide enough to rescue broken TAB lines, so noteheads from
@@ -281,6 +360,23 @@ export function resolveGuitarSystemRoles(
         return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
       }
       return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
+    }
+    // Truncated continuation TAB: staff detection kept only the top rows while
+    // fret digits occupy the full printed band. Prefer digits over leaked
+    // noteheads from the pad so the band pairs with the notation staff above.
+    if (
+      textEvidence.digitCount >= 6 &&
+      textEvidence.digitCount > textEvidence.noteheadCount
+    ) {
+      const recovered = recoverTruncatedTabFromDigits(
+        system,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+      if (recovered) {
+        return recovered
+      }
     }
     if (textEvidence.noteheadCount >= 3) {
       return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }

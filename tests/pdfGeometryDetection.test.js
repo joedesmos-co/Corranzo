@@ -22,6 +22,7 @@ import {
 } from './helpers/syntheticScore.js'
 import {
   assessBarlineReliability,
+  coalesceFragmentedStaves,
   detectStaffLineSystems,
 } from '../src/features/score-follow/detectStaffLines.js'
 import { detectContentBounds } from '../src/features/score-follow/detectStaffSystems.js'
@@ -255,6 +256,72 @@ describe('Barline reliability — dense stem grids never yield a confident-but-w
         (system.barlineRejected['stem-like'] ?? 0) +
         (system.barlineRejected['too-dense'] ?? 0),
     ).toBeGreaterThan(0)
+  })
+})
+
+describe('Fragmented TAB stave coalescing', () => {
+  it('merges an incomplete TAB fragment with a near-duplicate bottom ghost', () => {
+    const staves = [
+      {
+        y0: 0.2,
+        y1: 0.224,
+        center: 0.212,
+        lineCount: 5,
+        lineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+        detectedLineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      },
+      {
+        y0: 0.26,
+        y1: 0.278,
+        center: 0.269,
+        lineCount: 3,
+        detectedLineYs: [0.26, 0.269, 0.278],
+      },
+      {
+        y0: 0.304,
+        y1: 0.3047,
+        center: 0.30435,
+        lineCount: 2,
+        detectedLineYs: [0.304, 0.3047],
+      },
+      {
+        y0: 0.36,
+        y1: 0.384,
+        center: 0.372,
+        lineCount: 5,
+        lineYs: [0.36, 0.366, 0.372, 0.378, 0.384],
+        detectedLineYs: [0.36, 0.366, 0.372, 0.378, 0.384],
+      },
+    ]
+    const merged = coalesceFragmentedStaves(staves)
+    expect(merged).toHaveLength(3)
+    expect(merged[0].lineYs).toHaveLength(5)
+    expect(merged[1].y0).toBeCloseTo(0.26, 4)
+    expect(merged[1].y1).toBeCloseTo(0.3047, 4)
+    expect(merged[1].y1 - merged[1].y0).toBeGreaterThan(0.04)
+    expect(merged[2].lineYs).toHaveLength(5)
+  })
+
+  it('does not fuse nearby independent notation staves', () => {
+    const staves = [
+      {
+        y0: 0.2,
+        y1: 0.224,
+        center: 0.212,
+        lineCount: 5,
+        lineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+        detectedLineYs: [0.2, 0.206, 0.212, 0.218, 0.224],
+      },
+      {
+        y0: 0.25,
+        y1: 0.274,
+        center: 0.262,
+        lineCount: 5,
+        lineYs: [0.25, 0.256, 0.262, 0.268, 0.274],
+        detectedLineYs: [0.25, 0.256, 0.262, 0.268, 0.274],
+      },
+    ]
+    expect(coalesceFragmentedStaves(staves)).toHaveLength(2)
   })
 })
 
