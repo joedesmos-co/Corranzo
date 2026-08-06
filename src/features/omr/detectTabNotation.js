@@ -270,7 +270,9 @@ function expandSystemToDigitSpan(system, glyphs, imageData, { maxBelow = 0.055 }
   const orphanBand = digitYs.filter(
     (y) => y > digitBottom + 0.0005 && y <= digitBottom + gapGuess * 1.4,
   )
-  if (orphanBand.length >= 4) {
+  // Three aligned roots are enough: a single incomplete power-chord measure
+  // may only print a handful of bottom-string frets on the page.
+  if (orphanBand.length >= 3) {
     const orphanIndex = Math.min(
       orphanBand.length - 1,
       Math.floor(orphanBand.length * 0.9),

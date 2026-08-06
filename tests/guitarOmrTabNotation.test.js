@@ -1174,12 +1174,13 @@ describe('guitar OMR tablature detection', () => {
         width: 8,
         height: 10,
       })),
-      // Sparse orphan roots just below the quantile (~10% of digits).
-      ...Array.from({ length: 6 }, (_value, index) => ({
+      // Sparse orphan roots just below the quantile (≈ one staff-gap under the
+      // dense band; can be as few as one incomplete measure's frets).
+      ...Array.from({ length: 3 }, (_value, index) => ({
         text: '8',
         sourceText: '8',
         x: 164 + index * 40,
-        y: 0.3831 * imageData.height,
+        y: 0.3742 * imageData.height,
         width: 8,
         height: 10,
       })),
@@ -1192,14 +1193,14 @@ describe('guitar OMR tablature detection', () => {
     expect(roles[1]).toEqual(
       expect.objectContaining({ kind: 'tab', source: 'fret-digit-glyphs' }),
     )
-    expect(roles[1].tabStave.y1).toBeGreaterThan(0.38)
+    expect(roles[1].tabStave.y1).toBeGreaterThan(0.37)
     const frets = extractTabDigitNotes(glyphs, roles[1].tabStave, measureBoxes, imageData)
     const byString = frets.reduce((hist, note) => {
       hist[note.string] = (hist[note.string] || 0) + 1
       return hist
     }, {})
-    expect(byString[6] ?? 0).toBeGreaterThanOrEqual(4)
-    expect(frets.length).toBeGreaterThanOrEqual(16)
+    expect(byString[6] ?? 0).toBeGreaterThanOrEqual(3)
+    expect(frets.length).toBeGreaterThanOrEqual(14)
   })
 
   it('does not promote notation-only systems that merely sit near digits', () => {
