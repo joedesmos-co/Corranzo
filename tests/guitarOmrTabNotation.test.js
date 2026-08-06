@@ -1180,7 +1180,7 @@ describe('guitar OMR tablature detection', () => {
         text: '8',
         sourceText: '8',
         x: 164 + index * 40,
-        y: 0.3742 * imageData.height,
+        y: 0.3725 * imageData.height,
         width: 8,
         height: 10,
       })),

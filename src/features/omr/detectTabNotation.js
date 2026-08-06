@@ -268,7 +268,7 @@ function expandSystemToDigitSpan(system, glyphs, imageData, { maxBelow = 0.055 }
   // those digits remain unowned after six-line respace.
   const gapGuess = Math.max(0.005, (digitBottom - top) / 5)
   const orphanBand = digitYs.filter(
-    (y) => y > digitBottom + 0.0005 && y <= digitBottom + gapGuess * 1.4,
+    (y) => y > digitBottom + 0.0005 && y <= digitBottom + gapGuess * 1.5,
   )
   // Three aligned roots are enough: a single incomplete power-chord measure
   // may only print a handful of bottom-string frets on the page.
