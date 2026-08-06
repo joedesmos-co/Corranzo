@@ -261,7 +261,22 @@ function expandSystemToDigitSpan(system, glyphs, imageData, { maxBelow = 0.055 }
   // Robust bottom: prefer the upper-quantile so a stray lyric/digit farther
   // down cannot stretch the staff into the next system.
   const qIndex = Math.min(digitYs.length - 1, Math.floor(digitYs.length * 0.9))
-  const digitBottom = digitYs[qIndex]
+  let digitBottom = digitYs[qIndex]
+  // Sparse bottom-string frets (e.g. power-chord roots on string 6) can sit in
+  // a tight band just below the 90th percentile. Absorb that orphan band when
+  // it is dense and within one staff-gap of the quantile bottom — otherwise
+  // those digits remain unowned after six-line respace.
+  const gapGuess = Math.max(0.005, (digitBottom - top) / 5)
+  const orphanBand = digitYs.filter(
+    (y) => y > digitBottom + 0.0005 && y <= digitBottom + gapGuess * 1.4,
+  )
+  if (orphanBand.length >= 4) {
+    const orphanIndex = Math.min(
+      orphanBand.length - 1,
+      Math.floor(orphanBand.length * 0.9),
+    )
+    digitBottom = orphanBand[orphanIndex]
+  }
   const y0 = top
   const y1 = Math.max(system.y1 ?? digitBottom, digitBottom)
   const height = y1 - y0

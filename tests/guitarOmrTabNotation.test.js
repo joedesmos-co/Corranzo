@@ -1130,6 +1130,78 @@ describe('guitar OMR tablature detection', () => {
     expect(roles[1].tabStave.y1 - roles[1].tabStave.y0).toBeGreaterThan(0.03)
   })
 
+  it('absorbs a sparse bottom-string fret band just below the digit quantile', () => {
+    // Most frets sit on strings 4–5; only some columns place a root digit on
+    // string 6 slightly below the 90th-percentile bottom. That orphan band must
+    // extend the recovered staff so every power-chord column keeps three frets.
+    const notation = {
+      y0: 0.3,
+      y1: 0.324,
+      lineCount: 5,
+      lineYs: [0.3, 0.306, 0.312, 0.318, 0.324],
+      detectedLineYs: [0.3, 0.306, 0.312, 0.318, 0.324],
+      barlineCount: 4,
+    }
+    const truncatedTab = {
+      y0: 0.3345,
+      y1: 0.352,
+      lineCount: 2,
+      detectedLineYs: [0.3345, 0.3434],
+      barlineCount: 4,
+    }
+    const imageData = makeWhitePage()
+    const measureBoxes = [{ measureNumber: 1, x0: 0.1, x1: 0.95, playableX0: 0.12 }]
+    const glyphs = [
+      ...Array.from({ length: 4 }, (_value, index) => ({
+        text: '\uE0A4',
+        x: 200 + index * 40,
+        y: 0.312 * imageData.height,
+      })),
+      // Dense upper fret bands (quantile bottom).
+      ...Array.from({ length: 20 }, (_value, index) => ({
+        text: '1',
+        sourceText: '1',
+        x: 160 + (index % 10) * 40,
+        y: (0.3564 + Math.floor(index / 10) * 0.0089) * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+      ...Array.from({ length: 20 }, (_value, index) => ({
+        text: '0',
+        sourceText: '0',
+        x: 168 + (index % 10) * 40,
+        y: (0.3564 + Math.floor(index / 10) * 0.0089) * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+      // Sparse orphan roots just below the quantile (~10% of digits).
+      ...Array.from({ length: 6 }, (_value, index) => ({
+        text: '8',
+        sourceText: '8',
+        x: 164 + index * 40,
+        y: 0.3831 * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+    const roles = resolveGuitarSystemRoles([notation, truncatedTab], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+    expect(roles[1]).toEqual(
+      expect.objectContaining({ kind: 'tab', source: 'fret-digit-glyphs' }),
+    )
+    expect(roles[1].tabStave.y1).toBeGreaterThan(0.38)
+    const frets = extractTabDigitNotes(glyphs, roles[1].tabStave, measureBoxes, imageData)
+    const byString = frets.reduce((hist, note) => {
+      hist[note.string] = (hist[note.string] || 0) + 1
+      return hist
+    }, {})
+    expect(byString[6] ?? 0).toBeGreaterThanOrEqual(4)
+    expect(frets.length).toBeGreaterThanOrEqual(16)
+  })
+
   it('does not promote notation-only systems that merely sit near digits', () => {
     const notation = {
       y0: 0.2,
