@@ -385,11 +385,37 @@ export function resolveGuitarSystemRoles(
       ? { ...system, lineYs: inferredTabLineYs }
       : null
     if (textEvidence.explicitTab) {
-      const recovered = recoverTruncatedTabFromDigits(system, glyphs, imageData, stringCount)
+      const recovered = recoverTruncatedTabFromDigits(
+        system,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+
       if (recovered?.tabStave) {
-        inferredTabStave = recovered.tabStave
-      } else if (inferredTabLineYs) {
-        inferredTabStave = { ...system, lineYs: inferredTabLineYs }
+        const inferredTop = inferredTabLineYs?.[0]
+        const inferredBottom = inferredTabLineYs?.[inferredTabLineYs.length - 1]
+        const recoveredBottom =
+          recovered.tabStave.lineYs?.[recovered.tabStave.lineYs.length - 1]
+
+        const inferredGap =
+          inferredTabLineYs?.length > 1 &&
+          Number.isFinite(inferredTop) &&
+          Number.isFinite(inferredBottom)
+            ? (inferredBottom - inferredTop) / (inferredTabLineYs.length - 1)
+            : null
+
+        const materiallyExtendsInferredBottom =
+          !inferredTabLineYs?.length ||
+          (Number.isFinite(inferredGap) &&
+            inferredGap > 0 &&
+            Number.isFinite(recoveredBottom) &&
+            Number.isFinite(inferredBottom) &&
+            recoveredBottom > inferredBottom + inferredGap * 0.5)
+
+        if (materiallyExtendsInferredBottom) {
+          inferredTabStave = recovered.tabStave
+        }
       }
     }
 

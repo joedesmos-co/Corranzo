@@ -161,6 +161,106 @@ describe('guitar OMR tablature detection', () => {
     expect(roles[1].tabStave.lineYs[5]).toBeCloseTo(0.276)
   })
 
+  it('keeps inferred explicit TAB geometry when fret digits do not materially extend the bottom', () => {
+    // Frozen paired-chord regression: near-duplicate detections collapse to four
+    // trustworthy string rows. Their spacing already reconstructs the six-line
+    // TAB grid; nearby fret digits must not re-anchor string 1 at system.y0.
+    const system = {
+      y0: 0.321483771251932,
+      y1: 0.35239567233384855,
+      lineCount: 8,
+      detectedLineYs: [
+        0.321483771251932,
+        0.3222565687789799,
+        0.3315301391035549,
+        0.3323029366306028,
+        0.3415765069551777,
+        0.34234930448222567,
+        0.3516228748068006,
+        0.35239567233384855,
+      ],
+      barlineCount: 5,
+    }
+    const imageData = makeWhitePage()
+    const glyphs = [
+      { text: 'T', x: 120, y: 0.326 * imageData.height },
+      { text: 'A', x: 120, y: 0.336 * imageData.height },
+      { text: 'B', x: 120, y: 0.346 * imageData.height },
+      ...Array.from({ length: 18 }, (_value, index) => ({
+        text: String(index % 6),
+        sourceText: String(index % 6),
+        x: 180 + (index % 9) * 45,
+        y: (index < 9 ? 0.342 : 0.355) * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+
+    const [role] = resolveGuitarSystemRoles([system], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+
+    expect(role).toEqual(
+      expect.objectContaining({
+        kind: 'tab',
+        source: 'tab-clef-text',
+      }),
+    )
+    expect(role.tabStave.lineYs).toHaveLength(6)
+    expect(role.tabStave.lineYs[0]).toBeCloseTo(0.30177743431221016, 5)
+    expect(role.tabStave.lineYs[5]).toBeCloseTo(0.3520092735703246, 5)
+  })
+
+  it('uses fret-digit span when explicit TAB geometry is materially truncated at the bottom', () => {
+    // Foo-like regression: only the top three string rows survived detection.
+    // Fret digits extend several string gaps lower, so their vertical span must
+    // replace the upward-extrapolated six-line inference.
+    const system = {
+      y0: 0.20155586987270155,
+      y1: 0.21923620933521923,
+      lineCount: 3,
+      detectedLineYs: [
+        0.20155586987270155,
+        0.21074964639321075,
+        0.21923620933521923,
+      ],
+      barlineCount: 9,
+    }
+    const imageData = makeWhitePage()
+    const glyphs = [
+      { text: 'T', x: 120, y: 0.204 * imageData.height },
+      { text: 'A', x: 120, y: 0.211 * imageData.height },
+      { text: 'B', x: 120, y: 0.218 * imageData.height },
+      ...Array.from({ length: 24 }, (_value, index) => ({
+        text: String(index % 8),
+        sourceText: String(index % 8),
+        x: 170 + (index % 8) * 50,
+        y: (0.221 + Math.floor(index / 8) * 0.0145) * imageData.height,
+        width: 8,
+        height: 10,
+      })),
+    ]
+
+    const [role] = resolveGuitarSystemRoles([system], {
+      stringCount: 6,
+      glyphs,
+      imageData,
+    })
+
+    expect(role).toEqual(
+      expect.objectContaining({
+        kind: 'tab',
+        source: 'tab-clef-text',
+      }),
+    )
+    expect(role.tabStave.lineYs).toHaveLength(6)
+    expect(role.tabStave.lineYs[0]).toBeCloseTo(system.y0, 5)
+    expect(role.tabStave.lineYs[5]).toBeGreaterThan(0.245)
+    expect(role.tabStave.lineYs[5] - system.y1).toBeGreaterThan(0.02)
+  })
+
   it('collapses doubled raster rows before classifying six-line TAB staves', () => {
     const tabLineYs = [0.32, 0.33, 0.34, 0.35, 0.36, 0.37]
     const doubled = tabLineYs.flatMap((y) => [y, y + 0.0007])
