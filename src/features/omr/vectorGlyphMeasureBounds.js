@@ -1,10 +1,22 @@
-import { staffLineGap } from './pitchFromStaffPosition.js'
+import {
+  distanceToNearestStaffLine,
+  staffLineGap,
+} from './pitchFromStaffPosition.js'
 
 /** Trailing noteheads on the last system measure can sit slightly past the barline. */
 const LAST_MEASURE_X_PAD = 0.028
 const DEFAULT_Y_PAD = 0.035
 /** Staff-space pad so extreme ledger stacks stay in-measure (not orphaned). */
 const LEDGER_STAFF_SPACE_PAD = 8
+
+function staffDistance(yNorm, staffLines) {
+  if (!staffLines) {
+    return Infinity
+  }
+  const treble = distanceToNearestStaffLine(yNorm, staffLines.treble ?? [])
+  const bass = distanceToNearestStaffLine(yNorm, staffLines.bass ?? [])
+  return Math.min(treble, bass)
+}
 
 /**
  * Normalized bounds for assigning vector SMuFL noteheads to a measure.
@@ -28,8 +40,47 @@ export function vectorGlyphInMeasure(glyph, measureBox, imageData, placement = {
   if (!glyph || !measureBox || !imageData?.width || !imageData?.height) {
     return false
   }
+
   const bounds = vectorGlyphAllocationBounds(measureBox, placement)
   const xNorm = glyph.x / imageData.width
   const yNorm = glyph.y / imageData.height
-  return xNorm >= bounds.x0 && xNorm <= bounds.x1 && yNorm >= bounds.y0 && yNorm <= bounds.y1
+
+  if (
+    xNorm < bounds.x0 ||
+    xNorm > bounds.x1 ||
+    yNorm < bounds.y0 ||
+    yNorm > bounds.y1
+  ) {
+    return false
+  }
+
+  const currentDistance = staffDistance(yNorm, measureBox.staffLines)
+
+  if (
+    Number.isFinite(measureBox.ownershipY0) &&
+    yNorm < measureBox.ownershipY0
+  ) {
+    const previousDistance = staffDistance(
+      yNorm,
+      measureBox.ownershipPreviousStaffLines,
+    )
+    if (previousDistance < currentDistance) {
+      return false
+    }
+  }
+
+  if (
+    Number.isFinite(measureBox.ownershipY1) &&
+    yNorm > measureBox.ownershipY1
+  ) {
+    const nextDistance = staffDistance(
+      yNorm,
+      measureBox.ownershipNextStaffLines,
+    )
+    if (nextDistance <= currentDistance) {
+      return false
+    }
+  }
+
+  return true
 }

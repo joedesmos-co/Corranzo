@@ -112,6 +112,61 @@ function measureGridEntriesForSystem(
     .filter(Boolean)
 }
 
+function applyInterSystemOwnershipClips(systemMeasureBoxes, systems) {
+  for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
+    const system = systems[systemIndex]
+    const previous = systems[systemIndex - 1] ?? null
+    const next = systems[systemIndex + 1] ?? null
+
+    if (!system) {
+      continue
+    }
+
+    const previousStaffLines =
+      systemMeasureBoxes[systemIndex - 1]?.[0]?.staffLines ?? null
+    const nextStaffLines =
+      systemMeasureBoxes[systemIndex + 1]?.[0]?.staffLines ?? null
+
+    const ownershipY0 =
+      previous &&
+      Number.isFinite(previous.y1) &&
+      Number.isFinite(system.y0) &&
+      system.y0 > previous.y1
+        ? (previous.y1 + system.y0) / 2
+        : null
+
+    const ownershipY1 =
+      next &&
+      Number.isFinite(system.y1) &&
+      Number.isFinite(next.y0) &&
+      next.y0 > system.y1
+        ? (system.y1 + next.y0) / 2
+        : null
+
+    if (ownershipY0 == null && ownershipY1 == null) {
+      continue
+    }
+
+    systemMeasureBoxes[systemIndex] = (systemMeasureBoxes[systemIndex] ?? []).map(
+      (measureBox) => ({
+        ...measureBox,
+        ...(ownershipY0 == null
+          ? {}
+          : {
+              ownershipY0,
+              ownershipPreviousStaffLines: previousStaffLines,
+            }),
+        ...(ownershipY1 == null
+          ? {}
+          : {
+              ownershipY1,
+              ownershipNextStaffLines: nextStaffLines,
+            }),
+      }),
+    )
+  }
+}
+
 function structureBandForSystem(systemIndex, systems, systemRoles) {
   const system = systems[systemIndex]
   const role = systemRoles?.[systemIndex]
@@ -588,6 +643,15 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     if (gridDiag) {
       gridDiag.staffGapNormalization = systemDiag
     }
+  }
+
+  // Keep the generous extreme-ledger allowance inside free page space, but
+  // stop adjacent piano systems from claiming the same vector notehead. Without
+  // this clip, an eight-staff-space pad can reach into the next grand staff;
+  // that glyph is then marked assigned before nearest-system orphan recovery.
+  // Fretted/TAB pages retain their established notation↔TAB ownership behavior.
+  if (!tabCapable) {
+    applyInterSystemOwnershipClips(systemMeasureBoxes, systems)
   }
 
   // TAB-only pages (no SMuFL noteheads, confirmed tablature staves): assemble

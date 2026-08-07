@@ -64,3 +64,78 @@ describe('vectorGlyphInMeasure', () => {
     expect(vectorGlyphInMeasure(glyph, measureBox, imageData)).toBe(true)
   })
 })
+
+describe('vector system ownership clips', () => {
+  const nextStaffLines = {
+    treble: [0.56, 0.58, 0.6, 0.62, 0.64],
+    bass: [0.68, 0.7, 0.72, 0.74, 0.76],
+    splitY: 0.66,
+  }
+
+  it('keeps the full extreme-ledger allocation range', () => {
+    const box = {
+      x0: 0.1,
+      x1: 0.5,
+      y0: 0.3,
+      y1: 0.49,
+      staffLines,
+      ownershipY1: 0.525,
+      ownershipNextStaffLines: nextStaffLines,
+    }
+
+    const bounds = vectorGlyphAllocationBounds(box)
+    const unclipped = vectorGlyphAllocationBounds({
+      ...box,
+      ownershipY1: undefined,
+      ownershipNextStaffLines: undefined,
+    })
+
+    expect(bounds.y1).toBe(unclipped.y1)
+  })
+
+  it('rejects a padded notehead when the next system is geometrically closer', () => {
+    const box = {
+      x0: 0.1,
+      x1: 0.5,
+      y0: 0.3,
+      y1: 0.49,
+      staffLines,
+      ownershipY1: 0.525,
+      ownershipNextStaffLines: nextStaffLines,
+    }
+
+    const stolenFromNextSystem = {
+      x: 300,
+      y: 0.57 * imageData.height,
+      text: '\ue0a4',
+    }
+
+    expect(vectorGlyphInMeasure(stolenFromNextSystem, box, imageData)).toBe(false)
+  })
+
+  it('keeps an extreme ledger note past the midpoint when its own staff is closer', () => {
+    const distantNextStaff = {
+      treble: [0.62, 0.64, 0.66, 0.68, 0.7],
+      bass: [0.74, 0.76, 0.78, 0.8, 0.82],
+      splitY: 0.72,
+    }
+
+    const box = {
+      x0: 0.1,
+      x1: 0.5,
+      y0: 0.3,
+      y1: 0.49,
+      staffLines,
+      ownershipY1: 0.525,
+      ownershipNextStaffLines: distantNextStaff,
+    }
+
+    const legitimateLedgerNote = {
+      x: 300,
+      y: 0.53 * imageData.height,
+      text: '\ue0a4',
+    }
+
+    expect(vectorGlyphInMeasure(legitimateLedgerNote, box, imageData)).toBe(true)
+  })
+})
