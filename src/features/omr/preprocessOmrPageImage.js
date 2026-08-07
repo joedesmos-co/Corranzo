@@ -86,6 +86,11 @@ function sampledPageStatistics(imageData, stride = 4) {
 
 /**
  * Estimate whether a page looks scanned (noisy, low contrast) vs clean digital.
+ *
+ * Dense digital engraving produces high edge-variance ("noiseLevel") from
+ * legitimate staff/note antialiasing. That signal alone must not classify a
+ * sharp white-background page as a scan — despeckle on those pages erases
+ * thin staff peaks and silently breaks TAB line ownership.
  */
 export function estimatePageScanQuality(imageData) {
   const { histogram, ...statistics } = sampledPageStatistics(imageData)
@@ -96,14 +101,21 @@ export function estimatePageScanQuality(imageData) {
   const backgroundTexture =
     statistics.backgroundLuminance < 255 && statistics.midtoneRatio > 0.035
   const hasMusicalContent = statistics.inkRatio >= 0.001 && statistics.contentBounds !== null
+  const looksLikeCleanDigital =
+    contrastSpread >= 220 &&
+    statistics.backgroundLuminance >= 250 &&
+    statistics.robustContrastSpread >= 180 &&
+    !backgroundTexture
   const isLikelyScanned =
     hasMusicalContent &&
+    !looksLikeCleanDigital &&
     (contrastSpread < 175 || statistics.noiseLevel > 22 || backgroundTexture)
 
   return {
     isLikelyScanned,
     backgroundTexture,
     contrastSpread,
+    looksLikeCleanDigital,
     ...statistics,
     confidence: isLikelyScanned ? (backgroundTexture ? 0.8 : 0.72) : 0.7,
   }
@@ -299,7 +311,14 @@ export function preprocessOmrPageImage(imageData, options = {}) {
     normalizeScanBackground(processed)
     applied.push('background-cleanup')
   }
-  if (quality.noiseLevel > 14) {
+  // Edge variance on clean digital pages tracks dense ink, not speck noise.
+  // Only despeckle when contrast/paper cues also look scan-degraded; otherwise
+  // isolated-pixel removal collapses near-duplicate TAB staff peaks.
+  const scanLikeDegradation =
+    quality.contrastSpread < 175 ||
+    quality.backgroundTexture ||
+    (quality.robustContrastSpread ?? 0) < 150
+  if (quality.noiseLevel > 14 && scanLikeDegradation) {
     denoiseImageData(processed)
     applied.push('despeckle')
   }

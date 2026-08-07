@@ -2,6 +2,7 @@
 // rasterisation on real high-DPI score PDFs (needed by the staff-line detector).
 import { extractPdfVectorCurvesFromOperatorList } from '../omr/extractPdfVectorCurves.js'
 import { extractPdfVectorPathSymbolsFromOperatorList } from '../omr/detectVectorPathAccidentals.js'
+import { extractPdfVectorBarlineComponentsFromOperatorList } from '../omr/detectVectorRepeatBarlines.js'
 
 const ANALYSIS_WIDTH = 1000
 
@@ -382,8 +383,17 @@ export async function extractPdfPageVectorCurves(
     pageNumber,
     targetWidth: viewport.width,
   })
+  const barlineComponents = extractPdfVectorBarlineComponentsFromOperatorList({
+    operatorList,
+    ops: pdfjs.OPS,
+    viewportTransform: viewport.transform,
+    pageNumber,
+    targetWidth: viewport.width,
+  })
   curves.accidentalPaths = pathSymbols.accidentalPaths
   curves.augmentationDotPaths = pathSymbols.augmentationDotPaths
+  curves.verticalBarPaths = barlineComponents.verticalBars
+  curves.compactDotPaths = barlineComponents.compactDots
   return curves
 }
 

@@ -179,25 +179,81 @@ function singleStaffLines(y0, y1) {
   }
 }
 
-export function estimateGrandStaffLines(system) {
+function staveLineCount(stave) {
+  const fromLineYs = Array.isArray(stave?.lineYs)
+    ? stave.lineYs.filter(Number.isFinite).length
+    : 0
+  const fromDetected = Array.isArray(stave?.detectedLineYs)
+    ? stave.detectedLineYs.filter(Number.isFinite).length
+    : 0
+  if (Number.isFinite(stave?.lineCount) && stave.lineCount > 0) {
+    return Math.max(stave.lineCount, fromLineYs, fromDetected)
+  }
+  return Math.max(fromLineYs, fromDetected)
+}
+
+/** Six-line (or denser) bands are TAB, not piano bass. */
+function staveLooksLikeTab(stave) {
+  if (!stave) return false
+  if (stave.kind === 'tab' || stave.isTab || stave.stringCount >= 6) return true
+  return staveLineCount(stave) >= 6
+}
+
+function measuredLinesForStaff(stave) {
+  const canonical = Array.isArray(stave?.lineYs)
+    ? stave.lineYs.filter(Number.isFinite).sort((left, right) => left - right)
+    : []
+  if (canonical.length === 5 && canonical[4] > canonical[0]) {
+    return canonical
+  }
+  const lineGap = (stave.y1 - stave.y0) / 4
+  return [0, 1, 2, 3, 4].map((i) => stave.y0 + i * lineGap)
+}
+
+export function estimateGrandStaffLines(system, { systemRole = null } = {}) {
   const measuredStaves = Array.isArray(system?.staves)
     ? system.staves
         .filter((stave) => Number.isFinite(stave?.y0) && Number.isFinite(stave?.y1))
         .sort((left, right) => left.y0 - right.y0)
     : []
+
+  // Mixed notation+TAB guitar systems nest the TAB band as stave[1]. Treating
+  // that band as a piano bass staff invents absurdly low MIDI (TAB lines ≠
+  // bass clef) and inflates ledger y-padding so the next system's noteheads
+  // are stolen into this measure — both break notation↔TAB pairing.
+  const roleImpliesTabPair =
+    systemRole?.kind === 'mixed' ||
+    systemRole?.kind === 'tab' ||
+    Boolean(systemRole?.tabStave) ||
+    Boolean(system?.tabStave)
+  const notationStaves = measuredStaves.filter((stave) => !staveLooksLikeTab(stave))
+
+  if (roleImpliesTabPair) {
+    const notation = notationStaves[0] ?? measuredStaves[0]
+    if (notation) {
+      return singleStaffLines(notation.y0, notation.y1)
+    }
+  }
+
+  if (notationStaves.length >= 2) {
+    const treble = notationStaves[0]
+    const bass = notationStaves[1]
+    return {
+      treble: measuredLinesForStaff(treble),
+      bass: measuredLinesForStaff(bass),
+      splitY: (treble.y1 + bass.y0) / 2,
+    }
+  }
+
+  if (notationStaves.length === 1) {
+    return singleStaffLines(notationStaves[0].y0, notationStaves[0].y1)
+  }
+
+  // No explicit notation filter match — fall back to raw measured staves
+  // (piano grand staff / single staff).
   if (measuredStaves.length >= 2) {
     const treble = measuredStaves[0]
     const bass = measuredStaves[1]
-    function measuredLinesForStaff(stave) {
-      const canonical = Array.isArray(stave?.lineYs)
-        ? stave.lineYs.filter(Number.isFinite).sort((left, right) => left - right)
-        : []
-      if (canonical.length === 5 && canonical[4] > canonical[0]) {
-        return canonical
-      }
-      const lineGap = (stave.y1 - stave.y0) / 4
-      return [0, 1, 2, 3, 4].map((i) => stave.y0 + i * lineGap)
-    }
     return {
       treble: measuredLinesForStaff(treble),
       bass: measuredLinesForStaff(bass),

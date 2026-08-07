@@ -17,6 +17,12 @@ import {
   finalizeRepeatMarkings,
 } from './detectOmrRepeatBarline.js'
 import {
+  detectVectorRepeatColumns,
+  extractRepeatDotGlyphsFromPageText,
+  splitMeasureBoxesAtRepeatColumns,
+  staffGapFromLines,
+} from './detectVectorRepeatBarlines.js'
+import {
   detectPedalFromText,
 } from './detectOmrExpression.js'
 import { assignNoteAnchoredRasterArticulations } from './detectNoteAnchoredRasterArticulations.js'
@@ -141,9 +147,22 @@ function voltaBandForSystem(systemIndex, systems, systemRoles) {
 
 function staffLineYsForStructure(systemIndex, systemRoles, measureBox) {
   const role = systemRoles?.[systemIndex]
-  if (role?.tabStave?.lineYs?.length) {
+  // Pure TAB systems must keep TAB string-line Ys for raster repeat/colon
+  // geometry (sparse TAB fixtures). Do this before any notation treble hint.
+  if (role?.kind === 'tab' && role?.tabStave?.lineYs?.length) {
     return role.tabStave.lineYs
   }
+  // When notation is paired with a TAB band, the structure band includes TAB
+  // where engravers often place thick/thin repeat bars. Notation-only line Ys
+  // yield a tiny staffGap/searchPad and drop those bars — leave null so the
+  // detector uses the image-width fallback gap across the full pair band.
+  const hasPairedTab = systemRoles?.some(
+    (candidate) => candidate?.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+  )
+  if (hasPairedTab || role?.kind === 'mixed') {
+    return null
+  }
+  // Prefer notation staff lines for unpaired notation systems.
   const treble = measureBox?.staffLines?.treble
   if (Array.isArray(treble) && treble.length >= 5) {
     return treble
@@ -151,11 +170,83 @@ function staffLineYsForStructure(systemIndex, systemRoles, measureBox) {
   return null
 }
 
-function structureMarkingOptions(systemIndex, systems, systemRoles, measureBox) {
+/**
+ * Vector repeats stay on for piano and for notation/mixed systems on fretted
+ * scores (Guaraldi). Pure TAB systems keep the raster path only — TAB
+ * system-break double bars are a known false-positive family.
+ */
+function enableVectorRepeatBarlinesForSystem(tabCapable, systemIndex, systemRoles) {
+  if (!tabCapable) {
+    return true
+  }
+  const role = systemRoles?.[systemIndex]
+  if (!role) {
+    return false
+  }
+  if (role.kind === 'tab') {
+    return false
+  }
+  return role.kind === 'notation' || role.kind === 'mixed'
+}
+
+/**
+ * Split measure boxes that swallow an interior vector repeat column so forward
+ * can own the following LEFT edge and backward the preceding RIGHT edge.
+ */
+function applyVectorRepeatColumnSplitsToSystemBoxes({
+  measureBoxes,
+  systemIndex,
+  systems,
+  systemRoles,
+  imageData,
+  pageText,
+  vectorBarlineComponents,
+  enableVector,
+}) {
+  if (!enableVector || !measureBoxes?.length || !imageData?.width) {
+    return measureBoxes
+  }
+  const band = structureBandForSystem(systemIndex, systems, systemRoles)
+  const y0 = (band?.y0 ?? systems[systemIndex]?.y0 ?? 0) * imageData.height
+  const y1 = (band?.y1 ?? systems[systemIndex]?.y1 ?? 1) * imageData.height
+  const staffGap = staffGapFromLines(
+    [],
+    Math.max(8, imageData.width * 0.014),
+  )
+  const glyphDots = extractRepeatDotGlyphsFromPageText(pageText, imageData.width, imageData.height, {
+    staffGap,
+  })
+  const columns = detectVectorRepeatColumns({
+    verticalBars: vectorBarlineComponents?.verticalBars ?? [],
+    compactDots: [...(vectorBarlineComponents?.compactDots ?? []), ...glyphDots],
+    imageWidth: imageData.width,
+    imageHeight: imageData.height,
+    bandY0: y0,
+    bandY1: y1,
+    // Column discovery must not depend on a single staff's line Ys — mixed
+    // notation+TAB bands carry dots on both staves.
+    staffLineYs: null,
+  })
+  if (!columns.length) {
+    return measureBoxes
+  }
+  return splitMeasureBoxesAtRepeatColumns(measureBoxes, columns, imageData.width)
+}
+
+function structureMarkingOptions(
+  systemIndex,
+  systems,
+  systemRoles,
+  measureBox,
+  vectorBarlineComponents = null,
+  { enableVectorRepeatBarlines = true } = {},
+) {
   return {
     structureBand: structureBandForSystem(systemIndex, systems, systemRoles),
     voltaBand: voltaBandForSystem(systemIndex, systems, systemRoles),
     staffLineYs: staffLineYsForStructure(systemIndex, systemRoles, measureBox),
+    vectorBarlineComponents: enableVectorRepeatBarlines ? vectorBarlineComponents : null,
+    enableVectorRepeatBarlines,
   }
 }
 
@@ -283,6 +374,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     vectorCurves = [],
     vectorAccidentalPaths = [],
     vectorAugmentationDotPaths = [],
+    vectorBarlineComponents = null,
     stavesPerSystem = OMR_PIANO_STAVES_PER_SYSTEM,
     dense = false,
     keySignature: inheritedKeySignature = null,
@@ -294,12 +386,30 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     captureOmrV3Shadow = false,
     /** Capture detector observations for an independent V3 qualification shadow. */
     captureOmrV3RawSymbols = false,
+    /**
+     * When false, skip ink/path staccato fallback (document already has SMuFL
+     * staccato glyphs on some page).
+     */
+    allowInkStaccatoFallback = true,
   } = options
 
   const tabCapable = Boolean(instrument?.omr?.supportsTablature && instrument?.strings)
   const tabStringCount = instrument?.strings?.count ?? 6
   const tabTuning = instrument?.strings?.tuning ?? null
   const tabFretCount = instrument?.strings?.fretCount ?? 24
+
+  const resolvedVectorBarlineComponents =
+    vectorBarlineComponents &&
+    (vectorBarlineComponents.verticalBars?.length || vectorBarlineComponents.compactDots?.length)
+      ? vectorBarlineComponents
+      : {
+          verticalBars: Array.isArray(vectorCurves?.verticalBarPaths)
+            ? vectorCurves.verticalBarPaths
+            : [],
+          compactDots: Array.isArray(vectorCurves?.compactDotPaths)
+            ? vectorCurves.compactDotPaths
+            : [],
+        }
 
   // Legacy music fonts (e.g. MScore in musescore.com/TCPDF exports) draw
   // noteheads/clefs at pre-SMuFL codepoints. Normalize them to SMuFL so such
@@ -420,6 +530,23 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     const useVectorNoteColumnHints =
       !tabAnalysisActive || shouldUseVectorNoteColumnHints(systemVectorNoteheads)
     const noteColumns = clusterVectorNoteheadColumns(systemVectorNoteheads)
+    const pairedTabIndex = systemRoles?.findIndex(
+      (candidate) => candidate?.kind === 'tab' && candidate.pairedWithIndex === systemIndex,
+    )
+    const pairedTabRole = pairedTabIndex >= 0 ? systemRoles[pairedTabIndex] : null
+    const partnerSystem =
+      pairedTabRole?.tabStave &&
+      Number.isFinite(pairedTabRole.tabStave.y0) &&
+      Number.isFinite(pairedTabRole.tabStave.y1)
+        ? {
+            ...systems[pairedTabIndex],
+            y0: pairedTabRole.tabStave.y0,
+            y1: pairedTabRole.tabStave.y1,
+            center: (pairedTabRole.tabStave.y0 + pairedTabRole.tabStave.y1) / 2,
+          }
+        : pairedTabIndex >= 0
+          ? systems[pairedTabIndex]
+          : null
     const { measureBoxes, diagnostics: gridDiagnostics } = buildMeasureBoxesForSystemWithDiagnostics({
       page,
       systemIndex,
@@ -430,10 +557,23 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       darkThreshold: Math.min(inkThreshold, Math.max(145, inkThreshold - 22)),
       vectorNoteheadXNorms: useVectorNoteColumnHints ? systemVectorNoteheads : [],
       noteColumnXNorms: noteColumns,
+      systemRole: role,
+      partnerSystem,
     })
 
-    measureCounter += measureBoxes.length
-    systemMeasureBoxes.push(measureBoxes)
+    const splitBoxes = applyVectorRepeatColumnSplitsToSystemBoxes({
+      measureBoxes,
+      systemIndex,
+      systems,
+      systemRoles,
+      imageData,
+      pageText,
+      vectorBarlineComponents: resolvedVectorBarlineComponents,
+      enableVector: enableVectorRepeatBarlinesForSystem(tabCapable, systemIndex, systemRoles),
+    })
+
+    measureCounter += splitBoxes.length
+    systemMeasureBoxes.push(splitBoxes)
     measureGridDiagnostics.push(gridDiagnostics)
   }
 
@@ -628,7 +768,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             {
               isFirstInSystem: boxIndex === 0,
               pageText,
-              ...structureMarkingOptions(targetIndex, systems, systemRoles, measureBox),
+              ...structureMarkingOptions(
+                targetIndex,
+                systems,
+                systemRoles,
+                measureBox,
+                resolvedVectorBarlineComponents,
+                {
+                  enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                    tabCapable,
+                    targetIndex,
+                    systemRoles,
+                  ),
+                },
+              ),
             },
           )
           measureRecord.repeatMarking = structure.repeatMarking
@@ -741,6 +894,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       inkThreshold,
       captureDetectorObservations: captureOmrV3RawSymbols,
       enableLocalTupletGroups: !tabCapable,
+      allowInkStaccatoFallback: allowInkStaccatoFallback && !tabCapable,
     })
 
     // Mixed notation+TAB (fretted instruments): pull string/fret positions
@@ -831,7 +985,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
             {
               isFirstInSystem: boxIndex === 0,
               pageText,
-              ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
+              ...structureMarkingOptions(
+                systemIndex,
+                systems,
+                systemRoles,
+                measureBox,
+                resolvedVectorBarlineComponents,
+                {
+                  enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                    tabCapable,
+                    systemIndex,
+                    systemRoles,
+                  ),
+                },
+              ),
             },
           )
           measureRecord.repeatMarking = structure.repeatMarking
@@ -1082,7 +1249,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
         {
           isFirstInSystem: boxIndex === 0,
           pageText,
-          ...structureMarkingOptions(systemIndex, systems, systemRoles, measureBox),
+          ...structureMarkingOptions(
+            systemIndex,
+            systems,
+            systemRoles,
+            measureBox,
+            resolvedVectorBarlineComponents,
+            {
+              enableVectorRepeatBarlines: enableVectorRepeatBarlinesForSystem(
+                tabCapable,
+                systemIndex,
+                systemRoles,
+              ),
+            },
+          ),
         },
       )
       const dynamic = null

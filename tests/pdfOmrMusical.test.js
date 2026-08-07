@@ -22,6 +22,7 @@ import {
   estimateGrandStaffLines,
   midiFromStaffPosition,
   estimateLedgerLineCount,
+  resolvePitchFromGrandStaff,
 } from '../src/features/omr/pitchFromStaffPosition.js'
 import { OMR_DISCLAIMER } from '../src/features/omr/omrMusicalConstants.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
@@ -144,6 +145,64 @@ describe('experimental PDF OMR musical details (v3)', () => {
     expect(staffLines.bass).toHaveLength(5)
     expect(staffLines.treble[0]).toBeCloseTo(0.19)
     expect(staffLines.bass[4]).toBeCloseTo(0.33)
+  })
+
+  it('maps mixed notation+TAB guitar systems as notation-only, not TAB-as-bass', () => {
+    const notation = {
+      y0: 0.152,
+      y1: 0.176,
+      lineYs: [0.152, 0.158, 0.164, 0.17, 0.176],
+    }
+    const tab = {
+      y0: 0.204,
+      y1: 0.248,
+      // Engravers often omit lineYs on the nested stave object; role carries TAB.
+      lineYs: null,
+    }
+    const staffLines = estimateGrandStaffLines(
+      { y0: 0.152, y1: 0.248, staves: [notation, tab] },
+      {
+        systemRole: {
+          kind: 'mixed',
+          tabStave: {
+            y0: 0.204,
+            y1: 0.248,
+            lineYs: [0.204, 0.213, 0.222, 0.231, 0.24, 0.248],
+            lineCount: 6,
+          },
+        },
+      },
+    )
+
+    expect(staffLines.singleStaff).toBe(true)
+    expect(staffLines.bass).toEqual([])
+    expect(staffLines.treble[0]).toBeCloseTo(0.152)
+    expect(staffLines.treble[4]).toBeCloseTo(0.176)
+    // Pitch role stays on the notation (upper) staff — never TAB-as-bass.
+    const mapping = resolvePitchFromGrandStaff(0.164, staffLines)
+    expect(mapping.staffRole).toBe('upper')
+    expect(mapping.clefSign).toBe('treble')
+    expect(staffLines.bass).toHaveLength(0)
+  })
+
+  it('excludes explicit 6-line TAB staves from piano grand-staff bass mapping', () => {
+    const staffLines = estimateGrandStaffLines({
+      y0: 0.15,
+      y1: 0.28,
+      staves: [
+        { y0: 0.15, y1: 0.18, lineYs: [0.15, 0.1575, 0.165, 0.1725, 0.18] },
+        {
+          y0: 0.21,
+          y1: 0.28,
+          lineCount: 6,
+          lineYs: [0.21, 0.224, 0.238, 0.252, 0.266, 0.28],
+        },
+      ],
+    })
+
+    expect(staffLines.singleStaff).toBe(true)
+    expect(staffLines.bass).toEqual([])
+    expect(staffLines.treble).toHaveLength(5)
   })
 
   it('maps vector notehead glyphs through staff geometry and key signature', () => {

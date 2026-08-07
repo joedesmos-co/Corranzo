@@ -508,6 +508,27 @@ async function runPdfOmrPipelineBody({
   let measureCounter = 1
   const measureGridDiagnosticsEntries = []
 
+  // Document-level gate for path/ink staccato: if any page already emits SMuFL
+  // E4A2/E4A3, do not invent ink staccato on later pages of the same score.
+  let allowInkStaccatoFallback = true
+  if (!(numPagesOverride != null && usingDefaultExtract)) {
+    try {
+      for (let scanPage = 1; scanPage <= pageCount; scanPage += 1) {
+        const scanText = await extractPageText(pdfSource, scanPage).catch(() => [])
+        if (
+          (scanText ?? []).some(
+            (item) => item?.text === '\ue4a2' || item?.text === '\ue4a3',
+          )
+        ) {
+          allowInkStaccatoFallback = false
+          break
+        }
+      }
+    } catch {
+      allowInkStaccatoFallback = true
+    }
+  }
+
   for (let page = 1; page <= pageCount; page += 1) {
     const pagePhase = phaseTracer.start(`page-${page}`)
     omrTrace(`pipeline:page-${page}:loop-start`, null, traceRunId)
@@ -604,6 +625,14 @@ async function runPdfOmrPipelineBody({
         vectorAugmentationDotPaths: Array.isArray(vectorCurves?.augmentationDotPaths)
           ? vectorCurves.augmentationDotPaths
           : [],
+        vectorBarlineComponents: {
+          verticalBars: Array.isArray(vectorCurves?.verticalBarPaths)
+            ? vectorCurves.verticalBarPaths
+            : [],
+          compactDots: Array.isArray(vectorCurves?.compactDotPaths)
+            ? vectorCurves.compactDotPaths
+            : [],
+        },
         stavesPerSystem,
         instrument,
         keySignature,
@@ -611,6 +640,7 @@ async function runPdfOmrPipelineBody({
         documentStaffGapReference,
         captureOmrV3Shadow: captureOmrV3Analysis,
         captureOmrV3RawSymbols: needOmrV3Independent,
+        allowInkStaccatoFallback,
       }
       pageResult = analyzePage
         ? await analyzePage(imageData, analysisContext)

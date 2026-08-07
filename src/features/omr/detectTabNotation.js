@@ -67,6 +67,25 @@ export function classifySystemStaves(system, { stringCount = 6 } = {}) {
 function resolveTabLineYs(stave, stringCount) {
   const detectedLineYs = Array.isArray(stave?.detectedLineYs) ? stave.detectedLineYs : null
   if (detectedLineYs?.length === stringCount) {
+    // Near-duplicate rows inside an exact six-line claim must be collapsed.
+    // Returning the raw six (old early-return) assigns two frets to one string
+    // and merges them into illegal multi-digit frets such as "88".
+    // Multiple near-dup pairs can collapse below stringCount−1 (e.g. 6→4);
+    // respace from the outer unique rows rather than keeping the raw claim.
+    const collapsed = collapseNearbyStaffLineYs(detectedLineYs)
+    if (collapsed?.length === stringCount) {
+      return collapsed
+    }
+    if (collapsed?.length >= 2 && collapsed.length < stringCount) {
+      const respaced = respaceTabLineYs(
+        collapsed[0],
+        collapsed[collapsed.length - 1],
+        stringCount,
+      )
+      if (respaced) {
+        return respaced
+      }
+    }
     return detectedLineYs
   }
   const collapsedDetectedLineYs = collapseNearbyStaffLineYs(detectedLineYs)
@@ -108,6 +127,16 @@ function collapseNearbyStaffLineYs(lineYs) {
 
 function average(values) {
   return values.reduce((sum, value) => sum + value, 0) / values.length
+}
+
+function respaceTabLineYs(top, bottom, stringCount) {
+  if (!Number.isFinite(top) || !Number.isFinite(bottom) || !(bottom > top) || stringCount < 2) {
+    return null
+  }
+  return Array.from(
+    { length: stringCount },
+    (_value, index) => top + ((bottom - top) * index) / (stringCount - 1),
+  )
 }
 
 /** True when any detected system contains a tablature staff. */
@@ -201,6 +230,141 @@ function textEvidenceForSystem(system, glyphs, imageData) {
 }
 
 /**
+ * When staff-line detection only captures the top of a TAB band, fret digits
+ * still occupy the full printed height. Keep the detected top (it aligns with
+ * string 1) and extend the bottom to the digit span, then rebuild six-line
+ * geometry from those outer bounds — do not extrapolate missing lines upward
+ * from an incomplete detection cluster.
+ */
+function expandSystemToDigitSpan(system, glyphs, imageData, { maxBelow = 0.055 } = {}) {
+  if (!glyphs?.length || !imageData || !system) {
+    return null
+  }
+  const top = system.y0 ?? 0
+  const digitYs = []
+  for (const glyph of glyphs) {
+    if (!DIGIT_RE.test(glyph.text ?? '') || !sourceTextLooksLikeTabDigits(glyph)) {
+      continue
+    }
+    const yNorm = glyph.y / imageData.height
+    // Digits belonging to this TAB sit at or below the detected top. Ignore
+    // chord/fret labels above the staff and the next system farther below.
+    if (yNorm < top - 0.002 || yNorm > top + maxBelow) {
+      continue
+    }
+    digitYs.push(yNorm)
+  }
+  if (digitYs.length < 4) {
+    return null
+  }
+  digitYs.sort((left, right) => left - right)
+  // Robust bottom: prefer the upper-quantile so a stray lyric/digit farther
+  // down cannot stretch the staff into the next system.
+  const qIndex = Math.min(digitYs.length - 1, Math.floor(digitYs.length * 0.9))
+  let digitBottom = digitYs[qIndex]
+  // Sparse bottom-string frets (e.g. power-chord roots on string 6) can sit in
+  // a tight band just below the 90th percentile. Absorb that orphan band when
+  // it is dense and within one staff-gap of the quantile bottom — otherwise
+  // those digits remain unowned after six-line respace.
+  const gapGuess = Math.max(0.005, (digitBottom - top) / 5)
+  const orphanBand = digitYs.filter(
+    (y) => y > digitBottom + 0.0005 && y <= digitBottom + gapGuess * 1.5,
+  )
+  // Three aligned roots are enough: a single incomplete power-chord measure
+  // may only print a handful of bottom-string frets on the page.
+  if (orphanBand.length >= 3) {
+    const orphanIndex = Math.min(
+      orphanBand.length - 1,
+      Math.floor(orphanBand.length * 0.9),
+    )
+    digitBottom = orphanBand[orphanIndex]
+  }
+  const y0 = top
+  const y1 = Math.max(system.y1 ?? digitBottom, digitBottom)
+  const height = y1 - y0
+  if (!(height >= 0.028) || height > 0.06) {
+    return null
+  }
+  return {
+    ...system,
+    y0,
+    y1,
+    center: (y0 + y1) / 2,
+  }
+}
+
+function recoverTruncatedTabFromDigits(system, glyphs, imageData, stringCount) {
+  const expanded = expandSystemToDigitSpan(system, glyphs, imageData)
+  if (!expanded) {
+    return null
+  }
+  const collapsed = collapseNearbyStaffLineYs(expanded.detectedLineYs)
+  let lineYs = null
+  if (collapsed?.length === stringCount) {
+    lineYs = collapsed
+  } else if (collapsed?.length === stringCount - 1 && collapsed.length >= 2) {
+    lineYs = respaceTabLineYs(collapsed[0], collapsed[collapsed.length - 1], stringCount)
+  } else {
+    lineYs = respaceTabLineYs(expanded.y0, expanded.y1, stringCount)
+  }
+  if (!lineYs?.length) {
+    return null
+  }
+  return {
+    kind: 'tab',
+    tabStave: { ...expanded, lineYs, detectedLineYs: collapsed ?? expanded.detectedLineYs },
+    source: 'fret-digit-glyphs',
+  }
+}
+
+/**
+ * Geometry TAB whose resolved lineYs stop above the printed fret digits.
+ * Expand the bottom from digit evidence and rebuild six-line spacing so
+ * extractTabDigitNotes can own every string in a chord column.
+ */
+function refineGeometryTabFromDigitSpan(
+  system,
+  geometryStave,
+  glyphs,
+  imageData,
+  stringCount,
+) {
+  if (!geometryStave?.lineYs?.length || !glyphs?.length || !imageData) {
+    return null
+  }
+  const geoBottom = geometryStave.lineYs[geometryStave.lineYs.length - 1]
+  const geoTop = geometryStave.lineYs[0]
+  // Seed expansion from the geometry top so a collapsed/respaced stave that
+  // still reports a short system.y1 can reach digits below the last line.
+  const seed = {
+    ...system,
+    y0: Math.min(system?.y0 ?? geoTop, geoTop),
+    y1: Math.max(system?.y1 ?? geoBottom, geoBottom),
+    detectedLineYs: geometryStave.detectedLineYs ?? system?.detectedLineYs,
+  }
+  const recovered = recoverTruncatedTabFromDigits(seed, glyphs, imageData, stringCount)
+  if (!recovered?.tabStave?.lineYs?.length) {
+    return null
+  }
+  const recoveredBottom = recovered.tabStave.lineYs[recovered.tabStave.lineYs.length - 1]
+  // Only replace geometry when digits require a meaningfully lower bottom.
+  // Intact geometry staves that already cover their digit band stay put.
+  if (!(recoveredBottom > geoBottom + 0.004)) {
+    return null
+  }
+  return {
+    kind: 'tab',
+    tabStave: {
+      ...geometryStave,
+      ...recovered.tabStave,
+      // Preserve the geometry-confirmed top string anchor.
+      lineYs: respaceTabLineYs(geoTop, recoveredBottom, stringCount) ?? recovered.tabStave.lineYs,
+    },
+    source: 'fret-digit-glyphs',
+  }
+}
+
+/**
  * Resolve guitar system roles using both staff geometry and vector glyph
  * evidence. Text evidence corrects two generic detector ambiguities:
  * ledger lines can make five-line notation look six-line, while fret-digit
@@ -217,9 +381,43 @@ export function resolveGuitarSystemRoles(
     const inferredTabLineYs = textEvidence.explicitTab
       ? inferTabLineYs(system, stringCount)
       : null
-    const inferredTabStave = inferredTabLineYs
+    let inferredTabStave = inferredTabLineYs
       ? { ...system, lineYs: inferredTabLineYs }
       : null
+    if (textEvidence.explicitTab) {
+      const recovered = recoverTruncatedTabFromDigits(
+        system,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+
+      if (recovered?.tabStave) {
+        const inferredTop = inferredTabLineYs?.[0]
+        const inferredBottom = inferredTabLineYs?.[inferredTabLineYs.length - 1]
+        const recoveredBottom =
+          recovered.tabStave.lineYs?.[recovered.tabStave.lineYs.length - 1]
+
+        const inferredGap =
+          inferredTabLineYs?.length > 1 &&
+          Number.isFinite(inferredTop) &&
+          Number.isFinite(inferredBottom)
+            ? (inferredBottom - inferredTop) / (inferredTabLineYs.length - 1)
+            : null
+
+        const materiallyExtendsInferredBottom =
+          !inferredTabLineYs?.length ||
+          (Number.isFinite(inferredGap) &&
+            inferredGap > 0 &&
+            Number.isFinite(recoveredBottom) &&
+            Number.isFinite(inferredBottom) &&
+            recoveredBottom > inferredBottom + inferredGap * 0.5)
+
+        if (materiallyExtendsInferredBottom) {
+          inferredTabStave = recovered.tabStave
+        }
+      }
+    }
 
     // Preserve already-trustworthy multi-stave geometry. Glyph padding is
     // deliberately wide enough to rescue broken TAB lines, so noteheads from
@@ -235,9 +433,6 @@ export function resolveGuitarSystemRoles(
     if (textEvidence.explicitTab && inferredTabStave) {
       return { kind: 'tab', tabStave: inferredTabStave, source: 'tab-clef-text' }
     }
-    if (textEvidence.noteheadCount >= 3) {
-      return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
-    }
     if (tabStaves.length > 0) {
       // Geometry-only 6-line bands need page text before we commit to TAB when
       // the caller actually searched for glyphs (empty array). Pure raster piano
@@ -252,7 +447,53 @@ export function resolveGuitarSystemRoles(
           source: 'staff-geometry-unconfirmed',
         }
       }
-      return { kind: 'tab', tabStave: tabStaves[0], source: 'staff-geometry' }
+      // Ledger lines can make five-line notation look six-line. Strong notehead
+      // evidence with scarce fret digits keeps those bands as notation.
+      // Continuation TAB systems omit the TAB clef and often admit a few
+      // leaked noteheads in the evidence pad — fret digits must win so pairing
+      // (and the notation+TAB repeat structure band) stays intact.
+      const ledgerInflatedNotation =
+        textEvidence.noteheadCount >= 3 &&
+        textEvidence.digitCount < Math.max(3, Math.ceil(textEvidence.noteheadCount * 0.5))
+      if (ledgerInflatedNotation) {
+        return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
+      }
+      // Near-duplicate collapse + respace can leave a geometry TAB shorter than
+      // the printed fret-digit band (digits sit below the last synthetic line).
+      // Reuse the truncated-continuation digit-span rebuild so string ownership
+      // covers every engraved fret column — same helper, geometry entry path.
+      const geometryStave = tabStaves[0]
+      const digitRefined = refineGeometryTabFromDigitSpan(
+        system,
+        geometryStave,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+      if (digitRefined) {
+        return digitRefined
+      }
+      return { kind: 'tab', tabStave: geometryStave, source: 'staff-geometry' }
+    }
+    // Truncated continuation TAB: staff detection kept only the top rows while
+    // fret digits occupy the full printed band. Prefer digits over leaked
+    // noteheads from the pad so the band pairs with the notation staff above.
+    if (
+      textEvidence.digitCount >= 6 &&
+      textEvidence.digitCount > textEvidence.noteheadCount
+    ) {
+      const recovered = recoverTruncatedTabFromDigits(
+        system,
+        glyphs,
+        imageData,
+        stringCount,
+      )
+      if (recovered) {
+        return recovered
+      }
+    }
+    if (textEvidence.noteheadCount >= 3) {
+      return { kind: 'notation', tabStave: null, source: 'notehead-glyphs' }
     }
     return { kind: 'notation', tabStave: null, source: 'staff-geometry' }
   })

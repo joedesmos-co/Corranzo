@@ -2,6 +2,12 @@ import { isInk } from './omrInk.js'
 import { OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
 import { detectUnsafeRepeatExpansion } from '../musicxml/parseMeasureRepeats.js'
 import { detectVoltaFromRaster } from './detectRasterVoltaEnding.js'
+import {
+  detectVectorRepeatAtEdge,
+  extractRepeatDotGlyphsFromPageText,
+  fuseVectorRepeatMarkings,
+  staffGapFromLines,
+} from './detectVectorRepeatBarlines.js'
 
 function inkAt(imageData, x, y, threshold) {
   const { data, width, height } = imageData
@@ -548,8 +554,17 @@ export function sanitizeOmrRepeatMarkings(measureRecords) {
   }
 }
 
+function isProtectedVectorRepeat(marking) {
+  return (
+    marking?.source === 'vector-path' &&
+    (marking.confidence ?? 0) >= OMR_MUSICAL_CONFIDENCE.REPEAT
+  )
+}
+
 /**
  * Combine left/right repeat detections and optional volta into measure fields.
+ * Vector path/glyph evidence is preferred when available; raster remains the
+ * fallback (and the only path for scan fixtures).
  */
 export function detectMeasureStructureMarkings(
   imageData,
@@ -561,27 +576,11 @@ export function detectMeasureStructureMarkings(
     structureBand = null,
     voltaBand = null,
     staffLineYs = null,
+    vectorBarlineComponents = null,
+    enableVectorRepeatBarlines = true,
   } = {},
 ) {
   const structureOptions = { structureBand, voltaBand, staffLineYs }
-  const repeatRight = detectRepeatBarline(
-    imageData,
-    measureBox,
-    inkThreshold,
-    'right',
-    structureOptions,
-  )
-  const repeatLeft = isFirstInSystem
-    ? detectRepeatBarline(imageData, measureBox, inkThreshold, 'left', structureOptions)
-    : null
-  const repeatMarking =
-    repeatRight || repeatLeft
-      ? {
-          ...(repeatLeft ?? {}),
-          ...(repeatRight ?? {}),
-          confidence: Math.max(repeatLeft?.confidence ?? 0, repeatRight?.confidence ?? 0),
-        }
-      : null
   const endingMarking = detectVoltaEnding(
     imageData,
     measureBox,
@@ -589,6 +588,84 @@ export function detectMeasureStructureMarkings(
     pageText,
     structureOptions,
   )
+  const voltaContext = Boolean(endingMarking?.endingStartNumbers?.length)
+
+  let repeatMarking = null
+  const enableVector = enableVectorRepeatBarlines !== false
+  const baseComponents = enableVector ? vectorBarlineComponents : null
+  const staffGap = staffGapFromLines(
+    (staffLineYs ?? []).map((value) =>
+      value <= 1 && imageData?.height ? value * imageData.height : value,
+    ),
+    Math.max(8, (imageData?.width ?? 1000) * 0.014),
+  )
+  const glyphDots = enableVector
+    ? extractRepeatDotGlyphsFromPageText(pageText, imageData?.width, imageData?.height, {
+        staffGap,
+      })
+    : []
+  const components =
+    enableVector && (baseComponents || glyphDots.length)
+      ? {
+          verticalBars: baseComponents?.verticalBars ?? [],
+          compactDots: [...(baseComponents?.compactDots ?? []), ...glyphDots],
+        }
+      : null
+  if (
+    components &&
+    (components.verticalBars?.length || components.compactDots?.length) &&
+    imageData?.width
+  ) {
+    const vectorRight = detectVectorRepeatAtEdge({
+      verticalBars: components.verticalBars,
+      compactDots: components.compactDots,
+      measureBox,
+      imageWidth: imageData.width,
+      imageHeight: imageData.height,
+      edge: 'right',
+      staffLineYs,
+      structureBand,
+      voltaContext,
+      multiStaffBars: components.verticalBars,
+    })
+    const vectorLeft = detectVectorRepeatAtEdge({
+      verticalBars: components.verticalBars,
+      compactDots: components.compactDots,
+      measureBox,
+      imageWidth: imageData.width,
+      imageHeight: imageData.height,
+      edge: 'left',
+      staffLineYs,
+      structureBand,
+      voltaContext,
+      multiStaffBars: components.verticalBars,
+    })
+    // Left-edge hits are only forward (or forward half of back-to-back).
+    const leftHit = vectorLeft?.forwardRepeat ? vectorLeft : null
+    repeatMarking = fuseVectorRepeatMarkings([leftHit, vectorRight].filter(Boolean))
+  }
+
+  if (!repeatMarking) {
+    const repeatRight = detectRepeatBarline(
+      imageData,
+      measureBox,
+      inkThreshold,
+      'right',
+      structureOptions,
+    )
+    const repeatLeft = isFirstInSystem
+      ? detectRepeatBarline(imageData, measureBox, inkThreshold, 'left', structureOptions)
+      : null
+    repeatMarking =
+      repeatRight || repeatLeft
+        ? {
+            ...(repeatLeft ?? {}),
+            ...(repeatRight ?? {}),
+            confidence: Math.max(repeatLeft?.confidence ?? 0, repeatRight?.confidence ?? 0),
+          }
+        : null
+  }
+
   return { repeatMarking, endingMarking }
 }
 
@@ -621,6 +698,12 @@ export function finalizeEndingStops(measureRecords) {
 /**
  * Suppress repeat marks that match system-break barlines instead of repeat sections.
  * TAB layouts often engrave double bars at system breaks that resemble repeats.
+ * High-confidence vector-native repeats keep system-boundary marks (Korobeiniki /
+ * Mario section repeats are source-faithful at system ends/starts).
+ *
+ * Also completes back-to-back :||: boundaries: when measure N owns a vector
+ * thin-thick-thin backward with right-side dots, measure N+1 receives the
+ * matching forward on its left barline.
  */
 export function finalizeRepeatMarkings(measureRecords) {
   if (!Array.isArray(measureRecords) || !measureRecords.length) {
@@ -633,6 +716,9 @@ export function finalizeRepeatMarkings(measureRecords) {
     if (!repeat) {
       continue
     }
+    if (isProtectedVectorRepeat(repeat)) {
+      continue
+    }
 
     const prev = measureRecords[index - 1]
     const isFirstInSystem = !prev || prev.systemIndex !== measure.systemIndex
@@ -642,7 +728,11 @@ export function finalizeRepeatMarkings(measureRecords) {
 
     if (repeat.forwardRepeat && measure.systemIndex > 0 && isFirstInSystem) {
       if (repeat.backwardRepeat) {
-        measure.repeatMarking = { backwardRepeat: true, confidence: repeat.confidence }
+        measure.repeatMarking = {
+          backwardRepeat: true,
+          confidence: repeat.confidence,
+          ...(repeat.source ? { source: repeat.source } : {}),
+        }
       } else {
         measure.repeatMarking = null
       }
@@ -651,11 +741,39 @@ export function finalizeRepeatMarkings(measureRecords) {
 
     if (repeat.backwardRepeat && systemBreak && !hasEnding) {
       if (repeat.forwardRepeat) {
-        measure.repeatMarking = { forwardRepeat: true, confidence: repeat.confidence }
+        measure.repeatMarking = {
+          forwardRepeat: true,
+          confidence: repeat.confidence,
+          ...(repeat.source ? { source: repeat.source } : {}),
+        }
       } else {
         measure.repeatMarking = null
       }
     }
+  }
+
+  // Propagate forward half of vector back-to-back repeats onto the next measure.
+  for (let index = 0; index < measureRecords.length - 1; index += 1) {
+    const measure = measureRecords[index]
+    const next = measureRecords[index + 1]
+    const repeat = measure?.repeatMarking
+    if (!isProtectedVectorRepeat(repeat) || !repeat?.backwardRepeat || !repeat?.backToBack) {
+      continue
+    }
+    if (next.repeatMarking?.forwardRepeat) {
+      continue
+    }
+    const forwardMark = {
+      forwardRepeat: true,
+      confidence: repeat.confidence,
+      source: 'vector-path',
+      structure: repeat.structure,
+      backToBack: true,
+      evidenceFamilies: [
+        ...new Set([...(repeat.evidenceFamilies || []), 'back-to-back-propagate']),
+      ],
+    }
+    next.repeatMarking = fuseVectorRepeatMarkings([next.repeatMarking, forwardMark].filter(Boolean))
   }
 
   return measureRecords

@@ -545,6 +545,94 @@ function mergeStaveGroup(group) {
   }
 }
 
+function isSolidFiveLineNotationStave(stave) {
+  return Array.isArray(stave?.lineYs) && stave.lineYs.length === 5
+}
+
+function staveHeight(stave) {
+  return Math.max(0, (stave?.y1 ?? 0) - (stave?.y0 ?? 0))
+}
+
+/**
+ * Merge flat staff-line fragments that belong to one physical stave.
+ *
+ * Dense fret knockouts can hide middle TAB rows so one printed six-line TAB
+ * arrives as a short upper fragment plus a near-duplicate bottom ghost. Those
+ * must become one band with full vertical bounds before role assignment —
+ * otherwise continuation TAB (no clef) is misclassified as notation.
+ */
+function mergeFlatStaffFragments(left, right) {
+  const detectedLineYs = [...(left.detectedLineYs ?? []), ...(right.detectedLineYs ?? [])]
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b)
+  const collapsed = []
+  for (const y of detectedLineYs) {
+    if (!collapsed.length || y - collapsed[collapsed.length - 1] > 0.003) {
+      collapsed.push(y)
+    } else {
+      collapsed[collapsed.length - 1] = (collapsed[collapsed.length - 1] + y) / 2
+    }
+  }
+  const y0 = left.y0
+  const y1 = right.y1
+  return {
+    y0,
+    y1,
+    center: (y0 + y1) / 2,
+    lineCount: collapsed.length,
+    detectedLineYs: collapsed,
+    // Merged fragments are incomplete TAB / broken-line bands, not a fresh
+    // five-line notation hypothesis — leave lineYs unset.
+    lineYs: null,
+  }
+}
+
+function shouldMergeStaffFragments(prev, next) {
+  if (isSolidFiveLineNotationStave(prev) || isSolidFiveLineNotationStave(next)) {
+    return false
+  }
+  const gap = (next.y0 ?? 0) - (prev.y1 ?? 0)
+  if (!(gap >= 0 && gap <= 0.045)) {
+    return false
+  }
+  const prevH = staveHeight(prev)
+  const nextH = staveHeight(next)
+  const combinedH = (next.y1 ?? 0) - (prev.y0 ?? 0)
+  if (combinedH > 0.055 || combinedH < 0.02) {
+    return false
+  }
+  // Ghost / near-duplicate bottom (or top) attached to an incomplete band.
+  if (nextH <= 0.008 && prevH < 0.04) {
+    return true
+  }
+  if (prevH <= 0.008 && nextH < 0.04) {
+    return true
+  }
+  // Two incomplete fragments that together restore a TAB-height staff.
+  return prevH < 0.035 && nextH < 0.035
+}
+
+/**
+ * Coalesce fragmented non-notation staves before system grouping.
+ * Safe for piano pages: solid five-line notation staves never merge.
+ */
+export function coalesceFragmentedStaves(staves) {
+  if (!Array.isArray(staves) || staves.length < 2) {
+    return staves ?? []
+  }
+  const out = []
+  for (const stave of staves) {
+    const prev = out[out.length - 1]
+    if (prev && shouldMergeStaffFragments(prev, stave)) {
+      out[out.length - 1] = mergeFlatStaffFragments(prev, stave)
+    } else {
+      out.push(stave)
+    }
+  }
+  return out
+}
+
 /**
  * Count barlines in a system band: vertical dark runs spanning most of the
  * system height. Stems are short (one staff), barlines span the full grand
@@ -786,7 +874,8 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
     ...options,
     darkThreshold: inkThreshold,
   })
-  const staves = selectViableStavesForSystemGrouping(rawStaves, stavesPerSystem)
+  const viableStaves = selectViableStavesForSystemGrouping(rawStaves, stavesPerSystem)
+  const staves = coalesceFragmentedStaves(viableStaves)
   const trace = detectStaffLineStaves.lastTrace ?? null
   const grouped = groupStavesIntoSystems(staves, stavesPerSystem)
 
