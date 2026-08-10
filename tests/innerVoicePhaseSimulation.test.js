@@ -169,4 +169,36 @@ describe('inner voice phase simulation', () => {
     ]
     expect(detectInnerVoicePhaseWindow(extractOnsetColumns(events))).toBeNull()
   })
+
+  it('leaves the complete document grid unchanged around an explicit voice partition', () => {
+    const measures = [
+      {
+        measureNumber: 33,
+        events: [
+          noteEvent(9, [note(31, 'bass')]),
+          noteEvent(10, [note(43, 'bass'), note(31, 'bass')], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m33:10',
+            vectorVoiceLane: 'sustain',
+          }),
+          noteEvent(10, [note(81), note(77), note(72)], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m33:10',
+            vectorVoiceLane: 'moving',
+          }),
+          noteEvent(12, [note(31, 'bass')]),
+          noteEvent(13, [note(43, 'bass'), note(31, 'bass'), note(83), note(79), note(74)]),
+        ],
+      },
+    ]
+    const result = applyInnerVoicePhaseCorrection(measures)
+    expect(result.summary).toMatchObject({
+      candidateMeasures: 1,
+      appliedMeasures: 0,
+      rejectedReasons: { 'explicit-vector-voice-partition': 1 },
+    })
+    expect(result.measures[0].events.map((event) => event.startDivision)).toEqual([
+      9, 10, 10, 12, 13,
+    ])
+  })
 })

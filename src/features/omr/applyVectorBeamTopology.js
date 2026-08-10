@@ -161,15 +161,28 @@ export function applyVectorPrimaryBeamTopology(
         member.confidence >= MIN_DURATION_OVERRIDE_CONFIDENCE
           ? correctedPrimaryBeamDuration(member.event, next)
           : null
+      const durationAdjusted =
+        duration != null &&
+        duration.durationDivisions !== member.event.durationDivisions
       replacements.set(member.event, {
         ...(duration ?? {}),
         beams: Math.max(PRIMARY_BEAM_LEVEL, Number(member.event.beams ?? 0)),
         beamTopologyGroupId: groupId,
         beamTopologyConfidence: member.confidence,
         beamTopologyApplied: true,
-        beamTopologyDurationAdjusted:
-          duration != null &&
-          duration.durationDivisions !== member.event.durationDivisions,
+        beamTopologyDurationAdjusted: durationAdjusted,
+        // A later high-confidence connected beam is stronger direct evidence
+        // for the moving lane than its provisional un-beamed stem duration.
+        // Carry that value into the same reconciliation field so only the
+        // source onset (and the still-authoritative open sustain) is restored.
+        ...(durationAdjusted &&
+        member.event.vectorVoiceSeparated === true &&
+        member.event.vectorVoiceLane === 'moving'
+          ? {
+              vectorVoiceWrittenDurationDivisions: duration.durationDivisions,
+              vectorVoiceBeamTopologyWrittenDurationAdjusted: true,
+            }
+          : {}),
       })
     }
   }

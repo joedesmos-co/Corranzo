@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   buildVectorEvents,
   applyTerminalSameClefChordQuarterDurations,
+  coherentOpenGlyphDurationDivisions,
   durationMeta,
   dottedWrittenDurationDivisions,
   extendCombinedGrandStaffOpening,
@@ -18,6 +19,7 @@ import {
   refineEventDurationsFromBeamEvidence,
   refineOpeningBassSubdivisionDurations,
   refineUnsupportedUpperChordOverhangs,
+  reconcileCoherentOpenGlyphDurations,
   sparseHarmonicHalfSpan,
   sameClefBeatQuarterFloor,
   terminalHarmonicHalfSpan,
@@ -49,6 +51,41 @@ function durations(events) {
   return events.map((event) => event.durationDivisions)
 }
 
+function denseCountervoiceNotes(openGlyph, { chord = false } = {}) {
+  const openDuration = openGlyph === 'whole' ? 16 : 8
+  const openNotes = [40, ...(chord ? [43] : [])].map((midi, index) => ({
+    cx: 10 + index,
+    midi,
+    naturalMidi: midi,
+    clef: 'bass',
+    positionInMeasure: 0,
+    noteheadGlyph: openGlyph,
+    hollowGlyph: true,
+    hollow: true,
+    durationType: openGlyph,
+    durationDivisions: openDuration,
+    stem: openGlyph === 'whole' ? null : { x: 10, tipY: 1 },
+    beams: 0,
+    source: 'vector-glyph',
+  }))
+  const movingTreble = Array.from({ length: 8 }, (_, index) => ({
+    cx: 10 + index * 20,
+    midi: 72 + index,
+    naturalMidi: 72 + index,
+    clef: 'treble',
+    positionInMeasure: index / 8,
+    noteheadGlyph: 'black',
+    hollowGlyph: false,
+    hollow: false,
+    durationType: 'eighth',
+    durationDivisions: 2,
+    stem: { x: 10 + index * 20, tipY: 1 },
+    beams: 1,
+    source: 'vector-glyph',
+  }))
+  return [...openNotes, ...movingTreble]
+}
+
 describe('durationMeta snaps a division span to the nearest note value', () => {
   it('maps exact standard spans', () => {
     expect(durationMeta(12, { allowDotted: true })).toMatchObject({
@@ -69,7 +106,10 @@ describe('glyphAuthoritativeDurationDivisions', () => {
       glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'half' }]),
     ).toBe(8)
     expect(
-      glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'half' }], { allowDotted: true }),
+      glyphAuthoritativeDurationDivisions(
+        [{ noteheadGlyph: 'half', dotted: true }],
+        { allowDotted: true },
+      ),
     ).toBe(12)
     expect(
       glyphAuthoritativeDurationDivisions([{ noteheadGlyph: 'black' }]),
@@ -82,6 +122,36 @@ describe('glyphAuthoritativeDurationDivisions', () => {
         { noteheadGlyph: 'black', dotted: true, durationDivisions: 6 },
       ]),
     ).toBeNull()
+  })
+
+  it('abstains when an event mixes open, filled, missing, or different open glyphs', () => {
+    expect(
+      glyphAuthoritativeDurationDivisions([
+        { noteheadGlyph: 'half' },
+        { noteheadGlyph: 'black' },
+      ]),
+    ).toBeNull()
+    expect(
+      glyphAuthoritativeDurationDivisions([
+        { noteheadGlyph: 'half' },
+        {},
+      ]),
+    ).toBeNull()
+    expect(
+      glyphAuthoritativeDurationDivisions([
+        { noteheadGlyph: 'whole' },
+        { noteheadGlyph: 'half' },
+      ]),
+    ).toBeNull()
+  })
+
+  it('does not turn an inferred dotted event flag into a dotted open glyph', () => {
+    expect(
+      coherentOpenGlyphDurationDivisions(
+        [{ noteheadGlyph: 'half', dotted: false }],
+        { allowDotted: true },
+      ),
+    ).toBe(8)
   })
 
   it('prefers glyph duration over a large sparse gap that would invent a dotted half', () => {
@@ -125,6 +195,113 @@ describe('glyphAuthoritativeDurationDivisions', () => {
     const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 })
     expect(events[0].durationType).toBe('whole')
     expect(events[0].durationDivisions).toBe(16)
+  })
+
+  it('keeps an explicit half while a globally dense countervoice stays beamed eighths', () => {
+    const events = buildVectorEvents(
+      denseCountervoiceNotes('half'),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    const bass = events.find((event) => event.notes?.[0]?.clef === 'bass')
+    const treble = events.filter((event) => event.notes?.[0]?.clef === 'treble')
+
+    expect(bass).toMatchObject({
+      startDivision: 0,
+      durationDivisions: 8,
+      durationType: 'half',
+    })
+    expect(treble.map((event) => event.startDivision)).toEqual([0, 2, 4, 6, 8, 10, 12, 14])
+    expect(treble.every((event) => event.durationDivisions === 2)).toBe(true)
+    expect(treble.some((event) => event.startDivision > 0 && event.startDivision < 8)).toBe(true)
+    expect(events.every((event) => event.startDivision + event.durationDivisions <= 16)).toBe(true)
+  })
+
+  it('keeps an explicit whole chord while the other staff moves and serializes both voices', () => {
+    const events = buildVectorEvents(
+      denseCountervoiceNotes('whole', { chord: true }),
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    const bass = events.find((event) => event.notes?.[0]?.clef === 'bass')
+    const treble = events.filter((event) => event.notes?.[0]?.clef === 'treble')
+
+    expect(bass).toMatchObject({
+      startDivision: 0,
+      durationDivisions: 16,
+      durationType: 'whole',
+    })
+    expect(bass?.notes).toHaveLength(2)
+    expect(treble.every((event) => event.durationDivisions === 2)).toBe(true)
+    expect(events.every((event) => event.startDivision + event.durationDivisions <= 16)).toBe(true)
+
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, uncertain: false, events }],
+      includeDisclaimer: false,
+      instrument: { id: 'piano', notation: { grandStaff: true } },
+    })
+    const parsed = parseMusicXml(xml, 'dense-countervoice.omr.musicxml')
+    expect(parsed.notes.find((note) => note.midi === 40)?.durationQuarters).toBe(4)
+    expect(parsed.notes.find((note) => note.midi === 43)?.durationQuarters).toBe(4)
+    expect(parsed.notes.find((note) => note.midi === 72)?.durationQuarters).toBe(0.5)
+  })
+
+  it('caps a coherent open glyph at the barline and exempts recovered tuplets', () => {
+    const lateHalf = {
+      type: 'note',
+      startDivision: 12,
+      durationDivisions: 2,
+      durationType: 'eighth',
+      notes: [{ noteheadGlyph: 'half', clef: 'treble', midi: 60 }],
+    }
+    const capped = reconcileCoherentOpenGlyphDurations([lateHalf], 16)
+    expect(capped[0]).toMatchObject({
+      startDivision: 12,
+      durationDivisions: 4,
+      durationType: 'quarter',
+    })
+    expect(capped[0].startDivision + capped[0].durationDivisions).toBe(16)
+
+    const postProcessedWhole = {
+      ...lateHalf,
+      startDivision: 1,
+      durationDivisions: 16,
+      durationType: 'whole',
+      notes: [{ noteheadGlyph: 'whole', clef: 'treble', midi: 60 }],
+    }
+    const finalWhole = reconcileCoherentOpenGlyphDurations(
+      [postProcessedWhole],
+      16,
+    )[0]
+    expect(finalWhole.durationDivisions).toBe(15)
+    expect(finalWhole.startDivision + finalWhole.durationDivisions).toBe(16)
+
+    const recoveredTuplet = {
+      ...lateHalf,
+      startDivision: 0,
+      durationDivisions: 2,
+      timeModification: { actualNotes: 3, normalNotes: 2 },
+      tupletRecovered: true,
+    }
+    const tuplets = [recoveredTuplet]
+    expect(reconcileCoherentOpenGlyphDurations(tuplets, 16)).toBe(tuplets)
+    expect(tuplets[0].durationDivisions).toBe(2)
+  })
+
+  it('does not apply event-wide authority to a same-clef mixed-duration stack', () => {
+    const mixed = [{
+      type: 'note',
+      startDivision: 0,
+      durationDivisions: 2,
+      durationType: 'eighth',
+      notes: [
+        { noteheadGlyph: 'half', clef: 'treble', midi: 60 },
+        { noteheadGlyph: 'black', clef: 'treble', midi: 64 },
+      ],
+    }]
+    expect(reconcileCoherentOpenGlyphDurations(mixed, 16)).toBe(mixed)
+    expect(mixed[0].notes).toHaveLength(2)
+    expect(mixed[0].durationDivisions).toBe(2)
   })
 })
 
@@ -1465,6 +1642,28 @@ describe('refineEventDurationsFromBeamEvidence', () => {
     expect(events[0].durationDivisions).toBe(4)
     expect(events[0].beamDurationAdjusted).toBeUndefined()
   })
+
+  it('ignores nearby beam ink on an explicit open head without weakening real beams', () => {
+    const events = refineEventDurationsFromBeamEvidence(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 8,
+          notes: [{ clef: 'bass', midi: 48, noteheadGlyph: 'half', beams: 1 }],
+        },
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 8,
+          notes: [{ clef: 'treble', midi: 72, noteheadGlyph: 'black', beams: 1 }],
+        },
+      ],
+      16,
+    )
+    expect(events.find((event) => event.notes?.[0]?.clef === 'bass')?.durationDivisions).toBe(8)
+    expect(events.find((event) => event.notes?.[0]?.clef === 'treble')?.durationDivisions).toBe(2)
+  })
 })
 
 describe('resnapFlooredBeamOnsets', () => {
@@ -1677,6 +1876,40 @@ describe('extendCombinedGrandStaffOpening', () => {
     expect(events[1].durationDivisions).toBe(4)
     expect(events[1].durationType).toBe('quarter')
   })
+
+  it('does not apply a filled-head cap to a mixed open/filled treble stack', () => {
+    const events = extendCombinedGrandStaffOpening(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [{ clef: 'bass', midi: 40 }],
+        },
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          durationType: 'quarter',
+          notes: [
+            { clef: 'treble', midi: 64, noteheadGlyph: 'half' },
+            {
+              clef: 'treble',
+              midi: 67,
+              noteheadGlyph: 'black',
+              beams: 1,
+              durationDivisions: 2,
+            },
+          ],
+        },
+      ],
+      16,
+    )
+
+    expect(events[1].notes).toHaveLength(2)
+    expect(events[1].durationDivisions).toBe(12)
+  })
 })
 
 describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
@@ -1794,6 +2027,37 @@ describe('buildOmrMusicXml overlapping grand-staff rhythm', () => {
 
 
 describe('dotted subdivision recovery on dense-like measures', () => {
+  it('does not push a moving same-staff voice past a dotted open-head sustain', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 12,
+        durationType: 'half',
+        dotted: true,
+        notes: [
+          {
+            midi: 60,
+            clef: 'treble',
+            noteheadGlyph: 'half',
+            dotted: true,
+            durationDivisions: 12,
+          },
+        ],
+      },
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        notes: [{ midi: 67, clef: 'treble', noteheadGlyph: 'black' }],
+      },
+    ]
+
+    expect(resolveWrittenDurationOverlaps(events, 16)).toBe(events)
+    expect(events.map((event) => event.startDivision)).toEqual([0, 4])
+  })
+
   it('refines a dotted quarter to dotted eighth when the next attack is close', () => {
     const events = [
       {

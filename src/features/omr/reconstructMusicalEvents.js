@@ -106,6 +106,12 @@ function splitChordToneCandidate(anchor, follower) {
   if (anchor?.type !== 'note' || follower?.type !== 'note') {
     return false
   }
+  // These events were deliberately separated from one source onset column by
+  // incompatible written values and disconnected stem components. A later
+  // one-division resnap must not reinterpret either lane as an orphan chord tone.
+  if (anchor.vectorVoiceSeparated || follower.vectorVoiceSeparated) {
+    return false
+  }
   // Dense chords often arrive as 2+1 stacks after position snap; requiring 3+
   // left the common two-note + orphan tone case sequentialized.
   if ((anchor.notes?.length ?? 0) < 2 || (follower.notes?.length ?? 0) !== 1) {
@@ -211,6 +217,9 @@ function hasDuplicateAtStart(events, startDivision, note) {
 
 function sameStaffInnerVoiceSplitCandidate(events, event, totalDivisions) {
   if (event?.type !== 'note') {
+    return null
+  }
+  if (event.vectorVoiceSeparated) {
     return null
   }
   const start = event.startDivision ?? 0

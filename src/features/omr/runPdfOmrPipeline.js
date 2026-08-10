@@ -49,7 +49,11 @@ import {
   applyTerminalEarlyColumnCorrection,
   DEFAULT_MIN_STACK_NOTES as PHANTOM_COLUMN_MIN_STACK_NOTES,
 } from './phantomColumnSimulation.js'
-import { applyTerminalSameClefChordQuarterDurations } from './processVectorOmrPage.js'
+import {
+  applyTerminalSameClefChordQuarterDurations,
+  reconcileCoherentOpenGlyphDurations,
+  reconcileSeparatedWrittenVoiceEvents,
+} from './processVectorOmrPage.js'
 import {
   NOTATION_TAB_PAIRING_LOW_CONFIDENCE_MESSAGE,
   TAB_APPROXIMATE_RHYTHM_WARNING,
@@ -1177,6 +1181,22 @@ async function runPdfOmrPipelineBody({
       promotedMeasureCount: promotion.summary.promotedMeasureCount,
       promotedDecisions: promotion.summary.promotedDecisions,
     }, traceRunId)
+  }
+
+  // Document-level onset corrections run after per-measure vector rhythm. If
+  // one moves an explicit whole/half later, reconcile once more so the direct
+  // written value survives when it fits and is safely capped at the barline
+  // when it does not. Recovered tuplets remain exempt inside the helper.
+  for (let index = 0; index < measureRhythms.length; index += 1) {
+    const measure = measureRhythms[index]
+    const events = measure.events ?? []
+    const reconciledEvents = reconcileCoherentOpenGlyphDurations(
+      reconcileSeparatedWrittenVoiceEvents(events, measureDivisions),
+      measureDivisions,
+    )
+    if (reconciledEvents !== events) {
+      measureRhythms[index] = { ...measure, events: reconciledEvents }
+    }
   }
 
   phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })

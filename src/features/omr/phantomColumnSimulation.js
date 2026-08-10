@@ -55,6 +55,10 @@ function noteCountInMeasures(measures = []) {
   )
 }
 
+function hasExplicitVectorVoicePartition(events = []) {
+  return events.some((event) => event?.vectorVoiceSeparated === true)
+}
+
 function isPhantomColumn(column) {
   return column.noteCount === 1 && (column.startDivision ?? 0) % OMR_DIVISIONS_PER_QUARTER === PHANTOM_MOD
 }
@@ -390,6 +394,15 @@ export function applyPhantomColumnCorrection(
       continue
     }
     summary.candidateMeasures += 1
+    // Stack/terminal corrections remap several related columns. Reapplying the
+    // source onset to only the separated lanes would partially undo that map
+    // and create a collision with its shifted neighbors, so abstain atomically.
+    if (hasExplicitVectorVoicePartition(workingMeasure.events)) {
+      const reason = 'explicit-vector-voice-partition'
+      summary.rejectedReasons[reason] = (summary.rejectedReasons[reason] ?? 0) + 1
+      correctedMeasures.push(workingMeasure)
+      continue
+    }
     const maxShiftedStart = correction.stackShifts?.length
       ? Math.max(...correction.stackShifts.map(({ toDivision }) => toDivision))
       : -1

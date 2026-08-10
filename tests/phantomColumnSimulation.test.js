@@ -225,4 +225,68 @@ describe('phantom column simulation', () => {
       event.phantomColumnReasons.includes('terminal-early-forward-realign'),
     )).toBe(true)
   })
+
+  it('does not partially remap linked stacks containing a source voice partition', () => {
+    const measures = [
+      {
+        measureNumber: 25,
+        events: [
+          noteEvent(3, [note(43, 'bass')]),
+          noteEvent(5, [note(43, 'bass'), note(48)], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m25:5',
+            vectorVoiceLane: 'sustain',
+          }),
+          noteEvent(5, [note(55), note(60), note(64), note(67)], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m25:5',
+            vectorVoiceLane: 'moving',
+          }),
+          noteEvent(7, [note(43, 'bass')]),
+          noteEvent(9, [note(43, 'bass'), note(48), note(55), note(60), note(64), note(67)]),
+        ],
+      },
+    ]
+    const result = applyPhantomColumnCorrection(measures)
+    expect(result.summary).toMatchObject({
+      candidateMeasures: 1,
+      appliedMeasures: 0,
+      rejectedReasons: { 'explicit-vector-voice-partition': 1 },
+    })
+    expect(result.measures[0].events.map((event) => event.startDivision)).toEqual([
+      3, 5, 5, 7, 9,
+    ])
+  })
+
+  it('does not partially remap a terminal pattern containing a source voice partition', () => {
+    const measures = [
+      {
+        measureNumber: 94,
+        events: [
+          noteEvent(9, [note(41, 'bass')]),
+          noteEvent(10, [note(75)], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m94:10',
+            vectorVoiceLane: 'sustain',
+          }),
+          noteEvent(10, [note(68)], {
+            vectorVoiceSeparated: true,
+            vectorVoiceColumnId: 'p1:m94:10',
+            vectorVoiceLane: 'moving',
+          }),
+          noteEvent(12, [note(53, 'bass'), note(48, 'bass')]),
+          noteEvent(13, [note(48, 'bass'), note(36, 'bass'), note(77), note(68)]),
+        ],
+      },
+    ]
+    const result = applyTerminalEarlyColumnCorrection(measures)
+    expect(result.summary).toMatchObject({
+      candidateMeasures: 1,
+      appliedMeasures: 0,
+      rejectedReasons: { 'explicit-vector-voice-partition': 1 },
+    })
+    expect(result.measures[0].events.map((event) => event.startDivision)).toEqual([
+      9, 10, 10, 12, 13,
+    ])
+  })
 })

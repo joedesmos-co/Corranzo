@@ -48,6 +48,10 @@ function hasBeamEvidence(event) {
   )
 }
 
+function hasExplicitVectorVoicePartition(events = []) {
+  return events.some((event) => event?.vectorVoiceSeparated === true)
+}
+
 export function extractOnsetColumns(events = []) {
   const byStart = new Map()
   for (const event of events) {
@@ -267,6 +271,15 @@ export function applyInnerVoicePhaseCorrection(
       continue
     }
     summary.candidateMeasures += 1
+    // This correction moves a whole solo/stack pattern together. Restoring only
+    // the explicit partition afterward would leave neighboring columns shifted
+    // onto its source onset, so preserve the complete measure grid instead.
+    if (hasExplicitVectorVoicePartition(workingMeasure.events)) {
+      const reason = 'explicit-vector-voice-partition'
+      summary.rejectedReasons[reason] = (summary.rejectedReasons[reason] ?? 0) + 1
+      correctedMeasures.push(workingMeasure)
+      continue
+    }
     const guard = runPassesGuards(window.run, totalDivisions, minStackNotes)
     if (!guard.ok) {
       summary.rejectedReasons[guard.reason] = (summary.rejectedReasons[guard.reason] ?? 0) + 1

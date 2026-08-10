@@ -22,6 +22,7 @@ export const VECTOR_REST_SKIP_REASONS = {
   GAP_TOO_SMALL: 'gap-too-small',
   DUPLICATE_REST: 'duplicate-rest',
   UNSUPPORTED_WHOLE_REST: 'unsupported-whole-rest',
+  VECTOR_VOICE_PARTITION_COLLISION: 'vector-voice-partition-collision',
 }
 
 const NOTEHEAD_EXCLUSION_RADIUS = 10
@@ -94,6 +95,10 @@ function staffNoteEvents(events, clef) {
 
 function staffRestEvents(events, clef) {
   return events.filter((event) => event.type === 'rest' && event.clef === clef)
+}
+
+function isSeparatedVectorVoiceEvent(event) {
+  return event?.type === 'note' && event.vectorVoiceSeparated === true
 }
 
 function occupiedIntervals(staffEvents) {
@@ -223,14 +228,25 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     }
   }
   if (overlapsInterval(preferredStart, 1, intervals)) {
+    const colliding = notesOnStaff.filter((event) => {
+      const start = event.startDivision ?? 0
+      const end = start + (event.durationDivisions ?? 1)
+      return preferredStart >= start && preferredStart < end
+    })
+    // A source-proven voice partition may contain simultaneous note lanes with
+    // independent written values. The short-rest unpacker below is sequential:
+    // it would move those lanes one after another and destroy their shared
+    // source onset. A coincident rest can also belong to an unrepresented third
+    // voice, so abstain instead of inventing a rest or changing either lane.
+    if (colliding.some(isSeparatedVectorVoiceEvent)) {
+      return {
+        applied: false,
+        reason: VECTOR_REST_SKIP_REASONS.VECTOR_VOICE_PARTITION_COLLISION,
+      }
+    }
     const glyphDuration =
       OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
     if (glyphDuration <= OMR_DURATION_DIVISIONS.eighth) {
-      const colliding = notesOnStaff.filter((event) => {
-        const start = event.startDivision ?? 0
-        const end = start + (event.durationDivisions ?? 1)
-        return preferredStart >= start && preferredStart < end
-      })
       const rightOfRest = colliding
         .map((event) => ({
           event,
@@ -419,6 +435,11 @@ export function rebalanceOpeningPickupRests(events, totalDivisions) {
 
   const shiftByEvent = new Map()
   for (const [clef, clefNotes] of byClef.entries()) {
+    // These lanes carry an explicit source onset. Pickup rebalancing is a
+    // single-lane heuristic and must not shift a proven simultaneous column.
+    if (clefNotes.some(isSeparatedVectorVoiceEvent)) {
+      continue
+    }
     const openingRest = events.find(
       (event) =>
         event.type === 'rest' &&

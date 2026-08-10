@@ -77,8 +77,13 @@ function baseUnit(event, eventIndex) {
     staffLane: staffLaneForClef(clef),
     notes: event?.type === 'rest' ? [] : event?.notes ?? [],
     ownerships: [],
-    stemDirection: null,
+    stemDirection: VALID_STEM_DIRECTIONS.has(event?.vectorVoiceDirection)
+      ? event.vectorVoiceDirection
+      : null,
     structureSplit: false,
+    vectorVoiceSeparated: event?.vectorVoiceSeparated === true,
+    vectorVoiceColumnId: event?.vectorVoiceColumnId ?? null,
+    vectorVoiceLane: event?.vectorVoiceLane ?? null,
   }
 }
 
@@ -95,6 +100,15 @@ function analyzeNoteUnit(event, eventIndex, ownershipEvent) {
     }
   }
   const directions = ownerships.map(ownershipDirection)
+  if (unit.vectorVoiceSeparated) {
+    unit.ownerships = ownerships
+    return {
+      unit,
+      directions,
+      mixedStemCandidate: false,
+      rejectedReason: null,
+    }
+  }
   const strongDirections = new Set(directions.filter(Boolean))
   unit.ownerships = ownerships
   if (strongDirections.size === 1 && directions.every(Boolean)) {
@@ -193,6 +207,16 @@ function intervalsOverlap(left, right) {
   return leftStart < rightEnd && rightStart < leftEnd
 }
 
+function explicitVoicePartitionsOverlap(left, right) {
+  return (
+    left.vectorVoiceSeparated &&
+    right.vectorVoiceSeparated &&
+    left.vectorVoiceColumnId != null &&
+    left.vectorVoiceColumnId === right.vectorVoiceColumnId &&
+    left.vectorVoiceLane !== right.vectorVoiceLane
+  )
+}
+
 function hasWrittenSustainEvidence(unit) {
   if (unit.kind !== 'note' || (unit.durationDivisions ?? 0) < 8) {
     return false
@@ -225,7 +249,11 @@ function staffHasIndependentOverlap(units) {
         left.staffLane === right.staffLane &&
         left.eventIndex !== right.eventIndex &&
         intervalsOverlap(left, right) &&
-        (hasWrittenSustainEvidence(left) || hasWrittenSustainEvidence(right))
+        (
+          explicitVoicePartitionsOverlap(left, right) ||
+          hasWrittenSustainEvidence(left) ||
+          hasWrittenSustainEvidence(right)
+        )
       ) {
         return true
       }
@@ -246,10 +274,30 @@ function assignStaffVoices(units, polyphonicStaffs) {
     const polyphonic = polyphonicStaffs.has(staffLane)
     const assigned = []
     entries.sort(
-      (left, right) =>
-        left.startDivision - right.startDivision ||
-        left.eventIndex - right.eventIndex ||
-        Number(left.stemDirection === 'down') - Number(right.stemDirection === 'down'),
+      (left, right) => {
+        const startDelta = left.startDivision - right.startDivision
+        if (startDelta) return startDelta
+        const sameExplicitColumn =
+          left.vectorVoiceSeparated &&
+          right.vectorVoiceSeparated &&
+          left.vectorVoiceColumnId != null &&
+          left.vectorVoiceColumnId === right.vectorVoiceColumnId
+        if (sameExplicitColumn) {
+          // A directed moving lane should claim the voice implied by its stem
+          // before a stemless whole sustain takes the remaining voice. Tuplet
+          // recovery may reorder events, so eventIndex is not source evidence.
+          const directionDelta =
+            Number(!left.stemDirection) - Number(!right.stemDirection)
+          if (directionDelta) return directionDelta
+          const laneRank = (unit) => unit.vectorVoiceLane === 'sustain' ? 0 : 1
+          const laneDelta = laneRank(left) - laneRank(right)
+          if (laneDelta) return laneDelta
+        }
+        return (
+          left.eventIndex - right.eventIndex ||
+          Number(left.stemDirection === 'down') - Number(right.stemDirection === 'down')
+        )
+      },
     )
     for (const unit of entries) {
       if (unit.kind === 'rest' || !polyphonic) {

@@ -406,6 +406,12 @@ export function packJointPolyphonicRhythm(
   ) {
     return { events, applied: false, reason: 'event-outside-meter' }
   }
+  // A source-proven same-onset voice partition already carries independent
+  // written durations. This geometry packer has no persistent voice graph and
+  // would otherwise coalesce the two near-X lanes back into one event.
+  if (events.some((event) => event?.vectorVoiceSeparated === true)) {
+    return { events, applied: false, reason: 'explicit-vector-voice-partition' }
+  }
 
   const noteEvents = events.filter((event) => event.type === 'note')
   const clefs = [...new Set(noteEvents.map(eventClef))]

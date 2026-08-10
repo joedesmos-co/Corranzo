@@ -35,6 +35,13 @@ function eventClef(event) {
   return event?.clef ?? event?.notes?.[0]?.clef ?? 'treble'
 }
 
+function isExplicitSustainLane(event) {
+  return (
+    event?.vectorVoiceSeparated === true &&
+    event?.vectorVoiceLane === 'sustain'
+  )
+}
+
 function eventNoteYs(event) {
   return (event?.notes ?? [])
     .map((note) => note.cy ?? note.y)
@@ -228,8 +235,12 @@ export function recoverLocalDigitGatedTripletGroups(
     totalDivisions = 16,
   } = {},
 ) {
-  const noteEvents = (events ?? []).filter((event) => event.type === 'note')
-  const otherEvents = (events ?? []).filter((event) => event.type !== 'note')
+  const noteEvents = (events ?? []).filter(
+    (event) => event.type === 'note' && !isExplicitSustainLane(event),
+  )
+  const otherEvents = (events ?? []).filter(
+    (event) => event.type !== 'note' || isExplicitSustainLane(event),
+  )
   if (noteEvents.length < 2) {
     return { events, recovered: false, reason: 'too-few-notes', groups: 0 }
   }
@@ -452,8 +463,14 @@ export function recoverDigitGatedTripletEvents(
     totalDivisions = 16,
   } = {},
 ) {
-  const noteEvents = (events ?? []).filter((event) => event.type === 'note')
-  const rests = (events ?? []).filter((event) => event.type !== 'note')
+  // A literal half/whole sustain may share an onset with a moving triplet lane.
+  // Tuplet digits own the moving attacks, not the independently written sustain.
+  const noteEvents = (events ?? []).filter(
+    (event) => event.type === 'note' && !isExplicitSustainLane(event),
+  )
+  const preservedEvents = (events ?? []).filter(
+    (event) => event.type !== 'note' || isExplicitSustainLane(event),
+  )
   // Allow one missed notehead in a 3:2 group (12 expected for 4/4).
   if (noteEvents.length < beats * 3 - 1) {
     return { events, recovered: false, reason: 'too-few-notes', noteCount: noteEvents.length }
@@ -566,7 +583,7 @@ export function recoverDigitGatedTripletEvents(
   })
 
   return {
-    events: [...recoveredNotes, ...rests].sort(
+    events: [...recoveredNotes, ...preservedEvents].sort(
       (left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0),
     ),
     recovered: true,

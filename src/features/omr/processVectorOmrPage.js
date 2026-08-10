@@ -1043,6 +1043,317 @@ function mergeGroupsSharingBeat(groups, beats) {
  * Grand-staff groups can contain both staves at one horizontal slot. Split them
  * into separate rhythm events at the same start so overlap rules can apply.
  */
+function noteStemDirection(note) {
+  if (typeof note?.stem === 'string') {
+    return note.stem
+  }
+  return note?.stem?.direction ?? note?.stemDirection ?? null
+}
+
+function noteStaffSpacePx(note) {
+  const lines = [...(note?.pitchMapping?.lineYs ?? [])]
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  const imageHeight =
+    Number.isFinite(note?.cy) && Number.isFinite(note?.yNorm) && note.yNorm > 0
+      ? note.cy / note.yNorm
+      : null
+  if (lines.length >= 2 && imageHeight > 0) {
+    const gaps = []
+    for (let index = 1; index < lines.length; index += 1) {
+      const gap = (lines[index] - lines[index - 1]) * imageHeight
+      if (gap > 0) gaps.push(gap)
+    }
+    if (gaps.length) return medianNumber(gaps)
+  }
+  const stemLength = Number(note?.stem?.length)
+  return stemLength > 0 ? stemLength / 4 : 8
+}
+
+function stemSegment(note) {
+  const stem = note?.stem
+  if (
+    !stem ||
+    !Number.isFinite(stem.x) ||
+    !Number.isFinite(stem.tipY) ||
+    !Number.isFinite(note?.cy)
+  ) {
+    return null
+  }
+  return {
+    x: stem.x,
+    top: Math.min(stem.tipY, note.cy),
+    bottom: Math.max(stem.tipY, note.cy),
+  }
+}
+
+/** True only when two local stem probes describe one connected ink component. */
+export function notesShareStemComponent(left, right) {
+  const leftSegment = stemSegment(left)
+  const rightSegment = stemSegment(right)
+  if (!leftSegment || !rightSegment) return false
+  const staffSpace = Math.max(
+    3,
+    Math.min(noteStaffSpacePx(left), noteStaffSpacePx(right)),
+  )
+  if (Math.abs(leftSegment.x - rightSegment.x) > staffSpace * 0.32) {
+    return false
+  }
+  const verticalGap = Math.max(
+    0,
+    Math.max(leftSegment.top, rightSegment.top) -
+      Math.min(leftSegment.bottom, rightSegment.bottom),
+  )
+  return verticalGap <= staffSpace * 0.4
+}
+
+function explicitBlackDurationDivisions(note) {
+  if (note?.noteheadGlyph !== 'black' || note.timeModification || note.tuplet) {
+    return null
+  }
+  if (note.dotted === true) {
+    return Number.isFinite(note.durationDivisions) && note.durationDivisions > 0
+      ? note.durationDivisions
+      : null
+  }
+  if ((note.beams ?? 0) >= 2) return OMR_DURATION_DIVISIONS.sixteenth
+  if ((note.beams ?? 0) >= 1) return OMR_DURATION_DIVISIONS.eighth
+  if (
+    note.stem &&
+    Number.isFinite(note.durationDivisions) &&
+    note.durationDivisions > 0 &&
+    note.durationDivisions <= OMR_DIVISIONS_PER_QUARTER
+  ) {
+    return note.durationDivisions
+  }
+  return null
+}
+
+function explicitNoteDurationDivisions(note) {
+  if (note?.noteheadGlyph === 'whole' || note?.noteheadGlyph === 'half') {
+    const base = OMR_DURATION_DIVISIONS[note.noteheadGlyph]
+    return note.dotted === true ? Math.round(base * 1.5) : base
+  }
+  return explicitBlackDurationDivisions(note)
+}
+
+function cohortHasOneStemComponent(notes) {
+  if (notes.length <= 1) return true
+  const visited = new Set([notes[0]])
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const note of notes) {
+      if (visited.has(note)) continue
+      if ([...visited].some((entry) => notesShareStemComponent(entry, note))) {
+        visited.add(note)
+        changed = true
+      }
+    }
+  }
+  return visited.size === notes.length
+}
+
+function normalizeBoundaryCohortRhythm(note, cohort) {
+  if (note.noteheadGlyph === 'half' || note.noteheadGlyph === 'whole') {
+    if ((note.beams ?? 0) > 0) {
+      Object.assign(note, {
+        boundaryCohortOriginalRhythm: {
+          beams: note.beams ?? 0,
+          beamStrength: note.beamStrength ?? 0,
+          durationDivisions: note.durationDivisions ?? null,
+          durationType: note.durationType ?? null,
+        },
+        beams: 0,
+        beamStrength: 0,
+      })
+    }
+    return
+  }
+  if (note.noteheadGlyph !== 'black') return
+  const durations = cohort.map(explicitBlackDurationDivisions)
+  if (!durations.length || durations.some((value) => value == null)) return
+  if (!durations.every((value) => value === durations[0])) return
+  const beamCounts = cohort.map((entry) => entry.beams ?? 0)
+  if (!beamCounts.every((value) => value === beamCounts[0])) return
+  const durationDivisions = durations[0]
+  const meta = durationMeta(durationDivisions, {
+    allowDotted: cohort.some((entry) => entry.dotted === true),
+  })
+  Object.assign(note, {
+    boundaryCohortOriginalRhythm: {
+      beams: note.beams ?? 0,
+      beamStrength: note.beamStrength ?? 0,
+      durationDivisions: note.durationDivisions ?? null,
+      durationType: note.durationType ?? null,
+    },
+    beams: beamCounts[0],
+    beamStrength: Math.max(0, ...cohort.map((entry) => entry.beamStrength ?? 0)),
+    durationDivisions,
+    ...meta,
+  })
+}
+
+function hasStaffDependentPitchAlteration(note) {
+  const provenance = note?.pitchAlteration
+  return Boolean(
+    note?.accidental ||
+      provenance?.localAccidental != null ||
+      provenance?.measureAccidentalState != null ||
+      provenance?.keyAlteration != null ||
+      (Number.isFinite(provenance?.keySignatureFifths) &&
+        provenance.keySignatureFifths !== 0) ||
+      (Number.isFinite(note?.alter) && note.alter !== 0),
+  )
+}
+
+function noteBelongsToAdjacentInterstaffCohort(note, alternateCohort) {
+  const lines = (alternateCohort ?? [])
+    .flatMap((peer) => peer?.pitchMapping?.lineYs ?? [])
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+  if (lines.length < 2 || !Number.isFinite(note?.yNorm)) return false
+  const gaps = []
+  for (let index = 1; index < lines.length; index += 1) {
+    const gap = lines[index] - lines[index - 1]
+    if (gap > 0) gaps.push(gap)
+  }
+  if (!gaps.length) return false
+  const staffGap = medianNumber(gaps)
+  const adjacentStaffSpacePx = medianNumber(
+    alternateCohort.map(noteStaffSpacePx).filter(Number.isFinite),
+  )
+  const nearestHeadDistance = Math.min(
+    ...alternateCohort.map((peer) => Math.abs((peer.cy ?? 0) - (note.cy ?? 0))),
+  )
+  const nearestPitchDistance = Math.min(
+    ...alternateCohort
+      .map((peer) => Math.abs((peer.midi ?? Number.NaN) - note.pitchMapping.alternateMidi))
+      .filter(Number.isFinite),
+  )
+  if (
+    !(adjacentStaffSpacePx > 0) ||
+    nearestHeadDistance > adjacentStaffSpacePx * 1.5 ||
+    nearestPitchDistance > 12
+  ) {
+    return false
+  }
+  if (note.clef === 'bass' && note.pitchMapping?.alternateClef === 'treble') {
+    const distanceBelowTreble = note.yNorm - lines.at(-1)
+    return distanceBelowTreble >= 0 && distanceBelowTreble <= staffGap * 4.25
+  }
+  if (note.clef === 'treble' && note.pitchMapping?.alternateClef === 'bass') {
+    const distanceAboveBass = lines[0] - note.yNorm
+    return distanceAboveBass >= 0 && distanceAboveBass <= staffGap * 4.25
+  }
+  return false
+}
+
+/**
+ * Correct only an interstaff boundary head that is connected to a same-X,
+ * same-glyph cohort on its alternate staff and disconnected from the conflicting
+ * current-staff rhythm component. The original note object is retained so later
+ * stem/beam ownership WeakMaps remain valid.
+ */
+export function reassignInterstaffBoundaryCohorts(notes = []) {
+  for (const note of notes) {
+    const mapping = note?.pitchMapping
+    const alternateClef = mapping?.alternateClef
+    const alternateMidi = mapping?.alternateMidi
+    if (
+      !note?.noteheadGlyph ||
+      !Number.isFinite(alternateMidi) ||
+      hasStaffDependentPitchAlteration(note) ||
+      (alternateClef !== 'treble' && alternateClef !== 'bass') ||
+      alternateClef === note.clef
+    ) {
+      continue
+    }
+    const alternateCohort = notes.filter(
+      (peer) =>
+        peer !== note &&
+        peer.clef === alternateClef &&
+        peer.noteheadGlyph === note.noteheadGlyph &&
+        Number.isFinite(peer.cx) &&
+        Number.isFinite(note.cx) &&
+        Math.abs(peer.cx - note.cx) <= OMR_CHORD_MERGE_X &&
+        notesShareStemComponent(note, peer),
+    )
+    if (!alternateCohort.length || !cohortHasOneStemComponent([note, ...alternateCohort])) {
+      continue
+    }
+    if (!noteBelongsToAdjacentInterstaffCohort(note, alternateCohort)) continue
+    const conflictingCurrentStaff = notes.filter(
+      (peer) =>
+        peer !== note &&
+        peer.clef === note.clef &&
+        explicitNoteDurationDivisions(peer) !== explicitNoteDurationDivisions(note),
+    )
+    if (
+      !conflictingCurrentStaff.length ||
+      conflictingCurrentStaff.some((peer) => notesShareStemComponent(note, peer))
+    ) {
+      continue
+    }
+    const nearestAlternate = Math.min(
+      ...alternateCohort.map((peer) => Math.abs((peer.cy ?? 0) - (note.cy ?? 0))),
+    )
+    const nearestCurrent = Math.min(
+      ...conflictingCurrentStaff.map((peer) => Math.abs((peer.cy ?? 0) - (note.cy ?? 0))),
+    )
+    if (!(nearestAlternate < nearestCurrent)) continue
+
+    const original = {
+      clef: note.clef,
+      midi: note.midi,
+      naturalMidi: note.naturalMidi,
+      staffRole: mapping.staffRole,
+      pitchAlteration: note.pitchAlteration ?? null,
+    }
+    const pitchDelta = Number.isFinite(note.midi) && Number.isFinite(note.naturalMidi)
+      ? note.midi - note.naturalMidi
+      : 0
+    const previousStaffRole = mapping.staffRole
+    const previousClef = mapping.clef
+    const previousClefSign = mapping.clefSign
+    const previousMidi = mapping.midi
+    const alternateLineYs = alternateCohort.find(
+      (peer) => (peer.pitchMapping?.lineYs?.length ?? 0) >= 2,
+    )?.pitchMapping?.lineYs
+    Object.assign(note, {
+      clef: alternateClef,
+      naturalMidi: alternateMidi,
+      midi: alternateMidi + pitchDelta,
+      pitchAlteration: {
+        ...(note.pitchAlteration ?? {}),
+        writtenPitch: midiToWrittenPitch(alternateMidi),
+        naturalMidi: alternateMidi,
+        keySignatureFifths: 0,
+        keyDefaultMidi: alternateMidi,
+        keyAlteration: null,
+        localAccidental: null,
+        measureAccidentalState: null,
+      },
+      pitchMapping: {
+        ...mapping,
+        staffRole: mapping.alternateStaffRole,
+        clef: alternateClef,
+        clefSign: mapping.alternateClefSign,
+        midi: alternateMidi,
+        lineYs: alternateLineYs ?? mapping.lineYs,
+        alternateStaffRole: previousStaffRole,
+        alternateClef: previousClef,
+        alternateClefSign: previousClefSign,
+        alternateMidi: previousMidi,
+      },
+      interstaffBoundaryCohortAdjusted: true,
+      interstaffBoundaryOriginal: original,
+    })
+    normalizeBoundaryCohortRhythm(note, alternateCohort)
+  }
+  return notes
+}
+
 export function splitMixedClefEvents(events) {
   const expanded = []
   for (const event of events) {
@@ -1050,6 +1361,7 @@ export function splitMixedClefEvents(events) {
       expanded.push(event)
       continue
     }
+    reassignInterstaffBoundaryCohorts(event.notes ?? [])
     const bassNotes = (event.notes ?? []).filter((note) => note.clef === 'bass')
     const trebleNotes = (event.notes ?? []).filter((note) => note.clef === 'treble')
     if (bassNotes.length && trebleNotes.length) {
@@ -1060,6 +1372,233 @@ export function splitMixedClefEvents(events) {
     expanded.push(event)
   }
   return sortVectorRhythmEvents(expanded)
+}
+
+function cohortStemDirection(notes) {
+  const directions = [...new Set(notes.map(noteStemDirection).filter(Boolean))]
+  if (directions.length === 1) return directions[0]
+  if (directions.length > 1 && cohortHasOneStemComponent(notes)) {
+    return [...notes]
+      .sort((left, right) => (right.midi ?? 0) - (left.midi ?? 0))
+      .map(noteStemDirection)
+      .find(Boolean) ?? null
+  }
+  return null
+}
+
+function partitionColumnId(event) {
+  const page = event.page ?? event.notes?.[0]?.page ?? 'p'
+  const measure = event.measureNumber ?? event.notes?.[0]?.measureNumber ?? 'm'
+  const start = event.startDivision ?? 0
+  const cx = average((event.notes ?? []).map((note) => note.cx))
+  return `${page}:${measure}:${start}:${Number.isFinite(cx) ? Math.round(cx * 10) : 'x'}`
+}
+
+function cohortsHaveDistinctStemComponents(openNotes, filledNotes) {
+  const openAreStemlessWholes = openNotes.every(
+    (note) => note.noteheadGlyph === 'whole' && !note.stem,
+  )
+  if (openAreStemlessWholes) {
+    return (
+      filledNotes.every((note) => Boolean(note.stem)) &&
+      cohortHasOneStemComponent(filledNotes)
+    )
+  }
+  if (
+    !openNotes.every((note) => Boolean(note.stem)) ||
+    !filledNotes.every((note) => Boolean(note.stem)) ||
+    !cohortHasOneStemComponent(openNotes) ||
+    !cohortHasOneStemComponent(filledNotes)
+  ) {
+    return false
+  }
+  return openNotes.every(
+    (openNote) =>
+      filledNotes.every(
+        (filledNote) => !notesShareStemComponent(openNote, filledNote),
+      ),
+  )
+}
+
+function buildWrittenVoicePartitionEvent(
+  event,
+  notes,
+  durationDivisions,
+  totalDivisions,
+  columnId,
+  lane,
+) {
+  const startDivision = event.startDivision ?? 0
+  const cappedDuration = Math.min(
+    durationDivisions,
+    Math.max(1, totalDivisions - startDivision),
+  )
+  const allowDotted = hasDottedEvidence(notes)
+  return {
+    ...event,
+    notes,
+    cx: average(notes.map((note) => note.cx)),
+    durationDivisions: cappedDuration,
+    ...durationMeta(cappedDuration, { allowDotted }),
+    vectorVoiceSeparated: true,
+    vectorVoiceColumnId: columnId,
+    vectorVoiceLane: lane,
+    vectorVoiceDirection: cohortStemDirection(notes),
+    vectorVoiceSourceStartDivision: startDivision,
+    vectorVoiceWrittenDurationDivisions: cappedDuration,
+    vectorVoiceSeparationEvidence: 'incompatible-written-values-distinct-stem-components',
+  }
+}
+
+/**
+ * Turn a provisional same-onset column into independent events only when every
+ * member is an explicit vector open/black head, the two written values conflict,
+ * and local stem geometry proves two disconnected source components.
+ */
+export function partitionSameOnsetWrittenVoiceEvents(
+  events = [],
+  totalDivisions = 16,
+) {
+  let changed = false
+  const partitioned = []
+  for (const event of events) {
+    if (
+      event?.type !== 'note' ||
+      event.timeModification ||
+      event.tupletRecovered ||
+      (event.notes ?? []).some(
+        (note) => note?.timeModification || note?.tuplet || note?.tupletRecovered,
+      )
+    ) {
+      partitioned.push(event)
+      continue
+    }
+    const notes = event.notes ?? []
+    if (
+      notes.length < 2 ||
+      notes.some(
+        (note) =>
+          note?.noteheadGlyph !== 'whole' &&
+          note?.noteheadGlyph !== 'half' &&
+          note?.noteheadGlyph !== 'black',
+      )
+    ) {
+      partitioned.push(event)
+      continue
+    }
+    const openNotes = notes.filter(
+      (note) => note.noteheadGlyph === 'whole' || note.noteheadGlyph === 'half',
+    )
+    const filledNotes = notes.filter((note) => note.noteheadGlyph === 'black')
+    if (!openNotes.length || !filledNotes.length) {
+      partitioned.push(event)
+      continue
+    }
+    if (
+      openNotes.some((openNote) =>
+        filledNotes.some((filledNote) => openNote.midi === filledNote.midi),
+      )
+    ) {
+      partitioned.push(event)
+      continue
+    }
+    const openDuration = coherentOpenGlyphDurationDivisions(openNotes, {
+      allowDotted: hasDottedEvidence(openNotes),
+    })
+    const filledDurations = filledNotes.map(explicitBlackDurationDivisions)
+    const filledDuration = filledDurations[0]
+    if (
+      openDuration == null ||
+      filledDuration == null ||
+      !filledDurations.every((duration) => duration === filledDuration) ||
+      openDuration <= filledDuration ||
+      !cohortsHaveDistinctStemComponents(openNotes, filledNotes)
+    ) {
+      partitioned.push(event)
+      continue
+    }
+
+    const columnId = partitionColumnId(event)
+    partitioned.push(
+      buildWrittenVoicePartitionEvent(
+        event,
+        openNotes,
+        openDuration,
+        totalDivisions,
+        columnId,
+        'sustain',
+      ),
+      buildWrittenVoicePartitionEvent(
+        event,
+        filledNotes,
+        filledDuration,
+        totalDivisions,
+        columnId,
+        'moving',
+      ),
+    )
+    changed = true
+  }
+  return changed ? sortVectorRhythmEvents(partitioned) : events
+}
+
+function hasExplicitVectorVoicePartition(events = []) {
+  return events.some((event) => event?.vectorVoiceSeparated === true)
+}
+
+/**
+ * Literal mixed-duration source lanes own both their shared onset and their
+ * written value. Reapply those two facts after heuristic passes that were built
+ * for a single sequential clef lane; membership is protected separately by the
+ * coalescing/reconstruction guards.
+ */
+export function reconcileSeparatedWrittenVoiceEvents(
+  events = [],
+  totalDivisions = 16,
+) {
+  let changed = false
+  const reconciled = events.map((event) => {
+    if (
+      event?.vectorVoiceSeparated !== true ||
+      event.timeModification ||
+      event.tupletRecovered ||
+      !Number.isFinite(event.vectorVoiceSourceStartDivision) ||
+      !Number.isFinite(event.vectorVoiceWrittenDurationDivisions)
+    ) {
+      return event
+    }
+    const startDivision = Math.max(
+      0,
+      Math.min(totalDivisions - 1, event.vectorVoiceSourceStartDivision),
+    )
+    const durationDivisions = Math.min(
+      event.vectorVoiceWrittenDurationDivisions,
+      Math.max(1, totalDivisions - startDivision),
+    )
+    const meta = durationMeta(durationDivisions, {
+      allowDotted: hasDottedEvidence(event.notes),
+    })
+    if (
+      event.startDivision === startDivision &&
+      event.durationDivisions === durationDivisions &&
+      event.durationType === meta.durationType &&
+      Boolean(event.dotted) === Boolean(meta.dotted)
+    ) {
+      return event
+    }
+    changed = true
+    return {
+      ...event,
+      startDivision,
+      durationDivisions,
+      ...meta,
+      vectorVoiceWrittenValueReconciled: true,
+    }
+  })
+  // Reconciliation changes written timing, not event identity. Preserve the
+  // established order so document-level beam/stem ownership indices continue
+  // to address the same events after a late correction.
+  return changed ? reconciled : events
 }
 
 function noteClefFromNotes(notes) {
@@ -1537,6 +2076,11 @@ export function applyTerminalSameClefChordQuarterDurations(events, totalDivision
   if (!noteEvents.length) {
     return events
   }
+  // A separated column already has direct, per-lane written values. This
+  // single-clef terminal heuristic cannot distinguish its overlapping lanes.
+  if (hasExplicitVectorVoicePartition(noteEvents)) {
+    return events
+  }
 
   const byClef = new Map()
   for (const event of noteEvents) {
@@ -1818,6 +2362,14 @@ export function refineEventDurationsFromBeamEvidence(events, totalDivisions = 16
       if (event.type !== 'note') {
         return event
       }
+      // A vector whole/half codepoint is direct written-duration evidence. Open
+      // heads cannot also be beamed; any detected beam on a duration-coherent
+      // open-head event is nearby ink and must not shorten the written value.
+      if (coherentOpenGlyphDurationDivisions(event.notes ?? [], {
+        allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+      }) != null) {
+        return event
+      }
       const start = event.startDivision ?? 0
       const beamCap = inferredBeamDurationCap(event.notes)
       const beamFloor = inferredBeamDurationFloor(event.notes)
@@ -1980,28 +2532,82 @@ const VECTOR_DURATION_LADDER = [
 
 /**
  * Open notehead codepoints encode written value independently of X spacing.
- * Used on sparse measures so large whitespace cannot invent longer values and
- * packed false onsets cannot collapse wholes/halves to quarters.
+ * This keeps large whitespace from inventing longer values and dense
+ * countervoice onsets from collapsing wholes/halves to shorter notes.
  */
 export function glyphAuthoritativeDurationDivisions(notes = [], { allowDotted = false } = {}) {
-  const kinds = (notes ?? [])
-    .map((note) => note?.noteheadGlyph)
-    .filter((kind) => kind === 'whole' || kind === 'half')
-  if (!kinds.length) {
+  return coherentOpenGlyphDurationDivisions(notes, { allowDotted })
+}
+
+/**
+ * Event-wide duration authority is safe only when every member carries the same
+ * explicit vector open-head codepoint. Mixed half/black or half/whole stacks can
+ * represent independent same-onset voices and need per-note voice separation;
+ * assigning one duration to the combined event would corrupt the other voice.
+ */
+export function coherentOpenGlyphDurationDivisions(
+  notes = [],
+  { allowDotted = false } = {},
+) {
+  if (!notes.length) {
     return null
   }
-  const wholeCount = kinds.filter((kind) => kind === 'whole').length
-  const halfCount = kinds.filter((kind) => kind === 'half').length
-  // Chord tones should agree; require a clear majority of open heads.
-  if (wholeCount >= halfCount && wholeCount >= Math.ceil(kinds.length / 2)) {
-    const base = OMR_DURATION_DIVISIONS.whole
-    return allowDotted ? Math.round(base * 1.5) : base
+  const kinds = notes.map((note) => note?.noteheadGlyph)
+  const kind = kinds[0]
+  if (
+    (kind !== 'whole' && kind !== 'half') ||
+    kinds.some((candidate) => candidate !== kind)
+  ) {
+    return null
   }
-  if (halfCount > 0 && halfCount >= wholeCount) {
-    const base = OMR_DURATION_DIVISIONS.half
-    return allowDotted ? Math.round(base * 1.5) : base
-  }
-  return null
+  const base = OMR_DURATION_DIVISIONS[kind]
+  // `event.dotted` may itself have been inferred from a temporary 12-division
+  // gap. Only a source augmentation dot may promote an open glyph to 1.5x.
+  return allowDotted && hasDottedEvidence(notes)
+    ? Math.round(base * 1.5)
+    : base
+}
+
+/**
+ * Reconcile direct vector whole/half evidence after gap/beam/voice heuristics.
+ * The source codepoint supplies the exact written value; only the remaining
+ * measure capacity may shorten it. Onset and note/chord membership are unchanged.
+ */
+export function reconcileCoherentOpenGlyphDurations(events = [], totalDivisions = 16) {
+  let changed = false
+  const reconciled = events.map((event) => {
+    if (event.type !== 'note' || event.timeModification || event.tupletRecovered) {
+      return event
+    }
+    const allowDotted = hasDottedEvidence(event.notes)
+    const writtenDuration = coherentOpenGlyphDurationDivisions(event.notes ?? [], {
+      allowDotted,
+    })
+    if (writtenDuration == null) {
+      return event
+    }
+    const start = event.startDivision ?? 0
+    const durationDivisions = Math.min(
+      writtenDuration,
+      Math.max(1, totalDivisions - start),
+    )
+    const meta = durationMeta(durationDivisions, { allowDotted })
+    if (
+      event.durationDivisions === durationDivisions &&
+      event.durationType === meta.durationType &&
+      Boolean(event.dotted) === Boolean(meta.dotted)
+    ) {
+      return event
+    }
+    changed = true
+    return {
+      ...event,
+      durationDivisions,
+      ...meta,
+      coherentOpenGlyphDurationAdjusted: true,
+    }
+  })
+  return changed ? reconciled : events
 }
 
 /**
@@ -2315,13 +2921,28 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
     },
   ]
   if (sameStart) {
-    const trebleDuration = sameStartTrebleDuration(
+    const inferredTrebleDuration = sameStartTrebleDuration(
       second.notes[0],
       first.notes[0],
       events,
       extended,
       totalDivisions,
     )
+    // Do not turn a directly beamed/filled moving note into a sustain merely
+    // because it shares the opening column with the bass. Countervoices may
+    // begin together and then move independently.
+    const hasOpenTrebleMember = (second.notes ?? []).some(
+      (note) => note?.noteheadGlyph === 'whole' || note?.noteheadGlyph === 'half',
+    )
+    const directTrebleCap = hasOpenTrebleMember
+      ? null
+      : dottedWrittenDurationDivisions(second.notes) ??
+        inferredBeamDurationCap(second.notes) ??
+        filledHeadWrittenDurationCap(second.notes)
+    const trebleDuration =
+      directTrebleCap == null
+        ? inferredTrebleDuration
+        : Math.min(inferredTrebleDuration, directTrebleCap)
     updated.push({
       ...second,
       durationDivisions: trebleDuration,
@@ -2345,6 +2966,9 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
  * a quarter.
  */
 export function extendPenultimateHalfBeforeFinalQuarter(events, timeSignature, totalDivisions) {
+  if (hasExplicitVectorVoicePartition(events)) {
+    return events
+  }
   if (events.length < 3) {
     return events
   }
@@ -2627,6 +3251,9 @@ export function snapUniformSubdivisionStarts(
  * without changing chord membership.
  */
 export function alignOpeningEventStarts(events, beats = 4) {
+  if (hasExplicitVectorVoicePartition(events)) {
+    return events
+  }
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length < 2) {
     return events
@@ -2861,6 +3488,12 @@ export function refineSparsePickupColumnOnsets(events, beats = 4, totalDivisions
  * re-gap durations on that voice.
  */
 export function resolveWrittenDurationOverlaps(events, totalDivisions) {
+  // This repair models each clef as one sequential lane. A proven same-clef
+  // source partition means that premise is false, so shifting/regapping either
+  // lane (or its dotted predecessor) would corrupt polyphony.
+  if (hasExplicitVectorVoicePartition(events)) {
+    return events
+  }
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length < 2 || noteEvents.length > 5) {
     return events
@@ -2882,6 +3515,14 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
     for (let index = 0; index < sorted.length - 1; index += 1) {
       const current = sorted[index]
       const next = sorted[index + 1]
+      // This pass repairs filled-head dotted-subdivision packing. A dotted
+      // vector half/whole can legitimately overlap a moving same-staff voice;
+      // never push that voice to the sustained note's release.
+      if (coherentOpenGlyphDurationDivisions(current.notes ?? [], {
+        allowDotted: hasDottedEvidence(current.notes) || current.dotted,
+      }) != null) {
+        continue
+      }
       if (!hasDottedEvidence(current.notes) && !current.dotted) {
         continue
       }
@@ -3069,6 +3710,12 @@ export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
         durationDivisions,
         ...meta,
         dottedSubdivisionBaseRefined: true,
+        ...(event.vectorVoiceSeparated === true && event.vectorVoiceLane === 'moving'
+          ? {
+              vectorVoiceWrittenDurationDivisions: durationDivisions,
+              vectorVoiceDottedSubdivisionWrittenDurationAdjusted: true,
+            }
+          : {}),
         // Keep note-level written values in sync so later overlap repair does not
         // re-read the pre-refine dotted-quarter enrich and undo this recovery.
         notes: (event.notes ?? []).map((note) => ({
@@ -3223,6 +3870,9 @@ export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivision
  * proves sequential subdivision rather than a harmonic stack.
  */
 export function splitSnappedSequentialSixteenths(events, totalDivisions) {
+  if (hasExplicitVectorVoicePartition(events)) {
+    return events
+  }
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length < 1 || noteEvents.length > 6) {
     return events
@@ -3353,6 +4003,18 @@ function dedupeNotesByMidi(notes = []) {
   return dedupeNoteheads(notes)
 }
 
+function vectorVoicePartitionsMayCoalesce(left, right) {
+  const leftSeparated = left?.vectorVoiceSeparated === true
+  const rightSeparated = right?.vectorVoiceSeparated === true
+  if (!leftSeparated && !rightSeparated) return true
+  return (
+    leftSeparated &&
+    rightSeparated &&
+    left.vectorVoiceColumnId === right.vectorVoiceColumnId &&
+    left.vectorVoiceLane === right.vectorVoiceLane
+  )
+}
+
 /**
  * Merge same-onset, same-clef fragments into one chord event.
  *
@@ -3373,6 +4035,9 @@ export function coalesceSameOnsetChordEvents(events) {
     const clef = event.notes?.[0]?.clef ?? 'treble'
     const cx = average((event.notes ?? []).map((note) => note.cx))
     const match = merged.find((entry) => {
+      if (!vectorVoicePartitionsMayCoalesce(entry, event)) {
+        return false
+      }
       if ((entry.startDivision ?? 0) !== start) {
         return false
       }
@@ -3418,6 +4083,9 @@ export function coalesceSameOnsetChordEvents(events) {
  * real secondary-beamed sixteenth texture, then re-gap durations per clef.
  */
 export function resnapDenseChordOnsets(events, totalDivisions = 16) {
+  if (hasExplicitVectorVoicePartition(events)) {
+    return events
+  }
   const eighth = OMR_DURATION_DIVISIONS.eighth
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length <= 5) {
@@ -3547,12 +4215,11 @@ function buildNoteEventsFromGroups(
   const denseMeasure = groups.length > beats
 
   function track(stage, functionName, run) {
-    if (!provenance) {
-      return run()
-    }
     const before = events
-    const next = run()
-    provenance.recordStage(stage, functionName, before, next)
+    const next = reconcileSeparatedWrittenVoiceEvents(run(), totalDivisions)
+    if (provenance) {
+      provenance.recordStage(stage, functionName, before, next)
+    }
     return next
   }
 
@@ -3743,6 +4410,15 @@ function buildNoteEventsFromGroups(
       }
     }),
   )
+  // Geometric grouping establishes one onset column, not necessarily one
+  // musical chord. Partition source-proven mixed-duration stem components only
+  // after the onset grid is fixed so simultaneous voices cannot inflate density.
+  events = partitionSameOnsetWrittenVoiceEvents(events, totalDivisions)
+  // Global group density is useful for onset/grid inference, but it cannot
+  // invalidate a direct whole/half codepoint. Reconcile only after splitting
+  // mixed-clef columns so a bass half and treble black head keep independent
+  // written values; ambiguous same-clef mixed-glyph events intentionally abstain.
+  events = reconcileCoherentOpenGlyphDurations(events, totalDivisions)
   if (provenance) {
     events.forEach((event, index) => {
       provenance.recordInitialEvent(event, index, {
@@ -3816,6 +4492,11 @@ function buildNoteEventsFromGroups(
   events = track('opening-bass-subdivision', 'refineOpeningBassSubdivisionDurations', () =>
     refineOpeningBassSubdivisionDurations(events, totalDivisions),
   )
+  events = track(
+    'coherent-open-glyph-before-reconstruct',
+    'reconcileCoherentOpenGlyphDurations',
+    () => reconcileCoherentOpenGlyphDurations(events, totalDivisions),
+  )
   events = track('musical-event-reconstruct', 'reconstructMusicalEvents', () =>
     reconstructMusicalEvents(events, { totalDivisions }),
   )
@@ -3835,8 +4516,13 @@ function buildNoteEventsFromGroups(
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),
   )
-  return track('clamp-measure', 'clampMeasureEventDurations', () =>
+  events = track('clamp-measure', 'clampMeasureEventDurations', () =>
     clampMeasureEventDurations(events, totalDivisions),
+  )
+  return track(
+    'coherent-open-glyph-finalize',
+    'reconcileCoherentOpenGlyphDurations',
+    () => reconcileCoherentOpenGlyphDurations(events, totalDivisions),
   )
 }
 
@@ -3876,7 +4562,21 @@ export function buildVectorEvents(
     measureBox,
     totalDivisions,
   }).events
-  return packJointPolyphonicRhythm(events, { totalDivisions }).events
+  const packedEvents = packJointPolyphonicRhythm(events, { totalDivisions }).events
+  const reconciledEvents = reconcileCoherentOpenGlyphDurations(
+    packedEvents,
+    totalDivisions,
+  )
+  if (provenance && reconciledEvents !== packedEvents) {
+    provenance.recordStage(
+      'coherent-open-glyph-after-rest-pack',
+      'reconcileCoherentOpenGlyphDurations',
+      packedEvents,
+      reconciledEvents,
+      { reason: 'direct-vector-open-head' },
+    )
+  }
+  return reconciledEvents
 }
 
 export function buildVectorMeasureRecord({
@@ -4008,6 +4708,18 @@ export function buildVectorMeasureRecord({
     events = packJointPolyphonicRhythm(restApplyResult.events, {
       totalDivisions,
     }).events
+  }
+
+  const eventsBeforeOpenGlyphReconcile = events
+  events = reconcileCoherentOpenGlyphDurations(events, totalDivisions)
+  if (provenance && events !== eventsBeforeOpenGlyphReconcile) {
+    provenance.recordStage(
+      'coherent-open-glyph-before-tuplet-recovery',
+      'reconcileCoherentOpenGlyphDurations',
+      eventsBeforeOpenGlyphReconcile,
+      events,
+      { reason: 'direct-vector-open-head' },
+    )
   }
 
   const tupletRecovery = recoverVectorTupletEvents(events, {
