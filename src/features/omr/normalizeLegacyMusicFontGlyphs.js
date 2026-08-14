@@ -1,15 +1,18 @@
 /**
  * Legacy music-font glyph normalization for vector OMR.
  *
- * Some vector PDFs (notably musescore.com / TCPDF exports of beginner
- * arrangements) embed the legacy pre-SMuFL "MScore" music font instead of a
- * SMuFL font like Bravura. Their noteheads/clefs live at legacy private-use
- * codepoints, so the SMuFL-based vector OMR sees zero noteheads and silently
- * falls back to the much weaker raster path.
+ * Some vector PDFs embed non-SMuFL music fonts whose noteheads/clefs live at
+ * idiosyncratic codepoints. Two families are handled:
  *
- * This module maps legacy music-font codepoints to their SMuFL equivalents so
- * the vector pipeline can consume such pages unchanged. It is deliberately
- * conservative:
+ * 1. Legacy MScore (musescore.com / TCPDF exports) — known static codepoint
+ *    mapping via LEGACY_MSCORE_GLYPH_MAP.
+ * 2. LilyPond Feta and other dynamically-encoded fonts — the black-notehead
+ *    codepoint is discovered by ink-based heuristic: the most frequent
+ *    compact glyph in the music font that has a dark (filled) center when
+ *    probed against the rendered image. Open (half/whole) noteheads are
+ *    detected as ring-shaped (dark border, bright center).
+ *
+ * The module is deliberately conservative:
  *
  * - It only activates when a page has NO SMuFL noteheads and a clear quorum of
  *   legacy noteheads (mirrors the vector path's own notehead quorum).
@@ -138,5 +141,318 @@ export function normalizeLegacyMusicFontGlyphs(pageText = []) {
   })
 
   diagnostics.mappedGlyphCount = mappedGlyphCount
+  return { items, applied: true, diagnostics }
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic non-SMuFL music-font detection (LilyPond Feta, etc.)
+//
+// LilyPond embeds its Feta music font with per-document glyph ID assignments
+// that vary by font subset. Black noteheads can be at U+AC, ASCII 'Z', or
+// any other codepoint. There is no static codepoint map — we must detect
+// noteheads dynamically by analyzing frequency + ink profile.
+// ---------------------------------------------------------------------------
+
+const DYNAMIC_MIN_NOTEHEADS = 12
+const DYNAMIC_MIN_INK_SAMPLES = 6
+
+function isInk(pixel, index) {
+  return (
+    pixel[index] < 128 || pixel[index + 1] < 128 || pixel[index + 2] < 128
+  )
+}
+
+/**
+ * Probe the rendered image at a glyph position to determine if the glyph is
+ * a filled (black) notehead, an open (half/whole) notehead, or neither.
+ * glyphY is in image pixel coordinates (top-down).
+ *
+ * The probe is sized from glyphW (the character width), not from the font
+ * height — pdf.js reports the full em-height for embedded fonts, which can
+ * be 3-4x the actual ink extent, inflating the probe to include staff lines
+ * and stems. Notehead ink is roughly square in real pixels.
+ */
+function probeGlyphInk(imageData, glyphX, glyphY, glyphW, glyphH) {
+  if (!imageData?.data || !imageData.width || !imageData.height) {
+    return null
+  }
+  const cx = Math.round(glyphX)
+  const cy = Math.round(glyphY)
+  // The probe radius is the glyph width × 0.6 — just larger than the notehead
+  // ink, so the center measurement is the notehead body and the border ring
+  // reaches just past the outer edge.
+  const probeRadius = Math.max(3, Math.round(glyphW * 0.6))
+  const ringOuter = Math.round(glyphW * 1.1)
+  const { data, width: imgW, height: imgH } = imageData
+  if (cx < 0 || cy < 0 || cx >= imgW || cy >= imgH) {
+    return null
+  }
+  if (cx - ringOuter < 0 || cy - ringOuter < 0 || cx + ringOuter >= imgW || cy + ringOuter >= imgH) {
+    // Near page edge — skip; we need clean surrounding pixels
+    return null
+  }
+
+  let centerDark = 0
+  let centerTotal = 0
+  let borderDark = 0
+  let borderTotal = 0
+
+  for (let dy = -ringOuter; dy <= ringOuter; dy += 1) {
+    for (let dx = -ringOuter; dx <= ringOuter; dx += 1) {
+      const px = cx + dx
+      const py = cy + dy
+      if (px < 0 || py < 0 || px >= imgW || py >= imgH) continue
+      const idx = (py * imgW + px) * 4
+      const dist = Math.hypot(dx, dy)
+      const isCenter = dist <= probeRadius * 0.5
+      const isBorder = dist > probeRadius * 0.5 && dist <= ringOuter
+      if (isCenter) {
+        centerTotal += 1
+        if (isInk(data, idx)) centerDark += 1
+      } else if (isBorder) {
+        borderTotal += 1
+        if (isInk(data, idx)) borderDark += 1
+      }
+    }
+  }
+
+  const centerRatio = centerTotal ? centerDark / centerTotal : 0
+  const borderRatio = borderTotal ? borderDark / borderTotal : 0
+
+  if (centerRatio >= 0.5) {
+    return 'filled'
+  }
+  if (centerRatio <= 0.3 && borderRatio >= 0.2) {
+    return 'open'
+  }
+  return null
+}
+
+/**
+ * Collect per-font character statistics from page text items.
+ * Returns a Map: fontName → { total, chars: Map(char → { count, positions, width, height }) }
+ */
+function collectFontCharStats(pageText, imageData) {
+  const result = new Map()
+  for (const item of pageText ?? []) {
+    const font = item.fontName ?? ''
+    const text = item.text ?? ''
+    if (!text.length || !Number.isFinite(item.pageWidth) || !Number.isFinite(item.pageHeight)) {
+      continue
+    }
+    const scaleX = imageData.width / item.pageWidth
+    const scaleY = imageData.height / item.pageHeight
+    const charWidth = (item.width ?? 0) / Math.max(1, text.length)
+    const fontEntry = result.get(font) ?? { total: 0, chars: new Map() }
+
+    for (let i = 0; i < text.length; i += 1) {
+      const ch = text[i]
+      const textX = item.x + charWidth * (i + 0.5)
+      const imgX = textX * scaleX
+      const imgY = imageData.height - item.y * scaleY
+      const charEntry = fontEntry.chars.get(ch) ?? {
+        count: 0,
+        width: charWidth * scaleX,
+        height: (item.height ?? 0) * scaleY,
+        positions: [],
+      }
+      charEntry.count += 1
+      charEntry.positions.push([imgX, imgY])
+      fontEntry.chars.set(ch, charEntry)
+      fontEntry.total += 1
+    }
+    result.set(font, fontEntry)
+  }
+  return result
+}
+
+/**
+ * Determine the staff gap estimate from image width.
+ * Mirrors staffGapGuess in detectVectorRepeatBarlines.js (~1.4% of width).
+ */
+function estimateStaffGap(imageData) {
+  if (!imageData?.width) return 12
+  return Math.max(8, imageData.width * 0.014)
+}
+
+/**
+ * Identify the black-notehead character in a non-SMuFL music font using
+ * frequency + ink analysis. Returns the character code and/or open-notehead
+ * candidates.
+ */
+function detectDynamicNoteheadGlyphs(fontStats, imageData) {
+  if (!fontStats || imageData?.data == null) {
+    return null
+  }
+  const staffGap = estimateStaffGap(imageData)
+  const chars = [...fontStats.chars.entries()]
+  // Filter out whitespace and very low-frequency chars
+  const candidates = chars.filter(
+    ([ch, stats]) =>
+      ch.trim().length > 0 &&
+      stats.count >= DYNAMIC_MIN_NOTEHEADS &&
+      stats.width > 0 &&
+      stats.height > 0,
+  )
+  if (candidates.length === 0) {
+    return null
+  }
+
+  // Sort by frequency descending — the black notehead is overwhelmingly the
+  // most frequent music glyph on any score page.
+  candidates.sort((a, b) => b[1].count - a[1].count)
+
+  const result = { blackNotehead: null, openNoteheads: [] }
+
+  for (const [ch, stats] of candidates) {
+    // Width filters the music-font glyphs: noteheads are ~0.7-1.2x staff gap
+    // wide, while stems/ledger lines/barlines are very narrow (0.2-0.3x) and
+    // beams/slurs are very wide (>2x). Font "height" reports the em box, not
+    // the ink height, so we don't use it for filtering — the ink probe is the
+    // authoritative shape discriminator.
+    const wOk = stats.width >= staffGap * 0.35 && stats.width <= staffGap * 2.2
+    if (!wOk) continue
+
+    // Ink probe — sample up to 20 positions
+    const samplePositions = stats.positions.slice(0, 20)
+    let filledCount = 0
+    let openCount = 0
+    let probed = 0
+    for (const [x, y] of samplePositions) {
+      const ink = probeGlyphInk(imageData, x, y, stats.width, stats.height)
+      if (ink) {
+        probed += 1
+        if (ink === 'filled') filledCount += 1
+        else if (ink === 'open') openCount += 1
+      }
+    }
+    if (probed < DYNAMIC_MIN_INK_SAMPLES) continue
+
+    const filledRatio = filledCount / probed
+    const openRatio = openCount / probed
+
+    if (filledRatio >= 0.45 && !result.blackNotehead) {
+      // Reject ASCII digits (0-9) as "noteheads" — they are TAB fret digits
+      // in tablature fonts, not music notation noteheads. Notation fonts
+      // (Feta, Bravura, MScore) map noteheads to PUA/legacy PUA codepoints,
+      // never to ASCII digits which are reserved for time signatures,
+      // measure numbers, etc.
+      const code = ch.codePointAt(0)
+      if (code >= 0x30 && code <= 0x39) {
+        // This font uses ASCII digits as the most frequent "filled" glyph
+        // — it's a TAB font, not a notation font. Skip it.
+        continue
+      }
+      result.blackNotehead = ch
+    } else if (openRatio >= 0.4 && result.openNoteheads.length < 2) {
+      const code = ch.codePointAt(0)
+      if (code >= 0x30 && code <= 0x39) {
+        continue
+      }
+      result.openNoteheads.push(ch)
+    }
+  }
+
+  return result
+}
+
+/**
+ * Normalize non-SMuFL music-font glyphs (LilyPond Feta, etc.) by detecting
+ * notehead codepoints dynamically via ink analysis. Requires imageData for
+ * pixel probing. Returns identity when no dynamic noteheads are found.
+ */
+export function normalizeNonSmuflMusicFontGlyphs(pageText = [], imageData = null) {
+  const diagnostics = {
+    smuflNoteheadCount: 0,
+    dynamicNoteheadCount: 0,
+    mappedGlyphCount: 0,
+    dynamicFontNames: [],
+    detectedBlackNotehead: null,
+    detectedOpenNoteheads: [],
+    detectionMethod: 'none',
+  }
+
+  if (!imageData?.data || !imageData.width || !imageData.height) {
+    return { items: pageText, applied: false, diagnostics }
+  }
+
+  // Only apply when there are no SMuFL noteheads
+  const smuflNoteheads = countGlyphs(pageText, SMUFL_NOTEHEAD_GLYPHS)
+  diagnostics.smuflNoteheadCount = smuflNoteheads
+  if (smuflNoteheads > 0) {
+    return { items: pageText, applied: false, diagnostics }
+  }
+
+  // Also skip if MScore legacy noteheads were already handled
+  const legacyNoteheads = countGlyphs(pageText, LEGACY_NOTEHEAD_GLYPHS)
+  if (legacyNoteheads >= LEGACY_MIN_NOTEHEADS) {
+    return { items: pageText, applied: false, diagnostics }
+  }
+
+  // Find music font with dynamic notehead glyphs
+  const fontStats = collectFontCharStats(pageText, imageData)
+  let detectedFont = null
+  let detectedGlyphs = null
+
+  // Check fonts sorted by total character count (music fonts dominate)
+  const sortedFonts = [...fontStats.entries()].sort(
+    (a, b) => b[1].total - a[1].total
+  )
+
+  for (const [fontName, stats] of sortedFonts) {
+    if (stats.total < DYNAMIC_MIN_NOTEHEADS * 2) continue
+    const glyphs = detectDynamicNoteheadGlyphs(stats, imageData)
+    if (glyphs?.blackNotehead) {
+      detectedFont = fontName
+      detectedGlyphs = glyphs
+      break
+    }
+  }
+
+  if (!detectedFont || !detectedGlyphs?.blackNotehead) {
+    return { items: pageText, applied: false, diagnostics }
+  }
+
+  // Build the dynamic glyph map
+  const dynamicMap = new Map()
+  dynamicMap.set(detectedGlyphs.blackNotehead, '\ue0a4') // black notehead
+  for (const openChar of detectedGlyphs.openNoteheads) {
+    // First open notehead → half (\ue0a3); second → whole (\ue0a2)
+    const smufl = dynamicMap.size === 1 ? '\ue0a2' : '\ue0a3'
+    dynamicMap.set(openChar, smufl)
+  }
+
+  diagnostics.dynamicFontNames = [detectedFont]
+  diagnostics.detectedBlackNotehead = detectedGlyphs.blackNotehead
+  diagnostics.detectedOpenNoteheads = detectedGlyphs.openNoteheads
+  diagnostics.detectionMethod = 'dynamic-ink-probe'
+
+  let mappedGlyphCount = 0
+  const items = pageText.map((item) => {
+    if ((item.fontName ?? '') !== detectedFont) return item
+    const text = item.text ?? ''
+    let changed = false
+    let mappedText = ''
+    for (const char of text) {
+      const mapped = dynamicMap.get(char)
+      if (mapped) {
+        changed = true
+        mappedGlyphCount += 1
+        mappedText += mapped
+      } else {
+        mappedText += char
+      }
+    }
+    if (!changed) return item
+    return {
+      ...item,
+      text: mappedText,
+      originalLegacyText: text,
+      legacyMusicFontNormalized: true,
+    }
+  })
+
+  diagnostics.mappedGlyphCount = mappedGlyphCount
+  diagnostics.dynamicNoteheadCount = dynamicMap.size
   return { items, applied: true, diagnostics }
 }

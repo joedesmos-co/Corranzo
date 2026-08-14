@@ -41,7 +41,7 @@ import {
 } from './omrRhythmConstants.js'
 import { assertPixelViewReadable } from './omrPixelBuffer.js'
 import { omrDebugStep } from './omrDebug.js'
-import {
+import { 
   hasVectorOmrNoteheads,
   processVectorPageSystems,
   systemConfidenceFromMeasures as vectorSystemConfidenceFromMeasures,
@@ -56,6 +56,7 @@ import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
 import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
+import { normalizeNonSmuflMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
 import { normalizeNoncanonicalArticulationGlyphs } from './normalizeNoncanonicalArticulationGlyphs.js'
 import { buildRasterNoteheadPitchCalibration } from './rasterNoteheadPitchCalibration.js'
 import {
@@ -471,13 +472,20 @@ export function processOmrPageAnalysis(imageData, options = {}) {
   // pages take the vector path instead of the weak raster fallback. Identity
   // for pages that already contain SMuFL noteheads.
   const legacyFontNormalization = normalizeLegacyMusicFontGlyphs(rawPageText)
+  // Dynamically-encoded music fonts (LilyPond Feta, etc.) use idiosyncratic
+  // per-document codepoints for noteheads. Detect them via ink probing against
+  // the rendered image so the vector path can engage for these scores too.
+  const dynamicFontNormalization = legacyFontNormalization.applied
+    ? { items: legacyFontNormalization.items, applied: false, diagnostics: { detectionMethod: 'skipped-after-legacy' } }
+    : normalizeNonSmuflMusicFontGlyphs(legacyFontNormalization.items, imageData)
   const articulationGlyphNormalization =
-    normalizeNoncanonicalArticulationGlyphs(legacyFontNormalization.items)
+    normalizeNoncanonicalArticulationGlyphs(dynamicFontNormalization.items)
   const pageText = articulationGlyphNormalization.items
 
   omrDebugStep('processOmrPage:start', imageData, {
     page,
     legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
+    dynamicFontGlyphsApplied: dynamicFontNormalization.applied || undefined,
     articulationGlyphsNormalized:
       articulationGlyphNormalization.applied || undefined,
   })
@@ -573,7 +581,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       .filter((glyph) => {
         const yNorm = glyph.y / imageData.height
         return (
-          /^[\uE0A2-\uE0A4]$/.test(glyph.text ?? '') &&
+          /^[\uE0A0-\uE0A4]$/.test(glyph.text ?? '') &&
           yNorm >= system.y0 - 0.035 &&
           yNorm <= system.y1 + 0.035
         )
@@ -614,6 +622,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       noteColumnXNorms: noteColumns,
       systemRole: role,
       partnerSystem,
+      vectorBarlines: resolvedVectorBarlineComponents?.verticalBars ?? [],
     })
 
     const splitBoxes = applyVectorRepeatColumnSplitsToSystemBoxes({
@@ -1155,6 +1164,9 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       legacyFontNormalization: legacyFontNormalization.applied
         ? legacyFontNormalization.diagnostics
         : null,
+      dynamicFontNormalization: dynamicFontNormalization.applied
+        ? dynamicFontNormalization.diagnostics
+        : null,
       articulationGlyphNormalization: articulationGlyphNormalization.applied
         ? articulationGlyphNormalization.diagnostics
         : null,
@@ -1171,6 +1183,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       systems: systems.length,
       source: vector.source,
       legacyFontGlyphsApplied: legacyFontNormalization.applied || undefined,
+      dynamicFontGlyphsApplied: dynamicFontNormalization.applied || undefined,
       articulationGlyphsNormalized:
         articulationGlyphNormalization.applied || undefined,
     })
