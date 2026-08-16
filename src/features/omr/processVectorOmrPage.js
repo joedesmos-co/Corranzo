@@ -271,13 +271,15 @@ function glyphInBox(glyph, box, imageData, { usePlayableStart = true, yPad = 0 }
   )
 }
 
-function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = []) {
+function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vectorAccidentalPaths = []) {
   const firstBox = firstSystemBoxes[0]
   if (!firstBox) {
     return { fifths: 0, mode: 'major', confidence: 0 }
   }
   let sharps = 0
   let flats = 0
+  
+  // Check text glyphs
   for (const glyph of glyphs) {
     if (!glyphInBox(glyph, firstBox, imageData, { usePlayableStart: false, yPad: 0.02 })) {
       continue
@@ -292,13 +294,36 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = []) {
       flats += 1
     }
   }
-
+  
+  // Check vector accidental paths for key signature area
+  const keySigArea = {
+    x0: firstBox.x0 * imageData.width,
+    x1: (firstBox.playableX0 ?? firstBox.x0) * imageData.width,
+    y0: firstBox.y0 * imageData.height,
+    y1: firstBox.y1 * imageData.height,
+  }
+  
+  for (const path of vectorAccidentalPaths) {
+    if (!path.bounds) continue
+    if (path.bounds.x1 < keySigArea.x1 && 
+        path.bounds.x0 > keySigArea.x0 &&
+        path.bounds.y1 > keySigArea.y0 && 
+        path.bounds.y0 < keySigArea.y1) {
+      const isSharp = path.archDirection === 'above' || 
+                      (path.bounds.height > path.bounds.width * 1.5)
+      if (isSharp) {
+        sharps += 1
+      } else {
+        flats += 1
+      }
+    }
+  }
   if (sharps >= 2) {
     return {
       fifths: Math.max(1, Math.min(7, Math.round(sharps / 2))),
       mode: 'major',
       confidence: 0.9,
-      source: 'vector-glyphs',
+      source: 'vector-glyphs+paths',
     }
   }
   if (flats >= 2) {
@@ -306,7 +331,7 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = []) {
       fifths: -Math.max(1, Math.min(7, Math.round(flats / 2))),
       mode: 'major',
       confidence: 0.9,
-      source: 'vector-glyphs',
+      source: 'vector-glyphs+paths',
     }
   }
   return { fifths: 0, mode: 'major', confidence: 0 }
@@ -5131,7 +5156,7 @@ export function processVectorPageSystems({
 }) {
   const glyphs = textGlyphsToImage(pageText, imageData)
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
-  const detectedKeySignature = detectVectorKeySignature(glyphs, imageData, firstSystemBoxes)
+  const detectedKeySignature = detectVectorKeySignature(glyphs, imageData, firstSystemBoxes, vectorAccidentalPaths)
   const detectedTimeSignature = detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes)
   const keySignature =
     (detectedKeySignature.confidence ?? 0) > 0

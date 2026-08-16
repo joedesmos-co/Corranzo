@@ -376,12 +376,21 @@ export async function extractPdfPageVectorCurves(
     pageNumber,
     targetWidth: viewport.width,
   })
+  // Estimate key signature area: left 20% of page width, top 30% of page height
+  // This covers the typical key signature area (after clef, before first measure)
+  const keySignatureArea = {
+    x0: 0,
+    x1: viewport.width * 0.22,
+    y0: 0,
+    y1: viewport.height * 0.35,
+  }
   const pathSymbols = extractPdfVectorPathSymbolsFromOperatorList({
     operatorList,
     ops: pdfjs.OPS,
     viewportTransform: viewport.transform,
     pageNumber,
     targetWidth: viewport.width,
+    keySignatureArea,
   })
   const barlineComponents = extractPdfVectorBarlineComponentsFromOperatorList({
     operatorList,

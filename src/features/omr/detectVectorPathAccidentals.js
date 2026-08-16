@@ -181,14 +181,16 @@ export function classifyAugmentationDotPathGeometry(
 /**
  * Classify accidental type from path stroke geometry (not bbox alone).
  */
-export function classifyAccidentalPathGeometry(path, { staffGap = 12 } = {}) {
+export function classifyAccidentalPathGeometry(path, { staffGap = 12, isKeySignatureArea = false } = {}) {
   if (!path?.bounds) {
     return null
   }
   const { width, height } = path.bounds
+  // Relax size constraints for key signature area where accidentals are often smaller
+  const minHeight = isKeySignatureArea ? staffGap * 0.4 : staffGap * 0.55
   if (
     width < staffGap * 0.25 ||
-    height < staffGap * 0.55 ||
+    height < minHeight ||
     width > staffGap * 2.4 ||
     height > staffGap * 3.2
   ) {
@@ -220,19 +222,21 @@ export function classifyAccidentalPathGeometry(path, { staffGap = 12 } = {}) {
   const curveHeavy = (path.curveCount ?? 0) >= Math.max(2, (path.lineCount ?? 0))
 
   // Sharp: cross of verticals + (near-)horizontals, roughly square.
+  // Relax criteria for key signature area where accidentals are often smaller.
+  const minHeightForSharp = isKeySignatureArea ? staffGap * 0.5 : staffGap * 0.7
   if (
     aspect >= 0.35 &&
     aspect <= 1.15 &&
     vertical >= 2 &&
     (horizontal + slanted) >= 2 &&
-    height >= staffGap * 0.7
+    height >= minHeightForSharp
   ) {
     return {
       type: 'sharp',
       alter: 1,
       text: PATH_ACCIDENTAL_GLYPHS.sharp,
       confidence: Math.min(0.92, 0.62 + vertical * 0.05 + (horizontal + slanted) * 0.04),
-      reason: 'path-cross',
+      reason: isKeySignatureArea ? 'path-cross-keysig' : 'path-cross',
     }
   }
 
@@ -286,6 +290,8 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
   viewportTransform,
   pageNumber = 1,
   targetWidth = 1000,
+  /** Key signature area: { x0, x1, y0, y1 } in page coordinates. */
+  keySignatureArea = null,
 } = {}) {
   if (
     !operatorList?.fnArray?.length ||
@@ -383,8 +389,15 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
       })
     }
 
-    const classification = classifyAccidentalPathGeometry(parsed, {
+    const isInKeySigArea = keySignatureArea &&
+    bounds.x1 > keySignatureArea.x0 &&
+    bounds.x0 < keySignatureArea.x1 &&
+    bounds.y1 > keySignatureArea.y0 &&
+    bounds.y0 < keySignatureArea.y1
+
+const classification = classifyAccidentalPathGeometry(parsed, {
       staffGap: staffGapGuess,
+      isKeySignatureArea: isInKeySigArea,
     })
     const directlyClassifiedAccidental =
       classification != null && classification.confidence >= 0.62
@@ -393,17 +406,20 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
     // not fragments. Reusing them here can synthesize a second, wider sharp
     // from several independently valid glyphs in the same dense chord column.
     // Only unclassified geometry remains eligible for composite recovery.
+    // Allow zero-width (vertical line) and zero-height (horizontal line) fragments
+    // for sharp components, but require minimum dimension to exclude staff lines/noise.
+    const minFragmentDim = Math.max(1, staffGapGuess * 0.15)
     if (
       !dotClassification &&
       !directlyClassifiedAccidental &&
-      bounds.width > 0 &&
-      bounds.height > 0 &&
       bounds.width < staffGapGuess * 3.5 &&
-      bounds.height < staffGapGuess * 4
+      bounds.height < staffGapGuess * 4 &&
+      (bounds.width > minFragmentDim || bounds.height > minFragmentDim)
     ) {
       fragments.push({
         operatorIndex,
         paintOperation,
+        isInKeySigArea,
         ...parsed,
       })
     }
@@ -456,10 +472,11 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
         group.push(j)
       }
     }
-    if (group.length < 3) {
+    const members = group.map((index) => fragments[index])
+    const minGroupSize = members.some(m => m.isInKeySigArea) ? 2 : 3
+    if (group.length < minGroupSize) {
       continue
     }
-    const members = group.map((index) => fragments[index])
     const x0 = Math.min(...members.map((member) => member.bounds.x0))
     const x1 = Math.max(...members.map((member) => member.bounds.x1))
     const y0 = Math.min(...members.map((member) => member.bounds.y0))
@@ -474,6 +491,7 @@ export function extractPdfVectorPathSymbolsFromOperatorList({
     }
     const classification = classifyAccidentalPathGeometry(composite, {
       staffGap: staffGapGuess,
+      isKeySignatureArea: members.some(m => m.isInKeySigArea),
     })
     if (!classification || classification.type !== 'sharp') {
       continue

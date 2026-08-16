@@ -36,6 +36,12 @@ export const LEGACY_MSCORE_GLYPH_MAP = new Map([
   ['\ue12d', '\ue0a4'], // black notehead
   ['\ue19e', '\ue050'], // G (treble) clef
   ['\ue19c', '\ue062'], // F (bass) clef
+  // Accidentals (MScore legacy font → SMuFL)
+  ['\ue1a0', '\ue262'], // sharp
+  ['\ue1a1', '\ue260'], // flat
+  ['\ue1a2', '\ue261'], // natural
+  ['\ue1a3', '\ue263'], // double sharp
+  ['\ue1a4', '\ue264'], // double flat
 ])
 
 const LEGACY_NOTEHEAD_GLYPHS = new Set(['\ue12b', '\ue12c', '\ue12d'])
@@ -172,7 +178,8 @@ function isInk(pixel, index) {
  * be 3-4x the actual ink extent, inflating the probe to include staff lines
  * and stems. Notehead ink is roughly square in real pixels.
  */
-function probeGlyphInk(imageData, glyphX, glyphY, glyphW, glyphH) {
+function probeGlyphInk(imageData, glyphX, glyphY, glyphW, _glyphH) {
+  void _glyphH
   if (!imageData?.data || !imageData.width || !imageData.height) {
     return null
   }

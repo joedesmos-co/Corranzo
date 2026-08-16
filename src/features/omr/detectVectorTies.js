@@ -650,17 +650,17 @@ function collectPdfVectorCurvePairs({
 
     if (nearestStart) {
       const startBox = measureBoxByNumber.get(nearestStart.measureNumber)
-      if (startBox && isAtMeasureEdge(curve.end, 'right', startBox, imageData)) {
-        diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
-        diagnostic.classification = 'outgoing-measure-fragment'
-        measureOutgoingFragments.push({ curve, attachment: startCandidates[0], diagnostic })
-        continue
-      }
       const bounds = systemBounds.get(nearestStart.systemIndex)
       if (isAtSystemEdge(curve.end, 'right', bounds, imageData)) {
         diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
         diagnostic.classification = 'outgoing-system-fragment'
         outgoingFragments.push({ curve, attachment: startCandidates[0], diagnostic })
+        continue
+      }
+      if (startBox && isAtMeasureEdge(curve.end, 'right', startBox, imageData)) {
+        diagnostic.selectedStart = attachmentDiagnostic(startCandidates[0])
+        diagnostic.classification = 'outgoing-measure-fragment'
+        measureOutgoingFragments.push({ curve, attachment: startCandidates[0], diagnostic })
         continue
       }
       const tieLike = curveLooksTieLike(
@@ -710,17 +710,17 @@ function collectPdfVectorCurvePairs({
     }
     if (nearestEnd) {
       const endBox = measureBoxByNumber.get(nearestEnd.measureNumber)
-      if (endBox && isAtMeasureEdge(curve.start, 'left', endBox, imageData)) {
-        diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
-        diagnostic.classification = 'incoming-measure-fragment'
-        measureIncomingFragments.push({ curve, attachment: endCandidates[0], diagnostic })
-        continue
-      }
       const bounds = systemBounds.get(nearestEnd.systemIndex)
       if (isAtSystemEdge(curve.start, 'left', bounds, imageData)) {
         diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
         diagnostic.classification = 'incoming-system-fragment'
         incomingFragments.push({ curve, attachment: endCandidates[0], diagnostic })
+        continue
+      }
+      if (endBox && isAtMeasureEdge(curve.start, 'left', endBox, imageData)) {
+        diagnostic.selectedEnd = attachmentDiagnostic(endCandidates[0])
+        diagnostic.classification = 'incoming-measure-fragment'
+        measureIncomingFragments.push({ curve, attachment: endCandidates[0], diagnostic })
         continue
       }
     }

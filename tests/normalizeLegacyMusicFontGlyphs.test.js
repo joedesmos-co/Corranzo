@@ -128,8 +128,11 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     for (const [legacy, smufl] of LEGACY_MSCORE_GLYPH_MAP) {
       expect(legacy.codePointAt(0)).toBeGreaterThanOrEqual(0xe100)
       expect(legacy.codePointAt(0)).toBeLessThanOrEqual(0xe1ff)
-      expect(smufl.codePointAt(0)).toBeGreaterThanOrEqual(0xe050)
-      expect(smufl.codePointAt(0)).toBeLessThanOrEqual(0xe0ff)
+      const smuflCode = smufl.codePointAt(0)
+      // SMuFL noteheads/clefs are in 0xE050-0xE0FF; accidentals are in 0xE260-0xE264
+      const isNoteheadOrClef = smuflCode >= 0xe050 && smuflCode <= 0xe0ff
+      const isAccidental = smuflCode >= 0xe260 && smuflCode <= 0xe264
+      expect(isNoteheadOrClef || isAccidental).toBe(true)
     }
   })
 })

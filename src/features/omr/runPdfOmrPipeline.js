@@ -372,6 +372,7 @@ async function runPdfOmrPipelineBody({
   void jobPdfHash
   void jobIdentity
   void totalPages
+  void usingDefaultCurveExtract
 
   const measureRhythms = []
   const measureGridEntries = []
@@ -1223,6 +1224,31 @@ async function runPdfOmrPipelineBody({
 
   phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })
 
+  // DEBUG: Log measure numbers before MusicXML generation
+  if (measureRhythms.length > 0) {
+    const first20 = measureRhythms.slice(0, 20).map(m => m.measureNumber);
+    const last20 = measureRhythms.slice(-20).map(m => m.measureNumber);
+    const numbers = measureRhythms.map(m => m.measureNumber);
+    const unique = [...new Set(numbers)];
+    const sorted = [...numbers].sort((a,b) => a-b);
+    let hasDuplicates = false;
+    let hasGaps = false;
+    for (let i = 1; i < sorted.length; i++) {
+      if (sorted[i] === sorted[i-1]) hasDuplicates = true;
+      if (sorted[i] - sorted[i-1] > 1) hasGaps = true;
+    }
+    omrTrace('pipeline:measure-numbers-before-xml', {
+      count: measureRhythms.length,
+      uniqueCount: unique.length,
+      first20,
+      last20,
+      min: Math.min(...numbers),
+      max: Math.max(...numbers),
+      hasDuplicates,
+      hasGaps,
+    }, traceRunId)
+  }
+
   // Bind each final semantic note to its owned source-PDF geometry before
   // MusicXML serialization. The generated note IDs are the exact join key used
   // by practice; no later timing/position heuristic is needed for precision.
@@ -1239,10 +1265,10 @@ async function runPdfOmrPipelineBody({
       instrument,
     }),
   )
-  let musicXml = productionMusicXml
+  let musicXml
   let omrV3ShadowResult = null
   let omrV3IndependentShadowResult = null
-  let omrV3RuntimePromotion = null
+  let omrV3RuntimePromotion
   const runIndependentShadow = () =>
     runOmrV3Shadow({
       documentId: `independent-shadow-${title}`,
