@@ -3623,6 +3623,12 @@
   box-shadow: 0 0 10px rgba(255, 180, 70, 0.18);
 }
 
+/* Play Along changes targets from the musical timeline; keep each source box
+   steady between onsets instead of layering the Wait For You pulse on top. */
+.score-follow-overlay__note-highlight--play-along {
+  animation: none;
+}
+
 .score-follow-overlay__note-target {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -3632,6 +3638,10 @@
 
 .score-follow-overlay__note-target--compact {
   animation: wfy-note-target-pulse 2s ease-in-out infinite;
+}
+
+.score-follow-overlay__note-target--play-along {
+  animation: none;
 }
 
 .score-follow-overlay__note-target-glow {

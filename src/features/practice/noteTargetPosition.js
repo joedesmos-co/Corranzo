@@ -4,6 +4,11 @@ import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCurs
 import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { resolveNotePracticeHand } from './practiceScope.js'
 import {
+  getSourceVisualAnchorIndex,
+  resolveSourceVisualAnchorGeometry,
+  SOURCE_VISUAL_COORDINATE_SPACE,
+} from '../omr/omrSourceVisualMap.js'
+import {
   buildMeasureAnchorGeometry,
   getMeasureLayoutExtents,
   getMeasureTimingWindow,
@@ -13,6 +18,7 @@ export const NOTE_TARGET_MARKER_OFFSET_Y = 0.036
 
 export const NOTE_TARGET_SOURCE = {
   DIRECT_GEOMETRY: 'direct-geometry',
+  SOURCE_NOTEHEAD: 'source-notehead',
   MUSICXML_LAYOUT: 'musicxml-layout',
   MEASURE_BEAT: 'measure-beat',
   SYSTEM_HEURISTIC: 'system-heuristic',
@@ -20,25 +26,30 @@ export const NOTE_TARGET_SOURCE = {
 }
 
 const CONFIDENCE_BY_SOURCE = {
+  [NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD]: 0.96,
   [NOTE_TARGET_SOURCE.DIRECT_GEOMETRY]: 0.9,
-  [NOTE_TARGET_SOURCE.MUSICXML_LAYOUT]: 0.82,
+  [NOTE_TARGET_SOURCE.MUSICXML_LAYOUT]: 0.66,
   [NOTE_TARGET_SOURCE.MEASURE_BEAT]: 0.62,
   [NOTE_TARGET_SOURCE.SYSTEM_HEURISTIC]: 0.52,
   [NOTE_TARGET_SOURCE.ANCHOR_ONLY]: 0.35,
 }
 
 export const NOTE_TARGET_STATUS_LABELS = {
+  [NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD]: 'Using the printed source notehead',
   [NOTE_TARGET_SOURCE.DIRECT_GEOMETRY]: 'Using detected notehead geometry',
-  [NOTE_TARGET_SOURCE.MUSICXML_LAYOUT]: 'Using MusicXML horizontal note position',
+  [NOTE_TARGET_SOURCE.MUSICXML_LAYOUT]: 'Approximate — MusicXML onset in mapped measure',
   [NOTE_TARGET_SOURCE.MEASURE_BEAT]: 'Approximate — beat position in measure',
   [NOTE_TARGET_SOURCE.SYSTEM_HEURISTIC]: 'Approximate — staff or pitch on system',
   [NOTE_TARGET_SOURCE.ANCHOR_ONLY]: 'Rough guide — anchor only',
 }
 
 const HIGHLIGHT_SOURCES = new Set([
+  NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
   NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
   NOTE_TARGET_SOURCE.MUSICXML_LAYOUT,
 ])
+
+export const PRECISE_SOURCE_MIN_CONFIDENCE = 0.7
 
 function shouldPreserveGrandStaffBand(notes, timingMap) {
   if ((timingMap?.stavesPerSystem ?? 1) < 2) {
@@ -92,7 +103,6 @@ function resolveNoteX({
   checkpointTime,
 }) {
   const { xMeasureStart, xMeasureEnd } = geometry
-  const bandWidth = Math.max(0.025, xMeasureEnd - xMeasureStart)
 
   if (layoutExtents.hasDefaultX && note.defaultX != null) {
     // MusicXML default-x is tenths from the left of the measure. Map against the
@@ -138,18 +148,77 @@ function classifySource(note, layoutExtents, timingWindow, geometry) {
   return NOTE_TARGET_SOURCE.ANCHOR_ONLY
 }
 
+function resolveOwnedSourcePlacement(note, sourceAnchorIndex, preferredRepresentation) {
+  const ownedSourceAnchor = resolveSourceVisualAnchorGeometry(
+    sourceAnchorIndex?.get(note.sourceNoteheadId),
+    preferredRepresentation,
+  )
+  // An explicit notation/TAB choice is an event-level contract. If even one
+  // semantic note lacks that representation, reject its source placement so
+  // the whole event takes the conservative fallback path instead of painting
+  // exact boxes across both printed representations at once.
+  const matchesPreferredRepresentation =
+    preferredRepresentation == null ||
+    ownedSourceAnchor?.representation === preferredRepresentation
+  const ownershipMatchesSemanticNote =
+    ownedSourceAnchor &&
+    matchesPreferredRepresentation &&
+    (ownedSourceAnchor.measureNumber == null ||
+      note.measureNumber == null ||
+      Number(ownedSourceAnchor.measureNumber) === Number(note.measureNumber)) &&
+    (ownedSourceAnchor.midi == null ||
+      note.midi == null ||
+      Number(ownedSourceAnchor.midi) === Number(note.midi))
+  if (
+    ownershipMatchesSemanticNote &&
+    ownedSourceAnchor?.sourceCenter &&
+    ownedSourceAnchor?.sourceBBox
+  ) {
+    return {
+      x: ownedSourceAnchor.sourceCenter.x,
+      y: ownedSourceAnchor.sourceCenter.y,
+      page: ownedSourceAnchor.page,
+      source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
+      confidence: ownedSourceAnchor.confidence,
+      coordinateSpace: SOURCE_VISUAL_COORDINATE_SPACE,
+      sourceBBox: ownedSourceAnchor.sourceBBox,
+      sourceNoteheadId: ownedSourceAnchor.sourceNoteheadId,
+      sourceEventId: ownedSourceAnchor.sourceEventId,
+      sourceEventIds: ownedSourceAnchor.sourceEventIds ?? [],
+      representation: ownedSourceAnchor.representation,
+      systemIndex: ownedSourceAnchor.systemIndex,
+      staffIndex: ownedSourceAnchor.staffIndex,
+      geometrySource: ownedSourceAnchor.geometrySource,
+      staffGap: ownedSourceAnchor.staffGap,
+    }
+  }
+
+  return null
+}
+
 function resolveSingleNotePosition({
   note,
   geometry,
   timingWindow,
   layoutExtents,
   checkpointTime,
+  sourceAnchorIndex,
+  preferredRepresentation,
 }) {
+  const sourcePlacement = resolveOwnedSourcePlacement(
+    note,
+    sourceAnchorIndex,
+    preferredRepresentation,
+  )
+  if (sourcePlacement) return sourcePlacement
+
   if (finite(note.xNorm) && finite(note.yNorm)) {
     return {
       x: clamp(note.xNorm, 0.03, 0.97),
       y: clamp(note.yNorm, 0.06, 0.94),
       source: NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
+      confidence: CONFIDENCE_BY_SOURCE[NOTE_TARGET_SOURCE.DIRECT_GEOMETRY],
+      coordinateSpace: 'pdf-analysis-normalized',
     }
   }
 
@@ -174,6 +243,7 @@ function resolveSingleNotePosition({
     x: clamp(x, 0.03, 0.97),
     y,
     source: classifySource(note, layoutExtents, timingWindow, geometry),
+    coordinateSpace: 'pdf-analysis-normalized',
   }
 }
 
@@ -184,6 +254,7 @@ function pickStrongestSource(sources) {
     NOTE_TARGET_SOURCE.MEASURE_BEAT,
     NOTE_TARGET_SOURCE.MUSICXML_LAYOUT,
     NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
+    NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
   ]
   return sources.reduce(
     (best, source) => (order.indexOf(source) > order.indexOf(best) ? source : best),
@@ -192,6 +263,9 @@ function pickStrongestSource(sources) {
 }
 
 function noteBoxForPlacement(placement, geometry) {
+  if (placement.sourceBBox) {
+    return placement.sourceBBox
+  }
   const measureWidth = Math.max(0.03, geometry.xMeasureEnd - geometry.xMeasureStart)
   const corridorHeight = Math.max(0.055, geometry.yBottom - geometry.yTop)
   const halfWidth = clamp(measureWidth * 0.08, 0.008, 0.02)
@@ -220,6 +294,16 @@ function buildTargetHighlight({ placements, geometry, isChord, source, confidenc
   }
 
   const boxes = placements.map((placement) => noteBoxForPlacement(placement, geometry))
+  const coordinateSpaces = new Set(
+    placements.map((placement) => placement.coordinateSpace ?? 'pdf-analysis-normalized'),
+  )
+  if (coordinateSpaces.size !== 1) {
+    return null
+  }
+  const coordinateSpace = [...coordinateSpaces][0]
+  const preciseSource = placements.every(
+    (placement) => placement.source === NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
+  )
   const rect = boxes.reduce(
     (bounds, box) => ({
       x0: Math.min(bounds.x0, box.x0),
@@ -230,11 +314,13 @@ function buildTargetHighlight({ placements, geometry, isChord, source, confidenc
     { x0: Infinity, y0: Infinity, x1: 0, y1: 0 },
   )
 
-  const padded = expandRect(
-    rect,
-    isChord ? 0.012 : 0.01,
-    isChord ? 0.01 : 0.008,
-  )
+  const padded = preciseSource
+    ? expandRect(rect, 0.0025, 0.0025)
+    : expandRect(
+        rect,
+        isChord ? 0.012 : 0.01,
+        isChord ? 0.01 : 0.008,
+      )
   const minWidth = isChord ? 0.036 : 0.028
   const minHeight = isChord ? 0.028 : 0.022
   const measureWidth = Math.max(0.03, geometry.xMeasureEnd - geometry.xMeasureStart)
@@ -245,7 +331,7 @@ function buildTargetHighlight({ placements, geometry, isChord, source, confidenc
   const height = padded.y1 - padded.y0
   let centerX = (padded.x0 + padded.x1) / 2
   const centerY = (padded.y0 + padded.y1) / 2
-  if (width > maxWidth) {
+  if (!preciseSource && width > maxWidth) {
     const xs = placements.map((placement) => placement.x).sort((a, b) => a - b)
     centerX = xs[Math.floor(xs.length / 2)]
     width = maxWidth
@@ -262,8 +348,92 @@ function buildTargetHighlight({ placements, geometry, isChord, source, confidenc
     confidence,
     noteCount: placements.length,
     noteBoxes: boxes,
+    sourceNoteheadIds: placements.map((placement) => placement.sourceNoteheadId).filter(Boolean),
+    sourceEventIds: [
+      ...new Set(
+        placements.flatMap((placement) =>
+          placement.sourceEventIds?.length
+            ? placement.sourceEventIds
+            : placement.sourceEventId
+              ? [placement.sourceEventId]
+              : [],
+        ),
+      ),
+    ],
+    coordinateSpace,
+    renderMode: preciseSource ? 'individual-source-boxes' : 'union',
+    representation: preciseSource ? placements[0]?.representation ?? null : null,
+    preciseSource,
     isChord,
     approximate: confidence < 0.7,
+  }
+}
+
+function sourceAnchorSummaries(placements) {
+  return placements.map((placement) => ({
+    sourceNoteheadId: placement.sourceNoteheadId,
+    sourceEventId: placement.sourceEventId,
+    sourceEventIds: placement.sourceEventIds ?? [],
+    page: placement.page,
+    systemIndex: placement.systemIndex,
+    staffIndex: placement.staffIndex,
+    representation: placement.representation,
+    confidence: placement.confidence,
+    geometrySource: placement.geometrySource,
+    staffGap: placement.staffGap,
+  }))
+}
+
+function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
+  const uniquePlacements = [
+    ...new Map(
+      placements.map((placement) => [placement.sourceNoteheadId, placement]),
+    ).values(),
+  ]
+  const xs = uniquePlacements.map((placement) => placement.x)
+  const ys = uniquePlacements.map((placement) => placement.y)
+  const x = xs.reduce((sum, value) => sum + value, 0) / xs.length
+  const y = ys.reduce((sum, value) => sum + value, 0) / ys.length
+  const yMin = Math.min(...ys)
+  const yMax = Math.max(...ys)
+  const confidence = Math.min(
+    ...uniquePlacements.map((placement) => placement.confidence),
+  )
+  const highlight = buildTargetHighlight({
+    placements: uniquePlacements,
+    geometry: { xMeasureStart: 0, xMeasureEnd: 1 },
+    isChord: checkpoint.isChord,
+    source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
+    confidence,
+  })
+  const measureNumber = checkpoint.measureNumber
+  const checkpointTime = checkpoint.timeSeconds
+
+  return {
+    visible: true,
+    targetKey:
+      checkpoint.id ??
+      `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
+    page: uniquePlacements[0].page,
+    x: clamp(x, 0, 1),
+    y: clamp(y, 0, 1),
+    noteAnchorY: clamp(y, 0, 1),
+    markerOffsetY: 0,
+    highlight,
+    coordinateSpace: SOURCE_VISUAL_COORDINATE_SPACE,
+    sourceAnchors: sourceAnchorSummaries(uniquePlacements),
+    displayMode: 'highlight',
+    mode,
+    approximate: false,
+    confidence,
+    source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
+    reason: NOTE_TARGET_STATUS_LABELS[NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD],
+    isChord: checkpoint.isChord,
+    isWideChord: checkpoint.isChord && yMax - yMin > 0.04,
+    chordSpread: yMax - yMin,
+    hasLayoutData: notes.some((note) => noteHasLayout(note)),
+    measureNumber,
+    placement: 'source-ownership',
   }
 }
 
@@ -274,6 +444,9 @@ export function resolveNoteTargetPosition({
   checkpoint,
   timingMap,
   anchors,
+  sourceVisualMap = null,
+  preferredRepresentation = null,
+  mode = 'wait-for-you',
 }) {
   if (!checkpoint || !isPlayableCheckpointKind(checkpoint.kind)) {
     return { visible: false, reason: 'not-note-checkpoint' }
@@ -284,12 +457,46 @@ export function resolveNoteTargetPosition({
     return { visible: false, reason: 'no-notes' }
   }
 
-  if (!anchors?.length || !timingMap?.measures?.length) {
-    return { visible: false, reason: 'no-anchors' }
-  }
-
   const measureNumber = checkpoint.measureNumber
   const checkpointTime = checkpoint.timeSeconds
+  const sourceAnchorIndex = getSourceVisualAnchorIndex(sourceVisualMap)
+  const sourcePlacements = notes
+    .map((note) =>
+      resolveOwnedSourcePlacement(note, sourceAnchorIndex, preferredRepresentation),
+    )
+    .filter(Boolean)
+  const ownsEveryNote = sourcePlacements.length === notes.length
+  const sourcePages = new Set(sourcePlacements.map((placement) => placement.page))
+
+  if (sourcePages.size > 1) {
+    return { visible: false, reason: 'cross-page-source-event' }
+  }
+
+  const preciseSourceConfidence = ownsEveryNote
+    ? Math.min(...sourcePlacements.map((placement) => placement.confidence))
+    : null
+  if (
+    ownsEveryNote &&
+    sourcePages.size === 1 &&
+    preciseSourceConfidence >= PRECISE_SOURCE_MIN_CONFIDENCE
+  ) {
+    return buildExactSourceTarget({
+      checkpoint,
+      notes,
+      placements: sourcePlacements,
+      mode,
+    })
+  }
+
+  if (!anchors?.length || !timingMap?.measures?.length) {
+    return {
+      visible: false,
+      reason:
+        ownsEveryNote && preciseSourceConfidence < PRECISE_SOURCE_MIN_CONFIDENCE
+          ? 'low-confidence-source-anchor'
+          : 'no-anchors',
+    }
+  }
 
   const sharedCursor = resolveScoreFollowCursor({
     timingMap,
@@ -319,7 +526,9 @@ export function resolveNoteTargetPosition({
 
   const timingWindow = getMeasureTimingWindow(timingMap, measureNumber, checkpointTime)
   const layoutExtents = getMeasureLayoutExtents(timingMap, measureNumber)
-
+  // Exact rendering is all-or-nothing for a semantic event. If ownership is
+  // partial or below the precision threshold, resolve every member through the
+  // conservative measure/layout hierarchy so coordinate spaces never mix.
   const placements = notes.map((note) =>
     resolveSingleNotePosition({
       note,
@@ -327,6 +536,8 @@ export function resolveNoteTargetPosition({
       timingWindow,
       layoutExtents,
       checkpointTime,
+      sourceAnchorIndex: new Map(),
+      preferredRepresentation,
     }),
   )
 
@@ -338,7 +549,11 @@ export function resolveNoteTargetPosition({
   const y = checkpoint.isChord && yMax - yMin > 0.025 ? (yMin + yMax) / 2 : ys.reduce((a, b) => a + b, 0) / ys.length
 
   const source = pickStrongestSource(placements.map((placement) => placement.source))
-  const confidence = CONFIDENCE_BY_SOURCE[source] ?? 0.4
+  const confidence = Math.min(
+    ...placements.map(
+      (placement) => placement.confidence ?? CONFIDENCE_BY_SOURCE[placement.source] ?? 0.4,
+    ),
+  )
   const hasLayoutData = notes.some((note) => noteHasLayout(note))
   const chordSpread = yMax - yMin
   const highlight = buildTargetHighlight({
@@ -373,7 +588,10 @@ export function resolveNoteTargetPosition({
     noteAnchorY,
     markerOffsetY: NOTE_TARGET_MARKER_OFFSET_Y,
     highlight,
+    coordinateSpace: highlight?.coordinateSpace ?? 'pdf-analysis-normalized',
+    sourceAnchors: [],
     displayMode,
+    mode,
     approximate: !highlight || confidence < 0.7,
     confidence,
     source,

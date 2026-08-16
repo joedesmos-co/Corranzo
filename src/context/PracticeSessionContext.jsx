@@ -128,7 +128,8 @@ export function PracticeSessionProvider({
     if (
       experimentalOmrPlayback &&
       session.isWaitForYou &&
-      !scoreFollow.canFollow
+      !scoreFollow.canFollow &&
+      !(session.sourceVisualMap?.anchorCount > 0)
     ) {
       session.setPracticeMode(PRACTICE_MODE.NORMAL)
     }
@@ -136,6 +137,7 @@ export function PracticeSessionProvider({
     experimentalOmrPlayback,
     session.isWaitForYou,
     session.setPracticeMode,
+    session.sourceVisualMap?.anchorCount,
     scoreFollow.canFollow,
   ])
 
@@ -145,7 +147,25 @@ export function PracticeSessionProvider({
     waitForYouStatus: session.waitForYou.status,
     currentCheckpoint: session.waitForYou.currentCheckpoint,
     timingMap: session.timing.timingMap,
-    anchors: scoreFollow.displayAnchors ?? scoreFollow.anchors,
+    // Target resolution owns analysis/source coordinate conversion. Supplying
+    // displayAnchors here would rotate anchor-derived targets a second time.
+    anchors: scoreFollow.anchors,
+    sourceVisualMap: session.sourceVisualMap,
+    preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
+    mode: 'wait-for-you',
+    visiblePageNumber,
+  })
+
+  const playAlongNoteTarget = useWaitForYouNoteTarget({
+    active: !session.isWaitForYou,
+    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+    waitForYouStatus: null,
+    currentCheckpoint: session.playAlongVisualCheckpoint,
+    timingMap: session.timing.timingMap,
+    anchors: scoreFollow.anchors,
+    sourceVisualMap: session.sourceVisualMap,
+    preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
+    mode: 'play-along',
     visiblePageNumber,
   })
 
@@ -154,6 +174,32 @@ export function PracticeSessionProvider({
 
   const wfyNoteTargetVisible =
     wfyNoteMode && (waitForYouNoteTarget?.showOnPage ?? false)
+
+  const playAlongNoteTargetActive = Boolean(
+    !session.isWaitForYou && playAlongNoteTarget?.target?.visible,
+  )
+  const playAlongNoteTargetVisible = Boolean(
+    playAlongNoteTargetActive && playAlongNoteTarget?.showOnPage,
+  )
+
+  const practiceNoteTarget = session.isWaitForYou
+    ? {
+        ...waitForYouNoteTarget,
+        active: Boolean(
+          session.waitForYou.status === WFY_STATUS.WAITING &&
+            waitForYouNoteTarget?.target?.visible,
+        ),
+        mode: 'wait-for-you',
+      }
+    : {
+        ...playAlongNoteTarget,
+        active: playAlongNoteTargetActive,
+        mode: 'play-along',
+      }
+
+  const practiceNoteTargetVisible = session.isWaitForYou
+    ? wfyNoteTargetVisible
+    : playAlongNoteTargetVisible
 
   const hidePlaybackScoreFollowCursor = wfyNoteTargetVisible
 
@@ -256,8 +302,8 @@ export function PracticeSessionProvider({
             cursorPage: scoreFollow.cursorVisibility?.cursorPage ?? null,
           }
         : scoreFollow.cursorVisibility,
-      noteTarget: waitForYouNoteTarget?.target ?? null,
-      showNoteTarget: wfyNoteTargetVisible,
+      noteTarget: practiceNoteTarget?.target ?? null,
+      showNoteTarget: practiceNoteTargetVisible,
       hidePlaybackScoreFollowCursor,
     }),
     [
@@ -270,9 +316,8 @@ export function PracticeSessionProvider({
       scoreFollow.cursor?.measureNumber,
       scoreFollow.cursorVisibility,
       hidePlaybackScoreFollowCursor,
-      waitForYouNoteTarget?.target,
-      waitForYouNoteTarget?.showOnPage,
-      wfyNoteTargetVisible,
+      practiceNoteTarget?.target,
+      practiceNoteTargetVisible,
     ],
   )
 
@@ -281,6 +326,8 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
+      playAlongNoteTarget,
+      practiceNoteTarget,
       hidePlaybackScoreFollowCursor,
       sessionReady,
       practicePiece,
@@ -290,6 +337,8 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
+      playAlongNoteTarget,
+      practiceNoteTarget,
       hidePlaybackScoreFollowCursor,
       sessionReady,
       practicePiece,

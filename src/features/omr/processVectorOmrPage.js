@@ -2912,6 +2912,7 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
     {
       ...first,
       durationDivisions: extended,
+      combinedGrandStaffOpeningExtended: true,
       ...durationMeta(extended, {
         allowDotted:
           hasDottedEvidence(first.notes) ||
@@ -2946,6 +2947,9 @@ export function extendCombinedGrandStaffOpening(events, totalDivisions) {
     updated.push({
       ...second,
       durationDivisions: trebleDuration,
+      ...(trebleDuration > (second.durationDivisions ?? 0)
+        ? { combinedGrandStaffOpeningExtended: true }
+        : {}),
       ...durationMeta(trebleDuration, {
         allowDotted:
           hasDottedEvidence(second.notes) ||
@@ -3515,6 +3519,12 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
     for (let index = 0; index < sorted.length - 1; index += 1) {
       const current = sorted[index]
       const next = sorted[index + 1]
+      // A duration inferred by the grand-staff opening repair is a playback
+      // sustain, not evidence that a dotted source glyph owns this whole clef
+      // lane. Keep later same-clef attacks at their recovered source onsets.
+      if (current.combinedGrandStaffOpeningExtended) {
+        continue
+      }
       // This pass repairs filled-head dotted-subdivision packing. A dotted
       // vector half/whole can legitimately overlap a moving same-staff voice;
       // never push that voice to the sustained note's release.
@@ -4213,6 +4223,7 @@ function buildNoteEventsFromGroups(
 ) {
   const usePositionStarts = shouldInferRhythmFromPositions(groups, beats)
   const denseMeasure = groups.length > beats
+  let originalStartDivisions = null
 
   function track(stage, functionName, run) {
     const before = events
@@ -4267,6 +4278,7 @@ function buildNoteEventsFromGroups(
         }
       })
       .sort((left, right) => left.startDivision - right.startDivision)
+    originalStartDivisions = groups.map((group) => group.startDivision)
     if (usePositionStarts && groups.length) {
       const firstPosition = groupAnchorPosition(groups[0])
       if (Number.isFinite(firstPosition) && firstPosition < 1 / Math.max(1, beats)) {
@@ -4322,11 +4334,25 @@ function buildNoteEventsFromGroups(
       const rhythmStart = rhythmStarts[index]
       const nextRhythmStart =
         index + 1 < rhythmStarts.length ? rhythmStarts[index + 1] : totalDivisions
+      const originalStartDivision = originalStartDivisions?.[index]
+      const nextOriginalStartDivision =
+        index + 1 < (originalStartDivisions?.length ?? 0)
+          ? originalStartDivisions[index + 1]
+          : totalDivisions
+      const openingStartWasPulledEarlier =
+        index === 0 &&
+        Number.isFinite(originalStartDivision) &&
+        originalStartDivision > startDivision
       // When opening/subdivision alignment rewrites the onset grid, durations must
-      // follow the aligned starts — not the pre-align residual gaps.
+      // follow the aligned starts. The one exception is an opening onset pulled
+      // left across clef padding: preserve its source-to-source rhythmic gap.
       let durationDivisions = Math.max(
         1,
-        usePositionStarts ? nextAlignedStart - startDivision : nextRhythmStart - rhythmStart,
+        usePositionStarts
+          ? openingStartWasPulledEarlier
+            ? nextOriginalStartDivision - originalStartDivision
+            : nextAlignedStart - startDivision
+          : nextRhythmStart - rhythmStart,
       )
       if (!usePositionStarts && groups.length <= beats) {
         if (groups.length < beats) {

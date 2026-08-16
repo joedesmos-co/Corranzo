@@ -52,6 +52,8 @@ import { resolvePlayAlongTargetIndex } from './playAlongLaneFeedback.js'
 import usePlayAlongLaneFeedback from './usePlayAlongLaneFeedback.js'
 import { VISUAL_LANE_OUTCOME } from './visualLaneFeedback.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
+import usePlayAlongVisualCheckpoint from './usePlayAlongVisualCheckpoint.js'
+import { pausePlaybackAtAuthoritativeTime } from './practicePlaybackPause.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -100,6 +102,7 @@ export default function usePracticeSession({
     useState(false)
 
   const timing = useMusicXmlTiming(musicXmlSource, 0)
+  const sourceVisualMap = musicXmlSource?.omrMeta?.sourceVisualMap ?? null
   const practiceScopeAvailable = practiceScopeAppliesToTimingMap(
     timing.timingMap,
     selectedInstrument.id,
@@ -160,6 +163,15 @@ export default function usePracticeSession({
 
   const practiceTime = clock.practiceTime
 
+  const playAlongVisualCheckpoint = usePlayAlongVisualCheckpoint({
+    active: !isWaitForYou,
+    timingMap: timing.timingMap,
+    practiceScope: effectivePracticeScope,
+    practiceTime,
+    isPlaying: playback.isPlaying,
+    getScoreTime: playback.getScoreTime,
+  })
+
   const importReadiness = useImportReadiness({
     hasPdf,
     hasMidi,
@@ -186,11 +198,20 @@ export default function usePracticeSession({
     ? getBeatAtTime(timing.timingMap, practiceTime)
     : null
 
+  const pausePlayback = useCallback(
+    () =>
+      pausePlaybackAtAuthoritativeTime(
+        playbackRef.current,
+        clock.setManualTime,
+      ),
+    [clock.setManualTime],
+  )
+
   const ensurePaused = useCallback(() => {
     if (playbackRef.current.isPlaying) {
-      playbackRef.current.pause()
+      pausePlayback()
     }
-  }, [])
+  }, [pausePlayback])
 
   ensurePausedRef.current = ensurePaused
 
@@ -858,6 +879,7 @@ export default function usePracticeSession({
   const playbackForSession = useMemo(
     () => ({
       ...playback,
+      pause: pausePlayback,
       controlsDisabled: !hasMusicXml || playback.isLoading,
       playDisabled: !hasMusicXml || playback.isLoading || isWaitForYou,
       seekDisabled: !hasMusicXml || isWaitForYou,
@@ -867,6 +889,7 @@ export default function usePracticeSession({
     }),
     [
       playback,
+      pausePlayback,
       hasMusicXml,
       isWaitForYou,
     ],
@@ -907,6 +930,8 @@ export default function usePracticeSession({
       hasMidi,
       hasMusicXml,
       instrumentId,
+      sourceVisualMap,
+      playAlongVisualCheckpoint,
       sources: {
         playbackFileName: midiSource?.fileName ?? null,
         timingFileName: musicXmlSource?.fileName ?? null,
@@ -960,6 +985,8 @@ export default function usePracticeSession({
       hasMidi,
       hasMusicXml,
       instrumentId,
+      sourceVisualMap,
+      playAlongVisualCheckpoint,
       midiSource?.fileName,
       musicXmlSource?.fileName,
       playbackForSession,

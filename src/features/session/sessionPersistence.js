@@ -3,6 +3,7 @@ import {
   validateOmrSourceMeta,
 } from '../import/musicXmlSource.js'
 import { SUPPORTED_INSTRUMENT_IDS, normalizeInstrumentId } from '../instruments/instruments.js'
+import { normalizeOmrSourceVisualMap } from '../omr/omrSourceVisualMap.js'
 
 const DB_NAME = 'scoreflow-session'
 const DB_VERSION = 1
@@ -12,9 +13,68 @@ export const SESSION_META_VERSION = 1
 export const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
 
 const FILE_KEYS = ['pdf', 'midi', 'musicXml']
+const SOURCE_VISUAL_MAP_FILE_KEY = 'sourceVisualMap'
 
 function instrumentFileKey(instrumentId, fileKey) {
   return `instrument:${normalizeInstrumentId(instrumentId)}:${fileKey}`
+}
+
+function normalizePersistedSourceVisualMap(value) {
+  try {
+    return normalizeOmrSourceVisualMap(value)
+  } catch {
+    return null
+  }
+}
+
+function stripSourceVisualMapFromOmrMeta(omrMeta) {
+  if (!omrMeta || typeof omrMeta !== 'object') {
+    return omrMeta ?? null
+  }
+  const { sourceVisualMap: _sourceVisualMap, ...lightweightMeta } = omrMeta
+  return lightweightMeta
+}
+
+function stripSourceVisualMapsFromSessionMeta(meta) {
+  if (!meta || typeof meta !== 'object') {
+    return meta
+  }
+  const instrumentBundles =
+    meta.instrumentBundles && typeof meta.instrumentBundles === 'object'
+      ? Object.fromEntries(
+          Object.entries(meta.instrumentBundles).map(([instrumentId, bundle]) => [
+            instrumentId,
+            bundle && typeof bundle === 'object'
+              ? {
+                  ...bundle,
+                  omrMeta: stripSourceVisualMapFromOmrMeta(bundle.omrMeta),
+                }
+              : bundle,
+          ]),
+        )
+      : meta.instrumentBundles
+  return {
+    ...meta,
+    omrMeta: stripSourceVisualMapFromOmrMeta(meta.omrMeta),
+    instrumentBundles,
+  }
+}
+
+function attachPersistedSourceVisualMap(musicXmlSource, value) {
+  if (musicXmlSource?.source !== 'omr' || !musicXmlSource.omrMeta) {
+    return musicXmlSource
+  }
+  const sourceVisualMap = normalizePersistedSourceVisualMap(value)
+  if (!sourceVisualMap) {
+    return musicXmlSource
+  }
+  return {
+    ...musicXmlSource,
+    omrMeta: {
+      ...musicXmlSource.omrMeta,
+      sourceVisualMap,
+    },
+  }
 }
 
 function openDatabase() {
@@ -99,7 +159,7 @@ export function saveSessionMeta(meta) {
       JSON.stringify({
         version: SESSION_META_VERSION,
         savedAt: Date.now(),
-        ...meta,
+        ...stripSourceVisualMapsFromSessionMeta(meta),
       }),
     )
     return true
@@ -121,16 +181,24 @@ export async function clearSessionCompanionFiles() {
   try {
     await deleteFile(db, 'midi')
     await deleteFile(db, 'musicXml')
+    await deleteFile(db, SOURCE_VISUAL_MAP_FILE_KEY)
     for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
       await deleteFile(db, instrumentFileKey(instrumentId, 'midi'))
       await deleteFile(db, instrumentFileKey(instrumentId, 'musicXml'))
+      await deleteFile(db, instrumentFileKey(instrumentId, SOURCE_VISUAL_MAP_FILE_KEY))
     }
   } finally {
     db.close()
   }
 }
 
-export async function saveSessionFiles({ pdf, midi, musicXml, instrumentFiles = null }) {
+export async function saveSessionFiles({
+  pdf,
+  midi,
+  musicXml,
+  sourceVisualMap = null,
+  instrumentFiles = null,
+}) {
   const db = await openDatabase()
   try {
     if (pdf?.data) {
@@ -148,6 +216,12 @@ export async function saveSessionFiles({ pdf, midi, musicXml, instrumentFiles = 
     } else {
       await deleteFile(db, 'musicXml')
     }
+    const normalizedSourceVisualMap = normalizePersistedSourceVisualMap(sourceVisualMap)
+    if (normalizedSourceVisualMap) {
+      await putFile(db, SOURCE_VISUAL_MAP_FILE_KEY, normalizedSourceVisualMap)
+    } else {
+      await deleteFile(db, SOURCE_VISUAL_MAP_FILE_KEY)
+    }
     for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
       const files = instrumentFiles?.[instrumentId] ?? null
       for (const fileKey of FILE_KEYS) {
@@ -157,6 +231,15 @@ export async function saveSessionFiles({ pdf, midi, musicXml, instrumentFiles = 
         } else {
           await deleteFile(db, storageKey)
         }
+      }
+      const visualMapKey = instrumentFileKey(instrumentId, SOURCE_VISUAL_MAP_FILE_KEY)
+      const instrumentSourceVisualMap = normalizePersistedSourceVisualMap(
+        files?.sourceVisualMap,
+      )
+      if (instrumentSourceVisualMap) {
+        await putFile(db, visualMapKey, instrumentSourceVisualMap)
+      } else {
+        await deleteFile(db, visualMapKey)
       }
     }
   } finally {
@@ -174,6 +257,12 @@ export async function loadSessionFiles() {
         entries[key] = buffer
       }
     }
+    const sourceVisualMap = normalizePersistedSourceVisualMap(
+      await getFile(db, SOURCE_VISUAL_MAP_FILE_KEY),
+    )
+    if (sourceVisualMap) {
+      entries.sourceVisualMap = sourceVisualMap
+    }
     const instrumentFiles = {}
     for (const instrumentId of SUPPORTED_INSTRUMENT_IDS) {
       const files = {}
@@ -182,6 +271,12 @@ export async function loadSessionFiles() {
         if (buffer instanceof ArrayBuffer) {
           files[key] = buffer
         }
+      }
+      const sourceVisualMap = normalizePersistedSourceVisualMap(
+        await getFile(db, instrumentFileKey(instrumentId, SOURCE_VISUAL_MAP_FILE_KEY)),
+      )
+      if (sourceVisualMap) {
+        files.sourceVisualMap = sourceVisualMap
       }
       if (Object.keys(files).length > 0) {
         instrumentFiles[instrumentId] = files
@@ -260,6 +355,10 @@ export function validateRestoredSession(meta, files) {
         files.musicXml.slice(0),
         meta,
       )
+      musicXmlSource = attachPersistedSourceVisualMap(
+        musicXmlSource,
+        files.sourceVisualMap,
+      )
       const omrMetaValidation = validateOmrSourceMeta(musicXmlSource)
       if (!omrMetaValidation.ok) {
         issues.push('stale-omr-session')
@@ -322,7 +421,7 @@ export function buildSessionBundleMeta(bundle = {}) {
     musicXmlSize: bundle.musicXmlSource?.data?.byteLength ?? null,
     musicXmlSourceKind: bundle.musicXmlSource?.source ?? null,
     musicXmlOwnerPdfIdentity: bundle.musicXmlSource?.ownerPdfIdentity ?? null,
-    omrMeta: bundle.musicXmlSource?.omrMeta ?? null,
+    omrMeta: stripSourceVisualMapFromOmrMeta(bundle.musicXmlSource?.omrMeta),
     pageNumber: bundle.pageNumber ?? 1,
     practicePrefs: bundle.practicePrefs ?? null,
     pdfSoftWarning: bundle.pdfSoftWarning ?? null,
@@ -408,7 +507,7 @@ export function buildSessionMeta({
     musicXmlSourceKind: musicXmlSource?.source ?? null,
     musicXmlOwnerPdfIdentity: musicXmlSource?.ownerPdfIdentity ?? null,
     musicXmlOwnerScoreId: musicXmlSource?.ownerScoreId ?? null,
-    omrMeta: musicXmlSource?.omrMeta ?? null,
+    omrMeta: stripSourceVisualMapFromOmrMeta(musicXmlSource?.omrMeta),
     activeView,
     pageNumber,
     practicePrefs,

@@ -113,6 +113,26 @@ function measureGridEntriesForSystem(
     .filter(Boolean)
 }
 
+/**
+ * Keep the page dimensions beside every final owned source note. Geometry is
+ * still normalized for persistence, but exact pixel bounds from vector ink can
+ * only be normalized later if their originating page dimensions survive the
+ * worker handoff.
+ */
+function attachSourcePageDimensions(measureRecords, imageData) {
+  if (!(imageData?.width > 0) || !(imageData?.height > 0)) {
+    return
+  }
+  for (const measure of measureRecords ?? []) {
+    for (const event of measure.events ?? []) {
+      for (const note of event.notes ?? []) {
+        note.sourcePageWidth = imageData.width
+        note.sourcePageHeight = imageData.height
+      }
+    }
+  }
+}
+
 function applyInterSystemOwnershipClips(systemMeasureBoxes, systems) {
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const system = systems[systemIndex]
@@ -1418,6 +1438,8 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     imageData,
     inkThreshold,
   })
+
+  attachSourcePageDimensions(measureRhythms, imageData)
 
   const result = {
     pageEntry,

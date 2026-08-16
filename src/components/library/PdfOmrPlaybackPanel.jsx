@@ -328,6 +328,8 @@ export default function PdfOmrPlaybackPanel({
         diagnostics: lastDiagnosticsRef.current,
         warnings: result.warnings ?? [],
         measureGrid: result.measureGrid,
+        sourceVisualMap:
+          selectedOutput.engine === 'v2' ? result.sourceVisualMap ?? null : null,
         acceptance: result.acceptance ?? null,
         quality: result.quality ?? null,
         overallConfidence: result.overallConfidence ?? null,

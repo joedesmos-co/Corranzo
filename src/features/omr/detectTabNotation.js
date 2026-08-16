@@ -717,6 +717,11 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
   for (const digit of digits) {
     const last = clusters[clusters.length - 1]
     const width = Math.max(2, digit.width || 4)
+    const height = Math.max(2, digit.height || tabLineGap(tabStave.lineYs) * imageData.height * 0.8)
+    const left = digit.x - width / 2
+    const right = digit.x + width / 2
+    const top = digit.y - height / 2
+    const bottom = digit.y + height / 2
     if (
       last &&
       last.string === digit.string &&
@@ -727,6 +732,10 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       last.xSum += digit.x
       last.ySum += digit.y
       last.count += 1
+      last.left = Math.min(last.left, left)
+      last.right = Math.max(last.right, right)
+      last.top = Math.min(last.top, top)
+      last.bottom = Math.max(last.bottom, bottom)
       continue
     }
     clusters.push({
@@ -737,6 +746,10 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       xSum: digit.x,
       ySum: digit.y,
       count: 1,
+      left,
+      right,
+      top,
+      bottom,
     })
   }
 
@@ -751,7 +764,9 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       continue
     }
     const x = cluster.xSum / cluster.count
+    const y = cluster.ySum / cluster.count
     const xNorm = x / imageData.width
+    const yNorm = y / imageData.height
     const box = findMeasureBoxForX(measureBoxes, xNorm)
     if (!box) {
       continue // clef-zone / margin digits (time signatures, fingering keys)
@@ -764,7 +779,18 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       // the written-octave shift used for staff-position pitches.
       soundingPitch: true,
       x,
+      y,
       xNorm,
+      yNorm,
+      sourcePageWidth: imageData.width,
+      sourcePageHeight: imageData.height,
+      sourceVisualKind: 'tab-fret',
+      sourceBBox: {
+        x0: cluster.left / imageData.width,
+        y0: cluster.top / imageData.height,
+        x1: cluster.right / imageData.width,
+        y1: cluster.bottom / imageData.height,
+      },
       measureNumber: box.measureNumber,
       positionInMeasure: positionWithinBox(box, xNorm),
     })
@@ -1021,6 +1047,13 @@ export function buildTabMeasureEvents(measureNotes, { beats = 4 } = {}) {
         soundingPitch: true,
         clef: 'treble',
         cx: note.x,
+        cy: note.y,
+        xNorm: note.xNorm,
+        yNorm: note.yNorm,
+        sourcePageWidth: note.sourcePageWidth,
+        sourcePageHeight: note.sourcePageHeight,
+        sourceVisualKind: note.sourceVisualKind,
+        sourceBBox: note.sourceBBox,
       })),
     })
   }

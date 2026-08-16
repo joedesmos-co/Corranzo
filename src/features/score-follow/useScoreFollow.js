@@ -66,7 +66,7 @@ import {
   mapAnchorForViewerOverlay,
   mapCalibrationOverlayPageForViewer,
   mapSystemBandForViewerOverlay,
-  mapViewerOverlayToAnalysisPoint,
+  normalizeViewerDisplayPoint,
 } from '../../utils/analysisViewerCoords.js'
 import { buildPromotionDecision, resolveActiveAnchorSource } from './anchorPromotion.js'
 import {
@@ -681,8 +681,7 @@ export default function useScoreFollow({
 
   const placeAnchorAt = useCallback(
     (page, x, y) => {
-      const rotation = resolvePageViewRotation(pageViewRotations, page)
-      const analysisPoint = mapViewerOverlayToAnalysisPoint(x, y, rotation)
+      const analysisPoint = normalizeViewerDisplayPoint(x, y)
       const measureNumber = placementMeasureNumber
       const anchor = placeManualAnchor({
         page,
@@ -709,7 +708,6 @@ export default function useScoreFollow({
       maxMeasureNumber,
       minMeasureNumber,
       anchors,
-      pageViewRotations,
     ],
   )
 
@@ -743,12 +741,11 @@ export default function useScoreFollow({
   }, [])
 
   const addSystemStartMark = useCallback((page, x, y) => {
-    const rotation = resolvePageViewRotation(pageViewRotations, page)
-    const analysisPoint = mapViewerOverlayToAnalysisPoint(x, y, rotation)
+    const analysisPoint = normalizeViewerDisplayPoint(x, y)
     const mark = { id: createAnchorId(), page, x: analysisPoint.x, y: analysisPoint.y }
     setSystemStartMarks((prev) => [...prev, mark])
     systemStartStackRef.current.push(mark)
-  }, [pageViewRotations])
+  }, [])
 
   const undoLastSystemStartMark = useCallback(() => {
     const last = systemStartStackRef.current.pop()

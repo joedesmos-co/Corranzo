@@ -166,7 +166,7 @@ function buildVisualLaneCacheKey(timingMap, loopRegion, options = {}) {
     return null
   }
   const loopKey = loopRegion
-    ? `${loopRegion.start ?? ''}:${loopRegion.end ?? ''}`
+    ? `${loopRegion.startTimeSeconds ?? ''}:${loopRegion.endTimeSeconds ?? ''}`
     : 'full'
   const scope = options.practiceScope ?? 'both'
   const instrument = options.instrumentId ?? 'none'

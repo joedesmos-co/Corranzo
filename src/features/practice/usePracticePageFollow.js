@@ -8,8 +8,8 @@ const DOM_CACHE_REFRESH_FRAMES = 30
 
 /**
  * Resolve which PDF page page-follow should keep in view.
- * Wait For You note mode uses the checkpoint note target when the playback
- * cursor is hidden.
+ * An active semantic note target wins in both Wait For You and Play Along;
+ * otherwise the long-standing score-follow cursor remains authoritative.
  */
 export function resolvePageFollowTarget({ cursor, noteFollowTarget } = {}) {
   if (noteFollowTarget?.active && Number.isFinite(noteFollowTarget.page)) {
@@ -42,6 +42,8 @@ export default function usePracticePageFollow({
   const domCacheRef = useRef({
     container: null,
     cursorElement: null,
+    noteTargetElements: [],
+    noteTargetKey: null,
     pageFrame: null,
     pageNumber: null,
     frameCounter: 0,
@@ -83,6 +85,7 @@ export default function usePracticePageFollow({
     cursor?.visible,
     noteFollowTarget?.active,
     noteFollowTarget?.page,
+    noteFollowTarget?.targetKey,
     pageNumber,
     numPages,
     onGoToPage,
@@ -92,7 +95,7 @@ export default function usePracticePageFollow({
   useEffect(() => {
     lastRequestedPageRef.current = pageNumber
     domCacheRef.current.pageNumber = null
-  }, [pageNumber])
+  }, [pageNumber, noteFollowTarget?.targetKey])
 
   useEffect(() => {
     const container = scrollContainerRef?.current
@@ -138,6 +141,14 @@ export default function usePracticePageFollow({
       cache.cursorElement = container.querySelector(
         '.pdf-page-window__slot--active .score-follow-cursor, .pdf-page-frame .score-follow-cursor',
       )
+      cache.noteTargetElements = noteFollowTargetRef.current?.active
+        ? [
+            ...container.querySelectorAll(
+              '.pdf-page-window__slot--active [data-practice-note-target="true"], .pdf-page-frame [data-practice-note-target="true"]',
+            ),
+          ]
+        : []
+      cache.noteTargetKey = noteFollowTargetRef.current?.targetKey ?? null
       const pdfPage = container.querySelector(
         '.pdf-page-window__slot--active .react-pdf__Page, .pdf-page-frame .react-pdf__Page',
       )
@@ -161,7 +172,13 @@ export default function usePracticePageFollow({
       const userSuspended = Date.now() < userScrollUntilRef.current
       if (!userSuspended) {
         const cache = domCacheRef.current
-        if (cache.pageNumber !== pageNumber || cache.frameCounter >= DOM_CACHE_REFRESH_FRAMES) {
+        const liveNoteTarget = noteFollowTargetRef.current
+        if (
+          cache.pageNumber !== pageNumber ||
+          cache.noteTargetKey !== (liveNoteTarget?.targetKey ?? null) ||
+          (liveNoteTarget?.active && cache.noteTargetElements.length === 0) ||
+          cache.frameCounter >= DOM_CACHE_REFRESH_FRAMES
+        ) {
           refreshDomCache(container)
         } else {
           cache.frameCounter += 1
@@ -170,7 +187,23 @@ export default function usePracticePageFollow({
         const liveCursor = cursorRef.current
         const containerRect = cache.container.getBoundingClientRect()
         let cursorPixelY
-        if (cache.cursorElement && cache.cursorElement.style.display !== 'none') {
+        const targetRects = liveNoteTarget?.active
+          ? cache.noteTargetElements
+              .filter((element) => element.isConnected)
+              .map((element) => element.getBoundingClientRect())
+              .filter((rect) => rect.width > 0 && rect.height > 0)
+          : []
+        if (targetRects.length > 0) {
+          const top = Math.min(...targetRects.map((rect) => rect.top))
+          const bottom = Math.max(...targetRects.map((rect) => rect.bottom))
+          cursorPixelY =
+            (top + bottom) / 2 - containerRect.top + container.scrollTop
+        } else if (liveNoteTarget?.active) {
+          // The target page/frame may still be mounting. Do not drift toward a
+          // stale playback cursor while the semantic target owns page follow.
+          frameId = requestAnimationFrame(tick)
+          return
+        } else if (cache.cursorElement && cache.cursorElement.style.display !== 'none') {
           const cursorRect = cache.cursorElement.getBoundingClientRect()
           cursorPixelY =
             cursorRect.top - containerRect.top + cursorRect.height / 2 + container.scrollTop
@@ -206,6 +239,8 @@ export default function usePracticePageFollow({
   }, [
     active,
     pageNumber,
+    noteFollowTarget?.active,
+    noteFollowTarget?.targetKey,
     scrollContainerRef,
   ])
 }

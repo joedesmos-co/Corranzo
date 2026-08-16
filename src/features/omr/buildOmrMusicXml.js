@@ -505,8 +505,11 @@ function noteXml(
     stemDirection === 'up' || stemDirection === 'down'
       ? `<stem>${stemDirection}</stem>`
       : ''
+  const sourceIdXml = note?.sourceNoteheadId
+    ? ` id="${escapeXml(note.sourceNoteheadId)}"`
+    : ''
   return (
-    `<note>${chord ? '<chord/>' : ''}` +
+    `<note${sourceIdXml}>${chord ? '<chord/>' : ''}` +
     `${pitchXml(note, octaveShiftSemitones)}` +
     `${accidentalXml(note)}<duration>${duration}</duration>${tieXml}<voice>${voice}</voice>` +
     `<type>${type}</type>${dotXml}${timeModXml}${staffXml}${stemXml}${beamXml}${notationsXml}</note>`

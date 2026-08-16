@@ -6,6 +6,7 @@ import {
   validateOmrGeneratedPlayback,
 } from '../omr/validateOmrGeneratedPlayback.js'
 import { normalizeOmrMeasureGridMetadata } from '../omr/omrMeasureGridMeta.js'
+import { normalizeOmrSourceVisualMap } from '../omr/omrSourceVisualMap.js'
 import { fnv1aHashHex } from '../library/scoreSourceContentIdentity.js'
 
 function isFinitePositive(value) {
@@ -26,6 +27,12 @@ function cloneOmrMeta(meta) {
     cloned.measureGrid = measureGrid
   } else {
     delete cloned.measureGrid
+  }
+  const sourceVisualMap = normalizeOmrSourceVisualMap(meta.sourceVisualMap)
+  if (sourceVisualMap) {
+    cloned.sourceVisualMap = sourceVisualMap
+  } else {
+    delete cloned.sourceVisualMap
   }
   return cloned
 }

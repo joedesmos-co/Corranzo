@@ -245,6 +245,7 @@ export default function useSessionPersistence({
         return
       }
 
+      const instrumentBundles = getInstrumentSessionBundles?.() ?? null
       const meta = buildSessionMeta({
         pdfMeta,
         midiSource,
@@ -253,7 +254,7 @@ export default function useSessionPersistence({
         pageNumber,
         practicePrefs: practicePrefsRef?.current ?? null,
         instrumentId,
-        instrumentBundles: getInstrumentSessionBundles?.() ?? null,
+        instrumentBundles,
         scoreId:
           musicXmlSource?.ownerScoreId ??
           (typeof window !== 'undefined'
@@ -278,15 +279,20 @@ export default function useSessionPersistence({
           },
         }),
       )
-      saveSessionMeta(meta)
+      if (!saveSessionMeta(meta)) {
+        // Do not overwrite fixed IndexedDB file keys when their matching
+        // manifest could not be committed; that would corrupt the prior save.
+        return
+      }
 
       try {
         await saveSessionFiles({
           pdf: { data: pdfBuffer.slice(0) },
           midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
           musicXml: musicXmlSource?.data ? { data: musicXmlSource.data.slice(0) } : null,
+          sourceVisualMap: musicXmlSource?.omrMeta?.sourceVisualMap ?? null,
           instrumentFiles: Object.fromEntries(
-            Object.entries(getInstrumentSessionBundles?.() ?? {}).map(([bundleInstrumentId, bundle]) => [
+            Object.entries(instrumentBundles ?? {}).map(([bundleInstrumentId, bundle]) => [
               bundleInstrumentId,
               {
                 pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
@@ -294,6 +300,7 @@ export default function useSessionPersistence({
                 musicXml: bundle.musicXmlSource?.data
                   ? { data: bundle.musicXmlSource.data.slice(0) }
                   : null,
+                sourceVisualMap: bundle.musicXmlSource?.omrMeta?.sourceVisualMap ?? null,
               },
             ]),
           ),

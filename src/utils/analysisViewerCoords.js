@@ -47,6 +47,18 @@ export function mapViewerOverlayToAnalysisPoint(x, y, viewerRotation = 0) {
   }
 }
 
+/**
+ * Normalize a point measured against the transformed page's display rect.
+ *
+ * Unlike pre-transform overlay-local coordinates, `getBoundingClientRect()`
+ * coordinates already include the page's CSS rotation. Once normalized by
+ * that display rect they are in upright analysis space, so applying the inverse
+ * rotation again would rotate manual placements twice.
+ */
+export function normalizeViewerDisplayPoint(x, y) {
+  return { x: clamp01(x), y: clamp01(y) }
+}
+
 export function mapAnalysisAxisRectToViewerOverlay(rect, viewerRotation = 0) {
   if (!rect) {
     return rect

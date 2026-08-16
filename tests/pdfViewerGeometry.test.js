@@ -35,6 +35,37 @@ describe('library and practice PDF viewer geometry', () => {
     expect(source).toContain('viewerRotation={layout.viewerRotation')
   })
 
+  it('reports warm adjacent page loads so every source size is cached before promotion', () => {
+    const source = readSrc('components', 'pdf', 'PdfPageWindow.jsx')
+    expect(source).toMatch(/markPageWarm\(slotPageNumber\)[\s\S]*onPageLoadSuccess\?\.\(page\)/)
+    expect(source).not.toMatch(
+      /if \(slotPageNumber === pageNumber\) \{\s*onPageLoadSuccess\?\.\(page\)/,
+    )
+  })
+
+  it('uses a promoted heterogeneous page\'s cached dimensions instead of the prior page fallback', () => {
+    const portrait = { width: 612, height: 792 }
+    const landscape = { width: 842, height: 595 }
+    const promoted = resolvePdfPageLayout({
+      fitMode: 'page',
+      pageNumber: 2,
+      slotPageNumber: 2,
+      pageSize: portrait,
+      pageSizesByPage: { 1: portrait, 2: landscape },
+      containerSize: CONTAINER,
+      getPageViewRotation: () => 0,
+    })
+
+    expect(promoted.displayWidth / promoted.displayHeight).toBeCloseTo(
+      landscape.width / landscape.height,
+      6,
+    )
+    expect(promoted.displayWidth / promoted.displayHeight).not.toBeCloseTo(
+      portrait.width / portrait.height,
+      2,
+    )
+  })
+
   it('PdfPageFrame applies layout viewerRotation instead of score-follow props only', () => {
     const source = readSrc('components', 'pdf', 'PdfPageFrame.jsx')
     expect(source).toContain('viewerRotation = 0')

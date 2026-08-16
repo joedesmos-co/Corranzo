@@ -95,7 +95,9 @@ describe('Wait For You target highlight geometry', () => {
     expect(target.highlight.x1).toBeGreaterThan(target.x)
     expect(target.highlight.y0).toBeLessThan(target.noteAnchorY)
     expect(target.highlight.y1).toBeGreaterThan(target.noteAnchorY)
-    expect(target.approximate).toBe(false)
+    // MusicXML engraving coordinates do not describe the imported PDF's ink;
+    // keep the tight onset guide, but label it honestly as approximate.
+    expect(target.approximate).toBe(true)
   })
 
   it('uses direct detected notehead geometry when it is already available', () => {
@@ -186,11 +188,13 @@ describe('Wait For You target highlight geometry', () => {
     const position = readSrc('features', 'practice', 'noteTargetPosition.js')
 
     expect(overlay).toContain('noteTarget.page === pageNumber')
-    expect(overlay).toContain('mapAnalysisAxisRectToViewerOverlay')
+    expect(overlay).toContain('resolvePracticeTargetHighlightRects')
     expect(overlay).toContain('prev.viewerRotation !== next.viewerRotation')
     expect(overlay).toContain('pt?.targetKey !== nt?.targetKey')
     expect(frame).toContain('viewerRotation={viewRotation}')
-    expect(hook).toContain('[currentCheckpoint, timingMap, anchors]')
+    expect(hook).toContain('currentCheckpoint,')
+    expect(hook).toContain('sourceVisualMap,')
+    expect(hook).toContain('preferredRepresentation,')
     expect(position).toContain('targetKey: checkpoint.id')
   })
 

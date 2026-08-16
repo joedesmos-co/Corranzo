@@ -29,6 +29,10 @@ import { omrDebugStep } from './omrDebug.js'
 import { omrTrace, createOmrPhaseTracer } from './omrTrace.js'
 import { buildOmrMeasureGridMetadata } from './omrMeasureGridMeta.js'
 import {
+  buildOmrSourceVisualMap,
+  restoreOmrSourcePdfGeometry,
+} from './omrSourceVisualMap.js'
+import {
   formatOmrMeasureGridDiagnosticsReport,
   summarizeOmrMeasureGridDiagnostics,
 } from './omrMeasureGridDiagnostics.js'
@@ -589,6 +593,7 @@ async function runPdfOmrPipelineBody({
       tempo = pageTempo
     }
 
+    let preprocessing = null
     if (preprocessPages) {
       reportProgress({
         page,
@@ -596,12 +601,17 @@ async function runPdfOmrPipelineBody({
         phase: 'preprocess',
         label: omrPageProgressLabel(page, pageCount, 'preprocess'),
       })
-      const preprocessed = preprocessOmrPageImage(imageData)
-      imageData = preprocessed.imageData
+      preprocessing = preprocessOmrPageImage(imageData)
+      imageData = preprocessing.imageData
       omrDebugStep(`pipeline:page-${page}:after-preprocess`, imageData, {
-        applied: preprocessed.applied,
+        applied: preprocessing.applied,
       })
-      preprocessLog.push({ page, applied: preprocessed.applied, quality: preprocessed.quality })
+      preprocessLog.push({
+        page,
+        applied: preprocessing.applied,
+        quality: preprocessing.quality,
+        deskew: preprocessing.deskew ?? null,
+      })
     }
 
     reportProgress({
@@ -664,6 +674,18 @@ async function runPdfOmrPipelineBody({
 
     throwIfCancelled(signal)
     await yieldToBrowser()
+
+    restoreOmrSourcePdfGeometry(
+      {
+        measureRhythms: pageResult.measureRhythms,
+        measureGrid: pageResult.measureGrid,
+      },
+      {
+        width: renderedImage.width,
+        height: renderedImage.height,
+        deskewAngle: preprocessing?.deskew?.angle ?? 0,
+      },
+    )
 
     measureCounter = pageResult.nextMeasureNumber
     diagnostics.systems += pageResult.stats.systems
@@ -1201,6 +1223,13 @@ async function runPdfOmrPipelineBody({
 
   phaseTracer.end(postProcessPhase, { measureCount: measureRhythms.length })
 
+  // Bind each final semantic note to its owned source-PDF geometry before
+  // MusicXML serialization. The generated note IDs are the exact join key used
+  // by practice; no later timing/position heuristic is needed for precision.
+  const sourceVisualMap = phaseTracer.sync('build-source-visual-map', () =>
+    buildOmrSourceVisualMap(measureRhythms, measureGridEntries),
+  )
+
   const productionMusicXml = phaseTracer.sync('build-musicxml', () =>
     buildOmrMusicXml({
       title,
@@ -1459,8 +1488,16 @@ async function runPdfOmrPipelineBody({
     ),
   }
 
+  // The ownership sidecar is joined to the V2 note IDs. Developer/runtime V3
+  // promotion uses a different serializer and must abstain until it emits the
+  // same source IDs; returning a mismatched map would be worse than fallback.
+  const outputSourceVisualMap = musicXml === productionMusicXml
+    ? sourceVisualMap
+    : null
+
   const pipelineResult = {
     musicXml,
+    ...(outputSourceVisualMap ? { sourceVisualMap: outputSourceVisualMap } : {}),
     ...(omrV3ShadowResult ? { omrV3Shadow: omrV3ShadowResult } : {}),
     ...(omrV3IndependentShadowResult
       ? { omrV3IndependentShadow: omrV3IndependentShadowResult }

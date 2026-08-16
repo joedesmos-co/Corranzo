@@ -122,6 +122,7 @@ import {
 } from './features/import/pdfPracticeSource.js'
 import { validateOmrGeneratedPlayback } from './features/omr/validateOmrGeneratedPlayback.js'
 import { normalizeOmrMeasureGridMetadata } from './features/omr/omrMeasureGridMeta.js'
+import { normalizeOmrSourceVisualMap } from './features/omr/omrSourceVisualMap.js'
 import { isPdfBufferAttached } from './features/omr/omrPdfSource.js'
 import { logAppViewDebug, normalizeAppView } from './features/navigation/appViewDebug.js'
 import { releaseOmrUiLocks } from './features/omr/omrUiGuard.js'
@@ -929,6 +930,7 @@ export default function App() {
     noteCount,
     measureCount,
     measureGrid,
+    sourceVisualMap,
     warnings = [],
     acceptance: omrAcceptance = null,
     quality = null,
@@ -1221,6 +1223,10 @@ export default function App() {
     if (normalizedMeasureGrid) {
       omrMeta.measureGrid = normalizedMeasureGrid
     }
+    const normalizedSourceVisualMap = normalizeOmrSourceVisualMap(sourceVisualMap)
+    if (normalizedSourceVisualMap) {
+      omrMeta.sourceVisualMap = normalizedSourceVisualMap
+    }
     const nextMusicXmlSource = stampMusicXmlOwnerScoreId(
       createMusicXmlSource(generatedFileName, musicXml, {
         source: 'omr',
@@ -1425,49 +1431,54 @@ export default function App() {
       instrumentBundles: persistedInstrumentBundles,
       scoreId: ownerScoreId,
     })
-    saveSessionMeta(sessionMeta)
-    try {
-      await saveSessionFiles({
-        pdf: commitPdfBuffer ? { data: commitPdfBuffer.slice(0) } : null,
-        midi: ownedMidi?.data ? { data: ownedMidi.data.slice(0) } : null,
-        musicXml: nextMusicXmlSource.data ? { data: nextMusicXmlSource.data.slice(0) } : null,
-        instrumentFiles: Object.fromEntries(
-          Object.entries(persistedInstrumentBundles).map(([bundleInstrumentId, bundle]) => [
-            bundleInstrumentId,
-            {
-              pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
-              midi: bundle.midiSource?.data ? { data: bundle.midiSource.data.slice(0) } : null,
-              musicXml: bundle.musicXmlSource?.data
-                ? { data: bundle.musicXmlSource.data.slice(0) }
-                : null,
-            },
-          ]),
-        ),
-      })
-      const afterPersist = assertScoreSourceMutationAllowed({
-        ...callbackToken,
-        phase: 'persistence-after-await',
-      })
-      if (!afterPersist.ok) {
-        await clearSessionCompanionFiles().catch(() => {})
-        return discardStale(afterPersist)
+    if (saveSessionMeta(sessionMeta)) {
+      try {
+        await saveSessionFiles({
+          pdf: commitPdfBuffer ? { data: commitPdfBuffer.slice(0) } : null,
+          midi: ownedMidi?.data ? { data: ownedMidi.data.slice(0) } : null,
+          musicXml: nextMusicXmlSource.data ? { data: nextMusicXmlSource.data.slice(0) } : null,
+          sourceVisualMap: nextMusicXmlSource.omrMeta?.sourceVisualMap ?? null,
+          instrumentFiles: Object.fromEntries(
+            Object.entries(persistedInstrumentBundles).map(([bundleInstrumentId, bundle]) => [
+              bundleInstrumentId,
+              {
+                pdf: bundle.pdfBuffer ? { data: bundle.pdfBuffer.slice(0) } : null,
+                midi: bundle.midiSource?.data ? { data: bundle.midiSource.data.slice(0) } : null,
+                musicXml: bundle.musicXmlSource?.data
+                  ? { data: bundle.musicXmlSource.data.slice(0) }
+                  : null,
+                sourceVisualMap: bundle.musicXmlSource?.omrMeta?.sourceVisualMap ?? null,
+              },
+            ]),
+          ),
+        })
+        const afterPersist = assertScoreSourceMutationAllowed({
+          ...callbackToken,
+          phase: 'persistence-after-await',
+        })
+        if (!afterPersist.ok) {
+          await clearSessionCompanionFiles().catch(() => {})
+          return discardStale(afterPersist)
+        }
+        logScoreSourceLifecycle('persistence-run', {
+          ...callbackToken,
+          pdf: pdfContent,
+          musicXml: generatedContent,
+          practiceSessionEpoch: practiceSessionEpochRef.current,
+        })
+        pushScoreSourceContentTrace('indexeddb-persistence', {
+          pdf: pdfContent,
+          musicXml: generatedContent,
+          practiceSessionEpoch: practiceSessionEpochRef.current,
+          sourceOmrRunId,
+        })
+      } catch (error) {
+        logAppViewDebug('omr-generated:save-files-error', {
+          message: error instanceof Error ? error.message : String(error),
+        })
       }
-      logScoreSourceLifecycle('persistence-run', {
-        ...callbackToken,
-        pdf: pdfContent,
-        musicXml: generatedContent,
-        practiceSessionEpoch: practiceSessionEpochRef.current,
-      })
-      pushScoreSourceContentTrace('indexeddb-persistence', {
-        pdf: pdfContent,
-        musicXml: generatedContent,
-        practiceSessionEpoch: practiceSessionEpochRef.current,
-        sourceOmrRunId,
-      })
-    } catch (error) {
-      logAppViewDebug('omr-generated:save-files-error', {
-        message: error instanceof Error ? error.message : String(error),
-      })
+    } else {
+      logAppViewDebug('omr-generated:save-meta-error')
     }
 
     logAppViewDebug('omr-generated', {

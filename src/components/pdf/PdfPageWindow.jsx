@@ -111,11 +111,13 @@ function PdfPageWindow({
         timingRef.current.delete(loadKey)
       }
       markPageWarm(slotPageNumber)
-      if (slotPageNumber === pageNumber) {
-        onPageLoadSuccess?.(page)
-      }
+      // Report every mounted slot, including warm previous/next pages. The
+      // viewer keeps a per-page source-size cache; withholding a warm page's
+      // load leaves heterogeneous documents using the active page's dimensions
+      // when that warm slot is promoted.
+      onPageLoadSuccess?.(page)
     },
-    [onPageLoadSuccess, pageNumber],
+    [onPageLoadSuccess],
   )
 
   const handleRenderSuccess = useCallback(

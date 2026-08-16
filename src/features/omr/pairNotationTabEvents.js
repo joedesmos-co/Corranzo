@@ -266,6 +266,13 @@ function mergeCombinedNote(notationNote, tabNote, confidence) {
     fret: tabNote.fret,
     tabMidi: tabMidi ?? tabNote.midi,
     tabX: tabNote.x,
+    tabSourceVisual: {
+      xNorm: tabNote.xNorm ?? null,
+      yNorm: tabNote.yNorm ?? null,
+      sourceBBox: tabNote.sourceBBox ?? null,
+      sourcePageWidth: tabNote.sourcePageWidth ?? null,
+      sourcePageHeight: tabNote.sourcePageHeight ?? null,
+    },
     soundingPitch: true,
     notationTabPairConfidence: confidence,
     tabPosition: { string: tabNote.string, fret: tabNote.fret },

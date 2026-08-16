@@ -923,6 +923,12 @@ function walkPart({
             const slurs = readSlurs(child)
             const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
             const technicalPosition = isRest ? null : readTechnicalPosition(child)
+            const serializedSourceNoteheadId = attr(child, 'id')
+            const sourceNoteheadId =
+              typeof serializedSourceNoteheadId === 'string' &&
+              serializedSourceNoteheadId.startsWith('sfnh-')
+                ? serializedSourceNoteheadId
+                : null
             const timeModification = readTimeModification(child)
             const dots = findChildren(child, 'dot').length
             const noteType = childText(child, 'type') ?? null
@@ -943,6 +949,7 @@ function walkPart({
               ...(guitarTechniques.length ? { guitarTechniques } : {}),
               ...(timeModification ? { timeModification } : {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
+              ...(sourceNoteheadId ? { sourceNoteheadId } : {}),
               partId,
               measureNumber,
               quarterTime,

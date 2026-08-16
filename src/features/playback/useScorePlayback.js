@@ -382,8 +382,14 @@ export default function useScorePlayback({
   }, [])
 
   const pause = useCallback(() => {
-    engineRef.current?.pause()
+    const engine = engineRef.current
+    engine?.pause()
+    const pausedScoreTime = engine?.getCurrentScoreTime()
+    if (Number.isFinite(pausedScoreTime)) {
+      setCurrentTime(pausedScoreTime)
+    }
     setIsPlaying(false)
+    return Number.isFinite(pausedScoreTime) ? pausedScoreTime : null
   }, [])
 
   const stop = useCallback(() => {

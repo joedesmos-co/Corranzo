@@ -1,8 +1,8 @@
 import { memo, useCallback, useRef } from 'react'
 import {
-  mapAnalysisAxisRectToViewerOverlay,
-  mapAnalysisPointToViewerOverlay,
-} from '../../utils/analysisViewerCoords.js'
+  mapPracticeTargetPointToOverlay,
+  resolvePracticeTargetHighlightRects,
+} from '../../features/practice/practiceNoteTargetOverlay.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import {
   ANCHOR_SOURCE,
@@ -43,11 +43,16 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (pt?.targetKey !== nt?.targetKey) return false
   if (pt?.page !== nt?.page) return false
   if (pt?.displayMode !== nt?.displayMode) return false
+  if (pt?.mode !== nt?.mode) return false
+  if (pt?.coordinateSpace !== nt?.coordinateSpace) return false
   if (pt?.x !== nt?.x || pt?.y !== nt?.y) return false
   if (pt?.highlight?.x0 !== nt?.highlight?.x0) return false
   if (pt?.highlight?.y0 !== nt?.highlight?.y0) return false
   if (pt?.highlight?.x1 !== nt?.highlight?.x1) return false
   if (pt?.highlight?.y1 !== nt?.highlight?.y1) return false
+  if (pt?.highlight?.coordinateSpace !== nt?.highlight?.coordinateSpace) return false
+  if (pt?.highlight?.renderMode !== nt?.highlight?.renderMode) return false
+  if (pt?.highlight?.noteBoxes !== nt?.highlight?.noteBoxes) return false
   return true
 }
 
@@ -106,18 +111,15 @@ function ScoreFollowOverlay({
 
   const noteTargetOnPage =
     showNoteTarget && noteTarget?.visible && noteTarget.page === pageNumber
-  const noteHighlightOverlay =
-    noteTargetOnPage && noteTarget.highlight
-      ? mapAnalysisAxisRectToViewerOverlay(
-          noteTarget.highlight,
-          viewerRotation,
-        )
-      : null
+  const noteHighlightOverlays = noteTargetOnPage
+    ? resolvePracticeTargetHighlightRects(noteTarget, viewerRotation)
+    : []
   const noteFallbackOverlay =
-    noteTargetOnPage && !noteHighlightOverlay
-      ? mapAnalysisPointToViewerOverlay(
+    noteTargetOnPage && noteHighlightOverlays.length === 0
+      ? mapPracticeTargetPointToOverlay(
           noteTarget.x,
           noteTarget.y,
+          noteTarget.coordinateSpace,
           viewerRotation,
         )
       : null
@@ -239,12 +241,21 @@ function ScoreFollowOverlay({
         </div>
       )}
 
-      {noteHighlightOverlay && (
+      {noteHighlightOverlays.map((noteHighlightOverlay, index) => (
         <div
+          key={`${noteTarget.targetKey ?? 'note-target'}-box-${index}`}
           className={`score-follow-overlay__note-highlight${
             noteTarget.highlight.isChord ? ' score-follow-overlay__note-highlight--chord' : ''
           }${
             noteTarget.highlight.approximate ? ' score-follow-overlay__note-highlight--approximate' : ''
+          }${
+            noteTarget.highlight.renderMode === 'individual-source-boxes'
+              ? ' score-follow-overlay__note-highlight--source'
+              : ''
+          }${
+            noteTarget.mode === 'play-along'
+              ? ' score-follow-overlay__note-highlight--play-along'
+              : ''
           }`}
           style={{
             left: `${noteHighlightOverlay.x0 * 100}%`,
@@ -252,10 +263,18 @@ function ScoreFollowOverlay({
             width: `${(noteHighlightOverlay.x1 - noteHighlightOverlay.x0) * 100}%`,
             height: `${(noteHighlightOverlay.y1 - noteHighlightOverlay.y0) * 100}%`,
           }}
-          role="img"
-          aria-label={`Target note${noteTarget.isChord ? ' chord' : ''} highlight at measure ${noteTarget.measureNumber ?? ''}`}
+          data-practice-note-target="true"
+          data-practice-note-target-key={noteTarget.targetKey ?? undefined}
+          data-practice-note-mode={noteTarget.mode ?? undefined}
+          role={index === 0 ? 'img' : undefined}
+          aria-hidden={index === 0 ? undefined : true}
+          aria-label={
+            index === 0
+              ? `Target note${noteTarget.isChord ? ' chord' : ''} highlight at measure ${noteTarget.measureNumber ?? ''}`
+              : undefined
+          }
         />
-      )}
+      ))}
 
       {noteFallbackOverlay && (
         <div
@@ -265,11 +284,18 @@ function ScoreFollowOverlay({
               : noteTarget.isChord
                 ? ' score-follow-overlay__note-target--chord'
                 : ''
+          }${
+            noteTarget.mode === 'play-along'
+              ? ' score-follow-overlay__note-target--play-along'
+              : ''
           }`}
           style={{
             left: `${noteFallbackOverlay.x * 100}%`,
             top: `${noteFallbackOverlay.y * 100}%`,
           }}
+          data-practice-note-target="true"
+          data-practice-note-target-key={noteTarget.targetKey ?? undefined}
+          data-practice-note-mode={noteTarget.mode ?? undefined}
           role="img"
           aria-label={`Approximate target note${noteTarget.isChord ? ' chord' : ''} marker at measure ${noteTarget.measureNumber ?? ''}`}
         >

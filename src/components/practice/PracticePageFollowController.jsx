@@ -1,8 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { useScoreFollowCursor } from '../../context/PracticeTickContext.jsx'
-import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
-import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
 import usePracticePageFollow from '../../features/practice/usePracticePageFollow.js'
 import { isPlaybackVisualsOffEnabled } from '../../features/playback/playbackVisualsDiagnostics.js'
 
@@ -14,7 +12,7 @@ export default function PracticePageFollowController({
   onPrevPage,
   onNextPage,
 }) {
-  const { scoreFollow, session, waitForYouNoteTarget } = usePracticeSessionContext()
+  const { scoreFollow, practiceNoteTarget } = usePracticeSessionContext()
   const { displayCursor } = useScoreFollowCursor()
 
   const handleGoToPage = useCallback(
@@ -32,33 +30,29 @@ export default function PracticePageFollowController({
     [onGoToPage, onNextPage, onPrevPage, pageNumber],
   )
 
-  const pageFollowActive = Boolean(
-    scoreFollow.enabled &&
-      scoreFollow.canFollow &&
-      !scoreFollow.alignmentMode &&
-      !isPlaybackVisualsOffEnabled(),
-  )
-
   const noteFollowTarget = useMemo(() => {
-    if (
-      !session.isWaitForYou ||
-      session.checkpointMode !== WFY_CHECKPOINT_MODE.NOTE ||
-      session.waitForYou.status !== WFY_STATUS.WAITING ||
-      !waitForYouNoteTarget?.target?.visible
-    ) {
+    const target = practiceNoteTarget?.target
+    if (!practiceNoteTarget?.active || !target?.visible) {
       return null
     }
     return {
       active: true,
-      page: waitForYouNoteTarget.target.page,
+      page: target.page,
+      targetKey: target.targetKey ?? null,
+      y: target.noteAnchorY ?? target.y ?? null,
+      mode: practiceNoteTarget.mode ?? target.mode ?? null,
     }
   }, [
-    session.isWaitForYou,
-    session.checkpointMode,
-    session.waitForYou.status,
-    waitForYouNoteTarget?.target?.visible,
-    waitForYouNoteTarget?.target?.page,
+    practiceNoteTarget?.active,
+    practiceNoteTarget?.mode,
+    practiceNoteTarget?.target,
   ])
+
+  const pageFollowActive = Boolean(
+    !scoreFollow.alignmentMode &&
+      !isPlaybackVisualsOffEnabled() &&
+      ((scoreFollow.enabled && scoreFollow.canFollow) || noteFollowTarget?.active),
+  )
 
   usePracticePageFollow({
     active: pageFollowActive,

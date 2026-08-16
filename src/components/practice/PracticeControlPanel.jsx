@@ -44,7 +44,9 @@ export default memo(function PracticeControlPanel({
 
   const filesReady = Boolean(pdfFileName && session.hasMusicXml)
   const omrWaitForYouDisabled =
-    Boolean(scoreFollow?.experimentalOmrPlayback) && !scoreFollow?.canFollow
+    Boolean(scoreFollow?.experimentalOmrPlayback) &&
+    !scoreFollow?.canFollow &&
+    !(session.sourceVisualMap?.anchorCount > 0)
   const midiWaitForYouActive =
     session.isWaitForYou &&
     session.wfyInputSourceReady &&
