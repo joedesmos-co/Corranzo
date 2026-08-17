@@ -135,4 +135,32 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
       expect(isNoteheadOrClef || isAccidental).toBe(true)
     }
   })
+
+  it('static normalization does not fire on dynamic-font pages (demo-minuet safety)', () => {
+    // Simulate demo-minuet-in-g's g_d0_f3 font: low-PUA codepoints (U+0001, U+0004, etc.)
+    // The static MScore path must skip these — they are handled by the dynamic path.
+    const SHARP = '\u0004'
+    const TREBLE = '\u0005'
+    const NOTEHEAD = '\u0001'
+    const page = [
+      item(NOTEHEAD.repeat(100), 'g_d0_f3', { width: 7 }),
+      item(SHARP.repeat(6), 'g_d0_f3', { width: 6 }),
+      item(TREBLE.repeat(6), 'g_d0_f3', { width: 14 }),
+    ]
+    const { applied } = normalizeLegacyMusicFontGlyphs(page)
+    expect(applied).toBe(false) // static path skips — dynamic path handles this
+  })
+
+  it('static normalization does not fabricate sharps on C-major pages', () => {
+    // C-major fixture: noteheads + clefs, no accidentals.
+    // The static path must not create false key signatures.
+    const CLEF = '\u0005'
+    const NOTEHEAD = '\u0001'
+    const page = [
+      item(NOTEHEAD.repeat(100), 'music-font', { width: 7 }),
+      item(CLEF.repeat(6), 'music-font', { width: 14 }),
+    ]
+    const { applied } = normalizeLegacyMusicFontGlyphs(page)
+    expect(applied).toBe(false) // no MScore legacy noteheads → static skips
+  })
 })

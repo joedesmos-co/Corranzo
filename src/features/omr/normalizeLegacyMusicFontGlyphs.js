@@ -364,6 +364,50 @@ function detectDynamicNoteheadGlyphs(fontStats, imageData) {
 }
 
 /**
+ * Identify accidental glyphs (sharp, flat, natural) in a non-SMuFL music font.
+ *
+ * After noteheads are detected, accidentals are structural glyphs that appear
+ * once per system at the key-signature position. Heuristics:
+ * - Low total frequency (once per system, < 20 total) — distinguishes from
+ *   noteheads (dozens to hundreds) and from rests (variable frequency)
+ * - Width within 60% of the black notehead width — distinguishes from clefs
+ *   (much wider, spanning the full staff)
+ * - Not already mapped as a notehead
+ *
+ * The sharp is the most frequent accidental candidate, since sharp keys
+ * (G, D, A, E, B, F#) place one sharp at each system start. Flats and
+ * naturals appear less frequently (only in keys with 3+ flats, or as
+ * courtesy accidentals).
+ *
+ * This is a conservative detector: it only fires when there IS a strong
+ * accidental candidate. C-major pages return null (no false positives).
+ */
+function detectDynamicAccidentalGlyphs(fontStats, noteheadWidth, alreadyMapped) {
+  if (!fontStats || !noteheadWidth) return null
+
+  const chars = [...fontStats.chars.entries()]
+  // Filter for accidental candidates:
+  // - Not already mapped (notehead or open notehead)
+  // - Low frequency (structural glyph, appears once per system)
+  // - Width within 60% of notehead width (accidentals are notehead-sized)
+  const candidates = chars.filter(([ch, stats]) => {
+    if (alreadyMapped.has(ch)) return false
+    if (stats.count < 1 || stats.count > 20) return false
+    const widthRatio = stats.width / noteheadWidth
+    return widthRatio >= 0.4 && widthRatio <= 1.6
+  })
+
+  if (candidates.length === 0) return null
+
+  // The sharp is the most frequent accidental candidate
+  candidates.sort((a, b) => b[1].count - a[1].count)
+  const sharp = candidates[0]
+  if (!sharp) return null
+
+  return { sharp: sharp[0] }
+}
+
+/**
  * Normalize non-SMuFL music-font glyphs (LilyPond Feta, etc.) by detecting
  * notehead codepoints dynamically via ink analysis. Requires imageData for
  * pixel probing. Returns identity when no dynamic noteheads are found.
@@ -427,6 +471,21 @@ export function normalizeNonSmuflMusicFontGlyphs(pageText = [], imageData = null
     // First open notehead → half (\ue0a3); second → whole (\ue0a2)
     const smufl = dynamicMap.size === 1 ? '\ue0a2' : '\ue0a3'
     dynamicMap.set(openChar, smufl)
+  }
+
+  // Detect accidentals (sharps, flats, naturals) — structural glyphs that
+  // appear once per system at the key-signature position. After noteheads
+  // are identified, accidentals are the remaining glyphs with low frequency
+  // and width similar to the notehead. The sharp is the most frequent
+  // accidental candidate (appears once per system for sharp keys).
+  const noteheadWidth = fontStats.get(detectedFont)?.chars.get(detectedGlyphs.blackNotehead)?.width ?? null
+  const accidentalGlyphs = detectDynamicAccidentalGlyphs(
+    fontStats.get(detectedFont),
+    noteheadWidth,
+    dynamicMap
+  )
+  if (accidentalGlyphs?.sharp) {
+    dynamicMap.set(accidentalGlyphs.sharp, '\ue262') // sharp
   }
 
   diagnostics.dynamicFontNames = [detectedFont]
