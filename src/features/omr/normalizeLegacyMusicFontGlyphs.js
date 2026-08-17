@@ -142,7 +142,6 @@ export function normalizeLegacyMusicFontGlyphs(pageText = []) {
       ...item,
       text: mappedText,
       originalLegacyText: text,
-      legacyMusicFontNormalized: true,
     }
   })
 
@@ -161,6 +160,8 @@ export function normalizeLegacyMusicFontGlyphs(pageText = []) {
 
 const DYNAMIC_MIN_NOTEHEADS = 12
 const DYNAMIC_MIN_INK_SAMPLES = 6
+const DYNAMIC_MIN_OPEN_NOTEHEADS = 3
+const DYNAMIC_MIN_OPEN_INK_SAMPLES = 2
 
 function isInk(pixel, index) {
   return (
@@ -226,13 +227,24 @@ function probeGlyphInk(imageData, glyphX, glyphY, glyphW, _glyphH) {
   const centerRatio = centerTotal ? centerDark / centerTotal : 0
   const borderRatio = borderTotal ? borderDark / borderTotal : 0
 
-  if (centerRatio >= 0.5) {
-    return 'filled'
+  // Classification logic:
+  // - Filled notehead (no staff line): high center, moderate border (~0.21 ratio)
+  // - Open notehead (no staff line): low center, moderate border
+  // - Open notehead with staff line through center: VERY high center (staff line
+  //   fills center completely), HIGH border (notehead outline ring is thick)
+  //   The key insight: a filled notehead has borderRatio/centerRatio ~0.21
+  //   while a half notehead with staff line has ~0.30+ due to the outline.
+  // - Other glyphs (sharps, etc.): center ~0.5-0.7, high border - classified
+  //   as 'filled' to avoid false-positive open notehead detections
+  let classification = null
+  if (centerRatio >= 0.8 && borderRatio >= 0.25) {
+    classification = 'open'
+  } else if (centerRatio >= 0.5) {
+    classification = 'filled'
+  } else if (centerRatio <= 0.3 && borderRatio >= 0.2) {
+    classification = 'open'
   }
-  if (centerRatio <= 0.3 && borderRatio >= 0.2) {
-    return 'open'
-  }
-  return null
+  return { classification, centerRatio, borderRatio }
 }
 
 /**
@@ -285,42 +297,136 @@ function estimateStaffGap(imageData) {
 /**
  * Identify the black-notehead character in a non-SMuFL music font using
  * frequency + ink analysis. Returns the character code and/or open-notehead
- * candidates.
+ * candidates. Searches across all provided fontStats for open noteheads.
  */
-function detectDynamicNoteheadGlyphs(fontStats, imageData) {
-  if (!fontStats || imageData?.data == null) {
+function detectDynamicNoteheadGlyphs(allFontStats, imageData) {
+  if (!allFontStats || imageData?.data == null) {
     return null
   }
   const staffGap = estimateStaffGap(imageData)
-  const chars = [...fontStats.chars.entries()]
-  // Filter out whitespace and very low-frequency chars
-  const candidates = chars.filter(
+
+  // First, find the black notehead from the font with most characters
+  // (the primary music font)
+  let blackNotehead = null
+  let blackFontStats = null
+  let blackWidth = 0
+  let blackBorderSum = 0
+  let blackBorderCount = 0
+
+  const sortedFonts = [...allFontStats.entries()].sort((a, b) => b[1].total - a[1].total)
+
+  for (const [fontName, fontStats] of sortedFonts) {
+    if (fontStats.total < DYNAMIC_MIN_NOTEHEADS * 2) continue
+
+    const chars = [...fontStats.chars.entries()].filter(
+      ([ch, stats]) =>
+        ch.trim().length > 0 &&
+        stats.count >= DYNAMIC_MIN_NOTEHEADS &&
+        stats.width > 0 &&
+        stats.height > 0,
+    )
+    if (chars.length === 0) continue
+
+    chars.sort((a, b) => b[1].count - a[1].count)
+
+    for (const [ch, stats] of chars) {
+      const wOk = stats.width >= staffGap * 0.35 && stats.width <= staffGap * 2.2
+      if (!wOk) continue
+
+      const samplePositions = stats.positions.slice(0, 20)
+      let filledCount = 0
+      let openCount = 0
+      let probed = 0
+      for (const [x, y] of samplePositions) {
+        const ink = probeGlyphInk(imageData, x, y, stats.width, stats.height)
+        if (ink) {
+          probed += 1
+          if (ink.classification === 'filled') filledCount += 1
+          else if (ink.classification === 'open') openCount += 1
+          if (ink.borderRatio !== undefined) {
+            blackBorderSum += ink.borderRatio
+            blackBorderCount += 1
+          }
+        }
+      }
+      if (probed < DYNAMIC_MIN_INK_SAMPLES) continue
+
+      const filledRatio = filledCount / probed
+      if (filledRatio >= 0.45) {
+        const code = ch.codePointAt(0)
+        if (code >= 0x30 && code <= 0x39) continue
+        blackNotehead = ch
+        blackFontStats = fontStats
+        blackWidth = stats.width
+        break
+      }
+    }
+    if (blackNotehead) break
+  }
+
+  if (!blackNotehead) return null
+
+  // Now search ALL fonts for open noteheads with similar geometry to black notehead
+  const openNoteheads = []
+
+  for (const [fontName, fontStats] of allFontStats.entries()) {
+    if (fontStats === blackFontStats) continue // already checked primary font
+
+    const allChars = [...fontStats.chars.entries()].filter(
+      ([ch, stats]) =>
+        ch.trim().length > 0 &&
+        ch !== blackNotehead &&
+        stats.count >= DYNAMIC_MIN_OPEN_NOTEHEADS &&
+        stats.width > 0 &&
+        stats.height > 0,
+    )
+
+    for (const [ch, stats] of allChars) {
+      const widthRatio = stats.width / blackWidth
+      if (widthRatio < 0.5 || widthRatio > 1.5) continue
+
+      const samplePositions = stats.positions.slice(0, 20)
+      let filledCount = 0
+      let openCount = 0
+      let probed = 0
+      for (const [x, y] of samplePositions) {
+        const ink = probeGlyphInk(imageData, x, y, stats.width, stats.height)
+        if (ink) {
+          probed += 1
+          if (ink.classification === 'filled') filledCount += 1
+          else if (ink.classification === 'open') openCount += 1
+        }
+      }
+      if (probed < DYNAMIC_MIN_OPEN_INK_SAMPLES) continue
+
+      const openRatio = openCount / probed
+      const filledRatio = filledCount / probed
+
+      if (openRatio >= 0.3 && filledRatio < 0.5 && openNoteheads.length < 2) {
+        const code = ch.codePointAt(0)
+        // Reject ASCII digits and letters — these are text/lyrics, not noteheads.
+        // Noteheads in legacy music fonts map to control chars (U+0000-U+001F)
+        // or PUA (U+E000-U+F8FF), never to ASCII letters/digits.
+        if ((code >= 0x30 && code <= 0x39) || (code >= 0x41 && code <= 0x7a)) continue
+        openNoteheads.push(ch)
+      }
+    }
+  }
+
+  // Also check the primary font for open noteheads (in case half/whole are in same font)
+  const primaryAllChars = [...blackFontStats.chars.entries()].filter(
     ([ch, stats]) =>
       ch.trim().length > 0 &&
-      stats.count >= DYNAMIC_MIN_NOTEHEADS &&
+      ch !== blackNotehead &&
+      stats.count >= DYNAMIC_MIN_OPEN_NOTEHEADS &&
       stats.width > 0 &&
       stats.height > 0,
   )
-  if (candidates.length === 0) {
-    return null
-  }
 
-  // Sort by frequency descending — the black notehead is overwhelmingly the
-  // most frequent music glyph on any score page.
-  candidates.sort((a, b) => b[1].count - a[1].count)
+  for (const [ch, stats] of primaryAllChars) {
+    const widthRatio = stats.width / blackWidth
+    if (widthRatio < 0.5 || widthRatio > 1.5) continue
 
-  const result = { blackNotehead: null, openNoteheads: [] }
-
-  for (const [ch, stats] of candidates) {
-    // Width filters the music-font glyphs: noteheads are ~0.7-1.2x staff gap
-    // wide, while stems/ledger lines/barlines are very narrow (0.2-0.3x) and
-    // beams/slurs are very wide (>2x). Font "height" reports the em box, not
-    // the ink height, so we don't use it for filtering — the ink probe is the
-    // authoritative shape discriminator.
-    const wOk = stats.width >= staffGap * 0.35 && stats.width <= staffGap * 2.2
-    if (!wOk) continue
-
-    // Ink probe — sample up to 20 positions
     const samplePositions = stats.positions.slice(0, 20)
     let filledCount = 0
     let openCount = 0
@@ -329,38 +435,78 @@ function detectDynamicNoteheadGlyphs(fontStats, imageData) {
       const ink = probeGlyphInk(imageData, x, y, stats.width, stats.height)
       if (ink) {
         probed += 1
-        if (ink === 'filled') filledCount += 1
-        else if (ink === 'open') openCount += 1
+        if (ink.classification === 'filled') filledCount += 1
+        else if (ink.classification === 'open') openCount += 1
       }
     }
-    if (probed < DYNAMIC_MIN_INK_SAMPLES) continue
+    if (probed < DYNAMIC_MIN_OPEN_INK_SAMPLES) continue
 
-    const filledRatio = filledCount / probed
     const openRatio = openCount / probed
+    const filledRatio = filledCount / probed
 
-    if (filledRatio >= 0.45 && !result.blackNotehead) {
-      // Reject ASCII digits (0-9) as "noteheads" — they are TAB fret digits
-      // in tablature fonts, not music notation noteheads. Notation fonts
-      // (Feta, Bravura, MScore) map noteheads to PUA/legacy PUA codepoints,
-      // never to ASCII digits which are reserved for time signatures,
-      // measure numbers, etc.
+    if (openRatio >= 0.3 && filledRatio < 0.5 && openNoteheads.length < 2) {
       const code = ch.codePointAt(0)
-      if (code >= 0x30 && code <= 0x39) {
-        // This font uses ASCII digits as the most frequent "filled" glyph
-        // — it's a TAB font, not a notation font. Skip it.
-        continue
-      }
-      result.blackNotehead = ch
-    } else if (openRatio >= 0.4 && result.openNoteheads.length < 2) {
-      const code = ch.codePointAt(0)
-      if (code >= 0x30 && code <= 0x39) {
-        continue
-      }
-      result.openNoteheads.push(ch)
+      if ((code >= 0x30 && code <= 0x39) || (code >= 0x41 && code <= 0x7a)) continue
+      openNoteheads.push(ch)
     }
   }
 
-  return result
+  // SECONDARY PASS: detect half noteheads with partial staff line interference
+  // (centerRatio 0.4-0.8, borderRatio above black notehead level but below sharp level)
+  if (blackBorderCount > 0) {
+    const blackAvgBorder = blackBorderSum / blackBorderCount
+    const primaryChars = [...blackFontStats.chars.entries()].filter(
+      ([ch, stats]) =>
+        ch.trim().length > 0 &&
+        ch !== blackNotehead &&
+        !openNoteheads.includes(ch) &&
+        stats.count >= DYNAMIC_MIN_OPEN_NOTEHEADS &&
+        stats.width > 0 &&
+        stats.height > 0,
+    )
+
+    for (const [ch, stats] of primaryChars) {
+      const widthRatio = stats.width / blackWidth
+      if (widthRatio < 0.5 || widthRatio > 1.5) continue
+
+      const samplePositions = stats.positions.slice(0, 20)
+      let centerSum = 0
+      let borderSum = 0
+      let probed = 0
+      for (const [x, y] of samplePositions) {
+        const ink = probeGlyphInk(imageData, x, y, stats.width, stats.height)
+        if (ink) {
+          probed += 1
+          centerSum += ink.centerRatio
+          borderSum += ink.borderRatio
+        }
+      }
+      if (probed < DYNAMIC_MIN_OPEN_INK_SAMPLES) continue
+
+      const avgCenter = centerSum / probed
+      const avgBorder = borderSum / probed
+
+      // Check if this is a half notehead with partial staff line interference:
+      // - centerRatio in ambiguous range (0.4-0.8) - partially filled center
+      // - borderRatio above black notehead level (ring visible) but below sharp level
+      const lowerBorder = Math.max(blackAvgBorder * 1.2, 0.25)
+      const upperBorder = blackAvgBorder * 1.7
+      if (
+        avgCenter >= 0.4 &&
+        avgCenter < 0.8 &&
+        avgBorder >= lowerBorder &&
+        avgBorder < upperBorder
+      ) {
+        const code = ch.codePointAt(0)
+        if ((code >= 0x30 && code <= 0x39) || (code >= 0x41 && code <= 0x7a)) continue
+        if (openNoteheads.length < 2) {
+          openNoteheads.push(ch)
+        }
+      }
+    }
+  }
+
+  return { blackNotehead, openNoteheads }
 }
 
 /**
@@ -442,26 +588,21 @@ export function normalizeNonSmuflMusicFontGlyphs(pageText = [], imageData = null
 
   // Find music font with dynamic notehead glyphs
   const fontStats = collectFontCharStats(pageText, imageData)
-  let detectedFont = null
-  let detectedGlyphs = null
 
-  // Check fonts sorted by total character count (music fonts dominate)
-  const sortedFonts = [...fontStats.entries()].sort(
-    (a, b) => b[1].total - a[1].total
-  )
+  // Detect noteheads across all fonts (handles subset fonts)
+  const detectedGlyphs = detectDynamicNoteheadGlyphs(fontStats, imageData)
 
-  for (const [fontName, stats] of sortedFonts) {
-    if (stats.total < DYNAMIC_MIN_NOTEHEADS * 2) continue
-    const glyphs = detectDynamicNoteheadGlyphs(stats, imageData)
-    if (glyphs?.blackNotehead) {
-      detectedFont = fontName
-      detectedGlyphs = glyphs
-      break
-    }
+  if (!detectedGlyphs?.blackNotehead) {
+    return { items: pageText, applied: false, diagnostics }
   }
 
-  if (!detectedFont || !detectedGlyphs?.blackNotehead) {
-    return { items: pageText, applied: false, diagnostics }
+  // Find which font contains the black notehead (for diagnostics)
+  let detectedFont = null
+  for (const [fontName, stats] of fontStats.entries()) {
+    if (stats.chars.has(detectedGlyphs.blackNotehead)) {
+      detectedFont = fontName
+      break
+    }
   }
 
   // Build the dynamic glyph map
