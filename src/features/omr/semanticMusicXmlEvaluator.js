@@ -699,8 +699,24 @@ function recordAttributes(matches, stats, localDefects, measureRef) {
   }
 }
 
+function deriveStaffFromPartId(note, partToStaff, partIndexRef) {
+  if (note.staff != null) return note.staff
+  if (note.partId) {
+    if (!partToStaff.has(note.partId)) {
+      partIndexRef.value += 1
+      partToStaff.set(note.partId, partIndexRef.value)
+    }
+    return partToStaff.get(note.partId)
+  }
+  return 1
+}
+
 function recordVoiceLanes(truthNotes, generatedNotes, stats, localDefects, measureRef) {
-  const truthStaves = new Set(truthNotes.map((note) => note.staff ?? 1))
+  const partToStaff = new Map()
+  const partIndexRef = { value: 0 }
+  const truthStaves = new Set(
+    truthNotes.map((note) => deriveStaffFromPartId(note, partToStaff, partIndexRef))
+  )
   const generatedStaves = new Set(generatedNotes.map((note) => note.staff ?? 1))
   for (const staff of truthStaves) {
     stats.measureStructure.presentInTruth += 1
@@ -722,8 +738,10 @@ function recordVoiceLanes(truthNotes, generatedNotes, stats, localDefects, measu
   // Same pitches present but assigned to fewer/more raw voice lanes on the same staff.
   const byStaff = (notes) => {
     const map = new Map()
+    const localPartToStaff = new Map()
+    const localPartIndex = { value: 0 }
     for (const note of notes.filter((entry) => !entry.isRest)) {
-      const staff = note.staff ?? 1
+      const staff = deriveStaffFromPartId(note, localPartToStaff, localPartIndex)
       if (!map.has(staff)) {
         map.set(staff, { voices: new Set(), midis: [] })
       }

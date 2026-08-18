@@ -62,6 +62,19 @@ function fourQuarters(steps = ['C', 'D', 'E', 'F'], options = {}) {
   return steps.map((step) => pitchXml({ step, ...options })).join('')
 }
 
+function twoPartScore(part1MeasuresXml, part2MeasuresXml) {
+  const partList =
+    '<part-list>' +
+    '<score-part id="P1"><part-name>Right</part-name></score-part>' +
+    '<score-part id="P2"><part-name>Left</part-name></score-part>' +
+    '</part-list>'
+  return F.scoreWrap(
+    `<part id="P1">${part1MeasuresXml.join('')}</part>` +
+      `<part id="P2">${part2MeasuresXml.join('')}</part>`,
+    partList,
+  )
+}
+
 const tieStart =
   '<tie type="start"/><notations><tied type="start"/></notations>'
 const slurStart = '<notations><slur type="start" number="1"/></notations>'
@@ -692,5 +705,61 @@ describe('semantic evaluator hardening', () => {
     const report = JSON.parse(readFileSync(jsonPath, 'utf8'))
     expect(report.schemaVersion).toBe(2)
     expect(report.totals.defectCount).toBe(0)
+  })
+})
+
+describe('semantic evaluator: truth staff derivation from partId', () => {
+  it('derives distinct staves from partId when truth has no <staff> elements', () => {
+    // Truth: two parts (P1 right hand, P2 left hand) without explicit <staff> elements.
+    // Each part plays a different pitch. Generated is identical.
+    const truth = twoPartScore(
+      [measure(1, [pitchXml({ step: 'C' })].join(''), { first: true })],
+      [measure(1, [pitchXml({ step: 'G' })].join(''))],
+    )
+
+    const report = evaluateSemanticMusicXml({
+      groundTruthMusicXml: truth,
+      generatedMusicXml: truth,
+    })
+
+    // Self-comparison must yield zero defects. The fix ensures truth staves
+    // are derived from partId (P1->1, P2->2) rather than collapsing all
+    // notes to staff 1, which would cause false MISSING_VOICE or
+    // VOICE_MISMATCH when compared against generated output that has
+    // explicit <staff> elements.
+    expect(report.totals.defectCount).toBe(0)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.MISSING_VOICE)).toBe(0)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.VOICE_MISMATCH)).toBe(0)
+  })
+
+  it('avoids false voice-mismatch when truth uses parts and generated uses voices with explicit staff', () => {
+    // Truth: two parts (P1, P2) without <staff>, each with voice 1.
+    // Both hands play the same pitch in unison.
+    const truth = twoPartScore(
+      [measure(1, [pitchXml({ step: 'C' })].join(''), { first: true })],
+      [measure(1, [pitchXml({ step: 'C' })].join(''))],
+    )
+    // Generated: single part with two voices on explicit staff 1 and 2.
+    const generated = F.scoreWrap(
+      `<part id="P1">${measure(
+        1,
+        `${pitchXml({ step: 'C', voice: 1, staff: 1 })}${pitchXml({ step: 'C', voice: 2, staff: 2 })}`,
+        { first: true },
+      )}</part>`,
+    )
+
+    const report = evaluateSemanticMusicXml({
+      groundTruthMusicXml: truth,
+      generatedMusicXml: generated,
+      options: { mode: 'written' },
+    })
+
+    // Before the fix, truth collapsed both parts to staff 1 (voice set {1})
+    // while generated had voices {1,2} on staff 1+2 with matching midis,
+    // producing a false VOICE_MISMATCH. The fix derives truth staves from
+    // partId (P1->staff 1, P2->staff 2), so the voice-lane comparison
+    // happens per-staff and no longer triggers the mismatch.
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.VOICE_MISMATCH)).toBe(0)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.MISSING_VOICE)).toBe(0)
   })
 })
