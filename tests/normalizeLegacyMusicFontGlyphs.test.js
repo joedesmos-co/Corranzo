@@ -162,5 +162,26 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     ]
     const { applied } = normalizeLegacyMusicFontGlyphs(page)
     expect(applied).toBe(false) // no MScore legacy noteheads → static skips
+})
+
+  it('regression: demo-minuet U+0007 half-notehead detection must not overfire', () => {
+    // The dynamic font path for demo-minuet-in-g's g_d0_f3 font uses low-PUA codepoints.
+    // U+0007 appears 5 times in the font but 0 times in measure 1 bass staff (where
+    // ground-truth expects G3/B3/D4 half-noteheads). A classifier that maps U+0007
+    // to half-notehead in this font creates +17 extra notes and +8 missing notes
+    // across the Tier A corpus (see da0732c revert).
+    const SHARP = '\u0004'
+    const TREBLE = '\u0005'
+    const NOTEHEAD_BLACK = '\u0001'
+    const NOTEHEAD_HALF_U0007 = '\u0007'
+    const page = [
+      item(NOTEHEAD_BLACK.repeat(100), 'g_d0_f3', { width: 7 }),
+      item(NOTEHEAD_HALF_U0007.repeat(5), 'g_d0_f3', { width: 7 }),
+      item(SHARP.repeat(6), 'g_d0_f3', { width: 6 }),
+      item(TREBLE.repeat(6), 'g_d0_f3', { width: 14 }),
+    ]
+    const { applied } = normalizeLegacyMusicFontGlyphs(page)
+    expect(applied).toBe(false) // dynamic font pages skip static path
   })
+
 })
