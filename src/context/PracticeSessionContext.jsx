@@ -158,31 +158,11 @@ export function PracticeSessionProvider({
     visiblePageNumber,
   })
 
-  const playAlongNoteTarget = useWaitForYouNoteTarget({
-    active: !session.isWaitForYou,
-    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
-    waitForYouStatus: null,
-    currentCheckpoint: session.playAlongVisualCheckpoint,
-    timingMap: session.timing.timingMap,
-    anchors: scoreFollow.anchors,
-    sourceVisualMap: session.sourceVisualMap,
-    preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
-    mode: 'play-along',
-    visiblePageNumber,
-  })
-
   const wfyNoteMode =
     session.isWaitForYou && session.checkpointMode === WFY_CHECKPOINT_MODE.NOTE
 
   const wfyNoteTargetVisible =
     wfyNoteMode && (waitForYouNoteTarget?.showOnPage ?? false)
-
-  const playAlongNoteTargetActive = Boolean(
-    !session.isWaitForYou && playAlongNoteTarget?.target?.visible,
-  )
-  const playAlongNoteTargetVisible = Boolean(
-    playAlongNoteTargetActive && playAlongNoteTarget?.showOnPage,
-  )
 
   const practiceNoteTarget = session.isWaitForYou
     ? {
@@ -194,14 +174,13 @@ export function PracticeSessionProvider({
         mode: 'wait-for-you',
       }
     : {
-        ...playAlongNoteTarget,
-        active: playAlongNoteTargetActive,
+        target: null,
+        showOnPage: false,
+        active: false,
         mode: 'play-along',
       }
 
-  const practiceNoteTargetVisible = session.isWaitForYou
-    ? wfyNoteTargetVisible
-    : playAlongNoteTargetVisible
+  const practiceNoteTargetVisible = wfyNoteTargetVisible
 
   const hidePlaybackScoreFollowCursor = wfyNoteTargetVisible
 
@@ -328,7 +307,7 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
-      playAlongNoteTarget,
+      playAlongNoteTarget: null,
       practiceNoteTarget,
       hidePlaybackScoreFollowCursor,
       sessionReady,
@@ -339,7 +318,6 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
-      playAlongNoteTarget,
       practiceNoteTarget,
       hidePlaybackScoreFollowCursor,
       sessionReady,

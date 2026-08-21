@@ -710,8 +710,8 @@ export default function usePracticeSession({
   waitForYouRef.current = waitForYou
 
   const seekToPracticeTimeWithWfy = useCallback(
-    (seconds) => {
-      seekToPracticeTime(seconds)
+    (seconds, options = {}) => {
+      seekToPracticeTime(seconds, options)
       if (practiceMode === PRACTICE_MODE.WAIT_FOR_YOU) {
         waitForYouRef.current.syncToNearestCheckpoint(seconds)
       }
@@ -733,7 +733,9 @@ export default function usePracticeSession({
 
   const handleLoopRestart = useCallback(
     (seconds) => {
-      seekToPracticeTimeWithWfy(seconds)
+      // Loop wrap is dispatched by useLoopPlayback's effect. Avoid flushSync
+      // inside that lifecycle while keeping the same clock + playback seek.
+      seekToPracticeTimeWithWfy(seconds, { sync: false })
     },
     [seekToPracticeTimeWithWfy],
   )

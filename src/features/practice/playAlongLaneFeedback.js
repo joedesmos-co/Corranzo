@@ -42,20 +42,23 @@ function playAlongWindowEnd(group) {
  */
 export function updatePlayAlongMisses(state, groups, currentTime) {
   if (!state || !groups?.length) {
-    return
+    return false
   }
   const time = Number(currentTime)
   if (!Number.isFinite(time)) {
-    return
+    return false
   }
+  let changed = false
   for (const group of groups) {
     if (state.outcomes.has(group.id)) {
       continue
     }
     if (time > playAlongWindowEnd(group)) {
       state.outcomes.set(group.id, VISUAL_LANE_OUTCOME.MISSED)
+      changed = true
     }
   }
+  return changed
 }
 
 export function resolvePlayAlongTargetIndex(groups, currentTime) {

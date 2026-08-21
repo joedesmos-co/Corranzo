@@ -45,7 +45,6 @@ function TabVisualLane({
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
   const playheadRef = useRef(null)
-  const playheadCapRef = useRef(null)
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
 
@@ -98,7 +97,6 @@ function TabVisualLane({
     const step = () => {
       const el = scrollRef.current
       const playheadEl = playheadRef.current
-      const capEl = playheadCapRef.current
       const t = getFrameTime()
       const { playheadX: livePlayheadX, scrollX } = resolveVisualLaneTransform({
         frameTime: t,
@@ -113,9 +111,6 @@ function TabVisualLane({
       if (playheadEl) {
         playheadEl.setAttribute('x1', String(livePlayheadX))
         playheadEl.setAttribute('x2', String(livePlayheadX))
-      }
-      if (capEl) {
-        capEl.setAttribute('cx', String(livePlayheadX))
       }
       frame = requestAnimationFrame(step)
     }
@@ -288,19 +283,13 @@ function TabVisualLane({
           {/* Moving playhead, painted on top. */}
           <line
             ref={playheadRef}
-            className="tab-lane__playhead"
+            className="tab-lane__playhead score-follow-bar__line score-follow-bar__line--svg"
+            data-score-follow-bar="true"
             x1={playheadX}
             x2={playheadX}
             y1={topY - TAB_LINE_GAP}
             y2={bottomY + TAB_LINE_GAP}
             vectorEffect="non-scaling-stroke"
-          />
-          <circle
-            ref={playheadCapRef}
-            className="tab-lane__playhead-cap"
-            cx={playheadX}
-            cy={topY - TAB_LINE_GAP}
-            r={3.5}
           />
         </g>
       </svg>

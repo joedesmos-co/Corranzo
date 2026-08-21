@@ -5505,15 +5505,12 @@
 }
 
 .staff-lane__playhead {
-  stroke: var(--vp-accent, #6ee7b7);
+  stroke: var(--score-follow-bar-color, rgba(125, 100, 255, 0.92));
   stroke-width: 2;
   opacity: 0.95;
-  filter: drop-shadow(0 0 4px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
-}
-
-.staff-lane__playhead-cap {
-  fill: var(--vp-accent, #6ee7b7);
-  filter: drop-shadow(0 0 5px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+  filter:
+    drop-shadow(0 0 4px var(--score-follow-bar-glow, rgba(109, 74, 255, 0.45)))
+    drop-shadow(0 0 1px var(--score-follow-bar-edge, rgba(109, 74, 255, 0.8)));
 }
 
 .staff-lane__ledger {
@@ -5537,6 +5534,16 @@
 
 .staff-lane__head {
   fill: currentColor;
+}
+
+.staff-lane__rest {
+  color: var(--vp-upcoming, #b4b4bb);
+}
+
+.staff-lane__rest-glyph {
+  fill: currentColor;
+  font-family: Bravura, 'Noto Music', 'Apple Symbols', 'Segoe UI Symbol', serif;
+  user-select: none;
 }
 
 .staff-lane__stem {
@@ -5721,15 +5728,12 @@
 }
 
 .tab-lane__playhead {
-  stroke: var(--vp-accent, #6ee7b7);
+  stroke: var(--score-follow-bar-color, rgba(125, 100, 255, 0.92));
   stroke-width: 2;
   opacity: 0.95;
-  filter: drop-shadow(0 0 4px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
-}
-
-.tab-lane__playhead-cap {
-  fill: var(--vp-accent, #6ee7b7);
-  filter: drop-shadow(0 0 5px var(--vp-accent-glow, rgba(110, 231, 183, 0.55)));
+  filter:
+    drop-shadow(0 0 4px var(--score-follow-bar-glow, rgba(109, 74, 255, 0.45)))
+    drop-shadow(0 0 1px var(--score-follow-bar-edge, rgba(109, 74, 255, 0.8)));
 }
 
 /* Fret discs read like tab digits on a badge: dim gray upcoming, bright

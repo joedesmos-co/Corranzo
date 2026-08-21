@@ -18,6 +18,8 @@ export default function usePlayAlongLaneFeedback({
   isPlaying = false,
 }) {
   const stateRef = useRef(createPlayAlongFeedbackState())
+  const timelineRef = useRef({ groups, practiceTime })
+  timelineRef.current = { groups, practiceTime }
   const [version, setVersion] = useState(0)
   const bump = useCallback(() => setVersion((value) => value + 1), [])
 
@@ -42,14 +44,18 @@ export default function usePlayAlongLaneFeedback({
     if (!active || !isPlaying) {
       return undefined
     }
-    updatePlayAlongMisses(stateRef.current, groups, practiceTime)
-    bump()
+    const updateMisses = () => {
+      const timeline = timelineRef.current
+      if (updatePlayAlongMisses(stateRef.current, timeline.groups, timeline.practiceTime)) {
+        bump()
+      }
+    }
+    updateMisses()
     const intervalId = window.setInterval(() => {
-      updatePlayAlongMisses(stateRef.current, groups, practiceTime)
-      bump()
+      updateMisses()
     }, 80)
     return () => window.clearInterval(intervalId)
-  }, [active, isPlaying, groups, practiceTime, bump])
+  }, [active, isPlaying, bump])
 
   const handlePlayedMidi = useCallback(
     (midi) => {

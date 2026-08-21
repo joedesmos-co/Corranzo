@@ -54,6 +54,7 @@ function buildVisualEvents(timingMap, practiceScope) {
 
   const events = groups.map((group, index) => {
     const playable = group.notes.filter((note) => !note.isRest && Number.isFinite(note.midi))
+    const rests = group.notes.filter((note) => note.isRest)
     const displayedNotes = playable.length ? playable : []
     const durationNotes = displayedNotes.length ? displayedNotes : group.notes
     const sourceIds = displayedNotes.map((note) => note.sourceNoteheadId).filter(Boolean)
@@ -78,6 +79,8 @@ function buildVisualEvents(timingMap, practiceScope) {
       }, group.timeSeconds),
       expectedMidis: [...new Set(displayedNotes.map((note) => note.midi))],
       notes: displayedNotes,
+      rests,
+      sourceNotes: group.notes,
       isChord: displayedNotes.length > 1,
       isRest,
       isTiedContinuation:

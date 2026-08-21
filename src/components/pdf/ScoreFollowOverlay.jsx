@@ -237,7 +237,10 @@ function ScoreFollowOverlay({
           style={{ display: 'none' }}
           aria-hidden
         >
-          <span className="score-follow-cursor__line" />
+          <span
+            className="score-follow-cursor__line score-follow-bar__line"
+            data-score-follow-bar="true"
+          />
         </div>
       )}
 

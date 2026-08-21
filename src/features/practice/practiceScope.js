@@ -49,7 +49,7 @@ function partById(timingMap) {
 }
 
 export function resolveNotePracticeHand(note, timingMap = null) {
-  if (!note || note.isRest || note.midi == null) {
+  if (!note) {
     return null
   }
 

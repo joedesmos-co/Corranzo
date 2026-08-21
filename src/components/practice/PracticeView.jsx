@@ -176,10 +176,7 @@ export default function PracticeView({
                 error={session.timing?.error ?? null}
               />
               {isVisualView ? (
-                <VisualPracticeView
-                  timingSourceKind={timingSourceKind}
-                  onSourcePageChange={handleGoToPage}
-                />
+                <VisualPracticeView timingSourceKind={timingSourceKind} />
               ) : (
                 <div className="practice-workspace__score">
                   <OmrQualityWarningBanner

@@ -3552,6 +3552,12 @@
 
 /* Score-follow cursor — vertical bar spanning the full grand staff */
 
+.score-follow-bar__line {
+  --score-follow-bar-color: rgba(125, 100, 255, 0.92);
+  --score-follow-bar-glow: rgba(109, 74, 255, 0.45);
+  --score-follow-bar-edge: rgba(109, 74, 255, 0.8);
+}
+
 .score-follow-cursor {
   position: absolute;
   /* Centre the bar on the anchor point (grand-staff midpoint) */
@@ -3571,10 +3577,10 @@
   height: 100%;
   margin: 0 0 0 -1px;
   border-radius: 1px;
-  background: rgba(125, 100, 255, 0.92);
+  background: var(--score-follow-bar-color);
   box-shadow:
-    0 0 6px rgba(109, 74, 255, 0.45),
-    0 0 1px rgba(109, 74, 255, 0.8);
+    0 0 6px var(--score-follow-bar-glow),
+    0 0 1px var(--score-follow-bar-edge);
   transition: opacity 0.12s ease;
 }
 

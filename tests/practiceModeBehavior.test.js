@@ -54,8 +54,9 @@ describe('Play Along lane feedback', () => {
     const state = createPlayAlongFeedbackState()
     const first = groups[0]
 
-    updatePlayAlongMisses(state, groups, first.timeSeconds + 0.5)
+    expect(updatePlayAlongMisses(state, groups, first.timeSeconds + 0.5)).toBe(true)
     expect(state.outcomes.get(first.id)).toBe(VISUAL_LANE_OUTCOME.MISSED)
+    expect(updatePlayAlongMisses(state, groups, first.timeSeconds + 0.5)).toBe(false)
   })
 
   it('accepts slightly early Play Along input before the onset', () => {

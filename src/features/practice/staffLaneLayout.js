@@ -143,7 +143,7 @@ export function detectStaves(groups) {
   let hasTreble = false
   let hasBass = false
   for (const group of groups ?? []) {
-    for (const note of group.notes ?? []) {
+    for (const note of [...(group.notes ?? []), ...(group.rests ?? [])]) {
       if (resolveStaffKind(note) === STAFF_KIND.TREBLE) {
         hasTreble = true
       } else {
@@ -321,6 +321,37 @@ const FLAG_COUNT_BY_NOTE_TYPE = {
   '64th': 4,
 }
 
+export const REST_GLYPH_BY_NOTE_TYPE = Object.freeze({
+  whole: '\u{1D13B}',
+  breve: '\u{1D13A}',
+  half: '\u{1D13C}',
+  quarter: '\u{1D13D}',
+  eighth: '\u{1D13E}',
+  '8th': '\u{1D13E}',
+  sixteenth: '\u{1D13F}',
+  '16th': '\u{1D13F}',
+  '32nd': '\u{1D140}',
+  '64th': '\u{1D141}',
+})
+
+function inferredRestType(rest) {
+  if (REST_GLYPH_BY_NOTE_TYPE[rest?.noteType]) return rest.noteType
+  const quarters = Number(rest?.durationQuarters)
+  if (Number.isFinite(quarters)) {
+    if (quarters >= 4) return 'whole'
+    if (quarters >= 2) return 'half'
+    if (quarters >= 1) return 'quarter'
+    if (quarters >= 0.5) return 'eighth'
+    if (quarters >= 0.25) return 'sixteenth'
+    return '32nd'
+  }
+  return 'quarter'
+}
+
+export function restGlyphForNoteType(noteType) {
+  return REST_GLYPH_BY_NOTE_TYPE[noteType] ?? REST_GLYPH_BY_NOTE_TYPE.quarter
+}
+
 /** Notehead ellipse radii, in SVG units (shared with the renderer so stems
     attach exactly at the notehead edge). */
 export const NOTEHEAD_RX = 7
@@ -334,6 +365,45 @@ const ARTICULATION_OFFSET_Y = STAFF_LINE_GAP * 1.15
 const ARTICULATION_STACK_GAP = STAFF_LINE_GAP * 0.62
 const TIE_VERTICAL_OFFSET = STAFF_LINE_GAP * 0.88
 const SLUR_VERTICAL_OFFSET = STAFF_LINE_GAP * 1.35
+
+/**
+ * Position printed rests from the same semantic event stream as notes. Rests
+ * use standard Unicode music symbols with music-font fallbacks in CSS; no PDF
+ * glyph geometry or source-page spacing reaches this layer.
+ */
+export function buildStaffLaneRests(
+  groups,
+  geometry,
+  { pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond } = {},
+) {
+  const rests = []
+  for (const group of groups ?? []) {
+    for (let index = 0; index < (group.rests?.length ?? 0); index += 1) {
+      const rest = group.rests[index]
+      const staffKind = resolveStaffKind(rest)
+      const staff = geometry.staves[staffKind] ?? Object.values(geometry.staves)[0]
+      if (!staff) continue
+      const noteType = inferredRestType(rest)
+      rests.push({
+        id: rest.visualRestId ?? `${group.id}-rest-${index}`,
+        groupId: group.id,
+        status: group.status ?? null,
+        laneOutcome: group.laneOutcome ?? null,
+        x: Number(group.timeSeconds ?? rest.timeSeconds ?? 0) * pixelsPerSecond,
+        y: staff.lines[2],
+        staffKind,
+        voice: rest.voice ?? 1,
+        measureNumber: rest.measureNumber ?? group.measureNumber ?? null,
+        durationSeconds: sanitizeVisualDurationSeconds(rest.durationSeconds, 0),
+        durationQuarters: rest.durationQuarters ?? null,
+        noteType,
+        glyph: restGlyphForNoteType(noteType),
+        dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
+      })
+    }
+  }
+  return rests
+}
 
 /**
  * Flatten visual lane groups into positioned staff notes.

@@ -215,7 +215,7 @@ describe('Wait For You stabilization — page follow', () => {
 })
 
 describe('Wait For You stabilization — checkpoint grouping', () => {
-  it('groups hand-separated notes within the musical grouping window', () => {
+  it('keeps nearby sequential notes separate from exact simultaneous chord tones', () => {
     const timingMap = {
       notes: [
         { midi: C4, timeSeconds: 1.0, measureNumber: 1, label: 'C4', isRest: false },
@@ -227,7 +227,8 @@ describe('Wait For You stabilization — checkpoint grouping', () => {
     }
 
     const checkpoints = buildNoteCheckpoints(timingMap)
-    expect(checkpoints[0].expectedMidis).toEqual([C4, E4, G4])
+    expect(checkpoints[0].expectedMidis).toEqual([C4, E4])
+    expect(checkpoints[1].expectedMidis).toEqual([G4])
   })
 })
 

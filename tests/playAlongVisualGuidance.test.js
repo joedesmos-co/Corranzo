@@ -549,8 +549,10 @@ describe('Play Along visual runtime wiring', () => {
     const pageFollowHook = readSrc('features', 'practice', 'usePracticePageFollow.js')
 
     expect(context).toContain('session.sourceVisualMap?.anchorCount > 0')
-    expect(context.match(/preferredRepresentation:/g)).toHaveLength(2)
+    expect(context.match(/preferredRepresentation:/g)).toHaveLength(1)
     expect(context).toContain('scoreFollow.guitarScoreTarget?.activeTarget')
+    expect(context).toContain('playAlongNoteTarget: null')
+    expect(context).toContain('target: null')
     expect(controls).toContain('session.sourceVisualMap?.anchorCount > 0')
     expect(pageFollow).toContain('noteFollowTarget?.active')
     expect(pageFollow).toContain('(scoreFollow.enabled && scoreFollow.canFollow)')

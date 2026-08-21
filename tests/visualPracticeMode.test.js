@@ -423,7 +423,7 @@ describe('practice view integration', () => {
     expect(src).toContain('viewMode === PRACTICE_VIEW_MODE.VISUAL')
     expect(src).toContain('<VisualPracticeView')
     expect(src).toContain('timingSourceKind={timingSourceKind}')
-    expect(src).toContain('onSourcePageChange={handleGoToPage}')
+    expect(src).not.toContain('onSourcePageChange={handleGoToPage}')
     expect(src).toContain('savePracticeViewMode(mode)')
 
     // Score path unchanged: PdfViewer + score follow + page follow all remain.
@@ -454,6 +454,8 @@ describe('practice view integration', () => {
 
     // Staff lane + beginner affordances: target callout, keyboard strip.
     expect(src).toContain('StaffVisualLane')
+    expect(src).toContain('buildVisualRenderingInstructions')
+    expect(src).not.toContain('SourcePdfVisualLane')
     expect(src).toContain('detectStaves')
     expect(src).toContain('Play this')
     expect(src).toContain('VisualKeyboardStrip')
@@ -488,16 +490,17 @@ describe('practice view integration', () => {
     expect(src).toContain('translate(${scrollX} 0)')
     expect(src).toContain("playheadEl.setAttribute('x1', String(livePlayheadX))")
     expect(src).toContain("playheadEl.setAttribute('x2', String(livePlayheadX))")
-    expect(src).toContain("capEl.setAttribute('cx', String(livePlayheadX))")
+    expect(src).not.toContain('capEl')
 
     // Playhead is outside the scrolling group and painted on top, but its x
     // coordinate is updated by the same rAF loop as the scroll layer.
     const scrollIndex = src.indexOf('staff-lane__scroll')
-    const playheadIndex = src.indexOf('className="staff-lane__playhead"')
+    const playheadIndex = src.indexOf('className="staff-lane__playhead')
     expect(scrollIndex).toBeGreaterThan(-1)
     expect(playheadIndex).toBeGreaterThan(scrollIndex)
     expect(src).toContain('ref={playheadRef}')
-    expect(src).toContain('ref={playheadCapRef}')
+    expect(src).toContain('data-score-follow-bar="true"')
+    expect(src).not.toContain('playheadCapRef')
 
     // Staff notation elements: lines, clefs, noteheads, ledgers, sharps,
     // barlines, and a time signature.
@@ -508,7 +511,7 @@ describe('practice view integration', () => {
     expect(src).toContain('staff-lane__sharp')
     expect(src).toContain('staff-lane__barline')
     expect(src).toContain('staff-lane__timesig')
-    expect(src).toContain('staff-lane__playhead-cap')
+    expect(src).toContain('staff-lane__rest-glyph')
 
     // Note stems: shared per chord, direction-aware, no beams.
     expect(src).toContain('buildStaffLaneStems')

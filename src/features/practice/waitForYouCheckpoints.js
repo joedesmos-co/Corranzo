@@ -21,11 +21,14 @@ export const CHECKPOINT_KIND = {
 
 export { isPlayableCheckpointKind }
 
-/** Notes within this window (seconds) form one checkpoint — hands may be slightly apart. */
+/** Shared guitar mapping tolerance; checkpoint grouping itself stays semantic. */
 export { NOTE_TIME_GROUP_SECONDS }
 
 const LOOP_TIME_EPSILON = 0.001
-const TIME_GROUP_EPSILON = NOTE_TIME_GROUP_SECONDS
+// MusicXML/accepted OMR has authoritative onsets. A wide performance-style
+// tolerance merges real sequential notes at fast tempos, so only numerically
+// identical score onsets may become one Wait For You chord.
+const TIME_GROUP_EPSILON = 0.001
 
 function filterByLoopRegion(items, loopRegion, timeKey = 'timeSeconds') {
   if (!loopRegion?.isValid) {

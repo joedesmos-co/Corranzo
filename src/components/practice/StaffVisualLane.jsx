@@ -15,6 +15,7 @@ import {
   buildStaffGeometry,
   buildStaffLaneNotes,
   buildStaffLaneNotationMarkings,
+  buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
 } from '../../features/practice/staffLaneLayout.js'
@@ -77,7 +78,6 @@ function StaffVisualLane({
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
   const playheadRef = useRef(null)
-  const playheadCapRef = useRef(null)
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
 
@@ -93,8 +93,11 @@ function StaffVisualLane({
   // the outer ledger margins symmetrically.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const { notes, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
+  const { notes, rests, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+    })
+    const builtRests = buildStaffLaneRests(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
     })
     const builtStems = buildStaffLaneStems(visibleGroups, geometry, {
@@ -106,7 +109,13 @@ function StaffVisualLane({
       notes: builtNotes,
     })
     const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
-    return { notes: builtNotes, stems: builtStems, ...rhythmMarks, ...markings }
+    return {
+      notes: builtNotes,
+      rests: builtRests,
+      stems: builtStems,
+      ...rhythmMarks,
+      ...markings,
+    }
   }, [visibleGroups, geometry])
 
   // Barlines within the visible groups' span (deterministic x, like notes).
@@ -133,7 +142,6 @@ function StaffVisualLane({
     const step = () => {
       const el = scrollRef.current
       const playheadEl = playheadRef.current
-      const capEl = playheadCapRef.current
       const t = getFrameTime()
       const { playheadX: livePlayheadX, scrollX } = resolveVisualLaneTransform({
         frameTime: t,
@@ -148,9 +156,6 @@ function StaffVisualLane({
       if (playheadEl) {
         playheadEl.setAttribute('x1', String(livePlayheadX))
         playheadEl.setAttribute('x2', String(livePlayheadX))
-      }
-      if (capEl) {
-        capEl.setAttribute('cx', String(livePlayheadX))
       }
       frame = requestAnimationFrame(step)
     }
@@ -229,10 +234,45 @@ function StaffVisualLane({
                 vectorEffect="non-scaling-stroke"
               />
             ))}
+            {rests.map((rest) => (
+              <g
+                key={rest.id}
+                className={`staff-lane__rest staff-lane__note--${resolveLaneNoteClass(
+                  rest.status,
+                  rest.laneOutcome,
+                )}`}
+                data-note-type={rest.noteType}
+                data-voice={rest.voice}
+              >
+                <text
+                  className="staff-lane__rest-glyph"
+                  x={rest.x}
+                  y={rest.y}
+                  fontSize={STAFF_LINE_GAP * 2.55}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                >
+                  {rest.glyph}
+                </text>
+                {Array.from({ length: rest.dots }, (_, index) => (
+                  <circle
+                    key={`${rest.id}-dot-${index + 1}`}
+                    className="staff-lane__augmentation-dot"
+                    cx={rest.x + STAFF_LINE_GAP * 0.92 + index * 5}
+                    cy={rest.y - STAFF_LINE_GAP * 0.18}
+                    r={1.8}
+                  />
+                ))}
+              </g>
+            ))}
             {notes.map((note) => (
               <g
                 key={note.id}
                 className={`staff-lane__note staff-lane__note--${resolveLaneNoteClass(note.status, note.laneOutcome)}`}
+                data-note-type={note.noteType ?? undefined}
+                data-voice={note.voice}
+                data-hollow={note.hollow || undefined}
+                data-stemless={note.stemless || undefined}
               >
                 {note.ledgerLines.map((ledgerY) => (
                   <line
@@ -265,10 +305,10 @@ function StaffVisualLane({
                   </text>
                 )}
                 <ellipse
-                  className={`staff-lane__head${note.hollow ? ' staff-lane__head--hollow' : ''}`}
+                  className={`staff-lane__head${note.hollow ? ' staff-lane__head--hollow' : ''}${note.stemless ? ' staff-lane__head--whole' : ''}`}
                   cx={note.x + note.xOffset}
                   cy={note.y}
-                  rx={note.status === 'current' ? NOTEHEAD_RX * CURRENT_HEAD_SCALE : NOTEHEAD_RX}
+                  rx={(note.stemless ? NOTEHEAD_RX * 1.14 : NOTEHEAD_RX) * (note.status === 'current' ? CURRENT_HEAD_SCALE : 1)}
                   ry={note.status === 'current' ? NOTEHEAD_RY * CURRENT_HEAD_SCALE : NOTEHEAD_RY}
                   transform={`rotate(-14 ${note.x + note.xOffset} ${note.y})`}
                 />
@@ -411,19 +451,13 @@ function StaffVisualLane({
           {/* Moving playhead: outside the scrolling group, painted on top. */}
           <line
             ref={playheadRef}
-            className="staff-lane__playhead"
+            className="staff-lane__playhead score-follow-bar__line score-follow-bar__line--svg"
+            data-score-follow-bar="true"
             x1={playheadX}
             x2={playheadX}
             y1={STAFF_LINE_GAP}
             y2={geometry.height - STAFF_LINE_GAP}
             vectorEffect="non-scaling-stroke"
-          />
-          <circle
-            ref={playheadCapRef}
-            className="staff-lane__playhead-cap"
-            cx={playheadX}
-            cy={STAFF_LINE_GAP}
-            r={3.5}
           />
         </g>
       </svg>

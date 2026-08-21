@@ -110,11 +110,11 @@ describe('Practice visual runtime integration', () => {
 
       await visualButton.click()
       await expect.poll(() => visualButton.getAttribute('aria-pressed')).toBe('true')
-      const sourceLane = page.locator('.source-pdf-visual-lane')
-      await sourceLane.waitFor()
-      await sourceLane.locator('canvas').waitFor({ timeout: 15_000 })
-      expect(await sourceLane.getAttribute('data-source-page')).toBe('1')
-      expect(await page.locator('.staff-lane, .tab-lane').count()).toBe(0)
+      const reconstructedLane = page.locator('.staff-lane, .tab-lane')
+      await reconstructedLane.waitFor()
+      expect(await page.locator('.source-pdf-visual-lane').count()).toBe(0)
+      expect(await reconstructedLane.locator('canvas').count()).toBe(0)
+      expect(await reconstructedLane.locator('[data-score-follow-bar="true"]').count()).toBe(1)
       expect(await page.getByRole('alert').count()).toBe(0)
 
       const playAlong = page.getByRole('radio', { name: 'Play Along', exact: true })
@@ -123,7 +123,8 @@ describe('Practice visual runtime integration', () => {
         await page.getByRole('radiogroup', { name: 'Practice mode' }).getByText('Play Along', { exact: true }).click()
       }
       await expect.poll(() => playAlong.isChecked()).toBe(true)
-      await sourceLane.locator('canvas').waitFor()
+      expect(await page.locator('[data-practice-note-mode="play-along"]').count()).toBe(0)
+      expect(await page.locator('.source-pdf-visual-lane__highlight--play-along').count()).toBe(0)
       await page.getByRole('radiogroup', { name: 'Practice mode' }).getByText('Wait For You', { exact: true }).click()
       await expect.poll(() => waitForYou.isChecked()).toBe(true)
 

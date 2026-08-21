@@ -16,6 +16,7 @@ import {
   selectVisualWindow,
 } from '../../features/practice/visualPracticeLane.js'
 import { applyLaneOutcomes } from '../../features/practice/visualLaneFeedback.js'
+import { buildVisualRenderingInstructions } from '../../features/practice/visualRenderingInstructions.js'
 import {
   createWfyVisualTravelState,
   resolveWfyVisualTravelFrameTime,
@@ -35,7 +36,43 @@ import { INSTRUMENT_IDS } from '../../features/instruments/instruments.js'
 import { describeTabPosition } from '../../features/instruments/fretboard.js'
 import StaffVisualLane from './StaffVisualLane.jsx'
 import TabVisualLane from './TabVisualLane.jsx'
-import SourcePdfVisualLane from './SourcePdfVisualLane.jsx'
+
+const SEMANTIC_ONSET_EPSILON_SECONDS = 0.004
+
+function midiSetKey(midis) {
+  return [...new Set(midis ?? [])].sort((left, right) => left - right).join(',')
+}
+
+function findRenderingTargetIndex(renderingGroups, targetGroup) {
+  if (!renderingGroups?.length || !targetGroup) return -1
+  const targetMidis = midiSetKey(targetGroup.midis)
+  const exact = renderingGroups.findIndex(
+    (group) =>
+      !group.isRest &&
+      Math.abs(group.timeSeconds - targetGroup.timeSeconds) <=
+        SEMANTIC_ONSET_EPSILON_SECONDS &&
+      midiSetKey(group.midis) === targetMidis,
+  )
+  if (exact >= 0) return exact
+  return renderingGroups.findIndex(
+    (group) =>
+      !group.isRest &&
+      Math.abs(group.timeSeconds - targetGroup.timeSeconds) <=
+        SEMANTIC_ONSET_EPSILON_SECONDS,
+  )
+}
+
+function mapRenderingOutcomes(renderingGroups, practiceGroups, outcomesByPracticeGroup) {
+  if (!outcomesByPracticeGroup?.size) return outcomesByPracticeGroup
+  const mapped = new Map()
+  for (const practiceGroup of practiceGroups ?? []) {
+    const outcome = outcomesByPracticeGroup.get(practiceGroup.id)
+    if (!outcome) continue
+    const index = findRenderingTargetIndex(renderingGroups, practiceGroup)
+    if (index >= 0) mapped.set(renderingGroups[index].id, outcome)
+  }
+  return mapped
+}
 
 /**
  * Beginner-friendly Visual practice mode: a scrolling note lane with a fixed
@@ -48,26 +85,20 @@ import SourcePdfVisualLane from './SourcePdfVisualLane.jsx'
  * Read-only view over the existing practice session — playback, the
  * practice clock, and Wait For You all keep working unchanged.
  */
-function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null }) {
+function VisualPracticeView({ timingSourceKind = null }) {
   const visual = usePracticeVisualSession()
-  const { session, scoreFollow, practiceNoteTarget: resolvedPracticeNoteTarget } =
-    usePracticeSessionContext()
+  const { session, scoreFollow } = usePracticeSessionContext()
   const tick = usePracticeTick()
   const { instrument } = useInstrument()
 
   const timingMap = visual.timingMap
   const timingLoading = visual.timingLoading
   const loopRegion = visual.loopRegion
-  const pdfFile = visual.pdfFile
-  const pdfPageSizes = visual.pdfPageSizes
-  const visiblePageNumber = visual.visiblePageNumber
-  const setPdfPageSizes = visual.setPdfPageSizes
-  const pageViewRotations = visual.pageViewRotations
   const sourceVisualMap = session.sourceVisualMap
-  const omrMeasureGrid = session.omrMeasureGrid ?? session.sources?.musicXmlSource?.omrMeta?.measureGrid ?? null
 
   const laneKind = instrument.visualPractice.kind
   const isFretboardLane = laneKind === 'fretboard'
+  const preferredRepresentation = scoreFollow?.guitarScoreTarget?.activeTarget ?? null
   const laneStrings = useMemo(
     () => (isFretboardLane ? resolveStringsForTimingMap(timingMap, instrument) : null),
     [isFretboardLane, timingMap, instrument],
@@ -86,7 +117,22 @@ function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null
       }),
     [timingMap, loopRegion, visual.practiceScope, instrument.id, tabPositions],
   )
-  const staves = useMemo(() => detectStaves(groups), [groups])
+  const renderingGroups = useMemo(
+    () =>
+      buildVisualRenderingInstructions(timingMap, sourceVisualMap, {
+        loopRegion,
+        practiceScope: visual.practiceScope,
+        preferredRepresentation,
+      }),
+    [
+      timingMap,
+      sourceVisualMap,
+      loopRegion,
+      visual.practiceScope,
+      preferredRepresentation,
+    ],
+  )
+  const staves = useMemo(() => detectStaves(renderingGroups), [renderingGroups])
   // Keyboard shows a focused octave window (not the piece's full extremes).
   const keyboardRange = useMemo(() => computeKeyboardRange(groups), [groups])
   const barlineTimes = useMemo(() => buildBarlineTimes(timingMap), [timingMap])
@@ -150,10 +196,22 @@ function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null
   // look-ahead margin covers the coarseness, so the note layer's props stay
   // referentially stable between beats — scrolling itself is rAF-driven.
   const timeBucket = Math.floor(visualFrameTime)
+  const renderingTargetIndex = useMemo(
+    () => findRenderingTargetIndex(renderingGroups, targetGroup),
+    [renderingGroups, targetGroup],
+  )
+  const renderingOutcomes = useMemo(
+    () => mapRenderingOutcomes(renderingGroups, groups, laneOutcomesByGroupId),
+    [renderingGroups, groups, laneOutcomesByGroupId],
+  )
   const visibleGroups = useMemo(() => {
-    const windowed = selectVisualWindow(groups, timeBucket, targetIndex)
-    return applyLaneOutcomes(windowed, laneOutcomesByGroupId)
-  }, [groups, timeBucket, targetIndex, laneOutcomesByGroupId])
+    const windowed = selectVisualWindow(
+      renderingGroups,
+      timeBucket,
+      renderingTargetIndex,
+    )
+    return applyLaneOutcomes(windowed, renderingOutcomes)
+  }, [renderingGroups, timeBucket, renderingTargetIndex, renderingOutcomes])
 
   // Per-frame time source for the lane scroll: the engine's wall-clock
   // interpolated score time while playing (same source as the score-follow
@@ -197,10 +255,6 @@ function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null
   const isOmrTiming = timingSourceKind === 'omr'
   const laneComplete = isWaitForYou && wfyStatus === WFY_STATUS.COMPLETE
 
-  const practiceNoteTarget = resolvedPracticeNoteTarget?.target ?? null
-  const hasSourcePdf = pdfFile
-  const preferredRepresentation = scoreFollow?.guitarScoreTarget?.activeTarget ?? null
-
   return (
     <div
       className="visual-practice"
@@ -235,22 +289,7 @@ function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null
         instrumentId={instrument.id}
       />
 
-      {hasSourcePdf ? (
-        <SourcePdfVisualLane
-          pdfFile={pdfFile}
-          pdfPageSizes={pdfPageSizes}
-          setPdfPageSizes={setPdfPageSizes}
-          visiblePageNumber={visiblePageNumber}
-          noteTarget={practiceNoteTarget}
-          sourceVisualMap={sourceVisualMap}
-          omrMeasureGrid={omrMeasureGrid}
-          scoreAnchors={scoreFollow?.anchors ?? []}
-          activeMeasureNumber={currentMeasureNumber}
-          preferredRepresentation={preferredRepresentation}
-          pageViewRotations={pageViewRotations}
-          onSourcePageChange={onSourcePageChange}
-        />
-      ) : isFretboardLane ? (
+      {isFretboardLane ? (
         <TabVisualLane
           visibleGroups={visibleGroups}
           strings={laneStrings}
