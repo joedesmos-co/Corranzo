@@ -717,7 +717,8 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
   for (const digit of digits) {
     const last = clusters[clusters.length - 1]
     const width = Math.max(2, digit.width || 4)
-    const height = Math.max(2, digit.height || tabLineGap(tabStave.lineYs) * imageData.height * 0.8)
+    const lineGap = tabLineGap(tabStave.lineYs) * imageData.height
+    const height = Math.max(2, digit.height || lineGap * 0.8)
     const left = digit.x - width / 2
     const right = digit.x + width / 2
     const top = digit.y - height / 2
@@ -750,6 +751,7 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       right,
       top,
       bottom,
+      lineGap,
     })
   }
 
@@ -771,6 +773,11 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
     if (!box) {
       continue // clef-zone / margin digits (time signatures, fingering keys)
     }
+    const lineGap = cluster.lineGap
+    const tightHeight = lineGap * 0.65
+    const centerY = (cluster.top + cluster.bottom) / 2
+    const tightTop = centerY - tightHeight * 0.55
+    const tightBottom = centerY + tightHeight * 0.45
     notes.push({
       string: cluster.string,
       fret,
@@ -787,9 +794,9 @@ export function extractTabDigitNotes(glyphs, tabStave, measureBoxes, imageData, 
       sourceVisualKind: 'tab-fret',
       sourceBBox: {
         x0: cluster.left / imageData.width,
-        y0: cluster.top / imageData.height,
+        y0: tightTop / imageData.height,
         x1: cluster.right / imageData.width,
-        y1: cluster.bottom / imageData.height,
+        y1: tightBottom / imageData.height,
       },
       measureNumber: box.measureNumber,
       positionInMeasure: positionWithinBox(box, xNorm),

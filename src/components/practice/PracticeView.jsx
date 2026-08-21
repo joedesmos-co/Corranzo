@@ -1,6 +1,9 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
-import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
+import {
+  usePracticeSessionContext,
+  usePracticeVisualSession,
+} from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
 import {
@@ -43,6 +46,7 @@ export default function PracticeView({
   activeScoreSnapshot = null,
 }) {
   const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
+  const { setPdfPageSizes } = usePracticeVisualSession()
   const { instrumentId } = useInstrument()
   const practiceErrorResetKey = [
     session.waitForYou.currentCheckpoint?.id ?? 'none',
@@ -172,7 +176,10 @@ export default function PracticeView({
                 error={session.timing?.error ?? null}
               />
               {isVisualView ? (
-                <VisualPracticeView timingSourceKind={timingSourceKind} />
+                <VisualPracticeView
+                  timingSourceKind={timingSourceKind}
+                  onSourcePageChange={handleGoToPage}
+                />
               ) : (
                 <div className="practice-workspace__score">
                   <OmrQualityWarningBanner
@@ -197,6 +204,7 @@ export default function PracticeView({
                     onTogglePaper={onTogglePaper}
                     actionsRef={pdfActionsRef}
                     scrollContainerRef={pdfScrollRef}
+                    onPageSizesChange={setPdfPageSizes}
                   />
                 </div>
               )}

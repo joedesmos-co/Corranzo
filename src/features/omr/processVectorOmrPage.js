@@ -447,6 +447,12 @@ function noteheadsForMeasure(
         originalGlyph: glyph.originalLegacyText ?? glyph.text ?? null,
         legacyNormalized: Boolean(glyph.legacyMusicFontNormalized),
       },
+      glyphBBox: {
+        x: glyph.x - (glyph.width ?? 0) * 0.45,
+        y: glyph.y - (glyph.height ?? 0) * 0.55,
+        width: (glyph.width ?? 0) * 0.9,
+        height: (glyph.height ?? 0) * 0.65,
+      },
       pitchMapping,
       positionInMeasure: (glyph.x - left) / Math.max(1, right - left),
       measureNumber: measureBox.measureNumber,

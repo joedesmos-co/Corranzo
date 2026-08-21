@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { usePracticeVisualSession } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import { useInstrument } from '../../context/instrumentContext.js'
 import { WFY_STATUS } from '../../features/practice/waitForYouEngine.js'
@@ -34,6 +35,7 @@ import { INSTRUMENT_IDS } from '../../features/instruments/instruments.js'
 import { describeTabPosition } from '../../features/instruments/fretboard.js'
 import StaffVisualLane from './StaffVisualLane.jsx'
 import TabVisualLane from './TabVisualLane.jsx'
+import SourcePdfVisualLane from './SourcePdfVisualLane.jsx'
 
 /**
  * Beginner-friendly Visual practice mode: a scrolling note lane with a fixed
@@ -46,14 +48,23 @@ import TabVisualLane from './TabVisualLane.jsx'
  * Read-only view over the existing practice session — playback, the
  * practice clock, and Wait For You all keep working unchanged.
  */
-function VisualPracticeView({ timingSourceKind = null }) {
+function VisualPracticeView({ timingSourceKind = null, onSourcePageChange = null }) {
   const visual = usePracticeVisualSession()
+  const { session, scoreFollow, practiceNoteTarget: resolvedPracticeNoteTarget } =
+    usePracticeSessionContext()
   const tick = usePracticeTick()
   const { instrument } = useInstrument()
 
   const timingMap = visual.timingMap
   const timingLoading = visual.timingLoading
   const loopRegion = visual.loopRegion
+  const pdfFile = visual.pdfFile
+  const pdfPageSizes = visual.pdfPageSizes
+  const visiblePageNumber = visual.visiblePageNumber
+  const setPdfPageSizes = visual.setPdfPageSizes
+  const pageViewRotations = visual.pageViewRotations
+  const sourceVisualMap = session.sourceVisualMap
+  const omrMeasureGrid = session.omrMeasureGrid ?? session.sources?.musicXmlSource?.omrMeta?.measureGrid ?? null
 
   const laneKind = instrument.visualPractice.kind
   const isFretboardLane = laneKind === 'fretboard'
@@ -186,6 +197,10 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const isOmrTiming = timingSourceKind === 'omr'
   const laneComplete = isWaitForYou && wfyStatus === WFY_STATUS.COMPLETE
 
+  const practiceNoteTarget = resolvedPracticeNoteTarget?.target ?? null
+  const hasSourcePdf = pdfFile
+  const preferredRepresentation = scoreFollow?.guitarScoreTarget?.activeTarget ?? null
+
   return (
     <div
       className="visual-practice"
@@ -194,7 +209,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
     >
       {isOmrTiming && (
         <details className="visual-practice__omr-details">
-          <summary>About this piece’s notes</summary>
+          <summary>About this piece's notes</summary>
           <p className="visual-practice__omr-note" role="note">
             Notes for this piece were read automatically from the PDF, so a few may be off —
             the Score view is the reliable reference.
@@ -220,7 +235,22 @@ function VisualPracticeView({ timingSourceKind = null }) {
         instrumentId={instrument.id}
       />
 
-      {isFretboardLane ? (
+      {hasSourcePdf ? (
+        <SourcePdfVisualLane
+          pdfFile={pdfFile}
+          pdfPageSizes={pdfPageSizes}
+          setPdfPageSizes={setPdfPageSizes}
+          visiblePageNumber={visiblePageNumber}
+          noteTarget={practiceNoteTarget}
+          sourceVisualMap={sourceVisualMap}
+          omrMeasureGrid={omrMeasureGrid}
+          scoreAnchors={scoreFollow?.anchors ?? []}
+          activeMeasureNumber={currentMeasureNumber}
+          preferredRepresentation={preferredRepresentation}
+          pageViewRotations={pageViewRotations}
+          onSourcePageChange={onSourcePageChange}
+        />
+      ) : isFretboardLane ? (
         <TabVisualLane
           visibleGroups={visibleGroups}
           strings={laneStrings}

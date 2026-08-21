@@ -132,10 +132,11 @@ function estimatedNoteheadRect(center, note, dimensions) {
   })
 }
 
-function sourceCenterAndBox(note, representation = SOURCE_VISUAL_REPRESENTATION.NOTATION) {
+export function sourceCenterAndBox(note, representation = SOURCE_VISUAL_REPRESENTATION.NOTATION) {
   const dimensions = pageDimensions(note)
   const explicit = normalizeRect(note?.sourcePdfBBox ?? note?.sourceBBox)
   const inkBounds = rectFromPixelBounds(note?.noteheadAnchor?.visualBounds, dimensions)
+  const glyphBounds = rectFromPixelBounds(note?.glyphBBox, dimensions)
   const sourceX = finite(note?.sourcePdfCenter?.x)
     ? Number(note.sourcePdfCenter.x)
     : finite(note?.xNorm)
@@ -156,7 +157,7 @@ function sourceCenterAndBox(note, representation = SOURCE_VISUAL_REPRESENTATION.
             ? Number(note.yNorm)
             : null
 
-  const bestBox = explicit ?? inkBounds
+  const bestBox = explicit ?? inkBounds ?? glyphBounds
   const center = bestBox
     ? {
         x: rounded((bestBox.x0 + bestBox.x1) / 2),
@@ -182,9 +183,11 @@ function sourceCenterAndBox(note, representation = SOURCE_VISUAL_REPRESENTATION.
         : 'source-bbox'
       : inkBounds
         ? 'ink-notehead-bbox'
-        : representation === SOURCE_VISUAL_REPRESENTATION.TAB
-          ? 'tab-token-center'
-          : 'source-notehead-center',
+        : glyphBounds
+          ? 'glyph-font-bbox'
+          : representation === SOURCE_VISUAL_REPRESENTATION.TAB
+            ? 'tab-token-center'
+            : 'source-notehead-center',
   }
 }
 
@@ -203,9 +206,11 @@ function geometryConfidence(note, geometry, representation) {
     const visualConfidence =
       geometry?.geometrySource === 'source-notehead-center'
         ? 0.78
-        : finite(note?.noteheadAnchor?.confidence)
-          ? Number(note.noteheadAnchor.confidence)
-          : 0.78
+        : geometry?.geometrySource === 'glyph-font-bbox'
+          ? 0.75
+          : finite(note?.noteheadAnchor?.confidence)
+            ? Number(note.noteheadAnchor.confidence)
+            : 0.78
     return rounded(Math.min(1, Math.max(0, visualConfidence)))
   }
 
@@ -219,6 +224,7 @@ function geometryConfidence(note, geometry, representation) {
   ].filter(finite).map(Number)
   let confidence = candidates.length ? Math.min(...candidates) : 0.72
   if (geometry?.geometrySource === 'source-notehead-center') confidence = Math.min(confidence, 0.78)
+  if (geometry?.geometrySource === 'glyph-font-bbox') confidence = Math.min(confidence, 0.75)
   if (geometry?.geometrySource === 'tab-token-center') confidence = Math.min(confidence, 0.82)
   return rounded(Math.min(1, Math.max(0, confidence)))
 }

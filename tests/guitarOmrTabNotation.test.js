@@ -103,6 +103,7 @@ describe('guitar OMR tablature detection', () => {
         fret: 3,
       }),
     ])
+    expect(notes[0].sourceBBox.y1 - notes[0].sourceBBox.y0).toBeCloseTo(0.052, 6)
   })
 
   it('does not classify five-line notation staves as TAB', () => {

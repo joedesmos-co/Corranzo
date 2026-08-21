@@ -5369,6 +5369,71 @@
   color: var(--sf-text-subtle);
 }
 
+/* Source-backed Visual mode. The PDF canvas is the notation; semantic state
+   contributes only the crop selection and translucent notehead overlays. */
+.source-pdf-visual-lane {
+  position: relative;
+  flex: 1 1 clamp(220px, 48vh, 440px);
+  min-height: 190px;
+  overflow: hidden;
+  border: 1px solid var(--sf-border);
+  border-radius: var(--sf-radius-lg);
+  background: #ffffff;
+  isolation: isolate;
+}
+
+.source-pdf-visual-lane__page,
+.source-pdf-visual-lane__page .react-pdf__Page,
+.source-pdf-visual-lane__page canvas {
+  display: block;
+}
+
+.source-pdf-visual-lane__highlights {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.source-pdf-visual-lane__highlight {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid rgba(14, 116, 144, 0.95);
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.source-pdf-visual-lane__highlight--play-along {
+  border-color: rgba(5, 150, 105, 0.95);
+  background: rgba(52, 211, 153, 0.3);
+}
+
+.source-pdf-visual-lane__highlight--approximate {
+  border-style: dashed;
+  border-color: rgba(217, 119, 6, 0.95);
+  background: rgba(251, 191, 36, 0.2);
+}
+
+.source-pdf-visual-lane__empty,
+.source-pdf-visual-lane__error {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sf-space-lg);
+  color: #334155;
+  text-align: center;
+  pointer-events: none;
+}
+
+.source-pdf-visual-lane__error {
+  color: #991b1b;
+  background: rgba(255, 255, 255, 0.94);
+}
+
 /* Staff lane: dark card with a fixed playhead and scrolling SVG notation. */
 .staff-lane {
   position: relative;

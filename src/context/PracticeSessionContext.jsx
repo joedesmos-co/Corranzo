@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import * as Tone from 'tone'
 import { disposeReferencePlayer, releaseReferenceVoices, warmupReferenceVoice } from '../features/practice/referenceNotePlayer.js'
 import { setupAudioVisibilityResume } from '../features/audio/audioLifecycle.js'
@@ -39,6 +39,8 @@ export function PracticeSessionProvider({
   autoSetupGateOpen = true,
   experimentalOmrPlayback = false,
 }) {
+  const [pdfPageSizesState, setPdfPageSizesState] = useState(null)
+
   const { recordWfyEvent, refreshStats } = useProfileStats()
   const { instrumentId } = useInstrument()
 
@@ -361,6 +363,11 @@ export function PracticeSessionProvider({
       laneOutcomesByGroupId: session.laneOutcomesByGroupId,
       getScoreTime: session.playback.getScoreTime,
       guitarScoreTarget: scoreFollow.guitarScoreTarget,
+      pdfFile,
+      pdfPageSizes: pdfPageSizesState,
+      setPdfPageSizes: setPdfPageSizesState,
+      visiblePageNumber,
+      pageViewRotations: scoreFollow.pageViewRotations ?? {},
     }),
     [
       session.timing.timingMap,
@@ -376,6 +383,10 @@ export function PracticeSessionProvider({
       session.laneOutcomesByGroupId,
       session.playback.getScoreTime,
       scoreFollow.guitarScoreTarget,
+      pdfFile,
+      pdfPageSizesState,
+      visiblePageNumber,
+      scoreFollow.pageViewRotations,
     ],
   )
 

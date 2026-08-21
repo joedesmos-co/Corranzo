@@ -421,7 +421,9 @@ describe('practice view integration', () => {
     expect(src).toContain('PracticeViewSwitchBar')
     expect(src).toContain('practice-view-switch')
     expect(src).toContain('viewMode === PRACTICE_VIEW_MODE.VISUAL')
-    expect(src).toContain('<VisualPracticeView timingSourceKind={timingSourceKind} />')
+    expect(src).toContain('<VisualPracticeView')
+    expect(src).toContain('timingSourceKind={timingSourceKind}')
+    expect(src).toContain('onSourcePageChange={handleGoToPage}')
     expect(src).toContain('savePracticeViewMode(mode)')
 
     // Score path unchanged: PdfViewer + score follow + page follow all remain.
@@ -468,7 +470,7 @@ describe('practice view integration', () => {
     expect(src).toContain('read automatically from the PDF')
     expect(src).toContain('<details className="visual-practice__omr-details">')
     expect(src).not.toContain('<details className="visual-practice__omr-details" open')
-    expect(src).toContain('About this piece’s notes')
+    expect(src).toContain("About this piece's notes")
   })
 
   it('StaffVisualLane moves the playhead and scrolls via one rAF transform', () => {

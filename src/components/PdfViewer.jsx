@@ -52,6 +52,7 @@ export default function PdfViewer({
   onTogglePaper,
   actionsRef,
   scrollContainerRef,
+  onPageSizesChange,
 }) {
   const isPracticeEmbed = variant === 'practice'
   const geometryDebugEnabled = isGeometryDebugEnabled()
@@ -148,6 +149,7 @@ export default function PdfViewer({
     const changed = upsertPdfPageSize(pageSizesRef.current, page.pageNumber, size)
     if (changed) {
       setPageSizesVersion((version) => version + 1)
+      onPageSizesChange?.({ ...pageSizesRef.current })
     }
     if (geometryDebugEnabled && (changed || nativeRotation !== 0)) {
       setDebugSnapshot({
@@ -159,7 +161,7 @@ export default function PdfViewer({
     if (page.pageNumber === pageNumber) {
       setPageSize((previous) => (arePdfPageSizesEqual(previous, size) ? previous : size))
     }
-  }, [pageNumber, geometryDebugEnabled])
+  }, [pageNumber, geometryDebugEnabled, onPageSizesChange])
 
   useEffect(() => {
     setPageSize(null)

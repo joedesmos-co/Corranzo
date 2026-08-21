@@ -5,6 +5,7 @@ import {
   buildOmrSourceVisualMap,
   normalizeOmrSourceVisualMap,
   restoreOmrSourcePdfGeometry,
+  sourceCenterAndBox,
   SOURCE_VISUAL_COORDINATE_SPACE,
   SOURCE_VISUAL_REPRESENTATION,
 } from '../src/features/omr/omrSourceVisualMap.js'
@@ -561,6 +562,25 @@ describe('source visual map production path', () => {
       kind: 'tab-fret',
       representation: SOURCE_VISUAL_REPRESENTATION.TAB,
       sourceCenter: { x: 0.4, y: 0.72 },
+    })
+  })
+
+  it('uses a vector glyph box when no explicit or ink-derived notehead box exists', () => {
+    const geometry = sourceCenterAndBox({
+      sourcePageWidth: 1000,
+      sourcePageHeight: 1400,
+      glyphBBox: { x: 250, y: 420, width: 20, height: 14 },
+    })
+
+    expect(geometry).toMatchObject({
+      geometrySource: 'glyph-font-bbox',
+      sourceBBox: {
+        x0: 0.25,
+        y0: 0.3,
+        x1: 0.27,
+        y1: 0.31,
+      },
+      sourceCenter: { x: 0.26, y: 0.305 },
     })
   })
 
