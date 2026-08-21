@@ -47,11 +47,21 @@ export function loadMicPolyphonyManifest(manifestPath = DEFAULT_MANIFEST_PATH) {
   if (!Array.isArray(manifest.clips)) {
     throw new Error(`Invalid mic polyphony manifest: ${resolved}`)
   }
+  const provenancePath = manifest.provenanceFile
+    ? join(dirname(resolved), manifest.provenanceFile)
+    : null
+  const provenance = provenancePath && existsSync(provenancePath)
+    ? JSON.parse(readFileSync(provenancePath, 'utf8'))
+    : null
   return {
     ...manifest,
     manifestPath: resolved,
     clipsDir: dirname(resolved),
-    clips: manifest.clips.map(normalizeMicPolyphonyClip),
+    provenance,
+    clips: manifest.clips.map((clip) => normalizeMicPolyphonyClip({
+      ...clip,
+      provenance: clip.provenance ?? provenance?.clips?.[clip.id] ?? null,
+    })),
   }
 }
 

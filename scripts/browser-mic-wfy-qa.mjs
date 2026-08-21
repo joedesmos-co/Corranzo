@@ -979,8 +979,12 @@ async function main() {
     }
 
     const micDebugDefault = await page.evaluate(() => globalThis.__SCOREFLOW_MIC_DEBUG__ ?? null)
-    if (micDebugDefault?.engineMode === 'v2-score-informed' && micDebugDefault?.v2Enabled === true) {
-      pass('production build uses V2 mic engine when flag unset', micDebugDefault.engineMode)
+    if (
+      micDebugDefault?.engineMode === 'v3-performance-expectation' &&
+      micDebugDefault?.v3Enabled === true &&
+      micDebugDefault?.v2Enabled === true
+    ) {
+      pass('production build uses V3 expectations with V2 evidence when flag unset', micDebugDefault.engineMode)
     } else if (micDebugDefault) {
       note(`Mic engine debug: ${JSON.stringify(micDebugDefault)}`)
     } else {
@@ -1217,17 +1221,18 @@ async function main() {
         const micDebugV2 = await readMicDebug(page)
         v2Scenario.debugOnEnable = micDebugV2
         const fieldsOk =
-          micDebugV2?.engineMode === 'v2-score-informed' &&
+          micDebugV2?.engineMode === 'v3-performance-expectation' &&
+          micDebugV2?.v3Enabled === true &&
           micDebugV2?.v2Enabled === true &&
           typeof micDebugV2?.isMicV2Polyphonic === 'boolean'
         if (fieldsOk) {
           pass(
-            'V2: __SCOREFLOW_MIC_DEBUG__ reports engineMode/v2Enabled/isMicV2Polyphonic',
+            'V3: debug reports expectation mode and V2 evidence state',
             `mode=${micDebugV2.engineMode} poly=${micDebugV2.isMicV2Polyphonic} devDefault=${v2DevDefault}`,
           )
         } else {
           fail(
-            'V2: __SCOREFLOW_MIC_DEBUG__ reports required fields',
+            'V3: debug reports required expectation/evidence fields',
             micDebugV2 ? JSON.stringify(micDebugV2) : 'debug hook missing',
           )
         }
@@ -1441,8 +1446,12 @@ async function main() {
         await sleep(2000)
         const dbg = await readMicDebug(page)
         v2Scenario.reloadOptOut = dbg
-        if (dbg?.engineMode === 'v2-score-informed' && dbg?.v2Enabled === true) {
-          pass('V2-only: reload ignores legacy flag=false opt-out', dbg.engineMode)
+        if (
+          dbg?.engineMode === 'v3-performance-expectation' &&
+          dbg?.v3Enabled === true &&
+          dbg?.v2Enabled === true
+        ) {
+          pass('V3: reload keeps V2 evidence active despite legacy flag=false', dbg.engineMode)
         } else if (dbg) {
           note(`V2-only reload after legacy opt-out: ${JSON.stringify(dbg)}`)
         } else {

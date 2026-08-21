@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
   decideMicEngineV2Enabled,
+  decideMicEngineV3Enabled,
   isMicEngineV2Enabled,
+  isMicEngineV3Enabled,
   MIC_ENGINE_MODE,
   MIC_ENGINE_V2_FLAG,
   MIC_ENGINE_V2_STORAGE_KEY,
+  MIC_ENGINE_V3_FLAG,
+  MIC_ENGINE_V3_STORAGE_KEY,
   resolveFlagOverride,
 } from '../src/features/microphone-input/micEngineFlag.js'
 
@@ -74,6 +78,8 @@ describe('micEngineFlag', () => {
   it('exposes stable flag identifiers for dev QA', () => {
     expect(MIC_ENGINE_V2_FLAG).toBe('micEngineV2')
     expect(MIC_ENGINE_V2_STORAGE_KEY).toBe('scoreflow.flags.micEngineV2')
+    expect(MIC_ENGINE_V3_FLAG).toBe('micEngineV3')
+    expect(MIC_ENGINE_V3_STORAGE_KEY).toBe('scoreflow.flags.micEngineV3')
   })
 
   it('honors explicit override via isMicEngineV2Enabled', () => {
@@ -81,5 +87,14 @@ describe('micEngineFlag', () => {
     expect(isMicEngineV2Enabled(true)).toBe(true)
     expect(MIC_ENGINE_MODE.V2).toBe('v2-score-informed')
     expect(MIC_ENGINE_MODE.V1).toBeUndefined()
+  })
+
+  it('enables V3 by default but preserves an immediate rollback switch', () => {
+    expect(decideMicEngineV3Enabled()).toBe(true)
+    expect(decideMicEngineV3Enabled({ storageValue: 'off' })).toBe(false)
+    expect(decideMicEngineV3Enabled({ globalValue: false, storageValue: 'on' })).toBe(false)
+    expect(decideMicEngineV3Enabled({ override: true, globalValue: false })).toBe(true)
+    expect(isMicEngineV3Enabled(true)).toBe(true)
+    expect(MIC_ENGINE_MODE.V3).toBe('v3-performance-expectation')
   })
 })

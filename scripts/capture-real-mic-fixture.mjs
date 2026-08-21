@@ -10,11 +10,14 @@
  *   CORRANZO_DEVELOPER_MODE=1 node scripts/capture-real-mic-fixture.mjs \
  *     --target polyphony --id macbook-guitar-open-em --expected-midis 40,45,50,55,59,64 \
  *     --string-frets 6:0:40,5:0:45,4:0:50,3:0:55,2:0:59,1:0:64 \
- *     --instrument guitar --tone acoustic-guitar --device macbook-mic --seconds 4
+ *     --instrument guitar --tone acoustic-guitar --device macbook-mic --seconds 4 \
+ *     --performance-onset-ms 500
  *
  *   CORRANZO_DEVELOPER_MODE=1 node scripts/capture-real-mic-fixture.mjs \
  *     --from-wav /path/to/existing.wav --target polyphony --id desk-piano-c-major \
- *     --expected-midis 60,64,67 --instrument piano --tone acoustic-piano --device usb-condenser
+ *     --expected-midis 60,64,67 --instrument piano --tone acoustic-piano --device usb-condenser \
+ *     --performance-onset-ms 240 --fixture-class developer-imported-performance \
+ *     --natural-performance true
  */
 import { copyFileSync, existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -51,6 +54,12 @@ function parseList(value) {
     .split(',')
     .map((item) => Number(item.trim()))
     .filter(Number.isFinite)
+}
+
+function parseRequiredBoolean(value, flag) {
+  if (value === 'true') return true
+  if (value === 'false') return false
+  throw new Error(`${flag} must be true or false`)
 }
 
 function parseStringFrets(value) {
@@ -264,6 +273,8 @@ async function main() {
   const dynamic = argValue(args, '--dynamic', null)
   const stringFrets = parseStringFrets(argValue(args, '--string-frets'))
   const label = targetName === 'accuracy' ? 'note' : 'chord'
+  const fromWav = argValue(args, '--from-wav')
+  const performanceOnsetMs = Number(argValue(args, '--performance-onset-ms'))
 
   if (targetName === 'accuracy' && !Number.isFinite(expectedMidi)) {
     throw new Error('Accuracy captures require --expected-midi')
@@ -271,14 +282,34 @@ async function main() {
   if (targetName === 'polyphony' && expectedMidis.length < 2) {
     throw new Error('Polyphony captures require --expected-midis with at least two tones')
   }
+  if (!Number.isFinite(performanceOnsetMs) || performanceOnsetMs < 0) {
+    throw new Error('Captures require a non-negative --performance-onset-ms annotation')
+  }
+
+  const provenance = fromWav
+    ? {
+        fixtureClass: argValue(args, '--fixture-class'),
+        naturalPerformance: parseRequiredBoolean(
+          argValue(args, '--natural-performance'),
+          '--natural-performance',
+        ),
+        captureMethod: 'developer-imported-wav',
+        sourceFile: basename(fromWav),
+      }
+    : {
+        fixtureClass: 'developer-live-microphone-performance',
+        naturalPerformance: true,
+        captureMethod: 'developer-live-microphone',
+      }
+  if (!provenance.fixtureClass) {
+    throw new Error('Imported WAV captures require --fixture-class')
+  }
 
   mkdirSync(target.clipsDir, { recursive: true })
   const wavName = `${id}.wav`
   const traceName = `${id}.trace.json`
   const wavPath = join(target.clipsDir, wavName)
   const tracePath = join(target.clipsDir, traceName)
-  const fromWav = argValue(args, '--from-wav')
-
   let samples
   let sampleRate
   if (fromWav) {
@@ -343,6 +374,8 @@ async function main() {
     traceFile: `clips/${traceName}`,
     capturedAt: new Date().toISOString(),
     developerModeRequired: true,
+    performanceOnsetMs,
+    provenance,
     redistribution: argValue(args, '--redistribution', 'local-developer-fixture'),
     notes: argValue(args, '--notes', 'Developer-captured real microphone fixture.'),
   }

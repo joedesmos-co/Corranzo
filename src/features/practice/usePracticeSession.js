@@ -54,6 +54,8 @@ import { VISUAL_LANE_OUTCOME } from './visualLaneFeedback.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import usePlayAlongVisualCheckpoint from './usePlayAlongVisualCheckpoint.js'
 import { pausePlaybackAtAuthoritativeTime } from './practicePlaybackPause.js'
+import { PERFORMANCE_MODE } from '../microphone-input/v3/performanceExpectation.js'
+import { RECOGNITION_TIMING } from '../microphone-input/v3/micRecognitionIr.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -331,16 +333,16 @@ export default function usePracticeSession({
         : null,
     [guidanceStrings, timing.timingMap, guidanceInstrument],
   )
-  const enrichedWfyCheckpoint = useMemo(
-    () =>
-      waitForYou.currentCheckpoint
-        ? enrichWfyChordCheckpoint(waitForYou.currentCheckpoint, {
-            instrumentId,
-            tabPositions: guidanceTabPositions,
-          })
-        : null,
-    [waitForYou.currentCheckpoint, instrumentId, guidanceTabPositions],
+  const enrichedWfyCheckpoints = useMemo(
+    () => waitForYou.checkpoints.map((checkpoint) =>
+      enrichWfyChordCheckpoint(checkpoint, {
+        instrumentId,
+        tabPositions: guidanceTabPositions,
+      }),
+    ),
+    [waitForYou.checkpoints, instrumentId, guidanceTabPositions],
   )
+  const enrichedWfyCheckpoint = enrichedWfyCheckpoints[waitForYou.checkpointIndex] ?? null
 
   const playAlongInputActive =
     practiceActive &&
@@ -384,17 +386,9 @@ export default function usePracticeSession({
     isPlaying: playback.isPlaying,
   })
 
-  const playAlongTargetCheckpoint = useMemo(() => {
-    if (!playAlongInputActive || !playAlongLaneGroups.length) {
-      return null
-    }
-    const index = resolvePlayAlongTargetIndex(playAlongLaneGroups, practiceTime)
-    const group = playAlongLaneGroups[index]
-    if (!group) {
-      return null
-    }
-    return enrichWfyChordCheckpoint(
-      {
+  const playAlongRecognitionCheckpoints = useMemo(
+    () => playAlongLaneGroups.map((group) =>
+      enrichWfyChordCheckpoint({
         id: group.id,
         timeSeconds: group.timeSeconds,
         expectedMidis: group.midis,
@@ -403,25 +397,40 @@ export default function usePracticeSession({
         measureNumber: group.measureNumber,
         beat: group.beat,
         kind: group.kind,
-      },
-      { instrumentId, tabPositions: guidanceTabPositions },
-    )
-  }, [
-    playAlongInputActive,
-    playAlongLaneGroups,
-    practiceTime,
-    instrumentId,
-    guidanceTabPositions,
-  ])
+      }, { instrumentId, tabPositions: guidanceTabPositions }),
+    ),
+    [playAlongLaneGroups, instrumentId, guidanceTabPositions],
+  )
+  const playAlongTargetIndex = playAlongInputActive && playAlongRecognitionCheckpoints.length
+    ? resolvePlayAlongTargetIndex(playAlongRecognitionCheckpoints, practiceTime)
+    : -1
+  const playAlongTargetCheckpoint = playAlongRecognitionCheckpoints[playAlongTargetIndex] ?? null
 
-  const handlePlayAlongCorrect = useCallback(() => {
+  const handlePlayAlongCorrect = useCallback((decision = null) => {
     if (playAlongTargetCheckpoint?.id) {
+      const outcome = decision?.timing === RECOGNITION_TIMING.EARLY
+        ? VISUAL_LANE_OUTCOME.EARLY
+        : decision?.timing === RECOGNITION_TIMING.LATE
+          ? VISUAL_LANE_OUTCOME.LATE
+          : VISUAL_LANE_OUTCOME.CORRECT
       playAlongFeedback.setGroupOutcome(
         playAlongTargetCheckpoint.id,
-        VISUAL_LANE_OUTCOME.CORRECT,
+        outcome,
       )
     }
-  }, [playAlongTargetCheckpoint?.id, playAlongFeedback])
+  }, [playAlongTargetCheckpoint, playAlongFeedback])
+
+  const handlePlayAlongRecognition = useCallback((decision) => {
+    if (
+      playAlongTargetCheckpoint?.id &&
+      decision?.reason === 'expected-tied-sustain-held'
+    ) {
+      playAlongFeedback.setGroupOutcome(
+        playAlongTargetCheckpoint.id,
+        VISUAL_LANE_OUTCOME.SUSTAIN,
+      )
+    }
+  }, [playAlongTargetCheckpoint, playAlongFeedback])
 
   const handlePlayAlongWrong = useCallback(() => {
     if (playAlongTargetCheckpoint?.id) {
@@ -430,7 +439,7 @@ export default function usePracticeSession({
         VISUAL_LANE_OUTCOME.WRONG,
       )
     }
-  }, [playAlongTargetCheckpoint?.id, playAlongFeedback])
+  }, [playAlongTargetCheckpoint, playAlongFeedback])
 
   const micCaptureActive =
     practiceActive &&
@@ -474,6 +483,9 @@ export default function usePracticeSession({
       !waitForYou.displayPhase,
     checkpointMode,
     currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
+    checkpointIndex: waitForYou.checkpointIndex,
+    checkpoints: enrichedWfyCheckpoints,
+    performanceMode: PERFORMANCE_MODE.WAIT_FOR_YOU,
     matchSettings: matchSettingsState.settings,
     onPlayerInputMatched: handleWfyPlayerInputMatched,
     onWrongNote: handleWfyWrongNote,
@@ -486,9 +498,14 @@ export default function usePracticeSession({
       playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE,
     checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
     currentCheckpoint: playAlongTargetCheckpoint,
+    checkpointIndex: playAlongTargetIndex,
+    checkpoints: playAlongRecognitionCheckpoints,
+    performanceMode: PERFORMANCE_MODE.PLAY_ALONG,
+    performanceTimeMs: practiceTime * 1000,
     matchSettings: matchSettingsState.settings,
     onPlayerInputMatched: handlePlayAlongCorrect,
     onWrongNote: handlePlayAlongWrong,
+    onRecognitionDecision: handlePlayAlongRecognition,
     microphone,
     instrumentId,
   })

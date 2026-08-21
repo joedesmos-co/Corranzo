@@ -8,6 +8,9 @@ export const VISUAL_LANE_OUTCOME = {
   CORRECT: 'correct',
   WRONG: 'wrong',
   MISSED: 'missed',
+  EARLY: 'early',
+  LATE: 'late',
+  SUSTAIN: 'sustain',
 }
 
 /** How early Play Along / WFY accept input before the note onset (seconds). */
@@ -26,6 +29,9 @@ export function resolveLaneNoteClass(temporalStatus, outcome = VISUAL_LANE_OUTCO
   if (outcome === VISUAL_LANE_OUTCOME.WRONG || outcome === VISUAL_LANE_OUTCOME.MISSED) {
     return 'wrong'
   }
+  if (outcome === VISUAL_LANE_OUTCOME.EARLY) return 'early'
+  if (outcome === VISUAL_LANE_OUTCOME.LATE) return 'late'
+  if (outcome === VISUAL_LANE_OUTCOME.SUSTAIN) return 'sustain'
   return temporalStatus ?? 'upcoming'
 }
 
