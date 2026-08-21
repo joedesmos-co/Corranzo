@@ -1,10 +1,10 @@
 # OMR Semantic MusicXML Evaluator
 
-Status: **FROZEN for recognition sprints (v2.0.0 / schema 2)**  
+Status: **FROZEN for recognition sprints (v2.1.0 / schema 2)**
 Module: `src/features/omr/semanticMusicXmlEvaluator.js`  
 CLI: `node scripts/evaluate-omr-semantic.mjs`  
 Corpus: `node scripts/omr-semantic-corpus-eval.mjs` (`npm run omr:semantic-corpus`)  
-Schema: `schemaVersion` **2** · evaluator **2.0.0**
+Schema: `schemaVersion` **2** · evaluator **2.1.0**
 
 > **Freeze rule:** Do not change scoring formulas, tolerances, class definitions,
 > or defect codes while improving OMR recognition. Capture before/after against

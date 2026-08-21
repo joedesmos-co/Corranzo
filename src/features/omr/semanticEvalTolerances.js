@@ -7,7 +7,7 @@
  * tempo-mapped.
  */
 
-export const SEMANTIC_EVALUATOR_VERSION = '2.0.0'
+export const SEMANTIC_EVALUATOR_VERSION = '2.1.0'
 export const SEMANTIC_EVAL_SCHEMA_VERSION = 2
 
 /** Minimum coverage of supported truth elements before a class score is "reliable". */

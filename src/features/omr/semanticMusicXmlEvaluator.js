@@ -55,6 +55,7 @@ export const SEMANTIC_DEFECT_CODE = Object.freeze({
   MISSING_TENUTO: 'missing-tenuto',
   MISSING_MARCATO: 'missing-marcato',
   VOICE_MISMATCH: 'voice-mismatch',
+  KEY_SIGNATURE_MISMATCH: 'key-signature-mismatch',
   INCORRECT_BARLINE: 'incorrect-barline',
   INCORRECT_CHORD: 'incorrect-chord',
   MISSING_VOICE: 'missing-voice',
@@ -94,6 +95,7 @@ const DEFECT_LABEL = Object.freeze({
   [SEMANTIC_DEFECT_CODE.MISSING_TENUTO]: 'Missing tenuto',
   [SEMANTIC_DEFECT_CODE.MISSING_MARCATO]: 'Missing marcato',
   [SEMANTIC_DEFECT_CODE.VOICE_MISMATCH]: 'Voice mismatch',
+  [SEMANTIC_DEFECT_CODE.KEY_SIGNATURE_MISMATCH]: 'Key signature mismatch',
   [SEMANTIC_DEFECT_CODE.INCORRECT_BARLINE]: 'Incorrect barline',
   [SEMANTIC_DEFECT_CODE.INCORRECT_CHORD]: 'Incorrect chord',
   [SEMANTIC_DEFECT_CODE.MISSING_VOICE]: 'Missing voice',
@@ -458,6 +460,87 @@ function countKinds(marks) {
     counts[mark.kind] = (counts[mark.kind] ?? 0) + 1
   }
   return counts
+}
+
+function keySignatureCheckpoints(truthMap, generatedMap, truthNotes, generatedNotes) {
+  const truth = truthMap?.keySignatures ?? []
+  const generated = generatedMap?.keySignatures ?? []
+  const hasStaffSpecific = [...truth, ...generated].some((entry) => entry.staff != null)
+  const staffs = hasStaffSpecific
+    ? [...new Set([...truthNotes, ...generatedNotes].map((note) => note.staff ?? 1))]
+        .sort((left, right) => left - right)
+    : [null]
+  const times = [...new Set([0, ...truth, ...generated].map((entry) =>
+    typeof entry === 'number' ? entry : Number(entry.quarterTime) || 0,
+  ))].sort((left, right) => left - right)
+  return { truth, generated, staffs, times }
+}
+
+function effectiveKeySignature(events, quarterTime, staff) {
+  let result = { fifths: 0, staff }
+  const applicable = events
+    .filter((entry) =>
+      (Number(entry.quarterTime) || 0) <= quarterTime + 1e-9 &&
+      (entry.staff == null || staff == null || entry.staff === staff),
+    )
+    .sort((left, right) =>
+      (Number(left.quarterTime) || 0) - (Number(right.quarterTime) || 0) ||
+      Number(left.staff != null) - Number(right.staff != null),
+    )
+  for (const entry of applicable) {
+    result = { fifths: Number(entry.fifths) || 0, staff: entry.staff ?? staff }
+  }
+  return result
+}
+
+function measureNumberAtQuarter(timingMap, quarterTime) {
+  return (timingMap?.measures ?? []).find(
+    (measure) =>
+      quarterTime >= (measure.startQuarters ?? 0) - 1e-9 &&
+      quarterTime < (measure.endQuarters ?? Number.POSITIVE_INFINITY) - 1e-9,
+  )?.number ?? null
+}
+
+function compareKeySignatures(
+  truthMap,
+  generatedMap,
+  truthNotes,
+  generatedNotes,
+  stats,
+  defects,
+) {
+  const { truth, generated, staffs, times } = keySignatureCheckpoints(
+    truthMap,
+    generatedMap,
+    truthNotes,
+    generatedNotes,
+  )
+  for (const quarterTime of times) {
+    for (const staff of staffs) {
+      const expected = effectiveKeySignature(truth, quarterTime, staff)
+      const actual = effectiveKeySignature(generated, quarterTime, staff)
+      stats.measureStructure.presentInTruth += 1
+      stats.measureStructure.compared += 1
+      if (expected.fifths === actual.fifths) {
+        stats.measureStructure.truePositives += 1
+        continue
+      }
+      stats.measureStructure.falseNegatives += 1
+      defects.push(
+        makeDefect(
+          SEMANTIC_DEFECT_CODE.KEY_SIGNATURE_MISMATCH,
+          `Key signature ${actual.fifths} fifths (expected ${expected.fifths})`,
+          {
+            measureNumber: measureNumberAtQuarter(truthMap, quarterTime),
+            quarterTime,
+            staff,
+            expectedFifths: expected.fifths,
+            generatedFifths: actual.fifths,
+          },
+        ),
+      )
+    }
+  }
 }
 
 function groupNotesByMeasureIndex(notes, measures) {
@@ -1213,6 +1296,15 @@ export function evaluateSemanticMusicXmlFromTimingMaps({
       defects.push(...localDefects)
       measureReports.push(makeMeasureReport(measureRef, truthNums, genNums, pair, localDefects))
     }
+
+    compareKeySignatures(
+      groundTruthTimingMap,
+      generatedTimingMap,
+      truthNotes,
+      generatedNotes,
+      stats,
+      defects,
+    )
 
     compareInterpretation(
       alignment,

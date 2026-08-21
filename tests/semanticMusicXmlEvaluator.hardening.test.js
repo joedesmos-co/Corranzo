@@ -195,6 +195,47 @@ describe('semantic evaluator hardening', () => {
     expect(report.classes.articulation.falseNegatives).toBe(0)
   })
 
+  it('golden: one extra chord member is one extra note primary defect', () => {
+    const truth = score([measure(1, fourQuarters(), { first: true })])
+    const generated = score([
+      measure(
+        1,
+        `${pitchXml({ step: 'C' })}${pitchXml({ step: 'B', chord: true })}` +
+          `${pitchXml({ step: 'D' })}${pitchXml({ step: 'E' })}${pitchXml({ step: 'F' })}`,
+        { first: true },
+      ),
+    ])
+    const report = evaluateSemanticMusicXml({
+      groundTruthMusicXml: truth,
+      generatedMusicXml: generated,
+      options: { mode: 'written' },
+    })
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.EXTRA_NOTE)).toBe(1)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.MISSING_NOTE)).toBe(0)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.INCORRECT_PITCH)).toBe(0)
+  })
+
+  it('golden: one onset error does not become a duration or pitch error', () => {
+    const truth = score([measure(1, fourQuarters(), { first: true })])
+    const generated = score([
+      measure(
+        1,
+        `${pitchXml({ step: 'C' })}<forward><duration>1</duration></forward>` +
+          `${pitchXml({ step: 'D' })}<backup><duration>1</duration></backup>` +
+          `${pitchXml({ step: 'E' })}${pitchXml({ step: 'F' })}`,
+        { first: true },
+      ),
+    ])
+    const report = evaluateSemanticMusicXml({
+      groundTruthMusicXml: truth,
+      generatedMusicXml: generated,
+      options: { mode: 'written' },
+    })
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.ONSET_MISMATCH)).toBe(1)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.DURATION_MISMATCH)).toBe(0)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.INCORRECT_PITCH)).toBe(0)
+  })
+
   it('golden: quarter vs eighth', () => {
     const truth = score([
       measure(
@@ -261,6 +302,51 @@ describe('semantic evaluator hardening', () => {
       options: { mode: 'written' },
     })
     expect(codes(report)).toContain(SEMANTIC_DEFECT_CODE.MISSING_DOT)
+  })
+
+  it('golden: one tuplet ratio error is independently classified', () => {
+    const triplet = '<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>'
+    const truth = score([
+      measure(
+        1,
+        `${pitchXml({ step: 'C', extra: triplet })}${pitchXml({ step: 'D' })}` +
+          `${pitchXml({ step: 'E' })}${pitchXml({ step: 'F' })}`,
+        { first: true },
+      ),
+    ])
+    const generated = score([measure(1, fourQuarters(), { first: true })])
+    const report = evaluateSemanticMusicXml({
+      groundTruthMusicXml: truth,
+      generatedMusicXml: generated,
+      options: { mode: 'written' },
+    })
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.TUPLET_MISMATCH)).toBe(1)
+    expect(countCode(report, SEMANTIC_DEFECT_CODE.DURATION_MISMATCH)).toBe(0)
+  })
+
+  it('golden: wrong key signature is structural, while explicit C and implicit C are equivalent', () => {
+    const withKey = (fifths) =>
+      score([
+        measure(1, fourQuarters(), { first: true }).replace(
+          '<clef>',
+          `<key><fifths>${fifths}</fifths></key><clef>`,
+        ),
+      ])
+    const implicitC = score([measure(1, fourQuarters(), { first: true })])
+    const wrong = evaluateSemanticMusicXml({
+      groundTruthMusicXml: withKey(2),
+      generatedMusicXml: implicitC,
+      options: { mode: 'written' },
+    })
+    expect(countCode(wrong, SEMANTIC_DEFECT_CODE.KEY_SIGNATURE_MISMATCH)).toBe(1)
+    expect(countCode(wrong, SEMANTIC_DEFECT_CODE.INCORRECT_PITCH)).toBe(0)
+
+    const equivalent = evaluateSemanticMusicXml({
+      groundTruthMusicXml: withKey(0),
+      generatedMusicXml: implicitC,
+      options: { mode: 'written' },
+    })
+    expect(equivalent.totals.defectCount).toBe(0)
   })
 
   it('golden: missing rest', () => {

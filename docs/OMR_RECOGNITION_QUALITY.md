@@ -13,14 +13,15 @@ Recognition changes are scored **only** with the semantic MusicXML evaluator:
 | Field | Frozen value |
 | --- | --- |
 | Module | `src/features/omr/semanticMusicXmlEvaluator.js` |
-| Version | `2.0.0` (`SEMANTIC_EVALUATOR_VERSION`) |
+| Version | `2.1.0` (`SEMANTIC_EVALUATOR_VERSION`) |
 | Schema | `2` (`SEMANTIC_EVAL_SCHEMA_VERSION`) |
 | Default sprint mode | `written` |
 | Canonical docs | `docs/OMR_SEMANTIC_EVALUATOR.md`, `docs/OMR_SEMANTIC_DEFECT_TAXONOMY.md` |
 | Corpus baseline | `benchmarks/omr-semantic/BASELINE.md` + `baseline.json` |
 
 **Do not change evaluator formulas, tolerances, class definitions, or defect codes
-while iterating on recognition.** If the measuring stick moves, before/after is meaningless.
+while iterating on recognition.** Version 2.1.0 adds explicit key-signature comparison;
+capture a new baseline rather than comparing it directly with 2.0.0 reports.
 
 Hardening gate (must stay green):
 
