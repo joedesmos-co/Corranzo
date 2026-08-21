@@ -179,16 +179,24 @@ function singleStaffLines(y0, y1) {
   }
 }
 
+function staveLineCount(stave) {
+  const fromLineYs = Array.isArray(stave?.lineYs)
+    ? stave.lineYs.filter(Number.isFinite).length
+    : 0
+  const fromDetected = Array.isArray(stave?.detectedLineYs)
+    ? stave.detectedLineYs.filter(Number.isFinite).length
+    : 0
+  if (Number.isFinite(stave?.lineCount) && stave.lineCount > 0) {
+    return Math.max(stave.lineCount, fromLineYs, fromDetected)
+  }
+  return Math.max(fromLineYs, fromDetected)
+}
+
 /** Six-line (or denser) bands are TAB, not piano bass. */
 function staveLooksLikeTab(stave) {
   if (!stave) return false
   if (stave.kind === 'tab' || stave.isTab || stave.stringCount >= 6) return true
-  // Use canonical lineYs (5-line lattice) for TAB detection, not raw detected rows.
-  // Piano staves often have 6-7 fragmented detected rows but only 5 canonical lines.
-  const canonicalLines = Array.isArray(stave?.lineYs)
-    ? stave.lineYs.filter(Number.isFinite).length
-    : 0
-  return canonicalLines >= 6
+  return staveLineCount(stave) >= 6
 }
 
 function measuredLinesForStaff(stave) {
