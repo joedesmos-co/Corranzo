@@ -118,6 +118,45 @@ describe('experimental PDF OMR musical details (v3)', () => {
     expect(staffLines.splitY).toBeCloseTo(0.19)
   })
 
+  it('keeps fragmented raw piano rows as a canonical five-line grand staff', () => {
+    const staffLines = estimateGrandStaffLines({
+      y0: 0.1,
+      y1: 0.3,
+      staves: [
+        {
+          y0: 0.1,
+          y1: 0.14,
+          lineYs: [0.1, 0.11, 0.12, 0.13, 0.14],
+          detectedLineYs: [0.1, 0.11, 0.119, 0.12, 0.13, 0.14],
+        },
+        {
+          y0: 0.24,
+          y1: 0.28,
+          lineYs: [0.24, 0.25, 0.26, 0.27, 0.28],
+          detectedLineYs: [0.24, 0.25, 0.26, 0.261, 0.27, 0.28],
+        },
+      ],
+    })
+
+    expect(staffLines.treble).toHaveLength(5)
+    expect(staffLines.bass).toHaveLength(5)
+    expect(staffLines.singleStaff).toBeUndefined()
+  })
+
+  it('keeps canonical five-line piano staves as notation', () => {
+    const staffLines = estimateGrandStaffLines({
+      y0: 0.1,
+      y1: 0.28,
+      staves: [
+        { y0: 0.1, y1: 0.14, lineYs: [0.1, 0.11, 0.12, 0.13, 0.14] },
+        { y0: 0.24, y1: 0.28, lineYs: [0.24, 0.25, 0.26, 0.27, 0.28] },
+      ],
+    })
+
+    expect(staffLines.treble).toHaveLength(5)
+    expect(staffLines.bass).toHaveLength(5)
+  })
+
   it('maps a short single-staff band as one staff, not a phantom grand staff', () => {
     const staffLines = estimateGrandStaffLines({
       y0: 0.214,

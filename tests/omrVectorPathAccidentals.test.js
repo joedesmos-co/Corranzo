@@ -235,6 +235,30 @@ describe('detectVectorPathAccidentals geometry', () => {
     })
   })
 
+  it('rejects staggered stem-and-flag strokes that only imitate a sharp count', () => {
+    const paths = [
+      [0, 89, 90, 1, 102, 98],
+      [0, 101, 106, 1, 101, 82],
+      [0, 101, 82, 1, 114, 90],
+      [0, 113, 106, 1, 113, 82],
+    ]
+    const symbols = extractPdfVectorPathSymbolsFromOperatorList({
+      operatorList: {
+        fnArray: paths.map(() => 11),
+        argsArray: paths.map((path) => [21, [path]]),
+      },
+      ops: {
+        constructPath: 11,
+        stroke: 21,
+      },
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      pageNumber: 4,
+      targetWidth: 1000,
+    })
+
+    expect(symbols.accidentalPaths).toHaveLength(0)
+  })
+
   it('does not reuse a complete augmentation dot to meet the sharp cluster size', () => {
     const paths = [
       rectanglePath(101, 90, 103, 106),

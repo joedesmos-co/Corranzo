@@ -144,6 +144,47 @@ function staffGapPixels(lineYs, imageData) {
   return Math.max(6, ((sorted[sorted.length - 1] - sorted[0]) / 4) * imageData.height)
 }
 
+function distinctSharpCrossbarLevels(path, staffGap) {
+  const verticalCenters = (path?.segments ?? [])
+    .filter((segment) => {
+      const dx = Math.abs(segment.x1 - segment.x0)
+      const dy = Math.abs(segment.y1 - segment.y0)
+      return dy > dx * 2.2 && dy >= staffGap * 0.55
+    })
+    .map((segment) => (segment.x0 + segment.x1) / 2)
+    .sort((left, right) => left - right)
+  if (verticalCenters.length < 2) {
+    return 0
+  }
+  const leftPost = verticalCenters[0]
+  const rightPost = verticalCenters.at(-1)
+  const outsideMargin = Math.max(0.5, staffGap * 0.04)
+
+  const centers = (path?.segments ?? [])
+    .filter((segment) => {
+      const dx = Math.abs(segment.x1 - segment.x0)
+      const dy = Math.abs(segment.y1 - segment.y0)
+      const x0 = Math.min(segment.x0, segment.x1)
+      const x1 = Math.max(segment.x0, segment.x1)
+      return (
+        dx > staffGap * 0.2 &&
+        dy <= dx * 2.2 &&
+        x0 <= leftPost - outsideMargin &&
+        x1 >= rightPost + outsideMargin
+      )
+    })
+    .map((segment) => (segment.y0 + segment.y1) / 2)
+    .sort((left, right) => left - right)
+
+  const levels = []
+  for (const center of centers) {
+    if (!levels.length || center - levels.at(-1) >= staffGap * 0.15) {
+      levels.push(center)
+    }
+  }
+  return levels.length
+}
+
 /**
  * Identify a compact filled Bézier circle. Engravers commonly emit
  * augmentation dots as PDF paths instead of text-layer SMuFL glyphs.
@@ -493,7 +534,14 @@ const classification = classifyAccidentalPathGeometry(parsed, {
       staffGap: staffGapGuess,
       isKeySignatureArea: members.some(m => m.isInKeySigArea),
     })
-    if (!classification || classification.type !== 'sharp') {
+    // A fragmented sharp needs two crossbars at distinct vertical levels.
+    // Adjacent stem+flag pairs can otherwise supply the same raw count of two
+    // vertical and two slanted strokes, but both flag arms start at one level.
+    if (
+      !classification ||
+      classification.type !== 'sharp' ||
+      distinctSharpCrossbarLevels(composite, staffGapGuess) < 2
+    ) {
       continue
     }
     for (const index of group) {

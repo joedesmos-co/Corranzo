@@ -179,24 +179,16 @@ function singleStaffLines(y0, y1) {
   }
 }
 
-function staveLineCount(stave) {
-  const fromLineYs = Array.isArray(stave?.lineYs)
-    ? stave.lineYs.filter(Number.isFinite).length
-    : 0
-  const fromDetected = Array.isArray(stave?.detectedLineYs)
-    ? stave.detectedLineYs.filter(Number.isFinite).length
-    : 0
-  if (Number.isFinite(stave?.lineCount) && stave.lineCount > 0) {
-    return Math.max(stave.lineCount, fromLineYs, fromDetected)
-  }
-  return Math.max(fromLineYs, fromDetected)
-}
-
 /** Six-line (or denser) bands are TAB, not piano bass. */
 function staveLooksLikeTab(stave) {
   if (!stave) return false
   if (stave.kind === 'tab' || stave.isTab || stave.stringCount >= 6) return true
-  return staveLineCount(stave) >= 6
+  // Use the canonical reconstructed lattice, not raw detection fragments.
+  // A normal five-line piano staff can contain 6–7 near-duplicate raw rows.
+  const canonicalLines = Array.isArray(stave?.lineYs)
+    ? stave.lineYs.filter(Number.isFinite).length
+    : 0
+  return canonicalLines >= 6
 }
 
 function measuredLinesForStaff(stave) {

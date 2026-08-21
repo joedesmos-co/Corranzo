@@ -4336,6 +4336,13 @@ function buildNoteEventsFromGroups(
     beats,
     totalDivisions,
   )
+  const subdivisionRatio = groups.length / Math.max(1, beats)
+  const uniformSubdivisionSlot = totalDivisions / Math.max(1, groups.length)
+  const hasProvenUniformSubdivisionGrid =
+    [2, 4].includes(subdivisionRatio) &&
+    alignedStarts.every(
+      (start, index) => Math.abs(start - index * uniformSubdivisionSlot) < 1e-6,
+    )
   if (usePositionStarts && groups.length >= 2) {
     for (let index = 1; index < alignedStarts.length; index += 1) {
       const previousNotes = groups[index - 1]?.notes ?? []
@@ -4377,10 +4384,12 @@ function buildNoteEventsFromGroups(
       // When opening/subdivision alignment rewrites the onset grid, durations must
       // follow the aligned starts. The one exception is an opening onset pulled
       // left across clef padding: preserve its source-to-source rhythmic gap.
+      // A complete eighth/sixteenth pack is stronger evidence than that padding
+      // exception, so its opening value follows the proven uniform grid too.
       let durationDivisions = Math.max(
         1,
         usePositionStarts
-          ? openingStartWasPulledEarlier
+          ? openingStartWasPulledEarlier && !hasProvenUniformSubdivisionGrid
             ? nextOriginalStartDivision - originalStartDivision
             : nextAlignedStart - startDivision
           : nextRhythmStart - rhythmStart,

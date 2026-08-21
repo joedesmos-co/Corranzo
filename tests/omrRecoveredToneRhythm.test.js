@@ -132,6 +132,29 @@ describe('snapUniformSubdivisionStarts', () => {
   })
 })
 
+describe('complete subdivision duration recovery', () => {
+  it('keeps the opening dyad on the same eighth value as its seven peers', () => {
+    const notes = Array.from({ length: 8 }, (_, index) => {
+      // The first two raw position snaps are 1 and 2 divisions. Rebuilding the
+      // complete pack proves a 0,2,... grid, so the opening must not retain the
+      // pre-rebuild one-division gap.
+      const positionInMeasure = 0.04 + index * 0.08
+      return [
+        chordTone({ cx: 500 + index * 18, cy: 700, midi: 64, positionInMeasure }),
+        chordTone({ cx: 500 + index * 18, cy: 720, midi: 67, positionInMeasure }),
+      ]
+    }).flat()
+
+    const events = buildVectorEvents(notes, measureBox, { beats: 4, beatType: 4 }).filter(
+      (event) => event.type === 'note',
+    )
+
+    expect(events.map((event) => event.startDivision)).toEqual([0, 2, 4, 6, 8, 10, 12, 14])
+    expect(events.map((event) => event.durationDivisions)).toEqual([2, 2, 2, 2, 2, 2, 2, 2])
+    expect(events.every((event) => event.notes.length === 2)).toBe(true)
+  })
+})
+
 describe('refineSparseChordColumnStarts', () => {
   it('expands a compressed chord-column tail onto the quarter grid', () => {
     expect(refineSparseChordColumnStarts([0, 2, 4, 6, 9], 4, 16)).toEqual([0, 2, 4, 8, 12])
