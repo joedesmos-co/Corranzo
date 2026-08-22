@@ -55,6 +55,7 @@ import { detectStaffClefsFromGlyphs } from './pitchFromStaffPosition.js'
 import { serializeOmrMeasureBox } from './omrMeasureGridMeta.js'
 import { computeOmrMeasureVisualExtents } from './omrMeasureVisualExtents.js'
 import { normalizePageStaffLineGaps } from './normalizeStaffLineGaps.js'
+import { reconcileSourceSupportedGrandStaffSystems } from './reconcileGrandStaffSystems.js'
 import { normalizeLegacyMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
 import { normalizeNonSmuflMusicFontGlyphs } from './normalizeLegacyMusicFontGlyphs.js'
 import { normalizeNoncanonicalArticulationGlyphs } from './normalizeNoncanonicalArticulationGlyphs.js'
@@ -529,13 +530,26 @@ export function processOmrPageAnalysis(imageData, options = {}) {
     countBarlines: true,
   })
   const inkThreshold = detectedSystems.inkThreshold
-  const systems = detectedSystems.systems
+  const systemReconciliation = tabCapable
+    ? { systems: detectedSystems.systems, applied: false, merges: [] }
+    : reconcileSourceSupportedGrandStaffSystems({
+        page,
+        systems: detectedSystems.systems,
+        contentBounds,
+        imageData,
+        vectorBarlines: resolvedVectorBarlineComponents?.verticalBars ?? [],
+      })
+  const systems = systemReconciliation.systems
 
   const pageEntry = {
     page,
     systems: [],
     scanQuality,
     systemCount: systems.length,
+    systemReconciliation: {
+      applied: systemReconciliation.applied,
+      merges: systemReconciliation.merges,
+    },
   }
 
   const measureRhythms = []
