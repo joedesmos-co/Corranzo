@@ -138,6 +138,52 @@ describe("font-aware notehead pitch anchors", () => {
     expect(anchor.source).toBe("glyph-metrics-fallback");
   });
 
+  it("uses an isolated source head one staff space above a displaced font origin", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 130, 9, 9, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 150), page, LINES, {
+      noteheadPeerOrigins: [{ x: 110, y: 150 }],
+    });
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(Math.abs(anchor.yNorm * page.height - 130)).toBeLessThanOrEqual(1);
+  });
+
+  it("uses an isolated source head one staff space below a displaced font origin", () => {
+    const page = image();
+    const upperLines = [60, 80, 100, 120, 140];
+    staff(page, upperLines);
+    ellipse(page, 110, 150, 9, 9, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 130), page, upperLines, {
+      noteheadPeerOrigins: [{ x: 110, y: 130 }],
+    });
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(Math.abs(anchor.yNorm * page.height - 150)).toBeLessThanOrEqual(1);
+  });
+
+  it("does not take a displaced component owned by a closer chord glyph", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 130, 9, 9, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 150), page, LINES, {
+      noteheadPeerOrigins: [
+        { x: 110, y: 150 },
+        { x: 110, y: 130 },
+      ],
+    });
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+  });
+
+  it("rejects source ink displaced beyond the font-bearing ownership band", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 134, 9, 9, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES, {
+      noteheadPeerOrigins: [{ x: 110, y: 160 }],
+    });
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+  });
+
   it("uses the compact open-head outline instead of asymmetric full bounds", () => {
     const page = image();
     staff(page, LINES);

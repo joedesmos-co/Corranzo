@@ -677,13 +677,20 @@ function anchorDiagnostics(
 /**
  * Resolve a notehead's visual center from local rendered ink. PDF text origins
  * and glyph boxes vary by music font, so the metric anchor is retained unless
- * one compact head-shaped component survives staff-line and stem suppression.
+ * one source-owned head-shaped component survives staff-line and stem
+ * suppression. A bounded second window handles subset fonts whose glyph
+ * origin is displaced by about one staff space from the printed head.
  */
-export function resolveNoteheadAnchor(
+function resolveNoteheadAnchorInWindow(
   glyph,
   imageData,
   lineYs,
-  { inkThreshold = 170, chordColumnXs = null } = {},
+  {
+    inkThreshold = 170,
+    chordColumnXs = null,
+    noteheadPeerOrigins = null,
+    expandedWindow = false,
+  } = {},
 ) {
   const fallback = metricAnchorResult(glyph, imageData, lineYs)
   if (!glyph || !imageData?.data || !imageData.width || !imageData.height) {
@@ -722,7 +729,10 @@ export function resolveNoteheadAnchor(
   )
   const bottom = Math.min(
     imageData.height - 1,
-    Math.ceil(glyphY + gapPx * 0.3),
+    Math.ceil(
+      glyphY +
+        (expandedWindow ? Math.max(gapPx * 1.35, glyphHeight * 0.9) : gapPx * 0.3),
+    ),
   )
   if (right <= left || bottom <= top) {
     return { ...fallback, rejectedReason: 'empty-anchor-window' }
@@ -852,6 +862,41 @@ export function resolveNoteheadAnchor(
         Math.abs(heightRatio - 0.54) * 0.25,
     }
   })
+  const componentHasCloserPeer = (component) =>
+    (noteheadPeerOrigins ?? []).some((peer) => {
+      const peerX = Number(peer?.x)
+      const peerY = Number(peer?.y)
+      if (
+        !Number.isFinite(peerX) ||
+        !Number.isFinite(peerY) ||
+        (Math.abs(peerX - glyphX) < 0.01 && Math.abs(peerY - glyphY) < 0.01)
+      ) {
+        return false
+      }
+      if (Math.abs(peerX - component.centerX) > gapPx * 0.35) {
+        return false
+      }
+      const currentDistance = Math.hypot(
+        component.centerX - glyphX,
+        component.centerY - glyphY,
+      )
+      const peerDistance = Math.hypot(
+        component.centerX - peerX,
+        component.centerY - peerY,
+      )
+      return peerDistance + gapPx * 0.15 < currentDistance
+    })
+  const isDisplacedSourceHead = (component) =>
+    Array.isArray(noteheadPeerOrigins) &&
+    component.widthRatio >= 0.75 &&
+    component.widthRatio <= 1.35 &&
+    component.heightRatio >= 0.7 &&
+    component.heightRatio <= 1.15 &&
+    component.xOriginOffset >= -0.2 &&
+    component.xOriginOffset <= 0.75 &&
+    Math.abs(component.yOriginOffset) >= 0.8 &&
+    Math.abs(component.yOriginOffset) <= 1.2 &&
+    !componentHasCloserPeer(component)
   const headSized = rowComponents.filter(
     (component) => {
       // Coarse rasterization can leave a genuine filled head taller than the
@@ -876,9 +921,11 @@ export function resolveNoteheadAnchor(
       return (
         component.widthRatio >= 0.42 &&
         component.heightRatio >= 0.22 &&
+        !componentHasCloserPeer(component) &&
         ((component.heightRatio <= 0.7 && component.widthRatio <= 1.05) ||
           lowResolutionTallHead ||
-          coarseSquareHead)
+          coarseSquareHead ||
+          isDisplacedSourceHead(component))
       )
     },
   )
@@ -946,10 +993,11 @@ export function resolveNoteheadAnchor(
     const clearWinner =
       ranked.length >= 2 && second.score - best.score >= 0.12
     const inRelaxedOriginBand =
-      best.xOriginOffset >= -0.32 &&
-      best.xOriginOffset <= 0.95 &&
-      best.yOriginOffset >= 0.35 &&
-      best.yOriginOffset <= 1
+      (best.xOriginOffset >= -0.32 &&
+        best.xOriginOffset <= 0.95 &&
+        best.yOriginOffset >= 0.35 &&
+        best.yOriginOffset <= 1) ||
+      isDisplacedSourceHead(best)
     if (clearWinner && inRelaxedOriginBand) {
       selected = best
       selectedFromCompetition = true
@@ -966,10 +1014,11 @@ export function resolveNoteheadAnchor(
     const compact = headSized
       .filter(
         (component) =>
-          component.xOriginOffset >= -0.32 &&
-          component.xOriginOffset <= 0.95 &&
-          component.yOriginOffset >= 0.45 &&
-          component.yOriginOffset <= 1,
+          (component.xOriginOffset >= -0.32 &&
+            component.xOriginOffset <= 0.95 &&
+            component.yOriginOffset >= 0.45 &&
+            component.yOriginOffset <= 1) ||
+          isDisplacedSourceHead(component),
       )
       .sort(
         (leftComponent, rightComponent) =>
@@ -1026,6 +1075,29 @@ export function resolveNoteheadAnchor(
     ledgerClassifier,
     competingHeadCandidates,
   }
+}
+
+export function resolveNoteheadAnchor(glyph, imageData, lineYs, options = {}) {
+  const primary = resolveNoteheadAnchorInWindow(
+    glyph,
+    imageData,
+    lineYs,
+    options,
+  )
+  if (
+    primary.source !== 'glyph-metrics-fallback' ||
+    !Array.isArray(options.noteheadPeerOrigins)
+  ) {
+    return primary
+  }
+  // Keep the ordinary window frozen. Only a rejected, peer-aware glyph gets a
+  // symmetric second pass, so stems and staff fragments cannot perturb the
+  // established compact-head path.
+  const expanded = resolveNoteheadAnchorInWindow(glyph, imageData, lineYs, {
+    ...options,
+    expandedWindow: true,
+  })
+  return expanded.source === 'glyph-metrics-fallback' ? primary : expanded
 }
 
 /**

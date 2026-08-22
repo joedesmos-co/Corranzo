@@ -130,6 +130,7 @@ function rawNoteheadAnchor(
   lineYs,
   inkThreshold,
   calibration,
+  noteheadPeerOrigins = null,
 ) {
   const cacheKey = noteheadAnchorCacheKey(glyph, lineYs)
   const cached = calibration?.anchorCache?.get(cacheKey)
@@ -138,6 +139,7 @@ function rawNoteheadAnchor(
   }
   const anchor = resolveNoteheadAnchor(glyph, imageData, lineYs, {
     inkThreshold,
+    noteheadPeerOrigins,
   })
   calibration?.anchorCache?.set(cacheKey, anchor)
   return anchor
@@ -152,6 +154,12 @@ export function buildPageNoteheadFallbackCalibration({
   inkThreshold = 170,
 }) {
   const anchorCache = new Map()
+  // PDF subset fonts can place the text origin one staff space away from the
+  // visible head. Page-local peer origins keep the raster fallback from
+  // claiming an adjacent head in a chord at the same x position.
+  const noteheadPeerOrigins = glyphs
+    .filter((glyph) => NOTEHEAD_GLYPHS.has(glyph.text))
+    .map((glyph) => ({ x: glyph.x, y: glyph.y }))
   const samples = []
   const sampledGlyphs = new Set()
 
@@ -187,6 +195,7 @@ export function buildPageNoteheadFallbackCalibration({
         roughMapping.lineYs,
         inkThreshold,
         { anchorCache },
+        noteheadPeerOrigins,
       )
       const sample = createNoteheadFallbackCalibrationSample({
         glyph,
