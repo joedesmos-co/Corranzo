@@ -307,6 +307,13 @@ function defaultVoiceForClef(clef) {
   return clef === 'bass' ? 2 : 1
 }
 
+function clefChangeXml(clefSign, staffNumber = null) {
+  const sign = clefSign === 'bass' ? 'F' : 'G'
+  const line = clefSign === 'bass' ? 4 : 2
+  const number = staffNumber == null ? '' : ` number="${staffNumber}"`
+  return `<attributes><clef${number}><sign>${sign}</sign><line>${line}</line></clef></attributes>`
+}
+
 /**
  * True when recognized events span both treble and bass — emit MusicXML grand
  * staff so evaluator staff pairing (and playback lanes) match recognition.
@@ -723,6 +730,10 @@ export function buildOmrMusicXml({
 
   let measuresXml = ''
   let emittedTabApproximateWarning = false
+  const emittedClefSigns = {
+    upper: 'treble',
+    lower: 'bass',
+  }
   for (const measure of sortedMeasures) {
     let inner = ''
     if (measure.measureNumber === sortedMeasures[0].measureNumber) {
@@ -815,6 +826,22 @@ export function buildOmrMusicXml({
       const moved = cursorXml(cursor, eventStart)
       inner += moved.xml
       cursor = moved.cursor
+
+      const clefEvidenceNote = unit.notes?.find(
+        (note) => note?.pitchMapping?.clefSign,
+      )
+      if (clefEvidenceNote) {
+        const routedClef = clefEvidenceNote.clef ?? unit.clef
+        const staffRole = routedClef === 'bass' ? 'lower' : 'upper'
+        const desiredClefSign = clefEvidenceNote.pitchMapping.clefSign
+        if (desiredClefSign !== emittedClefSigns[staffRole]) {
+          inner += clefChangeXml(
+            desiredClefSign,
+            grandStaff ? staffNumberForClef(routedClef) : null,
+          )
+          emittedClefSigns[staffRole] = desiredClefSign
+        }
+      }
 
       if (event.type === 'rest') {
         const voice = unit.voice

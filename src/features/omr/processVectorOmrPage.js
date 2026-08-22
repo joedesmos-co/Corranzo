@@ -19,7 +19,7 @@ import {
   OMR_DURATION_DIVISIONS,
 } from './omrRhythmConstants.js'
 import {
-  detectStaffClefsFromGlyphs,
+  detectStaffClefTimelineFromGlyphs,
   midiToWrittenPitch,
   resolveNoteheadAnchor,
   resolvePitchFromGrandStaff,
@@ -542,11 +542,13 @@ function noteheadsForMeasure(
     }
     consumed.add(key)
 
+    const xNorm = glyph.x / imageData.width
     const yRough = glyph.y / imageData.height
     const roughMapping = resolvePitchFromGrandStaff(
       yRough,
       measureBox.staffLines,
       measureBox.staffClefs,
+      xNorm,
     )
     const uncalibratedAnchor = rawNoteheadAnchor(
       glyph,
@@ -567,8 +569,8 @@ function noteheadsForMeasure(
       yNorm,
       measureBox.staffLines,
       measureBox.staffClefs,
+      xNorm,
     )
-    const xNorm = glyph.x / imageData.width
     const clef = pitchMapping.clef
     const naturalMidi = pitchMapping.midi
     if (naturalMidi == null) {
@@ -4889,6 +4891,11 @@ export function buildVectorMeasureRecord({
   const totalDivisions = Math.round(
     beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
   )
+  const clefEvents = (measureBox.staffClefs?.events ?? []).filter(
+    (event) =>
+      event.xNorm >= measureBox.x0 - 0.002 &&
+      event.xNorm <= measureBox.x1 + 0.002,
+  )
 
   const provenance = createMeasureRhythmProvenance({
     measureNumber: measureBox.measureNumber,
@@ -5092,6 +5099,7 @@ export function buildVectorMeasureRecord({
     rhythmConfidence: confidenceBreakdown.rhythmConfidence,
     vectorNoteCount: noteCount,
     vectorRestGlyphCount: restCount,
+    clefEvents,
     vectorRestDiagnostics: {
       appliedCount:
         notes.length === 0
@@ -5313,6 +5321,7 @@ export function processVectorPageSystems({
   systemMeasureBoxes,
   inheritedKeySignature = null,
   inheritedTimeSignature = null,
+  inheritedStaffClefs = null,
   inkThreshold = 170,
   captureDetectorObservations = false,
   enableLocalTupletGroups = true,
@@ -5344,10 +5353,35 @@ export function processVectorPageSystems({
   const measureBoxByNumber = new Map()
   let noteCount = 0
 
+  let continuingStaffClefs = inheritedStaffClefs ?? {
+    upper: 'treble',
+    lower: 'bass',
+    confidence: 0,
+    source: 'default',
+  }
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const boxes = systemMeasureBoxes[systemIndex] ?? []
-    const staffClefs = detectStaffClefsFromGlyphs(glyphs, imageData, boxes[0]?.staffLines)
+    const firstBox = boxes[0]
+    const lastBox = boxes[boxes.length - 1]
+    const staffClefs = detectStaffClefTimelineFromGlyphs(
+      glyphs,
+      imageData,
+      firstBox?.staffLines,
+      {
+        xMinNorm: Math.max(0, (firstBox?.x0 ?? 0) - 0.03),
+        xMaxNorm: Math.min(1, (lastBox?.x1 ?? 1) + 0.02),
+        inheritedStaffClefs: continuingStaffClefs,
+        noteheadGlyphTexts: NOTEHEAD_GLYPHS,
+        page: firstBox?.page ?? null,
+        systemIndex,
+      },
+    )
     staffClefsBySystem.set(systemIndex, staffClefs)
+    continuingStaffClefs = {
+      ...staffClefs.continuationClefs,
+      confidence: staffClefs.confidence,
+      source: staffClefs.source,
+    }
   }
 
   const noteheadFallbackCalibration = buildPageNoteheadFallbackCalibration({
@@ -5556,6 +5590,18 @@ export function processVectorPageSystems({
       detections: detectedSystemKeySignatures,
       systems: systemKeyResolution.systems,
       changes: systemKeyResolution.changes,
+    },
+    initialStaffClefs:
+      staffClefsBySystem.get(0)?.initialClefs ?? inheritedStaffClefs ?? null,
+    endingStaffClefs: continuingStaffClefs,
+    staffClefDiagnostics: {
+      systems: [...staffClefsBySystem.entries()].map(([systemIndex, timeline]) => ({
+        systemIndex,
+        initialClefs: timeline.initialClefs,
+        endingClefs: timeline.endingClefs,
+        continuationClefs: timeline.continuationClefs,
+        events: timeline.events,
+      })),
     },
     timeSignature,
     noteCount,

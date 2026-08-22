@@ -335,6 +335,13 @@ export function staffSpanWithLedger(
 const TREBLE_CLEF_GLYPH = '\uE050'
 const BASS_CLEF_GLYPH = '\uE062'
 
+export const CLEF_EVENT_KIND = Object.freeze({
+  SYSTEM_START: 'SYSTEM_START',
+  ACTIVE_CHANGE: 'ACTIVE_CHANGE',
+  REMINDER: 'REMINDER',
+  COURTESY_REMINDER: 'COURTESY_REMINDER',
+})
+
 export const DEFAULT_STAFF_CLEFS = {
   upper: 'treble',
   lower: 'bass',
@@ -1080,8 +1087,15 @@ export function resolveClefForY(yNorm, staffLines) {
 /**
  * Map a note y to MIDI using per-staff clef signs (G vs F) on each staff's lines.
  */
-export function resolvePitchFromGrandStaff(yNorm, staffLines, staffClefs = DEFAULT_STAFF_CLEFS) {
-  const clefs = normalizeStaffClefs(staffClefs)
+export function resolvePitchFromGrandStaff(
+  yNorm,
+  staffLines,
+  staffClefs = DEFAULT_STAFF_CLEFS,
+  xNorm = null,
+) {
+  const clefs = Number.isFinite(xNorm)
+    ? resolveStaffClefsAtX(staffClefs, xNorm)
+    : normalizeStaffClefs(staffClefs)
   const staffResolution = resolveStaffRoleForY(yNorm, staffLines)
   const staffRole = staffResolution.staffRole
   const linesKey = staffRoleToLinesKey(staffRole)
@@ -1113,7 +1127,7 @@ export function resolvePitchFromGrandStaff(yNorm, staffLines, staffClefs = DEFAU
       ...staffResolution,
     },
     staffLines,
-    staffClefs,
+    clefs,
   )
 }
 
@@ -1219,6 +1233,240 @@ export function detectStaffClefsFromGlyphs(glyphs, imageData, staffLines, { xMax
     result.source = 'vector-glyph'
   }
   return result
+}
+
+function clefGlyphCandidates(
+  glyphs,
+  imageData,
+  staffLines,
+  { xMinNorm = 0, xMaxNorm = 1 } = {},
+) {
+  const result = []
+  const singleStaff = !staffLines?.bass?.length || staffLines?.singleStaff === true
+  for (const glyph of glyphs ?? []) {
+    if (glyph.text !== TREBLE_CLEF_GLYPH && glyph.text !== BASS_CLEF_GLYPH) {
+      continue
+    }
+    const xNorm = glyph.x / imageData.width
+    if (xNorm < xMinNorm || xNorm > xMaxNorm) {
+      continue
+    }
+    const yNorm = glyph.y / imageData.height
+    let staffRole = 'upper'
+    if (singleStaff) {
+      const gap = staffLineGap(staffLines?.treble ?? [])
+      const distance = distanceToNearestStaffLine(yNorm, staffLines?.treble ?? [])
+      if (!(gap > 0) || distance > gap * 6) {
+        continue
+      }
+    } else {
+      staffRole = staffRoleForClefGlyph(yNorm, staffLines)
+      if (!staffRole) {
+        continue
+      }
+    }
+    const clefSign = glyph.text === BASS_CLEF_GLYPH ? 'bass' : 'treble'
+    result.push({
+      glyph,
+      staffRole,
+      clefSign,
+      xNorm,
+      yNorm,
+      sourceX: glyph.x,
+      sourceY: glyph.y,
+      sourceGlyph: glyph.text,
+      sourceFont: glyph.fontName ?? null,
+    })
+  }
+  return result.sort(
+    (left, right) =>
+      left.xNorm - right.xNorm || left.yNorm - right.yNorm,
+  )
+}
+
+function noteheadRangeByStaff(
+  glyphs,
+  imageData,
+  staffLines,
+  noteheadGlyphTexts,
+  { xMinNorm, xMaxNorm },
+) {
+  const noteheadSet =
+    noteheadGlyphTexts instanceof Set
+      ? noteheadGlyphTexts
+      : new Set(noteheadGlyphTexts ?? [])
+  const ranges = {
+    upper: { first: null, last: null },
+    lower: { first: null, last: null },
+  }
+  if (!noteheadSet.size) {
+    return ranges
+  }
+  for (const glyph of glyphs ?? []) {
+    if (!noteheadSet.has(glyph.text)) {
+      continue
+    }
+    const xNorm = glyph.x / imageData.width
+    if (xNorm < xMinNorm || xNorm > xMaxNorm) {
+      continue
+    }
+    const yNorm = glyph.y / imageData.height
+    const staffRole = resolveStaffRoleForY(yNorm, staffLines).staffRole
+    const range = ranges[staffRole]
+    range.first = range.first == null ? xNorm : Math.min(range.first, xNorm)
+    range.last = range.last == null ? xNorm : Math.max(range.last, xNorm)
+  }
+  return ranges
+}
+
+/**
+ * Build an ordered, source-positioned clef timeline for each staff. The first
+ * printed clef before that staff's notes establishes system state; later
+ * different signs are active changes, while same-sign and post-note glyphs are
+ * retained as reminder/courtesy evidence without changing current-note pitch.
+ */
+export function detectStaffClefTimelineFromGlyphs(
+  glyphs,
+  imageData,
+  staffLines,
+  {
+    xMinNorm = 0,
+    xMaxNorm = 1,
+    inheritedStaffClefs = DEFAULT_STAFF_CLEFS,
+    noteheadGlyphTexts = [],
+    page = null,
+    systemIndex = null,
+  } = {},
+) {
+  const inherited = normalizeStaffClefs(inheritedStaffClefs)
+  const candidates = clefGlyphCandidates(glyphs, imageData, staffLines, {
+    xMinNorm,
+    xMaxNorm,
+  })
+  const noteRanges = noteheadRangeByStaff(
+    glyphs,
+    imageData,
+    staffLines,
+    noteheadGlyphTexts,
+    { xMinNorm, xMaxNorm },
+  )
+  const state = { ...inherited }
+  const events = []
+
+  for (const staffRole of ['upper', 'lower']) {
+    const staffCandidates = candidates.filter(
+      (candidate) => candidate.staffRole === staffRole,
+    )
+    const range = noteRanges[staffRole]
+    for (let index = 0; index < staffCandidates.length; index += 1) {
+      const candidate = staffCandidates[index]
+      const beforeFirstNote =
+        range.first == null || candidate.xNorm <= range.first + 0.002
+      const afterLastNote =
+        range.last != null && candidate.xNorm > range.last + 0.002
+      let kind
+      if (index === 0 && beforeFirstNote) {
+        kind = CLEF_EVENT_KIND.SYSTEM_START
+      } else if (afterLastNote) {
+        kind = CLEF_EVENT_KIND.COURTESY_REMINDER
+      } else if (candidate.clefSign === state[staffRole]) {
+        kind = CLEF_EVENT_KIND.REMINDER
+      } else {
+        kind = CLEF_EVENT_KIND.ACTIVE_CHANGE
+      }
+
+      if (
+        kind === CLEF_EVENT_KIND.SYSTEM_START ||
+        kind === CLEF_EVENT_KIND.ACTIVE_CHANGE
+      ) {
+        state[staffRole] = candidate.clefSign
+      }
+
+      events.push({
+        eventId: `p${page ?? 0}-s${systemIndex ?? 0}-clef-${staffRole}-${index}`,
+        page,
+        systemIndex,
+        staffRole,
+        clefSign: candidate.clefSign,
+        kind,
+        confidence: 0.96,
+        source: 'vector-glyph',
+        sourceX: candidate.sourceX,
+        sourceY: candidate.sourceY,
+        xNorm: candidate.xNorm,
+        yNorm: candidate.yNorm,
+        sourceGlyph: candidate.sourceGlyph,
+        sourceFont: candidate.sourceFont,
+      })
+    }
+  }
+  events.sort(
+    (left, right) => left.xNorm - right.xNorm || left.staffRole.localeCompare(right.staffRole),
+  )
+
+  const systemStartClefs = { ...inherited }
+  for (const event of events) {
+    if (event.kind === CLEF_EVENT_KIND.SYSTEM_START) {
+      systemStartClefs[event.staffRole] = event.clefSign
+    }
+  }
+  const endingClefs = { ...systemStartClefs }
+  for (const event of events) {
+    if (event.kind === CLEF_EVENT_KIND.ACTIVE_CHANGE) {
+      endingClefs[event.staffRole] = event.clefSign
+    }
+  }
+
+  return {
+    ...systemStartClefs,
+    initialClefs: systemStartClefs,
+    endingClefs,
+    continuationClefs: {
+      ...endingClefs,
+      ...Object.fromEntries(
+        ['upper', 'lower'].map((staffRole) => {
+          const courtesy = [...events]
+            .reverse()
+            .find(
+              (event) =>
+                event.staffRole === staffRole &&
+                event.kind === CLEF_EVENT_KIND.COURTESY_REMINDER &&
+                event.clefSign !== endingClefs[staffRole],
+            )
+          return [staffRole, courtesy?.clefSign ?? endingClefs[staffRole]]
+        }),
+      ),
+    },
+    confidence: events.length ? 0.96 : inheritedStaffClefs?.confidence ?? 0,
+    source: events.length ? 'vector-glyph-timeline' : inheritedStaffClefs?.source ?? 'default',
+    detections: events,
+    events,
+  }
+}
+
+/** Resolve the most recent active clef event strictly before a source x. */
+export function resolveStaffClefsAtX(staffClefTimeline, xNorm) {
+  const state = normalizeStaffClefs(
+    staffClefTimeline?.initialClefs ?? staffClefTimeline,
+  )
+  const activeEvents = {}
+  if (!Number.isFinite(xNorm)) {
+    return { ...state, activeEvents }
+  }
+  for (const event of staffClefTimeline?.events ?? []) {
+    if (event.xNorm >= xNorm) {
+      break
+    }
+    if (
+      event.kind !== CLEF_EVENT_KIND.SYSTEM_START &&
+      event.kind !== CLEF_EVENT_KIND.ACTIVE_CHANGE
+    ) {
+      continue
+    }
+    state[event.staffRole] = event.clefSign
+    activeEvents[event.staffRole] = event
+  }
+  return { ...state, activeEvents }
 }
 
 export function applyAlterToMidi(midi, alter) {

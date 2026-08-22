@@ -382,6 +382,12 @@ async function runPdfOmrPipelineBody({
   let documentInitialKeySignature = null
   let documentInitialKeyCaptured = false
   let timeSignature = { beats: 4, beatType: 4, confidence: 0 }
+  let staffClefs = {
+    upper: 'treble',
+    lower: 'bass',
+    confidence: 0,
+    source: 'default',
+  }
   let tempo = { bpm: OMR_DEFAULT_TEMPO, fromDefault: true, confidence: 0 }
   const diagnostics = {
     pages: pageCount,
@@ -392,6 +398,7 @@ async function runPdfOmrPipelineBody({
     pagesWithSystems: 0,
     preprocessPages,
     keySignatureChanges: [],
+    clefChanges: [],
     ties: {
       detectedTieCount: 0,
       appliedTieCount: 0,
@@ -655,6 +662,7 @@ async function runPdfOmrPipelineBody({
         instrument,
         keySignature,
         timeSignature,
+        staffClefs,
         documentStaffGapReference,
         captureOmrV3Shadow: captureOmrV3Analysis,
         captureOmrV3RawSymbols: needOmrV3Independent,
@@ -828,6 +836,14 @@ async function runPdfOmrPipelineBody({
     }
     for (const change of pageResult.keySignatureDiagnostics?.changes ?? []) {
       diagnostics.keySignatureChanges.push({ page, ...change })
+    }
+    for (const system of pageResult.staffClefDiagnostics?.systems ?? []) {
+      for (const event of system.events ?? []) {
+        diagnostics.clefChanges.push(event)
+      }
+    }
+    if (pageResult.endingStaffClefs) {
+      staffClefs = pageResult.endingStaffClefs
     }
     if ((pageResult.timeSignature?.confidence ?? 0) > (timeSignature.confidence ?? 0)) {
       timeSignature = pageResult.timeSignature

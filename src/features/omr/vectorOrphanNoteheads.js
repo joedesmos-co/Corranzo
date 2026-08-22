@@ -152,6 +152,7 @@ function resolveOrphanMeasureCandidate({
     yNorm,
     measureCandidate.measureBox.staffLines,
     measureCandidate.staffClefs,
+    xNorm,
   )
   if (pitchMapping.midi == null) {
     return { reason: ORPHAN_REJECTION.PITCH_NULL }
