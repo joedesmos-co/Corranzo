@@ -239,6 +239,36 @@ describe('recoverLocalDigitGatedTripletGroups', () => {
     expect(tupleted.reduce((s, e) => s + e.durationDivisions, 0)).toBeCloseTo(4, 5)
   })
 
+  it('rejects a fingering digit directly over one endpoint of quarter+eighth', () => {
+    const events = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 4,
+        durationType: 'quarter',
+        cx: 200,
+        notes: [{ midi: 67, cx: 200, cy: 400, clef: 'treble' }],
+      },
+      {
+        type: 'note',
+        startDivision: 4,
+        durationDivisions: 2,
+        durationType: 'eighth',
+        cx: 266,
+        notes: [{ midi: 64, cx: 266, cy: 400, clef: 'treble' }],
+      },
+    ]
+    const result = recoverLocalDigitGatedTripletGroups(events, {
+      glyphs: [{ text: '3', x: 264, y: 360 }],
+      measureBox,
+      imageData,
+      beats: 4,
+      totalDivisions: 16,
+    })
+
+    expect(result.recovered).toBe(false)
+  })
+
   it('keeps a second voice without a digit ordinary', () => {
     const events = [
       ...[0, 1, 2].map((i) => ({

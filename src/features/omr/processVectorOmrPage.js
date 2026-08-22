@@ -45,6 +45,10 @@ import {
 } from './vectorOrphanNoteheads.js'
 import { summarizeVectorChordGrouping } from './omrChordGroupingDiagnostics.js'
 import { enrichNoteheadRhythm } from './detectNoteRhythmFeatures.js'
+import {
+  applyVectorFlagDurationsToEvents,
+  assignVectorFlagsToNoteheads,
+} from './detectVectorFlags.js'
 import { vectorGlyphAllocationBounds } from './vectorGlyphMeasureBounds.js'
 import { summarizeVectorRhythmDiagnostics } from './vectorRhythmDiagnostics.js'
 import {
@@ -738,8 +742,15 @@ function noteheadsForMeasure(
         durationDivisions: dotted ? Math.round(baseDivisions * 1.5) : baseDivisions,
       }
     })
+  const vectorFlagDiagnostics = assignVectorFlagsToNoteheads({
+    glyphs,
+    notes: mappedNotes,
+    imageData,
+    measureBox,
+  })
   return {
     notes: mappedNotes,
+    vectorFlagDiagnostics,
     vectorAccidentalDiagnostics: localAccidentals.diagnostics ?? {
       detectedCandidates: [],
       selectedAttachments: [],
@@ -4815,6 +4826,7 @@ export function buildVectorMeasureRecord({
 }) {
   const {
     notes,
+    vectorFlagDiagnostics,
     vectorAccidentalDiagnostics,
     vectorStaccatoDiagnostics,
     vectorAccentDiagnostics,
@@ -4941,6 +4953,19 @@ export function buildVectorMeasureRecord({
       eventsBeforeOpenGlyphReconcile,
       events,
       { reason: 'direct-vector-open-head' },
+    )
+  }
+
+  const eventsBeforeVectorFlags = events
+  const vectorFlagApplyResult = applyVectorFlagDurationsToEvents(events)
+  events = vectorFlagApplyResult.events
+  if (provenance && vectorFlagApplyResult.appliedCount > 0) {
+    provenance.recordStage(
+      'source-vector-flag',
+      'applyVectorFlagDurationsToEvents',
+      eventsBeforeVectorFlags,
+      events,
+      { reason: 'explicit-smufl-flag-ownership' },
     )
   }
 
@@ -5112,6 +5137,7 @@ export function buildVectorMeasureRecord({
     vectorAccentDiagnostics,
     vectorNotationArticulationDiagnostics:
       combinedVectorNotationArticulationDiagnostics,
+    vectorFlagDiagnostics,
     noteheadFallbackCalibrationDiagnostics,
     vectorNoteMatching,
     vectorChordDiagnostics,

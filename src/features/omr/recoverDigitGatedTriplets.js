@@ -362,7 +362,14 @@ export function recoverLocalDigitGatedTripletGroups(
           continue
         }
         const midX = (left.cx + right.cx) / 2
-        if (Math.abs(digitX - midX) > 70) {
+        const columnGap = right.cx - left.cx
+        // A two-note 3:2 number belongs between the endpoints (normally over a
+        // bracket center). A digit directly over either note is fingering
+        // evidence, not tuplet evidence.
+        if (
+          !(columnGap > 0) ||
+          Math.abs(digitX - midX) > Math.max(12, columnGap * 0.3)
+        ) {
           continue
         }
         chosen = {
