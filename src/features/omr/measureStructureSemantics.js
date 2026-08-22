@@ -262,13 +262,19 @@ function staffHasIndependentOverlap(units) {
   return false
 }
 
-function assignStaffVoices(units, polyphonicStaffs) {
+function assignStaffVoices(units, polyphonicStaffs, tieConnections = []) {
   const byStaff = new Map()
   units.forEach((unit) => {
     const entries = byStaff.get(unit.staffLane) ?? []
     entries.push(unit)
     byStaff.set(unit.staffLane, entries)
   })
+
+  const tieMap = new Map()
+  for (const conn of tieConnections) {
+    tieMap.set(conn.fromEventIndex, conn.toEventIndex)
+    tieMap.set(conn.toEventIndex, conn.fromEventIndex)
+  }
 
   for (const [staffLane, entries] of byStaff) {
     const polyphonic = polyphonicStaffs.has(staffLane)
@@ -283,9 +289,6 @@ function assignStaffVoices(units, polyphonicStaffs) {
           left.vectorVoiceColumnId != null &&
           left.vectorVoiceColumnId === right.vectorVoiceColumnId
         if (sameExplicitColumn) {
-          // A directed moving lane should claim the voice implied by its stem
-          // before a stemless whole sustain takes the remaining voice. Tuplet
-          // recovery may reorder events, so eventIndex is not source evidence.
           const directionDelta =
             Number(!left.stemDirection) - Number(!right.stemDirection)
           if (directionDelta) return directionDelta
@@ -308,6 +311,13 @@ function assignStaffVoices(units, polyphonicStaffs) {
       let preferred = unit.stemDirection
         ? voiceForLaneDirection(staffLane, unit.stemDirection)
         : defaultVoiceForStaff(staffLane)
+      const tiedEventIndex = tieMap.get(unit.eventIndex)
+      if (tiedEventIndex != null) {
+        const tiedUnit = assigned.find((u) => u.eventIndex === tiedEventIndex)
+        if (tiedUnit && tiedUnit.voice != null) {
+          preferred = tiedUnit.voice
+        }
+      }
       const conflicts = assigned.filter(
         (entry) =>
           entry.kind === 'note' &&
@@ -375,7 +385,7 @@ export function buildMeasureStructureUnits(measure = {}) {
       )
     }),
   )
-  assignStaffVoices(provisional, polyphonicStaffs)
+  assignStaffVoices(provisional, polyphonicStaffs, measure.tieConnections ?? [])
   const units = provisional.map((unit, order) => ({ ...unit, order }))
   const defaultVoiceReassignments = units.filter(
     (unit) =>

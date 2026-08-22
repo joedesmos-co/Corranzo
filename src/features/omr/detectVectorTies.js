@@ -1723,6 +1723,29 @@ export function applyVectorPageTies({
 
   const appliedTieCount = applyTieMarks(measureRecords, tiePairs)
 
+  const tieConnectionsByMeasure = new Map()
+  for (const pair of tiePairs) {
+    if (!pair.from || !pair.to) continue
+    const fromMeasure = pair.from.measureNumber
+    const toMeasure = pair.to.measureNumber
+    if (fromMeasure === toMeasure) {
+      const conns = tieConnectionsByMeasure.get(fromMeasure) ?? []
+      conns.push({
+        fromEventIndex: pair.from.eventIndex,
+        toEventIndex: pair.to.eventIndex,
+        fromNoteIndex: pair.from.noteIndex ?? 0,
+        toNoteIndex: pair.to.noteIndex ?? 0,
+      })
+      tieConnectionsByMeasure.set(fromMeasure, conns)
+    }
+  }
+  for (const record of measureRecords) {
+    const conns = tieConnectionsByMeasure.get(record.measureNumber)
+    if (conns?.length) {
+      record.tieConnections = conns
+    }
+  }
+
   const slurSeen = new Set()
   const slurPairs = []
   for (const pair of pathResult.slurPairs) {
