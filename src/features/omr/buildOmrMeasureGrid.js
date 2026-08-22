@@ -3,6 +3,7 @@ import {
   detectSystemBarlinesWithDiagnostics,
 } from '../score-follow/detectStaffLines.js'
 import { summarizeBarlineRejections } from '../score-follow/pdfPageAnalysis.js'
+import { buildCanonicalMeasureBoundaryGraph } from './canonicalMeasureBoundaryGraph.js'
 import { estimateGrandStaffLines } from './pitchFromStaffPosition.js'
 
 const MIN_MEASURES_IF_NO_BARLINES = 4
@@ -643,6 +644,10 @@ function spansToMeasureBoxes(spans, {
     y0: system.y0,
     y1: system.y1,
     staffLines,
+    boundarySource: span.source ?? null,
+    boundaryConfidence: Number.isFinite(span.confidence) ? span.confidence : null,
+    leftBoundaryId: span.leftBoundaryId ?? null,
+    rightBoundaryId: span.rightBoundaryId ?? null,
   }))
 }
 
@@ -678,22 +683,45 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   noteColumnXNorms = null,
   systemRole = null,
   partnerSystem = null,
+  vectorBarlines = [],
 }) {
   const x0Content = contentBounds.x0 ?? contentBounds.left / imageData.width
   const x1Content = contentBounds.x1 ?? contentBounds.right / imageData.width
   const contentWidth = Math.max(1e-6, x1Content - x0Content)
 
-  const primary = detectAndSpanBarlines({
-    imageData,
-    contentBounds,
-    system,
-    darkThreshold,
-    vectorNoteheadXNorms,
-    noteColumnXNorms,
-    x0Content,
-    x1Content,
-    contentWidth,
-  })
+  // Piano PDFs commonly contain exact barline path geometry even when raster
+  // projection loses thin or fragmented strokes. Use it only after resolving a
+  // true two-stave grand staff; notation/TAB and unresolved single-stave bands
+  // retain the established raster/partner paths.
+  const canonicalBoundaryGraph = systemRole == null
+    ? buildCanonicalMeasureBoundaryGraph({
+        page,
+        systemIndex,
+        system,
+        contentBounds,
+        imageData,
+        vectorBarlines,
+      })
+    : {
+        usable: false,
+        reason: 'non-piano-system-role',
+        boundaries: [],
+        measureSpans: [],
+      }
+
+  const primary = canonicalBoundaryGraph.usable
+    ? canonicalBoundaryGraphAsSpanDetection(canonicalBoundaryGraph, contentWidth)
+    : detectAndSpanBarlines({
+        imageData,
+        contentBounds,
+        system,
+        darkThreshold,
+        vectorNoteheadXNorms,
+        noteColumnXNorms,
+        x0Content,
+        x1Content,
+        contentWidth,
+      })
 
   let spans = primary.spans
   let reliability = primary.reliability
@@ -712,6 +740,7 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
   let usedPartnerBarlines = false
 
   const partnerEligible =
+    !canonicalBoundaryGraph.usable &&
     partnerSystem &&
     Number.isFinite(partnerSystem.y0) &&
     Number.isFinite(partnerSystem.y1) &&
@@ -795,9 +824,48 @@ export function buildMeasureBoxesForSystemWithDiagnostics({
     suspiciousShortMeasures,
     spanWidthPercents,
     usedPartnerBarlines,
+    usedCanonicalVectorBoundaries: canonicalBoundaryGraph.usable,
+    canonicalBoundaryGraph: {
+      usable: canonicalBoundaryGraph.usable,
+      reason: canonicalBoundaryGraph.reason,
+      sourceSpanRatio: canonicalBoundaryGraph.sourceSpanRatio ?? null,
+      boundaryCount: canonicalBoundaryGraph.boundaries?.length ?? 0,
+      measureCount: canonicalBoundaryGraph.measureSpans?.length ?? 0,
+      boundaries: canonicalBoundaryGraph.boundaries ?? [],
+    },
   }
 
   return { measureBoxes, diagnostics }
+}
+
+function canonicalBoundaryGraphAsSpanDetection(graph, contentWidth) {
+  const spans = graph.measureSpans.map((span) => ({ ...span }))
+  const widths = spans.map((span) => (span.x1 - span.x0) / contentWidth)
+  const measureWidthFrac = median(widths)
+  return {
+    spans,
+    reliability: {
+      confident: true,
+      reason: 'canonical-vector-boundary-graph',
+      measureWidthFrac,
+    },
+    barlines: graph.boundaries.slice(1, -1).map((boundary) => boundary.normalizedX),
+    barlineDiagnostics: {
+      rejected: {},
+      thinningRemoved: 0,
+      densityAmbiguous: false,
+    },
+    vectorFiltered: { rejectedCount: 0, candidateOffsets: [] },
+    inPackFiltered: { rejectedCount: 0 },
+    initialMeasureCount: spans.length,
+    wideSpanRecovery: { spans, splitCount: 0 },
+    narrowMerge: { spans, mergedCount: 0 },
+    collapsedPairs: 0,
+    narrowAfter: { spans, mergedCount: 0 },
+    trailingNarrow: { spans, mergedCount: 0 },
+    rebuiltFromNoteColumnGaps: 0,
+    gapSnap: { spans, snappedCount: 0 },
+  }
 }
 
 function shouldPreferPartnerBarlineSpans({
