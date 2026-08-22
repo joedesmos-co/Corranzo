@@ -14,6 +14,8 @@ const SMUFL_BLACK = '\ue0a4'
 const SMUFL_HALF = '\ue0a3'
 const SMUFL_TREBLE_CLEF = '\ue050'
 const SMUFL_BASS_CLEF = '\ue062'
+const ALTERNATE_MSCORE_SHARP = '\ue10e'
+const ALTERNATE_MSCORE_FLAT = '\ue114'
 
 function item(text, fontName = 'music-font', overrides = {}) {
   return {
@@ -92,6 +94,25 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     // Title text is untouched.
     expect(
       items.some((entry) => entry.text === 'Twinkle, Twinkle, Little Star'),
+    ).toBe(true)
+  })
+
+  it('maps alternate MScore subset accidentals only on a proven legacy music font', () => {
+    const page = legacyGrandStaffPage()
+    page.push(item(ALTERNATE_MSCORE_SHARP.repeat(6), 'music-font'))
+    page.push(item(ALTERNATE_MSCORE_FLAT.repeat(4), 'music-font'))
+    page.push(item(`${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_FLAT}`, 'title-font'))
+
+    const { items, applied } = normalizeLegacyMusicFontGlyphs(page)
+    expect(applied).toBe(true)
+    expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue262'.repeat(6))).toBe(true)
+    expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue260'.repeat(4))).toBe(true)
+    expect(
+      items.some(
+        (entry) =>
+          entry.fontName === 'title-font' &&
+          entry.text === `${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_FLAT}`,
+      ),
     ).toBe(true)
   })
 

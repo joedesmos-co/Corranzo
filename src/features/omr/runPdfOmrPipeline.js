@@ -379,6 +379,8 @@ async function runPdfOmrPipelineBody({
   const pageDiagnostics = []
   const preprocessLog = []
   let keySignature = { fifths: 0, mode: 'major', confidence: 0 }
+  let documentInitialKeySignature = null
+  let documentInitialKeyCaptured = false
   let timeSignature = { beats: 4, beatType: 4, confidence: 0 }
   let tempo = { bpm: OMR_DEFAULT_TEMPO, fromDefault: true, confidence: 0 }
   const diagnostics = {
@@ -389,6 +391,7 @@ async function runPdfOmrPipelineBody({
     uncertainMeasures: 0,
     pagesWithSystems: 0,
     preprocessPages,
+    keySignatureChanges: [],
     ties: {
       detectedTieCount: 0,
       appliedTieCount: 0,
@@ -813,8 +816,18 @@ async function runPdfOmrPipelineBody({
       }
     }
 
-    if ((pageResult.keySignature?.confidence ?? 0) > (keySignature.confidence ?? 0)) {
+    if (!documentInitialKeyCaptured) {
+      documentInitialKeySignature =
+        pageResult.initialKeySignature ?? pageResult.keySignature ?? keySignature
+      documentInitialKeyCaptured = true
+    }
+    if ((pageResult.endingKeySignature?.confidence ?? 0) > 0) {
+      keySignature = pageResult.endingKeySignature
+    } else if ((pageResult.keySignature?.confidence ?? 0) > (keySignature.confidence ?? 0)) {
       keySignature = pageResult.keySignature
+    }
+    for (const change of pageResult.keySignatureDiagnostics?.changes ?? []) {
+      diagnostics.keySignatureChanges.push({ page, ...change })
     }
     if ((pageResult.timeSignature?.confidence ?? 0) > (timeSignature.confidence ?? 0)) {
       timeSignature = pageResult.timeSignature
@@ -906,7 +919,11 @@ async function runPdfOmrPipelineBody({
     tempo = measureTempo
   }
 
-  const musical = { keySignature, timeSignature, tempo }
+  const musical = {
+    keySignature: documentInitialKeySignature ?? keySignature,
+    timeSignature,
+    tempo,
+  }
   const layoutConsistency = validateOmrMultiPageLayout(pageDiagnostics)
   let richDiagnostics = buildOmrDiagnostics({
     pages: pageDiagnostics,

@@ -271,13 +271,14 @@ function glyphInBox(glyph, box, imageData, { usePlayableStart = true, yPad = 0 }
   )
 }
 
-function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vectorAccidentalPaths = []) {
-  const firstBox = firstSystemBoxes[0]
+export function detectVectorKeySignature(glyphs, imageData, firstBox, vectorAccidentalPaths = []) {
   if (!firstBox) {
     return { fifths: 0, mode: 'major', confidence: 0 }
   }
   let sharps = 0
   let flats = 0
+  let naturals = 0
+  let usedPathFallback = false
   
   // Check text glyphs
   for (const glyph of glyphs) {
@@ -292,6 +293,8 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vect
       sharps += 1
     } else if (glyph.text === FLAT_GLYPH) {
       flats += 1
+    } else if (glyph.text === NATURAL_GLYPH) {
+      naturals += 1
     }
   }
   
@@ -303,18 +306,25 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vect
     y1: firstBox.y1 * imageData.height,
   }
   
-  for (const path of vectorAccidentalPaths) {
-    if (!path.bounds) continue
-    if (path.bounds.x1 < keySigArea.x1 && 
-        path.bounds.x0 > keySigArea.x0 &&
-        path.bounds.y1 > keySigArea.y0 && 
-        path.bounds.y0 < keySigArea.y1) {
-      const isSharp = path.archDirection === 'above' || 
-                      (path.bounds.height > path.bounds.width * 1.5)
-      if (isSharp) {
-        sharps += 1
-      } else {
-        flats += 1
+  // Text glyphs are already typed accidental evidence. Mixing the same printed
+  // marks with path candidates can double-count them or turn a flat into a
+  // sharp by aspect ratio (observed on six-flat MuseScore exports). Paths are a
+  // fallback only when the text layer has no usable signature quorum.
+  if (sharps < 2 && flats < 2) {
+    usedPathFallback = true
+    for (const path of vectorAccidentalPaths) {
+      if (!path.bounds) continue
+      if (path.bounds.x1 < keySigArea.x1 &&
+          path.bounds.x0 > keySigArea.x0 &&
+          path.bounds.y1 > keySigArea.y0 &&
+          path.bounds.y0 < keySigArea.y1) {
+        const isSharp = path.archDirection === 'above' ||
+                        (path.bounds.height > path.bounds.width * 1.5)
+        if (isSharp) {
+          sharps += 1
+        } else {
+          flats += 1
+        }
       }
     }
   }
@@ -323,7 +333,8 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vect
       fifths: Math.max(1, Math.min(7, Math.round(sharps / 2))),
       mode: 'major',
       confidence: 0.9,
-      source: 'vector-glyphs+paths',
+      source: usedPathFallback ? 'vector-glyphs+paths' : 'vector-glyphs',
+      counts: { sharps, flats, naturals },
     }
   }
   if (flats >= 2) {
@@ -331,10 +342,148 @@ function detectVectorKeySignature(glyphs, imageData, firstSystemBoxes = [], vect
       fifths: -Math.max(1, Math.min(7, Math.round(flats / 2))),
       mode: 'major',
       confidence: 0.9,
-      source: 'vector-glyphs+paths',
+      source: usedPathFallback ? 'vector-glyphs+paths' : 'vector-glyphs',
+      counts: { sharps, flats, naturals },
     }
   }
-  return { fifths: 0, mode: 'major', confidence: 0 }
+  return {
+    fifths: 0,
+    mode: 'major',
+    confidence: 0,
+    source: 'no-vector-key-signature',
+    counts: { sharps, flats, naturals },
+  }
+}
+
+function reliableKeySignature(keySignature) {
+  return (
+    Number.isFinite(keySignature?.fifths) &&
+    (keySignature?.confidence ?? 0) > 0
+  )
+}
+
+function sameDetectedRun(detections, start, fifths) {
+  let length = 0
+  for (let index = start; index < detections.length; index += 1) {
+    const detected = detections[index]
+    if (!reliableKeySignature(detected) || detected.fifths !== fifths) break
+    length += 1
+  }
+  return length
+}
+
+function emptySignatureRun(detections, start) {
+  let length = 0
+  for (let index = start; index < detections.length; index += 1) {
+    if (reliableKeySignature(detections[index])) break
+    length += 1
+  }
+  return length
+}
+
+function sameSignNonZero(left, right) {
+  return (
+    Number(left) !== 0 &&
+    Number(right) !== 0 &&
+    Math.sign(Number(left)) === Math.sign(Number(right))
+  )
+}
+
+/**
+ * Resolve repeated vector key signatures as document state.
+ *
+ * Engravers repeat a non-zero key at system starts. A sustained new signature
+ * is a key change; a sustained absence after a non-zero key is cancellation to
+ * zero. Requiring two systems for a change rejects isolated local accidentals
+ * that happen to precede the first playable note of one system.
+ */
+export function resolveVectorSystemKeySignatures(
+  detections = [],
+  inheritedKeySignature = null,
+) {
+  let active = reliableKeySignature(inheritedKeySignature)
+    ? { ...inheritedKeySignature }
+    : null
+  const inheritedReliable = Boolean(active)
+  const resolved = []
+  const changes = []
+
+  for (let systemIndex = 0; systemIndex < detections.length; systemIndex += 1) {
+    const detected = detections[systemIndex]
+    let next = active
+    let reason = 'inherited'
+
+    if (reliableKeySignature(detected)) {
+      if (!active || detected.fifths === active.fifths) {
+        next = { ...detected }
+        reason = active ? 'repeated-system-signature' : 'initial-system-signature'
+      } else if (
+        sameSignNonZero(active.fifths, detected.fifths) &&
+        Math.abs(detected.fifths) < Math.abs(active.fifths) &&
+        (detected.counts?.naturals ?? 0) < 2
+      ) {
+        // Fewer same-kind accidentals without printed cancellation naturals is
+        // usually a clipped stave-margin count. Do not turn that into a key
+        // change even if two adjacent systems share the crop.
+        reason = 'same-sign-reduction-without-cancellation-rejected'
+      } else if (sameDetectedRun(detections, systemIndex, detected.fifths) >= 2) {
+        next = {
+          ...detected,
+          confidence: Math.max(0.9, detected.confidence ?? 0),
+          source: 'vector-system-signature-consensus',
+        }
+        reason = 'sustained-new-system-signature'
+      } else {
+        reason = 'isolated-conflicting-signature-rejected'
+      }
+    } else if (
+      active?.fifths !== 0 &&
+      emptySignatureRun(detections, systemIndex) >= 2
+    ) {
+      next = {
+        fifths: 0,
+        mode: 'major',
+        confidence: 0.88,
+        source: 'vector-system-signature-cancellation-consensus',
+      }
+      reason = 'sustained-absence-cancels-key'
+    }
+
+    const changed = Boolean(
+      next &&
+      active &&
+      next.fifths !== active.fifths,
+    )
+    if (changed) {
+      changes.push({
+        systemIndex,
+        fromFifths: active.fifths,
+        toFifths: next.fifths,
+        confidence: next.confidence,
+        source: next.source,
+        reason,
+      })
+    }
+    active = next
+    resolved.push({
+      systemIndex,
+      keySignature: active ?? { fifths: 0, mode: 'major', confidence: 0 },
+      detected,
+      changed,
+      reason,
+    })
+  }
+
+  const initial = resolved[0]?.keySignature ??
+    (inheritedReliable
+      ? { ...inheritedKeySignature }
+      : { fifths: 0, mode: 'major', confidence: 0 })
+  return {
+    initialKeySignature: initial,
+    endingKeySignature: active ?? initial,
+    systems: resolved,
+    changes,
+  }
 }
 
 function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
@@ -5170,13 +5319,21 @@ export function processVectorPageSystems({
   allowInkStaccatoFallback = true,
 }) {
   const glyphs = textGlyphsToImage(pageText, imageData)
+  const detectedSystemKeySignatures = systemMeasureBoxes.map((boxes) =>
+    detectVectorKeySignature(
+      glyphs,
+      imageData,
+      boxes[0],
+      vectorAccidentalPaths,
+    ),
+  )
+  const systemKeyResolution = resolveVectorSystemKeySignatures(
+    detectedSystemKeySignatures,
+    inheritedKeySignature,
+  )
+  const keySignature = systemKeyResolution.initialKeySignature
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
-  const detectedKeySignature = detectVectorKeySignature(glyphs, imageData, firstSystemBoxes, vectorAccidentalPaths)
   const detectedTimeSignature = detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes)
-  const keySignature =
-    (detectedKeySignature.confidence ?? 0) > 0
-      ? detectedKeySignature
-      : inheritedKeySignature ?? detectedKeySignature
   const timeSignature =
     (detectedTimeSignature.confidence ?? 0) > 0
       ? detectedTimeSignature
@@ -5213,6 +5370,11 @@ export function processVectorPageSystems({
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const boxes = systemMeasureBoxes[systemIndex] ?? []
     const staffClefs = staffClefsBySystem.get(systemIndex)
+    const systemKey =
+      systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
+    const systemKeyChanged = Boolean(
+      systemKeyResolution.systems[systemIndex]?.changed,
+    )
     const measures = boxes.map((measureBox, measureIndex) => {
       const measurePlacement = {
         isLastInSystem: measureIndex === boxes.length - 1,
@@ -5224,7 +5386,7 @@ export function processVectorPageSystems({
         glyphs,
         imageData,
         measureBox: enrichedBox,
-        keySignature,
+        keySignature: systemKey,
         timeSignature,
         measurePlacement,
         inkThreshold,
@@ -5235,6 +5397,9 @@ export function processVectorPageSystems({
         enableLocalTupletGroups,
         allowInkStaccatoFallback,
       })
+      if (measureIndex === 0 && systemKeyChanged) {
+        record.keySignatureChange = { ...systemKey }
+      }
       noteCount += record.vectorNoteCount ?? 0
       return record
     })
@@ -5263,11 +5428,13 @@ export function processVectorPageSystems({
         continue
       }
       const previous = measureRecordsBySystem[systemIndex][measureIndex]
+      const systemKey =
+        systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
       const rebuilt = buildVectorMeasureRecord({
         glyphs,
         imageData,
         measureBox,
-        keySignature,
+        keySignature: systemKey,
         timeSignature,
         measurePlacement,
         orphanGlyphs,
@@ -5279,6 +5446,12 @@ export function processVectorPageSystems({
         enableLocalTupletGroups,
         allowInkStaccatoFallback,
       })
+      if (
+        measureIndex === 0 &&
+        systemKeyResolution.systems[systemIndex]?.changed
+      ) {
+        rebuilt.keySignatureChange = { ...systemKey }
+      }
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
       break
@@ -5313,8 +5486,8 @@ export function processVectorPageSystems({
 
   if (accidentalPathCalibration.models.size > 0) {
     noteCount = 0
-    measureRecordsBySystem = systemMeasureBoxes.map((boxes) =>
-      boxes.map((measureBox) => {
+    measureRecordsBySystem = systemMeasureBoxes.map((boxes, systemIndex) =>
+      boxes.map((measureBox, measureIndex) => {
         const enrichedBox = measureBoxByNumber.get(measureBox.measureNumber)
         const measurePlacement =
           placementByMeasure.get(measureBox.measureNumber) ?? {}
@@ -5322,11 +5495,13 @@ export function processVectorPageSystems({
           orphanResult.assignments
             .get(measureBox.measureNumber)
             ?.map((entry) => entry.glyph) ?? []
+        const systemKey =
+          systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
         const record = buildVectorMeasureRecord({
           glyphs,
           imageData,
           measureBox: enrichedBox,
-          keySignature,
+          keySignature: systemKey,
           timeSignature,
           measurePlacement,
           orphanGlyphs,
@@ -5339,6 +5514,12 @@ export function processVectorPageSystems({
           enableLocalTupletGroups,
           allowInkStaccatoFallback,
         })
+        if (
+          measureIndex === 0 &&
+          systemKeyResolution.systems[systemIndex]?.changed
+        ) {
+          record.keySignatureChange = { ...systemKey }
+        }
         noteCount += record.vectorNoteCount ?? 0
         return record
       }),
@@ -5369,6 +5550,13 @@ export function processVectorPageSystems({
   return {
     measureRecordsBySystem,
     keySignature,
+    initialKeySignature: systemKeyResolution.initialKeySignature,
+    endingKeySignature: systemKeyResolution.endingKeySignature,
+    keySignatureDiagnostics: {
+      detections: detectedSystemKeySignatures,
+      systems: systemKeyResolution.systems,
+      changes: systemKeyResolution.changes,
+    },
     timeSignature,
     noteCount,
     source: 'vector-glyphs',

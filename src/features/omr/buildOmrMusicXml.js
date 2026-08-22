@@ -4,7 +4,7 @@ import {
   OMR_DEFAULT_TEMPO,
 } from './omrConstants.js'
 import { OMR_DIVISIONS_PER_QUARTER } from './omrRhythmConstants.js'
-import { OMR_DISCLAIMER } from './omrMusicalConstants.js'
+import { OMR_DISCLAIMER, OMR_MUSICAL_CONFIDENCE } from './omrMusicalConstants.js'
 import { TAB_APPROXIMATE_RHYTHM_WARNING } from './detectTabNotation.js'
 import { shouldEmitKeySignature } from './detectOmrKeySignature.js'
 import { shouldEmitRepeat, shouldEmitEnding, sanitizeOmrRepeatMarkings } from './detectOmrRepeatBarline.js'
@@ -746,6 +746,13 @@ export function buildOmrMusicXml({
       if (!hasMeasureTempos) {
         inner += legacyInitialTempoXml(tempo, emitTempo)
       }
+    } else if (
+      Number.isFinite(measure.keySignatureChange?.fifths) &&
+      (measure.keySignatureChange?.confidence ?? 0) >= OMR_MUSICAL_CONFIDENCE.KEY
+    ) {
+      inner +=
+        `<attributes><key><fifths>${measure.keySignatureChange.fifths}</fifths>` +
+        `<mode>${measure.keySignatureChange.mode ?? 'major'}</mode></key></attributes>`
     }
 
     for (const marking of measure.tempoMarkings ?? []) {
