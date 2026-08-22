@@ -862,12 +862,23 @@ export function resolveNoteheadAnchor(
         component.heightRatio > 0.7 &&
         component.heightRatio <= 0.85 &&
         component.widthRatio >= 0.6 &&
+        component.widthRatio <= 1.05 &&
         component.xOriginOffset <= 0.75
+      const coarseSquareHead =
+        component.heightRatio > 0.85 &&
+        component.heightRatio <= 1 &&
+        component.widthRatio >= 0.75 &&
+        component.widthRatio <= 1.12 &&
+        component.xOriginOffset >= -0.2 &&
+        component.xOriginOffset <= 0.75 &&
+        component.yOriginOffset >= 0.35 &&
+        component.yOriginOffset <= 0.75
       return (
         component.widthRatio >= 0.42 &&
-        component.widthRatio <= 1.05 &&
         component.heightRatio >= 0.22 &&
-        (component.heightRatio <= 0.7 || lowResolutionTallHead)
+        ((component.heightRatio <= 0.7 && component.widthRatio <= 1.05) ||
+          lowResolutionTallHead ||
+          coarseSquareHead)
       )
     },
   )

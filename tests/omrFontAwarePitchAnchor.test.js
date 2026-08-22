@@ -105,6 +105,15 @@ describe("font-aware notehead pitch anchors", () => {
     expect(anchor.yNorm * page.height).toBeCloseTo(150, 0);
   });
 
+  it("accepts an origin-aligned coarse square head below one staff space", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 150, 9, 9, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES);
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(anchor.yNorm * page.height).toBeCloseTo(150, 0);
+  });
+
   it("does not accept a staff-space-tall connected blob as a notehead", () => {
     const page = image();
     staff(page, LINES);
