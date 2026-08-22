@@ -853,11 +853,23 @@ export function resolveNoteheadAnchor(
     }
   })
   const headSized = rowComponents.filter(
-    (component) =>
-      component.widthRatio >= 0.42 &&
-      component.widthRatio <= 1.05 &&
-      component.heightRatio >= 0.22 &&
-      component.heightRatio <= 0.7,
+    (component) => {
+      // Coarse rasterization can leave a genuine filled head taller than the
+      // usual compact band. In that narrow extension, require enough width and
+      // close horizontal ownership so a stem fragment or adjacent chord head
+      // cannot become this glyph's pitch anchor.
+      const lowResolutionTallHead =
+        component.heightRatio > 0.7 &&
+        component.heightRatio <= 0.85 &&
+        component.widthRatio >= 0.6 &&
+        component.xOriginOffset <= 0.75
+      return (
+        component.widthRatio >= 0.42 &&
+        component.widthRatio <= 1.05 &&
+        component.heightRatio >= 0.22 &&
+        (component.heightRatio <= 0.7 || lowResolutionTallHead)
+      )
+    },
   )
 
   const diagnosticsBase = {
@@ -872,7 +884,23 @@ export function resolveNoteheadAnchor(
   if (!headSized.length) {
     return anchorDiagnostics(fallback, {
       ...diagnosticsBase,
-      extra: { rejectedReason: 'no-head-sized-component' },
+      extra: {
+        rejectedReason: 'no-head-sized-component',
+        candidateComponents: rowComponents
+          .sort((leftComponent, rightComponent) =>
+            leftComponent.score - rightComponent.score,
+          )
+          .slice(0, 8)
+          .map((component) => ({
+            centerX: component.centerX,
+            centerY: component.centerY,
+            widthRatio: component.widthRatio,
+            heightRatio: component.heightRatio,
+            xOriginOffset: component.xOriginOffset,
+            yOriginOffset: component.yOriginOffset,
+            score: component.score,
+          })),
+      },
     })
   }
 

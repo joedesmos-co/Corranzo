@@ -5233,6 +5233,48 @@ export function buildVectorMeasureRecord({
       counts[reason] = (counts[reason] ?? 0) + 1
       return counts
     }, {}),
+    ...(provenance
+      ? {
+          anchorSources: notes.reduce((counts, note) => {
+            const source = note.noteheadAnchor?.source ?? 'unknown'
+            counts[source] = (counts[source] ?? 0) + 1
+            return counts
+          }, {}),
+          fallbackSamples: notes
+            .filter(
+              (note) =>
+                note.noteheadAnchor?.source === 'glyph-metrics-fallback' ||
+                note.noteheadAnchor?.source === 'self-calibrated-glyph-fallback',
+            )
+            .slice(0, 256)
+            .map((note) => ({
+              measureNumber: note.measureNumber,
+              cx: note.cx,
+              cy: note.cy,
+              midi: note.midi,
+              naturalMidi: note.naturalMidi,
+              yNorm: note.yNorm,
+              anchor: note.noteheadAnchor,
+            })),
+          inkAnchorSamples: notes
+            .filter(
+              (note) =>
+                note.noteheadAnchor?.source === 'ink-notehead-geometry' ||
+                note.noteheadAnchor?.source ===
+                  'ledger-masked-ink-notehead-geometry',
+            )
+            .slice(0, 256)
+            .map((note) => ({
+              measureNumber: note.measureNumber,
+              cx: note.cx,
+              cy: note.cy,
+              midi: note.midi,
+              naturalMidi: note.naturalMidi,
+              yNorm: note.yNorm,
+              anchor: note.noteheadAnchor,
+            })),
+        }
+      : {}),
   }
   let rhythmProvenance = null
   if (provenance) {
@@ -5815,6 +5857,26 @@ export function processVectorPageSystems({
         }
         return counts
       }, {}),
+      anchorSources: flatRecords.reduce((counts, record) => {
+        for (const [source, count] of Object.entries(
+          record.noteheadFallbackCalibrationDiagnostics?.anchorSources ?? {},
+        )) {
+          counts[source] = (counts[source] ?? 0) + count
+        }
+        return counts
+      }, {}),
+      fallbackSamples: flatRecords
+        .flatMap(
+          (record) =>
+            record.noteheadFallbackCalibrationDiagnostics?.fallbackSamples ?? [],
+        )
+        .slice(0, 256),
+      inkAnchorSamples: flatRecords
+        .flatMap(
+          (record) =>
+            record.noteheadFallbackCalibrationDiagnostics?.inkAnchorSamples ?? [],
+        )
+        .slice(0, 256),
     },
     accidentalPathCalibrationDiagnostics: {
       ...accidentalPathCalibration.diagnostics,

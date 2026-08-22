@@ -96,6 +96,39 @@ describe("font-aware notehead pitch anchors", () => {
     expect(anchor.yNorm * page.height).toBeCloseTo(150, 0);
   });
 
+  it("accepts a compact low-resolution head up to 0.85 staff spaces tall", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 150, 8, 8);
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES);
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(anchor.yNorm * page.height).toBeCloseTo(150, 0);
+  });
+
+  it("does not accept a staff-space-tall connected blob as a notehead", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 150, 8, 10);
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES);
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+  });
+
+  it("does not accept a narrow tall fragment as a low-resolution notehead", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 110, 150, 4, 8);
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES);
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+  });
+
+  it("does not steal a tall neighboring chord head from a displaced glyph", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 126, 150, 8, 8);
+    const anchor = resolveNoteheadAnchor(glyph(110, 160), page, LINES);
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+  });
+
   it("uses the compact open-head outline instead of asymmetric full bounds", () => {
     const page = image();
     staff(page, LINES);

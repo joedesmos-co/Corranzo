@@ -418,6 +418,13 @@ async function runPdfOmrPipelineBody({
       skippedMixedRestCount: 0,
       skippedReasons: {},
     },
+    noteheadFallbackCalibration: {
+      appliedCount: 0,
+      byInkRejectionReason: {},
+      anchorSources: {},
+      fallbackSamples: [],
+      inkAnchorSamples: [],
+    },
     staccato: {
       detectedStaccatoCount: 0,
       appliedStaccatoCount: 0,
@@ -759,6 +766,43 @@ async function runPdfOmrPipelineBody({
         diagnostics.rests.perMeasure ??= []
         diagnostics.rests.perMeasure.push(...pageRests.perMeasure)
       }
+    }
+
+    const pageNoteheadFallback = pageResult.noteheadFallbackCalibrationDiagnostics
+    if (pageNoteheadFallback) {
+      diagnostics.noteheadFallbackCalibration.appliedCount +=
+        pageNoteheadFallback.appliedCount ?? 0
+      for (const [reason, count] of Object.entries(
+        pageNoteheadFallback.byInkRejectionReason ?? {},
+      )) {
+        diagnostics.noteheadFallbackCalibration.byInkRejectionReason[reason] =
+          (diagnostics.noteheadFallbackCalibration.byInkRejectionReason[reason] ?? 0) +
+          count
+      }
+      for (const [source, count] of Object.entries(
+        pageNoteheadFallback.anchorSources ?? {},
+      )) {
+        diagnostics.noteheadFallbackCalibration.anchorSources[source] =
+          (diagnostics.noteheadFallbackCalibration.anchorSources[source] ?? 0) + count
+      }
+      diagnostics.noteheadFallbackCalibration.fallbackSamples.push(
+        ...(pageNoteheadFallback.fallbackSamples ?? []).slice(
+          0,
+          Math.max(
+            0,
+            256 - diagnostics.noteheadFallbackCalibration.fallbackSamples.length,
+          ),
+        ),
+      )
+      diagnostics.noteheadFallbackCalibration.inkAnchorSamples.push(
+        ...(pageNoteheadFallback.inkAnchorSamples ?? []).slice(
+          0,
+          Math.max(
+            0,
+            256 - diagnostics.noteheadFallbackCalibration.inkAnchorSamples.length,
+          ),
+        ),
+      )
     }
 
     const pageStaccato = pageResult.staccatoDiagnostics
