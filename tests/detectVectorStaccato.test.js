@@ -341,6 +341,39 @@ describe('assignVectorAugmentationDots', () => {
     expect(assignments.get(0)).toBe(true)
   })
 
+  it('accepts a source-owned dot displaced into the adjacent staff space', () => {
+    const notes = [trebleNote(300, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: RHYTHM_DOT_GLYPH, x: 311.4, y: 174.2 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.get(0)).toBe(true)
+  })
+
+  it('retains a first-note dot inside the canonical measure start inset', () => {
+    const notes = [trebleNote(165, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: RHYTHM_DOT_GLYPH, x: 176.4, y: 174.2 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.get(0)).toBe(true)
+  })
+
+  it('keeps ambiguous period dots on the stricter vertical gate', () => {
+    const notes = [trebleNote(300, 170)]
+    const assignments = assignVectorAugmentationDots(
+      [{ text: '.', x: 311.4, y: 174.2 }],
+      notes,
+      measureBox,
+      imageData,
+    )
+    expect(assignments.size).toBe(0)
+  })
+
   it('normalizes a filled PDF path dot from visual center to notehead font baseline', () => {
     const notes = [trebleNote(300, 170)]
     const assignments = assignVectorAugmentationDots(

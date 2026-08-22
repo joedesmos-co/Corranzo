@@ -1330,6 +1330,129 @@ function explicitNoteDurationDivisions(note) {
   return explicitBlackDurationDivisions(note)
 }
 
+function sourceXForEvent(event) {
+  if (Number.isFinite(event?.cx)) return event.cx
+  const xs = (event?.notes ?? []).map((note) => note?.cx).filter(Number.isFinite)
+  return xs.length ? average(xs) : null
+}
+
+function explicitEventDurationDivisions(event, { laneHasBeamEvidence = false } = {}) {
+  if (
+    event?.type !== 'note' ||
+    event.timeModification ||
+    event.tupletRecovered ||
+    !(event.notes?.length > 0)
+  ) {
+    return null
+  }
+  const durations = event.notes.map((note) => {
+    if (
+      laneHasBeamEvidence &&
+      note?.noteheadGlyph === 'black' &&
+      note.dotted !== true &&
+      (note.beams ?? 0) < 1 &&
+      note.flagSource !== 'smufl-vector-glyph'
+    ) {
+      // A nearby beam run makes a bare stem-derived quarter non-authoritative:
+      // the stem may be an endpoint whose beam attachment was missed. Abstain
+      // instead of using exact measure capacity to manufacture that quarter.
+      return null
+    }
+    return explicitNoteDurationDivisions(note)
+  })
+  if (durations.some((duration) => !Number.isFinite(duration) || duration <= 0)) {
+    return null
+  }
+  return new Set(durations).size === 1 ? durations[0] : null
+}
+
+function eventStaffClef(event) {
+  const noteClefs = new Set((event?.notes ?? []).map((note) => note?.clef).filter(Boolean))
+  if (noteClefs.size === 1) return [...noteClefs][0]
+  if (event?.clef) return event.clef
+  if (event?.staff === 1) return 'treble'
+  if (event?.staff === 2) return 'bass'
+  return null
+}
+
+/**
+ * Reconstruct a complete staff lane from direct written-value evidence only.
+ *
+ * This is deliberately an exact-capacity proof, not a general spacing pack:
+ * a source augmentation dot must anchor the lane; every onset must then have a
+ * source-owned whole/half head or filled head with a stem/flag/dot-derived
+ * value, source X must be strictly ordered, the lane must begin at the measure
+ * start, and the values must sum exactly to the meter. Otherwise the function
+ * abstains and preserves the existing reconstruction. Plain undotted lanes are
+ * left to the existing polyphonic pack because offset same-staff voices can
+ * coincidentally sum to one measure without describing a sequential lane.
+ */
+export function repackCompleteSourceWrittenLanes(events = [], totalDivisions = 16) {
+  const lanes = new Map()
+  for (const event of events) {
+    if (event?.type !== 'note') continue
+    const clef = eventStaffClef(event)
+    if (!clef) continue
+    if (!lanes.has(clef)) lanes.set(clef, [])
+    lanes.get(clef).push(event)
+  }
+
+  const replacements = new Map()
+  for (const [clef, lane] of lanes) {
+    if (lane.length < 2 || !lane.some((event) => hasDottedEvidence(event.notes))) continue
+    const hasKnownLaneRest = events.some(
+      (event) => event?.type === 'rest' && eventStaffClef(event) === clef,
+    )
+    if (hasKnownLaneRest) continue
+    const ordered = [...lane].sort(
+      (left, right) =>
+        (sourceXForEvent(left) ?? Infinity) - (sourceXForEvent(right) ?? Infinity),
+    )
+    const xs = ordered.map(sourceXForEvent)
+    if (
+      xs.some((x) => !Number.isFinite(x)) ||
+      xs.some((x, index) => index > 0 && x <= xs[index - 1] + 1) ||
+      (ordered[0].startDivision ?? 0) !== 0
+    ) {
+      continue
+    }
+    const laneHasBeamEvidence = ordered.some((event) =>
+      (event.notes ?? []).some(
+        (note) => (note?.beams ?? 0) >= 1 || (note?.beamStrength ?? 0) >= 8,
+      ),
+    )
+    const writtenDurations = ordered.map((event) =>
+      explicitEventDurationDivisions(event, { laneHasBeamEvidence }),
+    )
+    if (
+      writtenDurations.some((duration) => duration == null) ||
+      writtenDurations.reduce((sum, duration) => sum + duration, 0) !== totalDivisions
+    ) {
+      continue
+    }
+    let startDivision = 0
+    for (let index = 0; index < ordered.length; index += 1) {
+      const event = ordered[index]
+      const durationDivisions = writtenDurations[index]
+      replacements.set(event, {
+        ...event,
+        startDivision,
+        durationDivisions,
+        ...durationMeta(durationDivisions, {
+          allowDotted: hasDottedEvidence(event.notes),
+        }),
+        sourceWrittenLanePacked: true,
+      })
+      startDivision += durationDivisions
+    }
+  }
+
+  if (!replacements.size) return events
+  return sortVectorRhythmEvents(
+    events.map((event) => replacements.get(event) ?? event),
+  )
+}
+
 function cohortHasOneStemComponent(notes) {
   if (notes.length <= 1) return true
   const visited = new Set([notes[0]])
@@ -5020,6 +5143,18 @@ export function buildVectorMeasureRecord({
   const beamStemDiagnostics = summarizeBeamStemGraph(beamStemGraph)
   const vectorBeamTopologyDiagnostics =
     summarizeAppliedVectorBeamTopology(events)
+
+  const eventsBeforeSourceWrittenLanePack = events
+  events = repackCompleteSourceWrittenLanes(events, totalDivisions)
+  if (provenance && events !== eventsBeforeSourceWrittenLanePack) {
+    provenance.recordStage(
+      'source-written-lane-pack',
+      'repackCompleteSourceWrittenLanes',
+      eventsBeforeSourceWrittenLanePack,
+      events,
+      { reason: 'complete-source-written-duration-capacity' },
+    )
+  }
 
   if (provenance) {
     const beamRows = []

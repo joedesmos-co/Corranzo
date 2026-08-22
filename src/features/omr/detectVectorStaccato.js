@@ -171,10 +171,17 @@ export function detectInkStaccatoAssignments(imageData, notes, measureBox, optio
   return hits
 }
 
-function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) {
+function glyphInMeasureBox(
+  glyph,
+  measureBox,
+  imageData,
+  { yPad = 0.025, includeSystemStartInset = false } = {},
+) {
   const xNorm = glyph.x / imageData.width
   const yNorm = glyph.y / imageData.height
-  const x0 = measureBox.playableX0 ?? measureBox.x0 ?? measureBox.xStart
+  const x0 = includeSystemStartInset
+    ? measureBox.x0 ?? measureBox.xStart ?? measureBox.playableX0
+    : measureBox.playableX0 ?? measureBox.x0 ?? measureBox.xStart
   const x1 = measureBox.x1 ?? measureBox.xEnd
   const y0 = measureBox.y0 ?? measureBox.yTop
   const y1 = measureBox.y1 ?? measureBox.yBottom
@@ -470,7 +477,11 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
     const competing = collect
       ? competingDotInterpretationScores(glyph, notes, measureBox, imageData)
       : null
-    if (!glyphInMeasureBox(glyph, measureBox, imageData)) {
+    // A first note may legitimately sit inside the clef/key/time inset derived
+    // for ordinary note discovery. Dots already require a close owner among
+    // this measure's recognized notes, so retain the canonical source boundary
+    // here instead of clipping source-owned first-note dots at playableX0.
+    if (!glyphInMeasureBox(glyph, measureBox, imageData, { includeSystemStartInset: true })) {
       if (diagnostics) {
         diagnostics.push({
           glyph: { text: glyph.text, x: glyph.x, y: glyph.y },
@@ -515,7 +526,14 @@ export function assignVectorAugmentationDots(glyphs, notes, measureBox, imageDat
           ? glyph.y + staffSpace * 0.5
           : glyph.y
       const dy = Math.abs(ownerY - note.cy)
-      const gate = Math.max(4, dx * 0.35)
+      // SMuFL augmentation dots are authoritative rhythm evidence. Engravers
+      // place a dot in an adjacent space when its notehead is centered on a
+      // staff line, producing a normal vertical offset of half a staff space.
+      // Preserve the tighter legacy gate for ambiguous period/path dots.
+      const gate =
+        glyph.text === RHYTHM_DOT_GLYPH && glyph.source !== 'vector-path'
+          ? Math.max(4, dx * 0.35, staffSpace * 0.62)
+          : Math.max(4, dx * 0.35)
       const compatible = dx >= 3 && dx <= 24 && dy <= gate
       const score = Math.abs(dx) + dy * 0.5
       if (collect) {

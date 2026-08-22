@@ -20,6 +20,7 @@ import {
   refineOpeningBassSubdivisionDurations,
   refineUnsupportedUpperChordOverhangs,
   reconcileCoherentOpenGlyphDurations,
+  repackCompleteSourceWrittenLanes,
   sparseHarmonicHalfSpan,
   sameClefBeatQuarterFloor,
   terminalHarmonicHalfSpan,
@@ -85,6 +86,101 @@ function denseCountervoiceNotes(openGlyph, { chord = false } = {}) {
   }))
   return [...openNotes, ...movingTreble]
 }
+
+function sourceWrittenEvent({
+  cx,
+  startDivision,
+  durationDivisions,
+  dotted = false,
+  beamed = false,
+}) {
+  const durationType = durationDivisions === 2 ? 'eighth' : 'quarter'
+  return {
+    type: 'note',
+    cx,
+    startDivision,
+    durationDivisions: durationDivisions === 6 ? 4 : durationDivisions,
+    durationType,
+    dotted: false,
+    notes: [
+      {
+        cx,
+        cy: 100,
+        midi: 60,
+        clef: 'treble',
+        noteheadGlyph: 'black',
+        stem: { direction: 'up', x: cx + 4, tipY: 80 },
+        beams: beamed ? 1 : 0,
+        beamStrength: beamed ? 20 : 0,
+        ...(durationDivisions === 2 && !beamed
+          ? {
+              flags: 1,
+              flagSource: 'smufl-vector-glyph',
+              flagGlyphCodePoint: 'U+E240',
+            }
+          : {}),
+        durationDivisions,
+        durationType,
+        dotted,
+      },
+    ],
+  }
+}
+
+describe('repackCompleteSourceWrittenLanes', () => {
+  it('packs an exact dotted-quarter/eighth/quarter/quarter source lane', () => {
+    const source = [
+      sourceWrittenEvent({ cx: 100, startDivision: 0, durationDivisions: 6, dotted: true }),
+      sourceWrittenEvent({ cx: 170, startDivision: 6, durationDivisions: 2 }),
+      sourceWrittenEvent({ cx: 230, startDivision: 10, durationDivisions: 4 }),
+      sourceWrittenEvent({ cx: 300, startDivision: 14, durationDivisions: 4 }),
+    ]
+    const packed = repackCompleteSourceWrittenLanes(source, 16)
+    expect(packed.map((event) => event.startDivision)).toEqual([0, 6, 8, 12])
+    expect(packed.map((event) => event.durationDivisions)).toEqual([6, 2, 4, 4])
+    expect(packed[0]).toMatchObject({ durationType: 'quarter', dotted: true })
+  })
+
+  it('abstains when source-owned values do not fill the measure exactly', () => {
+    const source = [
+      sourceWrittenEvent({ cx: 100, startDivision: 0, durationDivisions: 6, dotted: true }),
+      sourceWrittenEvent({ cx: 170, startDivision: 6, durationDivisions: 2 }),
+      sourceWrittenEvent({ cx: 230, startDivision: 10, durationDivisions: 4 }),
+    ]
+    expect(repackCompleteSourceWrittenLanes(source, 16)).toBe(source)
+  })
+
+  it('abstains on simultaneous same-staff voices without an ordered source lane', () => {
+    const source = [
+      sourceWrittenEvent({ cx: 100, startDivision: 0, durationDivisions: 4 }),
+      sourceWrittenEvent({ cx: 100, startDivision: 0, durationDivisions: 4 }),
+      sourceWrittenEvent({ cx: 200, startDivision: 8, durationDivisions: 4 }),
+      sourceWrittenEvent({ cx: 300, startDivision: 12, durationDivisions: 4 }),
+    ]
+    expect(repackCompleteSourceWrittenLanes(source, 16)).toBe(source)
+  })
+
+  it('leaves complete undotted lanes to the polyphonic pack', () => {
+    const source = [0, 1, 2, 3].map((index) =>
+      sourceWrittenEvent({
+        cx: 100 + index * 60,
+        startDivision: index * 4,
+        durationDivisions: 4,
+      }),
+    )
+    expect(repackCompleteSourceWrittenLanes(source, 16)).toBe(source)
+  })
+
+  it('abstains when a beam run leaves a terminal stem value unresolved', () => {
+    const source = [
+      sourceWrittenEvent({ cx: 100, startDivision: 0, durationDivisions: 6, dotted: true }),
+      sourceWrittenEvent({ cx: 170, startDivision: 6, durationDivisions: 2, beamed: true }),
+      sourceWrittenEvent({ cx: 230, startDivision: 10, durationDivisions: 4 }),
+      sourceWrittenEvent({ cx: 300, startDivision: 14, durationDivisions: 4 }),
+    ]
+    expect(repackCompleteSourceWrittenLanes(source, 16)).toBe(source)
+  })
+})
 
 describe('durationMeta snaps a division span to the nearest note value', () => {
   it('maps exact standard spans', () => {
