@@ -755,6 +755,10 @@ async function runPdfOmrPipelineBody({
         diagnostics.rests.skippedReasons[reason] =
           (diagnostics.rests.skippedReasons[reason] ?? 0) + count
       }
+      if (pageRests.perMeasure?.length) {
+        diagnostics.rests.perMeasure ??= []
+        diagnostics.rests.perMeasure.push(...pageRests.perMeasure)
+      }
     }
 
     const pageStaccato = pageResult.staccatoDiagnostics

@@ -5266,6 +5266,30 @@ export function buildVectorMeasureRecord({
           ? events.filter((event) => event.type === 'rest' && event.source === 'vector-glyph').length
           : restApplyResult.appliedCount,
       skipped: restApplyResult.skipped,
+      ...(provenance
+        ? {
+            detected: detectedRests.map((rest) => ({
+              cx: rest.cx,
+              cy: rest.cy,
+              positionInMeasure: rest.positionInMeasure,
+              durationType: rest.durationType,
+              glyph: rest.glyph,
+              clef: rest.clef,
+              source: rest.source,
+            })),
+            emitted: events
+              .filter((event) => event.type === 'rest')
+              .map((event) => ({
+                cx: event.cx,
+                startDivision: event.startDivision,
+                durationDivisions: event.durationDivisions,
+                durationType: event.durationType,
+                clef: event.clef,
+                source: event.source,
+                sourceGlyph: event.sourceGlyph,
+              })),
+          }
+        : {}),
     },
     vectorStaccatoDiagnostics,
     vectorAccidentalDiagnostics,

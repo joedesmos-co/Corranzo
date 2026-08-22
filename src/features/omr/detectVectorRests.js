@@ -97,6 +97,63 @@ function staffRestEvents(events, clef) {
   return events.filter((event) => event.type === 'rest' && event.clef === clef)
 }
 
+function completeSourceTerminalRestSequenceMembers(noteEvents, rests, totalDivisions) {
+  const eligible = new Set()
+  const groups = []
+  for (const rest of rests) {
+    if (
+      rest.source !== 'vector-glyph' ||
+      !Number.isFinite(rest.cx) ||
+      !Number.isFinite(rest.cy)
+    ) {
+      continue
+    }
+    const clef = rest.clef ?? 'treble'
+    let group = groups.find(
+      (candidate) =>
+        candidate.clef === clef &&
+        Math.abs(candidate.cy - rest.cy) <= REST_DEDUPE_RADIUS,
+    )
+    if (!group) {
+      group = { clef, cy: rest.cy, rests: [] }
+      groups.push(group)
+    }
+    group.rests.push(rest)
+  }
+
+  for (const group of groups) {
+    if (group.rests.length < 2) continue
+    const staffNotes = staffNoteEvents(noteEvents, group.clef)
+    if (!staffNotes.length) continue
+    const terminalStart = Math.max(
+      ...staffNotes.map(
+        (event) =>
+          (event.startDivision ?? 0) + Math.max(1, event.durationDivisions ?? 1),
+      ),
+    )
+    const terminalDuration = totalDivisions - terminalStart
+    const writtenDurations = group.rests.map(
+      (rest) => OMR_DURATION_DIVISIONS[rest.durationType],
+    )
+    const maxNoteX = Math.max(
+      ...staffNotes
+        .map((event) => event.cx ?? event.notes?.[0]?.cx)
+        .filter(Number.isFinite),
+    )
+    if (
+      !(terminalDuration > 0) ||
+      writtenDurations.some((duration) => !Number.isFinite(duration)) ||
+      writtenDurations.reduce((sum, duration) => sum + duration, 0) !== terminalDuration ||
+      !Number.isFinite(maxNoteX) ||
+      group.rests.some((rest) => rest.cx <= maxNoteX + 1)
+    ) {
+      continue
+    }
+    for (const rest of group.rests) eligible.add(rest)
+  }
+  return eligible
+}
+
 function isSeparatedVectorVoiceEvent(event) {
   return event?.type === 'note' && event.vectorVoiceSeparated === true
 }
@@ -171,7 +228,9 @@ function createRestEvent(rest, startDivision, durationDivisions, measureBox) {
     cx: rest.cx,
     clef: rest.clef,
     vector: true,
-    source: 'vector-glyph',
+    source: rest.source ?? 'vector-glyph',
+    sourceGlyph: rest.glyph,
+    ...(rest.sourceRestSequenceSnapped ? { sourceRestSequenceSnapped: true } : {}),
     notationArticulations: rest.notationArticulations ?? [],
   }
 }
@@ -369,6 +428,45 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.NO_STAFF_GAP }
   }
 
+  const glyphDuration =
+    OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
+  const hasSourceWrittenDuration = rest.sourceWrittenTerminalSequence === true
+  let sourceRestSequenceSnapped = false
+  if (
+    !openingPickupRest &&
+    hasSourceWrittenDuration &&
+    gap.gapEnd >= totalDivisions
+  ) {
+    const previousSourceRestEnd = restsOnStaff
+      .filter(
+        (existing) =>
+          existing.source === 'vector-glyph' &&
+          Number.isFinite(existing.cx) &&
+          Number.isFinite(rest.cx) &&
+          existing.cx < rest.cx &&
+          (!Number.isFinite(existing.cy) ||
+            !Number.isFinite(rest.cy) ||
+            Math.abs(existing.cy - rest.cy) <= REST_DEDUPE_RADIUS),
+      )
+      .reduce(
+        (latest, existing) =>
+          Math.max(
+            latest,
+            (existing.startDivision ?? gap.gapStart) +
+              Math.max(1, existing.durationDivisions ?? 1),
+          ),
+        gap.gapStart,
+      )
+    const sequenceStart = Math.max(gap.gapStart, previousSourceRestEnd)
+    if (
+      sequenceStart < gap.gapEnd &&
+      Math.abs(startDivision - sequenceStart) <= OMR_DURATION_DIVISIONS.eighth
+    ) {
+      sourceRestSequenceSnapped = startDivision !== sequenceStart
+      startDivision = sequenceStart
+    }
+  }
+
   const gapDuration = gap.gapEnd - startDivision
   if (gapDuration < 1) {
     return { applied: false, reason: VECTOR_REST_SKIP_REASONS.GAP_TOO_SMALL }
@@ -376,8 +474,6 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
 
   // Prefer the glyph's written duration when it fits the staff gap. Stretching
   // every rest to the full gap invents long rests and shifts later onsets.
-  const glyphDuration =
-    OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
   let durationDivisions = Math.min(gapDuration, Math.max(1, glyphDuration))
   if (openingPickupRest && startDivision === 0) {
     durationDivisions = Math.min(
@@ -388,6 +484,7 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
   }
   if (
     !openingPickupRest &&
+    !hasSourceWrittenDuration &&
     gapDuration >= OMR_DIVISIONS_PER_QUARTER &&
     durationDivisions < gapDuration &&
     gapDuration - durationDivisions <= OMR_DURATION_DIVISIONS.eighth
@@ -398,6 +495,7 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
   const isTerminalGap = gap.gapEnd >= measureEnd && startDivision + glyphDuration < measureEnd
   if (
     !openingPickupRest &&
+    !hasSourceWrittenDuration &&
     isTerminalGap &&
     gapDuration > durationDivisions &&
     gapDuration - durationDivisions <= OMR_DIVISIONS_PER_QUARTER
@@ -411,7 +509,15 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
 
   return {
     applied: true,
-    events: [...events, createRestEvent(rest, startDivision, durationDivisions, measureBox)],
+    events: [
+      ...events,
+      createRestEvent(
+        sourceRestSequenceSnapped ? { ...rest, sourceRestSequenceSnapped: true } : rest,
+        startDivision,
+        durationDivisions,
+        measureBox,
+      ),
+    ],
   }
 }
 
@@ -502,8 +608,16 @@ export function insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDi
   let events = [...noteEvents]
   const skipped = []
   let appliedCount = 0
+  const sourceTerminalSequenceMembers = completeSourceTerminalRestSequenceMembers(
+    noteEvents,
+    rests,
+    totalDivisions,
+  )
 
-  for (const rest of rests) {
+  for (const originalRest of rests) {
+    const rest = sourceTerminalSequenceMembers.has(originalRest)
+      ? { ...originalRest, sourceWrittenTerminalSequence: true }
+      : originalRest
     const result = tryApplyStaffRest(events, rest, totalDivisions, measureBox)
     if (result.applied) {
       events = result.events
@@ -585,6 +699,7 @@ export function summarizeVectorRestDiagnostics(measureRecords = []) {
   let appliedRestEventCount = 0
   let skippedMixedRestCount = 0
   const skippedReasons = {}
+  const perMeasure = []
 
   for (const record of measureRecords) {
     detectedRestGlyphCount += record.vectorRestGlyphCount ?? 0
@@ -594,6 +709,15 @@ export function summarizeVectorRestDiagnostics(measureRecords = []) {
       skippedMixedRestCount += 1
       skippedReasons[entry.reason] = (skippedReasons[entry.reason] ?? 0) + 1
     }
+    if (diagnostics.detected || diagnostics.emitted) {
+      perMeasure.push({
+        measureNumber: record.measureNumber,
+        page: record.page,
+        detected: diagnostics.detected ?? [],
+        emitted: diagnostics.emitted ?? [],
+        skipped: diagnostics.skipped ?? [],
+      })
+    }
   }
 
   return {
@@ -601,5 +725,6 @@ export function summarizeVectorRestDiagnostics(measureRecords = []) {
     appliedRestEventCount,
     skippedMixedRestCount,
     skippedReasons,
+    ...(perMeasure.length ? { perMeasure } : {}),
   }
 }

@@ -256,6 +256,119 @@ describe('insertMixedMeasureRests', () => {
     expect(rest?.durationDivisions).toBe(4)
   })
 
+  it('preserves consecutive source-written quarter rests in a terminal staff gap', () => {
+    const noteEvents = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 8,
+        durationType: 'half',
+        notes: [{ ...trebleNote(0.2, 48), clef: 'bass' }],
+      },
+    ]
+    const quarterRest = (positionInMeasure) => ({
+      cx: 200 + positionInMeasure * 500,
+      cy: 350,
+      positionInMeasure,
+      durationType: 'quarter',
+      glyph: '\ue4e5',
+      clef: 'bass',
+      source: 'vector-glyph',
+      confidence: 0.88,
+    })
+
+    const { events, appliedCount, skipped } = insertMixedMeasureRests(
+      noteEvents,
+      [quarterRest(0.56), quarterRest(0.8)],
+      { measureBox, totalDivisions: 16 },
+    )
+
+    expect(appliedCount).toBe(2)
+    expect(skipped).toEqual([])
+    expect(
+      events
+        .filter((event) => event.type === 'rest')
+        .map((event) => [event.startDivision, event.durationDivisions, event.sourceGlyph]),
+    ).toEqual([
+      [8, 4, '\ue4e5'],
+      [12, 4, '\ue4e5'],
+    ])
+    expect(
+      events
+        .filter((event) => event.type === 'rest')
+        .every((event) => event.sourceRestSequenceSnapped),
+    ).toBe(true)
+  })
+
+  it('does not sequence-snap source rests whose written values exceed the terminal gap', () => {
+    const noteEvents = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 8,
+        durationType: 'half',
+        notes: [{ ...trebleNote(0.2, 48), clef: 'bass' }],
+      },
+    ]
+    const rest = (positionInMeasure, durationType, glyph) => ({
+      cx: 200 + positionInMeasure * 500,
+      cy: 350,
+      positionInMeasure,
+      durationType,
+      glyph,
+      clef: 'bass',
+      source: 'vector-glyph',
+      confidence: 0.88,
+    })
+
+    const { events, appliedCount } = insertMixedMeasureRests(
+      noteEvents,
+      [rest(0.56, 'quarter', '\ue4e5'), rest(0.8, 'half', '\ue4e4')],
+      { measureBox, totalDivisions: 16 },
+    )
+
+    expect(appliedCount).toBeLessThan(2)
+    expect(
+      events
+        .filter((event) => event.type === 'rest')
+        .some((event) => event.sourceRestSequenceSnapped),
+    ).toBe(false)
+  })
+
+  it('keeps terminal gap completion available for a non-glyph fallback rest', () => {
+    const noteEvents = [
+      {
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 8,
+        durationType: 'half',
+        notes: [{ ...trebleNote(0.2, 48), clef: 'bass' }],
+      },
+    ]
+    const { events, appliedCount } = insertMixedMeasureRests(
+      noteEvents,
+      [
+        {
+          cx: 450,
+          cy: 350,
+          positionInMeasure: 0.5,
+          durationType: 'quarter',
+          clef: 'bass',
+          source: 'semantic-gap',
+          confidence: 0.5,
+        },
+      ],
+      { measureBox, totalDivisions: 16 },
+    )
+
+    expect(appliedCount).toBe(1)
+    expect(events.find((event) => event.type === 'rest')).toMatchObject({
+      startDivision: 8,
+      durationDivisions: 8,
+      source: 'semantic-gap',
+    })
+  })
+
   it('unpacks a same-onset column when a short rest sits just left of it', () => {
     const noteEvents = [
       {
