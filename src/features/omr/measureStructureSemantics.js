@@ -318,11 +318,33 @@ function assignStaffVoices(units, polyphonicStaffs, tieConnections = []) {
           preferred = tiedUnit.voice
         }
       }
+      function effectiveDurationDivisions(u, tieMap, assigned) {
+        if (u.event?.tieStart) {
+          const tiedIdx = tieMap.get(u.eventIndex)
+          if (tiedIdx != null) {
+            const tiedUnit = assigned.find((u) => u.eventIndex === tiedIdx)
+            if (tiedUnit) {
+              return (u.durationDivisions ?? 0) + (tiedUnit.durationDivisions ?? 0)
+            }
+          }
+        }
+        return u.durationDivisions ?? 0
+      }
+
+      function intervalsOverlapWithTies(left, right, tieMap, assigned) {
+        const leftStart = left.startDivision ?? 0
+        const rightStart = right.startDivision ?? 0
+        const leftEnd = leftStart + Math.max(0, effectiveDurationDivisions(left, tieMap, assigned))
+        const rightEnd = rightStart + Math.max(0, effectiveDurationDivisions(right, tieMap, assigned))
+        return leftStart < rightEnd && rightStart < leftEnd
+      }
+
       const conflicts = assigned.filter(
         (entry) =>
           entry.kind === 'note' &&
           entry.eventIndex !== unit.eventIndex &&
-          intervalsOverlap(entry, unit),
+          entry.eventIndex !== tiedEventIndex &&
+          intervalsOverlapWithTies(entry, unit, tieMap, assigned),
       )
       if (conflicts.some((entry) => entry.voice === preferred)) {
         preferred =
