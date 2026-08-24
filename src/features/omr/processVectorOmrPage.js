@@ -790,6 +790,124 @@ function noteheadsForMeasure(
   }
 }
 
+/**
+ * Re-anchor an opening open notehead when direct source evidence proves that
+ * the first-system notation preamble, rather than a musical pickup, displaced
+ * its geometric position. The next source column must land at the open
+ * notehead's written release, and an earlier same-clef rest vetoes the change.
+ * This runs before event grouping so rhythm, voices, and ties all inherit the
+ * corrected source origin.
+ */
+export function normalizeFirstSystemMeasureOpenNoteOrigin({
+  notes = [],
+  rests = [],
+  measureBox,
+  totalDivisions,
+} = {}) {
+  const diagnostics = {
+    applied: false,
+    reason: 'not-eligible',
+    correctedClefs: [],
+  }
+  if (
+    measureBox?.measureIndex !== 0 ||
+    !(totalDivisions > 0) ||
+    notes.length < 2
+  ) {
+    return { notes, diagnostics }
+  }
+
+  const corrected = new Set()
+  const byClef = Map.groupBy(notes, (note) => note.clef ?? 'treble')
+  for (const [clef, clefNotes] of byClef) {
+    const sorted = [...clefNotes].sort((left, right) => left.cx - right.cx)
+    const firstX = sorted[0]?.cx
+    if (!Number.isFinite(firstX)) {
+      continue
+    }
+    const firstColumn = sorted.filter(
+      (note) => Number.isFinite(note.cx) && Math.abs(note.cx - firstX) <= OMR_CHORD_MERGE_X,
+    )
+    const later = sorted.filter(
+      (note) => Number.isFinite(note.cx) && note.cx > firstX + OMR_CHORD_MERGE_X,
+    )
+    if (!firstColumn.length || !later.length) {
+      continue
+    }
+
+    const firstPosition = Math.min(
+      ...firstColumn.map((note) => note.positionInMeasure).filter(Number.isFinite),
+    )
+    const nextX = later[0].cx
+    const nextColumn = later.filter(
+      (note) => Number.isFinite(note.cx) && Math.abs(note.cx - nextX) <= OMR_CHORD_MERGE_X,
+    )
+    const nextPosition = Math.min(
+      ...nextColumn.map((note) => note.positionInMeasure).filter(Number.isFinite),
+    )
+    const writtenDurations = firstColumn.map((note) => {
+      if (note.noteheadGlyph !== 'half' && note.noteheadGlyph !== 'whole') {
+        return null
+      }
+      return Number.isFinite(note.durationDivisions)
+        ? note.durationDivisions
+        : OMR_DURATION_DIVISIONS[note.noteheadGlyph]
+    })
+    if (
+      !Number.isFinite(firstPosition) ||
+      !Number.isFinite(nextPosition) ||
+      firstPosition < 0.18 ||
+      writtenDurations.some((duration) => !Number.isFinite(duration))
+    ) {
+      continue
+    }
+    const writtenDuration = Math.max(...writtenDurations)
+    const writtenReleasePosition = writtenDuration / totalDivisions
+    if (
+      writtenReleasePosition >= 1 ||
+      Math.abs(nextPosition - writtenReleasePosition) > 0.04
+    ) {
+      continue
+    }
+    const hasEarlierSameClefRest = rests.some(
+      (rest) =>
+        (rest.clef ?? 'treble') === clef &&
+        Number.isFinite(rest.cx) &&
+        rest.cx < firstX - 2,
+    )
+    if (hasEarlierSameClefRest) {
+      continue
+    }
+    firstColumn.forEach((note) => corrected.add(note))
+    diagnostics.correctedClefs.push({
+      clef,
+      firstPosition,
+      nextPosition,
+      writtenReleasePosition,
+      noteCount: firstColumn.length,
+    })
+  }
+
+  if (!corrected.size) {
+    diagnostics.reason = 'source-evidence-incomplete'
+    return { notes, diagnostics }
+  }
+  diagnostics.applied = true
+  diagnostics.reason = 'open-note-release-matches-next-source-column'
+  return {
+    notes: notes.map((note) =>
+      corrected.has(note)
+        ? {
+            ...note,
+            positionInMeasure: 0,
+            openingSourceOriginCorrected: true,
+          }
+        : note,
+    ),
+    diagnostics,
+  }
+}
+
 function beatSlotForPosition(positionInMeasure, slotsPerMeasure) {
   if (!Number.isFinite(positionInMeasure)) {
     return null
@@ -3978,7 +4096,7 @@ export function resolveWrittenDurationOverlaps(events, totalDivisions) {
  * bases during enrich. When the next attack sits a subdivision tail away, the
  * written value is a dotted eighth, not a dotted quarter.
  */
-export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
+export function refineDottedSubdivisionBaseDurations(events) {
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length < 2 || noteEvents.length > 6) {
     return events
@@ -4068,7 +4186,7 @@ export function refineDottedSubdivisionBaseDurations(events, totalDivisions) {
  * After a dotted-eighth base is recovered, the next attack often sits on the
  * written release rather than a later quarter-grid snap.
  */
-export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions) {
+export function alignSubdivisionFollowersAfterDottedEighth(events) {
   const noteEvents = events.filter((event) => event.type === 'note')
   if (noteEvents.length < 2 || noteEvents.length > 6) {
     return events
@@ -4194,81 +4312,6 @@ export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivision
           allowDotted: hasDottedEvidence(event.notes) || event.dotted,
         }),
         subdivisionFollowerAligned: startByEvent.has(event) || undefined,
-      }
-    }),
-  )
-}
-
-/**
- * Correct tied note's own onset when it's the first event in a clef and has tieStart.
- * This handles first-measure key/time signature horizontal offset that shifts
- * the tied note's positionInMeasure rightward.
- * Does NOT adjust subsequent notes - they remain positioned relative to the
- * corrected tied note's written end via existing onset alignment logic.
- */
-export function resnapTiedNoteOnset(events, tieConnections, totalDivisions) {
-  if (!tieConnections?.length) return events
-
-  const noteEvents = events.filter((event) => event.type === 'note')
-  if (noteEvents.length < 1) return events
-
-  const eventIndexByRef = new Map()
-  events.forEach((event, index) => {
-    eventIndexByRef.set(event, index)
-  })
-
-  const tieMap = new Map()
-  for (const conn of tieConnections) {
-    tieMap.set(conn.fromEventIndex, conn.toEventIndex)
-  }
-
-  const startByEvent = new Map()
-  const byClef = new Map()
-  for (const event of noteEvents) {
-    const clef = event.notes?.[0]?.clef ?? 'treble'
-    if (!byClef.has(clef)) {
-      byClef.set(clef, [])
-    }
-    byClef.get(clef).push(event)
-  }
-
-  for (const clefEvents of byClef.values()) {
-    const sorted = [...clefEvents].sort(
-      (left, right) =>
-        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
-        (left.cx ?? 0) - (right.cx ?? 0),
-    )
-
-    // Correct tied note's own onset if it's the first note in the clef and has tieStart
-    const firstNote = sorted[0]
-    const firstNoteHasTieStart = firstNote.notes?.some((n) => n.tieStart === true)
-    const firstNoteOnset = firstNote.startDivision ?? 0
-    // Only correct if onset is significantly offset (>10% of measure) and has tieStart
-    // This is a conservative heuristic for first-measure key/time signature offset
-    if (firstNoteHasTieStart && firstNoteOnset > totalDivisions * 0.1) {
-      startByEvent.set(firstNote, 0)
-    }
-  }
-
-  if (!startByEvent.size) {
-    return events
-  }
-
-  return sortVectorRhythmEvents(
-    events.map((event) => {
-      const startDivision = startByEvent.has(event)
-        ? startByEvent.get(event)
-        : event.startDivision
-      if (startDivision === event.startDivision) {
-        return event
-      }
-      return {
-        ...event,
-        startDivision,
-        ...durationMeta(event.durationDivisions ?? 0, {
-          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
-        }),
-        tieAnchorCorrected: true,
       }
     }),
   )
@@ -4908,12 +4951,12 @@ function buildNoteEventsFromGroups(
   // left dotted eighths classified as dotted quarters (tuplets m8).
   // Run after dense-chord-resnap so resnap cannot undo the refined onsets.
   events = track('dotted-subdivision-base', 'refineDottedSubdivisionBaseDurations', () =>
-    refineDottedSubdivisionBaseDurations(events, totalDivisions),
+    refineDottedSubdivisionBaseDurations(events),
   )
   events = track(
     'dotted-subdivision-follower',
     'alignSubdivisionFollowersAfterDottedEighth',
-    () => alignSubdivisionFollowersAfterDottedEighth(events, totalDivisions),
+    () => alignSubdivisionFollowersAfterDottedEighth(events),
   )
   events = track('grand-staff-opening', 'extendCombinedGrandStaffOpening', () =>
     extendCombinedGrandStaffOpening(events, totalDivisions),
@@ -5032,7 +5075,7 @@ export function buildVectorMeasureRecord({
   allowInkStaccatoFallback = true,
 }) {
   const {
-    notes,
+    notes: detectedNotes,
     vectorFlagDiagnostics,
     vectorAccidentalDiagnostics,
     vectorStaccatoDiagnostics,
@@ -5057,7 +5100,7 @@ export function buildVectorMeasureRecord({
     glyphs,
     imageData,
     measureBox,
-    notes,
+    detectedNotes,
   )
   const restFermataResult = assignVectorFermatasToRests(
     glyphs,
@@ -5110,6 +5153,13 @@ export function buildVectorMeasureRecord({
   const totalDivisions = Math.round(
     beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
   )
+  const openingSourceOrigin = normalizeFirstSystemMeasureOpenNoteOrigin({
+    notes: detectedNotes,
+    rests: rawDetectedRests,
+    measureBox,
+    totalDivisions,
+  })
+  const notes = openingSourceOrigin.notes
   const clefEvents = (measureBox.staffClefs?.events ?? []).filter(
     (event) =>
       event.xNorm >= measureBox.x0 - 0.002 &&
@@ -5428,6 +5478,7 @@ export function buildVectorMeasureRecord({
     vectorChordDiagnostics,
     adjacentSlotChordGroupingDiagnostics,
     vectorRhythmDiagnostics,
+    openingSourceOriginDiagnostics: openingSourceOrigin.diagnostics,
     musicalEventReconstructionDiagnostics,
     beamStemGraph,
     beamStemDiagnostics,
@@ -5891,13 +5942,6 @@ export function processVectorPageSystems({
     imageData,
     inkThreshold,
   })
-
-  // Correct tied note onset for first-measure key/time signature offset
-  for (const record of flatRecords) {
-    if (record.tieConnections?.length) {
-      record.events = resnapTiedNoteOnset(record.events, record.tieConnections, record.totalDivisions ?? 16)
-    }
-  }
 
   return {
     measureRecordsBySystem,

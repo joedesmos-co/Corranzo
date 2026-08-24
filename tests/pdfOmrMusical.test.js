@@ -10,10 +10,10 @@ import { detectKeySignature } from '../src/features/omr/detectOmrKeySignature.js
 import { detectAccidentalNearNote, refineNotePitch } from '../src/features/omr/detectOmrAccidentals.js'
 import { detectRepeatBarline } from '../src/features/omr/detectOmrRepeatBarline.js'
 import { parseTempoFromTextItems } from '../src/features/omr/parseOmrTempoMarking.js'
-import { detectNoteheadsInMeasure } from '../src/features/omr/detectOmrNoteheads.js'
 import { buildMeasureBoxesForSystem } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
   buildVectorMeasureRecord,
+  normalizeFirstSystemMeasureOpenNoteOrigin,
   processVectorPageSystems,
 } from '../src/features/omr/processVectorOmrPage.js'
 import { detectContentBounds } from '../src/features/score-follow/detectStaffSystems.js'
@@ -26,6 +26,59 @@ import {
 } from '../src/features/omr/pitchFromStaffPosition.js'
 import { OMR_DISCLAIMER } from '../src/features/omr/omrMusicalConstants.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+
+describe('normalizeFirstSystemMeasureOpenNoteOrigin', () => {
+  const openingHalfNotes = [
+    {
+      cx: 264,
+      clef: 'treble',
+      positionInMeasure: 0.34,
+      noteheadGlyph: 'half',
+      durationDivisions: 8,
+    },
+    {
+      cx: 290,
+      clef: 'treble',
+      positionInMeasure: 0.51,
+      noteheadGlyph: 'black',
+      durationDivisions: 2,
+    },
+  ]
+
+  it('uses written release and source columns to correct a displaced system opening', () => {
+    const result = normalizeFirstSystemMeasureOpenNoteOrigin({
+      notes: openingHalfNotes,
+      rests: [],
+      measureBox: { measureIndex: 0 },
+      totalDivisions: 16,
+    })
+
+    expect(result.diagnostics.applied).toBe(true)
+    expect(result.notes[0].positionInMeasure).toBe(0)
+    expect(result.notes[0].openingSourceOriginCorrected).toBe(true)
+    expect(result.notes[1].positionInMeasure).toBe(0.51)
+  })
+
+  it('abstains outside the first system measure or when a leading same-clef rest exists', () => {
+    const laterMeasure = normalizeFirstSystemMeasureOpenNoteOrigin({
+      notes: openingHalfNotes,
+      rests: [],
+      measureBox: { measureIndex: 1 },
+      totalDivisions: 16,
+    })
+    const leadingRest = normalizeFirstSystemMeasureOpenNoteOrigin({
+      notes: openingHalfNotes,
+      rests: [{ cx: 230, clef: 'treble' }],
+      measureBox: { measureIndex: 0 },
+      totalDivisions: 16,
+    })
+
+    expect(laterMeasure.diagnostics.applied).toBe(false)
+    expect(laterMeasure.notes).toBe(openingHalfNotes)
+    expect(leadingRest.diagnostics.applied).toBe(false)
+    expect(leadingRest.notes).toBe(openingHalfNotes)
+  })
+})
 
 describe('experimental PDF OMR musical details (v3)', () => {
   it('parseTempoFromTextItems reads metronome marks and tempo words', () => {

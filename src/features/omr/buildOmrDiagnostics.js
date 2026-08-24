@@ -70,6 +70,7 @@ export function buildOmrDiagnostics({
         detectedNoteheads: measure.vectorNoteCount ?? measure.vectorNoteMatching?.detectedNoteheads ?? 0,
         emittedNoteheads: measure.vectorNoteMatching?.emittedNoteheads ?? 0,
         dedupedDuringGrouping: measure.vectorNoteMatching?.dedupedDuringGrouping ?? 0,
+        openingSourceOrigin: measure.openingSourceOriginDiagnostics ?? null,
         musicalEventReconstruction: measure.musicalEventReconstructionDiagnostics ?? {
           adjustedEventCount: 0,
           adjustedNoteCount: 0,

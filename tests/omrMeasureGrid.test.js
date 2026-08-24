@@ -312,6 +312,8 @@ describe('buildMeasureBoxesForSystemWithDiagnostics', () => {
     expect(measureBoxes).toHaveLength(4)
     expect(diagnostics.finalMeasureCount).toBe(4)
     expect(diagnostics.suspiciousShortMeasures).toBe(0)
+    expect(measureBoxes[0].playableX0 - measureBoxes[0].x0).toBeGreaterThanOrEqual(0.0599)
+    expect(measureBoxes.slice(1).every((box) => box.playableX0 === box.x0)).toBe(true)
   })
 
   it('consolidates dense synthetic oversampled grids and reports diagnostics', () => {
