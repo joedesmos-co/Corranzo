@@ -13,6 +13,7 @@ import { parseTempoFromTextItems } from '../src/features/omr/parseOmrTempoMarkin
 import { buildMeasureBoxesForSystem } from '../src/features/omr/buildOmrMeasureGrid.js'
 import {
   buildVectorMeasureRecord,
+  detectVectorTimeSignature,
   normalizeFirstSystemMeasureOpenNoteOrigin,
   processVectorPageSystems,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -26,6 +27,48 @@ import {
 } from '../src/features/omr/pitchFromStaffPosition.js'
 import { OMR_DISCLAIMER } from '../src/features/omr/omrMusicalConstants.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+
+describe('detectVectorTimeSignature', () => {
+  const imageData = { width: 1000, height: 1000 }
+  const firstMeasure = {
+    x0: 0.1,
+    playableX0: 0.22,
+    x1: 0.5,
+    y0: 0.1,
+    y1: 0.5,
+  }
+
+  it('reads duplicated stacked 6/8 SMuFL digits from both staves', () => {
+    const glyphs = [
+      { text: '\ue086', x: 180, y: 170, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue088', x: 180, y: 184, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue086', x: 180, y: 330, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue088', x: 180, y: 344, width: 12, height: 28, fontName: 'music' },
+    ]
+
+    expect(detectVectorTimeSignature(glyphs, imageData, [firstMeasure])).toMatchObject({
+      beats: 6,
+      beatType: 8,
+      confidence: 0.96,
+      matchedStaffCount: 2,
+    })
+  })
+
+  it('abstains for unstacked digits and digits inside playable notation', () => {
+    const glyphs = [
+      { text: '\ue086', x: 150, y: 170, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue088', x: 190, y: 184, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue086', x: 260, y: 330, width: 12, height: 28, fontName: 'music' },
+      { text: '\ue088', x: 260, y: 344, width: 12, height: 28, fontName: 'music' },
+    ]
+
+    expect(detectVectorTimeSignature(glyphs, imageData, [firstMeasure])).toEqual({
+      beats: 4,
+      beatType: 4,
+      confidence: 0,
+    })
+  })
+})
 
 describe('normalizeFirstSystemMeasureOpenNoteOrigin', () => {
   const openingHalfNotes = [

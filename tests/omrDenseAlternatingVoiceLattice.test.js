@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
 import { buildMeasureStructureUnits } from '../src/features/omr/measureStructureSemantics.js'
-import { reconstructDenseAlternatingVoiceLattice } from '../src/features/omr/processVectorOmrPage.js'
+import {
+  reconstructCompoundMeterDottedBeamOverprints,
+  reconstructDenseAlternatingVoiceLattice,
+} from '../src/features/omr/processVectorOmrPage.js'
 
 function latticeNote({ cx, midi, clef = 'treble', stem = 'up', open = false }) {
   return {
@@ -144,5 +147,63 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = denseAlternatingFixture(options)
     expect(reconstructDenseAlternatingVoiceLattice(source, 16)).toBe(source)
+  })
+})
+
+function compoundMeterFixture({
+  columns = 12,
+  missingAnchorDot = false,
+  sparseNonAnchorBeams = false,
+} = {}) {
+  return ['treble', 'bass'].flatMap((clef, staffIndex) =>
+    Array.from({ length: columns }, (_, index) => {
+      const anchor = index === 0 || index === 6
+      const cx = 100 + index * 20 + staffIndex * 0.5
+      const note = latticeNote({
+        cx,
+        midi: (clef === 'treble' ? 78 : 69) + (index % 3),
+        clef,
+        stem: 'down',
+      })
+      note.beams = anchor || !sparseNonAnchorBeams ? 2 : 0
+      note.dotted = anchor && !(missingAnchorDot && clef === 'bass' && index === 6)
+      return latticeEvent([note], index, 1)
+    }),
+  )
+}
+
+describe('reconstructCompoundMeterDottedBeamOverprints', () => {
+  it('splits complete 6/8 dotted-beam overprints into attack and sustain voices', () => {
+    const source = compoundMeterFixture({ sparseNonAnchorBeams: true })
+    const rebuilt = reconstructCompoundMeterDottedBeamOverprints(source, 12)
+
+    expect(rebuilt.flatMap((event) => event.notes)).toHaveLength(28)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(12)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toHaveLength(2)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(12)
+    expect(rebuilt.filter((event) => event.sourceVoice === 6)).toHaveLength(2)
+    expect(
+      rebuilt
+        .filter((event) => event.sourceVoice === 2 || event.sourceVoice === 6)
+        .map((event) => [event.startDivision, event.durationDivisions, event.dotted]),
+    ).toEqual([
+      [0, 6, true],
+      [0, 6, true],
+      [6, 6, true],
+      [6, 6, true],
+    ])
+    expect(
+      rebuilt
+        .filter((event) => event.sourceVoice === 1 || event.sourceVoice === 5)
+        .every((event) => event.durationDivisions === 1 && event.dotted === false),
+    ).toBe(true)
+  })
+
+  it.each([
+    ['a non-6/8 meter', compoundMeterFixture(), 16],
+    ['an incomplete lattice', compoundMeterFixture({ columns: 11 }), 12],
+    ['incomplete dotted-anchor evidence', compoundMeterFixture({ missingAnchorDot: true }), 12],
+  ])('abstains for %s', (_label, source, totalDivisions) => {
+    expect(reconstructCompoundMeterDottedBeamOverprints(source, totalDivisions)).toBe(source)
   })
 })

@@ -109,9 +109,26 @@ const ACCIDENTAL_GLYPHS = new Map([
   [DOUBLE_FLAT_GLYPH, { alter: -2, type: 'double-flat' }],
 ])
 const TIME_DIGIT_GLYPHS = {
+  '\ue080': 0,
+  '\ue081': 1,
+  '\ue082': 2,
   '\ue083': 3,
   '\ue084': 4,
+  '\ue085': 5,
+  '\ue086': 6,
+  '\ue087': 7,
+  '\ue088': 8,
+  '\ue089': 9,
 }
+const SUPPORTED_STACKED_TIME_SIGNATURES = new Set([
+  '2/2',
+  '2/4',
+  '3/4',
+  '3/8',
+  '4/4',
+  '6/8',
+  '9/8',
+])
 const VECTOR_MIN_NOTEHEADS = 12
 
 function noteheadAnchorCacheKey(glyph, lineYs = []) {
@@ -499,7 +516,7 @@ export function resolveVectorSystemKeySignatures(
   }
 }
 
-function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
+export function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
   const firstBox = firstSystemBoxes[0]
   if (!firstBox) {
     return { beats: 4, beatType: 4, confidence: 0 }
@@ -515,12 +532,55 @@ function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
     }
     const digit = TIME_DIGIT_GLYPHS[glyph.text]
     if (digit != null) {
-      digits.push(digit)
+      digits.push({
+        digit,
+        x: glyph.x,
+        y: glyph.y,
+        width: Math.max(1, glyph.width ?? 0),
+        height: Math.max(1, glyph.height ?? 0),
+        fontName: glyph.fontName ?? '',
+      })
     }
   }
 
-  if (digits.includes(3) && digits.includes(4)) {
-    return { beats: 3, beatType: 4, confidence: 0.92, source: 'vector-glyphs' }
+  const candidates = new Map()
+  for (const numerator of digits) {
+    for (const denominator of digits) {
+      if (numerator === denominator || numerator.y >= denominator.y) continue
+      const averageHeight = (numerator.height + denominator.height) / 2
+      const averageWidth = (numerator.width + denominator.width) / 2
+      const verticalGap = denominator.y - numerator.y
+      if (
+        Math.abs(numerator.x - denominator.x) > Math.max(1.5, averageWidth * 0.55) ||
+        verticalGap < averageHeight * 0.2 ||
+        verticalGap > averageHeight * 1.15 ||
+        (numerator.fontName && denominator.fontName && numerator.fontName !== denominator.fontName)
+      ) {
+        continue
+      }
+      const key = `${numerator.digit}/${denominator.digit}`
+      if (!SUPPORTED_STACKED_TIME_SIGNATURES.has(key)) continue
+      const current = candidates.get(key) ?? {
+        beats: numerator.digit,
+        beatType: denominator.digit,
+        matches: 0,
+      }
+      current.matches += 1
+      candidates.set(key, current)
+    }
+  }
+
+  const best = [...candidates.values()].sort(
+    (left, right) => right.matches - left.matches,
+  )[0]
+  if (best) {
+    return {
+      beats: best.beats,
+      beatType: best.beatType,
+      confidence: best.matches >= 2 ? 0.96 : 0.92,
+      source: 'vector-stacked-time-glyphs',
+      matchedStaffCount: best.matches,
+    }
   }
   return { beats: 4, beatType: 4, confidence: 0 }
 }
@@ -5295,6 +5355,162 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   return sortVectorRhythmEvents(rebuilt)
 }
 
+const COMPOUND_OVERPRINT_VOICE = Object.freeze({
+  UPPER_ATTACK: 1,
+  UPPER_SUSTAIN: 2,
+  LOWER_ATTACK: 5,
+  LOWER_SUSTAIN: 6,
+})
+
+function compoundOverprintLane(events, clef) {
+  return events
+    .filter(
+      (event) =>
+        event.type === 'note' &&
+        event.notes?.length === 1 &&
+        (event.notes[0].clef ?? event.clef ?? 'treble') === clef,
+    )
+    .sort((left, right) => left.notes[0].cx - right.notes[0].cx)
+}
+
+function compoundOverprintEvent(event, {
+  durationDivisions,
+  dotted,
+  sourceVoice,
+  sourceVoiceLane,
+  attack = false,
+}) {
+  const notes = event.notes.map((note) => ({
+    ...note,
+    durationDivisions,
+    durationType: durationDivisions === 1 ? 'sixteenth' : 'quarter',
+    dotted,
+    ...(attack
+      ? {}
+      : {
+          beams: 0,
+          beamStrength: 0,
+          flags: 0,
+        }),
+    compoundMeterDottedBeamOverprint: true,
+  }))
+  return {
+    ...event,
+    notes,
+    durationDivisions,
+    ...durationMeta(durationDivisions, { allowDotted: dotted }),
+    dotted,
+    ...(attack ? {} : { beams: 0 }),
+    sourceVoice,
+    sourceVoiceLane,
+    compoundMeterDottedBeamOverprint: true,
+  }
+}
+
+/**
+ * Split the two written values encoded by a dotted, double-beamed notehead at
+ * each half-measure boundary of a complete two-staff 6/8 lattice. The beam
+ * proves the sixteenth attack while the augmentation dot proves an independent
+ * dotted-quarter sustain. Both facts belong to the same printed pitch.
+ */
+export function reconstructCompoundMeterDottedBeamOverprints(
+  events = [],
+  totalDivisions = 12,
+) {
+  if (
+    totalDivisions !== 12 ||
+    events.some((event) => event?.timeModification) ||
+    events.some((event) => event.type === 'rest')
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length !== 24 || noteEvents.some((event) => event.notes?.length !== 1)) {
+    return events
+  }
+
+  const upper = compoundOverprintLane(noteEvents, 'treble')
+  const lower = compoundOverprintLane(noteEvents, 'bass')
+  if (upper.length !== 12 || lower.length !== 12) return events
+
+  const expectedStarts = Array.from({ length: 12 }, (_, index) => index)
+  for (const lane of [upper, lower]) {
+    if (lane.some((event, index) => event.startDivision !== expectedStarts[index])) {
+      return events
+    }
+    const xs = lane.map((event) => event.notes[0].cx)
+    const gaps = xs.slice(1).map((x, index) => x - xs[index])
+    const typicalGap = medianNumber(gaps)
+    if (
+      !(typicalGap > 0) ||
+      gaps.some((gap) => gap < typicalGap * 0.45 || gap > typicalGap * 1.9)
+    ) {
+      return events
+    }
+  }
+
+  const crossStaffOffsets = upper.map(
+    (event, index) => Math.abs(event.notes[0].cx - lower[index].notes[0].cx),
+  )
+  const typicalUpperGap = medianNumber(
+    upper.slice(1).map((event, index) => event.notes[0].cx - upper[index].notes[0].cx),
+  )
+  if (crossStaffOffsets.some((offset) => offset > Math.max(3, typicalUpperGap * 0.22))) {
+    return events
+  }
+
+  const anchors = [upper[0], upper[6], lower[0], lower[6]]
+  const dottedEvents = noteEvents.filter(
+    (event) => event.dotted === true || event.notes[0].dotted === true,
+  )
+  if (
+    dottedEvents.length !== 4 ||
+    anchors.some(
+      (event) =>
+        !(event.dotted === true || event.notes[0].dotted === true) ||
+        (event.notes[0].beams ?? event.beams ?? 0) < 2 ||
+        noteStemDirection(event.notes[0]) == null,
+    )
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  for (const [lane, attackVoice, sustainVoice, label] of [
+    [
+      upper,
+      COMPOUND_OVERPRINT_VOICE.UPPER_ATTACK,
+      COMPOUND_OVERPRINT_VOICE.UPPER_SUSTAIN,
+      'upper',
+    ],
+    [
+      lower,
+      COMPOUND_OVERPRINT_VOICE.LOWER_ATTACK,
+      COMPOUND_OVERPRINT_VOICE.LOWER_SUSTAIN,
+      'lower',
+    ],
+  ]) {
+    for (const event of lane) {
+      rebuilt.push(compoundOverprintEvent(event, {
+        durationDivisions: 1,
+        dotted: false,
+        sourceVoice: attackVoice,
+        sourceVoiceLane: `${label}-sixteenth-attacks`,
+        attack: true,
+      }))
+    }
+    for (const index of [0, 6]) {
+      rebuilt.push(compoundOverprintEvent(lane[index], {
+        durationDivisions: 6,
+        dotted: true,
+        sourceVoice: sustainVoice,
+        sourceVoiceLane: `${label}-dotted-quarter-sustain`,
+      }))
+    }
+  }
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 export function buildVectorMeasureRecord({
   glyphs,
   imageData,
@@ -5477,6 +5693,7 @@ export function buildVectorMeasureRecord({
   }
 
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
+  events = reconstructCompoundMeterDottedBeamOverprints(events, totalDivisions)
 
   const noteCount = notes.length
   const restCount = detectedRests.length
