@@ -391,6 +391,8 @@ function compoundMeterFixture({
   columns = 12,
   missingAnchorDot = false,
   sparseNonAnchorBeams = false,
+  fragmentedBeamTopology = false,
+  missingBeamTopology = false,
 } = {}) {
   return ['treble', 'bass'].flatMap((clef, staffIndex) =>
     Array.from({ length: columns }, (_, index) => {
@@ -402,7 +404,11 @@ function compoundMeterFixture({
         clef,
         stem: 'down',
       })
-      note.beams = anchor || !sparseNonAnchorBeams ? 2 : 0
+      note.beams = missingBeamTopology
+        ? 0
+        : fragmentedBeamTopology
+          ? clef === 'bass' && [1, 2, 3, 4, 7, 8, 9, 10].includes(index) ? 2 : 0
+          : anchor || !sparseNonAnchorBeams ? 2 : 0
       note.dotted = anchor && !(missingAnchorDot && clef === 'bass' && index === 6)
       return latticeEvent([note], index, 1)
     }),
@@ -436,10 +442,21 @@ describe('reconstructCompoundMeterDottedBeamOverprints', () => {
     ).toBe(true)
   })
 
+  it('uses half-measure beam topology when beams do not attach to dotted anchors', () => {
+    const source = compoundMeterFixture({ fragmentedBeamTopology: true })
+    const rebuilt = reconstructCompoundMeterDottedBeamOverprints(source, 12)
+
+    expect(rebuilt.flatMap((event) => event.notes)).toHaveLength(28)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 2 || event.sourceVoice === 6,
+    )).toHaveLength(4)
+  })
+
   it.each([
     ['a non-6/8 meter', compoundMeterFixture(), 16],
     ['an incomplete lattice', compoundMeterFixture({ columns: 11 }), 12],
     ['incomplete dotted-anchor evidence', compoundMeterFixture({ missingAnchorDot: true }), 12],
+    ['no double-beam topology', compoundMeterFixture({ missingBeamTopology: true }), 12],
   ])('abstains for %s', (_label, source, totalDivisions) => {
     expect(reconstructCompoundMeterDottedBeamOverprints(source, totalDivisions)).toBe(source)
   })

@@ -5895,14 +5895,24 @@ export function reconstructCompoundMeterDottedBeamOverprints(
   const dottedEvents = noteEvents.filter(
     (event) => event.dotted === true || event.notes[0].dotted === true,
   )
+  const anchorBeamEvidence = anchors.every(
+    (event) => (event.notes[0].beams ?? event.beams ?? 0) >= 2,
+  )
+  const halfMeasureBeamEvidence = [0, 6].map((startIndex) =>
+    [...upper, ...lower].filter((event) =>
+      event.startDivision >= startIndex &&
+      event.startDivision < startIndex + 6 &&
+      (event.notes[0].beams ?? event.beams ?? 0) >= 2,
+    ).length,
+  )
   if (
     dottedEvents.length !== 4 ||
     anchors.some(
       (event) =>
         !(event.dotted === true || event.notes[0].dotted === true) ||
-        (event.notes[0].beams ?? event.beams ?? 0) < 2 ||
         noteStemDirection(event.notes[0]) == null,
-    )
+    ) ||
+    (!anchorBeamEvidence && halfMeasureBeamEvidence.some((count) => count < 3))
   ) {
     return events
   }
