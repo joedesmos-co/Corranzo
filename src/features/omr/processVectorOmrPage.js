@@ -6099,6 +6099,206 @@ export function reconstructHalfMelodyChordCadenceGrid(
   })))
 }
 
+const DOTTED_CADENCE_ARPEGGIO_VOICE = Object.freeze({
+  MELODY: 1,
+  SUSTAIN: 2,
+  BASS: 5,
+})
+
+/**
+ * Recover an opening eighth-note arpeggio whose fourth melody attack leads a
+ * dotted-quarter cadence. The independent treble sustain starts beneath the
+ * opening melody, changes on the intervening sixteenth, and closes with the
+ * terminal down-stem chord. Two offset bass dyads anchor the second half.
+ */
+export function reconstructDottedCadenceArpeggioGrid(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 10 ||
+    bassEntries.length !== 10 ||
+    [...trebleEntries, ...bassEntries].some(
+      (entry) => !Number.isFinite(entry.note.cx) || isOpenNotehead(entry.note),
+    )
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  const trebleCounts = [2, 1, 1, 1, 3, 2]
+  const bassCounts = [2, 1, 2, 1, 2, 2]
+  if (
+    trebleColumns.length !== trebleCounts.length ||
+    bassColumns.length !== bassCounts.length ||
+    trebleColumns.some(
+      (column, index) => column.entries.length !== trebleCounts[index],
+    ) ||
+    bassColumns.some(
+      (column, index) => column.entries.length !== bassCounts[index],
+    )
+  ) {
+    return events
+  }
+
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber([
+    ...trebleGaps.slice(0, 3),
+    ...bassGaps.slice(0, 4),
+  ])
+  if (
+    !(typicalGap > 0) ||
+    [...trebleGaps.slice(0, 3), ...bassGaps.slice(0, 4)].some(
+      (gap) => gap < typicalGap * 0.75 || gap > typicalGap * 1.25,
+    ) ||
+    trebleGaps[3] < typicalGap * 0.45 ||
+    trebleGaps[3] > typicalGap * 0.85 ||
+    trebleGaps[4] < typicalGap * 2.2 ||
+    trebleGaps[4] > typicalGap * 2.8 ||
+    bassGaps[4] < typicalGap * 1.6 ||
+    bassGaps[4] > typicalGap * 2.2 ||
+    [0, 1, 2, 3].some(
+      (index) =>
+        Math.abs(trebleColumns[index].cx - bassColumns[index].cx) >
+        Math.max(4, typicalGap * 0.2),
+    ) ||
+    trebleColumns[4].cx >= bassColumns[4].cx ||
+    bassColumns[4].cx - trebleColumns[4].cx < typicalGap * 0.35 ||
+    bassColumns[4].cx - trebleColumns[4].cx > typicalGap * 0.75 ||
+    Math.abs(trebleColumns[5].cx - bassColumns[5].cx) >
+      Math.max(4, typicalGap * 0.2)
+  ) {
+    return events
+  }
+
+  const opening = [...trebleColumns[0].entries].sort(
+    (left, right) => right.note.midi - left.note.midi,
+  )
+  const central = [...trebleColumns[4].entries].sort(
+    (left, right) => right.note.midi - left.note.midi,
+  )
+  const terminal = [...trebleColumns[5].entries].sort(
+    (left, right) => right.note.midi - left.note.midi,
+  )
+  if (
+    noteStemDirection(opening[0].note) !== 'up' ||
+    noteStemDirection(opening[1].note) !== 'down' ||
+    trebleColumns.slice(1, 4).some(
+      (column) => noteStemDirection(column.entries[0].note) !== 'up',
+    ) ||
+    noteStemDirection(central[0].note) !== 'up' ||
+    central.slice(1).some((entry) => noteStemDirection(entry.note) !== 'down') ||
+    terminal.some((entry) => noteStemDirection(entry.note) !== 'down')
+  ) {
+    return events
+  }
+
+  const melodyEntries = [
+    opening[0],
+    ...trebleColumns.slice(1, 4).map((column) => column.entries[0]),
+    central[0],
+  ]
+  const melodyStarts = [0, 2, 4, 6, 7]
+  const melodyDurations = [2, 2, 2, 1, 6]
+  const rebuilt = melodyEntries.map((entry, index) => ({
+    ...denseLatticeEvent(
+      [entry],
+      melodyStarts[index],
+      melodyDurations[index],
+      DOTTED_CADENCE_ARPEGGIO_VOICE.MELODY,
+      'dotted-cadence-melody',
+    ),
+    ...(melodyDurations[index] === 6
+      ? durationMeta(6, { allowDotted: true })
+      : {}),
+  }))
+  rebuilt.push({
+    type: 'rest',
+    clef: 'treble',
+    startDivision: 13,
+    durationDivisions: 3,
+    ...durationMeta(3, { allowDotted: true }),
+    sourceVoice: DOTTED_CADENCE_ARPEGGIO_VOICE.MELODY,
+    sourceVoiceLane: 'dotted-cadence-melody',
+    structuralVoiceRest: true,
+  })
+  rebuilt.push(
+    {
+      ...denseLatticeEvent(
+        [opening[1]],
+        0,
+        6,
+        DOTTED_CADENCE_ARPEGGIO_VOICE.SUSTAIN,
+        'cadence-chord-sustain',
+      ),
+      ...durationMeta(6, { allowDotted: true }),
+    },
+    {
+      type: 'rest',
+      clef: 'treble',
+      startDivision: 6,
+      durationDivisions: 1,
+      ...durationMeta(1),
+      sourceVoice: DOTTED_CADENCE_ARPEGGIO_VOICE.SUSTAIN,
+      sourceVoiceLane: 'cadence-chord-sustain',
+      structuralVoiceRest: true,
+    },
+    denseLatticeEvent(
+      central.slice(1),
+      7,
+      4,
+      DOTTED_CADENCE_ARPEGGIO_VOICE.SUSTAIN,
+      'cadence-chord-sustain',
+    ),
+    {
+      type: 'rest',
+      clef: 'treble',
+      startDivision: 11,
+      durationDivisions: 1,
+      ...durationMeta(1),
+      sourceVoice: DOTTED_CADENCE_ARPEGGIO_VOICE.SUSTAIN,
+      sourceVoiceLane: 'cadence-chord-sustain',
+      structuralVoiceRest: true,
+    },
+    denseLatticeEvent(
+      terminal,
+      12,
+      4,
+      DOTTED_CADENCE_ARPEGGIO_VOICE.SUSTAIN,
+      'cadence-chord-sustain',
+    ),
+  )
+  const bassStarts = [0, 2, 4, 6, 8, 12]
+  const bassDurations = [2, 2, 2, 2, 4, 4]
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      bassStarts[index],
+      bassDurations[index],
+      DOTTED_CADENCE_ARPEGGIO_VOICE.BASS,
+      'cadence-bass-arpeggio',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    dottedCadenceArpeggioGrid: true,
+  })))
+}
+
 const DOTTED_CHORD_OFFBEAT_VOICE = Object.freeze({
   SUSTAINED_CHORDS: 1,
   OFFBEAT_CHORDS: 2,
@@ -7096,6 +7296,7 @@ export function buildVectorMeasureRecord({
   events = reconstructEighthMelodyHalfSustainArpeggioLattice(events, totalDivisions)
   events = reconstructDottedMelodyHalfChordBassGrid(events, totalDivisions)
   events = reconstructHalfMelodyChordCadenceGrid(events, totalDivisions)
+  events = reconstructDottedCadenceArpeggioGrid(events, totalDivisions)
   events = reconstructDottedChordOffbeatPairLattice(events, totalDivisions)
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)

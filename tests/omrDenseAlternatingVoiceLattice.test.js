@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
+  reconstructDottedCadenceArpeggioGrid,
   reconstructDottedChordOffbeatPairLattice,
   reconstructDottedMelodyHalfChordBassGrid,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
@@ -694,6 +695,93 @@ describe('reconstructHalfMelodyChordCadenceGrid', () => {
   ])('abstains for %s', (_label, options) => {
     const source = halfMelodyChordCadenceFixture(options)
     expect(reconstructHalfMelodyChordCadenceGrid(source, 16)).toBe(source)
+  })
+})
+
+function dottedCadenceArpeggioFixture({
+  wrongCentralStem = false,
+  misalignedTerminal = false,
+} = {}) {
+  const events = []
+  const trebleColumns = [
+    { cx: 100, midis: [79, 74], stems: ['up', 'down'] },
+    { cx: 124, midis: [77], stems: ['up'] },
+    { cx: 148, midis: [79], stems: ['up'] },
+    { cx: 172, midis: [84], stems: ['up'] },
+    { cx: 188, midis: [84, 77, 72], stems: [
+      wrongCentralStem ? 'down' : 'up',
+      'down',
+      'down',
+    ] },
+    { cx: misalignedTerminal ? 253 : 248, midis: [79, 74], stems: ['down', 'down'] },
+  ]
+  for (const [columnIndex, column] of trebleColumns.entries()) {
+    events.push(latticeEvent(column.midis.map((midi, noteIndex) => latticeNote({
+      cx: column.cx,
+      midi,
+      stem: column.stems[noteIndex],
+    })), columnIndex * 2, 2))
+  }
+  const bassColumns = [
+    { cx: 100, midis: [43, 31] },
+    { cx: 124, midis: [50] },
+    { cx: 148, midis: [59, 55] },
+    { cx: 172, midis: [50] },
+    { cx: 200, midis: [48, 36] },
+    { cx: 248, midis: [47, 35] },
+  ]
+  for (const [columnIndex, column] of bassColumns.entries()) {
+    events.push(latticeEvent(column.midis.map((midi) => latticeNote({
+      cx: column.cx,
+      midi,
+      clef: 'bass',
+      stem: 'up',
+    })), columnIndex * 2, 2))
+  }
+  return events
+}
+
+describe('reconstructDottedCadenceArpeggioGrid', () => {
+  it('recovers the staggered melody, sustain, and bass cadence lanes', () => {
+    const source = dottedCadenceArpeggioFixture()
+    const rebuilt = reconstructDottedCadenceArpeggioGrid(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(20)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'note',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 2],
+      [2, 2],
+      [4, 2],
+      [6, 1],
+      [7, 6],
+    ])
+    expect(rebuilt.find(
+      (event) => event.sourceVoice === 1 && event.type === 'rest',
+    )).toMatchObject({ startDivision: 13, durationDivisions: 3, dotted: true })
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['note', 0, 6],
+      ['rest', 6, 1],
+      ['note', 7, 4],
+      ['rest', 11, 1],
+      ['note', 12, 4],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 2], [8, 4], [12, 4]])
+  })
+
+  it.each([
+    ['ambiguous central stem ownership', { wrongCentralStem: true }],
+    ['a terminal chord outside the final bass column', { misalignedTerminal: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = dottedCadenceArpeggioFixture(options)
+    expect(reconstructDottedCadenceArpeggioGrid(source, 16)).toBe(source)
   })
 })
 
