@@ -630,25 +630,29 @@ function spansToMeasureBoxes(spans, {
   systemRole = null,
 }) {
   const staffLines = estimateGrandStaffLines(system, { systemRole })
-  return spans.map((span, index) => ({
-    page,
-    systemIndex,
-    measureIndex: index,
-    measureNumber: measureNumberStart + index,
-    x0: span.x0,
-    x1: span.x1,
-    playableX0:
+  return spans.map((span, index) => {
+    const measureWidth = span.x1 - span.x0
+    const playableOffset =
       index === 0
-        ? span.x0 + Math.min((span.x1 - span.x0) * 0.34, 0.085)
-        : span.x0,
-    y0: system.y0,
-    y1: system.y1,
-    staffLines,
-    boundarySource: span.source ?? null,
-    boundaryConfidence: Number.isFinite(span.confidence) ? span.confidence : null,
-    leftBoundaryId: span.leftBoundaryId ?? null,
-    rightBoundaryId: span.rightBoundaryId ?? null,
-  }))
+        ? Math.max(Math.min(measureWidth * 0.34, 0.085), 0.06)
+        : 0
+    return {
+      page,
+      systemIndex,
+      measureIndex: index,
+      measureNumber: measureNumberStart + index,
+      x0: span.x0,
+      x1: span.x1,
+      playableX0: span.x0 + playableOffset,
+      y0: system.y0,
+      y1: system.y1,
+      staffLines,
+      boundarySource: span.source ?? null,
+      boundaryConfidence: Number.isFinite(span.confidence) ? span.confidence : null,
+      leftBoundaryId: span.leftBoundaryId ?? null,
+      rightBoundaryId: span.rightBoundaryId ?? null,
+    }
+  })
 }
 
 function summarizeSpanWidths(spans, contentWidth) {

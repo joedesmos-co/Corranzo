@@ -4200,6 +4200,81 @@ export function alignSubdivisionFollowersAfterDottedEighth(events, totalDivision
 }
 
 /**
+ * Correct tied note's own onset when it's the first event in a clef and has tieStart.
+ * This handles first-measure key/time signature horizontal offset that shifts
+ * the tied note's positionInMeasure rightward.
+ * Does NOT adjust subsequent notes - they remain positioned relative to the
+ * corrected tied note's written end via existing onset alignment logic.
+ */
+export function resnapTiedNoteOnset(events, tieConnections, totalDivisions) {
+  if (!tieConnections?.length) return events
+
+  const noteEvents = events.filter((event) => event.type === 'note')
+  if (noteEvents.length < 1) return events
+
+  const eventIndexByRef = new Map()
+  events.forEach((event, index) => {
+    eventIndexByRef.set(event, index)
+  })
+
+  const tieMap = new Map()
+  for (const conn of tieConnections) {
+    tieMap.set(conn.fromEventIndex, conn.toEventIndex)
+  }
+
+  const startByEvent = new Map()
+  const byClef = new Map()
+  for (const event of noteEvents) {
+    const clef = event.notes?.[0]?.clef ?? 'treble'
+    if (!byClef.has(clef)) {
+      byClef.set(clef, [])
+    }
+    byClef.get(clef).push(event)
+  }
+
+  for (const clefEvents of byClef.values()) {
+    const sorted = [...clefEvents].sort(
+      (left, right) =>
+        (left.startDivision ?? 0) - (right.startDivision ?? 0) ||
+        (left.cx ?? 0) - (right.cx ?? 0),
+    )
+
+    // Correct tied note's own onset if it's the first note in the clef and has tieStart
+    const firstNote = sorted[0]
+    const firstNoteHasTieStart = firstNote.notes?.some((n) => n.tieStart === true)
+    const firstNoteOnset = firstNote.startDivision ?? 0
+    // Only correct if onset is significantly offset (>10% of measure) and has tieStart
+    // This is a conservative heuristic for first-measure key/time signature offset
+    if (firstNoteHasTieStart && firstNoteOnset > totalDivisions * 0.1) {
+      startByEvent.set(firstNote, 0)
+    }
+  }
+
+  if (!startByEvent.size) {
+    return events
+  }
+
+  return sortVectorRhythmEvents(
+    events.map((event) => {
+      const startDivision = startByEvent.has(event)
+        ? startByEvent.get(event)
+        : event.startDivision
+      if (startDivision === event.startDivision) {
+        return event
+      }
+      return {
+        ...event,
+        startDivision,
+        ...durationMeta(event.durationDivisions ?? 0, {
+          allowDotted: hasDottedEvidence(event.notes) || event.dotted,
+        }),
+        tieAnchorCorrected: true,
+      }
+    }),
+  )
+}
+
+/**
  * Position snap can collapse consecutive sixteenth attacks onto one onset.
  * Split same-start single-note events or two-note dyads when horizontal order
  * proves sequential subdivision rather than a harmonic stack.
@@ -5816,6 +5891,13 @@ export function processVectorPageSystems({
     imageData,
     inkThreshold,
   })
+
+  // Correct tied note onset for first-measure key/time signature offset
+  for (const record of flatRecords) {
+    if (record.tieConnections?.length) {
+      record.events = resnapTiedNoteOnset(record.events, record.tieConnections, record.totalDivisions ?? 16)
+    }
+  }
 
   return {
     measureRecordsBySystem,
