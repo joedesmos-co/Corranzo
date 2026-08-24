@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
+  reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructTripletMelodyOverprintLattice,
@@ -409,6 +410,84 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
     ['a non-4/4 measure', quarterMelodyOffbeatFixture(), 12],
   ])('abstains for %s', (_label, source, totalDivisions) => {
     expect(reconstructQuarterMelodyOffbeatChordLattice(source, totalDivisions)).toBe(source)
+  })
+})
+
+function eighthMelodyHalfSustainFixture({
+  missingSecondHollow = false,
+  misalignedBass = false,
+} = {}) {
+  const events = []
+  const melodyMidis = [76, 74, 72, 71, 69, 71, 72, 76]
+  const sustainMidis = new Map([[0, 72], [4, 65]])
+  const bassMidis = [
+    [33, 45],
+    [48],
+    [52, 57],
+    [48],
+    [29, 41],
+    [48],
+    [53, 57],
+    [48],
+  ]
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 20
+    const treble = [latticeNote({ cx, midi: melodyMidis[index], stem: 'up' })]
+    if (sustainMidis.has(index)) {
+      const sustain = latticeNote({
+        cx,
+        midi: sustainMidis.get(index),
+        stem: 'down',
+        open: !(missingSecondHollow && index === 4),
+      })
+      sustain.noteheadGlyph = sustain.hollow ? 'half' : 'black'
+      sustain.durationType = sustain.hollow ? 'half' : 'eighth'
+      sustain.durationDivisions = sustain.hollow ? 8 : 2
+      treble.push(sustain)
+    }
+    events.push(latticeEvent(treble, index * 2, 2))
+    events.push(latticeEvent(bassMidis[index].map((midi) => latticeNote({
+      cx: cx + (misalignedBass && index === 5 ? 8 : 0),
+      midi,
+      clef: 'bass',
+      stem: 'up',
+    })), index * 2, 2))
+  }
+  return events
+}
+
+describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
+  it('separates hollow half-note anchors from aligned eighth-note grids', () => {
+    const source = eighthMelodyHalfSustainFixture()
+    const rebuilt = reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(22)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 8], [8, 8]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, events: rebuilt }],
+      includeDisclaimer: false,
+    })
+    expect(xml).toContain('<voice>1</voice>')
+    expect(xml).toContain('<voice>2</voice>')
+    expect(xml).toContain('<voice>5</voice>')
+    expect(xml).toContain('<backup>')
+  })
+
+  it.each([
+    ['one missing hollow anchor', { missingSecondHollow: true }],
+    ['a broken staff-column alignment', { misalignedBass: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = eighthMelodyHalfSustainFixture(options)
+    expect(reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)).toBe(source)
   })
 })
 

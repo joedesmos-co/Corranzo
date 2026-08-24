@@ -5597,6 +5597,163 @@ export function reconstructQuarterMelodyOffbeatChordLattice(
   })))
 }
 
+const EIGHTH_MELODY_HALF_SUSTAIN_VOICE = Object.freeze({
+  MELODY: 1,
+  SUSTAIN: 2,
+  BASS: 5,
+})
+
+function isOpenNotehead(note) {
+  return (
+    note?.hollow === true ||
+    note?.noteheadGlyph === 'half' ||
+    note?.noteheadGlyph === 'whole'
+  )
+}
+
+/**
+ * Recover an eight-column piano texture where two hollow lower melody heads
+ * begin half-note sustains underneath a continuous eighth-note melody. The
+ * aligned bass staff alternates octave/dyad attacks with single arpeggio heads.
+ * Shared-onset packing otherwise folds each sustain anchor into the melody
+ * attack and loses the independent treble voice.
+ */
+export function reconstructEighthMelodyHalfSustainArpeggioLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const entriesForClef = (clef) => noteEvents.flatMap((event) => {
+    const eventNotes = (event.notes ?? []).filter((note) =>
+      clef === 'bass'
+        ? (note.clef ?? 'treble') === 'bass'
+        : (note.clef ?? 'treble') !== 'bass',
+    )
+    const latticeCx = medianNumber(eventNotes.map((note) => note.cx).filter(Number.isFinite))
+    return eventNotes.map((note) => ({ event, note, latticeCx }))
+  })
+  const trebleEntries = entriesForClef('treble')
+  const bassEntries = entriesForClef('bass')
+  if (
+    trebleEntries.length !== 10 ||
+    bassEntries.length !== 12 ||
+    [...trebleEntries, ...bassEntries].some((entry) => !Number.isFinite(entry.note.cx))
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  if (
+    trebleColumns.length !== 8 ||
+    bassColumns.length !== 8 ||
+    trebleColumns.some((column, index) =>
+      column.entries.length !== [2, 1, 1, 1, 2, 1, 1, 1][index],
+    ) ||
+    bassColumns.some((column, index) =>
+      column.entries.length !== (index % 2 === 0 ? 2 : 1),
+    )
+  ) {
+    return events
+  }
+
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber([...trebleGaps, ...bassGaps])
+  if (
+    !(typicalGap > 0) ||
+    [...trebleGaps, ...bassGaps].some(
+      (gap) => gap < typicalGap * 0.65 || gap > typicalGap * 1.45,
+    ) ||
+    trebleColumns.some(
+      (column, index) =>
+        Math.abs(column.cx - bassColumns[index].cx) > Math.max(4, typicalGap * 0.3),
+    )
+  ) {
+    return events
+  }
+
+  const melodyEntries = []
+  const sustainEntries = []
+  for (const [index, column] of trebleColumns.entries()) {
+    const sorted = [...column.entries].sort(
+      (left, right) => right.note.midi - left.note.midi,
+    )
+    if (index === 0 || index === 4) {
+      const [melody, sustain] = sorted
+      if (
+        isOpenNotehead(melody.note) ||
+        !isOpenNotehead(sustain.note) ||
+        melody.note.midi - sustain.note.midi < 3
+      ) {
+        return events
+      }
+      melodyEntries.push(melody)
+      sustainEntries.push(sustain)
+    } else {
+      if (isOpenNotehead(sorted[0].note)) return events
+      melodyEntries.push(sorted[0])
+    }
+  }
+  if (
+    trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length !== 2 ||
+    bassEntries.some((entry) => isOpenNotehead(entry.note))
+  ) {
+    return events
+  }
+  const melodyMidis = melodyEntries.map((entry) => entry.note.midi)
+  if (
+    !melodyMidis.slice(0, 5).every(
+      (midi, index, values) => index === 0 || midi <= values[index - 1],
+    ) ||
+    !isNonDecreasing(melodyMidis.slice(4))
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  for (const [index, entry] of melodyEntries.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      [entry],
+      index * 2,
+      2,
+      EIGHTH_MELODY_HALF_SUSTAIN_VOICE.MELODY,
+      'eighth-melody',
+    ))
+  }
+  for (const [index, entry] of sustainEntries.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      [entry],
+      index * 8,
+      8,
+      EIGHTH_MELODY_HALF_SUSTAIN_VOICE.SUSTAIN,
+      'half-note-sustain',
+    ))
+  }
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 2,
+      2,
+      EIGHTH_MELODY_HALF_SUSTAIN_VOICE.BASS,
+      'bass-arpeggio',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    eighthMelodyHalfSustainArpeggioLattice: true,
+  })))
+}
+
 const MIXED_TUPLET_VOICE = Object.freeze({
   TREBLE: 1,
   BASS: 5,
@@ -6440,6 +6597,7 @@ export function buildVectorMeasureRecord({
     measureBox,
     imageData,
   })
+  events = reconstructEighthMelodyHalfSustainArpeggioLattice(events, totalDivisions)
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
   events = reconstructTripletMelodyOverprintLattice(events, totalDivisions, {
