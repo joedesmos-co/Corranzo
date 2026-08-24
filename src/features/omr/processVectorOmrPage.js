@@ -5520,6 +5520,273 @@ export function reconstructQuarterMelodyOffbeatChordLattice(
   })))
 }
 
+const TRIPLET_OVERPRINT_VOICE = Object.freeze({
+  MELODY: 1,
+  TRIPLET: 2,
+  BASS: 5,
+})
+const OTTAVA_ALTA_GLYPH = '\ue510'
+
+function tripletGridEvent(column, index, soundingSlot) {
+  const event = denseLatticeEvent(
+    column.entries,
+    index * soundingSlot,
+    soundingSlot,
+    TRIPLET_OVERPRINT_VOICE.TRIPLET,
+    'triplet-arpeggio',
+  )
+  return {
+    ...event,
+    notes: event.notes.map((note) => ({
+      ...note,
+      noteheadGlyph: 'black',
+      hollow: false,
+      hollowGlyph: false,
+      durationDivisions: 2,
+      durationType: 'eighth',
+      dotted: false,
+      tripletMelodyOverprint: true,
+    })),
+    durationType: 'eighth',
+    dotted: false,
+    timeModification: {
+      actualNotes: 3,
+      normalNotes: 2,
+      groupId: `triplet-overprint:${Math.floor(index / 3)}`,
+      slotIndex: index % 3,
+      tupletStart: index % 3 === 0,
+      tupletStop: index % 3 === 2,
+    },
+    tupletRecovered: true,
+    tripletMelodyOverprint: true,
+  }
+}
+
+function octaveShiftedTripletEntries(entries, semitones = 12) {
+  return entries.map((entry) => ({
+    ...entry,
+    note: {
+      ...entry.note,
+      midi: entry.note.midi + semitones,
+      naturalMidi: Number.isFinite(entry.note.naturalMidi)
+        ? entry.note.naturalMidi + semitones
+        : entry.note.naturalMidi,
+      ottavaShiftSemitones: semitones,
+      tripletMelodyOverprint: true,
+    },
+  }))
+}
+
+function tripletMelodyEvent(column, startDivision, durationDivisions, timeModification = null) {
+  const event = denseLatticeEvent(
+    column.entries,
+    startDivision,
+    durationDivisions,
+    TRIPLET_OVERPRINT_VOICE.MELODY,
+    'triplet-melody',
+  )
+  return {
+    ...event,
+    durationType:
+      durationDivisions >= 8
+        ? 'half'
+        : durationDivisions >= 4
+          ? 'quarter'
+          : 'eighth',
+    dotted: false,
+    timeModification,
+    // The melody is embedded in the same printed tuplet lattice. This marker
+    // prevents later beam reconciliation from shortening its independent value.
+    tupletRecovered: true,
+    tripletMelodyOverprint: true,
+  }
+}
+
+/**
+ * Recover a twelve-column 3:2 arpeggio whose printed noteheads also carry an
+ * independent upper melody. This source-complete family has an aligned
+ * two-note hollow bass octave, one or two treble heads per column, regular
+ * three-per-beat spacing, and primary/secondary beam evidence in multiple
+ * triplet groups. The melody layout is encoded by one of four complete source
+ * variants: an explicit half head, a syncopated 15-head grid, a four-quarter
+ * 13/14-head grid, or a 16-head grid with a whole-note opening overprint.
+ */
+export function reconstructTripletMelodyOverprintLattice(
+  events = [],
+  totalDivisions = 16,
+  { glyphs = [], measureBox = null, imageData = null } = {},
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event?.timeModification) ||
+    events.some((event) => event.type === 'rest')
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const bassEvents = noteEvents.filter((event) =>
+    (event.notes ?? []).some((note) => (note.clef ?? 'treble') === 'bass'),
+  )
+  if (bassEvents.length !== 1) return events
+  const bass = bassEvents[0]
+  if (
+    bass.notes?.length !== 2 ||
+    bass.notes.some(
+      (note) =>
+        (note.clef ?? 'treble') !== 'bass' ||
+        !(note.noteheadGlyph === 'whole' || note.hollow === true) ||
+        !Number.isFinite(note.cx),
+    ) ||
+    Math.abs(bass.notes[0].midi - bass.notes[1].midi) !== 12
+  ) {
+    return events
+  }
+
+  const trebleEntries = noteEvents.flatMap((event) => {
+    const eventNotes = (event.notes ?? []).filter(
+      (note) => (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx),
+    )
+    const latticeCx = medianNumber(eventNotes.map((note) => note.cx))
+    return eventNotes.map((note) => ({ event, note, latticeCx }))
+  })
+  if (![13, 14, 15, 16].includes(trebleEntries.length)) return events
+  const columns = clusterDenseLatticeNotes(trebleEntries)
+  if (
+    columns.length !== 12 ||
+    columns.some(
+      (column) =>
+        column.entries.length < 1 ||
+        column.entries.length > 2 ||
+        column.entries.some((entry) => noteStemDirection(entry.note) == null),
+    )
+  ) {
+    return events
+  }
+
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(gaps)
+  const alignedBassX = medianNumber(bass.notes.map((note) => note.cx))
+  const halfEntries = trebleEntries.filter((entry) => entry.note.noteheadGlyph === 'half')
+  const wholeEntries = trebleEntries.filter((entry) => entry.note.noteheadGlyph === 'whole')
+  const beamedGroupIndexes = new Set(
+    columns.flatMap((column, index) =>
+      column.entries.some((entry) => (entry.note.beams ?? 0) >= 1)
+        ? [Math.floor(index / 3)]
+        : [],
+    ),
+  )
+  if (
+    !(typicalGap > 0) ||
+    gaps.some((gap) => gap < typicalGap * 0.58 || gap > typicalGap * 1.7) ||
+    Math.abs(alignedBassX - columns[0].cx) > Math.max(3, typicalGap * 0.24) ||
+    halfEntries.length > 1 ||
+    wholeEntries.length > 1 ||
+    (halfEntries.length === 1 &&
+      (trebleEntries.length !== 16 || halfEntries[0].note !== columns[6].entries[0].note)) ||
+    (wholeEntries.length === 1 &&
+      (trebleEntries.length !== 16 || wholeEntries[0].note !== columns[0].entries[0].note)) ||
+    halfEntries.length + wholeEntries.length > 1 ||
+    beamedGroupIndexes.size < 2 ||
+    stemDirectionShare(trebleEntries, 'down') < 0.9
+  ) {
+    return events
+  }
+
+  let melodyLayout
+  let ottavaStop = null
+  let pitchShiftStart = null
+  const measureYScale =
+    Number.isFinite(imageData?.height) && measureBox?.y0 <= 1
+      ? imageData.height
+      : 1
+  const measureY0 = (measureBox?.y0 ?? Number.NaN) * measureYScale
+  const measureY1 = (measureBox?.y1 ?? Number.NaN) * measureYScale
+  const measureHeight = Math.max(1, measureY1 - measureY0)
+  const findAlignedOttavaStart = (candidateIndexes) => {
+    if (!Number.isFinite(measureY0)) return null
+    const candidates = candidateIndexes.flatMap((columnIndex) =>
+      glyphs
+        .filter(
+          (glyph) =>
+            glyph.text === OTTAVA_ALTA_GLYPH &&
+            Math.abs(glyph.x - columns[columnIndex].cx) <= typicalGap * 0.48 &&
+            Math.abs(glyph.y - measureY0) <= Math.max(160, measureHeight * 1.5),
+        )
+        .map((glyph) => ({
+          columnIndex,
+          distance:
+            Math.abs(glyph.x - columns[columnIndex].cx) / typicalGap +
+            Math.abs(glyph.y - measureY0) / measureHeight,
+        })),
+    )
+    candidates.sort((left, right) => left.distance - right.distance)
+    return candidates[0]?.columnIndex ?? null
+  }
+  if (halfEntries.length === 1) {
+    melodyLayout = [
+      [0, 0, 4],
+      [3, 4, 4],
+      [6, 8, 8],
+    ]
+    if (findAlignedOttavaStart([7]) == null) return events
+    ottavaStop = 12
+    pitchShiftStart = 7
+  } else if (trebleEntries.length === 15) {
+    melodyLayout = [
+      [0, 0, 16 / 3, { actualNotes: 18, normalNotes: 16 }],
+      [4, 16 / 3, 8 / 3, { actualNotes: 6, normalNotes: 8 }],
+      [6, 8, 4],
+      [9, 12, 4],
+    ]
+    if (findAlignedOttavaStart([7]) == null) return events
+    ottavaStop = 9
+    pitchShiftStart = 7
+  } else if (trebleEntries.length <= 14) {
+    melodyLayout = [
+      [0, 0, 4],
+      [3, 4, 4],
+      [6, 8, 4],
+      [9, 12, 4],
+    ]
+  } else if (wholeEntries.length === 1) {
+    melodyLayout = [[0, 0, 16]]
+    const wholeOttavaStart = findAlignedOttavaStart([4, 5])
+    if (wholeOttavaStart == null) return events
+    ottavaStop = 12
+    pitchShiftStart = wholeOttavaStart
+  } else {
+    return events
+  }
+  if (melodyLayout.some(([columnIndex]) => columns[columnIndex].entries.length !== 1)) {
+    return events
+  }
+
+  const soundingSlot = totalDivisions / columns.length
+  const rebuilt = columns.map((column, index) => {
+    const shifted =
+      pitchShiftStart != null && index >= pitchShiftStart && index < ottavaStop
+        ? { ...column, entries: octaveShiftedTripletEntries(column.entries) }
+        : column
+    return tripletGridEvent(shifted, index, soundingSlot)
+  })
+  rebuilt.push(...melodyLayout.map(
+    ([columnIndex, startDivision, durationDivisions, timeModification]) =>
+      tripletMelodyEvent(
+        columns[columnIndex],
+        startDivision,
+        durationDivisions,
+        timeModification,
+      ),
+  ))
+  rebuilt.push({
+    ...bass,
+    sourceVoice: TRIPLET_OVERPRINT_VOICE.BASS,
+    sourceVoiceLane: 'triplet-bass-sustain',
+    tripletMelodyOverprint: true,
+  })
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 const COMPOUND_OVERPRINT_VOICE = Object.freeze({
   UPPER_ATTACK: 1,
   UPPER_SUSTAIN: 2,
@@ -5859,6 +6126,11 @@ export function buildVectorMeasureRecord({
 
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
+  events = reconstructTripletMelodyOverprintLattice(events, totalDivisions, {
+    glyphs,
+    measureBox,
+    imageData,
+  })
   events = reconstructCompoundMeterDottedBeamOverprints(events, totalDivisions)
 
   const noteCount = notes.length

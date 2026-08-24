@@ -5,6 +5,7 @@ import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
+  reconstructTripletMelodyOverprintLattice,
 } from '../src/features/omr/processVectorOmrPage.js'
 
 function latticeNote({ cx, midi, clef = 'treble', stem = 'up', open = false }) {
@@ -237,6 +238,152 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
     ['a non-4/4 measure', quarterMelodyOffbeatFixture(), 12],
   ])('abstains for %s', (_label, source, totalDivisions) => {
     expect(reconstructQuarterMelodyOffbeatChordLattice(source, totalDivisions)).toBe(source)
+  })
+})
+
+function tripletMelodyFixture({
+  trebleNoteCount = 16,
+  halfAnchor = true,
+  wholeAnchor = false,
+  columns = 12,
+  bassOctave = true,
+  beamedGroups = true,
+} = {}) {
+  const events = []
+  const bass = [38, bassOctave ? 26 : 27].map((midi) => {
+    const note = latticeNote({ cx: 100, midi, clef: 'bass', open: true })
+    note.stem = null
+    note.beams = 0
+    return note
+  })
+  events.push(latticeEvent(bass, 0, 16))
+  const chordIndexes = new Set(
+    trebleNoteCount === 16
+      ? [2, 5, 8, 10]
+      : trebleNoteCount === 15
+        ? [2, 5, 7]
+        : trebleNoteCount === 14
+          ? [2, 8]
+          : [5],
+  )
+  for (let index = 0; index < columns; index += 1) {
+    const cx = 100 + index * 18
+    const note = latticeNote({ cx, midi: 78 - (index % 5), stem: 'down' })
+    note.beams = beamedGroups && index % 3 === 1 && index < 7 ? 2 : 0
+    if (halfAnchor && index === 6) {
+      note.noteheadGlyph = 'half'
+      note.hollow = true
+      note.durationType = 'half'
+      note.durationDivisions = 8
+    } else if (wholeAnchor && index === 0) {
+      note.noteheadGlyph = 'whole'
+      note.hollow = true
+      note.durationType = 'whole'
+      note.durationDivisions = 16
+    }
+    const notes = [note]
+    if (chordIndexes.has(index)) {
+      notes.push(latticeNote({ cx, midi: note.midi - 7, stem: 'down' }))
+    }
+    events.push(latticeEvent(notes, index, 1))
+  }
+  return events
+}
+
+function tripletSourceOptions(ottavaIndex = null) {
+  return {
+    glyphs: ottavaIndex == null
+      ? []
+      : [{ text: '\ue510', x: 100 + ottavaIndex * 18, y: 80 }],
+    measureBox: { x0: 90, y0: 100, x1: 320, y1: 220 },
+  }
+}
+
+describe('reconstructTripletMelodyOverprintLattice', () => {
+  it('recovers the explicit-half melody and the complete 3:2 attack lane', () => {
+    const source = tripletMelodyFixture()
+    const rebuilt = reconstructTripletMelodyOverprintLattice(
+      source,
+      16,
+      tripletSourceOptions(7),
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 4], [4, 4], [8, 8]])
+    const triplets = rebuilt.filter((event) => event.sourceVoice === 2)
+    expect(triplets).toHaveLength(12)
+    expect(triplets.every(
+      (event) =>
+        event.durationType === 'eighth' &&
+        event.timeModification?.actualNotes === 3 &&
+        event.timeModification?.normalNotes === 2,
+    )).toBe(true)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(1)
+  })
+
+  it.each([
+    ['the syncopated 15-head variant', { trebleNoteCount: 15, halfAnchor: false }, 4, 7],
+    ['the four-quarter 14-head variant', { trebleNoteCount: 14, halfAnchor: false }, 4, null],
+    ['the whole-melody 16-head variant', { trebleNoteCount: 16, halfAnchor: false, wholeAnchor: true }, 1, 5],
+  ])('recovers %s', (_label, options, expectedMelodyEvents, ottavaIndex) => {
+    const rebuilt = reconstructTripletMelodyOverprintLattice(
+      tripletMelodyFixture(options),
+      16,
+      tripletSourceOptions(ottavaIndex),
+    )
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(
+      expectedMelodyEvents,
+    )
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toHaveLength(12)
+  })
+
+  it.each([4, 5])(
+    'starts the whole-melody ottava shift at source-aligned column %i',
+    (ottavaIndex) => {
+      const source = tripletMelodyFixture({
+        trebleNoteCount: 16,
+        halfAnchor: false,
+        wholeAnchor: true,
+      })
+      const sourceTripletMidis = source.slice(1).map((event) => event.notes[0].midi)
+      const rebuilt = reconstructTripletMelodyOverprintLattice(
+        source,
+        16,
+        tripletSourceOptions(ottavaIndex),
+      )
+      const triplets = rebuilt.filter((event) => event.sourceVoice === 2)
+
+      expect(triplets[ottavaIndex - 1].notes[0].midi).toBe(
+        sourceTripletMidis[ottavaIndex - 1],
+      )
+      expect(triplets[ottavaIndex].notes[0].midi).toBe(
+        sourceTripletMidis[ottavaIndex] + 12,
+      )
+    },
+  )
+
+  it.each([
+    ['an incomplete lattice', { columns: 11 }],
+    ['a non-octave bass anchor', { bassOctave: false }],
+    ['insufficient beam grouping', { beamedGroups: false }],
+  ])('abstains for %s', (_label, options) => {
+    const source = tripletMelodyFixture(options)
+    expect(reconstructTripletMelodyOverprintLattice(
+      source,
+      16,
+      tripletSourceOptions(7),
+    )).toBe(source)
+  })
+
+  it('abstains when the printed ottava start does not align with the source variant', () => {
+    const source = tripletMelodyFixture()
+    expect(reconstructTripletMelodyOverprintLattice(
+      source,
+      16,
+      tripletSourceOptions(5),
+    )).toBe(source)
   })
 })
 
