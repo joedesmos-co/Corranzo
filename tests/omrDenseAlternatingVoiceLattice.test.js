@@ -7,6 +7,7 @@ import {
   reconstructDottedChordOffbeatPairLattice,
   reconstructDottedMelodyHalfChordBassGrid,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
+  reconstructHalfMelodyChordCadenceGrid,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructTripletMelodyOverprintLattice,
@@ -618,6 +619,81 @@ describe('reconstructDottedMelodyHalfChordBassGrid', () => {
   ])('abstains for %s', (_label, options) => {
     const source = dottedMelodyHalfChordFixture(options)
     expect(reconstructDottedMelodyHalfChordBassGrid(source, 16)).toBe(source)
+  })
+})
+
+function halfMelodyChordCadenceFixture({
+  missingHollow = false,
+  misalignedTerminal = false,
+} = {}) {
+  const events = []
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 20
+    const count = index < 6 ? 2 : 1
+    events.push(latticeEvent(
+      Array.from({ length: count }, (_, noteIndex) => latticeNote({
+        cx,
+        midi: 52 - noteIndex * 7,
+        clef: 'bass',
+        stem: 'up',
+      })),
+      index * 2,
+      2,
+    ))
+  }
+  for (const [index, melodyMidi] of [81, 80].entries()) {
+    const cx = 100 + index * 80
+    const lower = [76, 71].map((midi, noteIndex) => {
+      const note = latticeNote({
+        cx,
+        midi,
+        stem: 'down',
+        open: !(missingHollow && index === 1 && noteIndex === 1),
+      })
+      note.noteheadGlyph = note.hollow ? 'half' : 'black'
+      return note
+    })
+    events.push(latticeEvent([
+      latticeNote({ cx, midi: melodyMidi, stem: 'up', open: index === 0 }),
+      ...lower,
+    ], index * 8, 8))
+  }
+  events.push(latticeEvent([
+    latticeNote({ cx: misalignedTerminal ? 248 : 240, midi: 72, stem: 'up' }),
+  ], 14, 2))
+  return events
+}
+
+describe('reconstructHalfMelodyChordCadenceGrid', () => {
+  it('separates two chord anchors and preserves the terminal cadence', () => {
+    const source = halfMelodyChordCadenceFixture()
+    const rebuilt = reconstructHalfMelodyChordCadenceGrid(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(21)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'note',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 8],
+      [8, 4],
+      [14, 2],
+    ])
+    expect(rebuilt.find(
+      (event) => event.sourceVoice === 1 && event.type === 'rest',
+    )).toMatchObject({ startDivision: 12, durationDivisions: 2 })
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 8, 2], [8, 8, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+  })
+
+  it.each([
+    ['incomplete hollow chord evidence', { missingHollow: true }],
+    ['a terminal attack outside the bass cadence column', { misalignedTerminal: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = halfMelodyChordCadenceFixture(options)
+    expect(reconstructHalfMelodyChordCadenceGrid(source, 16)).toBe(source)
   })
 })
 
