@@ -5215,7 +5215,6 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
       event.notes?.length === 1 &&
       (event.durationDivisions ?? 0) >= 8 &&
       (event.notes[0].noteheadGlyph === 'whole' || event.notes[0].hollow === true) &&
-      (event.notes[0].beams ?? 0) >= 1 &&
       noteStemDirection(event.notes[0]) != null,
   )
   if (!bassAnchor || bassEvents.length !== 1) return events
@@ -5233,9 +5232,17 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
 
   const columnGaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
   const typicalGap = medianNumber(columnGaps)
+  const bassAnchorAligned =
+    Math.abs(bassAnchor.notes[0].cx - columns[0].cx) <=
+    Math.max(3, typicalGap * 0.25)
+  const beamedColumnCount = columns.filter((column) =>
+    column.entries.some((entry) => (entry.note.beams ?? 0) >= 1),
+  ).length
   if (
     !(typicalGap > 0) ||
-    columnGaps.some((gap) => gap < typicalGap * 0.55 || gap > typicalGap * 1.75)
+    columnGaps.some((gap) => gap < typicalGap * 0.55 || gap > typicalGap * 1.75) ||
+    !bassAnchorAligned ||
+    ((bassAnchor.notes[0].beams ?? 0) < 1 && beamedColumnCount < 4)
   ) {
     return events
   }
@@ -5243,17 +5250,21 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   const upperColumns = columns.filter((_, index) => index % 2 === 1)
   const lowerColumns = columns.filter((_, index) => index >= 2 && index % 2 === 0)
   if (
-    upperColumns.some((column) => column.entries.length < 2 || column.entries.length > 3) ||
+    upperColumns.some((column) => column.entries.length < 1 || column.entries.length > 3) ||
     lowerColumns.some((column) => column.entries.length < 2) ||
     stemDirectionShare(upperColumns.flatMap((column) => column.entries), 'up') < 0.8
   ) {
     return events
   }
 
-  const evenHighs = lowerColumns.map((column) =>
-    Math.max(...column.entries.map((entry) => entry.note.midi)),
+  const fullChordHighs = [2, 6, 10, 14].map((columnIndex) =>
+    Math.max(...columns[columnIndex].entries.map((entry) => entry.note.midi)),
   )
-  const lowerPitchCeiling = medianNumber(evenHighs) + 2
+  // The full lower-chord columns establish the harmonic ceiling. Sampling all
+  // even columns lets the independent melody contaminate the median in the
+  // denser variants, while the intervening two-note chords can legitimately
+  // sit a third above this stable four-column reference.
+  const lowerPitchCeiling = medianNumber(fullChordHighs) + 3
   const melodyEntries = [...columns[0].entries]
   const lowerByColumn = new Map()
   for (let index = 2; index < columns.length; index += 2) {
@@ -5354,6 +5365,38 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
         : event.sourceVoice,
       sourceVoiceLane: openingTrebleRest ? 'upper-ostinato' : event.sourceVoiceLane,
       denseAlternatingVoiceLattice: openingTrebleRest || undefined,
+    })
+  }
+  const structuralRestKeys = new Set(
+    rebuilt
+      .filter((event) => event.type === 'rest')
+      .map((event) => `${event.sourceVoice}:${event.startDivision}`),
+  )
+  for (const [startDivision, sourceVoice, clef, lane] of [
+    ...Array.from({ length: 8 }, (_, index) => [
+      index * 2,
+      DENSE_ALTERNATING_VOICE.UPPER_OSTINATO,
+      'treble',
+      'upper-ostinato',
+    ]),
+    ...Array.from({ length: 8 }, (_, index) => [
+      index * 2 + 1,
+      DENSE_ALTERNATING_VOICE.LOWER_OSTINATO,
+      'bass',
+      'lower-ostinato',
+    ]),
+  ]) {
+    if (structuralRestKeys.has(`${sourceVoice}:${startDivision}`)) continue
+    rebuilt.push({
+      type: 'rest',
+      clef,
+      startDivision,
+      durationDivisions: 1,
+      ...durationMeta(1),
+      sourceVoice,
+      sourceVoiceLane: lane,
+      structuralVoiceRest: true,
+      denseAlternatingVoiceLattice: true,
     })
   }
   return sortVectorRhythmEvents(rebuilt)

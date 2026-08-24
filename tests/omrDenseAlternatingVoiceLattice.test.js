@@ -45,13 +45,16 @@ function denseAlternatingFixture({
   displacedChordHead = false,
   melodyIntrusions = true,
   thinLowerColumn = false,
+  indirectBassBeam = false,
+  singleNoteUpper = false,
+  raisedAlternatingLower = false,
+  fourNoteLower = false,
 } = {}) {
   const events = []
   if (bass) {
     const note = latticeNote({ cx: 100, midi: 38, clef: 'bass', open: true })
     if (!beamedBass) {
       note.beams = 0
-      note.stem = null
     }
     events.push(latticeEvent([note], 0, 16))
   }
@@ -69,15 +72,19 @@ function denseAlternatingFixture({
       continue
     }
     if (index % 2 === 1) {
-      events.push(latticeEvent([
+      const upperNotes = [
         latticeNote({ cx: baseX - 0.4, midi: 72, stem: 'up' }),
         latticeNote({ cx: baseX + 0.4, midi: 68, stem: 'up' }),
-      ], index, 1))
+      ]
+      events.push(latticeEvent(singleNoteUpper ? upperNotes.slice(0, 1) : upperNotes, index, 1))
       continue
     }
-    const lowerNotes = [67, 64, 60].map((midi, noteIndex) =>
+    const lowerTop = raisedAlternatingLower && index % 4 === 0 ? 70 : 67
+    const lowerMidis = fourNoteLower ? [lowerTop, 65, 62, 59] : [lowerTop, 64, 60]
+    const lowerNotes = lowerMidis.map((midi, noteIndex) =>
       latticeNote({ cx: baseX + noteIndex * 0.3, midi, stem: lowerStem }),
     )
+    if (indirectBassBeam) lowerNotes[0].beams = 2
     if (thinLowerColumn && index === 4) lowerNotes.pop()
     if (displacedChordHead && index === 10) lowerNotes[2].cx -= 9
     const melodyMidi = melodyByColumn.get(index)
@@ -117,7 +124,9 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
     ])
     expect(rebuilt.filter((event) => event.sourceVoice === 2 && event.type === 'note'))
       .toHaveLength(8)
-    const lowerEvents = rebuilt.filter((event) => event.sourceVoice === 5)
+    const lowerEvents = rebuilt.filter(
+      (event) => event.sourceVoice === 5 && event.type === 'note',
+    )
     expect(lowerEvents).toHaveLength(8)
     expect(lowerEvents.find((event) => event.sourceVoiceLane === 'lower-ostinato-bass-attack'))
       .toMatchObject({
@@ -130,6 +139,7 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
       startDivision: 0,
       sourceVoice: 2,
     })
+    expect(rebuilt.filter((event) => event.type === 'rest')).toHaveLength(16)
 
     const structure = buildMeasureStructureUnits({ measureNumber: 1, events: rebuilt })
     expect(structure.diagnostics.polyphonicStaffs).toEqual(['bass', 'treble'])
@@ -156,8 +166,32 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
     expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(1)
     expect(rebuilt.filter((event) => event.sourceVoice === 2 && event.type === 'note'))
       .toHaveLength(8)
-    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5 && event.type === 'note'))
+      .toHaveLength(8)
     expect(rebuilt.filter((event) => event.sourceVoice === 6)).toHaveLength(1)
+  })
+
+  it('uses aligned lattice beams and stable chord columns for dense variants', () => {
+    const source = denseAlternatingFixture({
+      beamedBass: false,
+      indirectBassBeam: true,
+      singleNoteUpper: true,
+      raisedAlternatingLower: true,
+      fourNoteLower: true,
+    })
+    const rebuilt = reconstructDenseAlternatingVoiceLattice(source, 16)
+
+    expect(rebuilt).not.toBe(source)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 6], [6, 2], [8, 4], [12, 4]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2 && event.type === 'note'))
+      .toHaveLength(8)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoiceLane === 'lower-ostinato' &&
+        event.notes?.some((note) => note.midi === 70),
+    )).toHaveLength(3)
   })
 
   it.each([
