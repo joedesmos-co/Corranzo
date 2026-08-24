@@ -5057,6 +5057,244 @@ export function buildVectorEvents(
   return reconciledEvents
 }
 
+const DENSE_ALTERNATING_VOICE = Object.freeze({
+  MELODY: 1,
+  UPPER_OSTINATO: 2,
+  LOWER_OSTINATO: 5,
+  BASS_SUSTAIN: 6,
+})
+
+function clusterDenseLatticeNotes(entries) {
+  const sorted = [...entries].sort(
+    (left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi,
+  )
+  const distinctXs = []
+  for (const entry of sorted) {
+    const x = entry.note.cx
+    if (!distinctXs.length || Math.abs(x - distinctXs.at(-1)) > 0.75) {
+      distinctXs.push(x)
+    }
+  }
+  if (distinctXs.length < 2) return []
+  const gaps = distinctXs.slice(1).map((x, index) => x - distinctXs[index])
+  const typicalGap = medianNumber(gaps)
+  if (!(typicalGap > 0)) return []
+  const mergeGap = Math.min(10, typicalGap * 0.48)
+  const clusters = []
+  for (const entry of sorted) {
+    const current = clusters.at(-1)
+    if (!current || entry.note.cx - current.maxX > mergeGap) {
+      clusters.push({ entries: [entry], minX: entry.note.cx, maxX: entry.note.cx })
+    } else {
+      current.entries.push(entry)
+      current.maxX = Math.max(current.maxX, entry.note.cx)
+    }
+  }
+  return clusters.map((cluster) => ({
+    ...cluster,
+    cx: average(cluster.entries.map((entry) => entry.note.cx)),
+  }))
+}
+
+function stemDirectionShare(entries, direction) {
+  if (!entries.length) return 0
+  return entries.filter((entry) => noteStemDirection(entry.note) === direction).length /
+    entries.length
+}
+
+function denseLatticeEvent(entries, startDivision, durationDivisions, sourceVoice, lane) {
+  const representative = entries[0].event
+  const notes = dedupeNoteheads(entries.map((entry) => entry.note)).sort(
+    (left, right) => right.midi - left.midi,
+  )
+  return {
+    ...representative,
+    type: 'note',
+    notes,
+    startDivision,
+    durationDivisions,
+    ...durationMeta(durationDivisions, {
+      allowDotted: notes.some((note) => note.dotted === true),
+    }),
+    cx: average(notes.map((note) => note.cx)),
+    positionInMeasure: average(
+      notes.map((note) => note.positionInMeasure).filter(Number.isFinite),
+    ),
+    sourceVoice,
+    sourceVoiceLane: lane,
+    denseAlternatingVoiceLattice: true,
+  }
+}
+
+/**
+ * Recover the independent cursors in a fully printed alternating piano lattice.
+ *
+ * The family is source-complete: one beamed long-value bass anchor, exactly sixteen regular
+ * treble columns in 4/4, eight up-stem upper-ostinato columns, seven down-stem
+ * lower-ostinato columns, and a small number of high melody intrusions. Absolute
+ * measure bounds can snap two early columns together, but their source X order
+ * still proves the sixteenth grid. The beam/stem crossing the hollow bass head
+ * proves a coincident lower-ostinato attack in addition to the sustain. Explicit
+ * lanes prevent the MusicXML cursor from serializing these simultaneous voices
+ * as one destructive chord stream.
+ */
+export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisions = 16) {
+  if (totalDivisions !== 16 || events.some((event) => event?.timeModification)) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const bassEvents = noteEvents.filter((event) =>
+    (event.notes ?? []).some((note) => (note.clef ?? 'treble') === 'bass'),
+  )
+  const bassAnchor = bassEvents.find(
+    (event) =>
+      (event.startDivision ?? 0) === 0 &&
+      event.notes?.length === 1 &&
+      (event.durationDivisions ?? 0) >= 8 &&
+      (event.notes[0].noteheadGlyph === 'whole' || event.notes[0].hollow === true) &&
+      (event.notes[0].beams ?? 0) >= 1 &&
+      noteStemDirection(event.notes[0]) != null,
+  )
+  if (!bassAnchor || bassEvents.length !== 1) return events
+
+  const trebleEntries = noteEvents.flatMap((event) =>
+    (event.notes ?? [])
+      .filter((note) => (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx))
+      .map((note) => ({ event, note })),
+  )
+  if (trebleEntries.length < 35) return events
+  const columns = clusterDenseLatticeNotes(trebleEntries)
+  if (columns.length !== 16) return events
+
+  const columnGaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(columnGaps)
+  if (
+    !(typicalGap > 0) ||
+    columnGaps.some((gap) => gap < typicalGap * 0.55 || gap > typicalGap * 1.75)
+  ) {
+    return events
+  }
+
+  const upperColumns = columns.filter((_, index) => index % 2 === 1)
+  const lowerColumns = columns.filter((_, index) => index >= 2 && index % 2 === 0)
+  if (
+    upperColumns.some((column) => column.entries.length < 2 || column.entries.length > 3) ||
+    lowerColumns.some((column) => column.entries.length < 3) ||
+    stemDirectionShare(upperColumns.flatMap((column) => column.entries), 'up') < 0.8
+  ) {
+    return events
+  }
+
+  const evenHighs = lowerColumns.map((column) =>
+    Math.max(...column.entries.map((entry) => entry.note.midi)),
+  )
+  const lowerPitchCeiling = medianNumber(evenHighs) + 2
+  const melodyEntries = [...columns[0].entries]
+  const lowerByColumn = new Map()
+  for (let index = 2; index < columns.length; index += 2) {
+    const lower = columns[index].entries.filter(
+      (entry) => entry.note.midi <= lowerPitchCeiling,
+    )
+    const melody = columns[index].entries.filter(
+      (entry) => entry.note.midi > lowerPitchCeiling,
+    )
+    if (lower.length < 3 || stemDirectionShare(lower, 'down') < 0.6 || melody.length > 1) {
+      return events
+    }
+    lowerByColumn.set(index, lower)
+    melodyEntries.push(...melody.map((entry) => ({ ...entry, latticeIndex: index })))
+  }
+  const intrusionCount = melodyEntries.length - columns[0].entries.length
+  if (
+    columns[0].entries.length !== 1 ||
+    intrusionCount < 2 ||
+    intrusionCount > 4 ||
+    columns[0].entries[0].note.midi <= lowerPitchCeiling
+  ) {
+    return events
+  }
+
+  const melodyByIndex = new Map([[0, columns[0].entries]])
+  for (const entry of melodyEntries.slice(1)) {
+    const current = melodyByIndex.get(entry.latticeIndex) ?? []
+    current.push(entry)
+    melodyByIndex.set(entry.latticeIndex, current)
+  }
+  const melodyIndexes = [...melodyByIndex.keys()].sort((left, right) => left - right)
+  const rebuilt = []
+  rebuilt.push({
+    ...bassAnchor,
+    sourceVoice: DENSE_ALTERNATING_VOICE.BASS_SUSTAIN,
+    sourceVoiceLane: 'bass-sustain',
+    denseAlternatingVoiceLattice: true,
+  })
+  for (let index = 0; index < melodyIndexes.length; index += 1) {
+    const latticeIndex = melodyIndexes[index]
+    const next = melodyIndexes[index + 1] ?? totalDivisions
+    rebuilt.push(denseLatticeEvent(
+      melodyByIndex.get(latticeIndex),
+      latticeIndex,
+      Math.max(1, next - latticeIndex),
+      DENSE_ALTERNATING_VOICE.MELODY,
+      'melody',
+    ))
+  }
+  for (let index = 1; index < columns.length; index += 2) {
+    rebuilt.push(denseLatticeEvent(
+      columns[index].entries,
+      index,
+      1,
+      DENSE_ALTERNATING_VOICE.UPPER_OSTINATO,
+      'upper-ostinato',
+    ))
+  }
+  for (let index = 2; index < columns.length; index += 2) {
+    rebuilt.push(denseLatticeEvent(
+      lowerByColumn.get(index),
+      index,
+      1,
+      DENSE_ALTERNATING_VOICE.LOWER_OSTINATO,
+      'lower-ostinato',
+    ))
+  }
+  rebuilt.push(denseLatticeEvent(
+    [{
+      event: bassAnchor,
+      note: {
+        ...bassAnchor.notes[0],
+        noteheadGlyph: 'black',
+        hollow: false,
+        hollowGlyph: false,
+        durationDivisions: 1,
+        durationType: 'sixteenth',
+        denseAlternatingBassAttackOverprint: true,
+      },
+    }],
+    0,
+    1,
+    DENSE_ALTERNATING_VOICE.LOWER_OSTINATO,
+    'lower-ostinato-bass-attack',
+  ))
+
+  for (const event of events.filter((candidate) => candidate.type !== 'note')) {
+    const openingTrebleRest =
+      event.type === 'rest' &&
+      (event.clef ?? 'treble') === 'treble' &&
+      (event.durationDivisions ?? 0) === 1 &&
+      (event.startDivision ?? 0) <= 2
+    rebuilt.push({
+      ...event,
+      startDivision: openingTrebleRest ? 0 : event.startDivision,
+      sourceVoice: openingTrebleRest
+        ? DENSE_ALTERNATING_VOICE.UPPER_OSTINATO
+        : event.sourceVoice,
+      sourceVoiceLane: openingTrebleRest ? 'upper-ostinato' : event.sourceVoiceLane,
+      denseAlternatingVoiceLattice: openingTrebleRest || undefined,
+    })
+  }
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 export function buildVectorMeasureRecord({
   glyphs,
   imageData,
@@ -5237,6 +5475,8 @@ export function buildVectorMeasureRecord({
   if (tupletRecovery.recovered) {
     events = tupletRecovery.events
   }
+
+  events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
 
   const noteCount = notes.length
   const restCount = detectedRests.length

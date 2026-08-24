@@ -84,6 +84,7 @@ function baseUnit(event, eventIndex) {
     vectorVoiceSeparated: event?.vectorVoiceSeparated === true,
     vectorVoiceColumnId: event?.vectorVoiceColumnId ?? null,
     vectorVoiceLane: event?.vectorVoiceLane ?? null,
+    sourceVoice: Number.isInteger(event?.sourceVoice) ? event.sourceVoice : null,
   }
 }
 
@@ -303,6 +304,11 @@ function assignStaffVoices(units, polyphonicStaffs, tieConnections = []) {
       },
     )
     for (const unit of entries) {
+      if (unit.sourceVoice != null) {
+        unit.voice = unit.sourceVoice
+        assigned.push(unit)
+        continue
+      }
       if (unit.kind === 'rest' || !polyphonic) {
         unit.voice = defaultVoiceForStaff(staffLane)
         assigned.push(unit)
@@ -401,7 +407,11 @@ export function buildMeasureStructureUnits(measure = {}) {
   const polyphonicStaffs = new Set(
     ['treble', 'bass'].filter((staffLane) => {
       const staffUnits = provisional.filter((unit) => unit.staffLane === staffLane)
+      const sourceVoices = new Set(
+        staffUnits.map((unit) => unit.sourceVoice).filter(Number.isInteger),
+      )
       return (
+        sourceVoices.size > 1 ||
         staffUnits.some((unit) => unit.structureSplit) ||
         staffHasIndependentOverlap(staffUnits)
       )
