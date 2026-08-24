@@ -9,6 +9,7 @@ import {
   reconstructDottedMelodyHalfChordBassGrid,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructHalfMelodyChordCadenceGrid,
+  reconstructHalfSustainSixteenthCadenceGrid,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructTripletMelodyOverprintLattice,
@@ -695,6 +696,96 @@ describe('reconstructHalfMelodyChordCadenceGrid', () => {
   ])('abstains for %s', (_label, options) => {
     const source = halfMelodyChordCadenceFixture(options)
     expect(reconstructHalfMelodyChordCadenceGrid(source, 16)).toBe(source)
+  })
+})
+
+function halfSustainSixteenthCadenceFixture({
+  missingHollow = false,
+  misalignedCadence = false,
+} = {}) {
+  const events = []
+  const trebleColumns = [
+    { cx: 100, midis: [76, 71, 67], stems: ['up', 'down', 'down'] },
+    { cx: 124, midis: [77], stems: ['up'] },
+    { cx: 148, midis: [76], stems: ['up'] },
+    { cx: 172, midis: [71], stems: ['up'] },
+    { cx: 186, midis: [73, 68, 64], stems: ['down', 'down', 'down'], open: [false, true, true] },
+    { cx: misalignedCadence ? 249 : 244, midis: [69], stems: ['up'] },
+    { cx: 257, midis: [71], stems: ['up'] },
+    { cx: 281, midis: [72], stems: ['up'] },
+    { cx: 295, midis: [74], stems: ['up'] },
+  ]
+  for (const [columnIndex, column] of trebleColumns.entries()) {
+    events.push(latticeEvent(column.midis.map((midi, noteIndex) => latticeNote({
+      cx: column.cx,
+      midi,
+      stem: column.stems[noteIndex],
+      open: column.open?.[noteIndex] && !(missingHollow && noteIndex === 2),
+    })), columnIndex * 2, 2))
+  }
+  const bassColumns = [
+    { cx: 100, midis: [40] },
+    { cx: 124, midis: [47] },
+    { cx: 148, midis: [56, 52] },
+    { cx: 172, midis: [47] },
+    { cx: 200, midis: [49, 37] },
+    { cx: 244, midis: [53, 41] },
+  ]
+  for (const [columnIndex, column] of bassColumns.entries()) {
+    events.push(latticeEvent(column.midis.map((midi) => latticeNote({
+      cx: column.cx,
+      midi,
+      clef: 'bass',
+      stem: 'up',
+    })), columnIndex * 2, 2))
+  }
+  return events
+}
+
+describe('reconstructHalfSustainSixteenthCadenceGrid', () => {
+  it('recovers the offset half sustain and terminal sixteenth cadence', () => {
+    const source = halfSustainSixteenthCadenceFixture()
+    const rebuilt = reconstructHalfSustainSixteenthCadenceGrid(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(22)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'note',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 2],
+      [2, 2],
+      [4, 2],
+      [6, 1],
+      [7, 4],
+      [12, 1],
+      [13, 1],
+      [14, 1],
+      [15, 1],
+    ])
+    expect(rebuilt.find(
+      (event) => event.sourceVoice === 1 && event.type === 'rest',
+    )).toMatchObject({ startDivision: 11, durationDivisions: 1 })
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+      event.notes?.length ?? 0,
+    ])).toEqual([
+      ['note', 0, 6, 2],
+      ['rest', 6, 1, 0],
+      ['note', 7, 8, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 2], [8, 4], [12, 4]])
+  })
+
+  it.each([
+    ['incomplete hollow sustain evidence', { missingHollow: true }],
+    ['a cadence outside the final bass anchor', { misalignedCadence: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = halfSustainSixteenthCadenceFixture(options)
+    expect(reconstructHalfSustainSixteenthCadenceGrid(source, 16)).toBe(source)
   })
 })
 
