@@ -5611,6 +5611,18 @@ function isOpenNotehead(note) {
   )
 }
 
+function latticeEntriesForClef(noteEvents, clef) {
+  return noteEvents.flatMap((event) => {
+    const eventNotes = (event.notes ?? []).filter((note) =>
+      clef === 'bass'
+        ? (note.clef ?? 'treble') === 'bass'
+        : (note.clef ?? 'treble') !== 'bass',
+    )
+    const latticeCx = medianNumber(eventNotes.map((note) => note.cx).filter(Number.isFinite))
+    return eventNotes.map((note) => ({ event, note, latticeCx }))
+  })
+}
+
 /**
  * Recover an eight-column piano texture where two hollow lower melody heads
  * begin half-note sustains underneath a continuous eighth-note melody. The
@@ -5629,17 +5641,8 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
     return events
   }
   const noteEvents = events.filter((event) => event.type === 'note')
-  const entriesForClef = (clef) => noteEvents.flatMap((event) => {
-    const eventNotes = (event.notes ?? []).filter((note) =>
-      clef === 'bass'
-        ? (note.clef ?? 'treble') === 'bass'
-        : (note.clef ?? 'treble') !== 'bass',
-    )
-    const latticeCx = medianNumber(eventNotes.map((note) => note.cx).filter(Number.isFinite))
-    return eventNotes.map((note) => ({ event, note, latticeCx }))
-  })
-  const trebleEntries = entriesForClef('treble')
-  const bassEntries = entriesForClef('bass')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
   if (
     trebleEntries.length !== 10 ||
     bassEntries.length !== 12 ||
@@ -5751,6 +5754,157 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   return sortVectorRhythmEvents(rebuilt.map((event) => ({
     ...event,
     eighthMelodyHalfSustainArpeggioLattice: true,
+  })))
+}
+
+const DOTTED_CHORD_OFFBEAT_VOICE = Object.freeze({
+  SUSTAINED_CHORDS: 1,
+  OFFBEAT_CHORDS: 2,
+  BASS: 5,
+})
+
+/**
+ * Recover two repeated dotted-quarter chord pulses with paired offbeat chords.
+ * The engraving supplies two aligned eight-column staff grids: the treble has
+ * large up-stem chords at the half-measure boundaries and punctuation columns,
+ * with two down-stem beamed chord attacks between them; the bass alternates a
+ * single low note with an upper dyad on every eighth-note column.
+ */
+export function reconstructDottedChordOffbeatPairLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 21 ||
+    bassEntries.length !== 12 ||
+    [...trebleEntries, ...bassEntries].some(
+      (entry) => !Number.isFinite(entry.note.cx) || isOpenNotehead(entry.note),
+    )
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  if (
+    trebleColumns.length !== 8 ||
+    bassColumns.length !== 8 ||
+    ![3, 4].includes(trebleColumns[0].entries.length) ||
+    ![3, 4].includes(trebleColumns[4].entries.length) ||
+    trebleColumns[0].entries.length + trebleColumns[4].entries.length !== 7 ||
+    trebleColumns.some((column, index) =>
+      index !== 0 &&
+      index !== 4 &&
+      column.entries.length !== ([1, 2, 5, 6].includes(index) ? 2 : 3),
+    ) ||
+    bassColumns.some((column, index) =>
+      column.entries.length !== (index % 2 === 0 ? 1 : 2),
+    )
+  ) {
+    return events
+  }
+
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber([...trebleGaps, ...bassGaps])
+  const sustainedColumns = [trebleColumns[0], trebleColumns[4]]
+  const offbeatColumns = [
+    trebleColumns[1],
+    trebleColumns[2],
+    trebleColumns[5],
+    trebleColumns[6],
+  ]
+  if (
+    !(typicalGap > 0) ||
+    [...trebleGaps, ...bassGaps].some(
+      (gap) => gap < typicalGap * 0.65 || gap > typicalGap * 1.45,
+    ) ||
+    trebleColumns.some(
+      (column, index) =>
+        Math.abs(column.cx - bassColumns[index].cx) > Math.max(4, typicalGap * 0.3),
+    ) ||
+    stemDirectionShare(sustainedColumns.flatMap((column) => column.entries), 'up') < 0.7 ||
+    stemDirectionShare(offbeatColumns.flatMap((column) => column.entries), 'down') < 0.75 ||
+    stemDirectionShare(bassEntries, 'up') < 0.7
+  ) {
+    return events
+  }
+
+  const rebuilt = [
+    denseLatticeEvent(
+      trebleColumns[0].entries,
+      0,
+      6,
+      DOTTED_CHORD_OFFBEAT_VOICE.SUSTAINED_CHORDS,
+      'dotted-chord-pulses',
+    ),
+    denseLatticeEvent(
+      trebleColumns[3].entries,
+      6,
+      2,
+      DOTTED_CHORD_OFFBEAT_VOICE.SUSTAINED_CHORDS,
+      'dotted-chord-pulses',
+    ),
+    denseLatticeEvent(
+      trebleColumns[4].entries,
+      8,
+      6,
+      DOTTED_CHORD_OFFBEAT_VOICE.SUSTAINED_CHORDS,
+      'dotted-chord-pulses',
+    ),
+    denseLatticeEvent(
+      trebleColumns[7].entries,
+      14,
+      2,
+      DOTTED_CHORD_OFFBEAT_VOICE.SUSTAINED_CHORDS,
+      'dotted-chord-pulses',
+    ),
+  ]
+  for (const index of [1, 2, 5, 6]) {
+    rebuilt.push(denseLatticeEvent(
+      trebleColumns[index].entries,
+      index * 2,
+      2,
+      DOTTED_CHORD_OFFBEAT_VOICE.OFFBEAT_CHORDS,
+      'offbeat-chord-pairs',
+    ))
+  }
+  for (const [startDivision, durationDivisions] of [[0, 2], [6, 4], [14, 2]]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision,
+      durationDivisions,
+      ...durationMeta(durationDivisions),
+      sourceVoice: DOTTED_CHORD_OFFBEAT_VOICE.OFFBEAT_CHORDS,
+      sourceVoiceLane: 'offbeat-chord-pairs',
+      structuralVoiceRest: true,
+    })
+  }
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 2,
+      2,
+      DOTTED_CHORD_OFFBEAT_VOICE.BASS,
+      'bass-eighth-ostinato',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    dottedChordOffbeatPairLattice: true,
   })))
 }
 
@@ -6598,6 +6752,7 @@ export function buildVectorMeasureRecord({
     imageData,
   })
   events = reconstructEighthMelodyHalfSustainArpeggioLattice(events, totalDivisions)
+  events = reconstructDottedChordOffbeatPairLattice(events, totalDivisions)
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
   events = reconstructTripletMelodyOverprintLattice(events, totalDivisions, {

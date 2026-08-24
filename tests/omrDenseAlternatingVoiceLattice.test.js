@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
+  reconstructDottedChordOffbeatPairLattice,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
@@ -488,6 +489,77 @@ describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = eighthMelodyHalfSustainFixture(options)
     expect(reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)).toBe(source)
+  })
+})
+
+function dottedChordOffbeatFixture({
+  laterFourNoteChord = false,
+  wrongOffbeatStem = false,
+  misalignedBass = false,
+} = {}) {
+  const events = []
+  const trebleCounts = laterFourNoteChord
+    ? [3, 2, 2, 3, 4, 2, 2, 3]
+    : [4, 2, 2, 3, 3, 2, 2, 3]
+  const bassCounts = [1, 2, 1, 2, 1, 2, 1, 2]
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 20
+    const offbeat = [1, 2, 5, 6].includes(index)
+    events.push(latticeEvent(
+      Array.from({ length: trebleCounts[index] }, (_, noteIndex) => latticeNote({
+        cx,
+        midi: 80 - noteIndex * 4 - (index % 4),
+        stem: wrongOffbeatStem && offbeat ? 'up' : offbeat ? 'down' : 'up',
+      })),
+      index * 2,
+      2,
+    ))
+    events.push(latticeEvent(
+      Array.from({ length: bassCounts[index] }, (_, noteIndex) => latticeNote({
+        cx: cx + (misalignedBass && index === 6 ? 8 : 0),
+        midi: 48 - noteIndex * 7 - (index % 2) * 4,
+        clef: 'bass',
+        stem: 'up',
+      })),
+      index * 2,
+      2,
+    ))
+  }
+  return events
+}
+
+describe('reconstructDottedChordOffbeatPairLattice', () => {
+  it.each([
+    ['an opening four-note pulse', false],
+    ['a later four-note pulse', true],
+  ])('recovers sustained and offbeat chord lanes for %s', (_label, laterFourNoteChord) => {
+    const source = dottedChordOffbeatFixture({ laterFourNoteChord })
+    const rebuilt = reconstructDottedChordOffbeatPairLattice(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(33)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 6], [6, 2], [8, 6], [14, 2]])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 2 && event.type === 'note',
+    ).map((event) => event.startDivision)).toEqual([2, 4, 10, 12])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 2 && event.type === 'rest',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 2],
+      [6, 4],
+      [14, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+  })
+
+  it.each([
+    ['unsupported offbeat stem ownership', { wrongOffbeatStem: true }],
+    ['a broken staff-column alignment', { misalignedBass: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = dottedChordOffbeatFixture(options)
+    expect(reconstructDottedChordOffbeatPairLattice(source, 16)).toBe(source)
   })
 })
 
