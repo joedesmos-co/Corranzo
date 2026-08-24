@@ -5807,6 +5807,150 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   })))
 }
 
+const DOTTED_MELODY_HALF_CHORD_VOICE = Object.freeze({
+  MELODY: 1,
+  SUSTAIN: 2,
+  BASS: 5,
+})
+
+/**
+ * Recover a staggered dotted melody over two half-note chord anchors and a
+ * regular eight-column bass grid. The final treble sixteenth sits between the
+ * last bass attack and the barline, while the preceding beat contains a
+ * source-printed eighth rest in the melody lane.
+ */
+export function reconstructDottedMelodyHalfChordBassGrid(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 9 ||
+    bassEntries.length !== 20 ||
+    [...trebleEntries, ...bassEntries].some((entry) => !Number.isFinite(entry.note.cx))
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  if (
+    trebleColumns.length !== 5 ||
+    bassColumns.length !== 8 ||
+    trebleColumns.some((column, index) =>
+      column.entries.length !== ([0, 2].includes(index) ? 3 : 1),
+    ) ||
+    bassColumns.some((column, index) =>
+      column.entries.length !== (index % 2 === 0 ? 3 : 2),
+    )
+  ) {
+    return events
+  }
+
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber(bassGaps)
+  const alignments = [[0, 0], [1, 3], [2, 4], [3, 7]]
+  const terminalGap = trebleColumns[4].cx - bassColumns[7].cx
+  if (
+    !(typicalGap > 0) ||
+    bassGaps.some((gap, index) =>
+      gap < typicalGap * 0.75 || gap > typicalGap * (index === 3 ? 1.4 : 1.25),
+    ) ||
+    alignments.some(
+      ([trebleIndex, bassIndex]) =>
+        Math.abs(trebleColumns[trebleIndex].cx - bassColumns[bassIndex].cx) >
+        Math.max(4, typicalGap * 0.3),
+    ) ||
+    terminalGap < typicalGap * 0.45 ||
+    terminalGap > typicalGap * 0.8
+  ) {
+    return events
+  }
+
+  const melodyEntries = []
+  const sustainColumns = []
+  for (const [index, column] of trebleColumns.entries()) {
+    const sorted = [...column.entries].sort(
+      (left, right) => right.note.midi - left.note.midi,
+    )
+    if (index === 0 || index === 2) {
+      if (
+        isOpenNotehead(sorted[0].note) ||
+        sorted.slice(1).some((entry) => !isOpenNotehead(entry.note))
+      ) {
+        return events
+      }
+      melodyEntries.push(sorted[0])
+      sustainColumns.push(sorted.slice(1))
+    } else {
+      if (isOpenNotehead(sorted[0].note)) return events
+      melodyEntries.push(sorted[0])
+    }
+  }
+  const melodyMidis = melodyEntries.map((entry) => entry.note.midi)
+  if (
+    trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length !== 4 ||
+    bassEntries.some((entry) => isOpenNotehead(entry.note)) ||
+    melodyMidis[0] <= melodyMidis[1] ||
+    melodyMidis[2] <= melodyMidis[1] ||
+    melodyMidis[2] <= melodyMidis[3] ||
+    melodyMidis[4] < melodyMidis[3]
+  ) {
+    return events
+  }
+
+  const melodyStarts = [0, 6, 8, 14, 15]
+  const melodyDurations = [6, 2, 4, 1, 1]
+  const rebuilt = melodyEntries.map((entry, index) => denseLatticeEvent(
+    [entry],
+    melodyStarts[index],
+    melodyDurations[index],
+    DOTTED_MELODY_HALF_CHORD_VOICE.MELODY,
+    'staggered-dotted-melody',
+  ))
+  rebuilt.push({
+    type: 'rest',
+    clef: 'treble',
+    startDivision: 12,
+    durationDivisions: 2,
+    ...durationMeta(2),
+    sourceVoice: DOTTED_MELODY_HALF_CHORD_VOICE.MELODY,
+    sourceVoiceLane: 'staggered-dotted-melody',
+    structuralVoiceRest: true,
+  })
+  for (const [index, entries] of sustainColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      entries,
+      index * 8,
+      8,
+      DOTTED_MELODY_HALF_CHORD_VOICE.SUSTAIN,
+      'half-note-chord-sustain',
+    ))
+  }
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 2,
+      2,
+      DOTTED_MELODY_HALF_CHORD_VOICE.BASS,
+      'bass-chord-grid',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    dottedMelodyHalfChordBassGrid: true,
+  })))
+}
+
 const DOTTED_CHORD_OFFBEAT_VOICE = Object.freeze({
   SUSTAINED_CHORDS: 1,
   OFFBEAT_CHORDS: 2,
@@ -6802,6 +6946,7 @@ export function buildVectorMeasureRecord({
     imageData,
   })
   events = reconstructEighthMelodyHalfSustainArpeggioLattice(events, totalDivisions)
+  events = reconstructDottedMelodyHalfChordBassGrid(events, totalDivisions)
   events = reconstructDottedChordOffbeatPairLattice(events, totalDivisions)
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)

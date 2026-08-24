@@ -5,6 +5,7 @@ import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedChordOffbeatPairLattice,
+  reconstructDottedMelodyHalfChordBassGrid,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
@@ -539,6 +540,84 @@ describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = eighthMelodyHalfSustainFixture(options)
     expect(reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)).toBe(source)
+  })
+})
+
+function dottedMelodyHalfChordFixture({
+  missingHollow = false,
+  misplacedTerminal = false,
+} = {}) {
+  const events = []
+  const bassCounts = [3, 2, 3, 2, 3, 2, 3, 2]
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 20
+    events.push(latticeEvent(
+      Array.from({ length: bassCounts[index] }, (_, noteIndex) => latticeNote({
+        cx,
+        midi: 48 - noteIndex * 6 + (index >= 4 ? 1 : 0),
+        clef: 'bass',
+        stem: 'up',
+      })),
+      index * 2,
+      2,
+    ))
+  }
+  const anchor = (cx, melodyMidi, lowerMidis, secondAnchor = false) => {
+    const notes = [latticeNote({ cx, midi: melodyMidi, stem: 'up' })]
+    for (const [index, midi] of lowerMidis.entries()) {
+      const note = latticeNote({
+        cx,
+        midi,
+        stem: 'down',
+        open: !(missingHollow && secondAnchor && index === 1),
+      })
+      note.noteheadGlyph = note.hollow ? 'half' : 'black'
+      notes.push(note)
+    }
+    return notes
+  }
+  events.push(latticeEvent(anchor(100, 80, [76, 72]), 0, 4))
+  events.push(latticeEvent([latticeNote({ cx: 160, midi: 78 })], 4, 4))
+  events.push(latticeEvent(anchor(180, 80, [75, 71], true), 7, 6))
+  events.push(latticeEvent([latticeNote({ cx: 240, midi: 78 })], 13, 1))
+  events.push(latticeEvent([
+    latticeNote({ cx: misplacedTerminal ? 258 : 252, midi: 80 }),
+  ], 15, 1))
+  return events
+}
+
+describe('reconstructDottedMelodyHalfChordBassGrid', () => {
+  it('recovers staggered melody, chord sustains, and the regular bass grid', () => {
+    const source = dottedMelodyHalfChordFixture()
+    const rebuilt = reconstructDottedMelodyHalfChordBassGrid(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(29)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'note',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 6],
+      [6, 2],
+      [8, 4],
+      [14, 1],
+      [15, 1],
+    ])
+    expect(rebuilt.find(
+      (event) => event.sourceVoice === 1 && event.type === 'rest',
+    )).toMatchObject({ startDivision: 12, durationDivisions: 2 })
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 8, 2], [8, 8, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+  })
+
+  it.each([
+    ['incomplete hollow chord evidence', { missingHollow: true }],
+    ['a terminal note outside the printed sixteenth gap', { misplacedTerminal: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = dottedMelodyHalfChordFixture(options)
+    expect(reconstructDottedMelodyHalfChordBassGrid(source, 16)).toBe(source)
   })
 })
 
