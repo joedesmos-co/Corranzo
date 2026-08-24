@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
+  reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructTripletMelodyOverprintLattice,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -239,6 +240,105 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = denseAlternatingFixture(options)
     expect(reconstructDenseAlternatingVoiceLattice(source, 16)).toBe(source)
+  })
+})
+
+function mixedTupletFixture({ misalignedClosing = false } = {}) {
+  const events = []
+  const openingTreble = [73, 80, 75, 68].map((midi, index) =>
+    latticeNote({ cx: index === 0 ? 100 : 108, midi, stem: index < 2 ? 'down' : 'up' }),
+  )
+  events.push(latticeEvent(openingTreble.slice(0, 1), 0, 1))
+  events.push(latticeEvent(openingTreble.slice(1), 1, 1))
+  events.push(latticeEvent([
+    latticeNote({ cx: 108, midi: 44, clef: 'bass', stem: 'up' }),
+    latticeNote({ cx: 108, midi: 32, clef: 'bass', stem: 'up' }),
+  ], 1, 2))
+
+  const trebleMidis = [63, 56, 61, 63, 68, 73, 75, 80, 85, 87]
+  trebleMidis.forEach((midi, index) => {
+    const note = latticeNote({
+      cx: 160 + index * 20,
+      midi,
+      stem: index < 5 ? 'up' : 'down',
+    })
+    if (index < 3) note.beams = 2
+    events.push(latticeEvent([note], index + 2, 1))
+  })
+  const bassMidis = [51, 44, 49, 51, 56, 61, 63]
+  bassMidis.forEach((midi, index) => {
+    const note = latticeNote({
+      cx: 160 + index * (170 / 6),
+      midi,
+      clef: 'bass',
+      stem: 'down',
+    })
+    if (index < 3) note.beams = 2
+    events.push(latticeEvent([note], index + 2, 1))
+  })
+  const trebleClosingMidis = [92, 87, 85, 80]
+  const bassClosingMidis = [68, 63, 61, 56]
+  for (let index = 0; index < 4; index += 1) {
+    const cx = 360 + index * 24
+    events.push(latticeEvent([
+      latticeNote({ cx, midi: trebleClosingMidis[index], stem: 'down' }),
+    ], 12 + index, 1))
+    events.push(latticeEvent([
+      latticeNote({
+        cx: cx + (misalignedClosing && index === 2 ? 8 : 0),
+        midi: bassClosingMidis[index],
+        clef: 'bass',
+        stem: 'down',
+      }),
+    ], 12 + index, 1))
+  }
+  return events
+}
+
+describe('reconstructMixedQuintupletSeptupletLattice', () => {
+  const geometry = {
+    glyphs: [{ text: '5', x: 240, y: 90 }, { text: '7', x: 260, y: 140 }],
+    measureBox: { x0: 0.05, x1: 0.5, y0: 0.05, y1: 0.2 },
+    imageData: { width: 1000, height: 1000 },
+  }
+
+  it('recovers independent quintuplet, septuplet, and closing grids', () => {
+    const source = mixedTupletFixture()
+    const rebuilt = reconstructMixedQuintupletSeptupletLattice(source, 16, geometry)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(31)
+    expect(rebuilt.filter(
+      (event) => event.timeModification?.actualNotes === 5,
+    )).toHaveLength(10)
+    expect(rebuilt.filter(
+      (event) => event.timeModification?.actualNotes === 7,
+    )).toHaveLength(7)
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.startDivision >= 12,
+    ).map((event) => event.startDivision)).toEqual([12, 13, 14, 15])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 5 && event.startDivision >= 12,
+    ).map((event) => event.startDivision)).toEqual([12, 13, 14, 15])
+
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, events: rebuilt }],
+      includeDisclaimer: false,
+    })
+    expect(xml).toContain('<actual-notes>5</actual-notes>')
+    expect(xml).toContain('<actual-notes>7</actual-notes>')
+  })
+
+  it('abstains without both printed tuplet digits', () => {
+    const source = mixedTupletFixture()
+    expect(reconstructMixedQuintupletSeptupletLattice(source, 16, {
+      ...geometry,
+      glyphs: geometry.glyphs.slice(0, 1),
+    })).toBe(source)
+  })
+
+  it('abstains when the closing staff grids do not align', () => {
+    const source = mixedTupletFixture({ misalignedClosing: true })
+    expect(reconstructMixedQuintupletSeptupletLattice(source, 16, geometry)).toBe(source)
   })
 })
 

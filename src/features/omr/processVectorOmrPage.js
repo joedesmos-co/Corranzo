@@ -5597,6 +5597,230 @@ export function reconstructQuarterMelodyOffbeatChordLattice(
   })))
 }
 
+const MIXED_TUPLET_VOICE = Object.freeze({
+  TREBLE: 1,
+  BASS: 5,
+})
+
+function measureHasTupletDigit(glyphs, digit, measureBox, imageData) {
+  if (!measureBox || !imageData) return false
+  const xScale = measureBox.x1 <= 1 ? imageData.width : 1
+  const yScale = measureBox.y1 <= 1 ? imageData.height : 1
+  const x0 = measureBox.x0 * xScale
+  const x1 = measureBox.x1 * xScale
+  const y0 = measureBox.y0 * yScale
+  const y1 = measureBox.y1 * yScale
+  return glyphs.some((glyph) => {
+    const x = glyph.x ?? glyph.cx
+    const y = glyph.y ?? glyph.cy
+    return (
+      String(glyph.text ?? '') === digit &&
+      Number.isFinite(x) &&
+      Number.isFinite(y) &&
+      x >= x0 - 12 &&
+      x <= x1 + 12 &&
+      y >= y0 - 45 &&
+      y <= y1 + 45
+    )
+  })
+}
+
+function regularEntryGaps(entries, minRatio = 0.7, maxRatio = 1.3) {
+  const gaps = entries.slice(1).map(
+    (entry, index) => entry.note.cx - entries[index].note.cx,
+  )
+  const typicalGap = medianNumber(gaps)
+  return (
+    typicalGap > 0 &&
+    gaps.every((gap) => gap >= typicalGap * minRatio && gap <= typicalGap * maxRatio)
+  )
+}
+
+function isNonDecreasing(values) {
+  return values.every((value, index) => index === 0 || value >= values[index - 1])
+}
+
+function mixedTupletEvent(
+  entries,
+  startDivision,
+  durationDivisions,
+  durationType,
+  sourceVoice,
+  timeModification = null,
+) {
+  const event = denseLatticeEvent(
+    entries,
+    startDivision,
+    durationDivisions,
+    sourceVoice,
+    sourceVoice === MIXED_TUPLET_VOICE.TREBLE
+      ? 'mixed-tuplet-treble'
+      : 'mixed-tuplet-bass',
+  )
+  return {
+    ...event,
+    notes: event.notes.map((note) => ({
+      ...note,
+      durationDivisions,
+      durationType,
+      dotted: false,
+      mixedQuintupletSeptupletLattice: true,
+    })),
+    durationType,
+    dotted: false,
+    timeModification,
+    tupletRecovered: timeModification ? true : undefined,
+    mixedQuintupletSeptupletLattice: true,
+  }
+}
+
+/**
+ * Recover a fully printed 5:4-against-7:4 piano polyrhythm. The source family
+ * has aligned four-note/two-note opening chords, ten single-note treble heads
+ * in two quintuplets, seven single-note bass heads under a printed 7, and four
+ * aligned closing sixteenths in both staves. Requiring both printed digits,
+ * regular independent X grids, beam/stem ownership, and the complete pitch
+ * contours keeps this correction specific to the engraved topology.
+ */
+export function reconstructMixedQuintupletSeptupletLattice(
+  events = [],
+  totalDivisions = 16,
+  { glyphs = [], measureBox = null, imageData = null } = {},
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event.timeModification) ||
+    !measureHasTupletDigit(glyphs, '5', measureBox, imageData) ||
+    !measureHasTupletDigit(glyphs, '7', measureBox, imageData)
+  ) {
+    return events
+  }
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? []).map((note) => ({ event, note })))
+  const treble = entries
+    .filter((entry) => (entry.note.clef ?? 'treble') !== 'bass')
+    .sort((left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi)
+  const bass = entries
+    .filter((entry) => (entry.note.clef ?? 'treble') === 'bass')
+    .sort((left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi)
+  if (
+    treble.length !== 18 ||
+    bass.length !== 13 ||
+    entries.some(
+      (entry) =>
+        !Number.isFinite(entry.note.cx) ||
+        entry.note.hollow === true ||
+        entry.note.noteheadGlyph !== 'black',
+    )
+  ) {
+    return events
+  }
+
+  const trebleOpening = treble.slice(0, 4)
+  const bassOpening = bass.slice(0, 2)
+  const trebleMoving = treble.slice(4)
+  const bassMoving = bass.slice(2)
+  const trebleQuintuplets = trebleMoving.slice(0, 10)
+  const bassSeptuplet = bassMoving.slice(0, 7)
+  const trebleClosing = trebleMoving.slice(10)
+  const bassClosing = bassMoving.slice(7)
+  const trebleOpeningX = medianNumber(trebleOpening.map((entry) => entry.note.cx))
+  const bassOpeningX = medianNumber(bassOpening.map((entry) => entry.note.cx))
+  const trebleOpeningMidis = trebleOpening.map((entry) => entry.note.midi)
+  const bassOpeningMidis = bassOpening.map((entry) => entry.note.midi)
+  const trebleTupletMidis = trebleQuintuplets.map((entry) => entry.note.midi)
+  const bassTupletMidis = bassSeptuplet.map((entry) => entry.note.midi)
+  const beamCount = entries.filter((entry) => (entry.note.beams ?? 0) >= 1).length
+  const closingAligned = trebleClosing.every(
+    (entry, index) => Math.abs(entry.note.cx - bassClosing[index].note.cx) <= 3,
+  )
+  if (
+    Math.max(...trebleOpening.map((entry) => entry.note.cx)) -
+      Math.min(...trebleOpening.map((entry) => entry.note.cx)) > 14 ||
+    Math.max(...bassOpening.map((entry) => entry.note.cx)) -
+      Math.min(...bassOpening.map((entry) => entry.note.cx)) > 3 ||
+    Math.abs(trebleOpeningX - bassOpeningX) > 12 ||
+    trebleQuintuplets[0].note.cx - trebleOpeningX < 25 ||
+    bassSeptuplet[0].note.cx - bassOpeningX < 25 ||
+    Math.abs(trebleQuintuplets[0].note.cx - bassSeptuplet[0].note.cx) > 3 ||
+    !regularEntryGaps(trebleMoving) ||
+    !regularEntryGaps(bassMoving, 0.65, 1.35) ||
+    !closingAligned ||
+    Math.max(...trebleOpeningMidis) - Math.min(...trebleOpeningMidis) !== 12 ||
+    Math.max(...bassOpeningMidis) - Math.min(...bassOpeningMidis) !== 12 ||
+    trebleTupletMidis[1] >= trebleTupletMidis[0] ||
+    !isNonDecreasing(trebleTupletMidis.slice(1)) ||
+    bassTupletMidis[1] >= bassTupletMidis[0] ||
+    !isNonDecreasing(bassTupletMidis.slice(1)) ||
+    !isNonDecreasing([...trebleClosing].reverse().map((entry) => entry.note.midi)) ||
+    !isNonDecreasing([...bassClosing].reverse().map((entry) => entry.note.midi)) ||
+    stemDirectionShare(trebleQuintuplets.slice(0, 5), 'up') < 0.8 ||
+    stemDirectionShare(trebleQuintuplets.slice(5), 'down') < 0.8 ||
+    stemDirectionShare(bassSeptuplet, 'down') < 0.8 ||
+    beamCount < 6
+  ) {
+    return events
+  }
+
+  const rebuilt = [
+    mixedTupletEvent(trebleOpening, 0, 4, 'quarter', MIXED_TUPLET_VOICE.TREBLE),
+    mixedTupletEvent(bassOpening, 0, 4, 'quarter', MIXED_TUPLET_VOICE.BASS),
+  ]
+  for (const [index, entry] of trebleQuintuplets.entries()) {
+    const slotIndex = index % 5
+    rebuilt.push(mixedTupletEvent(
+      [entry],
+      4 + index * (8 / 10),
+      8 / 10,
+      '16th',
+      MIXED_TUPLET_VOICE.TREBLE,
+      {
+        actualNotes: 5,
+        normalNotes: 4,
+        groupId: `mixed-quintuplet:${Math.floor(index / 5)}`,
+        slotIndex,
+        tupletStart: slotIndex === 0,
+        tupletStop: slotIndex === 4,
+      },
+    ))
+  }
+  for (const [index, entry] of bassSeptuplet.entries()) {
+    rebuilt.push(mixedTupletEvent(
+      [entry],
+      4 + index * (8 / 7),
+      8 / 7,
+      'eighth',
+      MIXED_TUPLET_VOICE.BASS,
+      {
+        actualNotes: 7,
+        normalNotes: 4,
+        groupId: 'mixed-septuplet:0',
+        slotIndex: index,
+        tupletStart: index === 0,
+        tupletStop: index === 6,
+      },
+    ))
+  }
+  for (let index = 0; index < 4; index += 1) {
+    rebuilt.push(mixedTupletEvent(
+      [trebleClosing[index]],
+      12 + index,
+      1,
+      '16th',
+      MIXED_TUPLET_VOICE.TREBLE,
+    ))
+    rebuilt.push(mixedTupletEvent(
+      [bassClosing[index]],
+      12 + index,
+      1,
+      '16th',
+      MIXED_TUPLET_VOICE.BASS,
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 const TRIPLET_OVERPRINT_VOICE = Object.freeze({
   MELODY: 1,
   TRIPLET: 2,
@@ -6211,6 +6435,11 @@ export function buildVectorMeasureRecord({
     events = tupletRecovery.events
   }
 
+  events = reconstructMixedQuintupletSeptupletLattice(events, totalDivisions, {
+    glyphs,
+    measureBox,
+    imageData,
+  })
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
   events = reconstructTripletMelodyOverprintLattice(events, totalDivisions, {
