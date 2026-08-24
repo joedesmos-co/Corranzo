@@ -40,6 +40,9 @@ function denseAlternatingFixture({
   lowerStem = 'down',
   bass = true,
   beamedBass = true,
+  displacedChordHead = false,
+  melodyIntrusions = true,
+  thinLowerColumn = false,
 } = {}) {
   const events = []
   if (bass) {
@@ -50,12 +53,11 @@ function denseAlternatingFixture({
     }
     events.push(latticeEvent([note], 0, 16))
   }
-  const melodyByColumn = new Map([
-    [0, 79],
-    [6, 77],
-    [8, 76],
-    [12, 74],
-  ])
+  const melodyByColumn = new Map(
+    melodyIntrusions
+      ? [[0, 79], [6, 77], [8, 76], [12, 74]]
+      : [[0, 79]],
+  )
   for (let index = 0; index < columns; index += 1) {
     const baseX = 100 + index * 20
     if (index === 0) {
@@ -74,6 +76,8 @@ function denseAlternatingFixture({
     const lowerNotes = [67, 64, 60].map((midi, noteIndex) =>
       latticeNote({ cx: baseX + noteIndex * 0.3, midi, stem: lowerStem }),
     )
+    if (thinLowerColumn && index === 4) lowerNotes.pop()
+    if (displacedChordHead && index === 10) lowerNotes[2].cx -= 9
     const melodyMidi = melodyByColumn.get(index)
     if (melodyMidi != null) {
       // A nearby independent melody note can be offset in X without becoming
@@ -94,7 +98,7 @@ function denseAlternatingFixture({
 
 describe('reconstructDenseAlternatingVoiceLattice', () => {
   it('recovers four independent source lanes from a complete 16-column lattice', () => {
-    const source = denseAlternatingFixture()
+    const source = denseAlternatingFixture({ displacedChordHead: true })
     const rebuilt = reconstructDenseAlternatingVoiceLattice(source, 16)
 
     expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(
@@ -137,6 +141,21 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
       expect(xml).toContain(`<voice>${voice}</voice>`)
     }
     expect(xml).toContain('<backup>')
+  })
+
+  it('accepts a complete variant with no later melody intrusion and one two-note lower chord', () => {
+    const source = denseAlternatingFixture({
+      melodyIntrusions: false,
+      thinLowerColumn: true,
+    })
+    const rebuilt = reconstructDenseAlternatingVoiceLattice(source, 16)
+
+    expect(rebuilt).not.toBe(source)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(1)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2 && event.type === 'note'))
+      .toHaveLength(8)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+    expect(rebuilt.filter((event) => event.sourceVoice === 6)).toHaveLength(1)
   })
 
   it.each([

@@ -5126,11 +5126,13 @@ const DENSE_ALTERNATING_VOICE = Object.freeze({
 
 function clusterDenseLatticeNotes(entries) {
   const sorted = [...entries].sort(
-    (left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi,
+    (left, right) =>
+      (left.latticeCx ?? left.note.cx) - (right.latticeCx ?? right.note.cx) ||
+      right.note.midi - left.note.midi,
   )
   const distinctXs = []
   for (const entry of sorted) {
-    const x = entry.note.cx
+    const x = entry.latticeCx ?? entry.note.cx
     if (!distinctXs.length || Math.abs(x - distinctXs.at(-1)) > 0.75) {
       distinctXs.push(x)
     }
@@ -5142,17 +5144,18 @@ function clusterDenseLatticeNotes(entries) {
   const mergeGap = Math.min(10, typicalGap * 0.48)
   const clusters = []
   for (const entry of sorted) {
+    const x = entry.latticeCx ?? entry.note.cx
     const current = clusters.at(-1)
-    if (!current || entry.note.cx - current.maxX > mergeGap) {
-      clusters.push({ entries: [entry], minX: entry.note.cx, maxX: entry.note.cx })
+    if (!current || x - current.maxX > mergeGap) {
+      clusters.push({ entries: [entry], minX: x, maxX: x })
     } else {
       current.entries.push(entry)
-      current.maxX = Math.max(current.maxX, entry.note.cx)
+      current.maxX = Math.max(current.maxX, x)
     }
   }
   return clusters.map((cluster) => ({
     ...cluster,
-    cx: average(cluster.entries.map((entry) => entry.note.cx)),
+    cx: average(cluster.entries.map((entry) => entry.latticeCx ?? entry.note.cx)),
   }))
 }
 
@@ -5217,11 +5220,13 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   )
   if (!bassAnchor || bassEvents.length !== 1) return events
 
-  const trebleEntries = noteEvents.flatMap((event) =>
-    (event.notes ?? [])
-      .filter((note) => (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx))
-      .map((note) => ({ event, note })),
-  )
+  const trebleEntries = noteEvents.flatMap((event) => {
+    const eventNotes = (event.notes ?? []).filter(
+      (note) => (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx),
+    )
+    const latticeCx = medianNumber(eventNotes.map((note) => note.cx))
+    return eventNotes.map((note) => ({ event, note, latticeCx }))
+  })
   if (trebleEntries.length < 35) return events
   const columns = clusterDenseLatticeNotes(trebleEntries)
   if (columns.length !== 16) return events
@@ -5239,7 +5244,7 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   const lowerColumns = columns.filter((_, index) => index >= 2 && index % 2 === 0)
   if (
     upperColumns.some((column) => column.entries.length < 2 || column.entries.length > 3) ||
-    lowerColumns.some((column) => column.entries.length < 3) ||
+    lowerColumns.some((column) => column.entries.length < 2) ||
     stemDirectionShare(upperColumns.flatMap((column) => column.entries), 'up') < 0.8
   ) {
     return events
@@ -5258,7 +5263,7 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
     const melody = columns[index].entries.filter(
       (entry) => entry.note.midi > lowerPitchCeiling,
     )
-    if (lower.length < 3 || stemDirectionShare(lower, 'down') < 0.6 || melody.length > 1) {
+    if (lower.length < 2 || stemDirectionShare(lower, 'down') < 0.6 || melody.length > 1) {
       return events
     }
     lowerByColumn.set(index, lower)
@@ -5267,7 +5272,6 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   const intrusionCount = melodyEntries.length - columns[0].entries.length
   if (
     columns[0].entries.length !== 1 ||
-    intrusionCount < 2 ||
     intrusionCount > 4 ||
     columns[0].entries[0].note.midi <= lowerPitchCeiling
   ) {
