@@ -5807,6 +5807,130 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   })))
 }
 
+const WHOLE_MELODY_QUARTER_CHORD_VOICE = Object.freeze({
+  MELODY: 1,
+  CHORDS: 2,
+  BASS: 5,
+})
+
+/**
+ * Recover a hollow whole-note melody over four quarter-note chord pulses and
+ * an aligned eight-column bass grid. The whole head is visibly offset between
+ * the first two bass attacks, while each down-stem chord aligns to an even
+ * bass column; serial packing otherwise shifts the chord lane destructively.
+ */
+export function reconstructWholeMelodyQuarterChordBassGrid(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 11 ||
+    bassEntries.length !== 20 ||
+    [...trebleEntries, ...bassEntries].some(
+      (entry) => !Number.isFinite(entry.note.cx),
+    )
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  const trebleCounts = [3, 1, 2, 3, 2]
+  if (
+    trebleColumns.length !== trebleCounts.length ||
+    bassColumns.length !== 8 ||
+    trebleColumns.some(
+      (column, index) => column.entries.length !== trebleCounts[index],
+    ) ||
+    bassColumns.some(
+      (column, index) => column.entries.length !== (index % 2 === 0 ? 3 : 2),
+    )
+  ) {
+    return events
+  }
+
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber(bassGaps)
+  const chordAlignments = [[0, 0], [2, 2], [3, 4], [4, 6]]
+  const wholeOffset = trebleColumns[1].cx - bassColumns[0].cx
+  if (
+    !(typicalGap > 0) ||
+    bassGaps.some((gap) => gap < typicalGap * 0.75 || gap > typicalGap * 1.25) ||
+    chordAlignments.some(
+      ([trebleIndex, bassIndex]) =>
+        Math.abs(trebleColumns[trebleIndex].cx - bassColumns[bassIndex].cx) >
+        Math.max(4, typicalGap * 0.2),
+    ) ||
+    wholeOffset < typicalGap * 0.45 ||
+    wholeOffset > typicalGap * 0.75
+  ) {
+    return events
+  }
+
+  const wholeEntry = trebleColumns[1].entries[0]
+  const chordColumns = [
+    trebleColumns[0],
+    trebleColumns[2],
+    trebleColumns[3],
+    trebleColumns[4],
+  ]
+  if (
+    !isOpenNotehead(wholeEntry.note) ||
+    trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length !== 1 ||
+    chordColumns.some((column) =>
+      column.entries.some(
+        (entry) =>
+          isOpenNotehead(entry.note) || noteStemDirection(entry.note) !== 'down',
+      ),
+    ) ||
+    bassEntries.some((entry) => isOpenNotehead(entry.note))
+  ) {
+    return events
+  }
+
+  const rebuilt = [
+    denseLatticeEvent(
+      [wholeEntry],
+      0,
+      16,
+      WHOLE_MELODY_QUARTER_CHORD_VOICE.MELODY,
+      'whole-note-melody',
+    ),
+  ]
+  for (const [index, column] of chordColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 4,
+      4,
+      WHOLE_MELODY_QUARTER_CHORD_VOICE.CHORDS,
+      'quarter-chord-pulses',
+    ))
+  }
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 2,
+      2,
+      WHOLE_MELODY_QUARTER_CHORD_VOICE.BASS,
+      'alternating-bass-eighths',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    wholeMelodyQuarterChordBassGrid: true,
+  })))
+}
+
 const DOTTED_MELODY_HALF_CHORD_VOICE = Object.freeze({
   MELODY: 1,
   SUSTAIN: 2,
@@ -7487,6 +7611,7 @@ export function buildVectorMeasureRecord({
     imageData,
   })
   events = reconstructEighthMelodyHalfSustainArpeggioLattice(events, totalDivisions)
+  events = reconstructWholeMelodyQuarterChordBassGrid(events, totalDivisions)
   events = reconstructDottedMelodyHalfChordBassGrid(events, totalDivisions)
   events = reconstructHalfMelodyChordCadenceGrid(events, totalDivisions)
   events = reconstructHalfSustainSixteenthCadenceGrid(events, totalDivisions)

@@ -13,6 +13,7 @@ import {
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructTripletMelodyOverprintLattice,
+  reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
 
 function latticeNote({ cx, midi, clef = 'treble', stem = 'up', open = false }) {
@@ -543,6 +544,83 @@ describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = eighthMelodyHalfSustainFixture(options)
     expect(reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)).toBe(source)
+  })
+})
+
+function wholeMelodyQuarterChordFixture({
+  missingWhole = false,
+  misalignedChord = false,
+} = {}) {
+  const events = []
+  const bassCounts = [3, 2, 3, 2, 3, 2, 3, 2]
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 28
+    events.push(latticeEvent(
+      Array.from({ length: bassCounts[index] }, (_, noteIndex) => latticeNote({
+        cx,
+        midi: 40 - noteIndex * 6,
+        clef: 'bass',
+        stem: 'up',
+      })),
+      index * 2,
+      2,
+    ))
+  }
+  const chordCounts = [3, 2, 3, 2]
+  for (let index = 0; index < 4; index += 1) {
+    const cx = 100 + index * 56 + (misalignedChord && index === 3 ? 6 : 0)
+    events.push(latticeEvent(
+      Array.from({ length: chordCounts[index] }, (_, noteIndex) => latticeNote({
+        cx,
+        midi: 81 - noteIndex * 5 - index,
+        stem: 'down',
+      })),
+      index * 4,
+      4,
+    ))
+  }
+  events.push(latticeEvent([
+    latticeNote({ cx: 117, midi: 76, open: !missingWhole }),
+  ], 0, 16))
+  return events
+}
+
+describe('reconstructWholeMelodyQuarterChordBassGrid', () => {
+  it('separates the whole melody from aligned chord and bass grids', () => {
+    const source = wholeMelodyQuarterChordFixture()
+    const rebuilt = reconstructWholeMelodyQuarterChordBassGrid(source, 16)
+
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(31)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toMatchObject([
+      { startDivision: 0, durationDivisions: 16, notes: [{ hollow: true }] },
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 4, 3], [4, 4, 2], [8, 4, 3], [12, 4, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 2, 3],
+      [2, 2, 2],
+      [4, 2, 3],
+      [6, 2, 2],
+      [8, 2, 3],
+      [10, 2, 2],
+      [12, 2, 3],
+      [14, 2, 2],
+    ])
+  })
+
+  it.each([
+    ['a missing hollow whole-note head', { missingWhole: true }],
+    ['a quarter chord outside its bass column', { misalignedChord: true }],
+  ])('abstains for %s', (_label, options) => {
+    const source = wholeMelodyQuarterChordFixture(options)
+    expect(reconstructWholeMelodyQuarterChordBassGrid(source, 16)).toBe(source)
   })
 })
 
