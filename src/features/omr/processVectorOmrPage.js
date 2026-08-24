@@ -5654,6 +5654,7 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   const bassColumns = clusterDenseLatticeNotes(bassEntries)
   const twoSustainAnchors = trebleEntries.length === 10
   const alternatingBassArpeggio = bassEntries.length === 12
+  const syncopatedBassDyads = twoSustainAnchors && !alternatingBassArpeggio
   if (
     trebleColumns.length !== 8 ||
     bassColumns.length !== 8 ||
@@ -5667,7 +5668,7 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
         alternatingBassArpeggio && index % 2 === 1 ? 1 : 2
       ),
     ) ||
-    (twoSustainAnchors !== alternatingBassArpeggio)
+    (!twoSustainAnchors && alternatingBassArpeggio)
   ) {
     return events
   }
@@ -5678,9 +5679,32 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   const bassGaps = bassColumns.slice(1).map(
     (column, index) => column.cx - bassColumns[index].cx,
   )
-  const typicalGap = medianNumber([...trebleGaps, ...bassGaps])
-  if (
-    !(typicalGap > 0) ||
+  const typicalGap = medianNumber(bassGaps)
+  if (!(typicalGap > 0)) return events
+  if (syncopatedBassDyads) {
+    const alignedIndexes = [0, 1, 2, 3, 4, 5, 7]
+    const shortGap = trebleGaps[5]
+    const dottedGap = trebleGaps[6]
+    const expectedSixteenthX = (bassColumns[5].cx + bassColumns[6].cx) / 2
+    if (
+      bassGaps.some((gap) => gap < typicalGap * 0.75 || gap > typicalGap * 1.25) ||
+      trebleGaps.slice(0, 5).some(
+        (gap) => gap < typicalGap * 0.75 || gap > typicalGap * 1.25,
+      ) ||
+      shortGap < typicalGap * 0.45 ||
+      shortGap > typicalGap * 0.8 ||
+      dottedGap < typicalGap * 1.4 ||
+      dottedGap > typicalGap * 1.85 ||
+      alignedIndexes.some(
+        (index) =>
+          Math.abs(trebleColumns[index].cx - bassColumns[index].cx) >
+          Math.max(4, typicalGap * 0.3),
+      ) ||
+      Math.abs(trebleColumns[6].cx - expectedSixteenthX) > Math.max(4, typicalGap * 0.2)
+    ) {
+      return events
+    }
+  } else if (
     [...trebleGaps, ...bassGaps].some(
       (gap) => gap < typicalGap * 0.65 || gap > typicalGap * 1.45,
     ) ||
@@ -5732,11 +5756,17 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   }
 
   const rebuilt = []
+  const melodyStarts = syncopatedBassDyads
+    ? [0, 2, 4, 6, 8, 10, 11, 14]
+    : Array.from({ length: 8 }, (_, index) => index * 2)
+  const melodyDurations = syncopatedBassDyads
+    ? [2, 2, 2, 2, 2, 1, 3, 2]
+    : Array(8).fill(2)
   for (const [index, entry] of melodyEntries.entries()) {
     rebuilt.push(denseLatticeEvent(
       [entry],
-      index * 2,
-      2,
+      melodyStarts[index],
+      melodyDurations[index],
       EIGHTH_MELODY_HALF_SUSTAIN_VOICE.MELODY,
       'eighth-melody',
     ))

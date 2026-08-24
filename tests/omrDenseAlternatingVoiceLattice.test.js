@@ -418,11 +418,12 @@ function eighthMelodyHalfSustainFixture({
   missingSecondHollow = false,
   misalignedBass = false,
   singleSustain = false,
+  syncopatedDyads = false,
 } = {}) {
   const events = []
   const melodyMidis = [76, 74, 72, 71, 69, 71, 72, 76]
   const sustainMidis = new Map(singleSustain ? [[0, 72]] : [[0, 72], [4, 65]])
-  const bassMidis = singleSustain
+  const bassMidis = singleSustain || syncopatedDyads
     ? Array.from({ length: 8 }, (_, index) => [29 + (index >= 4 ? 2 : 0), 41 + (index >= 4 ? 2 : 0)])
     : [
         [33, 45],
@@ -435,7 +436,8 @@ function eighthMelodyHalfSustainFixture({
         [48],
       ]
   for (let index = 0; index < 8; index += 1) {
-    const cx = 100 + index * 20
+    const bassCx = 100 + index * 20
+    const cx = syncopatedDyads && index === 6 ? 210 : bassCx
     const treble = [latticeNote({ cx, midi: melodyMidis[index], stem: 'up' })]
     if (sustainMidis.has(index)) {
       const sustain = latticeNote({
@@ -451,7 +453,7 @@ function eighthMelodyHalfSustainFixture({
     }
     events.push(latticeEvent(treble, index * 2, 2))
     events.push(latticeEvent(bassMidis[index].map((midi) => latticeNote({
-      cx: cx + (misalignedBass && index === 5 ? 8 : 0),
+      cx: bassCx + (misalignedBass && index === 5 ? 8 : 0),
       midi,
       clef: 'bass',
       stem: 'up',
@@ -505,6 +507,30 @@ describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
     ])
     expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
     expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(25)
+  })
+
+  it('uses the printed short and dotted X gaps over a regular dyad grid', () => {
+    const source = eighthMelodyHalfSustainFixture({ syncopatedDyads: true })
+    const rebuilt = reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      [0, 2],
+      [2, 2],
+      [4, 2],
+      [6, 2],
+      [8, 2],
+      [10, 1],
+      [11, 3],
+      [14, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 8], [8, 8]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
   })
 
   it.each([
