@@ -417,20 +417,23 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
 function eighthMelodyHalfSustainFixture({
   missingSecondHollow = false,
   misalignedBass = false,
+  singleSustain = false,
 } = {}) {
   const events = []
   const melodyMidis = [76, 74, 72, 71, 69, 71, 72, 76]
-  const sustainMidis = new Map([[0, 72], [4, 65]])
-  const bassMidis = [
-    [33, 45],
-    [48],
-    [52, 57],
-    [48],
-    [29, 41],
-    [48],
-    [53, 57],
-    [48],
-  ]
+  const sustainMidis = new Map(singleSustain ? [[0, 72]] : [[0, 72], [4, 65]])
+  const bassMidis = singleSustain
+    ? Array.from({ length: 8 }, (_, index) => [29 + (index >= 4 ? 2 : 0), 41 + (index >= 4 ? 2 : 0)])
+    : [
+        [33, 45],
+        [48],
+        [52, 57],
+        [48],
+        [29, 41],
+        [48],
+        [53, 57],
+        [48],
+      ]
   for (let index = 0; index < 8; index += 1) {
     const cx = 100 + index * 20
     const treble = [latticeNote({ cx, midi: melodyMidis[index], stem: 'up' })]
@@ -481,6 +484,27 @@ describe('reconstructEighthMelodyHalfSustainArpeggioLattice', () => {
     expect(xml).toContain('<voice>2</voice>')
     expect(xml).toContain('<voice>5</voice>')
     expect(xml).toContain('<backup>')
+  })
+
+  it('preserves the explicit second-half rest over an all-dyad bass grid', () => {
+    const source = eighthMelodyHalfSustainFixture({ singleSustain: true })
+    const rebuilt = reconstructEighthMelodyHalfSustainArpeggioLattice(source, 16)
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toEqual([
+      expect.objectContaining({
+        type: 'note',
+        startDivision: 0,
+        durationDivisions: 8,
+      }),
+      expect.objectContaining({
+        type: 'rest',
+        startDivision: 8,
+        durationDivisions: 8,
+        structuralVoiceRest: true,
+      }),
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
+    expect(rebuilt.flatMap((event) => event.notes ?? [])).toHaveLength(25)
   })
 
   it.each([

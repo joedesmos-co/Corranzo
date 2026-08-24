@@ -5644,23 +5644,30 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
   const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
   const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
   if (
-    trebleEntries.length !== 10 ||
-    bassEntries.length !== 12 ||
+    ![9, 10].includes(trebleEntries.length) ||
+    ![12, 16].includes(bassEntries.length) ||
     [...trebleEntries, ...bassEntries].some((entry) => !Number.isFinite(entry.note.cx))
   ) {
     return events
   }
   const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
   const bassColumns = clusterDenseLatticeNotes(bassEntries)
+  const twoSustainAnchors = trebleEntries.length === 10
+  const alternatingBassArpeggio = bassEntries.length === 12
   if (
     trebleColumns.length !== 8 ||
     bassColumns.length !== 8 ||
     trebleColumns.some((column, index) =>
-      column.entries.length !== [2, 1, 1, 1, 2, 1, 1, 1][index],
+      column.entries.length !== (
+        index === 0 || (twoSustainAnchors && index === 4) ? 2 : 1
+      ),
     ) ||
     bassColumns.some((column, index) =>
-      column.entries.length !== (index % 2 === 0 ? 2 : 1),
-    )
+      column.entries.length !== (
+        alternatingBassArpeggio && index % 2 === 1 ? 1 : 2
+      ),
+    ) ||
+    (twoSustainAnchors !== alternatingBassArpeggio)
   ) {
     return events
   }
@@ -5691,7 +5698,7 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
     const sorted = [...column.entries].sort(
       (left, right) => right.note.midi - left.note.midi,
     )
-    if (index === 0 || index === 4) {
+    if (index === 0 || (twoSustainAnchors && index === 4)) {
       const [melody, sustain] = sorted
       if (
         isOpenNotehead(melody.note) ||
@@ -5708,7 +5715,8 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
     }
   }
   if (
-    trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length !== 2 ||
+    trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length !==
+      (twoSustainAnchors ? 2 : 1) ||
     bassEntries.some((entry) => isOpenNotehead(entry.note))
   ) {
     return events
@@ -5741,6 +5749,18 @@ export function reconstructEighthMelodyHalfSustainArpeggioLattice(
       EIGHTH_MELODY_HALF_SUSTAIN_VOICE.SUSTAIN,
       'half-note-sustain',
     ))
+  }
+  if (!twoSustainAnchors) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision: 8,
+      durationDivisions: 8,
+      ...durationMeta(8),
+      sourceVoice: EIGHTH_MELODY_HALF_SUSTAIN_VOICE.SUSTAIN,
+      sourceVoiceLane: 'half-note-sustain',
+      structuralVoiceRest: true,
+    })
   }
   for (const [index, column] of bassColumns.entries()) {
     rebuilt.push(denseLatticeEvent(
