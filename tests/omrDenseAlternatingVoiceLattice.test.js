@@ -49,14 +49,23 @@ function denseAlternatingFixture({
   singleNoteUpper = false,
   raisedAlternatingLower = false,
   fourNoteLower = false,
+  splitBassAnchors = false,
+  misalignedSecondBass = false,
 } = {}) {
   const events = []
   if (bass) {
-    const note = latticeNote({ cx: 100, midi: 38, clef: 'bass', open: true })
-    if (!beamedBass) {
-      note.beams = 0
+    const bassStarts = splitBassAnchors ? [0, 8] : [0]
+    for (const [index, startDivision] of bassStarts.entries()) {
+      const cx = 100 + index * 160 + (index === 1 && misalignedSecondBass ? 8 : 0)
+      const note = latticeNote({ cx, midi: 38 + index * 2, clef: 'bass', open: true })
+      if (!beamedBass && index === 0) note.beams = 0
+      if (splitBassAnchors) {
+        note.noteheadGlyph = 'half'
+        note.durationType = 'half'
+        note.durationDivisions = 8
+      }
+      events.push(latticeEvent([note], startDivision, splitBassAnchors ? 8 : 16))
     }
-    events.push(latticeEvent([note], 0, 16))
   }
   const melodyByColumn = new Map(
     melodyIntrusions
@@ -69,6 +78,12 @@ function denseAlternatingFixture({
       events.push(latticeEvent([
         latticeNote({ cx: baseX, midi: melodyByColumn.get(index), stem: 'up' }),
       ], 0, 6))
+      continue
+    }
+    if (index === 8 && splitBassAnchors) {
+      events.push(latticeEvent([
+        latticeNote({ cx: baseX, midi: melodyByColumn.get(index), stem: 'up' }),
+      ], index, 4))
       continue
     }
     if (index % 2 === 1) {
@@ -194,11 +209,33 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
     )).toHaveLength(3)
   })
 
+  it('recovers two aligned half-note bass anchors and their attack overprints', () => {
+    const source = denseAlternatingFixture({
+      splitBassAnchors: true,
+      beamedBass: false,
+      indirectBassBeam: true,
+    })
+    const rebuilt = reconstructDenseAlternatingVoiceLattice(source, 16)
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 6).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 8], [8, 8]])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoiceLane === 'lower-ostinato-bass-attack',
+    ).map((event) => event.startDivision)).toEqual([0, 8])
+    expect(rebuilt.filter((event) => event.type === 'rest')).toHaveLength(16)
+  })
+
   it.each([
     ['an incomplete lattice', { columns: 15 }],
     ['unsupported lower-stem ownership', { lowerStem: 'up' }],
     ['a missing bass anchor', { bass: false }],
     ['a hollow bass note without crossing beam evidence', { beamedBass: false }],
+    ['a misaligned second bass anchor', {
+      splitBassAnchors: true,
+      misalignedSecondBass: true,
+    }],
   ])('abstains for %s', (_label, options) => {
     const source = denseAlternatingFixture(options)
     expect(reconstructDenseAlternatingVoiceLattice(source, 16)).toBe(source)

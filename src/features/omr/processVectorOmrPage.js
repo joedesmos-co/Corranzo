@@ -5192,14 +5192,15 @@ function denseLatticeEvent(entries, startDivision, durationDivisions, sourceVoic
 /**
  * Recover the independent cursors in a fully printed alternating piano lattice.
  *
- * The family is source-complete: one beamed long-value bass anchor, exactly sixteen regular
- * treble columns in 4/4, eight up-stem upper-ostinato columns, seven down-stem
- * lower-ostinato columns, and a small number of high melody intrusions. Absolute
- * measure bounds can snap two early columns together, but their source X order
- * still proves the sixteenth grid. The beam/stem crossing the hollow bass head
- * proves a coincident lower-ostinato attack in addition to the sustain. Explicit
- * lanes prevent the MusicXML cursor from serializing these simultaneous voices
- * as one destructive chord stream.
+ * The family is source-complete: one whole-value or two half-value hollow bass
+ * anchors, exactly sixteen regular treble columns in 4/4, eight up-stem
+ * upper-ostinato columns, six or seven down-stem lower-ostinato columns, and a small
+ * number of high melody intrusions. Absolute measure bounds can snap two early
+ * columns together, but their source X order still proves the sixteenth grid.
+ * A beam crossing each hollow bass head, directly or in the neighboring printed
+ * lattice, proves a coincident lower-ostinato attack in addition to the sustain.
+ * Explicit lanes prevent the MusicXML cursor from serializing these simultaneous
+ * voices as one destructive chord stream.
  */
 export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisions = 16) {
   if (totalDivisions !== 16 || events.some((event) => event?.timeModification)) {
@@ -5209,15 +5210,22 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   const bassEvents = noteEvents.filter((event) =>
     (event.notes ?? []).some((note) => (note.clef ?? 'treble') === 'bass'),
   )
-  const bassAnchor = bassEvents.find(
+  const bassAnchors = bassEvents.filter(
     (event) =>
-      (event.startDivision ?? 0) === 0 &&
       event.notes?.length === 1 &&
-      (event.durationDivisions ?? 0) >= 8 &&
+      (event.durationDivisions ?? 0) >= 7 &&
       (event.notes[0].noteheadGlyph === 'whole' || event.notes[0].hollow === true) &&
       noteStemDirection(event.notes[0]) != null,
-  )
-  if (!bassAnchor || bassEvents.length !== 1) return events
+  ).sort((left, right) => left.notes[0].cx - right.notes[0].cx)
+  if (
+    bassAnchors.length !== bassEvents.length ||
+    (bassAnchors.length !== 1 && bassAnchors.length !== 2) ||
+    (bassAnchors.length === 1 &&
+      ((bassAnchors[0].startDivision ?? 0) !== 0 ||
+        (bassAnchors[0].durationDivisions ?? 0) < 8))
+  ) {
+    return events
+  }
 
   const trebleEntries = noteEvents.flatMap((event) => {
     const eventNotes = (event.notes ?? []).filter(
@@ -5232,23 +5240,40 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
 
   const columnGaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
   const typicalGap = medianNumber(columnGaps)
-  const bassAnchorAligned =
-    Math.abs(bassAnchor.notes[0].cx - columns[0].cx) <=
-    Math.max(3, typicalGap * 0.25)
+  const bassAnchorColumns = bassAnchors.length === 1 ? [0] : [0, 8]
+  const bassAnchorsAligned = bassAnchors.every(
+    (anchor, index) =>
+      Math.abs(anchor.notes[0].cx - columns[bassAnchorColumns[index]].cx) <=
+      Math.max(3, typicalGap * 0.25),
+  )
   const beamedColumnCount = columns.filter((column) =>
     column.entries.some((entry) => (entry.note.beams ?? 0) >= 1),
   ).length
+  const splitAnchorBeamEvidence = bassAnchors.length !== 2 || bassAnchors.every(
+    (anchor, index) =>
+      (anchor.notes[0].beams ?? 0) >= 1 ||
+      columns
+        .slice(index * 8, index * 8 + 8)
+        .some((column) => column.entries.some((entry) => (entry.note.beams ?? 0) >= 1)),
+  )
   if (
     !(typicalGap > 0) ||
     columnGaps.some((gap) => gap < typicalGap * 0.55 || gap > typicalGap * 1.75) ||
-    !bassAnchorAligned ||
-    ((bassAnchor.notes[0].beams ?? 0) < 1 && beamedColumnCount < 4)
+    !bassAnchorsAligned ||
+    !splitAnchorBeamEvidence ||
+    (bassAnchors.length === 1 &&
+      (bassAnchors[0].notes[0].beams ?? 0) < 1 &&
+      beamedColumnCount < 4)
   ) {
     return events
   }
 
   const upperColumns = columns.filter((_, index) => index % 2 === 1)
-  const lowerColumns = columns.filter((_, index) => index >= 2 && index % 2 === 0)
+  const lowerColumnIndexes = Array.from(
+    { length: 7 },
+    (_, index) => index * 2 + 2,
+  ).filter((index) => bassAnchors.length !== 2 || index !== 8)
+  const lowerColumns = lowerColumnIndexes.map((index) => columns[index])
   if (
     upperColumns.some((column) => column.entries.length < 1 || column.entries.length > 3) ||
     lowerColumns.some((column) => column.entries.length < 2) ||
@@ -5264,10 +5289,10 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   // even columns lets the independent melody contaminate the median in the
   // denser variants, while the intervening two-note chords can legitimately
   // sit a third above this stable four-column reference.
-  const lowerPitchCeiling = medianNumber(fullChordHighs) + 3
+  const lowerPitchCeiling = medianNumber(fullChordHighs) + 4
   const melodyEntries = [...columns[0].entries]
   const lowerByColumn = new Map()
-  for (let index = 2; index < columns.length; index += 2) {
+  for (const index of lowerColumnIndexes) {
     const lower = columns[index].entries.filter(
       (entry) => entry.note.midi <= lowerPitchCeiling,
     )
@@ -5297,12 +5322,19 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   }
   const melodyIndexes = [...melodyByIndex.keys()].sort((left, right) => left - right)
   const rebuilt = []
-  rebuilt.push({
-    ...bassAnchor,
-    sourceVoice: DENSE_ALTERNATING_VOICE.BASS_SUSTAIN,
-    sourceVoiceLane: 'bass-sustain',
-    denseAlternatingVoiceLattice: true,
-  })
+  for (const [index, bassAnchor] of bassAnchors.entries()) {
+    const startDivision = index * 8
+    const durationDivisions = bassAnchors.length === 1 ? 16 : 8
+    rebuilt.push({
+      ...bassAnchor,
+      startDivision,
+      durationDivisions,
+      ...durationMeta(durationDivisions),
+      sourceVoice: DENSE_ALTERNATING_VOICE.BASS_SUSTAIN,
+      sourceVoiceLane: 'bass-sustain',
+      denseAlternatingVoiceLattice: true,
+    })
+  }
   for (let index = 0; index < melodyIndexes.length; index += 1) {
     const latticeIndex = melodyIndexes[index]
     const next = melodyIndexes[index + 1] ?? totalDivisions
@@ -5323,7 +5355,7 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
       'upper-ostinato',
     ))
   }
-  for (let index = 2; index < columns.length; index += 2) {
+  for (const index of lowerColumnIndexes) {
     rebuilt.push(denseLatticeEvent(
       lowerByColumn.get(index),
       index,
@@ -5332,24 +5364,26 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
       'lower-ostinato',
     ))
   }
-  rebuilt.push(denseLatticeEvent(
-    [{
-      event: bassAnchor,
-      note: {
-        ...bassAnchor.notes[0],
-        noteheadGlyph: 'black',
-        hollow: false,
-        hollowGlyph: false,
-        durationDivisions: 1,
-        durationType: 'sixteenth',
-        denseAlternatingBassAttackOverprint: true,
-      },
-    }],
-    0,
-    1,
-    DENSE_ALTERNATING_VOICE.LOWER_OSTINATO,
-    'lower-ostinato-bass-attack',
-  ))
+  for (const [index, bassAnchor] of bassAnchors.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      [{
+        event: bassAnchor,
+        note: {
+          ...bassAnchor.notes[0],
+          noteheadGlyph: 'black',
+          hollow: false,
+          hollowGlyph: false,
+          durationDivisions: 1,
+          durationType: 'sixteenth',
+          denseAlternatingBassAttackOverprint: true,
+        },
+      }],
+      index * 8,
+      1,
+      DENSE_ALTERNATING_VOICE.LOWER_OSTINATO,
+      'lower-ostinato-bass-attack',
+    ))
+  }
 
   for (const event of events.filter((candidate) => candidate.type !== 'note')) {
     const openingTrebleRest =
