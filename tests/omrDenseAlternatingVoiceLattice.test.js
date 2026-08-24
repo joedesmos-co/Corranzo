@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
+  reconstructQuarterMelodyOffbeatChordLattice,
 } from '../src/features/omr/processVectorOmrPage.js'
 
 function latticeNote({ cx, midi, clef = 'treble', stem = 'up', open = false }) {
@@ -166,6 +167,76 @@ describe('reconstructDenseAlternatingVoiceLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = denseAlternatingFixture(options)
     expect(reconstructDenseAlternatingVoiceLattice(source, 16)).toBe(source)
+  })
+})
+
+function quarterMelodyOffbeatFixture({ missingBass = false, wrongOddStem = false } = {}) {
+  const events = []
+  if (!missingBass) {
+    for (const index of [0, 4]) {
+      events.push(latticeEvent([
+        latticeNote({ cx: 100 + index * 20, midi: 42, clef: 'bass', stem: 'up' }),
+      ], index * 2, 8))
+    }
+  }
+  for (let index = 0; index < 8; index += 1) {
+    const cx = 100 + index * 20
+    if (index % 2 === 1) {
+      events.push(latticeEvent([
+        latticeNote({ cx, midi: 71, stem: wrongOddStem && index === 3 ? 'down' : 'up' }),
+        latticeNote({ cx, midi: 66, stem: 'up' }),
+      ], index * 2, 2))
+      continue
+    }
+    const notes = [latticeNote({ cx, midi: 79 - index, stem: 'up' })]
+    if (index === 2 || index === 6) {
+      notes.push(latticeNote({ cx, midi: 70, stem: 'down' }))
+      notes.push(latticeNote({ cx, midi: 63, stem: 'down' }))
+      if (index === 2) {
+        notes.push(latticeNote({ cx: cx - 9, midi: 58, stem: 'down' }))
+      }
+    }
+    events.push(latticeEvent(notes, index * 2, 2))
+  }
+  return events
+}
+
+describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
+  it('recovers melody, offbeat, lower-chord, and bass cursors from eight columns', () => {
+    const source = quarterMelodyOffbeatFixture()
+    const rebuilt = reconstructQuarterMelodyOffbeatChordLattice(source, 16)
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 4], [4, 4], [8, 4], [12, 4]])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 3 && event.type === 'note',
+    ).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[2, 2], [6, 2], [10, 2], [14, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.type,
+    ])).toEqual([
+      [0, 4, 'note'],
+      [4, 2, 'note'],
+      [6, 2, 'rest'],
+      [8, 4, 'note'],
+      [12, 2, 'note'],
+      [14, 2, 'rest'],
+    ])
+    expect(rebuilt.filter((event) => event.type === 'rest')).toHaveLength(8)
+  })
+
+  it.each([
+    ['a missing bass anchor', quarterMelodyOffbeatFixture({ missingBass: true }), 16],
+    ['unsupported odd-column stem ownership', quarterMelodyOffbeatFixture({ wrongOddStem: true }), 16],
+    ['a non-4/4 measure', quarterMelodyOffbeatFixture(), 12],
+  ])('abstains for %s', (_label, source, totalDivisions) => {
+    expect(reconstructQuarterMelodyOffbeatChordLattice(source, totalDivisions)).toBe(source)
   })
 })
 

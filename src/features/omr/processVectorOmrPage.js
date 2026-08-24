@@ -5359,6 +5359,167 @@ export function reconstructDenseAlternatingVoiceLattice(events = [], totalDivisi
   return sortVectorRhythmEvents(rebuilt)
 }
 
+/**
+ * Recover a regular eight-column texture whose written stem ownership proves
+ * four quarter-note melody attacks, four offbeat chord attacks, two interleaved
+ * lower chords, and two lower-staff quarter notes. The detector's shared onset
+ * packing otherwise collapses those independent voices into destructive chords.
+ */
+export function reconstructQuarterMelodyOffbeatChordLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event?.timeModification) ||
+    events.some((event) => event.type === 'rest')
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const bassEvents = noteEvents.filter((event) =>
+    (event.notes ?? []).some((note) => (note.clef ?? 'treble') === 'bass'),
+  )
+  if (
+    bassEvents.length !== 2 ||
+    bassEvents.some(
+      (event) =>
+        event.notes?.length !== 1 ||
+        noteStemDirection(event.notes[0]) !== 'up' ||
+        !Number.isFinite(event.notes[0].cx),
+    )
+  ) {
+    return events
+  }
+
+  const trebleEntries = noteEvents.flatMap((event) => {
+    const eventNotes = (event.notes ?? []).filter(
+      (note) => (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx),
+    )
+    const latticeCx = medianNumber(eventNotes.map((note) => note.cx))
+    return eventNotes.map((note) => ({ event, note, latticeCx }))
+  })
+  if (trebleEntries.length !== 17) return events
+  const columns = clusterDenseLatticeNotes(trebleEntries)
+  if (columns.length !== 8) return events
+
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(gaps)
+  if (
+    !(typicalGap > 0) ||
+    gaps.some((gap) => gap < typicalGap * 0.65 || gap > typicalGap * 1.45) ||
+    columns.some((column, index) =>
+      column.entries.length !== [1, 2, 4, 2, 1, 2, 3, 2][index],
+    )
+  ) {
+    return events
+  }
+
+  const melody = columns
+    .filter((_, index) => index % 2 === 0)
+    .map((column) => [...column.entries].sort((left, right) => right.note.midi - left.note.midi)[0])
+  const offbeats = columns.filter((_, index) => index % 2 === 1)
+  const lowerColumns = [columns[2], columns[6]].map((column, index) => {
+    const melodyEntry = melody[index * 2 + 1]
+    return column.entries.filter((entry) => entry !== melodyEntry)
+  })
+  if (
+    melody.some((entry) => noteStemDirection(entry.note) !== 'up') ||
+    stemDirectionShare(offbeats.flatMap((column) => column.entries), 'up') < 1 ||
+    stemDirectionShare(lowerColumns.flat(), 'down') < 0.8
+  ) {
+    return events
+  }
+
+  const bass = [...bassEvents].sort((left, right) => left.notes[0].cx - right.notes[0].cx)
+  if (
+    Math.abs(bass[0].notes[0].cx - columns[0].cx) > typicalGap * 0.25 ||
+    Math.abs(bass[1].notes[0].cx - columns[4].cx) > typicalGap * 0.25
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  for (let index = 0; index < melody.length; index += 1) {
+    rebuilt.push(denseLatticeEvent(
+      [melody[index]],
+      index * 4,
+      4,
+      1,
+      'quarter-melody',
+    ))
+  }
+  for (let index = 0; index < offbeats.length; index += 1) {
+    rebuilt.push(denseLatticeEvent(
+      offbeats[index].entries,
+      index * 4 + 2,
+      2,
+      3,
+      'offbeat-upper-chords',
+    ))
+  }
+  for (let index = 0; index < lowerColumns.length; index += 1) {
+    rebuilt.push(denseLatticeEvent(
+      lowerColumns[index],
+      index * 8 + 4,
+      2,
+      5,
+      'interleaved-lower-chords',
+    ))
+  }
+  for (let index = 0; index < bass.length; index += 1) {
+    rebuilt.push({
+      ...bass[index],
+      startDivision: index * 8,
+      durationDivisions: 4,
+      ...durationMeta(4),
+      sourceVoice: 5,
+      sourceVoiceLane: 'interleaved-bass-quarters',
+      quarterMelodyOffbeatChordLattice: true,
+    })
+  }
+  for (const startDivision of [0, 4, 8, 12]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision,
+      durationDivisions: 2,
+      ...durationMeta(2),
+      sourceVoice: 3,
+      sourceVoiceLane: 'offbeat-upper-chords',
+      structuralVoiceRest: true,
+    })
+  }
+  for (const startDivision of [0, 8]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision,
+      durationDivisions: 4,
+      ...durationMeta(4),
+      sourceVoice: 4,
+      sourceVoiceLane: 'quarter-rest-layer',
+      structuralVoiceRest: true,
+    })
+  }
+  for (const startDivision of [6, 14]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'bass',
+      startDivision,
+      durationDivisions: 2,
+      ...durationMeta(2),
+      sourceVoice: 5,
+      sourceVoiceLane: 'interleaved-bass-quarters',
+      structuralVoiceRest: true,
+    })
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    quarterMelodyOffbeatChordLattice: true,
+  })))
+}
+
 const COMPOUND_OVERPRINT_VOICE = Object.freeze({
   UPPER_ATTACK: 1,
   UPPER_SUSTAIN: 2,
@@ -5697,6 +5858,7 @@ export function buildVectorMeasureRecord({
   }
 
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
+  events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
   events = reconstructCompoundMeterDottedBeamOverprints(events, totalDivisions)
 
   const noteCount = notes.length
