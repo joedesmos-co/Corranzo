@@ -4,6 +4,7 @@ import { buildMeasureStructureUnits } from '../src/features/omr/measureStructure
 import {
   applyVectorOttavaSpans,
   completeQuarterRestChordBassTies,
+  completeSyncopatedQuarterChordBassTies,
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedCadenceArpeggioGrid,
@@ -19,6 +20,7 @@ import {
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
+  reconstructSyncopatedQuarterChordBassLattice,
   reconstructTripletMelodyOverprintLattice,
   reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -313,6 +315,121 @@ describe('reconstructEighthMelodyQuarterChordBassLattice', () => {
       .toBe(incomplete)
     expect(reconstructEighthMelodyQuarterChordBassLattice(complete, 12))
       .toBe(complete)
+  })
+})
+
+function syncopatedQuarterChordBassFixture({ missingBassHead = false } = {}) {
+  const events = [{
+    type: 'rest',
+    clef: 'treble',
+    startDivision: 2,
+    durationDivisions: 2,
+    durationType: 'eighth',
+  }]
+  const xs = [100, 136, 160, 184, 208, 220, 236, 260]
+  const trebleCounts = [1, 2, 0, 1, 0, 1, 2, 1]
+  const bassCounts = [2, 3, 1, 1, 1, 0, 3, 0]
+  for (const [index, cx] of xs.entries()) {
+    if (trebleCounts[index] > 0) {
+      const melody = latticeNote({ cx, midi: 73, stem: 'up' })
+      melody.beams = [3, 6].includes(index) ? 2 : 0
+      melody.durationDivisions = [0, 1, 5, 7].includes(index) ? 4 : 2
+      melody.durationType = melody.durationDivisions === 4 ? 'quarter' : 'eighth'
+      events.push(latticeEvent([melody], index * 2, 1))
+      if ([1, 6].includes(index)) {
+        events.push(latticeEvent([
+          latticeNote({ cx, midi: 68, stem: 'down' }),
+        ], index * 2, 1))
+      }
+    }
+
+    const count = bassCounts[index] - (missingBassHead && index === 1 ? 1 : 0)
+    if (count > 0) {
+      const notes = Array.from({ length: count }, (_, noteIndex) => {
+        const stem = index === 0
+          ? noteIndex === 0 ? 'down' : 'up'
+          : [1, 2, 6].includes(index) ? 'down' : 'up'
+        const midi = [2, 3, 4].includes(index)
+          ? 49
+          : 64 - noteIndex * 6
+        const note = latticeNote({ cx, midi, clef: 'bass', stem })
+        note.durationDivisions = [0, 2, 4, 6].includes(index) ? 4 : 2
+        note.durationType = note.durationDivisions === 4 ? 'quarter' : 'eighth'
+        note.beams = index === 1 && noteIndex === 0 ? 1 : index === 3 ? 2 : 0
+        return note
+      })
+      events.push(latticeEvent(notes, index * 2, 1))
+    }
+  }
+  return events
+}
+
+describe('reconstructSyncopatedQuarterChordBassLattice', () => {
+  it('recovers the repeated melody, quarter chords, and syncopated bass', () => {
+    const rebuilt = reconstructSyncopatedQuarterChordBassLattice(
+      syncopatedQuarterChordBassFixture(),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 4], [4, 4], [8, 3], [11, 1], [12, 2], [14, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['rest', 0, 4], ['note', 4, 4], ['rest', 8, 4], ['note', 12, 4],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 4, 2], [4, 2, 3], [6, 2, 1],
+      [8, 2, 1], [10, 2, 1], [12, 4, 3],
+    ])
+  })
+
+  it('abstains for incomplete source topology or a different meter', () => {
+    const complete = syncopatedQuarterChordBassFixture()
+    const incomplete = syncopatedQuarterChordBassFixture({ missingBassHead: true })
+    expect(reconstructSyncopatedQuarterChordBassLattice(incomplete, 16))
+      .toBe(incomplete)
+    expect(reconstructSyncopatedQuarterChordBassLattice(complete, 12))
+      .toBe(complete)
+  })
+
+  it('completes the inner tie only with independent page-tie evidence', () => {
+    const rebuilt = reconstructSyncopatedQuarterChordBassLattice(
+      syncopatedQuarterChordBassFixture(),
+      16,
+    )
+    const sourceConfirmed = rebuilt.map((event) => {
+      if (event.sourceVoice === 1 && event.startDivision === 14) {
+        return { ...event, notes: event.notes.map((note) => ({ ...note, tieStart: true })) }
+      }
+      if (event.sourceVoice === 5 && [6, 8].includes(event.startDivision)) {
+        return {
+          ...event,
+          notes: event.notes.map((note) => ({
+            ...note,
+            ...(event.startDivision === 6 ? { tieStart: true } : { tieStop: true }),
+          })),
+        }
+      }
+      return event
+    })
+    const completed = completeSyncopatedQuarterChordBassTies(sourceConfirmed)
+
+    expect(completed.find(
+      (event) => event.sourceVoice === 1 && event.startDivision === 11,
+    ).notes[0].tieStart).toBe(true)
+    expect(completed.find(
+      (event) => event.sourceVoice === 1 && event.startDivision === 12,
+    ).notes[0].tieStop).toBe(true)
+    expect(completeSyncopatedQuarterChordBassTies(rebuilt)).toBe(rebuilt)
   })
 })
 
