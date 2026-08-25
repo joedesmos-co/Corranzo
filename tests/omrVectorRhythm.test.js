@@ -20,6 +20,7 @@ import {
   refineOpeningBassSubdivisionDurations,
   refineUnsupportedUpperChordOverhangs,
   reconcileCoherentOpenGlyphDurations,
+  reuniteDisplacedWholeChordHead,
   repackCompleteSourceWrittenLanes,
   sparseHarmonicHalfSpan,
   sameClefBeatQuarterFloor,
@@ -51,6 +52,96 @@ function onsets(positions) {
 function durations(events) {
   return events.map((event) => event.durationDivisions)
 }
+
+function displacedWholeChordFixture({
+  displacedMidi = 67,
+  displacedCx = 116,
+  bassCount = 8,
+} = {}) {
+  const wholeNote = (midi, cx, stem = null) => ({
+    midi,
+    naturalMidi: midi,
+    clef: 'treble',
+    cx,
+    cy: 100 - midi,
+    noteheadGlyph: 'whole',
+    hollow: true,
+    hollowGlyph: true,
+    durationType: 'whole',
+    durationDivisions: 16,
+    stem,
+    source: 'vector-glyph',
+  })
+  const opening = {
+    type: 'note',
+    startDivision: 0,
+    durationDivisions: 16,
+    durationType: 'whole',
+    cx: 100,
+    notes: [wholeNote(65, 100, { direction: 'down' }), wholeNote(62, 100)],
+  }
+  const displaced = {
+    type: 'note',
+    startDivision: 8,
+    durationDivisions: 8,
+    durationType: 'half',
+    cx: displacedCx,
+    notes: [wholeNote(displacedMidi, displacedCx)],
+  }
+  const bass = Array.from({ length: bassCount }, (_, index) => ({
+    type: 'note',
+    startDivision: index * 2,
+    durationDivisions: 2,
+    durationType: 'eighth',
+    cx: 100 + index * 24,
+    notes: [{
+      midi: 43 + (index % 2) * 7,
+      naturalMidi: 43 + (index % 2) * 7,
+      clef: 'bass',
+      cx: 100 + index * 24,
+      cy: 180,
+      noteheadGlyph: 'black',
+      hollow: false,
+      durationType: 'eighth',
+      durationDivisions: 2,
+      stem: { direction: 'up' },
+      source: 'vector-glyph',
+    }],
+  }))
+  return { events: [opening, displaced, ...bass], opening, displaced }
+}
+
+describe('reuniteDisplacedWholeChordHead', () => {
+  it('reunites an engraved whole-note second before a complete bass grid', () => {
+    const { events } = displacedWholeChordFixture()
+    const rebuilt = reuniteDisplacedWholeChordHead(events, 16)
+    const treble = rebuilt.filter((event) => event.notes?.[0]?.clef === 'treble')
+
+    expect(treble).toHaveLength(1)
+    expect(treble[0]).toMatchObject({
+      startDivision: 0,
+      durationDivisions: 16,
+      durationType: 'whole',
+      displacedWholeChordHeadReunited: true,
+    })
+    expect(treble[0].notes.map((note) => note.midi)).toEqual([67, 65, 62])
+  })
+
+  it('abstains once the upper whole head reaches the next bass attack', () => {
+    const { events } = displacedWholeChordFixture({ displacedCx: 126 })
+    expect(reuniteDisplacedWholeChordHead(events, 16)).toBe(events)
+  })
+
+  it('abstains without the complete eight-column accompaniment', () => {
+    const { events } = displacedWholeChordFixture({ bassCount: 7 })
+    expect(reuniteDisplacedWholeChordHead(events, 16)).toBe(events)
+  })
+
+  it('abstains when the displaced pitch is not adjacent to the chord top', () => {
+    const { events } = displacedWholeChordFixture({ displacedMidi: 72 })
+    expect(reuniteDisplacedWholeChordHead(events, 16)).toBe(events)
+  })
+})
 
 function denseCountervoiceNotes(openGlyph, { chord = false } = {}) {
   const openDuration = openGlyph === 'whole' ? 16 : 8

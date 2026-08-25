@@ -4690,6 +4690,104 @@ export function resnapDenseChordOnsets(events, totalDivisions = 16) {
   return coalesceSameOnsetChordEvents(snapped)
 }
 
+/**
+ * Whole-note seconds are horizontally staggered by engravers so their hollow
+ * heads do not collide. In a dense two-staff texture that stagger can exceed
+ * the ordinary chord window and snap the upper head to a later bass column.
+ * Reunite only the complete source pattern: one opening whole chord, one
+ * stemless adjacent upper whole head, and eight evenly spaced bass attacks.
+ */
+export function reuniteDisplacedWholeChordHead(events = [], totalDivisions = 16) {
+  if (totalDivisions !== 16 || events.some((event) => event?.timeModification)) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEvents = noteEvents.filter(
+    (event) => (event.notes?.[0]?.clef ?? 'treble') === 'treble',
+  )
+  const bassEvents = noteEvents.filter(
+    (event) => (event.notes?.[0]?.clef ?? 'treble') === 'bass',
+  )
+  if (trebleEvents.length !== 2 || bassEvents.length !== 8) {
+    return events
+  }
+
+  const opening = trebleEvents.find(
+    (event) => (event.startDivision ?? 0) === 0 && (event.notes?.length ?? 0) >= 2,
+  )
+  const displaced = trebleEvents.find((event) => event !== opening)
+  const openingNotes = opening?.notes ?? []
+  const displacedNotes = displaced?.notes ?? []
+  if (
+    !opening ||
+    !displaced ||
+    openingNotes.length > 3 ||
+    displacedNotes.length !== 1 ||
+    (displaced.startDivision ?? 0) <= 0 ||
+    [...openingNotes, ...displacedNotes].some(
+      (note) =>
+        note.noteheadGlyph !== 'whole' ||
+        note.dotted === true ||
+        note.source !== 'vector-glyph',
+    ) ||
+    noteStemDirection(displacedNotes[0]) != null ||
+    bassEvents.some(
+      (event) =>
+        (event.notes?.length ?? 0) !== 1 ||
+        isOpenNotehead(event.notes[0]) ||
+        !Number.isFinite(event.notes[0].cx),
+    )
+  ) {
+    return events
+  }
+
+  const bassByX = [...bassEvents].sort(
+    (left, right) => left.notes[0].cx - right.notes[0].cx,
+  )
+  const bassXs = bassByX.map((event) => event.notes[0].cx)
+  const bassGaps = bassXs.slice(1).map((cx, index) => cx - bassXs[index])
+  const typicalBassGap = medianNumber(bassGaps)
+  const openingCx = average(openingNotes.map((note) => note.cx))
+  const displacedCx = displacedNotes[0].cx
+  const openingTopMidi = Math.max(...openingNotes.map((note) => note.midi))
+  if (
+    !(typicalBassGap > 0) ||
+    bassGaps.some(
+      (gap) => gap < typicalBassGap * 0.72 || gap > typicalBassGap * 1.35,
+    ) ||
+    !Number.isFinite(openingCx) ||
+    !Number.isFinite(displacedCx) ||
+    Math.abs(openingCx - bassXs[0]) > typicalBassGap * 0.2 ||
+    displacedCx <= openingCx + OMR_CHORD_MERGE_X ||
+    displacedCx - openingCx > typicalBassGap * 0.85 ||
+    displacedCx > bassXs[1] + typicalBassGap * 0.08 ||
+    displacedNotes[0].midi <= openingTopMidi ||
+    displacedNotes[0].midi - openingTopMidi > 2
+  ) {
+    return events
+  }
+
+  const mergedNotes = dedupeNotesByMidi([...openingNotes, ...displacedNotes]).sort(
+    (left, right) => right.midi - left.midi,
+  )
+  return sortVectorRhythmEvents(
+    events
+      .filter((event) => event !== displaced)
+      .map((event) =>
+        event === opening
+          ? {
+              ...opening,
+              notes: mergedNotes,
+              startDivision: 0,
+              durationDivisions: totalDivisions,
+              ...durationMeta(totalDivisions),
+              displacedWholeChordHeadReunited: true,
+            }
+          : event,
+      ),
+  )
+}
+
 export function clampMeasureEventDurations(events, totalDivisions) {
   const noteEvents = events.filter((event) => event.type === 'note')
   const denseMeasure = noteEvents.length > 5
@@ -4965,6 +5063,11 @@ function buildNoteEventsFromGroups(
       })
     })
   }
+  events = track(
+    'displaced-whole-chord-head',
+    'reuniteDisplacedWholeChordHead',
+    () => reuniteDisplacedWholeChordHead(events, totalDivisions),
+  )
   events = track('normalize-dense-lane', 'normalizeDenseVectorLaneSpacing', () =>
     normalizeDenseVectorLaneSpacing(events, totalDivisions),
   )
