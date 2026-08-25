@@ -71,6 +71,33 @@ describe('restsForMeasure', () => {
     expect(rests[0].positionInMeasure).toBeLessThan(1)
   })
 
+  it('keeps a source-written beat-one rest before the cursor playable start', () => {
+    const rests = restsForMeasure(
+      [{ text: '\ue4e5', x: 150, y: 350 }],
+      imageData,
+      measureBox,
+      [],
+    )
+
+    expect(rests).toHaveLength(1)
+    expect(rests[0]).toMatchObject({
+      durationType: 'quarter',
+      clef: 'bass',
+      positionInMeasure: 0,
+    })
+  })
+
+  it('does not allocate a rest glyph before the measure barline', () => {
+    const rests = restsForMeasure(
+      [{ text: '\ue4e5', x: 90, y: 350 }],
+      imageData,
+      measureBox,
+      [],
+    )
+
+    expect(rests).toHaveLength(0)
+  })
+
   it('treats free-standing U+E4E5 glyphs as quarter rests', () => {
     const rests = restsForMeasure([{ text: '\ue4e5', x: 400, y: 160 }], imageData, measureBox, [])
     expect(rests).toHaveLength(1)

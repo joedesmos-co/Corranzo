@@ -32,7 +32,11 @@ function glyphInMeasureBox(glyph, measureBox, imageData, { yPad = 0.025 } = {}) 
   const xNorm = glyph.x / imageData.width
   const yNorm = glyph.y / imageData.height
   return (
-    xNorm >= (measureBox.playableX0 ?? measureBox.x0) &&
+    // `playableX0` is cursor metadata and deliberately skips the clef/key
+    // margin on the first measure of a system. Source-written beat-one rests
+    // can live before that cursor start, so allocate glyphs from the barline
+    // boundary just as vector noteheads are allocated.
+    xNorm >= measureBox.x0 &&
     xNorm <= measureBox.x1 &&
     yNorm >= measureBox.y0 - yPad &&
     yNorm <= measureBox.y1 + yPad
@@ -57,7 +61,7 @@ function nearNotehead(glyph, noteheads, radius = NOTEHEAD_EXCLUSION_RADIUS) {
 function measurePosition(glyph, measureBox, imageData) {
   const left = (measureBox.playableX0 ?? measureBox.x0) * imageData.width
   const right = measureBox.x1 * imageData.width
-  return (glyph.x - left) / Math.max(1, right - left)
+  return Math.max(0, (glyph.x - left) / Math.max(1, right - left))
 }
 
 function restDurationMeta(durationDivisions) {
@@ -534,7 +538,7 @@ function tryApplyStaffRest(
  * When an opening pickup rest lands at the barline, shift delayed note onsets
  * left by the same pickup offset so the rest+attack grid matches the engraving.
  */
-export function rebalanceOpeningPickupRests(events, totalDivisions) {
+export function rebalanceOpeningPickupRests(events) {
   const noteEvents = events.filter((event) => event.type === 'note')
   if (!noteEvents.length) {
     return events
