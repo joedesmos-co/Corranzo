@@ -10,6 +10,7 @@ const LEGACY_BLACK = '\ue12d'
 const LEGACY_HALF = '\ue12c'
 const LEGACY_TREBLE_CLEF = '\ue19e'
 const LEGACY_BASS_CLEF = '\ue19c'
+const LEGACY_BASS_CLEF_8VB = '\ue1db'
 const SMUFL_BLACK = '\ue0a4'
 const SMUFL_HALF = '\ue0a3'
 const SMUFL_TREBLE_CLEF = '\ue050'
@@ -65,6 +66,19 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     expect(text).toContain(SMUFL_BASS_CLEF)
     expect(text).not.toContain(LEGACY_BLACK)
     expect(text).not.toContain(LEGACY_HALF)
+  })
+
+  it('normalizes the legacy composite bass-clef-8vb glyph with provenance', () => {
+    const page = legacyGrandStaffPage()
+    page.push(item(LEGACY_BASS_CLEF_8VB))
+
+    const { items } = normalizeLegacyMusicFontGlyphs(page)
+    const normalized = items.find(
+      (entry) => entry.originalLegacyText === LEGACY_BASS_CLEF_8VB,
+    )
+
+    expect(normalized?.text).toBe(SMUFL_BASS_CLEF)
+    expect(normalized?.legacyMusicFontNormalized).toBe(true)
   })
 
   it('routes legacy pages onto the vector path (2 same-beat notes stay 2 notes)', () => {

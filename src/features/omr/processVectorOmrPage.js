@@ -11620,6 +11620,7 @@ export function processVectorPageSystems({
     staffClefsBySystem.set(systemIndex, staffClefs)
     continuingStaffClefs = {
       ...staffClefs.continuationClefs,
+      initialOctaveChanges: staffClefs.continuationOctaveChanges,
       confidence: staffClefs.confidence,
       source: staffClefs.source,
     }

@@ -10,6 +10,7 @@ import {
 const TREBLE_CLEF = '\ue050'
 const BASS_CLEF = '\ue062'
 const BLACK_NOTEHEAD = '\ue0a4'
+const LEGACY_BASS_CLEF_8VB = '\ue1db'
 const imageData = { width: 1000, height: 1000 }
 const staffLines = {
   treble: [0.2, 0.21, 0.22, 0.23, 0.24],
@@ -80,6 +81,105 @@ describe('positioned staff-clef timeline', () => {
     expect(during.staffRole).toBe('lower')
     expect(during.clefSign).toBe('treble')
     expect(during.midi - before.midi).toBe(21)
+  })
+
+  it('preserves a source composite bass-clef-8vb through pitch and XML', () => {
+    const result = detectStaffClefTimelineFromGlyphs(
+      [
+        glyph(TREBLE_CLEF, 50, 220),
+        {
+          ...glyph(BASS_CLEF, 55, 340),
+          originalLegacyText: LEGACY_BASS_CLEF_8VB,
+        },
+        glyph(BLACK_NOTEHEAD, 120, 220),
+        glyph(BLACK_NOTEHEAD, 130, 340),
+      ],
+      imageData,
+      staffLines,
+      { noteheadGlyphTexts: [BLACK_NOTEHEAD] },
+    )
+    const lowerClef = result.events.find((event) => event.staffRole === 'lower')
+    const standardMidi = resolvePitchFromGrandStaff(0.34, staffLines, undefined).midi
+    const mapping = resolvePitchFromGrandStaff(0.34, staffLines, result, 0.13)
+
+    expect(lowerClef?.octaveChange).toBe(-1)
+    expect(mapping.clefOctaveChange).toBe(-1)
+    expect(mapping.midi).toBe(standardMidi - 12)
+
+    const xml = buildOmrMusicXml({
+      includeDisclaimer: false,
+      measures: [{
+        measureNumber: 1,
+        events: [{
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          clef: 'treble',
+          notes: [{ midi: 72, clef: 'treble' }],
+        }, {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 4,
+          clef: 'bass',
+          notes: [{ midi: mapping.midi, clef: 'bass', pitchMapping: mapping }],
+        }],
+      }],
+    })
+    expect(xml).toContain(
+      '<clef><sign>F</sign><line>4</line><clef-octave-change>-1</clef-octave-change></clef>',
+    )
+  })
+
+  it('treats an ordinary bass clef as an active reset after bass 8vb', () => {
+    const result = detectStaffClefTimelineFromGlyphs(
+      [
+        glyph(TREBLE_CLEF, 50, 220),
+        {
+          ...glyph(BASS_CLEF, 55, 340),
+          originalLegacyText: LEGACY_BASS_CLEF_8VB,
+        },
+        glyph(BLACK_NOTEHEAD, 130, 340),
+        glyph(BASS_CLEF, 250, 340),
+        glyph(BLACK_NOTEHEAD, 300, 340),
+      ],
+      imageData,
+      staffLines,
+      { noteheadGlyphTexts: [BLACK_NOTEHEAD] },
+    )
+    const lowerEvents = result.events.filter(
+      (event) => event.staffRole === 'lower',
+    )
+    const under8vb = resolvePitchFromGrandStaff(0.34, staffLines, result, 0.2)
+    const afterReset = resolvePitchFromGrandStaff(0.34, staffLines, result, 0.3)
+
+    expect(lowerEvents.map((event) => [event.octaveChange, event.kind])).toEqual([
+      [-1, CLEF_EVENT_KIND.SYSTEM_START],
+      [0, CLEF_EVENT_KIND.ACTIVE_CHANGE],
+    ])
+    expect(afterReset.midi - under8vb.midi).toBe(12)
+    expect(result.endingOctaveChanges.lower).toBe(0)
+  })
+
+  it('inherits bass 8vb when the next system omits a repeated clef glyph', () => {
+    const result = detectStaffClefTimelineFromGlyphs(
+      [glyph(BLACK_NOTEHEAD, 130, 340)],
+      imageData,
+      staffLines,
+      {
+        inheritedStaffClefs: {
+          upper: 'treble',
+          lower: 'bass',
+          initialOctaveChanges: { upper: 0, lower: -1 },
+        },
+        noteheadGlyphTexts: [BLACK_NOTEHEAD],
+      },
+    )
+    const standardMidi = resolvePitchFromGrandStaff(0.34, staffLines, undefined).midi
+    const mapping = resolvePitchFromGrandStaff(0.34, staffLines, result, 0.13)
+
+    expect(result.events).toHaveLength(0)
+    expect(mapping.clefOctaveChange).toBe(-1)
+    expect(mapping.midi).toBe(standardMidi - 12)
   })
 
   it('serializes active lower-staff changes as positioned MusicXML clefs', () => {

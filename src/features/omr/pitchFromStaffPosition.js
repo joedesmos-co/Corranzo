@@ -334,6 +334,7 @@ export function staffSpanWithLedger(
 
 const TREBLE_CLEF_GLYPH = '\uE050'
 const BASS_CLEF_GLYPH = '\uE062'
+const LEGACY_BASS_CLEF_8VB_GLYPH = '\uE1DB'
 
 export const CLEF_EVENT_KIND = Object.freeze({
   SYSTEM_START: 'SYSTEM_START',
@@ -1215,12 +1216,28 @@ export function resolvePitchFromGrandStaff(
   const alternateStaffRole = staffResolution.alternateStaffRole
   const alternateLinesKey = staffRoleToLinesKey(alternateStaffRole)
   const alternateClefSign = alternateStaffRole === 'upper' ? clefs.upper : clefs.lower
-  const midi = midiFromStaffPosition(yNorm, lineYs, clefSign)
-  const alternateMidi = midiFromStaffPosition(
+  const clefEvent = clefs.activeEvents?.[staffRole]
+  const clefOctaveChange =
+    clefEvent?.clefSign === clefSign
+      ? clefEvent.octaveChange ?? 0
+      : clefs.octaveChanges?.[staffRole] ?? 0
+  const alternateClefEvent = clefs.activeEvents?.[alternateStaffRole]
+  const alternateClefOctaveChange =
+    alternateClefEvent?.clefSign === alternateClefSign
+      ? alternateClefEvent.octaveChange ?? 0
+      : clefs.octaveChanges?.[alternateStaffRole] ?? 0
+  const writtenMidi = midiFromStaffPosition(yNorm, lineYs, clefSign)
+  const alternateWrittenMidi = midiFromStaffPosition(
     yNorm,
     staffLines?.[alternateLinesKey] ?? [],
     alternateClefSign,
   )
+  const midi = Number.isFinite(writtenMidi)
+    ? writtenMidi + clefOctaveChange * 12
+    : writtenMidi
+  const alternateMidi = Number.isFinite(alternateWrittenMidi)
+    ? alternateWrittenMidi + alternateClefOctaveChange * 12
+    : alternateWrittenMidi
 
   return refineGrandStaffPitchMapping(
     {
@@ -1228,10 +1245,12 @@ export function resolvePitchFromGrandStaff(
       staffRole,
       clef: staffResolution.clef,
       clefSign,
+      clefOctaveChange,
       midi,
       alternateStaffRole,
       alternateClef: staffResolution.alternateClef,
       alternateClefSign,
+      alternateClefOctaveChange,
       alternateMidi,
       lineYs,
       staffClefs: clefs,
@@ -1381,6 +1400,8 @@ function clefGlyphCandidates(
       glyph,
       staffRole,
       clefSign,
+      octaveChange:
+        glyph.originalLegacyText === LEGACY_BASS_CLEF_8VB_GLYPH ? -1 : 0,
       xNorm,
       yNorm,
       sourceX: glyph.x,
@@ -1462,6 +1483,10 @@ export function detectStaffClefTimelineFromGlyphs(
     { xMinNorm, xMaxNorm },
   )
   const state = { ...inherited }
+  const octaveState = {
+    upper: inheritedStaffClefs?.initialOctaveChanges?.upper ?? 0,
+    lower: inheritedStaffClefs?.initialOctaveChanges?.lower ?? 0,
+  }
   const events = []
 
   for (const staffRole of ['upper', 'lower']) {
@@ -1480,7 +1505,10 @@ export function detectStaffClefTimelineFromGlyphs(
         kind = CLEF_EVENT_KIND.SYSTEM_START
       } else if (afterLastNote) {
         kind = CLEF_EVENT_KIND.COURTESY_REMINDER
-      } else if (candidate.clefSign === state[staffRole]) {
+      } else if (
+        candidate.clefSign === state[staffRole] &&
+        candidate.octaveChange === octaveState[staffRole]
+      ) {
         kind = CLEF_EVENT_KIND.REMINDER
       } else {
         kind = CLEF_EVENT_KIND.ACTIVE_CHANGE
@@ -1491,6 +1519,7 @@ export function detectStaffClefTimelineFromGlyphs(
         kind === CLEF_EVENT_KIND.ACTIVE_CHANGE
       ) {
         state[staffRole] = candidate.clefSign
+        octaveState[staffRole] = candidate.octaveChange
       }
 
       events.push({
@@ -1499,6 +1528,7 @@ export function detectStaffClefTimelineFromGlyphs(
         systemIndex,
         staffRole,
         clefSign: candidate.clefSign,
+        octaveChange: candidate.octaveChange,
         kind,
         confidence: 0.96,
         source: 'vector-glyph',
@@ -1516,22 +1546,31 @@ export function detectStaffClefTimelineFromGlyphs(
   )
 
   const systemStartClefs = { ...inherited }
+  const systemStartOctaveChanges = {
+    upper: inheritedStaffClefs?.initialOctaveChanges?.upper ?? 0,
+    lower: inheritedStaffClefs?.initialOctaveChanges?.lower ?? 0,
+  }
   for (const event of events) {
     if (event.kind === CLEF_EVENT_KIND.SYSTEM_START) {
       systemStartClefs[event.staffRole] = event.clefSign
+      systemStartOctaveChanges[event.staffRole] = event.octaveChange ?? 0
     }
   }
   const endingClefs = { ...systemStartClefs }
+  const endingOctaveChanges = { ...systemStartOctaveChanges }
   for (const event of events) {
     if (event.kind === CLEF_EVENT_KIND.ACTIVE_CHANGE) {
       endingClefs[event.staffRole] = event.clefSign
+      endingOctaveChanges[event.staffRole] = event.octaveChange ?? 0
     }
   }
 
   return {
     ...systemStartClefs,
     initialClefs: systemStartClefs,
+    initialOctaveChanges: systemStartOctaveChanges,
     endingClefs,
+    endingOctaveChanges,
     continuationClefs: {
       ...endingClefs,
       ...Object.fromEntries(
@@ -1548,6 +1587,26 @@ export function detectStaffClefTimelineFromGlyphs(
         }),
       ),
     },
+    continuationOctaveChanges: {
+      ...endingOctaveChanges,
+      ...Object.fromEntries(
+        ['upper', 'lower'].map((staffRole) => {
+          const courtesy = [...events]
+            .reverse()
+            .find(
+              (event) =>
+                event.staffRole === staffRole &&
+                event.kind === CLEF_EVENT_KIND.COURTESY_REMINDER &&
+                (event.clefSign !== endingClefs[staffRole] ||
+                  (event.octaveChange ?? 0) !== endingOctaveChanges[staffRole]),
+            )
+          return [
+            staffRole,
+            courtesy?.octaveChange ?? endingOctaveChanges[staffRole],
+          ]
+        }),
+      ),
+    },
     confidence: events.length ? 0.96 : inheritedStaffClefs?.confidence ?? 0,
     source: events.length ? 'vector-glyph-timeline' : inheritedStaffClefs?.source ?? 'default',
     detections: events,
@@ -1560,9 +1619,13 @@ export function resolveStaffClefsAtX(staffClefTimeline, xNorm) {
   const state = normalizeStaffClefs(
     staffClefTimeline?.initialClefs ?? staffClefTimeline,
   )
+  const octaveChanges = {
+    upper: staffClefTimeline?.initialOctaveChanges?.upper ?? 0,
+    lower: staffClefTimeline?.initialOctaveChanges?.lower ?? 0,
+  }
   const activeEvents = {}
   if (!Number.isFinite(xNorm)) {
-    return { ...state, activeEvents }
+    return { ...state, octaveChanges, activeEvents }
   }
   for (const event of staffClefTimeline?.events ?? []) {
     if (event.xNorm >= xNorm) {
@@ -1575,9 +1638,10 @@ export function resolveStaffClefsAtX(staffClefTimeline, xNorm) {
       continue
     }
     state[event.staffRole] = event.clefSign
+    octaveChanges[event.staffRole] = event.octaveChange ?? 0
     activeEvents[event.staffRole] = event
   }
-  return { ...state, activeEvents }
+  return { ...state, octaveChanges, activeEvents }
 }
 
 export function applyAlterToMidi(midi, alter) {

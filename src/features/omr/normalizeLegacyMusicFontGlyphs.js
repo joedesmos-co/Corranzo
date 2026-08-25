@@ -36,6 +36,7 @@ export const LEGACY_MSCORE_GLYPH_MAP = new Map([
   ['\ue12d', '\ue0a4'], // black notehead
   ['\ue19e', '\ue050'], // G (treble) clef
   ['\ue19c', '\ue062'], // F (bass) clef
+  ['\ue1db', '\ue062'], // F clef with octave 8 below (bass clef 8vb)
   // Accidentals (MScore legacy font → SMuFL)
   ['\ue1a0', '\ue262'], // sharp
   ['\ue1a1', '\ue260'], // flat

@@ -330,11 +330,14 @@ function defaultVoiceForClef(clef) {
   return clef === 'bass' ? 2 : 1
 }
 
-function clefChangeXml(clefSign, staffNumber = null) {
+function clefChangeXml(clefSign, staffNumber = null, octaveChange = 0) {
   const sign = clefSign === 'bass' ? 'F' : 'G'
   const line = clefSign === 'bass' ? 4 : 2
   const number = staffNumber == null ? '' : ` number="${staffNumber}"`
-  return `<attributes><clef${number}><sign>${sign}</sign><line>${line}</line></clef></attributes>`
+  const octaveXml = octaveChange
+    ? `<clef-octave-change>${octaveChange}</clef-octave-change>`
+    : ''
+  return `<attributes><clef${number}><sign>${sign}</sign><line>${line}</line>${octaveXml}</clef></attributes>`
 }
 
 /**
@@ -751,6 +754,10 @@ export function buildOmrMusicXml({
     upper: 'treble',
     lower: 'bass',
   }
+  const emittedClefOctaveChanges = {
+    upper: 0,
+    lower: 0,
+  }
   for (const measure of sortedMeasures) {
     let inner = ''
     if (measure.measureNumber === sortedMeasures[0].measureNumber) {
@@ -851,12 +858,19 @@ export function buildOmrMusicXml({
         const routedClef = clefEvidenceNote.clef ?? unit.clef
         const staffRole = routedClef === 'bass' ? 'lower' : 'upper'
         const desiredClefSign = clefEvidenceNote.pitchMapping.clefSign
-        if (desiredClefSign !== emittedClefSigns[staffRole]) {
+        const desiredOctaveChange =
+          clefEvidenceNote.pitchMapping.clefOctaveChange ?? 0
+        if (
+          desiredClefSign !== emittedClefSigns[staffRole] ||
+          desiredOctaveChange !== emittedClefOctaveChanges[staffRole]
+        ) {
           inner += clefChangeXml(
             desiredClefSign,
             grandStaff ? staffNumberForClef(routedClef) : null,
+            desiredOctaveChange,
           )
           emittedClefSigns[staffRole] = desiredClefSign
+          emittedClefOctaveChanges[staffRole] = desiredOctaveChange
         }
       }
 
