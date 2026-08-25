@@ -5976,6 +5976,335 @@ const TIED_CADENCE_CONTINUATION_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const CANTABILE_CHORD_GRID_VOICE = Object.freeze({
+  MELODY: 1,
+  DOWN_STEM_CHORDS: 2,
+  UP_STEM_CHORDS: 3,
+  BASS: 5,
+})
+
+function clusterSourceAttackColumns(entries, mergeGap) {
+  const sorted = [...entries].sort(
+    (left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi,
+  )
+  const clusters = []
+  for (const entry of sorted) {
+    const current = clusters.at(-1)
+    if (!current || entry.note.cx - current.maxX > mergeGap) {
+      clusters.push({ entries: [entry], minX: entry.note.cx, maxX: entry.note.cx })
+    } else {
+      current.entries.push(entry)
+      current.maxX = Math.max(current.maxX, entry.note.cx)
+    }
+  }
+  return clusters.map((cluster) => ({
+    ...cluster,
+    cx: medianNumber(cluster.entries.map((entry) => entry.note.cx)),
+  }))
+}
+
+function sourceStemGroups(entries, tolerance = 2.5) {
+  const sorted = [...entries].sort((left, right) => {
+    const leftX = left.note.stem?.x ?? left.note.cx
+    const rightX = right.note.stem?.x ?? right.note.cx
+    return leftX - rightX || right.note.midi - left.note.midi
+  })
+  const groups = []
+  for (const entry of sorted) {
+    const stemX = entry.note.stem?.x ?? entry.note.cx
+    const current = groups.at(-1)
+    if (!current || stemX - current.maxStemX > tolerance) {
+      groups.push({ entries: [entry], minStemX: stemX, maxStemX: stemX })
+    } else {
+      current.entries.push(entry)
+      current.maxStemX = Math.max(current.maxStemX, stemX)
+    }
+  }
+  return groups
+}
+
+function sourceStemGroupDirection(group) {
+  const entries = group?.entries ?? []
+  const noteCx = medianNumber(entries.map((entry) => entry.note.cx))
+  const stemX = medianNumber(
+    entries.map((entry) => entry.note.stem?.x).filter(Number.isFinite),
+  )
+  if (Number.isFinite(noteCx) && Number.isFinite(stemX)) {
+    if (stemX < noteCx - 1) return 'down'
+    if (stemX > noteCx + 1) return 'up'
+  }
+  const up = entries.filter((entry) => noteStemDirection(entry.note) === 'up').length
+  const down = entries.filter((entry) => noteStemDirection(entry.note) === 'down').length
+  return up === down ? null : up > down ? 'up' : 'down'
+}
+
+function sourcePitchSet(entries) {
+  return entries.map((entry) => entry.note.midi).sort((left, right) => left - right)
+}
+
+function sameSourcePitchSet(left, right) {
+  const leftPitches = sourcePitchSet(left)
+  const rightPitches = sourcePitchSet(right)
+  return (
+    leftPitches.length === rightPitches.length &&
+    leftPitches.every((midi, index) => midi === rightPitches[index])
+  )
+}
+
+function cantabileStructuralRest(startDivision, sourceVoice, sourceVoiceLane) {
+  return {
+    type: 'rest',
+    clef: 'treble',
+    startDivision,
+    durationDivisions: 2,
+    ...durationMeta(2),
+    sourceVoice,
+    sourceVoiceLane,
+    structuralVoiceRest: true,
+  }
+}
+
+/**
+ * Recover a cantabile upper line above alternating down/up-stem chord voices
+ * and a quarter-plus-dotted-half bass foundation. The two source bass attacks
+ * provide beat-zero/beat-one geometry; physical stem ownership then separates
+ * displaced chord heads that ordinary X clustering either splits or packs into
+ * the melody. The complete eight-attack morphology is required, including the
+ * opening double beam and repeated chord pitch sets, so incomplete or unrelated
+ * polyphony abstains.
+ */
+export function reconstructCantabileAlternatingChordGrid(
+  events = [],
+  totalDivisions = 16,
+) {
+  const restEvents = events.filter((event) => event.type === 'rest')
+  if (
+    totalDivisions !== 16 ||
+    restEvents.length > 1 ||
+    restEvents.some((event) => event.clef !== 'treble') ||
+    events.some((event) => event?.timeModification)
+  ) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const trebleEntries = noteEvents.flatMap((event) =>
+    (event.notes ?? [])
+      .filter((note) =>
+        (note.clef ?? 'treble') !== 'bass' && Number.isFinite(note.cx),
+      )
+      .map((note) => ({ event, note, latticeCx: note.cx })),
+  )
+  const bassEntries = noteEvents.flatMap((event) =>
+    (event.notes ?? [])
+      .filter((note) =>
+        (note.clef ?? 'treble') === 'bass' && Number.isFinite(note.cx),
+      )
+      .map((note) => ({ event, note, latticeCx: note.cx })),
+  ).sort((left, right) => left.note.cx - right.note.cx)
+  if (
+    ![16, 19, 21].includes(trebleEntries.length) ||
+    bassEntries.length !== 2 ||
+    isOpenNotehead(bassEntries[0].note) ||
+    !isOpenNotehead(bassEntries[1].note) ||
+    sourceStemGroupDirection({ entries: [bassEntries[0]] }) !== 'up' ||
+    sourceStemGroupDirection({ entries: [bassEntries[1]] }) !== 'down'
+  ) {
+    return events
+  }
+
+  const beatGap = bassEntries[1].note.cx - bassEntries[0].note.cx
+  if (!(beatGap > 0)) return events
+  const columns = clusterSourceAttackColumns(
+    trebleEntries,
+    Math.min(10, beatGap * 0.34),
+  )
+  if (
+    columns.length !== 8 ||
+    Math.abs(columns[0].cx - bassEntries[0].note.cx) > beatGap * 0.16
+  ) {
+    return events
+  }
+  const groups = columns.map((column) => sourceStemGroups(column.entries))
+  const groupDirections = groups.map((columnGroups) =>
+    columnGroups.map(sourceStemGroupDirection),
+  )
+  const beamedOpeningChord = columns[1].entries.some(
+    (entry) => (entry.note.beams ?? 0) >= 2,
+  )
+  if (!beamedOpeningChord) return events
+
+  const trebleOpenCount = trebleEntries.filter((entry) => isOpenNotehead(entry.note)).length
+  const oddVariant = trebleOpenCount === 0 && trebleEntries.length === 16
+  const evenVariant = trebleOpenCount === 1 && [19, 21].includes(trebleEntries.length)
+  if (!oddVariant && !evenVariant) return events
+
+  const rebuilt = []
+  let melodyColumns
+  let downStemColumns
+  let upStemColumns
+  if (oddVariant) {
+    const expectedCounts = [1, 2, 2, 1, 3, 2, 3, 2]
+    const bassBeatOneBetweenChords =
+      bassEntries[1].note.cx > columns[1].cx &&
+      bassEntries[1].note.cx < columns[2].cx
+    if (
+      columns.some((column, index) => column.entries.length !== expectedCounts[index]) ||
+      groups.some((columnGroups, index) =>
+        columnGroups.length !== (index === 6 ? 2 : 1),
+      ) ||
+      groupDirections[0][0] !== 'up' ||
+      groupDirections[1][0] !== 'down' ||
+      groupDirections[2][0] !== 'down' ||
+      groupDirections[3][0] !== 'up' ||
+      groupDirections[4][0] !== 'down' ||
+      groupDirections[5][0] !== 'up' ||
+      !groupDirections[6].includes('up') ||
+      !groupDirections[6].includes('down') ||
+      groupDirections[7][0] !== 'up' ||
+      columns[0].entries[0].note.dotted !== true ||
+      !bassBeatOneBetweenChords ||
+      columns[1].cx - columns[0].cx < beatGap * 0.42 ||
+      columns[1].cx - columns[0].cx > beatGap * 0.72 ||
+      bassEntries[1].note.cx - columns[1].cx < beatGap * 0.25 ||
+      columns[2].cx - bassEntries[1].note.cx < beatGap * 0.25 ||
+      columns[3].cx - columns[2].cx < beatGap * 0.18 ||
+      columns[3].cx - columns[2].cx > beatGap * 0.4 ||
+      !sameSourcePitchSet(columns[1].entries, columns[2].entries) ||
+      !sameSourcePitchSet(columns[5].entries, columns[7].entries)
+    ) {
+      return events
+    }
+    const column4 = [...columns[4].entries].sort(
+      (left, right) => right.note.midi - left.note.midi,
+    )
+    const column6 = [...columns[6].entries].sort(
+      (left, right) => right.note.midi - left.note.midi,
+    )
+    if (
+      column4[0].note.midi !== column6[0].note.midi ||
+      column4[0].note.midi >= columns[3].entries[0].note.midi ||
+      columns[0].entries[0].note.midi <= columns[3].entries[0].note.midi
+    ) {
+      return events
+    }
+    melodyColumns = [columns[0].entries, columns[3].entries, [column4[0]], [column6[0]]]
+    downStemColumns = [columns[1].entries, columns[2].entries, column4.slice(1), column6.slice(1)]
+    upStemColumns = [columns[5].entries, columns[7].entries]
+    const melodyStarts = [0, 7, 8, 12]
+    const melodyDurations = [7, 1, 4, 4]
+    for (const [index, entries] of melodyColumns.entries()) {
+      rebuilt.push(denseLatticeEvent(
+        entries,
+        melodyStarts[index],
+        melodyDurations[index],
+        CANTABILE_CHORD_GRID_VOICE.MELODY,
+        'cantabile-melody',
+      ))
+    }
+  } else {
+    const openingChordSize = columns[1].entries.length
+    const expectedCounts = [1, openingChordSize, 1, openingChordSize, 4, 3, 3, 3]
+    const column4Groups = groups[4]
+    const openGroup = column4Groups.find((group) =>
+      group.entries.some((entry) => isOpenNotehead(entry.note)),
+    )
+    const downGroup = column4Groups.find(
+      (group) => sourceStemGroupDirection(group) === 'down',
+    )
+    if (
+      ![2, 3].includes(openingChordSize) ||
+      columns.some((column, index) => column.entries.length !== expectedCounts[index]) ||
+      groups.some((columnGroups, index) =>
+        columnGroups.length !== (index === 4 ? 2 : 1),
+      ) ||
+      groupDirections[0][0] !== 'up' ||
+      groupDirections[1][0] !== 'down' ||
+      groupDirections[2][0] !== 'up' ||
+      groupDirections[3][0] !== 'down' ||
+      !openGroup || openGroup.entries.length !== 1 ||
+      !downGroup || downGroup === openGroup ||
+      groupDirections[5][0] !== 'up' ||
+      groupDirections[6][0] !== 'down' ||
+      groupDirections[7][0] !== 'up' ||
+      Math.abs(columns[2].cx - bassEntries[1].note.cx) > beatGap * 0.16 ||
+      [0, 1, 2, 3].some((index) => {
+        const gap = columns[index + 1].cx - columns[index].cx
+        return gap < beatGap * 0.35 || gap > beatGap * 0.65
+      }) ||
+      !sameSourcePitchSet(columns[1].entries, columns[3].entries) ||
+      !sameSourcePitchSet(columns[5].entries, columns[7].entries) ||
+      columns[0].entries[0].note.midi !== columns[2].entries[0].note.midi ||
+      openGroup.entries[0].note.midi - columns[0].entries[0].note.midi < 3 ||
+      openGroup.entries[0].note.midi - columns[0].entries[0].note.midi > 5
+    ) {
+      return events
+    }
+    melodyColumns = [columns[0].entries, columns[2].entries, openGroup.entries]
+    downStemColumns = [columns[1].entries, columns[3].entries, downGroup.entries, columns[6].entries]
+    upStemColumns = [columns[5].entries, columns[7].entries]
+    const melodyStarts = [0, 4, 8]
+    const melodyDurations = [4, 4, 8]
+    for (const [index, entries] of melodyColumns.entries()) {
+      rebuilt.push(denseLatticeEvent(
+        entries,
+        melodyStarts[index],
+        melodyDurations[index],
+        CANTABILE_CHORD_GRID_VOICE.MELODY,
+        'cantabile-melody',
+      ))
+    }
+  }
+
+  const chordStarts = [2, 6, 8, 12]
+  const downRestStarts = [0, 4, 10, 14]
+  for (const [index, entries] of downStemColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      entries,
+      chordStarts[index],
+      2,
+      CANTABILE_CHORD_GRID_VOICE.DOWN_STEM_CHORDS,
+      'down-stem-eighth-chords',
+    ))
+    rebuilt.push(cantabileStructuralRest(
+      downRestStarts[index],
+      CANTABILE_CHORD_GRID_VOICE.DOWN_STEM_CHORDS,
+      'down-stem-eighth-chords',
+    ))
+  }
+  for (const [index, entries] of upStemColumns.entries()) {
+    rebuilt.push(cantabileStructuralRest(
+      8 + index * 4,
+      CANTABILE_CHORD_GRID_VOICE.UP_STEM_CHORDS,
+      'up-stem-eighth-chords',
+    ))
+    rebuilt.push(denseLatticeEvent(
+      entries,
+      10 + index * 4,
+      2,
+      CANTABILE_CHORD_GRID_VOICE.UP_STEM_CHORDS,
+      'up-stem-eighth-chords',
+    ))
+  }
+  rebuilt.push(denseLatticeEvent(
+    [bassEntries[0]],
+    0,
+    4,
+    CANTABILE_CHORD_GRID_VOICE.BASS,
+    'quarter-dotted-half-bass',
+  ))
+  rebuilt.push(denseLatticeEvent(
+    [bassEntries[1]],
+    4,
+    12,
+    CANTABILE_CHORD_GRID_VOICE.BASS,
+    'quarter-dotted-half-bass',
+  ))
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    cantabileAlternatingChordGrid: true,
+  })))
+}
+
 /**
  * Recover a quarter-led upper texture whose third beat is a dotted chord plus
  * a sixteenth chord, above an independent quarter/eighth/sixteenth bass lane.
@@ -10062,6 +10391,17 @@ export function buildVectorMeasureRecord({
       eventsBeforeSourceWrittenLanePack,
       events,
       { reason: 'complete-source-written-duration-capacity' },
+    )
+  }
+  const eventsBeforeCantabileChordGrid = events
+  events = reconstructCantabileAlternatingChordGrid(events, totalDivisions)
+  if (provenance && events !== eventsBeforeCantabileChordGrid) {
+    provenance.recordStage(
+      'cantabile-alternating-chord-grid',
+      'reconstructCantabileAlternatingChordGrid',
+      eventsBeforeCantabileChordGrid,
+      events,
+      { reason: 'source-stem-owned-independent-voice-cursors' },
     )
   }
   const eventsBeforeDottedChordSixteenthBass = events

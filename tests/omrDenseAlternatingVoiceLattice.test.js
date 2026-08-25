@@ -6,6 +6,7 @@ import {
   completeQuarterRestChordBassTies,
   completeSyncopatedQuarterChordBassTies,
   reconstructAlternatingEighthChordBassLattice,
+  reconstructCantabileAlternatingChordGrid,
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedCadenceArpeggioGrid,
@@ -126,6 +127,126 @@ function latticeEvent(notes, startDivision, durationDivisions = 1) {
     durationType: durationDivisions === 16 ? 'whole' : 'sixteenth',
   }
 }
+
+function cantabileChordGridFixture({
+  variant = 'odd',
+  irregularAttack = false,
+  openBassAnchor = true,
+  sourceRestCount = null,
+} = {}) {
+  const odd = variant === 'odd'
+  const xs = odd
+    ? [100, 124, 160, 172, 194, 214, 236, 256]
+    : [100, irregularAttack ? 128 : 118, 136, 154, 172, 190, 214, 234]
+  const columns = odd
+    ? [
+        [[78, 'up']],
+        [[70, 'down'], [66, 'down']],
+        [[70, 'down'], [66, 'down']],
+        [[77, 'up']],
+        [[75, 'down'], [71, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+        [[75, 'up'], [69, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+      ]
+    : [
+        [[78, 'up']],
+        [[70, 'down'], [66, 'down']],
+        [[78, 'up']],
+        [[70, 'down'], [66, 'down']],
+        [[82, 'up', true], [71, 'down'], [66, 'down'], [63, 'down']],
+        [[78, 'up'], [75, 'up'], [70, 'up']],
+        [[69, 'down'], [66, 'down'], [63, 'down']],
+        [[78, 'up'], [75, 'up'], [70, 'up']],
+      ]
+  const events = columns.map((specs, index) => {
+    const notes = specs.map(([midi, stem, open = false]) => {
+      const note = latticeNote({ cx: xs[index], midi, stem, open })
+      note.stem.x = xs[index] + (stem === 'up' ? 5 : -5)
+      note.beams = index === 1 || (!odd && index === 4) ? 2 : 0
+      note.dotted = odd && index === 0
+      return note
+    })
+    return latticeEvent(notes, index * 2, 1)
+  })
+  const bassFirst = latticeNote({ cx: 100, midi: 39, clef: 'bass', stem: 'up' })
+  bassFirst.stem.x = 105
+  bassFirst.durationDivisions = 4
+  bassFirst.durationType = 'quarter'
+  const bassSecond = latticeNote({
+    cx: odd ? 142 : 136,
+    midi: 58,
+    clef: 'bass',
+    stem: 'down',
+    open: openBassAnchor,
+  })
+  bassSecond.stem.x = bassSecond.cx - 5
+  bassSecond.durationDivisions = 12
+  bassSecond.durationType = 'half'
+  bassSecond.dotted = true
+  const restCount = sourceRestCount ?? (odd ? 1 : 0)
+  return [
+    ...events,
+    latticeEvent([bassFirst], 0, 4),
+    latticeEvent([bassSecond], 4, 12),
+    ...Array.from({ length: restCount }, (_, index) => ({
+      type: 'rest',
+      clef: 'treble',
+      cx: 130 + index * 20,
+      startDivision: 2 + index * 2,
+      durationDivisions: 2,
+      durationType: 'eighth',
+    })),
+  ]
+}
+
+describe('reconstructCantabileAlternatingChordGrid', () => {
+  it.each([
+    ['double-dotted melody', 'odd', [[0, 7], [7, 1], [8, 4], [12, 4]]],
+    ['half-note melody', 'even', [[0, 4], [4, 4], [8, 8]]],
+  ])('recovers the %s and two alternating chord cursors', (
+    _label,
+    variant,
+    expectedMelody,
+  ) => {
+    const rebuilt = reconstructCantabileAlternatingChordGrid(
+      cantabileChordGridFixture({ variant }),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(expectedMelody)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+    ])).toEqual([
+      ['rest', 0], ['note', 2], ['rest', 4], ['note', 6],
+      ['note', 8], ['rest', 10], ['note', 12], ['rest', 14],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 3).map((event) => [
+      event.type,
+      event.startDivision,
+    ])).toEqual([
+      ['rest', 8], ['note', 10], ['rest', 12], ['note', 14],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 4], [4, 12]])
+  })
+
+  it.each([
+    ['a filled second bass anchor', { openBassAnchor: false }, 16],
+    ['multiple detected source rests', { sourceRestCount: 2 }, 16],
+    ['irregular opening attack geometry', { variant: 'even', irregularAttack: true }, 16],
+    ['a non-4/4 measure', {}, 12],
+  ])('abstains for %s', (_label, options, totalDivisions) => {
+    const source = cantabileChordGridFixture(options)
+    expect(reconstructCantabileAlternatingChordGrid(source, totalDivisions)).toBe(source)
+  })
+})
 
 function quarterRestChordBassFixture({ missingBassHead = false } = {}) {
   const events = []
