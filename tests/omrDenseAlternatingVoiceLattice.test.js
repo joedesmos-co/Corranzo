@@ -13,6 +13,7 @@ import {
   reconstructHalfSustainSixteenthCadenceGrid,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
+  reconstructSyncopatedChordBassOstinatoGrid,
   reconstructTripletMelodyOverprintLattice,
   reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -1088,6 +1089,64 @@ describe('reconstructDottedChordOffbeatPairLattice', () => {
   ])('abstains for %s', (_label, options) => {
     const source = dottedChordOffbeatFixture(options)
     expect(reconstructDottedChordOffbeatPairLattice(source, 16)).toBe(source)
+  })
+})
+
+function syncopatedChordBassFixture({ missingLowerHead = false, missingBass = false } = {}) {
+  const events = []
+  const bassIndexes = new Set([0, 1, 2, 3, 5, 6, 7, 9])
+  const chordIndexes = new Set([0, 1, 2, 4, 5, 7, 9])
+  const melodyIndexes = new Set([0, 1, 2, 3, 4, 5, 7, 8, 9, 10])
+  for (let index = 0; index < 11; index += 1) {
+    const cx = 100 + index * 24
+    if (bassIndexes.has(index) && !(missingBass && index === 9)) {
+      events.push(latticeEvent([
+        latticeNote({ cx, midi: 36 + (index % 2) * 12, clef: 'bass', stem: 'up' }),
+      ], index, 1))
+    }
+    if (chordIndexes.has(index)) {
+      const lowerCount = index >= 7 || (missingLowerHead && index === 2) ? 1 : 2
+      const notes = Array.from({ length: lowerCount }, (_, noteIndex) => {
+        const note = latticeNote({ cx, midi: 62 - noteIndex * 4, stem: 'down' })
+        note.beams = index >= 7 ? 2 : 0
+        return note
+      })
+      events.push(latticeEvent(notes, index, 1))
+    }
+    if (melodyIndexes.has(index)) {
+      const note = latticeNote({ cx, midi: 72 - (index % 3), stem: 'up' })
+      note.beams = index >= 7 && index <= 9 ? 2 : 0
+      events.push(latticeEvent([note], index, 1))
+    }
+  }
+  return events
+}
+
+describe('reconstructSyncopatedChordBassOstinatoGrid', () => {
+  it.each([
+    ['the complete texture', false],
+    ['one source-visible lower-head miss', true],
+  ])('recovers independent bass, lower-chord, and melody lanes for %s', (_label, missingLowerHead) => {
+    const source = syncopatedChordBassFixture({ missingLowerHead })
+    const rebuilt = reconstructSyncopatedChordBassOstinatoGrid(source, 16)
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 3], [7, 1], [8, 4], [12, 2], [14, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 1], [7, 1], [8, 4], [12, 1], [13, 1], [14, 1], [15, 1]])
+  })
+
+  it('abstains when the complete eight-note bass grid is absent', () => {
+    const source = syncopatedChordBassFixture({ missingBass: true })
+    expect(reconstructSyncopatedChordBassOstinatoGrid(source, 16)).toBe(source)
   })
 })
 

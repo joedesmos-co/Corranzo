@@ -6767,6 +6767,155 @@ export function reconstructDottedChordOffbeatPairLattice(
   })))
 }
 
+const SYNCOPATED_CHORD_BASS_VOICE = Object.freeze({
+  LOWER_CHORD: 1,
+  MELODY: 2,
+  BASS: 5,
+})
+
+function syncopatedChordBassEvent(
+  entries,
+  startDivision,
+  durationDivisions,
+  sourceVoice,
+  sourceVoiceLane,
+) {
+  const representative = entries[0].event
+  const notes = dedupeNoteheads(entries.map((entry) => entry.note)).sort(
+    (left, right) => right.midi - left.midi,
+  )
+  return {
+    ...representative,
+    type: 'note',
+    notes,
+    startDivision,
+    durationDivisions,
+    ...durationMeta(durationDivisions),
+    cx: average(notes.map((note) => note.cx)),
+    positionInMeasure: average(
+      notes.map((note) => note.positionInMeasure).filter(Number.isFinite),
+    ),
+    sourceVoice,
+    sourceVoiceLane,
+    syncopatedChordBassOstinatoGrid: true,
+  }
+}
+
+/**
+ * Recover an eleven-column grand-staff texture with eight evenly spaced bass
+ * eighths, a separately stemmed upper melody, and lower treble chords. The two
+ * treble attacks around beat three are one sixteenth tied into one quarter;
+ * preserving those source onsets lets the page-level tie pass recover the
+ * sounding five-division sustain without collapsing either voice.
+ */
+export function reconstructSyncopatedChordBassOstinatoGrid(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => {
+      const latticeCx = medianNumber(
+        (event.notes ?? []).map((note) => note.cx).filter(Number.isFinite),
+      )
+      return (event.notes ?? [])
+        .filter((note) => Number.isFinite(note.cx))
+        .map((note) => ({ event, note, latticeCx }))
+    })
+  if (entries.length < 29 || entries.length > 30) return events
+  const columns = clusterDenseLatticeNotes(entries)
+  if (columns.length !== 11) return events
+
+  const trebleByColumn = columns.map((column) =>
+    column.entries
+      .filter((entry) => (entry.note.clef ?? 'treble') !== 'bass')
+      .sort((left, right) => right.note.midi - left.note.midi),
+  )
+  const bassByColumn = columns.map((column) =>
+    column.entries.filter((entry) => (entry.note.clef ?? 'treble') === 'bass'),
+  )
+  const bassIndexes = [0, 1, 2, 3, 5, 6, 7, 9]
+  const chordIndexes = [0, 1, 2, 4, 5, 7, 9]
+  const melodyIndexes = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]
+  const expectedTrebleCounts = [3, 3, null, 1, 3, null, 0, 2, 1, 2, 1]
+  if (
+    bassByColumn.some((column, index) =>
+      column.length !== (bassIndexes.includes(index) ? 1 : 0),
+    ) ||
+    trebleByColumn.some((column, index) =>
+      expectedTrebleCounts[index] == null
+        ? column.length < 2 || column.length > 3
+        : column.length !== expectedTrebleCounts[index],
+    )
+  ) {
+    return events
+  }
+
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(gaps.slice(0, 7))
+  const mixedStemColumns = chordIndexes.filter((index) => {
+    const column = trebleByColumn[index]
+    return (
+      column.some((entry) => noteStemDirection(entry.note) === 'up') &&
+      column.some((entry) => noteStemDirection(entry.note) === 'down')
+    )
+  }).length
+  const closingBeamEvidence = [7, 8, 9]
+    .flatMap((index) => trebleByColumn[index])
+    .filter((entry) => (entry.note.beams ?? 0) >= 1).length
+  if (
+    !(typicalGap > 0) ||
+    gaps.some((gap) => gap < typicalGap * 0.55 || gap > typicalGap * 1.55) ||
+    mixedStemColumns < 3 ||
+    closingBeamEvidence < 3
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const bassStarts = [0, 2, 4, 6, 8, 10, 12, 14]
+  for (const [position, columnIndex] of bassIndexes.entries()) {
+    rebuilt.push(syncopatedChordBassEvent(
+      bassByColumn[columnIndex],
+      bassStarts[position],
+      2,
+      SYNCOPATED_CHORD_BASS_VOICE.BASS,
+      'bass-eighth-ostinato',
+    ))
+  }
+
+  const lowerStarts = [0, 2, 4, 7, 8, 12, 14]
+  const lowerDurations = [2, 2, 3, 1, 4, 2, 2]
+  for (const [position, columnIndex] of chordIndexes.entries()) {
+    rebuilt.push(syncopatedChordBassEvent(
+      trebleByColumn[columnIndex].slice(1),
+      lowerStarts[position],
+      lowerDurations[position],
+      SYNCOPATED_CHORD_BASS_VOICE.LOWER_CHORD,
+      'lower-treble-chords',
+    ))
+  }
+
+  const melodyStarts = [0, 2, 4, 6, 7, 8, 12, 13, 14, 15]
+  const melodyDurations = [2, 2, 2, 1, 1, 4, 1, 1, 1, 1]
+  for (const [position, columnIndex] of melodyIndexes.entries()) {
+    rebuilt.push(syncopatedChordBassEvent(
+      trebleByColumn[columnIndex].slice(0, 1),
+      melodyStarts[position],
+      melodyDurations[position],
+      SYNCOPATED_CHORD_BASS_VOICE.MELODY,
+      'upper-syncopated-melody',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 const MIXED_TUPLET_VOICE = Object.freeze({
   TREBLE: 1,
   BASS: 5,
@@ -7792,6 +7941,7 @@ export function buildVectorMeasureRecord({
   events = reconstructHalfSustainSixteenthCadenceGrid(events, totalDivisions)
   events = reconstructDottedCadenceArpeggioGrid(events, totalDivisions)
   events = reconstructDottedChordOffbeatPairLattice(events, totalDivisions)
+  events = reconstructSyncopatedChordBassOstinatoGrid(events, totalDivisions)
   events = reconstructDenseAlternatingVoiceLattice(events, totalDivisions)
   events = reconstructQuarterMelodyOffbeatChordLattice(events, totalDivisions)
   events = reconstructTripletMelodyOverprintLattice(events, totalDivisions, {
