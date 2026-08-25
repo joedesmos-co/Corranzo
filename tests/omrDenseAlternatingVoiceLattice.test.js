@@ -7,6 +7,7 @@ import {
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedCadenceArpeggioGrid,
   reconstructDottedChordOffbeatPairLattice,
+  reconstructDottedMelodySixteenthBassLattice,
   reconstructDottedMelodyHalfChordBassGrid,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructHalfMelodyChordCadenceGrid,
@@ -485,6 +486,73 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
     ['a non-4/4 measure', quarterMelodyOffbeatFixture(), 12],
   ])('abstains for %s', (_label, source, totalDivisions) => {
     expect(reconstructQuarterMelodyOffbeatChordLattice(source, totalDivisions)).toBe(source)
+  })
+})
+
+function dottedMelodySixteenthBassFixture({ removeBassHead = false } = {}) {
+  const events = []
+  for (let index = 0; index < 12; index += 1) {
+    const bassCount = index % 2 === 0 ? 2 : 1
+    const bassNotes = Array.from({ length: bassCount }, (_, noteIndex) => {
+      const note = latticeNote({
+        cx: 100 + index * 14,
+        midi: 52 - noteIndex * 12 + (index % 3) * 2,
+        clef: 'bass',
+        stem: 'up',
+      })
+      note.beams = noteIndex === 0 && index % 2 === 0 ? 2 : 0
+      return note
+    })
+    if (removeBassHead && index === 4) bassNotes.pop()
+    events.push(latticeEvent(bassNotes, index, 1))
+  }
+  const accompanimentIndexes = [0, 2, 4, 5, 6, 8, 10]
+  for (const index of accompanimentIndexes) {
+    const note = latticeNote({
+      cx: 100 + index * 14,
+      midi: 68 - Math.floor(index / 5) * 2,
+      stem: 'down',
+    })
+    note.beams = index < 6 ? 2 : 1
+    events.push(latticeEvent([note], index, 1))
+  }
+  for (const [melodyIndex, index] of [0, 6].entries()) {
+    const note = latticeNote({
+      cx: 100 + index * 14,
+      midi: 76 + melodyIndex * 2,
+      stem: 'up',
+    })
+    note.dotted = true
+    note.durationType = 'quarter'
+    note.durationDivisions = 6
+    events.push(latticeEvent([note], index, 2))
+  }
+  return events
+}
+
+describe('reconstructDottedMelodySixteenthBassLattice', () => {
+  it('separates dotted melody, upper accompaniment, and bass sixteenths', () => {
+    const rebuilt = reconstructDottedMelodySixteenthBassLattice(
+      dottedMelodySixteenthBassFixture(),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 6], [6, 6]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 1], [5, 1], [6, 2], [8, 2], [10, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(12)
+  })
+
+  it('abstains outside 3/4 and when the alternating bass topology is incomplete', () => {
+    const complete = dottedMelodySixteenthBassFixture()
+    expect(reconstructDottedMelodySixteenthBassLattice(complete, 16)).toBe(complete)
+    const incomplete = dottedMelodySixteenthBassFixture({ removeBassHead: true })
+    expect(reconstructDottedMelodySixteenthBassLattice(incomplete, 12)).toBe(incomplete)
   })
 })
 
