@@ -5964,6 +5964,12 @@ const ALTERNATING_EIGHTH_CHORD_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const QUARTER_CADENCE_SIXTEENTH_BASS_VOICE = Object.freeze({
+  MELODY: 1,
+  UPPER_CHORD: 2,
+  BASS: 5,
+})
+
 /**
  * Recover a quarter-led upper texture whose third beat is a dotted chord plus
  * a sixteenth chord, above an independent quarter/eighth/sixteenth bass lane.
@@ -6300,6 +6306,275 @@ export function reconstructAlternatingEighthChordBassLattice(
     ...event,
     alternatingEighthChordBassLattice: true,
   })))
+}
+
+/**
+ * Recover a quarter-led two-voice cadence over an asymmetric bass cursor. The
+ * long opening gap, compressed sixteenth pair, opposing bass stems, and exact
+ * relative-pitch contours identify two printed variants: a four-head opening
+ * chord with a three-head cadence, or octave-separated upper attacks with a
+ * shared closing unison. The latter also requires its printed eighth rest.
+ */
+export function reconstructQuarterCadenceSixteenthBassLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event?.timeModification)
+  ) {
+    return events
+  }
+  const restEvents = events.filter((event) => event.type === 'rest')
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? [])
+      .filter((note) => Number.isFinite(note.cx))
+      .map((note) => ({ event, note, latticeCx: note.cx })))
+  const variant = entries.length === 23
+    ? 'chordal'
+    : entries.length === 20
+      ? 'octave'
+      : null
+  if (
+    !variant ||
+    entries.some((entry) => isOpenNotehead(entry.note)) ||
+    (variant === 'chordal' && restEvents.length !== 0) ||
+    (variant === 'octave' && (
+      restEvents.length !== 1 ||
+      restEvents[0].clef !== 'treble' ||
+      restEvents[0].sourceGlyph !== '\ue4e6' ||
+      !Number.isFinite(restEvents[0].cx)
+    ))
+  ) {
+    return events
+  }
+
+  const columns = clusterDenseLatticeNotes(entries)
+  if (columns.length !== 8) return events
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber([gaps[1], gaps[2], gaps[3]])
+  if (
+    !(typicalGap > 0) ||
+    gaps[0] < typicalGap * 1.42 || gaps[0] > typicalGap * 1.58 ||
+    [1, 2, 3].some(
+      (index) => gaps[index] < typicalGap * 0.9 || gaps[index] > typicalGap * 1.1,
+    ) ||
+    gaps[4] < typicalGap * 0.58 || gaps[4] > typicalGap * 0.75 ||
+    gaps[5] < typicalGap * 0.62 || gaps[5] > typicalGap * 0.85 ||
+    gaps[6] < typicalGap * 0.9 || gaps[6] > typicalGap * 1.22 ||
+    (variant === 'octave' &&
+      Math.abs(restEvents[0].cx - columns[6].cx) > typicalGap * 0.2)
+  ) {
+    return events
+  }
+
+  const trebleByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') !== 'bass',
+  ))
+  const bassByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') === 'bass',
+  ))
+  const expectedTrebleCounts = variant === 'chordal'
+    ? [1, 4, 0, 2, 0, 0, 1, 3]
+    : [1, 2, 0, 1, 0, 0, 1, 2]
+  const expectedBassCounts = variant === 'chordal'
+    ? [2, 3, 1, 2, 1, 1, 1, 1]
+    : [2, 3, 1, 2, 1, 1, 1, 2]
+  if (
+    trebleByColumn.some(
+      (column, index) => column.length !== expectedTrebleCounts[index],
+    ) ||
+    bassByColumn.some(
+      (column, index) => column.length !== expectedBassCounts[index],
+    )
+  ) {
+    return events
+  }
+  const trebleMidis = trebleByColumn.map((column) => column
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right))
+  const bassMidis = bassByColumn.map((column) => column
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right))
+  const matchesOffsets = (values, anchor, offsets) =>
+    values.length === offsets.length &&
+    values.every((midi, index) => midi === anchor + offsets[index])
+  const trebleAnchor = trebleMidis[0][0]
+  const bassAnchor = bassMidis[0][0]
+  const commonTreblePitchPattern =
+    matchesOffsets(trebleMidis[0], trebleAnchor, [0]) &&
+    matchesOffsets(trebleMidis[6], trebleAnchor, [-2])
+  const variantTreblePitchPattern = variant === 'chordal'
+    ? matchesOffsets(trebleMidis[1], trebleAnchor, [0, 3, 7, 12]) &&
+      matchesOffsets(trebleMidis[3], trebleAnchor, [-2, 2]) &&
+      matchesOffsets(trebleMidis[7], trebleAnchor, [-5, -2, 7])
+    : matchesOffsets(trebleMidis[1], trebleAnchor, [5, 12]) &&
+      matchesOffsets(trebleMidis[3], trebleAnchor, [2]) &&
+      matchesOffsets(trebleMidis[7], trebleAnchor, [0, 12])
+  const bassPitchPattern =
+    matchesOffsets(bassMidis[0], bassAnchor, [0, 12]) &&
+    matchesOffsets(bassMidis[1], bassAnchor, [15, 19, 22]) &&
+    matchesOffsets(bassMidis[2], bassAnchor, [12]) &&
+    matchesOffsets(bassMidis[3], bassAnchor, [2, 14]) &&
+    matchesOffsets(bassMidis[4], bassAnchor, [2]) &&
+    matchesOffsets(bassMidis[5], bassAnchor, [14]) &&
+    matchesOffsets(bassMidis[6], bassAnchor, [9]) &&
+    matchesOffsets(
+      bassMidis[7],
+      bassAnchor,
+      variant === 'chordal' ? [-5] : [-5, 7],
+    )
+  const openingTreble = [...trebleByColumn[1]].sort(
+    (left, right) => left.note.midi - right.note.midi,
+  )
+  const closingTreble = [...trebleByColumn[7]].sort(
+    (left, right) => left.note.midi - right.note.midi,
+  )
+  const variantStemPattern = variant === 'chordal'
+    ? noteStemDirection(openingTreble.at(-1).note) === 'down' &&
+      openingTreble.slice(0, -1).every(
+        (entry) => noteStemDirection(entry.note) === 'up',
+      ) &&
+      noteStemDirection(closingTreble[0].note) === 'down' &&
+      closingTreble.slice(1).every(
+        (entry) => noteStemDirection(entry.note) === 'up',
+      ) &&
+      noteStemDirection(bassByColumn[7][0].note) === 'up'
+    : noteStemDirection(openingTreble[0].note) === 'down' &&
+      noteStemDirection(openingTreble[1].note) === 'up' &&
+      noteStemDirection(closingTreble[0].note) === 'up' &&
+      noteStemDirection(closingTreble[1].note) === 'down' &&
+      stemDirectionShare(bassByColumn[7], 'up') === 0.5
+  if (
+    !commonTreblePitchPattern ||
+    !variantTreblePitchPattern ||
+    !bassPitchPattern ||
+    !variantStemPattern ||
+    noteStemDirection(trebleByColumn[0][0].note) !== 'down' ||
+    trebleByColumn[3].some(
+      (entry) => noteStemDirection(entry.note) !== 'down',
+    ) ||
+    noteStemDirection(trebleByColumn[6][0].note) !== 'down' ||
+    stemDirectionShare(bassByColumn[0], 'up') !== 0.5 ||
+    bassByColumn[1].some(
+      (entry) => noteStemDirection(entry.note) !== 'down',
+    ) ||
+    bassByColumn[1].every((entry) => (entry.note.beams ?? 0) < 2) ||
+    noteStemDirection(bassByColumn[2][0].note) !== 'down' ||
+    stemDirectionShare(bassByColumn[3], 'up') !== 0.5 ||
+    bassByColumn[3].every((entry) => (entry.note.beams ?? 0) < 1) ||
+    bassByColumn.slice(4, 7).flat().some(
+      (entry) => noteStemDirection(entry.note) !== 'up',
+    )
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const openingMelody = variant === 'chordal'
+    ? openingTreble.slice(0, 2)
+    : openingTreble.slice(0, 1)
+  const openingUpper = variant === 'chordal'
+    ? openingTreble.slice(2)
+    : openingTreble.slice(1)
+  const closingMelody = closingTreble.slice(0, 1)
+  const closingUpper = variant === 'chordal'
+    ? closingTreble.slice(1)
+    : closingTreble
+  const melodyColumns = [trebleByColumn[0], openingMelody,
+    trebleByColumn[3], trebleByColumn[6], closingMelody]
+  const melodyStarts = [0, 4, 8, 12, 14]
+  const melodyDurations = [4, 4, 4, 2, 2]
+  for (const [index, column] of melodyColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      melodyStarts[index],
+      melodyDurations[index],
+      QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.MELODY,
+      'quarter-cadence-melody',
+    ))
+  }
+
+  rebuilt.push(denseLatticeEvent(
+    openingUpper,
+    4,
+    4,
+    QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.UPPER_CHORD,
+    'upper-quarter-cadence',
+  ))
+  rebuilt.push(denseLatticeEvent(
+    closingUpper,
+    14,
+    2,
+    QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.UPPER_CHORD,
+    'upper-quarter-cadence',
+  ))
+  for (const [startDivision, durationDivisions] of [[0, 4], [8, 4], [12, 2]]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision,
+      durationDivisions,
+      ...durationMeta(durationDivisions),
+      sourceVoice: QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.UPPER_CHORD,
+      sourceVoiceLane: 'upper-quarter-cadence',
+      structuralVoiceRest: true,
+    })
+  }
+
+  const bassStarts = [0, 4, 6, 8, 10, 11, 12, 14]
+  const bassDurations = [4, 2, 2, 2, 1, 1, 2, 2]
+  for (const [index, column] of bassByColumn.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      bassStarts[index],
+      bassDurations[index],
+      QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.BASS,
+      'mixed-sixteenth-bass',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    quarterCadenceSixteenthBassLattice: true,
+  })))
+}
+
+/**
+ * Keep the page-level tie curve on the closing upper cadence. In the chordal
+ * variant, a broad upper curve can also reach the lone low bass head; three
+ * source-backed upper tie starts prove that the fourth bass mark is spillover.
+ */
+export function removeQuarterCadenceBassTieSpillover(events = []) {
+  if (!events.some((event) => event.quarterCadenceSixteenthBassLattice === true)) {
+    return events
+  }
+  const closingNotes = events
+    .filter((event) => event.type === 'note' && event.startDivision === 14)
+    .flatMap((event) => event.notes ?? [])
+  const upperTieStarts = closingNotes.filter(
+    (note) => note.clef !== 'bass' && note.tieStart === true,
+  )
+  const bassTieStarts = closingNotes.filter(
+    (note) => note.clef === 'bass' && note.tieStart === true,
+  )
+  if (upperTieStarts.length !== 3 || bassTieStarts.length !== 1) {
+    return events
+  }
+  return events.map((event) => {
+    if (
+      event.type !== 'note' ||
+      event.startDivision !== 14 ||
+      event.sourceVoice !== QUARTER_CADENCE_SIXTEENTH_BASS_VOICE.BASS ||
+      event.notes?.length !== 1
+    ) {
+      return event
+    }
+    const nextEvent = { ...event, notes: event.notes.map((note) => ({ ...note })) }
+    delete nextEvent.tieStart
+    delete nextEvent.notes[0].tieStart
+    return nextEvent
+  })
 }
 
 /**
@@ -9616,6 +9891,17 @@ export function buildVectorMeasureRecord({
       { reason: 'source-complete-independent-voice-cursors' },
     )
   }
+  const eventsBeforeQuarterCadenceSixteenthBass = events
+  events = reconstructQuarterCadenceSixteenthBassLattice(events, totalDivisions)
+  if (provenance && events !== eventsBeforeQuarterCadenceSixteenthBass) {
+    provenance.recordStage(
+      'quarter-cadence-sixteenth-bass-lattice',
+      'reconstructQuarterCadenceSixteenthBassLattice',
+      eventsBeforeQuarterCadenceSixteenthBass,
+      events,
+      { reason: 'source-complete-independent-voice-cursors' },
+    )
+  }
 
   if (provenance) {
     const beamRows = []
@@ -10278,6 +10564,7 @@ export function processVectorPageSystems({
   for (const record of flatRecords) {
     record.events = completeQuarterRestChordBassTies(record.events)
     record.events = completeSyncopatedQuarterChordBassTies(record.events)
+    record.events = removeQuarterCadenceBassTieSpillover(record.events)
   }
 
   return {

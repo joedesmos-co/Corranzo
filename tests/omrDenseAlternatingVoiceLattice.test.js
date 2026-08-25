@@ -20,6 +20,8 @@ import {
   reconstructMixedQuintupletSeptupletLattice,
   reconstructOffsetChordBassQuintupletGrid,
   reconstructQuarterChordGapBassLattice,
+  reconstructQuarterCadenceSixteenthBassLattice,
+  removeQuarterCadenceBassTieSpillover,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
@@ -565,6 +567,138 @@ describe('reconstructAlternatingEighthChordBassLattice', () => {
     expect(reconstructAlternatingEighthChordBassLattice(noRest, 16)).toBe(noRest)
     expect(reconstructAlternatingEighthChordBassLattice(wrongStem, 16)).toBe(wrongStem)
     expect(reconstructAlternatingEighthChordBassLattice(complete, 12)).toBe(complete)
+  })
+})
+
+function quarterCadenceSixteenthBassFixture({
+  variant = 'chordal',
+  includeRest = variant === 'octave',
+  firstGap = 36,
+} = {}) {
+  const xs = [100, 100 + firstGap, 160, 184, 208, 224, 240, 264]
+  const trebleMidis = variant === 'chordal'
+    ? [[69], [69, 72, 76, 81], [], [67, 71], [], [], [67], [64, 67, 76]]
+    : [[69], [74, 81], [], [71], [], [], [67], [69, 81]]
+  const bassMidis = [
+    [38, 50], [53, 57, 60], [50], [40, 52], [40], [52], [47],
+    variant === 'chordal' ? [33] : [33, 45],
+  ]
+  const events = []
+  for (const [index, cx] of xs.entries()) {
+    if (trebleMidis[index].length) {
+      const trebleNotes = trebleMidis[index].map((midi) => {
+        let stem = 'down'
+        if (variant === 'chordal' && index === 1 && midi !== 81) stem = 'up'
+        if (variant === 'chordal' && index === 7 && midi !== 64) stem = 'up'
+        if (variant === 'octave' && index === 1 && midi === 81) stem = 'up'
+        if (variant === 'octave' && index === 7 && midi === 69) stem = 'up'
+        const note = latticeNote({ cx, midi, stem })
+        note.beams = variant === 'chordal' && index === 6 ? 2 : 0
+        return note
+      })
+      events.push(latticeEvent(trebleNotes, index * 2, 1))
+    }
+
+    const bassNotes = bassMidis[index].map((midi) => {
+      let stem = 'up'
+      if ((index === 0 && midi === 50) || index === 1 || index === 2 ||
+        (index === 3 && midi === 52) ||
+        (variant === 'octave' && index === 7 && midi === 45)) {
+        stem = 'down'
+      }
+      const note = latticeNote({ cx, midi, clef: 'bass', stem })
+      note.beams = index === 1 && midi === 53 ? 2 : index === 3 && midi === 52 ? 1 : 0
+      return note
+    })
+    events.push(latticeEvent(bassNotes, index * 2, 1))
+  }
+  if (includeRest) {
+    events.push({
+      type: 'rest',
+      clef: 'treble',
+      cx: xs[6],
+      sourceGlyph: '\ue4e6',
+      startDivision: 12,
+      durationDivisions: 2,
+      durationType: 'eighth',
+    })
+  }
+  return events
+}
+
+describe('reconstructQuarterCadenceSixteenthBassLattice', () => {
+  it.each([
+    ['chordal', [2, 2]],
+    ['octave', [1, 1]],
+  ])('recovers the %s upper cadence and asymmetric bass cursor', (
+    variant,
+    openingNoteCounts,
+  ) => {
+    const rebuilt = reconstructQuarterCadenceSixteenthBassLattice(
+      quarterCadenceSixteenthBassFixture({ variant }),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 4, 1], [4, 4, openingNoteCounts[0]], [8, 4, variant === 'chordal' ? 2 : 1],
+      [12, 2, 1], [14, 2, 1],
+    ])
+    expect(rebuilt.filter(
+      (event) => event.type === 'note' && event.sourceVoice === 2,
+    ).map((event) => [event.startDivision, event.notes.length])).toEqual([
+      [4, openingNoteCounts[1]], [14, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 4, 2], [4, 2, 3], [6, 2, 1], [8, 2, 2],
+      [10, 1, 1], [11, 1, 1], [12, 2, 1],
+      [14, 2, variant === 'chordal' ? 1 : 2],
+    ])
+  })
+
+  it('abstains on incomplete rest, geometry, or meter evidence', () => {
+    const missingRest = quarterCadenceSixteenthBassFixture({
+      variant: 'octave',
+      includeRest: false,
+    })
+    const regularOpening = quarterCadenceSixteenthBassFixture({ firstGap: 24 })
+    const complete = quarterCadenceSixteenthBassFixture()
+    expect(reconstructQuarterCadenceSixteenthBassLattice(missingRest, 16)).toBe(missingRest)
+    expect(reconstructQuarterCadenceSixteenthBassLattice(regularOpening, 16)).toBe(regularOpening)
+    expect(reconstructQuarterCadenceSixteenthBassLattice(complete, 12)).toBe(complete)
+  })
+
+  it('removes only a fourth closing tie spilled onto the lone bass head', () => {
+    const rebuilt = reconstructQuarterCadenceSixteenthBassLattice(
+      quarterCadenceSixteenthBassFixture(),
+      16,
+    ).map((event) => {
+      if (event.type !== 'note' || event.startDivision !== 14) return event
+      return {
+        ...event,
+        tieStart: true,
+        notes: event.notes.map((note) => ({ ...note, tieStart: true })),
+      }
+    })
+    const repaired = removeQuarterCadenceBassTieSpillover(rebuilt)
+    const closingBass = repaired.find(
+      (event) => event.sourceVoice === 5 && event.startDivision === 14,
+    )
+    const closingUpper = repaired.filter(
+      (event) => event.sourceVoice !== 5 && event.startDivision === 14,
+    )
+    expect(closingBass.tieStart).toBeUndefined()
+    expect(closingBass.notes[0].tieStart).toBeUndefined()
+    expect(closingUpper.flatMap((event) => event.notes).every(
+      (note) => note.tieStart === true,
+    )).toBe(true)
   })
 })
 
