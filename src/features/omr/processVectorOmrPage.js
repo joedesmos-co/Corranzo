@@ -10935,12 +10935,21 @@ export function buildVectorMeasureRecord({
 
   let events
   let restApplyResult = { appliedCount: 0, skipped: [] }
+  const deferLegacyRestApplication =
+    notes.length > 0 &&
+    detectedRests.length > 0 &&
+    detectedRests.every((rest) => rest.legacyMusicFontNormalized === true)
   if (notes.length === 0) {
     events = buildVectorEvents(notes, measureBox, timeSignature, {
       rests: detectedRests,
       provenance,
     })
   } else if (!detectedRests.length) {
+    events = buildVectorEvents(notes, measureBox, timeSignature, { provenance })
+  } else if (deferLegacyRestApplication) {
+    // Legacy MScore pages were historically reconstructed without their rest
+    // codepoints. Keep that established note grid intact, then fill only
+    // genuine staff-local gaps after all note reconstruction stages finish.
     events = buildVectorEvents(notes, measureBox, timeSignature, { provenance })
   } else {
     const noteEvents = buildVectorEvents(notes, measureBox, timeSignature, {
@@ -11167,6 +11176,15 @@ export function buildVectorMeasureRecord({
       events,
       { reason: 'source-complete-independent-voice-cursors' },
     )
+  }
+
+  if (deferLegacyRestApplication) {
+    restApplyResult = insertMixedMeasureRests(events, detectedRests, {
+      measureBox,
+      totalDivisions,
+      preserveExistingNoteTiming: true,
+    })
+    events = restApplyResult.events
   }
 
   if (provenance) {

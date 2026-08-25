@@ -115,6 +115,29 @@ describe('restsForMeasure', () => {
     const rests = restsForMeasure([{ text: '\ue4a2', x: 520, y: 170 }], imageData, measureBox, [])
     expect(rests).toHaveLength(0)
   })
+
+  it('preserves legacy-font provenance on normalized rest glyphs', () => {
+    const rests = restsForMeasure(
+      [
+        {
+          text: '\ue4e7',
+          x: 510,
+          y: 170,
+          legacyMusicFontNormalized: true,
+          originalLegacyText: '\ue10a',
+        },
+      ],
+      imageData,
+      measureBox,
+      [],
+    )
+
+    expect(rests[0]).toMatchObject({
+      durationType: 'sixteenth',
+      legacyMusicFontNormalized: true,
+      originalLegacyGlyph: '\ue10a',
+    })
+  })
 })
 
 describe('insertMixedMeasureRests', () => {
@@ -171,6 +194,36 @@ describe('insertMixedMeasureRests', () => {
     )
     expect(appliedCount).toBe(0)
     expect(skipped[0]?.reason).toBe(VECTOR_REST_SKIP_REASONS.WHOLE_REST_WITH_STAFF_NOTES)
+  })
+
+  it('abstains instead of shifting a note when legacy-rest timing is preserved', () => {
+    const noteEvents = buildVectorEvents(
+      [trebleNote(0.45, 67)],
+      measureBox,
+      { beats: 4, beatType: 4 },
+    )
+    const before = noteEvents.find((event) => event.type === 'note')
+    const { events, appliedCount, skipped } = insertMixedMeasureRests(
+      noteEvents,
+      [
+        {
+          ...bassRestGlyph(0.45),
+          clef: 'treble',
+          durationType: 'sixteenth',
+        },
+      ],
+      {
+        measureBox,
+        totalDivisions: 16,
+        preserveExistingNoteTiming: true,
+      },
+    )
+    const after = events.find((event) => event.type === 'note')
+
+    expect(appliedCount).toBe(0)
+    expect(skipped[0]?.reason).toBe(VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES)
+    expect(after?.startDivision).toBe(before?.startDivision)
+    expect(after?.durationDivisions).toBe(before?.durationDivisions)
   })
 
   it('places an opening pickup rest at the barline before the first attack', () => {

@@ -4,13 +4,20 @@ import {
   LEGACY_MSCORE_GLYPH_MAP,
   normalizeLegacyMusicFontGlyphs,
 } from '../src/features/omr/normalizeLegacyMusicFontGlyphs.js'
-import { hasVectorOmrNoteheads } from '../src/features/omr/processVectorOmrPage.js'
+import {
+  hasVectorOmrNoteheads,
+  textGlyphsToImage,
+} from '../src/features/omr/processVectorOmrPage.js'
+import { restsForMeasure } from '../src/features/omr/detectVectorRests.js'
 
 const LEGACY_BLACK = '\ue12d'
 const LEGACY_HALF = '\ue12c'
 const LEGACY_TREBLE_CLEF = '\ue19e'
 const LEGACY_BASS_CLEF = '\ue19c'
 const LEGACY_BASS_CLEF_8VB = '\ue1db'
+const LEGACY_QUARTER_REST = '\ue107'
+const LEGACY_EIGHTH_REST = '\ue109'
+const LEGACY_SIXTEENTH_REST = '\ue10a'
 const SMUFL_BLACK = '\ue0a4'
 const SMUFL_HALF = '\ue0a3'
 const SMUFL_TREBLE_CLEF = '\ue050'
@@ -79,6 +86,40 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
 
     expect(normalized?.text).toBe(SMUFL_BASS_CLEF)
     expect(normalized?.legacyMusicFontNormalized).toBe(true)
+  })
+
+  it('normalizes source-proven MScore rests for the vector rest detector', () => {
+    const page = legacyGrandStaffPage()
+    page.push(
+      item(LEGACY_QUARTER_REST, 'music-font', { x: 180, y: 650 }),
+      item(LEGACY_EIGHTH_REST, 'music-font', { x: 300, y: 650 }),
+      item(LEGACY_SIXTEENTH_REST, 'music-font', { x: 420, y: 650 }),
+    )
+
+    const { items } = normalizeLegacyMusicFontGlyphs(page)
+    const imageData = { width: 612, height: 792 }
+    const rests = restsForMeasure(
+      textGlyphsToImage(items, imageData),
+      imageData,
+      {
+        x0: 0.1,
+        x1: 0.8,
+        y0: 0.1,
+        y1: 0.3,
+        staffLines: {
+          treble: [0.14, 0.16, 0.18, 0.2, 0.22],
+          bass: [0.3, 0.32, 0.34, 0.36, 0.38],
+          splitY: 0.26,
+        },
+      },
+      [],
+    )
+
+    expect(rests.map((rest) => rest.durationType)).toEqual([
+      'quarter',
+      'eighth',
+      'sixteenth',
+    ])
   })
 
   it('routes legacy pages onto the vector path (2 same-beat notes stay 2 notes)', () => {
@@ -164,10 +205,12 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
       expect(legacy.codePointAt(0)).toBeGreaterThanOrEqual(0xe100)
       expect(legacy.codePointAt(0)).toBeLessThanOrEqual(0xe1ff)
       const smuflCode = smufl.codePointAt(0)
-      // SMuFL noteheads/clefs are in 0xE050-0xE0FF; accidentals are in 0xE260-0xE264
+      // SMuFL noteheads/clefs are in 0xE050-0xE0FF; accidentals are in
+      // 0xE260-0xE264; rests are in 0xE4E3-0xE4E7.
       const isNoteheadOrClef = smuflCode >= 0xe050 && smuflCode <= 0xe0ff
       const isAccidental = smuflCode >= 0xe260 && smuflCode <= 0xe264
-      expect(isNoteheadOrClef || isAccidental).toBe(true)
+      const isRest = smuflCode >= 0xe4e3 && smuflCode <= 0xe4e7
+      expect(isNoteheadOrClef || isAccidental || isRest).toBe(true)
     }
   })
 

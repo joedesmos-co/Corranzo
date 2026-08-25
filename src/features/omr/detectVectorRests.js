@@ -243,7 +243,13 @@ function restDurationForEmptyStaff(rest, totalDivisions) {
   return Math.min(totalDivisions, hinted)
 }
 
-function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
+function tryApplyStaffRest(
+  events,
+  rest,
+  totalDivisions,
+  measureBox,
+  { preserveExistingNoteTiming = false } = {},
+) {
   const clef = rest.clef ?? 'treble'
   const notesOnStaff = staffNoteEvents(events, clef)
   const restsOnStaff = staffRestEvents(events, clef)
@@ -287,6 +293,9 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
     }
   }
   if (overlapsInterval(preferredStart, 1, intervals)) {
+    if (preserveExistingNoteTiming) {
+      return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
+    }
     const colliding = notesOnStaff.filter((event) => {
       const start = event.startDivision ?? 0
       const end = start + (event.durationDivisions ?? 1)
@@ -604,7 +613,11 @@ export function rebalanceOpeningPickupRests(events, totalDivisions) {
 /**
  * Append staff-local rest events without changing existing note event timing.
  */
-export function insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDivisions }) {
+export function insertMixedMeasureRests(
+  noteEvents,
+  rests,
+  { measureBox, totalDivisions, preserveExistingNoteTiming = false },
+) {
   let events = [...noteEvents]
   const skipped = []
   let appliedCount = 0
@@ -618,7 +631,9 @@ export function insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDi
     const rest = sourceTerminalSequenceMembers.has(originalRest)
       ? { ...originalRest, sourceWrittenTerminalSequence: true }
       : originalRest
-    const result = tryApplyStaffRest(events, rest, totalDivisions, measureBox)
+    const result = tryApplyStaffRest(events, rest, totalDivisions, measureBox, {
+      preserveExistingNoteTiming,
+    })
     if (result.applied) {
       events = result.events
       appliedCount += 1
@@ -632,7 +647,9 @@ export function insertMixedMeasureRests(noteEvents, rests, { measureBox, totalDi
     })
   }
 
-  events = rebalanceOpeningPickupRests(events, totalDivisions)
+  if (!preserveExistingNoteTiming) {
+    events = rebalanceOpeningPickupRests(events, totalDivisions)
+  }
 
   return {
     events: sortStaffAwareEvents(events),
@@ -689,6 +706,8 @@ export function restsForMeasure(glyphs, imageData, measureBox, noteheads = []) {
       clef: resolveClefForY(yNorm, measureBox.staffLines).clef,
       source: 'vector-glyph',
       confidence: 0.88,
+      legacyMusicFontNormalized: glyph.legacyMusicFontNormalized === true,
+      originalLegacyGlyph: glyph.originalLegacyText ?? null,
     })
   }
   return rests.sort((left, right) => left.cx - right.cx || left.cy - right.cy)

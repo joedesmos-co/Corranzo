@@ -34,6 +34,9 @@ export const LEGACY_MSCORE_GLYPH_MAP = new Map([
   ['\ue12b', '\ue0a2'], // whole notehead (adjacent to half/black in legacy font)
   ['\ue12c', '\ue0a3'], // half notehead
   ['\ue12d', '\ue0a4'], // black notehead
+  ['\ue107', '\ue4e5'], // quarter rest
+  ['\ue109', '\ue4e6'], // eighth rest
+  ['\ue10a', '\ue4e7'], // sixteenth rest
   ['\ue19e', '\ue050'], // G (treble) clef
   ['\ue19c', '\ue062'], // F (bass) clef
   ['\ue1db', '\ue062'], // F clef with octave 8 below (bass clef 8vb)
