@@ -32,6 +32,7 @@ import {
   reconstructSustainedCantabileChordGrid,
   reconstructTiedChordMelodyBassLattice,
   reconstructTripletMelodyOverprintLattice,
+  reconstructWholeChordSixteenthMelodyBassCadence,
   reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
 
@@ -1814,6 +1815,106 @@ describe('reconstructDottedMelodySixteenthBassLattice', () => {
     expect(reconstructDottedMelodySixteenthBassLattice(complete, 16)).toBe(complete)
     const incomplete = dottedMelodySixteenthBassFixture({ removeBassHead: true })
     expect(reconstructDottedMelodySixteenthBassLattice(incomplete, 12)).toBe(incomplete)
+  })
+})
+
+function wholeChordSixteenthCadenceFixture({
+  middleDyad = false,
+  missingOpeningBeam = false,
+  mismatchedSharedPitch = false,
+  wrongRestClef = false,
+} = {}) {
+  const events = []
+  const xs = Array.from({ length: 12 }, (_, index) => 100 + index * 16)
+  const openingMidis = [92, 88, 85, 80]
+  const opening = openingMidis.map((midi, index) => {
+    const note = latticeNote({
+      cx: xs[0],
+      midi,
+      stem: index === openingMidis.length - 1 ? 'up' : 'down',
+      open: true,
+    })
+    note.stem.x = xs[0] - 5
+    note.dotted = true
+    note.durationDivisions = 12
+    note.durationType = 'whole'
+    note.beams = !missingOpeningBeam && index === 2 ? 2 : 0
+    return note
+  })
+  events.push(latticeEvent(opening, 0, 12))
+  const melodyMidis = [80, 83, 85, 83, 80, 78, 80, 83, 85, 83, 80]
+  if (mismatchedSharedPitch) melodyMidis[0] = 81
+  for (const [index, midi] of melodyMidis.entries()) {
+    const note = latticeNote({ cx: xs[index + 1], midi, stem: 'down' })
+    note.beams = index === 2 ? 2 : 0
+    events.push(latticeEvent([note], index + 1, 1))
+  }
+  const initialBass = [45, 33].map((midi) => latticeNote({
+    cx: xs[0], midi, clef: 'bass', stem: 'up',
+  }))
+  events.push(latticeEvent(initialBass, 0, 2))
+  if (middleDyad) {
+    const middleBass = [57, 45].map((midi) => latticeNote({
+      cx: xs[4], midi, clef: 'bass', stem: 'up',
+    }))
+    events.push(latticeEvent(middleBass, 4, 2))
+  }
+  const closingBass = [64, 61, 56].map((midi) => {
+    const note = latticeNote({ cx: xs[6], midi, clef: 'bass', stem: 'down' })
+    note.dotted = true
+    note.durationDivisions = 6
+    note.durationType = 'dotted-quarter'
+    return note
+  })
+  events.push(latticeEvent(closingBass, 6, 6))
+  for (let index = 0; index < (middleDyad ? 1 : 2); index += 1) {
+    events.push({
+      type: 'rest',
+      clef: wrongRestClef && index === 0 ? 'treble' : 'bass',
+      startDivision: 2 + index * 2,
+      durationDivisions: 2,
+      durationType: 'eighth',
+    })
+  }
+  return events
+}
+
+describe('reconstructWholeChordSixteenthMelodyBassCadence', () => {
+  it.each([
+    ['sparse bass rests', false, [[0, 2, 'note'], [2, 2, 'rest'], [4, 2, 'rest'], [6, 6, 'note']]],
+    ['middle octave dyad', true, [[0, 2, 'note'], [2, 2, 'rest'], [4, 2, 'note'], [6, 6, 'note']]],
+  ])('splits the shared opening head with %s', (_label, middleDyad, bassLayout) => {
+    const rebuilt = reconstructWholeChordSixteenthMelodyBassCadence(
+      wholeChordSixteenthCadenceFixture({ middleDyad }),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(12)
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 12 }, (_, index) => [index, 1]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toHaveLength(1)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)[0]).toMatchObject({
+      startDivision: 0,
+      durationDivisions: 12,
+    })
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.type,
+    ])).toEqual(bassLayout)
+  })
+
+  it.each([
+    ['missing opening beam ownership', { missingOpeningBeam: true }, 12],
+    ['mismatched shared pitch', { mismatchedSharedPitch: true }, 12],
+    ['wrong-staff source rest', { wrongRestClef: true }, 12],
+    ['non-3/4 meter', {}, 16],
+  ])('abstains for %s', (_label, options, totalDivisions) => {
+    const source = wholeChordSixteenthCadenceFixture(options)
+    expect(reconstructWholeChordSixteenthMelodyBassCadence(source, totalDivisions))
+      .toBe(source)
   })
 })
 

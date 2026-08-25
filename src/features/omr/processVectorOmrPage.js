@@ -6023,6 +6023,12 @@ const DOTTED_CHORD_SIXTEENTH_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const WHOLE_CHORD_SIXTEENTH_MELODY_VOICE = Object.freeze({
+  MELODY: 1,
+  UPPER_CHORD: 2,
+  BASS: 5,
+})
+
 const ALTERNATING_EIGHTH_CHORD_BASS_VOICE = Object.freeze({
   MELODY: 1,
   UPPER_CHORD: 2,
@@ -6127,6 +6133,211 @@ function cantabileStructuralRest(startDivision, sourceVoice, sourceVoiceLane) {
     sourceVoiceLane,
     structuralVoiceRest: true,
   }
+}
+
+/**
+ * Split a shared opening head into a sixteenth attack and a whole-chord
+ * sustain when its source stem group is double-beamed into an otherwise
+ * complete twelve-column melody. The opposing stem ownership on the lowest
+ * hollow head proves the overprint. Two explicit bass-rest layouts distinguish
+ * the sparse and octave-rearticulation cadence variants.
+ */
+export function reconstructWholeChordSixteenthMelodyBassCadence(
+  events = [],
+  totalDivisions = 12,
+) {
+  if (totalDivisions !== 12 || events.some((event) => event?.timeModification)) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const sourceRests = events.filter((event) => event.type === 'rest')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 15 ||
+    ![5, 7].includes(bassEntries.length) ||
+    [...trebleEntries, ...bassEntries].some((entry) => !Number.isFinite(entry.note.cx))
+  ) {
+    return events
+  }
+
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  if (
+    trebleColumns.length !== 12 ||
+    trebleColumns.some(
+      (column, index) => column.entries.length !== (index === 0 ? 4 : 1),
+    )
+  ) {
+    return events
+  }
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const typicalTrebleGap = medianNumber(trebleGaps)
+  if (
+    !(typicalTrebleGap > 0) ||
+    trebleGaps.some(
+      (gap) => gap < typicalTrebleGap * 0.55 || gap > typicalTrebleGap * 1.65,
+    )
+  ) {
+    return events
+  }
+
+  const opening = [...trebleColumns[0].entries].sort(
+    (left, right) => right.note.midi - left.note.midi,
+  )
+  const running = trebleColumns.slice(1).map((column) => column.entries[0])
+  const lowestOpening = opening.at(-1)
+  const openingStemGroups = sourceStemGroups(opening)
+  if (
+    opening.some(
+      (entry) =>
+        !isOpenNotehead(entry.note) ||
+        entry.note.dotted !== true ||
+        entry.note.durationDivisions !== 12,
+    ) ||
+    new Set(opening.map((entry) => entry.note.midi)).size !== 4 ||
+    openingStemGroups.length !== 1 ||
+    sourceStemGroupDirection(openingStemGroups[0]) !== 'down' ||
+    opening.filter((entry) => noteStemDirection(entry.note) === 'up').length !== 1 ||
+    noteStemDirection(lowestOpening.note) !== 'up' ||
+    opening.every((entry) => (entry.note.beams ?? 0) < 2) ||
+    running.some(
+      (entry) =>
+        isOpenNotehead(entry.note) || noteStemDirection(entry.note) !== 'down',
+    ) ||
+    running.filter((entry) => (entry.note.beams ?? 0) >= 2).length < 1 ||
+    lowestOpening.note.midi !== running[0].note.midi
+  ) {
+    return events
+  }
+
+  const bassColumns = clusterSourceAttackColumns(
+    bassEntries,
+    Math.max(3, typicalTrebleGap * 0.42),
+  )
+  const hasMiddleDyad = bassEntries.length === 7
+  const expectedBassCounts = hasMiddleDyad ? [2, 2, 3] : [2, 3]
+  if (
+    bassColumns.length !== expectedBassCounts.length ||
+    bassColumns.some(
+      (column, index) => column.entries.length !== expectedBassCounts[index],
+    ) ||
+    Math.abs(bassColumns[0].cx - trebleColumns[0].cx) > typicalTrebleGap * 0.3 ||
+    Math.abs(bassColumns.at(-1).cx - trebleColumns[6].cx) > typicalTrebleGap * 0.35 ||
+    (hasMiddleDyad &&
+      Math.abs(bassColumns[1].cx - trebleColumns[4].cx) > typicalTrebleGap * 0.35) ||
+    Math.abs(
+      bassColumns[0].entries[0].note.midi - bassColumns[0].entries[1].note.midi,
+    ) !== 12 ||
+    (hasMiddleDyad && Math.abs(
+      bassColumns[1].entries[0].note.midi - bassColumns[1].entries[1].note.midi,
+    ) !== 12) ||
+    !bassColumns[0].entries.some(
+      (entry) => noteStemDirection(entry.note) === 'up',
+    ) ||
+    bassColumns.at(-1).entries.some(
+      (entry) =>
+        entry.note.dotted !== true ||
+        entry.note.durationDivisions !== 6 ||
+        noteStemDirection(entry.note) !== 'down',
+    ) ||
+    sourceRests.length !== (hasMiddleDyad ? 1 : 2) ||
+    sourceRests.some(
+      (event) =>
+        (event.clef ?? 'treble') !== 'bass' ||
+        event.durationDivisions < 1 ||
+        event.durationDivisions > 2,
+    )
+  ) {
+    return events
+  }
+
+  const openingAttack = {
+    ...lowestOpening,
+    note: {
+      ...lowestOpening.note,
+      hollow: false,
+      noteheadGlyph: 'black',
+      dotted: false,
+      durationType: 'sixteenth',
+      durationDivisions: 1,
+      wholeChordSharedHeadAttack: true,
+    },
+  }
+  const rebuilt = [
+    denseLatticeEvent(
+      [openingAttack],
+      0,
+      1,
+      WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.MELODY,
+      'shared-head-sixteenth-melody',
+    ),
+    denseLatticeEvent(
+      opening,
+      0,
+      12,
+      WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.UPPER_CHORD,
+      'whole-chord-sustain',
+    ),
+  ]
+  for (const [index, entry] of running.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      [entry],
+      index + 1,
+      1,
+      WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.MELODY,
+      'shared-head-sixteenth-melody',
+    ))
+  }
+  rebuilt.push(denseLatticeEvent(
+    bassColumns[0].entries,
+    0,
+    2,
+    WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.BASS,
+    'bass-cadence',
+  ))
+  rebuilt.push({
+    type: 'rest',
+    clef: 'bass',
+    startDivision: 2,
+    durationDivisions: 2,
+    ...durationMeta(2),
+    sourceVoice: WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.BASS,
+    sourceVoiceLane: 'bass-cadence',
+    structuralVoiceRest: true,
+  })
+  if (hasMiddleDyad) {
+    rebuilt.push(denseLatticeEvent(
+      bassColumns[1].entries,
+      4,
+      2,
+      WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.BASS,
+      'bass-cadence',
+    ))
+  } else {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'bass',
+      startDivision: 4,
+      durationDivisions: 2,
+      ...durationMeta(2),
+      sourceVoice: WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.BASS,
+      sourceVoiceLane: 'bass-cadence',
+      structuralVoiceRest: true,
+    })
+  }
+  rebuilt.push(denseLatticeEvent(
+    bassColumns.at(-1).entries,
+    6,
+    6,
+    WHOLE_CHORD_SIXTEENTH_MELODY_VOICE.BASS,
+    'bass-cadence',
+  ))
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    wholeChordSixteenthMelodyBassCadence: true,
+  })))
 }
 
 /**
@@ -10736,6 +10947,17 @@ export function buildVectorMeasureRecord({
       eventsBeforeSustainedCantabileChordGrid,
       events,
       { reason: 'source-stem-owned-sustain-and-chord-cursors' },
+    )
+  }
+  const eventsBeforeWholeChordSixteenthMelody = events
+  events = reconstructWholeChordSixteenthMelodyBassCadence(events, totalDivisions)
+  if (provenance && events !== eventsBeforeWholeChordSixteenthMelody) {
+    provenance.recordStage(
+      'whole-chord-sixteenth-melody-bass-cadence',
+      'reconstructWholeChordSixteenthMelodyBassCadence',
+      eventsBeforeWholeChordSixteenthMelody,
+      events,
+      { reason: 'source-beamed-shared-head-attack-and-sustain' },
     )
   }
   const eventsBeforeDottedChordSixteenthBass = events
