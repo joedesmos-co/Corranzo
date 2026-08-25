@@ -1636,6 +1636,7 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
 
 function dottedMelodySixteenthBassFixture({
   removeBassHead = false,
+  removeBassDot = false,
   bassVariant = 'alternating-sixteenths',
   midbarPadding = 0,
 } = {}) {
@@ -1646,6 +1647,8 @@ function dottedMelodySixteenthBassFixture({
       ? 1
       : bassVariant === 'octave-eighths'
         ? index % 2 === 0 ? 2 : 0
+        : bassVariant === 'dotted-eighth-chords'
+          ? [2, 0, 0, 4, 0, 0, 2, 0, 0, 4, 0, 0][index]
         : index % 2 === 0 ? 2 : 1
     const bassNotes = Array.from({ length: bassCount }, (_, noteIndex) => {
       const note = latticeNote({
@@ -1657,12 +1660,29 @@ function dottedMelodySixteenthBassFixture({
       note.beams = noteIndex === 0 && index % 2 === 0
         ? bassVariant === 'octave-eighths' ? (index === 8 ? 1 : 0) : 2
         : 0
+      if (bassVariant === 'dotted-eighth-chords') {
+        note.beams = 0
+        note.dotted = !(removeBassDot && index === 3 && noteIndex === 0)
+        note.durationType = note.dotted ? 'dotted-eighth' : 'quarter'
+        note.durationDivisions = note.dotted ? 6 : 4
+      }
       return note
     })
     if (removeBassHead && index === 4) bassNotes.pop()
     if (bassNotes.length > 0) events.push(latticeEvent(bassNotes, index, 1))
   }
-  const accompanimentIndexes = bassVariant === 'octave-eighths'
+  if (bassVariant === 'dotted-eighth-chords') {
+    events.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision: 1,
+      durationDivisions: 1,
+      durationType: 'sixteenth',
+    })
+  }
+  const accompanimentIndexes = ['octave-eighths', 'dotted-eighth-chords'].includes(
+    bassVariant,
+  )
     ? [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
     : [0, 2, 4, 5, 6, 8, 10]
   for (const index of accompanimentIndexes) {
@@ -1755,6 +1775,38 @@ describe('reconstructDottedMelodySixteenthBassLattice', () => {
       event.startDivision,
       event.durationDivisions,
     ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 2], [8, 2], [10, 2]])
+  })
+
+  it('supports rested treble sixteenths above dotted-eighth bass chords', () => {
+    const rebuilt = reconstructDottedMelodySixteenthBassLattice(
+      dottedMelodySixteenthBassFixture({ bassVariant: 'dotted-eighth-chords' }),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toHaveLength(12)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 3, 2], [3, 3, 4], [6, 3, 2], [9, 3, 4]])
+  })
+
+  it('abstains from the bass-chord variant when one source dot is absent', () => {
+    const source = dottedMelodySixteenthBassFixture({
+      bassVariant: 'dotted-eighth-chords',
+      removeBassDot: true,
+    })
+    expect(reconstructDottedMelodySixteenthBassLattice(source, 12)).toBe(source)
+  })
+
+  it('abstains from the bass-chord variant for a non-sixteenth source rest', () => {
+    const source = dottedMelodySixteenthBassFixture({
+      bassVariant: 'dotted-eighth-chords',
+    })
+    const rest = source.find((event) => event.type === 'rest')
+    rest.durationDivisions = 2
+    rest.durationType = 'eighth'
+    expect(reconstructDottedMelodySixteenthBassLattice(source, 12)).toBe(source)
   })
 
   it('abstains outside 3/4 and when the alternating bass topology is incomplete', () => {

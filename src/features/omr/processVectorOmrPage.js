@@ -5616,10 +5616,11 @@ export function reconstructDottedMelodySixteenthBassLattice(
 ) {
   if (
     totalDivisions !== 12 ||
-    events.some((event) => event.type === 'rest' || event?.timeModification)
+    events.some((event) => event?.timeModification)
   ) {
     return events
   }
+  const sourceRests = events.filter((event) => event.type === 'rest')
   const entries = events
     .filter((event) => event.type === 'note')
     .flatMap((event) => {
@@ -5669,14 +5670,33 @@ export function reconstructDottedMelodySixteenthBassLattice(
   ) && bassByColumn.every((column) =>
     column.length === 0 || Math.abs(column[0].note.midi - column[1].note.midi) === 12,
   )
+  const dottedBassChordCounts = [2, 0, 0, 4, 0, 0, 2, 0, 0, 4, 0, 0]
+  const dottedBassChords = bassByColumn.every(
+    (column, index) => column.length === dottedBassChordCounts[index],
+  ) && bassByColumn.flat().every(
+    (entry) => entry.note.dotted === true && entry.note.durationDivisions === 6,
+  )
   const sparseSixteenthTexture = sparseTreble && (
     alternatingBassSixteenths || singleBassSixteenths
   )
-  const restedEighthTexture = restedTrebleSixteenths && octaveBassEighths
+  const restedTrebleTexture = restedTrebleSixteenths && (
+    octaveBassEighths || dottedBassChords
+  )
   if (
-    (!sparseSixteenthTexture && !restedEighthTexture) ||
+    (!sparseSixteenthTexture && !restedTrebleTexture) ||
+    ((!dottedBassChords && sourceRests.length > 0) ||
+      (dottedBassChords && (
+        sourceRests.length > 2 ||
+        sourceRests.some(
+          (event) =>
+            (event.clef ?? 'treble') === 'bass' ||
+            event.durationDivisions !== 1,
+        )
+      ))) ||
     stemDirectionShare(bassByColumn.flat(), 'up') < 0.75 ||
-    (restedEighthTexture
+    (dottedBassChords
+      ? false
+      : octaveBassEighths
       ? bassByColumn.flat().filter((entry) => (entry.note.beams ?? 0) >= 1).length < 1
       : bassByColumn.flat().filter((entry) => (entry.note.beams ?? 0) >= 2).length < 4)
   ) {
@@ -5691,7 +5711,7 @@ export function reconstructDottedMelodySixteenthBassLattice(
     .filter(({ column }) => column.some(
       (entry) => noteStemDirection(entry.note) === 'down',
     ))
-  const expectedAccompanimentCount = restedEighthTexture ? 10 : 7
+  const expectedAccompanimentCount = restedTrebleTexture ? 10 : 7
   if (
     melodyEntries.some(
       (entry) =>
@@ -5718,7 +5738,7 @@ export function reconstructDottedMelodySixteenthBassLattice(
     'dotted-quarter-melody',
   ))
   for (const { column, index } of accompanimentIndexes) {
-    const nextIndex = restedEighthTexture
+    const nextIndex = restedTrebleTexture
       ? index + 1
       : accompanimentIndexes.find(({ index: candidate }) => candidate > index)?.index
         ?? totalDivisions
@@ -5730,7 +5750,7 @@ export function reconstructDottedMelodySixteenthBassLattice(
       'upper-eighth-sixteenth-accompaniment',
     ))
   }
-  if (restedEighthTexture) {
+  if (restedTrebleTexture) {
     for (const startDivision of [0, 6]) {
       rebuilt.push({
         type: 'rest',
@@ -5749,9 +5769,13 @@ export function reconstructDottedMelodySixteenthBassLattice(
     rebuilt.push(denseLatticeEvent(
       column,
       index,
-      restedEighthTexture ? 2 : 1,
+      dottedBassChords ? 3 : octaveBassEighths ? 2 : 1,
       DOTTED_MELODY_SIXTEENTH_BASS_VOICE.BASS,
-      restedEighthTexture ? 'bass-eighth-dyads' : 'bass-sixteenth-lattice',
+      dottedBassChords
+        ? 'bass-dotted-eighth-chords'
+        : octaveBassEighths
+          ? 'bass-eighth-dyads'
+          : 'bass-sixteenth-lattice',
     ))
   }
   return sortVectorRhythmEvents(rebuilt.map((event) => ({
