@@ -2648,6 +2648,147 @@ export function reconstructPairedOctaveTripletStreams(
   return sortVectorRhythmEvents(rebuilt)
 }
 
+/**
+ * Recover a cross-staff half-note lane above a continuous bass ostinato.
+ *
+ * A sloped primary beam can be sampled at both its upper and lower edges and
+ * falsely counted as two beams, shortening selected attacks to sixteenths.
+ * Require the complete printed texture before overriding that local probe:
+ * eight regular single-head bass columns, an opening bass half, and a treble
+ * half aligned with the fifth attack. Stem direction and repeated beam
+ * ink further distinguish the two groups of four eighths. Pitches are never
+ * changed; only the source-owned attack grid and written durations are rebuilt.
+ */
+const CROSS_STAFF_HALF_OSTINATO_VOICE = Object.freeze({
+  OSTINATO: 1,
+  CROSS_STAFF_HALF: 5,
+})
+
+export function reconstructCrossStaffHalfEighthOstinato(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 4) return events
+  if (events.some((event) => event?.type === 'rest' || event?.timeModification)) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event?.type === 'note')
+  const sourceNotes = noteEvents.flatMap((event) =>
+    (event.notes ?? []).map((note) => ({ note, event })),
+  )
+  if (
+    sourceNotes.length !== 10 ||
+    sourceNotes.some(({ note }) =>
+      note?.dotted === true ||
+      !Number.isFinite(note?.cx) ||
+      !Number.isFinite(note?.cy) ||
+      !Number.isFinite(note?.midi),
+    )
+  ) {
+    return events
+  }
+
+  const moving = sourceNotes
+    .filter(({ note }) => note.clef === 'bass' && note.noteheadGlyph === 'black')
+    .sort((left, right) => left.note.cx - right.note.cx)
+  const bassSustains = sourceNotes.filter(
+    ({ note }) => note.clef === 'bass' && note.noteheadGlyph === 'half',
+  )
+  const trebleHalves = sourceNotes.filter(
+    ({ note }) => note.clef === 'treble' && note.noteheadGlyph === 'half',
+  )
+  if (
+    moving.length !== 8 ||
+    bassSustains.length !== 1 ||
+    trebleHalves.length !== 1 ||
+    moving.length + bassSustains.length + trebleHalves.length !== sourceNotes.length
+  ) {
+    return events
+  }
+
+  const [bassSustain] = bassSustains
+  const [trebleHalf] = trebleHalves
+  if (
+    moving.some(({ note }) => noteStemDirection(note) !== 'up') ||
+    noteStemDirection(bassSustain.note) !== 'up' ||
+    noteStemDirection(trebleHalf.note) !== 'down' ||
+    moving.filter(({ note }) => (note.beams ?? 0) >= 1).length < 4
+  ) {
+    return events
+  }
+
+  const gaps = moving
+    .slice(1)
+    .map(({ note }, index) => note.cx - moving[index].note.cx)
+  const typicalGap = medianNumber(gaps)
+  if (
+    !(typicalGap > 5) ||
+    Math.max(...gaps) / Math.min(...gaps) > 1.35 ||
+    Math.abs(bassSustain.note.cx - moving[0].note.cx) > typicalGap * 0.25 ||
+    Math.abs(trebleHalf.note.cx - moving[4].note.cx) > typicalGap * 0.25
+  ) {
+    return events
+  }
+
+  const rebuild = (
+    entry,
+    startDivision,
+    durationDivisions,
+    lane,
+    direction,
+    sourceVoice,
+  ) => ({
+    ...entry.event,
+    type: 'note',
+    notes: [entry.note],
+    cx: entry.note.cx,
+    positionInMeasure: entry.note.positionInMeasure,
+    startDivision,
+    durationDivisions,
+    ...durationMeta(durationDivisions),
+    dotted: false,
+    vectorVoiceSeparated: true,
+    vectorVoiceColumnId: partitionColumnId(entry.event),
+    vectorVoiceLane: lane,
+    vectorVoiceDirection: direction,
+    vectorVoiceSourceStartDivision: startDivision,
+    vectorVoiceWrittenDurationDivisions: durationDivisions,
+    vectorVoiceSeparationEvidence: 'cross-staff-half-eighth-ostinato',
+    sourceVoice,
+    sourceVoiceLane: lane,
+    crossStaffHalfEighthOstinatoReconstructed: true,
+  })
+
+  return sortVectorRhythmEvents([
+    ...moving.map((entry, index) =>
+      rebuild(
+        entry,
+        index * OMR_DURATION_DIVISIONS.eighth,
+        2,
+        'bass-eighth-ostinato',
+        'up',
+        CROSS_STAFF_HALF_OSTINATO_VOICE.OSTINATO,
+      ),
+    ),
+    rebuild(
+      bassSustain,
+      0,
+      8,
+      'cross-staff-half',
+      'up',
+      CROSS_STAFF_HALF_OSTINATO_VOICE.CROSS_STAFF_HALF,
+    ),
+    rebuild(
+      trebleHalf,
+      8,
+      8,
+      'cross-staff-half',
+      'down',
+      CROSS_STAFF_HALF_OSTINATO_VOICE.CROSS_STAFF_HALF,
+    ),
+  ])
+}
+
 function hasExplicitVectorVoicePartition(events = []) {
   return events.some((event) => event?.vectorVoiceSeparated === true)
 }
@@ -5776,6 +5917,11 @@ function buildNoteEventsFromGroups(
     'paired-octave-triplet-streams',
     'reconstructPairedOctaveTripletStreams',
     () => reconstructPairedOctaveTripletStreams(events, totalDivisions),
+  )
+  events = track(
+    'cross-staff-half-eighth-ostinato',
+    'reconstructCrossStaffHalfEighthOstinato',
+    () => reconstructCrossStaffHalfEighthOstinato(events, totalDivisions),
   )
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),

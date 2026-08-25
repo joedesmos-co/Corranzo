@@ -9,6 +9,7 @@ import {
   partitionSameOnsetWrittenVoiceEvents,
   reassignInterstaffBoundaryCohorts,
   reconstructGrandStaffHalfDottedCadence,
+  reconstructCrossStaffHalfEighthOstinato,
   reconstructPairedOctaveTripletStreams,
   reconstructWholeOctaveDottedDyadCadence,
   reconstructWholeSustainEighthLattice,
@@ -668,6 +669,103 @@ describe('vector mixed-written voice separation', () => {
     expect(reconstructPairedOctaveTripletStreams(sameStems, 8)).toBe(sameStems)
     const noOctaves = phrase({ octaves: false })
     expect(reconstructPairedOctaveTripletStreams(noOctaves, 8)).toBe(noOctaves)
+  })
+
+  function crossStaffHalfOstinato({
+    trebleColumn = 4,
+    beamedIndexes = [0, 1, 2, 4, 5, 6],
+  } = {}) {
+    const xs = [20, 38, 56, 74, 92, 110, 128, 146]
+    const moving = xs.map((cx, index) => {
+      const note = sourceNote({
+        midi: 48 + (index % 4) * 2,
+        cx,
+        cy: 70 - (index % 4) * 3,
+        positionInMeasure: index / 8,
+        glyph: 'black',
+        duration: beamedIndexes.includes(index) ? 1 : 2,
+        durationType: beamedIndexes.includes(index) ? 'sixteenth' : 'eighth',
+        stem: sourceStem({ x: cx + 4, tipY: 38, cy: 70, direction: 'up' }),
+        beams: beamedIndexes.includes(index) ? 2 : 0,
+      })
+      return {
+        ...mixedEvent([note], index * 2),
+        cx,
+        durationDivisions: note.durationDivisions,
+        durationType: note.durationType,
+      }
+    })
+    const bassSustain = sourceNote({
+      midi: 36,
+      cx: 20.4,
+      cy: 98,
+      positionInMeasure: 0,
+      glyph: 'half',
+      duration: 8,
+      durationType: 'half',
+      stem: sourceStem({ x: 24, tipY: 66, cy: 98, direction: 'up' }),
+    })
+    const trebleHalf = sourceNote({
+      midi: 84,
+      cx: xs[trebleColumn] + 0.2,
+      cy: 24,
+      positionInMeasure: trebleColumn / 8,
+      glyph: 'half',
+      duration: 8,
+      durationType: 'half',
+      clef: 'treble',
+      stem: sourceStem({ x: xs[trebleColumn] - 4, tipY: 58, cy: 24, direction: 'down' }),
+    })
+    return [
+      ...moving,
+      { ...mixedEvent([bassSustain], 0), durationDivisions: 8, durationType: 'half' },
+      {
+        ...mixedEvent([trebleHalf], trebleColumn * 2),
+        durationDivisions: 8,
+        durationType: 'half',
+      },
+    ]
+  }
+
+  it('restores eight print-spaced bass eighths beneath two half-note anchors', () => {
+    const events = crossStaffHalfOstinato()
+    const reconstructed = reconstructCrossStaffHalfEighthOstinato(events, 16)
+    const bassEighths = reconstructed.filter(
+      (event) => event.sourceVoiceLane === 'bass-eighth-ostinato',
+    )
+    const halfLane = reconstructed.filter(
+      (event) => event.sourceVoiceLane === 'cross-staff-half',
+    )
+
+    expect(bassEighths.map((event) => event.startDivision)).toEqual([
+      0, 2, 4, 6, 8, 10, 12, 14,
+    ])
+    expect(bassEighths.every((event) =>
+      event.durationDivisions === 2 && event.durationType === 'eighth',
+    )).toBe(true)
+    expect(halfLane.map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes[0].clef,
+    ])).toEqual([
+      [0, 8, 'bass'],
+      [8, 8, 'treble'],
+    ])
+    expect(new Set(bassEighths.map((event) => event.sourceVoice))).toEqual(new Set([1]))
+    expect(new Set(halfLane.map((event) => event.sourceVoice))).toEqual(new Set([5]))
+    expect(noteInventory(reconstructed).map((note) => note.midi).sort((a, b) => a - b)).toEqual(
+      noteInventory(events).map((note) => note.midi).sort((a, b) => a - b),
+    )
+  })
+
+  it('abstains when the upper half is off-grid or beam evidence is too sparse', () => {
+    const offGrid = crossStaffHalfOstinato({ trebleColumn: 3 })
+    expect(reconstructCrossStaffHalfEighthOstinato(offGrid, 16)).toBe(offGrid)
+
+    const sparseBeams = crossStaffHalfOstinato({ beamedIndexes: [0, 2, 4] })
+    expect(reconstructCrossStaffHalfEighthOstinato(sparseBeams, 16)).toBe(
+      sparseBeams,
+    )
   })
 
   it('preserves a source-dotted sustained voice and its tie against moving notes', () => {
