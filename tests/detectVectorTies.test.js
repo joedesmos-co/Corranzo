@@ -732,6 +732,176 @@ describe('exclusive vector tie pairing geometry', () => {
     expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
   })
 
+  it('keeps a shallow whole-note tie across intervening same-clef onsets', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 16,
+            notes: [{ midi: 45, clef: 'bass', cx: 130, cy: 520 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 57, clef: 'bass', cx: 210, cy: 500 }],
+          },
+          {
+            type: 'note',
+            startDivision: 8,
+            durationDivisions: 4,
+            notes: [{ midi: 61, clef: 'bass', cx: 290, cy: 490 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 8,
+            notes: [{ midi: 45, clef: 'bass', cx: 400, cy: 520 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.1, 0.36)],
+        [2, staffBox(2, 0, 0.36, 0.58)],
+      ]),
+      vectorCurves: [
+        {
+          ...vectorCurve('long-shallow-tie', { x: 138, y: 522 }, { x: 392, y: 522 }, 'below'),
+          bounds: { x0: 138, x1: 392, y0: 522, y1: 532, width: 254, height: 10 },
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(result.diagnostics.appliedSlurCount).toBe(0)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+  })
+
+  it('keeps high same-pitch phrase arches as slurs', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 75, clef: 'treble', cx: 130, cy: 330 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 72, clef: 'treble', cx: 220, cy: 340 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 75, clef: 'treble', cx: 400, cy: 330 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.1, 0.36)],
+        [2, staffBox(2, 0, 0.36, 0.58)],
+      ]),
+      vectorCurves: [
+        {
+          ...vectorCurve('high-same-pitch-slur', { x: 138, y: 330 }, { x: 392, y: 330 }),
+          bounds: { x0: 138, x1: 392, y0: 300, y1: 330, width: 254, height: 30 },
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(0)
+    expect(result.diagnostics.appliedSlurCount).toBe(1)
+  })
+
+  it('does not reinterpret a shallow same-pitch phrase across skipped measures', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 67, clef: 'treble', cx: 130, cy: 330 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 69, clef: 'treble', cx: 220, cy: 340 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 3,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 4,
+            notes: [{ midi: 67, clef: 'treble', cx: 400, cy: 330 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.1, 0.36)],
+        [3, staffBox(3, 0, 0.36, 0.58)],
+      ]),
+      vectorCurves: [
+        {
+          ...vectorCurve('skipped-measure-phrase', { x: 138, y: 330 }, { x: 392, y: 330 }),
+          bounds: { x0: 138, x1: 392, y0: 322, y1: 330, width: 254, height: 8 },
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(0)
+    expect(result.diagnostics.appliedSlurCount).toBe(1)
+  })
+
   it('does not turn slur-like different-pitch curves into ties', () => {
     const measureRecords = [
       {
@@ -866,5 +1036,122 @@ describe('exclusive vector tie pairing geometry', () => {
     expect(result.diagnostics.appliedTieCount).toBe(1)
     expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
     expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+  })
+
+  it('stitches shallow whole-note tie fragments across a system break', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 16,
+            notes: [{ midi: 33, clef: 'bass', cx: 700, cy: 520 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 57, clef: 'bass', cx: 780, cy: 500 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 1,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 8,
+            notes: [{ midi: 33, clef: 'bass', cx: 130, cy: 780 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.55, 0.99)],
+        [2, staffBox(2, 1, 0.08, 0.35)],
+      ]),
+      vectorCurves: [
+        {
+          ...vectorCurve('whole-tie-outgoing', { x: 708, y: 522 }, { x: 980, y: 522 }, 'below'),
+          bounds: { x0: 708, x1: 980, y0: 522, y1: 532, width: 272, height: 10 },
+        },
+        {
+          ...vectorCurve('whole-tie-incoming', { x: 82, y: 782 }, { x: 122, y: 782 }, 'below'),
+          bounds: { x0: 82, x1: 122, y0: 782, y1: 789, width: 40, height: 7 },
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(1)
+    expect(result.diagnostics.appliedSlurCount).toBe(0)
+    expect(measureRecords[0].events[0].notes[0].tieStart).toBe(true)
+    expect(measureRecords[1].events[0].notes[0].tieStop).toBe(true)
+  })
+
+  it('keeps a high incoming system fragment from completing a whole-note tie', () => {
+    const measureRecords = [
+      {
+        measureNumber: 1,
+        page: 1,
+        systemIndex: 0,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 16,
+            notes: [{ midi: 33, clef: 'bass', cx: 700, cy: 520 }],
+          },
+          {
+            type: 'note',
+            startDivision: 4,
+            durationDivisions: 4,
+            notes: [{ midi: 57, clef: 'bass', cx: 780, cy: 500 }],
+          },
+        ],
+      },
+      {
+        measureNumber: 2,
+        page: 1,
+        systemIndex: 1,
+        events: [
+          {
+            type: 'note',
+            startDivision: 0,
+            durationDivisions: 8,
+            notes: [{ midi: 33, clef: 'bass', cx: 130, cy: 780 }],
+          },
+        ],
+      },
+    ]
+    const result = applyVectorPageTies({
+      measureRecords,
+      measureBoxByNumber: new Map([
+        [1, staffBox(1, 0, 0.55, 0.99)],
+        [2, staffBox(2, 1, 0.08, 0.35)],
+      ]),
+      vectorCurves: [
+        {
+          ...vectorCurve('phrase-outgoing', { x: 708, y: 522 }, { x: 980, y: 522 }, 'below'),
+          bounds: { x0: 708, x1: 980, y0: 522, y1: 532, width: 272, height: 10 },
+        },
+        {
+          ...vectorCurve('phrase-incoming', { x: 82, y: 782 }, { x: 122, y: 782 }, 'below'),
+          bounds: { x0: 82, x1: 122, y0: 752, y1: 782, width: 40, height: 30 },
+        },
+      ],
+      imageData: blankImage(1000, 1000),
+    })
+
+    expect(result.diagnostics.appliedTieCount).toBe(0)
   })
 })

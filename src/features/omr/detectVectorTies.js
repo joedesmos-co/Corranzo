@@ -290,6 +290,39 @@ function curveLooksTieLike(curve, note, measureBoxByNumber, imageData) {
 }
 
 /**
+ * A whole-note tie can span nearly an entire measure, so its width may exceed
+ * the ordinary local-tie cap. Keep that exception source-shaped: the closed
+ * vector lens must still be shallow with level endpoints. Phrase slurs over
+ * the same span arch several staff spaces and remain slurs.
+ */
+function curveLooksShallow(curve, note, measureBoxByNumber, imageData) {
+  const box = measureBoxByNumber.get(note.measureNumber)
+  const gap = staffGapPx(note, box, imageData)
+  const height = curve?.bounds?.height ?? 0
+  const endpointDelta = Math.abs((curve?.start?.y ?? 0) - (curve?.end?.y ?? 0))
+  return height <= gap * 1.15 && endpointDelta <= gap * 0.6
+}
+
+function isShallowSamePitchCrossBarTie(
+  from,
+  to,
+  curves,
+  measureBoxByNumber,
+  imageData,
+) {
+  return (
+    from.midi === to.midi &&
+    (from.clef ?? 'treble') === (to.clef ?? 'treble') &&
+    to.measureNumber === from.measureNumber + 1 &&
+    from.startDivision === to.startDivision &&
+    curves.length > 0 &&
+    curves.every((curve) =>
+      curveLooksShallow(curve, from, measureBoxByNumber, imageData),
+    )
+  )
+}
+
+/**
  * Prefer same-pitch, same-clef, forward-onset attachments so stacked chord
  * heads each claim their own curve instead of collapsing onto one note.
  */
@@ -353,7 +386,17 @@ function classifyCurvePair(
   const tieLike = curveLooksTieLike(curve, from, measureBoxByNumber, imageData)
   if (
     from.midi === to.midi &&
-    (tieLike || nextOnsetIsDirect(instances, from, to))
+    (
+      tieLike ||
+      nextOnsetIsDirect(instances, from, to) ||
+      isShallowSamePitchCrossBarTie(
+        from,
+        to,
+        [curve],
+        measureBoxByNumber,
+        imageData,
+      )
+    )
   ) {
     return { classification: 'tie', failureReason: null }
   }
@@ -506,8 +549,17 @@ function classifyCrossBarCurvePair(instances, from, to, curve, measureBoxByNumbe
   }
   const tieLike = curveLooksTieLike(curve, from, measureBoxByNumber, imageData)
   if (
-    isStructuralCrossBarPair(from, to) &&
-    (tieLike || from.midi === to.midi || nextOnsetIsDirect(instances, from, to))
+    (
+      isStructuralCrossBarPair(from, to) &&
+      (tieLike || from.midi === to.midi || nextOnsetIsDirect(instances, from, to))
+    ) ||
+    isShallowSamePitchCrossBarTie(
+      from,
+      to,
+      [curve],
+      measureBoxByNumber,
+      imageData,
+    )
   ) {
     return { classification: 'tie', failureReason: null, allowPitchMismatch: from.midi !== to.midi }
   }
@@ -546,7 +598,17 @@ function classifyStitchedCurvePair(
     curveLooksTieLike(incomingCurve, to, measureBoxByNumber, imageData)
   if (
     from.midi === to.midi &&
-    (tieLike || nextOnsetIsDirect(instances, from, to))
+    (
+      tieLike ||
+      nextOnsetIsDirect(instances, from, to) ||
+      isShallowSamePitchCrossBarTie(
+        from,
+        to,
+        [outgoingCurve, incomingCurve],
+        measureBoxByNumber,
+        imageData,
+      )
+    )
   ) {
     return { classification: 'tie', failureReason: null }
   }
