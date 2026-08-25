@@ -17,6 +17,7 @@ import {
   reconstructHalfSustainSixteenthCadenceGrid,
   reconstructMixedQuintupletSeptupletLattice,
   reconstructOffsetChordBassQuintupletGrid,
+  reconstructQuarterChordGapBassLattice,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
@@ -382,6 +383,89 @@ describe('reconstructTiedChordMelodyBassLattice', () => {
     const noSustain = tiedChordMelodyBassFixture({ openSustain: false })
     expect(reconstructTiedChordMelodyBassLattice(noSustain, 16)).toBe(noSustain)
     expect(reconstructTiedChordMelodyBassLattice(complete, 12)).toBe(complete)
+  })
+})
+
+function quarterChordGapBassFixture({ closingUpperStem = 'up', includeRests = true } = {}) {
+  const events = []
+  const xs = [100, 137, 162, 187, 212, 229, 245, 270]
+  const trebleMidis = [[69], [81, 76, 72], [67], [69], [72], [], [81, 74], [76]]
+  const bassMidis = [[53, 41], [64, 60, 57], [53], [52, 40], [], [52, 40], [], [45, 33]]
+  for (const [index, cx] of xs.entries()) {
+    if (trebleMidis[index].length) {
+      const notes = trebleMidis[index].map((midi, noteIndex) => {
+        const stem = index === 1
+          ? noteIndex === 0 ? 'down' : 'up'
+          : index === 6 && noteIndex === 0 ? closingUpperStem : 'down'
+        const note = latticeNote({ cx, midi, stem })
+        note.beams = index === 4 ? 2 : 0
+        return note
+      })
+      events.push(latticeEvent(notes, index, 1))
+    }
+    if (bassMidis[index].length) {
+      const notes = bassMidis[index].map((midi, noteIndex) => latticeNote({
+        cx,
+        midi,
+        clef: 'bass',
+        stem: index === 1 || noteIndex === 0 ? 'down' : 'up',
+      }))
+      events.push(latticeEvent(notes, index, 1))
+    }
+  }
+  if (includeRests) {
+    for (const cx of [xs[4], xs[6]]) {
+      events.push({
+        type: 'rest',
+        clef: 'bass',
+        cx,
+        durationDivisions: 1,
+        durationType: 'sixteenth',
+      })
+    }
+  }
+  return events
+}
+
+describe('reconstructQuarterChordGapBassLattice', () => {
+  it('recovers the melody, upper attacks, and written bass gaps', () => {
+    const rebuilt = reconstructQuarterChordGapBassLattice(
+      quarterChordGapBassFixture(),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['note', 0, 4], ['rest', 4, 2], ['note', 6, 2], ['note', 8, 2],
+      ['note', 10, 2], ['note', 12, 2], ['note', 14, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['rest', 0, 4], ['note', 4, 4], ['rest', 8, 4], ['note', 12, 4],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['note', 0, 4], ['note', 4, 2], ['note', 6, 2], ['note', 8, 2],
+      ['rest', 10, 1], ['note', 11, 1], ['rest', 12, 2], ['note', 14, 2],
+    ])
+  })
+
+  it('abstains when the opposing closing stems or meter are absent', () => {
+    const complete = quarterChordGapBassFixture()
+    const wrongStem = quarterChordGapBassFixture({ closingUpperStem: 'down' })
+    const noRests = quarterChordGapBassFixture({ includeRests: false })
+    expect(reconstructQuarterChordGapBassLattice(wrongStem, 16)).toBe(wrongStem)
+    expect(reconstructQuarterChordGapBassLattice(noRests, 16)).toBe(noRests)
+    expect(reconstructQuarterChordGapBassLattice(complete, 12)).toBe(complete)
   })
 })
 
