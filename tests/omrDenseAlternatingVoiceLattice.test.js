@@ -5,6 +5,7 @@ import {
   applyVectorOttavaSpans,
   completeQuarterRestChordBassTies,
   completeSyncopatedQuarterChordBassTies,
+  reconstructAlternatingEighthChordBassLattice,
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedCadenceArpeggioGrid,
@@ -475,6 +476,95 @@ describe('reconstructDottedChordSixteenthBassLattice', () => {
     expect(reconstructDottedChordSixteenthBassLattice(noRest, 16)).toBe(noRest)
     expect(reconstructDottedChordSixteenthBassLattice(wrongStem, 16)).toBe(wrongStem)
     expect(reconstructDottedChordSixteenthBassLattice(complete, 12)).toBe(complete)
+  })
+})
+
+function alternatingEighthChordBassFixture({
+  includeRest = true,
+  upperStem = 'up',
+} = {}) {
+  const events = []
+  const xs = Array.from({ length: 8 }, (_, index) => 100 + index * 24)
+  const trebleMidis = [[69], [69], [81, 76, 72], [69], [74, 71], [76, 72],
+    [74, 71], [76, 72]]
+  const bassMidis = [[45, 33], [45], [57, 52], [48, 36], [48, 36], [36], [48], [36]]
+  for (const [index, cx] of xs.entries()) {
+    const trebleNotes = trebleMidis[index].map((midi, noteIndex) => {
+      const note = latticeNote({
+        cx,
+        midi,
+        stem: index === 2 && noteIndex < 2 ? upperStem : 'down',
+      })
+      note.beams = [0, 1, 4, 5, 6].includes(index) ? 2 : 0
+      return note
+    })
+    events.push(latticeEvent(trebleNotes, index * 2, 1))
+
+    const bassNotes = bassMidis[index].map((midi, noteIndex) => {
+      const note = latticeNote({
+        cx,
+        midi,
+        clef: 'bass',
+        stem: index === 4 && noteIndex === 0 ? 'down' : 'up',
+      })
+      note.beams = index === 2 ? 2 : 0
+      return note
+    })
+    events.push(latticeEvent(bassNotes, index * 2, 1))
+  }
+  if (includeRest) {
+    events.push({
+      type: 'rest',
+      clef: 'treble',
+      cx: xs[0],
+      sourceGlyph: '\ue4e5',
+      startDivision: 1,
+      durationDivisions: 2,
+      durationType: 'eighth',
+    })
+  }
+  return events
+}
+
+describe('reconstructAlternatingEighthChordBassLattice', () => {
+  it('recovers the melody, quarter chord, and bass eighth cursors', () => {
+    const rebuilt = reconstructAlternatingEighthChordBassLattice(
+      alternatingEighthChordBassFixture(),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 2, 1], [2, 2, 1], [4, 2, 1], [6, 2, 1],
+      [8, 2, 2], [10, 2, 2], [12, 2, 2], [14, 2, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['rest', 0, 4], ['note', 4, 4], ['rest', 8, 8],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 2, 2], [2, 2, 1], [4, 2, 2], [6, 2, 2],
+      [8, 2, 2], [10, 2, 1], [12, 2, 1], [14, 2, 1],
+    ])
+  })
+
+  it('abstains without the printed rest, upper stem, or 4/4 capacity', () => {
+    const complete = alternatingEighthChordBassFixture()
+    const noRest = alternatingEighthChordBassFixture({ includeRest: false })
+    const wrongStem = alternatingEighthChordBassFixture({ upperStem: 'down' })
+    expect(reconstructAlternatingEighthChordBassLattice(noRest, 16)).toBe(noRest)
+    expect(reconstructAlternatingEighthChordBassLattice(wrongStem, 16)).toBe(wrongStem)
+    expect(reconstructAlternatingEighthChordBassLattice(complete, 12)).toBe(complete)
   })
 })
 
