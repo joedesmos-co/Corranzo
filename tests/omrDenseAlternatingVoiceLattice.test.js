@@ -27,6 +27,7 @@ import {
   removeTiedCadenceContinuationBassTieSpillover,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
+  reconstructRestedDottedChordEighthBassLattice,
   reconstructRestedSixteenthDottedSustainBassCadence,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructSyncopatedQuarterChordBassLattice,
@@ -745,6 +746,115 @@ describe('reconstructDottedChordSixteenthBassLattice', () => {
     expect(reconstructDottedChordSixteenthBassLattice(noRest, 16)).toBe(noRest)
     expect(reconstructDottedChordSixteenthBassLattice(wrongStem, 16)).toBe(wrongStem)
     expect(reconstructDottedChordSixteenthBassLattice(complete, 12)).toBe(complete)
+  })
+})
+
+function restedDottedChordEighthBassFixture({
+  includeSourceRest = true,
+  closingStem = 'down',
+  finalBassMidi = 46,
+} = {}) {
+  const events = []
+  const bassXs = [100, 128, 156, 184, 212, 248, 276, 320]
+  const bassMidis = [34, 46, 37, 49, 39, 52, 34, finalBassMidi]
+  for (const [index, cx] of bassXs.entries()) {
+    const note = latticeNote({ cx, midi: bassMidis[index], clef: 'bass' })
+    note.beams = index === 5 ? 2 : 0
+    events.push(latticeEvent([note], index * 2, 1))
+  }
+  const trebleXs = [100, 156, 230, 276, 302, 320]
+  const trebleMidis = [[61, 67], [61, 67], [61, 67], [61, 67], [66], [67]]
+  for (const [index, cx] of trebleXs.entries()) {
+    const notes = trebleMidis[index].map((midi) => {
+      const stem = index === 3 && midi === 61 ? closingStem : 'up'
+      const note = latticeNote({ cx, midi, stem })
+      note.beams = (index === 3 && midi === 67) || index === 4 ? 2 : 0
+      return note
+    })
+    if (index === 0) {
+      notes.forEach((note) => {
+        note.notationArticulations = [{
+          type: 'tenuto',
+          placement: 'below',
+          glyph: '\ue4a5',
+        }]
+      })
+    }
+    if (index === 1) {
+      notes.forEach((note) => {
+        note.articulation = { type: 'staccato', placement: 'below', glyph: '\ue4a3' }
+        note.notationArticulations = [note.articulation]
+      })
+    }
+    events.push(latticeEvent(notes, index * 2, 1))
+  }
+  const sourceRests = includeSourceRest
+    ? [{
+        cx: 212,
+        positionInMeasure: 0.5,
+        durationType: 'sixteenth',
+        clef: 'treble',
+        glyph: '\ue4e7',
+        source: 'vector-glyph',
+        legacyMusicFontNormalized: true,
+      }]
+    : []
+  return { events, sourceRests }
+}
+
+describe('reconstructRestedDottedChordEighthBassLattice', () => {
+  it('recovers the written rests, dotted chord, split melody, and bass eighths', () => {
+    const fixture = restedDottedChordEighthBassFixture()
+    const rebuilt = reconstructRestedDottedChordEighthBassLattice(
+      fixture.events,
+      16,
+      { sourceRests: fixture.sourceRests },
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+      event.notes?.length ?? 0,
+    ])).toEqual([
+      ['note', 0, 4, 2], ['note', 4, 4, 2], ['rest', 8, 1, 0],
+      ['note', 9, 3, 2], ['note', 12, 2, 1], ['rest', 14, 2, 0],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[12, 1], [13, 1], [14, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2]))
+
+    const opening = rebuilt.find(
+      (event) => event.sourceVoice === 1 && event.startDivision === 0,
+    )
+    expect(opening.notes.find((note) => note.midi === 61).notationArticulations)
+      .toHaveLength(1)
+    expect(opening.notes.find((note) => note.midi === 67).notationArticulations)
+      .toHaveLength(0)
+  })
+
+  it('abstains without the source rest, opposing stem, bass contour, or meter', () => {
+    const noRest = restedDottedChordEighthBassFixture({ includeSourceRest: false })
+    const wrongStem = restedDottedChordEighthBassFixture({ closingStem: 'up' })
+    const wrongBass = restedDottedChordEighthBassFixture({ finalBassMidi: 45 })
+    const complete = restedDottedChordEighthBassFixture()
+    expect(reconstructRestedDottedChordEighthBassLattice(
+      noRest.events, 16, { sourceRests: noRest.sourceRests },
+    )).toBe(noRest.events)
+    expect(reconstructRestedDottedChordEighthBassLattice(
+      wrongStem.events, 16, { sourceRests: wrongStem.sourceRests },
+    )).toBe(wrongStem.events)
+    expect(reconstructRestedDottedChordEighthBassLattice(
+      wrongBass.events, 16, { sourceRests: wrongBass.sourceRests },
+    )).toBe(wrongBass.events)
+    expect(reconstructRestedDottedChordEighthBassLattice(
+      complete.events, 12, { sourceRests: complete.sourceRests },
+    )).toBe(complete.events)
   })
 })
 

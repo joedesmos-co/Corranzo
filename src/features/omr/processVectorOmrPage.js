@@ -6023,6 +6023,12 @@ const DOTTED_CHORD_SIXTEENTH_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE = Object.freeze({
+  CHORD: 1,
+  CLOSING_MELODY: 2,
+  BASS: 5,
+})
+
 const WHOLE_CHORD_SIXTEENTH_MELODY_VOICE = Object.freeze({
   MELODY: 1,
   UPPER_CHORD: 2,
@@ -7160,6 +7166,281 @@ export function reconstructDottedChordSixteenthBassLattice(
   return sortVectorRhythmEvents(rebuilt.map((event) => ({
     ...event,
     dottedChordSixteenthBassLattice: true,
+  })))
+}
+
+function keepSharedBelowArticulationsOnLowest(entries) {
+  if (entries.length < 2) return entries
+  const lowestMidi = Math.min(...entries.map((entry) => entry.note.midi))
+  const sharedArticulation = entries[0].note.articulation
+  const articulationSharedBelow =
+    sharedArticulation?.placement === 'below' &&
+    entries.every((entry) =>
+      entry.note.articulation?.type === sharedArticulation.type &&
+      entry.note.articulation?.glyph === sharedArticulation.glyph &&
+      entry.note.articulation?.placement === 'below')
+  const belowNotationKey = (marking) =>
+    marking?.placement === 'below'
+      ? `${marking.type ?? ''}:${marking.glyph ?? ''}`
+      : null
+  const sharedBelowNotationKeys = new Set(
+    (entries[0].note.notationArticulations ?? [])
+      .map(belowNotationKey)
+      .filter((key) => key && entries.every((entry) =>
+        (entry.note.notationArticulations ?? []).some(
+          (marking) => belowNotationKey(marking) === key,
+        ))),
+  )
+  if (!articulationSharedBelow && sharedBelowNotationKeys.size === 0) {
+    return entries
+  }
+  return entries.map((entry) => {
+    if (entry.note.midi === lowestMidi) return entry
+    const note = { ...entry.note }
+    if (articulationSharedBelow) delete note.articulation
+    if (sharedBelowNotationKeys.size > 0) {
+      note.notationArticulations = (note.notationArticulations ?? []).filter(
+        (marking) => !sharedBelowNotationKeys.has(belowNotationKey(marking)),
+      )
+    }
+    return { ...entry, note }
+  })
+}
+
+function sourceBackedStructuralRest(
+  sourceRest,
+  startDivision,
+  durationDivisions,
+  sourceVoice,
+  lane,
+) {
+  return {
+    type: 'rest',
+    clef: 'treble',
+    startDivision,
+    durationDivisions,
+    ...durationMeta(durationDivisions),
+    sourceVoice,
+    sourceVoiceLane: lane,
+    structuralVoiceRest: true,
+    ...(sourceRest
+      ? {
+          cx: sourceRest.cx,
+          positionInMeasure: sourceRest.positionInMeasure,
+          source: sourceRest.source ?? 'vector-glyph',
+          sourceGlyph: sourceRest.glyph,
+        }
+      : {}),
+  }
+}
+
+/**
+ * Recover two quarter dyads, a written sixteenth-rest/dotted-eighth dyad,
+ * opposing closing treble stems, and eight independent bass eighths. The
+ * source rest, exact transposition-safe contours, asymmetric final spacing,
+ * and three double-beamed heads distinguish the three simultaneous cursors.
+ */
+export function reconstructRestedDottedChordEighthBassLattice(
+  events = [],
+  totalDivisions = 16,
+  { sourceRests = [] } = {},
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const sixteenthRests = sourceRests.filter(
+    (rest) =>
+      rest.durationType === 'sixteenth' &&
+      rest.clef === 'treble' &&
+      rest.legacyMusicFontNormalized === true &&
+      Number.isFinite(rest.cx),
+  )
+  const eighthRests = sourceRests.filter(
+    (rest) =>
+      rest.durationType === 'eighth' &&
+      rest.clef === 'treble' &&
+      rest.legacyMusicFontNormalized === true &&
+      Number.isFinite(rest.cx),
+  )
+  if (sixteenthRests.length !== 1 || eighthRests.length > 1) return events
+
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? [])
+      .filter((note) => Number.isFinite(note.cx))
+      .map((note) => ({ event, note, latticeCx: note.cx })))
+  if (
+    entries.length !== 18 ||
+    entries.some((entry) => isOpenNotehead(entry.note))
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') !== 'bass',
+  ))
+  const bassColumns = clusterDenseLatticeNotes(entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') === 'bass',
+  ))
+  if (
+    trebleColumns.length !== 6 ||
+    bassColumns.length !== 8 ||
+    trebleColumns.some(
+      (column, index) => column.entries.length !== [2, 2, 2, 2, 1, 1][index],
+    ) ||
+    bassColumns.some((column) => column.entries.length !== 1)
+  ) {
+    return events
+  }
+
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber(bassGaps.slice(0, 6))
+  const within = (value, low, high) => value >= low && value <= high
+  if (
+    !(typicalGap > 0) ||
+    bassGaps.slice(0, 4).some(
+      (gap) => !within(gap, typicalGap * 0.85, typicalGap * 1.15),
+    ) ||
+    !within(bassGaps[4], typicalGap * 1.15, typicalGap * 1.4) ||
+    !within(bassGaps[5], typicalGap * 0.85, typicalGap * 1.15) ||
+    !within(bassGaps[6], typicalGap * 1.45, typicalGap * 1.72) ||
+    Math.abs(trebleColumns[0].cx - bassColumns[0].cx) > typicalGap * 0.15 ||
+    Math.abs(trebleColumns[1].cx - bassColumns[2].cx) > typicalGap * 0.15 ||
+    Math.abs(sixteenthRests[0].cx - bassColumns[4].cx) > typicalGap * 0.15 ||
+    !within(
+      trebleColumns[2].cx - bassColumns[4].cx,
+      typicalGap * 0.52,
+      typicalGap * 0.75,
+    ) ||
+    Math.abs(trebleColumns[3].cx - bassColumns[6].cx) > typicalGap * 0.15 ||
+    !within(
+      trebleColumns[4].cx - trebleColumns[3].cx,
+      typicalGap * 0.8,
+      typicalGap * 1.0,
+    ) ||
+    !within(
+      bassColumns[7].cx - trebleColumns[4].cx,
+      typicalGap * 0.55,
+      typicalGap * 0.78,
+    ) ||
+    Math.abs(trebleColumns[5].cx - bassColumns[7].cx) > typicalGap * 0.15 ||
+    (eighthRests.length === 1 &&
+      Math.abs(eighthRests[0].cx - bassColumns[7].cx) > typicalGap * 0.15)
+  ) {
+    return events
+  }
+
+  const trebleMidis = trebleColumns.map((column) => column.entries
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right))
+  const bassMidis = bassColumns.map((column) => column.entries[0].note.midi)
+  const trebleAnchor = trebleMidis[0][0]
+  const upperTreble = trebleAnchor + 6
+  const bassAnchor = bassMidis[0]
+  const repeatedDyad = (midis) =>
+    midis.length === 2 &&
+    midis[0] === trebleAnchor &&
+    midis[1] === upperTreble
+  const beamedEntries = entries.filter((entry) => (entry.note.beams ?? 0) >= 2)
+  const splitTreble = [...trebleColumns[3].entries].sort(
+    (left, right) => left.note.midi - right.note.midi,
+  )
+  if (
+    !trebleMidis.slice(0, 4).every(repeatedDyad) ||
+    trebleMidis[4][0] !== upperTreble - 1 ||
+    ![upperTreble - 1, upperTreble].includes(trebleMidis[5][0]) ||
+    bassMidis.some(
+      (midi, index) =>
+        midi !== bassAnchor + [0, 12, 3, 15, 5, 18, 0, 12][index],
+    ) ||
+    entries.some((entry) => !Number.isFinite(entry.note.midi)) ||
+    bassColumns.some(
+      (column) => noteStemDirection(column.entries[0].note) !== 'up',
+    ) ||
+    trebleColumns.slice(0, 3).flatMap((column) => column.entries).some(
+      (entry) => noteStemDirection(entry.note) !== 'up',
+    ) ||
+    noteStemDirection(splitTreble[0].note) !== 'down' ||
+    noteStemDirection(splitTreble[1].note) !== 'up' ||
+    trebleColumns.slice(4).flatMap((column) => column.entries).some(
+      (entry) => noteStemDirection(entry.note) !== 'up',
+    ) ||
+    beamedEntries.length !== 3 ||
+    (bassColumns[5].entries[0].note.beams ?? 0) < 2 ||
+    (splitTreble[1].note.beams ?? 0) < 2 ||
+    (trebleColumns[4].entries[0].note.beams ?? 0) < 2
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const chordColumns = trebleColumns.slice(0, 3).map(
+    (column) => keepSharedBelowArticulationsOnLowest(column.entries),
+  )
+  for (const [index, startDivision] of [0, 4, 9].entries()) {
+    const durationDivisions = [4, 4, 3][index]
+    rebuilt.push({
+      ...denseLatticeEvent(
+        chordColumns[index],
+        startDivision,
+        durationDivisions,
+        RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.CHORD,
+        'rested-dotted-chord',
+      ),
+      ...durationMeta(durationDivisions, { allowDotted: true }),
+    })
+  }
+  rebuilt.push(sourceBackedStructuralRest(
+    sixteenthRests[0],
+    8,
+    1,
+    RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.CHORD,
+    'rested-dotted-chord',
+  ))
+  rebuilt.push(denseLatticeEvent(
+    [splitTreble[0]],
+    12,
+    2,
+    RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.CHORD,
+    'rested-dotted-chord',
+  ))
+  rebuilt.push(sourceBackedStructuralRest(
+    eighthRests[0] ?? null,
+    14,
+    2,
+    RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.CHORD,
+    'rested-dotted-chord',
+  ))
+
+  for (const [index, column] of [
+    [splitTreble[1]],
+    trebleColumns[4].entries,
+    trebleColumns[5].entries,
+  ].entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      12 + index,
+      index === 2 ? 2 : 1,
+      RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.CLOSING_MELODY,
+      'beamed-closing-melody',
+    ))
+  }
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      index * 2,
+      2,
+      RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE.BASS,
+      'bass-eighth-ostinato',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    restedDottedChordEighthBassLattice: true,
   })))
 }
 
@@ -11175,6 +11456,19 @@ export function buildVectorMeasureRecord({
       eventsBeforeTiedCadenceContinuation,
       events,
       { reason: 'source-complete-independent-voice-cursors' },
+    )
+  }
+  const eventsBeforeRestedDottedChordEighthBass = events
+  events = reconstructRestedDottedChordEighthBassLattice(events, totalDivisions, {
+    sourceRests: detectedRests,
+  })
+  if (provenance && events !== eventsBeforeRestedDottedChordEighthBass) {
+    provenance.recordStage(
+      'rested-dotted-chord-eighth-bass-lattice',
+      'reconstructRestedDottedChordEighthBassLattice',
+      eventsBeforeRestedDottedChordEighthBass,
+      events,
+      { reason: 'source-rest-stem-beam-and-pitch-owned-cursors' },
     )
   }
 
