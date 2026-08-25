@@ -5940,6 +5940,148 @@ const SYNCOPATED_QUARTER_CHORD_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const TIED_CHORD_MELODY_BASS_VOICE = Object.freeze({
+  UPPER_CHORD: 1,
+  MELODY: 2,
+  BASS: 5,
+})
+
+/**
+ * Recover five aligned upper chord attacks, a melody that continues after the
+ * chord becomes a half-note sustain, and eight independent bass eighths. The
+ * two hollow chord heads, octave-related bass pairs, and the shortened final
+ * melody gap make this topology distinguishable from a packed chord stream.
+ */
+export function reconstructTiedChordMelodyBassLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => {
+      const eventNotes = (event.notes ?? []).filter((note) => Number.isFinite(note.cx))
+      const latticeCx = medianNumber(eventNotes.map((note) => note.cx))
+      return eventNotes.map((note) => ({ event, note, latticeCx }))
+    })
+  if (entries.length !== 25) return events
+
+  const columns = clusterDenseLatticeNotes(entries)
+  if (columns.length !== 9) return events
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(gaps.slice(0, 7))
+  if (
+    !(typicalGap > 0) ||
+    gaps.slice(0, 7).some((gap) => gap < typicalGap * 0.82 || gap > typicalGap * 1.2) ||
+    gaps[7] < typicalGap * 0.52 ||
+    gaps[7] > typicalGap * 0.78
+  ) {
+    return events
+  }
+
+  const trebleByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') !== 'bass',
+  ))
+  const bassByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') === 'bass',
+  ))
+  const expectedTrebleCounts = [3, 3, 3, 3, 3, 0, 1, 0, 1]
+  const expectedBassCounts = [1, 1, 1, 1, 1, 1, 1, 1, 0]
+  if (
+    trebleByColumn.some(
+      (column, index) => column.length !== expectedTrebleCounts[index],
+    ) ||
+    bassByColumn.some(
+      (column, index) => column.length !== expectedBassCounts[index],
+    )
+  ) {
+    return events
+  }
+
+  const melodyColumnIndexes = [0, 1, 2, 3, 4, 6, 8]
+  const melodyEntries = melodyColumnIndexes.map((index) => [...trebleByColumn[index]]
+    .sort((left, right) => right.note.midi - left.note.midi)[0])
+  const chordEntries = trebleByColumn.slice(0, 5).map((column, index) =>
+    column.filter((entry) => entry !== melodyEntries[index]),
+  )
+  const melodyMidis = melodyEntries.map((entry) => entry.note.midi)
+  const bassMidis = bassByColumn.slice(0, 8).map((column) => column[0].note.midi)
+  if (
+    chordEntries.some((column) => column.length !== 2) ||
+    chordEntries.slice(0, 4).flat().some((entry) => isOpenNotehead(entry.note)) ||
+    chordEntries[4].some((entry) => !isOpenNotehead(entry.note)) ||
+    melodyEntries.some((entry) => isOpenNotehead(entry.note)) ||
+    bassByColumn.flat().some(
+      (entry) => isOpenNotehead(entry.note) || noteStemDirection(entry.note) !== 'up',
+    ) ||
+    melodyMidis[0] !== melodyMidis[2] ||
+    melodyMidis[0] - melodyMidis[1] !== 3 ||
+    melodyMidis.slice(3).some((midi) => midi !== melodyMidis[0] - 1) ||
+    bassMidis[0] !== bassMidis[2] ||
+    bassMidis[1] !== bassMidis[3] ||
+    bassMidis[1] - bassMidis[0] !== 12 ||
+    bassMidis[5] - bassMidis[4] !== 12 ||
+    bassMidis[7] - bassMidis[6] !== 12 ||
+    melodyEntries.filter(
+      (entry) => noteStemDirection(entry.note) === 'up',
+    ).length < 4 ||
+    melodyEntries.slice(0, 4).filter(
+      (entry) => (entry.note.beams ?? 0) >= 1,
+    ).length < 2 ||
+    chordEntries.slice(0, 4).flat().filter(
+      (entry) => noteStemDirection(entry.note) === 'down',
+    ).length < 3 ||
+    bassByColumn.slice(0, 8).flat().filter(
+      (entry) => (entry.note.beams ?? 0) >= 1,
+    ).length < 2
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  for (const [index, column] of chordEntries.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      index * 2,
+      index === 4 ? 8 : 2,
+      TIED_CHORD_MELODY_BASS_VOICE.UPPER_CHORD,
+      'tied-upper-chords',
+    ))
+  }
+  const melodyStarts = [0, 2, 4, 6, 8, 12, 15]
+  const melodyDurations = [2, 2, 2, 2, 4, 3, 1]
+  for (const [index, entry] of melodyEntries.entries()) {
+    rebuilt.push({
+      ...denseLatticeEvent(
+        [entry],
+        melodyStarts[index],
+        melodyDurations[index],
+        TIED_CHORD_MELODY_BASS_VOICE.MELODY,
+        'tied-upper-melody',
+      ),
+      ...durationMeta(melodyDurations[index], { allowDotted: true }),
+    })
+  }
+  for (const [index, column] of bassByColumn.slice(0, 8).entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      index * 2,
+      2,
+      TIED_CHORD_MELODY_BASS_VOICE.BASS,
+      'bass-eighth-lattice',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    tiedChordMelodyBassLattice: true,
+  })))
+}
+
 /**
  * Recover a repeated quarter-note melody around two opposing-stem upper chord
  * attacks and an independently syncopated bass cursor. The irregular union of
@@ -8831,6 +8973,7 @@ export function buildVectorMeasureRecord({
     imageData,
   })
   events = reconstructDottedMelodySixteenthBassLattice(events, totalDivisions)
+  events = reconstructTiedChordMelodyBassLattice(events, totalDivisions)
   events = reconstructSyncopatedQuarterChordBassLattice(events, totalDivisions)
   events = reconstructEighthMelodyQuarterChordBassLattice(events, totalDivisions)
   events = reconstructQuarterRestChordBassLattice(events, totalDivisions)

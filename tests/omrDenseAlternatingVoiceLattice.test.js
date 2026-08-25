@@ -21,6 +21,7 @@ import {
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructSyncopatedQuarterChordBassLattice,
+  reconstructTiedChordMelodyBassLattice,
   reconstructTripletMelodyOverprintLattice,
   reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
@@ -315,6 +316,72 @@ describe('reconstructEighthMelodyQuarterChordBassLattice', () => {
       .toBe(incomplete)
     expect(reconstructEighthMelodyQuarterChordBassLattice(complete, 12))
       .toBe(complete)
+  })
+})
+
+function tiedChordMelodyBassFixture({ openSustain = true } = {}) {
+  const events = []
+  const xs = [100, 132, 164, 200, 232, 264, 296, 328, 348]
+  const melodyIndexes = new Set([0, 1, 2, 3, 4, 6, 8])
+  const melodyMidis = [69, 66, 69, 68, 68, null, 68, null, 68]
+  const chordMidis = [[63, 60], [63, 60], [63, 60], [65, 60], [65, 60]]
+  const bassMidis = [36, 48, 36, 48, 37, 49, 32, 44]
+
+  for (const [index, cx] of xs.entries()) {
+    if (melodyIndexes.has(index)) {
+      const melody = latticeNote({
+        cx,
+        midi: melodyMidis[index],
+        stem: [1, 4].includes(index) ? 'down' : 'up',
+      })
+      melody.beams = [0, 1, 2, 6].includes(index) ? 1 : 0
+      events.push(latticeEvent([melody], index, 1))
+    }
+    if (index < 5) {
+      const chord = chordMidis[index].map((midi, noteIndex) => latticeNote({
+        cx,
+        midi,
+        stem: noteIndex === 0 || index >= 2 ? 'down' : 'up',
+        open: index === 4 && openSustain,
+      }))
+      events.push(latticeEvent(chord, index, 1))
+    }
+    if (index < 8) {
+      const bass = latticeNote({ cx, midi: bassMidis[index], clef: 'bass' })
+      bass.beams = [1, 3, 5].includes(index) ? 1 : 0
+      events.push(latticeEvent([bass], index, 1))
+    }
+  }
+  return events
+}
+
+describe('reconstructTiedChordMelodyBassLattice', () => {
+  it('separates the sustained chord, upper melody, and bass eighths', () => {
+    const rebuilt = reconstructTiedChordMelodyBassLattice(
+      tiedChordMelodyBassFixture(),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 2, 2], [2, 2, 2], [4, 2, 2], [6, 2, 2], [8, 8, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 2], [8, 4], [12, 3], [15, 1]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2]))
+  })
+
+  it('abstains without the printed hollow sustain or in a different meter', () => {
+    const complete = tiedChordMelodyBassFixture()
+    const noSustain = tiedChordMelodyBassFixture({ openSustain: false })
+    expect(reconstructTiedChordMelodyBassLattice(noSustain, 16)).toBe(noSustain)
+    expect(reconstructTiedChordMelodyBassLattice(complete, 12)).toBe(complete)
   })
 })
 
