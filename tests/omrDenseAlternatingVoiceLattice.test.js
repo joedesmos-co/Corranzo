@@ -28,6 +28,7 @@ import {
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
   reconstructRestedDottedChordEighthBassLattice,
+  reconstructRestedTripletChordMelodyLattice,
   reconstructRestedSixteenthDottedSustainBassCadence,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructSyncopatedQuarterChordBassLattice,
@@ -853,6 +854,130 @@ describe('reconstructRestedDottedChordEighthBassLattice', () => {
       wrongBass.events, 16, { sourceRests: wrongBass.sourceRests },
     )).toBe(wrongBass.events)
     expect(reconstructRestedDottedChordEighthBassLattice(
+      complete.events, 12, { sourceRests: complete.sourceRests },
+    )).toBe(complete.events)
+  })
+})
+
+function restedTripletChordMelodyFixture({
+  includeRest = true,
+  irregularBassGap = false,
+  brokenBassChord = false,
+} = {}) {
+  const events = []
+  const sustain = [45, 33].map((midi) => {
+    const note = latticeNote({ cx: 100, midi, clef: 'bass', open: true })
+    note.stem = null
+    note.beams = 0
+    return note
+  })
+  events.push(latticeEvent(sustain, 0, 16))
+
+  const trebleXs = [100, 140, 200, 220, 240, 260]
+  const trebleMidis = [
+    [88, 85, 81, 76],
+    [81, 69],
+    [81, 69],
+    [86, 74],
+    [89, 77],
+    [88, 76],
+  ]
+  for (const [index, cx] of trebleXs.entries()) {
+    const notes = trebleMidis[index].map((midi, noteIndex) => {
+      const note = latticeNote({
+        cx,
+        midi,
+        stem: noteIndex === 0 || [3, 4].includes(index) ? 'down' : 'up',
+      })
+      note.beams = index >= 2 && index <= 3 ? 2 : 0
+      return note
+    })
+    events.push(latticeEvent(notes, index, 1))
+  }
+
+  const bassXs = [140, 160, 180, 200, irregularBassGap ? 270 : 260, 280, 300]
+  for (const [index, cx] of bassXs.entries()) {
+    const midis = brokenBassChord && index === 5 ? [65, 61, 57] : [64, 61, 57]
+    const notes = midis.map((midi) => {
+      const note = latticeNote({ cx, midi, clef: 'bass', stem: 'up' })
+      note.beams = [0, 1, 4, 5].includes(index) ? 1 : 0
+      return note
+    })
+    events.push(latticeEvent(notes, index * (4 / 3), 4 / 3))
+  }
+  return {
+    events,
+    sourceRests: includeRest
+      ? [{
+          cx: 100,
+          positionInMeasure: 0,
+          durationType: 'quarter',
+          clef: 'bass',
+          glyph: '\ue4e5',
+          source: 'vector-glyph',
+        }]
+      : [],
+  }
+}
+
+describe('reconstructRestedTripletChordMelodyLattice', () => {
+  it('recovers the upper melody, whole bass, and rested triplet accompaniment', () => {
+    const fixture = restedTripletChordMelodyFixture()
+    const rebuilt = reconstructRestedTripletChordMelodyLattice(
+      fixture.events,
+      16,
+      { sourceRests: fixture.sourceRests },
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 4, 4],
+      [4, 4, 2],
+      [8, 4 / 3, 2],
+      [8 + 4 / 3, 4 / 3, 2],
+      [8 + 8 / 3, 4 / 3, 2],
+      [12, 4, 2],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 16, 2]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 6).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['rest', 0, 4],
+      ['note', 4, 4 / 3],
+      ['note', 4 + 4 / 3, 4 / 3],
+      ['note', 4 + 8 / 3, 4 / 3],
+      ['note', 8, 4],
+      ['note', 12, 4 / 3],
+      ['note', 12 + 4 / 3, 4 / 3],
+      ['note', 12 + 8 / 3, 4 / 3],
+    ])
+    expect(rebuilt.filter((event) => event.timeModification)).toHaveLength(9)
+  })
+
+  it('abstains without the source rest, repeated triads, regular geometry, or meter', () => {
+    const noRest = restedTripletChordMelodyFixture({ includeRest: false })
+    const wrongChord = restedTripletChordMelodyFixture({ brokenBassChord: true })
+    const wrongGap = restedTripletChordMelodyFixture({ irregularBassGap: true })
+    const complete = restedTripletChordMelodyFixture()
+    expect(reconstructRestedTripletChordMelodyLattice(
+      noRest.events, 16, { sourceRests: noRest.sourceRests },
+    )).toBe(noRest.events)
+    expect(reconstructRestedTripletChordMelodyLattice(
+      wrongChord.events, 16, { sourceRests: wrongChord.sourceRests },
+    )).toBe(wrongChord.events)
+    expect(reconstructRestedTripletChordMelodyLattice(
+      wrongGap.events, 16, { sourceRests: wrongGap.sourceRests },
+    )).toBe(wrongGap.events)
+    expect(reconstructRestedTripletChordMelodyLattice(
       complete.events, 12, { sourceRests: complete.sourceRests },
     )).toBe(complete.events)
   })

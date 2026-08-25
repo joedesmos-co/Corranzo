@@ -6029,6 +6029,12 @@ const RESTED_DOTTED_CHORD_EIGHTH_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const RESTED_TRIPLET_CHORD_MELODY_VOICE = Object.freeze({
+  MELODY: 1,
+  BASS_SUSTAIN: 5,
+  ACCOMPANIMENT: 6,
+})
+
 const WHOLE_CHORD_SIXTEENTH_MELODY_VOICE = Object.freeze({
   MELODY: 1,
   UPPER_CHORD: 2,
@@ -7441,6 +7447,255 @@ export function reconstructRestedDottedChordEighthBassLattice(
   return sortVectorRhythmEvents(rebuilt.map((event) => ({
     ...event,
     restedDottedChordEighthBassLattice: true,
+  })))
+}
+
+function restedTripletEvent(column, startDivision, sourceVoice, lane, groupId, slotIndex) {
+  const durationDivisions = 4 / 3
+  const event = denseLatticeEvent(
+    column.entries,
+    startDivision,
+    durationDivisions,
+    sourceVoice,
+    lane,
+  )
+  return {
+    ...event,
+    notes: event.notes.map((note) => ({
+      ...note,
+      durationType: 'eighth',
+      durationDivisions: 2,
+      dotted: false,
+      restedTripletChordMelodyLattice: true,
+    })),
+    durationType: 'eighth',
+    dotted: false,
+    timeModification: {
+      actualNotes: 3,
+      normalNotes: 2,
+      groupId,
+      slotIndex,
+      tupletStart: slotIndex === 0,
+      tupletStop: slotIndex === 2,
+    },
+    tupletRecovered: true,
+    restedTripletChordMelodyLattice: true,
+  }
+}
+
+/**
+ * Recover an upper quarter/quarter/triplet/quarter melody above two lower
+ * voices: a whole-note octave sustain and a rest/triplet/quarter/triplet
+ * accompaniment. The rule requires the printed beat-one bass rest, all 37
+ * source heads, aligned two-staff columns, repeated triads, octave dyads, and
+ * beam evidence in both lower triplet groups.
+ */
+export function reconstructRestedTripletChordMelodyLattice(
+  events = [],
+  totalDivisions = 16,
+  { sourceRests = [] } = {},
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification) ||
+    sourceRests.length !== 1
+  ) {
+    return events
+  }
+  const sourceRest = sourceRests[0]
+  if (
+    sourceRest.durationType !== 'quarter' ||
+    sourceRest.clef !== 'bass' ||
+    sourceRest.glyph !== '\ue4e5' ||
+    !Number.isFinite(sourceRest.cx) ||
+    !Number.isFinite(sourceRest.positionInMeasure) ||
+    sourceRest.positionInMeasure < 0 ||
+    sourceRest.positionInMeasure > 0.08
+  ) {
+    return events
+  }
+
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? [])
+      .filter((note) => Number.isFinite(note.cx) && Number.isFinite(note.midi))
+      .map((note) => ({ event, note, latticeCx: note.cx })))
+  if (entries.length !== 37) return events
+
+  const openBass = entries.filter(
+    (entry) =>
+      (entry.note.clef ?? 'treble') === 'bass' &&
+      entry.note.noteheadGlyph === 'whole',
+  )
+  const filledTreble = entries.filter(
+    (entry) =>
+      (entry.note.clef ?? 'treble') !== 'bass' &&
+      !isOpenNotehead(entry.note),
+  )
+  const filledBass = entries.filter(
+    (entry) =>
+      (entry.note.clef ?? 'treble') === 'bass' &&
+      !isOpenNotehead(entry.note),
+  )
+  if (
+    openBass.length !== 2 ||
+    filledTreble.length !== 14 ||
+    filledBass.length !== 21 ||
+    entries.some(
+      (entry) =>
+        !openBass.includes(entry) &&
+        !filledTreble.includes(entry) &&
+        !filledBass.includes(entry),
+    )
+  ) {
+    return events
+  }
+
+  const sustainX = average(openBass.map((entry) => entry.note.cx))
+  const sustainMidis = openBass.map((entry) => entry.note.midi).sort((a, b) => a - b)
+  const trebleColumns = clusterDenseLatticeNotes(filledTreble)
+  const bassColumns = clusterDenseLatticeNotes(filledBass)
+  if (
+    Math.abs(sustainMidis[1] - sustainMidis[0]) !== 12 ||
+    trebleColumns.length !== 6 ||
+    bassColumns.length !== 7 ||
+    trebleColumns.some(
+      (column, index) => column.entries.length !== [4, 2, 2, 2, 2, 2][index],
+    ) ||
+    bassColumns.some((column) => column.entries.length !== 3)
+  ) {
+    return events
+  }
+
+  const bassGaps = bassColumns.slice(1).map(
+    (column, index) => column.cx - bassColumns[index].cx,
+  )
+  const typicalGap = medianNumber([
+    bassGaps[0], bassGaps[1], bassGaps[2], bassGaps[4], bassGaps[5],
+  ])
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const within = (value, low, high) => value >= low && value <= high
+  if (
+    !(typicalGap > 0) ||
+    [0, 1, 2, 4, 5].some(
+      (index) => !within(bassGaps[index], typicalGap * 0.85, typicalGap * 1.15),
+    ) ||
+    !within(bassGaps[3], typicalGap * 2.75, typicalGap * 3.25) ||
+    !within(trebleGaps[0], typicalGap * 1.75, typicalGap * 2.15) ||
+    !within(trebleGaps[1], typicalGap * 2.75, typicalGap * 3.25) ||
+    trebleGaps.slice(2).some(
+      (gap) => !within(gap, typicalGap * 0.85, typicalGap * 1.15),
+    ) ||
+    Math.abs(sourceRest.cx - sustainX) > typicalGap * 0.15 ||
+    Math.abs(trebleColumns[0].cx - sustainX) > typicalGap * 0.15 ||
+    Math.abs(trebleColumns[1].cx - bassColumns[0].cx) > typicalGap * 0.15 ||
+    Math.abs(trebleColumns[2].cx - bassColumns[3].cx) > typicalGap * 0.15 ||
+    Math.abs(trebleColumns[5].cx - bassColumns[4].cx) > typicalGap * 0.15
+  ) {
+    return events
+  }
+
+  const pitchKey = (column) => column.entries
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right)
+    .join(',')
+  const accompanimentPitchKey = pitchKey(bassColumns[0])
+  const beamedColumn = (column) => column.entries.some(
+    (entry) => (entry.note.beams ?? 0) >= 1 || (entry.note.beamStrength ?? 0) >= 8,
+  )
+  if (
+    bassColumns.some((column) => pitchKey(column) !== accompanimentPitchKey) ||
+    bassColumns.flatMap((column) => column.entries).some(
+      (entry) => noteStemDirection(entry.note) !== 'up',
+    ) ||
+    bassColumns.slice(0, 3).filter(beamedColumn).length < 2 ||
+    bassColumns.slice(4).filter(beamedColumn).length < 2 ||
+    trebleColumns.slice(1).some((column) => {
+      const midis = column.entries.map((entry) => entry.note.midi)
+      return Math.max(...midis) - Math.min(...midis) !== 12
+    })
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const melodyStarts = [0, 4, 8, 8 + 4 / 3, 8 + 8 / 3, 12]
+  const melodyDurations = [4, 4, 4 / 3, 4 / 3, 4 / 3, 4]
+  for (const [index, column] of trebleColumns.entries()) {
+    if (index >= 2 && index <= 4) {
+      rebuilt.push(restedTripletEvent(
+        column,
+        melodyStarts[index],
+        RESTED_TRIPLET_CHORD_MELODY_VOICE.MELODY,
+        'quarter-triplet-melody',
+        'rested-triplet-melody:0',
+        index - 2,
+      ))
+      continue
+    }
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      melodyStarts[index],
+      melodyDurations[index],
+      RESTED_TRIPLET_CHORD_MELODY_VOICE.MELODY,
+      'quarter-triplet-melody',
+    ))
+  }
+
+  rebuilt.push(denseLatticeEvent(
+    openBass,
+    0,
+    16,
+    RESTED_TRIPLET_CHORD_MELODY_VOICE.BASS_SUSTAIN,
+    'whole-bass-sustain',
+  ))
+  rebuilt.push({
+    type: 'rest',
+    clef: 'bass',
+    cx: sourceRest.cx,
+    positionInMeasure: sourceRest.positionInMeasure,
+    startDivision: 0,
+    durationDivisions: 4,
+    ...durationMeta(4),
+    sourceVoice: RESTED_TRIPLET_CHORD_MELODY_VOICE.ACCOMPANIMENT,
+    sourceVoiceLane: 'rested-triplet-accompaniment',
+    structuralVoiceRest: true,
+    source: sourceRest.source ?? 'vector-glyph',
+    sourceGlyph: sourceRest.glyph,
+    restedTripletChordMelodyLattice: true,
+  })
+  for (let index = 0; index < 3; index += 1) {
+    rebuilt.push(restedTripletEvent(
+      bassColumns[index],
+      4 + index * (4 / 3),
+      RESTED_TRIPLET_CHORD_MELODY_VOICE.ACCOMPANIMENT,
+      'rested-triplet-accompaniment',
+      'rested-triplet-accompaniment:0',
+      index,
+    ))
+  }
+  rebuilt.push(denseLatticeEvent(
+    bassColumns[3].entries,
+    8,
+    4,
+    RESTED_TRIPLET_CHORD_MELODY_VOICE.ACCOMPANIMENT,
+    'rested-triplet-accompaniment',
+  ))
+  for (let index = 0; index < 3; index += 1) {
+    rebuilt.push(restedTripletEvent(
+      bassColumns[index + 4],
+      12 + index * (4 / 3),
+      RESTED_TRIPLET_CHORD_MELODY_VOICE.ACCOMPANIMENT,
+      'rested-triplet-accompaniment',
+      'rested-triplet-accompaniment:1',
+      index,
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    restedTripletChordMelodyLattice: true,
   })))
 }
 
@@ -11271,6 +11526,20 @@ export function buildVectorMeasureRecord({
       eventsBeforeVectorFlags,
       events,
       { reason: 'explicit-smufl-flag-ownership' },
+    )
+  }
+
+  const eventsBeforeRestedTripletChordMelody = events
+  events = reconstructRestedTripletChordMelodyLattice(events, totalDivisions, {
+    sourceRests: detectedRests,
+  })
+  if (provenance && events !== eventsBeforeRestedTripletChordMelody) {
+    provenance.recordStage(
+      'rested-triplet-chord-melody-lattice',
+      'reconstructRestedTripletChordMelodyLattice',
+      eventsBeforeRestedTripletChordMelody,
+      events,
+      { reason: 'source-rest-whole-sustain-and-triplet-cursors' },
     )
   }
 
