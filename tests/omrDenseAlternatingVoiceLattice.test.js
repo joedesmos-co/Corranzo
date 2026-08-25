@@ -22,6 +22,8 @@ import {
   reconstructQuarterChordGapBassLattice,
   reconstructQuarterCadenceSixteenthBassLattice,
   removeQuarterCadenceBassTieSpillover,
+  reconstructTiedCadenceContinuationLattice,
+  removeTiedCadenceContinuationBassTieSpillover,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
@@ -699,6 +701,100 @@ describe('reconstructQuarterCadenceSixteenthBassLattice', () => {
     expect(closingUpper.flatMap((event) => event.notes).every(
       (note) => note.tieStart === true,
     )).toBe(true)
+  })
+})
+
+function tiedCadenceContinuationFixture({ openingUpperStem = 'up', gapScale = 1 } = {}) {
+  const xs = [100, 124, 153, 178, 202, 226, 250, 274]
+    .map((x) => 100 + (x - 100) * gapScale)
+  const trebleMidis = [
+    [64, 67, 76], [67], [62], [62], [60], [62], [64], [67],
+  ]
+  const bassMidis = [[45], [33], [32], [44], [31], [43], [36, 48], [43]]
+  const events = []
+  for (const [index, cx] of xs.entries()) {
+    const trebleNotes = trebleMidis[index].map((midi) => {
+      const stem = index === 0 && midi === 67 ? openingUpperStem : 'down'
+      const note = latticeNote({ cx, midi, stem })
+      note.beams = (index === 0 && midi === 64) || index === 1 || index === 2 ? 2 : 0
+      return note
+    })
+    events.push(latticeEvent(trebleNotes, index * 2, 1))
+    const bassNotes = bassMidis[index].map((midi) => {
+      const stem = index === 6 && midi === 48 ? 'down' : 'up'
+      const note = latticeNote({ cx, midi, clef: 'bass', stem })
+      note.beams = index === 5 ? 2 : 0
+      return note
+    })
+    events.push(latticeEvent(bassNotes, index * 2, 1))
+  }
+  return events
+}
+
+describe('reconstructTiedCadenceContinuationLattice', () => {
+  it('recovers the melody, incoming chord, and bass eighth cursors', () => {
+    const rebuilt = reconstructTiedCadenceContinuationLattice(
+      tiedCadenceContinuationFixture(),
+      16,
+    )
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2, 1]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+      event.notes?.length ?? 0,
+    ])).toEqual([
+      ['note', 0, 4, 2], ['rest', 4, 4, 0], ['rest', 8, 8, 0],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 2, 1], [2, 2, 1], [4, 2, 1], [6, 2, 1],
+      [8, 2, 1], [10, 2, 1], [12, 2, 2], [14, 2, 1],
+    ])
+  })
+
+  it('abstains on missing stem ownership, irregular geometry, or meter', () => {
+    const wrongStem = tiedCadenceContinuationFixture({ openingUpperStem: 'down' })
+    const stretched = tiedCadenceContinuationFixture({ gapScale: 1.5 })
+    stretched[2].notes.forEach((note) => { note.cx += 20 })
+    const complete = tiedCadenceContinuationFixture()
+    expect(reconstructTiedCadenceContinuationLattice(wrongStem, 16)).toBe(wrongStem)
+    expect(reconstructTiedCadenceContinuationLattice(stretched, 16)).toBe(stretched)
+    expect(reconstructTiedCadenceContinuationLattice(complete, 12)).toBe(complete)
+  })
+
+  it('removes only the bass stop spilled from three incoming upper ties', () => {
+    const rebuilt = reconstructTiedCadenceContinuationLattice(
+      tiedCadenceContinuationFixture(),
+      16,
+    ).map((event) => {
+      const isUpperOpening = event.type === 'note' && event.startDivision === 0 &&
+        event.sourceVoice !== 5
+      const isBassSpill = event.type === 'note' && event.startDivision === 2 &&
+        event.sourceVoice === 5
+      if (!isUpperOpening && !isBassSpill) return event
+      return {
+        ...event,
+        tieStop: true,
+        notes: event.notes.map((note) => ({ ...note, tieStop: true })),
+      }
+    })
+    const repaired = removeTiedCadenceContinuationBassTieSpillover(rebuilt)
+    const bassStop = repaired.find(
+      (event) => event.sourceVoice === 5 && event.startDivision === 2,
+    )
+    expect(bassStop.tieStop).toBeUndefined()
+    expect(bassStop.notes[0].tieStop).toBeUndefined()
+    expect(repaired.filter(
+      (event) => event.sourceVoice !== 5 && event.startDivision === 0,
+    ).flatMap((event) => event.notes).every((note) => note.tieStop === true)).toBe(true)
   })
 })
 

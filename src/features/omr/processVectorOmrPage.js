@@ -5970,6 +5970,12 @@ const QUARTER_CADENCE_SIXTEENTH_BASS_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const TIED_CADENCE_CONTINUATION_VOICE = Object.freeze({
+  MELODY: 1,
+  UPPER_CHORD: 2,
+  BASS: 5,
+})
+
 /**
  * Recover a quarter-led upper texture whose third beat is a dotted chord plus
  * a sixteenth chord, above an independent quarter/eighth/sixteenth bass lane.
@@ -6573,6 +6579,195 @@ export function removeQuarterCadenceBassTieSpillover(events = []) {
     const nextEvent = { ...event, notes: event.notes.map((note) => ({ ...note })) }
     delete nextEvent.tieStart
     delete nextEvent.notes[0].tieStart
+    return nextEvent
+  })
+}
+
+/**
+ * Recover the source-complete continuation after a tied three-head cadence:
+ * eight melody eighths, the incoming quarter chord, and eight independent bass
+ * eighths. The opening opposing stems, two double-beamed melody heads, closing
+ * mixed bass octave, and transposition-safe pitch contour make this fail closed.
+ */
+export function reconstructTiedCadenceContinuationLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event?.timeModification)
+  ) {
+    return events
+  }
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? [])
+      .filter((note) => Number.isFinite(note.cx))
+      .map((note) => ({ event, note, latticeCx: note.cx })))
+  if (entries.length !== 19 || entries.some((entry) => isOpenNotehead(entry.note))) {
+    return events
+  }
+  const columns = clusterDenseLatticeNotes(entries)
+  if (columns.length !== 8) return events
+  const gaps = columns.slice(1).map((column, index) => column.cx - columns[index].cx)
+  const typicalGap = medianNumber(gaps)
+  if (
+    !(typicalGap > 0) ||
+    gaps.some((gap) => gap < typicalGap * 0.88 || gap > typicalGap * 1.25)
+  ) {
+    return events
+  }
+
+  const trebleByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') !== 'bass',
+  ))
+  const bassByColumn = columns.map((column) => column.entries.filter(
+    (entry) => (entry.note.clef ?? 'treble') === 'bass',
+  ))
+  const expectedTrebleCounts = [3, 1, 1, 1, 1, 1, 1, 1]
+  const expectedBassCounts = [1, 1, 1, 1, 1, 1, 2, 1]
+  if (
+    trebleByColumn.some(
+      (column, index) => column.length !== expectedTrebleCounts[index],
+    ) ||
+    bassByColumn.some(
+      (column, index) => column.length !== expectedBassCounts[index],
+    )
+  ) {
+    return events
+  }
+  const openingTreble = [...trebleByColumn[0]].sort(
+    (left, right) => left.note.midi - right.note.midi,
+  )
+  const melodyEntry = openingTreble[0]
+  const upperChordEntries = openingTreble.slice(1)
+  const trebleMidis = trebleByColumn.map((column) => column
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right))
+  const bassMidis = bassByColumn.map((column) => column
+    .map((entry) => entry.note.midi)
+    .sort((left, right) => left - right))
+  const matchesOffsets = (values, anchor, offsets) =>
+    values.length === offsets.length &&
+    values.every((midi, index) => midi === anchor + offsets[index])
+  const trebleAnchor = trebleMidis[0][0]
+  const bassAnchor = bassMidis[0][0]
+  const treblePitchPattern =
+    matchesOffsets(trebleMidis[0], trebleAnchor, [0, 3, 12]) &&
+    matchesOffsets(trebleMidis[1], trebleAnchor, [3]) &&
+    matchesOffsets(trebleMidis[2], trebleAnchor, [-2]) &&
+    matchesOffsets(trebleMidis[3], trebleAnchor, [-2]) &&
+    matchesOffsets(trebleMidis[4], trebleAnchor, [-4]) &&
+    matchesOffsets(trebleMidis[5], trebleAnchor, [-2]) &&
+    matchesOffsets(trebleMidis[6], trebleAnchor, [0]) &&
+    matchesOffsets(trebleMidis[7], trebleAnchor, [3])
+  const bassPitchPattern =
+    matchesOffsets(bassMidis[0], bassAnchor, [0]) &&
+    matchesOffsets(bassMidis[1], bassAnchor, [-12]) &&
+    matchesOffsets(bassMidis[2], bassAnchor, [-13]) &&
+    matchesOffsets(bassMidis[3], bassAnchor, [-1]) &&
+    matchesOffsets(bassMidis[4], bassAnchor, [-14]) &&
+    matchesOffsets(bassMidis[5], bassAnchor, [-2]) &&
+    matchesOffsets(bassMidis[6], bassAnchor, [-9, 3]) &&
+    matchesOffsets(bassMidis[7], bassAnchor, [-2])
+  if (
+    !treblePitchPattern ||
+    !bassPitchPattern ||
+    noteStemDirection(melodyEntry.note) !== 'down' ||
+    (melodyEntry.note.beams ?? 0) < 2 ||
+    noteStemDirection(upperChordEntries[0].note) !== 'up' ||
+    noteStemDirection(upperChordEntries[1].note) !== 'down' ||
+    trebleByColumn.slice(1).flat().some(
+      (entry) => noteStemDirection(entry.note) !== 'down',
+    ) ||
+    [1, 2].some((index) => (trebleByColumn[index][0].note.beams ?? 0) < 2) ||
+    bassByColumn.slice(0, 6).flat().some(
+      (entry) => noteStemDirection(entry.note) !== 'up',
+    ) ||
+    (bassByColumn[5][0].note.beams ?? 0) < 2 ||
+    stemDirectionShare(bassByColumn[6], 'up') !== 0.5 ||
+    noteStemDirection(bassByColumn[7][0].note) !== 'up'
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const melodyColumns = [[melodyEntry], ...trebleByColumn.slice(1)]
+  for (const [index, column] of melodyColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      index * 2,
+      2,
+      TIED_CADENCE_CONTINUATION_VOICE.MELODY,
+      'tied-cadence-eighth-melody',
+    ))
+  }
+  rebuilt.push(denseLatticeEvent(
+    upperChordEntries,
+    0,
+    4,
+    TIED_CADENCE_CONTINUATION_VOICE.UPPER_CHORD,
+    'tied-cadence-upper-chord',
+  ))
+  for (const [startDivision, durationDivisions] of [[4, 4], [8, 8]]) {
+    rebuilt.push({
+      type: 'rest',
+      clef: 'treble',
+      startDivision,
+      durationDivisions,
+      ...durationMeta(durationDivisions),
+      sourceVoice: TIED_CADENCE_CONTINUATION_VOICE.UPPER_CHORD,
+      sourceVoiceLane: 'tied-cadence-upper-chord',
+      structuralVoiceRest: true,
+    })
+  }
+  for (const [index, column] of bassByColumn.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column,
+      index * 2,
+      2,
+      TIED_CADENCE_CONTINUATION_VOICE.BASS,
+      'bass-eighth-continuation',
+    ))
+  }
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    tiedCadenceContinuationLattice: true,
+  })))
+}
+
+export function removeTiedCadenceContinuationBassTieSpillover(events = []) {
+  if (!events.some((event) => event.tiedCadenceContinuationLattice === true)) {
+    return events
+  }
+  const upperTieStops = events
+    .filter((event) => event.type === 'note' && event.startDivision === 0)
+    .flatMap((event) => event.notes ?? [])
+    .filter((note) => note.clef !== 'bass' && note.tieStop === true)
+  const bassTieStops = events
+    .filter(
+      (event) =>
+        event.type === 'note' &&
+        event.startDivision === 2 &&
+        event.sourceVoice === TIED_CADENCE_CONTINUATION_VOICE.BASS,
+    )
+    .flatMap((event) => event.notes ?? [])
+    .filter((note) => note.tieStop === true)
+  if (upperTieStops.length !== 3 || bassTieStops.length !== 1) {
+    return events
+  }
+  return events.map((event) => {
+    if (
+      event.type !== 'note' ||
+      event.startDivision !== 2 ||
+      event.sourceVoice !== TIED_CADENCE_CONTINUATION_VOICE.BASS ||
+      event.notes?.length !== 1
+    ) {
+      return event
+    }
+    const nextEvent = { ...event, notes: event.notes.map((note) => ({ ...note })) }
+    delete nextEvent.tieStop
+    delete nextEvent.notes[0].tieStop
     return nextEvent
   })
 }
@@ -9902,6 +10097,17 @@ export function buildVectorMeasureRecord({
       { reason: 'source-complete-independent-voice-cursors' },
     )
   }
+  const eventsBeforeTiedCadenceContinuation = events
+  events = reconstructTiedCadenceContinuationLattice(events, totalDivisions)
+  if (provenance && events !== eventsBeforeTiedCadenceContinuation) {
+    provenance.recordStage(
+      'tied-cadence-continuation-lattice',
+      'reconstructTiedCadenceContinuationLattice',
+      eventsBeforeTiedCadenceContinuation,
+      events,
+      { reason: 'source-complete-independent-voice-cursors' },
+    )
+  }
 
   if (provenance) {
     const beamRows = []
@@ -10565,6 +10771,7 @@ export function processVectorPageSystems({
     record.events = completeQuarterRestChordBassTies(record.events)
     record.events = completeSyncopatedQuarterChordBassTies(record.events)
     record.events = removeQuarterCadenceBassTieSpillover(record.events)
+    record.events = removeTiedCadenceContinuationBassTieSpillover(record.events)
   }
 
   return {
