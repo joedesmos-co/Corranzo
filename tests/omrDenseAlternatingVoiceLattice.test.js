@@ -1162,10 +1162,15 @@ describe('reconstructDottedChordOffbeatPairLattice', () => {
   })
 })
 
-function syncopatedChordBassFixture({ missingLowerHead = false, missingBass = false } = {}) {
+function syncopatedChordBassFixture({
+  missingLowerHead = false,
+  missingBass = false,
+  sparse = false,
+  missingSparseMelody = false,
+} = {}) {
   const events = []
   const bassIndexes = new Set([0, 1, 2, 3, 5, 6, 7, 9])
-  const chordIndexes = new Set([0, 1, 2, 4, 5, 7, 9])
+  const chordIndexes = new Set(sparse ? [0, 4, 5, 7] : [0, 1, 2, 4, 5, 7, 9])
   const melodyIndexes = new Set([0, 1, 2, 3, 4, 5, 7, 8, 9, 10])
   for (let index = 0; index < 11; index += 1) {
     const cx = 100 + index * 24
@@ -1175,7 +1180,9 @@ function syncopatedChordBassFixture({ missingLowerHead = false, missingBass = fa
       ], index, 1))
     }
     if (chordIndexes.has(index)) {
-      const lowerCount = index >= 7 || (missingLowerHead && index === 2) ? 1 : 2
+      const lowerCount = sparse
+        ? [0, 7].includes(index) ? 1 : 2
+        : index >= 7 || (missingLowerHead && index === 2) ? 1 : 2
       const notes = Array.from({ length: lowerCount }, (_, noteIndex) => {
         const note = latticeNote({ cx, midi: 62 - noteIndex * 4, stem: 'down' })
         note.beams = index >= 7 ? 2 : 0
@@ -1183,7 +1190,7 @@ function syncopatedChordBassFixture({ missingLowerHead = false, missingBass = fa
       })
       events.push(latticeEvent(notes, index, 1))
     }
-    if (melodyIndexes.has(index)) {
+    if (melodyIndexes.has(index) && !(missingSparseMelody && index === 5)) {
       const note = latticeNote({ cx, midi: 72 - (index % 3), stem: 'up' })
       note.beams = index >= 7 && index <= 9 ? 2 : 0
       events.push(latticeEvent([note], index, 1))
@@ -1217,6 +1224,34 @@ describe('reconstructSyncopatedChordBassOstinatoGrid', () => {
   it('abstains when the complete eight-note bass grid is absent', () => {
     const source = syncopatedChordBassFixture({ missingBass: true })
     expect(reconstructSyncopatedChordBassOstinatoGrid(source, 16)).toBe(source)
+  })
+
+  it.each([
+    ['a complete sparse melody', false],
+    ['one source-visible melody-head miss', true],
+  ])('recovers structural rests for %s', (_label, missingSparseMelody) => {
+    const rebuilt = reconstructSyncopatedChordBassOstinatoGrid(
+      syncopatedChordBassFixture({ sparse: true, missingSparseMelody }),
+      16,
+    )
+
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'note',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [0, 2], [7, 1], [8, 4], [12, 2],
+    ])
+    expect(rebuilt.filter(
+      (event) => event.sourceVoice === 1 && event.type === 'rest',
+    ).map((event) => [event.startDivision, event.durationDivisions])).toEqual([
+      [2, 2], [4, 2], [6, 1], [14, 2],
+    ])
+    const expectedMelodyStarts = missingSparseMelody
+      ? [0, 2, 4, 6, 7, 12, 13, 14, 15]
+      : [0, 2, 4, 6, 7, 8, 12, 13, 14, 15]
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map(
+      (event) => event.startDivision,
+    )).toEqual(expectedMelodyStarts)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(8)
   })
 })
 

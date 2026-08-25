@@ -6925,10 +6925,11 @@ function syncopatedChordBassEvent(
 
 /**
  * Recover an eleven-column grand-staff texture with eight evenly spaced bass
- * eighths, a separately stemmed upper melody, and lower treble chords. The two
- * treble attacks around beat three are one sixteenth tied into one quarter;
- * preserving those source onsets lets the page-level tie pass recover the
- * sounding five-division sustain without collapsing either voice.
+ * eighths, a separately stemmed upper melody, and lower treble chords. Sparse
+ * variants print structural rests in the lower chord lane instead of its early
+ * attacks. The two treble attacks around beat three are one sixteenth tied into
+ * one quarter; preserving those source onsets lets the page-level tie pass
+ * recover the sounding five-division sustain without collapsing either voice.
  */
 export function reconstructSyncopatedChordBassOstinatoGrid(
   events = [],
@@ -6950,7 +6951,9 @@ export function reconstructSyncopatedChordBassOstinatoGrid(
         .filter((note) => Number.isFinite(note.cx))
         .map((note) => ({ event, note, latticeCx }))
     })
-  if (entries.length < 29 || entries.length > 30) return events
+  if (entries.length < 23 || entries.length > 30 || (entries.length > 24 && entries.length < 29)) {
+    return events
+  }
   const columns = clusterDenseLatticeNotes(entries)
   if (columns.length !== 11) return events
 
@@ -6963,9 +6966,12 @@ export function reconstructSyncopatedChordBassOstinatoGrid(
     column.entries.filter((entry) => (entry.note.clef ?? 'treble') === 'bass'),
   )
   const bassIndexes = [0, 1, 2, 3, 5, 6, 7, 9]
-  const chordIndexes = [0, 1, 2, 4, 5, 7, 9]
+  const sparseVariant = entries.length <= 24
+  const chordIndexes = sparseVariant ? [0, 4, 5, 7] : [0, 1, 2, 4, 5, 7, 9]
   const melodyIndexes = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]
-  const expectedTrebleCounts = [3, 3, null, 1, 3, null, 0, 2, 1, 2, 1]
+  const expectedTrebleCounts = sparseVariant
+    ? [2, 1, 1, 1, 3, null, 0, 2, 1, 1, 1]
+    : [3, 3, null, 1, 3, null, 0, 2, 1, 2, 1]
   if (
     bassByColumn.some((column, index) =>
       column.length !== (bassIndexes.includes(index) ? 1 : 0),
@@ -7012,11 +7018,17 @@ export function reconstructSyncopatedChordBassOstinatoGrid(
     ))
   }
 
-  const lowerStarts = [0, 2, 4, 7, 8, 12, 14]
-  const lowerDurations = [2, 2, 3, 1, 4, 2, 2]
-  for (const [position, columnIndex] of chordIndexes.entries()) {
+  const lowerStarts = sparseVariant ? [0, 7, 8, 12] : [0, 2, 4, 7, 8, 12, 14]
+  const lowerDurations = sparseVariant ? [2, 1, 4, 2] : [2, 2, 3, 1, 4, 2, 2]
+  const lowerEntries = chordIndexes.map((columnIndex) => {
+    if (sparseVariant && columnIndex === 5 && trebleByColumn[columnIndex].length === 2) {
+      return trebleByColumn[columnIndex]
+    }
+    return trebleByColumn[columnIndex].slice(1)
+  })
+  for (const [position, columnEntries] of lowerEntries.entries()) {
     rebuilt.push(syncopatedChordBassEvent(
-      trebleByColumn[columnIndex].slice(1),
+      columnEntries,
       lowerStarts[position],
       lowerDurations[position],
       SYNCOPATED_CHORD_BASS_VOICE.LOWER_CHORD,
@@ -7024,9 +7036,29 @@ export function reconstructSyncopatedChordBassOstinatoGrid(
     ))
   }
 
+  if (sparseVariant) {
+    for (const [startDivision, durationDivisions] of [[2, 2], [4, 2], [6, 1], [14, 2]]) {
+      rebuilt.push({
+        type: 'rest',
+        clef: 'treble',
+        startDivision,
+        durationDivisions,
+        ...durationMeta(durationDivisions),
+        sourceVoice: SYNCOPATED_CHORD_BASS_VOICE.LOWER_CHORD,
+        sourceVoiceLane: 'lower-treble-chords',
+        structuralVoiceRest: true,
+        syncopatedChordBassOstinatoGrid: true,
+      })
+    }
+  }
+
   const melodyStarts = [0, 2, 4, 6, 7, 8, 12, 13, 14, 15]
   const melodyDurations = [2, 2, 2, 1, 1, 4, 1, 1, 1, 1]
-  for (const [position, columnIndex] of melodyIndexes.entries()) {
+  const presentMelodyIndexes = sparseVariant && trebleByColumn[5].length === 2
+    ? melodyIndexes.filter((index) => index !== 5)
+    : melodyIndexes
+  for (const columnIndex of presentMelodyIndexes) {
+    const position = melodyIndexes.indexOf(columnIndex)
     rebuilt.push(syncopatedChordBassEvent(
       trebleByColumn[columnIndex].slice(0, 1),
       melodyStarts[position],
