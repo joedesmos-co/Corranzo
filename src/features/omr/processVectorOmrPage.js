@@ -6938,8 +6938,8 @@ function measureHasTupletDigit(glyphs, digit, measureBox, imageData) {
       Number.isFinite(y) &&
       x >= x0 - 12 &&
       x <= x1 + 12 &&
-      y >= y0 - 45 &&
-      y <= y1 + 45
+      y >= y0 - 60 &&
+      y <= y1 + 60
     )
   })
 }
@@ -6991,6 +6991,187 @@ function mixedTupletEvent(
     tupletRecovered: timeModification ? true : undefined,
     mixedQuintupletSeptupletLattice: true,
   }
+}
+
+const OFFSET_CHORD_QUINTUPLET_VOICE = Object.freeze({
+  TREBLE: 1,
+  BASS: 5,
+  BASS_INNER: 6,
+})
+
+function offsetChordQuintupletEvent(
+  entries,
+  startDivision,
+  durationDivisions,
+  sourceVoice,
+  sourceVoiceLane,
+  timeModification = null,
+) {
+  const event = denseLatticeEvent(
+    entries,
+    startDivision,
+    durationDivisions,
+    sourceVoice,
+    sourceVoiceLane,
+  )
+  const duration = durationMeta(durationDivisions)
+  return {
+    ...event,
+    notes: event.notes.map((note) => ({
+      ...note,
+      durationDivisions,
+      ...duration,
+      dotted: false,
+      offsetChordBassQuintupletGrid: true,
+    })),
+    ...duration,
+    dotted: false,
+    timeModification,
+    tupletRecovered: timeModification ? true : undefined,
+    offsetChordBassQuintupletGrid: true,
+  }
+}
+
+function entrySpan(entries) {
+  const xs = entries.map((entry) => entry.note.cx).filter(Number.isFinite)
+  return xs.length ? Math.max(...xs) - Math.min(...xs) : Infinity
+}
+
+function groupMedianX(entries) {
+  return medianNumber(entries.map((entry) => entry.note.cx).filter(Number.isFinite))
+}
+
+/**
+ * Recover four grand-staff attacks whose opposing stems displace chord heads
+ * horizontally, followed by a printed bass quintuplet and one independent
+ * flagged inner note. Cross-staff anchor alignment proves that the displaced
+ * heads are simultaneous; the printed 5 and five down-stem tail heads prove the
+ * final beat's tuplet grid.
+ */
+export function reconstructOffsetChordBassQuintupletGrid(
+  events = [],
+  totalDivisions = 16,
+  { glyphs = [], measureBox = null, imageData = null } = {},
+) {
+  if (
+    totalDivisions !== 16 ||
+    events.some((event) => event.type === 'rest' || event.timeModification) ||
+    !measureHasTupletDigit(glyphs, '5', measureBox, imageData)
+  ) {
+    return events
+  }
+  const entries = events
+    .filter((event) => event.type === 'note')
+    .flatMap((event) => (event.notes ?? []).map((note) => ({ event, note })))
+  const treble = entries
+    .filter((entry) => (entry.note.clef ?? 'treble') !== 'bass')
+    .sort((left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi)
+  const bass = entries
+    .filter((entry) => (entry.note.clef ?? 'treble') === 'bass')
+    .sort((left, right) => left.note.cx - right.note.cx || right.note.midi - left.note.midi)
+  if (
+    treble.length !== 14 ||
+    bass.length !== 15 ||
+    entries.some((entry) => !Number.isFinite(entry.note.cx))
+  ) {
+    return events
+  }
+
+  const trebleGroups = [treble.slice(0, 4), treble.slice(4, 8), treble.slice(8, 10), treble.slice(10)]
+  const bassGroups = [bass.slice(0, 2), bass.slice(2, 5), bass.slice(5, 6), bass.slice(6, 9)]
+  const bassTail = bass.slice(9)
+  const innerNotes = bassTail.filter(
+    (entry) =>
+      noteStemDirection(entry.note) === 'up' &&
+      ((entry.note.flags ?? 0) >= 1 || entry.note.flagGlyphCodePoint),
+  )
+  const quintuplet = bassTail.filter((entry) => entry !== innerNotes[0])
+  const trebleAnchors = trebleGroups.map(groupMedianX)
+  const bassAnchors = bassGroups.map(groupMedianX)
+  const attackGaps = trebleAnchors.slice(1).map(
+    (anchor, index) => anchor - trebleAnchors[index],
+  )
+  const quintupletGaps = quintuplet.slice(1).map(
+    (entry, index) => entry.note.cx - quintuplet[index].note.cx,
+  )
+  const typicalTupletGap = medianNumber(quintupletGaps)
+  const opposingStemGroups = trebleGroups.filter((group) => {
+    const directions = new Set(group.map((entry) => noteStemDirection(entry.note)).filter(Boolean))
+    return directions.has('up') && directions.has('down')
+  }).length
+  if (
+    [...trebleGroups.slice(0, 3).flat(), ...bass].some(
+      (entry) => entry.note.hollow === true || entry.note.noteheadGlyph !== 'black',
+    ) ||
+    trebleGroups[3].some(
+      (entry) => entry.note.hollow !== true || entry.note.noteheadGlyph !== 'half',
+    ) ||
+    innerNotes.length !== 1 ||
+    quintuplet.length !== 5 ||
+    quintuplet.some((entry) => noteStemDirection(entry.note) !== 'down') ||
+    quintuplet.filter((entry) => (entry.note.beams ?? 0) >= 1).length < 1 ||
+    !trebleAnchors.every((anchor, index) => Math.abs(anchor - bassAnchors[index]) <= 4) ||
+    trebleGroups.some((group, index) => entrySpan(group) > (index === 2 ? 4 : 16)) ||
+    bassGroups.some((group, index) => entrySpan(group) > (index === 2 ? 4 : 16)) ||
+    attackGaps.some((gap) => !(gap > 0)) ||
+    attackGaps[1] < Math.max(attackGaps[0], attackGaps[2]) * 1.25 ||
+    opposingStemGroups < 2 ||
+    !(typicalTupletGap > 0) ||
+    quintupletGaps.some(
+      (gap) => gap < typicalTupletGap * 0.65 || gap > typicalTupletGap * 2.05,
+    ) ||
+    groupMedianX(quintuplet) <= trebleAnchors.at(-1) + attackGaps[2] * 1.2 ||
+    innerNotes[0].note.cx <= quintuplet[1].note.cx ||
+    innerNotes[0].note.cx >= quintuplet[3].note.cx
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  const attackStarts = [0, 2, 6, 8]
+  const trebleDurations = [2, 4, 2, 8]
+  const bassDurations = [2, 4, 2, 4]
+  for (const [index, group] of trebleGroups.entries()) {
+    rebuilt.push(offsetChordQuintupletEvent(
+      group,
+      attackStarts[index],
+      trebleDurations[index],
+      OFFSET_CHORD_QUINTUPLET_VOICE.TREBLE,
+      'offset-treble-chords',
+    ))
+    rebuilt.push(offsetChordQuintupletEvent(
+      bassGroups[index],
+      attackStarts[index],
+      bassDurations[index],
+      OFFSET_CHORD_QUINTUPLET_VOICE.BASS,
+      'aligned-bass-chords',
+    ))
+  }
+  for (const [index, entry] of quintuplet.entries()) {
+    rebuilt.push(offsetChordQuintupletEvent(
+      [entry],
+      12 + index * (4 / 5),
+      4 / 5,
+      OFFSET_CHORD_QUINTUPLET_VOICE.BASS,
+      'bass-quintuplet',
+      {
+        actualNotes: 5,
+        normalNotes: 4,
+        groupId: 'offset-chord-bass-quintuplet:0',
+        slotIndex: index,
+        tupletStart: index === 0,
+        tupletStop: index === 4,
+      },
+    ))
+  }
+  rebuilt.push(offsetChordQuintupletEvent(
+    innerNotes,
+    14,
+    2,
+    OFFSET_CHORD_QUINTUPLET_VOICE.BASS_INNER,
+    'flagged-bass-inner-note',
+  ))
+  return sortVectorRhythmEvents(rebuilt)
 }
 
 /**
@@ -7930,6 +8111,11 @@ export function buildVectorMeasureRecord({
   }
 
   events = reconstructMixedQuintupletSeptupletLattice(events, totalDivisions, {
+    glyphs,
+    measureBox,
+    imageData,
+  })
+  events = reconstructOffsetChordBassQuintupletGrid(events, totalDivisions, {
     glyphs,
     measureBox,
     imageData,

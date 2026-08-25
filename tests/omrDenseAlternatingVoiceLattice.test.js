@@ -12,6 +12,7 @@ import {
   reconstructHalfMelodyChordCadenceGrid,
   reconstructHalfSustainSixteenthCadenceGrid,
   reconstructMixedQuintupletSeptupletLattice,
+  reconstructOffsetChordBassQuintupletGrid,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructTripletMelodyOverprintLattice,
@@ -398,6 +399,7 @@ describe('reconstructMixedQuintupletSeptupletLattice', () => {
       measures: [{ measureNumber: 1, events: rebuilt }],
       includeDisclaimer: false,
     })
+    expect(xml).toContain('<divisions>140</divisions>')
     expect(xml).toContain('<actual-notes>5</actual-notes>')
     expect(xml).toContain('<actual-notes>7</actual-notes>')
   })
@@ -1147,6 +1149,107 @@ describe('reconstructSyncopatedChordBassOstinatoGrid', () => {
   it('abstains when the complete eight-note bass grid is absent', () => {
     const source = syncopatedChordBassFixture({ missingBass: true })
     expect(reconstructSyncopatedChordBassOstinatoGrid(source, 16)).toBe(source)
+  })
+})
+
+function offsetChordBassQuintupletFixture({ incompleteChord = false } = {}) {
+  const events = []
+  const trebleGroups = [
+    [100, 110, 110, 110],
+    [140, 150, 150, 150],
+    [215, 215],
+    [255, 265, 265, 265],
+  ]
+  const bassGroups = [
+    [110, 110],
+    [150, 150, 150],
+    [215],
+    [255, 265, 265],
+  ]
+  for (const [groupIndex, xs] of trebleGroups.entries()) {
+    const notes = xs.map((cx, noteIndex) => {
+      const note = latticeNote({
+        cx,
+        midi: 84 - groupIndex * 2 - noteIndex * 4,
+        stem: noteIndex === 0 ? 'down' : 'up',
+      })
+      if (groupIndex === 3) {
+        note.noteheadGlyph = 'half'
+        note.hollow = true
+        note.durationType = 'half'
+        note.durationDivisions = 8
+      }
+      note.beams = noteIndex === xs.length - 1 ? 2 : 0
+      return note
+    })
+    if (incompleteChord && groupIndex === 1) notes.pop()
+    events.push(latticeEvent(notes, groupIndex * 2, 1))
+  }
+  for (const [groupIndex, xs] of bassGroups.entries()) {
+    events.push(latticeEvent(xs.map((cx, noteIndex) => latticeNote({
+      cx,
+      midi: 48 - groupIndex * 2 - noteIndex * 7,
+      clef: 'bass',
+      stem: noteIndex === 0 ? 'down' : 'up',
+    })), groupIndex * 2, 1))
+  }
+  for (const [index, cx] of [310, 330, 350, 390, 410].entries()) {
+    const note = latticeNote({ cx, midi: 45 - index * 3, clef: 'bass', stem: 'down' })
+    note.beams = index === 1 || index === 3 ? 2 : 0
+    events.push(latticeEvent([note], 10 + index, 1))
+  }
+  const inner = latticeNote({ cx: 360, midi: 43, clef: 'bass', stem: 'up' })
+  inner.flags = 1
+  events.push(latticeEvent([inner], 13, 1))
+  return events
+}
+
+const offsetChordTupletSource = {
+  glyphs: [{ text: '5', x: 360, y: 235 }],
+  measureBox: { x0: 0, x1: 440, y0: 0, y1: 180 },
+  imageData: { width: 440, height: 260 },
+}
+
+describe('reconstructOffsetChordBassQuintupletGrid', () => {
+  it('recovers aligned displaced chords, the printed quintuplet, and its inner note', () => {
+    const rebuilt = reconstructOffsetChordBassQuintupletGrid(
+      offsetChordBassQuintupletFixture(),
+      16,
+      offsetChordTupletSource,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([[0, 2, 4], [2, 4, 4], [6, 2, 2], [8, 8, 4]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(9)
+    expect(rebuilt.filter((event) => event.timeModification).map((event) =>
+      event.timeModification.slotIndex)).toEqual([0, 1, 2, 3, 4])
+    expect(rebuilt.find((event) => event.sourceVoice === 6)).toMatchObject({
+      startDivision: 14,
+      durationDivisions: 2,
+    })
+    const xml = buildOmrMusicXml({
+      measures: [{ measureNumber: 1, events: rebuilt }],
+      includeDisclaimer: false,
+    })
+    expect(xml).toContain('<divisions>20</divisions>')
+    expect(xml).toContain('<duration>4</duration>')
+  })
+
+  it('abstains without the printed 5 or with an incomplete source chord', () => {
+    const complete = offsetChordBassQuintupletFixture()
+    expect(reconstructOffsetChordBassQuintupletGrid(complete, 16, {
+      ...offsetChordTupletSource,
+      glyphs: [],
+    })).toBe(complete)
+    const incomplete = offsetChordBassQuintupletFixture({ incompleteChord: true })
+    expect(reconstructOffsetChordBassQuintupletGrid(
+      incomplete,
+      16,
+      offsetChordTupletSource,
+    )).toBe(incomplete)
   })
 })
 

@@ -76,6 +76,29 @@ function durationTypeForDivisions(durationDivisions, dotted) {
   return TYPE_BY_DIVISIONS[base] ?? 'quarter'
 }
 
+function greatestCommonDivisor(left, right) {
+  let a = Math.abs(Math.trunc(left))
+  let b = Math.abs(Math.trunc(right))
+  while (b) {
+    const remainder = a % b
+    a = b
+    b = remainder
+  }
+  return a || 1
+}
+
+function leastCommonMultiple(left, right) {
+  return Math.abs(left * right) / greatestCommonDivisor(left, right)
+}
+
+function tupletDivisionScale(measures) {
+  const actualNoteCounts = measures
+    .flatMap((measure) => measure.events ?? [])
+    .map((event) => Number(event.timeModification?.actualNotes))
+    .filter((value) => Number.isInteger(value) && value > 1)
+  return actualNoteCounts.reduce(leastCommonMultiple, 1)
+}
+
 function beamLevelFromValue(value) {
   if (Number.isFinite(value)) {
     return Math.max(0, Math.round(value))
@@ -710,16 +733,10 @@ export function buildOmrMusicXml({
     ? `<clef-octave-change>${writtenOctaveOffset}</clef-octave-change>`
     : ''
 
-  const hasTuplets = sortedMeasures.some((measure) =>
-    (measure.events ?? []).some(
-      (event) =>
-        event.timeModification?.actualNotes &&
-        event.timeModification?.normalNotes,
-    ),
-  )
-  // Triplet eighths need integer sounding durations (truth uses divisions=12,
-  // duration=4). Scale the internal divisions=4 grid by 3 when tuplets appear.
-  const divisionScale = hasTuplets ? 3 : 1
+  // Tuplet sounding durations must remain integral in MusicXML. A fixed triplet
+  // scale rounds 5:4 and 7:4 grids; the LCM preserves every source-proven tuplet
+  // denominator while leaving ordinary and triplet-only documents unchanged.
+  const divisionScale = tupletDivisionScale(sortedMeasures)
   const xmlDivisions = OMR_DIVISIONS_PER_QUARTER * divisionScale
   const grandStaff = shouldEmitGrandStaffMusicXml(sortedMeasures, instrument)
   const clefXml = grandStaff
