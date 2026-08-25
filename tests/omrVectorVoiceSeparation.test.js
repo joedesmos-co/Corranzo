@@ -8,6 +8,7 @@ import {
   notesShareStemComponent,
   partitionSameOnsetWrittenVoiceEvents,
   reassignInterstaffBoundaryCohorts,
+  reconstructWholeSustainEighthLattice,
   reconcileSeparatedWrittenVoiceEvents,
   resolveWrittenDurationOverlaps,
   resnapDenseChordOnsets,
@@ -244,6 +245,164 @@ describe('vector mixed-written voice separation', () => {
       durationDivisions: 16,
       durationType: 'whole',
     })
+  })
+
+  it('ignores an adjacent moving stem falsely probed through a whole-note head', () => {
+    const sharedProbe = sourceStem({ x: 21, tipY: 15, cy: 45, direction: 'up' })
+    const whole = sourceNote({
+      midi: 52,
+      cx: 17,
+      cy: 52,
+      positionInMeasure: 0,
+      glyph: 'whole',
+      duration: 16,
+      durationType: 'whole',
+      stem: { ...sharedProbe, length: 37 },
+    })
+    const moving = sourceNote({
+      midi: 56,
+      cx: 17,
+      cy: 45,
+      positionInMeasure: 0,
+      glyph: 'black',
+      duration: 2,
+      durationType: 'eighth',
+      stem: { ...sharedProbe },
+      beams: 1,
+    })
+
+    expect(notesShareStemComponent(whole, moving)).toBe(true)
+    const partitioned = partitionSameOnsetWrittenVoiceEvents(
+      [mixedEvent([whole, moving])],
+      16,
+    )
+    expect(partitioned.map((event) => [
+      event.vectorVoiceLane,
+      event.durationDivisions,
+      event.notes.map((note) => note.midi),
+    ])).toEqual([
+      ['sustain', 16, [52]],
+      ['moving', 2, [56]],
+    ])
+  })
+
+  it('reconstructs a complete paired eighth lattice above a whole sustain', () => {
+    const approximateStarts = [0, 3, 5, 7, 9, 11, 13, 14]
+    const whole = sourceNote({
+      midi: 52,
+      cx: 20,
+      cy: 52,
+      positionInMeasure: 0,
+      glyph: 'whole',
+      duration: 16,
+      durationType: 'whole',
+      stem: sourceStem({ x: 24, tipY: 15, cy: 52 }),
+    })
+    const bass = Array.from({ length: 8 }, (_, index) => sourceNote({
+      midi: 56 + index,
+      cx: 20 + index * 18,
+      cy: 45,
+      positionInMeasure: approximateStarts[index] / 16,
+      glyph: 'black',
+      duration: index < 2 ? 1 : 4,
+      durationType: index < 2 ? 'sixteenth' : 'quarter',
+      stem: sourceStem({ x: 24 + index * 18, tipY: 15, cy: 45 }),
+      beams: index < 2 ? 2 : 0,
+    }))
+    const treble = Array.from({ length: 8 }, (_, index) => sourceNote({
+      midi: 72 + index,
+      cx: 20 + index * 18,
+      cy: 20,
+      positionInMeasure: approximateStarts[index] / 16,
+      glyph: 'black',
+      duration: 2,
+      durationType: 'eighth',
+      clef: 'treble',
+      stem: sourceStem({ x: 24 + index * 18, tipY: 2, cy: 20 }),
+      beams: 1,
+    }))
+    const opening = partitionSameOnsetWrittenVoiceEvents(
+      [mixedEvent([whole, bass[0]])],
+      16,
+    )
+    const events = [
+      ...opening,
+      { ...mixedEvent([treble[0]], approximateStarts[0]), cx: treble[0].cx },
+      ...bass.slice(1).flatMap((note, index) => [
+        { ...mixedEvent([note], approximateStarts[index + 1]), cx: note.cx },
+        {
+          ...mixedEvent([treble[index + 1]], approximateStarts[index + 1]),
+          cx: treble[index + 1].cx,
+        },
+      ]),
+    ]
+
+    const reconstructed = reconstructWholeSustainEighthLattice(events, 16)
+    const moving = reconstructed.filter((event) => event.vectorVoiceLane !== 'sustain')
+    expect([...new Set(moving.map((event) => event.startDivision))]).toEqual([
+      0, 2, 4, 6, 8, 10, 12, 14,
+    ])
+    expect(moving.every((event) => event.durationDivisions === 2)).toBe(true)
+    expect(
+      moving.find((event) => event.vectorVoiceLane === 'moving'),
+    ).toMatchObject({
+      vectorVoiceSourceStartDivision: 0,
+      vectorVoiceWrittenDurationDivisions: 2,
+    })
+    expect(
+      reconstructed.find((event) => event.vectorVoiceLane === 'sustain'),
+    ).toMatchObject({ durationDivisions: 16 })
+  })
+
+  it('abstains from whole-sustain lattice recovery for uneven or single-clef columns', () => {
+    const latticeEvent = (index, clef, cx = 20 + index * 18) => {
+      const note = sourceNote({
+        midi: 56 + index,
+        cx,
+        cy: clef === 'treble' ? 20 : 45,
+        positionInMeasure: index / 8,
+        glyph: 'black',
+        duration: 2,
+        durationType: 'eighth',
+        clef,
+        stem: sourceStem({ x: cx + 4, tipY: 2, cy: clef === 'treble' ? 20 : 45 }),
+        beams: 1,
+      })
+      return { ...mixedEvent([note], index * 2), cx }
+    }
+    const sustain = {
+      ...mixedEvent([sourceNote({
+        midi: 52,
+        cx: 20,
+        cy: 52,
+        positionInMeasure: 0,
+        glyph: 'whole',
+        duration: 16,
+        durationType: 'whole',
+        stem: null,
+      })]),
+      vectorVoiceLane: 'sustain',
+      vectorVoiceSeparated: true,
+    }
+    const paired = Array.from({ length: 8 }, (_, index) => [
+      latticeEvent(index, 'bass'),
+      latticeEvent(index, 'treble'),
+    ]).flat()
+    const uneven = [sustain, ...paired.map((event, index) =>
+      index >= 14
+        ? { ...event, cx: event.cx + 20, notes: event.notes.map((note) => ({ ...note, cx: note.cx + 20 })) }
+        : event,
+    )]
+    expect(reconstructWholeSustainEighthLattice(uneven, 16)).toBe(uneven)
+
+    const singleClef = [
+      sustain,
+      ...Array.from({ length: 8 }, (_, index) => [
+        latticeEvent(index, 'bass'),
+        latticeEvent(index, 'bass'),
+      ]).flat(),
+    ]
+    expect(reconstructWholeSustainEighthLattice(singleClef, 16)).toBe(singleClef)
   })
 
   it('preserves a source-dotted sustained voice and its tie against moving notes', () => {

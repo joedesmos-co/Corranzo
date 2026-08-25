@@ -2014,10 +2014,15 @@ function partitionColumnId(event) {
 }
 
 function cohortsHaveDistinctStemComponents(openNotes, filledNotes) {
-  const openAreStemlessWholes = openNotes.every(
-    (note) => note.noteheadGlyph === 'whole' && !note.stem,
+  const openAreWholes = openNotes.every(
+    (note) => note.noteheadGlyph === 'whole',
   )
-  if (openAreStemlessWholes) {
+  if (openAreWholes) {
+    // A source-proven whole-note head is stemless by definition. When it sits a
+    // staff step from a filled moving voice, the local stem probe can claim the
+    // neighbor's stem even though that ink cannot belong to the whole note.
+    // Keep the filled cohort requirement so disconnected nearby attacks still
+    // abstain instead of being invented as one moving voice.
     return (
       filledNotes.every((note) => Boolean(note.stem)) &&
       cohortHasOneStemComponent(filledNotes)
@@ -2072,7 +2077,8 @@ function buildWrittenVoicePartitionEvent(
 /**
  * Turn a provisional same-onset column into independent events only when every
  * member is an explicit vector open/black head, the two written values conflict,
- * and local stem geometry proves two disconnected source components.
+ * and local source geometry proves independent components. Whole-note glyphs
+ * are inherently stemless, so an incidental neighbor stem probe is ignored.
  */
 export function partitionSameOnsetWrittenVoiceEvents(
   events = [],
@@ -2159,6 +2165,105 @@ export function partitionSameOnsetWrittenVoiceEvents(
     changed = true
   }
   return changed ? sortVectorRhythmEvents(partitioned) : events
+}
+
+/**
+ * Recover two aligned eighth-note lines above a source-proven whole sustain.
+ *
+ * The complete pattern is deliberately strict: 4/4, one separated whole-note
+ * sustain, eight evenly spaced source columns, and exactly one black head from
+ * each grand-staff clef in every column. That paired lattice owns the moving
+ * voices' onset and written eighth value even when local beam probes mistake an
+ * endpoint for a sixteenth or quarter. Incomplete, uneven, or single-staff
+ * textures abstain.
+ */
+export function reconstructWholeSustainEighthLattice(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 4) return events
+  const noteEvents = events.filter((event) => event?.type === 'note')
+  const sustains = noteEvents.filter(
+    (event) =>
+      event.vectorVoiceLane === 'sustain' &&
+      event.vectorVoiceSeparated === true &&
+      (event.startDivision ?? 0) === 0 &&
+      (event.notes?.length ?? 0) >= 1 &&
+      event.notes.every((note) => note.noteheadGlyph === 'whole'),
+  )
+  if (sustains.length !== 1) return events
+  const sustain = sustains[0]
+  const moving = noteEvents.filter((event) => event !== sustain)
+  if (
+    moving.length !== 16 ||
+    moving.some(
+      (event) =>
+        event.timeModification ||
+        event.tupletRecovered ||
+        event.notes?.length !== 1 ||
+        event.notes[0]?.noteheadGlyph !== 'black' ||
+        event.notes[0]?.dotted === true ||
+        !Number.isFinite(sourceXForEvent(event)),
+    )
+  ) {
+    return events
+  }
+
+  const ordered = [...moving].sort(
+    (left, right) => sourceXForEvent(left) - sourceXForEvent(right),
+  )
+  const columns = []
+  for (const event of ordered) {
+    const x = sourceXForEvent(event)
+    const last = columns.at(-1)
+    if (!last || Math.abs(x - last.x) > 1.5) {
+      columns.push({ x, events: [event] })
+      continue
+    }
+    last.events.push(event)
+    last.x = average(last.events.map(sourceXForEvent))
+  }
+  if (
+    columns.length !== 8 ||
+    columns.some((column) => {
+      const clefs = new Set(column.events.map(eventStaffClef))
+      return (
+        column.events.length !== 2 ||
+        clefs.size !== 2 ||
+        !clefs.has('treble') ||
+        !clefs.has('bass')
+      )
+    })
+  ) {
+    return events
+  }
+  const gaps = columns.slice(1).map((column, index) => column.x - columns[index].x)
+  const minGap = Math.min(...gaps)
+  const maxGap = Math.max(...gaps)
+  if (!(minGap > 5) || maxGap / minGap > 1.2) return events
+
+  const replacementByEvent = new Map()
+  columns.forEach((column, index) => {
+    const startDivision = index * OMR_DURATION_DIVISIONS.eighth
+    for (const event of column.events) {
+      replacementByEvent.set(event, {
+        ...event,
+        startDivision,
+        durationDivisions: OMR_DURATION_DIVISIONS.eighth,
+        ...durationMeta(OMR_DURATION_DIVISIONS.eighth),
+        wholeSustainEighthLatticeReconstructed: true,
+        ...(event.vectorVoiceSeparated === true
+          ? {
+              vectorVoiceSourceStartDivision: startDivision,
+              vectorVoiceWrittenDurationDivisions: OMR_DURATION_DIVISIONS.eighth,
+            }
+          : {}),
+      })
+    }
+  })
+  return sortVectorRhythmEvents(
+    events.map((event) => replacementByEvent.get(event) ?? event),
+  )
 }
 
 function hasExplicitVectorVoicePartition(events = []) {
@@ -5270,6 +5375,11 @@ function buildNoteEventsFromGroups(
       packJointPolyphonicRhythm(events, { totalDivisions }).events,
     )
   }
+  events = track(
+    'whole-sustain-eighth-lattice',
+    'reconstructWholeSustainEighthLattice',
+    () => reconstructWholeSustainEighthLattice(events, totalDivisions),
+  )
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),
   )
