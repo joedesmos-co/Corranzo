@@ -14,6 +14,7 @@ import {
   hasBeamEvidenceForNotes,
   isDenseSubdivisionRun,
   normalizeDenseVectorLaneSpacing,
+  normalizeVectorNoteNameNoteheads,
   openingBassSubdivisionCap,
   openingBassChordSustainSpan,
   refineEventDurationsFromBeamEvidence,
@@ -38,6 +39,68 @@ import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 
 const measureBox = { measureNumber: 1, page: 1 }
+
+describe('normalizeVectorNoteNameNoteheads', () => {
+  const glyph = (text, x = 100, y = 200) => ({
+    text,
+    x,
+    y,
+    fontName: 'smufl-test',
+  })
+
+  it('normalizes named whole, half, and black heads to canonical noteheads', () => {
+    const normalized = normalizeVectorNoteNameNoteheads([
+      glyph('\ue1ad', 100),
+      glyph('\ue170', 100), // C sharp whole
+      glyph('\ue1ae', 200),
+      glyph('\ue18a', 200), // D sharp half
+      glyph('\ue1af', 300),
+      glyph('\ue1a3', 300), // E black
+    ])
+
+    expect(normalized.map((entry) => entry.text)).toEqual([
+      '\ue0a2',
+      '\ue0a3',
+      '\ue0a4',
+    ])
+    expect(normalized.map((entry) => entry.noteNameEmbeddedAlter)).toEqual([1, 1, 0])
+    expect(normalized.map((entry) => entry.originalNoteNameText)).toEqual([
+      '\ue170',
+      '\ue18a',
+      '\ue1a3',
+    ])
+  })
+
+  it('collapses only the matching empty-head overlay at the same source anchor', () => {
+    const normalized = normalizeVectorNoteNameNoteheads([
+      glyph('\ue1ae'),
+      glyph('\ue187'),
+      glyph('\ue1ae', 140),
+    ])
+
+    expect(normalized).toHaveLength(2)
+    expect(normalized[0]).toMatchObject({
+      text: '\ue0a3',
+      originalNoteNameText: '\ue187',
+      noteNameEmbeddedAlter: 1,
+    })
+    expect(normalized[1]).toMatchObject({
+      text: '\ue1ae',
+    })
+  })
+
+  it('keeps unpaired private-use glyphs, ordinary heads, and other symbols unchanged', () => {
+    const unpairedNamed = glyph('\ue187', 80)
+    const ordinary = glyph('\ue0a3')
+    const accidental = glyph('\ue262', 120)
+    const normalized = normalizeVectorNoteNameNoteheads([
+      unpairedNamed,
+      ordinary,
+      accidental,
+    ])
+    expect(normalized).toEqual([unpairedNamed, ordinary, accidental])
+  })
+})
 
 function onsets(positions) {
   return positions.map(({ x, positionInMeasure, clef = 'treble', midi = 60 + x }) => ({

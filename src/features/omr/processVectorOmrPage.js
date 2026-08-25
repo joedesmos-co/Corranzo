@@ -84,6 +84,112 @@ const WHOLE_NOTEHEAD_GLYPH = '\ue0a2'
 const BLACK_NOTEHEAD_GLYPH = '\ue0a4'
 const NOTEHEAD_GLYPHS = new Set([HALF_NOTEHEAD_GLYPH, WHOLE_NOTEHEAD_GLYPH, BLACK_NOTEHEAD_GLYPH])
 
+// SMuFL's note-name noteheads are semantic noteheads, not annotations. They
+// cover solfege and letter-name variants in whole, half, and black forms. Some
+// exporters overlay a named glyph with the matching `noteEmpty*` glyph at the
+// exact same origin, so normalize the family before measure assignment and
+// collapse only that source-explicit duplicate.
+const NOTE_NAME_NOTEHEAD_START = 0xe150
+const NOTE_NAME_NOTEHEAD_END = 0xe1af
+const NOTE_NAME_EMPTY_CODEPOINTS = new Set([0xe1ad, 0xe1ae, 0xe1af])
+
+function noteNameNoteheadInfo(text) {
+  if (typeof text !== 'string' || text.length !== 1) return null
+  const codepoint = text.codePointAt(0)
+  if (codepoint < NOTE_NAME_NOTEHEAD_START || codepoint > NOTE_NAME_NOTEHEAD_END) {
+    return null
+  }
+
+  let kind = null
+  if (
+    (codepoint >= 0xe150 && codepoint <= 0xe157) ||
+    (codepoint >= 0xe168 && codepoint <= 0xe17e) ||
+    codepoint === 0xe1ad
+  ) {
+    kind = 'whole'
+  } else if (
+    (codepoint >= 0xe158 && codepoint <= 0xe15f) ||
+    (codepoint >= 0xe17f && codepoint <= 0xe195) ||
+    codepoint === 0xe1ae
+  ) {
+    kind = 'half'
+  } else if (
+    (codepoint >= 0xe160 && codepoint <= 0xe167) ||
+    (codepoint >= 0xe196 && codepoint <= 0xe1ac) ||
+    codepoint === 0xe1af
+  ) {
+    kind = 'black'
+  }
+  if (!kind) return null
+
+  let embeddedAlter = null
+  for (const start of [0xe168, 0xe17f, 0xe196]) {
+    if (codepoint >= start && codepoint <= start + 20) {
+      embeddedAlter = [-1, 0, 1][(codepoint - start) % 3]
+      break
+    }
+  }
+  // SMuFL's H/H-sharp pairs follow the seven A-G triplets.
+  if ([0xe17d, 0xe194, 0xe1ab].includes(codepoint)) embeddedAlter = 0
+  if ([0xe17e, 0xe195, 0xe1ac].includes(codepoint)) embeddedAlter = 1
+
+  return {
+    kind,
+    canonicalGlyph:
+      kind === 'whole'
+        ? WHOLE_NOTEHEAD_GLYPH
+        : kind === 'half'
+          ? HALF_NOTEHEAD_GLYPH
+          : BLACK_NOTEHEAD_GLYPH,
+    embeddedAlter,
+    empty: NOTE_NAME_EMPTY_CODEPOINTS.has(codepoint),
+  }
+}
+
+function noteNameAnchorKey(glyph, kind) {
+  return [
+    glyph.fontName ?? '',
+    kind,
+    Math.round((glyph.x ?? 0) * 4),
+    Math.round((glyph.y ?? 0) * 4),
+  ].join(':')
+}
+
+export function normalizeVectorNoteNameNoteheads(glyphs = []) {
+  const namedAnchors = new Set()
+  const emptyAnchors = new Set()
+  for (const glyph of glyphs) {
+    const info = noteNameNoteheadInfo(glyph.text)
+    if (!info) continue
+    const key = noteNameAnchorKey(glyph, info.kind)
+    if (info.empty) {
+      emptyAnchors.add(key)
+    } else {
+      namedAnchors.add(key)
+    }
+  }
+
+  return glyphs.flatMap((glyph) => {
+    const info = noteNameNoteheadInfo(glyph.text)
+    if (!info) return [glyph]
+    const key = noteNameAnchorKey(glyph, info.kind)
+    if (info.empty && namedAnchors.has(key)) {
+      return []
+    }
+    // Paired `noteEmpty*` + named heads are the source fingerprint emitted by
+    // exporters using this SMuFL family. Private-use codepoints are not safe to
+    // interpret by number alone because unrelated embedded fonts reuse them.
+    if (info.empty || !emptyAnchors.has(key)) return [glyph]
+    return [{
+      ...glyph,
+      text: info.canonicalGlyph,
+      originalNoteNameText: glyph.text,
+      noteNameEmbeddedAlter: info.embeddedAlter,
+      noteNameNotehead: true,
+    }]
+  })
+}
+
 function noteheadGlyphKind(text) {
   if (text === WHOLE_NOTEHEAD_GLYPH) {
     return 'whole'
@@ -275,7 +381,7 @@ export function textGlyphsToImage(pageText, imageData) {
       })
     }
   }
-  return glyphs
+  return normalizeVectorNoteNameNoteheads(glyphs)
 }
 
 export function hasVectorOmrNoteheads(pageText = []) {
@@ -668,9 +774,18 @@ function noteheadsForMeasure(
       noteheadFont: {
         fontName: glyph.fontName ?? null,
         glyph: glyph.text ?? null,
-        originalGlyph: glyph.originalLegacyText ?? glyph.text ?? null,
+        originalGlyph:
+          glyph.originalNoteNameText ?? glyph.originalLegacyText ?? glyph.text ?? null,
         legacyNormalized: Boolean(glyph.legacyMusicFontNormalized),
       },
+      embeddedAccidental: Number.isFinite(glyph.noteNameEmbeddedAlter)
+        ? {
+            alter: glyph.noteNameEmbeddedAlter,
+            type: 'note-name-notehead',
+            source: 'smufl-note-name-glyph',
+            glyph: glyph.originalNoteNameText,
+          }
+        : null,
       glyphBBox: {
         x: glyph.x - (glyph.width ?? 0) * 0.45,
         y: glyph.y - (glyph.height ?? 0) * 0.55,
@@ -754,7 +869,8 @@ function noteheadsForMeasure(
     bottom: allocationBounds.y1 * imageData.height,
   }
   const mappedNotes = sortedNotes.map((note, index) => {
-      const localAccidental = localAccidentals.get(index) ?? null
+      const localAccidental =
+        note.embeddedAccidental ?? localAccidentals.get(index) ?? null
       const stateKey = accidentalStateKey(note)
       const carriedAlter = accidentalState.has(stateKey)
         ? accidentalState.get(stateKey)
