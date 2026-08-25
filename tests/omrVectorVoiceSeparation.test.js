@@ -9,6 +9,7 @@ import {
   partitionSameOnsetWrittenVoiceEvents,
   reassignInterstaffBoundaryCohorts,
   reconstructGrandStaffHalfDottedCadence,
+  reconstructWholeOctaveDottedDyadCadence,
   reconstructWholeSustainEighthLattice,
   reconcileSeparatedWrittenVoiceEvents,
   resolveWrittenDurationOverlaps,
@@ -468,6 +469,110 @@ describe('vector mixed-written voice separation', () => {
     expect(reconstructGrandStaffHalfDottedCadence(singleClef, 16)).toBe(singleClef)
     const missingDot = cadence({ dotted: false })
     expect(reconstructGrandStaffHalfDottedCadence(missingDot, 16)).toBe(missingDot)
+  })
+
+  it('separates a whole-octave pedal from a dotted dyad cadence', () => {
+    const xs = [20, 50, 72, 96]
+    const wholeNotes = [40, 52].map((midi, index) => sourceNote({
+      midi,
+      cx: xs[0],
+      cy: 75 - index * 28,
+      positionInMeasure: 0,
+      glyph: 'whole',
+      duration: 24,
+      durationType: 'whole',
+      dotted: true,
+      stem: index === 0 ? null : sourceStem({ x: 24, tipY: 15, cy: 47 }),
+    }))
+    const dyads = xs.map((cx, index) => [55 + index, 58 + index].map((midi, tone) =>
+      sourceNote({
+        midi,
+        cx,
+        cy: 42 - tone * 7,
+        positionInMeasure: [0, 8, 10, 14][index] / 16,
+        glyph: 'black',
+        duration: index === 0 ? 6 : index === 1 ? 2 : 4,
+        durationType: index === 0 ? 'quarter' : index === 1 ? 'eighth' : 'quarter',
+        dotted: index === 0,
+        stem: sourceStem({
+          x: cx + (tone === 0 && index === 0 ? -4 : 4),
+          tipY: tone === 0 && index === 0 ? 65 : 12,
+          cy: 42 - tone * 7,
+          direction: tone === 0 && index === 0 ? 'down' : 'up',
+        }),
+      }),
+    ))
+    const events = [
+      { ...mixedEvent([...wholeNotes, ...dyads[0]], 0), cx: xs[0] },
+      ...dyads.slice(1).map((notes, index) => ({
+        ...mixedEvent(notes, [8, 10, 14][index]),
+        cx: xs[index + 1],
+      })),
+    ]
+
+    const reconstructed = reconstructWholeOctaveDottedDyadCadence(events, 16)
+    expect(reconstructed.map((event) => [
+      event.vectorVoiceLane ?? null,
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.map((note) => note.midi),
+    ])).toEqual([
+      ['sustain', 0, 16, [40, 52]],
+      ['moving', 0, 6, [55, 58]],
+      [null, 6, 2, [56, 59]],
+      [null, 8, 4, [57, 60]],
+      [null, 12, 4, [58, 61]],
+    ])
+  })
+
+  it('abstains from whole-octave dyad recovery without an octave or dotted opening', () => {
+    const phrase = ({ octave = true, dotted = true } = {}) => {
+      const xs = [20, 50, 72, 96]
+      const wholeMidis = octave ? [40, 52] : [40, 51]
+      const opening = [
+        ...wholeMidis.map((midi) => sourceNote({
+          midi,
+          cx: xs[0],
+          cy: 70,
+          positionInMeasure: 0,
+          glyph: 'whole',
+          duration: 16,
+          durationType: 'whole',
+          stem: null,
+        })),
+        ...[55, 58].map((midi) => sourceNote({
+          midi,
+          cx: xs[0],
+          cy: 42,
+          positionInMeasure: 0,
+          glyph: 'black',
+          duration: 6,
+          durationType: 'quarter',
+          dotted,
+          stem: sourceStem({ x: 24, tipY: 12, cy: 42 }),
+        })),
+      ]
+      return [
+        { ...mixedEvent(opening, 0), cx: xs[0] },
+        ...xs.slice(1).map((cx, index) => ({
+          ...mixedEvent([56 + index, 59 + index].map((midi) => sourceNote({
+            midi,
+            cx,
+            cy: 42,
+            positionInMeasure: (index + 1) / 4,
+            glyph: 'black',
+            duration: 4,
+            durationType: 'quarter',
+            stem: sourceStem({ x: cx + 4, tipY: 12, cy: 42 }),
+          })), index * 4 + 4),
+          cx,
+        })),
+      ]
+    }
+    const noOctave = phrase({ octave: false })
+    expect(reconstructWholeOctaveDottedDyadCadence(noOctave, 16)).toBe(noOctave)
+    const noDot = phrase({ dotted: false })
+    expect(reconstructWholeOctaveDottedDyadCadence(noDot, 16)).toBe(noDot)
   })
 
   it('preserves a source-dotted sustained voice and its tie against moving notes', () => {

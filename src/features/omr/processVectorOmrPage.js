@@ -2377,6 +2377,140 @@ export function reconstructGrandStaffHalfDottedCadence(
   )
 }
 
+/**
+ * Separate a whole-octave pedal from a dotted dyad cadence on one staff.
+ *
+ * The opening dyad can use opposing stems, so local component connectivity is
+ * insufficient. The complete source phrase is stronger: an octave of whole
+ * heads shares the first of four ordered columns with a dotted third/fourth,
+ * followed by three more black-head thirds/fourths. That inventory uniquely
+ * tiles 4/4 as dotted-quarter/eighth/quarter/quarter above a whole sustain.
+ */
+export function reconstructWholeOctaveDottedDyadCadence(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 4) return events
+  if (events.some((event) => event?.type === 'rest')) return events
+  const noteEvents = events.filter((event) => event?.type === 'note')
+  const sourceNotes = noteEvents.flatMap((event) =>
+    (event.notes ?? []).map((note) => ({ note, event })),
+  )
+  if (
+    sourceNotes.length !== 10 ||
+    sourceNotes.some(({ note }) => !Number.isFinite(note?.cx))
+  ) {
+    return events
+  }
+  const clefs = new Set(sourceNotes.map(({ note }) => note.clef).filter(Boolean))
+  if (clefs.size !== 1) return events
+
+  const ordered = [...sourceNotes].sort((left, right) => left.note.cx - right.note.cx)
+  const columns = []
+  for (const entry of ordered) {
+    const last = columns.at(-1)
+    if (!last || Math.abs(entry.note.cx - last.x) > 1.5) {
+      columns.push({ x: entry.note.cx, entries: [entry] })
+      continue
+    }
+    last.entries.push(entry)
+    last.x = average(last.entries.map(({ note }) => note.cx))
+  }
+  if (
+    columns.length !== 4 ||
+    columns[0].entries.length !== 4 ||
+    columns.slice(1).some((column) => column.entries.length !== 2)
+  ) {
+    return events
+  }
+  const openingWholes = columns[0].entries.filter(
+    ({ note }) => note.noteheadGlyph === 'whole',
+  )
+  const blackColumns = columns.map((column) =>
+    column.entries.filter(({ note }) => note.noteheadGlyph === 'black'),
+  )
+  const isDyad = (entries) => {
+    if (entries.length !== 2) return false
+    const interval = Math.abs(entries[0].note.midi - entries[1].note.midi)
+    return interval === 3 || interval === 4
+  }
+  if (
+    openingWholes.length !== 2 ||
+    Math.abs(openingWholes[0].note.midi - openingWholes[1].note.midi) !== 12 ||
+    blackColumns.some((entries) => !isDyad(entries)) ||
+    blackColumns[0].some(({ note }) => note.dotted !== true) ||
+    blackColumns.slice(1).some((entries) =>
+      entries.some(({ note }) => note.dotted === true),
+    ) ||
+    columns[0].entries.some(
+      ({ note }) => note.noteheadGlyph !== 'whole' && note.noteheadGlyph !== 'black',
+    ) ||
+    columns.slice(1).some((column) =>
+      column.entries.some(({ note }) => note.noteheadGlyph !== 'black'),
+    )
+  ) {
+    return events
+  }
+  const gaps = columns.slice(1).map((column, index) => column.x - columns[index].x)
+  if (Math.min(...gaps) <= 5 || Math.max(...gaps) / Math.min(...gaps) > 1.8) {
+    return events
+  }
+  const eventForEntries = (entries) => entries[0].event
+  if (
+    blackColumns.some((entries) =>
+      entries.some(({ event }) => event !== eventForEntries(entries)),
+    )
+  ) {
+    return events
+  }
+
+  const openingBase = eventForEntries(columns[0].entries)
+  const columnId = partitionColumnId(openingBase)
+  const sustain = {
+    ...buildWrittenVoicePartitionEvent(
+      openingBase,
+      openingWholes.map(({ note }) => note),
+      totalDivisions,
+      totalDivisions,
+      columnId,
+      'sustain',
+    ),
+    wholeOctaveDottedDyadCadenceReconstructed: true,
+  }
+  const starts = [0, 6, 8, 12]
+  const durations = [6, 2, 4, 4]
+  const moving = blackColumns.map((entries, index) => {
+    const notes = entries.map(({ note }) => note)
+    const base = eventForEntries(entries)
+    const rebuilt = {
+      ...base,
+      notes,
+      cx: average(notes.map((note) => note.cx)),
+      startDivision: starts[index],
+      durationDivisions: durations[index],
+      ...durationMeta(durations[index], { allowDotted: index === 0 }),
+      wholeOctaveDottedDyadCadenceReconstructed: true,
+    }
+    return index === 0
+      ? {
+          ...rebuilt,
+          vectorVoiceSeparated: true,
+          vectorVoiceColumnId: columnId,
+          vectorVoiceLane: 'moving',
+          vectorVoiceDirection: cohortStemDirection(notes),
+          vectorVoiceSourceStartDivision: 0,
+          vectorVoiceWrittenDurationDivisions: durations[index],
+          vectorVoiceSeparationEvidence: 'whole-octave-dotted-dyad-cadence',
+        }
+      : rebuilt
+  })
+  return sortVectorRhythmEvents([
+    ...events.filter((event) => event?.type !== 'note'),
+    sustain,
+    ...moving,
+  ])
+}
+
 function hasExplicitVectorVoicePartition(events = []) {
   return events.some((event) => event?.vectorVoiceSeparated === true)
 }
@@ -5495,6 +5629,11 @@ function buildNoteEventsFromGroups(
     'grand-staff-half-dotted-cadence',
     'reconstructGrandStaffHalfDottedCadence',
     () => reconstructGrandStaffHalfDottedCadence(events, totalDivisions),
+  )
+  events = track(
+    'whole-octave-dotted-dyad-cadence',
+    'reconstructWholeOctaveDottedDyadCadence',
+    () => reconstructWholeOctaveDottedDyadCadence(events, totalDivisions),
   )
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),
