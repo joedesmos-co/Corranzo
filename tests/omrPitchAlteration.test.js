@@ -115,6 +115,46 @@ describe('resolveNotePitchWithMeasureState', () => {
 })
 
 describe('assignLocalAccidentals', () => {
+  it('keeps a beat-one accidental when its note precedes the playable cursor estimate', () => {
+    const assignments = assignLocalAccidentals(
+      [{ text: '\uE262', x: 140, y: 150 }],
+      imageData,
+      measureBox,
+      [
+        {
+          cx: 160,
+          cy: 150,
+          yNorm: 0.15,
+          clef: 'treble',
+          naturalMidi: 72,
+        },
+      ],
+      ACCIDENTAL_GLYPHS,
+    )
+
+    expect(assignments.get(0)?.type).toBe('sharp')
+  })
+
+  it('does not attach a distant key-signature glyph to an early note', () => {
+    const assignments = assignLocalAccidentals(
+      [{ text: '\uE262', x: 105, y: 150 }],
+      imageData,
+      measureBox,
+      [
+        {
+          cx: 160,
+          cy: 150,
+          yNorm: 0.15,
+          clef: 'treble',
+          naturalMidi: 72,
+        },
+      ],
+      ACCIDENTAL_GLYPHS,
+    )
+
+    expect(assignments.get(0)).toBeUndefined()
+  })
+
   it('binds each accidental to the nearest vertically aligned notehead', () => {
     const notes = [
       { cx: 300, cy: 350, yNorm: 0.35, clef: 'bass', naturalMidi: 48 },

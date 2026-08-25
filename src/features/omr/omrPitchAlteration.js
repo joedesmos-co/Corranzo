@@ -458,7 +458,21 @@ export function assignLocalAccidentals(
       const lineYs =
         note.clef === 'treble' ? measureBox.staffLines.treble : measureBox.staffLines.bass
       const window = accidentalMatchWindow(measureBox, lineYs, imageData)
-      if (glyph.x < window.minX) {
+      const playableStart =
+        (measureBox.playableX0 ?? measureBox.x0) * imageData.width
+      // A first-system cursor estimate can land after a legitimate beat-one
+      // notehead. When the note itself proves that happened, let its preceding
+      // text-layer accidental use the barline boundary. Keep a tighter local
+      // spacing limit here so key-signature glyphs remain excluded.
+      const earlyTextAccidental =
+        note.cx < playableStart &&
+        glyph.source == null &&
+        note.cx - glyph.x <= window.maxDx * 0.85
+      const noteOwnedMinX =
+        earlyTextAccidental
+          ? measureBox.x0 * imageData.width
+          : window.minX
+      if (glyph.x < noteOwnedMinX) {
         continue
       }
       const match = accidentalMatchResult(
