@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
 import { buildMeasureStructureUnits } from '../src/features/omr/measureStructureSemantics.js'
 import {
+  applyVectorOttavaSpans,
   reconstructCompoundMeterDottedBeamOverprints,
   reconstructDenseAlternatingVoiceLattice,
   reconstructDottedCadenceArpeggioGrid,
@@ -15,6 +16,71 @@ import {
   reconstructTripletMelodyOverprintLattice,
   reconstructWholeMelodyQuarterChordBassGrid,
 } from '../src/features/omr/processVectorOmrPage.js'
+
+function rasterImage(width, height) {
+  const data = new Uint8ClampedArray(width * height * 4).fill(255)
+  const mark = (x, y) => {
+    const index = (y * width + x) * 4
+    data[index] = 0
+    data[index + 1] = 0
+    data[index + 2] = 0
+    data[index + 3] = 255
+  }
+  return { width, height, data, mark }
+}
+
+describe('applyVectorOttavaSpans', () => {
+  it('shifts only treble notes inside a source-proven dotted 8va span', () => {
+    const image = rasterImage(400, 250)
+    for (let x = 110; x <= 220; x += 10) {
+      for (let dashX = x; dashX < x + 5; dashX += 1) image.mark(dashX, 72)
+    }
+    for (let y = 73; y <= 80; y += 1) image.mark(224, y)
+    const measureRecordsBySystem = [[{
+      measureNumber: 1,
+      events: [latticeEvent([
+        latticeNote({ cx: 102, midi: 72 }),
+        latticeNote({ cx: 180, midi: 76 }),
+        latticeNote({ cx: 180, midi: 48, clef: 'bass' }),
+        latticeNote({ cx: 240, midi: 79 }),
+      ], 0, 4)],
+    }]]
+
+    const diagnostics = applyVectorOttavaSpans({
+      glyphs: [{ text: '\ue510', x: 100, y: 80, width: 10, height: 20 }],
+      imageData: image,
+      systemMeasureBoxes: [[{ x0: 0.05, x1: 0.9, y0: 0.4, y1: 0.8 }]],
+      measureRecordsBySystem,
+    })
+
+    expect(diagnostics).toMatchObject({ appliedNoteCount: 2 })
+    expect(measureRecordsBySystem[0][0].events[0].notes.map((note) => note.midi))
+      .toEqual([84, 88, 48, 79])
+    expect(measureRecordsBySystem[0][0].events[0].notes[0]).toMatchObject({
+      ottavaShiftSemitones: 12,
+      vectorOttavaSpan: true,
+    })
+  })
+
+  it('abstains without a dotted line and terminal hook', () => {
+    const image = rasterImage(400, 250)
+    const sourceNote = latticeNote({ cx: 140, midi: 72 })
+    const measureRecordsBySystem = [[{
+      measureNumber: 1,
+      events: [latticeEvent([sourceNote], 0, 4)],
+    }]]
+
+    const diagnostics = applyVectorOttavaSpans({
+      glyphs: [{ text: '\ue510', x: 100, y: 80, width: 10, height: 20 }],
+      imageData: image,
+      systemMeasureBoxes: [[{ x0: 0.05, x1: 0.9, y0: 0.4, y1: 0.8 }]],
+      measureRecordsBySystem,
+    })
+
+    expect(diagnostics).toEqual({ detected: [], appliedNoteCount: 0 })
+    expect(measureRecordsBySystem[0][0].events[0].notes[0]).toBe(sourceNote)
+  })
+})
 
 function latticeNote({ cx, midi, clef = 'treble', stem = 'up', open = false }) {
   return {

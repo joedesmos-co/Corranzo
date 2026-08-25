@@ -946,7 +946,6 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       pageText,
       pageNumber: page,
     })
-
     const result = {
       pageEntry,
       measureRhythms,
@@ -1166,6 +1165,9 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       pageText,
       pageNumber: page,
     })
+    if (vector.ottavaDiagnostics?.detected?.length) {
+      pageEntry.ottavaDiagnostics = vector.ottavaDiagnostics
+    }
 
     const result = {
       pageEntry,
@@ -1192,6 +1194,7 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       source: vector.source,
       tabDiagnostics,
       tieDiagnostics: vector.tieDiagnostics,
+      ottavaDiagnostics: vector.ottavaDiagnostics,
       restDiagnostics: vector.restDiagnostics,
       staccatoDiagnostics: vector.staccatoDiagnostics,
       accentDiagnostics: vector.accentDiagnostics,

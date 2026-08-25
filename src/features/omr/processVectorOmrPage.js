@@ -7048,6 +7048,181 @@ function octaveShiftedTripletEntries(entries, semitones = 12) {
   }))
 }
 
+function darkPixelAt(imageData, x, y, threshold = 170) {
+  const roundedX = Math.round(x)
+  const roundedY = Math.round(y)
+  if (
+    roundedX < 0 ||
+    roundedY < 0 ||
+    roundedX >= imageData.width ||
+    roundedY >= imageData.height
+  ) {
+    return false
+  }
+  const index = (roundedY * imageData.width + roundedX) * 4
+  return (
+    imageData.data[index] < threshold &&
+    imageData.data[index + 1] < threshold &&
+    imageData.data[index + 2] < threshold
+  )
+}
+
+function darkRunsAtRow(imageData, y, x0, x1) {
+  const runs = []
+  let runStart = null
+  const lastX = Math.min(imageData.width - 1, Math.round(x1))
+  for (let x = Math.max(0, Math.round(x0)); x <= lastX; x += 1) {
+    const dark = darkPixelAt(imageData, x, y)
+    if (dark && runStart == null) runStart = x
+    if ((!dark || x === lastX) && runStart != null) {
+      const runEnd = dark ? x : x - 1
+      runs.push({ x0: runStart, x1: runEnd, length: runEnd - runStart + 1 })
+      runStart = null
+    }
+  }
+  return runs
+}
+
+function pixelCoordinate(value, extent) {
+  return value <= 1 ? value * extent : value
+}
+
+function detectOttavaDottedLine(glyph, imageData, systemBoxes) {
+  if (!imageData?.data || !systemBoxes?.length) return null
+  const systemX1 = Math.max(
+    ...systemBoxes.map((box) => pixelCoordinate(box.x1, imageData.width)),
+  )
+  const searchX0 = glyph.x + Math.max(3, glyph.width * 0.35)
+  const searchY0 = Math.round(glyph.y - Math.max(8, glyph.height * 0.55))
+  const searchY1 = Math.round(glyph.y - Math.max(3, glyph.height * 0.12))
+  let best = null
+
+  for (let y = searchY0; y <= searchY1; y += 1) {
+    const runs = darkRunsAtRow(imageData, y, searchX0, systemX1)
+      .filter((run) => run.length >= 2 && run.length <= 10)
+    for (let startIndex = 0; startIndex < runs.length; startIndex += 1) {
+      const first = runs[startIndex]
+      if (first.x0 - searchX0 > Math.max(20, glyph.width * 2)) break
+      const chain = [first]
+      for (let index = startIndex + 1; index < runs.length; index += 1) {
+        const gap = runs[index].x0 - chain.at(-1).x1 - 1
+        if (gap < 2) continue
+        if (gap > 14) break
+        chain.push(runs[index])
+      }
+      const extent = chain.at(-1).x1 - chain[0].x0
+      if (
+        chain.length >= 6 &&
+        extent >= Math.max(45, glyph.height * 2) &&
+        (!best || extent > best.extent)
+      ) {
+        best = { y, chain, extent }
+      }
+    }
+  }
+  if (!best) return null
+
+  const lineEnd = best.chain.at(-1).x1
+  let hookPixels = 0
+  for (let y = best.y + 1; y <= best.y + Math.max(6, Math.round(glyph.height * 0.42)); y += 1) {
+    if (
+      [-2, -1, 0, 1, 2].some((offset) =>
+        darkPixelAt(imageData, lineEnd + offset, y),
+      )
+    ) {
+      hookPixels += 1
+    }
+  }
+  if (hookPixels < 3) return null
+  return {
+    x0: glyph.x,
+    x1: lineEnd,
+    lineY: best.y,
+    dashCount: best.chain.length,
+    hookPixels,
+  }
+}
+
+/**
+ * Apply source-printed 8va spans after measure reconstruction. The SMuFL
+ * ottava glyph supplies the start and a raster-confirmed dotted line plus end
+ * hook supplies the stop, so the shift never depends on paired truth.
+ */
+export function applyVectorOttavaSpans({
+  glyphs = [],
+  imageData,
+  systemMeasureBoxes = [],
+  measureRecordsBySystem = [],
+} = {}) {
+  const diagnostics = { detected: [], appliedNoteCount: 0 }
+  if (!imageData?.width || !imageData?.height || !imageData?.data) return diagnostics
+
+  for (const glyph of glyphs.filter((candidate) => candidate.text === OTTAVA_ALTA_GLYPH)) {
+    const candidates = systemMeasureBoxes
+      .map((boxes, systemIndex) => {
+        if (!boxes.length) return null
+        const y0 = Math.min(...boxes.map((box) => pixelCoordinate(box.y0, imageData.height)))
+        const y1 = Math.max(...boxes.map((box) => pixelCoordinate(box.y1, imageData.height)))
+        const x0 = Math.min(...boxes.map((box) => pixelCoordinate(box.x0, imageData.width)))
+        const x1 = Math.max(...boxes.map((box) => pixelCoordinate(box.x1, imageData.width)))
+        const verticalDistance = y0 - glyph.y
+        return {
+          boxes,
+          systemIndex,
+          verticalDistance,
+          horizontallyAligned: glyph.x >= x0 - 20 && glyph.x <= x1 + 20,
+          verticallyAligned:
+            verticalDistance >= -Math.max(8, (y1 - y0) * 0.08) &&
+            verticalDistance <= Math.max(80, (y1 - y0) * 0.75),
+        }
+      })
+      .filter((candidate) => candidate?.horizontallyAligned && candidate.verticallyAligned)
+      .sort((left, right) => Math.abs(left.verticalDistance) - Math.abs(right.verticalDistance))
+    const system = candidates[0]
+    if (!system) continue
+    const span = detectOttavaDottedLine(glyph, imageData, system.boxes)
+    if (!span) continue
+
+    let appliedNoteCount = 0
+    for (const record of measureRecordsBySystem[system.systemIndex] ?? []) {
+      record.events = (record.events ?? []).map((event) => {
+        if (event.type !== 'note') return event
+        let changed = false
+        const notes = (event.notes ?? []).map((note) => {
+          if (
+            (note.clef ?? 'treble') === 'bass' ||
+            !Number.isFinite(note.cx) ||
+            note.cx < span.x0 - 2 ||
+            note.cx > span.x1 + 2 ||
+            Number.isFinite(note.ottavaShiftSemitones)
+          ) {
+            return note
+          }
+          changed = true
+          appliedNoteCount += 1
+          return {
+            ...note,
+            midi: note.midi + 12,
+            naturalMidi: Number.isFinite(note.naturalMidi)
+              ? note.naturalMidi + 12
+              : note.naturalMidi,
+            ottavaShiftSemitones: 12,
+            vectorOttavaSpan: true,
+          }
+        })
+        return changed ? { ...event, notes, vectorOttavaSpan: true } : event
+      })
+    }
+    diagnostics.appliedNoteCount += appliedNoteCount
+    diagnostics.detected.push({
+      systemIndex: system.systemIndex,
+      ...span,
+      appliedNoteCount,
+    })
+  }
+  return diagnostics
+}
+
 function tripletMelodyEvent(column, startDivision, durationDivisions, timeModification = null) {
   const event = denseLatticeEvent(
     column.entries,
@@ -8315,6 +8490,12 @@ export function processVectorPageSystems({
   }
 
   const flatRecords = measureRecordsBySystem.flat()
+  const ottavaDiagnostics = applyVectorOttavaSpans({
+    glyphs,
+    imageData,
+    systemMeasureBoxes,
+    measureRecordsBySystem,
+  })
   if (allowInkStaccatoFallback) {
     stripSparseInkPathStaccato(flatRecords)
   }
@@ -8358,6 +8539,7 @@ export function processVectorPageSystems({
     source: 'vector-glyphs',
     orphanDiagnostics,
     tieDiagnostics: tieResult.diagnostics,
+    ottavaDiagnostics,
     restDiagnostics: summarizeVectorRestDiagnostics(flatRecords),
     staccatoDiagnostics: summarizeVectorStaccatoDiagnostics(flatRecords),
     accentDiagnostics: summarizeVectorAccentDiagnostics(flatRecords),
