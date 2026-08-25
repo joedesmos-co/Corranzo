@@ -2266,6 +2266,117 @@ export function reconstructWholeSustainEighthLattice(
   )
 }
 
+/**
+ * Recover a paired grand-staff half → dotted-eighth/sixteenth/quarter cadence.
+ *
+ * In compact engraving, the beam probe may assign the dotted attack and its
+ * follower different values on each staff even though their aligned source
+ * columns are unambiguous. Require the complete four-column, two-clef pattern,
+ * direct half/black glyph provenance, a dot only on column two, and the
+ * characteristic decreasing source gaps before assigning the written grid.
+ */
+export function reconstructGrandStaffHalfDottedCadence(
+  events = [],
+  totalDivisions = 16,
+) {
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 4) return events
+  const noteEvents = events.filter((event) => event?.type === 'note')
+  if (
+    noteEvents.length !== 8 ||
+    noteEvents.some(
+      (event) =>
+        event.timeModification ||
+        event.tupletRecovered ||
+        !(event.notes?.length > 0) ||
+        !Number.isFinite(sourceXForEvent(event)),
+    )
+  ) {
+    return events
+  }
+  const ordered = [...noteEvents].sort(
+    (left, right) => sourceXForEvent(left) - sourceXForEvent(right),
+  )
+  const columns = []
+  for (const event of ordered) {
+    const x = sourceXForEvent(event)
+    const last = columns.at(-1)
+    if (!last || Math.abs(x - last.x) > 1.5) {
+      columns.push({ x, events: [event] })
+      continue
+    }
+    last.events.push(event)
+    last.x = average(last.events.map(sourceXForEvent))
+  }
+  if (
+    columns.length !== 4 ||
+    columns.some((column) => {
+      const clefs = new Set(column.events.map(eventStaffClef))
+      return (
+        column.events.length !== 2 ||
+        clefs.size !== 2 ||
+        !clefs.has('treble') ||
+        !clefs.has('bass')
+      )
+    })
+  ) {
+    return events
+  }
+  const [opening, dotted, follower, closing] = columns
+  if (
+    opening.events.some((event) =>
+      event.notes.some((note) => note.noteheadGlyph !== 'half' || note.dotted === true),
+    ) ||
+    [dotted, follower, closing].some((column) =>
+      column.events.some((event) =>
+        event.notes.some((note) => note.noteheadGlyph !== 'black'),
+      ),
+    ) ||
+    dotted.events.some((event) =>
+      event.notes.some((note) => note.dotted !== true),
+    ) ||
+    [follower, closing].some((column) =>
+      column.events.some((event) =>
+        event.notes.some((note) => note.dotted === true),
+      ),
+    )
+  ) {
+    return events
+  }
+  const gaps = columns.slice(1).map((column, index) => column.x - columns[index].x)
+  if (
+    !(gaps[2] > 5) ||
+    gaps[0] / gaps[1] < 1.2 ||
+    gaps[0] / gaps[1] > 1.8 ||
+    gaps[1] / gaps[2] < 1.5 ||
+    gaps[1] / gaps[2] > 2.4
+  ) {
+    return events
+  }
+
+  const starts = [0, OMR_DURATION_DIVISIONS.half, 11, 12]
+  const durations = [
+    OMR_DURATION_DIVISIONS.half,
+    OMR_DURATION_DIVISIONS.eighth + OMR_DURATION_DIVISIONS.sixteenth,
+    OMR_DURATION_DIVISIONS.sixteenth,
+    OMR_DIVISIONS_PER_QUARTER,
+  ]
+  const replacementByEvent = new Map()
+  columns.forEach((column, index) => {
+    for (const event of column.events) {
+      replacementByEvent.set(event, {
+        ...event,
+        startDivision: starts[index],
+        durationDivisions: durations[index],
+        ...durationMeta(durations[index], { allowDotted: index === 1 }),
+        grandStaffHalfDottedCadenceReconstructed: true,
+      })
+    }
+  })
+  return sortVectorRhythmEvents(
+    events.map((event) => replacementByEvent.get(event) ?? event),
+  )
+}
+
 function hasExplicitVectorVoicePartition(events = []) {
   return events.some((event) => event?.vectorVoiceSeparated === true)
 }
@@ -5379,6 +5490,11 @@ function buildNoteEventsFromGroups(
     'whole-sustain-eighth-lattice',
     'reconstructWholeSustainEighthLattice',
     () => reconstructWholeSustainEighthLattice(events, totalDivisions),
+  )
+  events = track(
+    'grand-staff-half-dotted-cadence',
+    'reconstructGrandStaffHalfDottedCadence',
+    () => reconstructGrandStaffHalfDottedCadence(events, totalDivisions),
   )
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),

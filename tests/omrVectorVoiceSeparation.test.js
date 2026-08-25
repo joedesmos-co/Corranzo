@@ -8,6 +8,7 @@ import {
   notesShareStemComponent,
   partitionSameOnsetWrittenVoiceEvents,
   reassignInterstaffBoundaryCohorts,
+  reconstructGrandStaffHalfDottedCadence,
   reconstructWholeSustainEighthLattice,
   reconcileSeparatedWrittenVoiceEvents,
   resolveWrittenDurationOverlaps,
@@ -403,6 +404,70 @@ describe('vector mixed-written voice separation', () => {
       ]).flat(),
     ]
     expect(reconstructWholeSustainEighthLattice(singleClef, 16)).toBe(singleClef)
+  })
+
+  it('reconstructs a paired grand-staff half and dotted cadence', () => {
+    const xs = [20, 70, 105, 123]
+    const approximateStarts = [0, 7, 12, 14]
+    const events = xs.flatMap((cx, index) => ['bass', 'treble'].map((clef) => {
+      const opening = index === 0
+      const note = sourceNote({
+        midi: (clef === 'bass' ? 48 : 72) + index,
+        cx,
+        cy: clef === 'bass' ? 52 : 20,
+        positionInMeasure: approximateStarts[index] / 16,
+        glyph: opening ? 'half' : 'black',
+        duration: opening ? 8 : index === 1 ? 6 : 4,
+        durationType: opening ? 'half' : index === 1 ? 'quarter' : 'quarter',
+        clef,
+        stem: sourceStem({ x: cx + 4, tipY: 2, cy: clef === 'bass' ? 52 : 20 }),
+        dotted: index === 1,
+        beams: index === 1 && clef === 'bass' ? 1 : 0,
+      })
+      return { ...mixedEvent([note], approximateStarts[index]), cx }
+    }))
+
+    const reconstructed = reconstructGrandStaffHalfDottedCadence(events, 16)
+    expect([...Map.groupBy(reconstructed, (event) => event.cx)].map(([, column]) => [
+      column[0].startDivision,
+      column[0].durationDivisions,
+      column[0].durationType,
+      column[0].dotted,
+    ])).toEqual([
+      [0, 8, 'half', false],
+      [8, 3, 'eighth', true],
+      [11, 1, 'sixteenth', false],
+      [12, 4, 'quarter', false],
+    ])
+    expect(reconstructed.every((event) =>
+      event.grandStaffHalfDottedCadenceReconstructed === true,
+    )).toBe(true)
+  })
+
+  it('abstains from half-dotted cadence recovery without paired clefs or the source dot', () => {
+    const cadence = ({ paired = true, dotted = true } = {}) => {
+      const xs = [20, 70, 105, 123]
+      return xs.flatMap((cx, index) => ['bass', paired ? 'treble' : 'bass'].map((clef) => {
+        const note = sourceNote({
+          midi: 48 + index,
+          cx,
+          cy: clef === 'bass' ? 52 : 20,
+          positionInMeasure: index / 4,
+          glyph: index === 0 ? 'half' : 'black',
+          duration: index === 0 ? 8 : 2,
+          durationType: index === 0 ? 'half' : 'eighth',
+          clef,
+          stem: sourceStem({ x: cx + 4, tipY: 2, cy: clef === 'bass' ? 52 : 20 }),
+          dotted: index === 1 && dotted,
+          beams: index === 1 ? 1 : 0,
+        })
+        return { ...mixedEvent([note], index * 4), cx }
+      }))
+    }
+    const singleClef = cadence({ paired: false })
+    expect(reconstructGrandStaffHalfDottedCadence(singleClef, 16)).toBe(singleClef)
+    const missingDot = cadence({ dotted: false })
+    expect(reconstructGrandStaffHalfDottedCadence(missingDot, 16)).toBe(missingDot)
   })
 
   it('preserves a source-dotted sustained voice and its tie against moving notes', () => {
