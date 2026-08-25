@@ -2511,6 +2511,143 @@ export function reconstructWholeOctaveDottedDyadCadence(
   ])
 }
 
+/**
+ * Recover two octave-paired triplet streams printed on one staff in 2/4.
+ *
+ * Some compact engravings omit a repeated tuplet digit after establishing the
+ * figure. Their opposing up/down beams can then be counted as two flags on a
+ * provisional chord, producing an irregular sixteenth/eighth cursor. Require
+ * the complete source texture instead: six regular X columns, two black heads
+ * per column, consistent vertical separation, parallel-octave pitch evidence,
+ * opposing stem continuity, and beam ink in both lanes. Pitches are preserved;
+ * only source-proven lane membership and the two triplet groups are restored.
+ */
+export function reconstructPairedOctaveTripletStreams(
+  events = [],
+  totalDivisions = 8,
+) {
+  if (totalDivisions !== OMR_DIVISIONS_PER_QUARTER * 2) return events
+  if (events.some((event) => event?.type === 'rest')) return events
+  const noteEvents = events.filter((event) => event?.type === 'note')
+  const sourceNotes = noteEvents.flatMap((event) =>
+    (event.notes ?? []).map((note) => ({ note, event })),
+  )
+  if (
+    sourceNotes.length !== 12 ||
+    sourceNotes.some(({ note }) =>
+      note?.noteheadGlyph !== 'black' ||
+      note?.dotted === true ||
+      !Number.isFinite(note?.cx) ||
+      !Number.isFinite(note?.cy) ||
+      !Number.isFinite(note?.midi),
+    )
+  ) {
+    return events
+  }
+  const clefs = new Set(sourceNotes.map(({ note }) => note.clef).filter(Boolean))
+  if (clefs.size !== 1) return events
+
+  const ordered = [...sourceNotes].sort((left, right) => left.note.cx - right.note.cx)
+  const columns = []
+  for (const entry of ordered) {
+    const last = columns.at(-1)
+    if (!last || Math.abs(entry.note.cx - last.x) > 1.5) {
+      columns.push({ x: entry.note.cx, entries: [entry] })
+      continue
+    }
+    last.entries.push(entry)
+    last.x = average(last.entries.map(({ note }) => note.cx))
+  }
+  if (columns.length !== 6 || columns.some((column) => column.entries.length !== 2)) {
+    return events
+  }
+  const gaps = columns.slice(1).map((column, index) => column.x - columns[index].x)
+  if (Math.min(...gaps) <= 5 || Math.max(...gaps) / Math.min(...gaps) > 1.25) {
+    return events
+  }
+
+  const laneColumns = columns.map((column) =>
+    [...column.entries].sort((left, right) => left.note.cy - right.note.cy),
+  )
+  const verticalGaps = laneColumns.map(
+    ([upper, lower]) => lower.note.cy - upper.note.cy,
+  )
+  const typicalVerticalGap = medianNumber(verticalGaps)
+  if (
+    !(typicalVerticalGap > 8) ||
+    verticalGaps.some(
+      (gap) =>
+        gap < typicalVerticalGap * 0.72 ||
+        gap > typicalVerticalGap * 1.32,
+    )
+  ) {
+    return events
+  }
+  const upperEntries = laneColumns.map(([upper]) => upper)
+  const lowerEntries = laneColumns.map(([, lower]) => lower)
+  const opposingStemColumns = laneColumns.filter(([upper, lower]) =>
+    noteStemDirection(upper.note) === 'up' &&
+    noteStemDirection(lower.note) === 'down',
+  ).length
+  const octaveColumns = laneColumns.filter(([upper, lower]) =>
+    Math.abs(upper.note.midi - lower.note.midi) === 12,
+  ).length
+  const beamedUpper = upperEntries.filter(({ note }) => (note.beams ?? 0) >= 1).length
+  const beamedLower = lowerEntries.filter(({ note }) => (note.beams ?? 0) >= 1).length
+  if (
+    opposingStemColumns < 5 ||
+    octaveColumns < 4 ||
+    beamedUpper < 4 ||
+    beamedLower < 4
+  ) {
+    return events
+  }
+
+  const durationDivisions = OMR_DIVISIONS_PER_QUARTER / 3
+  const rebuilt = []
+  for (const [index, [upper, lower]] of laneColumns.entries()) {
+    const startDivision = index * durationDivisions
+    const groupIndex = Math.floor(index / 3)
+    const slotIndex = index % 3
+    const columnId = partitionColumnId(upper.event)
+    const groupId = `paired-octave-triplet:${columnId}:${groupIndex}`
+    for (const [lane, entry, direction] of [
+      ['paired-octave-upper', upper, 'up'],
+      ['paired-octave-lower', lower, 'down'],
+    ]) {
+      rebuilt.push({
+        ...entry.event,
+        type: 'note',
+        notes: [entry.note],
+        cx: entry.note.cx,
+        positionInMeasure: entry.note.positionInMeasure,
+        startDivision,
+        durationDivisions,
+        durationType: 'eighth',
+        dotted: false,
+        timeModification: {
+          actualNotes: 3,
+          normalNotes: 2,
+          groupId,
+          slotIndex,
+          tupletStart: slotIndex === 0,
+          tupletStop: slotIndex === 2,
+        },
+        tupletRecovered: true,
+        vectorVoiceSeparated: true,
+        vectorVoiceColumnId: columnId,
+        vectorVoiceLane: lane,
+        vectorVoiceDirection: direction,
+        vectorVoiceSourceStartDivision: startDivision,
+        vectorVoiceWrittenDurationDivisions: durationDivisions,
+        vectorVoiceSeparationEvidence: 'paired-octave-opposing-stem-triplet-streams',
+        pairedOctaveTripletStreamsReconstructed: true,
+      })
+    }
+  }
+  return sortVectorRhythmEvents(rebuilt)
+}
+
 function hasExplicitVectorVoicePartition(events = []) {
   return events.some((event) => event?.vectorVoiceSeparated === true)
 }
@@ -5634,6 +5771,11 @@ function buildNoteEventsFromGroups(
     'whole-octave-dotted-dyad-cadence',
     'reconstructWholeOctaveDottedDyadCadence',
     () => reconstructWholeOctaveDottedDyadCadence(events, totalDivisions),
+  )
+  events = track(
+    'paired-octave-triplet-streams',
+    'reconstructPairedOctaveTripletStreams',
+    () => reconstructPairedOctaveTripletStreams(events, totalDivisions),
   )
   events = track('written-overlap-finalize', 'resolveWrittenDurationOverlaps', () =>
     resolveWrittenDurationOverlaps(events, totalDivisions),

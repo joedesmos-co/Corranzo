@@ -9,6 +9,7 @@ import {
   partitionSameOnsetWrittenVoiceEvents,
   reassignInterstaffBoundaryCohorts,
   reconstructGrandStaffHalfDottedCadence,
+  reconstructPairedOctaveTripletStreams,
   reconstructWholeOctaveDottedDyadCadence,
   reconstructWholeSustainEighthLattice,
   reconcileSeparatedWrittenVoiceEvents,
@@ -573,6 +574,100 @@ describe('vector mixed-written voice separation', () => {
     expect(reconstructWholeOctaveDottedDyadCadence(noOctave, 16)).toBe(noOctave)
     const noDot = phrase({ dotted: false })
     expect(reconstructWholeOctaveDottedDyadCadence(noDot, 16)).toBe(noDot)
+  })
+
+  it('separates octave-paired opposing-stem streams into two triplet lanes', () => {
+    const xs = [20, 37, 53, 70, 86, 103]
+    const approximateStarts = [0, 2, 3, 5, 6, 7]
+    const upperMidis = [50, 47, 49, 50, 47, 49]
+    const events = xs.map((cx, index) => {
+      const upper = sourceNote({
+        midi: upperMidis[index],
+        cx,
+        cy: 45 + (index % 3) * 3,
+        positionInMeasure: approximateStarts[index] / 8,
+        glyph: 'black',
+        duration: index % 3 === 2 ? 2 : 1,
+        durationType: index % 3 === 2 ? 'eighth' : 'sixteenth',
+        stem: sourceStem({ x: cx + 4, tipY: 20, cy: 45, direction: 'up' }),
+        beams: index % 3 === 2 ? 0 : 2,
+      })
+      const lower = sourceNote({
+        midi: upperMidis[index] - 12,
+        cx: cx + 0.2,
+        cy: upper.cy + 25,
+        positionInMeasure: approximateStarts[index] / 8,
+        glyph: 'black',
+        duration: index % 3 === 2 ? 2 : 1,
+        durationType: index % 3 === 2 ? 'eighth' : 'sixteenth',
+        stem: sourceStem({ x: cx - 4, tipY: 95, cy: upper.cy + 25, direction: 'down' }),
+        beams: index % 3 === 2 ? 0 : 2,
+      })
+      return { ...mixedEvent([upper, lower], approximateStarts[index]), cx }
+    })
+
+    const reconstructed = reconstructPairedOctaveTripletStreams(events, 8)
+    expect(reconstructed).toHaveLength(12)
+    expect([...new Set(reconstructed.map((event) => event.startDivision))]).toEqual([
+      0,
+      4 / 3,
+      8 / 3,
+      4,
+      16 / 3,
+      5 * (4 / 3),
+    ])
+    expect(reconstructed.every((event) =>
+      event.durationDivisions === 4 / 3 &&
+      event.durationType === 'eighth' &&
+      event.tupletRecovered === true,
+    )).toBe(true)
+    expect(new Set(reconstructed.map((event) => event.vectorVoiceLane))).toEqual(
+      new Set(['paired-octave-upper', 'paired-octave-lower']),
+    )
+    expect(reconstructed.map((event) => event.notes[0].midi).sort((a, b) => a - b)).toEqual(
+      events.flatMap((event) => event.notes.map((note) => note.midi)).sort((a, b) => a - b),
+    )
+  })
+
+  it('abstains from paired triplet recovery without opposing stems or octave evidence', () => {
+    const phrase = ({ opposing = true, octaves = true } = {}) =>
+      Array.from({ length: 6 }, (_, index) => {
+        const cx = 20 + index * 17
+        const upperMidi = 50 + (index % 2)
+        const upper = sourceNote({
+          midi: upperMidi,
+          cx,
+          cy: 45,
+          positionInMeasure: index / 6,
+          glyph: 'black',
+          duration: 1,
+          durationType: 'sixteenth',
+          stem: sourceStem({ x: cx + 4, tipY: 20, cy: 45, direction: 'up' }),
+          beams: index % 3 === 2 ? 0 : 2,
+        })
+        const lower = sourceNote({
+          midi: upperMidi - (octaves ? 12 : 10),
+          cx,
+          cy: 70,
+          positionInMeasure: index / 6,
+          glyph: 'black',
+          duration: 1,
+          durationType: 'sixteenth',
+          stem: sourceStem({
+            x: opposing ? cx - 4 : cx + 4,
+            tipY: opposing ? 95 : 20,
+            cy: 70,
+            direction: opposing ? 'down' : 'up',
+          }),
+          beams: index % 3 === 2 ? 0 : 2,
+        })
+        return { ...mixedEvent([upper, lower], index), cx }
+      })
+
+    const sameStems = phrase({ opposing: false })
+    expect(reconstructPairedOctaveTripletStreams(sameStems, 8)).toBe(sameStems)
+    const noOctaves = phrase({ octaves: false })
+    expect(reconstructPairedOctaveTripletStreams(noOctaves, 8)).toBe(noOctaves)
   })
 
   it('preserves a source-dotted sustained voice and its tie against moving notes', () => {
