@@ -9,6 +9,7 @@ import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 
 const SHARP = '\ue262'
 const FLAT = '\ue260'
+const NATURAL = '\ue261'
 const NOTEHEAD = '\ue0a4'
 
 function measureBox(systemIndex) {
@@ -41,6 +42,90 @@ function pdfTextGlyph(text, x, imageY) {
     pageHeight: 1000,
     fontName: 'Bravura',
   }
+}
+
+function addFlatSignature(pageText, box, countPerStaff, xStart) {
+  for (const staff of ['treble', 'bass']) {
+    for (let index = 0; index < countPerStaff; index += 1) {
+      pageText.push(
+        pdfTextGlyph(
+          FLAT,
+          xStart + index * 10,
+          box.staffLines[staff][Math.min(index, 4)] * 1000,
+        ),
+      )
+    }
+  }
+}
+
+function addNaturalCancellation(pageText, box, countPerStaff, xStart) {
+  for (const staff of ['treble', 'bass']) {
+    for (let index = 0; index < countPerStaff; index += 1) {
+      pageText.push(
+        pdfTextGlyph(
+          NATURAL,
+          xStart + index * 8,
+          box.staffLines[staff][Math.min(index, 4)] * 1000,
+        ),
+      )
+    }
+  }
+}
+
+function internalKeyScenario({
+  internalFlats = 5,
+  confirmingFlats = 5,
+  cancellationNaturals = 5,
+} = {}) {
+  const first = {
+    ...measureBox(0),
+    measureNumber: 1,
+    measureIndex: 0,
+    x0: 0.1,
+    playableX0: 0.2,
+    x1: 0.4,
+  }
+  const internal = {
+    ...measureBox(0),
+    measureNumber: 2,
+    measureIndex: 1,
+    x0: 0.4,
+    playableX0: 0.4,
+    x1: 0.7,
+  }
+  const nextSystem = {
+    ...measureBox(1),
+    measureNumber: 3,
+    measureIndex: 0,
+    x0: 0.1,
+    playableX0: 0.24,
+    x1: 0.9,
+  }
+  const pageText = []
+  for (const [box, noteX] of [
+    [first, 300],
+    [internal, 510],
+    [nextSystem, 300],
+  ]) {
+    const noteY = box.staffLines.treble[4] * 1000 - 10
+    pageText.push(pdfTextGlyph(NOTEHEAD, noteX, noteY))
+  }
+  addNaturalCancellation(pageText, internal, cancellationNaturals, 405)
+  addFlatSignature(pageText, internal, internalFlats, 455)
+  addFlatSignature(pageText, nextSystem, confirmingFlats, 150)
+  const imageData = {
+    width: 1000,
+    height: 1000,
+    data: new Uint8ClampedArray(1000 * 1000 * 4).fill(255),
+  }
+  return processVectorPageSystems({
+    imageData,
+    pageText,
+    systems: [{}, {}],
+    systemMeasureBoxes: [[first, internal], [nextSystem]],
+    inheritedKeySignature: { fifths: 5, mode: 'major', confidence: 0.9 },
+    inheritedTimeSignature: { beats: 4, beatType: 4, confidence: 0.9 },
+  })
 }
 
 describe('vector system key-signature state', () => {
@@ -140,5 +225,91 @@ describe('vector system key-signature state', () => {
     expect(xml).toContain('<key><fifths>1</fifths>')
     expect(xml).toContain('<key><fifths>0</fifths>')
     expect(parseMusicXml(xml, 'key-change.musicxml').keySignatures.map((entry) => entry.fifths)).toEqual([1, 0])
+  })
+
+  it('applies an initial reliable key established after an empty opening system', () => {
+    const boxes = [0, 1, 2].map(measureBox)
+    const pageText = []
+    for (const box of boxes) {
+      const noteY = box.staffLines.treble[4] * 1000 - 10
+      pageText.push(pdfTextGlyph(NOTEHEAD, 400, noteY))
+      if (box.systemIndex > 0) {
+        pageText.push(pdfTextGlyph(SHARP, 150, box.staffLines.treble[1] * 1000))
+        pageText.push(pdfTextGlyph(SHARP, 150, box.staffLines.bass[1] * 1000))
+      }
+    }
+    const imageData = {
+      width: 1000,
+      height: 1000,
+      data: new Uint8ClampedArray(1000 * 1000 * 4).fill(255),
+    }
+    const result = processVectorPageSystems({
+      imageData,
+      pageText,
+      systems: boxes.map(() => ({})),
+      systemMeasureBoxes: boxes.map((box) => [box]),
+      inheritedKeySignature: null,
+      inheritedTimeSignature: { beats: 4, beatType: 4, confidence: 0.9 },
+    })
+    const records = result.measureRecordsBySystem.flat()
+
+    expect(
+      records.map(
+        (record) => record.events[0].notes[0].pitchAlteration.keySignatureFifths,
+      ),
+    ).toEqual([0, 1, 1])
+    expect(records[1].keySignatureChange).toBeUndefined()
+  })
+
+  it('applies a dense internal opposite-sign signature confirmed at the next system', () => {
+    const result = internalKeyScenario()
+    const records = result.measureRecordsBySystem.flat()
+
+    expect(
+      records.map(
+        (record) => record.events[0].notes[0].pitchAlteration.keySignatureFifths,
+      ),
+    ).toEqual([5, -5, -5])
+    expect(records[1].keySignatureChange).toMatchObject({ fifths: -5 })
+    expect(records[1].events[0].startDivision).toBe(0)
+    expect(result.endingKeySignature.fifths).toBe(-5)
+    expect(result.keySignatureDiagnostics.internalChanges).toHaveLength(1)
+
+    const xml = buildOmrMusicXml({
+      measures: records,
+      musical: { keySignature: result.initialKeySignature },
+      includeDisclaimer: false,
+    })
+    expect(
+      parseMusicXml(xml, 'internal-key-change.musicxml').keySignatures.map(
+        (entry) => entry.fifths,
+      ),
+    ).toEqual([5, -5])
+  })
+
+  it('abstains from unconfirmed or sparse internal accidental prefixes', () => {
+    const unconfirmed = internalKeyScenario({ confirmingFlats: 4 })
+    expect(
+      unconfirmed.measureRecordsBySystem.flat().map(
+        (record) => record.events[0].notes[0].pitchAlteration.keySignatureFifths,
+      ),
+    ).toEqual([5, 5, 5])
+    expect(unconfirmed.keySignatureDiagnostics.internalChanges).toEqual([])
+
+    const sparse = internalKeyScenario({ internalFlats: 1, confirmingFlats: 1 })
+    expect(
+      sparse.measureRecordsBySystem.flat().map(
+        (record) => record.events[0].notes[0].pitchAlteration.keySignatureFifths,
+      ),
+    ).toEqual([5, 5, 5])
+    expect(sparse.keySignatureDiagnostics.internalChanges).toEqual([])
+
+    const noCancellation = internalKeyScenario({ cancellationNaturals: 0 })
+    expect(
+      noCancellation.measureRecordsBySystem.flat().map(
+        (record) => record.events[0].notes[0].pitchAlteration.keySignatureFifths,
+      ),
+    ).toEqual([5, 5, 5])
+    expect(noCancellation.keySignatureDiagnostics.internalChanges).toEqual([])
   })
 })

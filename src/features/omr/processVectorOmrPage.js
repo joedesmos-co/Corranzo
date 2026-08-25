@@ -622,6 +622,186 @@ export function resolveVectorSystemKeySignatures(
   }
 }
 
+const INTERNAL_KEY_MIN_TYPED_ACCIDENTALS = 6
+const INTERNAL_KEY_MAX_NOTEHEAD_OFFSET_FRAC = 0.12
+
+function openingPlayableX0(measureBox) {
+  const width = Math.max(0, (measureBox?.x1 ?? 0) - (measureBox?.x0 ?? 0))
+  const offset = Math.max(Math.min(width * 0.34, 0.085), 0.06)
+  return Math.min(measureBox?.x1 ?? 1, (measureBox?.x0 ?? 0) + offset)
+}
+
+function typedSignatureAccidentalCount(keySignature) {
+  if ((keySignature?.fifths ?? 0) > 0) {
+    return keySignature?.counts?.sharps ?? 0
+  }
+  if ((keySignature?.fifths ?? 0) < 0) {
+    return keySignature?.counts?.flats ?? 0
+  }
+  return 0
+}
+
+function typedCancellationNaturalCount(keySignature) {
+  return keySignature?.counts?.naturals ?? 0
+}
+
+/**
+ * Confirm a strong opposite-sign key change printed after an internal barline.
+ *
+ * Internal prefixes are much easier to confuse with local accidentals than
+ * system-start signatures. Require at least three matching marks per staff in
+ * the typed vector layer, a complete natural cancellation of the active key,
+ * a nearby first notehead, and the identical signature repeated at the
+ * immediately following system start. The accepted first notehead becomes the
+ * playable origin so the printed signature consumes no musical time.
+ */
+export function detectConfirmedInternalVectorKeyChanges({
+  glyphs = [],
+  imageData,
+  systemMeasureBoxes = [],
+  detectedSystemKeySignatures = [],
+  systemKeyResolution,
+  vectorAccidentalPaths = [],
+} = {}) {
+  if (!(imageData?.width > 0)) return []
+  const changes = []
+
+  for (
+    let systemIndex = 0;
+    systemIndex + 1 < systemMeasureBoxes.length;
+    systemIndex += 1
+  ) {
+    const boxes = systemMeasureBoxes[systemIndex] ?? []
+    const activeKey = systemKeyResolution?.systems?.[systemIndex]?.keySignature
+    const confirmation = detectedSystemKeySignatures[systemIndex + 1]
+    if (
+      !reliableKeySignature(activeKey) ||
+      !reliableKeySignature(confirmation)
+    ) {
+      continue
+    }
+
+    for (let measureIndex = 1; measureIndex < boxes.length; measureIndex += 1) {
+      const measureBox = boxes[measureIndex]
+      const candidatePlayableX0 = openingPlayableX0(measureBox)
+      const firstNoteheadX = glyphs
+        .filter(
+          (glyph) =>
+            NOTEHEAD_GLYPHS.has(glyph.text) &&
+            glyphInBox(glyph, measureBox, imageData, {
+              usePlayableStart: false,
+            }) &&
+            glyph.x >= candidatePlayableX0 * imageData.width,
+        )
+        .map((glyph) => glyph.x)
+        .filter(Number.isFinite)
+        .sort((left, right) => left - right)[0]
+      const measureWidthPx =
+        ((measureBox?.x1 ?? 0) - (measureBox?.x0 ?? 0)) * imageData.width
+      if (
+        !Number.isFinite(firstNoteheadX) ||
+        firstNoteheadX - candidatePlayableX0 * imageData.width >
+          measureWidthPx * INTERNAL_KEY_MAX_NOTEHEAD_OFFSET_FRAC
+      ) {
+        continue
+      }
+
+      const candidate = detectVectorKeySignature(
+        glyphs,
+        imageData,
+        { ...measureBox, playableX0: firstNoteheadX / imageData.width },
+        vectorAccidentalPaths,
+      )
+      const typedCount = typedSignatureAccidentalCount(candidate)
+      const cancellationNaturals = typedCancellationNaturalCount(candidate)
+      if (
+        candidate.source !== 'vector-glyphs' ||
+        !reliableKeySignature(candidate) ||
+        candidate.fifths === 0 ||
+        activeKey.fifths === 0 ||
+        Math.sign(candidate.fifths) === Math.sign(activeKey.fifths) ||
+        candidate.fifths !== confirmation.fifths ||
+        typedCount < INTERNAL_KEY_MIN_TYPED_ACCIDENTALS ||
+        cancellationNaturals < Math.abs(activeKey.fifths) * 2
+      ) {
+        continue
+      }
+
+      changes.push({
+        systemIndex,
+        measureIndex,
+        measureNumber: measureBox.measureNumber,
+        fromFifths: activeKey.fifths,
+        toFifths: candidate.fifths,
+        confidence: 0.94,
+        source: 'confirmed-internal-vector-key-signature',
+        reason: 'typed-cancelled-opposite-sign-prefix-confirmed-at-next-system',
+        playableX0: firstNoteheadX / imageData.width,
+        keySignature: {
+          ...candidate,
+          confidence: 0.94,
+          source: 'confirmed-internal-vector-key-signature',
+        },
+      })
+      break
+    }
+  }
+
+  return changes
+}
+
+function buildVectorMeasureKeyTimeline({
+  systemMeasureBoxes = [],
+  systemKeyResolution,
+  internalChanges = [],
+}) {
+  const byMeasure = new Map()
+  const internalByMeasure = new Map(
+    internalChanges.map((change) => [change.measureNumber, change]),
+  )
+  let active = {
+    ...(systemKeyResolution?.initialKeySignature ?? {
+      fifths: 0,
+      mode: 'major',
+      confidence: 0,
+    }),
+  }
+
+  for (let systemIndex = 0; systemIndex < systemMeasureBoxes.length; systemIndex += 1) {
+    const systemResolution = systemKeyResolution?.systems?.[systemIndex]
+    if (
+      reliableKeySignature(systemResolution?.keySignature) &&
+      (
+        !reliableKeySignature(active) ||
+        systemResolution.changed
+      )
+    ) {
+      // A page can begin without a detectable signature and establish its
+      // initial reliable key at a later repeated system. The resolver does not
+      // label that first reliable state as a key *change*, but measures in that
+      // system still need the resolved key for pitch.
+      active = { ...systemResolution.keySignature }
+    }
+    const boxes = systemMeasureBoxes[systemIndex] ?? []
+    for (let measureIndex = 0; measureIndex < boxes.length; measureIndex += 1) {
+      const measureBox = boxes[measureIndex]
+      const internalChange = internalByMeasure.get(measureBox.measureNumber)
+      if (internalChange) {
+        active = { ...internalChange.keySignature }
+      }
+      byMeasure.set(measureBox.measureNumber, {
+        keySignature: { ...active },
+        changed: Boolean(
+          internalChange || (measureIndex === 0 && systemResolution?.changed),
+        ),
+        playableX0: internalChange?.playableX0 ?? null,
+      })
+    }
+  }
+
+  return { byMeasure, endingKeySignature: active }
+}
+
 export function detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes = []) {
   const firstBox = firstSystemBoxes[0]
   if (!firstBox) {
@@ -13034,6 +13214,19 @@ export function processVectorPageSystems({
     detectedSystemKeySignatures,
     inheritedKeySignature,
   )
+  const internalKeyChanges = detectConfirmedInternalVectorKeyChanges({
+    glyphs,
+    imageData,
+    systemMeasureBoxes,
+    detectedSystemKeySignatures,
+    systemKeyResolution,
+    vectorAccidentalPaths,
+  })
+  const measureKeyTimeline = buildVectorMeasureKeyTimeline({
+    systemMeasureBoxes,
+    systemKeyResolution,
+    internalChanges: internalKeyChanges,
+  })
   const keySignature = systemKeyResolution.initialKeySignature
   const firstSystemBoxes = systemMeasureBoxes[0] ?? []
   const detectedTimeSignature = detectVectorTimeSignature(glyphs, imageData, firstSystemBoxes)
@@ -13099,23 +13292,29 @@ export function processVectorPageSystems({
   for (let systemIndex = 0; systemIndex < systems.length; systemIndex += 1) {
     const boxes = systemMeasureBoxes[systemIndex] ?? []
     const staffClefs = staffClefsBySystem.get(systemIndex)
-    const systemKey =
-      systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
-    const systemKeyChanged = Boolean(
-      systemKeyResolution.systems[systemIndex]?.changed,
-    )
     const measures = boxes.map((measureBox, measureIndex) => {
       const measurePlacement = {
         isLastInSystem: measureIndex === boxes.length - 1,
       }
-      const enrichedBox = { ...measureBox, staffClefs }
+      const measureKey = measureKeyTimeline.byMeasure.get(measureBox.measureNumber) ?? {
+        keySignature,
+        changed: false,
+        playableX0: null,
+      }
+      const enrichedBox = {
+        ...measureBox,
+        ...(Number.isFinite(measureKey.playableX0)
+          ? { playableX0: measureKey.playableX0 }
+          : {}),
+        staffClefs,
+      }
       placementByMeasure.set(measureBox.measureNumber, measurePlacement)
       measureBoxByNumber.set(measureBox.measureNumber, enrichedBox)
       const record = buildVectorMeasureRecord({
         glyphs,
         imageData,
         measureBox: enrichedBox,
-        keySignature: systemKey,
+        keySignature: measureKey.keySignature,
         timeSignature,
         measurePlacement,
         inkThreshold,
@@ -13126,8 +13325,8 @@ export function processVectorPageSystems({
         enableLocalTupletGroups,
         allowInkStaccatoFallback,
       })
-      if (measureIndex === 0 && systemKeyChanged) {
-        record.keySignatureChange = { ...systemKey }
+      if (measureKey.changed) {
+        record.keySignatureChange = { ...measureKey.keySignature }
       }
       noteCount += record.vectorNoteCount ?? 0
       return record
@@ -13157,13 +13356,15 @@ export function processVectorPageSystems({
         continue
       }
       const previous = measureRecordsBySystem[systemIndex][measureIndex]
-      const systemKey =
-        systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
+      const measureKey = measureKeyTimeline.byMeasure.get(measureNumber) ?? {
+        keySignature,
+        changed: false,
+      }
       const rebuilt = buildVectorMeasureRecord({
         glyphs,
         imageData,
         measureBox,
-        keySignature: systemKey,
+        keySignature: measureKey.keySignature,
         timeSignature,
         measurePlacement,
         orphanGlyphs,
@@ -13175,11 +13376,8 @@ export function processVectorPageSystems({
         enableLocalTupletGroups,
         allowInkStaccatoFallback,
       })
-      if (
-        measureIndex === 0 &&
-        systemKeyResolution.systems[systemIndex]?.changed
-      ) {
-        rebuilt.keySignatureChange = { ...systemKey }
+      if (measureKey.changed) {
+        rebuilt.keySignatureChange = { ...measureKey.keySignature }
       }
       noteCount += (rebuilt.vectorNoteCount ?? 0) - (previous.vectorNoteCount ?? 0)
       measureRecordsBySystem[systemIndex][measureIndex] = rebuilt
@@ -13215,8 +13413,8 @@ export function processVectorPageSystems({
 
   if (accidentalPathCalibration.models.size > 0) {
     noteCount = 0
-    measureRecordsBySystem = systemMeasureBoxes.map((boxes, systemIndex) =>
-      boxes.map((measureBox, measureIndex) => {
+    measureRecordsBySystem = systemMeasureBoxes.map((boxes) =>
+      boxes.map((measureBox) => {
         const enrichedBox = measureBoxByNumber.get(measureBox.measureNumber)
         const measurePlacement =
           placementByMeasure.get(measureBox.measureNumber) ?? {}
@@ -13224,13 +13422,15 @@ export function processVectorPageSystems({
           orphanResult.assignments
             .get(measureBox.measureNumber)
             ?.map((entry) => entry.glyph) ?? []
-        const systemKey =
-          systemKeyResolution.systems[systemIndex]?.keySignature ?? keySignature
+        const measureKey = measureKeyTimeline.byMeasure.get(measureBox.measureNumber) ?? {
+          keySignature,
+          changed: false,
+        }
         const record = buildVectorMeasureRecord({
           glyphs,
           imageData,
           measureBox: enrichedBox,
-          keySignature: systemKey,
+          keySignature: measureKey.keySignature,
           timeSignature,
           measurePlacement,
           orphanGlyphs,
@@ -13243,11 +13443,8 @@ export function processVectorPageSystems({
           enableLocalTupletGroups,
           allowInkStaccatoFallback,
         })
-        if (
-          measureIndex === 0 &&
-          systemKeyResolution.systems[systemIndex]?.changed
-        ) {
-          record.keySignatureChange = { ...systemKey }
+        if (measureKey.changed) {
+          record.keySignatureChange = { ...measureKey.keySignature }
         }
         noteCount += record.vectorNoteCount ?? 0
         return record
@@ -13292,11 +13489,16 @@ export function processVectorPageSystems({
     measureRecordsBySystem,
     keySignature,
     initialKeySignature: systemKeyResolution.initialKeySignature,
-    endingKeySignature: systemKeyResolution.endingKeySignature,
+    endingKeySignature: measureKeyTimeline.endingKeySignature,
     keySignatureDiagnostics: {
       detections: detectedSystemKeySignatures,
       systems: systemKeyResolution.systems,
-      changes: systemKeyResolution.changes,
+      internalChanges: internalKeyChanges,
+      changes: [...systemKeyResolution.changes, ...internalKeyChanges].sort(
+        (left, right) =>
+          left.systemIndex - right.systemIndex ||
+          (left.measureIndex ?? -1) - (right.measureIndex ?? -1),
+      ),
     },
     initialStaffClefs:
       staffClefsBySystem.get(0)?.initialClefs ?? inheritedStaffClefs ?? null,
