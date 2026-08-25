@@ -5627,7 +5627,10 @@ export function reconstructDottedMelodySixteenthBassLattice(
       const latticeCx = medianNumber(eventNotes.map((note) => note.cx))
       return eventNotes.map((note) => ({ event, note, latticeCx }))
     })
-  if (entries.length !== 27 || entries.some((entry) => isOpenNotehead(entry.note))) {
+  if (
+    ![21, 24, 27].includes(entries.length) ||
+    entries.some((entry) => isOpenNotehead(entry.note))
+  ) {
     return events
   }
   const columns = clusterDenseLatticeNotes(entries)
@@ -5637,7 +5640,11 @@ export function reconstructDottedMelodySixteenthBassLattice(
   const typicalGap = medianNumber(gaps)
   if (
     !(typicalGap > 0) ||
-    gaps.some((gap) => gap < typicalGap * 0.75 || gap > typicalGap * 1.25)
+    gaps.some(
+      (gap, index) =>
+        gap < typicalGap * 0.75 ||
+        gap > typicalGap * (index === 5 ? 2 : 1.25),
+    )
   ) {
     return events
   }
@@ -5648,14 +5655,30 @@ export function reconstructDottedMelodySixteenthBassLattice(
   const bassByColumn = columns.map((column) => column.entries.filter(
     (entry) => (entry.note.clef ?? 'treble') === 'bass',
   ))
-  const expectedTrebleCounts = [2, 0, 1, 0, 1, 1, 2, 0, 1, 0, 1, 0]
+  const sparseTrebleCounts = [2, 0, 1, 0, 1, 1, 2, 0, 1, 0, 1, 0]
+  const sparseTreble = trebleByColumn.every(
+    (column, index) => column.length === sparseTrebleCounts[index],
+  )
+  const alternatingBassSixteenths = bassByColumn.every(
+    (column, index) => column.length === (index % 2 === 0 ? 2 : 1),
+  )
+  const singleBassSixteenths = bassByColumn.every((column) => column.length === 1)
+  const restedTrebleSixteenths = trebleByColumn.every((column) => column.length === 1)
+  const octaveBassEighths = bassByColumn.every(
+    (column, index) => column.length === (index % 2 === 0 ? 2 : 0),
+  ) && bassByColumn.every((column) =>
+    column.length === 0 || Math.abs(column[0].note.midi - column[1].note.midi) === 12,
+  )
+  const sparseSixteenthTexture = sparseTreble && (
+    alternatingBassSixteenths || singleBassSixteenths
+  )
+  const restedEighthTexture = restedTrebleSixteenths && octaveBassEighths
   if (
-    trebleByColumn.some(
-      (column, index) => column.length !== expectedTrebleCounts[index],
-    ) ||
-    bassByColumn.some((column, index) => column.length !== (index % 2 === 0 ? 2 : 1)) ||
-    bassByColumn.flat().some((entry) => noteStemDirection(entry.note) !== 'up') ||
-    bassByColumn.flat().filter((entry) => (entry.note.beams ?? 0) >= 2).length < 6
+    (!sparseSixteenthTexture && !restedEighthTexture) ||
+    stemDirectionShare(bassByColumn.flat(), 'up') < 0.75 ||
+    (restedEighthTexture
+      ? bassByColumn.flat().filter((entry) => (entry.note.beams ?? 0) >= 1).length < 1
+      : bassByColumn.flat().filter((entry) => (entry.note.beams ?? 0) >= 2).length < 4)
   ) {
     return events
   }
@@ -5668,6 +5691,7 @@ export function reconstructDottedMelodySixteenthBassLattice(
     .filter(({ column }) => column.some(
       (entry) => noteStemDirection(entry.note) === 'down',
     ))
+  const expectedAccompanimentCount = restedEighthTexture ? 10 : 7
   if (
     melodyEntries.some(
       (entry) =>
@@ -5675,7 +5699,7 @@ export function reconstructDottedMelodySixteenthBassLattice(
         entry.note.dotted !== true ||
         entry.note.durationDivisions !== 6,
     ) ||
-    accompanimentIndexes.length !== 7 ||
+    accompanimentIndexes.length !== expectedAccompanimentCount ||
     accompanimentIndexes.some(({ column }) =>
       column.filter((entry) => noteStemDirection(entry.note) === 'down').length !== 1,
     ) ||
@@ -5694,8 +5718,10 @@ export function reconstructDottedMelodySixteenthBassLattice(
     'dotted-quarter-melody',
   ))
   for (const { column, index } of accompanimentIndexes) {
-    const nextIndex = accompanimentIndexes.find(({ index: candidate }) => candidate > index)?.index
-      ?? totalDivisions
+    const nextIndex = restedEighthTexture
+      ? index + 1
+      : accompanimentIndexes.find(({ index: candidate }) => candidate > index)?.index
+        ?? totalDivisions
     rebuilt.push(denseLatticeEvent(
       column.filter((entry) => noteStemDirection(entry.note) === 'down'),
       index,
@@ -5704,13 +5730,28 @@ export function reconstructDottedMelodySixteenthBassLattice(
       'upper-eighth-sixteenth-accompaniment',
     ))
   }
+  if (restedEighthTexture) {
+    for (const startDivision of [0, 6]) {
+      rebuilt.push({
+        type: 'rest',
+        clef: 'treble',
+        startDivision,
+        durationDivisions: 1,
+        ...durationMeta(1),
+        sourceVoice: DOTTED_MELODY_SIXTEENTH_BASS_VOICE.UPPER_ACCOMPANIMENT,
+        sourceVoiceLane: 'upper-eighth-sixteenth-accompaniment',
+        structuralVoiceRest: true,
+      })
+    }
+  }
   for (const [index, column] of bassByColumn.entries()) {
+    if (column.length === 0) continue
     rebuilt.push(denseLatticeEvent(
       column,
       index,
-      1,
+      restedEighthTexture ? 2 : 1,
       DOTTED_MELODY_SIXTEENTH_BASS_VOICE.BASS,
-      'bass-sixteenth-lattice',
+      restedEighthTexture ? 'bass-eighth-dyads' : 'bass-sixteenth-lattice',
     ))
   }
   return sortVectorRhythmEvents(rebuilt.map((event) => ({

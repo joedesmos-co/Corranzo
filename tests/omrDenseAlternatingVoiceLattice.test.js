@@ -1634,27 +1634,40 @@ describe('reconstructQuarterMelodyOffbeatChordLattice', () => {
   })
 })
 
-function dottedMelodySixteenthBassFixture({ removeBassHead = false } = {}) {
+function dottedMelodySixteenthBassFixture({
+  removeBassHead = false,
+  bassVariant = 'alternating-sixteenths',
+  midbarPadding = 0,
+} = {}) {
   const events = []
+  const columnX = (index) => 100 + index * 14 + (index >= 6 ? midbarPadding : 0)
   for (let index = 0; index < 12; index += 1) {
-    const bassCount = index % 2 === 0 ? 2 : 1
+    const bassCount = bassVariant === 'single-sixteenths'
+      ? 1
+      : bassVariant === 'octave-eighths'
+        ? index % 2 === 0 ? 2 : 0
+        : index % 2 === 0 ? 2 : 1
     const bassNotes = Array.from({ length: bassCount }, (_, noteIndex) => {
       const note = latticeNote({
-        cx: 100 + index * 14,
+        cx: columnX(index),
         midi: 52 - noteIndex * 12 + (index % 3) * 2,
         clef: 'bass',
         stem: 'up',
       })
-      note.beams = noteIndex === 0 && index % 2 === 0 ? 2 : 0
+      note.beams = noteIndex === 0 && index % 2 === 0
+        ? bassVariant === 'octave-eighths' ? (index === 8 ? 1 : 0) : 2
+        : 0
       return note
     })
     if (removeBassHead && index === 4) bassNotes.pop()
-    events.push(latticeEvent(bassNotes, index, 1))
+    if (bassNotes.length > 0) events.push(latticeEvent(bassNotes, index, 1))
   }
-  const accompanimentIndexes = [0, 2, 4, 5, 6, 8, 10]
+  const accompanimentIndexes = bassVariant === 'octave-eighths'
+    ? [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
+    : [0, 2, 4, 5, 6, 8, 10]
   for (const index of accompanimentIndexes) {
     const note = latticeNote({
-      cx: 100 + index * 14,
+      cx: columnX(index),
       midi: 68 - Math.floor(index / 5) * 2,
       stem: 'down',
     })
@@ -1663,7 +1676,7 @@ function dottedMelodySixteenthBassFixture({ removeBassHead = false } = {}) {
   }
   for (const [melodyIndex, index] of [0, 6].entries()) {
     const note = latticeNote({
-      cx: 100 + index * 14,
+      cx: columnX(index),
       midi: 76 + melodyIndex * 2,
       stem: 'up',
     })
@@ -1691,6 +1704,57 @@ describe('reconstructDottedMelodySixteenthBassLattice', () => {
       event.durationDivisions,
     ])).toEqual([[0, 2], [2, 2], [4, 1], [5, 1], [6, 2], [8, 2], [10, 2]])
     expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(12)
+  })
+
+  it('supports a complete single-head bass sixteenth cursor', () => {
+    const rebuilt = reconstructDottedMelodySixteenthBassLattice(
+      dottedMelodySixteenthBassFixture({
+        bassVariant: 'single-sixteenths',
+        midbarPadding: 10,
+      }),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1)).toHaveLength(2)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)).toHaveLength(7)
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 12 }, (_, index) => [index, 1]))
+  })
+
+  it('supports rested treble sixteenths above octave bass eighths', () => {
+    const rebuilt = reconstructDottedMelodySixteenthBassLattice(
+      dottedMelodySixteenthBassFixture({ bassVariant: 'octave-eighths' }),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 6], [6, 6]])
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.type,
+    ])).toEqual([
+      [0, 1, 'rest'],
+      [1, 1, 'note'],
+      [2, 1, 'note'],
+      [3, 1, 'note'],
+      [4, 1, 'note'],
+      [5, 1, 'note'],
+      [6, 1, 'rest'],
+      [7, 1, 'note'],
+      [8, 1, 'note'],
+      [9, 1, 'note'],
+      [10, 1, 'note'],
+      [11, 1, 'note'],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 2], [2, 2], [4, 2], [6, 2], [8, 2], [10, 2]])
   })
 
   it('abstains outside 3/4 and when the alternating bass topology is incomplete', () => {
