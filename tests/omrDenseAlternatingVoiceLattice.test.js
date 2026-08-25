@@ -29,6 +29,7 @@ import {
   reconstructQuarterRestChordBassLattice,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructSyncopatedQuarterChordBassLattice,
+  reconstructSustainedCantabileChordGrid,
   reconstructTiedChordMelodyBassLattice,
   reconstructTripletMelodyOverprintLattice,
   reconstructWholeMelodyQuarterChordBassGrid,
@@ -245,6 +246,147 @@ describe('reconstructCantabileAlternatingChordGrid', () => {
   ])('abstains for %s', (_label, options, totalDivisions) => {
     const source = cantabileChordGridFixture(options)
     expect(reconstructCantabileAlternatingChordGrid(source, totalDivisions)).toBe(source)
+  })
+})
+
+function sustainedCantabileFixture({
+  variant = 'whole',
+  tiedBass = true,
+  wrongTiedPitch = false,
+  missingOpeningBeam = false,
+} = {}) {
+  const whole = variant === 'whole'
+  const xs = whole
+    ? [100, 120, 160, 180, 200, 220, 240]
+    : [100, 124, 160, 172, 194, 214, 236, 256]
+  const columns = whole
+    ? [
+        [[75, null, true]],
+        [[70, 'down'], [66, 'down']],
+        [[70, 'down'], [66, 'down']],
+        [[71, 'down'], [66, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+        [[69, 'down'], [66, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+      ]
+    : [
+        [[78, 'up']],
+        [[70, 'down'], [66, 'down']],
+        [[70, 'down'], [66, 'down']],
+        [[77, 'up']],
+        [[75, 'down', true], [71, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+        [[69, 'down'], [63, 'down']],
+        [[70, 'up'], [66, 'up']],
+      ]
+  const events = columns.map((specs, index) => {
+    const notes = specs.map(([midi, stem, open = false]) => {
+      const note = latticeNote({
+        cx: xs[index],
+        midi,
+        stem: stem ?? 'up',
+        open,
+      })
+      if (stem == null) {
+        note.stem = null
+      } else {
+        note.stem.x = xs[index] + (stem === 'up' ? 5 : -5)
+      }
+      note.beams = index === 1 && !missingOpeningBeam ? 2 : 0
+      note.dotted = !whole && index === 0
+      return note
+    })
+    return latticeEvent(notes, index * 2, 1)
+  })
+  const bassAttack = latticeNote({ cx: 100, midi: 39, clef: 'bass', stem: 'up' })
+  bassAttack.stem.x = 105
+  const upperCx = whole ? 140 : 142
+  const upperSustain = latticeNote({
+    cx: upperCx,
+    midi: 58,
+    clef: 'bass',
+    stem: 'down',
+    open: true,
+  })
+  upperSustain.stem.x = upperCx - 5
+  const bassEvents = [
+    latticeEvent([bassAttack], 0, 4),
+    latticeEvent([upperSustain], 4, 12),
+  ]
+  if (tiedBass) {
+    const tied = latticeNote({
+      cx: 114,
+      midi: wrongTiedPitch ? 40 : 39,
+      clef: 'bass',
+      open: true,
+    })
+    tied.stem = null
+    bassEvents.splice(1, 0, latticeEvent([tied], 0, 16))
+  }
+  return [
+    ...events,
+    ...bassEvents,
+    ...(!whole ? [{
+      type: 'rest',
+      clef: 'treble',
+      cx: 150,
+      startDivision: 6,
+      durationDivisions: 2,
+      durationType: 'eighth',
+    }] : []),
+  ]
+}
+
+describe('reconstructSustainedCantabileChordGrid', () => {
+  it.each([
+    ['whole melody', 'whole', [[0, 16]]],
+    ['double-dotted and half melody', 'half', [[0, 7], [7, 1], [8, 8]]],
+  ])('recovers the %s above the tied bass sustain', (_label, variant, melody) => {
+    const rebuilt = reconstructSustainedCantabileChordGrid(
+      sustainedCantabileFixture({ variant }),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(melody)
+    expect(rebuilt.filter((event) => event.sourceVoice === 2 && event.type === 'note')
+      .map((event) => event.startDivision)).toEqual([2, 6, 8, 12])
+    expect(rebuilt.filter((event) => event.sourceVoice === 3 && event.type === 'note')
+      .map((event) => event.startDivision)).toEqual([10, 14])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([[0, 4], [4, 12]])
+    expect(rebuilt.find((event) => event.sourceVoice === 6)).toMatchObject({
+      startDivision: 0,
+      durationDivisions: 16,
+    })
+  })
+
+  it('also recovers the complete two-head bass foundation', () => {
+    const rebuilt = reconstructSustainedCantabileChordGrid(
+      sustainedCantabileFixture({ tiedBass: false }),
+      16,
+    )
+    expect(rebuilt.filter((event) => event.sourceVoice === 5)).toHaveLength(2)
+    expect(rebuilt.some((event) => event.sourceVoice === 6)).toBe(false)
+    expect(rebuilt.find(
+      (event) =>
+        event.sourceVoice === 3 &&
+        event.type === 'rest' &&
+        event.startDivision === 0,
+    )).toMatchObject({ durationDivisions: 8 })
+  })
+
+  it.each([
+    ['a mismatched tied bass pitch', { wrongTiedPitch: true }, 16],
+    ['missing opening double-beam evidence', { missingOpeningBeam: true }, 16],
+    ['a non-4/4 measure', {}, 12],
+  ])('abstains for %s', (_label, options, totalDivisions) => {
+    const source = sustainedCantabileFixture(options)
+    expect(reconstructSustainedCantabileChordGrid(source, totalDivisions)).toBe(source)
   })
 })
 
