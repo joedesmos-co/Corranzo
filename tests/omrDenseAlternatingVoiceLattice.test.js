@@ -27,6 +27,7 @@ import {
   removeTiedCadenceContinuationBassTieSpillover,
   reconstructQuarterMelodyOffbeatChordLattice,
   reconstructQuarterRestChordBassLattice,
+  reconstructRestedSixteenthDottedSustainBassCadence,
   reconstructSyncopatedChordBassOstinatoGrid,
   reconstructSyncopatedQuarterChordBassLattice,
   reconstructSustainedCantabileChordGrid,
@@ -1914,6 +1915,95 @@ describe('reconstructWholeChordSixteenthMelodyBassCadence', () => {
   ])('abstains for %s', (_label, options, totalDivisions) => {
     const source = wholeChordSixteenthCadenceFixture(options)
     expect(reconstructWholeChordSixteenthMelodyBassCadence(source, totalDivisions))
+      .toBe(source)
+  })
+})
+
+function restedSixteenthDottedSustainFixture({
+  missingSustainDot = false,
+  mismatchedClosingChord = false,
+  wrongRestClef = false,
+} = {}) {
+  const events = []
+  const xs = Array.from({ length: 12 }, (_, index) => 100 + index * 15)
+  const melodyMidis = [75, 76, 78, 80, 78, 76, null, 76, 78, 80, 78, 76]
+  for (const [index, midi] of melodyMidis.entries()) {
+    if (midi == null) continue
+    events.push(latticeEvent([
+      latticeNote({ cx: xs[index], midi, stem: 'down' }),
+    ], index, 1))
+  }
+  const sustain = latticeNote({ cx: xs[6], midi: 87, stem: 'up' })
+  sustain.dotted = !missingSustainDot
+  sustain.durationDivisions = missingSustainDot ? 4 : 6
+  sustain.durationType = missingSustainDot ? 'quarter' : 'dotted-quarter'
+  events.push(latticeEvent([sustain], 6, 6))
+
+  for (const [columnIndex, midis] of [
+    [0, [40, 28]],
+    [4, [52, 40]],
+    [6, [63, 59, 56]],
+    [10, mismatchedClosingChord ? [64, 59, 56] : [63, 59, 56]],
+  ]) {
+    const notes = midis.map((midi) => latticeNote({
+      cx: xs[columnIndex],
+      midi,
+      clef: 'bass',
+      stem: columnIndex < 6 ? 'up' : 'down',
+    }))
+    events.push(latticeEvent(notes, columnIndex, columnIndex === 6 ? 4 : 2))
+  }
+  events.push({
+    type: 'rest',
+    clef: wrongRestClef ? 'treble' : 'bass',
+    startDivision: 2,
+    durationDivisions: 2,
+    durationType: 'eighth',
+  })
+  return events
+}
+
+describe('reconstructRestedSixteenthDottedSustainBassCadence', () => {
+  it('separates the melody gap, dotted sustain, and bass cadence', () => {
+    const rebuilt = reconstructRestedSixteenthDottedSustainBassCadence(
+      restedSixteenthDottedSustainFixture(),
+      12,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.type,
+    ])).toEqual(Array.from({ length: 12 }, (_, index) => [
+      index,
+      1,
+      index === 6 ? 'rest' : 'note',
+    ]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 2)[0]).toMatchObject({
+      startDivision: 6,
+      durationDivisions: 6,
+    })
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.type,
+    ])).toEqual([
+      [0, 2, 'note'],
+      [2, 2, 'rest'],
+      [4, 2, 'note'],
+      [6, 4, 'note'],
+      [10, 2, 'note'],
+    ])
+  })
+
+  it.each([
+    ['missing sustain dot', { missingSustainDot: true }, 12],
+    ['mismatched closing chord', { mismatchedClosingChord: true }, 12],
+    ['wrong-staff source rest', { wrongRestClef: true }, 12],
+    ['non-3/4 meter', {}, 16],
+  ])('abstains for %s', (_label, options, totalDivisions) => {
+    const source = restedSixteenthDottedSustainFixture(options)
+    expect(reconstructRestedSixteenthDottedSustainBassCadence(source, totalDivisions))
       .toBe(source)
   })
 })

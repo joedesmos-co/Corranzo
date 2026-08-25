@@ -6029,6 +6029,12 @@ const WHOLE_CHORD_SIXTEENTH_MELODY_VOICE = Object.freeze({
   BASS: 5,
 })
 
+const RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE = Object.freeze({
+  MELODY: 1,
+  UPPER_SUSTAIN: 2,
+  BASS: 5,
+})
+
 const ALTERNATING_EIGHTH_CHORD_BASS_VOICE = Object.freeze({
   MELODY: 1,
   UPPER_CHORD: 2,
@@ -6337,6 +6343,153 @@ export function reconstructWholeChordSixteenthMelodyBassCadence(
   return sortVectorRhythmEvents(rebuilt.map((event) => ({
     ...event,
     wholeChordSixteenthMelodyBassCadence: true,
+  })))
+}
+
+/**
+ * Recover a sixteenth melody with a source-printed gap at the midpoint, where
+ * an independently up-stemmed dotted-quarter sustain begins. The lower staff
+ * supplies octave dyads, an explicit eighth rest, and two repeated cadence
+ * chords on a separate cursor.
+ */
+export function reconstructRestedSixteenthDottedSustainBassCadence(
+  events = [],
+  totalDivisions = 12,
+) {
+  if (totalDivisions !== 12 || events.some((event) => event?.timeModification)) {
+    return events
+  }
+  const noteEvents = events.filter((event) => event.type === 'note')
+  const sourceRests = events.filter((event) => event.type === 'rest')
+  const trebleEntries = latticeEntriesForClef(noteEvents, 'treble')
+  const bassEntries = latticeEntriesForClef(noteEvents, 'bass')
+  if (
+    trebleEntries.length !== 12 ||
+    bassEntries.length !== 10 ||
+    sourceRests.length !== 1 ||
+    (sourceRests[0].clef ?? 'treble') !== 'bass' ||
+    sourceRests[0].durationDivisions !== 2
+  ) {
+    return events
+  }
+  const trebleColumns = clusterDenseLatticeNotes(trebleEntries)
+  if (
+    trebleColumns.length !== 12 ||
+    trebleColumns.some((column) => column.entries.length !== 1)
+  ) {
+    return events
+  }
+  const trebleGaps = trebleColumns.slice(1).map(
+    (column, index) => column.cx - trebleColumns[index].cx,
+  )
+  const typicalTrebleGap = medianNumber(trebleGaps)
+  if (
+    !(typicalTrebleGap > 0) ||
+    trebleGaps.some(
+      (gap) => gap < typicalTrebleGap * 0.48 || gap > typicalTrebleGap * 1.55,
+    )
+  ) {
+    return events
+  }
+  const sustain = trebleColumns[6].entries[0]
+  const melody = trebleColumns
+    .filter((_, index) => index !== 6)
+    .map((column) => column.entries[0])
+  if (
+    isOpenNotehead(sustain.note) ||
+    noteStemDirection(sustain.note) !== 'up' ||
+    sustain.note.dotted !== true ||
+    sustain.note.durationDivisions !== 6 ||
+    melody.some(
+      (entry) =>
+        isOpenNotehead(entry.note) || noteStemDirection(entry.note) !== 'down',
+    )
+  ) {
+    return events
+  }
+
+  const bassColumns = clusterSourceAttackColumns(
+    bassEntries,
+    Math.max(3, typicalTrebleGap * 0.42),
+  )
+  const bassTrebleIndexes = [0, 4, 6, 10]
+  if (
+    bassColumns.length !== 4 ||
+    bassColumns.some(
+      (column, index) => column.entries.length !== (index < 2 ? 2 : 3),
+    ) ||
+    bassColumns.some(
+      (column, index) =>
+        Math.abs(column.cx - trebleColumns[bassTrebleIndexes[index]].cx) >
+        typicalTrebleGap * 0.35,
+    ) ||
+    bassColumns.slice(0, 2).some(
+      (column) =>
+        Math.abs(column.entries[0].note.midi - column.entries[1].note.midi) !== 12 ||
+        !column.entries.some((entry) => noteStemDirection(entry.note) === 'up'),
+    ) ||
+    bassColumns.slice(2).some(
+      (column) => column.entries.some(
+        (entry) => isOpenNotehead(entry.note) || noteStemDirection(entry.note) !== 'down',
+      ),
+    ) ||
+    !sameSourcePitchSet(bassColumns[2].entries, bassColumns[3].entries)
+  ) {
+    return events
+  }
+
+  const rebuilt = []
+  for (const [index, entry] of melody.entries()) {
+    const startDivision = index < 6 ? index : index + 1
+    rebuilt.push(denseLatticeEvent(
+      [entry],
+      startDivision,
+      1,
+      RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE.MELODY,
+      'rested-sixteenth-melody',
+    ))
+  }
+  rebuilt.push({
+    type: 'rest',
+    clef: 'treble',
+    startDivision: 6,
+    durationDivisions: 1,
+    ...durationMeta(1),
+    sourceVoice: RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE.MELODY,
+    sourceVoiceLane: 'rested-sixteenth-melody',
+    structuralVoiceRest: true,
+  })
+  rebuilt.push(denseLatticeEvent(
+    [sustain],
+    6,
+    6,
+    RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE.UPPER_SUSTAIN,
+    'dotted-quarter-upper-sustain',
+  ))
+  const bassStarts = [0, 4, 6, 10]
+  const bassDurations = [2, 2, 4, 2]
+  for (const [index, column] of bassColumns.entries()) {
+    rebuilt.push(denseLatticeEvent(
+      column.entries,
+      bassStarts[index],
+      bassDurations[index],
+      RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE.BASS,
+      'bass-dyad-chord-cadence',
+    ))
+  }
+  rebuilt.push({
+    type: 'rest',
+    clef: 'bass',
+    startDivision: 2,
+    durationDivisions: 2,
+    ...durationMeta(2),
+    sourceVoice: RESTED_SIXTEENTH_DOTTED_SUSTAIN_VOICE.BASS,
+    sourceVoiceLane: 'bass-dyad-chord-cadence',
+    structuralVoiceRest: true,
+  })
+  return sortVectorRhythmEvents(rebuilt.map((event) => ({
+    ...event,
+    restedSixteenthDottedSustainBassCadence: true,
   })))
 }
 
@@ -10958,6 +11111,17 @@ export function buildVectorMeasureRecord({
       eventsBeforeWholeChordSixteenthMelody,
       events,
       { reason: 'source-beamed-shared-head-attack-and-sustain' },
+    )
+  }
+  const eventsBeforeRestedSixteenthDottedSustain = events
+  events = reconstructRestedSixteenthDottedSustainBassCadence(events, totalDivisions)
+  if (provenance && events !== eventsBeforeRestedSixteenthDottedSustain) {
+    provenance.recordStage(
+      'rested-sixteenth-dotted-sustain-bass-cadence',
+      'reconstructRestedSixteenthDottedSustainBassCadence',
+      eventsBeforeRestedSixteenthDottedSustain,
+      events,
+      { reason: 'source-complete-rest-sustain-and-bass-cursors' },
     )
   }
   const eventsBeforeDottedChordSixteenthBass = events
