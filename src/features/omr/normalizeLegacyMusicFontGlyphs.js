@@ -48,9 +48,12 @@ export const LEGACY_MSCORE_GLYPH_MAP = new Map([
   ['\ue1a4', '\ue264'], // double flat
   // Alternate embedded MScore subset used by MuseScore web exports. These
   // codepoints were identified from repeated system-margin geometry: U+E10E
-  // occurs in paired sharp-order columns and U+E114 in paired flat-order
-  // columns, while the same font's noteheads/clefs use the mappings above.
+  // occurs in paired sharp-order columns, U+E114 in paired flat-order columns,
+  // and U+E113 immediately left of notes whose key-signature alteration is
+  // explicitly cancelled, while the same font's noteheads/clefs use the
+  // mappings above.
   ['\ue10e', '\ue262'], // sharp (alternate MScore subset)
+  ['\ue113', '\ue261'], // natural (alternate MScore subset)
   ['\ue114', '\ue260'], // flat (alternate MScore subset)
 ])
 
