@@ -10,6 +10,7 @@ import {
   reconstructDottedChordOffbeatPairLattice,
   reconstructDottedMelodySixteenthBassLattice,
   reconstructDottedMelodyHalfChordBassGrid,
+  reconstructEighthMelodyQuarterChordBassLattice,
   reconstructEighthMelodyHalfSustainArpeggioLattice,
   reconstructHalfMelodyChordCadenceGrid,
   reconstructHalfSustainSixteenthCadenceGrid,
@@ -227,6 +228,91 @@ describe('reconstructQuarterRestChordBassLattice', () => {
       })),
     }))
     expect(completeQuarterRestChordBassTies(rebuilt)).toBe(rebuilt)
+  })
+})
+
+function eighthMelodyQuarterChordBassFixture({ missingBassHead = false } = {}) {
+  const events = [{
+    type: 'rest',
+    clef: 'treble',
+    startDivision: 1,
+    durationDivisions: 2,
+    durationType: 'eighth',
+  }]
+  const xs = Array.from({ length: 8 }, (_, index) => 100 + index * 24)
+  const bassCounts = [2, 0, 3, 1, 1, 1, 3, 0]
+  for (const [index, cx] of xs.entries()) {
+    const melody = latticeNote({
+      cx,
+      midi: 76 - (index % 2) * 2,
+      stem: 'up',
+    })
+    melody.beams = [0, 1, 2, 5, 6].includes(index) ? 2 : index === 4 ? 1 : 0
+    events.push(latticeEvent([melody], index * 2, 1))
+    if ([2, 6].includes(index)) {
+      events.push(latticeEvent([
+        latticeNote({ cx, midi: 68, stem: 'down' }),
+      ], index * 2, 1))
+    }
+
+    const count = bassCounts[index] - (missingBassHead && index === 2 ? 1 : 0)
+    if (count > 0) {
+      const notes = Array.from({ length: count }, (_, noteIndex) => {
+        const stem = index === 0
+          ? noteIndex === 0 ? 'down' : 'up'
+          : [2, 3, 6].includes(index) ? 'down' : 'up'
+        const midi = [3, 4, 5].includes(index)
+          ? 49
+          : 64 - noteIndex * 6
+        const note = latticeNote({ cx, midi, clef: 'bass', stem })
+        note.durationDivisions = [0, 3, 5, 6].includes(index) ? 4 : 2
+        note.durationType = note.durationDivisions === 4 ? 'quarter' : 'eighth'
+        note.beams = index === 2 && noteIndex === 0 ? 1 : 0
+        if (index === 3) note.tieStart = true
+        if (index === 4) note.tieStop = true
+        return note
+      })
+      events.push(latticeEvent(notes, index * 2, 1))
+    }
+  }
+  return events
+}
+
+describe('reconstructEighthMelodyQuarterChordBassLattice', () => {
+  it('recovers the eighth melody, quarter chords, and syncopated bass', () => {
+    const rebuilt = reconstructEighthMelodyQuarterChordBassLattice(
+      eighthMelodyQuarterChordBassFixture(),
+      16,
+    )
+
+    expect(rebuilt.filter((event) => event.sourceVoice === 1).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual(Array.from({ length: 8 }, (_, index) => [index * 2, 2]))
+    expect(rebuilt.filter((event) => event.sourceVoice === 2).map((event) => [
+      event.type,
+      event.startDivision,
+      event.durationDivisions,
+    ])).toEqual([
+      ['rest', 0, 4], ['note', 4, 4], ['rest', 8, 4], ['note', 12, 4],
+    ])
+    expect(rebuilt.filter((event) => event.sourceVoice === 5).map((event) => [
+      event.startDivision,
+      event.durationDivisions,
+      event.notes.length,
+    ])).toEqual([
+      [0, 4, 2], [4, 2, 3], [6, 2, 1],
+      [8, 2, 1], [10, 2, 1], [12, 4, 3],
+    ])
+  })
+
+  it('abstains for incomplete bass evidence or a different meter', () => {
+    const complete = eighthMelodyQuarterChordBassFixture()
+    const incomplete = eighthMelodyQuarterChordBassFixture({ missingBassHead: true })
+    expect(reconstructEighthMelodyQuarterChordBassLattice(incomplete, 16))
+      .toBe(incomplete)
+    expect(reconstructEighthMelodyQuarterChordBassLattice(complete, 12))
+      .toBe(complete)
   })
 })
 
