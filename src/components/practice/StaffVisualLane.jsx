@@ -626,6 +626,7 @@ function StaffVisualLane({
                 )}`}
                 data-note-type={rest.noteType}
                 data-voice={rest.voice}
+                data-source-y-mode={rest.sourceYMode ?? undefined}
               >
                 <text
                   className="staff-lane__rest-glyph"
@@ -656,6 +657,7 @@ function StaffVisualLane({
                 data-voice={note.voice}
                 data-hollow={note.hollow || undefined}
                 data-stemless={note.stemless || undefined}
+                data-source-y-mode={note.sourceYMode ?? undefined}
               >
                 {note.ledgerLines.map((ledgerY) => (
                   <line

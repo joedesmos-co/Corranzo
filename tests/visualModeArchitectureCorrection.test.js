@@ -431,6 +431,62 @@ describe('Visual mode architecture correction', () => {
     )
   })
 
+  it('projects MusicXML default-y instead of forcing fixed-clef pitch placement', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list>
+          <score-part id="P1"><part-name>Piano</part-name></score-part>
+        </part-list>
+        <part id="P1">
+          <measure number="1" width="180">
+            <print new-system="yes">
+              <staff-layout number="2"><staff-distance>82.5</staff-distance></staff-layout>
+            </print>
+            <attributes>
+              <divisions>1</divisions>
+              <time><beats>4</beats><beat-type>4</beat-type></time>
+              <staves>2</staves>
+              <clef number="1"><sign>G</sign><line>2</line></clef>
+              <clef number="2"><sign>F</sign><line>4</line></clef>
+            </attributes>
+            <note default-x="20" default-y="-122.5" relative-y="5"><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>2</staff></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const baseGeometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    const sourceGeometry = buildSourceSystemStaffGeometry(
+      baseGeometry,
+      layout.systems[0],
+    )
+    const [note] = buildStaffLaneNotes(groups, baseGeometry, { sourceLayout: layout })
+
+    expect(note.sourceYMode).toBe('musicxml-default-y')
+    expect(note.y).toBeCloseTo(
+      sourceGeometry.staves.bass.lines[0] - STAFF_LINE_GAP * 0.5,
+      8,
+    )
+    expect(note.ledgerLines).toEqual([])
+  })
+
+  it('keeps semantic pitch Y when MusicXML has no printed vertical coordinate', () => {
+    const timingMap = semanticTimingMap()
+    timingMap.notes = timingMap.notes.map((note) => ({ ...note, defaultY: null }))
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry, { sourceLayout: layout })
+    const quarter = notes.find((note) => note.sourceNoteId === 'right-quarter')
+
+    expect(quarter.sourceYMode).toBe('semantic-fallback')
+    expect(quarter.y).toBeCloseTo(
+      geometry.staves.treble.lines[4] + STAFF_LINE_GAP,
+      8,
+    )
+  })
+
   it('keeps the semantic staff geometry when source staff-distance is absent', () => {
     const geometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
     expect(buildSourceSystemStaffGeometry(geometry, { staffDistances: null })).toBe(

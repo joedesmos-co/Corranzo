@@ -5,6 +5,7 @@ import {
 } from './visualNotationMarkings.js'
 import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
 import {
+  VISUAL_LAYOUT_SOURCE,
   resolveSourceFidelityLaneX,
   resolveSourceFidelityObjectX,
   resolveSourceFidelitySystem,
@@ -296,6 +297,56 @@ export function staffYForDiatonic(diatonic, staffKind, geometry) {
   return { y, ledgerLines }
 }
 
+function ledgerLinesForSourceY(y, staffKind, geometry) {
+  const staff = geometry.staves[staffKind] ?? Object.values(geometry.staves)[0]
+  if (!staff) return []
+  const top = staff.lines[0]
+  const bottom = staff.lines[staff.lines.length - 1]
+  const ledgerLines = []
+  if (y < top - HALF_STEP) {
+    for (let ledgerY = top - STAFF_LINE_GAP; ledgerY >= y - 0.001; ledgerY -= STAFF_LINE_GAP) {
+      ledgerLines.push(ledgerY)
+    }
+  } else if (y > bottom + HALF_STEP) {
+    for (let ledgerY = bottom + STAFF_LINE_GAP; ledgerY <= y + 0.001; ledgerY += STAFF_LINE_GAP) {
+      ledgerLines.push(ledgerY)
+    }
+  }
+  return ledgerLines
+}
+
+/**
+ * MusicXML default-y is source engraving evidence in tenths, measured upward
+ * from the source staff coordinate frame. Multi-staff exports include the
+ * inter-staff distance in that frame, so its origin maps to the top line of
+ * the first reconstructed staff. Translate that evidence when present;
+ * otherwise abstain so semantic clef/pitch layout remains the fallback.
+ */
+function sourceYForObject(object, staffKind, geometry) {
+  const layout = object?.sourceLayout
+  const defaultY = Number(layout?.defaultY)
+  const relativeY = layout?.relativeY == null ? 0 : Number(layout.relativeY)
+  if (
+    layout?.source !== VISUAL_LAYOUT_SOURCE.MUSICXML ||
+    layout.defaultY == null ||
+    !Number.isFinite(defaultY) ||
+    !Number.isFinite(relativeY)
+  ) {
+    return null
+  }
+  const firstStaff =
+    geometry.staves[STAFF_KIND.TREBLE] ?? Object.values(geometry.staves)[0]
+  if (!firstStaff) return null
+  const y = firstStaff.lines[0] - ((defaultY + relativeY) / 10) * STAFF_LINE_GAP
+  return {
+    y,
+    ledgerLines: ledgerLinesForSourceY(y, staffKind, geometry),
+    sourceYMode: 'musicxml-default-y',
+    sourceDefaultY: defaultY,
+    sourceRelativeY: relativeY,
+  }
+}
+
 const KEY_SIGNATURE_DIATONICS = {
   [STAFF_KIND.TREBLE]: {
     sharp: [38, 35, 39, 36, 33, 37, 34],
@@ -451,6 +502,7 @@ export function buildStaffLaneRests(
         objectGeometry.staves[staffKind] ?? Object.values(objectGeometry.staves)[0]
       if (!staff) continue
       const noteType = inferredRestType(rest)
+      const sourcePosition = sourceYForObject(rest, staffKind, objectGeometry)
       rests.push({
         id: rest.visualRestId ?? `${group.id}-rest-${index}`,
         groupId: group.id,
@@ -462,7 +514,8 @@ export function buildStaffLaneRests(
           group,
           group.timeSeconds ?? rest.timeSeconds ?? 0,
         ),
-        y: staff.lines[2],
+        y: sourcePosition?.y ?? staff.lines[2],
+        sourceYMode: sourcePosition?.sourceYMode ?? 'semantic-fallback',
         staffKind,
         voice: rest.voice ?? 1,
         measureNumber: rest.measureNumber ?? group.measureNumber ?? null,
@@ -542,11 +595,13 @@ export function buildStaffLaneNotes(
         note,
         renderGroup,
       )
-      const { y, ledgerLines } = staffYForDiatonic(
+      const semanticPosition = staffYForDiatonic(
         written.diatonic,
         staffKind,
         objectGeometry,
       )
+      const sourcePosition = sourceYForObject(note, staffKind, objectGeometry)
+      const { y, ledgerLines } = sourcePosition ?? semanticPosition
       const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0)
       const noteType = note.noteType ?? null
       notes.push({
@@ -557,6 +612,9 @@ export function buildStaffLaneNotes(
         x,
         xOffset: 0,
         y,
+        sourceYMode: sourcePosition?.sourceYMode ?? 'semantic-fallback',
+        sourceDefaultY: sourcePosition?.sourceDefaultY ?? null,
+        sourceRelativeY: sourcePosition?.sourceRelativeY ?? null,
         staffKind,
         sharp: written.accidentalType === 'sharp',
         accidentalType: written.accidentalType,
