@@ -320,6 +320,39 @@ function readHarmonySymbol(harmonyNode) {
   return symbol
 }
 
+function readDynamicMarks(directionNode) {
+  const marks = []
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    for (const dynamics of findChildren(directionType, 'dynamics')) {
+      for (const markNode of childNodes(dynamics)) {
+        const mark = String(
+          markNode.tag === 'other-dynamics'
+            ? textOf(markNode) ?? ''
+            : markNode.tag ?? '',
+        ).trim().toLowerCase()
+        if (!mark) continue
+        const defaultX = numberOf(attr(dynamics, 'default-x'), NaN)
+        const defaultY = numberOf(attr(dynamics, 'default-y'), NaN)
+        const relativeX = numberOf(attr(dynamics, 'relative-x'), NaN)
+        const relativeY = numberOf(attr(dynamics, 'relative-y'), NaN)
+        marks.push({
+          mark,
+          placement:
+            attr(dynamics, 'placement') ?? attr(directionNode, 'placement') ?? null,
+          printObject:
+            attr(directionNode, 'print-object') !== 'no' &&
+            attr(dynamics, 'print-object') !== 'no',
+          defaultX: Number.isFinite(defaultX) ? defaultX : null,
+          defaultY: Number.isFinite(defaultY) ? defaultY : null,
+          relativeX: Number.isFinite(relativeX) ? relativeX : null,
+          relativeY: Number.isFinite(relativeY) ? relativeY : null,
+        })
+      }
+    }
+  }
+  return marks
+}
+
 function emptyArticulations() {
   return {
     staccato: false,
@@ -787,6 +820,7 @@ function walkPart({
   notes,
   rawTimingEvents,
   harmonyEvents,
+  dynamicEvents = null,
   partNotation = null,
   wedgeSpans = null,
 }) {
@@ -870,8 +904,27 @@ function walkPart({
         case 'direction': {
           const helpers = { findChildren, childNodes, childText, attr }
           const directionStaff = staffFromDirection(child, helpers)
+          const visualDirectionStaffNumber = numberOf(childText(child, 'staff'), NaN)
+          const visualDirectionStaff =
+            Number.isFinite(visualDirectionStaffNumber) && visualDirectionStaffNumber > 0
+              ? visualDirectionStaffNumber
+              : directionStaff
           const dynamicsVelocity = dynamicsFromDirection(child, helpers)
           const quarterTime = measureStartQuarters + cursorDivisions / divisions
+          const directionOffsetDivisions = numberOf(childText(child, 'offset'), 0)
+          const visualQuarterTime =
+            quarterTime + directionOffsetDivisions / Math.max(divisions, 1)
+          if (Array.isArray(dynamicEvents)) {
+            for (const dynamic of readDynamicMarks(child)) {
+              dynamicEvents.push({
+                ...dynamic,
+                partId,
+                measureNumber,
+                staff: visualDirectionStaff,
+                quarterTime: visualQuarterTime,
+              })
+            }
+          }
           if (dynamicsVelocity != null) {
             if (directionStaff != null) {
               velocityByStaff.set(directionStaff, dynamicsVelocity)
@@ -1203,6 +1256,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const notes = []
   const rawTimingEvents = []
   const harmonyEvents = []
+  const dynamicEvents = []
   const wedgeSpans = []
   const partNotationById = new Map()
 
@@ -1230,6 +1284,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     notes,
     rawTimingEvents,
     harmonyEvents,
+    dynamicEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
   })
@@ -1248,6 +1303,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       notes,
       rawTimingEvents,
       harmonyEvents,
+      dynamicEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
     })
@@ -1390,6 +1446,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   for (const event of harmonyEvents) {
     event.timeSeconds = toSeconds(event.quarterTime)
   }
+  for (const event of dynamicEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
 
   const chordSheetAnalysis = analyzeChordSheetScore({
     harmonyEvents,
@@ -1507,6 +1566,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     notes,
     timingEvents,
     harmonyEvents,
+    dynamicEvents,
     wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {

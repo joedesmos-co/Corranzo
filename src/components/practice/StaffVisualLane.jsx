@@ -18,6 +18,7 @@ import {
   buildKeySignatureMarks,
   buildStaffGeometry,
   buildStaffLaneNotes,
+  buildStaffLaneDynamicMarks,
   buildStaffLaneNotationMarkings,
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
@@ -386,6 +387,13 @@ function StaffVisualLane({
       }),
     [structuralMarks, sourceSystemGeometries, geometry],
   )
+  const dynamicMarks = useMemo(
+    () =>
+      buildStaffLaneDynamicMarks(structuralMarks, geometry, {
+        sourceSystemGeometries,
+      }),
+    [structuralMarks, geometry, sourceSystemGeometries],
+  )
 
   return (
     <div
@@ -667,6 +675,23 @@ function StaffVisualLane({
                 />
               )
             })}
+            {dynamicMarks.map((dynamic) => (
+              <text
+                key={dynamic.id}
+                className="staff-lane__dynamic"
+                data-structural-kind="dynamic"
+                data-dynamic-mark={dynamic.mark}
+                data-source-x-mode={dynamic.sourceXMode}
+                data-source-y-mode={dynamic.sourceYMode}
+                x={dynamic.x}
+                y={dynamic.y}
+                fontSize={STAFF_LINE_GAP * 1.35}
+                textAnchor="middle"
+                dominantBaseline="middle"
+              >
+                {dynamic.mark}
+              </text>
+            ))}
             {visibleBarlines.map((barline) => (
               <line
                 key={barline.time}

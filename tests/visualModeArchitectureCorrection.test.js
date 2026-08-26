@@ -7,6 +7,7 @@ import {
   STAFF_LINE_GAP,
   buildStaffGeometry,
   buildKeySignatureMarks,
+  buildStaffLaneDynamicMarks,
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
   buildStaffLaneRests,
@@ -661,6 +662,7 @@ describe('Visual mode architecture correction', () => {
       timeSignatures: [],
       clefs: [],
       systemClefs: [],
+      dynamics: [],
     })
     expect(
       buildSourceFidelityStructuralMarks(timingMap, { mode: 'temporal-fallback' }),
@@ -671,7 +673,87 @@ describe('Visual mode architecture correction', () => {
       timeSignatures: [],
       clefs: [],
       systemClefs: [],
+      dynamics: [],
     })
+  })
+
+  it('projects printed dynamics with source X/Y and keeps a MusicXML-only fallback', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1" width="200">
+          <print new-system="yes"/>
+          <attributes><divisions>1</divisions><staves>2</staves><time><beats>4</beats><beat-type>4</beat-type></time><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+          <direction placement="below"><direction-type><dynamics default-x="80" default-y="-65" relative-x="5" relative-y="-5"><sfz/></dynamics></direction-type><staff>1</staff></direction>
+          <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+        </measure></part>
+      </score-partwise>
+    `, 'source-dynamic.musicxml')
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const structural = buildSourceFidelityStructuralMarks(timingMap, layout)
+    const geometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    const rendered = buildStaffLaneDynamicMarks(structural, geometry)
+
+    expect(timingMap.dynamicEvents).toMatchObject([{
+      mark: 'sfz',
+      staff: 1,
+      placement: 'below',
+      defaultX: 80,
+      defaultY: -65,
+      relativeX: 5,
+      relativeY: -5,
+      quarterTime: 0,
+    }])
+    expect(timingMap.notes[0].velocity).toBeCloseTo(0.7, 8)
+    expect(structural.dynamics).toMatchObject([{
+      mark: 'sfz',
+      x: 238,
+      sourceXMode: 'musicxml-default-x',
+    }])
+    expect(rendered).toMatchObject([{
+      mark: 'sfz',
+      placement: 'below',
+      sourceYMode: 'musicxml-default-y',
+    }])
+    expect(rendered[0].y).toBeCloseTo(geometry.staves.treble.lines[0] + 7 * STAFF_LINE_GAP, 8)
+
+    const fallback = buildSourceFidelityStructuralMarks(
+      {
+        parts: [{ id: 'P1' }],
+        dynamicEvents: [{
+          mark: 'p',
+          partId: 'P1',
+          measureNumber: 1,
+          quarterTime: 1,
+          timeSeconds: 1.5,
+          placement: 'below',
+          staff: 1,
+        }],
+      },
+      { mode: 'temporal-fallback', pixelsPerSecond: 100 },
+    )
+    expect(fallback.dynamics).toMatchObject([{
+      mark: 'p',
+      x: 150,
+      sourceXMode: 'temporal-fallback',
+    }])
+
+    const hiddenTimingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1">
+          <attributes><divisions>1</divisions><time><beats>1</beats><beat-type>4</beat-type></time></attributes>
+          <direction><direction-type><dynamics print-object="no"><ff/></dynamics></direction-type></direction>
+          <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration></note>
+        </measure></part>
+      </score-partwise>
+    `)
+    expect(hiddenTimingMap.dynamicEvents).toMatchObject([{ mark: 'ff', printObject: false }])
+    expect(buildSourceFidelityStructuralMarks(
+      hiddenTimingMap,
+      { mode: 'temporal-fallback', pixelsPerSecond: 100 },
+    ).dynamics).toEqual([])
   })
 
   it('preserves positioned clef changes without duplicating system-start declarations', () => {

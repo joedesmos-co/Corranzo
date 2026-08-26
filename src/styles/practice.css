@@ -5634,6 +5634,15 @@
   user-select: none;
 }
 
+.staff-lane__dynamic {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: currentColor;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  user-select: none;
+}
+
 .staff-lane__head--hollow {
   fill: transparent;
   stroke: currentColor;

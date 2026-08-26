@@ -21,6 +21,7 @@ function emptyStructuralMarks() {
     timeSignatures: [],
     clefs: [],
     systemClefs: [],
+    dynamics: [],
   }
 }
 
@@ -610,11 +611,26 @@ function primaryClefEvents(timingMap) {
     )
 }
 
+function primaryDynamicEvents(timingMap) {
+  const events = (timingMap?.dynamicEvents ?? []).filter(
+    (event) => event?.printObject !== false && event?.mark,
+  )
+  if (!events.length) return []
+  const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
+  return events
+    .filter((event) => primaryPartId == null || event.partId === primaryPartId)
+    .sort(
+      (left, right) =>
+        Number(left.quarterTime ?? 0) - Number(right.quarterTime ?? 0) ||
+        Number(left.staff ?? 1) - Number(right.staff ?? 1),
+    )
+}
+
 function clefXInMeasure(event, written, measure) {
   const width = Number(written?.engravedWidth)
   const defaultX = Number(event?.defaultX)
   const relativeX = Number(event?.relativeX)
-  if (width > 0 && Number.isFinite(defaultX)) {
+  if (width > 0 && finite(event?.defaultX) && Number.isFinite(defaultX)) {
     const sourceX = defaultX + (Number.isFinite(relativeX) ? relativeX : 0)
     return measure.xStart + clamp01(sourceX / width) * (measure.xEnd - measure.xStart)
   }
@@ -660,8 +676,18 @@ function buildSystemClefs(timingMap, layout, clefEvents) {
  * the renderer still draws native SVG/text glyphs and never source pixels.
  */
 export function buildSourceFidelityStructuralMarks(timingMap, layout) {
+  const dynamicEvents = primaryDynamicEvents(timingMap)
   if (layout?.mode !== 'source-fidelity' || !layout.measures?.length) {
-    return emptyStructuralMarks()
+    const result = emptyStructuralMarks()
+    result.dynamics = dynamicEvents.map((event, index) => ({
+      ...event,
+      id: `dynamic-${event.measureNumber ?? 'unknown'}-${index}`,
+      x: Number(event.timeSeconds ?? 0) * Number(layout?.pixelsPerSecond ?? 120),
+      systemOccurrence: null,
+      repeatPass: 1,
+      sourceXMode: 'temporal-fallback',
+    }))
+    return result
   }
 
   const result = emptyStructuralMarks()
@@ -688,6 +714,22 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
     const written = writtenMeasures.get(Number(measure.measureNumber))
     const marking = written?.marking ?? null
     const system = systemForMeasure(layout, measure)
+
+    for (const [dynamicIndex, event] of dynamicEvents.entries()) {
+      const eventMeasureNumber = writtenMeasureNumberForEvent(event, timingMap)
+      if (Number(eventMeasureNumber) !== Number(measure.measureNumber)) continue
+      result.dynamics.push({
+        ...event,
+        id: `dynamic-${measure.measureNumber}-${dynamicIndex}-pass-${measure.repeatPass}`,
+        x: clefXInMeasure(event, written, measure),
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+        sourceXMode:
+          finite(event.defaultX) && Number(written?.engravedWidth) > 0
+            ? 'musicxml-default-x'
+            : 'semantic-onset-fallback',
+      })
+    }
 
     if (
       activeEnding &&

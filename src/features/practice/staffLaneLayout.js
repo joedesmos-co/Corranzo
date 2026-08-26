@@ -375,6 +375,56 @@ function sourceYForObject(object, staffKind, geometry) {
   }
 }
 
+/**
+ * Reconstruct printed dynamic text from source direction events. MusicXML
+ * default-y shares the same score-wide tenths frame as positioned notes;
+ * when absent, conventional placement around the owning staff is the safe
+ * semantic fallback.
+ */
+export function buildStaffLaneDynamicMarks(
+  structuralMarks,
+  geometry,
+  { sourceSystemGeometries = new Map() } = {},
+) {
+  return (structuralMarks?.dynamics ?? [])
+    .filter((dynamic) => dynamic?.printObject !== false && dynamic?.mark)
+    .map((dynamic) => {
+      const dynamicGeometry =
+        sourceSystemGeometries.get(dynamic.systemOccurrence) ?? geometry
+      const staffKind = resolveStaffKind(dynamic)
+      const staff =
+        dynamicGeometry.staves[staffKind] ?? Object.values(dynamicGeometry.staves)[0]
+      const firstStaff =
+        dynamicGeometry.staves[STAFF_KIND.TREBLE] ??
+        Object.values(dynamicGeometry.staves)[0]
+      if (!staff || !firstStaff) return null
+
+      const defaultY = Number(dynamic.defaultY)
+      const relativeY = dynamic.relativeY == null ? 0 : Number(dynamic.relativeY)
+      const hasSourceY =
+        dynamic.defaultY != null &&
+        Number.isFinite(defaultY) &&
+        Number.isFinite(relativeY)
+      const placement = dynamic.placement === 'above' ? 'above' : 'below'
+      const y = hasSourceY
+        ? firstStaff.lines[0] - ((defaultY + relativeY) / 10) * STAFF_LINE_GAP
+        : placement === 'above'
+          ? staff.lines[0] - STAFF_LINE_GAP * 1.55
+          : staff.lines[staff.lines.length - 1] + STAFF_LINE_GAP * 1.55
+
+      return {
+        ...dynamic,
+        staffKind,
+        placement,
+        y,
+        sourceYMode: hasSourceY
+          ? 'musicxml-default-y'
+          : 'semantic-placement-fallback',
+      }
+    })
+    .filter(Boolean)
+}
+
 const KEY_SIGNATURE_DIATONICS = {
   [STAFF_KIND.TREBLE]: {
     sharp: [38, 35, 39, 36, 33, 37, 34],
