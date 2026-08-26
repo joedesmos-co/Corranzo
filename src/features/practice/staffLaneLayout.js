@@ -1140,6 +1140,7 @@ function splitStaffSpanAcrossSourceSystems(start, end, marking, laneLayout) {
 function buildStaffNoteMarkingGeometry(notes) {
   const supportedKinds = new Set([
     VISUAL_MARKING_KIND.STACCATO,
+    VISUAL_MARKING_KIND.STACCATISSIMO,
     VISUAL_MARKING_KIND.ACCENT,
     VISUAL_MARKING_KIND.TENUTO,
     VISUAL_MARKING_KIND.MARCATO,
@@ -1207,6 +1208,16 @@ function buildStaffNoteMarkingGeometry(notes) {
           x,
           y,
           r: 2.2,
+        })
+      } else if (marking.kind === VISUAL_MARKING_KIND.STACCATISSIMO) {
+        markings.push({
+          ...common,
+          id: `${marking.id}-staff-wedge`,
+          shape: 'text',
+          text: placement === 'below' ? '▾' : '▴',
+          x,
+          y,
+          fontSize: STAFF_LINE_GAP * 0.82,
         })
       } else if (marking.kind === VISUAL_MARKING_KIND.ACCENT) {
         markings.push({

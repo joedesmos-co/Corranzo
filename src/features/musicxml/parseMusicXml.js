@@ -323,6 +323,7 @@ function readHarmonySymbol(harmonyNode) {
 function emptyArticulations() {
   return {
     staccato: false,
+    staccatissimo: false,
     accent: false,
     tenuto: false,
     marcato: false,
@@ -369,6 +370,7 @@ function readArticulations(noteNode) {
     }
   }
   const staccatoNode = findChild(articulations, 'staccato')
+  const staccatissimoNode = findChild(articulations, 'staccatissimo')
   const accentNode = findChild(articulations, 'accent')
   const tenutoNode = findChild(articulations, 'tenuto')
   const marcatoNode =
@@ -377,6 +379,7 @@ function readArticulations(noteNode) {
   const articulationPlacements = {}
   for (const [type, node, orientation] of [
     ['staccato', staccatoNode, false],
+    ['staccatissimo', staccatissimoNode, false],
     ['accent', accentNode, false],
     ['tenuto', tenutoNode, false],
     ['marcato', marcatoNode, true],
@@ -389,6 +392,7 @@ function readArticulations(noteNode) {
   }
   return {
     staccato: staccatoNode != null,
+    staccatissimo: staccatissimoNode != null,
     accent: accentNode != null,
     tenuto: tenutoNode != null,
     marcato: marcatoNode != null,
@@ -997,6 +1001,7 @@ function walkPart({
             const { tieStart, tieStop, tiePlacement } = readTieFlags(child)
             const {
               staccato,
+              staccatissimo,
               accent,
               tenuto,
               marcato,
@@ -1057,6 +1062,7 @@ function walkPart({
               tieStop,
               tiePlacement,
               staccato,
+              staccatissimo,
               accent,
               tenuto,
               marcato,

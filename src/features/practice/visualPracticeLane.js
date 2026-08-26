@@ -71,6 +71,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           tieStop: Boolean(note.tieStop),
           tiePlacement: note.tiePlacement ?? null,
           staccato: Boolean(note.staccato),
+          staccatissimo: Boolean(note.staccatissimo),
           accent: Boolean(note.accent),
           tenuto: Boolean(note.tenuto),
           marcato: Boolean(note.marcato),

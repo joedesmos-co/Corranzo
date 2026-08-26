@@ -113,6 +113,7 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     tiePlacement: note.tiePlacement ?? null,
     suppressPlaybackAttack: Boolean(note.suppressPlaybackAttack),
     staccato: Boolean(note.staccato),
+    staccatissimo: Boolean(note.staccatissimo),
     accent: Boolean(note.accent),
     tenuto: Boolean(note.tenuto),
     marcato: Boolean(note.marcato),

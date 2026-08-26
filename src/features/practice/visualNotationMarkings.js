@@ -12,6 +12,7 @@ export const VISUAL_MARKING_KIND = {
   TIE: 'tie',
   SLUR: 'slur',
   STACCATO: 'staccato',
+  STACCATISSIMO: 'staccatissimo',
   ACCENT: 'accent',
   TENUTO: 'tenuto',
   MARCATO: 'marcato',
@@ -38,6 +39,7 @@ export const VISUAL_GUITAR_TECHNIQUE_SYMBOLS = {
 
 const NOTE_MARKING_KINDS = new Set([
   VISUAL_MARKING_KIND.STACCATO,
+  VISUAL_MARKING_KIND.STACCATISSIMO,
   VISUAL_MARKING_KIND.ACCENT,
   VISUAL_MARKING_KIND.TENUTO,
   VISUAL_MARKING_KIND.MARCATO,
@@ -102,6 +104,11 @@ export function buildVisualNoteMarkings(note, { groupId = null } = {}) {
   if (note.staccato) {
     push(VISUAL_MARKING_KIND.STACCATO, {
       placement: note.articulationPlacements?.staccato ?? null,
+    })
+  }
+  if (note.staccatissimo) {
+    push(VISUAL_MARKING_KIND.STACCATISSIMO, {
+      placement: note.articulationPlacements?.staccatissimo ?? null,
     })
   }
   if (note.accent) {

@@ -136,6 +136,36 @@ describe('visual notation marking model', () => {
       .toBe('line')
   })
 
+  it('renders staccatissimo as a wedge without collapsing it into staccato', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 2 })}` +
+      markedNote(
+        'C',
+        4,
+        '<notations><articulations><staccatissimo placement="below"/></articulations></notations>',
+      ) +
+      markedNote(
+        'D',
+        4,
+        '<notations><articulations><staccato placement="above"/></articulations></notations>',
+      ) +
+      '</measure></part>',
+    )
+    const groups = buildVisualLaneGroups(parseMusicXml(xml, 'staccatissimo.musicxml'))
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const { noteMarkings } = buildStaffLaneNotationMarkings(groups, geometry, { notes })
+    const staccatissimo = noteMarkings.find(
+      (marking) => marking.kind === VISUAL_MARKING_KIND.STACCATISSIMO,
+    )
+    const staccato = noteMarkings.find(
+      (marking) => marking.kind === VISUAL_MARKING_KIND.STACCATO,
+    )
+
+    expect(staccatissimo).toMatchObject({ shape: 'text', text: '▾', placement: 'below' })
+    expect(staccato).toMatchObject({ shape: 'dot', placement: 'above' })
+  })
+
   it('renders guitar hammer-on, pull-off, slide, bend, and vibrato markings in TAB geometry', () => {
     const guitar = getInstrument('guitar')
     const groups = buildVisualLaneGroups(parseMusicXml(guitarTechniqueScore())).map((group) => ({
