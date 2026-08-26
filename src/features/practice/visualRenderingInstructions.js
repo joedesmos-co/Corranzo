@@ -125,6 +125,7 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     fret: note.fret ?? null,
     chordSymbol: note.chordSymbol ?? null,
     isChord: Boolean(note.isChord),
+    printObject: note.printObject !== false,
   }
   const sourceOwnership = buildVisualSourceOwnership(
     semantic,
@@ -164,6 +165,7 @@ function visualRestInstruction(rest, event, restIndex, options) {
     noteType: rest.noteType ?? null,
     clef: rest.clef ?? null,
     isRest: true,
+    printObject: rest.printObject !== false,
     dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
   }
   return {
@@ -255,6 +257,7 @@ function comparableNote(note) {
     tieStart: Boolean(note.tieStart),
     tieStop: Boolean(note.tieStop),
     isRest: Boolean(note.isRest),
+    printObject: note.printObject !== false,
     measureNumber: finite(note.measureNumber) ? Number(note.measureNumber) : null,
     string: finite(note.string) ? Number(note.string) : null,
     fret: finite(note.fret) ? Number(note.fret) : null,

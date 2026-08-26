@@ -541,6 +541,7 @@ export function buildStaffLaneRests(
   for (const group of groups ?? []) {
     for (let index = 0; index < (group.rests?.length ?? 0); index += 1) {
       const rest = group.rests[index]
+      if (rest.printObject === false) continue
       const objectGeometry = geometryForSourceObject(
         geometry,
         laneLayout,
@@ -627,7 +628,7 @@ export function buildStaffLaneNotes(
     for (let entryIndex = 0; entryIndex < notationEntries.length; entryIndex += 1) {
       const entry = notationEntries[entryIndex]
       const note = entry.note
-      if (!isFiniteMidi(note.midi)) {
+      if (note.printObject === false || !isFiniteMidi(note.midi)) {
         continue
       }
       const renderGroup = entry.renderGroup

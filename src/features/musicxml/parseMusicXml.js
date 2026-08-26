@@ -110,6 +110,7 @@ function readNoteLayoutOrdered(noteNode) {
   const relativeY = numberOf(attr(noteNode, 'relative-y'), NaN)
   const staff = numberOf(childText(noteNode, 'staff'), NaN)
   return {
+    printObject: attr(noteNode, 'print-object') !== 'no',
     defaultX: Number.isFinite(defaultX) ? defaultX : null,
     defaultY: Number.isFinite(defaultY) ? defaultY : null,
     relativeX: Number.isFinite(relativeX) ? relativeX : null,

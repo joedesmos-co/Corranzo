@@ -252,6 +252,39 @@ function sourceVisualMap({ wrongMidi = false } = {}) {
 }
 
 describe('Visual mode architecture correction', () => {
+  it('keeps print-object=no events semantic while omitting their reconstructed glyphs', () => {
+    const xml = `<?xml version="1.0"?>
+      <score-partwise version="3.1">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1">
+          <attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+          <note print-object="no"><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+          <note print-object="yes"><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+          <note print-object="no"><rest/><duration>4</duration><voice>1</voice><type>quarter</type></note>
+          <note><rest/><duration>4</duration><voice>1</voice><type>quarter</type></note>
+        </measure></part>
+      </score-partwise>`
+    const timingMap = parseMusicXml(xml, 'hidden-visual-objects.musicxml')
+    const instructions = buildVisualRenderingInstructions(timingMap)
+    const geometryModel = buildStaffGeometry(detectStaves(instructions))
+    const notes = buildStaffLaneNotes(instructions, geometryModel)
+    const rests = buildStaffLaneRests(instructions, geometryModel)
+    const stems = buildStaffLaneStems(instructions, geometryModel, { notes })
+
+    expect(timingMap.notes.map((note) => note.printObject)).toEqual([
+      false,
+      true,
+      false,
+      true,
+    ])
+    expect(instructions.flatMap((group) => [...group.notes, ...group.rests]))
+      .toEqual(expect.arrayContaining([expect.objectContaining({ printObject: false })]))
+    expect(notes).toHaveLength(1)
+    expect(notes[0]).toMatchObject({ midi: 62 })
+    expect(rests).toHaveLength(1)
+    expect(stems).toHaveLength(1)
+  })
+
   it('uses one reconstructed renderer for PDF-backed and MusicXML-only pieces', () => {
     const view = readSource('components', 'practice', 'VisualPracticeView.jsx')
     const practice = readSource('components', 'practice', 'PracticeView.jsx')
