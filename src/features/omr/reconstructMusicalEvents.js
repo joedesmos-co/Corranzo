@@ -6,6 +6,8 @@ import {
 
 const SPLIT_CHORD_TONE_MAX_X = OMR_CHORD_MERGE_X + 2
 const SAME_STAFF_INNER_VOICE_REASON = 'same-staff-inner-voice-split'
+const SHARED_STEM_MAX_X_DELTA = 0.75
+const SHARED_STEM_MAX_SLOT_DELTA = 2
 
 const DURATION_LADDER = [
   { divisions: OMR_DIVISIONS_PER_QUARTER * 4, durationType: 'whole', dotted: false },
@@ -37,6 +39,22 @@ function durationMeta(durationDivisions) {
     }
   }
   return { durationType: best.durationType, dotted: best.dotted }
+}
+
+function nearestWrittenDurationDivisions(durationDivisions) {
+  let best = DURATION_LADDER[DURATION_LADDER.length - 1]
+  let bestDiff = Infinity
+  for (const candidate of DURATION_LADDER) {
+    const diff = Math.abs(candidate.divisions - durationDivisions)
+    if (
+      diff < bestDiff ||
+      (diff === bestDiff && candidate.divisions < best.divisions)
+    ) {
+      bestDiff = diff
+      best = candidate
+    }
+  }
+  return best.divisions
 }
 
 function eventClef(event) {
@@ -71,6 +89,29 @@ function noteInsideChordSpan(note, chordNotes) {
     return false
   }
   return midi >= Math.min(...midis) && midi <= Math.max(...midis)
+}
+
+function sharedQuarterStemEvidence(anchor, follower) {
+  const notes = [...(anchor?.notes ?? []), ...(follower?.notes ?? [])]
+  if (
+    notes.length < 3 ||
+    notes.some(
+      (note) =>
+        !Number.isFinite(note?.stem?.x) ||
+        note?.stem?.direction == null ||
+        note?.durationType !== 'quarter' ||
+        note?.dotted === true ||
+        hasNoteBeamEvidence(note),
+    )
+  ) {
+    return false
+  }
+  const directions = new Set(notes.map((note) => note.stem.direction))
+  const stemXs = notes.map((note) => note.stem.x)
+  return (
+    directions.size === 1 &&
+    Math.max(...stemXs) - Math.min(...stemXs) <= SHARED_STEM_MAX_X_DELTA
+  )
 }
 
 function nextSameClefStart(events, anchor, totalDivisions) {
@@ -117,9 +158,20 @@ function splitChordToneCandidate(anchor, follower) {
   if ((anchor.notes?.length ?? 0) < 2 || (follower.notes?.length ?? 0) !== 1) {
     return false
   }
-  // Only the immediate next subdivision. Gap=2 re-merges intentional
-  // same-staff inner-voice splits and loops with that splitter.
-  if ((follower.startDivision ?? 0) - (anchor.startDivision ?? 0) !== 1) {
+  const slotDelta =
+    (follower.startDivision ?? 0) - (anchor.startDivision ?? 0)
+  const sharedQuarterStem = sharedQuarterStemEvidence(anchor, follower)
+  // Ordinarily only the immediate next subdivision is eligible. A directly
+  // shared printed quarter stem proves that an offset chord head crossed up to
+  // two provisional slots during x-position snapping.
+  if (
+    slotDelta !== 1 &&
+    !(
+      sharedQuarterStem &&
+      slotDelta >= 0 &&
+      slotDelta <= SHARED_STEM_MAX_SLOT_DELTA
+    )
+  ) {
     return false
   }
   if (
@@ -128,7 +180,11 @@ function splitChordToneCandidate(anchor, follower) {
     return false
   }
   // Gap packing marks chord anchors as sixteenths/eighths; allow up to eighth.
-  if ((anchor.durationDivisions ?? OMR_DURATION_DIVISIONS.quarter) > OMR_DURATION_DIVISIONS.eighth) {
+  if (
+    !sharedQuarterStem &&
+    (anchor.durationDivisions ?? OMR_DURATION_DIVISIONS.quarter) >
+      OMR_DURATION_DIVISIONS.eighth
+  ) {
     return false
   }
   const dx = Math.abs(eventCx(anchor) - eventCx(follower))
@@ -164,10 +220,18 @@ function splitChordToneCandidate(anchor, follower) {
 function mergeSplitChordTone(events, anchor, follower, totalDivisions) {
   const retained = events.filter((event) => event !== follower)
   const notes = sortChordNotes([...(anchor.notes ?? []), ...(follower.notes ?? [])])
-  const durationDivisions = Math.max(
+  const sharedQuarterStem = sharedQuarterStemEvidence(anchor, follower)
+  const nextSameClefGap = Math.max(
     1,
-    nextSameClefStart(retained, anchor, totalDivisions) - (anchor.startDivision ?? 0),
+    nextSameClefStart(retained, anchor, totalDivisions) -
+      (anchor.startDivision ?? 0),
   )
+  const durationDivisions = sharedQuarterStem
+    ? Math.min(
+        nearestWrittenDurationDivisions(nextSameClefGap),
+        totalDivisions - (anchor.startDivision ?? 0),
+      )
+    : nextSameClefGap
   return retained.map((event) => {
     if (event !== anchor) {
       return event
@@ -182,7 +246,9 @@ function mergeSplitChordTone(events, anchor, follower, totalDivisions) {
       musicalEventReconstructionReasons: [
         ...new Set([
           ...(event.musicalEventReconstructionReasons ?? []),
-          'split-chord-tone',
+          sharedQuarterStem
+            ? 'shared-stem-displaced-chord-tone'
+            : 'split-chord-tone',
         ]),
       ],
     }

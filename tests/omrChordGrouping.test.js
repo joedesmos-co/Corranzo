@@ -329,6 +329,148 @@ describe('reconstructMusicalEvents', () => {
     expect(noteEvents[0].musicalEventReconstructionReasons).toContain('split-chord-tone')
   })
 
+  it('reattaches a displaced quarter chord tone proven by one shared source stem', () => {
+    const sharedStem = { x: 105, direction: 'up' }
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 0,
+          durationDivisions: 1,
+          notes: [
+            { midi: 68, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: sharedStem },
+            { midi: 63, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: sharedStem },
+            { midi: 59, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: sharedStem },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 2,
+          durationDivisions: 3,
+          notes: [
+            {
+              midi: 65,
+              clef: 'treble',
+              cx: 110,
+              beams: 0,
+              durationType: 'quarter',
+              stem: { x: 105, direction: 'up' },
+            },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 4,
+          notes: [
+            {
+              midi: 67,
+              clef: 'treble',
+              cx: 150,
+              beams: 0,
+              durationType: 'quarter',
+              stem: { x: 155, direction: 'up' },
+            },
+          ],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const opening = events.find(
+      (event) => event.type === 'note' && event.startDivision === 0,
+    )
+
+    expect(events.filter((event) => event.type === 'note')).toHaveLength(2)
+    expect(opening.notes.map((note) => note.midi)).toEqual([68, 65, 63, 59])
+    expect(opening.durationDivisions).toBe(4)
+    expect(opening.musicalEventReconstructionReasons).toContain(
+      'shared-stem-displaced-chord-tone',
+    )
+  })
+
+  it('derives a shared-stem chord duration from the next same-clef onset', () => {
+    const events = reconstructMusicalEvents(
+      [
+        {
+          type: 'note',
+          startDivision: 4,
+          durationDivisions: 1,
+          notes: [
+            { midi: 56, clef: 'bass', cx: 200, beams: 0, durationType: 'quarter', stem: { x: 205, direction: 'up' } },
+            { midi: 49, clef: 'bass', cx: 200, beams: 0, durationType: 'quarter', stem: { x: 205, direction: 'up' } },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 5,
+          durationDivisions: 4,
+          notes: [
+            { midi: 51, clef: 'bass', cx: 210, beams: 0, durationType: 'quarter', stem: { x: 205, direction: 'up' } },
+          ],
+        },
+        {
+          type: 'note',
+          startDivision: 6,
+          durationDivisions: 2,
+          notes: [
+            { midi: 44, clef: 'bass', cx: 240, beams: 1, durationType: 'eighth', stem: { x: 245, direction: 'up' } },
+          ],
+        },
+      ],
+      { totalDivisions: 16 },
+    )
+    const merged = events.find(
+      (event) => event.type === 'note' && event.startDivision === 4,
+    )
+
+    expect(merged.notes.map((note) => note.midi)).toEqual([56, 51, 49])
+    expect(merged.durationDivisions).toBe(2)
+    expect(merged.durationType).toBe('eighth')
+  })
+
+  it('keeps nearby quarter attacks separate without unambiguous shared-stem evidence', () => {
+    const baseAnchor = {
+      type: 'note',
+      startDivision: 0,
+      durationDivisions: 1,
+      notes: [
+        { midi: 68, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: { x: 105, direction: 'up' } },
+        { midi: 63, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: { x: 105, direction: 'up' } },
+        { midi: 59, clef: 'treble', cx: 100, beams: 0, durationType: 'quarter', stem: { x: 105, direction: 'up' } },
+      ],
+    }
+    const follower = (overrides = {}) => ({
+      type: 'note',
+      startDivision: 2,
+      durationDivisions: 2,
+      notes: [
+        {
+          midi: 65,
+          clef: 'treble',
+          cx: 110,
+          beams: 0,
+          durationType: 'quarter',
+          stem: { x: 115, direction: 'up' },
+          ...overrides,
+        },
+      ],
+    })
+
+    const differentStem = reconstructMusicalEvents([baseAnchor, follower()])
+    const beamed = reconstructMusicalEvents([
+      baseAnchor,
+      follower({ beams: 1, stem: { x: 105, direction: 'up' } }),
+    ])
+    const duplicatePitch = reconstructMusicalEvents([
+      baseAnchor,
+      follower({ midi: 68, stem: { x: 105, direction: 'up' } }),
+    ])
+
+    expect(differentStem.filter((event) => event.type === 'note')).toHaveLength(2)
+    expect(beamed.filter((event) => event.type === 'note')).toHaveLength(2)
+    expect(duplicatePitch.filter((event) => event.type === 'note')).toHaveLength(2)
+  })
+
   it('does not reattach a cross-clef orphan (staff voices stay separate)', () => {
     const events = reconstructMusicalEvents(
       [
