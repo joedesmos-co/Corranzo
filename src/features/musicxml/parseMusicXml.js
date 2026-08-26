@@ -202,9 +202,10 @@ function extractMarkings(measureNode) {
   return marking
 }
 
-function measurePrintFlags(measureNode) {
+function measurePrintLayout(measureNode) {
   let newSystem = false
   let newPage = false
+  const staffDistances = {}
   for (const printNode of findChildren(measureNode, 'print')) {
     const systemValue = attr(printNode, 'new-system')
     const pageValue = attr(printNode, 'new-page')
@@ -214,8 +215,19 @@ function measurePrintFlags(measureNode) {
     if (pageValue === 'yes' || pageValue === 'true' || pageValue === '1') {
       newPage = true
     }
+    for (const staffLayout of findChildren(printNode, 'staff-layout')) {
+      const staffNumber = numberOf(attr(staffLayout, 'number'), 1)
+      const distance = numberOf(childText(staffLayout, 'staff-distance'), NaN)
+      if (Number.isFinite(staffNumber) && staffNumber > 1 && Number.isFinite(distance) && distance > 0) {
+        staffDistances[String(staffNumber)] = distance
+      }
+    }
   }
-  return { newSystem, newPage }
+  return {
+    newSystem,
+    newPage,
+    staffDistances: Object.keys(staffDistances).length ? staffDistances : null,
+  }
 }
 
 function getMeasureNumberOrdered(measureNode, fallbackIndex) {
@@ -1011,7 +1023,7 @@ function walkPart({
       const notatedLengthQuarters = maxCursorDivisions / divisions
       const lengthQuarters =
         lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
-      const { newSystem, newPage } = measurePrintFlags(measureNode)
+      const { newSystem, newPage, staffDistances } = measurePrintLayout(measureNode)
       const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
       // MusicXML marks pickup/anacrusis (and some courtesy) measures with
       // implicit="yes". Preserve it as honest metadata for pickup detection.
@@ -1036,6 +1048,10 @@ function walkPart({
         // Engraved measure width in tenths (<measure width>), if present — used
         // to map MusicXML horizontal layout onto detected PDF barline spans.
         engravedWidth: Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
+        // Source engraving distance from the previous staff's bottom line to
+        // this staff's top line, in MusicXML tenths. Print declarations occur
+        // at system starts and must remain layout evidence, not music semantics.
+        staffDistances,
         marking: extractMarkings(measureNode),
       })
       measureStartQuarters += lengthQuarters
@@ -1255,6 +1271,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     implicit: boundary.implicit,
     notatedLengthQuarters: boundary.notatedLengthQuarters,
     engravedWidth: boundary.engravedWidth,
+    staffDistances: boundary.staffDistances ?? null,
     // Repeat / volta markings for written-score evaluation (not playback expansion).
     marking: boundary.marking ?? null,
   }))

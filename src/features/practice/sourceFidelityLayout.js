@@ -77,6 +77,7 @@ export function buildVisualMeasureLayoutIndex(timingMap) {
       pageBreakBefore: Boolean(measure.pageBreakBefore),
       engravedWidth:
         Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
+      staffDistances: measure.staffDistances ?? null,
       startTimeSeconds: finite(measure.startTimeSeconds)
         ? Number(measure.startTimeSeconds)
         : null,
@@ -316,6 +317,8 @@ export function buildSourceFidelityLaneLayout(
       pixelsPerSecond,
       groupXById: new Map(),
       objectXById: new Map(),
+      systemOccurrenceByGroupId: new Map(),
+      systemOccurrenceByObjectId: new Map(),
       barlineXByTime: new Map(),
       timeAnchors: [],
       systems: [],
@@ -336,6 +339,8 @@ export function buildSourceFidelityLaneLayout(
 
   const groupXById = new Map()
   const objectXById = new Map()
+  const systemOccurrenceByGroupId = new Map()
+  const systemOccurrenceByObjectId = new Map()
   const timeAnchors = []
   const systems = []
   const orderedMeasures = []
@@ -412,6 +417,7 @@ export function buildSourceFidelityLaneLayout(
       x = Math.max(lastGroupX, x)
       lastGroupX = x
       groupXById.set(group.id, x)
+      systemOccurrenceByGroupId.set(group.id, systemOccurrence)
       for (const object of [...(group.notes ?? []), ...(group.rests ?? [])]) {
         const objectSourceX = finite(object.sourceLayout?.x)
           ? Number(object.sourceLayout.x)
@@ -431,7 +437,10 @@ export function buildSourceFidelityLaneLayout(
             clamp01(objectXInMeasure) * (measureEntry.xEnd - measureEntry.xStart)
         }
         const objectId = object.visualNoteId ?? object.visualRestId ?? object.id
-        if (objectId) objectXById.set(objectId, objectX)
+        if (objectId) {
+          objectXById.set(objectId, objectX)
+          systemOccurrenceByObjectId.set(objectId, systemOccurrence)
+        }
       }
       timeAnchors.push({ timeSeconds: Number(group.timeSeconds), x, groupId: group.id })
     }
@@ -456,6 +465,9 @@ export function buildSourceFidelityLaneLayout(
               beatType: measureEntries[0].layout.beatType,
             }
           : null,
+      staffDistances:
+        measureEntries.find((entry) => entry.layout?.staffDistances)?.layout
+          ?.staffDistances ?? null,
     })
     cursorX += systemWidth + systemGap
   }
@@ -478,6 +490,8 @@ export function buildSourceFidelityLaneLayout(
     pixelsPerSecond,
     groupXById,
     objectXById,
+    systemOccurrenceByGroupId,
+    systemOccurrenceByObjectId,
     barlineXByTime,
     timeAnchors,
     systems,
@@ -492,6 +506,16 @@ export function buildSourceFidelityLaneLayout(
     systemWidth,
     systemGap,
   }
+}
+
+export function resolveSourceFidelitySystem(layout, object = null, group = null) {
+  if (layout?.mode !== 'source-fidelity') return null
+  const objectId = object?.visualNoteId ?? object?.visualRestId ?? object?.id
+  const occurrence =
+    (objectId ? layout.systemOccurrenceByObjectId?.get(objectId) : null) ??
+    layout.systemOccurrenceByGroupId?.get(group?.id)
+  if (!Number.isFinite(occurrence)) return null
+  return layout.systems?.find((system) => system.occurrence === occurrence) ?? null
 }
 
 export function resolveSourceFidelityGroupX(layout, group, timeSeconds = null) {

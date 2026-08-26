@@ -7,6 +7,7 @@ import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitiz
 import {
   resolveSourceFidelityLaneX,
   resolveSourceFidelityObjectX,
+  resolveSourceFidelitySystem,
 } from './sourceFidelityLayout.js'
 
 /**
@@ -168,10 +169,17 @@ export function detectStaves(groups) {
  * Build staff geometry: line y positions per staff and overall height.
  * Grand staff = treble above bass; single staff = just the one in use.
  */
-export function buildStaffGeometry(staves) {
+export function buildStaffGeometry(
+  staves,
+  { grandStaffGapGaps = GRAND_STAFF_GAP_GAPS } = {},
+) {
   const margin = STAFF_MARGIN_GAPS * STAFF_LINE_GAP
   const useTreble = staves.hasTreble || !staves.hasBass
   const useBass = staves.hasBass
+  const resolvedGrandStaffGapGaps =
+    Number.isFinite(Number(grandStaffGapGaps)) && Number(grandStaffGapGaps) > 0
+      ? Number(grandStaffGapGaps)
+      : GRAND_STAFF_GAP_GAPS
 
   const result = {
     grandStaff: Boolean(useTreble && useBass),
@@ -195,7 +203,7 @@ export function buildStaffGeometry(staves) {
   }
   if (useBass) {
     if (useTreble) {
-      y += GRAND_STAFF_GAP_GAPS * STAFF_LINE_GAP
+      y += resolvedGrandStaffGapGaps * STAFF_LINE_GAP
     }
     const lines = [0, 1, 2, 3, 4].map((i) => y + i * STAFF_LINE_GAP)
     result.staves[STAFF_KIND.BASS] = {
@@ -211,6 +219,50 @@ export function buildStaffGeometry(staves) {
 
   result.height = y + margin
   return result
+}
+
+/**
+ * Apply one source system's MusicXML staff-distance declaration to the native
+ * reconstructed staff geometry. MusicXML stores the distance from the bottom
+ * line of the preceding staff to the top line of the requested staff in
+ * tenths (10 tenths = one interline space).
+ */
+export function buildSourceSystemStaffGeometry(geometry, system) {
+  const treble = geometry?.staves?.[STAFF_KIND.TREBLE]
+  const bass = geometry?.staves?.[STAFF_KIND.BASS]
+  const staffDistanceTenths = Number(system?.staffDistances?.['2'])
+  if (!treble || !bass || !(staffDistanceTenths > 0)) {
+    return geometry
+  }
+
+  const bassTopY =
+    treble.lines[treble.lines.length - 1] +
+    (staffDistanceTenths / 10) * STAFF_LINE_GAP
+  const bassLines = [0, 1, 2, 3, 4].map(
+    (index) => bassTopY + index * STAFF_LINE_GAP,
+  )
+  const resolvedBass = {
+    ...bass,
+    topLineY: bassLines[0],
+    lines: bassLines,
+  }
+  return {
+    ...geometry,
+    staves: {
+      ...geometry.staves,
+      [STAFF_KIND.BASS]: resolvedBass,
+    },
+    lines: [...treble.lines, ...bassLines],
+    height: Math.max(
+      geometry.height,
+      bassLines[bassLines.length - 1] + STAFF_MARGIN_GAPS * STAFF_LINE_GAP,
+    ),
+  }
+}
+
+function geometryForSourceObject(geometry, sourceLayout, object, group) {
+  const system = resolveSourceFidelitySystem(sourceLayout, object, group)
+  return buildSourceSystemStaffGeometry(geometry, system)
 }
 
 /**
@@ -388,8 +440,15 @@ export function buildStaffLaneRests(
   for (const group of groups ?? []) {
     for (let index = 0; index < (group.rests?.length ?? 0); index += 1) {
       const rest = group.rests[index]
+      const objectGeometry = geometryForSourceObject(
+        geometry,
+        laneLayout,
+        rest,
+        group,
+      )
       const staffKind = resolveStaffKind(rest)
-      const staff = geometry.staves[staffKind] ?? Object.values(geometry.staves)[0]
+      const staff =
+        objectGeometry.staves[staffKind] ?? Object.values(objectGeometry.staves)[0]
       if (!staff) continue
       const noteType = inferredRestType(rest)
       rests.push({
@@ -477,10 +536,16 @@ export function buildStaffLaneNotes(
       )
       const staffKind = resolveStaffKind(note)
       const written = resolveVisualWrittenPitch(note)
+      const objectGeometry = geometryForSourceObject(
+        geometry,
+        laneLayout,
+        note,
+        renderGroup,
+      )
       const { y, ledgerLines } = staffYForDiatonic(
         written.diatonic,
         staffKind,
-        geometry,
+        objectGeometry,
       )
       const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0)
       const noteType = note.noteType ?? null

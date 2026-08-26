@@ -22,6 +22,7 @@ import {
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
+  buildSourceSystemStaffGeometry,
 } from '../../features/practice/staffLaneLayout.js'
 import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
 
@@ -90,8 +91,37 @@ function StaffVisualLane({
   const playheadRef = useRef(null)
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
+  const sourceSystems = useMemo(
+    () =>
+      sourceLayout?.mode === 'source-fidelity'
+        ? sourceLayout.systems ?? []
+        : [],
+    [sourceLayout],
+  )
+  const maxSourceStaffDistanceGaps = Math.max(
+    0,
+    ...sourceSystems
+      .map((system) => Number(system.staffDistances?.['2']) / 10)
+      .filter((value) => Number.isFinite(value) && value > 0),
+  )
 
-  const geometry = useMemo(() => buildStaffGeometry(staves), [staves])
+  const geometry = useMemo(
+    () =>
+      buildStaffGeometry(staves, {
+        grandStaffGapGaps: maxSourceStaffDistanceGaps || undefined,
+      }),
+    [staves, maxSourceStaffDistanceGaps],
+  )
+  const sourceSystemGeometries = useMemo(
+    () =>
+      new Map(
+        sourceSystems.map((system) => [
+          system.occurrence,
+          buildSourceSystemStaffGeometry(geometry, system),
+        ]),
+      ),
+    [sourceSystems, geometry],
+  )
 
   const scale =
     size.height > 0
@@ -145,10 +175,27 @@ function StaffVisualLane({
         time,
         x: resolveSourceFidelityBarlineX(sourceLayout, time),
       }))
-  }, [visibleGroups, barlineTimes, sourceLayout])
+      .map((barline) => {
+        const system = sourceSystems.find(
+          (candidate) =>
+            barline.x >= candidate.xStart && barline.x <= candidate.xEnd,
+        )
+        return {
+          ...barline,
+          geometry:
+            sourceSystemGeometries.get(system?.occurrence) ?? geometry,
+        }
+      })
+  }, [
+    visibleGroups,
+    barlineTimes,
+    sourceLayout,
+    sourceSystems,
+    sourceSystemGeometries,
+    geometry,
+  ])
 
   const staffTopY = geometry.lines[0]
-  const staffBottomY = geometry.lines[geometry.lines.length - 1]
 
   // Per-frame motion: React lays out the SVG, then rAF updates only the
   // attributes that depend on time.
@@ -188,9 +235,6 @@ function StaffVisualLane({
   const treble = geometry.staves[STAFF_KIND.TREBLE]
   const bass = geometry.staves[STAFF_KIND.BASS]
   const glyphClefs = supportsClefGlyphs()
-  const sourceSystems = sourceLayout?.mode === 'source-fidelity'
-    ? sourceLayout.systems ?? []
-    : []
   const usesSourceSystems = sourceSystems.length > 0
   const keySignatureMarks = useMemo(
     () => buildKeySignatureMarks(keySignature, geometry),
@@ -205,9 +249,9 @@ function StaffVisualLane({
   const staticMaskWidth =
     STAFF_LINE_GAP * 6.8 + keyColumns * SYSTEM_PREFIX_KEY_COLUMN_WIDTH
   const sourceSystemPrefixes = useMemo(() => {
-    let previousTimeSignature = null
     return sourceSystems.map((system, index) => {
-      const systemKeyMarks = buildKeySignatureMarks(system.keySignature, geometry)
+      const systemGeometry = sourceSystemGeometries.get(system.occurrence) ?? geometry
+      const systemKeyMarks = buildKeySignatureMarks(system.keySignature, systemGeometry)
       const systemKeyColumns = Math.max(
         0,
         ...systemKeyMarks.map((mark) => mark.column + 1),
@@ -216,12 +260,25 @@ function StaffVisualLane({
       const signatureKey = signature
         ? `${signature.beats}/${signature.beatType}`
         : null
+      const previousTimeSignature = sourceSystems
+        .slice(0, index)
+        .map((candidate) =>
+          candidate.timeSignature
+            ? `${candidate.timeSignature.beats}/${candidate.timeSignature.beatType}`
+            : null,
+        )
+        .filter(Boolean)
+        .at(-1) ?? null
       const showTimeSignature = Boolean(
         signatureKey && (index === 0 || signatureKey !== previousTimeSignature),
       )
-      if (signatureKey) previousTimeSignature = signatureKey
       return {
         ...system,
+        geometry: systemGeometry,
+        treble: systemGeometry.staves[STAFF_KIND.TREBLE] ?? null,
+        bass: systemGeometry.staves[STAFF_KIND.BASS] ?? null,
+        staffTopY: systemGeometry.lines[0],
+        staffBottomY: systemGeometry.lines[systemGeometry.lines.length - 1],
         keyMarks: systemKeyMarks,
         timeSignatureX:
           system.xStart +
@@ -230,14 +287,19 @@ function StaffVisualLane({
         showTimeSignature,
       }
     })
-  }, [sourceSystems, geometry])
+  }, [sourceSystems, sourceSystemGeometries, geometry])
   const inlineKeySignatures = useMemo(
     () =>
-      (structuralMarks?.keySignatures ?? []).map((signature) => ({
-        ...signature,
-        marks: buildKeySignatureMarks(signature, geometry),
-      })),
-    [structuralMarks, geometry],
+      (structuralMarks?.keySignatures ?? []).map((signature) => {
+        const systemGeometry =
+          sourceSystemGeometries.get(signature.systemOccurrence) ?? geometry
+        return {
+          ...signature,
+          geometry: systemGeometry,
+          marks: buildKeySignatureMarks(signature, systemGeometry),
+        }
+      }),
+    [structuralMarks, sourceSystemGeometries, geometry],
   )
 
   return (
@@ -253,7 +315,7 @@ function StaffVisualLane({
               Rendered first so staff lines and clefs paint over them. */}
           <g ref={scrollRef} className="staff-lane__scroll">
             {usesSourceSystems && sourceSystems.flatMap((system) =>
-              geometry.lines.map((y) => (
+              (sourceSystemGeometries.get(system.occurrence) ?? geometry).lines.map((y) => (
                 <line
                   key={`system-${system.occurrence}-line-${y}`}
                   className="staff-lane__line"
@@ -276,26 +338,26 @@ function StaffVisualLane({
                   className="staff-lane__system-connector"
                   x1={system.xStart}
                   x2={system.xStart}
-                  y1={staffTopY}
-                  y2={staffBottomY}
+                  y1={system.staffTopY}
+                  y2={system.staffBottomY}
                   vectorEffect="non-scaling-stroke"
                 />
-                {treble && (
+                {system.treble && (
                   <text
                     className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
                     x={system.xStart + SYSTEM_PREFIX_CLEF_X}
-                    y={treble.lines[3]}
+                    y={system.treble.lines[3]}
                     fontSize={glyphClefs ? STAFF_LINE_GAP * 5.6 : STAFF_LINE_GAP * 2}
                     dominantBaseline="middle"
                   >
                     {glyphClefs ? TREBLE_CLEF_GLYPH : 'G'}
                   </text>
                 )}
-                {bass && (
+                {system.bass && (
                   <text
                     className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
                     x={system.xStart + SYSTEM_PREFIX_CLEF_X}
-                    y={bass.lines[1]}
+                    y={system.bass.lines[1]}
                     fontSize={glyphClefs ? STAFF_LINE_GAP * 3.4 : STAFF_LINE_GAP * 2}
                     dominantBaseline="middle"
                   >
@@ -321,7 +383,7 @@ function StaffVisualLane({
                   </text>
                 ))}
                 {system.showTimeSignature && system.timeSignature &&
-                  Object.values(geometry.staves).map((staff) => (
+                  Object.values(system.geometry.staves).map((staff) => (
                     <g
                       key={`system-${system.occurrence}-${staff.kind}-time`}
                       className="staff-lane__timesig"
@@ -393,51 +455,58 @@ function StaffVisualLane({
                 </g>
               )
             })}
-            {(structuralMarks?.repeats ?? []).map((repeat) => (
-              <g
-                key={repeat.id}
-                className={`staff-lane__repeat staff-lane__repeat--${repeat.direction}`}
-                data-structural-kind="repeat"
-                data-repeat-direction={repeat.direction}
-              >
-                <line
-                  className="staff-lane__repeat-thick"
-                  x1={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
-                  x2={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
-                  y1={staffTopY}
-                  y2={staffBottomY}
-                  vectorEffect="non-scaling-stroke"
-                />
-                <line
-                  x1={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
-                  x2={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
-                  y1={staffTopY}
-                  y2={staffBottomY}
-                  vectorEffect="non-scaling-stroke"
-                />
-                {Object.values(geometry.staves).flatMap((staff) => [
-                  (staff.lines[1] + staff.lines[2]) / 2,
-                  (staff.lines[2] + staff.lines[3]) / 2,
-                ]).map((y, index) => (
-                  <circle
-                    key={`${repeat.id}-dot-${index}`}
-                    cx={repeat.x + (repeat.direction === 'forward' ? 10 : -9)}
-                    cy={y}
-                    r={STAFF_LINE_GAP * 0.16}
+            {(structuralMarks?.repeats ?? []).map((repeat) => {
+              const repeatGeometry =
+                sourceSystemGeometries.get(repeat.systemOccurrence) ?? geometry
+              const repeatTopY = repeatGeometry.lines[0]
+              const repeatBottomY =
+                repeatGeometry.lines[repeatGeometry.lines.length - 1]
+              return (
+                <g
+                  key={repeat.id}
+                  className={`staff-lane__repeat staff-lane__repeat--${repeat.direction}`}
+                  data-structural-kind="repeat"
+                  data-repeat-direction={repeat.direction}
+                >
+                  <line
+                    className="staff-lane__repeat-thick"
+                    x1={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
+                    x2={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
+                    y1={repeatTopY}
+                    y2={repeatBottomY}
+                    vectorEffect="non-scaling-stroke"
                   />
-                ))}
-                {repeat.times && (
-                  <text
-                    className="staff-lane__repeat-times"
-                    x={repeat.x - STAFF_LINE_GAP * 0.8}
-                    y={staffTopY - STAFF_LINE_GAP * 0.65}
-                    fontSize={STAFF_LINE_GAP}
-                  >
-                    ×{repeat.times}
-                  </text>
-                )}
-              </g>
-            ))}
+                  <line
+                    x1={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
+                    x2={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
+                    y1={repeatTopY}
+                    y2={repeatBottomY}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  {Object.values(repeatGeometry.staves).flatMap((staff) => [
+                    (staff.lines[1] + staff.lines[2]) / 2,
+                    (staff.lines[2] + staff.lines[3]) / 2,
+                  ]).map((y, index) => (
+                    <circle
+                      key={`${repeat.id}-dot-${index}`}
+                      cx={repeat.x + (repeat.direction === 'forward' ? 10 : -9)}
+                      cy={y}
+                      r={STAFF_LINE_GAP * 0.16}
+                    />
+                  ))}
+                  {repeat.times && (
+                    <text
+                      className="staff-lane__repeat-times"
+                      x={repeat.x - STAFF_LINE_GAP * 0.8}
+                      y={repeatTopY - STAFF_LINE_GAP * 0.65}
+                      fontSize={STAFF_LINE_GAP}
+                    >
+                      ×{repeat.times}
+                    </text>
+                  )}
+                </g>
+              )
+            })}
             {inlineKeySignatures.map((signature) => (
               <g
                 key={signature.id}
@@ -465,13 +534,16 @@ function StaffVisualLane({
                 ))}
               </g>
             ))}
-            {(structuralMarks?.timeSignatures ?? []).map((signature) => (
-              <g
-                key={signature.id}
-                className="staff-lane__timesig staff-lane__timesig--inline"
-                data-structural-kind="time-signature"
-              >
-                {Object.values(geometry.staves).flatMap((staff) => [
+            {(structuralMarks?.timeSignatures ?? []).map((signature) => {
+              const signatureGeometry =
+                sourceSystemGeometries.get(signature.systemOccurrence) ?? geometry
+              return (
+                <g
+                  key={signature.id}
+                  className="staff-lane__timesig staff-lane__timesig--inline"
+                  data-structural-kind="time-signature"
+                >
+                {Object.values(signatureGeometry.staves).flatMap((staff) => [
                   <text
                     key={`${signature.id}-${staff.kind}-beats`}
                     x={signature.x + STAFF_LINE_GAP * 1.2}
@@ -493,16 +565,17 @@ function StaffVisualLane({
                     {signature.beatType}
                   </text>,
                 ])}
-              </g>
-            ))}
+                </g>
+              )
+            })}
             {visibleBarlines.map((barline) => (
               <line
                 key={barline.time}
                 className="staff-lane__barline"
                 x1={barline.x}
                 x2={barline.x}
-                y1={staffTopY}
-                y2={staffBottomY}
+                y1={barline.geometry.lines[0]}
+                y2={barline.geometry.lines[barline.geometry.lines.length - 1]}
                 vectorEffect="non-scaling-stroke"
               />
             ))}

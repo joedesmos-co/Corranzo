@@ -4,12 +4,14 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import {
+  STAFF_LINE_GAP,
   buildStaffGeometry,
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
+  buildSourceSystemStaffGeometry,
   detectStaves,
 } from '../src/features/practice/staffLaneLayout.js'
 import { PRACTICE_SCOPE } from '../src/features/practice/practiceScope.js'
@@ -378,6 +380,64 @@ describe('Visual mode architecture correction', () => {
     expect(resolveSourceFidelityGroupX(layout, group)).toBeCloseTo(
       group.timeSeconds * 90,
       6,
+    )
+  })
+
+  it('preserves source-declared grand-staff distance per reconstructed system', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list>
+          <score-part id="P1"><part-name>Piano</part-name></score-part>
+        </part-list>
+        <part id="P1">
+          <measure number="1" width="180">
+            <print new-system="yes">
+              <staff-layout number="2"><staff-distance>82.5</staff-distance></staff-layout>
+            </print>
+            <attributes>
+              <divisions>1</divisions>
+              <time><beats>4</beats><beat-type>4</beat-type></time>
+              <staves>2</staves>
+              <clef number="1"><sign>G</sign><line>2</line></clef>
+              <clef number="2"><sign>F</sign><line>4</line></clef>
+            </attributes>
+            <note default-x="20"><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+            <backup><duration>4</duration></backup>
+            <note default-x="20"><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const baseGeometry = buildStaffGeometry(detectStaves(groups))
+    const sourceGeometry = buildSourceSystemStaffGeometry(
+      baseGeometry,
+      layout.systems[0],
+    )
+
+    expect(timingMap.measures[0].staffDistances).toEqual({ '2': 82.5 })
+    expect(layout.systems[0].staffDistances).toEqual({ '2': 82.5 })
+    expect(sourceGeometry.staves.bass.lines[0]).toBeCloseTo(
+      sourceGeometry.staves.treble.lines[4] + 8.25 * STAFF_LINE_GAP,
+      8,
+    )
+
+    const notes = buildStaffLaneNotes(groups, baseGeometry, { sourceLayout: layout })
+    const bassNote = notes.find((note) => note.staffKind === 'bass')
+    expect(bassNote.y).toBeCloseTo(
+      sourceGeometry.staves.bass.lines[0] + STAFF_LINE_GAP * 2.5,
+      8,
+    )
+  })
+
+  it('keeps the semantic staff geometry when source staff-distance is absent', () => {
+    const geometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    expect(buildSourceSystemStaffGeometry(geometry, { staffDistances: null })).toBe(
+      geometry,
+    )
+    expect(buildSourceSystemStaffGeometry(geometry, { staffDistances: { '2': -4 } })).toBe(
+      geometry,
     )
   })
 
