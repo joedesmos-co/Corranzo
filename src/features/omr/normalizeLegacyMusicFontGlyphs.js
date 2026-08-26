@@ -55,6 +55,10 @@ export const LEGACY_MSCORE_GLYPH_MAP = new Map([
   ['\ue10e', '\ue262'], // sharp (alternate MScore subset)
   ['\ue113', '\ue261'], // natural (alternate MScore subset)
   ['\ue114', '\ue260'], // flat (alternate MScore subset)
+  // U+E11C was verified at four isolated source positions in the same legacy
+  // MScore font family; every occurrence renders as the crossed double-sharp
+  // mark immediately left of a notehead.
+  ['\ue11c', '\ue263'], // double sharp (alternate MScore subset)
 ])
 
 const LEGACY_NOTEHEAD_GLYPHS = new Set(['\ue12b', '\ue12c', '\ue12d'])

@@ -25,6 +25,7 @@ const SMUFL_BASS_CLEF = '\ue062'
 const ALTERNATE_MSCORE_SHARP = '\ue10e'
 const ALTERNATE_MSCORE_NATURAL = '\ue113'
 const ALTERNATE_MSCORE_FLAT = '\ue114'
+const ALTERNATE_MSCORE_DOUBLE_SHARP = '\ue11c'
 
 function item(text, fontName = 'music-font', overrides = {}) {
   return {
@@ -158,8 +159,9 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     page.push(item(ALTERNATE_MSCORE_SHARP.repeat(6), 'music-font'))
     page.push(item(ALTERNATE_MSCORE_NATURAL.repeat(3), 'music-font'))
     page.push(item(ALTERNATE_MSCORE_FLAT.repeat(4), 'music-font'))
+    page.push(item(ALTERNATE_MSCORE_DOUBLE_SHARP.repeat(2), 'music-font'))
     page.push(item(
-      `${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_NATURAL}${ALTERNATE_MSCORE_FLAT}`,
+      `${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_NATURAL}${ALTERNATE_MSCORE_FLAT}${ALTERNATE_MSCORE_DOUBLE_SHARP}`,
       'title-font',
     ))
 
@@ -168,12 +170,13 @@ describe('normalizeLegacyMusicFontGlyphs', () => {
     expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue262'.repeat(6))).toBe(true)
     expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue261'.repeat(3))).toBe(true)
     expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue260'.repeat(4))).toBe(true)
+    expect(items.some((entry) => entry.fontName === 'music-font' && entry.text === '\ue263'.repeat(2))).toBe(true)
     expect(
       items.some(
         (entry) =>
           entry.fontName === 'title-font' &&
           entry.text ===
-            `${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_NATURAL}${ALTERNATE_MSCORE_FLAT}`,
+            `${ALTERNATE_MSCORE_SHARP}${ALTERNATE_MSCORE_NATURAL}${ALTERNATE_MSCORE_FLAT}${ALTERNATE_MSCORE_DOUBLE_SHARP}`,
       ),
     ).toBe(true)
   })
