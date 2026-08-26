@@ -66,6 +66,7 @@ function semanticTimingMap() {
         midi: 60,
         writtenPitch: { step: 'C', alter: 0, octave: 4 },
         accidental: { type: 'natural' },
+        keySignature: { fifths: 0, mode: 'major', cancelFifths: null },
         noteType: 'quarter',
         stemDirection: 'up',
         dots: 1,
@@ -345,6 +346,13 @@ describe('Visual mode architecture correction', () => {
 
     expect(layout.mode).toBe('source-fidelity')
     expect(layout.systems).toHaveLength(1)
+    expect(layout.systems[0]).toMatchObject({
+      page: 1,
+      systemIndex: 0,
+      firstTimeSeconds: 0,
+      keySignature: { fifths: 0 },
+      timeSignature: { beats: 4, beatType: 4 },
+    })
     expect(resolveSourceFidelityGroupX(layout, first)).toBeCloseTo(200, 6)
     expect(resolveSourceFidelityObjectX(layout, quarter, first)).toBeCloseTo(200, 6)
     expect(resolveSourceFidelityLaneX(layout, first.timeSeconds)).toBeCloseTo(200, 6)

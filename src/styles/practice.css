@@ -5485,6 +5485,11 @@
   opacity: 0.8;
 }
 
+.staff-lane__system-connector {
+  stroke: #8b8b94;
+  stroke-width: 1.35;
+}
+
 .staff-lane__timesig text {
   fill: var(--sf-text-muted);
   font-family: Georgia, 'Times New Roman', serif;

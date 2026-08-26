@@ -35,6 +35,9 @@ const CURRENT_HEAD_SCALE = 1.35
 const LEDGER_HALF_WIDTH = 11
 /** Extra vertical coverage for the clef-zone mask (in line gaps). */
 const STAFF_MASK_OVERDRAW_GAPS = 6
+const SYSTEM_PREFIX_CLEF_X = STAFF_LINE_GAP
+const SYSTEM_PREFIX_KEY_X = STAFF_LINE_GAP * 3.6
+const SYSTEM_PREFIX_KEY_COLUMN_WIDTH = STAFF_LINE_GAP * 0.82
 
 const TREBLE_CLEF_GLYPH = '\u{1D11E}'
 const BASS_CLEF_GLYPH = '\u{1D122}'
@@ -184,6 +187,10 @@ function StaffVisualLane({
   const treble = geometry.staves[STAFF_KIND.TREBLE]
   const bass = geometry.staves[STAFF_KIND.BASS]
   const glyphClefs = supportsClefGlyphs()
+  const sourceSystems = sourceLayout?.mode === 'source-fidelity'
+    ? sourceLayout.systems ?? []
+    : []
+  const usesSourceSystems = sourceSystems.length > 0
   const keySignatureMarks = useMemo(
     () => buildKeySignatureMarks(keySignature, geometry),
     [keySignature, geometry],
@@ -192,12 +199,37 @@ function StaffVisualLane({
     0,
     ...keySignatureMarks.map((mark) => mark.column + 1),
   )
-  const keyStartX = STAFF_LINE_GAP * 3.6
-  const keyColumnWidth = STAFF_LINE_GAP * 0.82
   const timeSignatureX =
-    STAFF_LINE_GAP * 4.6 + keyColumns * keyColumnWidth
+    STAFF_LINE_GAP * 4.6 + keyColumns * SYSTEM_PREFIX_KEY_COLUMN_WIDTH
   const staticMaskWidth =
-    STAFF_LINE_GAP * 6.8 + keyColumns * keyColumnWidth
+    STAFF_LINE_GAP * 6.8 + keyColumns * SYSTEM_PREFIX_KEY_COLUMN_WIDTH
+  const sourceSystemPrefixes = useMemo(() => {
+    let previousTimeSignature = null
+    return sourceSystems.map((system, index) => {
+      const systemKeyMarks = buildKeySignatureMarks(system.keySignature, geometry)
+      const systemKeyColumns = Math.max(
+        0,
+        ...systemKeyMarks.map((mark) => mark.column + 1),
+      )
+      const signature = system.timeSignature
+      const signatureKey = signature
+        ? `${signature.beats}/${signature.beatType}`
+        : null
+      const showTimeSignature = Boolean(
+        signatureKey && (index === 0 || signatureKey !== previousTimeSignature),
+      )
+      if (signatureKey) previousTimeSignature = signatureKey
+      return {
+        ...system,
+        keyMarks: systemKeyMarks,
+        timeSignatureX:
+          system.xStart +
+          STAFF_LINE_GAP * 4.6 +
+          systemKeyColumns * SYSTEM_PREFIX_KEY_COLUMN_WIDTH,
+        showTimeSignature,
+      }
+    })
+  }, [sourceSystems, geometry])
 
   return (
     <div
@@ -211,6 +243,102 @@ function StaffVisualLane({
           {/* Scrolling notes: single transform, deterministic reconstructed x.
               Rendered first so staff lines and clefs paint over them. */}
           <g ref={scrollRef} className="staff-lane__scroll">
+            {usesSourceSystems && sourceSystems.flatMap((system) =>
+              geometry.lines.map((y) => (
+                <line
+                  key={`system-${system.occurrence}-line-${y}`}
+                  className="staff-lane__line"
+                  x1={system.xStart}
+                  x2={system.xEnd}
+                  y1={y}
+                  y2={y}
+                  vectorEffect="non-scaling-stroke"
+                />
+              )),
+            )}
+            {usesSourceSystems && sourceSystemPrefixes.map((system) => (
+              <g
+                key={`system-${system.occurrence}-prefix`}
+                className="staff-lane__system-prefix"
+                data-source-page={system.page}
+                data-source-system={system.systemIndex}
+              >
+                <line
+                  className="staff-lane__system-connector"
+                  x1={system.xStart}
+                  x2={system.xStart}
+                  y1={staffTopY}
+                  y2={staffBottomY}
+                  vectorEffect="non-scaling-stroke"
+                />
+                {treble && (
+                  <text
+                    className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
+                    x={system.xStart + SYSTEM_PREFIX_CLEF_X}
+                    y={treble.lines[3]}
+                    fontSize={glyphClefs ? STAFF_LINE_GAP * 5.6 : STAFF_LINE_GAP * 2}
+                    dominantBaseline="middle"
+                  >
+                    {glyphClefs ? TREBLE_CLEF_GLYPH : 'G'}
+                  </text>
+                )}
+                {bass && (
+                  <text
+                    className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
+                    x={system.xStart + SYSTEM_PREFIX_CLEF_X}
+                    y={bass.lines[1]}
+                    fontSize={glyphClefs ? STAFF_LINE_GAP * 3.4 : STAFF_LINE_GAP * 2}
+                    dominantBaseline="middle"
+                  >
+                    {glyphClefs ? BASS_CLEF_GLYPH : 'F'}
+                  </text>
+                )}
+                {system.keyMarks.map((mark) => (
+                  <text
+                    key={`system-${system.occurrence}-${mark.id}`}
+                    className={`staff-lane__key-accidental staff-lane__key-accidental--${mark.type}`}
+                    data-key-accidental={mark.type}
+                    x={
+                      system.xStart +
+                      SYSTEM_PREFIX_KEY_X +
+                      mark.column * SYSTEM_PREFIX_KEY_COLUMN_WIDTH
+                    }
+                    y={mark.y}
+                    fontSize={STAFF_LINE_GAP * 1.45}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >
+                    {mark.glyph}
+                  </text>
+                ))}
+                {system.showTimeSignature && system.timeSignature &&
+                  Object.values(geometry.staves).map((staff) => (
+                    <g
+                      key={`system-${system.occurrence}-${staff.kind}-time`}
+                      className="staff-lane__timesig"
+                    >
+                      <text
+                        x={system.timeSignatureX}
+                        y={staff.lines[1]}
+                        fontSize={STAFF_LINE_GAP * 2.2}
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                      >
+                        {system.timeSignature.beats}
+                      </text>
+                      <text
+                        x={system.timeSignatureX}
+                        y={staff.lines[3]}
+                        fontSize={STAFF_LINE_GAP * 2.2}
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                      >
+                        {system.timeSignature.beatType}
+                      </text>
+                    </g>
+                  ))}
+              </g>
+            ))}
             {visibleBarlines.map((barline) => (
               <line
                 key={barline.time}
@@ -398,7 +526,7 @@ function StaffVisualLane({
               width={staticMaskWidth}
               height={geometry.height + STAFF_LINE_GAP * STAFF_MASK_OVERDRAW_GAPS * 2}
             />
-            {geometry.lines.map((y) => (
+            {!usesSourceSystems && geometry.lines.map((y) => (
               <line
                 key={y}
                 className="staff-lane__line"
@@ -409,7 +537,7 @@ function StaffVisualLane({
                 vectorEffect="non-scaling-stroke"
               />
             ))}
-            {treble && (
+            {!usesSourceSystems && treble && (
               <text
                 className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
                 x={STAFF_LINE_GAP}
@@ -420,7 +548,7 @@ function StaffVisualLane({
                 {glyphClefs ? TREBLE_CLEF_GLYPH : 'G'}
               </text>
             )}
-            {bass && (
+            {!usesSourceSystems && bass && (
               <text
                 className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
                 x={STAFF_LINE_GAP}
@@ -431,13 +559,13 @@ function StaffVisualLane({
                 {glyphClefs ? BASS_CLEF_GLYPH : 'F'}
               </text>
             )}
-            {keySignatureMarks.map((mark) => (
+            {!usesSourceSystems && keySignatureMarks.map((mark) => (
               <text
                 key={mark.id}
                 className={`staff-lane__key-accidental staff-lane__key-accidental--${mark.type}`}
                 data-key-accidental={mark.type}
                 data-key-cancellation={mark.cancellation || undefined}
-                x={keyStartX + mark.column * keyColumnWidth}
+                x={SYSTEM_PREFIX_KEY_X + mark.column * SYSTEM_PREFIX_KEY_COLUMN_WIDTH}
                 y={mark.y}
                 fontSize={STAFF_LINE_GAP * 1.45}
                 dominantBaseline="middle"
@@ -446,7 +574,7 @@ function StaffVisualLane({
                 {mark.glyph}
               </text>
             ))}
-            {timeSignature &&
+            {!usesSourceSystems && timeSignature &&
               Object.values(geometry.staves).map((staff) => (
                 <g key={staff.kind} className="staff-lane__timesig">
                   <text

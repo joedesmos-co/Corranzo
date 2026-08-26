@@ -76,6 +76,8 @@ export function buildVisualMeasureLayoutIndex(timingMap) {
         : null,
       startQuarters: finite(measure.startQuarters) ? Number(measure.startQuarters) : null,
       endQuarters: finite(measure.endQuarters) ? Number(measure.endQuarters) : null,
+      beats: finite(measure.beats) ? Number(measure.beats) : null,
+      beatType: finite(measure.beatType) ? Number(measure.beatType) : null,
     })
   }
 
@@ -333,6 +335,10 @@ export function buildSourceFidelityLaneLayout(
   for (let systemOccurrence = 0; systemOccurrence < segments.length; systemOccurrence += 1) {
     const segment = segments[systemOccurrence]
     const first = segment.groups[0]
+    const last = segment.groups[segment.groups.length - 1]
+    const firstKeySignature = segment.groups
+      .flatMap((group) => group.notes ?? [])
+      .find((note) => note.keySignature)?.keySignature ?? null
     const measureEntries = []
     const measureByKey = new Map()
     for (const group of segment.groups) {
@@ -426,9 +432,21 @@ export function buildSourceFidelityLaneLayout(
       page: first.sourceLayout?.page ?? 1,
       systemIndex: first.sourceLayout?.systemIndex ?? 0,
       repeatPass: first.repeatPass ?? 1,
+      firstTimeSeconds: Number(first.timeSeconds ?? 0),
+      lastTimeSeconds: Number(last.timeSeconds ?? first.timeSeconds ?? 0),
       xStart: cursorX,
       xEnd: cursorX + systemWidth,
       measureNumbers: measureEntries.map((entry) => entry.measureNumber),
+      keySignature: firstKeySignature
+        ? { ...firstKeySignature, cancelFifths: null }
+        : null,
+      timeSignature:
+        measureEntries[0]?.layout?.beats && measureEntries[0]?.layout?.beatType
+          ? {
+              beats: measureEntries[0].layout.beats,
+              beatType: measureEntries[0].layout.beatType,
+            }
+          : null,
     })
     cursorX += systemWidth + systemGap
   }
