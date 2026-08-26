@@ -1,6 +1,11 @@
 import { getSourceVisualAnchorIndex } from '../omr/omrSourceVisualMap.js'
 import { getPlayAlongVisualEvents } from './playAlongVisualTarget.js'
 import { buildVisualNoteMarkings } from './visualNotationMarkings.js'
+import {
+  buildVisualEventLayout,
+  buildVisualMeasureLayoutIndex,
+  buildVisualObjectLayout,
+} from './sourceFidelityLayout.js'
 
 const LOOP_EPSILON_SECONDS = 0.001
 
@@ -17,10 +22,9 @@ function availableRepresentations(anchor) {
 }
 
 /**
- * Geometry-free ownership metadata for a semantic note. Source coordinates
- * deliberately stop at this boundary: Visual mode consumes source identity,
- * representation, page/system ownership, and agreement checks, then lays the
- * music out in Corranzo coordinates.
+ * Source ownership metadata for a semantic note. The ownership record stays
+ * coordinate-free; buildVisualObjectLayout separately converts trustworthy
+ * source evidence into renderer-safe normalized geometry.
  */
 export function buildVisualSourceOwnership(
   note,
@@ -121,20 +125,28 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     chordSymbol: note.chordSymbol ?? null,
     isChord: Boolean(note.isChord),
   }
+  const sourceOwnership = buildVisualSourceOwnership(
+    semantic,
+    sourceAnchorIndex,
+    options.preferredRepresentation,
+  )
   return {
     ...semantic,
-    sourceOwnership: buildVisualSourceOwnership(
-      semantic,
+    sourceOwnership,
+    sourceLayout: buildVisualObjectLayout({
+      note,
+      measureLayout: options.measureLayoutIndex?.get(semantic.measureNumber) ?? null,
+      sourceOwnership,
       sourceAnchorIndex,
-      options.preferredRepresentation,
-    ),
+      preferredRepresentation: options.preferredRepresentation,
+    }),
     markings: buildVisualNoteMarkings(semantic, { groupId: event.id }),
   }
 }
 
-function visualRestInstruction(rest, event, restIndex) {
+function visualRestInstruction(rest, event, restIndex, options) {
   const visualRestId = `${event.id}-r${restIndex}-${rest.id ?? 'rest'}`
-  return {
+  const semantic = {
     id: rest.id ?? visualRestId,
     visualRestId,
     sourceNoteId: rest.id ?? null,
@@ -152,6 +164,13 @@ function visualRestInstruction(rest, event, restIndex) {
     isRest: true,
     dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
   }
+  return {
+    ...semantic,
+    sourceLayout: buildVisualObjectLayout({
+      note: rest,
+      measureLayout: options.measureLayoutIndex?.get(semantic.measureNumber) ?? null,
+    }),
+  }
 }
 
 function eventInsideLoop(event, loopRegion) {
@@ -166,9 +185,10 @@ function eventInsideLoop(event, loopRegion) {
  * Canonical reconstructed-notation input.
  *
  * Timing/MusicXML supplies exact musical semantics. sourceVisualMap joins the
- * corresponding source-owned noteheads and representation without exporting
- * source x/y/bounds into the render model. The returned objects are the only
- * data StaffVisualLane/TabVisualLane need to draw the clean Visual surface.
+ * corresponding source-owned noteheads and representation, while normalized
+ * source layout evidence guides reconstructed SVG placement. No PDF pixels or
+ * crop data crosses this boundary. The returned objects are the only data
+ * StaffVisualLane/TabVisualLane need to draw the clean Visual surface.
  */
 export function buildVisualRenderingInstructions(
   timingMap,
@@ -177,17 +197,20 @@ export function buildVisualRenderingInstructions(
 ) {
   if (!timingMap) return []
   const sourceAnchorIndex = getSourceVisualAnchorIndex(sourceVisualMap)
+  const measureLayoutIndex = buildVisualMeasureLayoutIndex(timingMap)
+  const layoutOptions = { ...options, measureLayoutIndex }
   const events = getPlayAlongVisualEvents(timingMap, options.practiceScope)
     .filter((event) => eventInsideLoop(event, options.loopRegion))
 
   return events.map((event) => {
     const notes = (event.notes ?? []).map((note, noteIndex) =>
-      visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, options),
+      visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, layoutOptions),
     )
     const rests = (event.rests ?? []).map((rest, restIndex) =>
-      visualRestInstruction(rest, event, restIndex),
+      visualRestInstruction(rest, event, restIndex, layoutOptions),
     )
     const ownership = notes.map((note) => note.sourceOwnership).filter(Boolean)
+    const measureLayout = measureLayoutIndex.get(event.measureNumber) ?? null
     return {
       id: `visual-${event.id}`,
       semanticEventId: event.id,
@@ -203,6 +226,7 @@ export function buildVisualRenderingInstructions(
       isTiedContinuation: event.isTiedContinuation,
       notes,
       rests,
+      sourceLayout: buildVisualEventLayout([...notes, ...rests], measureLayout),
       sourceOwnership: ownership,
       sourceOwned: ownership.length > 0,
       sourceSemanticAgreement: ownership.every(

@@ -17,6 +17,12 @@ import {
   buildVisualRenderingInstructions,
   compareVisualRenderingInstructions,
 } from '../src/features/practice/visualRenderingInstructions.js'
+import {
+  buildSourceFidelityLaneLayout,
+  resolveSourceFidelityGroupX,
+  resolveSourceFidelityLaneX,
+  resolveSourceFidelityObjectX,
+} from '../src/features/practice/sourceFidelityLayout.js'
 import { resolveVisualLaneTransform } from '../src/features/practice/visualPracticeLane.js'
 import * as F from './helpers/buildXml.js'
 
@@ -37,6 +43,9 @@ function semanticTimingMap() {
         endQuarters: 4,
         beats: 4,
         beatType: 4,
+        engravedWidth: 200,
+        systemBreakBefore: false,
+        pageBreakBefore: false,
       },
     ],
     beats: [],
@@ -250,7 +259,7 @@ describe('Visual mode architecture correction', () => {
     expect(practice).toContain('<VisualPracticeView timingSourceKind={timingSourceKind} />')
   })
 
-  it('joins sfnh/sfve provenance without leaking PDF layout geometry', () => {
+  it('joins sfnh/sfve provenance and exposes normalized renderer-safe geometry', () => {
     const instructions = buildVisualRenderingInstructions(
       semanticTimingMap(),
       sourceVisualMap(),
@@ -268,10 +277,99 @@ describe('Visual mode architecture correction', () => {
       provenanceStatus: 'matched',
     })
     expect(half.sourceOwnership.selectedRepresentation).toBe('notation')
+    expect(quarter.sourceLayout).toMatchObject({
+      source: 'source-visual-map',
+      coordinateSpace: 'pdf-source-normalized',
+      page: 1,
+      systemIndex: 0,
+      staffIndex: 0,
+      measureIndex: 0,
+      representation: 'tab',
+      x: 0.2,
+      y: 0.7,
+      confidence: 0.96,
+    })
+    expect(quarter.sourceLayout.bounds).toMatchObject({
+      x0: 0.19,
+      y0: 0.69,
+      y1: 0.71,
+    })
+    expect(quarter.sourceLayout.bounds.x1).toBeCloseTo(0.21, 8)
+    expect(first.sourceLayout).toMatchObject({
+      source: 'source-visual-map',
+      page: 1,
+      systemIndex: 0,
+      x: 0.2,
+    })
     expect(quarter).not.toHaveProperty('sourcePdfCenter')
     expect(quarter).not.toHaveProperty('defaultX')
     expect(JSON.stringify(instructions)).not.toContain('sourceBBox')
     expect(JSON.stringify(instructions)).not.toContain('sourceCenter')
+  })
+
+  it('uses MusicXML layout without source provenance and keeps a semantic fallback', () => {
+    const instructions = buildVisualRenderingInstructions(semanticTimingMap())
+    const first = instructions[0]
+    const quarter = first.notes.find((note) => note.id === 'right-quarter')
+    const half = first.notes.find((note) => note.id === 'right-half')
+
+    expect(quarter.sourceLayout).toMatchObject({
+      source: 'musicxml-layout',
+      page: 1,
+      systemIndex: 0,
+      measureNumber: 1,
+      defaultX: 42,
+      measureWidth: 200,
+      xInMeasure: 0.21,
+    })
+    expect(half.sourceLayout).toMatchObject({
+      source: 'semantic-fallback',
+      page: 1,
+      systemIndex: 0,
+      measureNumber: 1,
+    })
+  })
+
+  it('places source-owned events at their printed X and maps the cursor to the same lane point', () => {
+    const instructions = buildVisualRenderingInstructions(
+      semanticTimingMap(),
+      sourceVisualMap(),
+    )
+    const layout = buildSourceFidelityLaneLayout(instructions, {
+      barlineTimes: [0],
+      systemWidth: 1000,
+      systemGap: 100,
+    })
+    const first = instructions[0]
+    const quarter = first.notes.find((note) => note.id === 'right-quarter')
+
+    expect(layout.mode).toBe('source-fidelity')
+    expect(layout.systems).toHaveLength(1)
+    expect(resolveSourceFidelityGroupX(layout, first)).toBeCloseTo(200, 6)
+    expect(resolveSourceFidelityObjectX(layout, quarter, first)).toBeCloseTo(200, 6)
+    expect(resolveSourceFidelityLaneX(layout, first.timeSeconds)).toBeCloseTo(200, 6)
+    expect(layout.barlineXByTime.get('0.000000')).toBeCloseTo(0, 6)
+  })
+
+  it('preserves the original time layout when no source geometry or print structure exists', () => {
+    const timingMap = semanticTimingMap()
+    timingMap.measures[0].engravedWidth = null
+    timingMap.notes = timingMap.notes.map((note) => {
+      const withoutLayout = { ...note }
+      delete withoutLayout.defaultX
+      delete withoutLayout.defaultY
+      delete withoutLayout.sourceNoteheadId
+      return withoutLayout
+    })
+    const instructions = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(instructions, { pixelsPerSecond: 90 })
+    const group = instructions.find((event) => event.timeSeconds > 0)
+
+    expect(layout.mode).toBe('temporal-fallback')
+    expect(resolveSourceFidelityGroupX(layout, group)).toBeCloseTo(
+      group.timeSeconds * 90,
+      6,
+    )
   })
 
   it('fails the comparison harness on source-ownership disagreement', () => {
@@ -284,6 +382,8 @@ describe('Visual mode architecture correction', () => {
 
     expect(comparison.passed).toBe(false)
     expect(comparison.mismatches).toContainEqual({ kind: 'source-provenance', index: 0 })
+    const quarter = instructions[0].notes.find((note) => note.id === 'right-quarter')
+    expect(quarter.sourceLayout.source).toBe('musicxml-layout')
   })
 
   it('preserves exact onsets, chords, voices, hands, rests, ties, and printed values', () => {

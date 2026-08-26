@@ -4,6 +4,10 @@ import {
   buildVisualSpanMarkings,
 } from './visualNotationMarkings.js'
 import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitize.js'
+import {
+  resolveSourceFidelityLaneX,
+  resolveSourceFidelityObjectX,
+} from './sourceFidelityLayout.js'
 
 /**
  * Staff-lane layout for Visual practice mode.
@@ -374,9 +378,13 @@ const SLUR_VERTICAL_OFFSET = STAFF_LINE_GAP * 1.35
 export function buildStaffLaneRests(
   groups,
   geometry,
-  { pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond } = {},
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    sourceLayout = null,
+  } = {},
 ) {
   const rests = []
+  const laneLayout = sourceLayout ?? { mode: 'temporal-fallback', pixelsPerSecond }
   for (const group of groups ?? []) {
     for (let index = 0; index < (group.rests?.length ?? 0); index += 1) {
       const rest = group.rests[index]
@@ -389,7 +397,12 @@ export function buildStaffLaneRests(
         groupId: group.id,
         status: group.status ?? null,
         laneOutcome: group.laneOutcome ?? null,
-        x: Number(group.timeSeconds ?? rest.timeSeconds ?? 0) * pixelsPerSecond,
+        x: resolveSourceFidelityObjectX(
+          laneLayout,
+          rest,
+          group,
+          group.timeSeconds ?? rest.timeSeconds ?? 0,
+        ),
         y: staff.lines[2],
         staffKind,
         voice: rest.voice ?? 1,
@@ -412,9 +425,13 @@ export function buildStaffLaneRests(
 export function buildStaffLaneNotes(
   groups,
   geometry,
-  { pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond } = {},
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    sourceLayout = null,
+  } = {},
 ) {
   const notes = []
+  const laneLayout = sourceLayout ?? { mode: 'temporal-fallback', pixelsPerSecond }
   const groupByTime = new Map(
     (groups ?? []).map((group) => [
       Number(group.timeSeconds ?? 0).toFixed(6),
@@ -452,7 +469,12 @@ export function buildStaffLaneNotes(
         continue
       }
       const renderGroup = entry.renderGroup
-      const x = Number(entry.timeSeconds ?? 0) * pixelsPerSecond
+      const x = resolveSourceFidelityObjectX(
+        laneLayout,
+        note,
+        renderGroup,
+        entry.timeSeconds ?? 0,
+      )
       const staffKind = resolveStaffKind(note)
       const written = resolveVisualWrittenPitch(note)
       const { y, ledgerLines } = staffYForDiatonic(
@@ -567,9 +589,13 @@ export function buildStaffLaneStems(
     pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
     noteheadRx = NOTEHEAD_RX,
     notes: prebuiltNotes = null,
+    sourceLayout = null,
   } = {},
 ) {
-  const notes = prebuiltNotes ?? buildStaffLaneNotes(groups, geometry, { pixelsPerSecond })
+  const laneLayout = sourceLayout ?? { mode: 'temporal-fallback', pixelsPerSecond }
+  const notes =
+    prebuiltNotes ??
+    buildStaffLaneNotes(groups, geometry, { pixelsPerSecond, sourceLayout: laneLayout })
 
   const chords = new Map()
   for (const note of notes) {
@@ -938,9 +964,13 @@ export function buildStaffLaneNotationMarkings(
   {
     pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
     notes: prebuiltNotes = null,
+    sourceLayout = null,
   } = {},
 ) {
-  const notes = prebuiltNotes ?? buildStaffLaneNotes(groups, geometry, { pixelsPerSecond })
+  const laneLayout = sourceLayout ?? { mode: 'temporal-fallback', pixelsPerSecond }
+  const notes =
+    prebuiltNotes ??
+    buildStaffLaneNotes(groups, geometry, { pixelsPerSecond, sourceLayout: laneLayout })
   const notesById = new Map(notes.map((note) => [note.visualNoteId, note]))
 
   const spanMarkings = buildVisualSpanMarkings(groups)
@@ -953,7 +983,7 @@ export function buildStaffLaneNotationMarkings(
       if (start && !end && marking.toTimeSeconds > marking.fromTimeSeconds) {
         end = {
           ...start,
-          x: start.x + (marking.toTimeSeconds - marking.fromTimeSeconds) * pixelsPerSecond,
+          x: resolveSourceFidelityLaneX(laneLayout, marking.toTimeSeconds),
         }
       }
       if (!start || !end) {

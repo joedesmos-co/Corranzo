@@ -7,6 +7,10 @@ import {
   resolveVisualPlayheadX,
 } from '../../features/practice/visualPracticeLane.js'
 import {
+  resolveSourceFidelityBarlineX,
+  resolveSourceFidelityLaneX,
+} from '../../features/practice/sourceFidelityLayout.js'
+import {
   NOTEHEAD_RX,
   NOTEHEAD_RY,
   STAFF_KIND,
@@ -60,10 +64,11 @@ function supportsClefGlyphs() {
 /**
  * Scrolling staff renderer for Visual practice mode.
  *
- * Layout is a pure function of note time (x = seconds × px/s). The staff
- * lines stay static while one requestAnimationFrame loop moves the playhead
- * and translates the note layer from the same frame time, keeping both locked
- * to the playback engine's wall-clock-interpolated score time.
+ * Layout follows source-derived print positions when trustworthy geometry is
+ * available and falls back to note time otherwise. The staff lines stay
+ * static while one requestAnimationFrame loop moves the playhead and
+ * translates the note layer from the same semantic frame time, keeping both
+ * locked to the playback engine's wall-clock-interpolated score time.
  */
 function StaffVisualLane({
   visibleGroups,
@@ -74,6 +79,7 @@ function StaffVisualLane({
   keySignature = null,
   durationSeconds = null,
   loopRegion = null,
+  sourceLayout = null,
 }) {
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
@@ -96,17 +102,21 @@ function StaffVisualLane({
   const { notes, rests, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
+      sourceLayout,
     })
     const builtRests = buildStaffLaneRests(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
+      sourceLayout,
     })
     const builtStems = buildStaffLaneStems(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
+      sourceLayout,
     })
     const markings = buildStaffLaneNotationMarkings(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
+      sourceLayout,
     })
     const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
     return {
@@ -116,7 +126,7 @@ function StaffVisualLane({
       ...rhythmMarks,
       ...markings,
     }
-  }, [visibleGroups, geometry])
+  }, [visibleGroups, geometry, sourceLayout])
 
   // Barlines within the visible groups' span (deterministic x, like notes).
   const visibleBarlines = useMemo(() => {
@@ -125,28 +135,36 @@ function StaffVisualLane({
     }
     const start = visibleGroups[0].timeSeconds - 1
     const end = visibleGroups[visibleGroups.length - 1].timeSeconds + 2
-    return barlineTimes.filter((t) => t > start && t <= end)
-  }, [visibleGroups, barlineTimes])
+    return barlineTimes
+      .filter((time) => time > start && time <= end)
+      .map((time) => ({
+        time,
+        x: resolveSourceFidelityBarlineX(sourceLayout, time),
+      }))
+  }, [visibleGroups, barlineTimes, sourceLayout])
 
   const staffTopY = geometry.lines[0]
   const staffBottomY = geometry.lines[geometry.lines.length - 1]
 
   // Per-frame motion: React lays out the SVG, then rAF updates only the
   // attributes that depend on time.
-  const frameMetricsRef = useRef({ viewWidth, durationSeconds, loopRegion })
+  const frameMetricsRef = useRef({ viewWidth, durationSeconds, loopRegion, sourceLayout })
   useEffect(() => {
-    frameMetricsRef.current = { viewWidth, durationSeconds, loopRegion }
-  }, [viewWidth, durationSeconds, loopRegion])
+    frameMetricsRef.current = { viewWidth, durationSeconds, loopRegion, sourceLayout }
+  }, [viewWidth, durationSeconds, loopRegion, sourceLayout])
   useEffect(() => {
     let frame
     const step = () => {
       const el = scrollRef.current
       const playheadEl = playheadRef.current
       const t = getFrameTime()
-      const { playheadX: livePlayheadX, scrollX } = resolveVisualLaneTransform({
+      const metrics = frameMetricsRef.current
+      const { playheadX: livePlayheadX } = resolveVisualLaneTransform({
         frameTime: t,
-        ...frameMetricsRef.current,
+        ...metrics,
       })
+      const scrollX =
+        livePlayheadX - resolveSourceFidelityLaneX(metrics.sourceLayout, t)
       if (el) {
         el.setAttribute(
           'transform',
@@ -182,18 +200,23 @@ function StaffVisualLane({
     STAFF_LINE_GAP * 6.8 + keyColumns * keyColumnWidth
 
   return (
-    <div ref={containerRef} className="staff-lane" aria-hidden="true">
+    <div
+      ref={containerRef}
+      className="staff-lane"
+      aria-hidden="true"
+      data-source-layout={sourceLayout?.mode ?? 'temporal-fallback'}
+    >
       <svg className="staff-lane__svg" width="100%" height="100%">
         <g transform={`scale(${scale}) translate(0 ${offsetY})`}>
-          {/* Scrolling notes: single transform, deterministic x from time.
+          {/* Scrolling notes: single transform, deterministic reconstructed x.
               Rendered first so staff lines and clefs paint over them. */}
           <g ref={scrollRef} className="staff-lane__scroll">
-            {visibleBarlines.map((time) => (
+            {visibleBarlines.map((barline) => (
               <line
-                key={time}
+                key={barline.time}
                 className="staff-lane__barline"
-                x1={time * PX_PER_SECOND}
-                x2={time * PX_PER_SECOND}
+                x1={barline.x}
+                x2={barline.x}
                 y1={staffTopY}
                 y2={staffBottomY}
                 vectorEffect="non-scaling-stroke"
