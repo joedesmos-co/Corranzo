@@ -32,7 +32,10 @@ import {
   resolveStringsForTimingMap,
 } from '../../features/instruments/timingMapTabPositions.js'
 import { buildPianoPracticeInstruction } from '../../features/practice/pianoPracticeInstructions.js'
-import { buildSourceFidelityLaneLayout } from '../../features/practice/sourceFidelityLayout.js'
+import {
+  buildSourceFidelityLaneLayout,
+  buildSourceFidelityStructuralMarks,
+} from '../../features/practice/sourceFidelityLayout.js'
 import { INSTRUMENT_IDS } from '../../features/instruments/instruments.js'
 import { describeTabPosition } from '../../features/instruments/fretboard.js'
 import StaffVisualLane from './StaffVisualLane.jsx'
@@ -140,6 +143,10 @@ function VisualPracticeView({ timingSourceKind = null }) {
   const staffSourceLayout = useMemo(
     () => buildSourceFidelityLaneLayout(renderingGroups, { barlineTimes }),
     [renderingGroups, barlineTimes],
+  )
+  const staffStructuralMarks = useMemo(
+    () => buildSourceFidelityStructuralMarks(timingMap, staffSourceLayout),
+    [timingMap, staffSourceLayout],
   )
   const timeSignature = useMemo(() => {
     const first = timingMap?.measures?.[0]
@@ -315,6 +322,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
           durationSeconds={visualDurationSeconds}
           loopRegion={loopRegion}
           sourceLayout={staffSourceLayout}
+          structuralMarks={staffStructuralMarks}
         />
       )}
 

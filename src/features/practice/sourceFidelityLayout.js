@@ -13,6 +13,15 @@ export const SOURCE_LAYOUT_MIN_CONFIDENCE = 0.7
 export const SOURCE_FIDELITY_SYSTEM_WIDTH = 560
 export const SOURCE_FIDELITY_SYSTEM_GAP = 72
 
+function emptyStructuralMarks() {
+  return {
+    repeats: [],
+    endings: [],
+    keySignatures: [],
+    timeSignatures: [],
+  }
+}
+
 function finite(value) {
   return value !== null && value !== '' && Number.isFinite(Number(value))
 }
@@ -535,4 +544,166 @@ export function resolveSourceFidelityLaneX(layout, timeSeconds) {
   if (!(right.timeSeconds > left.timeSeconds)) return Math.max(left.x, right.x)
   const progress = (time - left.timeSeconds) / (right.timeSeconds - left.timeSeconds)
   return left.x + (right.x - left.x) * progress
+}
+
+function writtenMeasureNumberForEvent(event, timingMap) {
+  if (finite(event?.measureNumber)) return Number(event.measureNumber)
+  const quarterTime = Number(event?.quarterTime)
+  if (!Number.isFinite(quarterTime)) return null
+  const measure = (timingMap?.measures ?? []).find(
+    (candidate) =>
+      quarterTime >= Number(candidate.startQuarters ?? 0) - 1e-9 &&
+      quarterTime < Number(candidate.endQuarters ?? 0) - 1e-9,
+  )
+  return measure?.number ?? timingMap?.measures?.[0]?.number ?? null
+}
+
+function systemForMeasure(layout, measure) {
+  return layout?.systems?.find(
+    (system) => system.occurrence === measure.systemOccurrence,
+  ) ?? null
+}
+
+function isSystemStart(layout, measure) {
+  const system = systemForMeasure(layout, measure)
+  return system && Math.abs(Number(measure.xStart) - Number(system.xStart)) < 1e-6
+}
+
+/**
+ * Project written structural symbols onto source-derived measure boundaries.
+ * The marks contain semantic symbol identity plus reconstructed coordinates;
+ * the renderer still draws native SVG/text glyphs and never source pixels.
+ */
+export function buildSourceFidelityStructuralMarks(timingMap, layout) {
+  if (layout?.mode !== 'source-fidelity' || !layout.measures?.length) {
+    return emptyStructuralMarks()
+  }
+
+  const result = emptyStructuralMarks()
+  const writtenMeasures = new Map(
+    (timingMap?.measures ?? []).map((measure) => [Number(measure.number), measure]),
+  )
+  const keyEventsByMeasure = new Map()
+  for (const event of timingMap?.keySignatures ?? []) {
+    const number = writtenMeasureNumberForEvent(event, timingMap)
+    if (number != null) keyEventsByMeasure.set(Number(number), event)
+  }
+  const timeEventsByMeasure = new Map()
+  for (const event of timingMap?.timeSignatures ?? []) {
+    const number = writtenMeasureNumberForEvent(event, timingMap)
+    if (number != null) timeEventsByMeasure.set(Number(number), event)
+  }
+
+  let activeEnding = null
+  for (let index = 0; index < layout.measures.length; index += 1) {
+    const measure = layout.measures[index]
+    const previous = layout.measures[index - 1] ?? null
+    const written = writtenMeasures.get(Number(measure.measureNumber))
+    const marking = written?.marking ?? null
+    const system = systemForMeasure(layout, measure)
+
+    if (
+      activeEnding &&
+      previous &&
+      (previous.repeatPass !== measure.repeatPass ||
+        previous.systemOccurrence !== measure.systemOccurrence)
+    ) {
+      const previousSystem = systemForMeasure(layout, previous)
+      result.endings.push({
+        ...activeEnding,
+        id: `${activeEnding.id}-segment-${result.endings.length}`,
+        xEnd: previousSystem?.xEnd ?? previous.xEnd,
+        continued: activeEnding.continued,
+      })
+      if (previous.repeatPass !== measure.repeatPass) {
+        activeEnding = null
+      } else {
+        activeEnding = {
+          ...activeEnding,
+          xStart: system?.xStart ?? measure.xStart,
+          systemOccurrence: measure.systemOccurrence,
+          continued: true,
+        }
+      }
+    }
+
+    if (marking?.endingStartNumbers?.length) {
+      if (activeEnding) {
+        result.endings.push({
+          ...activeEnding,
+          id: `${activeEnding.id}-segment-${result.endings.length}`,
+          xEnd: measure.xStart,
+        })
+      }
+      activeEnding = {
+        id: `ending-${measure.measureNumber}-pass-${measure.repeatPass}`,
+        numbers: [...marking.endingStartNumbers],
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+        xStart: measure.xStart,
+        continued: false,
+      }
+    }
+
+    if (marking?.forwardRepeat) {
+      result.repeats.push({
+        id: `repeat-forward-${measure.measureNumber}-pass-${measure.repeatPass}`,
+        direction: 'forward',
+        x: measure.xStart,
+        systemOccurrence: measure.systemOccurrence,
+      })
+    }
+    if (marking?.backwardRepeat) {
+      result.repeats.push({
+        id: `repeat-backward-${measure.measureNumber}-pass-${measure.repeatPass}`,
+        direction: 'backward',
+        times: marking.backwardRepeatTimes ?? null,
+        x: measure.xEnd,
+        systemOccurrence: measure.systemOccurrence,
+      })
+    }
+
+    if (activeEnding && (marking?.endingStop || marking?.endingDiscontinue)) {
+      result.endings.push({
+        ...activeEnding,
+        id: `${activeEnding.id}-segment-${result.endings.length}`,
+        xEnd: measure.xEnd,
+        discontinue: Boolean(marking.endingDiscontinue),
+      })
+      activeEnding = null
+    }
+
+    if (!isSystemStart(layout, measure)) {
+      const keySignature = keyEventsByMeasure.get(Number(measure.measureNumber))
+      if (keySignature) {
+        result.keySignatures.push({
+          id: `key-${measure.measureNumber}-pass-${measure.repeatPass}`,
+          ...keySignature,
+          x: measure.xStart,
+          systemOccurrence: measure.systemOccurrence,
+        })
+      }
+      const timeSignature = timeEventsByMeasure.get(Number(measure.measureNumber))
+      if (timeSignature) {
+        result.timeSignatures.push({
+          id: `time-${measure.measureNumber}-pass-${measure.repeatPass}`,
+          ...timeSignature,
+          x: measure.xStart,
+          systemOccurrence: measure.systemOccurrence,
+        })
+      }
+    }
+  }
+
+  if (activeEnding) {
+    const lastMeasure = layout.measures[layout.measures.length - 1]
+    const lastSystem = systemForMeasure(layout, lastMeasure)
+    result.endings.push({
+      ...activeEnding,
+      id: `${activeEnding.id}-segment-${result.endings.length}`,
+      xEnd: lastSystem?.xEnd ?? lastMeasure.xEnd,
+    })
+  }
+
+  return result
 }

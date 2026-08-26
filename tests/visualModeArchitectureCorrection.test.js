@@ -19,6 +19,7 @@ import {
 } from '../src/features/practice/visualRenderingInstructions.js'
 import {
   buildSourceFidelityLaneLayout,
+  buildSourceFidelityStructuralMarks,
   resolveSourceFidelityGroupX,
   resolveSourceFidelityLaneX,
   resolveSourceFidelityObjectX,
@@ -378,6 +379,98 @@ describe('Visual mode architecture correction', () => {
       group.timeSeconds * 90,
       6,
     )
+  })
+
+  it('projects repeats, endings, and inline signature changes at source measure boundaries', () => {
+    const timingMap = {
+      measures: [
+        {
+          number: 1,
+          startQuarters: 0,
+          endQuarters: 4,
+          marking: {
+            forwardRepeat: true,
+            backwardRepeat: false,
+            endingStartNumbers: [1],
+          },
+        },
+        {
+          number: 2,
+          startQuarters: 4,
+          endQuarters: 8,
+          marking: {
+            forwardRepeat: false,
+            backwardRepeat: true,
+            backwardRepeatTimes: 3,
+            endingStop: true,
+          },
+        },
+      ],
+      keySignatures: [
+        { measureNumber: 1, quarterTime: 0, fifths: 0 },
+        { measureNumber: 2, quarterTime: 4, fifths: 2, cancelFifths: 0 },
+      ],
+      timeSignatures: [
+        { quarterTime: 0, beats: 4, beatType: 4 },
+        { measureNumber: 2, quarterTime: 4, beats: 3, beatType: 4 },
+      ],
+    }
+    const layout = {
+      mode: 'source-fidelity',
+      systems: [
+        { occurrence: 0, xStart: 0, xEnd: 200 },
+      ],
+      measures: [
+        { measureNumber: 1, repeatPass: 1, systemOccurrence: 0, xStart: 0, xEnd: 100 },
+        { measureNumber: 2, repeatPass: 1, systemOccurrence: 0, xStart: 100, xEnd: 200 },
+      ],
+    }
+
+    const marks = buildSourceFidelityStructuralMarks(timingMap, layout)
+
+    expect(marks.repeats).toMatchObject([
+      { direction: 'forward', x: 0 },
+      { direction: 'backward', times: 3, x: 200 },
+    ])
+    expect(marks.endings).toMatchObject([
+      { numbers: [1], xStart: 0, xEnd: 200 },
+    ])
+    expect(marks.keySignatures).toMatchObject([
+      { measureNumber: 2, fifths: 2, x: 100 },
+    ])
+    expect(marks.timeSignatures).toMatchObject([
+      { measureNumber: 2, beats: 3, beatType: 4, x: 100 },
+    ])
+  })
+
+  it('does not invent inline symbols for an unmarked score or duplicate its opening signatures', () => {
+    const timingMap = {
+      measures: [{ number: 1, startQuarters: 0, endQuarters: 4, marking: null }],
+      keySignatures: [{ quarterTime: 0, fifths: -3 }],
+      timeSignatures: [{ quarterTime: 0, beats: 6, beatType: 8 }],
+    }
+    const sourceLayout = {
+      mode: 'source-fidelity',
+      systems: [{ occurrence: 0, xStart: 0, xEnd: 100 }],
+      measures: [
+        { measureNumber: 1, repeatPass: 1, systemOccurrence: 0, xStart: 0, xEnd: 100 },
+      ],
+    }
+
+    expect(buildSourceFidelityStructuralMarks(timingMap, sourceLayout)).toEqual({
+      repeats: [],
+      endings: [],
+      keySignatures: [],
+      timeSignatures: [],
+    })
+    expect(
+      buildSourceFidelityStructuralMarks(timingMap, { mode: 'temporal-fallback' }),
+    ).toEqual({
+      repeats: [],
+      endings: [],
+      keySignatures: [],
+      timeSignatures: [],
+    })
   })
 
   it('fails the comparison harness on source-ownership disagreement', () => {

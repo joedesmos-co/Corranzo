@@ -83,6 +83,7 @@ function StaffVisualLane({
   durationSeconds = null,
   loopRegion = null,
   sourceLayout = null,
+  structuralMarks = null,
 }) {
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
@@ -230,6 +231,14 @@ function StaffVisualLane({
       }
     })
   }, [sourceSystems, geometry])
+  const inlineKeySignatures = useMemo(
+    () =>
+      (structuralMarks?.keySignatures ?? []).map((signature) => ({
+        ...signature,
+        marks: buildKeySignatureMarks(signature, geometry),
+      })),
+    [structuralMarks, geometry],
+  )
 
   return (
     <div
@@ -337,6 +346,153 @@ function StaffVisualLane({
                       </text>
                     </g>
                   ))}
+              </g>
+            ))}
+            {(structuralMarks?.endings ?? []).map((ending) => {
+              const y = staffTopY - STAFF_LINE_GAP * 1.7
+              return (
+                <g
+                  key={ending.id}
+                  className="staff-lane__ending"
+                  data-structural-kind="ending"
+                >
+                  <line
+                    x1={ending.xStart}
+                    x2={ending.xEnd}
+                    y1={y}
+                    y2={y}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  {!ending.continued && (
+                    <line
+                      x1={ending.xStart}
+                      x2={ending.xStart}
+                      y1={y}
+                      y2={staffTopY - STAFF_LINE_GAP * 0.25}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  )}
+                  {!ending.discontinue && (
+                    <line
+                      x1={ending.xEnd}
+                      x2={ending.xEnd}
+                      y1={y}
+                      y2={staffTopY - STAFF_LINE_GAP * 0.65}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  )}
+                  {!ending.continued && (
+                    <text
+                      x={ending.xStart + STAFF_LINE_GAP * 0.65}
+                      y={y - STAFF_LINE_GAP * 0.32}
+                      fontSize={STAFF_LINE_GAP * 1.15}
+                    >
+                      {ending.numbers.join(',')}.
+                    </text>
+                  )}
+                </g>
+              )
+            })}
+            {(structuralMarks?.repeats ?? []).map((repeat) => (
+              <g
+                key={repeat.id}
+                className={`staff-lane__repeat staff-lane__repeat--${repeat.direction}`}
+                data-structural-kind="repeat"
+                data-repeat-direction={repeat.direction}
+              >
+                <line
+                  className="staff-lane__repeat-thick"
+                  x1={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
+                  x2={repeat.x + (repeat.direction === 'forward' ? 0 : -3)}
+                  y1={staffTopY}
+                  y2={staffBottomY}
+                  vectorEffect="non-scaling-stroke"
+                />
+                <line
+                  x1={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
+                  x2={repeat.x + (repeat.direction === 'forward' ? 4 : 1)}
+                  y1={staffTopY}
+                  y2={staffBottomY}
+                  vectorEffect="non-scaling-stroke"
+                />
+                {Object.values(geometry.staves).flatMap((staff) => [
+                  (staff.lines[1] + staff.lines[2]) / 2,
+                  (staff.lines[2] + staff.lines[3]) / 2,
+                ]).map((y, index) => (
+                  <circle
+                    key={`${repeat.id}-dot-${index}`}
+                    cx={repeat.x + (repeat.direction === 'forward' ? 10 : -9)}
+                    cy={y}
+                    r={STAFF_LINE_GAP * 0.16}
+                  />
+                ))}
+                {repeat.times && (
+                  <text
+                    className="staff-lane__repeat-times"
+                    x={repeat.x - STAFF_LINE_GAP * 0.8}
+                    y={staffTopY - STAFF_LINE_GAP * 0.65}
+                    fontSize={STAFF_LINE_GAP}
+                  >
+                    ×{repeat.times}
+                  </text>
+                )}
+              </g>
+            ))}
+            {inlineKeySignatures.map((signature) => (
+              <g
+                key={signature.id}
+                className="staff-lane__inline-key"
+                data-structural-kind="key-signature"
+              >
+                {signature.marks.map((mark) => (
+                  <text
+                    key={`${signature.id}-${mark.id}`}
+                    className={`staff-lane__key-accidental staff-lane__key-accidental--${mark.type}`}
+                    data-key-accidental={mark.type}
+                    data-key-cancellation={mark.cancellation || undefined}
+                    x={
+                      signature.x +
+                      STAFF_LINE_GAP * 0.9 +
+                      mark.column * SYSTEM_PREFIX_KEY_COLUMN_WIDTH
+                    }
+                    y={mark.y}
+                    fontSize={STAFF_LINE_GAP * 1.45}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >
+                    {mark.glyph}
+                  </text>
+                ))}
+              </g>
+            ))}
+            {(structuralMarks?.timeSignatures ?? []).map((signature) => (
+              <g
+                key={signature.id}
+                className="staff-lane__timesig staff-lane__timesig--inline"
+                data-structural-kind="time-signature"
+              >
+                {Object.values(geometry.staves).flatMap((staff) => [
+                  <text
+                    key={`${signature.id}-${staff.kind}-beats`}
+                    x={signature.x + STAFF_LINE_GAP * 1.2}
+                    y={staff.lines[1]}
+                    fontSize={STAFF_LINE_GAP * 2.2}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >
+                    {signature.beats}
+                  </text>,
+                  <text
+                    key={`${signature.id}-${staff.kind}-beat-type`}
+                    x={signature.x + STAFF_LINE_GAP * 1.2}
+                    y={staff.lines[3]}
+                    fontSize={STAFF_LINE_GAP * 2.2}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >
+                    {signature.beatType}
+                  </text>,
+                ])}
               </g>
             ))}
             {visibleBarlines.map((barline) => (

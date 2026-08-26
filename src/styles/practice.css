@@ -5490,6 +5490,34 @@
   stroke-width: 1.35;
 }
 
+.staff-lane__repeat,
+.staff-lane__ending {
+  color: var(--sf-text-muted);
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.staff-lane__repeat {
+  stroke-width: 1.4;
+}
+
+.staff-lane__repeat-thick {
+  stroke-width: 3.2;
+}
+
+.staff-lane__ending {
+  stroke-width: 1.25;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 650;
+}
+
+.staff-lane__repeat-times {
+  fill: currentColor;
+  stroke: none;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 650;
+}
+
 .staff-lane__timesig text {
   fill: var(--sf-text-muted);
   font-family: Georgia, 'Times New Roman', serif;
