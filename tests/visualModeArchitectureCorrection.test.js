@@ -6,6 +6,7 @@ import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import {
   STAFF_LINE_GAP,
   buildStaffGeometry,
+  buildKeySignatureMarks,
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
   buildStaffLaneRests,
@@ -625,6 +626,8 @@ describe('Visual mode architecture correction', () => {
       endings: [],
       keySignatures: [],
       timeSignatures: [],
+      clefs: [],
+      systemClefs: [],
     })
     expect(
       buildSourceFidelityStructuralMarks(timingMap, { mode: 'temporal-fallback' }),
@@ -633,7 +636,147 @@ describe('Visual mode architecture correction', () => {
       endings: [],
       keySignatures: [],
       timeSignatures: [],
+      clefs: [],
+      systemClefs: [],
     })
+  })
+
+  it('preserves positioned clef changes without duplicating system-start declarations', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list>
+          <score-part id="P1"><part-name>Piano</part-name></score-part>
+        </part-list>
+        <part id="P1">
+          <measure number="1" width="200">
+            <print new-system="yes"/>
+            <attributes>
+              <divisions>1</divisions><staves>2</staves>
+              <time><beats>4</beats><beat-type>4</beat-type></time>
+              <clef number="1"><sign>G</sign><line>2</line></clef>
+              <clef number="2"><sign>F</sign><line>4</line></clef>
+            </attributes>
+            <note default-x="20"><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+            <backup><duration>4</duration></backup>
+            <note default-x="20"><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>2</voice><type>half</type><staff>2</staff></note>
+            <attributes><clef number="2" default-x="100" relative-x="10"><sign>G</sign><line>2</line></clef></attributes>
+            <note default-x="120"><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><voice>2</voice><type>half</type><staff>2</staff></note>
+          </measure>
+          <measure number="2" width="160">
+            <print new-system="yes"/>
+            <attributes><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+            <note default-x="20"><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>1</staff></note>
+            <backup><duration>4</duration></backup>
+            <note default-x="20"><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const marks = buildSourceFidelityStructuralMarks(timingMap, layout)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const renderedNotes = buildStaffLaneNotes(groups, geometry, { sourceLayout: layout })
+
+    expect(timingMap.clefEvents).toMatchObject([
+      { staff: 1, sign: 'G', line: 2, quarterTime: 0, initial: true, changed: false },
+      { staff: 2, sign: 'F', line: 4, quarterTime: 0, initial: true, changed: false },
+      {
+        staff: 2,
+        sign: 'G',
+        line: 2,
+        quarterTime: 2,
+        defaultX: 100,
+        relativeX: 10,
+        initial: false,
+        changed: true,
+      },
+      { staff: 2, sign: 'F', line: 4, quarterTime: 4, initial: false, changed: true },
+    ])
+    expect(marks.clefs).toMatchObject([
+      { staff: 2, sign: 'G', line: 2, x: 308, systemOccurrence: 0 },
+    ])
+    expect(marks.systemClefs).toMatchObject([
+      { staff: 1, sign: 'G', line: 2, systemOccurrence: 0 },
+      { staff: 2, sign: 'F', line: 4, systemOccurrence: 0 },
+      { staff: 1, sign: 'G', line: 2, systemOccurrence: 1 },
+      { staff: 2, sign: 'F', line: 4, systemOccurrence: 1 },
+    ])
+    const lowerNoteAfterChange = renderedNotes.find(
+      (note) => note.staffKind === 'bass' && note.measureNumber === 1 && note.writtenPitch?.octave === 4,
+    )
+    const firstSystemGeometry = buildSourceSystemStaffGeometry(geometry, layout.systems[0])
+    expect(lowerNoteAfterChange).toMatchObject({
+      clef: { sign: 'G', line: 2 },
+      sourceYMode: 'musicxml-clef',
+    })
+    expect(lowerNoteAfterChange.y).toBeCloseTo(
+      firstSystemGeometry.staves.bass.lines[4] + STAFF_LINE_GAP,
+      8,
+    )
+    const [lowerStaffSharp] = buildKeySignatureMarks(
+      { fifths: 1 },
+      firstSystemGeometry,
+      { clefs: [{ staff: 2, sign: 'G', line: 2 }] },
+    ).filter((mark) => mark.staffKind === 'bass')
+    expect(lowerStaffSharp.y).toBeCloseTo(firstSystemGeometry.staves.bass.lines[0], 8)
+  })
+
+  it('keeps ordinary opening grand-staff clefs in prefixes with no inline duplicates', () => {
+    const timingMap = {
+      parts: [{ id: 'P1' }],
+      measures: [{ number: 1, startQuarters: 0, endQuarters: 4, engravedWidth: 100 }],
+      clefEvents: [
+        { partId: 'P1', staff: 1, sign: 'G', line: 2, quarterTime: 0, initial: true, changed: false },
+        { partId: 'P1', staff: 2, sign: 'F', line: 4, quarterTime: 0, initial: true, changed: false },
+      ],
+    }
+    const layout = {
+      mode: 'source-fidelity',
+      systems: [{ occurrence: 0, systemIndex: 0, xStart: 0, xEnd: 100 }],
+      measures: [{
+        measureNumber: 1,
+        repeatPass: 1,
+        systemOccurrence: 0,
+        xStart: 0,
+        xEnd: 100,
+        layout: timingMap.measures[0],
+      }],
+    }
+
+    const marks = buildSourceFidelityStructuralMarks(timingMap, layout)
+    expect(marks.clefs).toEqual([])
+    expect(marks.systemClefs).toMatchObject([
+      { staff: 1, sign: 'G', systemOccurrence: 0 },
+      { staff: 2, sign: 'F', systemOccurrence: 0 },
+    ])
+  })
+
+  it('does not back-propagate a later clef through an independent MusicXML voice', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1">
+          <measure number="1">
+            <attributes>
+              <divisions>1</divisions><staves>2</staves>
+              <time><beats>4</beats><beat-type>4</beat-type></time>
+              <clef number="1"><sign>G</sign><line>2</line></clef>
+              <clef number="2"><sign>F</sign><line>4</line></clef>
+            </attributes>
+            <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><staff>2</staff></note>
+            <attributes><clef number="2"><sign>G</sign><line>2</line></clef></attributes>
+            <backup><duration>4</duration></backup>
+            <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><voice>2</voice><type>whole</type><staff>2</staff></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+
+    expect(timingMap.notes.filter((note) => note.staff === 2)).toMatchObject([
+      { quarterTime: 0, clef: { sign: 'F', line: 4 } },
+      { quarterTime: 0, clef: { sign: 'F', line: 4 } },
+    ])
   })
 
   it('fails the comparison harness on source-ownership disagreement', () => {

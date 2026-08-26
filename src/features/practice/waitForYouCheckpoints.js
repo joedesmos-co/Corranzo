@@ -156,6 +156,7 @@ function mergeTiedContinuations(notes) {
             writtenPitch: note.writtenPitch ?? null,
             accidental: note.accidental ?? null,
             keySignature: note.keySignature ?? null,
+            clef: note.clef ?? null,
             measureNumber: note.measureNumber ?? null,
             timeSeconds: note.timeSeconds,
             quarterTime: note.quarterTime,

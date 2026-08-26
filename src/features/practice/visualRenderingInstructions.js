@@ -95,6 +95,7 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     writtenPitch: note.writtenPitch ?? null,
     accidental: note.accidental ?? null,
     keySignature: note.keySignature ?? null,
+    clef: note.clef ?? null,
     staff: note.staff ?? null,
     timeSeconds: event.timeSeconds,
     quarterTime: note.quarterTime ?? null,
@@ -161,6 +162,7 @@ function visualRestInstruction(rest, event, restIndex, options) {
     durationQuarters: rest.durationQuarters ?? null,
     durationDivisions: rest.durationDivisions ?? null,
     noteType: rest.noteType ?? null,
+    clef: rest.clef ?? null,
     isRest: true,
     dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
   }

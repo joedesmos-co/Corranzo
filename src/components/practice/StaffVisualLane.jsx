@@ -42,6 +42,13 @@ const SYSTEM_PREFIX_KEY_COLUMN_WIDTH = STAFF_LINE_GAP * 0.82
 
 const TREBLE_CLEF_GLYPH = '\u{1D11E}'
 const BASS_CLEF_GLYPH = '\u{1D122}'
+const ALTO_CLEF_GLYPH = '\u{1D121}'
+
+const CLEF_SPECS = {
+  G: { glyph: TREBLE_CLEF_GLYPH, letter: 'G', line: 2, glyphSize: 5.6 },
+  F: { glyph: BASS_CLEF_GLYPH, letter: 'F', line: 4, glyphSize: 3.4 },
+  C: { glyph: ALTO_CLEF_GLYPH, letter: 'C', line: 3, glyphSize: 4.2 },
+}
 
 /**
  * Some platforms have no font for the Unicode musical clef glyphs and would
@@ -63,6 +70,74 @@ function supportsClefGlyphs() {
     clefGlyphSupport = false
   }
   return clefGlyphSupport
+}
+
+function resolveClefStaffGeometry(geometry, staffNumber) {
+  if (Number(staffNumber) === 2) {
+    return geometry.staves[STAFF_KIND.BASS] ?? geometry.staves[STAFF_KIND.TREBLE] ?? null
+  }
+  return geometry.staves[STAFF_KIND.TREBLE] ?? geometry.staves[STAFF_KIND.BASS] ?? null
+}
+
+function hasFiniteClefValue(value) {
+  return value !== null && value !== '' && Number.isFinite(Number(value))
+}
+
+function clefAnchorY(clef, staff, spec) {
+  const defaultY = hasFiniteClefValue(clef?.defaultY) ? Number(clef.defaultY) : null
+  const relativeY = hasFiniteClefValue(clef?.relativeY) ? Number(clef.relativeY) : 0
+  if (defaultY != null) {
+    return staff.lines[0] -
+      ((defaultY + relativeY) / 10) *
+        STAFF_LINE_GAP
+  }
+  const sourceLine = hasFiniteClefValue(clef?.line) ? Number(clef.line) : spec.line
+  const lineIndex = Math.min(4, Math.max(0, 5 - sourceLine))
+  return staff.lines[lineIndex]
+}
+
+function ClefMark({ clef, staff, x, glyphClefs, inline = false }) {
+  const sign = String(clef?.sign ?? '').toUpperCase()
+  const spec = CLEF_SPECS[sign]
+  if (!staff || !spec) return null
+  const y = clefAnchorY(clef, staff, spec)
+  const octaveChange = Number(clef?.octaveChange ?? 0)
+  const octaveText = Math.abs(octaveChange) >= 2 ? '15' : '8'
+  const octaveY = octaveChange > 0
+    ? staff.lines[0] - STAFF_LINE_GAP * 1.55
+    : staff.lines[4] + STAFF_LINE_GAP * 1.35
+  return (
+    <g
+      className="staff-lane__clef-mark"
+      data-structural-kind="clef"
+      data-clef-context={inline ? 'inline' : 'system-prefix'}
+      data-clef-sign={sign}
+      data-clef-staff={clef.staff}
+      data-source-system={clef.sourceSystemIndex ?? undefined}
+    >
+      <text
+        className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
+        x={x}
+        y={y}
+        fontSize={glyphClefs ? STAFF_LINE_GAP * spec.glyphSize : STAFF_LINE_GAP * 2}
+        dominantBaseline="middle"
+      >
+        {glyphClefs ? spec.glyph : spec.letter}
+      </text>
+      {octaveChange !== 0 && (
+        <text
+          className="staff-lane__clef-octave"
+          x={x + STAFF_LINE_GAP * 0.65}
+          y={octaveY}
+          fontSize={STAFF_LINE_GAP * 0.9}
+          textAnchor="middle"
+          dominantBaseline="middle"
+        >
+          {octaveText}
+        </text>
+      )}
+    </g>
+  )
 }
 
 /**
@@ -251,7 +326,14 @@ function StaffVisualLane({
   const sourceSystemPrefixes = useMemo(() => {
     return sourceSystems.map((system, index) => {
       const systemGeometry = sourceSystemGeometries.get(system.occurrence) ?? geometry
-      const systemKeyMarks = buildKeySignatureMarks(system.keySignature, systemGeometry)
+      const systemClefs = (structuralMarks?.systemClefs ?? []).filter(
+        (clef) => clef.systemOccurrence === system.occurrence,
+      )
+      const systemKeyMarks = buildKeySignatureMarks(
+        system.keySignature,
+        systemGeometry,
+        { clefs: systemClefs },
+      )
       const systemKeyColumns = Math.max(
         0,
         ...systemKeyMarks.map((mark) => mark.column + 1),
@@ -280,6 +362,7 @@ function StaffVisualLane({
         staffTopY: systemGeometry.lines[0],
         staffBottomY: systemGeometry.lines[systemGeometry.lines.length - 1],
         keyMarks: systemKeyMarks,
+        clefs: systemClefs,
         timeSignatureX:
           system.xStart +
           STAFF_LINE_GAP * 4.6 +
@@ -287,7 +370,7 @@ function StaffVisualLane({
         showTimeSignature,
       }
     })
-  }, [sourceSystems, sourceSystemGeometries, geometry])
+  }, [sourceSystems, sourceSystemGeometries, geometry, structuralMarks])
   const inlineKeySignatures = useMemo(
     () =>
       (structuralMarks?.keySignatures ?? []).map((signature) => {
@@ -296,7 +379,9 @@ function StaffVisualLane({
         return {
           ...signature,
           geometry: systemGeometry,
-          marks: buildKeySignatureMarks(signature, systemGeometry),
+          marks: buildKeySignatureMarks(signature, systemGeometry, {
+            clefs: signature.clefs,
+          }),
         }
       }),
     [structuralMarks, sourceSystemGeometries, geometry],
@@ -343,26 +428,26 @@ function StaffVisualLane({
                   vectorEffect="non-scaling-stroke"
                 />
                 {system.treble && (
-                  <text
-                    className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
+                  <ClefMark
+                    clef={
+                      system.clefs.find((clef) => Number(clef.staff) === 1) ??
+                      { staff: 1, sign: 'G', line: 2, sourceSystemIndex: system.systemIndex }
+                    }
+                    staff={system.treble}
                     x={system.xStart + SYSTEM_PREFIX_CLEF_X}
-                    y={system.treble.lines[3]}
-                    fontSize={glyphClefs ? STAFF_LINE_GAP * 5.6 : STAFF_LINE_GAP * 2}
-                    dominantBaseline="middle"
-                  >
-                    {glyphClefs ? TREBLE_CLEF_GLYPH : 'G'}
-                  </text>
+                    glyphClefs={glyphClefs}
+                  />
                 )}
                 {system.bass && (
-                  <text
-                    className={`staff-lane__clef${glyphClefs ? '' : ' staff-lane__clef--letter'}`}
+                  <ClefMark
+                    clef={
+                      system.clefs.find((clef) => Number(clef.staff) === 2) ??
+                      { staff: 2, sign: 'F', line: 4, sourceSystemIndex: system.systemIndex }
+                    }
+                    staff={system.bass}
                     x={system.xStart + SYSTEM_PREFIX_CLEF_X}
-                    y={system.bass.lines[1]}
-                    fontSize={glyphClefs ? STAFF_LINE_GAP * 3.4 : STAFF_LINE_GAP * 2}
-                    dominantBaseline="middle"
-                  >
-                    {glyphClefs ? BASS_CLEF_GLYPH : 'F'}
-                  </text>
+                    glyphClefs={glyphClefs}
+                  />
                 )}
                 {system.keyMarks.map((mark) => (
                   <text
@@ -566,6 +651,20 @@ function StaffVisualLane({
                   </text>,
                 ])}
                 </g>
+              )
+            })}
+            {(structuralMarks?.clefs ?? []).map((clef) => {
+              const clefGeometry =
+                sourceSystemGeometries.get(clef.systemOccurrence) ?? geometry
+              return (
+                <ClefMark
+                  key={clef.id}
+                  clef={clef}
+                  staff={resolveClefStaffGeometry(clefGeometry, clef.staff)}
+                  x={clef.x}
+                  glyphClefs={glyphClefs}
+                  inline
+                />
               )
             })}
             {visibleBarlines.map((barline) => (

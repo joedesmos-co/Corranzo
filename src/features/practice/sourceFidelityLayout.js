@@ -19,6 +19,8 @@ function emptyStructuralMarks() {
     endings: [],
     keySignatures: [],
     timeSignatures: [],
+    clefs: [],
+    systemClefs: [],
   }
 }
 
@@ -593,6 +595,65 @@ function isSystemStart(layout, measure) {
   return system && Math.abs(Number(measure.xStart) - Number(system.xStart)) < 1e-6
 }
 
+function primaryClefEvents(timingMap) {
+  const events = (timingMap?.clefEvents ?? []).filter(
+    (event) => event?.printObject !== false,
+  )
+  if (!events.length) return []
+  const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
+  return events
+    .filter((event) => primaryPartId == null || event.partId === primaryPartId)
+    .sort(
+      (left, right) =>
+        Number(left.quarterTime ?? 0) - Number(right.quarterTime ?? 0) ||
+        Number(left.staff ?? 1) - Number(right.staff ?? 1),
+    )
+}
+
+function clefXInMeasure(event, written, measure) {
+  const width = Number(written?.engravedWidth)
+  const defaultX = Number(event?.defaultX)
+  const relativeX = Number(event?.relativeX)
+  if (width > 0 && Number.isFinite(defaultX)) {
+    const sourceX = defaultX + (Number.isFinite(relativeX) ? relativeX : 0)
+    return measure.xStart + clamp01(sourceX / width) * (measure.xEnd - measure.xStart)
+  }
+  const start = Number(written?.startQuarters)
+  const end = Number(written?.endQuarters)
+  const quarterTime = Number(event?.quarterTime)
+  if (Number.isFinite(quarterTime) && Number.isFinite(start) && end > start) {
+    return measure.xStart + clamp01((quarterTime - start) / (end - start)) *
+      (measure.xEnd - measure.xStart)
+  }
+  return measure.xStart
+}
+
+function clefsAtQuarter(clefEvents, quarterTime) {
+  const activeByStaff = new Map()
+  for (const event of clefEvents) {
+    if (Number(event.quarterTime) > quarterTime + 1e-9) break
+    activeByStaff.set(Number(event.staff ?? 1), event)
+  }
+  return [...activeByStaff.values()]
+}
+
+function buildSystemClefs(timingMap, layout, clefEvents) {
+  if (!clefEvents.length) return []
+  return (layout?.systems ?? []).flatMap((system) => {
+    const firstMeasure = layout.measures.find(
+      (measure) => measure.systemOccurrence === system.occurrence,
+    )
+    const startQuarter = Number(firstMeasure?.layout?.startQuarters)
+    if (!Number.isFinite(startQuarter)) return []
+    return clefsAtQuarter(clefEvents, startQuarter).map((event) => ({
+      ...event,
+      id: `system-clef-${system.occurrence}-staff-${event.staff}`,
+      systemOccurrence: system.occurrence,
+      sourceSystemIndex: system.systemIndex,
+    }))
+  })
+}
+
 /**
  * Project written structural symbols onto source-derived measure boundaries.
  * The marks contain semantic symbol identity plus reconstructed coordinates;
@@ -617,6 +678,8 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
     const number = writtenMeasureNumberForEvent(event, timingMap)
     if (number != null) timeEventsByMeasure.set(Number(number), event)
   }
+  const clefEvents = primaryClefEvents(timingMap)
+  result.systemClefs = buildSystemClefs(timingMap, layout, clefEvents)
 
   let activeEnding = null
   for (let index = 0; index < layout.measures.length; index += 1) {
@@ -705,6 +768,10 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
           ...keySignature,
           x: measure.xStart,
           systemOccurrence: measure.systemOccurrence,
+          clefs: clefsAtQuarter(
+            clefEvents,
+            Number(keySignature.quarterTime ?? written?.startQuarters ?? 0),
+          ),
         })
       }
       const timeSignature = timeEventsByMeasure.get(Number(measure.measureNumber))
@@ -716,6 +783,25 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
           systemOccurrence: measure.systemOccurrence,
         })
       }
+    }
+
+    for (const event of clefEvents) {
+      if (!event.changed) continue
+      const eventMeasureNumber = writtenMeasureNumberForEvent(event, timingMap)
+      if (Number(eventMeasureNumber) !== Number(measure.measureNumber)) continue
+      const atSystemStart =
+        isSystemStart(layout, measure) &&
+        Math.abs(
+          Number(event.quarterTime) - Number(written?.startQuarters),
+        ) < 1e-9
+      if (atSystemStart) continue
+      result.clefs.push({
+        ...event,
+        id: `clef-${measure.measureNumber}-staff-${event.staff}-q-${event.quarterTime}-pass-${measure.repeatPass}`,
+        x: clefXInMeasure(event, written, measure),
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+      })
     }
   }
 

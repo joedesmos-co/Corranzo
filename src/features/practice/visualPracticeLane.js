@@ -56,6 +56,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           writtenPitch: note.writtenPitch ?? null,
           accidental: note.accidental ?? null,
           keySignature: note.keySignature ?? null,
+          clef: note.clef ?? null,
           staff: note.staff ?? null,
           measureNumber: note.measureNumber ?? checkpoint.measureNumber,
           quarterTime: note.quarterTime ?? checkpoint.quarterTime ?? null,

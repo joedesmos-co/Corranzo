@@ -279,22 +279,50 @@ export function staffYForNote(midi, staffKind, geometry) {
   }
 }
 
-export function staffYForDiatonic(diatonic, staffKind, geometry) {
+const CLEF_REFERENCE_DIATONICS = {
+  G: 32, // G4
+  F: 24, // F3
+  C: 28, // C4
+}
+
+function staffDiatonicBounds(staff, clef) {
+  const sign = String(clef?.sign ?? '').toUpperCase()
+  const reference = CLEF_REFERENCE_DIATONICS[sign]
+  const line = Number(clef?.line)
+  if (!Number.isFinite(reference) || !Number.isFinite(line) || line < 1 || line > 5) {
+    return {
+      top: staff.topLineDiatonic,
+      bottom: staff.bottomLineDiatonic,
+      source: 'semantic-fallback',
+    }
+  }
+  const octaveChange = Number(clef?.octaveChange ?? 0)
+  const referenceWithOctave =
+    reference + (Number.isFinite(octaveChange) ? octaveChange * 7 : 0)
+  return {
+    top: referenceWithOctave + (5 - line) * 2,
+    bottom: referenceWithOctave - (line - 1) * 2,
+    source: 'musicxml-clef',
+  }
+}
+
+export function staffYForDiatonic(diatonic, staffKind, geometry, clef = null) {
   const staff = geometry.staves[staffKind] ?? Object.values(geometry.staves)[0]
-  const y = staff.topLineY + (staff.topLineDiatonic - diatonic) * HALF_STEP
+  const bounds = staffDiatonicBounds(staff, clef)
+  const y = staff.topLineY + (bounds.top - diatonic) * HALF_STEP
 
   const ledgerLines = []
-  if (diatonic > staff.topLineDiatonic) {
-    for (let d = staff.topLineDiatonic + 2; d <= diatonic; d += 2) {
-      ledgerLines.push(staff.topLineY + (staff.topLineDiatonic - d) * HALF_STEP)
+  if (diatonic > bounds.top) {
+    for (let d = bounds.top + 2; d <= diatonic; d += 2) {
+      ledgerLines.push(staff.topLineY + (bounds.top - d) * HALF_STEP)
     }
-  } else if (diatonic < staff.bottomLineDiatonic) {
-    for (let d = staff.bottomLineDiatonic - 2; d >= diatonic; d -= 2) {
-      ledgerLines.push(staff.topLineY + (staff.topLineDiatonic - d) * HALF_STEP)
+  } else if (diatonic < bounds.bottom) {
+    for (let d = bounds.bottom - 2; d >= diatonic; d -= 2) {
+      ledgerLines.push(staff.topLineY + (bounds.top - d) * HALF_STEP)
     }
   }
 
-  return { y, ledgerLines }
+  return { y, ledgerLines, sourceYMode: bounds.source }
 }
 
 function ledgerLinesForSourceY(y, staffKind, geometry) {
@@ -368,7 +396,22 @@ function keySignatureType(fifths) {
   return null
 }
 
-export function buildKeySignatureMarks(keySignature, geometry) {
+function keySignatureOrder(type, staff, clef) {
+  if (!clef || !CLEF_REFERENCE_DIATONICS[String(clef.sign ?? '').toUpperCase()]) {
+    return KEY_SIGNATURE_DIATONICS[staff.kind][type]
+  }
+  const bounds = staffDiatonicBounds(staff, clef)
+  const octaveShift = Math.round((bounds.top - TREBLE_TOP_LINE_DIATONIC) / 7) * 7
+  return KEY_SIGNATURE_DIATONICS[STAFF_KIND.TREBLE][type].map(
+    (diatonic) => diatonic + octaveShift,
+  )
+}
+
+export function buildKeySignatureMarks(
+  keySignature,
+  geometry,
+  { clefs = [] } = {},
+) {
   const fifths = Math.max(-7, Math.min(7, Math.round(Number(keySignature?.fifths) || 0)))
   const cancelFifths = Math.max(
     -7,
@@ -378,11 +421,18 @@ export function buildKeySignatureMarks(keySignature, geometry) {
   const cancelType = keySignatureType(cancelFifths)
   const type = keySignatureType(fifths)
   for (const staff of Object.values(geometry.staves)) {
+    const staffNumber = staff.kind === STAFF_KIND.BASS ? 2 : 1
+    const clef = clefs.find((candidate) => Number(candidate.staff) === staffNumber) ?? null
     let column = 0
     if (cancelType) {
-      const cancelOrder = KEY_SIGNATURE_DIATONICS[staff.kind][cancelType]
+      const cancelOrder = keySignatureOrder(cancelType, staff, clef)
       for (let index = 0; index < Math.abs(cancelFifths); index += 1) {
-        const position = staffYForDiatonic(cancelOrder[index], staff.kind, geometry)
+        const position = staffYForDiatonic(
+          cancelOrder[index],
+          staff.kind,
+          geometry,
+          clef,
+        )
         marks.push({
           id: `key-cancel-${staff.kind}-${index}`,
           staffKind: staff.kind,
@@ -396,9 +446,9 @@ export function buildKeySignatureMarks(keySignature, geometry) {
       }
     }
     if (type) {
-      const order = KEY_SIGNATURE_DIATONICS[staff.kind][type]
+      const order = keySignatureOrder(type, staff, clef)
       for (let index = 0; index < Math.abs(fifths); index += 1) {
-        const position = staffYForDiatonic(order[index], staff.kind, geometry)
+        const position = staffYForDiatonic(order[index], staff.kind, geometry, clef)
         marks.push({
           id: `key-${staff.kind}-${index}`,
           staffKind: staff.kind,
@@ -599,6 +649,7 @@ export function buildStaffLaneNotes(
         written.diatonic,
         staffKind,
         objectGeometry,
+        note.clef,
       )
       const sourcePosition = sourceYForObject(note, staffKind, objectGeometry)
       const { y, ledgerLines } = sourcePosition ?? semanticPosition
@@ -612,7 +663,7 @@ export function buildStaffLaneNotes(
         x,
         xOffset: 0,
         y,
-        sourceYMode: sourcePosition?.sourceYMode ?? 'semantic-fallback',
+        sourceYMode: sourcePosition?.sourceYMode ?? semanticPosition.sourceYMode,
         sourceDefaultY: sourcePosition?.sourceDefaultY ?? null,
         sourceRelativeY: sourcePosition?.sourceRelativeY ?? null,
         staffKind,
@@ -643,6 +694,7 @@ export function buildStaffLaneNotes(
         writtenPitch: note.writtenPitch ?? null,
         accidental: note.accidental ?? null,
         keySignature: note.keySignature ?? null,
+        clef: note.clef ?? null,
         measureNumber: note.measureNumber ?? null,
         partId: note.partId ?? null,
         voice: note.voice ?? 1,

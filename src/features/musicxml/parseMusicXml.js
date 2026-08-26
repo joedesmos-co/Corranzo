@@ -547,8 +547,48 @@ function readTechnicalPosition(noteNode) {
   }
 }
 
-/** Clef declarations from an <attributes> node, keyed by staff number. */
-function readClefDeclarations(attributesNode, clefsByStaff) {
+function sameClef(left, right) {
+  return (
+    left?.sign === right?.sign &&
+    left?.line === right?.line &&
+    left?.octaveChange === right?.octaveChange
+  )
+}
+
+function activeClefAt(clefEvents, partId, staff, quarterTime) {
+  let active = null
+  let activeQuarter = -Infinity
+  for (const event of clefEvents ?? []) {
+    const eventQuarter = Number(event.quarterTime)
+    if (
+      event.partId === partId &&
+      Number(event.staff) === Number(staff) &&
+      Number.isFinite(eventQuarter) &&
+      eventQuarter <= quarterTime + 1e-9 &&
+      eventQuarter >= activeQuarter
+    ) {
+      active = event
+      activeQuarter = eventQuarter
+    }
+  }
+  return active
+}
+
+/**
+ * Clef declarations from an <attributes> node, keyed by staff number. Keep
+ * their written position as visual metadata instead of collapsing every
+ * temporary clef into the final part-level declaration.
+ */
+function readClefDeclarations(
+  attributesNode,
+  clefsByStaff,
+  {
+    clefEvents = null,
+    partId = null,
+    quarterTime = 0,
+    measureNumber = null,
+  } = {},
+) {
   for (const clefNode of findChildren(attributesNode, 'clef')) {
     const staffNumber = numberOf(attr(clefNode, 'number'), 1)
     const sign = childText(clefNode, 'sign')
@@ -557,12 +597,36 @@ function readClefDeclarations(attributesNode, clefsByStaff) {
     }
     const line = numberOf(childText(clefNode, 'line'), NaN)
     const octaveChange = numberOf(childText(clefNode, 'clef-octave-change'), 0)
-    clefsByStaff.set(staffNumber, {
+    const clef = {
       staff: staffNumber,
       sign: String(sign).toUpperCase(),
       line: Number.isFinite(line) ? line : null,
       octaveChange: Number.isFinite(octaveChange) ? octaveChange : 0,
-    })
+    }
+    const previous = clefsByStaff.get(staffNumber) ?? null
+    clefsByStaff.set(staffNumber, clef)
+    if (Array.isArray(clefEvents)) {
+      const defaultX = numberOf(attr(clefNode, 'default-x'), NaN)
+      const relativeX = numberOf(attr(clefNode, 'relative-x'), NaN)
+      const defaultY = numberOf(attr(clefNode, 'default-y'), NaN)
+      const relativeY = numberOf(attr(clefNode, 'relative-y'), NaN)
+      clefEvents.push({
+        ...clef,
+        partId,
+        quarterTime,
+        measureNumber,
+        initial: previous == null,
+        changed: previous != null && !sameClef(previous, clef),
+        redeclaration: previous != null && sameClef(previous, clef),
+        defaultX: Number.isFinite(defaultX) ? defaultX : null,
+        relativeX: Number.isFinite(relativeX) ? relativeX : null,
+        defaultY: Number.isFinite(defaultY) ? defaultY : null,
+        relativeY: Number.isFinite(relativeY) ? relativeY : null,
+        afterBarline: attr(clefNode, 'after-barline') === 'yes',
+        additional: attr(clefNode, 'additional') === 'yes',
+        printObject: attr(clefNode, 'print-object') !== 'no',
+      })
+    }
   }
 }
 
@@ -714,6 +778,7 @@ function walkPart({
   tempoEvents,
   timeSignatureEvents,
   keySignatureEvents,
+  clefEvents,
   notes,
   rawTimingEvents,
   harmonyEvents,
@@ -758,7 +823,12 @@ function walkPart({
             divisions = newDivisions
           }
           if (partNotation) {
-            readClefDeclarations(child, partNotation.clefs)
+            readClefDeclarations(child, partNotation.clefs, {
+              clefEvents,
+              partId,
+              quarterTime: measureStartQuarters + cursorDivisions / divisions,
+              measureNumber,
+            })
             readStaffDetails(child, partNotation.staffDetails)
           }
           readKeyDeclarations(child, activeKeySignatures, {
@@ -955,6 +1025,12 @@ function walkPart({
                 value: String(textOf(beam) ?? '').trim().toLowerCase(),
               }))
               .filter((beam) => beam.value)
+            const activeClef = activeClefAt(
+              clefEvents,
+              partId,
+              layout.staff ?? 1,
+              quarterTime,
+            )
             notes.push({
               ...(technicalPosition ?? {}),
               ...(slurs.length ? { slurs } : {}),
@@ -972,6 +1048,7 @@ function walkPart({
               writtenPitch,
               accidental,
               keySignature,
+              ...(activeClef ? { clef: { ...activeClef } } : {}),
               isRest,
               isChord,
               isGrace,
@@ -1115,6 +1192,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const tempoEvents = []
   const timeSignatureEvents = []
   const keySignatureEvents = []
+  const clefEvents = []
   const notes = []
   const rawTimingEvents = []
   const harmonyEvents = []
@@ -1141,6 +1219,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     tempoEvents,
     timeSignatureEvents,
     keySignatureEvents,
+    clefEvents,
     notes,
     rawTimingEvents,
     harmonyEvents,
@@ -1158,6 +1237,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       tempoEvents,
       timeSignatureEvents,
       keySignatureEvents,
+      clefEvents,
       notes,
       rawTimingEvents,
       harmonyEvents,
@@ -1205,6 +1285,10 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   }
 
   const toSeconds = (quarterTime) => quartersToSeconds(quarterTime, tempoChanges)
+
+  for (const event of clefEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
 
   const keySignatures = []
   for (const event of keySignatureEvents.sort(
@@ -1412,6 +1496,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     tempoChanges,
     timeSignatures,
     keySignatures,
+    clefEvents,
     notes,
     timingEvents,
     harmonyEvents,

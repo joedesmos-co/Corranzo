@@ -5537,6 +5537,13 @@
   fill: var(--sf-text-muted);
 }
 
+.staff-lane__clef-octave {
+  fill: var(--sf-text-muted);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  user-select: none;
+}
+
 .staff-lane__playhead {
   stroke: var(--score-follow-bar-color, rgba(125, 100, 255, 0.92));
   stroke-width: 2;
