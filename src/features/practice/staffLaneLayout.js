@@ -907,6 +907,78 @@ function staffSpanPath(start, end, marking) {
   return `M ${x1} ${y1} Q ${midX} ${Math.max(y1, y2) + arch} ${x2} ${y2}`
 }
 
+function sourceSystemForStaffNote(laneLayout, note) {
+  return resolveSourceFidelitySystem(
+    laneLayout,
+    { visualNoteId: note?.visualNoteId },
+    { id: note?.groupId },
+  )
+}
+
+function splitStaffSpanAcrossSourceSystems(start, end, marking, laneLayout) {
+  const startSystem = sourceSystemForStaffNote(laneLayout, start)
+  const endSystem = sourceSystemForStaffNote(laneLayout, end)
+  if (
+    !startSystem ||
+    !endSystem ||
+    startSystem.occurrence === endSystem.occurrence ||
+    startSystem.occurrence > endSystem.occurrence
+  ) {
+    return [{
+      ...marking,
+      path: staffSpanPath(start, end, marking),
+      status: marking.status ?? staffSpanStatus(start, end),
+    }]
+  }
+
+  const systems = (laneLayout.systems ?? []).filter(
+    (system) =>
+      system.occurrence >= startSystem.occurrence &&
+      system.occurrence <= endSystem.occurrence,
+  )
+  if (systems.length < 2) {
+    return [{
+      ...marking,
+      path: staffSpanPath(start, end, marking),
+      status: marking.status ?? staffSpanStatus(start, end),
+    }]
+  }
+
+  return systems.map((system, index) => {
+    const first = index === 0
+    const last = index === systems.length - 1
+    const progress = systems.length > 1 ? index / (systems.length - 1) : 0
+    const boundaryY = start.y + (end.y - start.y) * progress
+    const segmentStart = first
+      ? start
+      : {
+          ...end,
+          x: system.xStart + STAFF_LINE_GAP - NOTEHEAD_RX * 0.9,
+          xOffset: 0,
+          y: boundaryY,
+        }
+    const segmentEnd = last
+      ? end
+      : {
+          ...start,
+          x: system.xEnd - STAFF_LINE_GAP + NOTEHEAD_RX * 0.9,
+          xOffset: 0,
+          y: boundaryY,
+        }
+    return {
+      ...marking,
+      id: `${marking.id}-system-${system.occurrence}`,
+      path: staffSpanPath(segmentStart, segmentEnd, marking),
+      status: marking.status ?? staffSpanStatus(start, end),
+      segmentIndex: index,
+      segmentCount: systems.length,
+      systemOccurrence: system.occurrence,
+      continuedFromPrevious: !first,
+      continuesToNext: !last,
+    }
+  })
+}
+
 function buildStaffNoteMarkingGeometry(notes) {
   const supportedKinds = new Set([
     VISUAL_MARKING_KIND.STACCATO,
@@ -1042,7 +1114,7 @@ export function buildStaffLaneNotationMarkings(
     .filter((marking) =>
       marking.kind === VISUAL_MARKING_KIND.TIE || marking.kind === VISUAL_MARKING_KIND.SLUR,
     )
-    .map((marking) => {
+    .flatMap((marking) => {
       const start = notesById.get(marking.fromNoteId)
       let end = notesById.get(marking.toNoteId)
       if (start && !end && marking.toTimeSeconds > marking.fromTimeSeconds) {
@@ -1052,15 +1124,15 @@ export function buildStaffLaneNotationMarkings(
         }
       }
       if (!start || !end) {
-        return null
+        return []
       }
-      return {
-        ...marking,
-        path: staffSpanPath(start, end, marking),
-        status: marking.status ?? staffSpanStatus(start, end),
-      }
+      return splitStaffSpanAcrossSourceSystems(
+        start,
+        end,
+        marking,
+        laneLayout,
+      )
     })
-    .filter(Boolean)
 
   return {
     noteMarkings: buildStaffNoteMarkingGeometry(notes),

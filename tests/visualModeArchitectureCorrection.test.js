@@ -441,6 +441,53 @@ describe('Visual mode architecture correction', () => {
     )
   })
 
+  it('splits source-crossing slurs at reconstructed system boundaries', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list>
+          <score-part id="P1"><part-name>Piano</part-name></score-part>
+        </part-list>
+        <part id="P1">
+          <measure number="1" width="100">
+            <print new-system="yes"/>
+            <attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+            <note default-x="80"><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><notations><slur type="start" number="1" placement="above"/></notations></note>
+          </measure>
+          <measure number="2" width="100">
+            <print new-system="yes"/>
+            <note default-x="20"><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type><notations><slur type="stop" number="1"/></notations></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap).map((group) => ({
+      ...group,
+      status: 'upcoming',
+    }))
+    const sourceLayout = buildSourceFidelityLaneLayout(groups)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry, { sourceLayout })
+    const { spanMarkings } = buildStaffLaneNotationMarkings(groups, geometry, {
+      notes,
+      sourceLayout,
+    })
+    const slurSegments = spanMarkings.filter((marking) => marking.kind === 'slur')
+    const firstSystem = sourceLayout.systems[0]
+    const secondSystem = sourceLayout.systems[1]
+    const endpoints = slurSegments.map((segment) => {
+      const values = segment.path.match(/-?\d+(?:\.\d+)?/g).map(Number)
+      return { x1: values[0], x2: values[4] }
+    })
+
+    expect(slurSegments).toMatchObject([
+      { segmentIndex: 0, segmentCount: 2, continuesToNext: true },
+      { segmentIndex: 1, segmentCount: 2, continuedFromPrevious: true },
+    ])
+    expect(endpoints[0].x2).toBeLessThan(firstSystem.xEnd)
+    expect(endpoints[1].x1).toBeGreaterThan(secondSystem.xStart)
+    expect(endpoints.every(({ x1, x2 }) => x2 - x1 < sourceLayout.systemWidth)).toBe(true)
+  })
+
   it('projects repeats, endings, and inline signature changes at source measure boundaries', () => {
     const timingMap = {
       measures: [

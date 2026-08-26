@@ -610,6 +610,9 @@ function StaffVisualLane({
               <path
                 key={marking.id}
                 className={`staff-lane__span-mark staff-lane__span-mark--${marking.kind} staff-lane__note--${marking.status ?? 'upcoming'}`}
+                data-span-segment={marking.segmentIndex ?? undefined}
+                data-span-segment-count={marking.segmentCount ?? undefined}
+                data-source-system={marking.systemOccurrence ?? undefined}
                 d={marking.path}
                 vectorEffect="non-scaling-stroke"
               />
