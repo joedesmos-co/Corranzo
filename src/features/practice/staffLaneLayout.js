@@ -849,7 +849,6 @@ function beamKey(note, number) {
   return [
     note.partId ?? '',
     note.voice ?? 1,
-    note.staffKind ?? '',
     number,
   ].join('|')
 }
@@ -871,8 +870,9 @@ function notesByStemKey(notes = []) {
  */
 export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
   const chordNotes = notesByStemKey(notes)
+  const alignedStems = stems.map((stem) => ({ ...stem }))
   const stemByKey = new Map(
-    stems.map((stem) => [`${stem.groupId}:${stem.staffKind}:${stem.voice ?? 1}`, stem]),
+    alignedStems.map((stem) => [`${stem.groupId}:${stem.staffKind}:${stem.voice ?? 1}`, stem]),
   )
   const records = [...chordNotes.entries()]
     .map(([key, chord]) => {
@@ -891,6 +891,7 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
 
   const beamMarks = []
   const open = new Map()
+  const completeGroups = []
   for (const record of records) {
     if (!record.stem || !record.beamOwner) {
       continue
@@ -900,43 +901,89 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
       const value = String(mark.value ?? '').toLowerCase()
       const key = beamKey(record.beamOwner, number)
       if (value === 'begin') {
-        open.set(key, record)
+        open.set(key, [record])
+        continue
+      }
+      if (value === 'continue') {
+        const group = open.get(key)
+        if (group) {
+          if (group.at(-1) !== record) group.push(record)
+        } else {
+          // A printed beam can begin on a semantic spacer note marked
+          // print-object=no. The spacer is intentionally absent from Visual,
+          // so the first visible continuation becomes the reconstructed start.
+          open.set(key, [record])
+        }
         continue
       }
       if (value === 'end') {
-        const start = open.get(key)
+        const group = open.get(key)
         open.delete(key)
-        if (!start?.stem || start === record) {
+        if (!group?.length) {
           continue
         }
-        const offsetDirection = start.stem.stemDown ? -1 : 1
-        const offset = offsetDirection * (number - 1) * (STAFF_LINE_GAP * 0.46)
-        beamMarks.push({
-          id: `beam-${key}-${start.key}-${record.key}`,
-          number,
-          x1: start.stem.x,
-          y1: start.stem.y2 + offset,
-          x2: record.stem.x,
-          y2: record.stem.y2 + offset,
-          status: rhythmStatus(start.chord[0], record.chord[0]),
-        })
+        if (group.at(-1) !== record) group.push(record)
+        const visible = group.filter((entry) => entry.stem)
+        if (visible.length > 1) completeGroups.push({ key, number, records: visible })
         continue
       }
-      if (value === 'forward hook' || value === 'backward hook') {
-        const direction = value === 'forward hook' ? 1 : -1
-        const offsetDirection = record.stem.stemDown ? -1 : 1
-        const offset = offsetDirection * (number - 1) * (STAFF_LINE_GAP * 0.46)
-        beamMarks.push({
-          id: `beam-hook-${key}-${record.key}`,
-          number,
-          x1: record.stem.x,
-          y1: record.stem.y2 + offset,
-          x2: record.stem.x + direction * STAFF_LINE_GAP,
-          y2: record.stem.y2 + offset,
-          status: record.chord[0]?.status ?? null,
-          hook: true,
-        })
-      }
+    }
+  }
+
+  // The primary beam is the physical stem baseline. Preserve every written
+  // stem direction, including cross-staff beams whose stems approach the beam
+  // from opposite sides, and extend intermediate stems to the same line.
+  for (const group of completeGroups.filter(({ number }) => number === 1)) {
+    const start = group.records[0]
+    const end = group.records.at(-1)
+    const dx = end.stem.x - start.stem.x
+    for (const record of group.records.slice(1, -1)) {
+      const progress = dx === 0 ? 0 : (record.stem.x - start.stem.x) / dx
+      record.stem.y2 = start.stem.y2 + (end.stem.y2 - start.stem.y2) * progress
+    }
+  }
+
+  for (const group of completeGroups) {
+    const start = group.records[0]
+    const end = group.records.at(-1)
+    const offsetDirection = start.stem.stemDown ? -1 : 1
+    const offset = offsetDirection * (group.number - 1) * (STAFF_LINE_GAP * 0.46)
+    const staffKinds = [...new Set(group.records.map((record) => record.stem.staffKind))]
+    beamMarks.push({
+      id: `beam-${group.key}-${start.key}-${end.key}`,
+      number: group.number,
+      x1: start.stem.x,
+      y1: start.stem.y2 + offset,
+      x2: end.stem.x,
+      y2: end.stem.y2 + offset,
+      status: rhythmStatus(start.chord[0], end.chord[0]),
+      stemCount: group.records.length,
+      crossStaff: staffKinds.length > 1,
+    })
+  }
+
+  for (const record of records) {
+    if (!record.stem || !record.beamOwner) continue
+    for (const mark of record.marks) {
+      const value = String(mark.value ?? '').toLowerCase()
+      if (value !== 'forward hook' && value !== 'backward hook') continue
+      const number = Math.max(1, Math.round(Number(mark.number) || 1))
+      const key = beamKey(record.beamOwner, number)
+      const direction = value === 'forward hook' ? 1 : -1
+      const offsetDirection = record.stem.stemDown ? -1 : 1
+      const offset = offsetDirection * (number - 1) * (STAFF_LINE_GAP * 0.46)
+      beamMarks.push({
+        id: `beam-hook-${key}-${record.key}`,
+        number,
+        x1: record.stem.x,
+        y1: record.stem.y2 + offset,
+        x2: record.stem.x + direction * STAFF_LINE_GAP,
+        y2: record.stem.y2 + offset,
+        status: record.chord[0]?.status ?? null,
+        stemCount: 1,
+        crossStaff: false,
+        hook: true,
+      })
     }
   }
 
@@ -980,7 +1027,7 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
     }
   }
 
-  return { beams: beamMarks, flags, dots }
+  return { stems: alignedStems, beams: beamMarks, flags, dots }
 }
 
 function staffSpanStatus(start, end) {

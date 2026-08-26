@@ -19,6 +19,7 @@ import {
   detectStaves,
 } from '../src/features/practice/staffLaneLayout.js'
 import { buildVisualLaneGroups } from '../src/features/practice/visualPracticeLane.js'
+import { buildVisualRenderingInstructions } from '../src/features/practice/visualRenderingInstructions.js'
 
 function scoreWithNotes(notes, { divisions = 4, beats = 4 } = {}) {
   return (
@@ -206,6 +207,93 @@ describe('written duration MusicXML emission', () => {
 })
 
 describe('MusicXML -> Visual Practice written rhythm', () => {
+  it('keeps one beam owner across staff changes and aligns every intermediate stem', () => {
+    const xml = `<?xml version="1.0"?>
+      <score-partwise version="3.1">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1">
+          <attributes><divisions>4</divisions><staves>2</staves><time><beats>4</beats><beat-type>4</beat-type></time><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+          <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>up</stem><staff>2</staff><beam number="1">begin</beam></note>
+          <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>down</stem><staff>1</staff><beam number="1">continue</beam></note>
+          <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>up</stem><staff>2</staff><beam number="1">end</beam></note>
+        </measure></part>
+      </score-partwise>`
+    const groups = buildVisualRenderingInstructions(
+      parseMusicXml(xml, 'cross-staff-beam.musicxml'),
+    )
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const stems = buildStaffLaneStems(groups, geometry, { notes })
+    const marks = buildStaffLaneRhythmMarks(notes, stems)
+
+    expect(marks.beams).toHaveLength(1)
+    expect(marks.beams[0]).toMatchObject({
+      number: 1,
+      stemCount: 3,
+      crossStaff: true,
+    })
+    const [first, middle, last] = marks.stems.sort((left, right) => left.x - right.x)
+    const progress = (middle.x - first.x) / (last.x - first.x)
+    expect(middle.y2).toBeCloseTo(first.y2 + (last.y2 - first.y2) * progress, 8)
+    expect(new Set(marks.stems.map((stem) => stem.stemDown))).toEqual(new Set([true, false]))
+  })
+
+  it('does not merge simultaneous beam sequences from independent voices', () => {
+    const notes = []
+    const stems = []
+    for (const voice of [1, 2]) {
+      for (const [index, value] of ['begin', 'continue', 'end'].entries()) {
+        const groupId = `voice-${voice}-${index}`
+        notes.push({
+          groupId,
+          staffKind: voice === 1 ? 'treble' : 'bass',
+          partId: 'P1',
+          voice,
+          x: index * 40,
+          beams: [{ number: 1, value }],
+        })
+        stems.push({
+          groupId,
+          staffKind: voice === 1 ? 'treble' : 'bass',
+          voice,
+          stemDown: voice === 2,
+          x: index * 40 + voice,
+          y1: voice * 50,
+          y2: voice * 50 + index * 3,
+        })
+      }
+    }
+
+    const marks = buildStaffLaneRhythmMarks(notes, stems)
+    expect(marks.beams).toHaveLength(2)
+    expect(marks.beams.every((beam) => beam.crossStaff === false)).toBe(true)
+    expect(marks.beams.map((beam) => beam.stemCount)).toEqual([3, 3])
+  })
+
+  it('starts at the first visible continuation when the semantic beam begin is hidden', () => {
+    const xml = `<?xml version="1.0"?>
+      <score-partwise version="3.1">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1">
+          <attributes><divisions>4</divisions><staves>2</staves><time><beats>4</beats><beat-type>4</beat-type></time><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+          <note print-object="no"><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>up</stem><staff>2</staff><beam number="1">begin</beam></note>
+          <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>down</stem><staff>1</staff><beam number="1">continue</beam></note>
+          <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><voice>5</voice><type>eighth</type><stem>down</stem><staff>1</staff><beam number="1">end</beam></note>
+        </measure></part>
+      </score-partwise>`
+    const groups = buildVisualRenderingInstructions(
+      parseMusicXml(xml, 'hidden-beam-begin.musicxml'),
+    )
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const stems = buildStaffLaneStems(groups, geometry, { notes })
+    const marks = buildStaffLaneRhythmMarks(notes, stems)
+
+    expect(notes).toHaveLength(2)
+    expect(marks.beams).toHaveLength(1)
+    expect(marks.beams[0]).toMatchObject({ stemCount: 2, crossStaff: false })
+  })
+
   it('preserves note type, dots, and beams without changing performed timing', () => {
     const xml = scoreWithNotes(
       pitchedNote({

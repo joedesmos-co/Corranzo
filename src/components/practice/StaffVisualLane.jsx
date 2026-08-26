@@ -696,6 +696,9 @@ function StaffVisualLane({
                 x2={beam.x2}
                 y1={beam.y1}
                 y2={beam.y2}
+                data-beam-number={beam.number}
+                data-beam-stems={beam.stemCount}
+                data-cross-staff={beam.crossStaff || undefined}
               />
             ))}
             {flags.map((flag) => (
