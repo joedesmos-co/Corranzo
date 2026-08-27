@@ -5598,6 +5598,12 @@
   stroke-linecap: butt;
 }
 
+.staff-lane__tremolo {
+  stroke: currentColor;
+  stroke-width: 4.2;
+  stroke-linecap: butt;
+}
+
 .staff-lane__flag {
   fill: none;
   stroke: currentColor;

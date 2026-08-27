@@ -1542,12 +1542,46 @@ function buildStaffNoteMarkingGeometry(notes) {
   return markings
 }
 
+function buildStaffTremoloGeometry(spans, notesById, stems) {
+  const stemFor = (note) => (stems ?? []).find(
+    (stem) =>
+      stem.groupId === note?.groupId &&
+      stem.staffKind === note?.staffKind &&
+      Number(stem.voice ?? 1) === Number(note?.voice ?? 1),
+  )
+  return (spans ?? []).flatMap((span) => {
+    const start = notesById.get(span.fromNoteId)
+    const end = notesById.get(span.toNoteId)
+    const startStem = stemFor(start)
+    const endStem = stemFor(end)
+    if (!start || !end || !startStem || !endStem || endStem.x <= startStem.x) {
+      return []
+    }
+    const marks = Math.max(1, Math.min(4, Math.round(Number(span.marks) || 1)))
+    const startTowardHead = startStem.stemDown ? -1 : 1
+    const endTowardHead = endStem.stemDown ? -1 : 1
+    return Array.from({ length: marks }, (_, index) => ({
+      ...span,
+      id: `${span.id}-stroke-${index + 1}`,
+      spanId: span.id,
+      strokeIndex: index,
+      strokeCount: marks,
+      x1: startStem.x,
+      y1: startStem.y2 + startTowardHead * index * STAFF_LINE_GAP * 0.48,
+      x2: endStem.x,
+      y2: endStem.y2 + endTowardHead * index * STAFF_LINE_GAP * 0.48,
+      status: span.status ?? staffSpanStatus(start, end),
+    }))
+  })
+}
+
 export function buildStaffLaneNotationMarkings(
   groups,
   geometry,
   {
     pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
     notes: prebuiltNotes = null,
+    stems: prebuiltStems = null,
     sourceLayout = null,
   } = {},
 ) {
@@ -1556,8 +1590,16 @@ export function buildStaffLaneNotationMarkings(
     prebuiltNotes ??
     buildStaffLaneNotes(groups, geometry, { pixelsPerSecond, sourceLayout: laneLayout })
   const notesById = new Map(notes.map((note) => [note.visualNoteId, note]))
+  const stems =
+    prebuiltStems ??
+    buildStaffLaneStems(groups, geometry, {
+      pixelsPerSecond,
+      notes,
+      sourceLayout: laneLayout,
+    })
+  const visualSpans = buildVisualSpanMarkings(groups)
 
-  const spanMarkings = buildVisualSpanMarkings(groups)
+  const spanMarkings = visualSpans
     .filter((marking) =>
       marking.kind === VISUAL_MARKING_KIND.TIE || marking.kind === VISUAL_MARKING_KIND.SLUR,
     )
@@ -1580,9 +1622,15 @@ export function buildStaffLaneNotationMarkings(
         laneLayout,
       )
     })
+  const tremoloMarkings = buildStaffTremoloGeometry(
+    visualSpans.filter((marking) => marking.kind === VISUAL_MARKING_KIND.TREMOLO),
+    notesById,
+    stems,
+  )
 
   return {
     noteMarkings: buildStaffNoteMarkingGeometry(notes),
     spanMarkings,
+    tremoloMarkings,
   }
 }

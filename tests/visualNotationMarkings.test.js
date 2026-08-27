@@ -10,6 +10,7 @@ import {
   buildStaffGeometry,
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
+  buildStaffLaneStems,
   detectStaves,
 } from '../src/features/practice/staffLaneLayout.js'
 import {
@@ -204,6 +205,45 @@ describe('visual notation marking model', () => {
     expect(trills[0]).toMatchObject({ shape: 'text', text: 'tr', placement: 'above' })
     expect(trills[0].x).toBe(notes[0].x)
     expect(trills[0].y).toBeLessThan(geometry.staves.treble.lines[0])
+  })
+
+  it('pairs two-note tremolo into its written stroke count without changing note attacks', () => {
+    const tremolo = (step, octave, type, marks = 3, printObject = null) => markedNote(
+      step,
+      octave,
+      `<notations><ornaments><tremolo type="${type}"${
+        printObject ? ` print-object="${printObject}"` : ''
+      }>${marks}</tremolo></ornaments></notations>`,
+    )
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 5 })}` +
+      tremolo('B', 5, 'start') +
+      tremolo('C', 6, 'stop') +
+      tremolo('D', 6, 'single', 2) +
+      tremolo('E', 6, 'start', 3, 'no') +
+      tremolo('F', 6, 'stop') +
+      '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'two-note-tremolo.musicxml')
+    const groups = buildVisualLaneGroups(timingMap)
+    const tremoloSpans = buildVisualSpanMarkings(groups).filter(
+      (marking) => marking.kind === VISUAL_MARKING_KIND.TREMOLO,
+    )
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const stems = buildStaffLaneStems(groups, geometry, { notes })
+    const { tremoloMarkings } = buildStaffLaneNotationMarkings(groups, geometry, {
+      notes,
+      stems,
+    })
+
+    expect(timingMap.notes.map((note) => note.quarterTime)).toEqual([0, 1, 2, 3, 4])
+    expect(tremoloSpans).toHaveLength(1)
+    expect(tremoloSpans[0]).toMatchObject({ marks: 3, fromMidi: 83, toMidi: 84 })
+    expect(tremoloMarkings).toHaveLength(3)
+    expect(new Set(tremoloMarkings.map((marking) => marking.spanId)).size).toBe(1)
+    expect(tremoloMarkings.map((marking) => marking.strokeIndex)).toEqual([0, 1, 2])
+    expect(tremoloMarkings.every((marking) => marking.x2 > marking.x1)).toBe(true)
   })
 
   it('renders guitar hammer-on, pull-off, slide, bend, and vibrato markings in TAB geometry', () => {

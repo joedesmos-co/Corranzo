@@ -226,7 +226,17 @@ function StaffVisualLane({
   // short screens. Source-expanded envelopes fit exactly and stay visible.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
-  const { notes, rests, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
+  const {
+    notes,
+    rests,
+    stems,
+    beams,
+    flags,
+    dots,
+    noteMarkings,
+    spanMarkings,
+    tremoloMarkings,
+  } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       sourceLayout,
@@ -243,6 +253,7 @@ function StaffVisualLane({
     const markings = buildStaffLaneNotationMarkings(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
+      stems: builtStems,
       sourceLayout,
     })
     const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
@@ -825,6 +836,18 @@ function StaffVisualLane({
                 x2={stem.x}
                 y1={stem.y1}
                 y2={stem.y2}
+              />
+            ))}
+            {tremoloMarkings.map((tremolo) => (
+              <line
+                key={tremolo.id}
+                className={`staff-lane__tremolo staff-lane__note--${tremolo.status ?? 'upcoming'}`}
+                x1={tremolo.x1}
+                x2={tremolo.x2}
+                y1={tremolo.y1}
+                y2={tremolo.y2}
+                data-tremolo-stroke={tremolo.strokeIndex + 1}
+                data-tremolo-strokes={tremolo.strokeCount}
               />
             ))}
             {beams.map((beam) => (

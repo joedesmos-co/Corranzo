@@ -18,6 +18,7 @@ export const VISUAL_MARKING_KIND = {
   MARCATO: 'marcato',
   FERMATA: 'fermata',
   TRILL: 'trill',
+  TREMOLO: 'tremolo',
   HAMMER_ON: 'hammer-on',
   PULL_OFF: 'pull-off',
   SLIDE: 'slide',
@@ -275,6 +276,7 @@ export function buildVisualSpanMarkings(groups) {
   const spans = []
   const openTies = new Map()
   const openSlurs = new Map()
+  const openTremolos = new Map()
   const openTechniques = new Map()
 
   for (const ref of orderedNoteRefs(groups)) {
@@ -329,6 +331,28 @@ export function buildVisualSpanMarkings(groups) {
     }
     for (const slur of slurs.filter((entry) => entry.type === 'start')) {
       openSlurs.set(numberedKey(VISUAL_MARKING_KIND.SLUR, note, slur.number), ref)
+    }
+
+    const tremolo = note.tremolo
+    const tremoloKey = numberedKey(VISUAL_MARKING_KIND.TREMOLO, note, '1')
+    if (tremolo?.type === 'stop' && tremolo.printObject !== false) {
+      const start = openTremolos.get(tremoloKey)
+      const span = closeOpenSpan(
+        openTremolos,
+        tremoloKey,
+        ref,
+        VISUAL_MARKING_KIND.TREMOLO,
+        {
+          marks: Math.max(
+            1,
+            Math.round(Number(start?.note?.tremolo?.marks) || Number(tremolo.marks) || 1),
+          ),
+        },
+      )
+      if (span) spans.push(span)
+    }
+    if (tremolo?.type === 'start' && tremolo.printObject !== false) {
+      openTremolos.set(tremoloKey, ref)
     }
 
     const techniques = (note.guitarTechniques ?? [])
