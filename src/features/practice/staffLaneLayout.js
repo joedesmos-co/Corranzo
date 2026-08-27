@@ -1248,6 +1248,7 @@ export function buildStaffLaneStems(
         : farthest.diatonic >= middle
 
     const ys = chord.map((note) => note.y)
+    const headXs = chord.map((note) => note.x + note.xOffset)
     const topY = Math.min(...ys)
     const bottomY = Math.max(...ys)
     const length = STEM_LENGTH_GAPS * STAFF_LINE_GAP
@@ -1259,7 +1260,9 @@ export function buildStaffLaneStems(
       voice: chord[0].voice ?? 1,
       status: chord[0].status ?? null,
       stemDown,
-      x: chord[0].x + (stemDown ? -noteheadRx : noteheadRx),
+      x: stemDown
+        ? Math.min(...headXs) - noteheadRx
+        : Math.max(...headXs) + noteheadRx,
       y1: stemDown ? topY : bottomY,
       y2: stemDown ? bottomY + length : topY - length,
     })

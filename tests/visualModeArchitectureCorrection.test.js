@@ -391,6 +391,10 @@ describe('Visual mode architecture correction', () => {
             <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
             <note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
           </measure>
+          <measure number="3" width="160">
+            <note default-x="40"><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+            <note default-x="52"><chord/><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+          </measure>
         </part>
       </score-partwise>
     `)
@@ -404,6 +408,18 @@ describe('Visual mode architecture correction', () => {
     const fallback = notes
       .filter((note) => note.measureNumber === 2)
       .sort((left, right) => left.diatonic - right.diatonic)
+    const printedStemDown = notes
+      .filter((note) => note.measureNumber === 3)
+      .sort((left, right) => left.diatonic - right.diatonic)
+    const stems = buildStaffLaneStems(groups, geometry, {
+      notes,
+      sourceLayout,
+    })
+    const printedStem = stems.find((stem) => stem.groupId === printed[0].groupId)
+    const fallbackStem = stems.find((stem) => stem.groupId === fallback[0].groupId)
+    const printedDownStem = stems.find(
+      (stem) => stem.groupId === printedStemDown[0].groupId,
+    )
 
     expect(printed.map((note) => note.sourceXMode)).toEqual([
       'musicxml-layout',
@@ -416,6 +432,15 @@ describe('Visual mode architecture correction', () => {
       'semantic-fallback',
     ])
     expect(fallback.map((note) => note.xOffset)).toEqual([0, 12])
+    expect(printedStem).toMatchObject({ stemDown: false })
+    expect(printedStem.x).toBeCloseTo(printed[1].x + 7, 8)
+    expect(fallbackStem).toMatchObject({ stemDown: false })
+    expect(fallbackStem.x).toBeCloseTo(
+      fallback[1].x + fallback[1].xOffset + 7,
+      8,
+    )
+    expect(printedDownStem).toMatchObject({ stemDown: true })
+    expect(printedDownStem.x).toBeCloseTo(printedStemDown[0].x - 7, 8)
   })
 
   it('places source-owned events at their printed X and maps the cursor to the same lane point', () => {
