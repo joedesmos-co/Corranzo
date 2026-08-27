@@ -389,6 +389,42 @@ function readWedgeMarks(directionNode) {
   return marks
 }
 
+/** Printed ottava endpoints for Visual layout; sounding pitch is untouched. */
+function readOctaveShiftMarks(directionNode) {
+  const marks = []
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    for (const octaveShift of findChildren(directionType, 'octave-shift')) {
+      const type = String(attr(octaveShift, 'type') ?? '').trim().toLowerCase()
+      if (!['up', 'down', 'stop', 'continue'].includes(type)) continue
+      const defaultX = numberOf(attr(octaveShift, 'default-x'), NaN)
+      const defaultY = numberOf(attr(octaveShift, 'default-y'), NaN)
+      const relativeX = numberOf(attr(octaveShift, 'relative-x'), NaN)
+      const relativeY = numberOf(attr(octaveShift, 'relative-y'), NaN)
+      const size = numberOf(attr(octaveShift, 'size'), NaN)
+      const dashLength = numberOf(attr(octaveShift, 'dash-length'), NaN)
+      const spaceLength = numberOf(attr(octaveShift, 'space-length'), NaN)
+      marks.push({
+        type: type === 'up' || type === 'down' ? type : null,
+        stage: type === 'up' || type === 'down' ? 'start' : type,
+        number: String(attr(octaveShift, 'number') ?? '1'),
+        size: Number.isFinite(size) ? size : 8,
+        placement:
+          attr(octaveShift, 'placement') ?? attr(directionNode, 'placement') ?? null,
+        printObject:
+          attr(directionNode, 'print-object') !== 'no' &&
+          attr(octaveShift, 'print-object') !== 'no',
+        defaultX: Number.isFinite(defaultX) ? defaultX : null,
+        defaultY: Number.isFinite(defaultY) ? defaultY : null,
+        relativeX: Number.isFinite(relativeX) ? relativeX : null,
+        relativeY: Number.isFinite(relativeY) ? relativeY : null,
+        dashLength: Number.isFinite(dashLength) ? dashLength : null,
+        spaceLength: Number.isFinite(spaceLength) ? spaceLength : null,
+      })
+    }
+  }
+  return marks
+}
+
 function emptyArticulations() {
   return {
     staccato: false,
@@ -858,6 +894,7 @@ function walkPart({
   harmonyEvents,
   dynamicEvents = null,
   wedgeEvents = null,
+  octaveShiftEvents = null,
   partNotation = null,
   wedgeSpans = null,
 }) {
@@ -971,6 +1008,18 @@ function walkPart({
                 staff: visualDirectionStaff,
                 quarterTime: visualQuarterTime,
                 sourceOrder: wedgeEvents.length,
+              })
+            }
+          }
+          if (Array.isArray(octaveShiftEvents)) {
+            for (const octaveShiftEvent of readOctaveShiftMarks(child)) {
+              octaveShiftEvents.push({
+                ...octaveShiftEvent,
+                partId,
+                measureNumber,
+                staff: visualDirectionStaff,
+                quarterTime: visualQuarterTime,
+                sourceOrder: octaveShiftEvents.length,
               })
             }
           }
@@ -1307,6 +1356,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const harmonyEvents = []
   const dynamicEvents = []
   const wedgeEvents = []
+  const octaveShiftEvents = []
   const wedgeSpans = []
   const partNotationById = new Map()
 
@@ -1336,6 +1386,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     dynamicEvents,
     wedgeEvents,
+    octaveShiftEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
   })
@@ -1356,6 +1407,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       harmonyEvents,
       dynamicEvents,
       wedgeEvents,
+      octaveShiftEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
     })
@@ -1504,6 +1556,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   for (const event of wedgeEvents) {
     event.timeSeconds = toSeconds(event.quarterTime)
   }
+  for (const event of octaveShiftEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
 
   const chordSheetAnalysis = analyzeChordSheetScore({
     harmonyEvents,
@@ -1623,6 +1678,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     dynamicEvents,
     wedgeEvents,
+    octaveShiftEvents,
     wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {

@@ -29,6 +29,7 @@ import {
   isBlackKey,
   laneYForMidi,
   resolveWfyDisplayFrameTime,
+  resolveStaffLaneScale,
   resolveVisualFrameTime,
   resolveVisualLaneTransform,
   resolveVisualPlayheadX,
@@ -275,6 +276,32 @@ describe('visual practice lane', () => {
     })
     expect(transform.playheadX).toBeCloseTo(520)
     expect(transform.scrollX).toBeCloseTo(520 - 5 * VISUAL_LANE_DEFAULTS.pixelsPerSecond)
+  })
+
+  it('fits a source-expanded staff envelope while preserving the ordinary readability floor', () => {
+    expect(resolveStaffLaneScale({
+      laneHeight: 148,
+      geometryHeight: 365,
+      minimumScale: 0.9,
+      maximumScale: 2.6,
+      preserveSourceEnvelope: false,
+    })).toBe(0.9)
+
+    expect(resolveStaffLaneScale({
+      laneHeight: 148,
+      geometryHeight: 365,
+      minimumScale: 0.9,
+      maximumScale: 2.6,
+      preserveSourceEnvelope: true,
+    })).toBeCloseTo(148 / 365, 8)
+
+    expect(resolveStaffLaneScale({
+      laneHeight: 900,
+      geometryHeight: 240,
+      minimumScale: 0.9,
+      maximumScale: 2.6,
+      preserveSourceEnvelope: true,
+    })).toBe(2.6)
   })
 
   it('windows the lane and tags past/current/upcoming', () => {

@@ -16,6 +16,7 @@ import {
   detectStaves,
   midiToDiatonic,
   resolveStaffKind,
+  sourceDirectionMarginGaps,
   staffYForNote,
 } from '../src/features/practice/staffLaneLayout.js'
 
@@ -67,6 +68,36 @@ describe('staff geometry', () => {
     const bass = grand.staves[STAFF_KIND.BASS]
     expect(bass.lines[0]).toBeGreaterThan(treble.lines[4]) // bass sits below treble
     expect(grand.height).toBeGreaterThan(bass.lines[4])
+  })
+
+  it('expands outer margins for source-positioned directions without moving their staff-relative Y', () => {
+    const staves = { hasTreble: true, hasBass: true }
+    const margins = sourceDirectionMarginGaps(
+      {
+        octaveShifts: [
+          { defaultY: 55, placement: 'above' },
+          { defaultY: -230, placement: 'below' },
+        ],
+      },
+      staves,
+      { grandStaffGapGaps: 6 },
+    )
+    expect(margins.topMarginGaps).toBeCloseTo(6.75, 8)
+    expect(margins.bottomMarginGaps).toBeCloseTo(10.25, 8)
+    const geometry = buildStaffGeometry(staves, {
+      grandStaffGapGaps: 6,
+      ...margins,
+    })
+    expect(geometry.staves.treble.lines[0]).toBeCloseTo(6.75 * STAFF_LINE_GAP, 8)
+    expect(geometry.height - geometry.staves.bass.lines[4]).toBeCloseTo(
+      10.25 * STAFF_LINE_GAP,
+      8,
+    )
+
+    expect(sourceDirectionMarginGaps(
+      { octaveShifts: [{ placement: 'above' }] },
+      staves,
+    )).toEqual({ topMarginGaps: 3, bottomMarginGaps: 3 })
   })
 })
 

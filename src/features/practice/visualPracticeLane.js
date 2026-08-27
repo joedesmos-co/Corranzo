@@ -303,6 +303,34 @@ export function resolveVisualPlayheadX({
   return startX + (endX - startX) * progress
 }
 
+/**
+ * Fit reconstructed staff geometry into the lane without discarding the
+ * learning-mode readability floor for ordinary notation. Source-positioned
+ * directions may legitimately extend beyond the normal ledger margins; in
+ * that case the full source envelope wins so symbols are not clipped.
+ */
+export function resolveStaffLaneScale({
+  laneHeight,
+  geometryHeight,
+  minimumScale,
+  maximumScale,
+  preserveSourceEnvelope = false,
+}) {
+  const height = Number(laneHeight)
+  const contentHeight = Number(geometryHeight)
+  const min = Number(minimumScale)
+  const max = Number(maximumScale)
+  if (!(height > 0) || !(contentHeight > 0)) return 1
+
+  const fittedScale = height / contentHeight
+  const resolvedMin = Number.isFinite(min) && min > 0 ? min : 0
+  const resolvedMax = Number.isFinite(max) && max > 0 ? max : Number.POSITIVE_INFINITY
+  const floor = preserveSourceEnvelope
+    ? Math.min(resolvedMin, fittedScale)
+    : resolvedMin
+  return Math.min(resolvedMax, Math.max(floor, fittedScale))
+}
+
 export function resolveVisualLaneTransform({
   frameTime = 0,
   viewWidth = 0,

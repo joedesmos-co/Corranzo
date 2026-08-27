@@ -3,6 +3,7 @@ import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
 import { VISUAL_LANE_DEFAULTS } from '../../features/practice/visualLaneConstants.js'
 import {
+  resolveStaffLaneScale,
   resolveVisualLaneTransform,
   resolveVisualPlayheadX,
 } from '../../features/practice/visualPracticeLane.js'
@@ -20,11 +21,13 @@ import {
   buildStaffLaneNotes,
   buildStaffLaneDynamicMarks,
   buildStaffLaneNotationMarkings,
+  buildStaffLaneOctaveShiftMarks,
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
   buildStaffLaneWedgeMarks,
   buildSourceSystemStaffGeometry,
+  sourceDirectionMarginGaps,
 } from '../../features/practice/staffLaneLayout.js'
 import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
 
@@ -181,13 +184,21 @@ function StaffVisualLane({
       .map((system) => Number(system.staffDistances?.['2']) / 10)
       .filter((value) => Number.isFinite(value) && value > 0),
   )
+  const directionMargins = useMemo(
+    () =>
+      sourceDirectionMarginGaps(structuralMarks, staves, {
+        grandStaffGapGaps: maxSourceStaffDistanceGaps || undefined,
+      }),
+    [structuralMarks, staves, maxSourceStaffDistanceGaps],
+  )
 
   const geometry = useMemo(
     () =>
       buildStaffGeometry(staves, {
         grandStaffGapGaps: maxSourceStaffDistanceGaps || undefined,
+        ...directionMargins,
       }),
-    [staves, maxSourceStaffDistanceGaps],
+    [staves, maxSourceStaffDistanceGaps, directionMargins],
   )
   const sourceSystemGeometries = useMemo(
     () =>
@@ -200,14 +211,19 @@ function StaffVisualLane({
     [sourceSystems, geometry],
   )
 
-  const scale =
-    size.height > 0
-      ? Math.min(MAX_SCALE, Math.max(MIN_SCALE, size.height / geometry.height))
-      : 1
+  const preserveSourceEnvelope =
+    directionMargins.topMarginGaps > 3 || directionMargins.bottomMarginGaps > 3
+  const scale = resolveStaffLaneScale({
+    laneHeight: size.height,
+    geometryHeight: geometry.height,
+    minimumScale: MIN_SCALE,
+    maximumScale: MAX_SCALE,
+    preserveSourceEnvelope,
+  })
   const viewWidth = size.width > 0 ? size.width / scale : 1200
   const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
-  // Center the staff block; may go negative on short lanes, cropping only
-  // the outer ledger margins symmetrically.
+  // Ordinary lanes may crop only their generic outer ledger margins on very
+  // short screens. Source-expanded envelopes fit exactly and stay visible.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
 
   const { notes, rests, stems, beams, flags, dots, noteMarkings, spanMarkings } = useMemo(() => {
@@ -398,6 +414,13 @@ function StaffVisualLane({
   const wedgeMarks = useMemo(
     () =>
       buildStaffLaneWedgeMarks(structuralMarks, geometry, {
+        sourceSystemGeometries,
+      }),
+    [structuralMarks, geometry, sourceSystemGeometries],
+  )
+  const octaveShiftMarks = useMemo(
+    () =>
+      buildStaffLaneOctaveShiftMarks(structuralMarks, geometry, {
         sourceSystemGeometries,
       }),
     [structuralMarks, geometry, sourceSystemGeometries],
@@ -683,6 +706,53 @@ function StaffVisualLane({
                 />
               )
             })}
+            {octaveShiftMarks.map((shift) => (
+              <g
+                key={shift.id}
+                className={`staff-lane__octave-shift staff-lane__octave-shift--${shift.placement}`}
+                data-structural-kind="octave-shift"
+                data-octave-shift-type={shift.type}
+                data-octave-shift-size={shift.size}
+                data-octave-shift-number={shift.number}
+                data-source-x-start={shift.sourceXModeStart}
+                data-source-x-end={shift.sourceXModeEnd}
+                data-source-y-mode={shift.sourceYMode}
+                data-source-system={shift.systemOccurrence ?? undefined}
+                data-span-segment={shift.segmentIndex ?? undefined}
+                data-span-segment-count={shift.segmentCount ?? undefined}
+              >
+                {shift.showLabel && (
+                  <text
+                    className="staff-lane__octave-shift-label"
+                    x={shift.xStart}
+                    y={shift.y}
+                    fontSize={STAFF_LINE_GAP * 1.05}
+                    dominantBaseline="middle"
+                  >
+                    {shift.label}
+                  </text>
+                )}
+                <line
+                  className="staff-lane__octave-shift-line"
+                  x1={shift.lineXStart}
+                  x2={shift.xEnd}
+                  y1={shift.y}
+                  y2={shift.y}
+                  strokeDasharray={shift.dashArray}
+                  vectorEffect="non-scaling-stroke"
+                />
+                {shift.showHook && (
+                  <line
+                    className="staff-lane__octave-shift-hook"
+                    x1={shift.xEnd}
+                    x2={shift.xEnd}
+                    y1={shift.y}
+                    y2={shift.hookY}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                )}
+              </g>
+            ))}
             {wedgeMarks.map((wedge) => (
               <g
                 key={wedge.id}

@@ -5652,6 +5652,23 @@
   opacity: 0.86;
 }
 
+.staff-lane__octave-shift {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-linecap: butt;
+  stroke-width: 1.25;
+  opacity: 0.86;
+}
+
+.staff-lane__octave-shift-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  stroke: none;
+  user-select: none;
+}
+
 .staff-lane__head--hollow {
   fill: transparent;
   stroke: currentColor;

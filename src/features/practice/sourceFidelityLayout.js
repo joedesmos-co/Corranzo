@@ -23,6 +23,7 @@ function emptyStructuralMarks() {
     systemClefs: [],
     dynamics: [],
     wedges: [],
+    octaveShifts: [],
   }
 }
 
@@ -640,6 +641,19 @@ function primaryWedgeEvents(timingMap) {
     )
 }
 
+function primaryOctaveShiftEvents(timingMap) {
+  const events = timingMap?.octaveShiftEvents ?? []
+  if (!events.length) return []
+  const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
+  return events
+    .filter((event) => primaryPartId == null || event.partId === primaryPartId)
+    .sort(
+      (left, right) =>
+        Number(left.quarterTime ?? 0) - Number(right.quarterTime ?? 0) ||
+        Number(left.sourceOrder ?? 0) - Number(right.sourceOrder ?? 0),
+    )
+}
+
 function clefXInMeasure(event, written, measure) {
   const width = Number(written?.engravedWidth)
   const defaultX = Number(event?.defaultX)
@@ -658,7 +672,7 @@ function clefXInMeasure(event, written, measure) {
   return measure.xStart
 }
 
-function wedgeXInMeasure(event, written, measure) {
+function directionXInMeasure(event, written, measure) {
   const width = Number(written?.engravedWidth)
   const defaultX = Number(event?.defaultX)
   const relativeX = Number(event?.relativeX)
@@ -680,7 +694,7 @@ function wedgeXInMeasure(event, written, measure) {
   return measure.xStart
 }
 
-function wedgePairKey(event) {
+function directionPairKey(event) {
   return [
     event?.partId ?? 'primary',
     event?.staff ?? 'unspecified',
@@ -689,11 +703,11 @@ function wedgePairKey(event) {
   ].join('|')
 }
 
-function pairWedgeEvents(events) {
+function pairNumberedDirectionEvents(events) {
   const openByKey = new Map()
   const spans = []
   for (const event of events) {
-    const key = wedgePairKey(event)
+    const key = directionPairKey(event)
     if (event?.stage === 'start' && event.type) {
       const stack = openByKey.get(key) ?? []
       stack.push(event)
@@ -794,7 +808,7 @@ function buildSourceWedgeSegments(timingMap, layout, wedgeEvents, writtenMeasure
     for (const event of byMeasure.get(Number(measure.measureNumber)) ?? []) {
       projected.push({
         ...event,
-        x: wedgeXInMeasure(event, written, measure),
+        x: directionXInMeasure(event, written, measure),
         repeatPass: measure.repeatPass,
         systemOccurrence: measure.systemOccurrence,
         sourceXMode:
@@ -806,7 +820,7 @@ function buildSourceWedgeSegments(timingMap, layout, wedgeEvents, writtenMeasure
       })
     }
   }
-  return pairWedgeEvents(projected).flatMap((span) =>
+  return pairNumberedDirectionEvents(projected).flatMap((span) =>
     splitProjectedWedgeSpan(span, layout),
   )
 }
@@ -819,7 +833,7 @@ function buildTemporalWedgeSegments(wedgeEvents, pixelsPerSecond) {
     systemOccurrence: null,
     sourceXMode: 'temporal-fallback',
   }))
-  return pairWedgeEvents(projected)
+  return pairNumberedDirectionEvents(projected)
     .filter((span) => span.start?.printObject !== false)
     .map((span, index) => ({
       id: `wedge-${span.start.sourceOrder ?? index}-temporal`,
@@ -845,6 +859,127 @@ function buildTemporalWedgeSegments(wedgeEvents, pixelsPerSecond) {
       sourceXModeStart: 'temporal-fallback',
       sourceXModeEnd: 'temporal-fallback',
     }))
+}
+
+function splitProjectedOctaveShiftSpan(span, layout) {
+  if (span.start?.printObject === false) return []
+  const startSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.start.systemOccurrence,
+  )
+  const stopSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.stop.systemOccurrence,
+  )
+  if (startSystemIndex < 0 || stopSystemIndex < startSystemIndex) return []
+  const systems = layout.systems.slice(startSystemIndex, stopSystemIndex + 1)
+  const spanId = [
+    `octave-shift-${span.start.sourceOrder ?? 0}`,
+    `pass-${span.start.repeatPass ?? 1}`,
+    `system-${span.start.systemOccurrence ?? 'unknown'}`,
+  ].join('-')
+  return systems
+    .map((system, index) => ({
+      id: `${spanId}-segment-${index}`,
+      spanId,
+      type: span.type,
+      number: span.start.number ?? '1',
+      size: span.start.size ?? span.stop.size ?? 8,
+      partId: span.start.partId,
+      staff: span.start.staff ?? span.stop.staff,
+      placement: span.start.placement ?? span.stop.placement,
+      printObject: span.start.printObject,
+      defaultY: span.start.defaultY ?? span.stop.defaultY,
+      relativeY: span.start.relativeY ?? span.stop.relativeY,
+      dashLength: span.start.dashLength ?? span.stop.dashLength,
+      spaceLength: span.start.spaceLength ?? span.stop.spaceLength,
+      xStart: index === 0 ? span.start.x : system.xStart,
+      xEnd: index === systems.length - 1 ? span.stop.x : system.xEnd,
+      repeatPass: span.start.repeatPass ?? 1,
+      systemOccurrence: system.occurrence,
+      segmentIndex: index,
+      segmentCount: systems.length,
+      showLabel: index === 0,
+      showHook: index === systems.length - 1,
+      sourceXModeStart: span.start.sourceXMode,
+      sourceXModeEnd: span.stop.sourceXMode,
+    }))
+    .filter((segment) => Number(segment.xEnd) >= Number(segment.xStart))
+}
+
+function buildSourceOctaveShiftSegments(
+  timingMap,
+  layout,
+  octaveShiftEvents,
+  writtenMeasures,
+) {
+  const byMeasure = new Map()
+  for (const event of octaveShiftEvents) {
+    const number = writtenMeasureNumberForEvent(event, timingMap)
+    if (number == null) continue
+    const events = byMeasure.get(Number(number)) ?? []
+    events.push(event)
+    byMeasure.set(Number(number), events)
+  }
+  const projected = []
+  for (const measure of layout.measures ?? []) {
+    const written = writtenMeasures.get(Number(measure.measureNumber))
+    for (const event of byMeasure.get(Number(measure.measureNumber)) ?? []) {
+      projected.push({
+        ...event,
+        x: directionXInMeasure(event, written, measure),
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+        sourceXMode:
+          finite(event.defaultX) && Number(written?.engravedWidth) > 0
+            ? 'musicxml-default-x'
+            : finite(event.relativeX) && Number(written?.engravedWidth) > 0
+              ? 'semantic-onset-plus-relative-x'
+              : 'semantic-onset-fallback',
+      })
+    }
+  }
+  return pairNumberedDirectionEvents(projected).flatMap((span) =>
+    splitProjectedOctaveShiftSpan(span, layout),
+  )
+}
+
+function buildTemporalOctaveShiftSegments(octaveShiftEvents, pixelsPerSecond) {
+  const projected = octaveShiftEvents.map((event) => ({
+    ...event,
+    x: Number(event.timeSeconds ?? 0) * pixelsPerSecond,
+    repeatPass: 1,
+    systemOccurrence: null,
+    sourceXMode: 'temporal-fallback',
+  }))
+  return pairNumberedDirectionEvents(projected)
+    .filter((span) => span.start?.printObject !== false)
+    .map((span, index) => {
+      const spanId = `octave-shift-${span.start.sourceOrder ?? index}-temporal`
+      return {
+        id: spanId,
+        spanId,
+        type: span.type,
+        number: span.start.number ?? '1',
+        size: span.start.size ?? span.stop.size ?? 8,
+        partId: span.start.partId,
+        staff: span.start.staff ?? span.stop.staff,
+        placement: span.start.placement ?? span.stop.placement,
+        printObject: span.start.printObject,
+        defaultY: span.start.defaultY ?? span.stop.defaultY,
+        relativeY: span.start.relativeY ?? span.stop.relativeY,
+        dashLength: span.start.dashLength ?? span.stop.dashLength,
+        spaceLength: span.start.spaceLength ?? span.stop.spaceLength,
+        xStart: span.start.x,
+        xEnd: span.stop.x,
+        repeatPass: 1,
+        systemOccurrence: null,
+        segmentIndex: 0,
+        segmentCount: 1,
+        showLabel: true,
+        showHook: true,
+        sourceXModeStart: 'temporal-fallback',
+        sourceXModeEnd: 'temporal-fallback',
+      }
+    })
 }
 
 function clefsAtQuarter(clefEvents, quarterTime) {
@@ -881,6 +1016,7 @@ function buildSystemClefs(timingMap, layout, clefEvents) {
 export function buildSourceFidelityStructuralMarks(timingMap, layout) {
   const dynamicEvents = primaryDynamicEvents(timingMap)
   const wedgeEvents = primaryWedgeEvents(timingMap)
+  const octaveShiftEvents = primaryOctaveShiftEvents(timingMap)
   if (layout?.mode !== 'source-fidelity' || !layout.measures?.length) {
     const result = emptyStructuralMarks()
     result.dynamics = dynamicEvents.map((event, index) => ({
@@ -895,6 +1031,10 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
       wedgeEvents,
       Number(layout?.pixelsPerSecond ?? 120),
     )
+    result.octaveShifts = buildTemporalOctaveShiftSegments(
+      octaveShiftEvents,
+      Number(layout?.pixelsPerSecond ?? 120),
+    )
     return result
   }
 
@@ -906,6 +1046,12 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
     timingMap,
     layout,
     wedgeEvents,
+    writtenMeasures,
+  )
+  result.octaveShifts = buildSourceOctaveShiftSegments(
+    timingMap,
+    layout,
+    octaveShiftEvents,
     writtenMeasures,
   )
   const keyEventsByMeasure = new Map()

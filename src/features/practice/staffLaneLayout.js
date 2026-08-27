@@ -172,9 +172,22 @@ export function detectStaves(groups) {
  */
 export function buildStaffGeometry(
   staves,
-  { grandStaffGapGaps = GRAND_STAFF_GAP_GAPS } = {},
+  {
+    grandStaffGapGaps = GRAND_STAFF_GAP_GAPS,
+    topMarginGaps = STAFF_MARGIN_GAPS,
+    bottomMarginGaps = STAFF_MARGIN_GAPS,
+  } = {},
 ) {
-  const margin = STAFF_MARGIN_GAPS * STAFF_LINE_GAP
+  const resolvedTopMarginGaps =
+    Number.isFinite(Number(topMarginGaps)) && Number(topMarginGaps) > 0
+      ? Number(topMarginGaps)
+      : STAFF_MARGIN_GAPS
+  const resolvedBottomMarginGaps =
+    Number.isFinite(Number(bottomMarginGaps)) && Number(bottomMarginGaps) > 0
+      ? Number(bottomMarginGaps)
+      : STAFF_MARGIN_GAPS
+  const topMargin = resolvedTopMarginGaps * STAFF_LINE_GAP
+  const bottomMargin = resolvedBottomMarginGaps * STAFF_LINE_GAP
   const useTreble = staves.hasTreble || !staves.hasBass
   const useBass = staves.hasBass
   const resolvedGrandStaffGapGaps =
@@ -187,9 +200,11 @@ export function buildStaffGeometry(
     staves: {},
     lines: [],
     height: 0,
+    topMarginGaps: resolvedTopMarginGaps,
+    bottomMarginGaps: resolvedBottomMarginGaps,
   }
 
-  let y = margin
+  let y = topMargin
   if (useTreble) {
     const lines = [0, 1, 2, 3, 4].map((i) => y + i * STAFF_LINE_GAP)
     result.staves[STAFF_KIND.TREBLE] = {
@@ -218,8 +233,54 @@ export function buildStaffGeometry(
     y = lines[4]
   }
 
-  result.height = y + margin
+  result.height = y + bottomMargin
   return result
+}
+
+/**
+ * Expand only the outer staff margins needed by retained source directions.
+ * The marks stay at their MusicXML distance from the first staff; the lane
+ * grows around them instead of clipping or clamping their engraving.
+ */
+export function sourceDirectionMarginGaps(
+  structuralMarks,
+  staves,
+  { grandStaffGapGaps = GRAND_STAFF_GAP_GAPS } = {},
+) {
+  const resolvedGrandGap =
+    Number.isFinite(Number(grandStaffGapGaps)) && Number(grandStaffGapGaps) > 0
+      ? Number(grandStaffGapGaps)
+      : GRAND_STAFF_GAP_GAPS
+  const lastStaffBottomFromFirstTop =
+    staves?.hasTreble && staves?.hasBass ? 8 + resolvedGrandGap : 4
+  const marks = [
+    ...(structuralMarks?.dynamics ?? []),
+    ...(structuralMarks?.wedges ?? []),
+    ...(structuralMarks?.octaveShifts ?? []),
+  ].filter((mark) => mark?.printObject !== false)
+  let top = STAFF_MARGIN_GAPS
+  let bottom = STAFF_MARGIN_GAPS
+  for (const mark of marks) {
+    const defaultY = Number(mark?.defaultY)
+    const relativeY = mark?.relativeY == null ? 0 : Number(mark.relativeY)
+    if (
+      mark?.defaultY == null ||
+      !Number.isFinite(defaultY) ||
+      !Number.isFinite(relativeY)
+    ) {
+      continue
+    }
+    const positionFromFirstTop = -(defaultY + relativeY) / 10
+    if (positionFromFirstTop < 0) {
+      top = Math.max(top, -positionFromFirstTop + 1.25)
+    } else if (positionFromFirstTop > lastStaffBottomFromFirstTop) {
+      bottom = Math.max(
+        bottom,
+        positionFromFirstTop - lastStaffBottomFromFirstTop + 1.25,
+      )
+    }
+  }
+  return { topMarginGaps: top, bottomMarginGaps: bottom }
 }
 
 /**
@@ -256,7 +317,8 @@ export function buildSourceSystemStaffGeometry(geometry, system) {
     lines: [...treble.lines, ...bassLines],
     height: Math.max(
       geometry.height,
-      bassLines[bassLines.length - 1] + STAFF_MARGIN_GAPS * STAFF_LINE_GAP,
+      bassLines[bassLines.length - 1] +
+        Number(geometry.bottomMarginGaps ?? STAFF_MARGIN_GAPS) * STAFF_LINE_GAP,
     ),
   }
 }
@@ -481,6 +543,77 @@ export function buildStaffLaneWedgeMarks(
         yTopEnd: centerY - endHalfSpread,
         yBottomStart: centerY + startHalfSpread,
         yBottomEnd: centerY + endHalfSpread,
+        sourceYMode: hasSourceY
+          ? 'musicxml-default-y'
+          : 'semantic-placement-fallback',
+      }
+    })
+    .filter(Boolean)
+}
+
+function octaveShiftLabel(type, size) {
+  if (Number(size) === 15) return type === 'up' ? '15mb' : '15ma'
+  return type === 'up' ? '8vb' : '8va'
+}
+
+/** Native 8va/8vb (and 15ma/15mb) bracket geometry. */
+export function buildStaffLaneOctaveShiftMarks(
+  structuralMarks,
+  geometry,
+  { sourceSystemGeometries = new Map() } = {},
+) {
+  return (structuralMarks?.octaveShifts ?? [])
+    .filter(
+      (shift) =>
+        shift?.printObject !== false &&
+        (shift?.type === 'up' || shift?.type === 'down'),
+    )
+    .map((shift) => {
+      const shiftGeometry =
+        sourceSystemGeometries.get(shift.systemOccurrence) ?? geometry
+      const staffKind = resolveStaffKind(shift)
+      const staff =
+        shiftGeometry.staves[staffKind] ?? Object.values(shiftGeometry.staves)[0]
+      const firstStaff =
+        shiftGeometry.staves[STAFF_KIND.TREBLE] ??
+        Object.values(shiftGeometry.staves)[0]
+      if (!staff || !firstStaff) return null
+
+      const defaultY = Number(shift.defaultY)
+      const relativeY = shift.relativeY == null ? 0 : Number(shift.relativeY)
+      const hasSourceY =
+        shift.defaultY != null &&
+        Number.isFinite(defaultY) &&
+        Number.isFinite(relativeY)
+      const placement = shift.placement === 'below' ? 'below' : 'above'
+      const y = hasSourceY
+        ? firstStaff.lines[0] - ((defaultY + relativeY) / 10) * STAFF_LINE_GAP
+        : placement === 'below'
+          ? staff.lines[staff.lines.length - 1] + STAFF_LINE_GAP * 2.2
+          : staff.lines[0] - STAFF_LINE_GAP * 2.2
+      const label = octaveShiftLabel(shift.type, shift.size)
+      const lineXStart = shift.showLabel
+        ? Number(shift.xStart) + STAFF_LINE_GAP * (label.startsWith('15') ? 2.7 : 2.2)
+        : Number(shift.xStart)
+      const hookDirection = placement === 'below' ? -1 : 1
+      const dashLength =
+        shift.dashLength != null && Number.isFinite(Number(shift.dashLength))
+          ? Math.max(1, (Number(shift.dashLength) / 10) * STAFF_LINE_GAP)
+          : STAFF_LINE_GAP * 0.55
+      const spaceLength =
+        shift.spaceLength != null && Number.isFinite(Number(shift.spaceLength))
+          ? Math.max(1, (Number(shift.spaceLength) / 10) * STAFF_LINE_GAP)
+          : STAFF_LINE_GAP * 0.42
+
+      return {
+        ...shift,
+        staffKind,
+        placement,
+        label,
+        y,
+        lineXStart: Math.min(lineXStart, Number(shift.xEnd)),
+        hookY: y + hookDirection * STAFF_LINE_GAP * 0.8,
+        dashArray: `${dashLength} ${spaceLength}`,
         sourceYMode: hasSourceY
           ? 'musicxml-default-y'
           : 'semantic-placement-fallback',
