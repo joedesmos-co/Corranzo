@@ -166,6 +166,46 @@ describe('visual notation marking model', () => {
     expect(staccato).toMatchObject({ shape: 'dot', placement: 'above' })
   })
 
+  it('anchors a printed trill to its owned note without treating two-note tremolo as a trill', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 3 })}` +
+      markedNote(
+        'B',
+        4,
+        '<notations><ornaments><trill-mark/></ornaments></notations>',
+      ) +
+      markedNote(
+        'C',
+        5,
+        '<notations><ornaments><tremolo type="start">3</tremolo></ornaments></notations>',
+      ) +
+      markedNote(
+        'D',
+        5,
+        '<notations><ornaments><trill-mark print-object="no"/></ornaments></notations>',
+      ) +
+      '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'trill.musicxml')
+    expect(timingMap.notes).toMatchObject([
+      { trill: { placement: null, printObject: true } },
+      { tremolo: { type: 'start', marks: 3 } },
+      { trill: { printObject: false } },
+    ])
+    const groups = buildVisualLaneGroups(timingMap)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const { noteMarkings } = buildStaffLaneNotationMarkings(groups, geometry, { notes })
+    const trills = noteMarkings.filter(
+      (marking) => marking.kind === VISUAL_MARKING_KIND.TRILL,
+    )
+
+    expect(trills).toHaveLength(1)
+    expect(trills[0]).toMatchObject({ shape: 'text', text: 'tr', placement: 'above' })
+    expect(trills[0].x).toBe(notes[0].x)
+    expect(trills[0].y).toBeLessThan(geometry.staves.treble.lines[0])
+  })
+
   it('renders guitar hammer-on, pull-off, slide, bend, and vibrato markings in TAB geometry', () => {
     const guitar = getInstrument('guitar')
     const groups = buildVisualLaneGroups(parseMusicXml(guitarTechniqueScore())).map((group) => ({

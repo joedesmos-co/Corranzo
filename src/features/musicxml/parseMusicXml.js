@@ -506,6 +506,39 @@ function readArticulations(noteNode) {
   }
 }
 
+/** Printed note-owned ornaments for reconstructed Visual engraving. */
+function readOrnaments(noteNode) {
+  const ornaments = findChild(findChild(noteNode, 'notations'), 'ornaments')
+  if (!ornaments) return { trill: null, tremolo: null }
+
+  const trillNode = findChild(ornaments, 'trill-mark')
+  const tremoloNode = findChild(ornaments, 'tremolo')
+  const ornament = (node, extra = {}) => {
+    if (!node) return null
+    const defaultX = numberOf(attr(node, 'default-x'), NaN)
+    const defaultY = numberOf(attr(node, 'default-y'), NaN)
+    const relativeX = numberOf(attr(node, 'relative-x'), NaN)
+    const relativeY = numberOf(attr(node, 'relative-y'), NaN)
+    return {
+      placement: notationPlacement(node),
+      printObject: attr(node, 'print-object') !== 'no',
+      defaultX: Number.isFinite(defaultX) ? defaultX : null,
+      defaultY: Number.isFinite(defaultY) ? defaultY : null,
+      relativeX: Number.isFinite(relativeX) ? relativeX : null,
+      relativeY: Number.isFinite(relativeY) ? relativeY : null,
+      ...extra,
+    }
+  }
+  const tremoloMarks = numberOf(textOf(tremoloNode), NaN)
+  return {
+    trill: ornament(trillNode),
+    tremolo: ornament(tremoloNode, {
+      type: attr(tremoloNode, 'type') ?? 'single',
+      marks: Number.isFinite(tremoloMarks) ? tremoloMarks : null,
+    }),
+  }
+}
+
 function resolveNoteVelocity(activeVelocity, velocityByStaff, staff) {
   if (staff != null && velocityByStaff.has(staff)) {
     return velocityByStaff.get(staff)
@@ -1159,6 +1192,7 @@ function walkPart({
               fermata,
               articulationPlacements,
             } = readArticulations(child)
+            const { trill, tremolo } = readOrnaments(child)
             const slurs = readSlurs(child)
             const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
             const technicalPosition = isRest ? null : readTechnicalPosition(child)
@@ -1219,6 +1253,8 @@ function walkPart({
               marcato,
               fermata,
               articulationPlacements,
+              ...(trill ? { trill } : {}),
+              ...(tremolo ? { tremolo } : {}),
               dots,
               noteType,
               stemDirection,

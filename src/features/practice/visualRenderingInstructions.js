@@ -119,6 +119,8 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     marcato: Boolean(note.marcato),
     fermata: Boolean(note.fermata),
     articulationPlacements: note.articulationPlacements ?? {},
+    trill: note.trill ?? null,
+    tremolo: note.tremolo ?? null,
     slurs: note.slurs ?? [],
     guitarTechniques: note.guitarTechniques ?? [],
     timeModification: note.timeModification ?? null,

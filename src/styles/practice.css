@@ -5634,6 +5634,11 @@
   user-select: none;
 }
 
+.staff-lane__articulation--trill {
+  font-style: italic;
+  letter-spacing: -0.08em;
+}
+
 .staff-lane__dynamic {
   color: var(--vp-upcoming, #b4b4bb);
   fill: currentColor;

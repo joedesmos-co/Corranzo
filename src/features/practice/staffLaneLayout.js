@@ -767,6 +767,8 @@ export const STEM_LENGTH_GAPS = 3.2
 export const STEMLESS_MIN_SECONDS = 2.0
 const ARTICULATION_OFFSET_Y = STAFF_LINE_GAP * 1.15
 const ARTICULATION_STACK_GAP = STAFF_LINE_GAP * 0.62
+const TRILL_NOTE_OFFSET_Y = STAFF_LINE_GAP * 1.6
+const TRILL_STAFF_OFFSET_Y = STAFF_LINE_GAP * 0.65
 const TIE_VERTICAL_OFFSET = STAFF_LINE_GAP * 0.88
 const SLUR_VERTICAL_OFFSET = STAFF_LINE_GAP * 1.35
 
@@ -915,6 +917,14 @@ export function buildStaffLaneNotes(
         sourceDefaultY: sourcePosition?.sourceDefaultY ?? null,
         sourceRelativeY: sourcePosition?.sourceRelativeY ?? null,
         staffKind,
+        staffTopY:
+          objectGeometry.staves[staffKind]?.lines?.[0] ??
+          Object.values(objectGeometry.staves)[0]?.lines?.[0] ??
+          y,
+        staffBottomY:
+          objectGeometry.staves[staffKind]?.lines?.at(-1) ??
+          Object.values(objectGeometry.staves)[0]?.lines?.at(-1) ??
+          y,
         sharp: written.accidentalType === 'sharp',
         accidentalType: written.accidentalType,
         accidentalGlyph: written.accidentalGlyph,
@@ -1392,6 +1402,7 @@ function buildStaffNoteMarkingGeometry(notes) {
     VISUAL_MARKING_KIND.TENUTO,
     VISUAL_MARKING_KIND.MARCATO,
     VISUAL_MARKING_KIND.FERMATA,
+    VISUAL_MARKING_KIND.TRILL,
   ])
   const grouped = new Map()
   for (const note of notes ?? []) {
@@ -1431,11 +1442,21 @@ function buildStaffNoteMarkingGeometry(notes) {
         ? STAFF_LINE_GAP * 0.45
         : 0
     const y =
-      anchor.y +
-      direction *
-        (ARTICULATION_OFFSET_Y +
-          extraOffset +
-          stackIndex * ARTICULATION_STACK_GAP)
+      marking.kind === VISUAL_MARKING_KIND.TRILL
+        ? placement === 'below'
+          ? Math.max(
+              anchor.y + TRILL_NOTE_OFFSET_Y,
+              anchor.staffBottomY + TRILL_STAFF_OFFSET_Y,
+            )
+          : Math.min(
+              anchor.y - TRILL_NOTE_OFFSET_Y,
+              anchor.staffTopY - TRILL_STAFF_OFFSET_Y,
+            )
+        : anchor.y +
+          direction *
+            (ARTICULATION_OFFSET_Y +
+              extraOffset +
+              stackIndex * ARTICULATION_STACK_GAP)
     const x =
       chordNotes.reduce(
         (sum, note) => sum + note.x + note.xOffset,
@@ -1505,6 +1526,16 @@ function buildStaffNoteMarkingGeometry(notes) {
           x,
           y,
           fontSize: STAFF_LINE_GAP * 1.8,
+        })
+      } else if (marking.kind === VISUAL_MARKING_KIND.TRILL) {
+        markings.push({
+          ...common,
+          id: `${marking.id}-staff-trill`,
+          shape: 'text',
+          text: 'tr',
+          x,
+          y,
+          fontSize: STAFF_LINE_GAP * 1.12,
         })
       }
   }

@@ -17,6 +17,7 @@ export const VISUAL_MARKING_KIND = {
   TENUTO: 'tenuto',
   MARCATO: 'marcato',
   FERMATA: 'fermata',
+  TRILL: 'trill',
   HAMMER_ON: 'hammer-on',
   PULL_OFF: 'pull-off',
   SLIDE: 'slide',
@@ -44,6 +45,7 @@ const NOTE_MARKING_KINDS = new Set([
   VISUAL_MARKING_KIND.TENUTO,
   VISUAL_MARKING_KIND.MARCATO,
   VISUAL_MARKING_KIND.FERMATA,
+  VISUAL_MARKING_KIND.TRILL,
   VISUAL_MARKING_KIND.BEND,
   VISUAL_MARKING_KIND.VIBRATO,
 ])
@@ -129,6 +131,12 @@ export function buildVisualNoteMarkings(note, { groupId = null } = {}) {
   if (note.fermata) {
     push(VISUAL_MARKING_KIND.FERMATA, {
       placement: note.articulationPlacements?.fermata ?? null,
+    })
+  }
+  if (note.trill?.printObject !== false && note.trill) {
+    push(VISUAL_MARKING_KIND.TRILL, {
+      placement: note.trill.placement ?? 'above',
+      ornament: note.trill,
     })
   }
 

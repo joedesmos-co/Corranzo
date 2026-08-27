@@ -77,6 +77,8 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           marcato: Boolean(note.marcato),
           fermata: Boolean(note.fermata),
           articulationPlacements: note.articulationPlacements ?? {},
+          trill: note.trill ?? null,
+          tremolo: note.tremolo ?? null,
           slurs: note.slurs ?? [],
           guitarTechniques: note.guitarTechniques ?? [],
           tiedContinuations: (note.tiedContinuations ?? []).map(
