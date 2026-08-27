@@ -13,6 +13,7 @@ import {
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
+  buildStaffLaneWedgeMarks,
   buildSourceSystemStaffGeometry,
   detectStaves,
 } from '../src/features/practice/staffLaneLayout.js'
@@ -663,6 +664,7 @@ describe('Visual mode architecture correction', () => {
       clefs: [],
       systemClefs: [],
       dynamics: [],
+      wedges: [],
     })
     expect(
       buildSourceFidelityStructuralMarks(timingMap, { mode: 'temporal-fallback' }),
@@ -674,6 +676,7 @@ describe('Visual mode architecture correction', () => {
       clefs: [],
       systemClefs: [],
       dynamics: [],
+      wedges: [],
     })
   })
 
@@ -754,6 +757,102 @@ describe('Visual mode architecture correction', () => {
       hiddenTimingMap,
       { mode: 'temporal-fallback', pixelsPerSecond: 100 },
     ).dynamics).toEqual([])
+  })
+
+  it('pairs numbered hairpins, splits them at source systems, and keeps temporal fallback', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1">
+          <measure number="1" width="200">
+            <print new-system="yes"/>
+            <attributes><divisions>1</divisions><staves>2</staves><time><beats>4</beats><beat-type>4</beat-type></time><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+            <direction placement="below"><direction-type><wedge type="crescendo" number="1" default-y="-65"/></direction-type><staff>1</staff></direction>
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+            <direction placement="above"><direction-type><wedge type="diminuendo" number="2" default-y="-105" relative-x="5"/></direction-type><staff>2</staff></direction>
+            <note default-x="80"><pitch><step>D</step><octave>4</octave></pitch><duration>3</duration><voice>1</voice><type>half</type><dot/><staff>1</staff></note>
+          </measure>
+          <measure number="2" width="200">
+            <print new-system="yes"/>
+            <note default-x="40"><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+            <direction placement="below"><direction-type><wedge type="stop" number="1"/></direction-type><staff>1</staff></direction>
+            <note default-x="80"><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>
+            <direction placement="above"><direction-type><wedge type="stop" number="2"/></direction-type><staff>2</staff></direction>
+            <note default-x="120"><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>half</type><staff>1</staff></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `, 'numbered-hairpins.musicxml')
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const structural = buildSourceFidelityStructuralMarks(timingMap, layout)
+    const geometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    const rendered = buildStaffLaneWedgeMarks(structural, geometry, {
+      sourceSystemGeometries: new Map(
+        layout.systems.map((system) => [
+          system.occurrence,
+          buildSourceSystemStaffGeometry(geometry, system),
+        ]),
+      ),
+    })
+
+    expect(timingMap.wedgeEvents).toMatchObject([
+      { type: 'crescendo', stage: 'start', number: '1', staff: 1, defaultY: -65 },
+      { type: 'diminuendo', stage: 'start', number: '2', staff: 2, relativeX: 5 },
+      { type: null, stage: 'stop', number: '1', staff: 1 },
+      { type: null, stage: 'stop', number: '2', staff: 2 },
+    ])
+    expect(structural.wedges).toHaveLength(4)
+    expect(structural.wedges.filter((wedge) => wedge.number === '1')).toHaveLength(2)
+    expect(structural.wedges.filter((wedge) => wedge.number === '2')).toHaveLength(2)
+    expect(structural.wedges.find(
+      (wedge) => wedge.number === '1' && wedge.segmentIndex === 1,
+    ).xEnd).toBeLessThan(structural.wedges.find(
+      (wedge) => wedge.number === '2' && wedge.segmentIndex === 1,
+    ).xEnd)
+    expect(structural.wedges.filter((wedge) => wedge.number === '1')).toMatchObject([
+      { apertureStart: 0, segmentIndex: 0, segmentCount: 2 },
+      { apertureEnd: 1, segmentIndex: 1, segmentCount: 2 },
+    ])
+    expect(structural.wedges.filter((wedge) => wedge.number === '2')).toMatchObject([
+      { apertureStart: 1, segmentIndex: 0, segmentCount: 2 },
+      { apertureEnd: 0, segmentIndex: 1, segmentCount: 2 },
+    ])
+    expect(rendered).toHaveLength(4)
+    expect(rendered.every((wedge) => wedge.sourceYMode === 'musicxml-default-y')).toBe(true)
+
+    const fallback = buildSourceFidelityStructuralMarks(
+      timingMap,
+      { mode: 'temporal-fallback', pixelsPerSecond: 100 },
+    )
+    expect(fallback.wedges).toHaveLength(2)
+    expect(fallback.wedges).toMatchObject([
+      { number: '1', xStart: 0, xEnd: 250, sourceXModeStart: 'temporal-fallback' },
+      { number: '2', xStart: 50, xEnd: 300, sourceXModeEnd: 'temporal-fallback' },
+    ])
+  })
+
+  it('does not render a source-hidden hairpin', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1">
+          <attributes><divisions>1</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>
+          <direction><direction-type><wedge type="crescendo" number="1" print-object="no"/></direction-type></direction>
+          <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration></note>
+          <direction><direction-type><wedge type="stop" number="1"/></direction-type></direction>
+          <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration></note>
+        </measure></part>
+      </score-partwise>
+    `)
+    expect(timingMap.wedgeEvents).toMatchObject([
+      { stage: 'start', printObject: false },
+      { stage: 'stop', printObject: true },
+    ])
+    expect(buildSourceFidelityStructuralMarks(
+      timingMap,
+      { mode: 'temporal-fallback', pixelsPerSecond: 100 },
+    ).wedges).toEqual([])
   })
 
   it('preserves positioned clef changes without duplicating system-start declarations', () => {

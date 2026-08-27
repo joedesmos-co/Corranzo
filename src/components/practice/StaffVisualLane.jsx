@@ -23,6 +23,7 @@ import {
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
+  buildStaffLaneWedgeMarks,
   buildSourceSystemStaffGeometry,
 } from '../../features/practice/staffLaneLayout.js'
 import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
@@ -394,6 +395,13 @@ function StaffVisualLane({
       }),
     [structuralMarks, geometry, sourceSystemGeometries],
   )
+  const wedgeMarks = useMemo(
+    () =>
+      buildStaffLaneWedgeMarks(structuralMarks, geometry, {
+        sourceSystemGeometries,
+      }),
+    [structuralMarks, geometry, sourceSystemGeometries],
+  )
 
   return (
     <div
@@ -675,6 +683,42 @@ function StaffVisualLane({
                 />
               )
             })}
+            {wedgeMarks.map((wedge) => (
+              <g
+                key={wedge.id}
+                className={`staff-lane__hairpin staff-lane__hairpin--${wedge.type}`}
+                data-structural-kind="wedge"
+                data-wedge-type={wedge.type}
+                data-wedge-number={wedge.number}
+                data-source-x-start={wedge.sourceXModeStart}
+                data-source-x-end={wedge.sourceXModeEnd}
+                data-source-y-mode={wedge.sourceYMode}
+                data-source-system={wedge.systemOccurrence ?? undefined}
+                data-span-segment={wedge.segmentIndex ?? undefined}
+                data-span-segment-count={wedge.segmentCount ?? undefined}
+              >
+                <line
+                  x1={wedge.xStart}
+                  x2={wedge.xEnd}
+                  y1={wedge.yTopStart}
+                  y2={wedge.yTopEnd}
+                  vectorEffect="non-scaling-stroke"
+                />
+                <line
+                  x1={wedge.xStart}
+                  x2={wedge.xEnd}
+                  y1={wedge.yBottomStart}
+                  y2={wedge.yBottomEnd}
+                  vectorEffect="non-scaling-stroke"
+                />
+                {wedge.niente && Number(wedge.apertureStart) === 0 && (
+                  <circle cx={wedge.xStart} cy={wedge.centerY} r={STAFF_LINE_GAP * 0.22} />
+                )}
+                {wedge.niente && Number(wedge.apertureEnd) === 0 && (
+                  <circle cx={wedge.xEnd} cy={wedge.centerY} r={STAFF_LINE_GAP * 0.22} />
+                )}
+              </g>
+            ))}
             {dynamicMarks.map((dynamic) => (
               <text
                 key={dynamic.id}

@@ -22,6 +22,7 @@ function emptyStructuralMarks() {
     clefs: [],
     systemClefs: [],
     dynamics: [],
+    wedges: [],
   }
 }
 
@@ -626,6 +627,19 @@ function primaryDynamicEvents(timingMap) {
     )
 }
 
+function primaryWedgeEvents(timingMap) {
+  const events = timingMap?.wedgeEvents ?? []
+  if (!events.length) return []
+  const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
+  return events
+    .filter((event) => primaryPartId == null || event.partId === primaryPartId)
+    .sort(
+      (left, right) =>
+        Number(left.quarterTime ?? 0) - Number(right.quarterTime ?? 0) ||
+        Number(left.sourceOrder ?? 0) - Number(right.sourceOrder ?? 0),
+    )
+}
+
 function clefXInMeasure(event, written, measure) {
   const width = Number(written?.engravedWidth)
   const defaultX = Number(event?.defaultX)
@@ -642,6 +656,195 @@ function clefXInMeasure(event, written, measure) {
       (measure.xEnd - measure.xStart)
   }
   return measure.xStart
+}
+
+function wedgeXInMeasure(event, written, measure) {
+  const width = Number(written?.engravedWidth)
+  const defaultX = Number(event?.defaultX)
+  const relativeX = Number(event?.relativeX)
+  let sourceX = null
+  if (width > 0 && finite(event?.defaultX) && Number.isFinite(defaultX)) {
+    sourceX = defaultX
+  } else {
+    const start = Number(written?.startQuarters)
+    const end = Number(written?.endQuarters)
+    const quarterTime = Number(event?.quarterTime)
+    if (Number.isFinite(quarterTime) && Number.isFinite(start) && end > start) {
+      sourceX = ((quarterTime - start) / (end - start)) * width
+    }
+  }
+  if (sourceX != null && width > 0) {
+    if (finite(event?.relativeX) && Number.isFinite(relativeX)) sourceX += relativeX
+    return measure.xStart + clamp01(sourceX / width) * (measure.xEnd - measure.xStart)
+  }
+  return measure.xStart
+}
+
+function wedgePairKey(event) {
+  return [
+    event?.partId ?? 'primary',
+    event?.staff ?? 'unspecified',
+    event?.number ?? '1',
+    event?.repeatPass ?? 1,
+  ].join('|')
+}
+
+function pairWedgeEvents(events) {
+  const openByKey = new Map()
+  const spans = []
+  for (const event of events) {
+    const key = wedgePairKey(event)
+    if (event?.stage === 'start' && event.type) {
+      const stack = openByKey.get(key) ?? []
+      stack.push(event)
+      openByKey.set(key, stack)
+      continue
+    }
+    if (event?.stage === 'continue') {
+      const stack = openByKey.get(key)
+      if (stack?.length) {
+        const open = stack[stack.length - 1]
+        open.continuations = [...(open.continuations ?? []), event]
+      }
+      continue
+    }
+    if (event?.stage !== 'stop') continue
+    const stack = openByKey.get(key)
+    if (!stack?.length) continue
+    const start = stack.pop()
+    if (!stack.length) openByKey.delete(key)
+    spans.push({ start, stop: event, type: start.type })
+  }
+  return spans
+}
+
+function splitProjectedWedgeSpan(span, layout) {
+  if (span.start?.printObject === false) return []
+  const startSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.start.systemOccurrence,
+  )
+  const stopSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.stop.systemOccurrence,
+  )
+  if (startSystemIndex < 0 || stopSystemIndex < startSystemIndex) return []
+  const systems = layout.systems.slice(startSystemIndex, stopSystemIndex + 1)
+  const pieces = systems
+    .map((system, index) => ({
+      system,
+      xStart: index === 0 ? span.start.x : system.xStart,
+      xEnd: index === systems.length - 1 ? span.stop.x : system.xEnd,
+    }))
+    .filter((piece) => Number(piece.xEnd) >= Number(piece.xStart))
+  const totalWidth = pieces.reduce(
+    (sum, piece) => sum + Math.max(0, piece.xEnd - piece.xStart),
+    0,
+  )
+  let consumedWidth = 0
+  const spanId = [
+    `wedge-${span.start.sourceOrder ?? 0}`,
+    `pass-${span.start.repeatPass ?? 1}`,
+    `system-${span.start.systemOccurrence ?? 'unknown'}`,
+  ].join('-')
+  return pieces.map((piece, index) => {
+    const pieceWidth = Math.max(0, piece.xEnd - piece.xStart)
+    const progressStart = totalWidth > 0 ? consumedWidth / totalWidth : 0
+    consumedWidth += pieceWidth
+    const progressEnd = totalWidth > 0 ? consumedWidth / totalWidth : 1
+    const apertureStart = span.type === 'crescendo' ? progressStart : 1 - progressStart
+    const apertureEnd = span.type === 'crescendo' ? progressEnd : 1 - progressEnd
+    return {
+      id: `${spanId}-segment-${index}`,
+      spanId,
+      type: span.type,
+      number: span.start.number ?? '1',
+      partId: span.start.partId,
+      staff: span.start.staff ?? span.stop.staff,
+      placement: span.start.placement ?? span.stop.placement,
+      printObject: span.start.printObject,
+      niente: Boolean(span.start.niente || span.stop.niente),
+      defaultY: span.start.defaultY ?? span.stop.defaultY,
+      relativeY: span.start.relativeY ?? span.stop.relativeY,
+      spread: span.start.spread ?? span.stop.spread,
+      xStart: piece.xStart,
+      xEnd: piece.xEnd,
+      apertureStart,
+      apertureEnd,
+      repeatPass: span.start.repeatPass ?? 1,
+      systemOccurrence: piece.system.occurrence,
+      segmentIndex: index,
+      segmentCount: pieces.length,
+      sourceXModeStart: span.start.sourceXMode,
+      sourceXModeEnd: span.stop.sourceXMode,
+    }
+  })
+}
+
+function buildSourceWedgeSegments(timingMap, layout, wedgeEvents, writtenMeasures) {
+  const byMeasure = new Map()
+  for (const event of wedgeEvents) {
+    const number = writtenMeasureNumberForEvent(event, timingMap)
+    if (number == null) continue
+    const events = byMeasure.get(Number(number)) ?? []
+    events.push(event)
+    byMeasure.set(Number(number), events)
+  }
+  const projected = []
+  for (const measure of layout.measures ?? []) {
+    const written = writtenMeasures.get(Number(measure.measureNumber))
+    for (const event of byMeasure.get(Number(measure.measureNumber)) ?? []) {
+      projected.push({
+        ...event,
+        x: wedgeXInMeasure(event, written, measure),
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+        sourceXMode:
+          finite(event.defaultX) && Number(written?.engravedWidth) > 0
+            ? 'musicxml-default-x'
+            : finite(event.relativeX) && Number(written?.engravedWidth) > 0
+              ? 'semantic-onset-plus-relative-x'
+              : 'semantic-onset-fallback',
+      })
+    }
+  }
+  return pairWedgeEvents(projected).flatMap((span) =>
+    splitProjectedWedgeSpan(span, layout),
+  )
+}
+
+function buildTemporalWedgeSegments(wedgeEvents, pixelsPerSecond) {
+  const projected = wedgeEvents.map((event) => ({
+    ...event,
+    x: Number(event.timeSeconds ?? 0) * pixelsPerSecond,
+    repeatPass: 1,
+    systemOccurrence: null,
+    sourceXMode: 'temporal-fallback',
+  }))
+  return pairWedgeEvents(projected)
+    .filter((span) => span.start?.printObject !== false)
+    .map((span, index) => ({
+      id: `wedge-${span.start.sourceOrder ?? index}-temporal`,
+      spanId: `wedge-${span.start.sourceOrder ?? index}-temporal`,
+      type: span.type,
+      number: span.start.number ?? '1',
+      partId: span.start.partId,
+      staff: span.start.staff ?? span.stop.staff,
+      placement: span.start.placement ?? span.stop.placement,
+      printObject: span.start.printObject,
+      niente: Boolean(span.start.niente || span.stop.niente),
+      defaultY: span.start.defaultY ?? span.stop.defaultY,
+      relativeY: span.start.relativeY ?? span.stop.relativeY,
+      spread: span.start.spread ?? span.stop.spread,
+      xStart: span.start.x,
+      xEnd: span.stop.x,
+      apertureStart: span.type === 'crescendo' ? 0 : 1,
+      apertureEnd: span.type === 'crescendo' ? 1 : 0,
+      repeatPass: 1,
+      systemOccurrence: null,
+      segmentIndex: 0,
+      segmentCount: 1,
+      sourceXModeStart: 'temporal-fallback',
+      sourceXModeEnd: 'temporal-fallback',
+    }))
 }
 
 function clefsAtQuarter(clefEvents, quarterTime) {
@@ -677,6 +880,7 @@ function buildSystemClefs(timingMap, layout, clefEvents) {
  */
 export function buildSourceFidelityStructuralMarks(timingMap, layout) {
   const dynamicEvents = primaryDynamicEvents(timingMap)
+  const wedgeEvents = primaryWedgeEvents(timingMap)
   if (layout?.mode !== 'source-fidelity' || !layout.measures?.length) {
     const result = emptyStructuralMarks()
     result.dynamics = dynamicEvents.map((event, index) => ({
@@ -687,12 +891,22 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
       repeatPass: 1,
       sourceXMode: 'temporal-fallback',
     }))
+    result.wedges = buildTemporalWedgeSegments(
+      wedgeEvents,
+      Number(layout?.pixelsPerSecond ?? 120),
+    )
     return result
   }
 
   const result = emptyStructuralMarks()
   const writtenMeasures = new Map(
     (timingMap?.measures ?? []).map((measure) => [Number(measure.number), measure]),
+  )
+  result.wedges = buildSourceWedgeSegments(
+    timingMap,
+    layout,
+    wedgeEvents,
+    writtenMeasures,
   )
   const keyEventsByMeasure = new Map()
   for (const event of timingMap?.keySignatures ?? []) {

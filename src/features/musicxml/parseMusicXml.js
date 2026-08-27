@@ -353,6 +353,42 @@ function readDynamicMarks(directionNode) {
   return marks
 }
 
+/**
+ * Preserve the printed endpoints of MusicXML hairpins independently from the
+ * playback velocity envelope. Numbered endpoints can overlap, and their
+ * source positioning belongs to Visual layout rather than audio semantics.
+ */
+function readWedgeMarks(directionNode) {
+  const marks = []
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    for (const wedge of findChildren(directionType, 'wedge')) {
+      const type = String(attr(wedge, 'type') ?? '').trim().toLowerCase()
+      if (!['crescendo', 'diminuendo', 'stop', 'continue'].includes(type)) continue
+      const defaultX = numberOf(attr(wedge, 'default-x'), NaN)
+      const defaultY = numberOf(attr(wedge, 'default-y'), NaN)
+      const relativeX = numberOf(attr(wedge, 'relative-x'), NaN)
+      const relativeY = numberOf(attr(wedge, 'relative-y'), NaN)
+      const spread = numberOf(attr(wedge, 'spread'), NaN)
+      marks.push({
+        type: type === 'crescendo' || type === 'diminuendo' ? type : null,
+        stage: type === 'crescendo' || type === 'diminuendo' ? 'start' : type,
+        number: String(attr(wedge, 'number') ?? '1'),
+        placement: attr(wedge, 'placement') ?? attr(directionNode, 'placement') ?? null,
+        printObject:
+          attr(directionNode, 'print-object') !== 'no' &&
+          attr(wedge, 'print-object') !== 'no',
+        niente: attr(wedge, 'niente') === 'yes',
+        defaultX: Number.isFinite(defaultX) ? defaultX : null,
+        defaultY: Number.isFinite(defaultY) ? defaultY : null,
+        relativeX: Number.isFinite(relativeX) ? relativeX : null,
+        relativeY: Number.isFinite(relativeY) ? relativeY : null,
+        spread: Number.isFinite(spread) ? spread : null,
+      })
+    }
+  }
+  return marks
+}
+
 function emptyArticulations() {
   return {
     staccato: false,
@@ -821,6 +857,7 @@ function walkPart({
   rawTimingEvents,
   harmonyEvents,
   dynamicEvents = null,
+  wedgeEvents = null,
   partNotation = null,
   wedgeSpans = null,
 }) {
@@ -922,6 +959,18 @@ function walkPart({
                 measureNumber,
                 staff: visualDirectionStaff,
                 quarterTime: visualQuarterTime,
+              })
+            }
+          }
+          if (Array.isArray(wedgeEvents)) {
+            for (const wedgeEvent of readWedgeMarks(child)) {
+              wedgeEvents.push({
+                ...wedgeEvent,
+                partId,
+                measureNumber,
+                staff: visualDirectionStaff,
+                quarterTime: visualQuarterTime,
+                sourceOrder: wedgeEvents.length,
               })
             }
           }
@@ -1257,6 +1306,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const rawTimingEvents = []
   const harmonyEvents = []
   const dynamicEvents = []
+  const wedgeEvents = []
   const wedgeSpans = []
   const partNotationById = new Map()
 
@@ -1285,6 +1335,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     rawTimingEvents,
     harmonyEvents,
     dynamicEvents,
+    wedgeEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
   })
@@ -1304,6 +1355,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       rawTimingEvents,
       harmonyEvents,
       dynamicEvents,
+      wedgeEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
     })
@@ -1449,6 +1501,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   for (const event of dynamicEvents) {
     event.timeSeconds = toSeconds(event.quarterTime)
   }
+  for (const event of wedgeEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
 
   const chordSheetAnalysis = analyzeChordSheetScore({
     harmonyEvents,
@@ -1567,6 +1622,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timingEvents,
     harmonyEvents,
     dynamicEvents,
+    wedgeEvents,
     wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {

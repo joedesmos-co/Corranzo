@@ -425,6 +425,70 @@ export function buildStaffLaneDynamicMarks(
     .filter(Boolean)
 }
 
+/**
+ * Translate structural hairpin segments into native staff-lane line geometry.
+ * MusicXML default-y is score-wide tenths from the first staff; otherwise the
+ * owning staff and direction placement provide a conventional fallback.
+ */
+export function buildStaffLaneWedgeMarks(
+  structuralMarks,
+  geometry,
+  { sourceSystemGeometries = new Map() } = {},
+) {
+  return (structuralMarks?.wedges ?? [])
+    .filter(
+      (wedge) =>
+        wedge?.printObject !== false &&
+        (wedge?.type === 'crescendo' || wedge?.type === 'diminuendo'),
+    )
+    .map((wedge) => {
+      const wedgeGeometry =
+        sourceSystemGeometries.get(wedge.systemOccurrence) ?? geometry
+      const staffKind = resolveStaffKind(wedge)
+      const staff =
+        wedgeGeometry.staves[staffKind] ?? Object.values(wedgeGeometry.staves)[0]
+      const firstStaff =
+        wedgeGeometry.staves[STAFF_KIND.TREBLE] ??
+        Object.values(wedgeGeometry.staves)[0]
+      if (!staff || !firstStaff) return null
+
+      const defaultY = Number(wedge.defaultY)
+      const relativeY = wedge.relativeY == null ? 0 : Number(wedge.relativeY)
+      const hasSourceY =
+        wedge.defaultY != null &&
+        Number.isFinite(defaultY) &&
+        Number.isFinite(relativeY)
+      const placement = wedge.placement === 'above' ? 'above' : 'below'
+      const centerY = hasSourceY
+        ? firstStaff.lines[0] - ((defaultY + relativeY) / 10) * STAFF_LINE_GAP
+        : placement === 'above'
+          ? staff.lines[0] - STAFF_LINE_GAP * 1.45
+          : staff.lines[staff.lines.length - 1] + STAFF_LINE_GAP * 1.45
+      const spreadTenths =
+        wedge.spread != null && Number.isFinite(Number(wedge.spread))
+          ? Math.max(0, Number(wedge.spread))
+          : 15
+      const halfSpread = (spreadTenths / 20) * STAFF_LINE_GAP
+      const startHalfSpread = halfSpread * Number(wedge.apertureStart ?? 0)
+      const endHalfSpread = halfSpread * Number(wedge.apertureEnd ?? 0)
+
+      return {
+        ...wedge,
+        staffKind,
+        placement,
+        centerY,
+        yTopStart: centerY - startHalfSpread,
+        yTopEnd: centerY - endHalfSpread,
+        yBottomStart: centerY + startHalfSpread,
+        yBottomEnd: centerY + endHalfSpread,
+        sourceYMode: hasSourceY
+          ? 'musicxml-default-y'
+          : 'semantic-placement-fallback',
+      }
+    })
+    .filter(Boolean)
+}
+
 const KEY_SIGNATURE_DIATONICS = {
   [STAFF_KIND.TREBLE]: {
     sharp: [38, 35, 39, 36, 33, 37, 34],

@@ -5643,6 +5643,15 @@
   user-select: none;
 }
 
+.staff-lane__hairpin {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: var(--vp-surface, #15151a);
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.45;
+  opacity: 0.86;
+}
+
 .staff-lane__head--hollow {
   fill: transparent;
   stroke: currentColor;
