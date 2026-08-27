@@ -83,6 +83,26 @@ function normalizeTechniqueKind(kind) {
   }
 }
 
+function articulationPlacement(note, kind) {
+  const declared = note?.articulationPlacements?.[kind]
+  if (declared === 'above' || declared === 'below') {
+    return declared
+  }
+  // MusicXML often omits articulation placement. Engravers place the common
+  // note articulations on the side opposite the written stem; preserve a
+  // neutral-above fallback when the source has no stem direction.
+  if (kind === VISUAL_MARKING_KIND.FERMATA) {
+    return null
+  }
+  if (note?.stemDirection === 'up') {
+    return 'below'
+  }
+  if (note?.stemDirection === 'down') {
+    return 'above'
+  }
+  return null
+}
+
 export function buildVisualNoteMarkings(note, { groupId = null } = {}) {
   if (!note) {
     return []
@@ -107,27 +127,27 @@ export function buildVisualNoteMarkings(note, { groupId = null } = {}) {
 
   if (note.staccato) {
     push(VISUAL_MARKING_KIND.STACCATO, {
-      placement: note.articulationPlacements?.staccato ?? null,
+      placement: articulationPlacement(note, VISUAL_MARKING_KIND.STACCATO),
     })
   }
   if (note.staccatissimo) {
     push(VISUAL_MARKING_KIND.STACCATISSIMO, {
-      placement: note.articulationPlacements?.staccatissimo ?? null,
+      placement: articulationPlacement(note, VISUAL_MARKING_KIND.STACCATISSIMO),
     })
   }
   if (note.accent) {
     push(VISUAL_MARKING_KIND.ACCENT, {
-      placement: note.articulationPlacements?.accent ?? null,
+      placement: articulationPlacement(note, VISUAL_MARKING_KIND.ACCENT),
     })
   }
   if (note.tenuto) {
     push(VISUAL_MARKING_KIND.TENUTO, {
-      placement: note.articulationPlacements?.tenuto ?? null,
+      placement: articulationPlacement(note, VISUAL_MARKING_KIND.TENUTO),
     })
   }
   if (note.marcato) {
     push(VISUAL_MARKING_KIND.MARCATO, {
-      placement: note.articulationPlacements?.marcato ?? null,
+      placement: articulationPlacement(note, VISUAL_MARKING_KIND.MARCATO),
     })
   }
   if (note.fermata) {

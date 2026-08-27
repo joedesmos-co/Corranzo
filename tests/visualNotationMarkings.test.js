@@ -170,6 +170,24 @@ describe('visual notation marking model', () => {
     expect(staccato).toMatchObject({ shape: 'dot', placement: 'above' })
   })
 
+  it('infers omitted articulation placement from the written stem direction', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 2 })}` +
+      '<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><stem>up</stem><notations><articulations><staccato/><accent/></articulations></notations></note>' +
+      '<note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><stem>down</stem><notations><articulations><staccato/></articulations></notations></note>' +
+      '</measure></part>',
+    )
+    const groups = buildVisualLaneGroups(parseMusicXml(xml, 'articulation-placement.musicxml'))
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const { noteMarkings } = buildStaffLaneNotationMarkings(groups, geometry, { notes })
+    const staccatos = noteMarkings.filter((marking) => marking.kind === VISUAL_MARKING_KIND.STACCATO)
+    const accent = noteMarkings.find((marking) => marking.kind === VISUAL_MARKING_KIND.ACCENT)
+
+    expect(staccatos.map((marking) => marking.placement)).toEqual(['below', 'above'])
+    expect(accent).toMatchObject({ placement: 'below' })
+  })
+
   it('anchors a printed trill to its owned note without treating two-note tremolo as a trill', () => {
     const xml = F.scoreWrap(
       `<part id="P1"><measure number="1">${F.attributes({ beats: 3 })}` +
