@@ -443,6 +443,42 @@ describe('Visual mode architecture correction', () => {
     expect(printedDownStem.x).toBeCloseTo(printedStemDown[0].x - 7, 8)
   })
 
+  it('projects fermatas attached to rests into reconstructed notation markings', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1">
+          <measure number="1" width="160">
+            <attributes><divisions>1</divisions><time><beats>2</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+            <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
+            <note><rest/><duration>1</duration><voice>1</voice><type>quarter</type><notations><fermata type="inverted"/></notations></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const sourceLayout = buildSourceFidelityLaneLayout(groups)
+    const staffGeometry = buildStaffGeometry(detectStaves(groups))
+    const rests = buildStaffLaneRests(groups, staffGeometry, { sourceLayout })
+    const markings = buildStaffLaneNotationMarkings(groups, staffGeometry, {
+      notes: buildStaffLaneNotes(groups, staffGeometry, { sourceLayout }),
+      rests,
+      sourceLayout,
+    })
+
+    expect(rests).toHaveLength(1)
+    expect(rests[0].markings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'fermata', placement: 'below' }),
+      ]),
+    )
+    expect(markings.noteMarkings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'fermata', shape: 'text', text: '𝄑' }),
+      ]),
+    )
+  })
+
   it('places source-owned events at their printed X and maps the cursor to the same lane point', () => {
     const instructions = buildVisualRenderingInstructions(
       semanticTimingMap(),

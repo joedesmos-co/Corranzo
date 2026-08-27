@@ -265,6 +265,7 @@ function StaffVisualLane({
       notes: builtNotes,
       stems: rhythmMarks.stems,
       beams: rhythmMarks.beams,
+      rests: builtRests,
       sourceLayout,
     })
     return {

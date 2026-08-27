@@ -237,6 +237,8 @@ function visualRestInstruction(rest, event, restIndex, options) {
     isRest: true,
     printObject: rest.printObject !== false,
     dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
+    fermata: Boolean(rest.fermata),
+    articulationPlacements: rest.articulationPlacements ?? {},
   }
   return {
     ...semantic,
@@ -244,6 +246,7 @@ function visualRestInstruction(rest, event, restIndex, options) {
       note: rest,
       measureLayout: options.measureLayoutIndex?.get(semantic.measureNumber) ?? null,
     }),
+    markings: buildVisualNoteMarkings(semantic, { groupId: event.id }),
   }
 }
 

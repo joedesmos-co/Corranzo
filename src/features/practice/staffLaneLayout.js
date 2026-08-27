@@ -848,6 +848,9 @@ export function buildStaffLaneRests(
         noteType,
         glyph: restGlyphForNoteType(noteType),
         dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
+        xOffset: 0,
+        visualNoteId: rest.visualRestId ?? rest.id ?? `${group.id}-rest-${index}`,
+        markings: rest.markings ?? [],
       })
     }
   }
@@ -1828,6 +1831,7 @@ export function buildStaffLaneNotationMarkings(
     notes: prebuiltNotes = null,
     stems: prebuiltStems = null,
     beams: prebuiltBeams = null,
+    rests: prebuiltRests = null,
     sourceLayout = null,
   } = {},
 ) {
@@ -1844,6 +1848,15 @@ export function buildStaffLaneNotationMarkings(
       sourceLayout: laneLayout,
     })
   const visualSpans = buildVisualSpanMarkings(groups)
+
+  const markingObjects = [
+    ...notes,
+    ...(prebuiltRests ??
+      buildStaffLaneRests(groups, geometry, {
+        pixelsPerSecond,
+        sourceLayout: laneLayout,
+      })),
+  ]
 
   const spanMarkings = visualSpans
     .filter((marking) =>
@@ -1881,7 +1894,7 @@ export function buildStaffLaneNotationMarkings(
   )
 
   return {
-    noteMarkings: buildStaffNoteMarkingGeometry(notes),
+    noteMarkings: buildStaffNoteMarkingGeometry(markingObjects),
     spanMarkings,
     tremoloMarkings,
     tupletMarkings,
