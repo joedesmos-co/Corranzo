@@ -12,6 +12,7 @@ import {
   glyphAuthoritativeDurationDivisions,
   hasConfidentQuarterInference,
   hasBeamEvidenceForNotes,
+  inferSilentGrandStaffWholeRest,
   isDenseSubdivisionRun,
   normalizeDenseVectorLaneSpacing,
   normalizeVectorNoteNameNoteheads,
@@ -39,6 +40,51 @@ import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 
 const measureBox = { measureNumber: 1, page: 1 }
+
+describe('inferSilentGrandStaffWholeRest', () => {
+  const staffGeometry = {
+    staffLines: {
+      treble: [0, 1, 2, 3, 4],
+      bass: [10, 11, 12, 13, 14],
+    },
+  }
+
+  it('adds a whole rest for a geometrically complete silent grand-staff lane', () => {
+    const events = [0, 4, 8, 12].map((start) => ({
+      type: 'note',
+      clef: 'bass',
+      startDivision: start,
+      durationDivisions: 4,
+      notes: [{ midi: 40, clef: 'bass' }],
+    }))
+    const result = inferSilentGrandStaffWholeRest(events, {
+      measureBox: staffGeometry,
+      totalDivisions: 16,
+    })
+    expect(result.applied).toBe(true)
+    expect(result.events.at(-1)).toMatchObject({
+      type: 'rest',
+      clef: 'treble',
+      startDivision: 0,
+      durationDivisions: 16,
+      source: 'inferred-silent-grand-staff-whole-rest',
+    })
+  })
+
+  it('abstains when the populated lane is mixed-rhythm polyphony', () => {
+    const events = [
+      { type: 'note', clef: 'bass', startDivision: 0, durationDivisions: 4, notes: [{ midi: 40, clef: 'bass' }] },
+      { type: 'note', clef: 'bass', startDivision: 4, durationDivisions: 1, notes: [{ midi: 39, clef: 'bass' }] },
+      { type: 'note', clef: 'bass', startDivision: 7, durationDivisions: 1, notes: [{ midi: 38, clef: 'bass' }] },
+    ]
+    const result = inferSilentGrandStaffWholeRest(events, {
+      measureBox: staffGeometry,
+      totalDivisions: 8,
+    })
+    expect(result.applied).toBe(false)
+    expect(result.events).toBe(events)
+  })
+})
 
 describe('normalizeVectorNoteNameNoteheads', () => {
   const glyph = (text, x = 100, y = 200) => ({

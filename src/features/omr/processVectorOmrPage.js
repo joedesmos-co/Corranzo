@@ -12403,6 +12403,60 @@ export function reconstructCompoundMeterDottedBeamOverprints(
   return sortVectorRhythmEvents(rebuilt)
 }
 
+export function inferSilentGrandStaffWholeRest(
+  events = [],
+  { measureBox = null, totalDivisions = OMR_DIVISIONS_PER_QUARTER * 4 } = {},
+) {
+  const noteClefs = new Set(
+    events
+      .filter((event) => event?.type === 'note')
+      .map((event) => event.notes?.[0]?.clef ?? event.clef)
+      .filter(Boolean),
+  )
+  const hasGrandStaffGeometry =
+    (measureBox?.staffLines?.treble?.length ?? 0) >= 5 &&
+    (measureBox?.staffLines?.bass?.length ?? 0) >= 5
+  const orderedQuarterLane = [...events]
+    .filter((event) => event?.type === 'note')
+    .sort((left, right) => (left.startDivision ?? 0) - (right.startDivision ?? 0))
+  const completeQuarterLane =
+    totalDivisions === OMR_DIVISIONS_PER_QUARTER * 4 &&
+    orderedQuarterLane.length === 4 &&
+    orderedQuarterLane.every(
+      (event, index) =>
+        event.notes?.length === 1 &&
+        event.durationDivisions === OMR_DIVISIONS_PER_QUARTER &&
+        event.startDivision === index * OMR_DIVISIONS_PER_QUARTER,
+    )
+  if (
+    !hasGrandStaffGeometry ||
+    noteClefs.size !== 1 ||
+    !completeQuarterLane ||
+    events.some((event) => event?.type === 'rest')
+  ) {
+    return { events, applied: false, reason: 'silent-staff-evidence-incomplete' }
+  }
+  const silentClef = noteClefs.has('treble') ? 'bass' : 'treble'
+  return {
+    events: [
+      ...events,
+      {
+        type: 'rest',
+        clef: silentClef,
+        startDivision: 0,
+        durationDivisions: totalDivisions,
+        durationType: 'whole',
+        dotted: false,
+        source: 'inferred-silent-grand-staff-whole-rest',
+        sourceGeometry: 'two-staff-measure-with-one-populated-staff',
+        confidence: 0.86,
+      },
+    ],
+    applied: true,
+    reason: 'silent-staff-whole-rest',
+  }
+}
+
 export function buildVectorMeasureRecord({
   glyphs,
   imageData,
@@ -12555,6 +12609,12 @@ export function buildVectorMeasureRecord({
       totalDivisions,
     }).events
   }
+
+  const silentRestResult = inferSilentGrandStaffWholeRest(events, {
+    measureBox,
+    totalDivisions,
+  })
+  events = silentRestResult.events
 
   const eventsBeforeOpenGlyphReconcile = events
   events = reconcileCoherentOpenGlyphDurations(events, totalDivisions)
