@@ -5604,6 +5604,30 @@
   stroke-linecap: butt;
 }
 
+.staff-lane__tuplet {
+  color: var(--vp-upcoming, #b4b4bb);
+}
+
+.staff-lane__tuplet-bracket {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.staff-lane__tuplet-number {
+  fill: currentColor;
+  stroke: var(--sf-bg-panel);
+  stroke-width: 2.8;
+  paint-order: stroke fill;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  user-select: none;
+}
+
 .staff-lane__flag {
   fill: none;
   stroke: currentColor;

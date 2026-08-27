@@ -19,6 +19,7 @@ export const VISUAL_MARKING_KIND = {
   FERMATA: 'fermata',
   TRILL: 'trill',
   TREMOLO: 'tremolo',
+  TUPLET: 'tuplet',
   HAMMER_ON: 'hammer-on',
   PULL_OFF: 'pull-off',
   SLIDE: 'slide',
@@ -232,6 +233,10 @@ function numberedKey(kind, note, number = '1') {
   ].join('|')
 }
 
+function voiceNumberedKey(kind, note, number = '1') {
+  return [kind, note.partId ?? '', note.voice ?? 1, number ?? '1'].join('|')
+}
+
 function spanStatus(startStatus, endStatus) {
   if (startStatus === 'current' || endStatus === 'current') {
     return 'current'
@@ -277,6 +282,7 @@ export function buildVisualSpanMarkings(groups) {
   const openTies = new Map()
   const openSlurs = new Map()
   const openTremolos = new Map()
+  const openTuplets = new Map()
   const openTechniques = new Map()
 
   for (const ref of orderedNoteRefs(groups)) {
@@ -353,6 +359,40 @@ export function buildVisualSpanMarkings(groups) {
     }
     if (tremolo?.type === 'start' && tremolo.printObject !== false) {
       openTremolos.set(tremoloKey, ref)
+    }
+
+    for (const tuplet of (note.tuplets ?? []).filter((entry) => entry.type === 'stop')) {
+      const key = voiceNumberedKey(VISUAL_MARKING_KIND.TUPLET, note, tuplet.number)
+      const start = openTuplets.get(key)
+      const startTuplet = start?.tuplet ?? null
+      const showNumber = startTuplet?.showNumber ?? 'actual'
+      const renderNumber = showNumber !== 'none'
+      const renderBracket = startTuplet?.bracket !== 'no'
+      const span = closeOpenSpan(openTuplets, key, ref, VISUAL_MARKING_KIND.TUPLET, {
+        number: startTuplet?.number ?? tuplet.number ?? '1',
+        placement: startTuplet?.placement ?? tuplet.placement ?? null,
+        renderNumber,
+        renderBracket,
+        showNumber,
+        showType: startTuplet?.showType ?? null,
+        lineShape: startTuplet?.lineShape ?? null,
+        actualNotes: Number(start?.note?.timeModification?.actualNotes) || null,
+        normalNotes: Number(start?.note?.timeModification?.normalNotes) || null,
+      })
+      if (
+        span &&
+        startTuplet?.printObject !== false &&
+        tuplet.printObject !== false &&
+        (renderNumber || renderBracket)
+      ) {
+        spans.push(span)
+      }
+    }
+    for (const tuplet of (note.tuplets ?? []).filter((entry) => entry.type === 'start')) {
+      openTuplets.set(
+        voiceNumberedKey(VISUAL_MARKING_KIND.TUPLET, note, tuplet.number),
+        { ...ref, tuplet },
+      )
     }
 
     const techniques = (note.guitarTechniques ?? [])

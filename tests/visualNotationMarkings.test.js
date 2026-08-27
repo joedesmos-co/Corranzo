@@ -246,6 +246,49 @@ describe('visual notation marking model', () => {
     expect(tremoloMarkings.every((marking) => marking.x2 > marking.x1)).toBe(true)
   })
 
+  it('renders only source-visible tuplet numbers without changing their timing ratio', () => {
+    const tupletNote = (step, type, attributes = '') => markedNote(
+      step,
+      5,
+      '<time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification>' +
+      `<notations><tuplet type="${type}" ${attributes}/></notations>`,
+    )
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes({ beats: 6 })}` +
+      tupletNote('C', 'start', 'bracket="no"') +
+      tupletNote('D', 'stop') +
+      tupletNote('E', 'start', 'bracket="no" show-number="none"') +
+      tupletNote('F', 'stop') +
+      tupletNote('G', 'start', 'bracket="yes" show-number="both" placement="above"') +
+      tupletNote('A', 'stop') +
+      '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'visible-tuplets.musicxml')
+    const groups = buildVisualLaneGroups(timingMap)
+    const spans = buildVisualSpanMarkings(groups).filter(
+      (marking) => marking.kind === VISUAL_MARKING_KIND.TUPLET,
+    )
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry)
+    const stems = buildStaffLaneStems(groups, geometry, { notes })
+    const { tupletMarkings } = buildStaffLaneNotationMarkings(groups, geometry, {
+      notes,
+      stems,
+    })
+
+    expect(timingMap.notes.map((note) => note.quarterTime)).toEqual([0, 1, 2, 3, 4, 5])
+    expect(timingMap.notes.every((note) => note.timeModification?.actualNotes === 3)).toBe(true)
+    expect(spans).toHaveLength(2)
+    expect(tupletMarkings.map((marking) => marking.label)).toEqual(['3', '3:2'])
+    expect(tupletMarkings[0]).toMatchObject({ renderNumber: true, renderBracket: false })
+    expect(tupletMarkings[1]).toMatchObject({
+      renderNumber: true,
+      renderBracket: true,
+      placement: 'above',
+    })
+    expect(tupletMarkings[1].bracketPath).toMatch(/^M .* L /)
+  })
+
   it('renders guitar hammer-on, pull-off, slide, bend, and vibrato markings in TAB geometry', () => {
     const guitar = getInstrument('guitar')
     const groups = buildVisualLaneGroups(parseMusicXml(guitarTechniqueScore())).map((group) => ({

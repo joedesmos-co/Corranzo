@@ -597,6 +597,29 @@ function readTimeModification(noteNode) {
   return { actualNotes, normalNotes }
 }
 
+/** Printed tuplet topology is visual metadata; timing remains time-modification. */
+function readTuplets(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) return []
+  return findChildren(notations, 'tuplet')
+    .map((node, index) => {
+      const type = attr(node, 'type')
+      if (type !== 'start' && type !== 'stop') return null
+      return {
+        type,
+        number: attr(node, 'number') ?? '1',
+        bracket: attr(node, 'bracket') ?? null,
+        showNumber: attr(node, 'show-number') ?? null,
+        showType: attr(node, 'show-type') ?? null,
+        lineShape: attr(node, 'line-shape') ?? null,
+        placement: notationPlacement(node),
+        printObject: attr(node, 'print-object') !== 'no',
+        index,
+      }
+    })
+    .filter(Boolean)
+}
+
 function readSlurs(noteNode) {
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
@@ -1203,6 +1226,7 @@ function walkPart({
                 ? serializedSourceNoteheadId
                 : null
             const timeModification = readTimeModification(child)
+            const tuplets = readTuplets(child)
             const dots = findChildren(child, 'dot').length
             const noteType = childText(child, 'type') ?? null
             const rawStemDirection = String(childText(child, 'stem') ?? '').toLowerCase()
@@ -1227,6 +1251,7 @@ function walkPart({
               ...(slurs.length ? { slurs } : {}),
               ...(guitarTechniques.length ? { guitarTechniques } : {}),
               ...(timeModification ? { timeModification } : {}),
+              ...(tuplets.length ? { tuplets } : {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               ...(sourceNoteheadId ? { sourceNoteheadId } : {}),
               partId,

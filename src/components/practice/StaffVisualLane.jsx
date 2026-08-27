@@ -236,6 +236,7 @@ function StaffVisualLane({
     noteMarkings,
     spanMarkings,
     tremoloMarkings,
+    tupletMarkings,
   } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
@@ -250,13 +251,14 @@ function StaffVisualLane({
       notes: builtNotes,
       sourceLayout,
     })
+    const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
     const markings = buildStaffLaneNotationMarkings(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
-      stems: builtStems,
+      stems: rhythmMarks.stems,
+      beams: rhythmMarks.beams,
       sourceLayout,
     })
-    const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
     return {
       notes: builtNotes,
       rests: builtRests,
@@ -862,6 +864,29 @@ function StaffVisualLane({
                 data-beam-stems={beam.stemCount}
                 data-cross-staff={beam.crossStaff || undefined}
               />
+            ))}
+            {tupletMarkings.map((tuplet) => (
+              <g
+                key={tuplet.id}
+                className={`staff-lane__tuplet staff-lane__note--${tuplet.status ?? 'upcoming'}`}
+                data-tuplet-number={tuplet.label}
+                data-tuplet-placement={tuplet.placement}
+              >
+                {tuplet.bracketPath && (
+                  <path className="staff-lane__tuplet-bracket" d={tuplet.bracketPath} />
+                )}
+                {tuplet.renderNumber && (
+                  <text
+                    className="staff-lane__tuplet-number"
+                    x={tuplet.x}
+                    y={tuplet.y}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    {tuplet.label}
+                  </text>
+                )}
+              </g>
             ))}
             {flags.map((flag) => (
               <path

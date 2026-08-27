@@ -81,6 +81,8 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           tremolo: note.tremolo ?? null,
           slurs: note.slurs ?? [],
           guitarTechniques: note.guitarTechniques ?? [],
+          timeModification: note.timeModification ?? null,
+          tuplets: note.tuplets ?? [],
           tiedContinuations: (note.tiedContinuations ?? []).map(
             (continuation, continuationIndex) => {
               const visualContinuation = {

@@ -124,6 +124,7 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
     slurs: note.slurs ?? [],
     guitarTechniques: note.guitarTechniques ?? [],
     timeModification: note.timeModification ?? null,
+    tuplets: note.tuplets ?? [],
     string: note.string ?? null,
     fret: note.fret ?? null,
     chordSymbol: note.chordSymbol ?? null,

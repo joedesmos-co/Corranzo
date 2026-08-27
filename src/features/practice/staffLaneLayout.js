@@ -1575,6 +1575,69 @@ function buildStaffTremoloGeometry(spans, notesById, stems) {
   })
 }
 
+function buildStaffTupletGeometry(spans, notesById, stems, beams) {
+  const stemFor = (note) => (stems ?? []).find(
+    (stem) =>
+      stem.groupId === note?.groupId &&
+      stem.staffKind === note?.staffKind &&
+      Number(stem.voice ?? 1) === Number(note?.voice ?? 1),
+  )
+  return (spans ?? []).flatMap((span) => {
+    const start = notesById.get(span.fromNoteId)
+    const end = notesById.get(span.toNoteId)
+    if (!start || !end || end.x <= start.x) return []
+
+    const startStem = stemFor(start)
+    const endStem = stemFor(end)
+    const x1 = start.x + start.xOffset
+    const x2 = end.x + end.xOffset
+    const x = (x1 + x2) / 2
+    const beam = (beams ?? []).find(
+      (candidate) =>
+        Number(candidate.number) === 1 &&
+        candidate.x1 <= x1 + STAFF_LINE_GAP &&
+        candidate.x2 >= x2 - STAFF_LINE_GAP,
+    )
+    const inferredPlacement =
+      span.placement ?? (startStem?.stemDown || endStem?.stemDown ? 'below' : 'above')
+    let y
+    if (beam) {
+      const progress = (x - beam.x1) / Math.max(1e-9, beam.x2 - beam.x1)
+      const beamY = beam.y1 + (beam.y2 - beam.y1) * progress
+      y = beamY + (inferredPlacement === 'below' ? 1 : -1) * STAFF_LINE_GAP * 0.92
+    } else {
+      const outerY = inferredPlacement === 'below'
+        ? Math.max(start.y, end.y)
+        : Math.min(start.y, end.y)
+      y = outerY + (inferredPlacement === 'below' ? 1 : -1) * STAFF_LINE_GAP * 1.7
+    }
+    const actual = Math.max(1, Math.round(Number(span.actualNotes) || 3))
+    const normal = Math.max(1, Math.round(Number(span.normalNotes) || 2))
+    const label = span.showNumber === 'both' ? `${actual}:${normal}` : String(actual)
+    const bracketY = y + (inferredPlacement === 'below' ? -1 : 1) * STAFF_LINE_GAP * 0.18
+    const hook = (inferredPlacement === 'below' ? -1 : 1) * STAFF_LINE_GAP * 0.62
+    const labelGap = Math.max(STAFF_LINE_GAP * 0.72, label.length * STAFF_LINE_GAP * 0.38)
+    const bracketPath = span.renderBracket
+      ? `M ${x1} ${bracketY + hook} L ${x1} ${bracketY} L ${x - labelGap} ${bracketY} M ${
+          x + labelGap
+        } ${bracketY} L ${x2} ${bracketY} L ${x2} ${bracketY + hook}`
+      : null
+    return [{
+      ...span,
+      id: `${span.id}-staff-tuplet`,
+      spanId: span.id,
+      x,
+      y,
+      x1,
+      x2,
+      label,
+      bracketPath,
+      placement: inferredPlacement,
+      status: span.status ?? staffSpanStatus(start, end),
+    }]
+  })
+}
+
 export function buildStaffLaneNotationMarkings(
   groups,
   geometry,
@@ -1582,6 +1645,7 @@ export function buildStaffLaneNotationMarkings(
     pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
     notes: prebuiltNotes = null,
     stems: prebuiltStems = null,
+    beams: prebuiltBeams = null,
     sourceLayout = null,
   } = {},
 ) {
@@ -1627,10 +1691,17 @@ export function buildStaffLaneNotationMarkings(
     notesById,
     stems,
   )
+  const tupletMarkings = buildStaffTupletGeometry(
+    visualSpans.filter((marking) => marking.kind === VISUAL_MARKING_KIND.TUPLET),
+    notesById,
+    stems,
+    prebuiltBeams,
+  )
 
   return {
     noteMarkings: buildStaffNoteMarkingGeometry(notes),
     spanMarkings,
     tremoloMarkings,
+    tupletMarkings,
   }
 }
