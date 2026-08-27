@@ -430,6 +430,134 @@ function metricAnchorResult(glyph, imageData, lineYs, rejectedReason = null) {
   }
 }
 
+function resolveLegacyRunContinuationAnchor(
+  glyph,
+  imageData,
+  lineYs,
+  inkThreshold,
+) {
+  const sourceLength = Number(glyph?.sourceLength)
+  const sourceIndex = Number(glyph?.sourceIndex)
+  if (
+    !glyph?.legacyMusicFontNormalized ||
+    !Number.isInteger(sourceLength) ||
+    sourceLength < 2 ||
+    sourceLength > 4 ||
+    !Number.isInteger(sourceIndex) ||
+    sourceIndex <= 0 ||
+    sourceIndex >= sourceLength
+  ) {
+    return null
+  }
+
+  const pixelLines = lineYsInPixels(lineYs, imageData.height)
+  const gapPx = staffLineGap(pixelLines)
+  const glyphX = Number(glyph.x)
+  const glyphY = Number(glyph.y)
+  const glyphWidth = Number(glyph.width)
+  if (
+    !(gapPx >= 4) ||
+    !Number.isFinite(glyphX) ||
+    !Number.isFinite(glyphY) ||
+    !(glyphWidth > 0) ||
+    glyphWidth < gapPx * 0.55 ||
+    glyphWidth > gapPx * 1.8
+  ) {
+    return null
+  }
+
+  // Some legacy PDFs collapse a horizontally displaced chord head into the
+  // preceding text item's baseline. The rendered continuation cell still owns
+  // one compact, vertically displaced ink band. Keep staff-line pixels here:
+  // removing the line would split a head printed directly on that line.
+  const halfWidth = Math.max(2, Math.min(glyphWidth * 0.45, gapPx * 0.75))
+  const left = Math.max(0, Math.round(glyphX - halfWidth))
+  const right = Math.min(imageData.width - 1, Math.round(glyphX + halfWidth))
+  const top = Math.max(0, Math.round(glyphY - gapPx * 1.35))
+  const bottom = Math.min(imageData.height - 1, Math.round(glyphY + gapPx * 1.35))
+  const cellWidth = right - left + 1
+  if (cellWidth < 5 || bottom <= top) {
+    return null
+  }
+
+  const minimumDensePixels = Math.max(3, Math.ceil(cellWidth * 0.45))
+  const denseRows = []
+  for (let y = top; y <= bottom; y += 1) {
+    let inkPixels = 0
+    for (let x = left; x <= right; x += 1) {
+      if (pixelIsInk(imageData, x, y, inkThreshold)) {
+        inkPixels += 1
+      }
+    }
+    if (inkPixels >= minimumDensePixels) {
+      denseRows.push({ y, inkPixels })
+    }
+  }
+
+  const bands = []
+  for (const row of denseRows) {
+    const current = bands[bands.length - 1]
+    if (current && row.y === current.bottom + 1) {
+      current.bottom = row.y
+      current.inkPixels += row.inkPixels
+      current.rowCount += 1
+    } else {
+      bands.push({
+        top: row.y,
+        bottom: row.y,
+        inkPixels: row.inkPixels,
+        rowCount: 1,
+      })
+    }
+  }
+
+  const candidates = bands
+    .map((band) => ({
+      ...band,
+      centerY: (band.top + band.bottom) / 2,
+      heightRatio: band.rowCount / gapPx,
+      offsetSpaces: ((band.top + band.bottom) / 2 - glyphY) / gapPx,
+      meanRowFill: band.inkPixels / (band.rowCount * cellWidth),
+    }))
+    .filter(
+      (band) =>
+        band.heightRatio >= 0.42 &&
+        band.heightRatio <= 1.25 &&
+        Math.abs(band.offsetSpaces) >= 0.42 &&
+        Math.abs(band.offsetSpaces) <= 1.2 &&
+        band.meanRowFill >= 0.52,
+    )
+
+  if (candidates.length !== 1) {
+    return null
+  }
+  const selected = candidates[0]
+  return {
+    yNorm: selected.centerY / imageData.height,
+    fallbackYNorm: resolveMetricNoteheadYNorm(glyph, imageData, lineYs),
+    rawYNorm: glyphY / imageData.height,
+    source: 'ink-notehead-geometry',
+    confidence: 0.91,
+    visualBounds: {
+      x: left,
+      y: selected.top,
+      width: cellWidth,
+      height: selected.rowCount,
+    },
+    suppressedStaffOrLedgerRows: 0,
+    suppressedStemColumns: 0,
+    rejectedReason: null,
+    localStaffGapNorm: gapPx / imageData.height,
+    recoveryMode: 'legacy-text-run-continuation-cell',
+    sourceTextRun: {
+      index: sourceIndex,
+      length: sourceLength,
+      offsetSpaces: selected.offsetSpaces,
+      meanRowFill: selected.meanRowFill,
+    },
+  }
+}
+
 function collectCompactRowComponents({
   imageData,
   left,
@@ -698,6 +826,15 @@ function resolveNoteheadAnchorInWindow(
     return { ...fallback, rejectedReason: 'missing-image-geometry' }
   }
   if (glyph.legacyMusicFontNormalized) {
+    const continuationAnchor = resolveLegacyRunContinuationAnchor(
+      glyph,
+      imageData,
+      lineYs,
+      inkThreshold,
+    )
+    if (continuationAnchor) {
+      return continuationAnchor
+    }
     return { ...fallback, rejectedReason: 'legacy-font-profile-unavailable' }
   }
 

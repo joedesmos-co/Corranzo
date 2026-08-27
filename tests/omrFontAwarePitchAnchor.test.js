@@ -401,6 +401,68 @@ describe("font-aware notehead pitch anchors", () => {
     expect(anchor.rejectedReason).toBe("legacy-font-profile-unavailable");
   });
 
+  it("recovers a vertically displaced continuation head from its legacy text-run cell", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 120, 180, 8, 5);
+    const anchor = resolveNoteheadAnchor(
+      {
+        ...glyph(120, 160, { width: 18 }),
+        legacyMusicFontNormalized: true,
+        originalLegacyText: "\ue12d",
+        sourceText: "\ue0a4\ue0a4",
+        sourceIndex: 1,
+        sourceLength: 2,
+      },
+      page,
+      LINES,
+    );
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(anchor.recoveryMode).toBe("legacy-text-run-continuation-cell");
+    expect(anchor.yNorm * page.height).toBeCloseTo(180, 0);
+  });
+
+  it("does not move a legacy run continuation whose ink remains on the shared baseline", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 120, 160, 8, 5);
+    const anchor = resolveNoteheadAnchor(
+      {
+        ...glyph(120, 160, { width: 18 }),
+        legacyMusicFontNormalized: true,
+        originalLegacyText: "\ue12d",
+        sourceText: "\ue0a4\ue0a4",
+        sourceIndex: 1,
+        sourceLength: 2,
+      },
+      page,
+      LINES,
+    );
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+    expect(anchor.rejectedReason).toBe("legacy-font-profile-unavailable");
+  });
+
+  it("rejects two competing displaced ink bands in a legacy continuation cell", () => {
+    const page = image();
+    staff(page, LINES);
+    ellipse(page, 120, 140, 8, 5);
+    ellipse(page, 120, 180, 8, 5);
+    const anchor = resolveNoteheadAnchor(
+      {
+        ...glyph(120, 160, { width: 18 }),
+        legacyMusicFontNormalized: true,
+        originalLegacyText: "\ue12d",
+        sourceText: "\ue0a4\ue0a4",
+        sourceIndex: 1,
+        sourceLength: 2,
+      },
+      page,
+      LINES,
+    );
+    expect(anchor.source).toBe("glyph-metrics-fallback");
+    expect(anchor.rejectedReason).toBe("legacy-font-profile-unavailable");
+  });
+
   it("places a tall upper-treble metric fallback on the E-line not the F-line", () => {
     const page = image(1000, 1172);
     const lineYs = [222, 233, 244, 255, 266];
