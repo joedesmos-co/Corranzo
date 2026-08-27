@@ -8,11 +8,14 @@ import {
 } from '../src/features/practice/visualNotationMarkings.js'
 import {
   buildStaffGeometry,
+  buildStaffLaneGraceNotes,
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
   buildStaffLaneStems,
   detectStaves,
 } from '../src/features/practice/staffLaneLayout.js'
+import { buildSourceFidelityLaneLayout } from '../src/features/practice/sourceFidelityLayout.js'
+import { buildVisualRenderingInstructions } from '../src/features/practice/visualRenderingInstructions.js'
 import {
   buildTabGeometry,
   buildTabLaneNotes,
@@ -287,6 +290,76 @@ describe('visual notation marking model', () => {
       placement: 'above',
     })
     expect(tupletMarkings[1].bracketPath).toMatch(/^M .* L /)
+  })
+
+  it('renders source grace groups without adding playback or Wait For You attacks', () => {
+    const graceNote = ({
+      step,
+      defaultX,
+      defaultY,
+      beam = '',
+      notations = '',
+      accidental = '',
+      printObject = '',
+    }) =>
+      `<note default-x="${defaultX}" default-y="${defaultY}"${
+        printObject ? ` print-object="${printObject}"` : ''
+      }><grace slash="yes"/><pitch><step>${step}</step><octave>5</octave></pitch>` +
+      '<voice>1</voice><type>16th</type><stem>up</stem>' +
+      `${accidental ? `<accidental>${accidental}</accidental>` : ''}${beam}${notations}</note>`
+    const principal = (step, defaultX, notations = '') =>
+      `<note default-x="${defaultX}" default-y="0"><pitch><step>${step}</step><octave>5</octave></pitch>` +
+      `<duration>1</duration><voice>1</voice><type>quarter</type>${notations}</note>`
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1" width="100">${F.attributes({ beats: 2 })}` +
+      graceNote({
+        step: 'F',
+        defaultX: 10,
+        defaultY: 20,
+        accidental: 'double-sharp',
+        beam: '<beam number="1">begin</beam><beam number="2">begin</beam>',
+        notations: '<notations><slur type="start" number="1" placement="above"/></notations>',
+      }) +
+      graceNote({
+        step: 'G',
+        defaultX: 18,
+        defaultY: 15,
+        beam: '<beam number="1">end</beam><beam number="2">end</beam>',
+      }) +
+      principal('C', 35, '<notations><slur type="stop" number="1"/></notations>') +
+      graceNote({
+        step: 'E',
+        defaultX: 55,
+        defaultY: 10,
+        printObject: 'no',
+      }) +
+      principal('D', 70) +
+      '</measure></part>',
+    )
+    const timingMap = parseMusicXml(xml, 'visual-grace.musicxml')
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    const groups = buildVisualRenderingInstructions(timingMap).map((group) => ({
+      ...group,
+      status: 'upcoming',
+    }))
+    const sourceLayout = buildSourceFidelityLaneLayout(groups)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry, { sourceLayout })
+    const grace = buildStaffLaneGraceNotes(notes, geometry, { sourceLayout })
+
+    expect(timingMap.noteCount).toBe(2)
+    expect(timingMap.notes.map((note) => note.quarterTime)).toEqual([0, 1])
+    expect(timingMap.timingEvents.filter((event) => event.type === 'note-on')).toHaveLength(2)
+    expect(checkpoints.map((checkpoint) => checkpoint.expectedMidis)).toEqual([[72], [74]])
+    expect(timingMap.notes[0].graceNotesBefore).toHaveLength(2)
+    expect(timingMap.notes[1].graceNotesBefore).toHaveLength(1)
+    expect(grace.notes).toHaveLength(2)
+    expect(grace.notes.every((note) => note.sourceXMode === 'musicxml-layout')).toBe(true)
+    expect(grace.notes[0].accidentalGlyph).toBe('𝄪')
+    expect(grace.notes[1].x).toBeLessThan(notes[0].x)
+    expect(grace.beams.map((beam) => beam.number)).toEqual([1, 2])
+    expect(grace.slurs).toHaveLength(1)
+    expect(grace.slurs[0].path).toMatch(/^M .* Q /)
   })
 
   it('renders guitar hammer-on, pull-off, slide, bend, and vibrato markings in TAB geometry', () => {

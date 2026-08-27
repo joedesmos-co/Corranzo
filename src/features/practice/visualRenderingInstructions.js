@@ -81,6 +81,63 @@ export function buildVisualSourceOwnership(
   }
 }
 
+function visualGraceNoteInstruction(
+  graceNote,
+  event,
+  graceIndex,
+  sourceAnchorIndex,
+  options,
+) {
+  const visualNoteId = `${event.id}-grace-${graceIndex}-${graceNote.id ?? graceNote.midi ?? 'note'}`
+  const semantic = {
+    id: graceNote.id ?? visualNoteId,
+    visualNoteId,
+    sourceNoteId: graceNote.id ?? null,
+    sourceNoteheadId: graceNote.sourceNoteheadId ?? null,
+    partId: graceNote.partId ?? null,
+    voice: graceNote.voice ?? 1,
+    midi: graceNote.midi,
+    label: graceNote.label ?? null,
+    writtenPitch: graceNote.writtenPitch ?? null,
+    accidental: graceNote.accidental ?? null,
+    keySignature: graceNote.keySignature ?? null,
+    clef: graceNote.clef ?? null,
+    staff: graceNote.staff ?? null,
+    timeSeconds: event.timeSeconds,
+    quarterTime: graceNote.quarterTime ?? null,
+    measureNumber: graceNote.measureNumber ?? event.measureNumber,
+    repeatPass: event.repeatPass,
+    durationSeconds: 0,
+    durationQuarters: graceNote.durationQuarters ?? 0,
+    durationDivisions: graceNote.durationDivisions ?? 0,
+    noteType: graceNote.noteType ?? 'eighth',
+    stemDirection: graceNote.stemDirection ?? null,
+    dots: Math.max(0, Math.round(Number(graceNote.dots) || 0)),
+    beams: graceNote.beams ?? [],
+    slurs: graceNote.slurs ?? [],
+    grace: graceNote.grace ?? { slash: false },
+    isGrace: true,
+    printObject: graceNote.printObject !== false,
+  }
+  const sourceOwnership = buildVisualSourceOwnership(
+    semantic,
+    sourceAnchorIndex,
+    options.preferredRepresentation,
+  )
+  return {
+    ...semantic,
+    sourceOwnership,
+    sourceLayout: buildVisualObjectLayout({
+      note: graceNote,
+      measureLayout: options.measureLayoutIndex?.get(semantic.measureNumber) ?? null,
+      sourceOwnership,
+      sourceAnchorIndex,
+      preferredRepresentation: options.preferredRepresentation,
+    }),
+    markings: buildVisualNoteMarkings(semantic, { groupId: event.id }),
+  }
+}
+
 function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, options) {
   const visualNoteId = `${event.id}-n${noteIndex}-${note.id ?? note.midi ?? 'note'}`
   const semantic = {
@@ -138,6 +195,15 @@ function visualNoteInstruction(note, event, noteIndex, sourceAnchorIndex, option
   )
   return {
     ...semantic,
+    graceNotesBefore: (note.graceNotesBefore ?? []).map((graceNote, graceIndex) =>
+      visualGraceNoteInstruction(
+        graceNote,
+        event,
+        graceIndex,
+        sourceAnchorIndex,
+        options,
+      ),
+    ),
     sourceOwnership,
     sourceLayout: buildVisualObjectLayout({
       note,

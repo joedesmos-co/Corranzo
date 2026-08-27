@@ -83,6 +83,7 @@ export function buildVisualLaneGroups(timingMap, loopRegion = null, options = {}
           guitarTechniques: note.guitarTechniques ?? [],
           timeModification: note.timeModification ?? null,
           tuplets: note.tuplets ?? [],
+          graceNotesBefore: note.graceNotesBefore ?? [],
           tiedContinuations: (note.tiedContinuations ?? []).map(
             (continuation, continuationIndex) => {
               const visualContinuation = {

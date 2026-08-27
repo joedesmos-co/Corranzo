@@ -18,6 +18,7 @@ import {
   STAFF_LINE_GAP,
   buildKeySignatureMarks,
   buildStaffGeometry,
+  buildStaffLaneGraceNotes,
   buildStaffLaneNotes,
   buildStaffLaneDynamicMarks,
   buildStaffLaneNotationMarkings,
@@ -237,6 +238,9 @@ function StaffVisualLane({
     spanMarkings,
     tremoloMarkings,
     tupletMarkings,
+    graceNotes,
+    graceBeams,
+    graceSlurs,
   } = useMemo(() => {
     const builtNotes = buildStaffLaneNotes(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
@@ -252,6 +256,10 @@ function StaffVisualLane({
       sourceLayout,
     })
     const rhythmMarks = buildStaffLaneRhythmMarks(builtNotes, builtStems)
+    const graceMarks = buildStaffLaneGraceNotes(builtNotes, geometry, {
+      pixelsPerSecond: PX_PER_SECOND,
+      sourceLayout,
+    })
     const markings = buildStaffLaneNotationMarkings(visibleGroups, geometry, {
       pixelsPerSecond: PX_PER_SECOND,
       notes: builtNotes,
@@ -265,6 +273,9 @@ function StaffVisualLane({
       stems: builtStems,
       ...rhythmMarks,
       ...markings,
+      graceNotes: graceMarks.notes,
+      graceBeams: graceMarks.beams,
+      graceSlurs: graceMarks.slurs,
     }
   }, [visibleGroups, geometry, sourceLayout])
 
@@ -865,6 +876,27 @@ function StaffVisualLane({
                 data-cross-staff={beam.crossStaff || undefined}
               />
             ))}
+            {graceSlurs.map((slur) => (
+              <path
+                key={slur.id}
+                className={`staff-lane__grace-slur staff-lane__note--${slur.status ?? 'upcoming'}`}
+                data-grace-slur="true"
+                data-grace-placement={slur.placement}
+                d={slur.path}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+            {graceBeams.map((beam) => (
+              <line
+                key={beam.id}
+                className={`staff-lane__grace-beam staff-lane__note--${beam.status ?? 'upcoming'}`}
+                x1={beam.x1}
+                x2={beam.x2}
+                y1={beam.y1}
+                y2={beam.y2}
+                data-grace-beam-number={beam.number}
+              />
+            ))}
             {tupletMarkings.map((tuplet) => (
               <g
                 key={tuplet.id}
@@ -986,6 +1018,84 @@ function StaffVisualLane({
                   ry={note.status === 'current' ? NOTEHEAD_RY * CURRENT_HEAD_SCALE : NOTEHEAD_RY}
                   transform={`rotate(-14 ${note.x + note.xOffset} ${note.y})`}
                 />
+              </g>
+            ))}
+            {graceNotes.map((note) => (
+              <g
+                key={note.id}
+                className={`staff-lane__grace-note staff-lane__note--${resolveLaneNoteClass(note.status, note.laneOutcome)}`}
+                data-grace-note="true"
+                data-grace-measure={note.measureNumber ?? undefined}
+                data-principal-note-id={note.principalNoteId ?? undefined}
+                data-note-type={note.noteType ?? undefined}
+                data-voice={note.voice}
+                data-source-x-mode={note.sourceXMode}
+                data-source-y-mode={note.sourceYMode}
+              >
+                {note.ledgerLines.map((ledgerY) => (
+                  <line
+                    key={ledgerY}
+                    className="staff-lane__grace-ledger"
+                    x1={note.x - LEDGER_HALF_WIDTH * 0.66}
+                    x2={note.x + LEDGER_HALF_WIDTH * 0.66}
+                    y1={ledgerY}
+                    y2={ledgerY}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                ))}
+                {note.accidentalGlyph && (
+                  <text
+                    className="staff-lane__grace-accidental"
+                    data-accidental={note.accidentalType}
+                    x={note.x - note.headRx - STAFF_LINE_GAP * 0.32}
+                    y={note.y}
+                    dominantBaseline="middle"
+                    textAnchor="end"
+                    fontSize={STAFF_LINE_GAP * 0.72}
+                  >
+                    {note.accidentalGlyph}
+                  </text>
+                )}
+                <line
+                  className="staff-lane__grace-stem"
+                  x1={note.stemX}
+                  x2={note.stemX}
+                  y1={note.stemY1}
+                  y2={note.stemY2}
+                />
+                {Array.from({ length: note.flagCount }, (_, index) => {
+                  const direction = note.stemDown ? -1 : 1
+                  const startY =
+                    note.stemY2 + (note.stemDown ? -1 : 1) * index * STAFF_LINE_GAP * 0.34
+                  return (
+                    <path
+                      key={`${note.id}-flag-${index + 1}`}
+                      className="staff-lane__grace-flag"
+                      d={`M ${note.stemX} ${startY} Q ${
+                        note.stemX + direction * STAFF_LINE_GAP * 0.55
+                      } ${startY + (note.stemDown ? -1 : 1) * STAFF_LINE_GAP * 0.2} ${
+                        note.stemX + direction * STAFF_LINE_GAP * 0.38
+                      } ${startY + (note.stemDown ? -1 : 1) * STAFF_LINE_GAP * 0.72}`}
+                    />
+                  )
+                })}
+                <ellipse
+                  className="staff-lane__grace-head"
+                  cx={note.x}
+                  cy={note.y}
+                  rx={note.headRx}
+                  ry={note.headRy}
+                  transform={`rotate(-14 ${note.x} ${note.y})`}
+                />
+                {note.slash && (
+                  <line
+                    className="staff-lane__grace-slash"
+                    x1={note.stemX - STAFF_LINE_GAP * 0.5}
+                    x2={note.stemX + STAFF_LINE_GAP * 0.28}
+                    y1={note.y + (note.stemDown ? 1 : -1) * STAFF_LINE_GAP * 0.3}
+                    y2={note.y + (note.stemDown ? 1 : -1) * STAFF_LINE_GAP * 0.95}
+                  />
+                )}
               </g>
             ))}
             {dots.map((dot) => (

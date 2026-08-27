@@ -31,6 +31,9 @@ export const STAFF_KIND = {
 /** Vertical distance between adjacent staff lines, in SVG units. */
 export const STAFF_LINE_GAP = 12
 const HALF_STEP = STAFF_LINE_GAP / 2
+export const GRACE_NOTE_SCALE = 0.66
+const GRACE_NOTE_SPACING = STAFF_LINE_GAP * 1.45
+const GRACE_STEM_LENGTH = STAFF_LINE_GAP * 2.1
 
 /** Diatonic reference indices (octave × 7 + letter, C=0 … B=6). */
 const TREBLE_TOP_LINE_DIATONIC = 38 // F5
@@ -68,6 +71,8 @@ const ACCIDENTAL_GLYPHS = {
   'sharp-sharp': '𝄪',
   'double-flat': '𝄫',
   'flat-flat': '𝄫',
+  'natural-sharp': '♮♯',
+  'natural-flat': '♮♭',
 }
 
 export function accidentalGlyph(type) {
@@ -956,6 +961,8 @@ export function buildStaffLaneNotes(
         measureNumber: note.measureNumber ?? null,
         partId: note.partId ?? null,
         voice: note.voice ?? 1,
+        slurs: note.slurs ?? [],
+        graceNotesBefore: note.graceNotesBefore ?? [],
         visualNoteId:
           note.visualNoteId ?? note.id ?? `${group.id}-${entryIndex}`,
         sourceNoteId: note.sourceNoteId ?? note.id ?? null,
@@ -1003,6 +1010,153 @@ export function buildStaffLaneNotes(
     }
   }
   return notes
+}
+
+/**
+ * Grace notes are visual children of the following principal note. They never
+ * enter playback or Wait For You checkpoints. Exact MusicXML X/Y wins when
+ * present; coordinate-less scores use a compact lead-in immediately before
+ * the owning principal note.
+ */
+export function buildStaffLaneGraceNotes(
+  principalNotes,
+  geometry,
+  {
+    pixelsPerSecond = VISUAL_LANE_DEFAULTS.pixelsPerSecond,
+    sourceLayout = null,
+  } = {},
+) {
+  const laneLayout = sourceLayout ?? { mode: 'temporal-fallback', pixelsPerSecond }
+  const notes = []
+  const beams = []
+  const slurs = []
+
+  for (const principal of principalNotes ?? []) {
+    const sourceGraceNotes = (principal.graceNotesBefore ?? []).filter(
+      (grace) => grace?.printObject !== false && isFiniteMidi(grace?.midi),
+    )
+    if (!sourceGraceNotes.length) continue
+    const renderGroup = {
+      id: principal.groupId,
+      timeSeconds: principal.timeSeconds,
+      status: principal.status,
+      laneOutcome: principal.laneOutcome,
+    }
+    const positioned = sourceGraceNotes.map((grace, index) => {
+      const staffKind = resolveStaffKind(grace)
+      const objectGeometry = geometryForSourceObject(
+        geometry,
+        laneLayout,
+        grace,
+        renderGroup,
+      )
+      const written = resolveVisualWrittenPitch(grace)
+      const semanticPosition = staffYForDiatonic(
+        written.diatonic,
+        staffKind,
+        objectGeometry,
+        grace.clef,
+      )
+      const sourcePosition = sourceYForObject(grace, staffKind, objectGeometry)
+      const sourceOwnedX = laneLayout.objectXById?.get(
+        grace.visualNoteId ?? grace.id,
+      )
+      const x = Number.isFinite(sourceOwnedX)
+        ? sourceOwnedX
+        : principal.x + principal.xOffset -
+          (sourceGraceNotes.length - index) * GRACE_NOTE_SPACING
+      const { y, ledgerLines } = sourcePosition ?? semanticPosition
+      const stemDown = grace.stemDirection === 'down'
+      const headRx = NOTEHEAD_RX * GRACE_NOTE_SCALE
+      const headRy = NOTEHEAD_RY * GRACE_NOTE_SCALE
+      const stemX = x + (stemDown ? -headRx : headRx)
+      const stemY1 = y
+      const stemY2 = stemDown ? y + GRACE_STEM_LENGTH : y - GRACE_STEM_LENGTH
+      return {
+        ...grace,
+        id: `${principal.id}-grace-${index}`,
+        principalNoteId: principal.visualNoteId,
+        status: principal.status,
+        laneOutcome: principal.laneOutcome,
+        x,
+        y,
+        headRx,
+        headRy,
+        stemDown,
+        stemX,
+        stemY1,
+        stemY2,
+        staffKind,
+        sourceXMode: Number.isFinite(sourceOwnedX)
+          ? grace.sourceLayout?.source ?? 'source-owned'
+          : 'semantic-lead-in-fallback',
+        sourceYMode: sourcePosition?.sourceYMode ?? semanticPosition.sourceYMode,
+        ledgerLines,
+        accidentalType: written.accidentalType,
+        accidentalGlyph: decoratedAccidentalGlyph(
+          written.accidentalGlyph,
+          grace.accidental,
+        ),
+        slash: grace.grace?.slash === true,
+        flagCount: (grace.beams?.length ?? 0) > 0
+          ? 0
+          : flagCountForNoteType(grace.noteType),
+      }
+    })
+    notes.push(...positioned)
+
+    const openBeams = new Map()
+    for (const note of positioned) {
+      for (const mark of note.beams ?? []) {
+        const number = Math.max(1, Math.round(Number(mark.number) || 1))
+        const value = String(mark.value ?? '').toLowerCase()
+        if (value === 'begin') {
+          openBeams.set(number, note)
+        } else if (value === 'end') {
+          const start = openBeams.get(number)
+          if (start) {
+            const offset = (number - 1) * STAFF_LINE_GAP * 0.32 *
+              (start.stemDown ? -1 : 1)
+            beams.push({
+              id: `${principal.id}-grace-beam-${number}-${beams.length}`,
+              number,
+              x1: start.stemX,
+              y1: start.stemY2 + offset,
+              x2: note.stemX,
+              y2: note.stemY2 + offset,
+              status: principal.status,
+            })
+            openBeams.delete(number)
+          }
+        }
+      }
+    }
+
+    for (const grace of positioned) {
+      const start = (grace.slurs ?? []).find((slur) => slur.type === 'start')
+      if (!start) continue
+      const matchingStop = (principal.slurs ?? []).find(
+        (slur) => slur.type === 'stop' && String(slur.number ?? '1') === String(start.number ?? '1'),
+      )
+      if (!matchingStop) continue
+      const placement = start.placement === 'below' ? 'below' : 'above'
+      const direction = placement === 'below' ? 1 : -1
+      const x1 = grace.x + grace.headRx * 0.7
+      const x2 = principal.x + principal.xOffset - NOTEHEAD_RX * 0.8
+      const y1 = grace.y + direction * STAFF_LINE_GAP * 0.55
+      const y2 = principal.y + direction * STAFF_LINE_GAP * 0.65
+      slurs.push({
+        id: `${grace.id}-to-${principal.id}-slur-${start.number ?? '1'}`,
+        placement,
+        status: principal.status,
+        path: `M ${x1} ${y1} Q ${(x1 + x2) / 2} ${
+          (y1 + y2) / 2 + direction * STAFF_LINE_GAP * 0.8
+        } ${x2} ${y2}`,
+      })
+    }
+  }
+
+  return { notes, beams, slurs }
 }
 
 /** Horizontal shift for the upper note of a chord "second", in SVG units. */

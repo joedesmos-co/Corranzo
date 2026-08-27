@@ -966,6 +966,8 @@ function walkPart({
   const velocityByStaff = new Map()
   const openWedges = []
   const activeKeySignatures = new Map()
+  const pendingGraceNotes = new Map()
+  let graceNoteSerial = 0
 
   measureNodes.forEach((measureNode, index) => {
     const measureNumber = getMeasureNumberOrdered(measureNode, index)
@@ -1196,97 +1198,136 @@ function walkPart({
           const quarterTime = measureStartQuarters + startDivisions / divisions
           const durationQuarters = duration / divisions
 
-          if (!isGrace) {
-            const layout = readNoteLayoutOrdered(child)
-            const pitchNode = isRest ? null : findChild(child, 'pitch')
-            const midi = isRest ? null : pitchNodeToMidi(pitchNode)
-            const writtenPitch = isRest ? null : readWrittenPitch(pitchNode)
-            const accidental = isRest ? null : readPrintedAccidental(child)
-            const keySignature = isRest
-              ? null
-              : activeKeySignatureForStaff(activeKeySignatures, layout.staff)
-            const { tieStart, tieStop, tiePlacement } = readTieFlags(child)
-            const {
-              staccato,
-              staccatissimo,
-              accent,
-              tenuto,
-              marcato,
-              fermata,
-              articulationPlacements,
-            } = readArticulations(child)
-            const { trill, tremolo } = readOrnaments(child)
-            const slurs = readSlurs(child)
-            const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
-            const technicalPosition = isRest ? null : readTechnicalPosition(child)
-            const serializedSourceNoteheadId = attr(child, 'id')
-            const sourceNoteheadId =
-              typeof serializedSourceNoteheadId === 'string' &&
-              serializedSourceNoteheadId.startsWith('sfnh-')
-                ? serializedSourceNoteheadId
-                : null
-            const timeModification = readTimeModification(child)
-            const tuplets = readTuplets(child)
-            const dots = findChildren(child, 'dot').length
-            const noteType = childText(child, 'type') ?? null
-            const rawStemDirection = String(childText(child, 'stem') ?? '').toLowerCase()
-            const stemDirection =
-              rawStemDirection === 'up' || rawStemDirection === 'down'
-                ? rawStemDirection
-                : null
-            const beams = findChildren(child, 'beam')
-              .map((beam) => ({
-                number: Math.max(1, Math.round(numberOf(attr(beam, 'number'), 1))),
-                value: String(textOf(beam) ?? '').trim().toLowerCase(),
-              }))
-              .filter((beam) => beam.value)
-            const activeClef = activeClefAt(
-              clefEvents,
-              partId,
-              layout.staff ?? 1,
-              quarterTime,
+          const layout = readNoteLayoutOrdered(child)
+          const pitchNode = isRest ? null : findChild(child, 'pitch')
+          const midi = isRest ? null : pitchNodeToMidi(pitchNode)
+          const writtenPitch = isRest ? null : readWrittenPitch(pitchNode)
+          const accidental = isRest ? null : readPrintedAccidental(child)
+          const keySignature = isRest
+            ? null
+            : activeKeySignatureForStaff(activeKeySignatures, layout.staff)
+          const { tieStart, tieStop, tiePlacement } = readTieFlags(child)
+          const {
+            staccato,
+            staccatissimo,
+            accent,
+            tenuto,
+            marcato,
+            fermata,
+            articulationPlacements,
+          } = readArticulations(child)
+          const { trill, tremolo } = readOrnaments(child)
+          const slurs = readSlurs(child)
+          const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
+          const technicalPosition = isRest ? null : readTechnicalPosition(child)
+          const serializedSourceNoteheadId = attr(child, 'id')
+          const sourceNoteheadId =
+            typeof serializedSourceNoteheadId === 'string' &&
+            serializedSourceNoteheadId.startsWith('sfnh-')
+              ? serializedSourceNoteheadId
+              : null
+          const timeModification = readTimeModification(child)
+          const tuplets = readTuplets(child)
+          const dots = findChildren(child, 'dot').length
+          const noteType = childText(child, 'type') ?? null
+          const rawStemDirection = String(childText(child, 'stem') ?? '').toLowerCase()
+          const stemDirection =
+            rawStemDirection === 'up' || rawStemDirection === 'down'
+              ? rawStemDirection
+              : null
+          const beams = findChildren(child, 'beam')
+            .map((beam) => ({
+              number: Math.max(1, Math.round(numberOf(attr(beam, 'number'), 1))),
+              value: String(textOf(beam) ?? '').trim().toLowerCase(),
+            }))
+            .filter((beam) => beam.value)
+          const activeClef = activeClefAt(
+            clefEvents,
+            partId,
+            layout.staff ?? 1,
+            quarterTime,
+          )
+          const normalizedVoice = Number.isFinite(voice) && voice > 0 ? voice : 1
+          const graceOwnerKey = `${normalizedVoice}|${layout.staff ?? 1}`
+          const parsedNote = {
+            ...(technicalPosition ?? {}),
+            ...(slurs.length ? { slurs } : {}),
+            ...(guitarTechniques.length ? { guitarTechniques } : {}),
+            ...(timeModification ? { timeModification } : {}),
+            ...(tuplets.length ? { tuplets } : {}),
+            id: isGrace
+              ? `${partId}-m${measureNumber}-g${graceNoteSerial++}`
+              : `${partId}-m${measureNumber}-n${notes.length}`,
+            ...(sourceNoteheadId ? { sourceNoteheadId } : {}),
+            partId,
+            measureNumber,
+            quarterTime,
+            durationQuarters,
+            durationDivisions: duration,
+            midi,
+            label: midiToLabel(midi),
+            writtenPitch,
+            accidental,
+            keySignature,
+            ...(activeClef ? { clef: { ...activeClef } } : {}),
+            isRest,
+            isChord,
+            isGrace,
+            tieStart,
+            tieStop,
+            tiePlacement,
+            staccato,
+            staccatissimo,
+            accent,
+            tenuto,
+            marcato,
+            fermata,
+            articulationPlacements,
+            ...(trill ? { trill } : {}),
+            ...(tremolo ? { tremolo } : {}),
+            dots,
+            noteType,
+            stemDirection,
+            beams,
+            voice: normalizedVoice,
+            velocity: resolveNoteVelocity(activeVelocity, velocityByStaff, layout.staff),
+            ...layout,
+          }
+
+          if (isGrace) {
+            const graceNode = findChild(child, 'grace')
+            const stealTimePrevious = numberOf(
+              attr(graceNode, 'steal-time-previous'),
+              NaN,
             )
+            const stealTimeFollowing = numberOf(
+              attr(graceNode, 'steal-time-following'),
+              NaN,
+            )
+            const makeTime = numberOf(attr(graceNode, 'make-time'), NaN)
+            const pending = pendingGraceNotes.get(graceOwnerKey) ?? []
+            pending.push({
+              ...parsedNote,
+              grace: {
+                slash: attr(graceNode, 'slash') === 'yes',
+                stealTimePrevious: Number.isFinite(stealTimePrevious)
+                  ? stealTimePrevious
+                  : null,
+                stealTimeFollowing: Number.isFinite(stealTimeFollowing)
+                  ? stealTimeFollowing
+                  : null,
+                makeTime: Number.isFinite(makeTime) ? makeTime : null,
+              },
+            })
+            pendingGraceNotes.set(graceOwnerKey, pending)
+          } else {
+            const graceNotesBefore = isRest
+              ? []
+              : pendingGraceNotes.get(graceOwnerKey) ?? []
+            if (!isRest) pendingGraceNotes.delete(graceOwnerKey)
             notes.push({
-              ...(technicalPosition ?? {}),
-              ...(slurs.length ? { slurs } : {}),
-              ...(guitarTechniques.length ? { guitarTechniques } : {}),
-              ...(timeModification ? { timeModification } : {}),
-              ...(tuplets.length ? { tuplets } : {}),
-              id: `${partId}-m${measureNumber}-n${notes.length}`,
-              ...(sourceNoteheadId ? { sourceNoteheadId } : {}),
-              partId,
-              measureNumber,
-              quarterTime,
-              durationQuarters,
-              durationDivisions: duration,
-              midi,
-              label: midiToLabel(midi),
-              writtenPitch,
-              accidental,
-              keySignature,
-              ...(activeClef ? { clef: { ...activeClef } } : {}),
-              isRest,
-              isChord,
-              isGrace,
-              tieStart,
-              tieStop,
-              tiePlacement,
-              staccato,
-              staccatissimo,
-              accent,
-              tenuto,
-              marcato,
-              fermata,
-              articulationPlacements,
-              ...(trill ? { trill } : {}),
-              ...(tremolo ? { tremolo } : {}),
-              dots,
-              noteType,
-              stemDirection,
-              beams,
-              voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
-              velocity: resolveNoteVelocity(activeVelocity, velocityByStaff, layout.staff),
-              ...layout,
+              ...parsedNote,
+              ...(graceNotesBefore.length ? { graceNotesBefore } : {}),
             })
 
             if (!isRest && midi != null) {
@@ -1296,7 +1337,7 @@ function walkPart({
                 measureNumber,
                 midi,
                 label: midiToLabel(midi),
-                voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
+                voice: normalizedVoice,
               })
             }
           }

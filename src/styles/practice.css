@@ -5604,6 +5604,51 @@
   stroke-linecap: butt;
 }
 
+.staff-lane__grace-note {
+  color: var(--vp-upcoming, #b4b4bb);
+}
+
+.staff-lane__grace-head {
+  fill: currentColor;
+}
+
+.staff-lane__grace-stem,
+.staff-lane__grace-slash,
+.staff-lane__grace-ledger {
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.staff-lane__grace-beam {
+  stroke: currentColor;
+  stroke-width: 2.7;
+  stroke-linecap: butt;
+}
+
+.staff-lane__grace-flag {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.staff-lane__grace-slur {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  opacity: 0.78;
+}
+
+.staff-lane__grace-accidental {
+  fill: currentColor;
+  stroke: var(--sf-bg-panel);
+  stroke-width: 1.8;
+  paint-order: stroke fill;
+  user-select: none;
+}
+
 .staff-lane__tuplet {
   color: var(--vp-upcoming, #b4b4bb);
 }

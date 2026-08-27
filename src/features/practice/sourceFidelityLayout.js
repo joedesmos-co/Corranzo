@@ -423,7 +423,12 @@ export function buildSourceFidelityLaneLayout(
       lastGroupX = x
       groupXById.set(group.id, x)
       systemOccurrenceByGroupId.set(group.id, systemOccurrence)
-      for (const object of [...(group.notes ?? []), ...(group.rests ?? [])]) {
+      const sourceObjects = [
+        ...(group.notes ?? []),
+        ...(group.rests ?? []),
+        ...(group.notes ?? []).flatMap((note) => note.graceNotesBefore ?? []),
+      ]
+      for (const object of sourceObjects) {
         const objectSourceX = finite(object.sourceLayout?.x)
           ? Number(object.sourceLayout.x)
           : NaN
