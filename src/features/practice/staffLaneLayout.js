@@ -442,6 +442,25 @@ function sourceYForObject(object, staffKind, geometry) {
   }
 }
 
+function sourceXModeForObject(object) {
+  const layout = object?.sourceLayout
+  if (
+    layout?.source === VISUAL_LAYOUT_SOURCE.SOURCE_VISUAL_MAP &&
+    layout.x != null &&
+    Number.isFinite(Number(layout.x))
+  ) {
+    return VISUAL_LAYOUT_SOURCE.SOURCE_VISUAL_MAP
+  }
+  if (
+    layout?.source === VISUAL_LAYOUT_SOURCE.MUSICXML &&
+    layout.xInMeasure != null &&
+    Number.isFinite(Number(layout.xInMeasure))
+  ) {
+    return VISUAL_LAYOUT_SOURCE.MUSICXML
+  }
+  return VISUAL_LAYOUT_SOURCE.SEMANTIC_FALLBACK
+}
+
 /**
  * Reconstruct printed dynamic text from source direction events. MusicXML
  * default-y shares the same score-wide tenths frame as positioned notes;
@@ -917,6 +936,7 @@ export function buildStaffLaneNotes(
         laneOutcome: renderGroup.laneOutcome ?? null,
         x,
         xOffset: 0,
+        sourceXMode: sourceXModeForObject(note),
         y,
         sourceYMode: sourcePosition?.sourceYMode ?? semanticPosition.sourceYMode,
         sourceDefaultY: sourcePosition?.sourceDefaultY ?? null,
@@ -988,7 +1008,12 @@ export function buildStaffLaneNotes(
       if (
         curr.staffKind === prev.staffKind &&
         curr.diatonic - prev.diatonic === 1 &&
-        prev.xOffset === 0
+        prev.xOffset === 0 &&
+        !(
+          curr.sourceXMode !== VISUAL_LAYOUT_SOURCE.SEMANTIC_FALLBACK &&
+          prev.sourceXMode !== VISUAL_LAYOUT_SOURCE.SEMANTIC_FALLBACK &&
+          Math.abs(curr.x - prev.x) > 0.001
+        )
       ) {
         curr.xOffset = NOTEHEAD_SECOND_OFFSET
       }

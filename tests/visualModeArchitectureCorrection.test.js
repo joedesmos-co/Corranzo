@@ -371,6 +371,53 @@ describe('Visual mode architecture correction', () => {
     })
   })
 
+  it('keeps printed second displacement without adding the semantic collision offset twice', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list>
+          <score-part id="P1"><part-name>Piano</part-name></score-part>
+        </part-list>
+        <part id="P1">
+          <measure number="1" width="160">
+            <attributes>
+              <divisions>1</divisions>
+              <time><beats>1</beats><beat-type>4</beat-type></time>
+              <clef><sign>G</sign><line>2</line></clef>
+            </attributes>
+            <note default-x="40"><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
+            <note default-x="52"><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
+          </measure>
+          <measure number="2" width="160">
+            <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
+            <note><chord/><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>
+          </measure>
+        </part>
+      </score-partwise>
+    `)
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const sourceLayout = buildSourceFidelityLaneLayout(groups)
+    const geometry = buildStaffGeometry(detectStaves(groups))
+    const notes = buildStaffLaneNotes(groups, geometry, { sourceLayout })
+    const printed = notes
+      .filter((note) => note.measureNumber === 1)
+      .sort((left, right) => left.diatonic - right.diatonic)
+    const fallback = notes
+      .filter((note) => note.measureNumber === 2)
+      .sort((left, right) => left.diatonic - right.diatonic)
+
+    expect(printed.map((note) => note.sourceXMode)).toEqual([
+      'musicxml-layout',
+      'musicxml-layout',
+    ])
+    expect(printed[1].x).toBeGreaterThan(printed[0].x)
+    expect(printed.map((note) => note.xOffset)).toEqual([0, 0])
+    expect(fallback.map((note) => note.sourceXMode)).toEqual([
+      'semantic-fallback',
+      'semantic-fallback',
+    ])
+    expect(fallback.map((note) => note.xOffset)).toEqual([0, 12])
+  })
+
   it('places source-owned events at their printed X and maps the cursor to the same lane point', () => {
     const instructions = buildVisualRenderingInstructions(
       semanticTimingMap(),
