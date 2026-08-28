@@ -161,6 +161,18 @@ describe("font-aware notehead pitch anchors", () => {
     expect(Math.abs(anchor.yNorm * page.height - 150)).toBeLessThanOrEqual(1);
   });
 
+  it("recovers a coarse narrow head one staff space below its source origin", () => {
+    const page = image();
+    const upperLines = [60, 80, 100, 120, 140];
+    staff(page, upperLines);
+    ellipse(page, 110, 150, 6.5, 8, { open: true });
+    const anchor = resolveNoteheadAnchor(glyph(110, 130), page, upperLines, {
+      noteheadPeerOrigins: [{ x: 110, y: 130 }],
+    });
+    expect(anchor.source).toBe("ink-notehead-geometry");
+    expect(Math.abs(anchor.yNorm * page.height - 150)).toBeLessThanOrEqual(1);
+  });
+
   it("does not take a displaced component owned by a closer chord glyph", () => {
     const page = image();
     staff(page, LINES);

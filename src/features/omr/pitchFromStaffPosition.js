@@ -1036,7 +1036,7 @@ function resolveNoteheadAnchorInWindow(
     })
   const isDisplacedSourceHead = (component) =>
     Array.isArray(noteheadPeerOrigins) &&
-    component.widthRatio >= 0.75 &&
+    component.widthRatio >= 0.7 &&
     component.widthRatio <= 1.35 &&
     component.heightRatio >= 0.7 &&
     component.heightRatio <= 1.15 &&
