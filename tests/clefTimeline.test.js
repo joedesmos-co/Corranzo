@@ -83,6 +83,24 @@ describe('positioned staff-clef timeline', () => {
     expect(during.midi - before.midi).toBe(21)
   })
 
+  it('keeps a printed lower-staff treble clef authoritative below its bottom line', () => {
+    const result = detectStaffClefTimelineFromGlyphs(
+      [
+        glyph(TREBLE_CLEF, 50, 220),
+        glyph(TREBLE_CLEF, 55, 340),
+        glyph(BLACK_NOTEHEAD, 130, 375),
+      ],
+      imageData,
+      staffLines,
+      { noteheadGlyphTexts: [BLACK_NOTEHEAD] },
+    )
+    const mapping = resolvePitchFromGrandStaff(0.375, staffLines, result, 0.13)
+
+    expect(result.initialClefs.lower).toBe('treble')
+    expect(mapping.staffClefs.activeEvents.lower?.source).toBe('vector-glyph')
+    expect(mapping.clefSign).toBe('treble')
+  })
+
   it('preserves a source composite bass-clef-8vb through pitch and XML', () => {
     const result = detectStaffClefTimelineFromGlyphs(
       [

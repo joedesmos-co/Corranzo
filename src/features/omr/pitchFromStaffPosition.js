@@ -103,6 +103,16 @@ function refineGrandStaffPitchMapping(pitchMapping, staffLines, staffClefs) {
   const linesKey = staffRoleToLinesKey(staffRole)
   const lineYs = staffLines?.[linesKey] ?? pitchMapping.lineYs ?? []
   const detectedClef = staffRole === 'upper' ? clefs.upper : clefs.lower
+  const positionedClefEvent = pitchMapping.staffClefs?.activeEvents?.[staffRole]
+  if (
+    positionedClefEvent?.source === 'vector-glyph' &&
+    positionedClefEvent.clefSign === detectedClef &&
+    detectedClef === pitchMapping.clefSign
+  ) {
+    // A printed clef remains authoritative for ledger notes. The historical
+    // deep-lower-note fallback below is only for unpositioned/weak clef state.
+    return pitchMapping
+  }
   const clefSign = resolveClefSignForStaffRole(
     pitchMapping.yNorm,
     lineYs,
