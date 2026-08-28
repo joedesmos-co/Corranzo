@@ -287,7 +287,9 @@ export function buildGuidance({
           ? 'Almost — keep strumming the shape'
           : rollingChordMicMode
             ? 'Almost — keep playing the chord'
-            : 'Almost — hold the chord'
+            : isChord
+              ? 'Almost — hold the chord'
+              : 'Almost — hold the note'
     if (heard.length && missing.length && !guitarChordShapeMode && !rollingChordMicMode) {
       primary = `Need ${missing.join(', ')}`
     } else if (heard.length && !missing.length) {

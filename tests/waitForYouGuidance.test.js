@@ -21,6 +21,8 @@ import {
 } from '../src/features/practice/waitForYouInputFeedback.js'
 import { normalizeMatchSettings, WFY_MATCH_DEFAULTS } from '../src/features/practice/waitForYouMatchSettings.js'
 import { getNextCheckpointIndex } from '../src/features/practice/waitForYouEngine.js'
+import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
+import { PRACTICE_SCOPE } from '../src/features/practice/practiceScope.js'
 import { midiToNoteLabel } from '../src/features/midi-input/midiNoteLabel.js'
 import { buildCursorMotionTimeline, resolveCursorMotion } from '../src/features/score-follow/cursorMotionTimeline.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
@@ -119,6 +121,84 @@ describe('Wait For You — mic path', () => {
 })
 
 describe('Wait For You — guidance feedback', () => {
+  const confirmedHoldFeedback = (midis) =>
+    fb({
+      outcome: WFY_INPUT_OUTCOME.CHORD_PARTIAL,
+      expectedMidis: midis,
+      matchedIndices: new Set(midis.map((_, index) => index)),
+      isChord: midis.length > 1,
+    })
+
+  const checkpointTimeline = (notes) => ({
+    notes,
+    beats: [{ timeSeconds: 0, measureNumber: 1, beatInMeasure: 1 }],
+    measures: [{ number: 1, startSeconds: 0, durationSeconds: 1 }],
+    stavesPerSystem: 2,
+  })
+
+  it('calls a confirmed one-pitch event a note', () => {
+    const checkpoint = noteCheckpoint([E4])
+    const guidance = buildGuidance({
+      checkpoint,
+      inputFeedback: confirmedHoldFeedback(checkpoint.expectedMidis),
+    })
+    expect(guidance.primary).toBe('Almost — hold the note')
+    expect(guidance.isChord).toBe(false)
+  })
+
+  it.each([
+    [[C4, E4], 2],
+    [[C4, E4, G4], 3],
+  ])('calls a confirmed %i-pitch event a chord', (midis) => {
+    const checkpoint = noteCheckpoint(midis)
+    const guidance = buildGuidance({
+      checkpoint,
+      inputFeedback: confirmedHoldFeedback(checkpoint.expectedMidis),
+    })
+    expect(guidance.primary).toBe('Almost — hold the chord')
+    expect(guidance.isChord).toBe(true)
+  })
+
+  it('uses the post-hand-filter required pitches for note-versus-chord wording', () => {
+    const checkpoints = buildNoteCheckpoints(
+      checkpointTimeline([
+        { id: 'right', midi: E4, staff: 1, timeSeconds: 0, durationSeconds: 1, measureNumber: 1 },
+        { id: 'left', midi: C4, staff: 2, timeSeconds: 0, durationSeconds: 1, measureNumber: 1 },
+      ]),
+      null,
+      { practiceScope: PRACTICE_SCOPE.RIGHT_HAND },
+    )
+    expect(checkpoints[0].expectedMidis).toEqual([E4])
+    expect(buildGuidance({
+      checkpoint: checkpoints[0],
+      inputFeedback: confirmedHoldFeedback(checkpoints[0].expectedMidis),
+    }).primary).toBe('Almost — hold the note')
+  })
+
+  it('uses the remaining attack pitch when a tied chord tone needs no new attack', () => {
+    const checkpoints = buildNoteCheckpoints(checkpointTimeline([
+      { id: 'attack', midi: C4, staff: 1, timeSeconds: 0, durationSeconds: 1, measureNumber: 1 },
+      { id: 'tied', midi: E4, staff: 1, timeSeconds: 0, durationSeconds: 1, measureNumber: 1, tieStop: true },
+    ]))
+    expect(checkpoints[0].expectedMidis).toEqual([C4])
+    expect(buildGuidance({
+      checkpoint: checkpoints[0],
+      inputFeedback: confirmedHoldFeedback(checkpoints[0].expectedMidis),
+    }).primary).toBe('Almost — hold the note')
+  })
+
+  it('normalizes duplicate/unison semantic notes to one sounding pitch', () => {
+    const checkpoints = buildNoteCheckpoints(checkpointTimeline([
+      { id: 'voice-1', midi: E4, staff: 1, voice: 1, timeSeconds: 0, durationSeconds: 1, measureNumber: 1 },
+      { id: 'voice-2', midi: E4, staff: 1, voice: 2, timeSeconds: 0, durationSeconds: 1, measureNumber: 1 },
+    ]))
+    expect(checkpoints[0].expectedMidis).toEqual([E4])
+    expect(buildGuidance({
+      checkpoint: checkpoints[0],
+      inputFeedback: confirmedHoldFeedback(checkpoints[0].expectedMidis),
+    }).primary).toBe('Almost — hold the note')
+  })
+
   it('correct → green', () => {
     const g = buildGuidance({
       checkpoint: noteCheckpoint([E4]),
