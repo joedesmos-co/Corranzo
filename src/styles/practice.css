@@ -5453,20 +5453,9 @@
   will-change: transform;
 }
 
-/* Far-future notes fade out toward the right edge: readability first. */
-.staff-lane::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 16%;
-  background: linear-gradient(to right, transparent, var(--sf-bg-panel) 88%);
-  pointer-events: none;
-}
-
 .staff-lane__svg {
   display: block;
+  overflow: visible;
   shape-rendering: geometricPrecision;
 }
 
@@ -5584,6 +5573,10 @@
   fill: currentColor;
   font-family: Bravura, 'Noto Music', 'Apple Symbols', 'Segoe UI Symbol', serif;
   user-select: none;
+}
+
+.staff-lane__rest-block {
+  fill: currentColor;
 }
 
 .staff-lane__stem {
@@ -5745,6 +5738,39 @@
   font-family: Georgia, 'Times New Roman', serif;
   font-style: italic;
   font-weight: 700;
+  stroke: none;
+  user-select: none;
+}
+
+.staff-lane__pedal {
+  color: var(--vp-upcoming, #b4b4bb);
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  opacity: 0.9;
+}
+
+.staff-lane__pedal-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 700;
+  stroke: none;
+  user-select: none;
+}
+
+.staff-lane__pedal-line,
+.staff-lane__pedal-hook,
+.staff-lane__pedal-change {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.staff-lane__pedal-release {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11px;
   stroke: none;
   user-select: none;
 }

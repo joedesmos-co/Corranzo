@@ -24,6 +24,7 @@ function emptyStructuralMarks() {
     dynamics: [],
     wedges: [],
     octaveShifts: [],
+    pedals: [],
   }
 }
 
@@ -185,14 +186,31 @@ export function buildVisualObjectLayout({
   sourceAnchorIndex = null,
   preferredRepresentation = null,
 }) {
+  const sourceMap = sourceMapLayout(
+    note,
+    sourceOwnership,
+    sourceAnchorIndex,
+    preferredRepresentation,
+  )
+  const musicXml = musicXmlLayout(note, measureLayout)
+  if (sourceMap) {
+    // PDF/source-map ownership is the strongest horizontal evidence, but its
+    // page-normalized Y cannot safely be translated without a proven staff
+    // origin. MusicXML default-y is independently staff-relative, so retain it
+    // alongside the source-map X instead of throwing it away wholesale.
+    return {
+      ...sourceMap,
+      verticalSource:
+        musicXml?.defaultY != null ? VISUAL_LAYOUT_SOURCE.MUSICXML : null,
+      defaultY: musicXml?.defaultY ?? null,
+      relativeY: musicXml?.relativeY ?? null,
+      musicXmlDefaultX: musicXml?.defaultX ?? null,
+      musicXmlRelativeX: musicXml?.relativeX ?? null,
+      musicXmlMeasureWidth: musicXml?.measureWidth ?? null,
+    }
+  }
   return (
-    sourceMapLayout(
-      note,
-      sourceOwnership,
-      sourceAnchorIndex,
-      preferredRepresentation,
-    ) ??
-    musicXmlLayout(note, measureLayout) ?? {
+    musicXml ?? {
       source: VISUAL_LAYOUT_SOURCE.SEMANTIC_FALLBACK,
       coordinateSpace: null,
       page: measureLayout?.page ?? null,
@@ -549,6 +567,29 @@ export function resolveSourceFidelityObjectX(
   return resolveSourceFidelityGroupX(layout, group, timeSeconds)
 }
 
+/** Translate a MusicXML tenths delta inside the owning reconstructed measure. */
+export function resolveSourceFidelityObjectDeltaX(layout, object, deltaTenths) {
+  const delta = Number(deltaTenths)
+  if (!Number.isFinite(delta)) return null
+  if (layout?.mode !== 'source-fidelity') return delta
+  const objectId = object?.visualNoteId ?? object?.visualRestId ?? object?.id
+  const occurrence = objectId
+    ? layout.systemOccurrenceByObjectId?.get(objectId)
+    : null
+  const measure = (layout.measures ?? []).find(
+    (candidate) =>
+      (occurrence == null || candidate.systemOccurrence === occurrence) &&
+      Number(candidate.measureNumber) === Number(object?.measureNumber),
+  )
+  const sourceWidth = Number(
+    object?.sourceLayout?.measureWidth ??
+    object?.sourceLayout?.musicXmlMeasureWidth,
+  )
+  const renderedWidth = Number(measure?.xEnd) - Number(measure?.xStart)
+  if (!(sourceWidth > 0) || !Number.isFinite(renderedWidth)) return null
+  return (delta / sourceWidth) * renderedWidth
+}
+
 export function resolveSourceFidelityBarlineX(layout, timeSeconds) {
   const owned = layout?.barlineXByTime?.get(timeKey(timeSeconds))
   if (Number.isFinite(owned)) return owned
@@ -648,6 +689,19 @@ function primaryWedgeEvents(timingMap) {
 
 function primaryOctaveShiftEvents(timingMap) {
   const events = timingMap?.octaveShiftEvents ?? []
+  if (!events.length) return []
+  const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
+  return events
+    .filter((event) => primaryPartId == null || event.partId === primaryPartId)
+    .sort(
+      (left, right) =>
+        Number(left.quarterTime ?? 0) - Number(right.quarterTime ?? 0) ||
+        Number(left.sourceOrder ?? 0) - Number(right.sourceOrder ?? 0),
+    )
+}
+
+function primaryPedalEvents(timingMap) {
+  const events = timingMap?.pedalEvents ?? []
   if (!events.length) return []
   const primaryPartId = timingMap?.parts?.[0]?.id ?? events[0]?.partId ?? null
   return events
@@ -987,6 +1041,161 @@ function buildTemporalOctaveShiftSegments(octaveShiftEvents, pixelsPerSecond) {
     })
 }
 
+function pairPedalDirectionEvents(events) {
+  const openByKey = new Map()
+  const spans = []
+  for (const event of events) {
+    const key = directionPairKey(event)
+    if (event.stage === 'start') {
+      const previous = openByKey.get(key)
+      if (previous) {
+        spans.push({ start: previous, stop: event, endStage: 'change' })
+      }
+      openByKey.set(key, event)
+      continue
+    }
+    if (event.stage === 'continue') {
+      const open = openByKey.get(key)
+      if (open) open.continuations = [...(open.continuations ?? []), event]
+      continue
+    }
+    if (event.stage === 'change') {
+      const open = openByKey.get(key)
+      if (!open) continue
+      spans.push({ start: open, stop: event, endStage: 'change' })
+      openByKey.set(key, {
+        ...event,
+        stage: 'start',
+        sign: false,
+        line: Boolean(event.line || open.line),
+        startedByChange: true,
+      })
+      continue
+    }
+    if (event.stage !== 'stop') continue
+    const open = openByKey.get(key)
+    if (!open) continue
+    openByKey.delete(key)
+    spans.push({ start: open, stop: event, endStage: 'stop' })
+  }
+  return spans
+}
+
+function splitProjectedPedalSpan(span, layout) {
+  if (span.start?.printObject === false) return []
+  const startSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.start.systemOccurrence,
+  )
+  const stopSystemIndex = (layout?.systems ?? []).findIndex(
+    (system) => system.occurrence === span.stop.systemOccurrence,
+  )
+  if (startSystemIndex < 0 || stopSystemIndex < startSystemIndex) return []
+  const systems = layout.systems.slice(startSystemIndex, stopSystemIndex + 1)
+  const spanId = [
+    `pedal-${span.start.sourceOrder ?? 0}`,
+    `pass-${span.start.repeatPass ?? 1}`,
+    `system-${span.start.systemOccurrence ?? 'unknown'}`,
+  ].join('-')
+  return systems
+    .map((system, index) => ({
+      id: `${spanId}-segment-${index}`,
+      spanId,
+      partId: span.start.partId,
+      staff: span.start.staff ?? span.stop.staff,
+      number: span.start.number ?? '1',
+      placement: span.start.placement ?? span.stop.placement ?? 'below',
+      printObject: span.start.printObject,
+      line: Boolean(span.start.line || span.stop.line),
+      sign: span.start.sign !== false,
+      abbreviated: Boolean(span.start.abbreviated),
+      defaultY: span.start.defaultY ?? span.stop.defaultY,
+      relativeY: span.start.relativeY ?? span.stop.relativeY,
+      xStart: index === 0 ? span.start.x : system.xStart,
+      xEnd: index === systems.length - 1 ? span.stop.x : system.xEnd,
+      repeatPass: span.start.repeatPass ?? 1,
+      systemOccurrence: system.occurrence,
+      segmentIndex: index,
+      segmentCount: systems.length,
+      showLabel: index === 0 && span.start.sign !== false && !span.start.startedByChange,
+      showChangeStart: index === 0 && Boolean(span.start.startedByChange),
+      showChangeEnd: index === systems.length - 1 && span.endStage === 'change',
+      showRelease: index === systems.length - 1 && span.endStage === 'stop',
+      sourceXModeStart: span.start.sourceXMode,
+      sourceXModeEnd: span.stop.sourceXMode,
+    }))
+    .filter((segment) => Number(segment.xEnd) >= Number(segment.xStart))
+}
+
+function buildSourcePedalSegments(timingMap, layout, pedalEvents, writtenMeasures) {
+  const byMeasure = new Map()
+  for (const event of pedalEvents) {
+    const number = writtenMeasureNumberForEvent(event, timingMap)
+    if (number == null) continue
+    const events = byMeasure.get(Number(number)) ?? []
+    events.push(event)
+    byMeasure.set(Number(number), events)
+  }
+  const projected = []
+  for (const measure of layout.measures ?? []) {
+    const written = writtenMeasures.get(Number(measure.measureNumber))
+    for (const event of byMeasure.get(Number(measure.measureNumber)) ?? []) {
+      projected.push({
+        ...event,
+        x: directionXInMeasure(event, written, measure),
+        repeatPass: measure.repeatPass,
+        systemOccurrence: measure.systemOccurrence,
+        sourceXMode:
+          finite(event.defaultX) && Number(written?.engravedWidth) > 0
+            ? 'musicxml-default-x'
+            : finite(event.relativeX) && Number(written?.engravedWidth) > 0
+              ? 'semantic-onset-plus-relative-x'
+              : 'semantic-onset-fallback',
+      })
+    }
+  }
+  return pairPedalDirectionEvents(projected).flatMap((span) =>
+    splitProjectedPedalSpan(span, layout),
+  )
+}
+
+function buildTemporalPedalSegments(pedalEvents, pixelsPerSecond) {
+  const projected = pedalEvents.map((event) => ({
+    ...event,
+    x: Number(event.timeSeconds ?? 0) * pixelsPerSecond,
+    repeatPass: 1,
+    systemOccurrence: null,
+    sourceXMode: 'temporal-fallback',
+  }))
+  return pairPedalDirectionEvents(projected)
+    .filter((span) => span.start?.printObject !== false)
+    .map((span, index) => ({
+      id: `pedal-${span.start.sourceOrder ?? index}-temporal`,
+      spanId: `pedal-${span.start.sourceOrder ?? index}-temporal`,
+      partId: span.start.partId,
+      staff: span.start.staff ?? span.stop.staff,
+      number: span.start.number ?? '1',
+      placement: span.start.placement ?? span.stop.placement ?? 'below',
+      printObject: span.start.printObject,
+      line: Boolean(span.start.line || span.stop.line),
+      sign: span.start.sign !== false,
+      abbreviated: Boolean(span.start.abbreviated),
+      defaultY: span.start.defaultY ?? span.stop.defaultY,
+      relativeY: span.start.relativeY ?? span.stop.relativeY,
+      xStart: span.start.x,
+      xEnd: span.stop.x,
+      repeatPass: 1,
+      systemOccurrence: null,
+      segmentIndex: 0,
+      segmentCount: 1,
+      showLabel: span.start.sign !== false && !span.start.startedByChange,
+      showChangeStart: Boolean(span.start.startedByChange),
+      showChangeEnd: span.endStage === 'change',
+      showRelease: span.endStage === 'stop',
+      sourceXModeStart: 'temporal-fallback',
+      sourceXModeEnd: 'temporal-fallback',
+    }))
+}
+
 function clefsAtQuarter(clefEvents, quarterTime) {
   const activeByStaff = new Map()
   for (const event of clefEvents) {
@@ -1022,6 +1231,7 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
   const dynamicEvents = primaryDynamicEvents(timingMap)
   const wedgeEvents = primaryWedgeEvents(timingMap)
   const octaveShiftEvents = primaryOctaveShiftEvents(timingMap)
+  const pedalEvents = primaryPedalEvents(timingMap)
   if (layout?.mode !== 'source-fidelity' || !layout.measures?.length) {
     const result = emptyStructuralMarks()
     result.dynamics = dynamicEvents.map((event, index) => ({
@@ -1038,6 +1248,10 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
     )
     result.octaveShifts = buildTemporalOctaveShiftSegments(
       octaveShiftEvents,
+      Number(layout?.pixelsPerSecond ?? 120),
+    )
+    result.pedals = buildTemporalPedalSegments(
+      pedalEvents,
       Number(layout?.pixelsPerSecond ?? 120),
     )
     return result
@@ -1057,6 +1271,12 @@ export function buildSourceFidelityStructuralMarks(timingMap, layout) {
     timingMap,
     layout,
     octaveShiftEvents,
+    writtenMeasures,
+  )
+  result.pedals = buildSourcePedalSegments(
+    timingMap,
+    layout,
+    pedalEvents,
     writtenMeasures,
   )
   const keyEventsByMeasure = new Map()

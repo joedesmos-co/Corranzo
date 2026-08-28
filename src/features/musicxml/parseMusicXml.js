@@ -84,6 +84,10 @@ function readPrintedAccidental(noteNode) {
   if (!type) {
     return null
   }
+  const defaultX = numberOf(attr(accidental, 'default-x'), NaN)
+  const defaultY = numberOf(attr(accidental, 'default-y'), NaN)
+  const relativeX = numberOf(attr(accidental, 'relative-x'), NaN)
+  const relativeY = numberOf(attr(accidental, 'relative-y'), NaN)
   return {
     type: type === 'flat-flat' ? 'double-flat' : type,
     printed: true,
@@ -92,6 +96,10 @@ function readPrintedAccidental(noteNode) {
     parentheses: attr(accidental, 'parentheses') === 'yes',
     bracket: attr(accidental, 'bracket') === 'yes',
     smufl: attr(accidental, 'smufl') ?? null,
+    defaultX: Number.isFinite(defaultX) ? defaultX : null,
+    defaultY: Number.isFinite(defaultY) ? defaultY : null,
+    relativeX: Number.isFinite(relativeX) ? relativeX : null,
+    relativeY: Number.isFinite(relativeY) ? relativeY : null,
   }
 }
 
@@ -419,6 +427,45 @@ function readOctaveShiftMarks(directionNode) {
         relativeY: Number.isFinite(relativeY) ? relativeY : null,
         dashLength: Number.isFinite(dashLength) ? dashLength : null,
         spaceLength: Number.isFinite(spaceLength) ? spaceLength : null,
+      })
+    }
+  }
+  return marks
+}
+
+/** Preserve semantic sustain-pedal directions for reconstructed notation. */
+function readPedalMarks(directionNode) {
+  const marks = []
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    for (const pedal of findChildren(directionType, 'pedal')) {
+      const type = String(attr(pedal, 'type') ?? '').trim().toLowerCase()
+      if (!['start', 'stop', 'change', 'continue', 'resume', 'discontinue'].includes(type)) {
+        continue
+      }
+      const defaultX = numberOf(attr(pedal, 'default-x'), NaN)
+      const defaultY = numberOf(attr(pedal, 'default-y'), NaN)
+      const relativeX = numberOf(attr(pedal, 'relative-x'), NaN)
+      const relativeY = numberOf(attr(pedal, 'relative-y'), NaN)
+      marks.push({
+        stage:
+          type === 'resume'
+            ? 'start'
+            : type === 'discontinue'
+              ? 'stop'
+              : type,
+        sourceType: type,
+        number: String(attr(pedal, 'number') ?? '1'),
+        placement: attr(pedal, 'placement') ?? attr(directionNode, 'placement') ?? null,
+        printObject:
+          attr(directionNode, 'print-object') !== 'no' &&
+          attr(pedal, 'print-object') !== 'no',
+        line: attr(pedal, 'line') === 'yes',
+        sign: attr(pedal, 'sign') !== 'no',
+        abbreviated: attr(pedal, 'abbreviated') === 'yes',
+        defaultX: Number.isFinite(defaultX) ? defaultX : null,
+        defaultY: Number.isFinite(defaultY) ? defaultY : null,
+        relativeX: Number.isFinite(relativeX) ? relativeX : null,
+        relativeY: Number.isFinite(relativeY) ? relativeY : null,
       })
     }
   }
@@ -951,6 +998,7 @@ function walkPart({
   dynamicEvents = null,
   wedgeEvents = null,
   octaveShiftEvents = null,
+  pedalEvents = null,
   partNotation = null,
   wedgeSpans = null,
 }) {
@@ -1081,6 +1129,18 @@ function walkPart({
               })
             }
           }
+          if (Array.isArray(pedalEvents)) {
+            for (const pedalEvent of readPedalMarks(child)) {
+              pedalEvents.push({
+                ...pedalEvent,
+                partId,
+                measureNumber,
+                staff: visualDirectionStaff,
+                quarterTime: visualQuarterTime,
+                sourceOrder: pedalEvents.length,
+              })
+            }
+          }
           if (dynamicsVelocity != null) {
             if (directionStaff != null) {
               velocityByStaff.set(directionStaff, dynamicsVelocity)
@@ -1191,7 +1251,8 @@ function walkPart({
         case 'note': {
           const isChord = findChild(child, 'chord') != null
           const isGrace = findChild(child, 'grace') != null
-          const isRest = findChild(child, 'rest') != null
+          const restNode = findChild(child, 'rest')
+          const isRest = restNode != null
           const duration = numberOf(childText(child, 'duration'), 0)
           const voice = numberOf(childText(child, 'voice'), NaN)
           const startDivisions = isChord ? lastNoteStartDivisions : cursorDivisions
@@ -1230,6 +1291,21 @@ function walkPart({
           const tuplets = readTuplets(child)
           const dots = findChildren(child, 'dot').length
           const noteType = childText(child, 'type') ?? null
+          const expectedMeasureQuarters = measureLengthQuarters(
+            measureBeats,
+            measureBeatType,
+          )
+          const measureRest = Boolean(
+            isRest &&
+            (
+              attr(restNode, 'measure') === 'yes' ||
+              (
+                noteType == null &&
+                expectedMeasureQuarters > 0 &&
+                durationQuarters >= expectedMeasureQuarters - 1e-9
+              )
+            ),
+          )
           const rawStemDirection = String(childText(child, 'stem') ?? '').toLowerCase()
           const stemDirection =
             rawStemDirection === 'up' || rawStemDirection === 'down'
@@ -1271,6 +1347,7 @@ function walkPart({
             keySignature,
             ...(activeClef ? { clef: { ...activeClef } } : {}),
             isRest,
+            measureRest,
             isChord,
             isGrace,
             tieStart,
@@ -1459,6 +1536,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const dynamicEvents = []
   const wedgeEvents = []
   const octaveShiftEvents = []
+  const pedalEvents = []
   const wedgeSpans = []
   const partNotationById = new Map()
 
@@ -1489,6 +1567,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     dynamicEvents,
     wedgeEvents,
     octaveShiftEvents,
+    pedalEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
   })
@@ -1510,6 +1589,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       dynamicEvents,
       wedgeEvents,
       octaveShiftEvents,
+      pedalEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
     })
@@ -1661,6 +1741,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   for (const event of octaveShiftEvents) {
     event.timeSeconds = toSeconds(event.quarterTime)
   }
+  for (const event of pedalEvents) {
+    event.timeSeconds = toSeconds(event.quarterTime)
+  }
 
   const chordSheetAnalysis = analyzeChordSheetScore({
     harmonyEvents,
@@ -1781,6 +1864,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     dynamicEvents,
     wedgeEvents,
     octaveShiftEvents,
+    pedalEvents,
     wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {

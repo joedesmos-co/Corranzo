@@ -8,6 +8,7 @@ import {
   NOTEHEAD_RX,
   STAFF_KIND,
   STAFF_LINE_GAP,
+  STAFF_LANE_RIGHT_GLYPH_OVERSCAN,
   STEMLESS_MIN_SECONDS,
   STEM_LENGTH_GAPS,
   buildStaffGeometry,
@@ -18,6 +19,7 @@ import {
   resolveStaffKind,
   sourceDirectionMarginGaps,
   staffYForNote,
+  isStaffVisualBoundsInsideRightEdge,
 } from '../src/features/practice/staffLaneLayout.js'
 
 const HALF = STAFF_LINE_GAP / 2
@@ -98,6 +100,25 @@ describe('staff geometry', () => {
       { octaveShifts: [{ placement: 'above' }] },
       staves,
     )).toEqual({ topMarginGaps: 3, bottomMarginGaps: 3 })
+  })
+})
+
+describe('right-edge full visual bounds', () => {
+  it('reserves more than a displaced head, ledger line, flag, or dot needs', () => {
+    expect(STAFF_LANE_RIGHT_GLYPH_OVERSCAN).toBeGreaterThan(NOTEHEAD_RX + STAFF_LINE_GAP)
+  })
+
+  it.each([
+    ['rightmost single note', { x: 88, width: 11 }, 100, true],
+    ['right-displaced chord head', { x: 80, width: 21 }, 100, false],
+    ['accidental plus chord union', { x: 68, width: 33 }, 100, false],
+    ['upward stem and flag', { x: 82, width: 17 }, 100, true],
+    ['downward stem and flag', { x: 87, width: 12 }, 100, true],
+    ['beamed group', { x: 55, width: 46 }, 100, false],
+    ['ledger-line note', { x: 87, width: 14 }, 100, false],
+    ['zoomed narrow viewport', { x: 48, width: 17 }, 64, false],
+  ])('uses the complete %s bounds before revealing it', (_label, bounds, edge, expected) => {
+    expect(isStaffVisualBoundsInsideRightEdge(bounds, 0, edge)).toBe(expected)
   })
 })
 

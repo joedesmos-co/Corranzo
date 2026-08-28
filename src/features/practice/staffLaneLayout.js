@@ -7,6 +7,7 @@ import { isFiniteMidi, sanitizeVisualDurationSeconds } from './visualNoteSanitiz
 import {
   VISUAL_LAYOUT_SOURCE,
   resolveSourceFidelityLaneX,
+  resolveSourceFidelityObjectDeltaX,
   resolveSourceFidelityObjectX,
   resolveSourceFidelitySystem,
 } from './sourceFidelityLayout.js'
@@ -31,6 +32,27 @@ export const STAFF_KIND = {
 /** Vertical distance between adjacent staff lines, in SVG units. */
 export const STAFF_LINE_GAP = 12
 const HALF_STEP = STAFF_LINE_GAP / 2
+/**
+ * Reserved viewport room for the complete right-side visual envelope of an
+ * event. Three staff gaps cover a displaced/whole notehead, ledger line,
+ * augmentation dots, flags, beam thickness, and attached ornaments. The
+ * scrolling camera treats this as overscan instead of painting a fade over it.
+ */
+export const STAFF_LANE_RIGHT_GLYPH_OVERSCAN = STAFF_LINE_GAP * 3
+
+/** Full-object right-edge visibility; partial intersections stay hidden. */
+export function isStaffVisualBoundsInsideRightEdge(
+  bounds,
+  scrollX,
+  rightEdge,
+) {
+  const x = Number(bounds?.x)
+  const width = Number(bounds?.width)
+  const translation = Number(scrollX)
+  const edge = Number(rightEdge)
+  if (![x, width, translation, edge].every(Number.isFinite)) return true
+  return x + Math.max(0, width) + translation <= edge + 0.001
+}
 export const GRACE_NOTE_SCALE = 0.66
 const GRACE_NOTE_SPACING = STAFF_LINE_GAP * 1.45
 const GRACE_STEM_LENGTH = STAFF_LINE_GAP * 2.1
@@ -262,6 +284,7 @@ export function sourceDirectionMarginGaps(
     ...(structuralMarks?.dynamics ?? []),
     ...(structuralMarks?.wedges ?? []),
     ...(structuralMarks?.octaveShifts ?? []),
+    ...(structuralMarks?.pedals ?? []),
   ].filter((mark) => mark?.printObject !== false)
   let top = STAFF_MARGIN_GAPS
   let bottom = STAFF_MARGIN_GAPS
@@ -284,6 +307,16 @@ export function sourceDirectionMarginGaps(
         positionFromFirstTop - lastStaffBottomFromFirstTop + 1.25,
       )
     }
+  }
+  if (
+    (structuralMarks?.pedals ?? []).some(
+      (pedal) =>
+        pedal?.printObject !== false &&
+        pedal?.defaultY == null &&
+        pedal?.placement !== 'above',
+    )
+  ) {
+    bottom = Math.max(bottom, 4.2)
   }
   return { topMarginGaps: top, bottomMarginGaps: bottom }
 }
@@ -422,7 +455,10 @@ function sourceYForObject(object, staffKind, geometry) {
   const defaultY = Number(layout?.defaultY)
   const relativeY = layout?.relativeY == null ? 0 : Number(layout.relativeY)
   if (
-    layout?.source !== VISUAL_LAYOUT_SOURCE.MUSICXML ||
+    (
+      layout?.source !== VISUAL_LAYOUT_SOURCE.MUSICXML &&
+      layout?.verticalSource !== VISUAL_LAYOUT_SOURCE.MUSICXML
+    ) ||
     layout.defaultY == null ||
     !Number.isFinite(defaultY) ||
     !Number.isFinite(relativeY)
@@ -646,6 +682,67 @@ export function buildStaffLaneOctaveShiftMarks(
     .filter(Boolean)
 }
 
+/** Native sustain-pedal label, continuation line, change, and release geometry. */
+export function buildStaffLanePedalMarks(
+  structuralMarks,
+  geometry,
+  { sourceSystemGeometries = new Map() } = {},
+) {
+  return (structuralMarks?.pedals ?? [])
+    .filter((pedal) => pedal?.printObject !== false)
+    .map((pedal) => {
+      const pedalGeometry =
+        sourceSystemGeometries.get(pedal.systemOccurrence) ?? geometry
+      const staffKind = resolveStaffKind(pedal)
+      const staff =
+        pedalGeometry.staves[staffKind] ?? Object.values(pedalGeometry.staves)[0]
+      const firstStaff =
+        pedalGeometry.staves[STAFF_KIND.TREBLE] ??
+        Object.values(pedalGeometry.staves)[0]
+      if (!staff || !firstStaff) return null
+
+      const defaultY = Number(pedal.defaultY)
+      const relativeY = pedal.relativeY == null ? 0 : Number(pedal.relativeY)
+      const hasSourceY =
+        pedal.defaultY != null &&
+        Number.isFinite(defaultY) &&
+        Number.isFinite(relativeY)
+      const placement = pedal.placement === 'above' ? 'above' : 'below'
+      const y = hasSourceY
+        ? firstStaff.lines[0] - ((defaultY + relativeY) / 10) * STAFF_LINE_GAP
+        : placement === 'above'
+          ? staff.lines[0] - STAFF_LINE_GAP * 1.65
+          : staff.lines[staff.lines.length - 1] + STAFF_LINE_GAP * 1.65
+      const label = pedal.abbreviated ? 'Ped.' : 'Ped.'
+      const lineXStart = pedal.showLabel
+        ? Number(pedal.xStart) + STAFF_LINE_GAP * 2.45
+        : Number(pedal.xStart)
+      const hookDirection = placement === 'above' ? 1 : -1
+      const hookY = y + hookDirection * STAFF_LINE_GAP * 0.72
+      const changeDepth = hookDirection * STAFF_LINE_GAP * 0.65
+
+      return {
+        ...pedal,
+        staffKind,
+        placement,
+        label,
+        y,
+        lineXStart: Math.min(lineXStart, Number(pedal.xEnd)),
+        hookY,
+        changeStartPath: pedal.showChangeStart
+          ? `M ${pedal.xStart - STAFF_LINE_GAP * 0.34} ${y} L ${pedal.xStart} ${y + changeDepth} L ${pedal.xStart + STAFF_LINE_GAP * 0.34} ${y}`
+          : null,
+        changeEndPath: pedal.showChangeEnd
+          ? `M ${pedal.xEnd - STAFF_LINE_GAP * 0.34} ${y} L ${pedal.xEnd} ${y + changeDepth} L ${pedal.xEnd + STAFF_LINE_GAP * 0.34} ${y}`
+          : null,
+        sourceYMode: hasSourceY
+          ? 'musicxml-default-y'
+          : 'semantic-placement-fallback',
+      }
+    })
+    .filter(Boolean)
+}
+
 const KEY_SIGNATURE_DIATONICS = {
   [STAFF_KIND.TREBLE]: {
     sharp: [38, 35, 39, 36, 33, 37, 34],
@@ -763,6 +860,7 @@ export const REST_GLYPH_BY_NOTE_TYPE = Object.freeze({
 })
 
 function inferredRestType(rest) {
+  if (rest?.measureRest) return 'whole'
   if (REST_GLYPH_BY_NOTE_TYPE[rest?.noteType]) return rest.noteType
   const quarters = Number(rest?.durationQuarters)
   if (Number.isFinite(quarters)) {
@@ -845,8 +943,10 @@ export function buildStaffLaneRests(
         measureNumber: rest.measureNumber ?? group.measureNumber ?? null,
         durationSeconds: sanitizeVisualDurationSeconds(rest.durationSeconds, 0),
         durationQuarters: rest.durationQuarters ?? null,
+        measureRest: Boolean(rest.measureRest),
         noteType,
         glyph: restGlyphForNoteType(noteType),
+        shape: noteType === 'whole' || noteType === 'half' ? noteType : 'glyph',
         dots: Math.max(0, Math.round(Number(rest.dots) || 0)),
         xOffset: 0,
         visualNoteId: rest.visualRestId ?? rest.id ?? `${group.id}-rest-${index}`,
@@ -930,6 +1030,45 @@ export function buildStaffLaneNotes(
       )
       const sourcePosition = sourceYForObject(note, staffKind, objectGeometry)
       const { y, ledgerLines } = sourcePosition ?? semanticPosition
+      const noteDefaultXValue =
+        note.sourceLayout?.source === VISUAL_LAYOUT_SOURCE.MUSICXML
+          ? note.sourceLayout?.defaultX
+          : note.sourceLayout?.musicXmlDefaultX
+      const noteDefaultX = noteDefaultXValue == null
+        ? NaN
+        : Number(noteDefaultXValue)
+      const noteRelativeX = Number(
+        note.sourceLayout?.source === VISUAL_LAYOUT_SOURCE.MUSICXML
+          ? note.sourceLayout?.relativeX ?? 0
+          : note.sourceLayout?.musicXmlRelativeX ?? 0,
+      )
+      const accidentalDefaultX = Number(note.accidental?.defaultX)
+      const accidentalRelativeX = Number(note.accidental?.relativeX ?? 0)
+      const sourceAccidentalDeltaX =
+        note.accidental?.defaultX != null &&
+        Number.isFinite(accidentalDefaultX) &&
+        Number.isFinite(noteDefaultX) &&
+        Number.isFinite(noteRelativeX) &&
+        Number.isFinite(accidentalRelativeX)
+          ? resolveSourceFidelityObjectDeltaX(
+              laneLayout,
+              note,
+              accidentalDefaultX + accidentalRelativeX - noteDefaultX - noteRelativeX,
+            )
+          : null
+      const accidentalDefaultY = Number(note.accidental?.defaultY)
+      const accidentalRelativeY = Number(note.accidental?.relativeY ?? 0)
+      const firstStaff =
+        objectGeometry.staves[STAFF_KIND.TREBLE] ??
+        Object.values(objectGeometry.staves)[0]
+      const sourceAccidentalY =
+        note.accidental?.defaultY != null &&
+        Number.isFinite(accidentalDefaultY) &&
+        Number.isFinite(accidentalRelativeY) &&
+        firstStaff
+          ? firstStaff.lines[0] -
+            ((accidentalDefaultY + accidentalRelativeY) / 10) * STAFF_LINE_GAP
+          : null
       const durationSeconds = sanitizeVisualDurationSeconds(note.durationSeconds, 0)
       const noteType = note.noteType ?? null
       notes.push({
@@ -961,6 +1100,11 @@ export function buildStaffLaneNotes(
           note.accidental,
         ),
         accidentalColumn: 0,
+        accidentalX:
+          sourceAccidentalDeltaX != null ? x + sourceAccidentalDeltaX : null,
+        accidentalY: sourceAccidentalY,
+        accidentalSourcePosition:
+          sourceAccidentalDeltaX != null || sourceAccidentalY != null,
         ledgerLines,
         diatonic: written.diatonic,
         hollow: noteType
@@ -1103,6 +1247,7 @@ export function buildStaffLaneGraceNotes(
       return {
         ...grace,
         id: `${principal.id}-grace-${index}`,
+        groupId: principal.groupId,
         principalNoteId: principal.visualNoteId,
         status: principal.status,
         laneOutcome: principal.laneOutcome,
@@ -1153,6 +1298,7 @@ export function buildStaffLaneGraceNotes(
               x2: note.stemX,
               y2: note.stemY2 + offset,
               status: principal.status,
+              groupId: principal.groupId,
             })
             openBeams.delete(number)
           }
@@ -1401,6 +1547,7 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
       status: rhythmStatus(start.chord[0], end.chord[0]),
       stemCount: group.records.length,
       crossStaff: staffKinds.length > 1,
+      groupIds: [...new Set(group.records.map((record) => record.chord[0]?.groupId).filter(Boolean))],
     })
   }
 
@@ -1425,6 +1572,7 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
         stemCount: 1,
         crossStaff: false,
         hook: true,
+        groupIds: [record.chord[0]?.groupId].filter(Boolean),
       })
     }
   }
@@ -1452,6 +1600,10 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
           record.stem.x + side * STAFF_LINE_GAP * 0.9
         } ${controlY} ${record.stem.x + side * STAFF_LINE_GAP * 0.62} ${endY}`,
         status: record.chord[0]?.status ?? null,
+        groupId: record.chord[0]?.groupId ?? null,
+        rightX:
+          record.stem.x +
+          (side > 0 ? STAFF_LINE_GAP * 0.9 : STAFF_LINE_GAP * 0.14),
       })
     }
   }
@@ -1465,6 +1617,7 @@ export function buildStaffLaneRhythmMarks(notes = [], stems = []) {
         cy: note.y - NOTEHEAD_RY * 0.25,
         r: 1.8,
         status: note.status ?? null,
+        groupId: note.groupId ?? null,
       })
     }
   }

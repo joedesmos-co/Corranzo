@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import useElementSize from '../../hooks/useElementSize.js'
 import useStableElementSize from '../../hooks/useStableElementSize.js'
 import { VISUAL_LANE_DEFAULTS } from '../../features/practice/visualLaneConstants.js'
@@ -14,6 +14,7 @@ import {
 import {
   NOTEHEAD_RX,
   NOTEHEAD_RY,
+  STAFF_LANE_RIGHT_GLYPH_OVERSCAN,
   STAFF_KIND,
   STAFF_LINE_GAP,
   buildKeySignatureMarks,
@@ -23,12 +24,14 @@ import {
   buildStaffLaneDynamicMarks,
   buildStaffLaneNotationMarkings,
   buildStaffLaneOctaveShiftMarks,
+  buildStaffLanePedalMarks,
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
   buildStaffLaneWedgeMarks,
   buildSourceSystemStaffGeometry,
   sourceDirectionMarginGaps,
+  isStaffVisualBoundsInsideRightEdge,
 } from '../../features/practice/staffLaneLayout.js'
 import { resolveLaneNoteClass } from '../../features/practice/visualLaneFeedback.js'
 
@@ -170,6 +173,7 @@ function StaffVisualLane({
   const containerRef = useRef(null)
   const scrollRef = useRef(null)
   const playheadRef = useRef(null)
+  const rightEdgeBoundsRef = useRef([])
   const rawSize = useElementSize(containerRef)
   const size = useStableElementSize(rawSize)
   const sourceSystems = useMemo(
@@ -221,8 +225,6 @@ function StaffVisualLane({
     maximumScale: MAX_SCALE,
     preserveSourceEnvelope,
   })
-  const viewWidth = size.width > 0 ? size.width / scale : 1200
-  const playheadX = resolveVisualPlayheadX({ frameTime: 0, viewWidth, durationSeconds, loopRegion })
   // Ordinary lanes may crop only their generic outer ledger margins on very
   // short screens. Source-expanded envelopes fit exactly and stay visible.
   const offsetY = (size.height > 0 ? size.height / scale - geometry.height : 0) / 2
@@ -279,6 +281,25 @@ function StaffVisualLane({
       graceSlurs: graceMarks.slurs,
     }
   }, [visibleGroups, geometry, sourceLayout])
+
+  // Keep the camera's working edge left of the physical clip edge by the
+  // complete conservative glyph envelope. The SVG itself may paint into this
+  // reserved strip, so an anchor can reach the working edge without its head,
+  // stem, flag, dot, ledger line, beam, or ornament being sliced.
+  const fullSvgWidth = size.width > 0 ? size.width / scale : 1200
+  const viewWidth = Math.max(
+    STAFF_LINE_GAP * 8,
+    fullSvgWidth - STAFF_LANE_RIGHT_GLYPH_OVERSCAN,
+  )
+  const svgWidth = size.width > 0
+    ? Math.max(1, size.width - STAFF_LANE_RIGHT_GLYPH_OVERSCAN * scale)
+    : '100%'
+  const playheadX = resolveVisualPlayheadX({
+    frameTime: 0,
+    viewWidth,
+    durationSeconds,
+    loopRegion,
+  })
 
   // Barlines within the visible groups' span (deterministic x, like notes).
   const visibleBarlines = useMemo(() => {
@@ -343,6 +364,20 @@ function StaffVisualLane({
       if (playheadEl) {
         playheadEl.setAttribute('x1', String(livePlayheadX))
         playheadEl.setAttribute('x2', String(livePlayheadX))
+      }
+      const physicalRightEdge =
+        metrics.viewWidth + STAFF_LANE_RIGHT_GLYPH_OVERSCAN
+      for (const entry of rightEdgeBoundsRef.current) {
+        const visible = isStaffVisualBoundsInsideRightEdge(
+          entry.bounds,
+          scrollX,
+          physicalRightEdge,
+        )
+        if (entry.visible === visible) continue
+        entry.visible = visible
+        for (const node of entry.nodes) {
+          node.style.visibility = visible ? '' : 'hidden'
+        }
       }
       frame = requestAnimationFrame(step)
     }
@@ -450,6 +485,81 @@ function StaffVisualLane({
       }),
     [structuralMarks, geometry, sourceSystemGeometries],
   )
+  const pedalMarks = useMemo(
+    () =>
+      buildStaffLanePedalMarks(structuralMarks, geometry, {
+        sourceSystemGeometries,
+      }),
+    [structuralMarks, geometry, sourceSystemGeometries],
+  )
+
+  const beamBoundsGroupByEvent = useMemo(() => {
+    const result = new Map()
+    for (const beam of beams) {
+      if (Number(beam.number) !== 1 || !beam.groupIds?.length) continue
+      const group = `beam:${beam.groupIds.join('|')}`
+      for (const groupId of beam.groupIds) result.set(groupId, group)
+    }
+    return result
+  }, [beams])
+  const boundsGroupFor = (groupId, fallback) =>
+    beamBoundsGroupByEvent.get(groupId) ?? groupId ?? fallback
+
+  // Collect the conservative numeric right envelope emitted for every SVG
+  // object in an event. The animation loop reveals the event only after the
+  // union is inside the physical edge, so heads and their stems, flags,
+  // accidentals, ledgers, beams, dots, and ornaments cannot enter as slices.
+  useLayoutEffect(() => {
+    const root = scrollRef.current
+    if (!root) {
+      rightEdgeBoundsRef.current = []
+      return
+    }
+    const grouped = new Map()
+    for (const node of root.querySelectorAll('[data-visual-bounds-group]')) {
+      const group = node.getAttribute('data-visual-bounds-group')
+      node.style.visibility = ''
+      const right = Number(node.getAttribute('data-visual-bounds-right'))
+      if (!group || !Number.isFinite(right)) continue
+      const current = grouped.get(group) ?? {
+        nodes: [],
+        maxX: right,
+        visible: null,
+      }
+      current.nodes.push(node)
+      current.maxX = Math.max(current.maxX, right)
+      grouped.set(group, current)
+    }
+    rightEdgeBoundsRef.current = [...grouped.values()].map((entry) => ({
+      ...entry,
+      bounds: {
+        x: entry.maxX,
+        y: 0,
+        width: 0,
+        height: 0,
+      },
+    }))
+  }, [
+    notes,
+    rests,
+    stems,
+    beams,
+    flags,
+    dots,
+    noteMarkings,
+    spanMarkings,
+    tremoloMarkings,
+    tupletMarkings,
+    graceNotes,
+    graceBeams,
+    graceSlurs,
+    dynamicMarks,
+    wedgeMarks,
+    octaveShiftMarks,
+    pedalMarks,
+    visibleBarlines,
+    sourceSystemPrefixes,
+  ])
 
   return (
     <div
@@ -457,8 +567,9 @@ function StaffVisualLane({
       className="staff-lane"
       aria-hidden="true"
       data-source-layout={sourceLayout?.mode ?? 'temporal-fallback'}
+      data-right-glyph-overscan={STAFF_LANE_RIGHT_GLYPH_OVERSCAN}
     >
-      <svg className="staff-lane__svg" width="100%" height="100%">
+      <svg className="staff-lane__svg" width={svgWidth} height="100%" overflow="visible">
         <g transform={`scale(${scale}) translate(0 ${offsetY})`}>
           {/* Scrolling notes: single transform, deterministic reconstructed x.
               Rendered first so staff lines and clefs paint over them. */}
@@ -480,6 +591,8 @@ function StaffVisualLane({
               <g
                 key={`system-${system.occurrence}-prefix`}
                 className="staff-lane__system-prefix"
+                data-visual-bounds-group={`system-prefix:${system.occurrence}`}
+                data-visual-bounds-right={system.xStart + STAFF_LINE_GAP * 8}
                 data-source-page={system.page}
                 data-source-system={system.systemIndex}
               >
@@ -735,6 +848,8 @@ function StaffVisualLane({
               <g
                 key={shift.id}
                 className={`staff-lane__octave-shift staff-lane__octave-shift--${shift.placement}`}
+                data-visual-bounds-group={`octave-shift:${shift.id}`}
+                data-visual-bounds-right={shift.xEnd + STAFF_LINE_GAP * 0.2}
                 data-structural-kind="octave-shift"
                 data-octave-shift-type={shift.type}
                 data-octave-shift-size={shift.size}
@@ -782,6 +897,8 @@ function StaffVisualLane({
               <g
                 key={wedge.id}
                 className={`staff-lane__hairpin staff-lane__hairpin--${wedge.type}`}
+                data-visual-bounds-group={`wedge:${wedge.id}`}
+                data-visual-bounds-right={wedge.xEnd + STAFF_LINE_GAP * 0.2}
                 data-structural-kind="wedge"
                 data-wedge-type={wedge.type}
                 data-wedge-number={wedge.number}
@@ -818,6 +935,8 @@ function StaffVisualLane({
               <text
                 key={dynamic.id}
                 className="staff-lane__dynamic"
+                data-visual-bounds-group={`dynamic:${dynamic.id}`}
+                data-visual-bounds-right={dynamic.x + STAFF_LINE_GAP}
                 data-structural-kind="dynamic"
                 data-dynamic-mark={dynamic.mark}
                 data-source-x-mode={dynamic.sourceXMode}
@@ -831,10 +950,76 @@ function StaffVisualLane({
                 {dynamic.mark}
               </text>
             ))}
+            {pedalMarks.map((pedal) => (
+              <g
+                key={pedal.id}
+                className="staff-lane__pedal"
+                data-visual-bounds-group={`pedal:${pedal.id}`}
+                data-visual-bounds-right={pedal.xEnd + STAFF_LINE_GAP * 0.4}
+                data-structural-kind="pedal"
+                data-pedal-number={pedal.number}
+                data-source-x-start={pedal.sourceXModeStart}
+                data-source-x-end={pedal.sourceXModeEnd}
+                data-source-y-mode={pedal.sourceYMode}
+                data-source-system={pedal.systemOccurrence ?? undefined}
+                data-span-segment={pedal.segmentIndex ?? undefined}
+                data-span-segment-count={pedal.segmentCount ?? undefined}
+              >
+                {pedal.showLabel && (
+                  <text
+                    className="staff-lane__pedal-label"
+                    x={pedal.xStart}
+                    y={pedal.y}
+                    dominantBaseline="middle"
+                  >
+                    {pedal.label}
+                  </text>
+                )}
+                {pedal.line && pedal.xEnd >= pedal.lineXStart && (
+                  <line
+                    className="staff-lane__pedal-line"
+                    x1={pedal.lineXStart}
+                    x2={pedal.xEnd}
+                    y1={pedal.y}
+                    y2={pedal.y}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                )}
+                {pedal.changeStartPath && (
+                  <path className="staff-lane__pedal-change" d={pedal.changeStartPath} />
+                )}
+                {pedal.changeEndPath && (
+                  <path className="staff-lane__pedal-change" d={pedal.changeEndPath} />
+                )}
+                {pedal.showRelease && pedal.line && (
+                  <line
+                    className="staff-lane__pedal-hook"
+                    x1={pedal.xEnd}
+                    x2={pedal.xEnd}
+                    y1={pedal.y}
+                    y2={pedal.hookY}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                )}
+                {pedal.showRelease && !pedal.line && (
+                  <text
+                    className="staff-lane__pedal-release"
+                    x={pedal.xEnd}
+                    y={pedal.y}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >
+                    ✱
+                  </text>
+                )}
+              </g>
+            ))}
             {visibleBarlines.map((barline) => (
               <line
                 key={barline.time}
                 className="staff-lane__barline"
+                data-visual-bounds-group={`barline:${barline.time}`}
+                data-visual-bounds-right={barline.x + 1}
                 x1={barline.x}
                 x2={barline.x}
                 y1={barline.geometry.lines[0]}
@@ -846,6 +1031,8 @@ function StaffVisualLane({
               <line
                 key={stem.id}
                 className={`staff-lane__stem staff-lane__note--${stem.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(stem.groupId, stem.id)}
+                data-visual-bounds-right={stem.x + 2}
                 x1={stem.x}
                 x2={stem.x}
                 y1={stem.y1}
@@ -856,6 +1043,8 @@ function StaffVisualLane({
               <line
                 key={tremolo.id}
                 className={`staff-lane__tremolo staff-lane__note--${tremolo.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(tremolo.fromGroupId, tremolo.id)}
+                data-visual-bounds-right={Math.max(tremolo.x1, tremolo.x2) + STAFF_LINE_GAP * 0.3}
                 x1={tremolo.x1}
                 x2={tremolo.x2}
                 y1={tremolo.y1}
@@ -868,6 +1057,8 @@ function StaffVisualLane({
               <line
                 key={beam.id}
                 className={`staff-lane__beam staff-lane__note--${beam.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(beam.groupIds?.[0], beam.id)}
+                data-visual-bounds-right={Math.max(beam.x1, beam.x2) + STAFF_LINE_GAP * 0.3}
                 x1={beam.x1}
                 x2={beam.x2}
                 y1={beam.y1}
@@ -881,6 +1072,8 @@ function StaffVisualLane({
               <path
                 key={slur.id}
                 className={`staff-lane__grace-slur staff-lane__note--${slur.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(slur.groupId, slur.id)}
+                data-visual-bounds-right={slur.xEnd ?? slur.x2 ?? 0}
                 data-grace-slur="true"
                 data-grace-placement={slur.placement}
                 d={slur.path}
@@ -891,6 +1084,8 @@ function StaffVisualLane({
               <line
                 key={beam.id}
                 className={`staff-lane__grace-beam staff-lane__note--${beam.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(beam.groupId, beam.id)}
+                data-visual-bounds-right={Math.max(beam.x1, beam.x2) + STAFF_LINE_GAP * 0.2}
                 x1={beam.x1}
                 x2={beam.x2}
                 y1={beam.y1}
@@ -902,6 +1097,8 @@ function StaffVisualLane({
               <g
                 key={tuplet.id}
                 className={`staff-lane__tuplet staff-lane__note--${tuplet.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(tuplet.fromGroupId, tuplet.id)}
+                data-visual-bounds-right={tuplet.x2 + STAFF_LINE_GAP * 0.25}
                 data-tuplet-number={tuplet.label}
                 data-tuplet-placement={tuplet.placement}
               >
@@ -925,6 +1122,8 @@ function StaffVisualLane({
               <path
                 key={flag.id}
                 className={`staff-lane__flag staff-lane__note--${flag.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(flag.groupId, flag.id)}
+                data-visual-bounds-right={flag.rightX}
                 d={flag.path}
               />
             ))}
@@ -932,6 +1131,8 @@ function StaffVisualLane({
               <path
                 key={marking.id}
                 className={`staff-lane__span-mark staff-lane__span-mark--${marking.kind} staff-lane__note--${marking.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(marking.fromGroupId, marking.id)}
+                data-visual-bounds-right={marking.xEnd ?? marking.x2 ?? 0}
                 data-span-segment={marking.segmentIndex ?? undefined}
                 data-span-segment-count={marking.segmentCount ?? undefined}
                 data-source-system={marking.systemOccurrence ?? undefined}
@@ -946,20 +1147,37 @@ function StaffVisualLane({
                   rest.status,
                   rest.laneOutcome,
                 )}`}
+                data-visual-bounds-group={boundsGroupFor(rest.groupId, rest.id)}
+                data-visual-bounds-right={
+                  rest.x + STAFF_LINE_GAP * (1.15 + rest.dots * 0.45)
+                }
                 data-note-type={rest.noteType}
                 data-voice={rest.voice}
                 data-source-y-mode={rest.sourceYMode ?? undefined}
               >
-                <text
-                  className="staff-lane__rest-glyph"
-                  x={rest.x}
-                  y={rest.y}
-                  fontSize={STAFF_LINE_GAP * 2.55}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                >
-                  {rest.glyph}
-                </text>
+                {rest.shape === 'whole' || rest.shape === 'half' ? (
+                  <rect
+                    className={`staff-lane__rest-block staff-lane__rest-block--${rest.shape}`}
+                    data-rest-shape={rest.shape}
+                    x={rest.x - STAFF_LINE_GAP * 0.55}
+                    y={rest.shape === 'whole'
+                      ? rest.y
+                      : rest.y - STAFF_LINE_GAP * 0.38}
+                    width={STAFF_LINE_GAP * 1.1}
+                    height={STAFF_LINE_GAP * 0.38}
+                  />
+                ) : (
+                  <text
+                    className="staff-lane__rest-glyph"
+                    x={rest.x}
+                    y={rest.y}
+                    fontSize={STAFF_LINE_GAP * 2.55}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    {rest.glyph}
+                  </text>
+                )}
                 {Array.from({ length: rest.dots }, (_, index) => (
                   <circle
                     key={`${rest.id}-dot-${index + 1}`}
@@ -975,6 +1193,14 @@ function StaffVisualLane({
               <g
                 key={note.id}
                 className={`staff-lane__note staff-lane__note--${resolveLaneNoteClass(note.status, note.laneOutcome)}`}
+                data-visual-bounds-group={boundsGroupFor(note.groupId, note.id)}
+                data-visual-bounds-right={
+                  note.x + note.xOffset + Math.max(
+                    LEDGER_HALF_WIDTH,
+                    (note.stemless ? NOTEHEAD_RX * 1.14 : NOTEHEAD_RX) *
+                      (note.status === 'current' ? CURRENT_HEAD_SCALE : 1),
+                  )
+                }
                 data-note-type={note.noteType ?? undefined}
                 data-voice={note.voice}
                 data-hollow={note.hollow || undefined}
@@ -996,14 +1222,16 @@ function StaffVisualLane({
                   <text
                     className={`staff-lane__accidental staff-lane__accidental--${note.accidentalType}${note.accidentalType === 'sharp' ? ' staff-lane__sharp' : ''}`}
                     data-accidental={note.accidentalType}
+                    data-source-position={note.accidentalSourcePosition || undefined}
                     x={
+                      note.accidentalX ??
                       note.x +
-                      note.xOffset -
-                      NOTEHEAD_RX -
-                      4 -
-                      note.accidentalColumn * STAFF_LINE_GAP * 0.95
+                        note.xOffset -
+                        NOTEHEAD_RX -
+                        4 -
+                        note.accidentalColumn * STAFF_LINE_GAP * 0.95
                     }
-                    y={note.y}
+                    y={note.accidentalY ?? note.y}
                     dominantBaseline="middle"
                     textAnchor="end"
                     fontSize={STAFF_LINE_GAP + 2}
@@ -1025,6 +1253,11 @@ function StaffVisualLane({
               <g
                 key={note.id}
                 className={`staff-lane__grace-note staff-lane__note--${resolveLaneNoteClass(note.status, note.laneOutcome)}`}
+                data-visual-bounds-group={boundsGroupFor(note.groupId, note.id)}
+                data-visual-bounds-right={
+                  Math.max(note.x + note.headRx, note.stemX) +
+                  note.flagCount * STAFF_LINE_GAP * 0.9
+                }
                 data-grace-note="true"
                 data-grace-measure={note.measureNumber ?? undefined}
                 data-principal-note-id={note.principalNoteId ?? undefined}
@@ -1103,6 +1336,8 @@ function StaffVisualLane({
               <circle
                 key={dot.id}
                 className={`staff-lane__augmentation-dot staff-lane__note--${dot.status ?? 'upcoming'}`}
+                data-visual-bounds-group={boundsGroupFor(dot.groupId, dot.id)}
+                data-visual-bounds-right={dot.cx + dot.r}
                 cx={dot.cx}
                 cy={dot.cy}
                 r={dot.r}
@@ -1115,6 +1350,8 @@ function StaffVisualLane({
                   <circle
                     key={marking.id}
                     className={className}
+                    data-visual-bounds-group={boundsGroupFor(marking.groupId, marking.id)}
+                    data-visual-bounds-right={marking.x + marking.r}
                     cx={marking.x}
                     cy={marking.y}
                     r={marking.r}
@@ -1126,6 +1363,8 @@ function StaffVisualLane({
                   <line
                     key={marking.id}
                     className={className}
+                    data-visual-bounds-group={boundsGroupFor(marking.groupId, marking.id)}
+                    data-visual-bounds-right={Math.max(marking.x1, marking.x2)}
                     x1={marking.x1}
                     x2={marking.x2}
                     y1={marking.y1}
@@ -1138,6 +1377,10 @@ function StaffVisualLane({
                 <text
                   key={marking.id}
                   className={className}
+                  data-visual-bounds-group={boundsGroupFor(marking.groupId, marking.id)}
+                  data-visual-bounds-right={
+                    marking.x + (marking.fontSize ?? STAFF_LINE_GAP) * 0.65
+                  }
                   x={marking.x}
                   y={marking.y}
                   fontSize={marking.fontSize}

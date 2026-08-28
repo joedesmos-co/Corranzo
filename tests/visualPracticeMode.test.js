@@ -550,6 +550,7 @@ describe('practice view integration', () => {
 
   it('keyboard strip shows target chips and the legend explains states', () => {
     const view = readSrc('components', 'practice', 'VisualPracticeView.jsx')
+    const staffLane = readSrc('components', 'practice', 'StaffVisualLane.jsx')
     expect(view).toContain('visual-practice__key-chip')
     expect(view).toContain('computeKeyboardRange')
     expect(view).toContain('buildBarlineTimes')
@@ -558,8 +559,11 @@ describe('practice view integration', () => {
     const css = readSrc('styles', 'practice.css')
     expect(css).toContain('.visual-practice__key-chip')
     expect(css).toContain('.visual-practice__legend-item--now')
-    // Far-future fade overlay keeps the learning window readable.
-    expect(css).toContain('.staff-lane::after')
+    // Staff notation reserves a full-glyph overscan strip instead of placing
+    // an anchor-blind fade over upcoming heads/stems/accidentals.
+    expect(css).not.toContain('.staff-lane::after')
+    expect(staffLane).toContain('STAFF_LANE_RIGHT_GLYPH_OVERSCAN')
+    expect(staffLane).toContain('overflow="visible"')
   })
 
   it('guitar fretboard strip labels visual frets while open strings stay in headers and TAB', () => {

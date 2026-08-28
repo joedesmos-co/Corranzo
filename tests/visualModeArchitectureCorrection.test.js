@@ -11,6 +11,7 @@ import {
   buildStaffLaneNotationMarkings,
   buildStaffLaneNotes,
   buildStaffLaneOctaveShiftMarks,
+  buildStaffLanePedalMarks,
   buildStaffLaneRests,
   buildStaffLaneRhythmMarks,
   buildStaffLaneStems,
@@ -348,6 +349,30 @@ describe('Visual mode architecture correction', () => {
     expect(JSON.stringify(instructions)).not.toContain('sourceCenter')
   })
 
+  it('combines source-map X with independent MusicXML staff-relative Y', () => {
+    const timingMap = semanticTimingMap()
+    timingMap.notes = timingMap.notes.map((note) =>
+      note.id === 'right-quarter'
+        ? { ...note, defaultY: 20, relativeY: 5 }
+        : note,
+    )
+    const instructions = buildVisualRenderingInstructions(timingMap, sourceVisualMap())
+    const laneLayout = buildSourceFidelityLaneLayout(instructions)
+    const staffGeometry = buildStaffGeometry(detectStaves(instructions))
+    const quarter = buildStaffLaneNotes(instructions, staffGeometry, {
+      sourceLayout: laneLayout,
+    }).find((note) => note.sourceNoteId === 'right-quarter')
+
+    expect(quarter.sourceXMode).toBe('source-visual-map')
+    expect(quarter.sourceYMode).toBe('musicxml-default-y')
+    expect(quarter.sourceDefaultY).toBe(20)
+    expect(quarter.sourceRelativeY).toBe(5)
+    expect(quarter.y).toBeCloseTo(
+      staffGeometry.staves.treble.lines[0] - STAFF_LINE_GAP * 2.5,
+      8,
+    )
+  })
+
   it('uses MusicXML layout without source provenance and keeps a semantic fallback', () => {
     const instructions = buildVisualRenderingInstructions(semanticTimingMap())
     const first = instructions[0]
@@ -426,6 +451,13 @@ describe('Visual mode architecture correction', () => {
       'musicxml-layout',
     ])
     expect(printed[1].x).toBeGreaterThan(printed[0].x)
+    const printedMeasure = sourceLayout.measures.find(
+      (measure) => Number(measure.measureNumber) === 1,
+    )
+    expect(printed[1].x - printed[0].x).toBeCloseTo(
+      (12 / 160) * (printedMeasure.xEnd - printedMeasure.xStart),
+      8,
+    )
     expect(printed.map((note) => note.xOffset)).toEqual([0, 0])
     expect(fallback.map((note) => note.sourceXMode)).toEqual([
       'semantic-fallback',
@@ -441,6 +473,27 @@ describe('Visual mode architecture correction', () => {
     )
     expect(printedDownStem).toMatchObject({ stemDown: true })
     expect(printedDownStem.x).toBeCloseTo(printedStemDown[0].x - 7, 8)
+  })
+
+  it('keeps a printed accidental attached with its own source-relative X and Y', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1" width="160">
+          <attributes><divisions>1</divisions><time><beats>1</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+          <note default-x="60" default-y="-10"><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type><accidental default-x="43" default-y="-10">sharp</accidental></note>
+        </measure></part>
+      </score-partwise>
+    `, 'positioned-accidental.musicxml')
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const sourceLayout = buildSourceFidelityLaneLayout(groups)
+    const staffGeometry = buildStaffGeometry(detectStaves(groups))
+    const [note] = buildStaffLaneNotes(groups, staffGeometry, { sourceLayout })
+
+    expect(note.accidentalSourcePosition).toBe(true)
+    expect(note.accidentalX).toBeLessThan(note.x)
+    expect(note.x - note.accidentalX).toBeCloseTo((17 / 160) * 560, 8)
+    expect(note.accidentalY).toBe(note.y)
   })
 
   it('projects fermatas attached to rests into reconstructed notation markings', () => {
@@ -775,6 +828,7 @@ describe('Visual mode architecture correction', () => {
       dynamics: [],
       wedges: [],
       octaveShifts: [],
+      pedals: [],
     })
     expect(
       buildSourceFidelityStructuralMarks(timingMap, { mode: 'temporal-fallback' }),
@@ -788,6 +842,7 @@ describe('Visual mode architecture correction', () => {
       dynamics: [],
       wedges: [],
       octaveShifts: [],
+      pedals: [],
     })
   })
 
@@ -1035,6 +1090,47 @@ describe('Visual mode architecture correction', () => {
     ])
   })
 
+  it('preserves sustain-pedal start, change, stop, line, and release semantics', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1">
+          <measure number="1" width="200">
+            <attributes><divisions>1</divisions><staves>2</staves><time><beats>4</beats><beat-type>4</beat-type></time><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef></attributes>
+            <direction placement="below"><direction-type><pedal type="start" line="yes" number="1" default-y="-150"/></direction-type><staff>2</staff></direction>
+            <note default-x="30" default-y="-105"><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>half</type><staff>2</staff></note>
+            <direction placement="below"><direction-type><pedal type="change" line="yes" number="1"/></direction-type><staff>2</staff></direction>
+            <note default-x="110" default-y="-100"><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>half</type><staff>2</staff></note>
+            <direction placement="below"><direction-type><pedal type="stop" line="yes" number="1"/></direction-type><staff>2</staff></direction>
+          </measure>
+        </part>
+      </score-partwise>
+    `, 'semantic-pedal.musicxml')
+    const groups = buildVisualRenderingInstructions(timingMap)
+    const layout = buildSourceFidelityLaneLayout(groups)
+    const structural = buildSourceFidelityStructuralMarks(timingMap, layout)
+    const geometry = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    const rendered = buildStaffLanePedalMarks(structural, geometry)
+
+    expect(timingMap.pedalEvents).toMatchObject([
+      { stage: 'start', staff: 2, line: true, sign: true, defaultY: -150 },
+      { stage: 'change', staff: 2, line: true },
+      { stage: 'stop', staff: 2, line: true },
+    ])
+    expect(structural.pedals).toHaveLength(2)
+    expect(structural.pedals).toMatchObject([
+      { showLabel: true, showChangeEnd: true, showRelease: false },
+      { showLabel: false, showChangeStart: true, showRelease: true },
+    ])
+    expect(rendered).toHaveLength(2)
+    expect(rendered[0]).toMatchObject({
+      label: 'Ped.',
+      sourceYMode: 'musicxml-default-y',
+    })
+    expect(rendered[0].changeEndPath).toContain('M ')
+    expect(rendered[1].hookY).toBeLessThan(rendered[1].y)
+  })
+
   it('does not render a source-hidden ottava bracket', () => {
     const timingMap = parseMusicXml(`
       <score-partwise version="4.0">
@@ -1260,8 +1356,66 @@ describe('Visual mode architecture correction', () => {
     expect(rhythm.beams).toHaveLength(1)
     expect(rhythm.dots).toHaveLength(1)
     expect(rests.map((rest) => rest.noteType)).toEqual(['quarter', 'half'])
+    expect(rests.map((rest) => rest.shape)).toEqual(['glyph', 'half'])
     expect(rests.every((rest) => rest.glyph.length > 0)).toBe(true)
     expect(markings.spanMarkings.some((marking) => marking.kind === 'tie')).toBe(true)
+  })
+
+  it('keeps whole, half, quarter, eighth, sixteenth, full-measure, and multi-voice rests', () => {
+    const geometryModel = buildStaffGeometry({ hasTreble: true, hasBass: true })
+    const groups = [
+      {
+        id: 'rest-family',
+        timeSeconds: 0,
+        rests: [
+          { id: 'whole', noteType: 'whole', durationQuarters: 4, staff: 1, voice: 1 },
+          { id: 'half', noteType: 'half', durationQuarters: 2, staff: 1, voice: 2 },
+          { id: 'quarter', noteType: 'quarter', durationQuarters: 1, staff: 2, voice: 1 },
+          { id: 'eighth', noteType: 'eighth', durationQuarters: 0.5, staff: 2, voice: 2 },
+          { id: 'sixteenth', noteType: 'sixteenth', durationQuarters: 0.25, staff: 2, voice: 3 },
+          { id: 'measure-rest', noteType: null, durationQuarters: 3, measureRest: true, staff: 2, voice: 4 },
+        ],
+      },
+    ]
+    const rests = buildStaffLaneRests(groups, geometryModel)
+
+    expect(rests).toHaveLength(6)
+    expect(rests.map((rest) => rest.noteType)).toEqual([
+      'whole', 'half', 'quarter', 'eighth', 'sixteenth', 'whole',
+    ])
+    expect(rests.map((rest) => rest.shape)).toEqual([
+      'whole', 'half', 'glyph', 'glyph', 'glyph', 'whole',
+    ])
+    expect(new Set(rests.map((rest) => rest.voice))).toEqual(new Set([1, 2, 3, 4]))
+    expect(rests.at(-1)).toMatchObject({ noteType: 'whole', measureRest: true })
+  })
+
+  it('recognizes a type-less 3/4 full-measure rest and keeps a simultaneous other voice', () => {
+    const timingMap = parseMusicXml(`
+      <score-partwise version="4.0">
+        <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+        <part id="P1"><measure number="1" width="160">
+          <attributes><divisions>1</divisions><time><beats>3</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+          <note default-x="50"><rest/><duration>3</duration><voice>1</voice></note>
+          <backup><duration>3</duration></backup>
+          <note default-x="50"><pitch><step>C</step><octave>5</octave></pitch><duration>3</duration><voice>2</voice><type>half</type><dot/></note>
+        </measure></part>
+      </score-partwise>
+    `, 'three-four-measure-rest.musicxml')
+    const rest = timingMap.notes.find((note) => note.isRest)
+    const instructions = buildVisualRenderingInstructions(timingMap)
+    const event = instructions.find((group) => group.rests.length && group.notes.length)
+    const rendered = buildStaffLaneRests(
+      instructions,
+      buildStaffGeometry(detectStaves(instructions)),
+      { sourceLayout: buildSourceFidelityLaneLayout(instructions) },
+    )
+
+    expect(rest).toMatchObject({ measureRest: true, noteType: null })
+    expect(event).toBeTruthy()
+    expect(event.rests).toHaveLength(1)
+    expect(event.notes).toHaveLength(1)
+    expect(rendered).toMatchObject([{ measureRest: true, noteType: 'whole', shape: 'whole' }])
   })
 
   it('passes representative permanent piano and guitar/TAB fixtures', () => {
