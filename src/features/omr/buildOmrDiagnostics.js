@@ -5,6 +5,7 @@ import {
   summarizeScoreGraph,
   buildRuntimeVsScoreGraphReport,
 } from './scoreGraph.js'
+import { aggregateSourceRelationGraphs } from './sourceRelationGraph.js'
 
 function average(values) {
   if (!values.length) {
@@ -76,6 +77,7 @@ export function buildOmrDiagnostics({
           adjustedNoteCount: 0,
           reasons: {},
         },
+        sourceRelationGraph: measure.sourceRelationGraph?.diagnostics ?? null,
         beamStem: measure.beamStemDiagnostics ?? null,
       })),
     })),
@@ -90,6 +92,7 @@ export function buildOmrDiagnostics({
   const scoreGraph = buildScoreGraph(pages)
   const scoreGraphSummary = summarizeScoreGraph(scoreGraph)
   const runtimeVsScoreGraph = buildRuntimeVsScoreGraphReport(pages, scoreGraph)
+  const sourceRelationGraph = aggregateSourceRelationGraphs(pages)
 
   const overallConfidence = average(allMeasureConfidence)
   const warnings = [OMR_DISCLAIMER]
@@ -108,11 +111,23 @@ export function buildOmrDiagnostics({
     musical,
     musicalEventReconstruction: summarizeMusicalEventReconstruction(pages),
     beamStemReconstruction: aggregateBeamStemDiagnostics(pages),
+    sourceRelationGraph,
     scoreGraph: scoreGraphSummary,
     runtimeVsScoreGraph,
     // Full IR is heavy (thousands of nodes on dense scores) and dev/shadow-only.
     // Off by default so runtime diagnostics stay lean and unchanged.
-    ...(includeScoreGraph ? { scoreGraphFull: scoreGraph } : {}),
+    ...(includeScoreGraph
+      ? {
+          scoreGraphFull: scoreGraph,
+          sourceRelationGraphFull: pages.flatMap((page) =>
+            (page.systems ?? []).flatMap((system) =>
+              (system.measures ?? [])
+                .map((measure) => measure.sourceRelationGraph)
+                .filter(Boolean),
+            ),
+          ),
+        }
+      : {}),
     warnings,
     disclaimer: OMR_DISCLAIMER,
   }

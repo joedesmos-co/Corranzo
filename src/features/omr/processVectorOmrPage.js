@@ -63,6 +63,7 @@ import {
   buildBeamStemGraph,
   summarizeBeamStemGraph,
 } from './beamStemReconstructionDiagnostics.js'
+import { buildSourceRelationGraph } from './sourceRelationGraph.js'
 import {
   applyVectorPrimaryBeamTopology,
   summarizeAppliedVectorBeamTopology,
@@ -12553,6 +12554,18 @@ export function buildVectorMeasureRecord({
   const totalDivisions = Math.round(
     beats * OMR_DIVISIONS_PER_QUARTER * (4 / (timeSignature?.beatType ?? 4)),
   )
+  // Phase 1 shadow graph: capture only source primitives and their possible
+  // physical/temporal relationships before any event grouping, onset repair,
+  // voice inference, or topology-family reconstruction can influence them.
+  const sourceRelationGraph = buildSourceRelationGraph({
+    notes: detectedNotes,
+    rests: detectedRests,
+    glyphs,
+    imageData,
+    measureBox,
+    keySignature,
+    timeSignature,
+  })
   const openingSourceOrigin = normalizeFirstSystemMeasureOpenNoteOrigin({
     notes: detectedNotes,
     rests: rawDetectedRests,
@@ -13052,6 +13065,7 @@ export function buildVectorMeasureRecord({
     vectorRhythmDiagnostics,
     openingSourceOriginDiagnostics: openingSourceOrigin.diagnostics,
     musicalEventReconstructionDiagnostics,
+    sourceRelationGraph,
     beamStemGraph,
     beamStemDiagnostics,
     vectorBeamTopologyDiagnostics,
