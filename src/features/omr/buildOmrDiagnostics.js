@@ -6,6 +6,7 @@ import {
   buildRuntimeVsScoreGraphReport,
 } from './scoreGraph.js'
 import { aggregateSourceRelationGraphs } from './sourceRelationGraph.js'
+import { aggregateSourceTemporalLaneSolutions } from './sourceTemporalLaneSolver.js'
 
 function average(values) {
   if (!values.length) {
@@ -78,6 +79,7 @@ export function buildOmrDiagnostics({
           reasons: {},
         },
         sourceRelationGraph: measure.sourceRelationGraph?.diagnostics ?? null,
+        sourceTemporalLaneSolver: measure.sourceTemporalLaneSolution?.diagnostics ?? null,
         beamStem: measure.beamStemDiagnostics ?? null,
       })),
     })),
@@ -93,6 +95,7 @@ export function buildOmrDiagnostics({
   const scoreGraphSummary = summarizeScoreGraph(scoreGraph)
   const runtimeVsScoreGraph = buildRuntimeVsScoreGraphReport(pages, scoreGraph)
   const sourceRelationGraph = aggregateSourceRelationGraphs(pages)
+  const sourceTemporalLaneSolver = aggregateSourceTemporalLaneSolutions(pages)
 
   const overallConfidence = average(allMeasureConfidence)
   const warnings = [OMR_DISCLAIMER]
@@ -112,6 +115,7 @@ export function buildOmrDiagnostics({
     musicalEventReconstruction: summarizeMusicalEventReconstruction(pages),
     beamStemReconstruction: aggregateBeamStemDiagnostics(pages),
     sourceRelationGraph,
+    sourceTemporalLaneSolver,
     scoreGraph: scoreGraphSummary,
     runtimeVsScoreGraph,
     // Full IR is heavy (thousands of nodes on dense scores) and dev/shadow-only.
@@ -123,6 +127,13 @@ export function buildOmrDiagnostics({
             (page.systems ?? []).flatMap((system) =>
               (system.measures ?? [])
                 .map((measure) => measure.sourceRelationGraph)
+                .filter(Boolean),
+            ),
+          ),
+          sourceTemporalLaneSolverFull: pages.flatMap((page) =>
+            (page.systems ?? []).flatMap((system) =>
+              (system.measures ?? [])
+                .map((measure) => measure.sourceTemporalLaneSolution)
                 .filter(Boolean),
             ),
           ),

@@ -64,6 +64,7 @@ import {
   summarizeBeamStemGraph,
 } from './beamStemReconstructionDiagnostics.js'
 import { buildSourceRelationGraph } from './sourceRelationGraph.js'
+import { solveSourceTemporalLanes } from './sourceTemporalLaneSolver.js'
 import {
   applyVectorPrimaryBeamTopology,
   summarizeAppliedVectorBeamTopology,
@@ -12566,6 +12567,10 @@ export function buildVectorMeasureRecord({
     keySignature,
     timeSignature,
   })
+  // Phase 2 remains shadow-only. The solver consumes only the independent
+  // pre-event relation graph above; production event construction below never
+  // reads the proposal.
+  const sourceTemporalLaneSolution = solveSourceTemporalLanes(sourceRelationGraph)
   const openingSourceOrigin = normalizeFirstSystemMeasureOpenNoteOrigin({
     notes: detectedNotes,
     rests: rawDetectedRests,
@@ -13066,6 +13071,7 @@ export function buildVectorMeasureRecord({
     openingSourceOriginDiagnostics: openingSourceOrigin.diagnostics,
     musicalEventReconstructionDiagnostics,
     sourceRelationGraph,
+    sourceTemporalLaneSolution,
     beamStemGraph,
     beamStemDiagnostics,
     vectorBeamTopologyDiagnostics,
