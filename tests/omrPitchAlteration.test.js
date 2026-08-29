@@ -46,14 +46,14 @@ describe('resolveMeasureNotePitch', () => {
     expect(resolved.pitchAlteration.keySignatureFifths).toBe(2)
   })
 
-  it('raises the key-default pitch with a sharp accidental', () => {
+  it('applies a sharp to the written natural pitch despite a flat key default', () => {
     const resolved = resolveMeasureNotePitch({
       naturalMidi: 64,
       keySignature: { fifths: -3, mode: 'major' },
       localAccidental: { alter: 1, type: 'sharp' },
     })
     expect(applyKeySignature(64, -3).midi).toBe(63)
-    expect(resolved.midi).toBe(64)
+    expect(resolved.midi).toBe(65)
     expect(resolved.pitchAlteration.keyDefaultMidi).toBe(63)
   })
 
@@ -92,15 +92,32 @@ describe('resolveNotePitchWithMeasureState', () => {
     expect(second.pitchAlteration.measureAccidentalState).toBe(1)
   })
 
-  it('carries a sharp from the key-default pitch for key-signature flats', () => {
+  it('carries a sharp as an absolute written alteration in a flat key', () => {
     const resolved = resolveNotePitchWithMeasureState({
       naturalMidi: 71,
       keySignature: { fifths: -3, mode: 'major' },
       carriedAlter: 1,
     })
     expect(applyKeySignature(71, -3).midi).toBe(70)
-    expect(resolved.midi).toBe(71)
+    expect(resolved.midi).toBe(72)
     expect(resolved.pitchAlteration.keyDefaultMidi).toBe(70)
+  })
+
+  it('does not double a carried sharp already present in the key signature', () => {
+    const first = resolveNotePitchWithMeasureState({
+      naturalMidi: 50,
+      keySignature: { fifths: 4, mode: 'major' },
+      localAccidental: { alter: 1, type: 'sharp' },
+    })
+    const second = resolveNotePitchWithMeasureState({
+      naturalMidi: 50,
+      keySignature: { fifths: 4, mode: 'major' },
+      carriedAlter: first.measureAccidentalState,
+    })
+
+    expect(applyKeySignature(50, 4).midi).toBe(51)
+    expect(first.midi).toBe(51)
+    expect(second.midi).toBe(51)
   })
 
   it('keeps local sharps on the written natural pitch', () => {

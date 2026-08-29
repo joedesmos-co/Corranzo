@@ -28,7 +28,9 @@ export function accidentalStateKey(note) {
 
 /**
  * Resolve written pitch with key signature, local accidentals, and measure carry.
- * Sharps/flats apply relative to the key-default pitch at that staff step.
+ * Explicit accidental signs are absolute alterations of the written natural
+ * pitch. The same alteration carries through the measure without reapplying
+ * the key signature.
  */
 export function resolveMeasureNotePitch({
   naturalMidi,
@@ -64,7 +66,7 @@ export function resolveMeasureNotePitch({
         accidentalState: { mode: 'natural' },
       }
     }
-    const midi = applyAlterToMidi(keyed.midi, localAccidental.alter)
+    const midi = applyAlterToMidi(naturalMidi, localAccidental.alter)
     return {
       midi,
       alter: localAccidental.alter,
@@ -106,7 +108,7 @@ export function resolveMeasureNotePitch({
   }
 
   if (carriedState?.mode === 'explicit') {
-    const midi = applyAlterToMidi(keyed.midi, carriedState.alter)
+    const midi = applyAlterToMidi(naturalMidi, carriedState.alter)
     return {
       midi,
       alter: carriedState.alter,
@@ -140,8 +142,9 @@ export function resolveMeasureNotePitch({
 
 /**
  * Resolve pitch with key signature, local glyph accidentals, and measure carry.
- * Local accidentals apply to the written natural pitch; carried accidentals apply
- * relative to the key-default pitch so repeated chromatic spellings stay correct.
+ * Local and carried accidentals apply to the written natural pitch. Their
+ * alteration is already absolute, so applying it to the key-default pitch
+ * would double a matching key-signature sharp or flat.
  */
 export function resolveNotePitchWithMeasureState({
   naturalMidi,
@@ -220,7 +223,7 @@ export function resolveNotePitchWithMeasureState({
       }
     }
     return {
-      midi: applyAlterToMidi(keyedDefault.midi, carriedAlter),
+      midi: applyAlterToMidi(naturalMidi, carriedAlter),
       alter: carriedAlter,
       measureAccidentalState: carriedAlter,
       pitchAlteration: {
