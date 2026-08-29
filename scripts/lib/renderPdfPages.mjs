@@ -76,7 +76,7 @@ export async function makePdfTextExtractor(pdfPath, { rootDir } = {}) {
     const viewport = page.getViewport({ scale: 1, rotation: 0 })
     const content = await page.getTextContent()
     return (content.items ?? [])
-      .map((item) => ({
+      .map((item, sourceItemIndex) => ({
         text: item.str ?? '',
         x: item.transform?.[4] ?? 0,
         y: item.transform?.[5] ?? 0,
@@ -85,6 +85,11 @@ export async function makePdfTextExtractor(pdfPath, { rootDir } = {}) {
         fontName: item.fontName ?? '',
         pageWidth: viewport.width,
         pageHeight: viewport.height,
+        sourceItemIndex,
+        sourceRunId: `p${pageNumber}:text-item:${sourceItemIndex}`,
+        sourceTransform: Array.isArray(item.transform) ? [...item.transform] : null,
+        sourceDirection: item.dir ?? null,
+        sourceHasEol: item.hasEOL === true,
       }))
       .filter((item) => item.text.trim().length > 0)
   }

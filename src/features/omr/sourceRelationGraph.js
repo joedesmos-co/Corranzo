@@ -1,4 +1,4 @@
-const GRAPH_VERSION = 1
+const GRAPH_VERSION = 2
 const DEFAULT_STAFF_SPACE_PX = 8
 const MAX_BUCKET_NEIGHBORS = 3
 const MAX_ORDERED_NEIGHBORS = 4
@@ -29,6 +29,108 @@ function staffRole(note) {
 function stemDirection(note) {
   if (typeof note?.stem === 'string') return note.stem
   return note?.stem?.direction ?? note?.stemDirection ?? null
+}
+
+function physicalAnchorY(note, imageData) {
+  const yNorm = Number(note?.noteheadAnchor?.yNorm ?? note?.yNorm)
+  if (Number.isFinite(yNorm) && Number.isFinite(imageData?.height)) {
+    return yNorm * imageData.height
+  }
+  return Number(note?.cy)
+}
+
+function anchorConfidence(note) {
+  const explicit = Number(note?.noteheadAnchor?.confidence)
+  if (Number.isFinite(explicit)) return clamp01(explicit)
+  return Number.isFinite(note?.cy) ? 0.75 : 0
+}
+
+function noteheadBounds(note, staffSpace, imageData) {
+  const centerX = Number(note?.cx) || 0
+  const centerY = physicalAnchorY(note, imageData) || 0
+  const sourceWidth = Number(note?.glyphBBox?.width)
+  const sourceHeight = Number(note?.glyphBBox?.height)
+  const width = Math.max(
+    staffSpace * 0.78,
+    Math.min(staffSpace * 1.5, sourceWidth > 0 ? sourceWidth : staffSpace),
+  )
+  const height = Math.max(
+    staffSpace * 0.62,
+    Math.min(staffSpace * 1.15, sourceHeight > 0 ? sourceHeight : staffSpace * 0.75),
+  )
+  return {
+    x0: centerX - width / 2,
+    x1: centerX + width / 2,
+    y0: centerY - height / 2,
+    y1: centerY + height / 2,
+    width,
+    height,
+  }
+}
+
+function isLiteralWholeHead(note) {
+  return String(note?.noteheadGlyph ?? '').toLowerCase() === 'whole'
+}
+
+function stemProbeAssessment(note, staffSpace, imageData) {
+  const stem = note?.stem
+  if (!stem) return { observation: null, rejectedReason: null }
+  if (isLiteralWholeHead(note)) {
+    return { observation: null, rejectedReason: 'literal-whole-head-cannot-own-stem' }
+  }
+  const direction = stemDirection(note)
+  if (!direction) return { observation: null, rejectedReason: 'missing-stem-direction' }
+  const confidence = anchorConfidence(note)
+  const centerY = physicalAnchorY(note, imageData)
+  const rawY = Number(note?.rawSourceCy ?? note?.cy)
+  const correctionSpaces = Number.isFinite(centerY) && Number.isFinite(rawY)
+    ? Math.abs(centerY - rawY) / Math.max(1, staffSpace)
+    : 0
+  // A raster probe launched from a rejected/far-displaced text origin is not
+  // independent physical ownership evidence. Keep the head, pitch, and source
+  // provenance, but fail closed on the derived stem relation.
+  if (correctionSpaces > 0.72) {
+    return {
+      observation: null,
+      rejectedReason: 'raw-origin-too-far-from-resolved-head',
+      correctionSpaces,
+    }
+  }
+  const x = Number.isFinite(stem?.x)
+    ? stem.x
+    : (note?.cx ?? 0) + (direction === 'down' ? -staffSpace * 0.45 : staffSpace * 0.45)
+  const tipY = Number.isFinite(stem?.tipY)
+    ? stem.tipY
+    : centerY + (direction === 'down' ? 4 : -4) * staffSpace
+  const bounds = noteheadBounds(note, staffSpace, imageData)
+  const expectedBoundaryX = direction === 'up' ? bounds.x1 : bounds.x0
+  const attachmentError = Math.abs(x - expectedBoundaryX)
+  const attachmentScore = clamp01(1 - attachmentError / Math.max(1, staffSpace * 0.8))
+  if (attachmentScore < 0.22) {
+    return {
+      observation: null,
+      rejectedReason: 'stem-misses-direction-compatible-head-boundary',
+      correctionSpaces,
+      attachmentScore,
+    }
+  }
+  return {
+    observation: {
+      direction,
+      x,
+      tipY,
+      centerY,
+      bounds,
+      anchorConfidence: confidence,
+      correctionSpaces,
+      attachmentScore,
+    },
+    rejectedReason: null,
+  }
+}
+
+function stemObservation(note, staffSpace, imageData) {
+  return stemProbeAssessment(note, staffSpace, imageData).observation
 }
 
 function staffSpacePx(notes, measureBox, imageData) {
@@ -96,7 +198,11 @@ function relationStatus(score) {
   return 'weak-candidate'
 }
 
-function physicalNoteheadNode(scope, note, index) {
+function physicalNoteheadNode(scope, note, index, staffSpace, imageData) {
+  const physicalY = physicalAnchorY(note, imageData)
+  const bounds = noteheadBounds(note, staffSpace, imageData)
+  const stemAssessment = stemProbeAssessment(note, staffSpace, imageData)
+  const stem = stemAssessment.observation
   return {
     id: noteId(scope, note, index),
     kind: 'notehead',
@@ -104,9 +210,22 @@ function physicalNoteheadNode(scope, note, index) {
     source: note?.source ?? 'unknown',
     anchor: {
       x: round(note?.cx, 2),
-      y: round(note?.cy, 2),
+      y: round(physicalY, 2),
+      rawSourceY: round(note?.rawSourceCy ?? note?.cy, 2),
       xNorm: round(note?.xNorm),
       yNorm: round(note?.yNorm),
+      source: note?.noteheadAnchor?.source ?? 'source-text-origin',
+      confidence: round(anchorConfidence(note)),
+      rejectedReason: note?.noteheadAnchor?.rejectedReason ?? null,
+      inkRejectedReason: note?.noteheadAnchor?.inkRejectedReason ?? null,
+    },
+    bounds: {
+      x0: round(bounds.x0, 2),
+      x1: round(bounds.x1, 2),
+      y0: round(bounds.y0, 2),
+      y1: round(bounds.y1, 2),
+      width: round(bounds.width, 2),
+      height: round(bounds.height, 2),
     },
     staffRole: staffRole(note),
     clef: note?.clef ?? null,
@@ -126,28 +245,46 @@ function physicalNoteheadNode(scope, note, index) {
       open: note?.hollowGlyph === true || note?.hollow === true,
       fontName: note?.noteheadFont?.fontName ?? null,
       glyph: note?.noteheadFont?.glyph ?? null,
+      originalGlyph: note?.noteheadFont?.originalGlyph ?? null,
+      legacyNormalized: note?.noteheadFont?.legacyNormalized === true,
+    },
+    provenance: {
+      runId: note?.sourceProvenance?.runId ?? null,
+      itemIndex: note?.sourceProvenance?.itemIndex ?? null,
+      sourceIndex: note?.sourceProvenance?.sourceIndex ?? null,
+      sourceLength: note?.sourceProvenance?.sourceLength ?? null,
+      sourceText: note?.sourceProvenance?.sourceText ?? null,
+      drawOrder: note?.sourceProvenance?.drawOrder ?? null,
+      transform: note?.sourceProvenance?.transform ?? null,
     },
     primitiveEvidence: {
-      stemDirection: stemDirection(note),
-      beamCount: note?.beams ?? 0,
-      beamStrength: round(note?.beamStrength ?? 0, 2),
+      stemDirection: stem?.direction ?? null,
+      stemProbeRejected: Boolean(note?.stem && !stem),
+      stemProbeRejectedReason: stemAssessment.rejectedReason,
+      stemProbeAnchorCorrectionSpaces: round(stemAssessment.correctionSpaces),
+      rawStemDirection: stemDirection(note),
+      rawBeamCount: note?.beams ?? 0,
+      rawBeamStrength: round(note?.beamStrength ?? 0, 2),
+      beamCount: stem ? note?.beams ?? 0 : 0,
+      beamStrength: stem ? round(note?.beamStrength ?? 0, 2) : 0,
+      beamProbeRejected: Boolean(
+        !stem && ((note?.beams ?? 0) > 0 || (note?.beamStrength ?? 0) >= 8),
+      ),
       augmentationDot: note?.dotted === true,
       accidental: note?.accidental?.type ?? null,
+      tieCandidate: note?.tieStart === true,
+      durationType: note?.durationType ?? null,
+      durationConfidence: round(note?.confidence),
     },
   }
 }
 
-function stemKey(note, staffSpace) {
-  const stem = note?.stem
+function stemKey(note, staffSpace, imageData) {
+  const stem = stemObservation(note, staffSpace, imageData)
   if (!stem) return null
-  const direction = stemDirection(note) ?? 'unknown'
-  const x = Number.isFinite(stem?.x)
-    ? stem.x
-    : (note?.cx ?? 0) + (direction === 'down' ? -staffSpace * 0.45 : staffSpace * 0.45)
-  const tipY = Number.isFinite(stem?.tipY)
-    ? stem.tipY
-    : (note?.cy ?? 0) + (direction === 'down' ? 4 : -4) * staffSpace
+  const { direction, x, tipY } = stem
   return {
+    ...stem,
     direction,
     x,
     tipY,
@@ -155,68 +292,203 @@ function stemKey(note, staffSpace) {
   }
 }
 
-function buildStemNodes(scope, notes, noteNodes, staffSpace, relations) {
+function buildStemNodes(scope, notes, noteNodes, staffSpace, imageData, relations) {
   const byKey = new Map()
   notes.forEach((note, index) => {
-    const stem = stemKey(note, staffSpace)
+    const stem = stemKey(note, staffSpace, imageData)
     if (!stem) return
-    let node = byKey.get(stem.key)
-    if (!node) {
-      node = {
-        id: `${scope}:stem:${byKey.size + 1}`,
-        kind: 'stem',
-        source: note?.stem?.source ?? 'notehead-rhythm-probe',
+    let group = byKey.get(stem.key)
+    if (!group) {
+      group = {
+        key: stem.key,
         staffRole: staffRole(note),
         direction: stem.direction,
-        anchor: {
-          x: round(stem.x, 2),
-          y0: round(Math.min(note?.cy ?? stem.tipY, stem.tipY), 2),
-          y1: round(Math.max(note?.cy ?? stem.tipY, stem.tipY), 2),
-          tipY: round(stem.tipY, 2),
-        },
-        sourceRefs: [],
+        x: stem.x,
+        tipY: stem.tipY,
+        entries: [],
       }
-      byKey.set(stem.key, node)
+      byKey.set(stem.key, group)
     }
-    node.sourceRefs.push(sourceRef(note, index))
-    const components = [
-      component(
-        'source-stem-probe',
-        note?.stem?.recovered === false ? 0.92 : 0.82,
-        0.7,
-        'primitive stem geometry',
-        'A stem segment was observed adjacent to the printed head.',
-      ),
-      component(
-        'anchor-proximity',
-        1 - Math.min(1, Math.abs((note?.cx ?? stem.x) - stem.x) / Math.max(1, staffSpace)),
-        0.3,
-        'source x/y anchors',
-        'Stem x is close to the notehead boundary.',
-      ),
-    ]
-    const score = scoreComponents(components)
-    relations.push({
-      type: 'stem-owner-candidate',
-      from: node.id,
-      to: noteNodes[index].id,
-      score,
-      status: relationStatus(score),
-      components,
-      evidence: { direction: stem.direction, sharedStemKey: stem.key },
-      reasons: ['physical-stem-adjacent-to-notehead'],
-    })
+    group.entries.push({ note, index, stem })
+    group.x = median(group.entries.map((entry) => entry.stem.x))
+    group.tipY = median(group.entries.map((entry) => entry.stem.tipY))
   })
-  return [...byKey.values()]
+
+  const nodes = []
+  const ownerIdsByNote = new Map()
+  for (const group of byKey.values()) {
+    const node = {
+      id: `${scope}:stem:${nodes.length + 1}`,
+      kind: 'stem',
+      source: 'validated-notehead-rhythm-probe',
+      staffRole: group.staffRole,
+      direction: group.direction,
+      anchor: {
+        x: round(group.x, 2),
+        y0: round(Math.min(group.tipY, ...group.entries.map((entry) => entry.stem.centerY)), 2),
+        y1: round(Math.max(group.tipY, ...group.entries.map((entry) => entry.stem.centerY)), 2),
+        tipY: round(group.tipY, 2),
+      },
+      sourceRefs: group.entries.map(({ note, index }) => sourceRef(note, index)),
+      probeCount: group.entries.length,
+    }
+    nodes.push(node)
+
+    const attachOwner = ({ note, index, stem, inferred = false }) => {
+      if (!ownerIdsByNote.has(index)) ownerIdsByNote.set(index, new Set())
+      ownerIdsByNote.get(index).add(node.id)
+      const components = inferred
+        ? [
+            component(
+              'multi-probe-stem-segment',
+              Math.min(1, group.entries.length / 2),
+              0.35,
+              'two or more compatible primitive stem probes',
+              'Independent probes identify one continuous physical stem segment.',
+            ),
+            component(
+              'head-boundary-attachment',
+              stem.attachmentScore,
+              0.35,
+              'resolved notehead bounds and stem x',
+              'The continuous stem reaches the direction-compatible head boundary.',
+            ),
+            component(
+              'inside-observed-stem-span',
+              1,
+              0.2,
+              'outer directly observed stem owners',
+              'The candidate head lies between directly observed owners on the same segment.',
+            ),
+            component(
+              'resolved-anchor-confidence',
+              Math.max(0.6, stem.anchorConfidence),
+              0.1,
+              note?.noteheadAnchor?.source ?? 'source-text-origin',
+              'The head center is supported by pre-event source geometry.',
+            ),
+          ]
+        : [
+            component(
+              'source-stem-segment',
+              note?.stem?.recovered === false ? 0.92 : 0.82,
+              0.4,
+              'primitive stem geometry',
+              'A stem segment was observed adjacent to the printed head.',
+            ),
+            component(
+              'head-boundary-attachment',
+              stem.attachmentScore,
+              0.35,
+              'resolved notehead bounds and stem x',
+              'Stem x reaches the direction-compatible edge of the visible head bounds.',
+            ),
+            component(
+              'resolved-anchor-confidence',
+              Math.max(0.6, stem.anchorConfidence),
+              0.25,
+              note?.noteheadAnchor?.source ?? 'source-text-origin',
+              'The ownership probe originates from a supported physical head center.',
+            ),
+          ]
+      const score = scoreComponents(components)
+      relations.push({
+        type: 'stem-owner-candidate',
+        from: node.id,
+        to: noteNodes[index].id,
+        score,
+        status: relationStatus(score),
+        components,
+        evidence: {
+          direction: stem.direction,
+          sharedStemKey: node.id,
+          ownershipKind: inferred ? 'interior-segment-owner' : 'direct-probe-owner',
+          attachmentErrorPx: round(
+            Math.abs(stem.x - (stem.direction === 'up' ? stem.bounds.x1 : stem.bounds.x0)),
+            2,
+          ),
+          anchorCorrectionSpaces: round(stem.correctionSpaces),
+          directProbeCount: group.entries.length,
+        },
+        reasons: [
+          inferred
+            ? 'head-boundary-intersects-multi-probe-stem-span'
+            : 'physical-stem-enters-resolved-notehead-boundary',
+        ],
+      })
+    }
+
+    for (const { note, index, stem } of group.entries) {
+      attachOwner({ note, index, stem })
+    }
+
+    if (group.entries.length >= 2) {
+      const directIndexes = new Set(group.entries.map((entry) => entry.index))
+      const observedCenters = group.entries.map((entry) => entry.stem.centerY)
+      const spanY0 = Math.min(...observedCenters) - staffSpace * 0.18
+      const spanY1 = Math.max(...observedCenters) + staffSpace * 0.18
+      notes.forEach((note, index) => {
+        if (
+          directIndexes.has(index) ||
+          staffRole(note) !== group.staffRole ||
+          isLiteralWholeHead(note)
+        ) return
+        const bounds = noteheadBounds(note, staffSpace, imageData)
+        const centerY = physicalAnchorY(note, imageData)
+        if (!(centerY >= spanY0 && centerY <= spanY1)) return
+        const expectedBoundaryX = group.direction === 'up' ? bounds.x1 : bounds.x0
+        const attachmentError = Math.abs(group.x - expectedBoundaryX)
+        const attachmentScore = clamp01(
+          1 - attachmentError / Math.max(1, staffSpace * 0.72),
+        )
+        if (attachmentScore < 0.58) return
+        attachOwner({
+          note,
+          index,
+          inferred: true,
+          stem: {
+            direction: group.direction,
+            x: group.x,
+            bounds,
+            attachmentScore,
+            anchorConfidence: anchorConfidence(note),
+            correctionSpaces: Math.abs(centerY - Number(note?.rawSourceCy ?? centerY)) /
+              Math.max(1, staffSpace),
+          },
+        })
+      })
+    }
+  }
+  return { nodes, ownerIdsByNote }
 }
 
 function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpace) {
+  const stemNodeById = new Map(stemNodes.map((stem) => [stem.id, stem]))
+  const stemOwnersByHead = new Map()
+  for (const relation of relations.filter((entry) => entry.type === 'stem-owner-candidate')) {
+    if (!stemOwnersByHead.has(relation.to)) stemOwnersByHead.set(relation.to, [])
+    stemOwnersByHead.get(relation.to).push(relation)
+  }
   const candidates = notes
     .map((note, index) => ({ note, index, head: noteNodes[index] }))
-    .filter(({ note }) => (note?.beams ?? 0) > 0 || (note?.beamStrength ?? 0) >= 8)
+    .filter(({ head }) =>
+      head?.primitiveEvidence?.stemDirection &&
+      ((head?.primitiveEvidence?.beamCount ?? 0) > 0 ||
+        (head?.primitiveEvidence?.beamStrength ?? 0) >= 8),
+    )
+    .map((entry) => {
+      const owner = (stemOwnersByHead.get(entry.head.id) ?? [])
+        .sort((left, right) => (right.score ?? 0) - (left.score ?? 0))[0]
+      return {
+        ...entry,
+        direction: entry.head.primitiveEvidence.stemDirection,
+        owner,
+        stemNode: stemNodeById.get(owner?.from),
+      }
+    })
     .sort((left, right) =>
       String(staffRole(left.note)).localeCompare(String(staffRole(right.note))) ||
-      String(stemDirection(left.note)).localeCompare(String(stemDirection(right.note))) ||
+      String(left.direction).localeCompare(String(right.direction)) ||
       (left.note.cx ?? 0) - (right.note.cx ?? 0),
     )
   const groups = []
@@ -225,18 +497,21 @@ function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpac
     const compatible =
       previous &&
       previous.staffRole === staffRole(entry.note) &&
-      previous.direction === stemDirection(entry.note) &&
-      (entry.note.cx ?? 0) - previous.lastX <= staffSpace * 9
+      previous.direction === entry.direction &&
+      (entry.note.cx ?? 0) - previous.lastX <= staffSpace * 6 &&
+      Math.abs((entry.stemNode?.anchor?.tipY ?? 0) - previous.lastTipY) <= staffSpace * 2.5
     if (!compatible) {
       groups.push({
         staffRole: staffRole(entry.note),
-        direction: stemDirection(entry.note),
+        direction: entry.direction,
         lastX: entry.note.cx ?? 0,
+        lastTipY: entry.stemNode?.anchor?.tipY ?? 0,
         entries: [entry],
       })
     } else {
       previous.entries.push(entry)
       previous.lastX = entry.note.cx ?? previous.lastX
+      previous.lastTipY = entry.stemNode?.anchor?.tipY ?? previous.lastTipY
     }
   }
   const nodes = []
@@ -246,7 +521,7 @@ function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpac
     const node = {
       id,
       kind: 'beam',
-      source: 'notehead-rhythm-probe',
+      source: 'validated-stem-tip-ink-components',
       staffRole: group.staffRole,
       direction: group.direction,
       level: Math.max(...group.entries.map(({ note }) => note?.beams ?? 1)),
@@ -257,21 +532,30 @@ function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpac
       sourceRefs: group.entries.map(({ note, index }) => sourceRef(note, index)),
     }
     nodes.push(node)
-    for (const { note, head, index } of group.entries) {
+    for (const { note, head, index, owner } of group.entries) {
       const components = [
         component(
           'beam-count-probe',
-          Math.min(1, (note?.beams ?? 0) / 2),
-          0.55,
+          (head?.primitiveEvidence?.beamCount ?? 0) > 0
+            ? Math.min(1, 0.8 + (head.primitiveEvidence.beamCount - 1) * 0.2)
+            : 0,
+          0.45,
           'primitive beam count',
           'The notehead rhythm probe observed one or more beam levels.',
         ),
         component(
           'beam-ink-strength',
-          Math.min(1, (note?.beamStrength ?? 0) / 20),
-          0.45,
+          Math.min(1, (head?.primitiveEvidence?.beamStrength ?? 0) / 12),
+          0.25,
           'source ink near stem tip',
           'Ink density near the stem tip supports beam membership.',
+        ),
+        component(
+          'validated-stem-ownership',
+          owner?.score ?? 0,
+          0.3,
+          'resolved notehead/stem geometry',
+          'A validated head-to-stem relation connects the head to the probed beam tip.',
         ),
       ]
       const score = scoreComponents(components)
@@ -282,8 +566,12 @@ function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpac
         score,
         status: relationStatus(score),
         components,
-        evidence: { beamCount: note?.beams ?? 0, beamStrength: round(note?.beamStrength ?? 0, 2) },
-        reasons: ['source-beam-probe'],
+        evidence: {
+          beamCount: head?.primitiveEvidence?.beamCount ?? 0,
+          beamStrength: round(head?.primitiveEvidence?.beamStrength ?? 0, 2),
+          stemOwnerRelationId: owner?.id ?? null,
+        },
+        reasons: ['beam-ink-connected-through-validated-stem-owner'],
       })
       const source = sourceRef(note, index)
       for (const stem of stemNodes.filter((candidate) => candidate.sourceRefs.includes(source))) {
@@ -322,8 +610,20 @@ function buildSharedHeadRoleCandidates(scope, notes, noteNodes, relations, staff
         ((candidate?.beams ?? 0) > 0 || (candidate?.beamStrength ?? 0) >= 8),
     )
     if (!attackEvidence && !localAttackContext) return
+    if (!attackEvidence) {
+      ambiguities.push({
+        id: `${scope}:ambiguity:shared-head:${index + 1}`,
+        kind: 'shared-head-semantic-overprint',
+        memberIds: [noteNodes[index].id],
+        evidenceScore: 0.5,
+        hypotheses: ['single-written-value', 'attack-plus-sustain-roles'],
+        reasons: ['sustain-evidence-present', 'second-independent-ownership-path-absent'],
+        resolution: 'abstain',
+      })
+      return
+    }
     const components = [
-      component('attack-value-evidence', attackEvidence ? Math.min(1, Math.max(note?.beams ?? 0, (note?.beamStrength ?? 0) / 12)) : 0.62, 0.5, attackEvidence ? 'primitive beam probe' : 'bounded local beam context', attackEvidence ? 'The printed head carries short-value attack evidence.' : 'A nearby same-staff attack run makes a second role plausible for this sustain head.'),
+      component('attack-value-evidence', Math.min(1, Math.max(note?.beams ?? 0, (note?.beamStrength ?? 0) / 12)), 0.5, 'primitive beam probe on the same physical head', 'The printed head itself carries short-value attack evidence.'),
       component('sustain-value-evidence', note?.dotted === true ? 1 : 0.75, 0.5, 'notehead/dot glyph evidence', 'The same physical head carries independent sustain evidence.'),
     ]
     const score = scoreComponents(components)
@@ -340,8 +640,9 @@ function buildSharedHeadRoleCandidates(scope, notes, noteNodes, relations, staff
         dotted: note?.dotted === true,
         open: note?.hollowGlyph === true || note?.hollow === true,
         localAttackContext,
+        independentPhysicalSignalCount: 2,
       },
-      reasons: ['same-physical-head-has-attack-and-sustain-evidence'],
+      reasons: ['same-physical-head-has-independent-attack-and-sustain-evidence'],
     })
     ambiguities.push({
       id: `${scope}:ambiguity:shared-head:${index + 1}`,
@@ -496,31 +797,15 @@ function buildGridSharedHeadCandidates(scope, notes, noteNodes, subdivisionEvide
           relation.type === 'shared-head-role-candidate' && relation.from === node.id,
       )
     ) return
-    const components = [
-      component('subdivision-grid-membership', 0.78, 0.5, 'bounded attack-column grid evidence', 'This physical head belongs to a plausible short-value subdivision grid.'),
-      component('sustain-value-evidence', note?.dotted === true ? 1 : 0.75, 0.5, 'notehead/dot glyph evidence', 'The same physical head carries a written sustain value.'),
-    ]
-    const score = scoreComponents(components)
-    relations.push({
-      type: 'shared-head-role-candidate',
-      from: node.id,
-      to: node.id,
-      score,
-      status: relationStatus(score),
-      components,
-      evidence: {
-        dotted: note?.dotted === true,
-        open: note?.hollowGlyph === true || note?.hollow === true,
-        subdivisionGridMember: true,
-      },
-      reasons: ['same-physical-head-has-subdivision-and-sustain-evidence'],
-    })
     ambiguities.push({
       kind: 'shared-head-semantic-overprint',
       memberIds: [node.id],
-      evidenceScore: score,
+      evidenceScore: 0.5,
       hypotheses: ['single-written-value', 'subdivision-attack-plus-sustain-roles'],
-      reasons: ['subdivision-grid-membership', 'long-value-head-or-dot-evidence'],
+      reasons: [
+        'subdivision-grid-is-context-not-independent-physical-ownership',
+        'long-value-head-or-dot-evidence',
+      ],
       resolution: 'abstain',
     })
   })
@@ -630,17 +915,28 @@ function restNodes(scope, rests) {
   }))
 }
 
-function tupletMarkNodes(scope, glyphs, measureBox, imageData) {
+function tupletMarkNodes(scope, glyphs, notes, measureBox, imageData, staffSpace) {
   if (!measureBox || !imageData) return []
   const x0 = (measureBox.playableX0 ?? measureBox.x0 ?? 0) * imageData.width
   const x1 = (measureBox.x1 ?? 1) * imageData.width
-  const y0 = (measureBox.y0 ?? 0) * imageData.height
-  const y1 = (measureBox.y1 ?? 1) * imageData.height
+  const noteYs = notes.map((note) => Number(note?.cy)).filter(Number.isFinite)
+  const y0 = noteYs.length
+    ? Math.min(...noteYs)
+    : (measureBox.y0 ?? 0) * imageData.height
+  const y1 = noteYs.length
+    ? Math.max(...noteYs)
+    : (measureBox.y1 ?? 1) * imageData.height
+  // Tuplet ratios are conventionally placed outside the staff body. The old
+  // strict measure rectangle discarded legitimate marks just above beams or
+  // below brackets (Idol m10 is a concrete source-positive example).
+  const verticalPad = Math.max(18, Math.min(64, staffSpace * 4))
   return glyphs
     .filter(
       (glyph) =>
         /^[357]$/.test(String(glyph?.text ?? '')) &&
-        glyph.x >= x0 && glyph.x <= x1 && glyph.y >= y0 && glyph.y <= y1,
+        Number(glyph?.sourceLength ?? 1) === 1 &&
+        glyph.x >= x0 && glyph.x <= x1 &&
+        glyph.y >= y0 - verticalPad && glyph.y <= y1 + verticalPad,
     )
     .map((glyph, index) => ({
       id: `${scope}:tuplet-mark:${index + 1}`,
@@ -649,7 +945,16 @@ function tupletMarkNodes(scope, glyphs, measureBox, imageData) {
       glyphClass: `digit-${glyph.text}`,
       ratioHint: Number(glyph.text),
       anchor: { x: round(glyph.x, 2), y: round(glyph.y, 2) },
-      sourceRef: glyph.sourcePathId ?? glyph.glyphId ?? null,
+      sourceRef: glyph.sourceRunId
+        ? `${glyph.sourceRunId}:glyph:${glyph.sourceIndex ?? 0}`
+        : glyph.sourcePathId ?? glyph.glyphId ?? null,
+      provenance: {
+        runId: glyph.sourceRunId ?? null,
+        itemIndex: glyph.sourceItemIndex ?? null,
+        sourceIndex: glyph.sourceIndex ?? null,
+        sourceLength: glyph.sourceLength ?? null,
+        drawOrder: glyph.sourceDrawOrder ?? null,
+      },
     }))
 }
 
@@ -745,13 +1050,29 @@ function candidatePairs(notes, staffSpace) {
   return { pairs: [...pairs.values()], bucketWidth }
 }
 
-function pairRelations(scope, notes, noteNodes, staffSpace, relations) {
+function pairRelations(
+  scope,
+  notes,
+  noteNodes,
+  staffSpace,
+  relations,
+  stemOwnerIdsByNote = new Map(),
+) {
   const attackCandidates = []
   const laneEvidence = []
   const ambiguities = []
   const { pairs, bucketWidth } = candidatePairs(notes, staffSpace)
   const attackTolerance = Math.max(2.25, staffSpace * 0.38)
   const displacedTolerance = Math.max(4.5, staffSpace * 0.82)
+  const sourceColumns = []
+  for (const x of [...notes]
+    .map((note) => Number(note?.cx))
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)) {
+    if (!sourceColumns.length || x - sourceColumns.at(-1) > attackTolerance) {
+      sourceColumns.push(x)
+    }
+  }
 
   for (const pair of pairs) {
     const left = notes[pair.left]
@@ -765,12 +1086,65 @@ function pairRelations(scope, notes, noteNodes, staffSpace, relations) {
     const rightStem = stemDirection(right)
     const opposingStems = leftStem && rightStem && leftStem !== rightStem
     const samePitch = left?.midi != null && left.midi === right?.midi
-    const sharedStem =
-      stemKey(left, staffSpace)?.key != null &&
-      stemKey(left, staffSpace)?.key === stemKey(right, staffSpace)?.key
+    const leftStemOwners = stemOwnerIdsByNote.get(pair.left) ?? new Set()
+    const rightStemOwners = stemOwnerIdsByNote.get(pair.right) ?? new Set()
+    const sharedStem = [...leftStemOwners].some((stemId) => rightStemOwners.has(stemId))
     const sameAttackX = dx <= attackTolerance
     const displacedChord =
       sameStaff && dx <= displacedTolerance && dy >= staffSpace * 0.35 && sharedStem
+    const literalWholePair = isLiteralWholeHead(left) && isLiteralWholeHead(right)
+    const pitchDistance =
+      left?.midi != null && right?.midi != null ? Math.abs(left.midi - right.midi) : null
+    const laterX = Math.max(left?.cx ?? 0, right?.cx ?? 0)
+    const followingX = sourceColumns.find((columnX) => columnX > laterX + attackTolerance)
+    const followingGap = Number.isFinite(followingX) ? followingX - laterX : null
+    const wholeCollisionDisplacement =
+      sameStaff &&
+      literalWholePair &&
+      !leftStemOwners.size &&
+      !rightStemOwners.size &&
+      pitchDistance != null &&
+      pitchDistance > 0 &&
+      pitchDistance <= 2 &&
+      dx > attackTolerance &&
+      dx <= staffSpace * 3.2 &&
+      (followingGap == null || dx <= followingGap * 1.05)
+
+    if (wholeCollisionDisplacement) {
+      const components = [
+        component('literal-whole-glyph-pair', 1, 0.32, 'source glyph identity', 'Both physical heads are literal stemless whole-note glyphs.'),
+        component('adjacent-written-pitch', 1 - Math.max(0, pitchDistance - 1) * 0.2, 0.24, 'pre-event staff-position mapping', 'Adjacent written pitches conventionally require collision displacement.'),
+        component('bounded-collision-displacement', 1 - dx / Math.max(1, staffSpace * 3.2), 0.24, 'resolved source anchors', 'The horizontal offset is bounded relative to notehead and staff geometry.'),
+        component('before-following-attack-column', followingGap == null ? 0.5 : 1 - dx / Math.max(1, followingGap * 1.05), 0.2, 'local source-column order', 'The displaced head remains before the next distinct attack column.'),
+      ]
+      const score = scoreComponents(components)
+      relations.push({
+        type: 'collision-displaced-open-head-candidate',
+        from: leftNode.id,
+        to: rightNode.id,
+        score,
+        status: relationStatus(score),
+        components,
+        evidence: {
+          dx: round(dx, 2),
+          dy: round(dy, 2),
+          pitchDistance,
+          followingGap: round(followingGap, 2),
+          literalWholePair,
+          stemlessPair: true,
+        },
+        reasons: ['general-whole-head-collision-displacement-evidence'],
+      })
+      ambiguities.push({
+        id: `${scope}:ambiguity:whole-collision:${ambiguities.length + 1}`,
+        kind: 'collision-displaced-whole-head',
+        memberIds: [leftNode.id, rightNode.id],
+        evidenceScore: score,
+        hypotheses: ['same-attack-displaced-whole-chord', 'successive-whole-note-attacks'],
+        reasons: ['literal-whole-pair', 'adjacent-pitch', 'bounded-source-column-offset'],
+        resolution: 'abstain',
+      })
+    }
 
     if (sameAttackX || displacedChord) {
       const components = [
@@ -883,8 +1257,15 @@ function pairRelations(scope, notes, noteNodes, staffSpace, relations) {
       })
     }
     if (!sameStaff && dx <= staffSpace * 1.2) {
-      const pitchDistance =
-        left?.midi != null && right?.midi != null ? Math.abs(left.midi - right.midi) : null
+      const sharedSourceRun =
+        left?.sourceProvenance?.runId != null &&
+        left.sourceProvenance.runId === right?.sourceProvenance?.runId
+      const compatibleStemDirection =
+        leftStem != null && rightStem != null && leftStem === rightStem
+      const compatibleBeamProbe =
+        compatibleStemDirection &&
+        (((left?.beams ?? 0) > 0 && (right?.beams ?? 0) > 0) ||
+          ((left?.beamStrength ?? 0) >= 8 && (right?.beamStrength ?? 0) >= 8))
       const components = [
         component('cross-staff-x-continuity', 1 - dx / Math.max(1, staffSpace * 1.2), 0.65, 'source x anchors', 'Heads on different staves are horizontally continuous.'),
         component('pitch-continuity', pitchDistance == null ? 0 : 1 - Math.min(1, pitchDistance / 24), 0.35, 'pre-event pitch mapping', 'Pitch distance is compatible with a continuing written line.'),
@@ -897,7 +1278,14 @@ function pairRelations(scope, notes, noteNodes, staffSpace, relations) {
         score,
         status: relationStatus(score),
         components,
-        evidence: { dx: round(dx, 2), pitchDistance },
+        evidence: {
+          dx: round(dx, 2),
+          pitchDistance,
+          sharedSourceRun,
+          compatibleStemDirection,
+          compatibleBeamProbe,
+          physicalPathContinuityAvailable: false,
+        },
         reasons: ['adjacent-cross-staff-source-anchors'],
       })
       laneEvidence.push({
@@ -1075,15 +1463,36 @@ export function buildSourceRelationGraph({
   const systemIndex = measureBox?.systemIndex ?? notes[0]?.systemIndex ?? null
   const measureNumber = measureBox?.measureNumber ?? notes[0]?.measureNumber ?? null
   const scope = `p${page ?? 0}:s${systemIndex ?? 0}:m${measureNumber ?? 0}`
-  const physicalNotes = [...notes]
+  const physicalNotes = notes.map((note) => ({
+    ...note,
+    rawSourceCy: note?.cy,
+    cy: physicalAnchorY(note, imageData),
+  }))
   const space = staffSpacePx(physicalNotes, measureBox, imageData)
-  const noteNodes = physicalNotes.map((note, index) => physicalNoteheadNode(scope, note, index))
+  const noteNodes = physicalNotes.map((note, index) =>
+    physicalNoteheadNode(scope, note, index, space, imageData),
+  )
   const relations = []
-  const stems = buildStemNodes(scope, physicalNotes, noteNodes, space, relations)
+  const stemGraph = buildStemNodes(
+    scope,
+    physicalNotes,
+    noteNodes,
+    space,
+    imageData,
+    relations,
+  )
+  const stems = stemGraph.nodes
   const beams = buildBeamNodes(scope, physicalNotes, noteNodes, stems, relations, space)
   const attachments = ownerAttachmentNodes(scope, physicalNotes, noteNodes, relations)
   const physicalRests = restNodes(scope, rests)
-  const tupletMarks = tupletMarkNodes(scope, glyphs, measureBox, imageData)
+  const tupletMarks = tupletMarkNodes(
+    scope,
+    glyphs,
+    physicalNotes,
+    measureBox,
+    imageData,
+    space,
+  )
   const stateMarks = stateMarkNodes(scope, measureBox, keySignature, timeSignature)
   const sharedHeadAmbiguities = buildSharedHeadRoleCandidates(
     scope,
@@ -1103,7 +1512,14 @@ export function buildSourceRelationGraph({
     relations,
   )
   buildTupletMembershipCandidates(scope, tupletMarks, physicalNotes, noteNodes, space, relations)
-  const pairGraph = pairRelations(scope, physicalNotes, noteNodes, space, relations)
+  const pairGraph = pairRelations(
+    scope,
+    physicalNotes,
+    noteNodes,
+    space,
+    relations,
+    stemGraph.ownerIdsByNote,
+  )
   const subdivisionEvidence = buildSubdivisionGridEvidence(
     scope,
     physicalNotes,
@@ -1173,7 +1589,20 @@ export function buildSourceRelationGraph({
       readsTopologyFamily: false,
       readsTruthOrEvaluator: false,
     },
-    geometry: { staffSpacePx: round(space, 2), bucketWidthPx: round(pairGraph.bucketWidth, 2) },
+    geometry: {
+      staffSpacePx: round(space, 2),
+      bucketWidthPx: round(pairGraph.bucketWidth, 2),
+      measureBoundsPx: {
+        x0: round((measureBox?.x0 ?? 0) * (imageData?.width ?? 1), 2),
+        playableX0: round(
+          (measureBox?.playableX0 ?? measureBox?.x0 ?? 0) * (imageData?.width ?? 1),
+          2,
+        ),
+        x1: round((measureBox?.x1 ?? 1) * (imageData?.width ?? 1), 2),
+        y0: round((measureBox?.y0 ?? 0) * (imageData?.height ?? 1), 2),
+        y1: round((measureBox?.y1 ?? 1) * (imageData?.height ?? 1), 2),
+      },
+    },
     nodes,
     relations: finalRelations,
     attackCandidates: pairGraph.attackCandidates,

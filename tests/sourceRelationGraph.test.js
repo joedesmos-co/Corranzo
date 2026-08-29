@@ -34,6 +34,9 @@ function note({
   dotted = false,
   open = false,
   accidental = null,
+  glyph = open ? 'half' : 'black',
+  sourceProvenance = null,
+  noteheadAnchor = null,
 } = {}) {
   return {
     cx: x,
@@ -45,9 +48,11 @@ function note({
     clef: role === 'lower' ? 'bass' : 'treble',
     pitchMapping: { staffRole: role },
     pitchConfidence: 0.94,
-    noteheadGlyph: open ? 'half' : 'black',
+    noteheadGlyph: glyph,
     hollowGlyph: open,
     source: 'test-source-glyph',
+    sourceProvenance,
+    noteheadAnchor,
     ...(direction
       ? {
           stem: {
@@ -230,5 +235,151 @@ describe('pre-event source relation graph', () => {
       expect.objectContaining({ kind: 'incomplete-evidence', resolution: 'abstain', evidenceScore: 0 }),
     ])
     expect(formatSourceRelationGraphDiagnostics(result)).toContain('NODES')
+  })
+
+  it('uses the resolved physical head anchor while retaining the raw PDF origin', () => {
+    const result = graph([
+      note({
+        x: 200,
+        y: 300,
+        noteheadAnchor: {
+          yNorm: 0.22,
+          confidence: 0.91,
+          source: 'staff-ink-component',
+        },
+      }),
+    ])
+    const head = result.nodes.find((node) => node.kind === 'notehead')
+    expect(head.anchor).toMatchObject({ y: 220, rawSourceY: 300, source: 'staff-ink-component' })
+  })
+
+  it('preserves source text-run provenance without treating draw order as ownership', () => {
+    const result = graph([
+      note({
+        x: 200,
+        y: 220,
+        sourceProvenance: {
+          runId: 'p1:text-item:12',
+          itemIndex: 12,
+          sourceIndex: 1,
+          sourceLength: 3,
+          sourceText: '\ue0a4\ue0a4\ue0a4',
+          drawOrder: 12,
+        },
+      }),
+    ])
+    const head = result.nodes.find((node) => node.kind === 'notehead')
+    expect(head.provenance).toMatchObject({ runId: 'p1:text-item:12', sourceIndex: 1, drawOrder: 12 })
+    expect(result.relations).toHaveLength(0)
+  })
+
+  it('never assigns a raster stem probe to a literal whole-note head', () => {
+    const whole = note({ x: 200, y: 220, open: true, glyph: 'whole', direction: 'up' })
+    const result = graph([whole])
+    const head = result.nodes.find((node) => node.kind === 'notehead')
+    expect(head.primitiveEvidence.stemDirection).toBeNull()
+    expect(head.primitiveEvidence.stemProbeRejectedReason)
+      .toBe('literal-whole-head-cannot-own-stem')
+    expect(relations(result, 'stem-owner-candidate')).toHaveLength(0)
+  })
+
+  it('retains rejected raw stem and beam provenance without creating ownership', () => {
+    const result = graph([
+      note({
+        x: 200,
+        y: 300,
+        direction: 'up',
+        beams: 2,
+        beamStrength: 18,
+        noteheadAnchor: {
+          yNorm: 0.22,
+          confidence: 0.91,
+          source: 'staff-ink-component',
+        },
+      }),
+    ])
+    const head = result.nodes.find((node) => node.kind === 'notehead')
+    expect(head.primitiveEvidence).toMatchObject({
+      stemDirection: null,
+      rawStemDirection: 'up',
+      rawBeamCount: 2,
+      beamCount: 0,
+      beamProbeRejected: true,
+      stemProbeRejectedReason: 'raw-origin-too-far-from-resolved-head',
+    })
+    expect(relations(result, 'stem-owner-candidate')).toHaveLength(0)
+    expect(relations(result, 'beam-membership-candidate')).toHaveLength(0)
+  })
+
+  it('recovers an interior chord-head owner only inside a multi-probe stem segment', () => {
+    const result = graph([
+      note({ x: 200, y: 220, midi: 60, direction: 'up', stemX: 204, stemTipY: 160 }),
+      note({ x: 200, y: 210, midi: 62 }),
+      note({ x: 200, y: 200, midi: 64, direction: 'up', stemX: 204, stemTipY: 160 }),
+    ])
+    const owners = relations(result, 'stem-owner-candidate')
+    expect(owners).toHaveLength(3)
+    expect(owners.some((owner) => owner.evidence.ownershipKind === 'interior-segment-owner')).toBe(true)
+  })
+
+  it('captures a single-character tuplet ratio outside the detected staff body', () => {
+    const result = graph(
+      [
+        note({ x: 200, y: 210, direction: 'up', beams: 1 }),
+        note({ x: 225, y: 215, midi: 62, direction: 'up', beams: 1 }),
+        note({ x: 250, y: 220, midi: 64, direction: 'up', beams: 1 }),
+      ],
+      {
+        glyphs: [{
+          text: '3',
+          sourceLength: 1,
+          x: 225,
+          y: 252,
+          sourceRunId: 'p1:text-item:90',
+          sourceItemIndex: 90,
+          sourceIndex: 0,
+        }],
+      },
+    )
+    expect(result.nodes).toContainEqual(expect.objectContaining({
+      kind: 'tuplet-mark',
+      ratioHint: 3,
+      provenance: expect.objectContaining({ runId: 'p1:text-item:90' }),
+    }))
+  })
+
+  it('does not promote grid context alone to shared-head physical ownership', () => {
+    const result = graph([
+      note({ x: 200, y: 220, open: true }),
+      note({ x: 230, y: 210, midi: 62, direction: 'up', beams: 1, beamStrength: 14 }),
+      note({ x: 260, y: 200, midi: 64, direction: 'up', beams: 1, beamStrength: 14 }),
+    ])
+    expect(relations(result, 'shared-head-role-candidate')).toHaveLength(0)
+    expect(result.ambiguities.some((entry) =>
+      entry.reasons?.includes('second-independent-ownership-path-absent') ||
+      entry.reasons?.includes('subdivision-grid-is-context-not-independent-physical-ownership'),
+    )).toBe(true)
+  })
+
+  it('represents displaced literal whole heads as a general collision candidate', () => {
+    const result = graph([
+      note({ x: 200, y: 220, midi: 60, open: true, glyph: 'whole' }),
+      note({ x: 218, y: 210, midi: 62, open: true, glyph: 'whole' }),
+      note({ x: 250, y: 215, midi: 65, direction: 'up' }),
+    ])
+    expect(relations(result, 'collision-displaced-open-head-candidate')).toHaveLength(1)
+    expect(result.ambiguities).toContainEqual(expect.objectContaining({
+      kind: 'collision-displaced-whole-head',
+      resolution: 'abstain',
+    }))
+  })
+
+  it('records when a cross-staff candidate lacks a continuous physical path', () => {
+    const result = graph([
+      note({ x: 200, y: 240, midi: 60, role: 'upper', direction: 'down' }),
+      note({ x: 203, y: 500, midi: 55, role: 'lower', direction: 'up' }),
+    ])
+    expect(relations(result, 'cross-staff-continuation-candidate')[0].evidence)
+      .toMatchObject({ physicalPathContinuityAvailable: false })
   })
 })

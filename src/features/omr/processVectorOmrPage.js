@@ -378,6 +378,16 @@ export function textGlyphsToImage(pageText, imageData) {
         width: charWidth * scaleX,
         height: (item.height ?? 0) * scaleY,
         fontName: item.fontName ?? '',
+        sourceItemIndex: Number.isFinite(item.sourceItemIndex)
+          ? item.sourceItemIndex
+          : null,
+        sourceRunId: item.sourceRunId ?? null,
+        sourceTransform: item.sourceTransform ?? null,
+        sourceDirection: item.sourceDirection ?? null,
+        sourceHasEol: item.sourceHasEol === true,
+        sourceDrawOrder: Number.isFinite(item.sourceItemIndex)
+          ? item.sourceItemIndex
+          : null,
         originalLegacyText: item.originalLegacyText?.[index] ?? null,
         legacyMusicFontNormalized: Boolean(item.legacyMusicFontNormalized),
       })
@@ -953,6 +963,20 @@ function noteheadsForMeasure(
       xNorm,
       yNorm,
       noteheadAnchor,
+      sourcePathId: glyph.sourceRunId
+        ? `${glyph.sourceRunId}:glyph:${glyph.sourceIndex ?? 0}`
+        : null,
+      sourceProvenance: {
+        runId: glyph.sourceRunId ?? null,
+        itemIndex: glyph.sourceItemIndex ?? null,
+        sourceIndex: glyph.sourceIndex ?? null,
+        sourceLength: glyph.sourceLength ?? null,
+        sourceText: glyph.sourceText ?? null,
+        transform: glyph.sourceTransform ?? null,
+        drawOrder: glyph.sourceDrawOrder ?? null,
+        direction: glyph.sourceDirection ?? null,
+        hasEol: glyph.sourceHasEol === true,
+      },
       noteheadFont: {
         fontName: glyph.fontName ?? null,
         glyph: glyph.text ?? null,

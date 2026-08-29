@@ -335,7 +335,7 @@ export async function extractPdfPageText(pdfSource, pageNumber, identity = {}) {
   const viewport = page.getViewport({ scale: 1, rotation: 0 })
   const content = await page.getTextContent()
   return (content.items ?? [])
-    .map((item) => ({
+    .map((item, sourceItemIndex) => ({
       text: item.str ?? '',
       x: item.transform?.[4] ?? 0,
       y: item.transform?.[5] ?? 0,
@@ -344,6 +344,14 @@ export async function extractPdfPageText(pdfSource, pageNumber, identity = {}) {
       fontName: item.fontName ?? '',
       pageWidth: viewport.width,
       pageHeight: viewport.height,
+      // Preserve source text-run identity before legacy-font normalization or
+      // per-character projection. Text-item order is useful provenance, but is
+      // deliberately not treated as semantic ownership or reliable z-order.
+      sourceItemIndex,
+      sourceRunId: `p${pageNumber}:text-item:${sourceItemIndex}`,
+      sourceTransform: Array.isArray(item.transform) ? [...item.transform] : null,
+      sourceDirection: item.dir ?? null,
+      sourceHasEol: item.hasEOL === true,
     }))
     .filter((item) => item.text.trim().length > 0)
 }
