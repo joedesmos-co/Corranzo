@@ -994,6 +994,9 @@ export function processOmrPageAnalysis(imageData, options = {}) {
       vectorCurves,
       vectorAccidentalPaths,
       vectorAugmentationDotPaths,
+      vectorSourcePaths: Array.isArray(vectorCurves?.sourcePaths)
+        ? vectorCurves.sourcePaths
+        : [],
       systems,
       systemMeasureBoxes,
       inheritedKeySignature,

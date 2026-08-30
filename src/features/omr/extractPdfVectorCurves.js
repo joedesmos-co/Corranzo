@@ -1,6 +1,8 @@
 const PDF_PATH_MOVE_TO = 0
+const PDF_PATH_LINE_TO = 1
 const PDF_PATH_CURVE_TO = 2
 const PDF_PATH_CLOSE = 3
+const MAX_SOURCE_VECTOR_PATHS_PER_PAGE = 12000
 
 function multiplyTransforms(left, right) {
   return [
@@ -27,6 +29,186 @@ function pathChunks(value) {
   return value.flatMap((entry) =>
     ArrayBuffer.isView(entry) ? Array.from(entry) : Array.isArray(entry) ? entry : [],
   )
+}
+
+function vectorScale(transform) {
+  if (!Array.isArray(transform)) return 1
+  const xScale = Math.hypot(transform[0] ?? 1, transform[1] ?? 0)
+  const yScale = Math.hypot(transform[2] ?? 0, transform[3] ?? 1)
+  return (xScale + yScale) / 2
+}
+
+function boundsForPoints(points) {
+  const xValues = points.map((point) => point?.[0]).filter(Number.isFinite)
+  const yValues = points.map((point) => point?.[1]).filter(Number.isFinite)
+  if (!xValues.length || !yValues.length) return null
+  const x0 = Math.min(...xValues)
+  const x1 = Math.max(...xValues)
+  const y0 = Math.min(...yValues)
+  const y1 = Math.max(...yValues)
+  return { x0, x1, y0, y1, width: x1 - x0, height: y1 - y0 }
+}
+
+function sourceVectorSubpaths(rawPath, transform) {
+  const raw = pathChunks(rawPath)
+  const subpaths = []
+  let cursor = 0
+  let current = null
+  let lastPoint = null
+  while (cursor < raw.length) {
+    const command = raw[cursor]
+    cursor += 1
+    if (command === PDF_PATH_MOVE_TO) {
+      const next = transformPoint([raw[cursor], raw[cursor + 1]], transform)
+      cursor += 2
+      if (!next.every(Number.isFinite)) break
+      current = { commands: ['move'], points: [next], segments: [], closed: false }
+      subpaths.push(current)
+      lastPoint = next
+      continue
+    }
+    if (!current || !lastPoint) break
+    if (command === PDF_PATH_LINE_TO) {
+      const next = transformPoint([raw[cursor], raw[cursor + 1]], transform)
+      cursor += 2
+      if (!next.every(Number.isFinite)) break
+      current.commands.push('line')
+      current.points.push(next)
+      current.segments.push({ kind: 'line', from: lastPoint, to: next })
+      lastPoint = next
+      continue
+    }
+    if (command === PDF_PATH_CURVE_TO) {
+      const c1 = transformPoint([raw[cursor], raw[cursor + 1]], transform)
+      const c2 = transformPoint([raw[cursor + 2], raw[cursor + 3]], transform)
+      const next = transformPoint([raw[cursor + 4], raw[cursor + 5]], transform)
+      cursor += 6
+      if (![c1, c2, next].every((point) => point.every(Number.isFinite))) break
+      current.commands.push('curve')
+      current.points.push(c1, c2, next)
+      current.segments.push({ kind: 'cubic', from: lastPoint, c1, c2, to: next })
+      lastPoint = next
+      continue
+    }
+    if (command === PDF_PATH_CLOSE) {
+      current.commands.push('close')
+      current.closed = true
+      const first = current.points[0]
+      if (first && lastPoint) {
+        current.segments.push({ kind: 'line', from: lastPoint, to: first })
+      }
+      lastPoint = first
+      continue
+    }
+    break
+  }
+  return subpaths
+}
+
+/**
+ * Preserve neutral PDF path/operator provenance at the OMR viewport scale.
+ *
+ * These records deliberately do not call a path a stem, beam, bracket, tie, or
+ * owner. Those meanings require measure-local physical geometry and are added
+ * later by the shadow relation graph. pdf.js does not expose original indirect
+ * PDF object ids here, so page/operator/subpath identity is the strongest stable
+ * page-local identifier available.
+ */
+export function extractPdfVectorSourcePathsFromOperatorList({
+  operatorList,
+  ops,
+  viewportTransform,
+  pageNumber = 1,
+  maxPaths = MAX_SOURCE_VECTOR_PATHS_PER_PAGE,
+} = {}) {
+  if (
+    !operatorList?.fnArray?.length ||
+    !operatorList?.argsArray?.length ||
+    !ops ||
+    !Array.isArray(viewportTransform)
+  ) {
+    return []
+  }
+
+  const paintOperations = acceptedPaintOperations(ops)
+  let currentTransform = [1, 0, 0, 1, 0, 0]
+  let sourceLineWidth = 1
+  const stateStack = []
+  const paths = []
+  let eligibleSubpaths = 0
+
+  for (let operatorIndex = 0; operatorIndex < operatorList.fnArray.length; operatorIndex += 1) {
+    const operation = operatorList.fnArray[operatorIndex]
+    const args = operatorList.argsArray[operatorIndex]
+    if (operation === ops.save) {
+      stateStack.push({ transform: [...currentTransform], sourceLineWidth })
+      continue
+    }
+    if (operation === ops.restore) {
+      const restored = stateStack.pop()
+      if (restored) {
+        currentTransform = restored.transform
+        sourceLineWidth = restored.sourceLineWidth
+      }
+      continue
+    }
+    if (operation === ops.transform) {
+      currentTransform = multiplyTransforms(currentTransform, args)
+      continue
+    }
+    if (operation === ops.setLineWidth) {
+      const next = Number(args?.[0])
+      if (next > 0) sourceLineWidth = next
+      continue
+    }
+    if (operation !== ops.constructPath) continue
+
+    const paintOperation = args?.[0]
+    if (paintOperations.size && !paintOperations.has(paintOperation)) continue
+    const pageTransform = multiplyTransforms(viewportTransform, currentTransform)
+    const subpaths = sourceVectorSubpaths(args?.[1], pageTransform)
+    for (let subpathIndex = 0; subpathIndex < subpaths.length; subpathIndex += 1) {
+      const subpath = subpaths[subpathIndex]
+      const bounds = boundsForPoints(subpath.points)
+      if (!bounds) continue
+      eligibleSubpaths += 1
+      if (paths.length >= maxPaths) continue
+      paths.push({
+        pathId: `pdf-path-p${pageNumber}-op${operatorIndex}-sub${subpathIndex}`,
+        operatorPathId: `pdf-path-p${pageNumber}-op${operatorIndex}`,
+        source: 'pdf-vector-operator-path',
+        page: pageNumber,
+        operatorIndex,
+        subpathIndex,
+        drawOrder: operatorIndex,
+        paintOperation,
+        sourceTransform: [...currentTransform],
+        viewportTransform: [...viewportTransform],
+        sourceLineWidth,
+        effectiveLineWidth: sourceLineWidth * vectorScale(pageTransform),
+        commands: subpath.commands,
+        closed: subpath.closed,
+        segments: subpath.segments.map((segment) => ({
+          kind: segment.kind,
+          from: { x: segment.from[0], y: segment.from[1] },
+          to: { x: segment.to[0], y: segment.to[1] },
+          ...(segment.c1 ? { c1: { x: segment.c1[0], y: segment.c1[1] } } : {}),
+          ...(segment.c2 ? { c2: { x: segment.c2[0], y: segment.c2[1] } } : {}),
+        })),
+        bounds,
+      })
+    }
+  }
+
+  paths.diagnostics = {
+    page: pageNumber,
+    eligibleSubpaths,
+    retainedSubpaths: paths.length,
+    truncated: eligibleSubpaths > paths.length,
+    maxPaths,
+    originalPdfObjectIdsAvailable: false,
+  }
+  return paths
 }
 
 function cubicPathPoints(rawPath, transform) {

@@ -76,11 +76,59 @@ function graph(notes, options = {}) {
     notes,
     rests: options.rests ?? [],
     glyphs: options.glyphs ?? [],
+    rawVectorPaths: options.rawVectorPaths ?? [],
     imageData,
     measureBox,
     keySignature: { fifths: 0, source: 'test-key' },
     timeSignature: { beats: 4, beatType: 4, source: 'test-meter' },
   })
+}
+
+function rawLinePath(pathId, from, to, { lineWidth = 1 } = {}) {
+  return {
+    pathId,
+    operatorPathId: pathId.split('-sub')[0],
+    operatorIndex: Number(pathId.match(/op(\d+)/)?.[1] ?? 0),
+    subpathIndex: 0,
+    drawOrder: Number(pathId.match(/op(\d+)/)?.[1] ?? 0),
+    source: 'pdf-vector-operator-path',
+    sourceTransform: [1, 0, 0, 1, 0, 0],
+    sourceLineWidth: lineWidth,
+    effectiveLineWidth: lineWidth,
+    commands: ['move', 'line'],
+    closed: false,
+    segments: [{ kind: 'line', from: { x: from[0], y: from[1] }, to: { x: to[0], y: to[1] } }],
+    bounds: {
+      x0: Math.min(from[0], to[0]),
+      x1: Math.max(from[0], to[0]),
+      y0: Math.min(from[1], to[1]),
+      y1: Math.max(from[1], to[1]),
+      width: Math.abs(to[0] - from[0]),
+      height: Math.abs(to[1] - from[1]),
+    },
+  }
+}
+
+function rawPolygonPath(pathId, points, { lineWidth = 1 } = {}) {
+  const segments = points.map((from, index) => {
+    const to = points[(index + 1) % points.length]
+    return { kind: 'line', from: { x: from[0], y: from[1] }, to: { x: to[0], y: to[1] } }
+  })
+  const xs = points.map((point) => point[0])
+  const ys = points.map((point) => point[1])
+  return {
+    ...rawLinePath(pathId, points[0], points[1], { lineWidth }),
+    commands: ['move', ...points.map(() => 'line')],
+    segments,
+    bounds: {
+      x0: Math.min(...xs),
+      x1: Math.max(...xs),
+      y0: Math.min(...ys),
+      y1: Math.max(...ys),
+      width: Math.max(...xs) - Math.min(...xs),
+      height: Math.max(...ys) - Math.min(...ys),
+    },
+  }
 }
 
 function relations(result, type) {
@@ -134,6 +182,61 @@ describe('pre-event source relation graph', () => {
     expect(result.nodes.filter((node) => node.kind === 'beam')).toHaveLength(1)
     expect(relations(result, 'beam-membership-candidate')).toHaveLength(3)
     expect(JSON.stringify(result)).not.toContain('startDivision')
+  })
+
+  it('uses direct raw head-stem and stem-beam path connectivity as physical ownership', () => {
+    const result = graph(
+      [
+        note({ x: 200, y: 220, midi: 60 }),
+        note({ x: 230, y: 215, midi: 62 }),
+      ],
+      {
+        rawVectorPaths: [
+          rawLinePath('pdf-path-p1-op10-sub0', [205, 160], [205, 220]),
+          rawLinePath('pdf-path-p1-op11-sub0', [235, 160], [235, 215]),
+          rawPolygonPath(
+            'pdf-path-p1-op12-sub0',
+            [[205, 160], [235, 164], [235, 169], [205, 165]],
+            { lineWidth: 1 },
+          ),
+        ],
+      },
+    )
+
+    expect(result.nodes.filter((node) => node.kind === 'raw-stem-path')).toHaveLength(2)
+    expect(result.nodes.filter((node) => node.kind === 'raw-beam-segment')).toHaveLength(1)
+    expect(relations(result, 'stem-owner-candidate').filter(
+      (relation) => relation.evidence.ownershipKind === 'direct-raw-vector-path-contact',
+    )).toHaveLength(2)
+    expect(relations(result, 'beam-membership-candidate').filter(
+      (relation) => relation.evidence.physicalPathContinuity,
+    )).toHaveLength(2)
+    expect(result.nodes.filter((node) => node.kind === 'notehead')).toEqual([
+      expect.objectContaining({ primitiveEvidence: expect.objectContaining({ rawBeamConnectivity: true }) }),
+      expect.objectContaining({ primitiveEvidence: expect.objectContaining({ rawBeamConnectivity: true }) }),
+    ])
+    expect(result.diagnostics.rawVector).toMatchObject({
+      available: true,
+      rawStemPathCount: 2,
+      rawBeamPathCount: 1,
+    })
+  })
+
+  it('does not treat raw operator grouping or near-miss paths as ownership', () => {
+    const result = graph(
+      [note({ x: 200, y: 220 })],
+      {
+        rawVectorPaths: [
+          rawLinePath('pdf-path-p1-op20-sub0', [214, 160], [214, 220]),
+          rawLinePath('pdf-path-p1-op20-sub1', [214, 160], [240, 160], { lineWidth: 5 }),
+        ],
+      },
+    )
+    expect(result.nodes.some((node) => node.kind === 'raw-stem-path')).toBe(false)
+    expect(result.diagnostics.rawVector).toMatchObject({
+      sourceOperatorGroupingUsedAsOwnership: false,
+      sourceDrawOrderUsedAsOwnership: false,
+    })
   })
 
   it('records sustain evidence over a moving line as lane evidence only', () => {

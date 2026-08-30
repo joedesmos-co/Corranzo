@@ -3,7 +3,10 @@ import {
   applyDocumentVectorCurveContinuations,
   applyVectorPageTies,
 } from '../src/features/omr/detectVectorTies.js'
-import { extractPdfVectorCurvesFromOperatorList } from '../src/features/omr/extractPdfVectorCurves.js'
+import {
+  extractPdfVectorCurvesFromOperatorList,
+  extractPdfVectorSourcePathsFromOperatorList,
+} from '../src/features/omr/extractPdfVectorCurves.js'
 import { buildOmrMusicXml } from '../src/features/omr/buildOmrMusicXml.js'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { buildScoreNoteSchedule } from '../src/features/playback/scorePlaybackSchedule.js'
@@ -19,6 +22,8 @@ const OPS = {
   save: 10,
   restore: 11,
   transform: 12,
+  setLineWidth: 13,
+  stroke: 21,
   fill: 22,
   eoFill: 23,
   fillStroke: 24,
@@ -92,6 +97,46 @@ function box(measureNumber, systemIndex, x0, x1) {
 }
 
 describe('Notation Fidelity Sprint 3 PDF path source', () => {
+  it('preserves neutral raw path geometry and page-local operator provenance', () => {
+    const paths = extractPdfVectorSourcePathsFromOperatorList({
+      operatorList: {
+        fnArray: [OPS.save, OPS.transform, OPS.setLineWidth, OPS.constructPath, OPS.restore],
+        argsArray: [
+          [],
+          [1, 0, 0, 1, 20, 30],
+          [2],
+          [OPS.stroke, [new Float32Array([0, 100, 100, 1, 100, 150])]],
+          [],
+        ],
+      },
+      ops: OPS,
+      viewportTransform: [2, 0, 0, 2, 0, 0],
+      pageNumber: 3,
+    })
+
+    expect(paths).toHaveLength(1)
+    expect(paths[0]).toMatchObject({
+      pathId: 'pdf-path-p3-op3-sub0',
+      operatorPathId: 'pdf-path-p3-op3',
+      operatorIndex: 3,
+      subpathIndex: 0,
+      drawOrder: 3,
+      sourceLineWidth: 2,
+      effectiveLineWidth: 4,
+      commands: ['move', 'line'],
+      closed: false,
+    })
+    expect(paths[0].segments[0]).toMatchObject({
+      kind: 'line',
+      from: { x: 240, y: 260 },
+      to: { x: 240, y: 360 },
+    })
+    expect(paths.diagnostics).toMatchObject({
+      retainedSubpaths: 1,
+      originalPdfObjectIdsAvailable: false,
+    })
+  })
+
   it('extracts a closed cubic tie/slur lens in viewport coordinates', () => {
     const curves = extractPdfVectorCurvesFromOperatorList({
       operatorList: {

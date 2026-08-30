@@ -5,7 +5,10 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { extractPdfVectorCurvesFromOperatorList } from '../../src/features/omr/extractPdfVectorCurves.js'
+import {
+  extractPdfVectorCurvesFromOperatorList,
+  extractPdfVectorSourcePathsFromOperatorList,
+} from '../../src/features/omr/extractPdfVectorCurves.js'
 
 export const CALIBRATION_ANALYSIS_WIDTH = 1000
 
@@ -110,12 +113,22 @@ export async function makePdfCurveExtractor(
       scale: analysisWidth / base.width,
       rotation: 0,
     })
-    return extractPdfVectorCurvesFromOperatorList({
-      operatorList: await page.getOperatorList(),
+    const operatorList = await page.getOperatorList()
+    const curves = extractPdfVectorCurvesFromOperatorList({
+      operatorList,
       ops: pdfjs.OPS,
       viewportTransform: viewport.transform,
       pageNumber,
       targetWidth: viewport.width,
     })
+    const sourcePaths = extractPdfVectorSourcePathsFromOperatorList({
+      operatorList,
+      ops: pdfjs.OPS,
+      viewportTransform: viewport.transform,
+      pageNumber,
+    })
+    curves.sourcePaths = sourcePaths
+    curves.sourcePathDiagnostics = sourcePaths.diagnostics
+    return curves
   }
 }

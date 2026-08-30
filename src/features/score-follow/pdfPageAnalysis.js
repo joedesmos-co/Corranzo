@@ -1,6 +1,9 @@
 // Higher analysis resolution so thin staff lines and barlines survive
 // rasterisation on real high-DPI score PDFs (needed by the staff-line detector).
-import { extractPdfVectorCurvesFromOperatorList } from '../omr/extractPdfVectorCurves.js'
+import {
+  extractPdfVectorCurvesFromOperatorList,
+  extractPdfVectorSourcePathsFromOperatorList,
+} from '../omr/extractPdfVectorCurves.js'
 import { extractPdfVectorPathSymbolsFromOperatorList } from '../omr/detectVectorPathAccidentals.js'
 import { extractPdfVectorBarlineComponentsFromOperatorList } from '../omr/detectVectorRepeatBarlines.js'
 
@@ -384,6 +387,12 @@ export async function extractPdfPageVectorCurves(
     pageNumber,
     targetWidth: viewport.width,
   })
+  const sourcePaths = extractPdfVectorSourcePathsFromOperatorList({
+    operatorList,
+    ops: pdfjs.OPS,
+    viewportTransform: viewport.transform,
+    pageNumber,
+  })
   // Estimate key signature area: left 20% of page width, top 30% of page height
   // This covers the typical key signature area (after clef, before first measure)
   const keySignatureArea = {
@@ -411,6 +420,8 @@ export async function extractPdfPageVectorCurves(
   curves.augmentationDotPaths = pathSymbols.augmentationDotPaths
   curves.verticalBarPaths = barlineComponents.verticalBars
   curves.compactDotPaths = barlineComponents.compactDots
+  curves.sourcePaths = sourcePaths
+  curves.sourcePathDiagnostics = sourcePaths.diagnostics
   return curves
 }
 

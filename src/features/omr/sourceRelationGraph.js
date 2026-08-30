@@ -1,4 +1,4 @@
-const GRAPH_VERSION = 2
+const GRAPH_VERSION = 3
 const DEFAULT_STAFF_SPACE_PX = 8
 const MAX_BUCKET_NEIGHBORS = 3
 const MAX_ORDERED_NEIGHBORS = 4
@@ -594,6 +594,540 @@ function buildBeamNodes(scope, notes, noteNodes, stemNodes, relations, staffSpac
     }
   }
   return nodes
+}
+
+function boundsOverlap(left, right, padding = 0) {
+  return (
+    (left?.x1 ?? -Infinity) >= (right?.x0 ?? Infinity) - padding &&
+    (left?.x0 ?? Infinity) <= (right?.x1 ?? -Infinity) + padding &&
+    (left?.y1 ?? -Infinity) >= (right?.y0 ?? Infinity) - padding &&
+    (left?.y0 ?? Infinity) <= (right?.y1 ?? -Infinity) + padding
+  )
+}
+
+function sourcePathMeasureBounds(measureBox, imageData, staffSpace) {
+  return {
+    x0: (measureBox?.x0 ?? 0) * (imageData?.width ?? 1) - staffSpace,
+    x1: (measureBox?.x1 ?? 1) * (imageData?.width ?? 1) + staffSpace,
+    // Tuplet beams/brackets and cross-staff connectors are conventionally
+    // outside the five-line staff body. Keep the same bounded four-space
+    // vertical envelope used for raw ratio digits.
+    y0: (measureBox?.y0 ?? 0) * (imageData?.height ?? 1) - staffSpace * 4.5,
+    y1: (measureBox?.y1 ?? 1) * (imageData?.height ?? 1) + staffSpace * 4.5,
+  }
+}
+
+function lineOnlyPath(path) {
+  return (
+    (path?.segments?.length ?? 0) > 0 &&
+    path.segments.every((segment) => segment?.kind === 'line')
+  )
+}
+
+function rawStemPath(path, staffSpace, measureBounds) {
+  if (!lineOnlyPath(path)) return null
+  const bounds = path?.bounds
+  if (!bounds) return null
+  const visibleWidth = Math.max(bounds.width, Number(path?.effectiveLineWidth) || 0)
+  if (
+    bounds.height < staffSpace * 1.35 ||
+    bounds.height > staffSpace * 7.2 ||
+    visibleWidth > staffSpace * 0.48 ||
+    bounds.height / Math.max(0.2, visibleWidth) < 4.5
+  ) return null
+  const x = (bounds.x0 + bounds.x1) / 2
+  if (
+    Math.abs(x - measureBounds.x0) <= staffSpace * 0.45 ||
+    Math.abs(x - measureBounds.x1) <= staffSpace * 0.45
+  ) return null
+  return { path, x, y0: bounds.y0, y1: bounds.y1, bounds }
+}
+
+function rawBeamPath(path, staffSpace, staffLineYs) {
+  if (!lineOnlyPath(path)) return null
+  const bounds = path?.bounds
+  if (!bounds) return null
+  const lineSegments = path.segments
+    .map((segment) => ({
+      segment,
+      length: Math.hypot(
+        (segment?.to?.x ?? 0) - (segment?.from?.x ?? 0),
+        (segment?.to?.y ?? 0) - (segment?.from?.y ?? 0),
+      ),
+    }))
+    .sort((left, right) => right.length - left.length)
+  const longEdges = lineSegments.slice(0, 2)
+  const shortEdge = lineSegments.at(-1)?.length ?? Infinity
+  const isThinFilledParallelogram =
+    lineSegments.length >= 4 &&
+    longEdges[0]?.length >= staffSpace * 1.15 &&
+    longEdges[1]?.length >= longEdges[0].length * 0.82 &&
+    shortEdge <= staffSpace * 1.1 &&
+    longEdges[0].length / Math.max(0.2, shortEdge) >= 2.2
+  const physicalThickness = isThinFilledParallelogram
+    ? shortEdge
+    : Math.max(bounds.height, Number(path?.effectiveLineWidth) || 0)
+  if (
+    bounds.width < staffSpace * 1.15 ||
+    bounds.width > staffSpace * 12 ||
+    physicalThickness > staffSpace * 1.35 ||
+    bounds.width / Math.max(0.2, physicalThickness) < 2.2
+  ) return null
+  const centerY = (bounds.y0 + bounds.y1) / 2
+  if (staffLineYs.some((lineY) => Math.abs(lineY - centerY) <= staffSpace * 0.2)) return null
+  const edgeYAtX = (edge, x) => {
+    const from = edge?.segment?.from
+    const to = edge?.segment?.to
+    const dx = (to?.x ?? 0) - (from?.x ?? 0)
+    if (!from || !to || Math.abs(dx) < 0.01) return null
+    const t = (x - from.x) / dx
+    return from.y + ((to.y - from.y) * t)
+  }
+  return {
+    path,
+    x0: bounds.x0,
+    x1: bounds.x1,
+    y0: bounds.y0,
+    y1: bounds.y1,
+    centerY,
+    physicalThickness,
+    isThinFilledParallelogram,
+    yAtX(x) {
+      const values = longEdges.map((edge) => edgeYAtX(edge, x)).filter(Number.isFinite)
+      return values.length ? median(values) : centerY
+    },
+  }
+}
+
+function xBucketIndex(items, bucketWidth, xSelector) {
+  const buckets = new Map()
+  items.forEach((item, index) => {
+    const x = xSelector(item)
+    if (!Number.isFinite(x)) return
+    const bucket = Math.floor(x / bucketWidth)
+    if (!buckets.has(bucket)) buckets.set(bucket, [])
+    buckets.get(bucket).push({ item, index })
+  })
+  return {
+    near(x, radius) {
+      const left = Math.floor((x - radius) / bucketWidth)
+      const right = Math.floor((x + radius) / bucketWidth)
+      const result = []
+      for (let bucket = left; bucket <= right; bucket += 1) {
+        result.push(...(buckets.get(bucket) ?? []))
+      }
+      return result
+    },
+  }
+}
+
+function sourcePathNode(scope, kind, path, index, extra = {}) {
+  return {
+    id: `${scope}:${kind}:${index + 1}`,
+    kind,
+    source: 'pdf-vector-operator-path',
+    sourceRef: path.pathId,
+    operatorPathId: path.operatorPathId ?? null,
+    operatorIndex: path.operatorIndex ?? null,
+    subpathIndex: path.subpathIndex ?? null,
+    drawOrder: path.drawOrder ?? null,
+    paintOperation: path.paintOperation ?? null,
+    sourceTransform: path.sourceTransform ?? null,
+    sourceLineWidth: round(path.sourceLineWidth, 4),
+    effectiveLineWidth: round(path.effectiveLineWidth, 4),
+    bounds: Object.fromEntries(
+      Object.entries(path.bounds ?? {}).map(([key, value]) => [key, round(value, 3)]),
+    ),
+    ...extra,
+  }
+}
+
+function buildRawVectorOwnership({
+  scope,
+  rawVectorPaths,
+  notes,
+  noteNodes,
+  measureBox,
+  imageData,
+  staffSpace,
+  relations,
+  tupletMarks,
+}) {
+  if (!rawVectorPaths?.length || !measureBox || !imageData) {
+    return {
+      nodes: [],
+      ambiguities: [],
+      diagnostics: {
+        available: false,
+        rawPagePathCount: rawVectorPaths?.length ?? 0,
+        localPathCount: 0,
+        rawStemPathCount: 0,
+        rawStemOwnerCount: 0,
+        rawBeamPathCount: 0,
+        rawBeamMembershipCount: 0,
+        curvePathCount: 0,
+        tupletBracketPathCount: 0,
+        tupletSpanCount: 0,
+        crossStaffBeamCount: 0,
+        sharedHeadOwnerCount: 0,
+      },
+    }
+  }
+
+  const measureBounds = sourcePathMeasureBounds(measureBox, imageData, staffSpace)
+  const localPaths = rawVectorPaths.filter((path) => boundsOverlap(path?.bounds, measureBounds))
+  const staffLineYs = Object.values(measureBox?.staffLines ?? {})
+    .flatMap((lines) => Array.isArray(lines) ? lines : [])
+    .filter(Number.isFinite)
+    .map((value) => value * imageData.height)
+  const noteIndex = xBucketIndex(noteNodes, Math.max(2, staffSpace * 1.5), (node) => node?.anchor?.x)
+  const rawStemCandidates = localPaths
+    .map((path) => rawStemPath(path, staffSpace, measureBounds))
+    .filter(Boolean)
+  const nodes = []
+  const ambiguities = []
+  const rawStems = []
+  const rawStemOwnersByHead = new Map()
+
+  for (const candidate of rawStemCandidates) {
+    const contacts = []
+    for (const { item: head, index } of noteIndex.near(candidate.x, staffSpace)) {
+      if (isLiteralWholeHead(notes[index])) continue
+      const bounds = head.bounds
+      if (!bounds || candidate.y1 < bounds.y0 - staffSpace * 0.14 || candidate.y0 > bounds.y1 + staffSpace * 0.14) continue
+      const extensionAbove = (head.anchor?.y ?? 0) - candidate.y0
+      const extensionBelow = candidate.y1 - (head.anchor?.y ?? 0)
+      const direction = extensionAbove >= extensionBelow ? 'up' : 'down'
+      const expectedX = direction === 'up' ? bounds.x1 : bounds.x0
+      const attachmentError = Math.abs(candidate.x - expectedX)
+      if (attachmentError > staffSpace * 0.42) continue
+      const extension = Math.max(extensionAbove, extensionBelow)
+      if (extension < staffSpace * 1.2) continue
+      contacts.push({ head, index, direction, attachmentError, extension })
+    }
+    if (!contacts.length) continue
+    const directions = [...new Set(contacts.map((contact) => contact.direction))]
+    if (directions.length !== 1) continue
+    const node = sourcePathNode(scope, 'raw-stem-path', candidate.path, nodes.length, {
+      direction: directions[0],
+      anchor: {
+        x: round(candidate.x, 3),
+        y0: round(candidate.y0, 3),
+        y1: round(candidate.y1, 3),
+        tipY: round(directions[0] === 'up' ? candidate.y0 : candidate.y1, 3),
+      },
+      physicalContact: true,
+    })
+    nodes.push(node)
+    const rawStem = { ...candidate, node, contacts: [] }
+    for (const contact of contacts) {
+      const components = [
+        component('raw-vector-head-contact', 1, 0.55, 'PDF path endpoint and resolved notehead bounds', 'The original vector stem path directly intersects the direction-compatible notehead boundary.'),
+        component('direction-compatible-attachment', 1 - contact.attachmentError / Math.max(1, staffSpace * 0.42), 0.3, 'raw path x and physical head bounds', 'The path reaches the left/down or right/up attachment side.'),
+        component('bounded-stem-extension', Math.min(1, contact.extension / Math.max(1, staffSpace * 3.5)), 0.15, 'raw vector path extent', 'The contacted path extends a physically plausible stem distance from the head.'),
+      ]
+      const score = scoreComponents(components)
+      relations.push({
+        type: 'stem-owner-candidate',
+        from: node.id,
+        to: contact.head.id,
+        score,
+        status: relationStatus(score),
+        components,
+        evidence: {
+          direction: contact.direction,
+          ownershipKind: 'direct-raw-vector-path-contact',
+          pathId: candidate.path.pathId,
+          operatorPathId: candidate.path.operatorPathId ?? null,
+          attachmentErrorPx: round(contact.attachmentError, 3),
+          directPhysicalContact: true,
+          originalPdfObjectIdAvailable: false,
+        },
+        reasons: ['raw-vector-path-enters-resolved-notehead-boundary'],
+      })
+      if (score < 0.78) continue
+      rawStem.contacts.push(contact)
+      if (!rawStemOwnersByHead.has(contact.index)) rawStemOwnersByHead.set(contact.index, [])
+      rawStemOwnersByHead.get(contact.index).push(rawStem)
+    }
+    if (rawStem.contacts.length) rawStems.push(rawStem)
+  }
+
+  for (const [index, stems] of rawStemOwnersByHead) {
+    const directions = [...new Set(stems.map((stem) => stem.node.direction))]
+    noteNodes[index].primitiveEvidence.rawVectorStemDirections = directions
+    const current = noteNodes[index].primitiveEvidence.stemDirection
+    if (directions.length === 1 && current && current !== directions[0]) {
+      noteNodes[index].primitiveEvidence.rawVectorStemDirectionConflict = true
+    }
+  }
+
+  const rawStemIndex = xBucketIndex(rawStems, Math.max(2, staffSpace * 2), (stem) => stem.x)
+  const rawBeamCandidates = localPaths
+    .map((path) => rawBeamPath(path, staffSpace, staffLineYs))
+    .filter(Boolean)
+  const rawBeams = []
+  const beamNodesByHead = new Map()
+  for (const candidate of rawBeamCandidates) {
+    const connected = []
+    const centerX = (candidate.x0 + candidate.x1) / 2
+    const radius = (candidate.x1 - candidate.x0) / 2 + staffSpace * 0.3
+    for (const { item: stem } of rawStemIndex.near(centerX, radius)) {
+      if (stem.x < candidate.x0 - staffSpace * 0.25 || stem.x > candidate.x1 + staffSpace * 0.25) continue
+      const headY = median(stem.contacts.map((contact) => contact.head.anchor?.y))
+      const tipY = stem.node.anchor.tipY
+      const beamY = candidate.yAtX(stem.x)
+      const insideStem = beamY >= stem.y0 - staffSpace * 0.15 && beamY <= stem.y1 + staffSpace * 0.15
+      const nearTerminal = Math.abs(beamY - tipY) <= staffSpace * 1.55
+      const awayFromHead = stem.node.direction === 'up'
+        ? beamY <= headY - staffSpace * 0.45
+        : beamY >= headY + staffSpace * 0.45
+      if (!insideStem || !nearTerminal || !awayFromHead) continue
+      connected.push(stem)
+    }
+    const distinctStems = [...new Map(connected.map((stem) => [stem.node.id, stem])).values()]
+    if (distinctStems.length < 2) continue
+    const node = sourcePathNode(scope, 'raw-beam-segment', candidate.path, nodes.length, {
+      anchor: {
+        x0: round(candidate.x0, 3),
+        x1: round(candidate.x1, 3),
+        y0: round(candidate.y0, 3),
+        y1: round(candidate.y1, 3),
+      },
+      connectedStemIds: distinctStems.map((stem) => stem.node.id),
+      physicalContact: true,
+    })
+    nodes.push(node)
+    rawBeams.push({ ...candidate, node, stems: distinctStems })
+    for (const stem of distinctStems) {
+      const stemComponents = [
+        component('raw-path-intersection', 1, 0.7, 'PDF beam segment and stem path', 'The beam segment physically intersects the terminal region of the raw stem path.'),
+        component('terminal-stem-region', 1 - Math.abs(candidate.centerY - stem.node.anchor.tipY) / Math.max(1, staffSpace * 1.55), 0.3, 'raw vector endpoints', 'The contact lies at the beam-compatible end of the stem.'),
+      ]
+      relations.push({
+        type: 'beam-stem-candidate',
+        from: node.id,
+        to: stem.node.id,
+        score: scoreComponents(stemComponents),
+        status: 'strong-candidate',
+        components: stemComponents,
+        evidence: { physicalPathContinuity: true, beamPathId: candidate.path.pathId, stemPathId: stem.path.pathId },
+        reasons: ['raw-beam-path-physically-intersects-raw-stem-path'],
+      })
+      for (const contact of stem.contacts) {
+        if (!beamNodesByHead.has(contact.index)) beamNodesByHead.set(contact.index, new Set())
+        beamNodesByHead.get(contact.index).add(node.id)
+        const components = [
+          component('raw-beam-stem-contact', 1, 0.55, 'PDF vector path connectivity', 'A retained beam segment physically contacts the raw stem owned by this head.'),
+          component('raw-stem-head-contact', 1, 0.45, 'PDF vector path and resolved head bounds', 'The same raw stem physically contacts the resolved notehead.'),
+        ]
+        const score = scoreComponents(components)
+        relations.push({
+          type: 'beam-membership-candidate',
+          from: contact.head.id,
+          to: node.id,
+          score,
+          status: relationStatus(score),
+          components,
+          evidence: {
+            physicalPathContinuity: true,
+            beamPathId: candidate.path.pathId,
+            stemPathId: stem.path.pathId,
+            beamLevelFromRawPath: true,
+          },
+          reasons: ['head-to-stem-to-beam-raw-path-connectivity'],
+        })
+      }
+    }
+  }
+
+  for (const [index, beamIds] of beamNodesByHead) {
+    const head = noteNodes[index]
+    const level = Math.min(4, beamIds.size)
+    head.primitiveEvidence.rawBeamPathCount = level
+    head.primitiveEvidence.beamCount = Math.max(head.primitiveEvidence.beamCount ?? 0, level)
+    head.primitiveEvidence.rawBeamConnectivity = true
+  }
+
+  let crossStaffBeamCount = 0
+  for (const beam of rawBeams) {
+    const contacts = beam.stems.flatMap((stem) => stem.contacts)
+    const roles = new Set(contacts.map((contact) => contact.head.staffRole))
+    if (roles.size < 2) continue
+    crossStaffBeamCount += 1
+    for (let leftIndex = 0; leftIndex < contacts.length; leftIndex += 1) {
+      for (let rightIndex = leftIndex + 1; rightIndex < contacts.length; rightIndex += 1) {
+        const left = contacts[leftIndex]
+        const right = contacts[rightIndex]
+        if (left.head.staffRole === right.head.staffRole) continue
+        const components = [
+          component('shared-raw-beam-path', 1, 0.65, 'single PDF beam segment', 'Both staff-owned stems physically contact the same retained vector beam segment.'),
+          component('independent-raw-stem-paths', left.head.id === right.head.id ? 0 : 1, 0.35, 'raw vector stem paths', 'Independent raw stem paths connect the two physical heads to the shared beam.'),
+        ]
+        relations.push({
+          type: 'cross-staff-continuation-candidate',
+          from: left.head.id,
+          to: right.head.id,
+          score: scoreComponents(components),
+          status: 'strong-candidate',
+          components,
+          evidence: { physicalPathContinuityAvailable: true, beamPathId: beam.path.pathId },
+          reasons: ['shared-beam-path-crosses-staff-owned-stems'],
+        })
+      }
+    }
+  }
+
+  let sharedHeadOwnerCount = 0
+  for (const [index, stems] of rawStemOwnersByHead) {
+    const directions = [...new Set(stems.map((stem) => stem.node.direction))]
+    const beamIds = beamNodesByHead.get(index) ?? new Set()
+    const sustainEvidence = noteNodes[index]?.glyph?.open === true || noteNodes[index]?.primitiveEvidence?.augmentationDot === true
+    if (stems.length < 2 || directions.length < 2 || !beamIds.size || !sustainEvidence) continue
+    sharedHeadOwnerCount += 1
+    const components = [
+      component('opposing-raw-stem-paths', 1, 0.4, 'independent PDF vector paths', 'Two distinct physical stem paths attach to opposite sides/directions of one head.'),
+      component('raw-beam-path-membership', 1, 0.3, 'raw beam/stem connectivity', 'At least one attached stem participates in a physical beam path.'),
+      component('independent-sustain-glyph', 1, 0.3, 'open head or attached augmentation dot', 'The same physical head independently carries long-value evidence.'),
+    ]
+    relations.push({
+      type: 'shared-head-physical-observation',
+      from: noteNodes[index].id,
+      to: noteNodes[index].id,
+      score: scoreComponents(components),
+      status: 'candidate-only',
+      components,
+      evidence: {
+        independentPhysicalSignalCount: 3,
+        rawStemPathIds: stems.map((stem) => stem.path.pathId),
+        rawBeamNodeIds: [...beamIds],
+      },
+      reasons: [
+        'opposing-raw-stems-plus-beam-plus-sustain-glyph',
+        'physical-observation-does-not-by-itself-assign-semantic-roles',
+      ],
+    })
+    ambiguities.push({
+      kind: 'raw-shared-head-role-unresolved',
+      memberIds: [noteNodes[index].id],
+      evidenceScore: scoreComponents(components),
+      hypotheses: ['single-written-role', 'attack-plus-sustain-roles'],
+      reasons: ['raw-ownership-paths-present', 'semantic-role-still-unresolved'],
+      resolution: 'abstain',
+    })
+  }
+
+  let tupletSpanCount = 0
+  for (const mark of tupletMarks) {
+    const ratio = mark.ratioHint
+    const segmentCandidates = rawBeams
+      .filter((beam) =>
+        mark.anchor.x >= beam.x0 - staffSpace &&
+        mark.anchor.x <= beam.x1 + staffSpace &&
+        Math.abs(mark.anchor.y - beam.centerY) <= staffSpace * 4,
+      )
+      .map((beam) => ({
+        beam,
+        contacts: [...new Map(
+          beam.stems.flatMap((stem) => stem.contacts).map((contact) => [contact.head.id, contact]),
+        ).values()],
+      }))
+      .filter(({ beam }) => beam.stems.length === ratio)
+    const spanGroups = new Map()
+    for (const candidate of segmentCandidates) {
+      const key = candidate.beam.stems.map((stem) => stem.node.id).sort().join('|')
+      if (!spanGroups.has(key)) spanGroups.set(key, [])
+      spanGroups.get(key).push(candidate)
+    }
+    if (spanGroups.size !== 1) continue
+    tupletSpanCount += 1
+    const beamSegments = [...spanGroups.values()][0]
+    const { beam, contacts } = beamSegments[0]
+    const beamPathIds = beamSegments.map((candidate) => candidate.beam.path.pathId)
+    for (const contact of contacts) {
+      const components = [
+        component('printed-ratio-mark', 1, 0.4, 'single-character source glyph', 'A raw printed tuplet ratio lies over or under the bounded beam span.'),
+        component('physical-beam-span', 1, 0.4, 'raw beam/stem connectivity', 'The beam path physically connects exactly the printed ratio count of attacks.'),
+        component('digit-span-proximity', 1 - Math.abs(mark.anchor.y - beam.centerY) / Math.max(1, staffSpace * 4), 0.2, 'source glyph and raw path anchors', 'The ratio mark is geometrically local to that beam span.'),
+      ]
+      relations.push({
+        type: 'tuplet-membership-candidate',
+        from: contact.head.id,
+        to: mark.id,
+        score: scoreComponents(components),
+        status: 'strong-candidate',
+        components,
+        evidence: { ratioHint: ratio, beamPathIds, physicalBeamSpan: true },
+        reasons: ['ratio-glyph-plus-exact-raw-beam-span'],
+      })
+    }
+  }
+
+  const curvePaths = localPaths.filter((path) => path?.segments?.some((segment) => segment?.kind === 'cubic'))
+  for (const path of curvePaths) {
+    nodes.push(sourcePathNode(scope, 'raw-curve-path', path, nodes.length, {
+      semanticClass: null,
+      candidateOnly: true,
+      curveSegments: path.segments.filter((segment) => segment?.kind === 'cubic'),
+      orientation: (path?.bounds?.width ?? 0) >= (path?.bounds?.height ?? 0)
+        ? 'horizontal'
+        : 'vertical',
+    }))
+  }
+
+  const rawBeamPathIds = new Set(rawBeams.map((beam) => beam.path.pathId))
+  const tupletBracketPaths = []
+  for (const mark of tupletMarks) {
+    const candidates = localPaths.filter((path) => {
+      if (!lineOnlyPath(path) || rawBeamPathIds.has(path.pathId)) return false
+      const bounds = path.bounds
+      if (
+        (path.segments?.length ?? 0) < 3 ||
+        bounds.width < staffSpace * 1.5 ||
+        bounds.width > staffSpace * 14 ||
+        bounds.height < staffSpace * 0.15 ||
+        bounds.height > staffSpace * 3
+      ) return false
+      const centerY = (bounds.y0 + bounds.y1) / 2
+      return (
+        mark.anchor.x >= bounds.x0 - staffSpace &&
+        mark.anchor.x <= bounds.x1 + staffSpace &&
+        Math.abs(mark.anchor.y - centerY) <= staffSpace * 3.5
+      )
+    })
+    for (const path of candidates) {
+      if (tupletBracketPaths.some((entry) => entry.path.pathId === path.pathId)) continue
+      const node = sourcePathNode(scope, 'raw-tuplet-bracket-path', path, nodes.length, {
+        candidateOnly: true,
+        ratioMarkId: mark.id,
+        lineSegments: path.segments,
+      })
+      nodes.push(node)
+      tupletBracketPaths.push({ path, node, mark })
+    }
+  }
+
+  return {
+    nodes,
+    ambiguities,
+    diagnostics: {
+      available: true,
+      rawPagePathCount: rawVectorPaths.length,
+      localPathCount: localPaths.length,
+      rawStemPathCount: rawStems.length,
+      rawStemOwnerCount: [...rawStemOwnersByHead.values()].reduce((sum, entries) => sum + entries.length, 0),
+      rawBeamPathCount: rawBeams.length,
+      rawBeamMembershipCount: [...beamNodesByHead.values()].reduce((sum, ids) => sum + ids.size, 0),
+      curvePathCount: curvePaths.length,
+      tupletBracketPathCount: tupletBracketPaths.length,
+      tupletSpanCount,
+      crossStaffBeamCount,
+      sharedHeadOwnerCount,
+      sourceOperatorGroupingUsedAsOwnership: false,
+      sourceDrawOrderUsedAsOwnership: false,
+      originalPdfObjectIdsAvailable: false,
+    },
+  }
 }
 
 function buildSharedHeadRoleCandidates(scope, notes, noteNodes, relations, staffSpace) {
@@ -1453,6 +1987,7 @@ export function buildSourceRelationGraph({
   notes = [],
   rests = [],
   glyphs = [],
+  rawVectorPaths = [],
   imageData = null,
   measureBox = null,
   keySignature = null,
@@ -1494,6 +2029,17 @@ export function buildSourceRelationGraph({
     space,
   )
   const stateMarks = stateMarkNodes(scope, measureBox, keySignature, timeSignature)
+  const rawVector = buildRawVectorOwnership({
+    scope,
+    rawVectorPaths,
+    notes: physicalNotes,
+    noteNodes,
+    measureBox,
+    imageData,
+    staffSpace: space,
+    relations,
+    tupletMarks,
+  })
   const sharedHeadAmbiguities = buildSharedHeadRoleCandidates(
     scope,
     physicalNotes,
@@ -1558,12 +2104,14 @@ export function buildSourceRelationGraph({
     ...rawDots.nodes,
     ...tupletMarks,
     ...stateMarks,
+    ...rawVector.nodes,
   ]
   const ambiguities = [
     ...sharedHeadAmbiguities,
     ...gridSharedHeadAmbiguities,
     ...rawDots.ambiguities,
     ...pairGraph.ambiguities,
+    ...rawVector.ambiguities,
   ].map((entry, index) => ({ ...entry, id: `${scope}:ambiguity:${index + 1}` }))
   for (const outcome of zeroEvidence) {
     ambiguities.push({
@@ -1619,6 +2167,7 @@ export function buildSourceRelationGraph({
       candidatePairsConsidered: pairGraph.pairCount,
       theoreticalAllPairs: (physicalNotes.length * (physicalNotes.length - 1)) / 2,
       constructionMs: round(elapsed, 3),
+      rawVector: rawVector.diagnostics,
     },
   }
 }
