@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "model_id": "corranzo-piano-vision-v1",
+  "model": {
+    "variant": "tiny"
+  },
+  "data": {
+    "image_height": 192,
+    "image_width": 512,
+    "context_scopes": 1,
+    "max_objects": 64,
+    "max_relations": 256,
+    "shuffle_buffer": 32,
+    "verify_hashes": false,
+    "allow_synthetic_pixels": false
+  },
+  "training": {
+    "seed": 21401,
+    "epochs": 40,
+    "batch_size": 2,
+    "validation_batch_size": 2,
+    "num_workers": 0,
+    "prefetch_factor": 1,
+    "persistent_workers": false,
+    "gradient_accumulation": 8,
+    "gradient_clip_norm": 1.0,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "warmup_steps": 500,
+    "minimum_lr_ratio": 0.05,
+    "mixed_precision": "auto",
+    "checkpoint_every_steps": 1000,
+    "keep_periodic_checkpoints": 3,
+    "early_stopping_patience": 8,
+    "early_stopping_min_delta": 0.0001,
+    "loss_explosion_factor": 8.0,
+    "max_steps": null,
+    "device": "auto"
+  },
+  "uncertainty": {
+    "offer_threshold": 0.72,
+    "complete_threshold": 0.82,
+    "top_k": 3,
+    "wrong_complete_cost": 5.0
+  }
+}
