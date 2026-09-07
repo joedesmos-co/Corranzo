@@ -93,6 +93,27 @@ class SemanticStreaming:
             raise RuntimeError(f"SEMANTIC_SPLIT_OVERLAP:{kind}:{identity}")
         self.db.execute("INSERT OR IGNORE INTO semantic_identities VALUES(?,?,?)", (kind, identity, split))
 
+    def _split_for_score(self, score_id):
+        from semantic_factory import semantic_split
+        return semantic_split(score_id)
+
+    def _input_fingerprint(self, row, target_path, target_exists):
+        return digest({
+            "canonical": sha256_path(row["path"]),
+            "target": sha256_path(target_path) if target_exists else None,
+            "contract": self.contract, "shardSize": self.shard_size,
+            "bufferBytes": self.buffer_bytes, "layout": "SCORE_CHUNKS_V1",
+        })
+
+    def _transform_scope(self, source, target):
+        return source, target
+
+    def _shard_path(self, shard_id, split):
+        return self.shard_dir / f"semantic-{split}-{shard_id:05d}.jsonl.gz"
+
+    def _next_shard_id(self):
+        return self.db.execute("SELECT COALESCE(MAX(shard_id),-1)+1 FROM semantic_shards").fetchone()[0]
+
     def _flush(self, score_id, split, cursor, chunk, errors):
         """File first, then one DB transaction for shard/examples/resume cursor.
 
@@ -101,8 +122,8 @@ class SemanticStreaming:
         Staging partials are outside the consumer's semantic-shards glob.
         """
         self._disk_check(sum(len(item[1]) for item in chunk) + 65536)
-        shard_id = self.db.execute("SELECT COALESCE(MAX(shard_id),-1)+1 FROM semantic_shards").fetchone()[0]
-        path = self.shard_dir / f"semantic-{split}-{shard_id:05d}.jsonl.gz"
+        shard_id = self._next_shard_id()
+        path = self._shard_path(shard_id, split)
         if chunk:
             partial = self.staging_dir / (path.name + ".partial")
             with partial.open("wb") as raw:
@@ -153,12 +174,7 @@ class SemanticStreaming:
         target_path = self._target_bundle(score_id)
         target_exists = bool(target_path and target_path.is_file())
         # Bind every score (including zero-output scores) to its immutable inputs.
-        fingerprint = digest({
-            "canonical": sha256_path(row["path"]),
-            "target": sha256_path(target_path) if target_exists else None,
-            "contract": self.contract, "shardSize": self.shard_size,
-            "bufferBytes": self.buffer_bytes, "layout": "SCORE_CHUNKS_V1",
-        })
+        fingerprint = self._input_fingerprint(row, target_path, target_exists)
         progress = self.db.execute("SELECT * FROM semantic_score_progress WHERE score_id=?", (score_id,)).fetchone()
         if progress:
             if progress["input_digest"] != fingerprint:
@@ -172,7 +188,7 @@ class SemanticStreaming:
             progress = {"scope_cursor": 0}
         self._set_state("semantic_current_score", score_id)
         if not target_exists:
-            self._flush(score_id, semantic_split(score_id), 0, [], [
+            self._flush(score_id, self._split_for_score(score_id), 0, [], [
                 {"scoreId": score_id, "scopeCursor": 0, "reason": "TARGET_BUNDLE_MISSING"}
             ])
             with self.db:
@@ -195,7 +211,7 @@ class SemanticStreaming:
                     if self._stop_requested():
                         raise InterruptedError("semantic stop requested")
             targets.commit()
-            split = semantic_split(score_id)
+            split = self._split_for_score(score_id)
             chunk, errors = [], []
             byte_count = 0
             cursor = progress["scope_cursor"]
@@ -209,6 +225,8 @@ class SemanticStreaming:
                 example_id = source["metadata"]["exampleId"]
                 target_row = targets.execute("SELECT payload FROM targets WHERE id=?", (example_id,)).fetchone()
                 target = json.loads(target_row[0]) if target_row else None
+                if target:
+                    source, target = self._transform_scope(source, target)
                 violations = firewall_violations(source["modelInput"]) if target else []
                 if not target or violations:
                     errors.append({"scoreId": score_id, "exampleId": example_id, "scopeCursor": ordinal,
