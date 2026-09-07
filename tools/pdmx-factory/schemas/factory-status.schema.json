@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corranzo.local/schemas/pdmx-factory-status-v1.json",
+  "title": "Corranzo persisted factory status",
+  "type": "object",
+  "required": ["schemaVersion", "authorization", "overall", "music", "throughput", "time", "system", "liveLog"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "authorization": { "enum": ["GENERIC_FACTORY_MODEL_CONTRACT_PENDING", "SEMANTIC_FACTORY_CONTRACT_VALIDATED"] },
+    "semantic": {
+      "type": "object",
+      "required": ["state", "canonicalScoresTotal", "scoresProcessed", "examplesEmitted", "labelsEmitted", "shardsEmitted"],
+      "properties": {
+        "state": {"type": "string"},
+        "canonicalScoresTotal": {"type": "integer", "minimum": 0},
+        "scoresProcessed": {"type": "integer", "minimum": 0},
+        "examplesEmitted": {"type": "integer", "minimum": 0},
+        "labelsEmitted": {"type": "integer", "minimum": 0},
+        "shardsEmitted": {"type": "integer", "minimum": 0}
+      }
+    },
+    "overall": { "type": "object" },
+    "music": { "type": "object" },
+    "currentScore": { "type": ["object", "null"] },
+    "throughput": { "type": "object" },
+    "time": { "type": "object" },
+    "system": { "type": "object" },
+    "paused": { "type": "boolean" },
+    "liveLog": { "type": "array" }
+  }
+}

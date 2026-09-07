@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Corranzo Piano Vision Factory</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0d1118;--panel:#151c27;--panel2:#101722;--line:#293548;--text:#edf3fa;--muted:#91a0b4;--accent:#67d5b5;--warn:#f0c66a;--bad:#ef8490;--blue:#72a7e8}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 ui-sans-serif,system-ui,sans-serif}main{max-width:1480px;margin:auto;padding:28px}
+    h1,h2,h3,p{margin-top:0}h1{font-size:25px;margin-bottom:3px}h2{font-size:18px;margin-bottom:14px}h3{font-size:14px;margin-bottom:10px}.sub,.muted{color:var(--muted)}.sub{margin-bottom:22px}
+    .card{background:var(--panel);border:1px solid var(--line);padding:16px}.label{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}.mono{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .setup{margin-bottom:14px}.input-row{display:grid;grid-template-columns:155px minmax(260px,1fr) auto;gap:9px;align-items:center;margin:8px 0}.file-state{margin:-3px 0 5px 164px;color:var(--muted);font-size:12px}
+    input{width:100%;background:#0c131d;border:1px solid #344258;color:var(--text);padding:8px 10px}button{border:0;padding:8px 12px;font-weight:700;background:var(--accent);color:#092019;cursor:pointer}button.secondary{background:#354258;color:var(--text)}button:disabled{opacity:.34;cursor:not-allowed}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px}
+    .ok{color:var(--accent)}.warn{color:var(--warn)}.bad{color:var(--bad)}.state{font-size:10px;font-weight:800;letter-spacing:.08em}.state.ESTIMATED{color:var(--warn)}.state.CALCULATING{color:var(--blue)}.state.UNAVAILABLE{color:var(--muted)}
+    .blocker{display:none;margin:14px 0;border-left:3px solid var(--bad);padding:12px 14px;background:#241820}.blocker.show{display:grid;grid-template-columns:1fr repeat(3,auto);gap:18px;align-items:center}.blocker strong{color:var(--bad)}
+    .overall{margin:14px 0}.overall-head{display:flex;justify-content:space-between;gap:16px;align-items:end}.overall-pct{font-size:38px;font-weight:750;letter-spacing:-.04em}.overall-count{font-size:18px}.track{height:9px;background:#273245;overflow:hidden;margin:13px 0 9px}.fill{height:100%;width:0;background:var(--accent);transition:width .25s linear}.formula{font-size:12px;color:var(--muted)}
+    .metric-grid{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:9px;margin-bottom:14px}.metric{background:var(--panel2);border:1px solid var(--line);padding:13px;min-height:112px}.metric-count{font-size:17px;font-weight:700;margin:8px 0 3px;white-space:nowrap}.metric-pct{font-size:13px;color:var(--muted)}.metric .track{height:4px;margin:10px 0 0}
+    .columns{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:14px}.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px 18px}.plan-row{display:flex;justify-content:space-between;border-bottom:1px solid #263044;padding:6px 0}.plan-row span:last-child{text-align:right}.phase{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #263044}.phase:last-child{border:0}.phase-num{color:var(--muted)}
+    .current{display:grid;grid-template-columns:1fr 1fr;gap:14px}.current-main{min-height:208px}.current-name{font-size:19px;font-weight:700;margin:8px 0 12px}.current-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.current-cell{border-top:1px solid #2d394c;padding-top:8px}.current-cell b{display:block;font-size:16px;margin-top:3px}.current-idle{color:var(--muted);padding:50px 0;text-align:center}
+    dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:9px 0 0}dt{color:var(--muted)}dd{margin:0;font-variant-numeric:tabular-nums}pre{white-space:pre-wrap;max-height:280px;overflow:auto;color:#bfccdc;font:11px/1.5 ui-monospace,monospace;margin-bottom:0}
+    @media(max-width:1200px){.metric-grid{grid-template-columns:repeat(4,1fr)}}@media(max-width:850px){main{padding:16px}.columns,.current{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}.input-row{grid-template-columns:1fr}.file-state{margin-left:0}.blocker.show{grid-template-columns:1fr}}
+  </style>
+</head>
+<body><main>
+  <h1>Corranzo Piano Vision Dataset Factory</h1>
+  <div class="sub" id="contract-sub">Generic factory reused · loading persisted state</div>
+
+  <section class="card setup">
+    <div class="label">Local four-file setup</div>
+    <h2>CORRANZO PIANO VISION FACTORY</h2>
+    <div class="input-row"><label for="metadata">PDMX Metadata</label><input id="metadata" placeholder="/local/path/PDMX.csv"><button class="secondary" data-choose="metadata">Choose PDMX.csv</button></div><div class="file-state" id="metadata-state"></div>
+    <div class="input-row"><label for="pdfArchive">PDF Archive</label><input id="pdfArchive" placeholder="/local/path/pdf.tar.gz"><button class="secondary" data-choose="pdfArchive">Choose pdf.tar.gz</button></div><div class="file-state" id="pdfArchive-state"></div>
+    <div class="input-row"><label for="mxlArchive">MusicXML Archive</label><input id="mxlArchive" placeholder="/local/path/mxl.tar.gz"><button class="secondary" data-choose="mxlArchive">Choose mxl.tar.gz</button></div><div class="file-state" id="mxlArchive-state"></div>
+    <div class="input-row"><label for="subsetPaths">Subset Paths</label><input id="subsetPaths" placeholder="/local/path/subset_paths.tar.gz"><button class="secondary" data-choose="subsetPaths">Choose subset_paths.tar.gz</button></div><div class="file-state" id="subsetPaths-state"></div>
+    <div class="actions"><button id="validate">Validate Inputs</button><button id="preflight" class="secondary" disabled>Run Corpus Preflight</button><button id="build" disabled>Build Dataset</button><button id="pause" class="secondary">Pause</button><button id="resume" class="secondary">Resume</button><strong id="ready" class="warn">NOT VALIDATED</strong></div>
+    <pre id="setup-summary"></pre>
+  </section>
+
+  <section class="blocker" id="disk-blocker"><div><div class="label">Build Dataset</div><strong>BLOCKED — DISK SAFETY</strong></div><div><span class="muted">Free</span><br><b id="disk-free">—</b></div><div><span class="muted">Required minimum</span><br><b id="disk-required">—</b></div><div><span class="muted">Need to free</span><br><b id="disk-shortfall">—</b></div></section>
+
+  <section class="card overall">
+    <div class="overall-head"><div><div class="label">Global build · persisted frozen plan</div><div class="overall-count mono" id="overall-count">0 / calculating… scores</div></div><div class="overall-pct mono" id="overall-pct">0.0000%</div></div>
+    <div class="track"><div class="fill" id="overall-fill"></div></div>
+    <div class="formula" id="overall-formula">Waiting for a frozen build plan.</div>
+  </section>
+
+  <section class="metric-grid" id="metrics"></section>
+
+  <div class="columns">
+    <section class="card"><div class="label">Build plan</div><h2>CORRANZO PIANO VISION DATASET</h2><div class="plan-grid" id="build-plan"></div></section>
+    <section class="card"><div class="label">Pipeline phases</div><div id="phases"></div></section>
+  </div>
+
+  <div class="current">
+    <section class="card current-main"><div class="label">Current score</div><div id="current"><div class="current-idle">Idle — no score is currently active.</div></div></section>
+    <section class="card"><div class="label">Outcomes</div><dl id="outcomes"></dl><div class="label" style="margin-top:18px">Time</div><dl id="time"></dl><div class="label" style="margin-top:18px">Throughput + remaining</div><dl id="throughput"></dl></section>
+  </div>
+
+  <section class="card" style="margin-top:14px"><div class="label">Live persisted log</div><pre id="log"></pre></section>
+</main><script>
+const inputKeys=['metadata','pdfArchive','mxlArchive','subsetPaths'];let lastInput=null;let lastStatus=null;
+const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const number=v=>v==null?'—':new Intl.NumberFormat().format(v);
+const pct=v=>v==null?'—':`${Number(v).toFixed(4)}%`;
+const humanBytes=value=>{if(value==null)return '—';const units=['B','KiB','MiB','GiB','TiB'];let i=0,n=value;while(n>=1024&&i<units.length-1){n/=1024;i++}return `${n.toFixed(i?1:0)} ${units[i]}`};
+const duration=value=>{if(value==null)return '—';value=Math.max(0,Math.round(value));const h=Math.floor(value/3600),m=Math.floor(value%3600/60),s=value%60;return [h,m,s].map(x=>String(x).padStart(2,'0')).join(':')};
+const denominator=r=>r.denominatorState==='CALCULATING'?'calculating…':r.denominatorState==='UNAVAILABLE'?'unavailable':`${r.denominatorState==='ESTIMATED'?'~':''}${number(r.denominator)}`;
+const countText=r=>`${number(r.numerator)} / ${denominator(r)}`;
+const stateHtml=r=>`<span class="state ${r.denominatorState}">${r.denominatorState}</span>`;
+const barWidth=r=>r.percentage==null?0:Math.max(0,Math.min(100,r.percentage));
+async function loadSetup(){const value=await fetch('/api/setup',{cache:'no-store'}).then(r=>r.json());for(const key of inputKeys)document.getElementById(key).value=value.config.paths[key]||'';document.getElementById('contract-sub').textContent=`Generic factory reused · ${value.modelContract.state.replaceAll('_',' ')} · local paths only`;}
+async function savePaths(){const paths=Object.fromEntries(inputKeys.map(key=>[key,document.getElementById(key).value]));await fetch('/api/inputs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paths})});}
+async function choose(key){await savePaths();const value=await fetch(`/api/choose?kind=${encodeURIComponent(key)}`,{method:'POST'}).then(r=>r.json());if(value.path)document.getElementById(key).value=value.path;}
+function renderInput(v){lastInput=v;for(const key of inputKeys){const row=v.inputs[key];const target=document.getElementById(`${key}-state`);target.textContent=row.valid?`${row.filename} · ${humanBytes(row.bytes)} · readable · valid`:`${row.filename||'Not selected'} · ${row.error||'invalid'}`;target.className=`file-state ${row.valid?'ok':'bad'}`;}const inputsReady=v.state==='READY'&&v.modelContract.valid;document.getElementById('preflight').disabled=!inputsReady;document.getElementById('ready').textContent=inputsReady?'PDMX INPUTS READY':'INPUTS NEED ATTENTION';document.getElementById('ready').className=inputsReady?'ok':'bad';document.getElementById('setup-summary').textContent=[v.summary,`Metadata: ${number(v.metadataRows)} rows`,`PDF archive: ${humanBytes(v.inputs.pdfArchive.bytes)}`,`MXL archive: ${humanBytes(v.inputs.mxlArchive.bytes)}`,`Subset paths: ${v.inputs.subsetPaths.valid?'loaded':'not ready'}`,`Model: ${v.modelContract.state.replaceAll('_',' ')}`].join('\n');}
+async function validateInputs(){await savePaths();renderInput(await fetch('/api/validate-inputs',{method:'POST'}).then(r=>r.json()));await refresh();}
+async function runPreflight(){const response=await fetch('/api/preflight',{method:'POST'});const value=await response.json();if(!response.ok){alert(`Preflight not started: ${value.reason}`);return;}document.getElementById('preflight').disabled=true;document.getElementById('ready').textContent=`PREFLIGHT RUNNING · PID ${value.pid}`;}
+async function launchBuild(){if(!window.confirm('Start the full Corranzo PDMX dataset build with this frozen plan?'))return;const response=await fetch('/api/build',{method:'POST'});const value=await response.json();if(!response.ok){alert(`Build not started: ${(value.reasons||[value.reason]).join(' · ')}`);return;}document.getElementById('build').disabled=true;document.getElementById('ready').textContent=`BUILD LAUNCHED · PID ${value.pid}`;}
+async function control(route){await fetch(`/api/${route}`,{method:'POST'});await refresh();}
+function renderMetric(key,label,r){return `<article class="metric"><div class="label">${label}</div><div class="metric-count mono">${countText(r)}</div>${stateHtml(r)}<div class="metric-pct mono">${pct(r.percentage)}</div><div class="track"><div class="fill" style="width:${barWidth(r)}%"></div></div></article>`;}
+function renderStatus(s){lastStatus=s;const p=s.progress,o=p.overall,u=p.units,plan=p.buildPlan;
+ document.getElementById('overall-count').textContent=`${countText(o)} scores`;document.getElementById('overall-pct').textContent=pct(o.percentage);document.getElementById('overall-fill').style.width=`${barWidth(o)}%`;document.getElementById('overall-formula').textContent=o.formula?.id?`${o.formula.id} · ${o.formula.weighting} · 100.0000% only after validation`:'Waiting for a frozen build plan.';
+ document.getElementById('metrics').innerHTML=[renderMetric('scores','Scores',u.scores),renderMetric('pages','Pages',u.pages),renderMetric('measures','Measures',u.measures),renderMetric('notes','MusicXML Notes',u.musicXmlNotes),renderMetric('objects','Physical Objects',u.physicalObjects),renderMetric('semantic-scores','Semantic Scores',u.semanticScores),renderMetric('labels','Semantic Labels',u.semanticLabels),renderMetric('examples','Training Examples',u.trainingExamples)].join('');
+ const rows=[['Planned Scores',plan.plannedScores],['Planned Pages',plan.plannedPages],['Planned Measures',plan.plannedMeasures],['Planned MusicXML Notes',plan.plannedMusicXmlNotes]];document.getElementById('build-plan').innerHTML=rows.map(([label,r])=>`<div class="plan-row"><span>${label}</span><span class="mono">${denominator(r)}<br>${stateHtml(r)}</span></div>`).join('')+`<div class="plan-row"><span>Estimated Dataset Size</span><span class="mono">${plan.estimatedDatasetBytes.state==='UNAVAILABLE'?'unavailable':`${plan.estimatedDatasetBytes.state==='ESTIMATED'?'~':''}${humanBytes(plan.estimatedDatasetBytes.value)}`}<br><span class="state ${plan.estimatedDatasetBytes.state}">${plan.estimatedDatasetBytes.state}</span></span></div><div class="plan-row"><span>Plan</span><span>${plan.frozen?'FROZEN':'NOT FROZEN'}<br><span class="state">${plan.state}</span></span></div>`;
+ document.getElementById('phases').innerHTML=p.phases.map((phase,i)=>`<div class="phase"><b>${i+1}.</b><div>${phase.label}<br><span class="state ${phase.status==='FAILED'?'bad':''}">${phase.status}</span></div><span class="phase-num mono">${pct(phase.percentage)}</span></div>`).join('');
+ const disk=plan.disk,block=document.getElementById('disk-blocker');block.classList.toggle('show',!disk.safe);document.getElementById('disk-free').textContent=humanBytes(disk.freeBytes);document.getElementById('disk-required').textContent=humanBytes(disk.requiredMinimumBytes);document.getElementById('disk-shortfall').textContent=humanBytes(disk.shortfallBytes);
+ const inputPhase=p.phases.find(x=>x.id==='validate-inputs'),inputReady=inputPhase?.status==='COMPLETE';if(inputReady&&!lastInput){document.getElementById('ready').textContent='PDMX INPUTS READY';document.getElementById('ready').className='ok';}const preflightReady=plan.state==='READY';document.getElementById('build').disabled=!(preflightReady&&disk.safe&&inputReady&&s.modelContract.valid);document.getElementById('preflight').disabled=!(inputReady&&s.modelContract.valid)||p.phases.find(x=>x.id==='corpus-preflight')?.status==='RUNNING';
+ document.getElementById('outcomes').innerHTML=Object.entries({Processed:`${number(s.overall.processed)} / ${number(u.scores.denominator)}`,Accepted:s.overall.accepted,Review:s.overall.review,Rejected:s.overall.rejected,Failed:s.overall.failed,Remaining:s.overall.remaining}).map(([k,v])=>`<dt>${k}</dt><dd>${v??'—'}</dd>`).join('');
+ document.getElementById('time').innerHTML=Object.entries({Status:s.paused?`PAUSED — ${pct(o.percentage)}`:o.status,Elapsed:duration(s.time.elapsedSeconds),ETA:s.time.etaState==='CALIBRATING'?'CALIBRATING':duration(s.time.etaSeconds),'Estimated Finish':s.time.estimatedFinishAt?new Date(s.time.estimatedFinishAt).toLocaleString():'—'}).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+ const t=s.throughput;document.getElementById('throughput').innerHTML=Object.entries({'Scores / hour':t.scoresPerHour,'Pages / min':t.pagesPerMinute,'Measures / min':t.measuresPerMinute,'Notes / min':t.notesPerMinute,'Objects / min':t.objectsPerMinute,'Examples / min':t.examplesPerMinute,'Remaining scores':t.remainingScores,'Remaining pages':t.remainingPages,'Remaining measures':t.remainingMeasures,'Remaining notes':t.remainingNotes}).map(([k,v])=>`<dt>${k}</dt><dd>${v==null?'—':number(Math.round(v*1000)/1000)}</dd>`).join('');
+ renderCurrent(s.currentScore);document.getElementById('log').textContent=s.liveLog.map(e=>`${e.created_at} ${e.level} ${e.stage} ${e.score_id||''} ${e.message}`).join('\n');
+}
+function renderCurrent(c){const target=document.getElementById('current');if(!c){target.innerHTML='<div class="current-idle">Idle — no score is currently active.</div>';return;}const page=c.pageProgress,measure=c.measureProgress,note=c.noteProgress;target.innerHTML=`<div class="current-name">${esc(c.name||c.scoreId)}</div><div class="muted mono">Score ${number(c.scorePosition)} / ${number(c.scoreTotal)} · ${esc(c.stage||'Working')}</div><div class="track"><div class="fill" style="width:${barWidth(page)}%"></div></div><div class="current-grid"><div class="current-cell"><span class="label">Page</span><b class="mono">${countText(page)}</b><span>${pct(page.percentage)}</span></div><div class="current-cell"><span class="label">Measure</span><b class="mono">${countText(measure)}</b><span>${pct(measure.percentage)}</span></div><div class="current-cell"><span class="label">Notes</span><b class="mono">${countText(note)}</b><span>${pct(note.percentage)}</span></div><div class="current-cell"><span class="label">Objects</span><b class="mono">${number(c.objects)}</b></div><div class="current-cell"><span class="label">Examples</span><b class="mono">${number(c.examples)}</b></div><div class="current-cell"><span class="label">Elapsed on score</span><b class="mono">${duration(c.elapsedSeconds)}</b></div></div>`;}
+async function refresh(){try{renderStatus(await fetch('/api/status',{cache:'no-store'}).then(r=>r.json()));}catch(error){document.getElementById('log').textContent=String(error)}}
+document.querySelectorAll('[data-choose]').forEach(button=>button.addEventListener('click',()=>choose(button.dataset.choose)));document.getElementById('validate').addEventListener('click',validateInputs);document.getElementById('preflight').addEventListener('click',runPreflight);document.getElementById('build').addEventListener('click',launchBuild);document.getElementById('pause').addEventListener('click',()=>control('pause'));document.getElementById('resume').addEventListener('click',()=>control('resume'));
+loadSetup().then(refresh);setInterval(refresh,2000);
+</script></body></html>
