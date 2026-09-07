@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 import torch
-from PIL import Image
+from PIL import Image, PngImagePlugin
 
 from piano_vision.checkpoint import CheckpointManager
 from piano_vision.config import freeze_config, load_config, model_config
@@ -130,7 +130,9 @@ def completed_factory_fixture(root: Path, stale_wal=False):
     ))
     for index, score, split, path, digest, labels, example_id in rows:
         visual_path = visual_dir / f"{score}.png"
-        Image.new("L", (16, 16), 255).save(visual_path)
+        visual = Image.new("L", (16, 16), 255)
+        visual.putpixel((index + 1, index + 2), 0)
+        visual.save(visual_path)
         canonical_path = canonical_dir / f"{score}.json.gz"
         with gzip.open(canonical_path, "wt", encoding="utf-8") as stream:
             json.dump({
@@ -288,6 +290,57 @@ class FullReadinessTests(unittest.TestCase):
             self.assertEqual(report["full_training"], "BLOCKED — DATASET BUILD IN PROGRESS")
             self.assertFalse(report["database_opened"])
             self.assertFalse((campaign / "full-semantic-index.json").exists())
+
+    def test_identical_pixels_across_splits_block_prepare_review_and_launch(self):
+        for heldout in ("validation", "test", "future-test"):
+            with self.subTest(heldout=heldout), tempfile.TemporaryDirectory() as directory:
+                root, campaign, config_path, _rows = self._paths(directory)
+                # Distinct PNG bytes, score IDs, and semantic sources; same pixels.
+                source = root / "visual/train-score.png"
+                duplicate = root / f"visual/{heldout}-score.png"
+                metadata = PngImagePlugin.PngInfo()
+                metadata.add_text("Description", "Different container metadata")
+                with Image.open(source) as image:
+                    image.save(duplicate, pnginfo=metadata, compress_level=0)
+                self.assertNotEqual(source.read_bytes(), duplicate.read_bytes())
+                report = prepare_full(
+                    root, campaign, disk_floor_gib=0, process_lines=[], open_file_pids=[],
+                )
+                self.assertFalse(report["prepared"])
+                self.assertFalse(report["checks"]["pixel_content_split_isolation"])
+                self.assertEqual(report["training_asset_inventory"]["pixel_content_split_overlap_count"], 1)
+                self.assertEqual(report["missing_or_corrupt_shards"], [])
+                self.assertFalse((campaign / "full-semantic-index.json").exists())
+                review = review_full(root, campaign, process_lines=[], open_file_pids=[])
+                self.assertEqual(review["review_state"], "BLOCKED")
+                with self.assertRaises(RuntimeError):
+                    review_full(root, campaign, confirmation=REVIEW_CONFIRMATION,
+                                process_lines=[], open_file_pids=[])
+                gate = evaluate_launch_gate(
+                    root, config_path, campaign / "full-semantic-index.json", disk_floor_gib=0,
+                    human_review=True, process_lines=[], open_file_pids=[],
+                )
+                self.assertFalse(gate["ready"])
+                self.assertFalse((campaign / "human-review.json").exists())
+
+    def test_pixel_corruption_or_leakage_after_review_closes_launch_gate(self):
+        for corruption in (False, True):
+            with self.subTest(corruption=corruption), tempfile.TemporaryDirectory() as directory:
+                root, campaign, config_path, _rows = self._paths(directory)
+                self.assertTrue(prepare_full(
+                    root, campaign, disk_floor_gib=0, process_lines=[], open_file_pids=[],
+                )["prepared"])
+                review_full(root, campaign, confirmation=REVIEW_CONFIRMATION,
+                            process_lines=[], open_file_pids=[])
+                target = root / "visual/validation-score.png"
+                target.write_bytes(b"invalid PNG" if corruption else (root / "visual/train-score.png").read_bytes())
+                gate = evaluate_launch_gate(
+                    root, config_path, campaign / "full-semantic-index.json", disk_floor_gib=0,
+                    process_lines=[], open_file_pids=[],
+                )
+                self.assertFalse(gate["ready"])
+                self.assertFalse(gate["checks"]["training_assets_available"])
+                self.assertEqual(review_full(root, campaign, process_lines=[], open_file_pids=[])["review_state"], "BLOCKED")
 
     def test_completed_stale_wal_prepare_is_deterministic(self):
         with tempfile.TemporaryDirectory() as directory:

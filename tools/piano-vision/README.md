@@ -51,7 +51,10 @@ digest. It cannot be triggered by the factory.
 generation, streaming shard hashing, whole-score and semantic-source split
 checks, future-test locking, family counts, canonical/pixel availability and
 training-byte estimation, and TINY workload estimation. It writes only to the
-Piano Vision campaign directory. Liveness is established
+Piano Vision campaign directory. Every referenced page is decoded and hashed
+as grayscale pixels: identical pages across splits block preparation, review,
+and launch even when score IDs, archive bytes, or PNG metadata differ. These
+checks never reassign a score's split. Liveness is established
 from matching processes, open SQLite handles, and WAL quiescence. A stale WAL
 becomes readable only after the process/open-file checks are clear and the WAL
 has been unchanged for five minutes; it is then opened in SQLite read-only

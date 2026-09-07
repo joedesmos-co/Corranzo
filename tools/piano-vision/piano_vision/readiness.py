@@ -18,6 +18,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from PIL import Image
+
 from .config import config_digest, load_config
 from .data import SPLITS, build_dataset_index, load_dataset_index, verify_index_shards
 
@@ -301,6 +303,7 @@ def inspect_training_assets(factory_dir: Path, index, error_limit=100):
     scopes = 0
     scopes_with_pixel_paths = 0
     pixel_paths = set()
+    pixel_owners = {}
 
     def add_error(message):
         nonlocal missing_count
@@ -334,12 +337,17 @@ def inspect_training_assets(factory_dir: Path, index, error_limit=100):
             score_pixel_scopes += 1
             scopes_with_pixel_paths += 1
             pixel_paths.add(str(path))
+            pixel_owners.setdefault(str(path), set()).add((score["split"], score["score_id"]))
         if score_pixel_scopes < int(score["examples"]):
             add_error(
                 f"insufficient-pixel-scopes:{score['score_id']}:{score_pixel_scopes}<{score['examples']}"
             )
     pixel_rows = []
     visual_bytes = 0
+    content_owners = {}
+    pixel_leaks = []
+    pixel_leak_count = 0
+    decoded_assets = 0
     for value in sorted(pixel_paths):
         path = Path(value)
         if not path.is_file():
@@ -347,7 +355,31 @@ def inspect_training_assets(factory_dir: Path, index, error_limit=100):
             continue
         size = path.stat().st_size
         visual_bytes += size
-        pixel_rows.append((value, size))
+        try:
+            # Compare the actual grayscale input, including dimensions. PNG
+            # metadata/compression and different archive IDs can conceal duplicates.
+            with Image.open(path) as source:
+                pixels = source.convert("L")
+                content_hash = hashlib.sha256()
+                content_hash.update(f"{pixels.width}x{pixels.height}:L:".encode())
+                content_hash.update(pixels.tobytes())
+            content_digest = content_hash.hexdigest()
+            decoded_assets += 1
+        except Exception as error:
+            add_error(f"invalid-pixel:{value}:{error}")
+            continue
+        for split, score_id in sorted(pixel_owners[value]):
+            previous = content_owners.setdefault(content_digest, (split, score_id, value))
+            if previous[0] != split:
+                pixel_leak_count += 1
+                add_error(f"pixel-content-split-overlap:{previous[1]}:{score_id}")
+                if len(pixel_leaks) < int(error_limit):
+                    pixel_leaks.append({
+                        "pixel_digest": content_digest,
+                        "first": {"split": previous[0], "score_id": previous[1], "path": previous[2]},
+                        "second": {"split": split, "score_id": score_id, "path": value},
+                    })
+        pixel_rows.append((value, size, content_digest))
     semantic_bytes = int(index.get("dataset_bytes", 0))
     return {
         "valid": missing_count == 0,
@@ -356,6 +388,10 @@ def inspect_training_assets(factory_dir: Path, index, error_limit=100):
         "canonical_scopes": scopes,
         "scopes_with_pixel_paths": scopes_with_pixel_paths,
         "unique_visual_assets": len(pixel_paths),
+        "decoded_visual_assets": decoded_assets,
+        "pixel_content_split_isolation": pixel_leak_count == 0,
+        "pixel_content_split_overlap_count": pixel_leak_count,
+        "pixel_content_split_overlaps": pixel_leaks,
         "visual_asset_bytes": visual_bytes,
         "semantic_shard_bytes": semantic_bytes,
         "estimated_training_dataset_bytes": canonical_bytes + visual_bytes + semantic_bytes,
@@ -473,9 +509,28 @@ def prepare_full(
         factory_inventory = compare_factory_shard_inventory(factory_dir, metadata, index)
         training_assets = inspect_training_assets(factory_dir, index)
         if not shard_verification["valid"] or not factory_inventory["valid"] or not training_assets["valid"]:
-            raise ValueError("; ".join(
-                shard_verification["errors"] + factory_inventory["errors"] + training_assets["errors"]
-            ))
+            integrity_checks = {
+                **completion_checks,
+                "index_hashes_pass": shard_verification["valid"],
+                "factory_shard_inventory_pass": factory_inventory["valid"],
+                "training_assets_available": training_assets["valid"],
+                "pixel_content_split_isolation": training_assets["pixel_content_split_isolation"],
+            }
+            report = _blocked_preparation(
+                factory_dir, campaign_dir, liveness,
+                [key for key, passed in integrity_checks.items() if not passed], metadata,
+                shard_verification["errors"] + factory_inventory["errors"] + training_assets["errors"],
+            )
+            report.update(
+                checks=integrity_checks,
+                shard_verification=shard_verification,
+                factory_shard_inventory=factory_inventory,
+                training_asset_inventory=training_assets,
+                missing_or_corrupt_shards=shard_verification["errors"] + factory_inventory["errors"],
+            )
+            candidate_path.unlink(missing_ok=True)
+            _atomic_json(report_path, report)
+            return report
         os.replace(candidate_path, index_path)
         index = load_dataset_index(index_path, expected_root=factory_dir)
         config = load_config(config_path)
@@ -594,6 +649,19 @@ def review_full(
         }
     metadata = read_factory_metadata(factory_dir, liveness)
     index_path = campaign_dir / "full-semantic-index.json"
+    if not index_path.is_file():
+        if confirmation is not None:
+            raise RuntimeError("Review cannot be confirmed without a prepared full semantic index")
+        return {
+            "schema_version": 1,
+            "review_state": "BLOCKED",
+            "eligible_for_confirmation": False,
+            "reason": "No prepared full semantic index; resolve prepare-full blockers first",
+            "readiness_report": str(campaign_dir / "full-readiness-report.json"),
+            "database_opened": True,
+            "recorded": False,
+            "training_started": False,
+        }
     index = load_dataset_index(index_path, expected_root=factory_dir)
     shard_report = verify_index_shards(index, require_hashes=True)
     factory_inventory = compare_factory_shard_inventory(factory_dir, metadata, index)
