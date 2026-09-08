@@ -39,7 +39,14 @@ export function auditWrittenTargets(xml, records) {
       if (label.semanticEventIds.length !== 1 || !note?.isRest) { fail('NOT_ONE_EXPLICIT_WRITTEN_REST'); continue }
       if (label.value.divisionsNormalizedQuarters !== note.durationQuarters || label.value.dots !== note.dots || label.value.writtenType !== note.noteType) fail('WRITTEN_REST_DURATION_MISMATCH')
       if (JSON.stringify(label.value.timeModification ?? null) !== JSON.stringify(note.timeModification ?? null) || Boolean(label.value.grace) !== note.isGrace) fail('WRITTEN_REST_RATIO_OR_GRACE_MISMATCH')
-      const norm = value => String(value ?? '').replace(/[-_ ]/g, '').toLowerCase()
+      // Independent vocabulary comparison; do not call the alignment producer.
+      const norm = value => {
+        const name = String(value ?? '').replace(/[-_ ]/g, '').toLowerCase()
+        const aliases = ['sixteenth', 'thirtysecond', 'sixtyfourth', 'onehundredtwentyeighth',
+          'twohundredfiftysixth', 'fivehundredtwelfth', 'onethousandtwentyfourth']
+        const types = ['16th', '32nd', '64th', '128th', '256th', '512th', '1024th']
+        return types[aliases.indexOf(name)] ?? name
+      }
       if (norm(glyphClass) !== norm(note.noteType) || staffRole !== (note.staff === 1 ? 'upper' : note.staff === 2 ? 'lower' : `staff-${note.staff}`)) fail('SOURCE_GLYPH_OR_STAFF_MISMATCH')
     }
   }

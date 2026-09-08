@@ -110,3 +110,18 @@ test('overlapping source scopes cannot produce a trusted rest attachment', () =>
   assert.equal(result.source.modelInput.physicalObjects.length, 0)
   assert.equal(result.target.families.REST[0].state, 'UNAVAILABLE')
 })
+
+test('source rest fractions match MusicXML ordinal types without conflating unknown or different types', () => {
+  for (const [glyph, written] of [['sixteenth', '16th'], ['thirtySecond', '32nd'], ['sixty-fourth', '64th'],
+    ['oneHundredTwentyEighth', '128th'], ['twoHundredFiftySixth', '256th'],
+    ['fiveHundredTwelfth', '512th'], ['oneThousandTwentyFourth', '1024th']]) {
+    const { source, target } = restFixture()
+    source.modelInput.sourceGraph.nodes[0].glyphClass = glyph
+    const writtenXml = xml(note('', { ordinary: true, rest: true })).replace('<type>eighth</type>', `<type>${written}</type>`)
+    assert.equal(repairScope(repairContext(writtenXml, [source]), source, target).target.families.REST[0].state, 'KNOWN')
+    for (const wrong of ['eighth', 'unknown', null]) {
+      const mismatched = writtenXml.replace(`<type>${written}</type>`, wrong ? `<type>${wrong}</type>` : '')
+      assert.equal(repairScope(repairContext(mismatched, [source]), source, target).target.families.REST[0].state, 'UNAVAILABLE')
+    }
+  }
+})

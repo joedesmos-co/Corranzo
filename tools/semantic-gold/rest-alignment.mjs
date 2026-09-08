@@ -174,7 +174,13 @@ export function freezeSourceRestInventory({ manifest, sourceScopeMap, groupIds, 
   }
 }
 
-const normalizedRestType = (value) => String(value ?? '').replace(/[-_ ]/g, '').toLowerCase()
+const normalizedRestType = (value) => {
+  const name = String(value ?? '').replace(/[-_ ]/g, '').toLowerCase()
+  // The source glyph vocabulary spells fractions out; MusicXML uses ordinals.
+  return ({ sixteenth: '16th', thirtysecond: '32nd', sixtyfourth: '64th',
+    onehundredtwentyeighth: '128th', twohundredfiftysixth: '256th',
+    fivehundredtwelfth: '512th', onethousandtwentyfourth: '1024th' })[name] ?? name
+}
 
 /**
  * Attach semantics only after the physical rest inventory has been frozen.

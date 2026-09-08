@@ -21,3 +21,11 @@ test('independent auditor rejects missing members and wrong rest duration/staff'
   rest.label.value.divisionsNormalizedQuarters=.5;rest.staffRole='lower'
   assert.equal(auditWrittenTargets(restXml,[{tuplets:[],rests:[rest]}]).errors.length,2)
 })
+
+test('independent rest audit accepts equivalent fraction spellings and rejects different types', () => {
+  const restXml='<score-partwise><part id="P1"><measure number="1"><attributes><divisions>4</divisions></attributes><note><rest/><duration>1</duration><type>16th</type><staff>1</staff></note></measure></part></score-partwise>'
+  const rest={label:{labelId:'rest',semanticEventIds:['P1-m1-n1'],value:{writtenType:'16th',dots:0,divisionsNormalizedQuarters:.25}},glyphClass:'sixteenth',staffRole:'upper'}
+  assert.deepEqual(auditWrittenTargets(restXml,[{tuplets:[],rests:[rest]}]).errors,[])
+  rest.glyphClass='thirtySecond'
+  assert.ok(auditWrittenTargets(restXml,[{tuplets:[],rests:[rest]}]).errors.some(e=>e.reason==='SOURCE_GLYPH_OR_STAFF_MISMATCH'))
+})
