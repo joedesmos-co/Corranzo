@@ -43,6 +43,10 @@ def audit(root, output, contract_path, mxl_archive, revision):
     assignments = {row['score_id']: row['split'] for row in split_manifest['scores']}
     baseline = json.loads((output/'baseline-semantic-audit.json').read_text())
     errors = []
+    if sha256_path(contract_path) != recipe['contract_sha256']:
+        errors.append('REPAIR_CONTRACT_CHANGED')
+    if digest({k:v for k,v in split_manifest.items() if k!='digest'}) != split_manifest['digest'] or split_manifest['digest'] != recipe['split_digest']:
+        errors.append('REPAIR_SPLIT_MANIFEST_CHANGED')
     db = sqlite3.connect((root/'factory.sqlite3').as_uri()+'?mode=ro', uri=True); db.row_factory=sqlite3.Row
     db.executescript('PRAGMA query_only=ON; PRAGMA cache_size=-4096; PRAGMA temp_store=FILE;')
     scratch = output/'audit-index.sqlite3'
@@ -58,6 +62,11 @@ def audit(root, output, contract_path, mxl_archive, revision):
     integrity = db.execute('PRAGMA integrity_check').fetchall()
     if [r[0] for r in integrity] != ['ok'] or db.execute('PRAGMA foreign_key_check').fetchall(): errors.append('SQLITE_INTEGRITY')
     if db.execute("SELECT COUNT(*) FROM semantic_repair_scores WHERE revision=? AND status!='COMPLETE'", (revision,)).fetchone()[0]: errors.append('REPAIR_INCOMPLETE')
+    if db.execute("SELECT value FROM state WHERE key='semantic_repair_revision'").fetchone()[0] != revision:
+        errors.append('REPAIR_REVISION_NOT_ACTIVE')
+    inventory_digest = hashlib.sha256()
+    for row in db.execute('SELECT shard_id,path,records,sha256,split FROM semantic_shards ORDER BY shard_id'):
+        inventory_digest.update((json.dumps(list(row),separators=(',',':'))+'\n').encode())
     physical_hash = hashlib.sha256()
     for table in ('build_plan','scores','canonical','fragments','shards','preflight_inventory'):
         for row in db.execute('SELECT * FROM '+table+' ORDER BY 1'):
@@ -201,6 +210,8 @@ def audit(root, output, contract_path, mxl_archive, revision):
     save('notation-audit.json',written)
     ix.commit();ix.close();db.close()
     report={'valid':not errors,'errors':errors,'physical':physical,'semantic':summary,'written':written,
+        'factory_directory':str(root),'revision':revision,'recipe_digest':digest(recipe),
+        'shard_inventory_digest':inventory_digest.hexdigest(),
         'decoded_pages':decoded,'decoded_page_overlaps':len(overlaps),'contract_digest':contract['configurationDigest'],
         'elapsed_seconds':time.time()-start,'free_bytes':shutil.disk_usage(root).free,'peak_rss_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
     save('full-repair-audit.json',report);progress('audit_complete',examples)
