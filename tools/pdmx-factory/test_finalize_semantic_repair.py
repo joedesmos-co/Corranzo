@@ -183,6 +183,34 @@ class FinalizeRepairTest(unittest.TestCase):
         self.report_change = lambda report: report['semantic']['families']['REST'].__setitem__('KNOWN', 0)
         self.assert_blocked('TRUSTED_REST_SUPERVISION_MISSING')
 
+    def add_review_exclusion(self, target_path=None):
+        with closing(sqlite3.connect(self.root / 'factory.sqlite3')) as db, db:
+            metadata = {'target_bundle': target_path} if target_path else {}
+            db.execute("INSERT INTO scores(score_id,csv_row,filter_state,job_state,alignment_state,metadata_json,updated_at) VALUES('excluded-review',99,'ACCEPT_PIANO','REVIEW','SOURCE_ALIGNMENT_REQUIRED',?,'fixture')",
+                       (json.dumps(metadata),))
+            db.execute("INSERT INTO semantic_score_progress VALUES('excluded-review','unused','SKIPPED',0,0,0,'fixture')")
+            details = {'scoreId': 'excluded-review', 'scopeCursor': 0, 'reason': 'TARGET_BUNDLE_MISSING'}
+            db.execute("INSERT INTO semantic_assembly_errors VALUES('excluded-review',0,'TARGET_BUNDLE_MISSING',?)", (json.dumps(details),))
+
+    def test_expected_review_exclusion_is_documented_without_erasing_error(self):
+        self.add_review_exclusion()
+        result = self.run_finalizer()
+        self.assertEqual(result['assembly_errors']['expected_review_exclusions'], 1)
+        self.assertEqual(result['assembly_errors']['unexplained_count'], 0)
+        with closing(sqlite3.connect(self.root / 'factory.sqlite3')) as db:
+            self.assertEqual(db.execute('SELECT COUNT(*) FROM semantic_assembly_errors').fetchone()[0], 1)
+
+    def test_lost_target_is_not_an_expected_review_exclusion(self):
+        self.add_review_exclusion(str(self.root / 'lost-target.jsonl.gz'))
+        self.assert_blocked('UNEXPLAINED_ASSEMBLY_ERRORS')
+
+    def test_error_on_repaired_score_is_not_an_expected_review_exclusion(self):
+        with closing(sqlite3.connect(self.root / 'factory.sqlite3')) as db, db:
+            score = db.execute('SELECT MIN(score_id) FROM semantic_repair_scores').fetchone()[0]
+            details = {'scoreId': score, 'scopeCursor': 0, 'reason': 'TARGET_BUNDLE_MISSING'}
+            db.execute('INSERT INTO semantic_assembly_errors VALUES(?,0,?,?)', (score, details['reason'], json.dumps(details)))
+        self.assert_blocked('UNEXPLAINED_ASSEMBLY_ERRORS')
+
     def test_generic_validator_failure_never_publishes_complete(self):
         with patch.object(Factory, 'validate_dataset', return_value={'valid': False, 'errors': ['physical corrupt']}):
             self.assert_blocked('DATASET_VALIDATION_FAILED')

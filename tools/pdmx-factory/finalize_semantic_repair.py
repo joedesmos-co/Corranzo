@@ -38,6 +38,38 @@ def shard_inventory_digest(db):
     return result.hexdigest()
 
 
+def classify_assembly_errors(db, revision):
+    """Keep expected review exclusions visible; refuse every unexplained error.
+
+    The ordinary assembler records missing targets even for physical REVIEW
+    scores that never qualified for semantic emission. A missing target on an
+    accepted/repaired score, or a lost previously assigned target, is a blocker.
+    """
+    total = excluded = 0
+    unexplained = []
+    for row in db.execute('''SELECT e.*,s.job_state,s.alignment_state,s.metadata_json,
+            p.status,p.examples,p.labels FROM semantic_assembly_errors e
+            LEFT JOIN scores s USING(score_id) LEFT JOIN semantic_score_progress p USING(score_id)
+            ORDER BY e.score_id,e.scope_cursor,e.reason'''):
+        total += 1
+        metadata = json.loads(row['metadata_json'] or '{}')
+        details = json.loads(row['details'])
+        expected = (row['reason'] == 'TARGET_BUNDLE_MISSING' and row['scope_cursor'] == 0
+                    and row['job_state'] == 'REVIEW' and row['alignment_state'] == 'SOURCE_ALIGNMENT_REQUIRED'
+                    and row['status'] == 'SKIPPED' and row['examples'] == row['labels'] == 0
+                    and not metadata.get('target_bundle') and not metadata.get('targetBundle')
+                    and details == {'scoreId': row['score_id'], 'scopeCursor': 0, 'reason': row['reason']}
+                    and not db.execute('SELECT 1 FROM semantic_examples WHERE score_id=? LIMIT 1', (row['score_id'],)).fetchone()
+                    and not db.execute('SELECT 1 FROM semantic_repair_scores WHERE revision=? AND score_id=?',
+                                       (revision, row['score_id'])).fetchone())
+        if expected:
+            excluded += 1
+        elif len(unexplained) < 100:
+            unexplained.append({'score_id': row['score_id'], 'reason': row['reason']})
+    return {'valid': total == excluded, 'total': total, 'expected_review_exclusions': excluded,
+            'unexplained_count': total - excluded, 'unexplained': unexplained}
+
+
 def check_revision(root, db, revision, contract):
     require(revision.replace('-', '').isalnum(), 'UNSAFE_REPAIR_REVISION')
     directory = root / 'semantic-revisions' / revision
@@ -135,11 +167,15 @@ def finalize(root, revision, contract, csv, pdf_archive, mxl_archive, baseline_d
             binding = check_revision(root, db, revision, contract)
             report['binding'] = binding
             report['checks']['repair_complete'] = True
+            assembly_errors = classify_assembly_errors(db, revision)
+            save(output / 'assembly-error-classification.json', assembly_errors)
+            require(assembly_errors['valid'], 'UNEXPLAINED_ASSEMBLY_ERRORS:' + repr(assembly_errors['unexplained']))
+            report['assembly_errors'] = assembly_errors
             stage('current_semantic_validation')
             semantic_result = semantic.validate()
             save(output / 'semantic-validation.json', semantic_result)
             require(semantic_result['valid'] and not semantic_result['errors']
-                    and not semantic_result['assemblyErrorCount'] and semantic_result['futureHeldoutReserved']
+                    and semantic_result['assemblyErrorCount'] == assembly_errors['total'] and semantic_result['futureHeldoutReserved']
                     and semantic_result['wholeScoreSplitIsolation'] and semantic_result['semanticSourceSplitIsolation'],
                     'SEMANTIC_VALIDATION_FAILED:' + repr(semantic_result['errors']))
             report['checks']['semantic_validation'] = True
@@ -182,7 +218,7 @@ def finalize(root, revision, contract, csv, pdf_archive, mxl_archive, baseline_d
             require([row[0] for row in db.execute('PRAGMA quick_check')] == ['ok']
                     and not db.execute('PRAGMA foreign_key_check').fetchall(), 'DATABASE_INTEGRITY')
             report['checks']['database_integrity'] = True
-            evidence = ['semantic-validation.json', 'dataset-validation.json', 'loader-evaluation.json',
+            evidence = ['semantic-validation.json', 'assembly-error-classification.json', 'dataset-validation.json', 'loader-evaluation.json',
                         'audit/full-repair-audit.json', 'audit/baseline-semantic-audit.json', 'audit/physical-db-manifest.jsonl.sha256']
             report['artifacts'] = {name: sha256_path(output / name) for name in evidence}
             report['validator_sha256'] = sha256_path(Path(__file__))
@@ -195,6 +231,7 @@ def finalize(root, revision, contract, csv, pdf_archive, mxl_archive, baseline_d
             with db:
                 db.executemany('INSERT OR REPLACE INTO state VALUES(?,?)', [
                     ('semantic_build_state', 'COMPLETE'), ('full_build_state', 'COMPLETE'), ('semantic_last_error', ''),
+                    ('semantic_repair_finalization_error', ''),
                     ('semantic_repair_finalization', json.dumps({'path': str(attestation), 'sha256': sha256_path(attestation),
                                                               'revision': revision, 'completed_at': report['completed_at']}, sort_keys=True))])
             db.execute('PRAGMA wal_checkpoint(TRUNCATE)')

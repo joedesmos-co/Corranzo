@@ -110,6 +110,10 @@ validation and loader evaluation. It writes a versioned attestation before
 atomically publishing both build states as `COMPLETE`. A failed check leaves
 both states `FAILED`, with the exact stage and blocker in `blocked.json`.
 Neither failure nor success regenerates or deletes repaired shards.
+Missing-target records are documented as expected exclusions only when the
+score requires source alignment, remains in physical review, was skipped with
+zero semantic output, has no assigned target bundle, and is outside the repair
+revision. Every other assembly error blocks finalization; no error is deleted.
 
 After success and database closure, `prepare-full` and `review-full` remain
 separate Piano Vision steps. Finalization does not record human confirmation
