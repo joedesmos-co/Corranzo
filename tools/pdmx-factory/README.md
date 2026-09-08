@@ -83,6 +83,38 @@ scope cursor together. `semantic_score_progress` also records completed,
 empty, skipped, and review scores. Stop/restart does not change shard layout.
 The default disk floor is 20 GiB and remains enforced during semantic writes.
 
+## Finalizing an existing semantic repair
+
+After `semantic_repair.py` reports
+`REPAIR_REGENERATED_PENDING_FULL_AUDIT`, use
+`finalize_semantic_repair.py`. Ordinary `full_pipeline.py --semantic-only
+--resume` expects the original assembly fingerprint; repaired scores instead
+bind that fingerprint to their repair recipe, written XML and repaired split.
+The finalizer validates existing data without invoking assembly or repair.
+
+```text
+python3 tools/pdmx-factory/finalize_semantic_repair.py \
+  --factory-dir <existing-factory> --revision <completed-repair-revision> \
+  --model-contract <frozen-model-contract.json> \
+  --csv <PDMX.csv> --pdf-archive <pdf.tar.gz> --mxl-archive <mxl.tar.gz> \
+  --baseline-dir <original-repair-audit-inputs> \
+  --output <new-finalization-directory> --disk-floor-gib 20
+```
+
+The baseline directory must contain the original
+`baseline-semantic-audit.json` and `physical-db-manifest.jsonl.sha256`.
+Every attempt requires a new output directory. The finalizer holds the
+pipeline and semantic locks through revision/staging checks, current shard
+validation, the full independent pixel/written-notation audit, generic dataset
+validation and loader evaluation. It writes a versioned attestation before
+atomically publishing both build states as `COMPLETE`. A failed check leaves
+both states `FAILED`, with the exact stage and blocker in `blocked.json`.
+Neither failure nor success regenerates or deletes repaired shards.
+
+After success and database closure, `prepare-full` and `review-full` remain
+separate Piano Vision steps. Finalization does not record human confirmation
+or launch training.
+
 ## Precise persisted progress
 
 Phase 2.13 adds a cheap `preflight` command before the expensive source and
