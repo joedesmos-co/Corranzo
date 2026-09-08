@@ -75,6 +75,19 @@ test('rest repair uses frozen coordinates, ignores nominal graph measure, and pr
   assert.deepEqual(result.target.families.DURATION, target.families.DURATION)
 })
 
+test('known rests preserve written tuplet duration ratios and invalid durations abstain', () => {
+  const { source, target } = restFixture()
+  const context = repairContext(xml(note('', { rest: true })), [source])
+  const result = repairScope(context, source, target)
+  const label = result.target.families.REST[0]
+  assert.equal(label.state, 'KNOWN')
+  assert.deepEqual(label.value.timeModification, { actualNotes: 3, normalNotes: 2, normalType: null })
+  assert.equal(label.value.grace, false)
+  assert.equal(label.value.divisionsNormalizedQuarters, .333333)
+  const invalid = repairContext(xml(note('', { rest: true })).replace('<duration>2</duration>', '<duration>0</duration>'), [source])
+  assert.equal(repairScope(invalid, source, target).target.families.REST[0].state, 'UNAVAILABLE')
+})
+
 test('untrusted rest graphs reject; mismatches and simultaneous voices abstain without negative labels', () => {
   const { source, target } = restFixture()
   let context = repairContext(xml(note('', { ordinary: true })), [source])

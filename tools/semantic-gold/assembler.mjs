@@ -709,7 +709,9 @@ export function buildRestLabels({ truth, scope, restObjects, restMapping, object
   truth.rests.forEach((note, index) => {
     const match = restMapping?.mapping.get(note.id) ?? null
     const objectIndex = match ? objectIndexById.get(match.sourceRestId) : null
-    const sourceMapped = match && Number.isInteger(objectIndex) && scope.state === KNOWN
+    const attached = match && Number.isInteger(objectIndex) && scope.state === KNOWN
+    const durationKnown = Number.isFinite(note.durationQuarters) && (note.isGrace || note.durationQuarters > 0)
+    const sourceMapped = attached && durationKnown
     if (sourceMapped) eventRef.set(note.id, { objectIndex, matchState: match.state, confidence: match.confidence })
     labels.push(labelRecord({
       family: 'REST',
@@ -725,10 +727,12 @@ export function buildRestLabels({ truth, scope, restObjects, restMapping, object
         divisionsNormalizedQuarters: note.durationQuarters,
         writtenType: note.noteType,
         dots: note.dots,
+        timeModification: note.timeModification,
+        grace: note.isGrace,
       },
       reason: sourceMapped
         ? null
-        : (restObjects.length
+        : (attached && !durationKnown ? 'MUSICXML_WRITTEN_REST_DURATION_UNAVAILABLE' : restObjects.length
             ? 'NO_HIGH_CONFIDENCE_FROZEN_SOURCE_REST_OBJECT_MATCH'
             : 'NO_FROZEN_SOURCE_REST_OBJECT_ALIGNMENT_IN_PHASE212S'),
       sourceEvidence: sourceMapped
