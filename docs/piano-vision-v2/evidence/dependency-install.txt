@@ -1,0 +1,19 @@
+Collecting opencv-python-headless
+  Downloading opencv_python_headless-5.0.0.93-cp37-abi3-macosx_13_0_arm64.whl.metadata (19 kB)
+Collecting pypdfium2
+  Downloading pypdfium2-5.13.0-py3-none-macosx_13_0_arm64.whl.metadata (66 kB)
+Collecting scipy
+  Downloading scipy-1.18.1-cp313-cp313-macosx_14_0_arm64.whl.metadata (62 kB)
+Requirement already satisfied: numpy>=2 in /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages (from opencv-python-headless) (2.5.2)
+Downloading opencv_python_headless-5.0.0.93-cp37-abi3-macosx_13_0_arm64.whl (48.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.3/48.3 MB 9.6 MB/s  0:00:05
+Downloading pypdfium2-5.13.0-py3-none-macosx_13_0_arm64.whl (3.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.5/3.5 MB 11.3 MB/s  0:00:00
+Downloading scipy-1.18.1-cp313-cp313-macosx_14_0_arm64.whl (20.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 20.5/20.5 MB 8.9 MB/s  0:00:02
+Installing collected packages: scipy, pypdfium2, opencv-python-headless
+
+Successfully installed opencv-python-headless-5.0.0.93 pypdfium2-5.13.0 scipy-1.18.1
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: /Users/ryland/Documents/scoreflow/.local/piano-vision-v2-env/bin/python -m pip install --upgrade pip

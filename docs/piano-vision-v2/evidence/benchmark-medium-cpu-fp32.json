@@ -1,0 +1,73 @@
+{
+  "conditional_short_score": {
+    "cache_bytes": 244187136,
+    "cache_hits": 62,
+    "cache_misses": 23,
+    "full_omr_end_to_end": false,
+    "pages": 1,
+    "per_page_seconds": {
+      "1": 7.007817829144187
+    },
+    "scopes": 15,
+    "score_id": "QmYjdUUpTqFVfu1LJinznWrRhCryfkDk8LPMGtLAnKnEcg",
+    "seconds": 7.007855291012675
+  },
+  "cpu_threads": 4,
+  "device": "cpu",
+  "excludes": [
+    "new source proposal/layout detection",
+    "PDF/photo normalization",
+    "notation sequence decoding",
+    "constraint search/export"
+  ],
+  "future_test_opened": false,
+  "inference_median_seconds": 1.6475552910706028,
+  "inference_p95_seconds": 1.650046308664605,
+  "inference_samples_seconds": [
+    1.6475552910706028,
+    1.6480268749874085,
+    1.6453209159662947,
+    1.6466883330140263,
+    1.6505511670839041
+  ],
+  "memory": {
+    "peak_caveat": "RSS is process lifetime high-water; MPS values are sampled lower bounds, not exact device peaks",
+    "process_peak_rss_bytes": 2995961856,
+    "sampled_mps_driver_peak_bytes": null,
+    "sampled_mps_tensor_peak_bytes": null,
+    "sampling_interval_seconds": 0.01
+  },
+  "parameters": 25762296,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "precision": "fp32",
+  "quality_comparison": false,
+  "raw_weight_bytes": {
+    "fp16": 51524592,
+    "fp32": 103049184,
+    "int8_estimate": 25762296
+  },
+  "representative_example": "QmYjdUUpTqFVfu1LJinznWrRhCryfkDk8LPMGtLAnKnEcg:p1-s6-x438900",
+  "test_opened": false,
+  "timed_steps": 5,
+  "torch": "2.13.0",
+  "training_batch_size": 2,
+  "training_examples_per_second": 0.19754245888404964,
+  "training_step_seconds": [
+    10.914382457965985,
+    10.571118792053312,
+    9.709740624995902,
+    9.735126957995817,
+    9.691659750067629
+  ],
+  "variant": "medium",
+  "weights_are_trained": false,
+  "workload": {
+    "image_shape": [
+      192,
+      512
+    ],
+    "objects": 123,
+    "relations": 4148,
+    "views": 5
+  }
+}

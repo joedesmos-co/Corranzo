@@ -1,0 +1,120 @@
+{
+  "ablation": "no-refinement",
+  "checkpoint": null,
+  "device": "mps",
+  "effective_examples_per_second": 2.420184763853785,
+  "elapsed_seconds": 165.2766375419451,
+  "example_ids": [
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x66000",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x290900",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x435300",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x633500"
+  ],
+  "examples": 4,
+  "future_test_opened": false,
+  "generalization_measured": false,
+  "head_metrics": {
+    "context.clef": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_line": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_octave": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "context.key_fifths": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "object.duration_dots": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_grace": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_tuplet_ratio": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_type": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.lane": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_accidental": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_octave": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_written_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "relation.attack": {
+      "accuracy": 0.9918699264526367,
+      "labels": 738
+    },
+    "relation.chord": {
+      "accuracy": 1.0,
+      "labels": 386
+    },
+    "relation.lane_continuation": {
+      "accuracy": 1.0,
+      "labels": 347
+    }
+  },
+  "loss_after": 0.02443327009677887,
+  "loss_before": 4.808525085449219,
+  "loss_history": [
+    {
+      "loss": 4.808525085449219,
+      "step": 1
+    },
+    {
+      "loss": 1.3511061668395996,
+      "step": 20
+    },
+    {
+      "loss": 0.6487303376197815,
+      "step": 40
+    },
+    {
+      "loss": 0.34490785002708435,
+      "step": 60
+    },
+    {
+      "loss": 0.14748181402683258,
+      "step": 80
+    },
+    {
+      "loss": 0.026788756251335144,
+      "step": 100
+    }
+  ],
+  "overfit_criterion_loss_ratio": 0.25,
+  "overfit_pass": true,
+  "split": "train",
+  "steps": 100,
+  "test_opened": false,
+  "variant": "compact"
+}

@@ -1,0 +1,73 @@
+{
+  "conditional_short_score": {
+    "cache_bytes": 223838208,
+    "cache_hits": 62,
+    "cache_misses": 23,
+    "full_omr_end_to_end": false,
+    "pages": 1,
+    "per_page_seconds": {
+      "1": 2.9010071279481053
+    },
+    "scopes": 15,
+    "score_id": "QmYjdUUpTqFVfu1LJinznWrRhCryfkDk8LPMGtLAnKnEcg",
+    "seconds": 2.9010733750183135
+  },
+  "cpu_threads": 4,
+  "device": "mps",
+  "excludes": [
+    "new source proposal/layout detection",
+    "PDF/photo normalization",
+    "notation sequence decoding",
+    "constraint search/export"
+  ],
+  "future_test_opened": false,
+  "inference_median_seconds": 0.14057870907709002,
+  "inference_p95_seconds": 0.20336629159282893,
+  "inference_samples_seconds": [
+    0.1001813339535147,
+    0.10678304196335375,
+    0.14057870907709002,
+    0.2100736249703914,
+    0.17653695808257908
+  ],
+  "memory": {
+    "peak_caveat": "RSS is process lifetime high-water; MPS values are sampled lower bounds, not exact device peaks",
+    "process_peak_rss_bytes": 1014956032,
+    "sampled_mps_driver_peak_bytes": 3698720768,
+    "sampled_mps_tensor_peak_bytes": 2913602304,
+    "sampling_interval_seconds": 0.01
+  },
+  "parameters": 48330840,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "precision": "fp16",
+  "quality_comparison": false,
+  "raw_weight_bytes": {
+    "fp16": 96661680,
+    "fp32": 193323360,
+    "int8_estimate": 48330840
+  },
+  "representative_example": "QmYjdUUpTqFVfu1LJinznWrRhCryfkDk8LPMGtLAnKnEcg:p1-s6-x438900",
+  "test_opened": false,
+  "timed_steps": 5,
+  "torch": "2.13.0",
+  "training_batch_size": 2,
+  "training_examples_per_second": 0.977106763162922,
+  "training_step_seconds": [
+    2.1591512080049142,
+    2.080357249942608,
+    2.0754680410027504,
+    2.045079292031005,
+    1.8742403750075027
+  ],
+  "variant": "large",
+  "weights_are_trained": false,
+  "workload": {
+    "image_shape": [
+      192,
+      512
+    ],
+    "objects": 123,
+    "relations": 4148,
+    "views": 5
+  }
+}

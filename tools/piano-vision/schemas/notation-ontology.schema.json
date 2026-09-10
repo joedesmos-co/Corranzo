@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corranzo.local/schemas/notation-graph-2.0.json",
+  "title": "Piano Vision versioned notation graph",
+  "type": "object",
+  "required": ["schema_version", "document", "notations"],
+  "properties": {
+    "schema_version": {"const": "notation-graph/2.0"},
+    "document": {"$ref": "#/$defs/xml"},
+    "notations": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+    "recognition_provenance": {"type": "string"},
+    "visual_coverage_qualified": {"type": "boolean"},
+    "verified_complete": {"type": "boolean"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "xml": {
+      "type": "object", "required": ["tag"],
+      "properties": {
+        "tag": {"type": "string", "minLength": 1},
+        "attributes": {"type": "object", "additionalProperties": {"type": "string"}},
+        "text": {"type": ["string", "null"]},
+        "tail": {"type": ["string", "null"]},
+        "children": {"type": "array", "items": {"$ref": "#/$defs/xml"}}
+      },
+      "additionalProperties": false
+    },
+    "region": {
+      "type": "object", "required": ["page", "box"],
+      "properties": {
+        "page": {"type": "integer", "minimum": 1},
+        "box": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number", "minimum": 0, "maximum": 1}}
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object", "required": ["id", "category", "type", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "category": {"enum": ["event", "attribute", "relation", "span", "direction", "context", "structure", "unknown"]},
+        "type": {"type": "string", "pattern": "^[^:]+:.+$"},
+        "attributes": {"type": "object"},
+        "anchors": {"type": "array", "items": {"type": "string"}},
+        "region": {"anyOf": [{"$ref": "#/$defs/region"}, {"type": "null"}]},
+        "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "status": {"enum": ["known", "unknown", "unsupported", "needs_review"]},
+        "provenance": {"type": "array", "items": {"type": "object"}},
+        "xml": {"anyOf": [{"$ref": "#/$defs/xml"}, {"type": "null"}]}
+      },
+      "allOf": [{"if": {"properties": {"category": {"const": "unknown"}}}, "then": {"required": ["region"], "properties": {"region": {"$ref": "#/$defs/region"}}}}],
+      "additionalProperties": false
+    }
+  }
+}

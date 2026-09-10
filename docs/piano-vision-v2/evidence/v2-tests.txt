@@ -1,0 +1,49 @@
+test_cached_inference_matches_uncached_and_rejects_training (test_v2.DataModelTests.test_cached_inference_matches_uncached_and_rejects_training) ... ok
+test_config_rejects_invalid_capacity (test_v2.DataModelTests.test_config_rejects_invalid_capacity) ... ok
+test_context_key_supervision_and_conflict_mask (test_v2.DataModelTests.test_context_key_supervision_and_conflict_mask) ... ok
+test_coordinate_roundtrip_includes_letterbox_padding (test_v2.DataModelTests.test_coordinate_roundtrip_includes_letterbox_padding) ... ok
+test_hierarchy_visual_context_changes_note_predictions (test_v2.DataModelTests.test_hierarchy_visual_context_changes_note_predictions) ... ok
+test_input_truth_firewall_and_cross_score_rejection (test_v2.DataModelTests.test_input_truth_firewall_and_cross_score_rejection) ... ok
+test_model_loss_gradient_refinement_and_masks (test_v2.DataModelTests.test_model_loss_gradient_refinement_and_masks) ... ok
+test_neighbor_crops_and_overflow_are_explicit (test_v2.DataModelTests.test_neighbor_crops_and_overflow_are_explicit) ... ok
+test_no_refinement_finite_and_masked_loss (test_v2.DataModelTests.test_no_refinement_finite_and_masked_loss) ... /Users/ryland/Documents/scoreflow/tools/piano-vision/tests/test_v2.py:164: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  loss,count=semantic_loss(out,batch['targets']);self.assertEqual(float(loss),0);self.assertEqual(int(count),0)
+ok
+test_order_parses_production_not_lexicographic (test_v2.DataModelTests.test_order_parses_production_not_lexicographic) ... ok
+test_own_view_sampler_and_no_edge_clamp (test_v2.DataModelTests.test_own_view_sampler_and_no_edge_clamp) ... ok
+test_padded_objects_do_not_change_valid_predictions (test_v2.DataModelTests.test_padded_objects_do_not_change_valid_predictions) ... ok
+test_sealed_splits_fail_before_index_read (test_v2.DataModelTests.test_sealed_splits_fail_before_index_read) ... ok
+test_three_conflicting_duration_labels_stay_masked (test_v2.DataModelTests.test_three_conflicting_duration_labels_stay_masked) ... ok
+test_broad_xml_roundtrip_preserves_trees (test_v2.NotationTests.test_broad_xml_roundtrip_preserves_trees) ... ok
+test_codec_unicode_and_invalid_sequence_review (test_v2.NotationTests.test_codec_unicode_and_invalid_sequence_review) ... ok
+test_grace_cue_and_small_ordinary_are_distinct (test_v2.NotationTests.test_grace_cue_and_small_ordinary_are_distinct) ... ok
+test_invalid_region_and_xml_names_rejected (test_v2.NotationTests.test_invalid_region_and_xml_names_rejected) ... ok
+test_shared_decoder_causal_and_region_conditioned (test_v2.NotationTests.test_shared_decoder_causal_and_region_conditioned) ... ok
+test_unbound_known_mark_does_not_disappear (test_v2.NotationTests.test_unbound_known_mark_does_not_disappear) ... ok
+test_unknown_survives_export_and_blocks_complete (test_v2.NotationTests.test_unknown_survives_export_and_blocks_complete) ... ok
+test_clean_and_blur_and_resolution (test_v2.QualityTests.test_clean_and_blur_and_resolution) ... ok
+test_perspective_is_rectified_before_quality (test_v2.QualityTests.test_perspective_is_rectified_before_quality) ... ok
+test_rotation_canvas_expands_and_blank_rejects (test_v2.QualityTests.test_rotation_canvas_expands_and_blank_rejects) ... ok
+test_transparent_images_are_composited_white (test_v2.QualityTests.test_transparent_images_are_composited_white) ... ok
+test_checkpoint_strict_resume_and_explicit_partial_migration (test_v2.SafetyEvaluationTests.test_checkpoint_strict_resume_and_explicit_partial_migration) ... ok
+test_complete_never_from_uncalibrated_or_contradiction (test_v2.SafetyEvaluationTests.test_complete_never_from_uncalibrated_or_contradiction) ... ok
+test_missing_page_and_wrong_complete_denominators (test_v2.SafetyEvaluationTests.test_missing_page_and_wrong_complete_denominators) ... ok
+test_page_stream_yields_before_whole_score_finishes (test_v2.SafetyEvaluationTests.test_page_stream_yields_before_whole_score_finishes) ... ok
+test_promotion_refuses_missing_metrics_and_regressions (test_v2.SafetyEvaluationTests.test_promotion_refuses_missing_metrics_and_regressions) ... ok
+test_temperature_partitions_and_no_train_calibration (test_v2.SafetyEvaluationTests.test_temperature_partitions_and_no_train_calibration) ... ok
+test_arbitrary_and_nested_tuplets (test_v2.VerifierTests.test_arbitrary_and_nested_tuplets) ... ok
+test_courtesy_accidental_and_unusual_articulation_preserved (test_v2.VerifierTests.test_courtesy_accidental_and_unusual_articulation_preserved) ... ok
+test_free_meter_pickup_and_irregular_are_not_normalized (test_v2.VerifierTests.test_free_meter_pickup_and_irregular_are_not_normalized) ... ok
+test_good_chord_not_double_counted_and_order_invariant (test_v2.VerifierTests.test_good_chord_not_double_counted_and_order_invariant) ... ok
+test_grace_does_not_consume_meter_and_cue_does (test_v2.VerifierTests.test_grace_does_not_consume_meter_and_cue_does) ... ok
+test_legal_shorter_chord_tones (test_v2.VerifierTests.test_legal_shorter_chord_tones) ... ok
+test_reranking_is_auditable_and_not_destructive (test_v2.VerifierTests.test_reranking_is_auditable_and_not_destructive) ... ok
+test_tie_contradiction_and_missing_boundary (test_v2.VerifierTests.test_tie_contradiction_and_missing_boundary) ... ok
+test_unknown_prevents_consistency_and_no_empty_success (test_v2.VerifierTests.test_unknown_prevents_consistency_and_no_empty_success) ... ok
+test_voice_gap_soft_unless_explicit_complete_contract (test_v2.VerifierTests.test_voice_gap_soft_unless_explicit_complete_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 41 tests in 1.558s
+
+OK

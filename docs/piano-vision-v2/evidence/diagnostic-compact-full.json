@@ -1,0 +1,235 @@
+{
+  "ablation": "full",
+  "checkpoint": null,
+  "device": "mps",
+  "effective_examples_per_second": 2.3012962243715602,
+  "elapsed_seconds": 173.81508550001308,
+  "example_ids": [
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x66000",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x290900",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x435300",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x633500"
+  ],
+  "examples": 4,
+  "future_test_opened": false,
+  "generalization_measured": true,
+  "head_metrics": {
+    "context.clef": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_line": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_octave": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "context.key_fifths": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "object.duration_dots": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_grace": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_tuplet_ratio": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_type": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.lane": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_accidental": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_octave": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_written_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "relation.attack": {
+      "accuracy": 0.989159882068634,
+      "labels": 738
+    },
+    "relation.chord": {
+      "accuracy": 1.0,
+      "labels": 386
+    },
+    "relation.lane_continuation": {
+      "accuracy": 1.0,
+      "labels": 347
+    }
+  },
+  "loss_after": 0.04451393708586693,
+  "loss_before": 6.404860496520996,
+  "loss_history": [
+    {
+      "loss": 6.40485954284668,
+      "step": 1
+    },
+    {
+      "loss": 1.6255998611450195,
+      "step": 20
+    },
+    {
+      "loss": 0.844626784324646,
+      "step": 40
+    },
+    {
+      "loss": 0.4408603012561798,
+      "step": 60
+    },
+    {
+      "loss": 0.22359932959079742,
+      "step": 80
+    },
+    {
+      "loss": 0.04739304631948471,
+      "step": 100
+    }
+  ],
+  "overfit_criterion_loss_ratio": 0.25,
+  "overfit_pass": true,
+  "split": "train",
+  "steps": 100,
+  "test_opened": false,
+  "validation": {
+    "complete_score_accuracy_measured": false,
+    "head_metrics": {
+      "context.clef": {
+        "accuracy": 0.75,
+        "correct": 12,
+        "labels": 16
+      },
+      "context.clef_line": {
+        "accuracy": 0.75,
+        "correct": 12,
+        "labels": 16
+      },
+      "context.clef_octave": {
+        "accuracy": 1.0,
+        "correct": 16,
+        "labels": 16
+      },
+      "context.key_fifths": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "labels": 16
+      },
+      "object.duration_dots": {
+        "accuracy": 0.7410071942446043,
+        "correct": 103,
+        "labels": 139
+      },
+      "object.duration_grace": {
+        "accuracy": 1.0,
+        "correct": 139,
+        "labels": 139
+      },
+      "object.duration_tuplet_ratio": {
+        "accuracy": 1.0,
+        "correct": 139,
+        "labels": 139
+      },
+      "object.duration_type": {
+        "accuracy": 0.2446043165467626,
+        "correct": 34,
+        "labels": 139
+      },
+      "object.lane": {
+        "accuracy": 0.5,
+        "correct": 67,
+        "labels": 134
+      },
+      "object.pitch_accidental": {
+        "accuracy": 0.23880597014925373,
+        "correct": 32,
+        "labels": 134
+      },
+      "object.pitch_octave": {
+        "accuracy": 0.5895522388059702,
+        "correct": 79,
+        "labels": 134
+      },
+      "object.pitch_staff": {
+        "accuracy": 0.9029850746268657,
+        "correct": 121,
+        "labels": 134
+      },
+      "object.pitch_staff_step": {
+        "accuracy": 0.373134328358209,
+        "correct": 50,
+        "labels": 134
+      },
+      "object.pitch_written_step": {
+        "accuracy": 0.14925373134328357,
+        "correct": 20,
+        "labels": 134
+      },
+      "object.rest": {
+        "accuracy": 0.7368421052631579,
+        "correct": 14,
+        "labels": 19
+      },
+      "relation.attack": {
+        "accuracy": 0.7299635701275046,
+        "correct": 1603,
+        "labels": 2196
+      },
+      "relation.chord": {
+        "accuracy": 0.7722419928825622,
+        "correct": 868,
+        "labels": 1124
+      },
+      "relation.lane_continuation": {
+        "accuracy": 0.9615745079662605,
+        "correct": 1026,
+        "labels": 1067
+      }
+    },
+    "interpretation": "Tiny training fixture and bounded held-out scopes; diagnostic only, not a trained-capacity ranking",
+    "mean_scope_loss": 8.374769740634495,
+    "partition": "selection",
+    "scopes": 9,
+    "scores": [
+      {
+        "score_id": "QmR6ksJEfck9BzGLtbLCrPqb5StrBetMrzRkswaz52YoSt",
+        "semantic_source_id": "QmR6ksJEfck9BzGLtbLCrPqb5StrBetMrzRkswaz52YoSt"
+      },
+      {
+        "score_id": "Qmd6MYhXKDbMBnhYW6cy9vPZvvdvEWcJL674Cg2sMMqMYv",
+        "semantic_source_id": "Qmd6MYhXKDbMBnhYW6cy9vPZvvdvEWcJL674Cg2sMMqMYv"
+      },
+      {
+        "score_id": "QmReAFwCejeyHAoBsegKGqiJQDXNkpP2qdvtsXqf6ot1Lz",
+        "semantic_source_id": "QmReAFwCejeyHAoBsegKGqiJQDXNkpP2qdvtsXqf6ot1Lz"
+      }
+    ],
+    "split": "validation",
+    "sufficient_for_capacity_selection": false
+  },
+  "variant": "compact"
+}

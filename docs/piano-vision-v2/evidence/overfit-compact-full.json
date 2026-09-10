@@ -1,0 +1,120 @@
+{
+  "ablation": "full",
+  "checkpoint": null,
+  "device": "mps",
+  "effective_examples_per_second": 2.339253060687717,
+  "elapsed_seconds": 170.99475329206325,
+  "example_ids": [
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x66000",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x290900",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x435300",
+    "QmPDviYNKnYGJ2CgGkyFmBSrFXep8fQTgHp7vqgcfpSEmD:p1-s0-x633500"
+  ],
+  "examples": 4,
+  "future_test_opened": false,
+  "generalization_measured": false,
+  "head_metrics": {
+    "context.clef": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_line": {
+      "accuracy": 1.0,
+      "labels": 6
+    },
+    "context.clef_octave": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "context.key_fifths": {
+      "accuracy": 1.0,
+      "labels": 8
+    },
+    "object.duration_dots": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_grace": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_tuplet_ratio": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.duration_type": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.lane": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_accidental": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_octave": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_staff_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "object.pitch_written_step": {
+      "accuracy": 1.0,
+      "labels": 56
+    },
+    "relation.attack": {
+      "accuracy": 0.9878048896789551,
+      "labels": 738
+    },
+    "relation.chord": {
+      "accuracy": 1.0,
+      "labels": 386
+    },
+    "relation.lane_continuation": {
+      "accuracy": 1.0,
+      "labels": 347
+    }
+  },
+  "loss_after": 0.04011308029294014,
+  "loss_before": 6.404860496520996,
+  "loss_history": [
+    {
+      "loss": 6.40485954284668,
+      "step": 1
+    },
+    {
+      "loss": 1.6256028413772583,
+      "step": 20
+    },
+    {
+      "loss": 0.8446165323257446,
+      "step": 40
+    },
+    {
+      "loss": 0.4408702552318573,
+      "step": 60
+    },
+    {
+      "loss": 0.21846896409988403,
+      "step": 80
+    },
+    {
+      "loss": 0.04392257705330849,
+      "step": 100
+    }
+  ],
+  "overfit_criterion_loss_ratio": 0.25,
+  "overfit_pass": true,
+  "split": "train",
+  "steps": 100,
+  "test_opened": false,
+  "variant": "compact"
+}

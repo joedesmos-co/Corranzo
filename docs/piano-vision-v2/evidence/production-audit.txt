@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/run-v2.py", line 6, in <module>
+    main()
+    ~~~~^^
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/experiments.py", line 269, in main
+    elif args.command=='audit':result=audit(args.index)
+                                      ~~~~~^^^^^^^^^^^^
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/experiments.py", line 72, in audit
+    v2=tensorize(record,records,resolver,PRESETS['compact'])
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/data.py", line 394, in tensorize
+    sample, selected, lookup, relations, nodes = build_inputs(record, records, resolver, config)
+                                                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/data.py", line 213, in build_inputs
+    pv = add_view(row, (0, 0, 1, 1), pk)
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/data.py", line 184, in add_view
+    pixels, matrix, back = crop_view(resolver.page(row), bounds, config.image_height, config.image_width)
+                                     ~~~~~~~~~~~~~^^^^^
+  File "/Users/ryland/Documents/scoreflow/tools/piano-vision/piano_vision/v2/data.py", line 81, in page
+    raise PermissionError("Canonical split mismatch")
+PermissionError: Canonical split mismatch

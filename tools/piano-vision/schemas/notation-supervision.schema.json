@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corranzo.local/schemas/notation-supervision-2.0.json",
+  "title": "Immutable supplemental visual notation labels",
+  "type": "object",
+  "required": ["schema_version", "score_id", "example_id", "split", "source_pixel_digest", "alignment_validated", "regions"],
+  "properties": {
+    "schema_version": {"const": "notation-supervision/2.0"},
+    "score_id": {"type": "string", "minLength": 1},
+    "example_id": {"type": "string", "minLength": 1},
+    "split": {"enum": ["train", "validation", "test", "future-test"]},
+    "source_pixel_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "alignment_validated": {"type": "boolean"},
+    "alignment_report_digest": {"type": "string"},
+    "annotation_provenance": {"type": "object"},
+    "coverage_manifest": {"type": "object"},
+    "regions": {
+      "type": "array", "maxItems": 128,
+      "items": {
+        "type": "object", "required": ["state", "region_origin", "source_region"],
+        "properties": {
+          "state": {"enum": ["KNOWN", "AMBIGUOUS", "UNAVAILABLE", "UNSUPPORTED"]},
+          "region_origin": {"enum": ["source-detector", "human-visual"]},
+          "source_region": {"type": "object", "required": ["page", "box"]},
+          "target": {"type": "object", "required": ["id", "category", "type", "status"]},
+          "alternatives": {"type": "array"},
+          "reason": {"type": "string"}
+        },
+        "allOf": [{"if": {"properties": {"state": {"const": "KNOWN"}}}, "then": {"required": ["target"]}}],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "Target and region also undergo notation-graph/2.0 runtime validation; relational box ordering and pixel/alignment identity are checked by the adapter. Development loaders reject sealed splits before opening their content. Absent family does not mean verified negative. Coverage manifests are mandatory before claiming complete notation supervision."
+}
