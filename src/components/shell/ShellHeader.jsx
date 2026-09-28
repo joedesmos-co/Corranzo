@@ -28,6 +28,10 @@ export default function ShellHeader({
     onGoHome()
   }
 
+  const toggleLabel = drawerMode
+    ? (sidebarExpanded ? 'Close navigation' : 'Open navigation')
+    : (sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar')
+
   return (
     <header className="cz-shell__header">
       <div className="cz-shell__header-left">
@@ -38,8 +42,10 @@ export default function ShellHeader({
           onClick={onToggleSidebar}
           aria-expanded={sidebarExpanded}
           aria-controls={sidebarControlsId}
-          aria-label={drawerMode ? 'Open navigation' : sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-          title={drawerMode ? 'Open navigation' : sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          // Name the action the button performs, so the label never contradicts
+          // aria-expanded while the mobile drawer is open.
+          aria-label={toggleLabel}
+          title={toggleLabel}
         >
           <Icon name="panel" size={19} />
         </button>
