@@ -1,0 +1,674 @@
+{
+  "version": "guitar-splits/1.0",
+  "kind": "guitar-vision-split-manifest",
+  "seed": 24,
+  "ratios": {
+    "train": 0.6,
+    "validation": 0.2,
+    "heldout": 0.15,
+    "diagnostic": 0.05
+  },
+  "seedSearch": 400,
+  "generatedWith": {
+    "pixelFingerprints": true,
+    "tool": "tools/guitar-vision/build-split-manifest.mjs"
+  },
+  "splits": {
+    "TRAIN": "train",
+    "VALIDATION": "validation",
+    "HELDOUT": "heldout",
+    "DIAGNOSTIC": "diagnostic"
+  },
+  "provenanceCounts": {
+    "real-printed": 14,
+    "synthetic-cc0": 5,
+    "unlabelled": 5
+  },
+  "sufficiency": {
+    "totalCollections": 17,
+    "labelableCollections": 12,
+    "minimumCollections": 6,
+    "validationRolesPresent": 3,
+    "validationRolesRequired": 3,
+    "shortages": [],
+    "sufficient": true
+  },
+  "requiresHumanReview": [
+    {
+      "path": "corranzo-holdout-intake/canon-in-d-pachelbel-guitar-tab.pdf",
+      "provenance": "unlabelled",
+      "reasons": [
+        "no declared provenance and no generated-output signal"
+      ]
+    },
+    {
+      "path": "corranzo-holdout-intake/gravity-falls-theme-tab.pdf",
+      "provenance": "unlabelled",
+      "reasons": [
+        "no declared provenance and no generated-output signal"
+      ]
+    },
+    {
+      "path": "corranzo-holdout-intake/home-undertale-ost-012-tab-for-solo-guitar.pdf",
+      "provenance": "unlabelled",
+      "reasons": [
+        "no declared provenance and no generated-output signal"
+      ]
+    },
+    {
+      "path": "corranzo-holdout-intake/pirates-of-the-caribbean-hes-a-pirate-guitar-tab.pdf",
+      "provenance": "unlabelled",
+      "reasons": [
+        "no declared provenance and no generated-output signal"
+      ]
+    },
+    {
+      "path": "corranzo-holdout-intake/save-me-bts-guitar-tabs.pdf",
+      "provenance": "unlabelled",
+      "reasons": [
+        "no declared provenance and no generated-output signal"
+      ]
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": [],
+    "checkedSamples": 24,
+    "checkedCollections": 17
+  },
+  "collections": 17,
+  "samples": [
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-1",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-1",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-1/guitar-aguado-op03-1.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-1/guitar-aguado-op03-1.musicxml",
+      "truthDigest": "4d04ee8e75c6129a93a8c2b5b70699e6ff57ec59cd37b979210ea53e2adcf70d",
+      "fileDigest": "7d9b0ed4ca6b43f21aceff644d6e462ecf11c8f864c3c627fcde9e51dc98363d",
+      "pixelDigests": [
+        "d361e720d9018418a3cb6bdd1919f82d94e687fee7dedbdc7ed8470134af2662"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-2",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-2",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-2/guitar-aguado-op03-2.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-2/guitar-aguado-op03-2.musicxml",
+      "truthDigest": "4d79436bf604e06846182be87612e92a133edce53766776f08fd6feff6245738",
+      "fileDigest": "a91f6ab42ccf4fbfa9b0cedc92f0f8c366aa209ba286ae45831699e048fb89c3",
+      "pixelDigests": [
+        "4e80c6f7b52cd91e6f6c397b122c807bf7c865add56c95630ac1019f8a6255e8",
+        "31557bac178b6f3bfbf42d2e08802ce97268a63a2d915fa8c8614d35aa3fb50a"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-3",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-3",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-3/guitar-aguado-op03-3.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-3/guitar-aguado-op03-3.musicxml",
+      "truthDigest": "0eeeccd326d2fb5e8e6869231757ffe14518af84b6fb928bc72e30f50b71b580",
+      "fileDigest": "3b4bc9a57b85a167728e18c2810416166e52b0552bc74a03ca728ac26bbc76c2",
+      "pixelDigests": [
+        "ec7f25bdd07159695975c1de28423529629736d3411b079a8615838c9745a024"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-4",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-4",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-4/guitar-aguado-op03-4.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-4/guitar-aguado-op03-4.musicxml",
+      "truthDigest": "a703a83c699ac04482943d1dd446c7dd4ee327572515edcb2cd1f8ca2355cf92",
+      "fileDigest": "a89c205ae10e8c2afa1ec9a27f424d6063aee78132fb3cf386fd8f0262d0048b",
+      "pixelDigests": [
+        "6dc5fc97761d476d133362f6233a3128228de7876ad55bed876ee46b22016550",
+        "bece609b2edbab5a813112d99cb1b69d922b5499c02c00f52f967c4c8876ab04"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-5",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-5",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-5/guitar-aguado-op03-5.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-5/guitar-aguado-op03-5.musicxml",
+      "truthDigest": "831b8dc07df211e7e91ecc0caec38580fbb478475b0f83d8bb956d70799494f1",
+      "fileDigest": "dbc649de2eaf080deb1fffdab89839d9ae96d8747a359c9030ef9a52d4ed6588",
+      "pixelDigests": [
+        "2755d242389d0526ce2d4c3677e383decaeee96a87cd451fae61144577eb3661",
+        "1fafb8a620463652c286c45251b3a8d038910295ade659bcea47f8d268e540f3"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "aguado-petites-pieces-op3/guitar-aguado-op03-6",
+      "collectionId": "aguado-petites-pieces-op3",
+      "collectionAssumed": false,
+      "pieceId": "guitar-aguado-op03-6",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-op03-6/guitar-aguado-op03-6.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-op03-6/guitar-aguado-op03-6.musicxml",
+      "truthDigest": "4aa50f47354382be4184484a4aedce7555a53c9b362a26c4bdbd358146501861",
+      "fileDigest": "6bec7c7ef81d20d307b526919c03ab8f49b9db9681bc1cf58d546776125e0594",
+      "pixelDigests": [
+        "d10b2cdbc5675f7d4df6865ccef9fd397c59638dae6e752414ddf8a7765b4de8"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "bach-lute-suite/guitar-bach-menuet-bwv1006a",
+      "collectionId": "bach-lute-suite",
+      "collectionAssumed": false,
+      "pieceId": "guitar-bach-menuet-bwv1006a",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-bach-menuet-bwv1006a/guitar-bach-menuet-bwv1006a.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-bach-menuet-bwv1006a/guitar-bach-menuet-bwv1006a.musicxml",
+      "truthDigest": "9bf528e5982c9cace8a63cb1c5c90cb70a4ad4957543d0c8189754effe87b2fb",
+      "fileDigest": "99eba6ebddc4676f490667981b16e51b832bf73ba920ef62ab0fe5f6d7193d0d",
+      "pixelDigests": [
+        "d79c877591b3c4e5b1a46897e37c95409ce1db950cc8b509b35d5fb7f9288b3c"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "bach-lute-suite/guitar-bach-prelude-bwv997",
+      "collectionId": "bach-lute-suite",
+      "collectionAssumed": false,
+      "pieceId": "guitar-bach-prelude-bwv997",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-bach-prelude-bwv997/guitar-bach-prelude-bwv997.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-bach-prelude-bwv997/guitar-bach-prelude-bwv997.musicxml",
+      "truthDigest": "64be576172d24e4b0b6d4ef1cdd91005d8506fc7daab6d63afc40f659c989765",
+      "fileDigest": "634499f9050f89fa5d5a72ed3c051939c19389207ca77763311de98c378f734c",
+      "pixelDigests": [
+        "485a3a7a25ac44a6d143c9a34c07a230d8a61363a9a49d1ac881ea7a1f6a4399",
+        "f6e59294626149e92ac7e51feeab682d7f7af49e34f00e71dfa30fbfc7b9850d"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "bach-lute-suite/guitar-bach-prelude-bwv999",
+      "collectionId": "bach-lute-suite",
+      "collectionAssumed": false,
+      "pieceId": "guitar-bach-prelude-bwv999",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-bach-prelude-bwv999/guitar-bach-prelude-bwv999.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-bach-prelude-bwv999/guitar-bach-prelude-bwv999.musicxml",
+      "truthDigest": "90b80cc11291f6f0ee36cf217d6fc5839def2623cb900519c3291030c876ecb8",
+      "fileDigest": "02451842645b39cd33bbc5bf6824d5dccd2a0e75b842fc107aeafe196a270b20",
+      "pixelDigests": [
+        "7e59d067c334afeb588af98cb27f99194e3043520d6259f5988dceb28cc4aace",
+        "f4c8fcc0c08b7d941b98b09ae8bbc6a17cc4974c337c8d6bfa20aa5ee96c5fbd"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "ode-to-joy/guitar-ode-to-joy",
+      "collectionId": "ode-to-joy",
+      "collectionAssumed": false,
+      "pieceId": "guitar-ode-to-joy",
+      "publisherId": "corranzo-demo",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.pdf",
+      "truthPath": "public/fixtures/guitar-ode-to-joy/guitar-ode-to-joy.musicxml",
+      "truthDigest": "5adf263e343f3a618df90b202e746643b3f9fe914e852b5aaa92b05f7e4288b9",
+      "fileDigest": "e28eebee01af1ccf154da0c0b7fb82360cf9ea659030271cec4ff8c441951018",
+      "pixelDigests": [
+        "1d1eefbe5eb77599656a9c6b5e73261b886af1d069b402146551af837c0b3c73"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:canon-in-d-pachelbel-guitar-tab/canon-in-d-pachelbel-guitar-tab",
+      "collectionId": "solo:canon-in-d-pachelbel-guitar-tab",
+      "collectionAssumed": true,
+      "pieceId": "canon-in-d-pachelbel-guitar-tab",
+      "publisherId": "holdout-intake",
+      "instrumentId": "guitar",
+      "provenance": "unlabelled",
+      "labelable": false,
+      "forcedSplit": "heldout",
+      "scorable": false,
+      "pdfPath": "corranzo-holdout-intake/canon-in-d-pachelbel-guitar-tab.pdf",
+      "truthPath": null,
+      "truthDigest": null,
+      "fileDigest": "fd236279df700cd2039a67862544e3bd9e35cd520156982cfb0bb28cc09f95dc",
+      "pixelDigests": [
+        "ba44d9693d825f7fe6021906d3b7684cc7ed6847fbb0168a33555b01d5319d01"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": false,
+      "note": "Real PDF with no authoritative truth. Held out deliberately: it can exercise the input-quality gate and be inspected by hand, but it cannot produce a metric."
+    },
+    {
+      "sampleId": "solo:gravity-falls-theme-tab/gravity-falls-theme-tab",
+      "collectionId": "solo:gravity-falls-theme-tab",
+      "collectionAssumed": true,
+      "pieceId": "gravity-falls-theme-tab",
+      "publisherId": "holdout-intake",
+      "instrumentId": "guitar",
+      "provenance": "unlabelled",
+      "labelable": false,
+      "forcedSplit": "heldout",
+      "scorable": false,
+      "pdfPath": "corranzo-holdout-intake/gravity-falls-theme-tab.pdf",
+      "truthPath": null,
+      "truthDigest": null,
+      "fileDigest": "207fde4596448de8a147868c5cc882cdac0a5ecbb993d51a36bd0f0e83517d97",
+      "pixelDigests": [
+        "7978862faffc07016882edf82a8c9b0d14d4afdbe92100259ce9c36d6226f5f9"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": false,
+      "note": "Real PDF with no authoritative truth. Held out deliberately: it can exercise the input-quality gate and be inspected by hand, but it cannot produce a metric."
+    },
+    {
+      "sampleId": "solo:guitar-aguado-a-minor-study/guitar-aguado-a-minor-study",
+      "collectionId": "solo:guitar-aguado-a-minor-study",
+      "collectionAssumed": true,
+      "pieceId": "guitar-aguado-a-minor-study",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-a-minor-study/guitar-aguado-a-minor-study.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-a-minor-study/guitar-aguado-a-minor-study.musicxml",
+      "truthDigest": "4212742fe061685f153e8e59e4f2cf71c5b141282e3e024dd23485421da3b4ca",
+      "fileDigest": "d06a9ad966816546f2adb4122c4c4b9b0fcc9a68b8aa5c882f5486ebcd54caca",
+      "pixelDigests": [
+        "bdfa502850eec755ffb27f014455553a1a49ea0e7f70a1213659233c5cc4ce51"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-aguado-allegro-g/guitar-aguado-allegro-g",
+      "collectionId": "solo:guitar-aguado-allegro-g",
+      "collectionAssumed": true,
+      "pieceId": "guitar-aguado-allegro-g",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-allegro-g/guitar-aguado-allegro-g.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-allegro-g/guitar-aguado-allegro-g.musicxml",
+      "truthDigest": "e47a9b5eb3b729f63a2ea2b21766ee0afaead7eff869f29dcba35cc8ae548b59",
+      "fileDigest": "8b6ba932ddfd7e61472cd22857622844b49a4cf111dfaf2f33a0134555b3f57e",
+      "pixelDigests": [
+        "f8d7b903acacaf5e7ded8eee921c8589b2b99d134e07915785d056407e59c83b"
+      ],
+      "split": "validation",
+      "validationRole": "selection",
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-aguado-favorites-1/guitar-aguado-favorites-1",
+      "collectionId": "solo:guitar-aguado-favorites-1",
+      "collectionAssumed": true,
+      "pieceId": "guitar-aguado-favorites-1",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-aguado-favorites-1/guitar-aguado-favorites-1.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-aguado-favorites-1/guitar-aguado-favorites-1.musicxml",
+      "truthDigest": "2ce1350dcedfcafc81a161993799716f7c5c80e68da5dda13ceb81d348dc8bd4",
+      "fileDigest": "d69fdf7deaefa51aeb1f7d4ef672d6ad7a1288f7bead6928bb86e58e72947cf5",
+      "pixelDigests": [
+        "ddc91df57c94631a3db018f3bbdf24a1faafac6e025475fbbb7c7c3e01019c0b",
+        "1acbb3f14b80ff914fa8e8ff1114645150a58b7a5fd4187c489174cb90a09553"
+      ],
+      "split": "validation",
+      "validationRole": "risk",
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-paired-chords-vector/guitar-paired-chords-vector",
+      "collectionId": "solo:guitar-paired-chords-vector",
+      "collectionAssumed": true,
+      "pieceId": "guitar-paired-chords-vector",
+      "publisherId": "corranzo-benchmark",
+      "instrumentId": "guitar",
+      "provenance": "synthetic-cc0",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf",
+      "truthPath": "benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.musicxml",
+      "truthDigest": "c616752190e04c6587114f12d5bdcd9673d9eb1045018f47438d3f965aa5783f",
+      "fileDigest": "2f8441e870ca9942802f3b4bf9945df168d950d70a75f302ac258b20e2519ffe",
+      "pixelDigests": [
+        "1caa193ea0162aadab18753dff950a89ffceff32f3fea515a9ba86d0b2a13cd1"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-paired-scan/guitar-paired-scan",
+      "collectionId": "solo:guitar-paired-scan",
+      "collectionAssumed": true,
+      "pieceId": "guitar-paired-scan",
+      "publisherId": "corranzo-benchmark",
+      "instrumentId": "guitar",
+      "provenance": "synthetic-cc0",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf",
+      "truthPath": "benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.musicxml",
+      "truthDigest": "0b52be0f86f0cf107273665eff941e72da80bdb5579f21d8b4fb77962920e936",
+      "fileDigest": "b6999f1c17c781752895b7d0efe9f800d3cf49a375ace7f5b7fd0a73453332ab",
+      "pixelDigests": [
+        "b851302608a93102fcb66f5c297c0cb52565303a77ccde29f7a4be8015347610"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-spanish-romance/guitar-spanish-romance",
+      "collectionId": "solo:guitar-spanish-romance",
+      "collectionAssumed": true,
+      "pieceId": "guitar-spanish-romance",
+      "publisherId": "mutopia-project",
+      "instrumentId": "guitar",
+      "provenance": "real-printed",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "public/fixtures/practice-library/guitar-spanish-romance/guitar-spanish-romance.pdf",
+      "truthPath": "public/fixtures/practice-library/guitar-spanish-romance/guitar-spanish-romance.musicxml",
+      "truthDigest": "f9afa84882d043d7e3ef0e1ee8d812cbd0d43af8feeb60160fd3b929e6203047",
+      "fileDigest": "93a49611fae46ae7ac01ccc98120520876cf498a828f4d706cea7768a749c637",
+      "pixelDigests": [
+        "2a06bca74f2eca41d87b02c9129e1e98d2b7fc0459ffb8b4de6d1c6d04513b15"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-standard-chords-vector/guitar-standard-chords-vector",
+      "collectionId": "solo:guitar-standard-chords-vector",
+      "collectionAssumed": true,
+      "pieceId": "guitar-standard-chords-vector",
+      "publisherId": "corranzo-benchmark",
+      "instrumentId": "guitar",
+      "provenance": "synthetic-cc0",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf",
+      "truthPath": "benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.musicxml",
+      "truthDigest": "d9a79e6a65ed6cfac496718a68c3af0b74ef4fab00dd015563c3244ea6b81450",
+      "fileDigest": "3193e6a7fbee5962c72e0f3eea887e830b14cf92d5837eb753eea17af909ca60",
+      "pixelDigests": [
+        "c704cc6803bc4af4e140a6f1f5a5eef51c90452364e889483fe1e817b905812c"
+      ],
+      "split": "validation",
+      "validationRole": "temperature",
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-tab-sparse-vector/guitar-tab-sparse-vector",
+      "collectionId": "solo:guitar-tab-sparse-vector",
+      "collectionAssumed": true,
+      "pieceId": "guitar-tab-sparse-vector",
+      "publisherId": "corranzo-benchmark",
+      "instrumentId": "guitar",
+      "provenance": "synthetic-cc0",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf",
+      "truthPath": "benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.musicxml",
+      "truthDigest": "1f4e2b23998b62c9e0aaff89af8fb43ad17bf14049a032dfdb9948a17f1df437",
+      "fileDigest": "5ccfde9bcff46152d9495ab350c7f157ba6a53a23d54897f028239f5f36e3215",
+      "pixelDigests": [
+        "dfb43fc1b2752ddf816ad1721ed6fef58289212e95322d958a8ace5e7aac49c1"
+      ],
+      "split": "diagnostic",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:guitar-techniques-paired-vector/guitar-techniques-paired-vector",
+      "collectionId": "solo:guitar-techniques-paired-vector",
+      "collectionAssumed": true,
+      "pieceId": "guitar-techniques-paired-vector",
+      "publisherId": "corranzo-benchmark",
+      "instrumentId": "guitar",
+      "provenance": "synthetic-cc0",
+      "labelable": true,
+      "forcedSplit": null,
+      "scorable": true,
+      "pdfPath": "benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.pdf",
+      "truthPath": "benchmarks/omr-fixtures/guitar-techniques-paired-vector/guitar-techniques-paired-vector.musicxml",
+      "truthDigest": "f17ce42a3e2de1dc75b7fbab6c86cef40e3ad356ed2e3cfe42ba8a4c93eddb95",
+      "fileDigest": "72b731f4aa0bd71fc5f60b04aaeafd330d4e975e8987a29dbc27365fcca6f422",
+      "pixelDigests": [
+        "02f3bb9fcf3f5adfa9a88f7ff9a631054a2b8c9e279ae33c1d5a8b4e62080cff"
+      ],
+      "split": "train",
+      "validationRole": null,
+      "pageCount": 1,
+      "labelCounts": null,
+      "usableForScoring": true
+    },
+    {
+      "sampleId": "solo:home-undertale-ost-012-tab-for-solo-guitar/home-undertale-ost-012-tab-for-solo-guitar",
+      "collectionId": "solo:home-undertale-ost-012-tab-for-solo-guitar",
+      "collectionAssumed": true,
+      "pieceId": "home-undertale-ost-012-tab-for-solo-guitar",
+      "publisherId": "holdout-intake",
+      "instrumentId": "guitar",
+      "provenance": "unlabelled",
+      "labelable": false,
+      "forcedSplit": "heldout",
+      "scorable": false,
+      "pdfPath": "corranzo-holdout-intake/home-undertale-ost-012-tab-for-solo-guitar.pdf",
+      "truthPath": null,
+      "truthDigest": null,
+      "fileDigest": "8955932454ca4aded0229125bc9830500fe0f38dc8fe31e59f50cb5cc56f116f",
+      "pixelDigests": [
+        "84e1f795e1df672bf52ad62dcb966b9b139b0e6b044a50a82a08bd79ef29e019",
+        "54a44f7f10f35d49a6816d43a906c6be23684b7ab052f658e46104e8993dbf85",
+        "47ef83edec3768d4841e5646c51e7f6e0652980ea5ed0aef7e15b51e3eb8cfe1"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 3,
+      "labelCounts": null,
+      "usableForScoring": false,
+      "note": "Real PDF with no authoritative truth. Held out deliberately: it can exercise the input-quality gate and be inspected by hand, but it cannot produce a metric."
+    },
+    {
+      "sampleId": "solo:pirates-of-the-caribbean-hes-a-pirate-guitar-tab/pirates-of-the-caribbean-hes-a-pirate-guitar-tab",
+      "collectionId": "solo:pirates-of-the-caribbean-hes-a-pirate-guitar-tab",
+      "collectionAssumed": true,
+      "pieceId": "pirates-of-the-caribbean-hes-a-pirate-guitar-tab",
+      "publisherId": "holdout-intake",
+      "instrumentId": "guitar",
+      "provenance": "unlabelled",
+      "labelable": false,
+      "forcedSplit": "heldout",
+      "scorable": false,
+      "pdfPath": "corranzo-holdout-intake/pirates-of-the-caribbean-hes-a-pirate-guitar-tab.pdf",
+      "truthPath": null,
+      "truthDigest": null,
+      "fileDigest": "423b97005bd3e55d90ca3e3a52feffb5f0aded57ea4ed5bb085b9d306dc70c0d",
+      "pixelDigests": [
+        "d580d1b2b02551137fa8f24036dae3fb975feda0f3721348730cf83799812b54",
+        "416181f2c84f7d45b5b46d9117c5a6716de7140efadcc872afed841079717752"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": false,
+      "note": "Real PDF with no authoritative truth. Held out deliberately: it can exercise the input-quality gate and be inspected by hand, but it cannot produce a metric."
+    },
+    {
+      "sampleId": "solo:save-me-bts-guitar-tabs/save-me-bts-guitar-tabs",
+      "collectionId": "solo:save-me-bts-guitar-tabs",
+      "collectionAssumed": true,
+      "pieceId": "save-me-bts-guitar-tabs",
+      "publisherId": "holdout-intake",
+      "instrumentId": "guitar",
+      "provenance": "unlabelled",
+      "labelable": false,
+      "forcedSplit": "heldout",
+      "scorable": false,
+      "pdfPath": "corranzo-holdout-intake/save-me-bts-guitar-tabs.pdf",
+      "truthPath": null,
+      "truthDigest": null,
+      "fileDigest": "3c2f2ae46eb9bf29ab15227f08d05a31d2e77d4db835d634e478a144d5a67c3f",
+      "pixelDigests": [
+        "944966c084c387cfb8bd5e3d97b8344bcb0807517c199b9eeae1e66ebdc9eecf",
+        "c1fe84266398c2e26b137a3c806b51e0d29dfba5ed7cce75ab96df3f8b2df10f"
+      ],
+      "split": "heldout",
+      "validationRole": null,
+      "pageCount": 2,
+      "labelCounts": null,
+      "usableForScoring": false,
+      "note": "Real PDF with no authoritative truth. Held out deliberately: it can exercise the input-quality gate and be inspected by hand, but it cannot produce a metric."
+    }
+  ],
+  "digest": "51e77dfaccbd4f842b220f37103a4457dacb573ee5191a32eb69a2644feb2cf3"
+}

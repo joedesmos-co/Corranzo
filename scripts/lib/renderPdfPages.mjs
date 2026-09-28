@@ -26,10 +26,19 @@ export async function loadPdfRenderDependencies(rootDir) {
   return { createCanvas, pdfjs, root }
 }
 
-export async function renderPdfToPages(pdfPath, { analysisWidth = CALIBRATION_ANALYSIS_WIDTH, maxPages = null, rootDir } = {}) {
-  const { createCanvas, pdfjs } = await loadPdfRenderDependencies(rootDir)
-  const data = new Uint8Array(readFileSync(pdfPath))
-  const doc = await pdfjs.getDocument({ data, isEvalSupported: false }).promise
+export async function renderPdfToPages(
+  pdfPath,
+  { analysisWidth = CALIBRATION_ANALYSIS_WIDTH, maxPages = null, rootDir, pdfjs: pdfjsOverride, standardFontDataUrl } = {},
+) {
+  const { createCanvas, pdfjs: loadedPdfjs } = await loadPdfRenderDependencies(rootDir)
+  const pdfjs = pdfjsOverride ?? loadedPdfjs
+  const getDocumentOptions = { data: new Uint8Array(readFileSync(pdfPath)), isEvalSupported: false }
+  // pdfjs logs a warning per page unless standard font data is supplied. Callers
+  // that render many pages pass the vendored directory to keep output readable.
+  if (standardFontDataUrl) {
+    getDocumentOptions.standardFontDataUrl = standardFontDataUrl
+  }
+  const doc = await pdfjs.getDocument(getDocumentOptions).promise
   const pages = []
 
   const renderCount = Number.isInteger(maxPages)
