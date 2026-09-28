@@ -1,0 +1,8 @@
+{
+  "focus": "Skip opening",
+  "afterSkip": "home",
+  "afterDelay": "home",
+  "a11y": [],
+  "errors": [],
+  "scenario": "Browser-only 1800ms delay in restored Blob reads; Escape cancels before late data can replace the active screen."
+}

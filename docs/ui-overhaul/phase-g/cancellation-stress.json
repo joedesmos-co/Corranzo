@@ -1,0 +1,91 @@
+{
+  "cycles": [
+    {
+      "i": 0,
+      "action": "cancel with preview mounting"
+    },
+    {
+      "i": 1,
+      "action": "rapid replacement retains new source"
+    },
+    {
+      "i": 2,
+      "action": "leave during processing and reopen retained PDF"
+    },
+    {
+      "i": 3,
+      "action": "cancel with preview mounting"
+    },
+    {
+      "i": 4,
+      "action": "rapid replacement retains new source"
+    },
+    {
+      "i": 5,
+      "action": "leave during processing and reopen retained PDF"
+    },
+    {
+      "i": 6,
+      "action": "cancel with preview mounting"
+    },
+    {
+      "i": 7,
+      "action": "rapid replacement retains new source"
+    },
+    {
+      "i": 8,
+      "action": "leave during processing and reopen retained PDF"
+    },
+    {
+      "i": 9,
+      "action": "cancel with preview mounting"
+    },
+    {
+      "i": 10,
+      "action": "rapid replacement retains new source"
+    },
+    {
+      "i": 11,
+      "action": "leave during processing and reopen retained PDF"
+    },
+    {
+      "i": 12,
+      "action": "cancel with preview mounting"
+    },
+    {
+      "i": 13,
+      "action": "rapid replacement retains new source"
+    },
+    {
+      "i": 14,
+      "action": "leave during processing and reopen retained PDF"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=4 pdfHash=fd1f9cc1 pageCount=null stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 4, pdfHash: fd1f9cc1, pageCount: null, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=9 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 9, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=14 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 14, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=19 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 19, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=28 pdfHash=fd1f9cc1 pageCount=null stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 28, pdfHash: fd1f9cc1, pageCount: null, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=33 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 33, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=38 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 38, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=43 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 43, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=52 pdfHash=fd1f9cc1 pageCount=null stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 52, pdfHash: fd1f9cc1, pageCount: null, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=57 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 57, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=62 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 62, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=67 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 67, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=76 pdfHash=fd1f9cc1 pageCount=null stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 76, pdfHash: fd1f9cc1, pageCount: null, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=81 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 81, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=86 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 86, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=91 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 91, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=100 pdfHash=fd1f9cc1 pageCount=null stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 100, pdfHash: fd1f9cc1, pageCount: null, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=105 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 105, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=110 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 110, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "OMR FAILURE: scoreId=score-5437f25d-b351-4533-b922-48da7e6c0072 runId=115 pdfHash=fd1f9cc1 pageCount=1 stage=20 errorName=AbortError errorMessage=OMR generation cancelled. readablePages=null totalPages=1 {scoreId: score-5437f25d-b351-4533-b922-48da7e6c0072, runId: 115, pdfHash: fd1f9cc1, pageCount: 1, totalPages: 1}",
+    "[buildOmrMusicXml] Input measures: 24 min: 1 max: 24",
+    "[buildOmrMusicXml] Sorted raw first 20: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",
+    "[buildOmrMusicXml] After sanitize: 24 min: 1 max: 24"
+  ],
+  "failure": null
+}

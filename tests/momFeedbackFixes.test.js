@@ -8,16 +8,12 @@ const root = join(__dir, '..')
 const readSrc = (...parts) => readFileSync(join(root, 'src', ...parts), 'utf8')
 
 describe('Corranzo mom-test feedback pass', () => {
-  it('opens the file help panel from the Help menu', () => {
+  it('opens contextual import help from the Help menu', () => {
     const app = readSrc('App.jsx')
-    const library = readSrc('components', 'LibraryPanel.jsx')
-    const guide = readSrc('components', 'LibraryAccuracyGuide.jsx')
-
-    expect(app).toContain('setFileHelpSignal((signal) => signal + 1)')
-    expect(app).toContain('fileHelpSignal={fileHelpSignal}')
-    expect(library).toContain('openHelpSignal={fileHelpSignal}')
-    expect(guide).toContain('detailsRef.current.open = true')
-    expect(guide).toContain('Why a timing file helps')
+    const flow = readSrc('components', 'library', 'ImportScoreView.jsx')
+    expect(app.slice(app.indexOf('function showFileHelp'), app.indexOf('function handleTutorialAddSheetMusic'))).toContain("navigateToView('import')")
+    expect(flow).toContain('A clear page.')
+    expect(flow).toContain('Advanced · optional files & details')
   })
 
   it('keeps tutorial targets readable by cutting a clear hole around the target', () => {
@@ -30,18 +26,15 @@ describe('Corranzo mom-test feedback pass', () => {
     expect(css).toContain('.guided-tour__backdrop--piece')
   })
 
-  it('lets users remove timing and sound files from Library', () => {
+  it('lets users remove optional notation and accompaniment files in Import', () => {
     const app = readSrc('App.jsx')
-    const multiUpload = readSrc('components', 'MultiFileUpload.jsx')
-    const library = readSrc('components', 'LibraryPanel.jsx')
-
+    const flow = readSrc('components', 'library', 'ImportScoreView.jsx')
     expect(app).toContain('const handleClearMusicXml = useCallback')
     expect(app).toContain('const handleClearMidi = useCallback')
-    expect(multiUpload).toContain('onClearMusicXml')
-    expect(multiUpload).toContain('onClearMidi')
-    expect(multiUpload).toContain('className="multi-upload__remove"')
-    expect(library).toContain('Remove Timing File')
-    expect(library).toContain('Remove Sound File')
+    expect(flow).toContain('onClick={onClearMusicXml}')
+    expect(flow).toContain('onClick={onClearMidi}')
+    expect(flow).toContain('Remove notation file')
+    expect(flow).toContain('Remove MIDI')
   })
 
   it('clears old timing and sound when a new PDF is uploaded', () => {

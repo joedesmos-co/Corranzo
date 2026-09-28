@@ -11,11 +11,11 @@ function readSrc(...parts) {
 }
 
 describe('logo home navigation', () => {
-  it('targets library landing with welcome visible and / pathname', () => {
+  it('targets the dedicated Home without the legacy welcome panel', () => {
     expect(getHomeNavigationTarget()).toEqual({
-      view: 'library',
+      view: 'home',
       pathname: '/',
-      showWelcome: true,
+      showWelcome: false,
     })
   })
 
@@ -32,7 +32,7 @@ describe('logo home navigation', () => {
   it('App goHome uses getHomeNavigationTarget and scrolls to top', () => {
     const app = readSrc('App.jsx')
     expect(app).toContain('getHomeNavigationTarget')
-    expect(app).toContain('setShowWelcome(home.showWelcome)')
+    expect(app).not.toContain('<LibraryWelcomeCard')
     expect(app).toContain('window.scrollTo(0, 0)')
     expect(app).toMatch(/onGoHome=\{goHome\}/)
   })
@@ -49,8 +49,8 @@ describe('logo home navigation', () => {
       setShowWelcome(home.showWelcome)
       navigateToView(home.view)
 
-      expect(setShowWelcome).toHaveBeenCalledWith(true)
-      expect(navigateToView).toHaveBeenCalledWith('library')
+      expect(setShowWelcome).toHaveBeenCalledWith(false)
+      expect(navigateToView).toHaveBeenCalledWith('home')
     }
   })
 })
