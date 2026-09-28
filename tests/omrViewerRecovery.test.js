@@ -14,6 +14,8 @@ describe('OMR viewer recovery', () => {
   const app = readSrc('App.jsx')
   const viewer = readSrc('components', 'PdfViewer.jsx')
   const libraryPanel = readSrc('components', 'LibraryPanel.jsx')
+  const importView = readSrc('components', 'library', 'ImportScoreView.jsx')
+  const importPresentation = readSrc('features', 'import', 'importPresentation.js')
   const omrPanel = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
   const scoreFollowControls = readSrc('components', 'pdf', 'ScoreFollowControls.jsx')
 
@@ -55,11 +57,13 @@ describe('OMR viewer recovery', () => {
   })
 
   it('resets stale OMR panel state when a different PDF source is loaded', () => {
-    expect(libraryPanel).toMatch(
+    // The import surface moved out of LibraryPanel into ImportScoreView.
+    expect(importView).toMatch(
       /key=\{`omr-panel-\$\{fileName \?\? 'score'\}-\$\{pdfFileUrl \?\? 'no-url'\}`\}/,
     )
-    expect(libraryPanel).toMatch(/shouldShowLibraryOmrPanel/)
-    expect(libraryPanel).toMatch(/isLibraryScoreTimingReady\(musicXmlSource\)/)
+    expect(importView).toMatch(/shouldShowLibraryOmrPanel/)
+    expect(importView).toMatch(/isLibraryScoreTimingReady\(musicXmlSource\)/)
+    expect(libraryPanel).not.toContain('omr-panel-')
   })
 
   it('keeps non-abort OMR panel failures visible', () => {
@@ -69,12 +73,16 @@ describe('OMR viewer recovery', () => {
   })
 
   it('keeps TAB extraction failures specific instead of replacing them with generic PDF copy', () => {
-    expect(omrPanel).toMatch(/TAB staff lines were detected[\s\S]*return rawMessage/)
+    // The specific TAB diagnosis is raised by the pipeline and surfaced verbatim
+    // by the presentation layer, so users never see generic PDF copy instead.
+    expect(readSrc('features', 'omr', 'detectTabNotation.js')).toContain('TAB staff lines were detected')
+    expect(readSrc('features', 'omr', 'runPdfOmrPipeline.js')).toMatch(/new Error\(TAB_NO_USABLE_NOTES_MESSAGE\)/)
+    expect(importPresentation).toMatch(/rejectReasons[\s\S]*join\(' '\)/)
   })
 
   it('uses friendly PDF timing copy and exposes cursor retry', () => {
     expect(omrPanel).toContain('Preparing score')
-    expect(omrPanel).toContain('Ready to practice')
+    expect(omrPanel).toContain('Ready to prepare')
     expect(omrPanel).toContain('Try again')
     expect(omrPanel).not.toContain('Generate experimental playback from PDF')
     expect(scoreFollowControls).toContain(

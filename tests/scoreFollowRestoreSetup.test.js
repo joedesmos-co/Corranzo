@@ -221,18 +221,21 @@ describe('score follow restore setup state', () => {
       join(__dir, '..', 'src', 'context', 'PracticeSessionContext.jsx'),
       'utf8',
     )
-    const controls = readFileSync(
-      join(__dir, '..', 'src', 'components', 'practice', 'PracticeControlPanel.jsx'),
+    const view = readFileSync(
+      join(__dir, '..', 'src', 'components', 'practice', 'PracticeView.jsx'),
       'utf8',
     )
-    const modeSection = readFileSync(
-      join(__dir, '..', 'src', 'components', 'practice', 'PracticeModeSection.jsx'),
+    const transport = readFileSync(
+      join(__dir, '..', 'src', 'components', 'practice', 'WorkspaceTransport.jsx'),
       'utf8',
     )
 
     expect(provider).toMatch(/experimentalOmrPlayback[\s\S]*session\.isWaitForYou[\s\S]*!scoreFollow\.canFollow/)
-    expect(provider).toMatch(/session\.setPracticeMode\(PRACTICE_MODE\.NORMAL\)/)
-    expect(controls).toMatch(/scoreFollow\?\.experimentalOmrPlayback[\s\S]*!scoreFollow\?\.canFollow/)
-    expect(modeSection).toMatch(/mode === PRACTICE_MODE\.WAIT_FOR_YOU && waitForYouDisabled/)
+    // Falls back to Preview, the canonical default (legacy "normal" is gone).
+    expect(provider).toMatch(/session\.setPracticeMode\(PRACTICE_MODE\.PREVIEW\)/)
+    expect(view).toMatch(/scoreFollow\.experimentalOmrPlayback && !scoreFollow\.canFollow[\s\S]*waitDisabled/)
+    // The mode control disables the choice rather than hiding it.
+    expect(transport).toMatch(/mode === PRACTICE_MODE\.WAIT_FOR_YOU && waitDisabled/)
+    expect(transport).toMatch(/Score following must be ready before this mode is available\./)
   })
 })
