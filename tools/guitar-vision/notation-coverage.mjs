@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+import { NOTATION_FAMILIES } from './notationCoverageFamilies.mjs'
 /**
  * Guitar Vision — Phase 0/1 notation coverage inventory.
  *
@@ -14,36 +16,44 @@
  *   node tools/guitar-vision/notation-coverage.mjs
  *   node tools/guitar-vision/notation-coverage.mjs --json out.json --root .
  */
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import JSZip from 'jszip'
+import { classifyProvenance } from '../../src/features/omr/guitar/provenance.js'
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const FROZEN_MANIFEST = join(ROOT, 'datasets/guitar-vision/splits/frozen.json')
 
 /**
- * The full notation surface Guitar Vision must cover. Every family is tracked
- * whether or not the corpus contains it, so absence is always visible.
+ * Authoritative provenance for known sources, taken from the frozen split
+ * manifest rather than re-derived from the path.
+ *
+ * The manifest carries human-declared provenance for the practice library and
+ * the CC0 fixtures, which path-based classification cannot recover: those files
+ * sit outside any scratch directory and carry no generated-output marker, so
+ * they would fall through to `unlabelled` and the coverage report would show
+ * zero labels for a corpus that has them. One source of truth for provenance
+ * also means a reclassified file cannot disagree between tools.
  */
-export const NOTATION_FAMILIES = [
-  // Core music
-  'note', 'rest', 'chord', 'stacked-notes', 'multi-voice', 'grace-note',
-  'cue-note', 'ghost-note', 'dead-note', 'augmentation-dot', 'tuplet',
-  'accidental', 'key-signature', 'time-signature', 'clef',
-  'barline', 'repeat', 'first-ending', 'second-ending', 'segno', 'coda',
-  'dc-ds', 'time-sig-change', 'key-change', 'clef-change', 'tempo-marking',
-  'ritardando', 'accelerando', 'performance-text', 'lyrics',
-  // Guitar-specific
-  'tab-staff', 'fret-number', 'string-number', 'fret-position',
-  'string-assignment', 'paired-staff-tab', 'capo', 'tuning-change',
-  'alternate-tuning', 'scordatura', 'octave-shift',
-  'bend', 'pre-bend', 'bend-release', 'bend-amount', 'bend-with-fret',
-  'vibrato', 'hammer-on', 'pull-off', 'slide', 'glissando',
-  'natural-harmonic', 'artificial-harmonic', 'pinch-harmonic',
-  'tapping', 'palm-mute', 'let-ring', 'tremolo-picking', 'tremolo',
-  'whammy-bar', 'arpeggio', 'ornament',
-  // Articulations / expression
-  'staccato', 'tenuto', 'marcato', 'accent', 'sforzando', 'fermata',
-  'dynamic', 'hairpin', 'tie', 'slur', 'fingering', 'pick-direction',
-  'barre', 'chord-symbol', 'chord-diagram', 'multi-staff',
-]
+function loadDeclaredProvenance() {
+  if (!existsSync(FROZEN_MANIFEST)) {
+    console.error(
+      `WARN: ${FROZEN_MANIFEST} not found; declared provenance is unavailable and ` +
+        'every score will be judged by path and content alone.',
+    )
+    return new Map()
+  }
+  const manifest = JSON.parse(readFileSync(FROZEN_MANIFEST, 'utf8'))
+  const declared = new Map()
+  for (const record of manifest.samples ?? []) {
+    for (const path of [record.truthPath, record.pdfPath]) {
+      if (path) declared.set(path, { provenance: record.provenance, pieceId: record.pieceId })
+    }
+  }
+  return declared
+}
+
 
 const noteTag = (xml, tag) => (xml.match(new RegExp(`<${tag}[^>]*>`, 'g')) ?? []).length
 
@@ -198,12 +208,17 @@ function main() {
   const jsonOut = argValue('--json', null)
 
   return (async () => {
+    const declaredProvenance = loadDeclaredProvenance()
     const files = walk(root).filter((file) => !file.includes(`${'tmp'}/gv-audit`))
     const totals = Object.fromEntries(NOTATION_FAMILIES.map((name) => [name, 0]))
+    const labelableTotals = Object.fromEntries(NOTATION_FAMILIES.map((name) => [name, 0]))
     const perFile = []
     let guitarFiles = 0
     let tabFiles = 0
     let scanned = 0
+    let excludedGenerated = 0
+    let excludedUnlabelled = 0
+    const excludedExamples = []
 
     for (const file of files) {
       let xml = ''
@@ -214,15 +229,40 @@ function main() {
       }
       if (!xml.includes('<score-partwise') && !xml.includes('<score-timewise')) continue
       scanned += 1
+
+      /**
+       * Provenance is resolved before anything is counted. The repository
+       * tracks ~670 MusicXML files under tmp/ that are OMR engine output, and
+       * counting them as ground truth would report 6077 fret labels for a corpus
+       * that has none. Coverage must describe the labelable corpus only.
+       */
+      const relativePath = relative(root, file)
+      const declaration = declaredProvenance.get(relativePath)
+      const verdict = declaration
+        ? { provenance: declaration.provenance, rule: 'frozen-manifest', labelable: declaration.provenance === 'real-printed' || declaration.provenance === 'synthetic-cc0', requiresHumanReview: false }
+        : classifyProvenance({ path: relativePath, text: xml })
+      if (verdict.provenance === 'generated') {
+        excludedGenerated += 1
+        if (excludedExamples.length < 5) excludedExamples.push(relativePath)
+        continue
+      }
+      if (verdict.provenance === 'unlabelled') {
+        excludedUnlabelled += 1
+        continue
+      }
+
       const { part, hits } = classifyFile(xml)
       if (part.isGuitar) guitarFiles += 1
       if (part.hasTabClef) tabFiles += 1
       for (const [name, value] of Object.entries(hits)) {
         if (name in totals) totals[name] += value
+        if (name in labelableTotals) labelableTotals[name] += value
       }
       perFile.push({
-        file: relative(root, file),
+        file: relativePath,
         instrument: part.isGuitar ? 'guitar' : 'other',
+        provenance: verdict.provenance,
+        provenanceRule: verdict.rule,
         tab: part.hasTabClef,
         staffLines: part.staffLines,
         staves: part.staves,
@@ -231,24 +271,26 @@ function main() {
       })
     }
 
-    const zeroFamilies = NOTATION_FAMILIES.filter((name) => (totals[name] ?? 0) === 0)
+    const zeroFamilies = NOTATION_FAMILIES.filter((name) => (labelableTotals[name] ?? 0) === 0)
     const thinFamilies = NOTATION_FAMILIES.filter((name) => {
-      const value = totals[name] ?? 0
+      const value = labelableTotals[name] ?? 0
       return value > 0 && value < 50
     })
 
-    console.log('Guitar Vision — notation coverage inventory')
+    console.log('Guitar Vision — notation coverage inventory (labelable corpus only)')
     console.log('='.repeat(64))
-    console.log(`root:              ${root}`)
-    console.log(`scores scanned:    ${scanned}`)
-    console.log(`guitar scores:     ${guitarFiles}`)
-    console.log(`scores with TAB:   ${tabFiles}`)
-    console.log(`families tracked:  ${NOTATION_FAMILIES.length}`)
+    console.log(`root:                     ${root}`)
+    console.log(`scores scanned:           ${scanned}`)
+    console.log(`excluded, OMR-generated:  ${excludedGenerated}  (engine output, never a label)`)
+    console.log(`excluded, no truth:       ${excludedUnlabelled}`)
+    console.log(`guitar scores:            ${guitarFiles}`)
+    console.log(`scores with a real TAB:   ${tabFiles}`)
+    console.log(`families tracked:         ${NOTATION_FAMILIES.length}`)
     console.log('')
-    console.log('PER-FAMILY GROUND-TRUTH COUNTS')
+    console.log('PER-FAMILY LABEL COUNTS (authoritative sources only)')
     console.log('-'.repeat(64))
     for (const name of NOTATION_FAMILIES) {
-      const value = totals[name] ?? 0
+      const value = labelableTotals[name] ?? 0
       const bar = value === 0 ? '' : '#'.repeat(Math.min(40, Math.max(1, Math.round(Math.log10(value + 1) * 8))))
       const flag = value === 0 ? 'ZERO ' : value < 50 ? 'THIN ' : '     '
       console.log(`  ${flag}${name.padEnd(22)} ${String(value).padStart(7)}  ${bar}`)
@@ -265,13 +307,15 @@ function main() {
         jsonOut,
         `${JSON.stringify(
           {
-            version: 1,
+            version: 2,
             root,
             scoresScanned: scanned,
+            excludedGenerated,
+            excludedUnlabelled,
             guitarScores: guitarFiles,
             scoresWithTab: tabFiles,
             familiesTracked: NOTATION_FAMILIES.length,
-            totals,
+            totals: labelableTotals,
             zeroCoverageFamilies: zeroFamilies,
             thinFamilies,
             files: perFile,

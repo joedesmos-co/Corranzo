@@ -32,3 +32,10 @@ datasets/barline-training/labels.json
 datasets/barline-training/*.partial.json
 tmp/uiowa-mic-sources/
 .local/
+
+# Guitar Vision synthetic training corpus. Fully determined by the seed recorded
+# in datasets/guitar-vision/synthetic/train/manifest.json, so the generated
+# scores and event models are regenerated rather than committed. Committing them
+# would bloat the repository while adding no information.
+datasets/guitar-vision/synthetic/train/*.musicxml
+datasets/guitar-vision/synthetic/train/*.events.json

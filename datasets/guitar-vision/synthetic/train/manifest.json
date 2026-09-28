@@ -1,0 +1,347 @@
+{
+  "version": 1,
+  "kind": "guitar-vision-synthetic",
+  "split": "train",
+  "seed": 20260928,
+  "count": 60,
+  "deterministic": true,
+  "provenanceNote": "Synthetic. TRAIN SPLIT ONLY. Never to be used for validation or held-out evaluation, and never to be reported as real-data coverage.",
+  "generatedFamilies": [
+    "note",
+    "rest",
+    "chord",
+    "stacked-notes",
+    "multi-voice",
+    "onset",
+    "duration",
+    "augmentation-dot",
+    "tuplet",
+    "accidental",
+    "key-signature",
+    "time-signature",
+    "clef",
+    "barline",
+    "tie",
+    "grace-note",
+    "fret-number",
+    "string-number",
+    "string-assignment",
+    "paired-staff-tab",
+    "tab-staff",
+    "bend",
+    "bend-amount",
+    "hammer-on",
+    "pull-off",
+    "slide",
+    "glissando",
+    "natural-harmonic",
+    "artificial-harmonic",
+    "tapping",
+    "fingering",
+    "fret-position",
+    "staccato",
+    "accent"
+  ],
+  "scores": [
+    {
+      "name": "synthetic-train-20260928000",
+      "seed": 20260928000,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928001",
+      "seed": 20260928001,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928002",
+      "seed": 20260928002,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928003",
+      "seed": 20260928003,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928004",
+      "seed": 20260928004,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928005",
+      "seed": 20260928005,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928006",
+      "seed": 20260928006,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928007",
+      "seed": 20260928007,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928008",
+      "seed": 20260928008,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928009",
+      "seed": 20260928009,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928010",
+      "seed": 20260928010,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928011",
+      "seed": 20260928011,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928012",
+      "seed": 20260928012,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928013",
+      "seed": 20260928013,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928014",
+      "seed": 20260928014,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928015",
+      "seed": 20260928015,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928016",
+      "seed": 20260928016,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928017",
+      "seed": 20260928017,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928018",
+      "seed": 20260928018,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928019",
+      "seed": 20260928019,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928020",
+      "seed": 20260928020,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928021",
+      "seed": 20260928021,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928022",
+      "seed": 20260928022,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928023",
+      "seed": 20260928023,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928024",
+      "seed": 20260928024,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928025",
+      "seed": 20260928025,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928026",
+      "seed": 20260928026,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928027",
+      "seed": 20260928027,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928028",
+      "seed": 20260928028,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928029",
+      "seed": 20260928029,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928030",
+      "seed": 20260928030,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928031",
+      "seed": 20260928031,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928032",
+      "seed": 20260928032,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928033",
+      "seed": 20260928033,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928034",
+      "seed": 20260928034,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928035",
+      "seed": 20260928035,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928036",
+      "seed": 20260928036,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928037",
+      "seed": 20260928037,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928038",
+      "seed": 20260928038,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928039",
+      "seed": 20260928039,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928040",
+      "seed": 20260928040,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928041",
+      "seed": 20260928041,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928042",
+      "seed": 20260928042,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928043",
+      "seed": 20260928043,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928044",
+      "seed": 20260928044,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928045",
+      "seed": 20260928045,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928046",
+      "seed": 20260928046,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928047",
+      "seed": 20260928047,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928048",
+      "seed": 20260928048,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928049",
+      "seed": 20260928049,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928050",
+      "seed": 20260928050,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928051",
+      "seed": 20260928051,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928052",
+      "seed": 20260928052,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928053",
+      "seed": 20260928053,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928054",
+      "seed": 20260928054,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928055",
+      "seed": 20260928055,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928056",
+      "seed": 20260928056,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928057",
+      "seed": 20260928057,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928058",
+      "seed": 20260928058,
+      "measures": 4
+    },
+    {
+      "name": "synthetic-train-20260928059",
+      "seed": 20260928059,
+      "measures": 4
+    }
+  ]
+}

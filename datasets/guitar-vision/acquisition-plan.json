@@ -1,0 +1,3227 @@
+{
+  "version": 1,
+  "kind": "guitar-vision-acquisition-plan",
+  "totals": {
+    "families": 78,
+    "noLabels": 59,
+    "underRepresented": 10,
+    "adequate": 9,
+    "claimable": 9,
+    "notExtractable": 40,
+    "totalRealInstancesShort": 1731,
+    "familiesNeedingRealPages": 13
+  },
+  "families": [
+    {
+      "family": "scordatura",
+      "tier": "unobtainable-real",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0,
+        "trainCollections": 0
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Effectively absent from published guitar music. Support cannot be claimed."
+    },
+    {
+      "family": "stacked-notes",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "barline",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "string-assignment",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "hammer-on",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "pull-off",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "slide",
+      "tier": "essential",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "grace-note",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "capo",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "bend",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "bend-amount",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "vibrato",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "natural-harmonic",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "artificial-harmonic",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "pinch-harmonic",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "palm-mute",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "let-ring",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tremolo-picking",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tremolo",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "arpeggio",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "staccato",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "accent",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "dynamic",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "hairpin",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "slur",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "chord-symbol",
+      "tier": "important",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "cue-note",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "ghost-note",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "dead-note",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "first-ending",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "second-ending",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "segno",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "coda",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "dc-ds",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "time-sig-change",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "key-change",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "clef-change",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "ritardando",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "accelerando",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "performance-text",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "fret-position",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "alternate-tuning",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "octave-shift",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "pre-bend",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "bend-release",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "bend-with-fret",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "glissando",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "tapping",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "whammy-bar",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "ornament",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "tenuto",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "marcato",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "sforzando",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "fermata",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "fingering",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "pick-direction",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": true,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        },
+        {
+          "route": "page capture from real published scores",
+          "why": "Engraver-specific glyph form and placement cannot be reproduced by a renderer",
+          "realistic": true,
+          "required": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "barre",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "chord-diagram",
+      "tier": "occasional",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "lyrics",
+      "tier": "rare",
+      "labelableCount": 0,
+      "extractableByParser": false,
+      "synthesisPolicy": "none",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 8,
+        "validation": 2,
+        "heldout": 2,
+        "trainCollections": 1
+      },
+      "shortfall": {
+        "train": 8,
+        "validation": 2,
+        "heldout": 2
+      },
+      "status": "no-labels",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Legitimate but uncommon. Volume will come from synthesis; honesty required."
+    },
+    {
+      "family": "key-signature",
+      "tier": "essential",
+      "labelableCount": 28,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 32,
+        "validation": 7,
+        "heldout": 7
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "time-signature",
+      "tier": "essential",
+      "labelableCount": 19,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 41,
+        "validation": 9,
+        "heldout": 9
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "clef",
+      "tier": "essential",
+      "labelableCount": 20,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 40,
+        "validation": 8,
+        "heldout": 8
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "tab-staff",
+      "tier": "essential",
+      "labelableCount": 1,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 59,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "publish matched PDF+MusicXML pairs for real TAB scores",
+          "why": "TAB truth does not exist in the public-domain classical repertoire; the whole TAB corpus must be built",
+          "realistic": false,
+          "note": "Requires transcribing TAB scores by hand and rendering them, or licensing existing ones."
+        },
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "paired-staff-tab",
+      "tier": "essential",
+      "labelableCount": 1,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 59,
+        "validation": 12,
+        "heldout": 12
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "publish matched PDF+MusicXML pairs for real TAB scores",
+          "why": "TAB truth does not exist in the public-domain classical repertoire; the whole TAB corpus must be built",
+          "realistic": false,
+          "note": "Requires transcribing TAB scores by hand and rendering them, or licensing existing ones."
+        },
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "multi-voice",
+      "tier": "important",
+      "labelableCount": 21,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 9,
+        "validation": 2,
+        "heldout": 2
+      },
+      "status": "under-represented",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "repeat",
+      "tier": "important",
+      "labelableCount": 6,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 24,
+        "validation": 5,
+        "heldout": 5
+      },
+      "status": "under-represented",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tempo-marking",
+      "tier": "important",
+      "labelableCount": 19,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 11,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "under-represented",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "multi-staff",
+      "tier": "important",
+      "labelableCount": 6,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 24,
+        "validation": 5,
+        "heldout": 5
+      },
+      "status": "under-represented",
+      "supportable": true,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tuning-change",
+      "tier": "occasional",
+      "labelableCount": 1,
+      "extractableByParser": false,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 15,
+        "validation": 3,
+        "heldout": 3,
+        "trainCollections": 2
+      },
+      "shortfall": {
+        "train": 14,
+        "validation": 3,
+        "heldout": 3
+      },
+      "status": "under-represented",
+      "supportable": false,
+      "claimable": false,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Appears in specific genres or passages. Lower volume is honest."
+    },
+    {
+      "family": "note",
+      "tier": "essential",
+      "labelableCount": 5511,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "rest",
+      "tier": "essential",
+      "labelableCount": 915,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "chord",
+      "tier": "essential",
+      "labelableCount": 1238,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "fret-number",
+      "tier": "essential",
+      "labelableCount": 324,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "publish matched PDF+MusicXML pairs for real TAB scores",
+          "why": "TAB truth does not exist in the public-domain classical repertoire; the whole TAB corpus must be built",
+          "realistic": false,
+          "note": "Requires transcribing TAB scores by hand and rendering them, or licensing existing ones."
+        },
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "string-number",
+      "tier": "essential",
+      "labelableCount": 324,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 60,
+        "validation": 12,
+        "heldout": 12,
+        "trainCollections": 4
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Common in ordinary guitar music. Must be genuinely learned and measured."
+    },
+    {
+      "family": "augmentation-dot",
+      "tier": "important",
+      "labelableCount": 335,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tuplet",
+      "tier": "important",
+      "labelableCount": 641,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "accidental",
+      "tier": "important",
+      "labelableCount": 996,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    },
+    {
+      "family": "tie",
+      "tier": "important",
+      "labelableCount": 502,
+      "extractableByParser": true,
+      "synthesisPolicy": "partial",
+      "requiresRealPages": false,
+      "requirement": {
+        "train": 30,
+        "validation": 6,
+        "heldout": 6,
+        "trainCollections": 3
+      },
+      "shortfall": {
+        "train": 0,
+        "validation": 0,
+        "heldout": 0
+      },
+      "status": "adequate",
+      "supportable": true,
+      "claimable": true,
+      "acquisitionRoutes": [
+        {
+          "route": "Mutopia Project and public-domain guitar editions",
+          "why": "Already the richest source of matched real guitar PDF+MusicXML in the repository",
+          "realistic": true
+        },
+        {
+          "route": "IMSLP / MuseScore public-domain guitar collections",
+          "why": "Large volume of real engraved guitar scores, many with paired staff+TAB",
+          "realistic": true
+        },
+        {
+          "route": "deterministic synthesis from an event model (TRAIN SPLIT ONLY)",
+          "why": "Supplies volume and exact geometry; never substitutes for real validation or held-out",
+          "realistic": true
+        }
+      ],
+      "tierNote": "Regularly encountered in published guitar scores."
+    }
+  ]
+}
