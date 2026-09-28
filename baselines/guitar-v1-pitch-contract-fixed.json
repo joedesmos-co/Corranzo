@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "kind": "guitar-vision-phase0-corpus-baseline-pitch-contract-fixed",
+  "version": 2,
+  "kind": "guitar-vision-phase0-corpus-baseline",
   "engine": "heuristic-js-omr (pre-Guitar-Vision)",
   "corpus": {
     "source": "public/fixtures/practice-library (Mutopia / public domain real guitar scores)",
@@ -8,7 +8,7 @@
     "domain": "vector PDF -> MusicXML",
     "staffType": "standard 5-line notation only; no TAB scores in this corpus"
   },
-  "caveat": "Same heuristic engine and same input PDFs as guitar-v1-baseline.json. The only change is that the written/sounding pitch contract (guitar-pitch/1.0) is now enforced at emission. This is a fix to the measurement and to playback, NOT an improvement in recognition: the engine sees identical pixels and makes identical detections. The dominant +12 semitone systematic offset is eliminated on 5 of 12 scores.",
+  "caveat": "These numbers measure the EXISTING heuristic engine, not Guitar Vision. They are the floor that a learned model must beat to justify shipping.",
   "summary": {
     "scores": 13,
     "transcribed": 12,
@@ -47,7 +47,82 @@
       "median": 0.8737
     },
     "meanSelfReportedConfidence": 0.8897,
-    "scoresSelfReportedAccepted": 12
+    "scoresSelfReportedAccepted": 12,
+    "strict": {
+      "scoresScored": 12,
+      "noteDetectionF1": {
+        "value": 0.0993,
+        "scoresWithEvidence": 12
+      },
+      "noteDetectionPrecision": {
+        "value": 0.1028,
+        "scoresWithEvidence": 12
+      },
+      "noteDetectionRecall": {
+        "value": 0.0961,
+        "scoresWithEvidence": 12
+      },
+      "endToEndNoteAccuracy": {
+        "value": 0.0506,
+        "scoresWithEvidence": 12
+      },
+      "soundingPitchAccuracy": {
+        "value": 0.4855,
+        "scoresWithEvidence": 7
+      },
+      "writtenPitchAccuracy": {
+        "value": 0.4851,
+        "scoresWithEvidence": 7
+      },
+      "onsetAccuracy": {
+        "value": 0.3813,
+        "scoresWithEvidence": 7
+      },
+      "durationAccuracy": {
+        "value": 0.4817,
+        "scoresWithEvidence": 7
+      },
+      "stringAccuracy": {
+        "value": null,
+        "scoresWithEvidence": 0
+      },
+      "fretAccuracy": {
+        "value": null,
+        "scoresWithEvidence": 0
+      },
+      "voiceAccuracy": {
+        "value": 0.9098,
+        "scoresWithEvidence": 7
+      },
+      "staffAccuracy": {
+        "value": 1,
+        "scoresWithEvidence": 7
+      },
+      "dotsAccuracy": {
+        "value": 1,
+        "scoresWithEvidence": 7
+      },
+      "accidentalsAccuracy": {
+        "value": 0.002,
+        "scoresWithEvidence": 5
+      },
+      "dotsAccuracyWhenDotted": {
+        "value": null,
+        "scoresWithEvidence": 0
+      },
+      "tupletAccuracyWhenPresent": {
+        "value": 0,
+        "scoresWithEvidence": 1
+      },
+      "accidentalsAccuracyWhenPresent": {
+        "value": 0.0026,
+        "scoresWithEvidence": 4
+      },
+      "tabConsistencyGenerated": {
+        "value": null,
+        "scoresWithEvidence": 0
+      }
+    }
   },
   "scores": [
     {
@@ -119,6 +194,169 @@
             "delta": -4,
             "count": 7
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 238,
+          "generatedNoteCount": 235,
+          "matched": 86,
+          "missed": 152,
+          "falsePositive": 149,
+          "precision": 0.366,
+          "recall": 0.3613,
+          "f1": 0.3636
+        },
+        "endToEndNoteAccuracy": 0.2353,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 86,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0.6512,
+            "correct": 56,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0.6512,
+            "correct": 56,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.3488,
+            "correct": 30,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0.9651,
+            "correct": 83,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 86,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 1,
+            "correct": 86,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 86,
+            "comparable": 86,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 4,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -192,6 +430,177 @@
             "count": 10
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 488,
+          "generatedNoteCount": 359,
+          "matched": 3,
+          "missed": 485,
+          "falsePositive": 356,
+          "precision": 0.0084,
+          "recall": 0.0061,
+          "f1": 0.0071
+        },
+        "endToEndNoteAccuracy": 0.0061,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.3333,
+            "correct": 1,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 3,
+            "comparable": 3,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 24,
+            "generated": 0,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -263,6 +672,177 @@
             "delta": 3,
             "count": 11
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 435,
+          "generatedNoteCount": 347,
+          "matched": 0,
+          "missed": 435,
+          "falsePositive": 347,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 3,
+            "generated": 0,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -336,6 +916,177 @@
             "count": 5
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 397,
+          "generatedNoteCount": 656,
+          "matched": 2,
+          "missed": 395,
+          "falsePositive": 654,
+          "precision": 0.003,
+          "recall": 0.005,
+          "f1": 0.0038
+        },
+        "endToEndNoteAccuracy": 0.0025,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 2,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0.5,
+            "correct": 1,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0.5,
+            "correct": 1,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 2,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 1,
+            "correct": 2,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 2,
+            "comparable": 2,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 7,
+            "generated": 8,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -407,6 +1158,177 @@
             "delta": -2,
             "count": 9
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 427,
+          "generatedNoteCount": 316,
+          "matched": 0,
+          "missed": 427,
+          "falsePositive": 316,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 5,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -480,6 +1402,177 @@
             "count": 6
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 275,
+          "generatedNoteCount": 339,
+          "matched": 0,
+          "missed": 275,
+          "falsePositive": 339,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 17,
+            "generated": 2,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -551,6 +1644,177 @@
             "delta": 10,
             "count": 11
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 539,
+          "generatedNoteCount": 324,
+          "matched": 0,
+          "missed": 539,
+          "falsePositive": 324,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 99,
+            "generated": 0,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -624,6 +1888,177 @@
             "count": 14
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 571,
+          "generatedNoteCount": 342,
+          "matched": 0,
+          "missed": 571,
+          "falsePositive": 342,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 84,
+            "generated": 3,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -695,6 +2130,177 @@
             "delta": 2,
             "count": 6
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 302,
+          "generatedNoteCount": 269,
+          "matched": 11,
+          "missed": 291,
+          "falsePositive": 258,
+          "precision": 0.0409,
+          "recall": 0.0364,
+          "f1": 0.0385
+        },
+        "endToEndNoteAccuracy": 0.0166,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 11,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0.4545,
+            "correct": 5,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0.4545,
+            "correct": 5,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.5455,
+            "correct": 6,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0.3636,
+            "correct": 4,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 11,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 8,
+            "conditionalAccuracy": 0,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 8
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 0.6364,
+            "correct": 7,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 11,
+            "comparable": 11,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 1,
+            "conditionalAccuracy": 0,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 1
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tie",
+            "truth": 11,
+            "generated": 4,
+            "matched": 1,
+            "recall": 0.0909,
+            "precision": 0.25
+          },
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -768,6 +2374,169 @@
             "count": 8
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 267,
+          "generatedNoteCount": 224,
+          "matched": 5,
+          "missed": 262,
+          "falsePositive": 219,
+          "precision": 0.0223,
+          "recall": 0.0187,
+          "f1": 0.0204
+        },
+        "endToEndNoteAccuracy": 0,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 5,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.8,
+            "correct": 4,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0.6,
+            "correct": 3,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 5,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 1,
+            "correct": 5,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 5,
+            "comparable": 5,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 3,
+            "conditionalAccuracy": 0,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 3
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -839,6 +2608,169 @@
             "delta": -5,
             "count": 23
           }
+        ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 1091,
+          "generatedNoteCount": 990,
+          "matched": 743,
+          "missed": 348,
+          "falsePositive": 247,
+          "precision": 0.7505,
+          "recall": 0.681,
+          "f1": 0.7141
+        },
+        "endToEndNoteAccuracy": 0.3327,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 743,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0.4886,
+            "correct": 363,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0.4859,
+            "correct": 361,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.5114,
+            "correct": 380,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0.7039,
+            "correct": 523,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 743,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 0.7322,
+            "correct": 544,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 743,
+            "comparable": 743,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": 0.0101,
+            "correct": 2,
+            "comparable": 198,
+            "conditionalAccuracy": 0.0104,
+            "conditionalCorrect": 2,
+            "conditionalComparable": 193
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
         ]
       }
     },
@@ -912,6 +2844,169 @@
             "count": 28
           }
         ]
+      },
+      "strict": {
+        "detection": {
+          "truthNoteCount": 510,
+          "generatedNoteCount": 544,
+          "matched": 23,
+          "missed": 487,
+          "falsePositive": 521,
+          "precision": 0.0423,
+          "recall": 0.0451,
+          "f1": 0.0436
+        },
+        "endToEndNoteAccuracy": 0.0137,
+        "attributes": {
+          "noteVsRest": {
+            "accuracy": 1,
+            "correct": 23,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "soundingPitch": {
+            "accuracy": 0.3043,
+            "correct": 7,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "writtenPitch": {
+            "accuracy": 0.3043,
+            "correct": 7,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "onset": {
+            "accuracy": 0.1304,
+            "correct": 3,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "duration": {
+            "accuracy": 0.7391,
+            "correct": 17,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "dots": {
+            "accuracy": 1,
+            "correct": 23,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "tuplet": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "string": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "fret": {
+            "accuracy": null,
+            "correct": 0,
+            "comparable": 0,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "voice": {
+            "accuracy": 1,
+            "correct": 23,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "staff": {
+            "accuracy": 1,
+            "correct": 23,
+            "comparable": 23,
+            "conditionalAccuracy": null,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 0
+          },
+          "accidentals": {
+            "accuracy": 0,
+            "correct": 0,
+            "comparable": 1,
+            "conditionalAccuracy": 0,
+            "conditionalCorrect": 0,
+            "conditionalComparable": 1
+          }
+        },
+        "tabConsistency": {
+          "truthConsistent": 0,
+          "truthCheckable": 0,
+          "generatedConsistent": 0,
+          "generatedCheckable": 0,
+          "truthRate": null,
+          "generatedRate": null
+        },
+        "markingFamiliesWithTruth": [
+          {
+            "family": "tempoMarking",
+            "truth": 1,
+            "generated": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0
+          }
+        ],
+        "unscoreableFamilies": [
+          "dynamic",
+          "performanceText",
+          "repeat",
+          "ending",
+          "segno",
+          "coda",
+          "cueNote",
+          "ghostNote",
+          "deadNote",
+          "hammerOn",
+          "pullOff",
+          "glissando",
+          "preBend",
+          "bendRelease",
+          "bendAmount",
+          "vibrato",
+          "naturalHarmonic",
+          "artificialHarmonic",
+          "pinchHarmonic",
+          "tapping",
+          "palmMute",
+          "letRing",
+          "tremoloPicking",
+          "tremolo",
+          "whammyBar",
+          "pickDirection",
+          "barre",
+          "chordDiagram",
+          "capo",
+          "tuning",
+          "octaveShift",
+          "arpeggio"
+        ]
       }
     },
     {
@@ -925,6 +3020,5 @@
       "selfReportedQuality": {},
       "pitchOffsetAnalysis": null
     }
-  ],
-  "predecessor": "guitar-v1-baseline.json"
+  ]
 }

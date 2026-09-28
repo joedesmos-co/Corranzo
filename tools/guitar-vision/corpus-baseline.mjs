@@ -19,6 +19,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseMusicXml } from '../../src/features/musicxml/parseMusicXml.js'
+import { evaluateGuitarScore } from '../../src/features/omr/guitar/guitarMetrics.js'
+import { extractNoteObjects } from '../../src/features/omr/guitar/guitarObjects.js'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
@@ -98,6 +100,47 @@ function offsetAnalysis(truthNotes, genNotes) {
   }
 }
 
+/**
+ * Strict per-object scoring, kept alongside the legacy bag metrics so the two
+ * can be compared directly. The legacy numbers are retained because they are
+ * what the existing benchmark thresholds are written against; the strict
+ * numbers are what a product decision should rest on.
+ */
+function strictReport(truthPath, generatedPath) {
+  const truthXml = readFileSync(truthPath, 'utf8')
+  const generatedXml = readFileSync(generatedPath, 'utf8')
+  const report = evaluateGuitarScore({ truthXml, generatedXml, parse: parseMusicXml })
+  return {
+    detection: report.detection,
+    endToEndNoteAccuracy: report.endToEndNoteAccuracy,
+    attributes: Object.fromEntries(
+      Object.entries(report.attributes).map(([name, value]) => [
+        name,
+        {
+          accuracy: value.accuracy,
+          correct: value.correct,
+          comparable: value.comparable,
+          conditionalAccuracy: value.conditionalAccuracy ?? null,
+          conditionalCorrect: value.conditionalCorrect ?? null,
+          conditionalComparable: value.conditionalComparable ?? null,
+        },
+      ]),
+    ),
+    tabConsistency: report.tabConsistency,
+    markingFamiliesWithTruth: Object.entries(report.markings)
+      .filter(([, value]) => value.supported)
+      .map(([family, value]) => ({
+        family,
+        truth: value.truth,
+        generated: value.generated,
+        matched: value.matched,
+        recall: value.recall,
+        precision: value.precision,
+      })),
+    unscoreableFamilies: report.unscoreableFamilies,
+  }
+}
+
 function median(values) {
   if (!values.length) return 0
   const sorted = [...values].sort((a, b) => a - b)
@@ -172,8 +215,14 @@ function main() {
     const diagnostics = report.generatedOmrDiagnostics ?? {}
 
     let offsets = null
+    let strict = null
     if (existsSync(generatedPath)) {
       offsets = offsetAnalysis(loadNotes(truth), loadNotes(generatedPath))
+      try {
+        strict = strictReport(truth, generatedPath)
+      } catch (error) {
+        strict = { error: String(error?.message ?? error) }
+      }
     }
 
     records.push({
@@ -215,6 +264,7 @@ function main() {
         overallConfidence: diagnostics.overallConfidence ?? null,
       },
       pitchOffsetAnalysis: offsets,
+      strict,
     })
     process.stderr.write(`baseline: ${id}\n`)
   }
@@ -223,6 +273,32 @@ function main() {
   const refused = records.filter((record) => record.engineOutcome === 'refused-or-crashed')
   const collect = (key) =>
     valid.map((record) => record.metrics[key]).filter((value) => Number.isFinite(value))
+
+  const strictValid = valid.filter((record) => record.strict && !record.strict.error)
+  const strictMean = (path) =>
+    mean(
+      strictValid
+        .map((record) => path.reduce((value, key) => value?.[key], record.strict))
+        .filter(Number.isFinite),
+    )
+  /**
+   * How many scores actually supplied comparable evidence for a metric.
+   *
+   * A metric with no comparable objects has an accuracy of `null`. Averaging
+   * those into a 0% would be a lie of omission: the real 13-score corpus has zero
+   * string/fret labels, so "string accuracy 0%" would read as "the engine got
+   * every string wrong" when the truth is "this corpus cannot say".
+   */
+  const strictEvidence = (path) =>
+    strictValid.filter((record) => {
+      const value = path.reduce((node, key) => node?.[key], record.strict)
+      return Number.isFinite(value)
+    }).length
+  const strictCell = (path) => {
+    const evidence = strictEvidence(path)
+    return { value: evidence ? strictMean(path) : null, scoresWithEvidence: evidence }
+  }
+
 
   const summary = {
     scores: records.filter((record) => !record.error).length,
@@ -255,10 +331,46 @@ function main() {
     scoresSelfReportedAccepted: valid.filter(
       (record) => record.selfReportedQuality?.acceptance === 'accepted',
     ).length,
+    /**
+     * Strict, identity-assigned metrics. These supersede the bag numbers above
+     * for any product decision: every figure is conditional on having identified
+     * the same musical object in both scores.
+     */
+    strict: {
+      scoresScored: strictValid.length,
+      noteDetectionF1: strictCell(['detection', 'f1']),
+      noteDetectionPrecision: strictCell(['detection', 'precision']),
+      noteDetectionRecall: strictCell(['detection', 'recall']),
+      endToEndNoteAccuracy: strictCell(['endToEndNoteAccuracy']),
+      soundingPitchAccuracy: strictCell(['attributes', 'soundingPitch', 'accuracy']),
+      writtenPitchAccuracy: strictCell(['attributes', 'writtenPitch', 'accuracy']),
+      onsetAccuracy: strictCell(['attributes', 'onset', 'accuracy']),
+      durationAccuracy: strictCell(['attributes', 'duration', 'accuracy']),
+      stringAccuracy: strictCell(['attributes', 'string', 'accuracy']),
+      fretAccuracy: strictCell(['attributes', 'fret', 'accuracy']),
+      voiceAccuracy: strictCell(['attributes', 'voice', 'accuracy']),
+      staffAccuracy: strictCell(['attributes', 'staff', 'accuracy']),
+      dotsAccuracy: strictCell(['attributes', 'dots', 'accuracy']),
+      accidentalsAccuracy: strictCell(['attributes', 'accidentals', 'accuracy']),
+      /**
+       * Conditional figures answer "when the score actually contains this, does
+       * the engine find it". Unconditional accuracy is dominated by the default
+       * value for sparse attributes — almost every note has zero dots — and so
+       * reads near 100% even when the recogniser finds none.
+       */
+      dotsAccuracyWhenDotted: strictCell(['attributes', 'dots', 'conditionalAccuracy']),
+      tupletAccuracyWhenPresent: strictCell(['attributes', 'tuplet', 'conditionalAccuracy']),
+      accidentalsAccuracyWhenPresent: strictCell([
+        'attributes',
+        'accidentals',
+        'conditionalAccuracy',
+      ]),
+      tabConsistencyGenerated: strictCell(['tabConsistency', 'generatedRate']),
+    },
   }
 
   const baseline = {
-    version: 1,
+    version: 2,
     kind: 'guitar-vision-phase0-corpus-baseline',
     engine: 'heuristic-js-omr (pre-Guitar-Vision)',
     corpus: {
@@ -304,6 +416,39 @@ function main() {
   console.log('')
   console.log(`  self-reported confidence:  ${(summary.meanSelfReportedConfidence * 100).toFixed(1)}% mean`)
   console.log(`  scores accepted as good:   ${summary.scoresSelfReportedAccepted}/${summary.scores}`)
+  console.log('')
+  console.log('  STRICT per-object metrics (identity-assigned; supersede the bag numbers above)')
+  console.log(`  scored ${summary.strict.scoresScored}/${summary.scores} scores`)
+  console.log('  ' + '-'.repeat(52))
+  const strictRows = [
+    ['note detection F1', summary.strict.noteDetectionF1],
+    ['detection precision', summary.strict.noteDetectionPrecision],
+    ['detection recall', summary.strict.noteDetectionRecall],
+    ['end-to-end note acc', summary.strict.endToEndNoteAccuracy],
+    ['sounding pitch', summary.strict.soundingPitchAccuracy],
+    ['written pitch', summary.strict.writtenPitchAccuracy],
+    ['onset', summary.strict.onsetAccuracy],
+    ['duration', summary.strict.durationAccuracy],
+    ['accidentals', summary.strict.accidentalsAccuracy],
+    ['accidentals (when present)', summary.strict.accidentalsAccuracyWhenPresent],
+    ['dots', summary.strict.dotsAccuracy],
+    ['dots (when present)', summary.strict.dotsAccuracyWhenDotted],
+    ['tuplet (when present)', summary.strict.tupletAccuracyWhenPresent],
+    ['string', summary.strict.stringAccuracy],
+    ['fret', summary.strict.fretAccuracy],
+    ['voice', summary.strict.voiceAccuracy],
+    ['staff', summary.strict.staffAccuracy],
+    ['TAB consistency', summary.strict.tabConsistencyGenerated],
+  ]
+  for (const [label, cell] of strictRows) {
+    // "n/a" means this corpus supplies no comparable evidence, which is a data
+    // gap to report, not a zero to average in.
+    const shown =
+      cell.value == null
+        ? `n/a (${cell.scoresWithEvidence} scores)`
+        : `${(cell.value * 100).toFixed(1)}% (${cell.scoresWithEvidence} scores)`
+    console.log(`  ${label.padEnd(24)}${shown.padStart(28)}`)
+  }
   console.log('')
   console.log('  per-score dominant systematic pitch offset:')
   for (const record of valid) {
