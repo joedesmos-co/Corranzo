@@ -384,7 +384,7 @@ describe('practice view mode', () => {
     expect(PRACTICE_VIEW_MODE.SCORE).toBe('score')
     expect(PRACTICE_VIEW_MODE.VISUAL).toBe('visual')
     expect(PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.SCORE]).toBe('Score')
-    expect(PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.VISUAL]).toBe('Visual')
+    expect(PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.VISUAL]).toBe('Note guide')
   })
 
   it('normalizes unknown values to Score and survives missing storage', () => {
@@ -418,8 +418,8 @@ describe('practice view integration', () => {
     const src = readSrc('components', 'practice', 'PracticeView.jsx')
 
     // Toggle exists and drives a conditional render.
-    expect(src).toContain('PracticeViewSwitchBar')
-    expect(src).toContain('practice-view-switch')
+    expect(src).toContain('workspace-representation')
+    expect(src).toContain('Score presentation')
     expect(src).toContain('viewMode === PRACTICE_VIEW_MODE.VISUAL')
     expect(src).toContain('<VisualPracticeView')
     expect(src).toContain('timingSourceKind={timingSourceKind}')
@@ -428,7 +428,7 @@ describe('practice view integration', () => {
 
     // Score path unchanged: PdfViewer + score follow + page follow all remain.
     expect(src).toContain('variant="practice"')
-    expect(src).toContain('<ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />')
+    expect(src).toContain('<WorkspaceTransport session={session} scoreFollow={scoreFollow}')
     expect(src).toContain('PracticePageFollowController')
     expect(src).toContain('className="practice-workspace__score"')
 
@@ -467,7 +467,7 @@ describe('practice view integration', () => {
 
     // Gentle guidance for missing timing and OMR-derived notes. The OMR note
     // stays collapsed inside a details fold during normal use.
-    expect(src).toContain('Visual mode needs a timing file')
+    expect(src).toContain('A note guide is not available for this piece yet.')
     expect(src).toContain("timingSourceKind === 'omr'")
     expect(src).toContain('read automatically from the PDF')
     expect(src).toContain('<details className="visual-practice__omr-details">')

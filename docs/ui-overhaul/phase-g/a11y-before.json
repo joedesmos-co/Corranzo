@@ -1,0 +1,42 @@
+[
+  {
+    "state": "home",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".cz-home__edition"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.38 (foreground color: #656b60, background color: #e7e6dd, font size: 6.0pt (8px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "state": "library",
+    "violations": []
+  },
+  {
+    "state": "import",
+    "violations": [
+      {
+        "id": "landmark-unique",
+        "impact": "moderate",
+        "description": "Ensure landmarks are unique",
+        "nodes": [
+          {
+            "target": [
+              ".score-import"
+            ],
+            "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ]
+      }
+    ]
+  }
+]

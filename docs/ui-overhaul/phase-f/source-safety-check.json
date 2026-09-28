@@ -1,0 +1,31 @@
+{
+  "worktree": "/Users/ryland/Documents/scoreflow-ui",
+  "branch": "codex/corranzo-ui-overhaul-v1",
+  "baseline": "Phase F start",
+  "changedExistingSourceFiles": [
+    "src/App.jsx",
+    "src/components/MultiFileUpload.jsx",
+    "src/components/LibraryPanel.jsx",
+    "src/components/library/PdfOmrPlaybackPanel.jsx",
+    "src/features/import/classifyUploadFiles.js",
+    "src/features/import/sourceNotationFiles.js"
+  ],
+  "changedFeatureFiles": [
+    "src/features/import/classifyUploadFiles.js",
+    "src/features/import/sourceNotationFiles.js"
+  ],
+  "protectedSourceFilesCompared": 394,
+  "protectedSourceFilesChanged": [],
+  "originalWorktreeWrites": false,
+  "trainingProcessSignals": false,
+  "datasetsCheckpointsSidecarsTouched": false,
+  "readOnlyTrainingProcessSnapshot": [],
+  "processCheckNote": "Read-only process inventory; no process was signalled or restarted. An empty list means no command explicitly contained this campaign path.",
+  "newImportSourceFiles": [
+    "src/styles/import.css",
+    "src/components/library/ImportScoreView.jsx",
+    "src/features/import/importPresentation.js",
+    "src/features/import/scorePreparationQueue.js"
+  ],
+  "finalVerifiedBranch": "codex/corranzo-ui-overhaul-v1"
+}

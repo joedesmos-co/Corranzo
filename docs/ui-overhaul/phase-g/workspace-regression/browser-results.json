@@ -1,0 +1,19 @@
+{
+  "completed": true,
+  "failure": null,
+  "checks": [
+    "Preview opens without input prompt; one dock, >70% score canvas, reading width and page overview",
+    "Shared tempo/click survive mode changes; switching pauses playback; accompaniment mutes; controls own their keys",
+    "Denied microphone retains Continue; Preview playback never requests capture",
+    "Loop range visible; WFY manual input and reopening preserve the existing position and mode",
+    "Immediate navigation preserves newest annotation; reopen restores tempo/click/loop",
+    "Keyboard modes, tempo, loop and focus; Escape closes nested tools first",
+    "Note guide shares modes and focus; Score returns with annotations intact",
+    "Immediate browser reload restores the latest tempo, metronome, count-in and annotations",
+    "Laptop hierarchy, text contrast, 44px control targets and hover/keyboard Note guide help",
+    "Wide/laptop/narrow/phone layouts retain transport, tools and drawer without horizontal overflow",
+    "Reduced motion respected; no uncaught browser errors"
+  ],
+  "errors": [],
+  "date": "2026-09-22T10:53:45.283Z"
+}

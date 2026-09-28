@@ -1,0 +1,38 @@
+{
+  "worktree": "/Users/ryland/Documents/scoreflow-ui",
+  "branch": "codex/corranzo-ui-overhaul-v1",
+  "protectedFilesChecked": 369,
+  "protectedDifferences": [],
+  "changedFilesSincePhaseF": [
+    "src/App.jsx",
+    "src/utils/focusTrap.js",
+    "src/styles/import.css",
+    "src/styles/collection.css",
+    "src/styles/workspace.css",
+    "src/components/PdfViewer.jsx",
+    "src/components/MultiFileUpload.jsx",
+    "src/components/SessionRestoreOverlay.jsx",
+    "src/components/LibraryPanel.jsx",
+    "src/hooks/useSessionPersistence.js",
+    "src/components/ui/ToolbarPopover.jsx",
+    "src/components/home/home.css",
+    "src/components/home/Home.jsx",
+    "src/components/omr/RecognitionProblemReportDialog.jsx",
+    "src/components/collection/PieceRow.jsx",
+    "src/components/shell/shell.css",
+    "src/components/shell/AppShell.jsx",
+    "src/components/library/ImportScoreView.jsx",
+    "src/components/library/PdfOmrPlaybackPanel.jsx",
+    "src/components/practice/PracticeErrorBoundary.jsx",
+    "src/features/library/practiceLibrary.js",
+    "tests/launchReadiness.test.js",
+    "tests/practiceLibrary.test.js"
+  ],
+  "newSourceAndTests": [
+    "src/features/import/useCompanionMidiCheck.js",
+    "src/features/session/sessionViewPersistence.js",
+    "tests/sessionViewPersistence.test.js"
+  ],
+  "scope": "UI-only code. The score-problem-report dialog change is limited to focus/background semantics; report generation, recognition, model/training, playback and score-follow engines are unchanged.",
+  "originalWorktreeOperations": "None. No original-worktree file operations, branch switches, process signals or training commands were performed."
+}

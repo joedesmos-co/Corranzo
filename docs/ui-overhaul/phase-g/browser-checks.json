@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "PDF-first entry; optional files collapsed; unsupported photos explain PDF conversion; no tutorial modal",
+    "Real PDF worker: truthful progress, cancel, resume, validated ready state, explicit entry, first-use mode introduction",
+    "Keyboard mode selection and all three workspace entry modes; first-use introduction becomes concise on return",
+    "1440, 1280, 768 and 390 layouts; reduced motion; reload restores ready step and score",
+    "Optional MusicXML/MXL/MIDI accepted; damaged companions do not claim readiness; removal recovers PDF preparation",
+    "Real blank-PDF quality rejection; practical rescan guidance; replacement PDF recovers",
+    "Controlled worker failure uses real recovery UI; retry returns to real successful processing",
+    "Navigation during preparation stays where requested; interrupted import resumes; rapid replacement retains the new owner",
+    "Unreadable PDF has actionable failure and no Open score action"
+  ],
+  "errors": [],
+  "failure": null,
+  "controlledScenario": "processing-failure injects a worker error through a browser-only route; all successful recognition and blank-PDF rejection use the real worker."
+}

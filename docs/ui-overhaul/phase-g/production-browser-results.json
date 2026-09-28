@@ -1,0 +1,25 @@
+{
+  "origin": "http://127.0.0.1:5193/",
+  "initial": [
+    "index-CkonQ7bt.js",
+    "rolldown-runtime-BM3Ffeng.js",
+    "pdf-vendor-BhWFS5Oj.js",
+    "audio-vendor-VLR0g-sR.js",
+    "pianoInstrument-Daaw_HzN.js",
+    "instrumentVoiceStatus-mK5uuGgW.js",
+    "sampledInstrumentVoice-BIhxrBNE.js",
+    "guitarInstrument-BTHeJx8j.js"
+  ],
+  "workspaceRequests": [
+    "PracticeSessionContext-CVOZmSGH.js",
+    "PracticeView-D-J1ZP4K.js"
+  ],
+  "checks": [
+    "Production Home renders the real score preview without the practice route or design sandbox",
+    "Practice provider and view chunks load together on entry",
+    "All three modes, playback, Note guide and focus work from production chunks",
+    "Controlled route-chunk failure offers Library recovery; reload restores the saved score after the chunk is available"
+  ],
+  "errors": [],
+  "failure": null
+}

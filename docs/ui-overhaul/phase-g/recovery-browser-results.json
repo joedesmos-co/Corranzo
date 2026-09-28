@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "Slow restore receives focus, traps Tab, and respects Escape; late results cannot take over; reload still restores the original saved score",
+    "Processing announces concise polite atomic stage changes; no busy ancestor suppresses updates; no fake percentage",
+    "Controlled processing failure and report dialog remain accessible; retry succeeds using the real processor"
+  ],
+  "errors": [],
+  "failure": null,
+  "accessibility": [
+    {
+      "name": "Restore dialog",
+      "violations": []
+    },
+    {
+      "name": "Processing / truthful stage status",
+      "violations": []
+    },
+    {
+      "name": "Processing / failure and retry",
+      "violations": []
+    },
+    {
+      "name": "Score problem report dialog",
+      "violations": []
+    }
+  ],
+  "controlledScenario": "Browser-only delays for file reads/worker loading and an injected worker failure; successful processing uses the real app."
+}

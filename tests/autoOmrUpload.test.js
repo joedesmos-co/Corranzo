@@ -248,7 +248,7 @@ describe('auto OMR orchestration helpers', () => {
 
 describe('auto OMR upload wiring', () => {
   const app = readSrc('App.jsx')
-  const library = readSrc('components', 'LibraryPanel.jsx')
+  const library = readSrc('components', 'library', 'ImportScoreView.jsx')
   const omrPanel = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
   const orchestration = readSrc('features', 'library', 'autoOmrOrchestration.js')
 
@@ -302,13 +302,15 @@ describe('auto OMR upload wiring', () => {
     )
   })
 
-  it('opens Practice after App accepts generated MusicXML without requiring MIDI', () => {
-    expect(app).toContain('function isPracticeNavigableSet')
-    expect(app).toMatch(
-      /setMusicXmlSource\(nextMusicXmlSource\)[\s\S]*setAutoOmrRequest\(null\)[\s\S]*navigateToView\('practice'\)/,
-    )
-    expect(app).toContain("activeView: 'practice'")
-    expect(app).toContain('Ready to practice')
+  it('leaves accepted generation at the ready step and enters only with an explicit mode choice', () => {
+    const completion = app.slice(app.indexOf('const handleOmrGenerated'), app.indexOf('const handleLoadSampleFixtures'))
+    expect(completion).toContain('setMusicXmlSource(nextMusicXmlSource)')
+    expect(completion).toContain('setAutoOmrRequest(null)')
+    expect(completion).not.toContain("navigateToView('practice')")
+    expect(completion).toContain('activeView: activeViewRef.current')
+    expect(app).toContain('function handleOpenImportedScore(mode)')
+    expect(app).toContain('practiceMode: normalizePracticeMode(mode)')
+    expect(library).toContain('onOpenScore?.(selectedMode)')
   })
 
   it('restores session with auto-queue only when PDF has no usable timing', () => {

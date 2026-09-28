@@ -1,0 +1,97 @@
+{
+  "date": "2026-09-20T00:17:12.066Z",
+  "completed": true,
+  "failure": null,
+  "results": [
+    {
+      "name": "Fresh Home has one main landmark, real score preview and no blocking tutorial",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Help menu arrow navigation and Escape focus return",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Home viewport matrix",
+      "detail": "1920, 1440, 1280, 1024, 768, 390px; no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "Mobile drawer traps focus, returns focus and restores content on Escape",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Mobile drawer navigation is clickable above its backdrop and closes on selection",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Composer search, difficulty filter, empty results and reset",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Library tabs support arrow-key selection and preserve upload access",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Featured score opens; playback, Space pause, tempo and metronome respond",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Returning Home reopens the same score; F and Escape enter/exit existing focus view",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Loop start/end use the current position; enable and clear remain functional",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Existing backing track can be muted and restored",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Saved score annotations survive leaving, reopening and resizing with unchanged normalized geometry",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Existing Wait For You manual advancement and Visual presentation remain reachable",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Full tutorial remains available explicitly from Help and can be skipped",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Instrument change returns to its own collection; Guitar Home uses real guitar scores",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion disables hover transitions",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "No uncaught browser errors",
+      "detail": "",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "knownLimitations": [
+    "Inherited playback hook resets tempo/metronome on remount; full session resume requires Phase D persistence work.",
+    "Inherited annotation autosave cancels its 600ms timer on unmount; immediate navigation can lose the newest mark despite the unconditional Saved label."
+  ]
+}

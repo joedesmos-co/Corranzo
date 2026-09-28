@@ -170,8 +170,8 @@ describe('practice library pieces', () => {
         instrumentId: INSTRUMENT_IDS.PIANO,
         difficulty: 'Uploaded',
         approxDuration: '1m 5s',
-        subtitle: 'Timing: bach.musicxml',
-        attribution: 'Sound: bach.mid',
+        subtitle: 'Saved score',
+        attribution: 'Accompaniment attached',
         ready: true,
         isActive: true,
       }),
@@ -191,34 +191,37 @@ describe('practice library pieces', () => {
 })
 
 describe('library tab shell', () => {
-  it('defaults the Library tab to Practice Library and routes file help to My Uploads', () => {
+  it('defaults the Library tab to Practice Library and routes file help to Import', () => {
     const app = readSrc('App.jsx')
 
     expect(LIBRARY_TABS.PRACTICE).toBe('practice')
     expect(app).toContain('useState(LIBRARY_TABS.PRACTICE)')
-    expect(app).toContain('<main className="library-main">')
+    expect(app).toContain('score-import-main')
     expect(app).toContain('uploadedPieces={uploadedPracticePieces}')
     expect(app).toContain('onOpenUploadedPiece={handleOpenUploadedPiece}')
     expect(app).toContain('setLibraryTab(LIBRARY_TABS.UPLOADS)')
   })
 
-  it('keeps uploads and OMR controls inside the My Uploads panel', () => {
+  it('keeps the uploaded collection and routes its import action to dedicated preparation', () => {
     const library = readSrc('components', 'LibraryPanel.jsx')
     const app = readSrc('App.jsx')
 
     expect(library).toContain('Practice Library')
     expect(library).toContain('My Uploads')
     expect(library).toContain('Search uploads')
-    expect(library).toContain('Upload your own piece')
-    expect(library).toContain('Start Practice')
+    expect(library).toContain('Import a score')
+    expect(library).toContain('Open score')
+    expect(library).toContain('Continue import')
     expect(library).toContain('onDeleteUploadedPiece')
     expect(library).toContain('window.confirm')
     expect(library).toContain('className="practice-piece-card__remove"')
     expect(app).toContain('onDeleteUploadedPiece={handleDeleteUploadedPiece}')
-    expect(library).toContain('MultiFileUpload')
-    expect(library).toContain('PdfOmrPlaybackPanel')
-    expect(library).toContain('Upload one file at a time')
-    expect(library).toContain('onLoadSampleFixtures?.(piece.id)')
+    expect(library).toContain('ImportScoreView')
+    expect(library).toContain('onClick={onImportScore}')
+    expect(readSrc('components', 'library', 'ImportScoreView.jsx')).toContain('PdfOmrPlaybackPanel')
+    expect(library).toContain('onLoadSampleFixtures?.(id)')
+    expect(library).toContain('<PieceRow')
+    expect(readSrc('components', 'collection', 'PieceRow.jsx')).toContain('onOpen(piece.id)')
   })
 
   it('orders My Uploads as add-files first and user uploads second', () => {
