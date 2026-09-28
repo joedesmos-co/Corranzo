@@ -100,9 +100,7 @@ export default function useWaitForYou({
     const checkpointsChanged = checkpointsKeyRef.current !== checkpointsKey
 
     if (enteringMode) {
-      const startTime = loopRegion?.isValid
-        ? loopRegion.startTimeSeconds
-        : (checkpoints[0]?.timeSeconds ?? 0)
+      const startTime = Math.max(loopRegion?.isValid ? loopRegion.startTimeSeconds : 0, practiceTime)
       const startIndex = checkpoints.length
         ? findCheckpointIndexAtTime(checkpoints, startTime)
         : 0
@@ -113,7 +111,7 @@ export default function useWaitForYou({
 
     wasActiveRef.current = true
     checkpointsKeyRef.current = checkpointsKey
-  }, [active, checkpointsKey, checkpoints, loopRegion, goToCheckpoint, clearAdvanceTimer])
+  }, [active, checkpointsKey, checkpoints, loopRegion, goToCheckpoint, clearAdvanceTimer, practiceTime])
 
   const markCorrectAndContinue = useCallback(
     ({ immediate = false } = {}) => {

@@ -1,10 +1,9 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
 import {
   usePracticeSessionContext,
   usePracticeVisualSession,
 } from '../../context/PracticeSessionContext.jsx'
-import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
 import {
   PRACTICE_VIEW_MODE,
@@ -14,13 +13,18 @@ import {
 } from '../../features/practice/practiceViewMode.js'
 import { useInstrument } from '../../context/instrumentContext.js'
 import PdfViewer from '../PdfViewer.jsx'
-import PracticeControlPanel from './PracticeControlPanel.jsx'
-import ScoreFollowSetupStatus from './ScoreFollowSetupStatus.jsx'
+import WorkspaceTransport from './WorkspaceTransport.jsx'
+import WorkspaceTools from './WorkspaceTools.jsx'
+import NoteGuideButton from './NoteGuideButton.jsx'
+import Icon from '../../design/Icon.jsx'
+import { handleFocusTrap } from '../../utils/focusTrap.js'
+import { PRACTICE_MODE } from '../../features/practice/practiceMode.js'
 import OmrQualityWarningBanner from './OmrQualityWarningBanner.jsx'
 import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialog.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
 import '../../styles/practice.css'
+import '../../styles/workspace.css'
 
 export default function PracticeView({
   pdfFile,
@@ -45,7 +49,7 @@ export default function PracticeView({
   musicXmlSource = null,
   activeScoreSnapshot = null,
 }) {
-  const { session, scoreFollow, waitForYouNoteTarget } = usePracticeSessionContext()
+  const { session, scoreFollow, practiceStats, practicePiece } = usePracticeSessionContext()
   const { setPdfPageSizes } = usePracticeVisualSession()
   const { instrumentId } = useInstrument()
   const practiceErrorResetKey = [
@@ -60,6 +64,47 @@ export default function PracticeView({
   useEffect(() => {
     sessionRef.current = session
   }, [session])
+
+  const [focus, setFocus] = useState(false)
+  const [tool, setTool] = useState(null)
+  const workspaceRef = useRef(null)
+  const focusButtonRef = useRef(null)
+  const toolOriginRef = useRef(null)
+  const toggleFocus = useCallback(() => setFocus(value => !value), [])
+  const closeTool = useCallback(() => setTool(null), [])
+  const openTool = useCallback((next) => {
+    toolOriginRef.current = document.activeElement
+    setTool(value => value === next ? null : next)
+  }, [])
+  const waitDisabled = Boolean(scoreFollow.experimentalOmrPlayback && !scoreFollow.canFollow && !(session.sourceVisualMap?.anchorCount > 0))
+  useEffect(() => {
+    if (!focus) return undefined
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const background = [...document.querySelectorAll('.cz-shell__sidewrap, .cz-shell__scrim, .cz-shell__header, .app-footer')]
+    const priorInert = background.map(el => el.inert)
+    background.forEach(el => { el.inert = true })
+    const focusButton = focusButtonRef.current
+    focusButton?.focus()
+    const onKey = event => {
+      if (event.defaultPrevented) return
+      if (event.key === 'Escape') { event.preventDefault(); if (!pdfActionsRef.current?.cancelAnnotation?.()) setFocus(false) }
+      else handleFocusTrap(workspaceRef.current, event)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      background.forEach((el, i) => { el.inert = priorInert[i] })
+      window.removeEventListener('keydown', onKey)
+      focusButton?.focus()
+    }
+  }, [focus])
+
+  // Placement needs the score canvas immediately; discard the open tool before
+  // committing a frame that would leave the canvas inert behind its dialog.
+  if (tool && (scoreFollow.alignmentMode || scoreFollow.systemStartMode)) {
+    setTool(null)
+  }
 
   const [viewMode, setViewMode] = useState(() => loadPracticeViewMode())
   const isVisualView = viewMode === PRACTICE_VIEW_MODE.VISUAL
@@ -137,21 +182,24 @@ export default function PracticeView({
     onNextPage,
     onPrevMeasure: () => sessionRef.current.measure.goToPreviousMeasure(),
     onNextMeasure: () => sessionRef.current.measure.goToNextMeasure(),
-    onToggleFullscreen: () => pdfActionsRef.current?.toggleFullscreen?.(),
+    onToggleFullscreen: toggleFocus,
+    onModeChange: mode => { if (!sessionRef.current.timingDisabled && !(mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled)) sessionRef.current.setPracticeMode(mode) },
+    onAdjustTempo: delta => { const p = sessionRef.current.playback; p.setPlaybackRate(Math.max(.25, Math.min(1.5, Math.round((p.playbackRate + delta) * 100) / 100))) },
+    onLoop: () => openTool('loop'),
     onWaitForYouContinue: () => sessionRef.current.waitForYou.markCorrectAndContinue(),
   })
 
   return (
-    <main className="practice-workspace" aria-label="Practice">
+    <main ref={workspaceRef} className={`practice-workspace score-workspace${focus ? ' score-workspace--focus' : ''}`} aria-label="Score workspace" data-mode={session.practiceMode}>
       {!pdfFile ? (
         <div className="practice-workspace__empty">
           <h2>Choose a piece first</h2>
           <p className="practice-workspace__empty-lead">
-            Open a PDF and timing file from <strong>Library</strong>.
+            Open a score from <strong>Library</strong> to begin.
           </p>
         </div>
       ) : (
-        <PracticeWorkspaceLayout>
+        <div className="workspace-frame">
           <PracticeErrorBoundary
             resetKey={practiceErrorResetKey}
             onReloadPractice={onReloadPractice}
@@ -167,16 +215,19 @@ export default function PracticeView({
                 onNextPage={onNextPage}
               />
             )}
-            <div className="practice-workspace__main">
-              <PracticeViewSwitchBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
-              <PracticeTimingPrepBanner
-                isLoading={Boolean(session.timing?.isLoading)}
-                hasTimingMap={Boolean(session.timing?.timingMap)}
-                hasMusicXml={Boolean(session.hasMusicXml)}
-                error={session.timing?.error ?? null}
-              />
+            <header className="workspace-header" inert={tool ? true : undefined}>
+              <button className="workspace-back" aria-label="Back to Library" onClick={onReturnToLibrary}><Icon name="prev" size={16} /><span>Library</span></button>
+              <h1>{(fileName || 'Your score').replace(/\.[^.]+$/, '').replace(/ - (Piano|Guitar)$/, '')}</h1>
+              <div className="workspace-representation" role="group" aria-label="Score presentation">
+                <button aria-pressed={!isVisualView} onClick={() => handleViewModeChange(PRACTICE_VIEW_MODE.SCORE)}>{PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.SCORE]}</button>
+                <NoteGuideButton active={isVisualView} onSelect={() => handleViewModeChange(PRACTICE_VIEW_MODE.VISUAL)} />
+              </div>
+              <button ref={focusButtonRef} className="workspace-focus" aria-label={focus ? 'Exit focus (F)' : 'Focus score (F)'} aria-pressed={focus} onClick={toggleFocus}><Icon name={focus ? 'close' : 'fullscreen'} size={18} /><span>{focus ? 'Exit focus' : 'Focus'}</span></button>
+            </header>
+            {(scoreFollow.alignmentMode || scoreFollow.systemStartMode) && <div className="workspace-placement" role="status">Select the requested position on your score.<button onClick={() => { scoreFollow.setAlignmentMode(false); scoreFollow.exitSystemStartMode?.() }}>Finish placement</button></div>}
+            <div className="practice-workspace__main" inert={tool ? true : undefined}>
               {isVisualView ? (
-                <VisualPracticeView timingSourceKind={timingSourceKind} />
+                <div className="workspace-guide"><p className="workspace-guide-caption">Note guide <span>A moving guide to the notes and finger positions. Your score remains the reference.</span></p><VisualPracticeView timingSourceKind={timingSourceKind} /></div>
               ) : (
                 <div className="practice-workspace__score">
                   <OmrQualityWarningBanner
@@ -186,7 +237,6 @@ export default function PracticeView({
                     onDismiss={onDismissOmrQualityWarning}
                     onReportProblem={() => openReportDialog({ defaultCategory: null })}
                   />
-                  <ScoreFollowSetupStatus setupStatus={scoreFollow.setupStatus} />
                   <PdfViewer
                     variant="practice"
                     file={pdfFile}
@@ -195,6 +245,7 @@ export default function PracticeView({
                     pageNumber={pageNumber}
                     numPages={numPages}
                     paperTheme={paperTheme}
+                    onWorkspaceFocus={toggleFocus}
                     onDocumentLoadSuccess={onDocumentLoadSuccess}
                     onPrevPage={onPrevPage}
                     onNextPage={onNextPage}
@@ -206,12 +257,10 @@ export default function PracticeView({
                 </div>
               )}
             </div>
-            <PracticeControlPanel
-              pdfFileName={fileName || null}
-              pdfPageNumber={pageNumber}
-              waitForYouNoteTarget={waitForYouNoteTarget}
-              onReportRecognitionProblem={() => openReportDialog({ defaultCategory: null })}
-            />
+            <div className="workspace-dock-wrap" inert={tool ? true : undefined}>
+              <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} />
+            </div>
+            {tool && <WorkspaceTools tool={tool} onClose={closeTool} returnFocusTo={toolOriginRef} session={session} scoreFollow={scoreFollow} fileName={fileName} pageNumber={pageNumber} practiceStats={practiceStats} pieceId={practicePiece?.id} onReport={() => { closeTool(); openReportDialog() }} />}
             <RecognitionProblemReportDialog
               open={reportOpen}
               onClose={() => setReportOpen(false)}
@@ -231,110 +280,8 @@ export default function PracticeView({
               defaultCategory={reportDefaultCategory}
             />
           </PracticeErrorBoundary>
-        </PracticeWorkspaceLayout>
+        </div>
       )}
     </main>
   )
 }
-
-const PracticeViewSwitchBar = memo(function PracticeViewSwitchBar({
-  viewMode,
-  onViewModeChange,
-}) {
-  return (
-    <div className="practice-view-switchbar">
-      <span className="practice-view-switchbar__label" id="practice-view-switch-label">
-        View
-      </span>
-      <div
-        className="practice-view-switch"
-        role="group"
-        aria-labelledby="practice-view-switch-label"
-      >
-        {Object.values(PRACTICE_VIEW_MODE).map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            className="practice-view-switch__option"
-            aria-pressed={viewMode === mode}
-            onClick={() => onViewModeChange(mode)}
-          >
-            {PRACTICE_VIEW_MODE_LABELS[mode]}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-})
-
-const PracticeTimingPrepBanner = memo(function PracticeTimingPrepBanner({
-  isLoading,
-  hasTimingMap,
-  hasMusicXml,
-  error,
-}) {
-  useEffect(() => {
-    if (hasTimingMap && !isLoading && typeof window !== 'undefined') {
-      const marks = window.__SCOREFLOW_PRACTICE_PREP__?.marks ?? []
-      if (!marks.some((entry) => entry.stage === 'first-usable-controls')) {
-        const entry = {
-          stage: 'first-usable-controls',
-          at: performance.now?.() ?? Date.now(),
-        }
-        window.__SCOREFLOW_PRACTICE_PREP__ = {
-          marks: [...marks, entry],
-          last: entry,
-        }
-        try {
-          performance.mark('practice-prep:first-usable-controls')
-        } catch {
-          // ignore
-        }
-      }
-    }
-  }, [hasTimingMap, isLoading])
-
-  if (error) {
-    return (
-      <div
-        className="practice-timing-prep practice-timing-prep--error"
-        role="status"
-        data-testid="practice-timing-prep"
-        data-prep-state="error"
-      >
-        Timing could not be prepared. Library and navigation stay available —
-        try reopening the piece or uploading a cleaner MusicXML.
-      </div>
-    )
-  }
-
-  if (!hasMusicXml || hasTimingMap || !isLoading) {
-    return null
-  }
-
-  return (
-    <div
-      className="practice-timing-prep"
-      role="status"
-      aria-live="polite"
-      data-testid="practice-timing-prep"
-      data-prep-state="preparing"
-    >
-      Preparing timing for practice… Controls unlock when the score timeline is ready.
-      Navigation and Library stay available.
-    </div>
-  )
-})
-
-const PracticeWorkspaceLayout = memo(function PracticeWorkspaceLayout({ children }) {
-  const tick = usePracticeTick()
-  return (
-    <div
-      className={`practice-workspace__layout${
-        tick.playbackIsPlaying ? ' practice-workspace__layout--playing' : ''
-      }`}
-    >
-      {children}
-    </div>
-  )
-})

@@ -1,0 +1,116 @@
+import Icon from '../../design/Icon.jsx'
+
+const PRIMARY_NAV = [
+  { view: 'home', label: 'Home', icon: 'home' },
+  { view: 'library', label: 'Library', icon: 'library' },
+  { view: 'import', label: 'Import', icon: 'import' },
+  // Accessible name stays exactly "Practice" (score workspace): existing
+  // browser QA navigates by this name, and the tour anchors here.
+  // data-tour-id keeps the legacy id so the guided tour still finds it.
+  { view: 'practice', label: 'Practice', icon: 'practice', tourId: 'topbar-practice' },
+  { view: 'settings', label: 'Settings', icon: 'settings' },
+]
+
+// Existing listening-history view. Secondary placement is deliberate: it is
+// real functionality (not a placeholder), but not a primary destination.
+const SECONDARY_NAV = [{ view: 'profile', label: 'History', icon: 'clock' }]
+
+function NavButton({ item, active, collapsed, onNavigate }) {
+  return (
+    <button
+      type="button"
+      className={`cz-shell__navbtn${active ? ' cz-shell__navbtn--active' : ''}`}
+      aria-current={active ? 'page' : undefined}
+      aria-label={collapsed ? item.label : undefined}
+      title={collapsed ? item.label : undefined}
+      data-label={item.label}
+      data-tour-id={item.tourId ?? undefined}
+      onClick={() => onNavigate(item.view)}
+    >
+      <span className="cz-shell__navicon" aria-hidden="true">
+        <Icon name={item.icon} size={19} />
+      </span>
+      <span className="cz-shell__navlabel" aria-hidden={collapsed ? 'true' : undefined}>
+        {item.label}
+      </span>
+    </button>
+  )
+}
+
+/**
+ * Corranzo product sidebar. Expanded = icon + label; rail = icon + tooltip;
+ * drawer behavior (fixed overlay + scrim) is owned by AppShell via layout.
+ * Future areas (Learn, transcription) are intentionally absent — reserved
+ * internally only, never exposed as unfinished navigation.
+ */
+export default function Sidebar({
+  activeView,
+  onNavigate,
+  layout = 'expanded',
+  expanded,
+  onToggleExpanded,
+}) {
+  const collapsed = layout !== 'expanded'
+
+  function handleNavigate(view) {
+    onNavigate(view)
+  }
+
+  return (
+    <nav
+      className="cz-shell__sidebar"
+      aria-label="Primary"
+      data-sidebar-nav="true"
+      data-collapsed={collapsed ? 'true' : 'false'}
+    >
+      <div className="cz-shell__brand" aria-hidden="true">
+        <span className="cz-shell__mark">C</span>
+        {!collapsed && <span className="cz-shell__wordmark">Corranzo</span>}
+      </div>
+
+      <div className="cz-shell__navgroup" role="list">
+        {PRIMARY_NAV.map((item) => (
+          <div role="listitem" key={item.view} className="cz-shell__navitem">
+            <NavButton
+              item={item}
+              active={activeView === item.view}
+              collapsed={collapsed}
+              onNavigate={handleNavigate}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="cz-shell__navgroup cz-shell__navgroup--secondary" role="list" aria-label="Secondary">
+        {SECONDARY_NAV.map((item) => (
+          <div role="listitem" key={item.view} className="cz-shell__navitem">
+            <NavButton
+              item={item}
+              active={activeView === item.view}
+              collapsed={collapsed}
+              onNavigate={handleNavigate}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="cz-shell__sidefooter">
+        <button
+          type="button"
+          className="cz-shell__navbtn cz-shell__navbtn--quiet"
+          onClick={onToggleExpanded}
+          aria-label={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          title={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          data-label={expanded ? 'Collapse' : 'Expand'}
+        >
+          <span className="cz-shell__navicon" aria-hidden="true">
+            <Icon name="panel" size={19} />
+          </span>
+          {!collapsed && (
+            <span className="cz-shell__navlabel">{expanded ? 'Collapse' : 'Expand'}</span>
+          )}
+        </button>
+      </div>
+    </nav>
+  )
+}

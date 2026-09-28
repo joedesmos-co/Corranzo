@@ -9,7 +9,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'library',
     title: 'Library',
-    body: 'Add sheet music plus a timing file. PDF-only playback is experimental.',
+    body: 'Bring your own score or choose a piece from the collection.',
     targetId: 'library-upload',
     view: 'library',
   },
@@ -29,7 +29,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'practice-mode',
     title: 'Practice Mode',
-    body: 'Play Along keeps moving. Wait For You pauses until you play each note or tap Continue.',
+    body: 'Preview listens and follows. Play Along keeps time as you play. Wait For You waits for each note or Continue.',
     targetId: 'practice-mode',
     view: 'practice',
   },
@@ -50,7 +50,7 @@ export const GUIDED_TUTORIAL_STEPS = [
   {
     id: 'advanced',
     title: 'Advanced',
-    body: 'Advanced holds files, playback options, score cursor controls, and note matching.',
+    body: 'Workspace settings holds score following, keyboard shortcuts, and advanced setup. Sound and loop tools open beside the transport.',
     targetId: 'practice-advanced',
     view: 'practice',
   },

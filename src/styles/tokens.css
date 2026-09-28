@@ -2,18 +2,18 @@
  * Corranzo design tokens — monochromatic, sharp-edge minimal surfaces.
  */
 :root {
-  /* Surfaces */
-  --sf-bg-app: #000000;
-  --sf-bg-raised: #000000;
-  --sf-bg-panel: #121212;
-  --sf-bg-panel-inset: #1e1e1e;
-  --sf-bg-topbar: #000000;
+  /* Surfaces — very dark warm charcoal, not pure black */
+  --sf-bg-app: #141210;
+  --sf-bg-raised: #191613;
+  --sf-bg-panel: #1c1814;
+  --sf-bg-panel-inset: #251f18;
+  --sf-bg-topbar: #141210;
   --sf-bg-overlay: rgba(0, 0, 0, 0.92);
 
-  /* Borders — flat 1px zinc */
-  --sf-border: #27272a;
-  --sf-border-muted: #1e1e1e;
-  --sf-border-strong: #3f3f46;
+  /* Borders — flat 1px warm umber */
+  --sf-border: #2e2820;
+  --sf-border-muted: #231e17;
+  --sf-border-strong: #4a4032;
   --sf-border-focus: #ffffff;
 
   /* Text */
@@ -22,7 +22,9 @@
   --sf-text-body: #e4e4e7;
   --sf-text-muted: #a1a1aa;
   --sf-text-subtle: #71717a;
-  --sf-text-faint: #52525b;
+  /* Faint still has to be readable: 4.5:1+ on the app surface, so it can be
+     used for small secondary text without failing contrast. */
+  --sf-text-faint: #8e8e99;
   --sf-text-disabled: #3f3f46;
 
   /* Accent — monochrome highlights only */
@@ -101,6 +103,101 @@
   --sf-duration-press: 170ms;
 
   /* Focus */
-  --sf-focus-ring: 0 0 0 1px #000000, 0 0 0 2px #ffffff;
-  --sf-focus-ring-subtle: 0 0 0 1px #121212, 0 0 0 2px #a1a1aa;
+  --sf-focus-ring: 0 0 0 1px #141210, 0 0 0 2px #ffffff;
+  --sf-focus-ring-subtle: 0 0 0 1px #1c1814, 0 0 0 2px #a1a1aa;
+}
+
+/**
+ * Phase A — Corranzo "Studio Console, warmed" direction.
+ * Refinement pass: the --sf-* dark scale is intentionally warmed (charcoal,
+ * not pure black). Values stay structurally identical (same roles, same
+ * contrast relationships) so current screens keep working while reading
+ * warmer. New --cz-* tokens carry the direction-specific system.
+ */
+:root {
+  /* Warm neutrals (Print Room warmth, used selectively — never full-app beige) */
+  --cz-desk: #100e0b; /* warm-charcoal canvas behind the score sheet */
+  --cz-desk-raised: #1a1611;
+  --cz-paper: #f5f1e6; /* warm ivory, close to actual score paper */
+  --cz-paper-soft: #e8e0cd;
+  --cz-paper-ink: #25211a;
+  --cz-paper-muted: #6e6355;
+  --cz-paper-border: #d8ccb1;
+  /* Hairline motif lines on dark surfaces (staff-line echoes, decorative only) */
+  --cz-motif-line: rgba(245, 241, 230, 0.09);
+
+  /* Signal accent — brand gold. PRIMARY actions and active states.
+   * WARNING uses the burnt-orange triplet below — a different hue, never a
+   * fill. If it reads as "alert", it must not also be the brand. */
+  --cz-signal: #e5a83c;
+  --cz-signal-strong: #f2c063;
+  --cz-signal-ink: #1e1506; /* dark text on signal fills */
+  --cz-signal-muted: rgba(229, 168, 60, 0.13);
+  --cz-signal-border: rgba(229, 168, 60, 0.5);
+
+  /* Semantic triplets — status is never color-only; always paired with icon + word */
+  --cz-ok-text: #93d3a0;
+  --cz-ok-bg: rgba(90, 190, 115, 0.12);
+  --cz-ok-border: rgba(90, 190, 115, 0.42);
+  --cz-warn-text: #e2843b;
+  --cz-warn-bg: rgba(226, 132, 59, 0.12);
+  --cz-warn-border: rgba(226, 132, 59, 0.45);
+  --cz-err-text: #e58d7d;
+  --cz-err-bg: rgba(220, 100, 85, 0.12);
+  --cz-err-border: rgba(220, 100, 85, 0.45);
+
+  /* Typography roles — one sans, one editorial serif, one mono. Nothing else. */
+  --cz-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --cz-font-editorial: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+  --cz-font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --cz-size-display: 2rem; /* home headlines + hero empty states only */
+  --cz-size-piece: 1.375rem; /* piece titles — the editorial moment in working UI */
+
+  /* Spacing additions — small steps for control interiors + chrome padding */
+  --cz-space-3xs: 4px;
+  --cz-space-2xs: 8px;
+  --cz-chrome-padding: 10px; /* score workspace chrome (not marketing panels) */
+  --cz-chrome-gap: 8px;
+
+  /* Radius roles */
+  --cz-radius-control: 7px;
+  --cz-radius-card: 10px;
+  --cz-radius-deck: 12px;
+
+  /* Sanctioned depths — the ONLY shadows in the system (gimmick-proof by token) */
+  --cz-shadow-sheet: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 32px rgba(0, 0, 0, 0.45);
+  --cz-shadow-deck: 0 -8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --cz-shadow-pop: 0 8px 28px rgba(0, 0, 0, 0.5);
+
+  /* Motion — extends --sf-* durations */
+  --cz-duration-instant: 80ms;
+  --cz-duration-slow: 320ms;
+  --cz-ease-spring: cubic-bezier(0.2, 0.9, 0.25, 1.15); /* drawers/sheets only, never controls */
+
+  /* Control sizing — hit targets ≥40px for deck/pager/mode (44px mobile primary) */
+  --cz-control-h-sm: 32px;
+  --cz-control-h-md: 40px;
+  --cz-control-h-lg: 48px;
+  --cz-target-min: 40px;
+}
+
+/* Takeover direction proof: ink, paper and an editorial vermilion mark.
+ * These roles are scoped to the shell/collection; legacy practice is unchanged. */
+:root {
+  --cz-ink: #242925;
+  --cz-ink-raised: #303631;
+  --cz-ink-muted: #b2b8af;
+  --cz-ink-line: #41483f;
+  --cz-sheet: #f2f1ea;
+  --cz-sheet-raised: #faf9f4;
+  --cz-sheet-shade: #e7e6dd;
+  --cz-sheet-line: #d3d5ca;
+  --cz-sheet-muted: #656b60;
+  --cz-vermilion: #a63c2d;
+  --cz-vermilion-light: #f1967d;
+  --cz-vermilion-soft: #e9d8cf;
+  --cz-collection-max: 1100px;
+  --cz-collection-gutter: clamp(24px, 4.5vw, 72px);
+  --cz-font-edition: Georgia, 'Times New Roman', serif;
+  --cz-shell-header-height: 64px;
 }

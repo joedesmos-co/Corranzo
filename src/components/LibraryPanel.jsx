@@ -1,17 +1,5 @@
-import LibraryAccuracyGuide from './LibraryAccuracyGuide.jsx'
-import MultiFileUpload from './MultiFileUpload.jsx'
-import PdfOmrPlaybackPanel from './library/PdfOmrPlaybackPanel.jsx'
-import {
-  ACCEPT_ATTRIBUTES,
-  isAcceptedScoreTimingFile,
-  isMuseScoreSourceFile,
-  MUSESCORE_PLANNED_MESSAGE,
-} from '../features/import/sourceNotationFiles.js'
-import { isAcceptedFileType } from '../features/import/fileImportLimits.js'
-import {
-  isLibraryScoreTimingReady,
-  shouldShowLibraryOmrPanel,
-} from '../features/import/musicXmlSource.js'
+import PieceRow from './collection/PieceRow.jsx'
+import ImportScoreView from './library/ImportScoreView.jsx'
 import { getInstrument } from '../features/instruments/instruments.js'
 import {
   DIFFICULTY_FILTERS,
@@ -22,16 +10,6 @@ import {
 } from '../features/library/practiceLibrary.js'
 import { useEffect, useMemo, useState } from 'react'
 
-function rejectMessage(kind) {
-  if (kind === 'pdf') {
-    return 'Not a PDF — choose a .pdf file.'
-  }
-  if (kind === 'midi') {
-    return 'Not a MIDI file — choose .mid or .midi.'
-  }
-  return 'Unsupported — choose .mxl, .musicxml, or .xml.'
-}
-
 export default function LibraryPanel({
   className = '',
   activeTab = LIBRARY_TABS.PRACTICE,
@@ -39,7 +17,7 @@ export default function LibraryPanel({
   instrumentId,
   fileName,
   midiFileName,
-  musicXmlFileName,
+  midiSource,
   musicXmlSource = null,
   onFileSelect,
   onMidiSelect,
@@ -63,20 +41,16 @@ export default function LibraryPanel({
   sampleLoadError = null,
   importFeedback = null,
   uploadsDisabled = false,
-  fileHelpSignal = 0,
+  importOnly = false,
+  onImportScore,
+  onOpenScore,
+  initialMode,
+  onBack,
 }) {
   const [difficultyFilter, setDifficultyFilter] = useState('all')
   const [practiceSearch, setPracticeSearch] = useState('')
   const [uploadsSearch, setUploadsSearch] = useState('')
-  const hasPdf = Boolean(pdfFileUrl || pdfSource || fileName)
-  const hasMusicXml = isLibraryScoreTimingReady(musicXmlSource)
-  const hasMidi = Boolean(midiFileName)
-  const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource, pdfIdentity })
-  const autoOmrRequestForCurrentPdf =
-    autoOmrRequest?.instrumentId === instrumentId &&
-    autoOmrRequest?.pdfFileName === fileName
-      ? autoOmrRequest
-      : null
+  const [openingPieceId, setOpeningPieceId] = useState(null)
   const activeInstrument = getInstrument(instrumentId)
   const visiblePracticePieces = useMemo(
     () =>
@@ -104,55 +78,18 @@ export default function LibraryPanel({
     setPracticeSearch('')
   }, [instrumentId])
 
-  function reportReject(kind) {
-    onImportFeedback?.({ type: 'error', message: rejectMessage(kind) })
+  function openPiece(id) {
+    setOpeningPieceId(id)
+    onLoadSampleFixtures?.(id)
   }
 
-  function handlePdfChange(event) {
-    const file = event.target.files?.[0]
-    if (!file) {
-      return
-    }
-    if (!isAcceptedFileType(file, 'pdf')) {
-      reportReject('pdf')
-      event.target.value = ''
-      return
-    }
-    onFileSelect(file)
-    event.target.value = ''
-  }
-
-  function handleMidiChange(event) {
-    const file = event.target.files?.[0]
-    if (!file) {
-      return
-    }
-    if (!isAcceptedFileType(file, 'midi')) {
-      reportReject('midi')
-      event.target.value = ''
-      return
-    }
-    onMidiSelect(file)
-    event.target.value = ''
-  }
-
-  function handleScoreTimingChange(event) {
-    const file = event.target.files?.[0]
-    if (!file) {
-      return
-    }
-    if (!isAcceptedScoreTimingFile(file)) {
-      reportReject('scoreTiming')
-      event.target.value = ''
-      return
-    }
-    if (isMuseScoreSourceFile(file)) {
-      onImportFeedback?.({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
-      event.target.value = ''
-      return
-    }
-    onMusicXmlSelect(file)
-    event.target.value = ''
+  function handleTabKeys(event) {
+    const tabs = [LIBRARY_TABS.PRACTICE, LIBRARY_TABS.UPLOADS]
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+    event.preventDefault()
+    const index = event.key === 'Home' ? 0 : event.key === 'End' ? 1 : selectedTab === tabs[0] ? 1 : 0
+    selectTab(tabs[index])
+    event.currentTarget.querySelectorAll('[role="tab"]')[index]?.focus()
   }
 
   function handleDeleteUploadedPiece(piece) {
@@ -167,19 +104,30 @@ export default function LibraryPanel({
     }
   }
 
+  if (importOnly) return <ImportScoreView
+    key={`${pdfIdentity ?? 'empty'}:${pdfFileUrl ?? ''}`}
+    {...{ fileName, pdfSource, pdfFileUrl, pdfIdentity, practiceSessionEpoch, musicXmlSource, midiFileName, midiSource,
+      instrumentId, uploadsDisabled, onFileSelect, onMusicXmlSelect, onMidiSelect, onClassifiedUpload,
+      onClearMusicXml, onClearMidi, onOmrGenerated, onImportFeedback, importFeedback,
+      autoOmrRequest, onAutoOmrRequestConsumed, onOpenScore, initialMode, onBack }} />
+
   return (
-    <aside className={`library-panel ${className}`.trim()}>
+    <div className={`library-panel ${className}`.trim()}>
       <header className="library-panel__hero">
-        <p className="library-panel__tagline">Start practicing</p>
+        <span className="cz-edition-label">Corranzo / Library</span>
+        <h1 className="library-panel__tagline">{selectedTab === LIBRARY_TABS.PRACTICE ? 'The collection.' : 'Your scores.'}</h1>
         <p className="library-panel__browser-hint" role="note">
-          Choose a built-in piece, or add your own files.
+          Find a piece that stays with you. Then make it your own.
         </p>
       </header>
 
-      <div className="library-panel__tabs" role="tablist" aria-label="Library sections">
+      <div className="library-panel__tabs" role="tablist" aria-label="Library sections" onKeyDown={handleTabKeys}>
         <button
           type="button"
           role="tab"
+          id="library-tab-practice"
+          aria-controls="library-panel-practice"
+          tabIndex={selectedTab === LIBRARY_TABS.PRACTICE ? 0 : -1}
           aria-selected={selectedTab === LIBRARY_TABS.PRACTICE}
           className={`library-panel__tab${selectedTab === LIBRARY_TABS.PRACTICE ? ' library-panel__tab--active' : ''}`}
           onClick={() => selectTab(LIBRARY_TABS.PRACTICE)}
@@ -189,6 +137,9 @@ export default function LibraryPanel({
         <button
           type="button"
           role="tab"
+          id="library-tab-uploads"
+          aria-controls="library-panel-uploads"
+          tabIndex={selectedTab === LIBRARY_TABS.UPLOADS ? 0 : -1}
           aria-selected={selectedTab === LIBRARY_TABS.UPLOADS}
           className={`library-panel__tab${selectedTab === LIBRARY_TABS.UPLOADS ? ' library-panel__tab--active' : ''}`}
           onClick={() => selectTab(LIBRARY_TABS.UPLOADS)}
@@ -198,7 +149,7 @@ export default function LibraryPanel({
       </div>
 
       {selectedTab === LIBRARY_TABS.PRACTICE ? (
-        <section className="practice-library" aria-labelledby="practice-library-heading">
+        <section className="practice-library" id="library-panel-practice" role="tabpanel" aria-labelledby="library-tab-practice">
           <div className="practice-library__header">
             <div>
               <p className="practice-library__eyebrow">{activeInstrument.label}</p>
@@ -233,55 +184,23 @@ export default function LibraryPanel({
             </div>
           </div>
 
+          {sampleLoadLoading && <p role="status" className="cz-collection-credit">Opening your score…</p>}
+          {sampleLoadError && <p role="alert" className="cz-collection-error">{sampleLoadError} Open the piece again to retry.</p>}
           {practiceGroups.length > 0 ? (
             <div className="practice-library__groups">
               {practiceGroups.map((group) => (
                 <section className="practice-library__group" key={group.difficulty}>
                   <h3 className="practice-library__group-title">{group.difficulty}</h3>
-                  <div className="practice-library__grid">
+                  <div className="cz-piece-list">
                     {group.pieces.map((piece) => (
-                      <article className="practice-piece-card" key={piece.id}>
-                        <div className="practice-piece-card__main">
-                          <p className="practice-piece-card__meta">
-                            {piece.instrument} - {piece.difficulty} - {piece.approxDuration}
-                          </p>
-                          <h4 className="practice-piece-card__title">{piece.title}</h4>
-                          <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
-                          {piece.teaches ? (
-                            <p className="practice-piece-card__teaches" title={piece.teaches}>
-                              {piece.teaches}
-                            </p>
-                          ) : null}
-                        </div>
-                        <div className="practice-piece-card__action">
-                          <button
-                            type="button"
-                            className="practice-piece-card__button"
-                            disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                            onClick={() => onLoadSampleFixtures?.(piece.id)}
-                            aria-label={`Start practice: ${piece.title}`}
-                          >
-                            {sampleLoadLoading ? 'Opening...' : 'Start Practice'}
-                          </button>
-                          <p className="practice-piece-card__credit" title={[piece.attribution, piece.license].filter(Boolean).join(' · ')}>
-                            {piece.attribution}
-                            {piece.license ? ` · ${piece.license}` : ''}
-                          </p>
-                        </div>
-                        {sampleLoadError && (
-                          <div className="practice-piece-card__error-block" role="alert">
-                            <p className="practice-piece-card__error">{sampleLoadError}</p>
-                            <button
-                              type="button"
-                              className="practice-piece-card__retry"
-                              disabled={sampleLoadLoading || !onLoadSampleFixtures}
-                              onClick={() => onLoadSampleFixtures?.(piece.id)}
-                            >
-                              Retry
-                            </button>
-                          </div>
-                        )}
-                      </article>
+                      <PieceRow
+                        key={piece.id}
+                        piece={piece}
+                        number={visiblePracticePieces.indexOf(piece) + 1}
+                        onOpen={onLoadSampleFixtures ? openPiece : undefined}
+                        disabled={sampleLoadLoading}
+                        opening={sampleLoadLoading && openingPieceId === piece.id}
+                      />
                     ))}
                   </div>
                 </section>
@@ -289,15 +208,16 @@ export default function LibraryPanel({
             </div>
           ) : (
             <p className="practice-library__empty">
-              No built-in {activeInstrument.label} pieces match this search.
+              No {activeInstrument.label.toLowerCase()} pieces match this search. Try another title or composer, or choose All levels.
             </p>
           )}
+          <p className="cz-collection-credit">Public-domain scores · Composer credits are shown with every piece.</p>
         </section>
       ) : (
-        <section className="library-panel__uploads" aria-labelledby="library-uploads-heading">
+        <section className="library-panel__uploads" id="library-panel-uploads" role="tabpanel" aria-labelledby="library-tab-uploads">
           <div className="practice-library__header">
             <div>
-              <p className="practice-library__eyebrow">Your files</p>
+              <p className="practice-library__eyebrow">Your music</p>
               <h2 id="library-uploads-heading" className="practice-library__title">
                 My Uploads
               </h2>
@@ -321,168 +241,11 @@ export default function LibraryPanel({
           <div className="practice-library__grid library-panel__uploads-grid">
             <article className="practice-piece-card practice-piece-card--add-files">
               <div className="practice-piece-card__main">
-                <p className="practice-piece-card__meta">Add files</p>
-                <h4 className="practice-piece-card__title">Upload your own piece</h4>
-                <p className="practice-piece-card__teaches">
-                  PDF sets up automatically. Timing and MIDI are optional.
-                </p>
+                <p className="practice-piece-card__meta">Your music</p>
+                <h3 className="practice-piece-card__title">Bring your next piece.</h3>
+                <p className="practice-piece-card__teaches">Choose a PDF. We’ll help you get it ready to play.</p>
               </div>
-
-              <MultiFileUpload
-                hasPdf={hasPdf}
-                hasMusicXml={hasMusicXml}
-                hasMidi={hasMidi}
-                onFileSelect={onFileSelect}
-                onMusicXmlSelect={onMusicXmlSelect}
-                onMidiSelect={onMidiSelect}
-                onClearMusicXml={onClearMusicXml}
-                onClearMidi={onClearMidi}
-                onClassifiedUpload={onClassifiedUpload}
-                disabled={uploadsDisabled}
-              />
-
-              {importFeedback?.message && (
-                <p
-                  className={`library-panel__feedback library-panel__feedback--${importFeedback.type ?? 'info'}`}
-                  role={importFeedback.type === 'error' ? 'alert' : 'status'}
-                >
-                  {importFeedback.message}
-                </p>
-              )}
-
-              {showOmrPanel && (
-                <PdfOmrPlaybackPanel
-                  key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
-                  pdfSource={pdfSource}
-                  pdfFileUrl={pdfFileUrl}
-                  pdfFileName={fileName}
-                  pdfIdentity={pdfIdentity}
-                  practiceSessionEpoch={practiceSessionEpoch}
-                  disabled={uploadsDisabled}
-                  onGenerated={onOmrGenerated}
-                  onFeedback={onImportFeedback}
-                  autoStartKey={autoOmrRequestForCurrentPdf?.key ?? null}
-                  onAutoStartConsumed={onAutoOmrRequestConsumed}
-                />
-              )}
-
-              {showOmrPanel && (
-                <p className="library-panel__workflow library-panel__workflow-next" role="status">
-                  Corranzo is preparing this score automatically.
-                </p>
-              )}
-
-              <details className="library-panel__advanced">
-                <summary className="library-panel__advanced-summary">Upload one file at a time</summary>
-
-                <div className="panel library-panel__upload-card">
-                  <h2 className="panel__title practice-section__title--editorial">
-                    <span className="panel__step-badge">1</span> Sheet music
-                  </h2>
-                  <p className="panel__hint">PDF - the score you read on screen.</p>
-
-                  <label className={`upload-btn${uploadsDisabled ? ' upload-btn--disabled' : ''}`}>
-                    Upload PDF
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTES.sheetMusic}
-                      hidden
-                      disabled={uploadsDisabled}
-                      onChange={handlePdfChange}
-                    />
-                  </label>
-
-                  {fileName ? (
-                    <p className="library-panel__file" title={fileName}>
-                      {fileName}
-                    </p>
-                  ) : (
-                    <p className="library-panel__empty">Choose the score you want to read.</p>
-                  )}
-                </div>
-
-                <div className="panel library-panel__upload-card library-panel__musicxml">
-                  <h2 className="panel__title practice-section__title--editorial">
-                    <span className="panel__step-badge">2</span> Timing file
-                  </h2>
-                  <p className="panel__hint">
-                    Keeps Practice, loops, and Wait For You lined up with your score.
-                  </p>
-
-                  <label
-                    className={`upload-btn upload-btn--musicxml${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
-                  >
-                    Upload Timing File
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTES.scoreTiming}
-                      hidden
-                      disabled={uploadsDisabled}
-                      onChange={handleScoreTimingChange}
-                    />
-                  </label>
-
-                  {musicXmlFileName ? (
-                    <div className="library-panel__loaded-file">
-                      <p className="library-panel__file" title={musicXmlFileName}>
-                        {musicXmlFileName}
-                      </p>
-                      {onClearMusicXml && (
-                        <button
-                          type="button"
-                          className="library-panel__file-remove"
-                          onClick={onClearMusicXml}
-                          disabled={uploadsDisabled}
-                        >
-                          Remove Timing File
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="library-panel__empty">Usually MusicXML or MXL from your notation app.</p>
-                  )}
-                </div>
-
-                <div className="panel library-panel__upload-card library-panel__midi">
-                  <h2 className="panel__title practice-section__title--editorial">
-                    <span className="panel__step-badge">3</span> Sound <span className="panel__optional">(optional)</span>
-                  </h2>
-                  <p className="panel__hint">MIDI - backing audio in Practice.</p>
-
-                  <label
-                    className={`upload-btn upload-btn--midi${uploadsDisabled ? ' upload-btn--disabled' : ''}`}
-                  >
-                    Upload MIDI
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTES.soundFile}
-                      hidden
-                      disabled={uploadsDisabled}
-                      onChange={handleMidiChange}
-                    />
-                  </label>
-
-                  {midiFileName ? (
-                    <div className="library-panel__loaded-file">
-                      <p className="library-panel__file" title={midiFileName}>
-                        {midiFileName}
-                      </p>
-                      {onClearMidi && (
-                        <button
-                          type="button"
-                          className="library-panel__file-remove"
-                          onClick={onClearMidi}
-                          disabled={uploadsDisabled}
-                        >
-                          Remove Sound File
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="library-panel__empty">Add MIDI only if you want backing playback.</p>
-                  )}
-                </div>
-              </details>
+              <button className="cz-collection-button" onClick={onImportScore}>Import a score</button>
             </article>
 
             {visibleUploadedPieces.map((piece) => (
@@ -492,9 +255,9 @@ export default function LibraryPanel({
               >
                 <div className="practice-piece-card__main">
                   <p className="practice-piece-card__meta">
-                    {piece.instrument} - {piece.difficulty} - {piece.approxDuration}
+                    {piece.instrument} · {piece.approxDuration}
                   </p>
-                  <h4 className="practice-piece-card__title">{piece.title}</h4>
+                  <h3 className="practice-piece-card__title">{piece.title}</h3>
                   <p className="practice-piece-card__subtitle">{piece.subtitle}</p>
                   {piece.teaches ? (
                     <p className="practice-piece-card__teaches" title={piece.teaches}>
@@ -508,16 +271,16 @@ export default function LibraryPanel({
                     className="practice-piece-card__button"
                     disabled={!onOpenUploadedPiece}
                     onClick={() => onOpenUploadedPiece?.(piece.instrumentId)}
-                    aria-label={`Open Practice: ${piece.title}`}
+                    aria-label={`${piece.ready ? 'Open score' : 'Continue import'}: ${piece.title}`}
                   >
-                    Start Practice
+                    {piece.ready ? 'Open score' : 'Continue import'}
                   </button>
                   <button
                     type="button"
                     className="practice-piece-card__remove"
                     disabled={!onDeleteUploadedPiece}
                     onClick={() => handleDeleteUploadedPiece(piece)}
-                    aria-label={`Remove upload: ${piece.title}`}
+                    aria-label={`Remove score: ${piece.title}`}
                   >
                     Remove
                   </button>
@@ -527,19 +290,17 @@ export default function LibraryPanel({
             ))}
           </div>
 
+          <p className="cz-collection-credit">Corranzo currently keeps one imported score per instrument on this device. Opening another score replaces it.</p>
+          {importFeedback?.type === 'error' && <p className="cz-collection-error" role="alert">{importFeedback.message}</p>}
           {uploadedPieces.length === 0 && (
             <p className="practice-library__empty">
-              No uploads yet. Add files to create your first practice piece.
+              No scores here yet. Import a score to begin.
             </p>
           )}
 
-          <LibraryAccuracyGuide
-            hasPdf={hasPdf}
-            hasMusicXml={hasMusicXml}
-            openHelpSignal={fileHelpSignal}
-          />
+
         </section>
       )}
-    </aside>
+    </div>
   )
 }

@@ -20,14 +20,13 @@ import useLoopPlayback from './useLoopPlayback.js'
 import useWaitForYou from './useWaitForYou.js'
 import useWaitForYouMidiInput from './useWaitForYouMidiInput.js'
 import { getBeatAtTime, getMeasureAtTime } from '../musicxml/timingQuery.js'
-import { PRACTICE_MODE } from './practiceMode.js'
+import { PRACTICE_MODE, normalizePracticeMode, practiceInputEnabled } from './practiceMode.js'
 import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
 import useWaitForYouMatchSettings from './useWaitForYouMatchSettings.js'
 import useWaitForYouReferencePlayback from './useWaitForYouReferencePlayback.js'
 import useWaitForYouGuidance from './useWaitForYouGuidance.js'
 import {
   practiceInputSourceIsReady,
-  shouldShowPracticeInputSourceModal,
 } from './waitForYouInputSourceSession.js'
 import {
   resolveWfyDisplayStatus,
@@ -54,6 +53,7 @@ import { VISUAL_LANE_OUTCOME } from './visualLaneFeedback.js'
 import { WFY_INPUT_OUTCOME } from './waitForYouInputFeedback.js'
 import usePlayAlongVisualCheckpoint from './usePlayAlongVisualCheckpoint.js'
 import { pausePlaybackAtAuthoritativeTime } from './practicePlaybackPause.js'
+import { releaseReferenceVoices } from './referenceNotePlayer.js'
 import { PERFORMANCE_MODE } from '../microphone-input/v3/performanceExpectation.js'
 import { RECOGNITION_TIMING } from '../microphone-input/v3/micRecognitionIr.js'
 
@@ -76,7 +76,7 @@ export default function usePracticeSession({
   const selectedInstrument = useMemo(() => getInstrument(instrumentId), [instrumentId])
 
   const [practiceMode, setPracticeMode] = useState(
-    prefs.practiceMode ?? PRACTICE_MODE.NORMAL,
+    normalizePracticeMode(prefs.practiceMode),
   )
   const [practiceScope, setPracticeScopeState] = useState(
     normalizePracticeScope(prefs.practiceScope),
@@ -121,6 +121,7 @@ export default function usePracticeSession({
     timingLoading: timing.isLoading,
     alignmentDiagnostics: alignment.diagnostics,
     instrumentId,
+    initialPreferences: prefs.playback,
   })
   const playbackRef = useRef(playback)
   playbackRef.current = playback
@@ -128,13 +129,11 @@ export default function usePracticeSession({
   const hasMidi = Boolean(midiSource?.data)
   const hasMusicXml = Boolean(musicXmlSource?.data)
   const isWaitForYou = practiceMode === PRACTICE_MODE.WAIT_FOR_YOU
-  const wfyInputSourceReady = practiceInputSourceIsReady({
+  const inputModeEnabled = practiceInputEnabled(practiceMode)
+  const wfyInputSourceReady = inputModeEnabled && practiceInputSourceIsReady({
     sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
   })
-  const showWfyInputSourceModal = shouldShowPracticeInputSourceModal({
-    practiceActive,
-    sourceSelectedThisSession: wfyInputSourceSelectedThisSession,
-  })
+  const showWfyInputSourceModal = false // Input is chosen contextually; Preview never requests access.
 
   const sourcesRevisionKey = [
     midiSource?.fileName ?? '',
@@ -217,21 +216,19 @@ export default function usePracticeSession({
 
   ensurePausedRef.current = ensurePaused
 
+  const setManualPracticeTime = clock.setManualTime
+  const initialPositionRef = useRef(prefs.practiceTime ?? 0)
+  const restoredPositionRef = useRef(null)
   useEffect(() => {
-    if (prefs.practiceTime != null && hasMusicXml && !hasMidi) {
-      clock.setManualTime(prefs.practiceTime)
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- restore once on mount
-
-  useEffect(() => {
-    if (!hasMusicXml) {
-      return
-    }
-    playbackRef.current.seek(0)
-    clock.syncManualTimeToMidi(0)
-    clock.setManualTime(0)
-    setPracticeScopeState(PRACTICE_SCOPE.BOTH_HANDS)
-  }, [sourcesRevisionKey]) // eslint-disable-line react-hooks/exhaustive-deps -- new score files → start at 0
+    if (!hasMusicXml || playback.isLoading || !playback.duration) return
+    if (restoredPositionRef.current === sourcesRevisionKey) return
+    const seconds = restoredPositionRef.current == null
+      ? Math.max(0, Math.min(playback.duration, initialPositionRef.current)) : 0
+    restoredPositionRef.current = sourcesRevisionKey
+    playbackRef.current.seek(seconds)
+    setManualPracticeTime(seconds)
+    if (practiceMode === PRACTICE_MODE.WAIT_FOR_YOU) waitForYouRef.current.syncToNearestCheckpoint(seconds)
+  }, [sourcesRevisionKey, hasMusicXml, playback.isLoading, playback.duration, setManualPracticeTime, practiceMode])
 
   const setPracticeScope = useCallback((scope) => {
     setPracticeScopeState(normalizePracticeScope(scope))
@@ -346,7 +343,7 @@ export default function usePracticeSession({
 
   const playAlongInputActive =
     practiceActive &&
-    !isWaitForYou &&
+    practiceMode === PRACTICE_MODE.PLAY_ALONG &&
     wfyInputSourceReady &&
     playback.isPlaying &&
     (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE ||
@@ -785,12 +782,12 @@ export default function usePracticeSession({
 
   const handlePracticeModeChange = useCallback(
     (mode) => {
-      if (mode === PRACTICE_MODE.WAIT_FOR_YOU) {
-        ensurePaused()
-      }
-      setPracticeMode(mode)
+      ensurePaused()
+      releaseReferenceVoices()
+      if (mode === PRACTICE_MODE.PREVIEW) microphone.disable()
+      setPracticeMode(normalizePracticeMode(mode))
     },
-    [ensurePaused],
+    [ensurePaused, microphone],
   )
 
   const practiceTimeForSnapshotDeps = playback.isPlaying
@@ -800,6 +797,13 @@ export default function usePracticeSession({
   const practicePrefsSnapshot = useMemo(
     () => ({
       practiceMode,
+      playback: {
+        playbackRate: playback.playbackRate,
+        metronomeEnabled: playback.metronomeEnabled,
+        metronomeLevel: playback.metronomeLevel,
+        metronomeSubdivision: playback.metronomeSubdivision,
+        metronomeCountIn: playback.metronomeCountIn,
+      },
       practiceScope,
       checkpointMode,
       wfyInputSource,
@@ -816,6 +820,11 @@ export default function usePracticeSession({
     }),
     [
       practiceMode,
+      playback.playbackRate,
+      playback.metronomeEnabled,
+      playback.metronomeLevel,
+      playback.metronomeSubdivision,
+      playback.metronomeCountIn,
       practiceScope,
       checkpointMode,
       wfyInputSource,
@@ -837,6 +846,11 @@ export default function usePracticeSession({
     savePracticePrefs(practicePrefsSnapshotRef.current)
   }, [
     practiceMode,
+    playback.playbackRate,
+    playback.metronomeEnabled,
+    playback.metronomeLevel,
+    playback.metronomeSubdivision,
+    playback.metronomeCountIn,
     practiceScope,
     checkpointMode,
     wfyInputSource,

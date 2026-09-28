@@ -60,6 +60,7 @@ export default function ToolbarPopover({
     function handleKeyDown(event) {
       if (event.key === 'Escape') {
         event.preventDefault()
+        event.stopPropagation()
         setOpen(false)
         triggerRef.current?.focus()
       }
@@ -77,6 +78,7 @@ export default function ToolbarPopover({
     <div
       ref={rootRef}
       className={`tb-popover${open ? ' tb-popover--open' : ''}`}
+      onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false) }}
     >
       <ToolbarIconButton
         ref={triggerRef}
@@ -85,7 +87,6 @@ export default function ToolbarPopover({
         active={active || open}
         disabled={disabled}
         aria-expanded={open}
-        aria-haspopup="true"
         aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
       />

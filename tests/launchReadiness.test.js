@@ -23,16 +23,18 @@ describe('launch readiness fixes', () => {
     const app = readSrc('App.jsx')
 
     expect(app).toMatch(/const handleOpenUploadedPiece = useCallback/)
-    expect(app).toMatch(/setLibraryFeedback\(\{ type: 'info', message: 'Opened Practice\.' \}\)/)
+    expect(app).toContain("isPracticeNavigableSet(openingBundle.pdfFile, openingBundle.musicXmlSource) ? 'practice' : 'import'")
     expect(app).not.toContain('Add a sound file anytime for backing audio')
   })
 
   it('aligns Progress naming and explains both stat sources', () => {
-    const topbar = readSrc('components', 'TopBar.jsx')
+    // History lives in the shell sidebar; TopBar is retired.
+    const sidebar = readSrc('components', 'shell', 'Sidebar.jsx')
     const profile = readSrc('components', 'profile', 'ProfileView.jsx')
 
-    expect(topbar).toContain("label: 'Progress'")
-    expect(profile).toMatch(/>\s*Progress\s*<\/h2>/)
+    expect(sidebar).toContain("label: 'History'")
+    // The view owns the page's single h1.
+    expect(profile).toMatch(/>\s*Progress\s*<\/h1>/)
     expect(profile).toContain('tracks time automatically')
     expect(profile).not.toContain('only recorded when you log a session')
   })
@@ -63,7 +65,8 @@ describe('launch readiness fixes', () => {
     const omr = readSrc('components', 'library', 'PdfOmrPlaybackPanel.jsx')
 
     expect(omr).toContain('Preparing score')
-    expect(omr).toContain('Ready to practice')
+    expect(omr).toContain('Checking your score')
+    expect(readSrc('components', 'library', 'ImportScoreView.jsx')).toContain('Your score is ready')
     expect(omr).not.toContain('Generate experimental playback from PDF')
     expect(omr).not.toContain('Generate timing from PDF')
   })
@@ -71,8 +74,8 @@ describe('launch readiness fixes', () => {
   it('keeps the guided tutorial off Profile and legal views', () => {
     const app = readSrc('App.jsx')
 
-    expect(app).toMatch(
-      /guidedTutorialOpen[\s\S]*activeView === 'library' \|\| activeView === 'practice'/,
+expect(app).toMatch(
+      /guidedTutorialOpen[\s\S]*activeView === 'library'\s*\|\|\s*activeView === 'home'\s*\|\|\s*activeView === 'import'/,
     )
   })
 

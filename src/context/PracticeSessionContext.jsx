@@ -133,7 +133,7 @@ export function PracticeSessionProvider({
       !scoreFollow.canFollow &&
       !(session.sourceVisualMap?.anchorCount > 0)
     ) {
-      session.setPracticeMode(PRACTICE_MODE.NORMAL)
+      session.setPracticeMode(PRACTICE_MODE.PREVIEW)
     }
   }, [
     experimentalOmrPlayback,
@@ -192,10 +192,17 @@ export function PracticeSessionProvider({
   const practicePrefsSnapshotRef = useRef(session.practicePrefsSnapshot)
   practicePrefsSnapshotRef.current = session.practicePrefsSnapshot
 
+  const pausedPracticeTime = session.playback.isPlaying ? null : session.practiceTime
   useEffect(() => {
     onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
   }, [
     session.practiceMode,
+    session.playback.playbackRate,
+    session.playback.metronomeEnabled,
+    session.playback.metronomeLevel,
+    session.playback.metronomeSubdivision,
+    session.playback.metronomeCountIn,
+    pausedPracticeTime,
     session.rawPracticeScope,
     session.checkpointMode,
     session.wfyInputSource,
@@ -328,6 +335,7 @@ export function PracticeSessionProvider({
 
   const visualValue = useMemo(
     () => ({
+      practiceMode: session.practiceMode,
       timingMap: session.timing.timingMap,
       timingLoading: session.timing.isLoading,
       loopRegion:
@@ -348,6 +356,7 @@ export function PracticeSessionProvider({
       pageViewRotations: scoreFollow.pageViewRotations ?? {},
     }),
     [
+      session.practiceMode,
       session.timing.timingMap,
       session.timing.isLoading,
       session.isWaitForYou,

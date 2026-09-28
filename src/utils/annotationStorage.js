@@ -47,8 +47,9 @@ export function saveAnnotations(fingerprint, payload) {
       getAnnotationStorageKey(fingerprint),
       JSON.stringify({ ...payload, updatedAt: Date.now() }),
     )
+    return true
   } catch {
-    // Ignore quota errors
+    return false
   }
 }
 

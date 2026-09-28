@@ -1,12 +1,13 @@
 const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  'summary, a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export function getFocusableElements(container) {
   if (!container) {
     return []
   }
   return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
-    (element) => element.offsetParent !== null || element === document.activeElement,
+    (element) => element.tabIndex >= 0 && !element.closest('[inert]') &&
+      (element.getClientRects().length > 0 || element === document.activeElement),
   )
 }
 

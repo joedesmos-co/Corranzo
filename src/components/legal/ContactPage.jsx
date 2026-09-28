@@ -9,7 +9,7 @@ export default function ContactPage() {
       lede="Questions about Corranzo, privacy, or the public beta."
     >
       <section>
-        <h3>Email</h3>
+        <h2>Email</h2>
         <p>
           Reach us at{' '}
           <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>.
@@ -17,7 +17,7 @@ export default function ContactPage() {
       </section>
 
       <section>
-        <h3>Product feedback</h3>
+        <h2>Product feedback</h2>
         <p>
           For bug reports and beta feedback, you can also use our{' '}
           <a href={FEEDBACK_MAILTO}>feedback template</a> ({FEEDBACK_EMAIL}).

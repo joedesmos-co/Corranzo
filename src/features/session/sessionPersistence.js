@@ -168,6 +168,21 @@ export function saveSessionMeta(meta) {
   }
 }
 
+/** Update only preferences for the already-saved score; never rewrite its files. */
+export function updateSessionPracticePrefs(practicePrefs, pdfMeta, instrumentId) {
+  const saved = loadSessionMeta()
+  if (!saved || saved.expired || !pdfMeta?.fileName || !Number.isFinite(pdfMeta.size)) return false
+  const identity = meta => meta ? `${meta.fileName}::${meta.size}::${meta.lastModified ?? ''}` : null
+  const meta = saved.meta
+  const instrument = normalizeInstrumentId(instrumentId)
+  if (normalizeInstrumentId(meta.instrumentId) !== instrument || identity(meta.pdfMeta) !== identity(pdfMeta)) return false
+  const bundle = meta.instrumentBundles?.[instrument]
+  const instrumentBundles = bundle && identity(bundle.pdfMeta) === identity(pdfMeta)
+    ? { ...meta.instrumentBundles, [instrument]: { ...bundle, practicePrefs } }
+    : meta.instrumentBundles
+  return saveSessionMeta({ ...meta, savedAt: Date.now(), practicePrefs, instrumentBundles })
+}
+
 export function clearSessionMeta() {
   try {
     localStorage.removeItem(META_KEY)

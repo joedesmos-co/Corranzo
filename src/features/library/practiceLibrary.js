@@ -104,10 +104,8 @@ export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId =
       const approxDuration = formatApproxDuration(bundle.musicXmlSource?.omrMeta?.durationSeconds)
       const title = stripExtension(bundle.pdfMeta.fileName) || 'Uploaded score'
       const description = hasTiming
-        ? hasMidi
-          ? 'PDF, timing, and sound are ready for practice.'
-          : 'PDF and timing are ready. Sound is optional.'
-        : 'PDF loaded. Add a timing file for Practice, loops, and Wait For You.'
+        ? 'Your score is saved on this device.'
+        : 'Your PDF is saved. Continue import to prepare playback.'
 
       return {
         id: `upload:${normalizedInstrument}:${bundle.pdfMeta.fileName}`,
@@ -116,12 +114,10 @@ export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId =
         legacyInstrument,
         title,
         difficulty: 'Uploaded',
-        approxDuration: approxDuration ?? (hasTiming ? 'Timing ready' : 'Needs timing'),
+        approxDuration: approxDuration ?? 'PDF score',
         teaches: description,
-        subtitle: bundle.musicXmlSource?.fileName
-          ? `Timing: ${bundle.musicXmlSource.fileName}`
-          : 'Timing file not added yet',
-        attribution: hasMidi ? `Sound: ${bundle.midiSource.fileName}` : 'MIDI optional',
+        subtitle: hasTiming ? 'Saved score' : 'Preparation needed',
+        attribution: hasMidi ? 'Accompaniment attached' : 'No extra sound file needed',
         pdfFileName: bundle.pdfMeta.fileName,
         musicXmlFileName: bundle.musicXmlSource?.fileName ?? null,
         midiFileName: bundle.midiSource?.fileName ?? null,

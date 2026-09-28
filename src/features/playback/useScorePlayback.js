@@ -3,7 +3,7 @@ import { startToneFromUserGesture } from '../audio/toneAudioUnlock.js'
 import { formatMidiImportError } from '../import/formatImportError.js'
 import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
 import { displayTempoAtTime } from './scorePlaybackSchedule.js'
-import { METRONOME_COUNT_IN, METRONOME_SUBDIVISION } from './metronomeConstants.js'
+import { normalizePlaybackPreferences } from './playbackPreferences.js'
 import { ScorePlaybackEngine } from './scorePlaybackEngine.js'
 import {
   describePlaybackEvents,
@@ -26,7 +26,9 @@ export default function useScorePlayback({
   timingLoading = false,
   alignmentDiagnostics = null,
   instrumentId = null,
+  initialPreferences = {},
 }) {
+  const [initial] = useState(() => normalizePlaybackPreferences(initialPreferences))
   const engineRef = useRef(null)
   const loadGenerationRef = useRef(0)
   const mountedRef = useRef(true)
@@ -36,13 +38,13 @@ export default function useScorePlayback({
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [playbackRate, setPlaybackRateState] = useState(1)
-  const [metronomeEnabled, setMetronomeEnabledState] = useState(false)
-  const [metronomeLevel, setMetronomeLevelState] = useState(0.6)
+  const [playbackRate, setPlaybackRateState] = useState(initial.playbackRate)
+  const [metronomeEnabled, setMetronomeEnabledState] = useState(initial.metronomeEnabled)
+  const [metronomeLevel, setMetronomeLevelState] = useState(initial.metronomeLevel)
   const [metronomeSubdivision, setMetronomeSubdivisionState] = useState(
-    METRONOME_SUBDIVISION.QUARTER,
+    initial.metronomeSubdivision,
   )
-  const [metronomeCountIn, setMetronomeCountInState] = useState(METRONOME_COUNT_IN.OFF)
+  const [metronomeCountIn, setMetronomeCountInState] = useState(initial.metronomeCountIn)
   const [metronomeDisplay, setMetronomeDisplay] = useState(null)
   const [mappingWarning, setMappingWarning] = useState(null)
   const [audioSource, setAudioSource] = useState('musicxml')
@@ -53,6 +55,11 @@ export default function useScorePlayback({
     // cleanup-only ref would stay false, dropping every engine time update.
     mountedRef.current = true
     const engine = new ScorePlaybackEngine()
+    engine.setPlaybackRate(initial.playbackRate)
+    engine.setMetronomeEnabled(initial.metronomeEnabled)
+    engine.setMetronomeLevel(initial.metronomeLevel)
+    engine.setMetronomeSubdivision(initial.metronomeSubdivision)
+    engine.setMetronomeCountIn(initial.metronomeCountIn)
     let lastTimeEmit = 0
     let pendingTime = null
     let pendingDuration = null
@@ -133,7 +140,7 @@ export default function useScorePlayback({
       engine.dispose()
       engineRef.current = null
     }
-  }, [])
+  }, [initial])
 
   const midiData = midiSource?.data
   const midiFileName = midiSource?.fileName

@@ -157,9 +157,9 @@ export default function ManualPracticeLog() {
       className="profile-panel profile-manual-log"
       aria-labelledby="manual-practice-heading"
     >
-      <h3 id="manual-practice-heading" className="profile-panel__title">
+      <h2 id="manual-practice-heading" className="profile-panel__title">
         Log practice
-      </h3>
+      </h2>
       <p className="profile-manual-log__lede">
         Start a timer when you sit down to practice, then save what you worked on.
       </p>

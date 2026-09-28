@@ -1,10 +1,7 @@
-import { PRACTICE_MODE } from '../../features/practice/practiceMode.js'
+import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import PracticeHelpTip from './PracticeHelpTip.jsx'
 
-const MODE_LABELS = {
-  [PRACTICE_MODE.NORMAL]: 'Play Along',
-  [PRACTICE_MODE.WAIT_FOR_YOU]: 'Wait For You',
-}
+const MODE_LABELS = PRACTICE_MODE_LABELS
 
 export default function PracticeModeSection({
   practiceMode,
