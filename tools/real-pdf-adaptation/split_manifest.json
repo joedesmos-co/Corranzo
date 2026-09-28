@@ -1,0 +1,1227 @@
+{
+  "digest": "e0ab017abd29a626352f48fe53ba151fed63d351d2439849b254d7451e4338cc",
+  "engraving_coverage": {
+    "corranzo-benchmark": [
+      "heldout-test",
+      "validation"
+    ],
+    "musescore-feta": [
+      "adaptation",
+      "heldout-test"
+    ],
+    "musescore-legacy-mscore": [
+      "adaptation"
+    ],
+    "musescore4-emmentaler": [
+      "adaptation",
+      "diagnostic",
+      "heldout-test",
+      "validation"
+    ]
+  },
+  "known_unusable": [
+    {
+      "id": "bc-bach-chorale-bwv259",
+      "reason": "SATB choral, 2 parts, no bass-clef grand staff in every part"
+    },
+    {
+      "id": "bc-bach-chorale-bwv264",
+      "reason": "SATB choral, 4 parts"
+    },
+    {
+      "id": "bc-bach-sheep-may-safely",
+      "reason": "SATB choral, 4 parts"
+    },
+    {
+      "id": "bc-mozart-ave-verum",
+      "reason": "2 vocal parts"
+    },
+    {
+      "id": "bc-mozart-symphony25-m1",
+      "reason": "orchestral, 7 parts"
+    },
+    {
+      "id": "bc-vivaldi-mentre-dormi",
+      "reason": "orchestral, 6 parts"
+    },
+    {
+      "id": "bc-bach-lute-prelude-bwv997",
+      "reason": "guitar, single F4 staff"
+    },
+    {
+      "id": "pl-piano-mozart-menuet-k2",
+      "reason": "held in reserve: single-line texture, 24 measures, kept for a later run"
+    },
+    {
+      "id": "bc-schubert-erlkonig",
+      "reason": "3 parts, one is a vocal line above the piano staves"
+    },
+    {
+      "id": "bc-schubert-heidenroeslein",
+      "reason": "3 parts, one is a vocal line above the piano staves"
+    },
+    {
+      "id": "pl-piano-bach-chorale-bwv259",
+      "reason": "2 vocal parts labelled Soprano/Tenor"
+    },
+    {
+      "id": "pl-piano-chopin-mazurka-op6-1 (dup)",
+      "reason": "identical piece to the benchmarks/cache render; one score only"
+    },
+    {
+      "id": "omf-piano-beginner-single-vector",
+      "reason": "8 measures, single voice, no headroom for a held-out set"
+    },
+    {
+      "id": "pl-piano-bach-chorale-bwv259 (dup)",
+      "reason": "identical piece to the benchmarks/cache render; one score only"
+    },
+    {
+      "id": "omf-piano-articulation-scan",
+      "reason": "8 measures, raster scan variant, no matched MusicXML fidelity"
+    },
+    {
+      "id": "guitar-* (16 practice-library scores)",
+      "reason": "guitar tablature, single F4 staff"
+    },
+    {
+      "id": "corranzo-holdout-intake (13 PDFs)",
+      "reason": "no MusicXML at all; cannot produce ground truth"
+    }
+  ],
+  "overlap": [],
+  "policy": {
+    "diagnostic": "Reported only. Never used for checkpoint selection, so demo-minuet-in-g cannot be tuned to.",
+    "note": "A score is assigned to exactly one split. No measure of a heldout-test or diagnostic score is ever written to the adaptation split.",
+    "unit": "score"
+  },
+  "schemaVersion": 1,
+  "scores": [
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "pl-bach-prelude-bwv846",
+      "musicxml": "public/fixtures/practice-library/piano-bach-prelude-bwv846/piano-bach-prelude-bwv846.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "Pe40bd9d409b0211907195bcb51f8f252:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "Pe74d4ddac57fa4f7aeae915a9435f509:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 35,
+        "ok": true,
+        "part_measure_counts": {
+          "Pe40bd9d409b0211907195bcb51f8f252": 35,
+          "Pe74d4ddac57fa4f7aeae915a9435f509": 35
+        },
+        "part_names": {
+          "Pe40bd9d409b0211907195bcb51f8f252": "upper:",
+          "Pe74d4ddac57fa4f7aeae915a9435f509": "lower:2"
+        },
+        "printed_events": 615,
+        "printed_rests": 66,
+        "score_id": "piano-bach-prelude-bwv846",
+        "title": "Prelude in C, BWV 846",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "7c6f2445f03f685406e1b0423a9a093c6cb8a3b721ec13486a9d2b96478dff4d",
+      "pages": 2,
+      "pdf": "public/fixtures/practice-library/piano-bach-prelude-bwv846/piano-bach-prelude-bwv846.pdf",
+      "pdf_sha256": "b1c5be9fb63954df9c1a3e7b651ae930c4e5e332a5ab3e14b197379cfa04c35a",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 35,
+      "xml_notes": 615,
+      "xml_rests": 66
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "pl-handel-gavotte",
+      "musicxml": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P14f76ecfb6c1b9a4fd1d1405ba1671e2:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pf65c49d1edd271ad47b6ebc730afcbc4:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 20,
+        "ok": true,
+        "part_measure_counts": {
+          "P14f76ecfb6c1b9a4fd1d1405ba1671e2": 20,
+          "Pf65c49d1edd271ad47b6ebc730afcbc4": 20
+        },
+        "part_names": {
+          "P14f76ecfb6c1b9a4fd1d1405ba1671e2": "down:",
+          "Pf65c49d1edd271ad47b6ebc730afcbc4": "up:One"
+        },
+        "printed_events": 258,
+        "printed_rests": 16,
+        "score_id": "piano-handel-gavotte",
+        "title": "Gavotte (Aylesford)",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "1cc56e8cc2c69e53e3330a14fcc64f7f49ccfaf262eef3f4b45f4ca849443cb0",
+      "pages": 1,
+      "pdf": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf",
+      "pdf_sha256": "5165a9766293aac3671c46df5cd22178e0575ffca108b0c197a510896163f1e3",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 20,
+      "xml_notes": 258,
+      "xml_rests": 16
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "bc-bach-fugue-bwv846",
+      "musicxml": "benchmarks/cache/bach-fugue-bwv846/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P1f9627abaddca78a5c4f60da223b5ffe:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "P2dea8deca7156addd642a6fa6a0f8efa:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 27,
+        "ok": true,
+        "part_measure_counts": {
+          "P1f9627abaddca78a5c4f60da223b5ffe": 27,
+          "P2dea8deca7156addd642a6fa6a0f8efa": 27
+        },
+        "part_names": {
+          "P1f9627abaddca78a5c4f60da223b5ffe": "",
+          "P2dea8deca7156addd642a6fa6a0f8efa": ""
+        },
+        "printed_events": 863,
+        "printed_rests": 113,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "820781cfb736f40af00886d2b47e52edc8cf4b0fdb2e3fbe16f444ff68336874",
+      "pages": 2,
+      "pdf": "benchmarks/cache/bach-fugue-bwv846/score.pdf",
+      "pdf_sha256": "bb1e08c6768256be507af65da04446af143b7033a7a067c939f2d63b779d218c",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 27,
+      "xml_notes": 863,
+      "xml_rests": 113
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-18",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "bc-chopin-etude-op10-12",
+      "musicxml": "benchmarks/cache/chopin-etude-op10-12/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "Pa39121aa0e77f60672c9086514f1ed99:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pc135fc0537f8fbc85ebd8542522cc146:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 84,
+        "ok": true,
+        "part_measure_counts": {
+          "Pa39121aa0e77f60672c9086514f1ed99": 84,
+          "Pc135fc0537f8fbc85ebd8542522cc146": 82
+        },
+        "part_names": {
+          "Pa39121aa0e77f60672c9086514f1ed99": "down:links",
+          "Pc135fc0537f8fbc85ebd8542522cc146": "up:rechts"
+        },
+        "printed_events": 2171,
+        "printed_rests": 77,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 2
+      },
+      "musicxml_sha256": "b0d5bc062dc36ced6728799e8032df806abad34a2b7a36f88ff0fcf29e5dc05f",
+      "pages": 6,
+      "pdf": "benchmarks/cache/chopin-etude-op10-12/score.pdf",
+      "pdf_sha256": "a98f9062f12248db9479115d954e4847230d9bfaefd30d9e7b037c60b25f0ae7",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 82,
+      "xml_notes": 2171,
+      "xml_rests": 77
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-18",
+        "Emmentaler-20"
+      ],
+      "id": "pl-brahms-lullaby",
+      "musicxml": "public/fixtures/practice-library/piano-brahms-lullaby/piano-brahms-lullaby.musicxml",
+      "musicxml_audit": {
+        "ok": false,
+        "rejected": [
+          "16 of 16 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 1); budget is 4"
+        ]
+      },
+      "musicxml_sha256": "649a71a0547a5e420e9b9255e0855007d5fbed0b477f0ff5f8099e25770605c9",
+      "pages": 1,
+      "pdf": "public/fixtures/practice-library/piano-brahms-lullaby/piano-brahms-lullaby.pdf",
+      "pdf_sha256": "e792571137ea3cb4e1546f57d5d2f3cde72cd77cac58f6c283e644b3c1ba5334",
+      "rejected": [
+        "16 of 16 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 1); budget is 4"
+      ],
+      "split": "excluded",
+      "status": "musicxml_rejected",
+      "xml_measures": 16,
+      "xml_notes": 183,
+      "xml_rests": 4
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "bc-mozart-k153",
+      "musicxml": "benchmarks/cache/mozart-k153/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P4e05df30306bd73634913ef3a32f691a:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pbf1e238bbeac5a9f0fe3ddfe12c87fc3:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 67,
+        "ok": true,
+        "part_measure_counts": {
+          "P4e05df30306bd73634913ef3a32f691a": 67,
+          "Pbf1e238bbeac5a9f0fe3ddfe12c87fc3": 67
+        },
+        "part_names": {
+          "P4e05df30306bd73634913ef3a32f691a": "down:three",
+          "Pbf1e238bbeac5a9f0fe3ddfe12c87fc3": "up:one"
+        },
+        "printed_events": 1376,
+        "printed_rests": 203,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "e4b62667ee7e7117acbcefefcaf62e74746031a0e5fd044fa821a2e07af2b6aa",
+      "pages": 4,
+      "pdf": "benchmarks/cache/mozart-k153/score.pdf",
+      "pdf_sha256": "1abb54fdd4f0e6361573ce8a589331e2e8fbdfe00e8962d6ac69e70d7fe54f13",
+      "rejected": [],
+      "split": "validation",
+      "status": "ok",
+      "xml_measures": 67,
+      "xml_notes": 1376,
+      "xml_rests": 203
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-11",
+        "Emmentaler-13",
+        "Emmentaler-20"
+      ],
+      "id": "pl-brahms-waltz-op39-3",
+      "musicxml": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "Pa8a05dfaf866fa416c13803af2d17bd2:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pf3ee4e7e05c481d4c53a2d329e9578e8:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 33,
+        "ok": true,
+        "part_measure_counts": {
+          "Pa8a05dfaf866fa416c13803af2d17bd2": 33,
+          "Pf3ee4e7e05c481d4c53a2d329e9578e8": 33
+        },
+        "part_names": {
+          "Pa8a05dfaf866fa416c13803af2d17bd2": "",
+          "Pf3ee4e7e05c481d4c53a2d329e9578e8": "Acoustic Guitar"
+        },
+        "printed_events": 290,
+        "printed_rests": 20,
+        "score_id": "piano-brahms-waltz-op39-3",
+        "title": "Waltz Op. 39 No. 3",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "56a3c11e191fd7cd46e24e289d94689623a89956b3773c5d9f26006d5cdd5c98",
+      "pages": 1,
+      "pdf": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.pdf",
+      "pdf_sha256": "eec6814a25568e86ed4922651dd7fdc90fc125bdc3a24b2c8b3561e7b33f42e0",
+      "rejected": [],
+      "split": "validation",
+      "status": "ok",
+      "xml_measures": 33,
+      "xml_notes": 290,
+      "xml_rests": 20
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "pl-tchaikovsky-old-french-song",
+      "musicxml": "public/fixtures/practice-library/piano-tchaikovsky-old-french-song/piano-tchaikovsky-old-french-song.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P0b7ed49b5c93f67f98cab706ea3f21cf:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "P2e6586201ba63531251bd844af1a1186:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 33,
+        "ok": true,
+        "part_measure_counts": {
+          "P0b7ed49b5c93f67f98cab706ea3f21cf": 33,
+          "P2e6586201ba63531251bd844af1a1186": 33
+        },
+        "part_names": {
+          "P0b7ed49b5c93f67f98cab706ea3f21cf": "lower:",
+          "P2e6586201ba63531251bd844af1a1186": "upper:"
+        },
+        "printed_events": 256,
+        "printed_rests": 18,
+        "score_id": "piano-tchaikovsky-old-french-song",
+        "title": "Old French Song",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "c000963002866a5ca502f227b682b0a266c1763055454d72dacd7642535091bf",
+      "pages": 1,
+      "pdf": "public/fixtures/practice-library/piano-tchaikovsky-old-french-song/piano-tchaikovsky-old-french-song.pdf",
+      "pdf_sha256": "e051dabc69b63bf9e665ac8579273a5f2583768ea4c453de8ea138d55fae5c7e",
+      "rejected": [],
+      "split": "heldout-test",
+      "status": "ok",
+      "xml_measures": 33,
+      "xml_notes": 256,
+      "xml_rests": 18
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "Aybabtu-Regular",
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-13",
+        "Emmentaler-14",
+        "Emmentaler-20",
+        "feta-alphabet20"
+      ],
+      "id": "bc-beethoven-sonata-op2-m1",
+      "musicxml": "benchmarks/cache/beethoven-sonata-op2-m1/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P97764caafe02e727e6a9fdb7ba67204f:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "Pfdeda1548f8ecbe3bf69ee28297a93e9:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 152,
+        "ok": true,
+        "part_measure_counts": {
+          "P97764caafe02e727e6a9fdb7ba67204f": 152,
+          "Pfdeda1548f8ecbe3bf69ee28297a93e9": 152
+        },
+        "part_names": {
+          "P97764caafe02e727e6a9fdb7ba67204f": "up",
+          "Pfdeda1548f8ecbe3bf69ee28297a93e9": "down"
+        },
+        "printed_events": 1993,
+        "printed_rests": 239,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "df5567fa0da761950f239fd33c154f7f843e7a0325613e027ec5b22e17d93d8d",
+      "pages": 6,
+      "pdf": "benchmarks/cache/beethoven-sonata-op2-m1/score.pdf",
+      "pdf_sha256": "c27b92fce9408c552df05e7cdd6bbcd925ce05350d91b43c36442ad171684df4",
+      "rejected": [],
+      "split": "heldout-test",
+      "status": "ok",
+      "xml_measures": 152,
+      "xml_notes": 1993,
+      "xml_rests": 239
+    },
+    {
+      "engraving": "musescore-feta",
+      "fonts": [
+        "Aybabtu-Regular",
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-14",
+        "Emmentaler-18",
+        "Emmentaler-20",
+        "feta-alphabet11",
+        "feta-alphabet20"
+      ],
+      "id": "pl-chopin-mazurka-op6-1",
+      "musicxml": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P4122f4bd876d8ed2e4a49490cdf339ac:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "P4d3f0e7fcedb0320f90b882697416699:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 74,
+        "ok": true,
+        "part_measure_counts": {
+          "P4122f4bd876d8ed2e4a49490cdf339ac": 74,
+          "P4d3f0e7fcedb0320f90b882697416699": 74
+        },
+        "part_names": {
+          "P4122f4bd876d8ed2e4a49490cdf339ac": "down",
+          "P4d3f0e7fcedb0320f90b882697416699": "up"
+        },
+        "printed_events": 1134,
+        "printed_rests": 193,
+        "score_id": "piano-chopin-mazurka-op6-1",
+        "title": "Mazurka Op. 6 No. 1",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "ca2c5f951ed8afc276d56add5e1970e26348639de739c63c5a6a5bd81e3aaa2e",
+      "pages": 3,
+      "pdf": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf",
+      "pdf_sha256": "27bb16a99e38f570d15d34579f68f926b12c406eb21e6c23743dbda6275eda9c",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 74,
+      "xml_notes": 1134,
+      "xml_rests": 193
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-11",
+        "Emmentaler-13",
+        "Emmentaler-14",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "pl-mozart-turkish-march",
+      "musicxml": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P137988538d6b1cc95b3e460144861702:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "P80ad2014a6e68ef1ab639246e1233a47:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 128,
+        "ok": true,
+        "part_measure_counts": {
+          "P137988538d6b1cc95b3e460144861702": 128,
+          "P80ad2014a6e68ef1ab639246e1233a47": 128
+        },
+        "part_names": {
+          "P137988538d6b1cc95b3e460144861702": "",
+          "P80ad2014a6e68ef1ab639246e1233a47": ""
+        },
+        "printed_events": 1816,
+        "printed_rests": 202,
+        "score_id": "piano-mozart-turkish-march",
+        "title": "Rondo Alla Turca",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "385dde9f6887b51f44748d9efd0c767d30ba44795f0717ebcd428ef68998d042",
+      "pages": 5,
+      "pdf": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf",
+      "pdf_sha256": "605b2f3f18f50f202fb80efadada57548757b19fc7d9529ef9cd55a591a16259",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 128,
+      "xml_notes": 1816,
+      "xml_rests": 202
+    },
+    {
+      "engraving": "musescore-feta",
+      "fonts": [
+        "Aybabtu-Regular",
+        "CenturySchL-Bold",
+        "CenturySchL-BoldItal",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-11",
+        "Emmentaler-13",
+        "Emmentaler-14",
+        "Emmentaler-16",
+        "Emmentaler-18",
+        "feta-alphabet11",
+        "feta-alphabet18"
+      ],
+      "id": "bc-chopin-nocturne-op9-n2",
+      "musicxml": "benchmarks/cache/chopin-nocturne-op9-n2/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P2e02571da0bb216312a3ba93ac13a745:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "P7e928144c8e8db240576616d639453fe:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 38,
+        "ok": true,
+        "part_measure_counts": {
+          "P2e02571da0bb216312a3ba93ac13a745": 38,
+          "P7e928144c8e8db240576616d639453fe": 38
+        },
+        "part_names": {
+          "P2e02571da0bb216312a3ba93ac13a745": "upper",
+          "P7e928144c8e8db240576616d639453fe": "lower"
+        },
+        "printed_events": 1343,
+        "printed_rests": 66,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "3e7cba72734c61a16b61b1c8f0b548bdb182869eacec2c26a18825a9649485e8",
+      "pages": 3,
+      "pdf": "benchmarks/cache/chopin-nocturne-op9-n2/score.pdf",
+      "pdf_sha256": "049a434aa4c5b5c7b837001cbc02245c220c429fed27728df98b0860c05f6438",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 38,
+      "xml_notes": 1343,
+      "xml_rests": 66
+    },
+    {
+      "engraving": "musescore-feta",
+      "fonts": [
+        "Aybabtu-Regular",
+        "CenturySchL-Bold",
+        "CenturySchL-Ital",
+        "CenturySchL-Roma",
+        "Emmentaler-16",
+        "Emmentaler-18",
+        "Emmentaler-20",
+        "feta-alphabet11",
+        "feta-alphabet20",
+        "feta-alphabet26"
+      ],
+      "id": "bc-chopin-etude-op10-01",
+      "musicxml": "benchmarks/cache/chopin-etude-op10-01/score.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "Pa9848afb41e3e3b2bc14dc421035338c:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pb25ff9b0bfdf24cec4a80cebf75e9b14:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 79,
+        "ok": true,
+        "part_measure_counts": {
+          "Pa9848afb41e3e3b2bc14dc421035338c": 79,
+          "Pb25ff9b0bfdf24cec4a80cebf75e9b14": 78
+        },
+        "part_names": {
+          "Pa9848afb41e3e3b2bc14dc421035338c": "down",
+          "Pb25ff9b0bfdf24cec4a80cebf75e9b14": "up"
+        },
+        "printed_events": 1561,
+        "printed_rests": 179,
+        "score_id": "score",
+        "title": "Music21 Fragment",
+        "trailing_measure_deficit": 1
+      },
+      "musicxml_sha256": "52b7dc93d467462c14aed5b49e6d13a4302b54959b865ad34fa7722e9317debe",
+      "pages": 7,
+      "pdf": "benchmarks/cache/chopin-etude-op10-01/score.pdf",
+      "pdf_sha256": "6f8ea4b25f30dc071d79538548b201a6e0470e683144ce21da35a4b4886573b2",
+      "rejected": [],
+      "split": "heldout-test",
+      "status": "ok",
+      "xml_measures": 78,
+      "xml_notes": 1561,
+      "xml_rests": 179
+    },
+    {
+      "engraving": "musescore-legacy-mscore",
+      "fonts": [
+        "MScore-20",
+        "MScore1-20",
+        "TimesNewRomanPS-BoldMT",
+        "TimesNewRomanPS-ItalicMT",
+        "TimesNewRomanPSMT"
+      ],
+      "id": "std-hungarian-dance-no5",
+      "musicxml": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P1:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "P1:2": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 104,
+        "ok": true,
+        "part_measure_counts": {
+          "P1": 104
+        },
+        "part_names": {
+          "P1": "Piano"
+        },
+        "printed_events": 1584,
+        "printed_rests": 81,
+        "score_id": "hungarian-dance-no5",
+        "title": "",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "01a9680ade6411a59b21623ba6b4f83a49219eed7f845acb257a763529ed6df3",
+      "pages": 4,
+      "pdf": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf",
+      "pdf_sha256": "9b9383a5ddc725bba7e2930736ef827aee28b50de0b2f8527759f9c0ba53b1f8",
+      "rejected": [],
+      "split": "adaptation",
+      "status": "ok",
+      "xml_measures": 104,
+      "xml_notes": 1584,
+      "xml_rests": 81
+    },
+    {
+      "engraving": "musescore-legacy-mscore",
+      "fonts": [
+        "BravuraText",
+        "FreeSerif",
+        "FreeSerifBold",
+        "Helvetica",
+        "MScore",
+        "MScoreText"
+      ],
+      "id": "std-spider-dance-undertale",
+      "musicxml": "public/fixtures/spider-dance-undertale.mxl",
+      "musicxml_audit": {
+        "ok": false,
+        "rejected": [
+          "16 of 87 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 51); budget is 4"
+        ]
+      },
+      "musicxml_sha256": "af6a6c339f302e8b1e6dcd0b4ce85f071701fb63177a9fddea8c7219b79f1a61",
+      "pages": 4,
+      "pdf": "public/fixtures/spider-dance-undertale.pdf",
+      "pdf_sha256": "2ebc4c42cf572baa9f8f4c91f41d5551e76efa00a976cfb329649ab78011f78b",
+      "rejected": [
+        "16 of 87 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 51); budget is 4"
+      ],
+      "split": "validation",
+      "status": "musicxml_rejected",
+      "xml_measures": 87,
+      "xml_notes": 1084,
+      "xml_rests": 59
+    },
+    {
+      "engraving": "lilypond-bravura",
+      "fonts": [
+        "Bravura_Text",
+        "Edwin-Bold",
+        "Edwin-Italic",
+        "Edwin-Roman",
+        "Leland",
+        "LelandText"
+      ],
+      "id": "std-la-campanella",
+      "musicxml": "public/fixtures/la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.mxl",
+      "musicxml_audit": {
+        "ok": false,
+        "rejected": [
+          "95 of 150 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 1); budget is 7"
+        ]
+      },
+      "musicxml_sha256": "2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd",
+      "pages": 11,
+      "pdf": "public/fixtures/la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
+      "pdf_sha256": "3ab86a247c2c38d36ece65c1c977c0d24217a5c77d9b8caeefbce55f84cc8b60",
+      "rejected": [
+        "95 of 150 printed measures have two MusicXML lanes claiming the same staff band (first at printed measure 1); budget is 7"
+      ],
+      "split": "adaptation",
+      "status": "musicxml_rejected",
+      "xml_measures": 150,
+      "xml_notes": 4753,
+      "xml_rests": 365
+    },
+    {
+      "engraving": "corranzo-benchmark",
+      "fonts": [
+        "CorranzoBenchmarkMusic-Regular",
+        "Helvetica",
+        "Helvetica-Bold"
+      ],
+      "id": "omf-piano-dense-advanced-vector",
+      "musicxml": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P1:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "P1:2": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 8,
+        "ok": true,
+        "part_measure_counts": {
+          "P1": 8
+        },
+        "part_names": {
+          "P1": "Piano"
+        },
+        "printed_events": 264,
+        "printed_rests": 0,
+        "score_id": "piano-dense-advanced-vector",
+        "title": "CC0 Dense Advanced Texture Study",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "0951bd7d7a833886fccfb22cfd0c3b5f2437fecfcb42b853df992383fbef87d8",
+      "pages": 1,
+      "pdf": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf",
+      "pdf_sha256": "7f2390081104a4f328ba16ae39b86c301f2df526553a26169cd6888d19d72705",
+      "rejected": [],
+      "split": "heldout-test",
+      "status": "ok",
+      "xml_measures": 8,
+      "xml_notes": 264,
+      "xml_rests": 0
+    },
+    {
+      "engraving": "corranzo-benchmark",
+      "fonts": [
+        "CorranzoBenchmarkMusic-Regular",
+        "Helvetica",
+        "Helvetica-Bold"
+      ],
+      "id": "omf-piano-grand-voices-vector",
+      "musicxml": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P1:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          },
+          "P1:2": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 8,
+        "ok": true,
+        "part_measure_counts": {
+          "P1": 8
+        },
+        "part_names": {
+          "P1": "Piano"
+        },
+        "printed_events": 88,
+        "printed_rests": 0,
+        "score_id": "piano-grand-voices-vector",
+        "title": "CC0 Grand Staff Voice Study",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561",
+      "pages": 1,
+      "pdf": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+      "pdf_sha256": "d56380dfdb2820c0a26bbe1716276a7f6e15026877f266a6826ea350c6f6ecb9",
+      "rejected": [],
+      "split": "heldout-test",
+      "status": "ok",
+      "xml_measures": 8,
+      "xml_notes": 88,
+      "xml_rests": 0
+    },
+    {
+      "engraving": "corranzo-benchmark",
+      "fonts": [
+        "CorranzoBenchmarkMusic-Regular",
+        "Helvetica",
+        "Helvetica-Bold"
+      ],
+      "id": "omf-piano-rhythm-tuplets-vector",
+      "musicxml": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 1,
+        "lanes": {
+          "P1:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 8,
+        "ok": true,
+        "part_measure_counts": {
+          "P1": 8
+        },
+        "part_names": {
+          "P1": "Piano"
+        },
+        "printed_events": 68,
+        "printed_rests": 5,
+        "score_id": "piano-rhythm-tuplets-vector",
+        "title": "CC0 Rhythm and Tuplet Study",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b",
+      "pages": 1,
+      "pdf": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
+      "pdf_sha256": "36c4cf23305903f9114161ec930b5a1775c2dffe16340ea46044ea2339a78635",
+      "rejected": [],
+      "split": "validation",
+      "status": "ok",
+      "xml_measures": 8,
+      "xml_notes": 68,
+      "xml_rests": 5
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-14",
+        "Emmentaler-20",
+        "Emmentaler-Brace",
+        "TeXGyreSchola-Bold",
+        "TeXGyreSchola-Regular"
+      ],
+      "id": "std-demo-minuet-in-g",
+      "musicxml": "public/fixtures/demo-minuet-in-g.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P86ec70203e6b13fa8613ccc44802d212:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "Pe7b0cec7ffc1788978652a19f3a16d35:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 32,
+        "ok": true,
+        "part_measure_counts": {
+          "P86ec70203e6b13fa8613ccc44802d212": 32,
+          "Pe7b0cec7ffc1788978652a19f3a16d35": 32
+        },
+        "part_names": {
+          "P86ec70203e6b13fa8613ccc44802d212": "Piano (bass)",
+          "Pe7b0cec7ffc1788978652a19f3a16d35": "Piano (treble)"
+        },
+        "printed_events": 207,
+        "printed_rests": 3,
+        "score_id": "demo-minuet-in-g",
+        "title": "Minuet in G (Demo)",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "11500f576cee656a1eba662c0e62e1aada911d4762314a5e145a866c7cb883f2",
+      "pages": 1,
+      "pdf": "public/fixtures/demo-minuet-in-g.pdf",
+      "pdf_sha256": "6b34ba44122d9694156a113c749eee0bf3232f54ead431a44be6f2a1b6f32c8b",
+      "rejected": [],
+      "split": "diagnostic",
+      "status": "ok",
+      "xml_measures": 32,
+      "xml_notes": 207,
+      "xml_rests": 3
+    },
+    {
+      "engraving": "musescore4-emmentaler",
+      "fonts": [
+        "CenturySchL-Bold",
+        "CenturySchL-Roma",
+        "DejaVuSans",
+        "DejaVuSans-Bold",
+        "Emmentaler-13",
+        "Emmentaler-14",
+        "Emmentaler-20",
+        "Emmentaler-Brace"
+      ],
+      "id": "pl-beethoven-fur-elise",
+      "musicxml": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.musicxml",
+      "musicxml_audit": {
+        "band_collision_measures": [],
+        "clef_change_elements": 2,
+        "lanes": {
+          "P16ea6c5189131232bc28182720e67bf0:1": {
+            "center_diatonic": 24,
+            "initial_band": "lower",
+            "initial_clef": "F4",
+            "initial_octave_change": 0
+          },
+          "P258f39c33e606c3f65438e0c9dd2ff5a:1": {
+            "center_diatonic": 32,
+            "initial_band": "upper",
+            "initial_clef": "G2",
+            "initial_octave_change": 0
+          }
+        },
+        "measures": 105,
+        "ok": true,
+        "part_measure_counts": {
+          "P16ea6c5189131232bc28182720e67bf0": 105,
+          "P258f39c33e606c3f65438e0c9dd2ff5a": 105
+        },
+        "part_names": {
+          "P16ea6c5189131232bc28182720e67bf0": "down:",
+          "P258f39c33e606c3f65438e0c9dd2ff5a": "up:"
+        },
+        "printed_events": 1100,
+        "printed_rests": 172,
+        "score_id": "piano-beethoven-fur-elise",
+        "title": "F\u00fcr Elise",
+        "trailing_measure_deficit": 0
+      },
+      "musicxml_sha256": "b3be73867fd1d9f60b5829cacecd52ca4bc8cbe92f1609d3265c9c4e8a67af5e",
+      "pages": 3,
+      "pdf": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf",
+      "pdf_sha256": "0641395b4e97811bb89751352719bb9994cacd4f13da7b9429fe65716dfdc328",
+      "rejected": [],
+      "split": "diagnostic",
+      "status": "ok",
+      "xml_measures": 105,
+      "xml_notes": 1100,
+      "xml_rests": 172
+    }
+  ],
+  "splits": {
+    "adaptation": [
+      "pl-bach-prelude-bwv846",
+      "pl-handel-gavotte",
+      "bc-bach-fugue-bwv846",
+      "bc-chopin-etude-op10-12",
+      "pl-chopin-mazurka-op6-1",
+      "pl-mozart-turkish-march",
+      "bc-chopin-nocturne-op9-n2",
+      "std-hungarian-dance-no5"
+    ],
+    "diagnostic": [
+      "std-demo-minuet-in-g",
+      "pl-beethoven-fur-elise"
+    ],
+    "heldout-test": [
+      "pl-tchaikovsky-old-french-song",
+      "bc-beethoven-sonata-op2-m1",
+      "bc-chopin-etude-op10-01",
+      "omf-piano-dense-advanced-vector",
+      "omf-piano-grand-voices-vector"
+    ],
+    "validation": [
+      "bc-mozart-k153",
+      "pl-brahms-waltz-op39-3",
+      "omf-piano-rhythm-tuplets-vector"
+    ]
+  }
+}
