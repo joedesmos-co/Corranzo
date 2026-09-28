@@ -43,3 +43,5 @@ datasets/guitar-vision/synthetic/train/*.events.json
 # Python bytecode from read-only inspection of the Piano Vision reference stack
 __pycache__/
 *.pyc
+tmp/guitar-vision/
+tmp/gv-probe/

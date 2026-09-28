@@ -305,22 +305,32 @@ export function generateEventModel(seed, { measures = 4, beats = 4, includeTab =
       cursor += durationDivisions
     }
 
-    model.measures.push({ number: measure, events })
+    /**
+     * The nominal measure length, recorded rather than recomputed. The
+     * `<backup>` that opens the TAB staff must rewind exactly one measure, and
+     * summing the events would be wrong whenever tuplet rounding makes the
+     * events not add up to the bar.
+     */
+    model.measures.push({ number: measure, measureDivisions, events })
   }
   return model
 }
 
+/**
+ * Render one event as a `<note>`.
+ *
+ * A TAB note carries BOTH a `<pitch>` and a `<fret>`. The pitch is the sounding
+ * pitch, which is what `guitar-pitch/1.0` requires of every stored pitch, and
+ * `soundingFromTab` is what produced it — so the two cannot disagree. It is also
+ * what a real engraver emits, and omitting it makes engravers drop the digit
+ * entirely and draw a notehead on the TAB staff instead.
+ */
 function renderNoteXml(event, { staff, isTab }) {
-  const pitchXml = isTab
-    ? ''
-    : `<pitch><step>${event.pitch.step}</step>${event.pitch.alter ? `<alter>${event.pitch.alter}</alter>` : ''}<octave>${event.pitch.octave}</octave></pitch>`
+  const pitchXml = `<pitch><step>${event.pitch.step}</step>${event.pitch.alter ? `<alter>${event.pitch.alter}</alter>` : ''}<octave>${event.pitch.octave}</octave></pitch>`
   const dots = event.dotted ? '<dot/>' : ''
-  // `<time-modification>` is a direct child of `<note>`, before `<notations>`.
   const tupletXml = event.tuplet
     ? `<time-modification><actual-notes>${event.tuplet.actual}</actual-notes><normal-notes>${event.tuplet.normal}</normal-notes></time-modification>`
     : ''
-  // A TAB note carries its position; a notation note carries its markings. Both
-  // live inside a single `<notations>` element, never nested ones.
   const inner = isTab
     ? `<technical><string>${event.position.string}</string><fret>${event.position.fret}</fret></technical>`
     : event.technique
@@ -350,12 +360,20 @@ export function renderMusicXml(model, { title = 'Guitar Vision synthetic', paire
       const notationNotes = measure.events
         .map((event) => renderNoteXml(event, { staff: 1, isTab: false }))
         .join('')
-      // The TAB staff is backed by, not guessed from, the notation staff.
+      /**
+       * A two-staff part needs `<backup>` to return to the start of the measure
+       * before writing the second staff. Without it engravers read the two
+       * staves as one continuing sequence and the TAB staff comes out empty.
+       *
+       * The TAB staff is a real staff with its own note sequence, not a set of
+       * chord members hanging off the notation staff: `<chord/>` means "same
+       * onset as the previous note", which suppresses the fret number and makes
+       * engravers draw noteheads on the TAB staff. Alignment between the two
+       * staves follows from both having the same durations.
+       */
       const tabNotes = paired
-        ? measure.events
-            .map((event) => renderNoteXml(event, { staff: 2, isTab: true }))
-            .join('')
-            .replace(/<note>/g, '<note><chord/>')
+        ? `<backup><duration>${measure.measureDivisions ?? beats * DIVISIONS}</duration></backup>` +
+          measure.events.map((event) => renderNoteXml(event, { staff: 2, isTab: true })).join('')
         : ''
       return `<measure number="${measure.number}">${attributes}${notationNotes}${tabNotes}</measure>`
     })
