@@ -14,8 +14,8 @@ const editorial = readFileSync(join(root, 'src', 'styles', 'editorial-polish.css
 
 describe('minimal audio transport styling', () => {
   it('uses monochromatic design tokens', () => {
-    expect(tokens).toContain('--sf-bg-app: #000000')
-    expect(tokens).toContain('--sf-bg-panel: #121212')
+    expect(tokens).toContain('--sf-bg-app: #141210')
+    expect(tokens).toContain('--sf-bg-panel: #1c1814')
     expect(tokens).toContain('--sf-radius-sm: 4px')
     expect(tokens).toContain('--sf-shadow-soft: none')
     expect(tokens).toContain('--sf-font-micro')
@@ -38,10 +38,12 @@ describe('minimal audio transport styling', () => {
       'utf8',
     )
     const library = readFileSync(join(root, 'src', 'components', 'LibraryPanel.jsx'), 'utf8')
-    const welcome = readFileSync(join(root, 'src', 'components', 'LibraryWelcomeCard.jsx'), 'utf8')
+    const collection = readFileSync(join(root, 'src', 'styles', 'collection.css'), 'utf8')
     expect(tracks).toContain('practice-section__title--editorial')
-    expect(library).toContain('panel__title practice-section__title--editorial')
-    expect(welcome).toContain('library-welcome__section-title practice-section__title--editorial')
+    // Library headings are styled to the editorial scale in the collection layer.
+    expect(library).toContain('practice-library__title')
+    expect(library).toContain('practice-library__group-title')
+    expect(collection).toMatch(/\[data-view='library'\] \.practice-library__title \{[^}]*--cz-font-edition/)
   })
 
   it('seek bars and progress tracks are razor-thin', () => {

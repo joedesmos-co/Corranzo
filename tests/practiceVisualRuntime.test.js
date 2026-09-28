@@ -96,14 +96,14 @@ describe('Practice visual runtime integration', () => {
       await page.goto(baseUrl, { waitUntil: 'domcontentloaded' })
       const skipTutorial = page.getByRole('button', { name: 'Skip', exact: true })
       if (await skipTutorial.isVisible()) await skipTutorial.click()
-      await page.getByRole('button', { name: 'Start practice: Menuet in F, K.2' }).click()
-      await page.getByRole('main', { name: 'Practice' }).waitFor()
+      await page.getByRole('button', { name: 'Open score: Menuet in F, K.2' }).first().click()
+      await page.getByRole('main', { name: 'Score workspace' }).waitFor()
 
       const inputChoice = page.getByRole('button', { name: 'Use MIDI Keyboard' })
       if (await inputChoice.isVisible()) await inputChoice.click()
 
       const scoreButton = page.getByRole('button', { name: 'Score', exact: true })
-      const visualButton = page.getByRole('button', { name: 'Visual', exact: true })
+      const visualButton = page.getByRole('button', { name: 'Note guide', exact: true })
       await expect.poll(() => scoreButton.getAttribute('aria-pressed')).toBe('true')
       await page.locator('.pdf-page-window__slot--active canvas').first().waitFor({ timeout: 15_000 })
       expect(await page.getByRole('alert').count()).toBe(0)

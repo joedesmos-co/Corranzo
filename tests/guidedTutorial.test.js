@@ -101,18 +101,22 @@ describe('guided tutorial UI wiring', () => {
 
   it('wires replay and real UI targets without visible extra setup clutter', () => {
     expect(readSrc('App.jsx')).toMatch(/GuidedTutorial/)
-    expect(readSrc('components', 'TopBar.jsx')).toMatch(/onReplayTutorial/)
-    expect(readSrc('components', 'TopBar.jsx')).toContain('Replay tutorial')
-    expect(readSrc('components', 'TopBar.jsx')).toContain('How files work')
-    expect(readSrc('components', 'TopBar.jsx')).toContain('Contact / Feedback')
-    expect(readSrc('components', 'TopBar.jsx')).toMatch(/data-tour-id=\{id === 'practice' \? 'topbar-practice'/)
-    expect(readSrc('App.css')).toMatch(/\.topbar__help-menu:not\(\[open\]\) \.topbar__help-panel[\s\S]*display: none/)
-    expect(readSrc('components', 'MultiFileUpload.jsx')).toMatch(/data-tour-id="library-upload"/)
-    expect(readSrc('components', 'practice', 'PracticeTransportSection.jsx')).toMatch(/data-tour-id="practice-playback"/)
-    expect(readSrc('components', 'practice', 'PracticeModeSection.jsx')).toMatch(/data-tour-id="practice-mode"/)
-    expect(readSrc('components', 'practice', 'WaitForYouInputSourceSelector.jsx')).toMatch(/data-tour-id="practice-input-source"/)
-    expect(readSrc('components', 'practice', 'PracticeScoreCursorSection.jsx')).toMatch(/data-tour-id="score-cursor"/)
-    expect(readSrc('components', 'practice', 'PracticeControlPanel.jsx')).toMatch(/dataTourId="practice-advanced"/)
+    // Help moved from the retired TopBar into the Corranzo app shell header.
+    expect(readSrc('components', 'shell', 'ShellHeader.jsx')).toMatch(/onReplayTutorial/)
+    expect(readSrc('components', 'shell', 'ShellHeader.jsx')).toContain('Replay tutorial')
+    expect(readSrc('components', 'shell', 'ShellHeader.jsx')).toContain('How files work')
+    expect(readSrc('components', 'shell', 'ShellHeader.jsx')).toContain('Contact &amp; feedback')
+    expect(readSrc('components', 'shell', 'ShellHeader.jsx')).toContain('data-tour-id="topbar-help"')
+    expect(readSrc('components', 'shell', 'Sidebar.jsx')).toMatch(/tourId: 'topbar-practice'/)
+    expect(readSrc('components', 'shell', 'Sidebar.jsx')).toMatch(/data-tour-id=\{item\.tourId\}/)
+    expect(readSrc('components', 'MultiFileUpload.jsx')).toMatch(/'library-upload'/)
+    // Practice tour targets now live in the workspace transport, which the
+    // retired PracticeControlPanel tree was replaced by.
+    const transport = readSrc('components', 'practice', 'WorkspaceTransport.jsx')
+    expect(transport).toMatch(/data-tour-id="practice-playback"/)
+    expect(transport).toMatch(/data-tour-id="practice-mode"/)
+    expect(transport).toMatch(/data-tour-id="score-cursor"/)
+    expect(transport).toMatch(/id === 'input' \? 'practice-input-source' : id === 'settings' \? 'practice-advanced'/)
   })
 
   it('offers clear first-run choices and hides Done until the finish step', () => {
