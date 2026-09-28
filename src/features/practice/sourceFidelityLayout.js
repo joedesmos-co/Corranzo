@@ -36,6 +36,27 @@ function clamp01(value) {
   return Math.min(1, Math.max(0, Number(value)))
 }
 
+/**
+ * Usable width of a written page's content box, in MusicXML tenths.
+ *
+ * Engravers mirror page margins between recto and verso pages, so pick the odd
+ * (recto) set for odd pages and the even (verso) set for even pages. A score
+ * with no <page-layout>, or with only one margin set, still resolves when the
+ * content width is unambiguous.
+ */
+function sourcePageContentWidth(pageLayout, page) {
+  if (!pageLayout || !finite(pageLayout.pageWidth)) return null
+  const margins = pageLayout.margins ?? {}
+  const isVerso = Number(page) % 2 === 0
+  const preferred = margins[isVerso ? 'even' : 'odd'] ?? margins.default ?? null
+  if (!preferred) return null
+  const left = Number(preferred.left)
+  const right = Number(preferred.right)
+  if (!Number.isFinite(left) || !Number.isFinite(right)) return null
+  const contentWidth = Number(pageLayout.pageWidth) - left - right
+  return contentWidth > 0 ? contentWidth : null
+}
+
 function normalizeSourceBounds(sourceBBox) {
   if (
     !finite(sourceBBox?.x0) ||
@@ -61,6 +82,7 @@ export function buildVisualMeasureLayoutIndex(timingMap) {
   let page = 1
   let systemIndex = 0
   let pageSystemIndex = 0
+  const pageLayout = timingMap?.pageLayout ?? null
 
   for (let measureIndex = 0; measureIndex < (timingMap?.measures?.length ?? 0); measureIndex += 1) {
     const measure = timingMap.measures[measureIndex]
@@ -84,6 +106,21 @@ export function buildVisualMeasureLayoutIndex(timingMap) {
       engravedWidth:
         Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
       staffDistances: measure.staffDistances ?? null,
+      // Source page content box for this measure's page, in tenths. Null when the
+      // score declares no <page-layout>.
+      pageContentWidthTenths: sourcePageContentWidth(pageLayout, page),
+      pageWidthTenths: finite(pageLayout?.pageWidth) ? Number(pageLayout.pageWidth) : null,
+      // Engraved extent of the system starting at this measure, in tenths, as
+      // declared by <system-layout><system-margins>. Null when undeclared.
+      systemLeftMargin: finite(measure.systemLayout?.leftMargin)
+        ? Number(measure.systemLayout.leftMargin)
+        : null,
+      systemRightMargin: finite(measure.systemLayout?.rightMargin)
+        ? Number(measure.systemLayout.rightMargin)
+        : null,
+      topSystemDistance: finite(measure.systemLayout?.topSystemDistance)
+        ? Number(measure.systemLayout.topSystemDistance)
+        : null,
       startTimeSeconds: finite(measure.startTimeSeconds)
         ? Number(measure.startTimeSeconds)
         : null,
@@ -318,6 +355,79 @@ function usesSourceFidelityLayout(groups) {
 }
 
 /**
+ * Decide whether the written page box is trustworthy enough to drive a real
+ * page coordinate transform.
+ *
+ * Engraved MusicXML partitions each system's staff exactly: the sum of that
+ * system's `<measure width>` values equals its declared
+ * `<system-layout><system-margins>` extent, and both sit inside the page
+ * content box. When that holds, the horizontal model becomes one global affine
+ * projection of source tenths into lane units with a per-system offset, instead
+ * of renormalising every system onto the same fixed band. The projected content
+ * box is still `systemWidth` units wide, so page-normalized source-map X keeps
+ * exactly the scale it had before.
+ *
+ * Returns null unless the evidence is complete and self-consistent, so scores
+ * without page geometry stay on the previous band-normalized fallback.
+ */
+function resolveSourcePageTransform(groups, systemWidth) {
+  const contentWidths = new Map()
+  let everyMeasurePositioned = true
+  for (const group of groups) {
+    const layout = group.sourceLayout?.measure
+    if (!(Number(layout?.engravedWidth) > 0)) {
+      everyMeasurePositioned = false
+      break
+    }
+    const content = Number(layout?.pageContentWidthTenths)
+    if (!(content > 0)) {
+      everyMeasurePositioned = false
+      break
+    }
+    contentWidths.set(content, (contentWidths.get(content) ?? 0) + 1)
+  }
+  if (!everyMeasurePositioned || !contentWidths.size) return null
+
+  // Engravers mirror page margins recto/verso but keep one content width, so a
+  // trustworthy score declares a single page box. Genuinely mixed boxes mean the
+  // declarations disagree about the page, which is not safe to project.
+  const declared = [...contentWidths.keys()].sort((left, right) => left - right)
+  const pageContentWidth = declared[0]
+  if (declared.some((value) => Math.abs(value - pageContentWidth) > pageContentWidth * 0.01)) {
+    return null
+  }
+
+  // One width per written measure occurrence, not per group: chords and voices
+  // repeat the same measure and must not inflate the system's extent.
+  const systemWidthTenths = new Map()
+  for (const group of groups) {
+    const layout = group.sourceLayout?.measure
+    const systemKey = systemOccurrenceKey(group)
+    const measureKey = measureOccurrenceKey(group)
+    const seen = systemWidthTenths.get(systemKey) ?? new Map()
+    if (!seen.has(measureKey)) seen.set(measureKey, Number(layout.engravedWidth))
+    systemWidthTenths.set(systemKey, seen)
+  }
+  const widest = Math.max(
+    0,
+    ...[...systemWidthTenths.values()].map(
+      (measures) => [...measures.values()].reduce((sum, value) => sum + value, 0),
+    ),
+  )
+  // Contradictory evidence: a system wider than the page it was drawn on means
+  // the two declarations disagree, so fall back rather than project nonsense.
+  if (!(widest > 0) || widest > pageContentWidth * 1.02) return null
+
+  return {
+    mode: 'page-affine',
+    source: 'musicxml-page-layout',
+    pageContentWidthTenths: pageContentWidth,
+    tenthsToUnits: systemWidth / pageContentWidth,
+    systemCount: systemWidthTenths.size,
+  }
+}
+
+/**
  * Flatten written source systems into a monotonic practice lane while keeping
  * their internal measure widths and event spacing. The systems remain
  * reconstructed SVG notation; the gap is a structural break, never a PDF crop.
@@ -329,6 +439,7 @@ export function buildSourceFidelityLaneLayout(
     pixelsPerSecond = 120,
     systemWidth = SOURCE_FIDELITY_SYSTEM_WIDTH,
     systemGap = SOURCE_FIDELITY_SYSTEM_GAP,
+    pageTransform: pageTransformOption = 'auto',
   } = {},
 ) {
   const orderedGroups = [...(groups ?? [])].sort(
@@ -338,6 +449,7 @@ export function buildSourceFidelityLaneLayout(
     return {
       mode: 'temporal-fallback',
       pixelsPerSecond,
+      pageTransform: null,
       groupXById: new Map(),
       objectXById: new Map(),
       systemOccurrenceByGroupId: new Map(),
@@ -367,6 +479,9 @@ export function buildSourceFidelityLaneLayout(
   const timeAnchors = []
   const systems = []
   const orderedMeasures = []
+  const pageTransform =
+    pageTransformOption === 'off' ? null : resolveSourcePageTransform(orderedGroups, systemWidth)
+  const measureScale = pageTransform?.tenthsToUnits ?? null
   let cursorX = 0
 
   for (let systemOccurrence = 0; systemOccurrence < segments.length; systemOccurrence += 1) {
@@ -399,8 +514,17 @@ export function buildSourceFidelityLaneLayout(
       (sum, entry) => sum + measureWeight(entry.layout),
       0,
     )
-    const widthScale = systemWidth / Math.max(totalWeight, 0.001)
-    let measureCursorX = cursorX
+    // Page-affine systems project engraved tenths directly; the fallback keeps
+    // renormalising each system onto the full nominal band.
+    const widthScale = measureScale ?? systemWidth / Math.max(totalWeight, 0.001)
+    // Printed systems are inset from the page content box (an opening system is
+    // usually indented further than the rest). That inset is real source X.
+    const sourceLeftMargin = Number(first.sourceLayout?.measure?.systemLeftMargin)
+    const inset = measureScale != null && Number.isFinite(sourceLeftMargin)
+      ? Math.max(0, sourceLeftMargin) * measureScale
+      : 0
+    const systemStartX = cursorX + inset
+    let measureCursorX = systemStartX
     for (const entry of measureEntries) {
       const width = measureWeight(entry.layout) * widthScale
       entry.systemOccurrence = systemOccurrence
@@ -409,8 +533,9 @@ export function buildSourceFidelityLaneLayout(
       measureCursorX = entry.xEnd
       orderedMeasures.push(entry)
     }
+    const systemWidthUnits = measureCursorX - systemStartX
 
-    let lastGroupX = cursorX
+    let lastGroupX = systemStartX
     for (const group of segment.groups) {
       const measureEntry = measureByKey.get(measureOccurrenceKey(group))
       const sourceX = finite(group.sourceLayout?.x)
@@ -432,7 +557,7 @@ export function buildSourceFidelityLaneLayout(
         x = measureEntry.xStart + quarterProgress * (measureEntry.xEnd - measureEntry.xStart)
       } else {
         const localTime = Number(group.timeSeconds) - Number(segment.groups[0].timeSeconds)
-        x = cursorX + Math.max(0, localTime) * pixelsPerSecond
+        x = systemStartX + Math.max(0, localTime) * pixelsPerSecond
       }
       // Engraved positions should progress left-to-right inside one written
       // system. Abstain from reverse cursor motion when malformed layout data
@@ -480,8 +605,10 @@ export function buildSourceFidelityLaneLayout(
       repeatPass: first.repeatPass ?? 1,
       firstTimeSeconds: Number(first.timeSeconds ?? 0),
       lastTimeSeconds: Number(last.timeSeconds ?? first.timeSeconds ?? 0),
-      xStart: cursorX,
-      xEnd: cursorX + systemWidth,
+      xStart: systemStartX,
+      xEnd: systemStartX + systemWidthUnits,
+      sourceLeftMarginTenths: Number.isFinite(sourceLeftMargin) ? sourceLeftMargin : null,
+      sourceEngravedExtentTenths: Number.isFinite(totalWeight) ? totalWeight : null,
       measureNumbers: measureEntries.map((entry) => entry.measureNumber),
       keySignature: firstKeySignature
         ? { ...firstKeySignature, cancelFifths: null }
@@ -497,7 +624,7 @@ export function buildSourceFidelityLaneLayout(
         measureEntries.find((entry) => entry.layout?.staffDistances)?.layout
           ?.staffDistances ?? null,
     })
-    cursorX += systemWidth + systemGap
+    cursorX = systemStartX + systemWidthUnits + systemGap
   }
 
   const barlineXByTime = new Map()
@@ -516,6 +643,7 @@ export function buildSourceFidelityLaneLayout(
   return {
     mode: 'source-fidelity',
     pixelsPerSecond,
+    pageTransform,
     groupXById,
     objectXById,
     systemOccurrenceByGroupId,

@@ -341,3 +341,84 @@ export function layoutRichTwoSystems() {
   const xml = measure(1) + measure(2) + measure(3, true) + measure(4)
   return scoreWrap(`<part id="P1">${xml}</part>`)
 }
+
+/**
+ * Written page box plus per-system engraved extents, the declarations a real
+ * engraver emits. Defaults model a two-system score whose opening system is
+ * indented further than the rest:
+ *
+ *   page-width 1224, odd margins 100/100  -> content box 1024 tenths
+ *   system 0: left-margin 72,  right 0    -> extent 952  = 300 + 300 + 352
+ *   system 1: left-margin 16,  right 0    -> extent 1008 = 504 + 504
+ *
+ * Each measure width therefore sums exactly to its system's declared extent,
+ * which is what makes an affine page-coordinate transform provable.
+ *
+ * Negative paths: omitPageLayout drops the page box, omitMeasureWidths leaves
+ * measures unpositioned, and even margins differing from odd margins declares
+ * two conflicting content boxes.
+ */
+export function pageBoxScore({
+  pageWidth = 1224,
+  pageHeight = 1584,
+  marginLeft = 100,
+  marginRight = 100,
+  evenMarginLeft = null,
+  evenMarginRight = null,
+  systems = [
+    { leftMargin: 72, rightMargin: 0, widths: [300, 300, 352] },
+    { leftMargin: 16, rightMargin: 0, widths: [504, 504] },
+  ],
+  omitMeasureWidths = false,
+  omitPageLayout = false,
+} = {}) {
+  const measures = []
+  let number = 1
+  for (const system of systems) {
+    system.widths.forEach((width, indexInSystem) => {
+      const print =
+        indexInSystem === 0
+          ? `<print${system.newPage ? ' new-page="yes"' : ''} new-system="yes">` +
+            `<system-layout><system-margins>` +
+            `<left-margin>${system.leftMargin}</left-margin>` +
+            `<right-margin>${system.rightMargin}</right-margin>` +
+            `</system-margins>` +
+            (system.topSystemDistance
+              ? `<top-system-distance>${system.topSystemDistance}</top-system-distance>`
+              : '') +
+            `</system-layout></print>`
+          : ''
+      const widthAttribute = omitMeasureWidths ? '' : ` width="${width}"`
+      measures.push(
+        `<measure number="${number}"${widthAttribute}>${print}` +
+          (number === 1 ? attributes() + soundTempo(120) : '') +
+          fourQuarters() +
+          `</measure>`,
+      )
+      number += 1
+    })
+  }
+
+  const marginBlock = (type, left, right) =>
+    `<page-margins type="${type}"><left-margin>${left}</left-margin>` +
+    `<right-margin>${right}</right-margin>` +
+    `<top-margin>80</top-margin><bottom-margin>80</bottom-margin></page-margins>`
+
+  const defaults = omitPageLayout
+    ? ''
+    : `<defaults><page-layout>` +
+      `<page-height>${pageHeight}</page-height>` +
+      `<page-width>${pageWidth}</page-width>` +
+      marginBlock('odd', marginLeft, marginRight) +
+      (evenMarginLeft == null
+        ? ''
+        : marginBlock('even', evenMarginLeft, evenMarginRight)) +
+      `</page-layout></defaults>`
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="3.1">
+  ${defaults}
+  <part-list><score-part id="P1"><part-name>Music</part-name></score-part></part-list>
+  <part id="P1">${measures.join('')}</part>
+</score-partwise>`
+}

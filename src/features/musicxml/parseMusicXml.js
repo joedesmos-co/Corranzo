@@ -211,10 +211,45 @@ function extractMarkings(measureNode) {
   return marking
 }
 
+/**
+ * Written page box from <page-layout>, in MusicXML tenths.
+ *
+ * Page margins are the outer trim; the usable content box between them is what a
+ * horizontal page-coordinate transform must scale. Even/odd margins are kept
+ * separately because engraved scores mirror them on verso pages.
+ */
+function scorePageLayout(scoreNode) {
+  // <page-layout> normally lives under <defaults>; accept it directly under
+  // <score> too, since both placements occur in real MusicXML.
+  const layout =
+    findChild(findChild(scoreNode, 'defaults'), 'page-layout') ??
+    findChild(scoreNode, 'page-layout')
+  if (!layout) return null
+  const pageWidth = numberOf(childText(layout, 'page-width'), NaN)
+  const pageHeight = numberOf(childText(layout, 'page-height'), NaN)
+  const margins = {}
+  for (const marginNode of findChildren(layout, 'page-margins')) {
+    const type = attr(marginNode, 'type') ?? 'default'
+    const left = numberOf(childText(marginNode, 'left-margin'), NaN)
+    const right = numberOf(childText(marginNode, 'right-margin'), NaN)
+    const top = numberOf(childText(marginNode, 'top-margin'), NaN)
+    const bottom = numberOf(childText(marginNode, 'bottom-margin'), NaN)
+    if (![left, right, top, bottom].every((value) => Number.isFinite(value))) continue
+    margins[type] = { left, right, top, bottom }
+  }
+  if (!(pageWidth > 0) || !Object.keys(margins).length) return null
+  return {
+    pageWidth,
+    pageHeight: Number.isFinite(pageHeight) ? pageHeight : null,
+    margins,
+  }
+}
+
 function measurePrintLayout(measureNode) {
   let newSystem = false
   let newPage = false
   const staffDistances = {}
+  let systemLayout = null
   for (const printNode of findChildren(measureNode, 'print')) {
     const systemValue = attr(printNode, 'new-system')
     const pageValue = attr(printNode, 'new-page')
@@ -231,11 +266,33 @@ function measurePrintLayout(measureNode) {
         staffDistances[String(staffNumber)] = distance
       }
     }
+    // Per-system engraved extent and vertical lead-in. Engravers emit these on
+    // the first measure of a system. They describe where the staff was drawn,
+    // not what was played, so they remain layout evidence only.
+    const systemLayoutNode = findChild(printNode, 'system-layout')
+    if (systemLayoutNode) {
+      const marginNode = findChild(systemLayoutNode, 'system-margins')
+      const leftMargin = numberOf(childText(marginNode, 'left-margin'), NaN)
+      const rightMargin = numberOf(childText(marginNode, 'right-margin'), NaN)
+      const topSystemDistance = numberOf(
+        childText(systemLayoutNode, 'top-system-distance'),
+        NaN,
+      )
+      systemLayout = {
+        leftMargin: Number.isFinite(leftMargin) ? leftMargin : null,
+        rightMargin: Number.isFinite(rightMargin) ? rightMargin : null,
+        topSystemDistance:
+          Number.isFinite(topSystemDistance) && topSystemDistance > 0
+            ? topSystemDistance
+            : null,
+      }
+    }
   }
   return {
     newSystem,
     newPage,
     staffDistances: Object.keys(staffDistances).length ? staffDistances : null,
+    systemLayout,
   }
 }
 
@@ -1437,7 +1494,8 @@ function walkPart({
       const notatedLengthQuarters = maxCursorDivisions / divisions
       const lengthQuarters =
         lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
-      const { newSystem, newPage, staffDistances } = measurePrintLayout(measureNode)
+      const { newSystem, newPage, staffDistances, systemLayout } =
+        measurePrintLayout(measureNode)
       const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
       // MusicXML marks pickup/anacrusis (and some courtesy) measures with
       // implicit="yes". Preserve it as honest metadata for pickup detection.
@@ -1466,6 +1524,10 @@ function walkPart({
         // this staff's top line, in MusicXML tenths. Print declarations occur
         // at system starts and must remain layout evidence, not music semantics.
         staffDistances,
+        // Source engraved extent of the system that starts at this measure: how
+        // far the staff is inset from the page content box on the left/right,
+        // plus the vertical lead-in. Layout evidence only.
+        systemLayout,
         marking: extractMarkings(measureNode),
       })
       measureStartQuarters += lengthQuarters
@@ -1705,6 +1767,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     notatedLengthQuarters: boundary.notatedLengthQuarters,
     engravedWidth: boundary.engravedWidth,
     staffDistances: boundary.staffDistances ?? null,
+    systemLayout: boundary.systemLayout ?? null,
     // Repeat / volta markings for written-score evaluation (not playback expansion).
     marking: boundary.marking ?? null,
   }))
@@ -1847,6 +1910,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     fileName,
     title: getWorkTitle(score),
     notation,
+    // Written page box (<page-layout>), in MusicXML tenths. Lets the Visual lane
+    // build a real page coordinate transform instead of guessing a band width.
+    pageLayout: scorePageLayout(score),
     durationSeconds,
     writtenDurationSeconds,
     noteCount: pitchNotes.length,
