@@ -23,7 +23,17 @@ export function logAppViewDebug(label, detail = null) {
   console.log(`[AppView] ${label}`, detail)
 }
 
-export const APP_SHELL_VIEWS = new Set(['library', 'practice', 'profile', 'privacy', 'terms', 'contact'])
+export const APP_SHELL_VIEWS = new Set([
+  'home',
+  'library',
+  'import',
+  'practice',
+  'profile',
+  'settings',
+  'privacy',
+  'terms',
+  'contact',
+])
 
 export function normalizeAppView(view) {
   if (typeof view === 'string' && APP_SHELL_VIEWS.has(view)) {

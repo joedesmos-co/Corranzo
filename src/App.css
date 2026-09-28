@@ -4679,8 +4679,16 @@
   margin-top: var(--sf-space-lg);
 }
 
+/* Links need an explicit color: without one they inherit the UA default blue,
+   which fails contrast on Corranzo's dark surfaces. */
 .feedback-link {
-  text-decoration: none;
+  color: var(--cz-vermilion-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.feedback-link:hover {
+  color: var(--cz-ink);
 }
 
 .library-welcome__actions .feedback-link {

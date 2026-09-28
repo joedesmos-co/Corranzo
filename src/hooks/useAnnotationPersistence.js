@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   getFileFingerprint,
   loadAnnotations,
@@ -7,8 +7,6 @@ import {
   serializeAnnotationsExport,
 } from '../utils/annotationStorage.js'
 import { buildPdfFingerprint } from '../features/score-follow/scoreFollowStorage.js'
-
-const AUTOSAVE_MS = 600
 
 /**
  * Annotations were briefly saved under this key for every PDF because the
@@ -49,13 +47,14 @@ export default function useAnnotationPersistence({
 }) {
   const fingerprintRef = useRef(null)
   const skipNextSaveRef = useRef(false)
+  const [saveStatus, setSaveStatus] = useState('saved')
 
   const fingerprint = useMemo(
     () => resolveAnnotationFingerprint({ pdfMeta, file }),
     [pdfMeta, file],
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!file || !fingerprint) {
       fingerprintRef.current = null
       return
@@ -94,7 +93,7 @@ export default function useAnnotationPersistence({
     }
   }, [file, fileName, fingerprint, replaceAnnotations])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!file || !fingerprintRef.current) {
       return undefined
     }
@@ -104,16 +103,12 @@ export default function useAnnotationPersistence({
       return undefined
     }
 
-    const timer = setTimeout(() => {
-      saveAnnotations(fingerprintRef.current, {
-        version: 1,
-        fileName,
-        strokesByPage,
-        toolSettings,
-      })
-    }, AUTOSAVE_MS)
-
-    return () => clearTimeout(timer)
+    // Commit each completed stroke synchronously before the next navigation
+    // event or unmount. No debounce can discard the newest mark anymore.
+    const saved = saveAnnotations(fingerprintRef.current, {
+      version: 1, fileName, strokesByPage, toolSettings,
+    })
+    setSaveStatus(saved ? 'saved' : 'error')
   }, [file, fileName, strokesByPage, toolSettings])
 
   const exportAnnotations = useCallback(() => {
@@ -138,5 +133,5 @@ export default function useAnnotationPersistence({
     [replaceAnnotations],
   )
 
-  return { exportAnnotations, importAnnotations }
+  return { exportAnnotations, importAnnotations, saveStatus: fingerprint ? saveStatus : 'unavailable' }
 }

@@ -1,18 +1,39 @@
+import { normalizePracticeMode } from './features/practice/practiceMode.js'
 import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
-import TopBar from './components/TopBar.jsx'
+import AppShell from './components/shell/AppShell.jsx'
+import SettingsView from './components/shell/SettingsView.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
-import LibraryWelcomeCard from './components/LibraryWelcomeCard.jsx'
+import Home from './components/home/Home.jsx'
 import AppViewPlaceholder from './components/AppViewPlaceholder.jsx'
 import AppFooter from './components/AppFooter.jsx'
 import SessionRestoreBanner from './components/SessionRestoreBanner.jsx'
 import SessionRestoreOverlay from './components/SessionRestoreOverlay.jsx'
 import GuidedTutorial from './components/onboarding/GuidedTutorial.jsx'
 import useRestoreUploadGate from './features/import/useRestoreUploadGate.js'
-import PracticeView from './components/practice/PracticeView.jsx'
-import { PracticeSessionProvider } from './context/PracticeSessionContext.jsx'
+import PracticeErrorBoundary from './components/practice/PracticeErrorBoundary.jsx'
+import useMusicXmlTiming from './features/musicxml/useMusicXmlTiming.js'
+import useCompanionMidiCheck from './features/import/useCompanionMidiCheck.js'
 import { ProfileStatsProvider } from './context/ProfileStatsContext.jsx'
 
 const ProfileView = lazy(() => import('./components/profile/ProfileView.jsx'))
+const DesignSandbox = import.meta.env.DEV ? lazy(() => import('./design/DesignSandbox.jsx')) : null
+
+let practiceModules
+const loadPracticeModules = () => practiceModules ??= Promise.all([
+  import('./context/PracticeSessionContext.jsx'),
+  import('./components/practice/PracticeView.jsx'),
+])
+const PracticeSessionProvider = lazy(async () => ({ default: (await loadPracticeModules())[0].PracticeSessionProvider }))
+const PracticeView = lazy(async () => ({ default: (await loadPracticeModules())[1].default }))
+
+/** Phase A: dev-only design proof surface. Never linked from prod UI. */
+function isDesignSandboxPath() {
+  return (
+    import.meta.env.DEV &&
+    typeof window !== 'undefined' &&
+    window.location.pathname === '/design'
+  )
+}
 import PrivacyPolicyPage from './components/legal/PrivacyPolicyPage.jsx'
 import TermsOfServicePage from './components/legal/TermsOfServicePage.jsx'
 import ContactPage from './components/legal/ContactPage.jsx'
@@ -22,14 +43,11 @@ import {
   dismissOnboarding,
   hideDemoCard,
   isDemoCardHidden,
-  isOnboardingDismissed,
   resetPracticeTimePrefs,
   savePracticePrefs,
 } from './features/session/practicePrefsStorage.js'
 import {
   completeGuidedTutorial,
-  isGuidedTutorialCompleted,
-  shouldOpenGuidedTutorial,
 } from './features/onboarding/guidedTutorial.js'
 import {
   readFileArrayBuffer,
@@ -111,6 +129,7 @@ import {
   clearOmrGeneratedPlaybackSource,
   describeMusicXmlSource,
   isMusicXmlSourceReady,
+  musicXmlSourceKey,
   isOmrGeneratedPlayback,
   isPracticePlaybackReady,
   validateRestoredOmrPlayback,
@@ -135,13 +154,15 @@ import {
   clearSessionStorage,
   saveSessionFiles,
   saveSessionMeta,
+  updateSessionPracticePrefs,
 } from './features/session/sessionPersistence.js'
 import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
+import './styles/collection.css'
 
 function resolveInitialView() {
-  return getViewFromPathname(window.location.pathname) ?? 'library'
+  return getViewFromPathname(window.location.pathname) ?? 'home'
 }
 
 function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
@@ -176,10 +197,8 @@ export default function App() {
   const practiceSessionEpochRef = useRef(0)
   const sessionSaveGenerationRef = useRef(0)
   const [instrumentBundleRevision, setInstrumentBundleRevision] = useState(0)
-  const [showWelcome, setShowWelcome] = useState(() => !isOnboardingDismissed())
-  const [guidedTutorialOpen, setGuidedTutorialOpen] = useState(() =>
-    shouldOpenGuidedTutorial({ completed: isGuidedTutorialCompleted() }),
-  )
+  // Orientation lives on Home; the full tour remains available through Help.
+  const [guidedTutorialOpen, setGuidedTutorialOpen] = useState(false)
   const [demoCardHidden, setDemoCardHidden] = useState(() => isDemoCardHidden())
   const practicePrefsRef = useRef(null)
   const pendingClassifiedUploadRef = useRef(null)
@@ -205,6 +224,8 @@ export default function App() {
   const [numPages, setNumPages] = useState(null)
   const [midiSource, setMidiSource] = useState(null)
   const [musicXmlSource, setMusicXmlSource] = useState(null)
+  const scoreTimingValidation = useMusicXmlTiming(musicXmlSource)
+  const scoreMidiValidation = useCompanionMidiCheck(midiSource)
   const [sampleLoadState, setSampleLoadState] = useState({ loading: false, error: null })
   const [demoPieceActive, setDemoPieceActive] = useState(false)
   const [libraryFeedback, setLibraryFeedback] = useState(null)
@@ -224,7 +245,10 @@ export default function App() {
 
   const {
     paperTheme,
+    setPaperTheme,
+    sidebarOpen,
     setSidebarOpen,
+    toggleSidebar,
     togglePaperTheme,
   } = useWorkspacePreferences()
 
@@ -407,7 +431,7 @@ export default function App() {
   const getInstrumentSessionBundles = useCallback(() => {
     const bundles = Object.fromEntries(instrumentBundleStoreRef.current.entries())
     const activeInstrument = normalizeInstrumentId(activeInstrumentRef.current)
-    const activeBundle = snapshotInstrumentBundle(liveBundleRef.current)
+    const activeBundle = snapshotInstrumentBundle({ ...liveBundleRef.current, practicePrefs: practicePrefsRef.current })
     if (activeBundle.pdfFile && activeBundle.pdfBuffer) {
       bundles[activeInstrument] = activeBundle
     }
@@ -416,7 +440,7 @@ export default function App() {
 
   useEffect(() => {
     function handlePopState() {
-      setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'library'))
+      setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'home'))
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -458,6 +482,7 @@ export default function App() {
       libraryNavAtRef.current = Date.now()
     }
     setActiveView(nextView)
+    requestAnimationFrame(() => window.scrollTo(0, 0))
     const nextPath = pathnameForView(nextView)
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath)
@@ -510,7 +535,6 @@ export default function App() {
 
   const goHome = useCallback(() => {
     const home = getHomeNavigationTarget()
-    setShowWelcome(home.showWelcome)
     setLibraryTab(LIBRARY_TABS.PRACTICE)
     setSidebarOpen(true)
     navigateToView(home.view)
@@ -777,7 +801,7 @@ export default function App() {
         }),
       })
 
-      navigateToView('library')
+      navigateToView('import')
     } catch (error) {
       setLibraryFeedback({
         type: 'error',
@@ -811,11 +835,11 @@ export default function App() {
       setLibraryFeedback({
         type: 'success',
         message: fullSet
-          ? `Loaded ${file.name}. All files ready — opening Practice.`
-          : `Loaded ${file.name}. Add sheet music and a timing file to open Practice.`,
+          ? `Loaded ${file.name}. Accompaniment added.`
+          : `Loaded ${file.name}. Accompaniment added. Choose the matching PDF to begin.`,
       })
       if (fullSet) {
-        navigateToView('practice')
+        navigateToView('import')
       }
     } catch (error) {
       setLibraryFeedback({
@@ -870,11 +894,11 @@ export default function App() {
       setLibraryFeedback({
         type: 'success',
         message: canPractice
-          ? `Loaded ${file.name}. Opening Practice.`
-          : `Loaded ${file.name}. Add sheet music to open Practice.`,
+          ? `Loaded ${file.name}. Checking your score.`
+          : `Loaded ${file.name}. Choose the matching PDF to begin.`,
       })
       if (canPractice) {
-        navigateToView('practice')
+        navigateToView('import')
       }
     } catch (error) {
       setLibraryFeedback({
@@ -906,9 +930,9 @@ export default function App() {
     setAutoOmrRequest(null)
     setLibraryFeedback({
       type: 'info',
-      message: 'Timing file removed. Add a timing file to use Practice, loops, and Wait For You.',
+      message: 'Notation file removed. Prepare from the PDF, or add another notation file.',
     })
-    navigateToView('library')
+    navigateToView('import')
   }, [clearDemoPiece, navigateToView])
 
   const handleClearMidi = useCallback(() => {
@@ -919,9 +943,9 @@ export default function App() {
     }
     setLibraryFeedback({
       type: 'info',
-      message: 'Sound file removed. Timing, the score cursor, and Wait For You still work without MIDI.',
+      message: 'Optional accompaniment removed. Your score is still available.',
     })
-    navigateToView('library')
+    navigateToView('import')
   }, [clearDemoPiece, navigateToView])
 
   const handleOmrGenerated = useCallback(async ({
@@ -1299,7 +1323,6 @@ export default function App() {
     clearDemoPiece()
     markDemoCardHidden()
     dismissOnboarding()
-    setShowWelcome(false)
     // Keep React midi aligned with the live bundle (null after PDF-only replace).
     // Re-stamp MIDI ownership onto the active PDF when it survived replacement.
     const ownedMidi = stampMidiOwnerScoreId(
@@ -1342,13 +1365,9 @@ export default function App() {
     setAutoOmrRequest(null)
     setLibraryFeedback({
       type: 'success',
-      message: `Ready to practice (${playbackValidation.noteCount} notes, ${Math.round(playbackValidation.durationSeconds)}s).`,
+      message: 'Your score is ready. Choose a mode, then open it.',
     })
-    // Rapid A→B→C: if the user returned to Library after this OMR started
-    // (to upload a replacement), do not yank them into Practice mid-upload.
-    if (libraryNavAtRef.current <= omrRunStartedAtRef.current) {
-      navigateToView('practice')
-    }
+    // Stay on the ready step. Workspace entry is an explicit musician choice.
 
     logScoreSourceLifecycle('authoritative-musicxml-changed', {
       ...callbackToken,
@@ -1424,7 +1443,7 @@ export default function App() {
       pdfMeta: stablePdfMeta,
       midiSource: ownedMidi,
       musicXmlSource: nextMusicXmlSource,
-      activeView: 'practice',
+      activeView: activeViewRef.current,
       pageNumber: liveBeforeApply.pageNumber ?? currentBundle.pageNumber ?? pageNumber,
       practicePrefs: practicePrefsRef.current,
       instrumentId: currentInstrument,
@@ -1520,7 +1539,6 @@ export default function App() {
     pdfMeta,
     pdfBuffer,
     pageNumber,
-    navigateToView,
     clearDemoPiece,
     markDemoCardHidden,
     clearGeneratedPlaybackAfterOmrFailure,
@@ -1531,6 +1549,11 @@ export default function App() {
     if (!isDemoSampleEnabled()) {
       return
     }
+
+    const current = liveBundleRef.current
+    if (current?.pdfFile && !current.demoPieceActive && !window.confirm(
+      'Opening a collection piece replaces your saved score for this instrument on this device. Keep your original files to import it again. Open this piece?',
+    )) return
 
     setSampleLoadState({ loading: true, error: null })
 
@@ -1606,7 +1629,6 @@ export default function App() {
 
       setPdfSoftWarning(null)
       setAutoOmrRequest(null)
-      setShowWelcome(false)
       dismissOnboarding()
       markDemoCardHidden()
       setDemoPieceActive(true)
@@ -1694,7 +1716,7 @@ export default function App() {
 
       setLibraryFeedback({
         type: 'success',
-        message: `${meta.title} loaded — opening Practice. Press Play, then try Wait For You.`,
+        message: `${meta.title} loaded — checking your score. Press Play, then try Wait For You.`,
       })
       navigateToView('practice')
       setSampleLoadState({ loading: false, error: null })
@@ -1852,6 +1874,12 @@ export default function App() {
               const nextEpoch = practiceSessionEpochRef.current + 1
               practiceSessionEpochRef.current = nextEpoch
               setPracticeSessionEpoch(nextEpoch)
+              // Keep retry ownership in sync with the new companion-file session.
+              activatePdfScoreSource({
+                pdfIdentity: buildPdfSourceIdentity(ownerMeta),
+                epoch: nextEpoch,
+                reason: 'classified-musicxml-upload',
+              })
             }
           }
         }
@@ -1907,8 +1935,8 @@ export default function App() {
             setLibraryFeedback({
               type: 'success',
               message: loadedSoftWarning
-                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with timing${fullSet ? ' and sound' : ''} — opening Practice.`
-                : `Loaded ${classified.pdf[0].name} with timing${fullSet ? ' and sound' : ''} — opening Practice.`,
+                ? `${loadedSoftWarning} Loaded ${classified.pdf[0].name} with timing${fullSet ? ' and sound' : ''} — checking your score.`
+                : `Loaded ${classified.pdf[0].name} with timing${fullSet ? ' and sound' : ''} — checking your score.`,
             })
           } else if (clearedCompanionFilesForPdf && !loadedNewCompanionFile) {
             setLibraryFeedback({
@@ -1950,18 +1978,16 @@ export default function App() {
             type: 'success',
             message: canPractice
               ? fullSet
-                ? 'All files ready — opening Practice.'
-                : 'Timing loaded — opening Practice.'
+                ? 'Files added. Checking your score.'
+                : 'Notation added. Checking your score.'
               : classified.musicXml[0]
-                ? `Loaded ${classified.musicXml[0].name}. Add sheet music to open Practice.`
+                ? `Loaded ${classified.musicXml[0].name}. Choose the matching PDF to begin.`
                 : `Loaded ${classified.midi[0].name}. Add sheet music; score preparation continues if needed.`,
           })
         }
 
-        if (isPracticeNavigableSet(loadedPdf, loadedXml)) {
-          navigateToView('practice')
-        } else if (!classified.pdf[0]) {
-          navigateToView('library')
+        if (classified.pdf[0] || classified.musicXml[0] || classified.midi[0]) {
+          navigateToView('import')
         }
       } catch (error) {
         setLibraryFeedback({
@@ -2012,8 +2038,16 @@ export default function App() {
     setPageNumber(Math.min(numPages, Math.max(1, page)))
   }
 
-  const handleSessionRestore = useCallback(async (payload) => {
-    const restoredBuffer = await payload.pdfFile.arrayBuffer()
+  const handleSessionRestore = useCallback(async (payload, shouldApply = () => true) => {
+    const restoredInstrument = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
+    const otherBundles = Object.entries(payload.instrumentBundles ?? {}).filter(([id, bundle]) => normalizeInstrumentId(id) !== restoredInstrument && bundle?.pdfFile)
+    const [restoredBuffer, otherBuffers] = await Promise.all([
+      payload.pdfFile.arrayBuffer(),
+      Promise.all(otherBundles.map(async ([id, bundle]) => [id, await bundle.pdfFile.arrayBuffer()])),
+    ])
+    // A skipped or timed-out restore must never replace a newer import.
+    if (!shouldApply()) return
+    const restoredBundleBuffers = new Map(otherBuffers)
     const pdfBufferCopy = restoredBuffer.slice(0)
     const nextPdfUrl = URL.createObjectURL(payload.pdfFile)
     setPdfBuffer(pdfBufferCopy)
@@ -2087,7 +2121,6 @@ export default function App() {
     setMusicXmlSource(nextMusicXml)
     setPageNumber(payload.pageNumber ?? 1)
     resetPdfViewerRuntime()
-    const restoredInstrument = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
     setPracticeSessionEpoch(nextEpoch)
     setPracticeRemountKey((key) => key + 1)
     activatePdfScoreSource({
@@ -2112,7 +2145,6 @@ export default function App() {
         }),
       ),
     )
-    setShowWelcome(false)
     setPdfSoftWarning(null)
     setDemoPieceActive(false)
     markDemoCardHidden()
@@ -2123,7 +2155,7 @@ export default function App() {
       if (normalizedBundleInstrument === restoredInstrument || !bundle?.pdfFile) {
         continue
       }
-      const bundleBuffer = await bundle.pdfFile.arrayBuffer()
+      const bundleBuffer = restoredBundleBuffers.get(bundleInstrumentId)
       instrumentBundleStoreRef.current.set(normalizedBundleInstrument, {
         ...bundle,
         pdfFile: URL.createObjectURL(bundle.pdfFile),
@@ -2230,11 +2262,21 @@ export default function App() {
     handleClassifiedUpload(pending)
   }, [restoreGateOpen, handleClassifiedUpload])
 
+  const timingMapCurrent = scoreTimingValidation.timingMap?.sourceContentKey === musicXmlSourceKey(musicXmlSource)
+  const scoreChecking = scoreMidiValidation.checking || (Boolean(musicXmlSource?.data) && !scoreTimingValidation.error && (scoreTimingValidation.isLoading || !timingMapCurrent))
   const practiceReady = isPracticePlaybackReady({
     restoreGateOpen,
     pdfFile,
     musicXmlSource,
-  })
+  }) && timingMapCurrent && !scoreTimingValidation.error && scoreTimingValidation.timingMap?.notes?.length > 0 && !scoreMidiValidation.checking && !scoreMidiValidation.invalid
+  function handleOpenImportedScore(mode) {
+    if (!practiceReady) return
+    const snapshot = { ...practicePrefsRef.current, practiceMode: normalizePracticeMode(mode) }
+    syncPracticePrefsSnapshot(snapshot)
+    updateSessionPracticePrefs(snapshot, pdfMeta, instrumentId)
+    setSidebarOpen(false)
+    navigateToView('practice')
+  }
   const sessionFilesReady = practiceReady
   const uploadedPracticePieces = useMemo(
     () =>
@@ -2263,6 +2305,7 @@ export default function App() {
     const currentInstrument = normalizeInstrumentId(activeInstrumentRef.current)
     const store = instrumentBundleStoreRef.current
     const live = snapshotInstrumentBundle(liveBundleRef.current)
+    let openingBundle = live
 
     if (targetInstrument !== currentInstrument) {
       // Persist the outgoing upload without wiping it when live is already empty.
@@ -2280,6 +2323,7 @@ export default function App() {
       // Update the active-instrument ref before setInstrumentId so the switch
       // effect does not clear the bundle we are about to open.
       activeInstrumentRef.current = targetInstrument
+      openingBundle = targetBundle
       applyInstrumentBundle(targetBundle)
       setInstrumentId(targetInstrument)
     } else if (!bundleHasActiveFile(live)) {
@@ -2292,11 +2336,12 @@ export default function App() {
         })
         return
       }
+      openingBundle = targetBundle
       applyInstrumentBundle(targetBundle)
     }
 
-    setLibraryFeedback({ type: 'info', message: 'Opened Practice.' })
-    navigateToView('practice')
+    setLibraryFeedback(null)
+    navigateToView(isPracticeNavigableSet(openingBundle.pdfFile, openingBundle.musicXmlSource) ? 'practice' : 'import')
   }, [applyInstrumentBundle, navigateToView, setInstrumentId])
 
   const persistUploadBundlesNow = useCallback(async ({
@@ -2461,40 +2506,40 @@ export default function App() {
     }
   }, [activeView, pdfFile, pdfBuffer, resetPdfViewerRuntime])
 
-  const practiceLibraryIsFirstRunHome = true
-  const showLibraryIntro =
-    !practiceLibraryIsFirstRunHome &&
-    activeView === 'library' &&
-    showWelcome &&
-    restoreGateOpen &&
-    !guidedTutorialOpen
-  const showLibraryWorkspace = activeView === 'library'
+  const showLibraryWorkspace = activeView === 'library' || activeView === 'import'
+  const libraryTabForView = activeView === 'import' ? LIBRARY_TABS.UPLOADS : libraryTab
+
+  function handleLibraryTabChange(tab) {
+    if (activeView === 'import' && tab !== LIBRARY_TABS.UPLOADS) {
+      setLibraryTab(tab)
+      navigateToView('library')
+      return
+    }
+    setLibraryTab(tab)
+  }
 
   function finishGuidedTutorial(reason) {
     completeGuidedTutorial(reason)
     dismissOnboarding()
-    setShowWelcome(false)
     setGuidedTutorialOpen(false)
   }
 
   function replayGuidedTutorial() {
-    setShowWelcome(false)
     setGuidedTutorialOpen(true)
   }
 
   function showFileHelp() {
-    setShowWelcome(false)
     setSidebarOpen(true)
     setLibraryTab(LIBRARY_TABS.UPLOADS)
     setFileHelpSignal((signal) => signal + 1)
-    navigateToView('library')
+    navigateToView('import')
   }
 
   function handleTutorialAddSheetMusic() {
     finishGuidedTutorial('add-sheet-music')
     setSidebarOpen(true)
     setLibraryTab(LIBRARY_TABS.UPLOADS)
-    navigateToView('library')
+    navigateToView('import')
   }
 
   useEffect(() => {
@@ -2513,11 +2558,10 @@ export default function App() {
       practiceFile: pdfMeta?.fileName ?? fileName ?? null,
       practiceReady,
       numPages,
-      showLibraryIntro,
       showLibraryWorkspace,
       rendering:
-        showLibraryIntro
-          ? 'LibraryWelcomeCard'
+        activeView === 'home'
+          ? 'Home'
           : showLibraryWorkspace
             ? 'LibraryWorkspace'
             : activeView === 'practice'
@@ -2538,7 +2582,6 @@ export default function App() {
     musicXmlSource,
     pdfMeta?.fileName,
     fileName,
-    showLibraryIntro,
     showLibraryWorkspace,
     sessionFilesReady,
     practiceReady,
@@ -2556,16 +2599,40 @@ export default function App() {
     }
     if (meta?.emptyPractice) {
       dismissOnboarding()
-      setShowWelcome(false)
       setSidebarOpen(false)
       navigateToView('practice')
       return
     }
-    if (view === 'library') {
-      setSidebarOpen(true)
+    if (view === 'import') {
+      setLibraryTab(LIBRARY_TABS.UPLOADS)
     }
     navigateToView(view)
   }
+
+  const shellLocation = useMemo(() => {
+    switch (activeView) {
+      case 'home':
+        return { title: 'Home' }
+      case 'library':
+        return { title: 'Library' }
+      case 'import':
+        return { title: 'Import' }
+      case 'practice':
+        return { title: 'Practice', sub: fileName ?? null }
+      case 'profile':
+        return { title: 'Practice history' }
+      case 'settings':
+        return { title: 'Settings' }
+      case 'privacy':
+        return { title: 'Privacy' }
+      case 'terms':
+        return { title: 'Terms' }
+      case 'contact':
+        return { title: 'Contact' }
+      default:
+        return { title: 'Library' }
+    }
+  }, [activeView, fileName])
 
   function renderPracticeContent() {
     if (isRestoring || !restoreGateOpen) {
@@ -2577,43 +2644,17 @@ export default function App() {
       )
     }
 
-    if (!sessionFilesReady) {
-      const omrInvalid =
-        isOmrGeneratedPlayback(musicXmlSource) &&
-        !((musicXmlSource?.omrMeta?.durationSeconds ?? 0) > 0)
-      return (
-        <AppViewPlaceholder
-          title={omrInvalid ? 'Generated playback is not ready' : 'No piece open yet'}
-          message={
-            omrInvalid
-              ? 'This experimental PDF playback could not be validated. Go back to Library to regenerate it, or add a timing file.'
-              : 'Open the demo piece to start now, or add your own sheet music and timing file in Library.'
-          }
-          actionLabel={
-            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
-              ? 'Try Demo Piece'
-              : 'Back to Library'
-          }
-          onAction={
-            !omrInvalid && isDemoSampleEnabled() && restoreGateOpen
-              ? handleLoadSampleFixtures
-              : () => {
-                  setSidebarOpen(true)
-                  setLibraryTab(LIBRARY_TABS.UPLOADS)
-                  navigateToView('library')
-                }
-          }
-          secondaryActionLabel={!omrInvalid ? 'Add My Sheet Music' : null}
-          onSecondaryAction={!omrInvalid
-            ? () => {
-                setSidebarOpen(true)
-                setLibraryTab(LIBRARY_TABS.UPLOADS)
-                navigateToView('library')
-              }
-            : null}
-        />
-      )
-    }
+    if (pdfFile && scoreChecking) return <AppViewPlaceholder title="Opening your score" message="Checking that playback is available…" />
+    if (pdfFile && musicXmlSource?.data && !practiceReady) return <AppViewPlaceholder
+      title="This score needs attention"
+      message={scoreMidiValidation.invalid ? "The optional accompaniment couldn’t be read. Return to import to remove or replace it." : "The notation file couldn’t be read. Return to import to replace it or prepare from the PDF."}
+      actionLabel="Continue import" onAction={() => navigateToView('import')} />
+
+    if (!sessionFilesReady) return <AppViewPlaceholder
+      title={pdfFile ? 'Finish preparing your score' : 'Your next piece starts here'}
+      message={pdfFile ? 'Your PDF is saved. Continue import to get playback ready.' : 'Import your sheet music, or choose a ready-to-play piece from the collection.'}
+      actionLabel={pdfFile ? 'Continue import' : 'Import a score'} onAction={() => navigateToView('import')}
+      secondaryActionLabel="Explore library" onSecondaryAction={() => navigateToView('library')} />
 
     return (
       <PracticeSessionProvider
@@ -2628,13 +2669,14 @@ export default function App() {
         numPages={numPages}
         visiblePageNumber={pageNumber}
         pdfSoftWarning={pdfSoftWarning}
-        initialPracticePrefs={initialPracticePrefs}
+        initialPracticePrefs={practicePrefsRef.current ?? initialPracticePrefs}
         sessionFilesReady={sessionFilesReady}
         isDemoPiece={demoPieceActive}
         autoSetupGateOpen={practicePdfReady}
         experimentalOmrPlayback={isOmrGeneratedPlayback(musicXmlSource)}
         onPracticePrefsChange={(snapshot) => {
           practicePrefsRef.current = snapshot
+          updateSessionPracticePrefs(snapshot, pdfMeta, instrumentId)
         }}
       >
         <PracticeView
@@ -2686,49 +2728,46 @@ export default function App() {
         className={`app${isRestoring ? ' app--restoring' : ''}${guidedChoiceOpen ? ' app--guided-choice' : ''}`}
         inert={isRestoring ? true : undefined}
       >
-        <TopBar
+        <AppShell
           activeView={activeView}
+          expanded={sidebarOpen}
+          onToggleExpanded={() => toggleSidebar()}
           onNavigate={handleNavigate}
           onGoHome={goHome}
-          onReplayTutorial={replayGuidedTutorial}
-          onShowFileHelp={showFileHelp}
-          practiceReady={practiceReady}
-        />
-
-      <SessionRestoreBanner
-        status={sessionPersistence.restoreStatus}
-        message={sessionPersistence.restoreMessage}
-        onDismiss={sessionPersistence.dismissRestoreMessage}
-        onClearSaved={sessionPersistence.clearSavedSession}
-      />
-
-      {showLibraryIntro && (
-        <main className="library-welcome-wrap">
-          <LibraryWelcomeCard
-            onDismiss={() => setShowWelcome(false)}
-            onTrySample={
-              isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined
-            }
-            demoPiece={activeDemoPiece}
-            sampleLoading={sampleLoadState.loading}
-            sampleError={sampleLoadState.error}
+          headerProps={{
+            title: shellLocation.title,
+            sub: shellLocation.sub ?? null,
+            onReplayTutorial: replayGuidedTutorial,
+            onShowFileHelp: showFileHelp,
+            importActive: activeView === 'import',
+          }}
+        >
+          <SessionRestoreBanner
+            status={sessionPersistence.restoreStatus}
+            message={sessionPersistence.restoreMessage}
+            onDismiss={sessionPersistence.dismissRestoreMessage}
+            onClearSaved={sessionPersistence.clearSavedSession}
           />
-        </main>
-      )}
 
-      {showLibraryWorkspace && (
-        <main className="library-main">
+          {showLibraryWorkspace && (
+        <main className={`library-main${activeView === 'import' ? ' score-import-main' : ''}`}>
           <LibraryPanel
+            importOnly={activeView === 'import'}
+            onImportScore={() => navigateToView('import')}
+            onBack={() => navigateToView('library')}
+            onOpenScore={handleOpenImportedScore}
+            initialMode={initialPracticePrefs?.practiceMode}
             className={
-              libraryTab === LIBRARY_TABS.PRACTICE
+              libraryTabForView === LIBRARY_TABS.PRACTICE
                 ? 'library-panel--practice-library'
                 : 'library-panel--uploads-library'
             }
-            activeTab={libraryTab}
-            onTabChange={setLibraryTab}
+            activeTab={libraryTabForView}
+            onTabChange={handleLibraryTabChange}
             instrumentId={instrumentId}
             fileName={fileName}
             midiFileName={midiSource?.fileName}
+            midiSource={midiSource}
             musicXmlFileName={musicXmlSource?.fileName}
             musicXmlSource={musicXmlSource}
             uploadsDisabled={isRestoring}
@@ -2762,7 +2801,23 @@ export default function App() {
         </main>
       )}
 
-      {activeView === 'practice' && renderPracticeContent()}
+      {activeView === 'practice' && <PracticeErrorBoundary onReturnToLibrary={() => navigateToView('library')}>
+        <Suspense fallback={<AppViewPlaceholder title="Opening your score" message="Getting your practice room ready…" />}>{renderPracticeContent()}</Suspense>
+      </PracticeErrorBoundary>}
+
+      {activeView === 'home' && (
+        <Home
+          fileName={fileName}
+          pdfFile={pdfFile}
+          practiceReady={practiceReady}
+          instrumentId={instrumentId}
+          pageNumber={pageNumber}
+          onNavigate={handleNavigate}
+          onLoadPiece={isDemoSampleEnabled() && restoreGateOpen ? handleLoadSampleFixtures : undefined}
+          sampleLoading={sampleLoadState.loading}
+          sampleError={sampleLoadState.error}
+        />
+      )}
 
       {activeView === 'profile' && (
         <Suspense
@@ -2774,18 +2829,35 @@ export default function App() {
         </Suspense>
       )}
 
+      {activeView === 'settings' && (
+        <SettingsView
+          paperTheme={paperTheme}
+          onPaperThemeChange={setPaperTheme}
+          sidebarExpanded={sidebarOpen}
+          onSidebarExpandedChange={setSidebarOpen}
+          onClearSavedSession={sessionPersistence.clearSavedSession}
+          onNavigate={handleNavigate}
+        />
+      )}
+
       {activeView === 'privacy' && <PrivacyPolicyPage />}
       {activeView === 'terms' && <TermsOfServicePage />}
       {activeView === 'contact' && <ContactPage />}
 
-      {(activeView === 'library' ||
+      {(activeView === 'home' ||
+        activeView === 'library' ||
+        activeView === 'import' ||
         activeView === 'practice' ||
         activeView === 'profile' ||
+        activeView === 'settings' ||
         isLegalView(activeView)) && <AppFooter onLegalNavigate={navigateToView} />}
 
       {guidedTutorialOpen &&
         restoreGateOpen &&
-        (activeView === 'library' || activeView === 'practice') && (
+        (activeView === 'library' ||
+          activeView === 'home' ||
+          activeView === 'import' ||
+          activeView === 'practice') && (
         <GuidedTutorial
           activeView={activeView}
           practiceReady={practiceReady}
@@ -2798,6 +2870,7 @@ export default function App() {
           onDone={() => finishGuidedTutorial('done')}
         />
       )}
+        </AppShell>
       </div>
       {isRestoring && <SessionRestoreOverlay onSkip={sessionPersistence.skipRestore} />}
     </>
@@ -2805,7 +2878,17 @@ export default function App() {
 
   return (
     <ProfileStatsProvider>
-      {appBody}
+      {isDesignSandboxPath() ? (
+        <Suspense
+          fallback={
+            <AppViewPlaceholder title="Loading design sandbox" message="Preparing primitives…" />
+          }
+        >
+          <DesignSandbox />
+        </Suspense>
+      ) : (
+        appBody
+      )}
     </ProfileStatsProvider>
   )
 }

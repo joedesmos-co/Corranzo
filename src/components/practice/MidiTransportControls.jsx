@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { formatTime } from '../../features/playback/formatTime.js'
 import { quantizePracticeTime } from '../../context/PracticeTickContext.jsx'
+import Icon from '../../design/Icon.jsx'
 
 function MidiTransportControls({
   disabled,
@@ -43,7 +44,7 @@ function MidiTransportControls({
             title={playPauseTitle}
           >
             <span className="midi-transport__btn-icon" aria-hidden="true">
-              {isPlaying ? '❚❚' : '▶'}
+              <Icon name={isPlaying ? 'pause' : 'play'} size={15} />
             </span>
             <span>{isPlaying ? 'Pause' : 'Play'}</span>
           </button>
@@ -60,7 +61,7 @@ function MidiTransportControls({
               aria-pressed={isPlaying}
               title={playTitle}
             >
-              ▶
+              <Icon name="play" size={15} />
             </button>
             <button
               type="button"
@@ -70,7 +71,7 @@ function MidiTransportControls({
               aria-label="Pause (Space)"
               title="Pause (Space)"
             >
-              ❚❚
+              <Icon name="pause" size={15} />
             </button>
             <button
               type="button"
@@ -79,7 +80,7 @@ function MidiTransportControls({
               onClick={onStop}
               aria-label="Stop"
             >
-              ■
+              <Icon name="stop" size={14} />
             </button>
           </>
         )}
@@ -92,7 +93,7 @@ function MidiTransportControls({
             aria-label="Test sound"
             title="Test sound (checks speakers without MIDI)"
           >
-            ♪
+            <Icon name="music" size={15} />
           </button>
         )}
       </div>

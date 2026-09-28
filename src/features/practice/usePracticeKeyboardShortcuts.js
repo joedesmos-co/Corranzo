@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { PRACTICE_MODE } from './practiceMode.js'
 import { WFY_STATUS } from './waitForYouEngine.js'
 
 function isEditableTarget(target) {
@@ -42,6 +43,9 @@ export default function usePracticeKeyboardShortcuts({
   onNextMeasure,
   onToggleFullscreen,
   onWaitForYouContinue,
+  onModeChange,
+  onAdjustTempo,
+  onLoop,
 }) {
   const handlersRef = useRef({
     onTogglePlayPause,
@@ -51,6 +55,9 @@ export default function usePracticeKeyboardShortcuts({
     onNextMeasure,
     onToggleFullscreen,
     onWaitForYouContinue,
+    onModeChange,
+    onAdjustTempo,
+    onLoop,
   })
 
   handlersRef.current = {
@@ -61,6 +68,9 @@ export default function usePracticeKeyboardShortcuts({
     onNextMeasure,
     onToggleFullscreen,
     onWaitForYouContinue,
+    onModeChange,
+    onAdjustTempo,
+    onLoop,
   }
 
   useEffect(() => {
@@ -69,16 +79,17 @@ export default function usePracticeKeyboardShortcuts({
     }
 
     function handleKeyDown(event) {
-      if (event.defaultPrevented || isEditableTarget(event.target)) {
+      if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey || isEditableTarget(event.target) || event.target?.closest?.('[role="dialog"], .tb-popover__panel:not([hidden])')) {
         return
       }
 
+      if (alignmentMode) return
       const key = event.key
+      if (event.target?.closest?.('button, a, summary, [role="radio"]') && [' ', 'Spacebar', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) return
+      if (['1', '2', '3'].includes(key)) { event.preventDefault(); handlersRef.current.onModeChange?.(Object.values(PRACTICE_MODE)[Number(key) - 1]); return }
+      if (['-', '+', '='].includes(key) && hasMusicXml && !playbackLoading) { event.preventDefault(); handlersRef.current.onAdjustTempo?.(key === '-' ? -.05 : .05); return }
+      if (key.toLowerCase() === 'l') { event.preventDefault(); handlersRef.current.onLoop?.(); return }
       const handlers = handlersRef.current
-
-      if (alignmentMode) {
-        return
-      }
 
       const canContinueWfy =
         isWaitForYou &&

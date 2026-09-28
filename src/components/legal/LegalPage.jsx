@@ -5,9 +5,9 @@ export default function LegalPage({ title, lede, children }) {
     <main className="legal-page" aria-labelledby="legal-heading">
       <header className="legal-page__header">
         <CorranzoLogo className="legal-page__logo" width={180} height={52} />
-        <h2 id="legal-heading" className="legal-page__title">
+        <h1 id="legal-heading" className="legal-page__title">
           {title}
-        </h2>
+        </h1>
         {lede ? <p className="legal-page__lede">{lede}</p> : null}
       </header>
       <article className="legal-page__content">{children}</article>

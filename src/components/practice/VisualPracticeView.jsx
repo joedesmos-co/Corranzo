@@ -239,13 +239,13 @@ function VisualPracticeView({ timingSourceKind = null }) {
 
   if (!timingMap || !groups.length) {
     return (
-      <div className="visual-practice visual-practice--empty" aria-label="Visual practice">
+      <div className="visual-practice visual-practice--empty" aria-label="Note guide">
         <div className="visual-practice__empty">
           <h3>{timingLoading ? 'Loading notes…' : 'No notes to show yet'}</h3>
           <p>
             {timingLoading
-              ? 'Reading the timing file for this piece.'
-              : 'Visual mode needs a timing file (MusicXML or MXL). Add one in Library, or open the demo piece to try it now. The Score view still works for PDF-only pieces.'}
+              ? 'Preparing the notes for this piece.'
+              : 'A note guide is not available for this piece yet. You can still read and mark your Score, or try a piece from the collection.'}
           </p>
         </div>
       </div>
@@ -258,7 +258,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
   return (
     <div
       className="visual-practice"
-      aria-label="Visual practice"
+      aria-label="Note guide"
       data-guitar-score-target={visualGuitarScoreTarget ?? undefined}
     >
       {isOmrTiming && (
@@ -271,11 +271,12 @@ function VisualPracticeView({ timingSourceKind = null }) {
         </details>
       )}
 
-      <VisualTargetHeader
+      {!isWaitForYou && <VisualTargetHeader
         targetGroup={targetGroup}
         targetIndex={targetIndex}
         totalGroups={groups.length}
         isWaitForYou={isWaitForYou}
+        isPreview={visual.practiceMode === 'preview'}
         waiting={waitForYouWaiting}
         complete={laneComplete}
         micChordSequence={
@@ -287,7 +288,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
         strings={laneStrings}
         tabPositions={tabPositions}
         instrumentId={instrument.id}
-      />
+      />}
 
       {isFretboardLane ? (
         <TabVisualLane
@@ -322,7 +323,7 @@ function VisualPracticeView({ timingSourceKind = null }) {
         <VisualKeyboardStrip keys={keyboardKeys} />
       )}
 
-      {!isWaitForYou && (
+      {!isWaitForYou && visual.practiceMode !== 'preview' && (
         <div className="visual-practice__legend" aria-hidden="true">
           <span className="visual-practice__legend-item visual-practice__legend-item--correct">
             Correct
@@ -448,6 +449,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
   targetIndex,
   totalGroups,
   isWaitForYou,
+  isPreview = false,
   waiting,
   complete,
   micChordSequence = false,
@@ -487,10 +489,10 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
       aria-atomic="true"
     >
       <span className="visual-practice__target-kicker">
-        {isWaitForYou ? 'Play this' : 'Next up'}
+        {isPreview ? 'Listen for' : isWaitForYou ? 'Play this' : 'Next up'}
       </span>
       <strong className="visual-practice__target-notes">
-        {describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)}
+        {isPreview ? describeTargetNotes(targetGroup, strings, tabPositions, instrumentId).replace(/^Play /, '') : describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)}
         {targetGroup.isChord && micChordSequence ? ' (one at a time)' : ''}
       </strong>
       <span className="visual-practice__target-meta">

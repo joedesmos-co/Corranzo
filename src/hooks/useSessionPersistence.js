@@ -17,6 +17,8 @@ import {
   logScoreSourceIdentities,
 } from '../features/library/scoreSourceReplacement.js'
 
+import { updateSavedSessionView } from '../features/session/sessionViewPersistence.js'
+
 const SAVE_DEBOUNCE_MS = 1200
 const RESTORE_TIMEOUT_MS = 30_000
 
@@ -67,6 +69,7 @@ export default function useSessionPersistence({
   const [restoreStatus, setRestoreStatus] = useState(() => initialRestoreStatus(restoreSuspended))
   const [restoreMessage, setRestoreMessage] = useState(null)
   const restoreAttemptedRef = useRef(false)
+  const restoreControllerRef = useRef(null)
   const saveTimerRef = useRef(null)
   const saveGenerationRef = useRef(sessionSaveGeneration)
   const deferredRestoreRef = useRef(
@@ -107,22 +110,24 @@ export default function useSessionPersistence({
       return
     }
     restoreAttemptedRef.current = true
+    const controller = new AbortController()
+    restoreControllerRef.current = controller
 
     try {
       const loaded = loadSessionMeta()
       if (!loaded) {
-        if (!mountedRef.current) return
+        if (!mountedRef.current || controller.signal.aborted) return
         setRestoreStatus(RESTORE_STATUS.NONE)
         return
       }
 
-      if (!mountedRef.current) return
+      if (!mountedRef.current || controller.signal.aborted) return
       setRestoreStatus(RESTORE_STATUS.RESTORING)
 
       if (loaded.expired) {
-        if (!mountedRef.current) return
+        if (!mountedRef.current || controller.signal.aborted) return
         setRestoreStatus(RESTORE_STATUS.EXPIRED)
-        setRestoreMessage('Your saved session was older than a week and was not restored.')
+        setRestoreMessage('Your saved score is more than a week old. Import the PDF again to continue.')
         await clearSessionStorage()
         return
       }
@@ -130,9 +135,9 @@ export default function useSessionPersistence({
       const files = await withTimeout(
         loadSessionFiles(),
         RESTORE_TIMEOUT_MS,
-        'Restoring files timed out. Skip restore or clear the saved session.',
+        'Opening your saved score took too long. Try reloading or importing your PDF again.',
       )
-      if (!mountedRef.current) return
+      if (!mountedRef.current || controller.signal.aborted) return
       const result = validateRestoredSession(loaded.meta, files)
       const instrumentBundles = validateRestoredInstrumentBundles(loaded.meta, files)
       const bundleOnlyRestore = !result.ok || !result.pdfMeta
@@ -141,10 +146,10 @@ export default function useSessionPersistence({
         : null
 
       if (bundleOnlyRestore && !fallbackBundleEntry) {
-        if (!mountedRef.current) return
+        if (!mountedRef.current || controller.signal.aborted) return
         setRestoreStatus(RESTORE_STATUS.FAILED)
         setRestoreMessage(
-          'Could not restore your last session — upload your files again, or clear the saved session below.',
+          'Your saved score couldn’t be opened. Import the PDF again, or clear the saved score below.',
         )
         return
       }
@@ -178,31 +183,29 @@ export default function useSessionPersistence({
                 scoreId: loaded.meta.scoreId ?? null,
                 issues: result.issues ?? [],
               },
+          () => mountedRef.current && !controller.signal.aborted,
         ),
         RESTORE_TIMEOUT_MS,
-        'Restoring files timed out. Skip restore or clear the saved session.',
+        'Opening your saved score took too long. Try reloading or importing your PDF again.',
       )
-      if (!mountedRef.current) return
+      if (!mountedRef.current || controller.signal.aborted) return
 
       if (result.partial) {
         setRestoreStatus(RESTORE_STATUS.PARTIAL)
         setRestoreMessage(
           result.issues?.includes('stale-omr-session')
-            ? 'Restored your PDF, but experimental playback was invalid — regenerate from PDF in Library.'
-            : 'Restored your score with some files missing — re-upload anything that looks wrong.',
+            ? 'Your PDF is saved, but playback needs preparation. Continue from Import.'
+            : 'Your PDF is saved, but some companion files are missing. Check Import before practicing.',
         )
       } else {
         setRestoreStatus(RESTORE_STATUS.RESTORED)
-        setRestoreMessage('Restored your last practice session.')
+        setRestoreMessage('Your score and practice settings are ready.')
       }
-    } catch (error) {
-      if (!mountedRef.current) return
+    } catch {
+      if (!mountedRef.current || controller.signal.aborted) return
+      controller.abort()
       setRestoreStatus(RESTORE_STATUS.FAILED)
-      setRestoreMessage(
-        error instanceof Error
-          ? error.message
-          : 'Could not restore your last session — you can upload fresh files anytime.',
-      )
+      setRestoreMessage('Your saved score couldn’t be opened. Try reloading, or import your PDF again.')
     }
   }, [onRestore])
 
@@ -228,6 +231,10 @@ export default function useSessionPersistence({
       attemptRestore()
     }
   }, [attemptRestore, restoreStatus, restoreSuspended])
+
+  useEffect(() => {
+    if (restoreGateOpen && !restoreSuspended) updateSavedSessionView(activeView, pdfMeta, instrumentId)
+  }, [activeView, pdfMeta, instrumentId, restoreGateOpen, restoreSuspended])
 
   const scheduleSave = useCallback(() => {
     if (!restoreGateOpen) {
@@ -341,6 +348,7 @@ export default function useSessionPersistence({
   }, [pdfMeta, scheduleSave, restoreGateOpen])
 
   const clearSavedSession = useCallback(async () => {
+    restoreControllerRef.current?.abort()
     await clearSessionStorage()
     restoreAttemptedRef.current = false
     setRestoreStatus(RESTORE_STATUS.NONE)
@@ -348,10 +356,11 @@ export default function useSessionPersistence({
   }, [])
 
   const skipRestore = useCallback(() => {
+    restoreControllerRef.current?.abort()
     restoreAttemptedRef.current = true
     setRestoreStatus(RESTORE_STATUS.FAILED)
     setRestoreMessage(
-      'Skipped restore. Upload your files, or clear the saved session below.',
+      'Opening paused. Reload to try your saved score again, or import another PDF.',
     )
   }, [])
 

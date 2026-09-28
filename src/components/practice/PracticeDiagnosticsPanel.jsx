@@ -70,7 +70,10 @@ export default function PracticeDiagnosticsPanel({
         </details>
       )}
 
-      {scoreFollow?.debug && (
+      {/* Anchor-promotion internals are developer-only, like Calibration debug
+          below. Keeping them out of production also keeps model pipeline terms
+          out of user-facing copy. */}
+      {import.meta.env.DEV && scoreFollow?.debug && (
         <details className="practice-diagnostics__group">
           <summary>Score cursor</summary>
           <div className="practice-diagnostics__group-body">

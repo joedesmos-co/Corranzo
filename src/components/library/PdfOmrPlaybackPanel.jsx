@@ -1,9 +1,11 @@
+import { runScorePreparation } from '../../features/import/scorePreparationQueue.js'
+import { describePreparation, describePreparationFailure } from '../../features/import/importPresentation.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { runPdfOmrClient, cancelActiveOmrWorker } from '../../features/omr/runPdfOmrClient.js'
 import { useInstrument } from '../../context/instrumentContext.js'
 import { describePdfSourceType, isPdfBufferAttached } from '../../features/omr/omrPdfSource.js'
 import { beginOmrUiBlock, endOmrUiBlock, releaseOmrUiLocks } from '../../features/omr/omrUiGuard.js'
-import { OMR_STATUS, OMR_STATUS_LABEL, yieldToBrowser } from '../../features/omr/omrConstants.js'
+import { OMR_STATUS, yieldToBrowser } from '../../features/omr/omrConstants.js'
 import { OMR_ACCEPTANCE, OMR_QUALITY_WARNING_MESSAGE } from '../../features/omr/assessOmrAcceptance.js'
 import { nextOmrTraceRunId, omrTrace } from '../../features/omr/omrTrace.js'
 import {
@@ -37,23 +39,6 @@ function resetOmrPanelState(setters) {
   setters.setProgressLabel('')
 }
 
-function formatOmrFailureMessage(error) {
-  const rawMessage = error?.message ?? ''
-  // DEV: never swallow the underlying exception — operators need the real cause.
-  if (import.meta.env.DEV && rawMessage) {
-    const stage = error?.code ?? error?.stage ?? error?.difficulty?.reasons?.[0]
-    const stageHint = stage ? ` [${stage}]` : ''
-    return `${rawMessage}${stageHint}`
-  }
-  if (/TAB staff lines were detected/i.test(rawMessage)) {
-    return rawMessage
-  }
-  if (/too difficult|confidence|unsupported|failed/i.test(rawMessage)) {
-    return 'We could not read enough of this PDF automatically. You can try again, or upload MusicXML/MXL for the most accurate timing.'
-  }
-  return 'We could not get timing ready from this PDF. You can try again, or upload MusicXML/MXL for the most accurate timing.'
-}
-
 function pdfBytesFromOmrSource(pdfSource) {
   if (pdfSource instanceof ArrayBuffer) {
     return pdfSource
@@ -85,6 +70,9 @@ export default function PdfOmrPlaybackPanel({
   const [error, setError] = useState(null)
   const [summary, setSummary] = useState(null)
   const [progressLabel, setProgressLabel] = useState('')
+  const [progress, setProgress] = useState(null)
+  const [failureCopy, setFailureCopy] = useState(null)
+  const [cancelled, setCancelled] = useState(false)
   const [devFlags, setDevFlags] = useState(() => getOmrDiagnosticFlags())
   const [devCopyStatus, setDevCopyStatus] = useState('')
   const [hasDiagnostics, setHasDiagnostics] = useState(false)
@@ -100,11 +88,14 @@ export default function PdfOmrPlaybackPanel({
   const autoStartedKeyRef = useRef(null)
 
   useEffect(() => () => {
+    const runId = activeRunRef.current
+    activeRunRef.current = nextOmrTraceRunId()
+    const activeWorkerRun = getActiveScoreSourceGeneration().activeOmrRunId
     if (!completedRunRef.current) {
       abortRef.current?.abort()
-      cancelActiveOmrWorker()
+      if (activeWorkerRun === runId) cancelActiveOmrWorker()
     }
-    releaseOmrUiLocks()
+    if (activeWorkerRun == null || activeWorkerRun === runId) releaseOmrUiLocks()
   }, [])
 
   // New PDF / session epoch must wipe prior panel UI. A discarded Piece-A
@@ -114,6 +105,9 @@ export default function PdfOmrPlaybackPanel({
     abortRef.current?.abort()
     activeRunRef.current = nextOmrTraceRunId()
     setError(null)
+    setProgress(null)
+    setFailureCopy(null)
+    setCancelled(false)
     setSummary(null)
     setHasDiagnostics(false)
     setFailureReport(null)
@@ -128,6 +122,7 @@ export default function PdfOmrPlaybackPanel({
 
   const handleCancel = useCallback(() => {
     omrTrace('ui:handleCancel')
+    setCancelled(true)
     completedRunRef.current = false
     abortRef.current?.abort()
     cancelActiveOmrWorker()
@@ -212,7 +207,10 @@ export default function PdfOmrPlaybackPanel({
 
     omrTrace('ui:handleGenerate:clear-errors', null, runId)
     setError(null)
-    onFeedback?.(null)
+    setFailureCopy(null)
+    setProgress(null)
+    setCancelled(false)
+    onFeedbackRef.current?.(null)
     setSummary(null)
     setHasDiagnostics(false)
     setProgressLabel('Starting…')
@@ -224,7 +222,7 @@ export default function PdfOmrPlaybackPanel({
     try {
       omrTrace('ui:handleGenerate:runPdfOmrClient:start', null, runId)
       const developerOptions = resolveOmrV3DeveloperPipelineOptions(getOmrDiagnosticFlags())
-      const result = await runPdfOmrClient(pdfSource, {
+      const result = await runScorePreparation(() => runPdfOmrClient(pdfSource, {
         title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
         pdfFileUrl,
         instrumentId,
@@ -248,11 +246,12 @@ export default function PdfOmrPlaybackPanel({
             return
           }
           setProgressLabel(progress.label ?? '')
+          setProgress(progress)
         },
         signal: controller.signal,
         useWorker: true,
         traceRunId: runId,
-      })
+      }), controller.signal)
 
       noteOmrWorkerSettled({
         runId,
@@ -362,6 +361,7 @@ export default function PdfOmrPlaybackPanel({
       if (accepted?.ok !== true) {
         const message = accepted?.message ?? 'Generated playback failed.'
         setError(message)
+        setFailureCopy(describePreparationFailure({ message }))
         setSummary(null)
         setIsGenerating(false)
         setProgressLabel('')
@@ -421,7 +421,9 @@ export default function PdfOmrPlaybackPanel({
         return
       }
       resetInFinally = false
-      const message = formatOmrFailureMessage(err)
+      const friendly = describePreparationFailure(err)
+      setFailureCopy(friendly)
+      const message = friendly.message
       omrTrace('ui:setError', { message }, runId)
       const failureDiagnostics = err?.diagnostics ?? null
       if (failureDiagnostics) {
@@ -462,11 +464,15 @@ export default function PdfOmrPlaybackPanel({
       setProgressLabel('')
       setStatus(OMR_STATUS.FAILED)
       omrTrace('ui:onFeedback:error', { message }, runId)
-      onFeedbackRef.current?.({ type: 'error', message })
+      onFeedbackRef.current?.({ type: 'error', message, source: 'preparation' })
     } finally {
-      cancelActiveOmrWorker()
-      endOmrUiBlock()
-      releaseOmrUiLocks()
+      // An aborted PDF may settle after its replacement has started. Cleanup
+      // must never terminate the newer score's worker or release its UI state.
+      if (getActiveScoreSourceGeneration().activeOmrRunId === runId) {
+        cancelActiveOmrWorker()
+        endOmrUiBlock()
+        releaseOmrUiLocks()
+      }
       if (resetInFinally && activeRunRef.current === runId && !completedRunRef.current) {
         resetOmrPanelState({ setIsGenerating, setStatus, setProgressLabel })
       }
@@ -582,74 +588,25 @@ export default function PdfOmrPlaybackPanel({
   const showPreparing =
     isGenerating || (Boolean(autoStartKey) && status === OMR_STATUS.IDLE)
 
+  const presentation = describePreparation(status, progress)
   return (
-    <section className="library-omr-panel" aria-label="Preparing score" aria-busy={isGenerating}>
-      <div className="library-omr-panel__header">
-        <h2 className="library-omr-panel__title practice-section__title--editorial">
-          Preparing score
-        </h2>
-        <span className="library-omr-panel__badge">Local</span>
+    <section className="library-omr-panel score-import-processing" aria-label="Preparing score" data-busy={showPreparing} data-state={status}>
+      <p className="cz-edition-label">{showRetry ? 'Let’s try a different approach' : 'From page to playback'}</p>
+      <div role={showRetry ? 'alert' : 'status'} aria-live="polite" aria-atomic="true">
+        <h2>{showRetry ? failureCopy?.title ?? 'We couldn’t prepare playback' : showPreparing ? presentation.title : status === OMR_STATUS.READY ? 'Checking your score' : cancelled ? 'Preparation paused' : 'Ready to prepare'}</h2>
+        <p>{showRetry ? failureCopy?.message ?? 'Try again, or choose another copy of the score.' : showPreparing ? presentation.detail : status === OMR_STATUS.READY ? 'Making sure the page and playback are available.' : cancelled ? 'Your PDF is still here. Continue whenever you’re ready.' : 'Corranzo will read your PDF and prepare it for playback.'}</p>
       </div>
-      <p className="library-omr-panel__lede">
-        {showRetry
-          ? error
-            ? 'Preparation failed — see the details below, then try again or upload MusicXML/MXL.'
-            : 'Preparation failed — try again, or upload MusicXML/MXL.'
-          : 'This may take a moment.'}
-      </p>
-      <div className="library-omr-panel__actions">
-        {showRetry && (
-          <button
-            type="button"
-            className="upload-btn library-omr-panel__btn"
-            disabled={disabled || !pdfBytesAvailable}
-            onClick={handleGenerate}
-          >
-            Try again
-          </button>
-        )}
-        {!pdfBytesAvailable && !isGenerating && (
-          <p className="library-omr-panel__status" role="status">
-            PDF is still loading — try again in a moment.
-          </p>
-        )}
-        {isGenerating && (
-          <button
-            type="button"
-            className="upload-btn library-omr-panel__btn library-omr-panel__btn--cancel"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-        )}
+      {showPreparing && <ol className="score-import-stages" aria-label="Preparation stages">
+        {['Read the page', 'Understand the notes', 'Prepare playback'].map((label, index) => <li key={label} data-state={index < presentation.step ? 'done' : index === presentation.step ? 'current' : 'pending'} aria-current={index === presentation.step ? 'step' : undefined}>
+          <span aria-hidden="true">{index < presentation.step ? '✓' : `0${index + 1}`}</span>{label}
+        </li>)}
+      </ol>}
+      <div className="score-import-processing-actions">
+        {(showRetry || (!showPreparing && status === OMR_STATUS.IDLE)) && <button type="button" className="cz-collection-button" disabled={disabled || !pdfBytesAvailable} onClick={handleGenerate}>{showRetry ? 'Try again' : 'Prepare score'}</button>}
+        {isGenerating && <button type="button" className="cz-text-link" onClick={handleCancel}>Cancel preparation</button>}
+        {showRetry && (hasDiagnostics || failureReport) && <button type="button" className="cz-text-link" onClick={() => setReportOpen(true)}>Report a score problem</button>}
       </div>
-      {showPreparing && (
-        <div className="library-omr-panel__progress" role="status" aria-live="polite">
-          <span className="library-omr-panel__progress-bar" aria-hidden="true" />
-          <p className="library-omr-panel__status">
-            Preparing score… {isGenerating ? progressLabel || OMR_STATUS_LABEL[status] || '' : ''}
-          </p>
-        </div>
-      )}
-      {!isGenerating && status === OMR_STATUS.READY && summary && (
-        <p className="library-omr-panel__status library-omr-panel__status--ready" role="status">
-          Ready to practice — {summary}
-        </p>
-      )}
-      {!isGenerating && status === OMR_STATUS.FAILED && error && (
-        <p className="library-omr-panel__status library-omr-panel__status--error" role="alert">
-          {error}
-        </p>
-      )}
-      {!isGenerating && status === OMR_STATUS.FAILED && (hasDiagnostics || failureReport) && (
-        <button
-          type="button"
-          className="recognition-report-trigger library-omr-panel__report"
-          onClick={() => setReportOpen(true)}
-        >
-          Report recognition problem
-        </button>
-      )}
+      {showRetry && <p className="score-import-caption">You can also choose another PDF, or add a matching notation file in Advanced.</p>}
       <RecognitionProblemReportDialog
         open={reportOpen}
         onClose={() => setReportOpen(false)}
@@ -676,7 +633,12 @@ export default function PdfOmrPlaybackPanel({
         defaultCategory="failed-to-generate"
       />
       {showDevTools && (
-        <div className="profile-dev-tools library-omr-panel__dev-tools" aria-label="OMR developer tools">
+        <details className="score-import-diagnostics">
+          <summary>Advanced diagnostics</summary>
+          {error && <p>{failureReport?.exceptionMessage ?? error}</p>}
+          {progressLabel && <p>{progressLabel}</p>}
+          {summary && <p>{summary}</p>}
+          <div className="profile-dev-tools library-omr-panel__dev-tools" aria-label="OMR developer tools">
           <span className="profile-dev-tools__label">OMR diagnostics</span>
           <button
             type="button"
@@ -743,7 +705,8 @@ export default function PdfOmrPlaybackPanel({
               {devCopyStatus}
             </span>
           )}
-        </div>
+          </div>
+        </details>
       )}
     </section>
   )

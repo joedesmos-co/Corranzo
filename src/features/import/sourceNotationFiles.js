@@ -1,7 +1,7 @@
 import { isMusicXmlFile } from '../musicxml/loadMusicXmlFile.js'
 
 export const MUSESCORE_PLANNED_MESSAGE =
-  'MuseScore source files (.mscz, .mscx) are planned. For now, export MusicXML or MXL from MuseScore for best accuracy.'
+  'Export your MuseScore score as PDF or MusicXML/MXL, then import that copy.'
 
 export const SCORE_TIMING_ROLE = {
   label: 'Timing file',
@@ -72,7 +72,7 @@ export const ACCEPT_ATTRIBUTES = {
     SHEET_MUSIC_ROLE.acceptMime,
   ),
   scoreTiming: buildAcceptAttribute(
-    [...SCORE_TIMING_ROLE.parsedExtensions, ...SCORE_TIMING_ROLE.plannedExtensions],
+    SCORE_TIMING_ROLE.parsedExtensions,
     SCORE_TIMING_ROLE.acceptMime,
   ),
   soundFile: buildAcceptAttribute(SOUND_FILE_ROLE.extensions, SOUND_FILE_ROLE.acceptMime),

@@ -53,6 +53,7 @@ export default function PdfViewer({
   actionsRef,
   scrollContainerRef,
   onPageSizesChange,
+  onWorkspaceFocus = null,
 }) {
   const isPracticeEmbed = variant === 'practice'
   const geometryDebugEnabled = isGeometryDebugEnabled()
@@ -91,7 +92,7 @@ export default function PdfViewer({
   // during render. Holds raw sizes, native /Rotate, and react-pdf original sizes.
   const [debugSnapshot, setDebugSnapshot] = useState({ sizes: {}, native: {}, original: {} })
 
-  const [fitMode, setFitMode] = useState('page')
+  const [fitMode, setFitMode] = useState(isPracticeEmbed ? 'width' : 'page')
   const [pageSize, setPageSize] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [documentError, setDocumentError] = useState(null)
@@ -111,7 +112,7 @@ export default function PdfViewer({
     replaceAnnotations,
   } = useAnnotations()
 
-  const { exportAnnotations, importAnnotations } = useAnnotationPersistence({
+  const { exportAnnotations, importAnnotations, saveStatus } = useAnnotationPersistence({
     file,
     fileName,
     pdfMeta,
@@ -119,6 +120,17 @@ export default function PdfViewer({
     toolSettings,
     replaceAnnotations,
   })
+
+  useEffect(() => {
+    if (activeTool === ANNOTATION_TOOLS.POINTER) return undefined
+    function cancel(event) {
+      if (event.key !== 'Escape' || event.defaultPrevented || document.querySelector('.tb-popover__panel:not([hidden]), .workspace-tool-panel')) return
+      event.preventDefault()
+      setActiveTool(ANNOTATION_TOOLS.POINTER)
+    }
+    window.addEventListener('keydown', cancel)
+    return () => window.removeEventListener('keydown', cancel)
+  }, [activeTool, setActiveTool])
 
   const canGoPrev = pageNumber > 1
   const canGoNext = numPages != null && pageNumber < numPages
@@ -226,6 +238,7 @@ export default function PdfViewer({
   }, [fitMode, pageNumber, file])
 
   function handleToggleFullscreen() {
+    if (onWorkspaceFocus) { onWorkspaceFocus(); return }
     setIsFullscreen((open) => !open)
   }
 
@@ -238,12 +251,17 @@ export default function PdfViewer({
       return undefined
     }
     actionsRef.current = {
-      toggleFullscreen: () => setIsFullscreen((open) => !open),
+      toggleFullscreen: () => onWorkspaceFocus ? onWorkspaceFocus() : setIsFullscreen((open) => !open),
+      cancelAnnotation: () => {
+        if (activeTool === ANNOTATION_TOOLS.POINTER) return false
+        setActiveTool(ANNOTATION_TOOLS.POINTER)
+        return true
+      },
     }
     return () => {
       actionsRef.current = null
     }
-  }, [actionsRef])
+  }, [actionsRef, onWorkspaceFocus, setActiveTool, activeTool])
 
   const practiceContext = usePracticeSessionContextOptional()
   const practiceSession = practiceContext?.session ?? null
@@ -492,6 +510,8 @@ export default function PdfViewer({
         {file && (
           <PdfViewerToolbar
             variant="embedded"
+            managedFocus={Boolean(onWorkspaceFocus)}
+            saveStatus={saveStatus}
             visible
             file={file}
             fileName={fileName}
@@ -544,6 +564,9 @@ export default function PdfViewer({
 
           <div
             ref={assignCanvasRef}
+            tabIndex={0}
+            role="region"
+            aria-label="Score pages"
             className={`pdf-canvas pdf-canvas--fit-${fitMode} pdf-canvas--paper-${paperTheme}`}
           >
           {!file ? (

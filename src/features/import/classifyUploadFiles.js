@@ -50,6 +50,10 @@ export function classifyUploadFile(file) {
     return UPLOAD_KIND.MUSICXML
   }
 
+  // Ambiguous binary MIME must not turn a photo/audio/unknown extension into notation.
+  if (extensionOf(file.name) && ['application/octet-stream', 'application/zip'].includes(file.type)) {
+    return UPLOAD_KIND.UNSUPPORTED
+  }
   // No recognizable extension — fall back to the existing MIME-aware detectors.
   if (isAcceptedFileType(file, 'pdf')) {
     return UPLOAD_KIND.PDF

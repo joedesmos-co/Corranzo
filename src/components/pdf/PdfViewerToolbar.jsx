@@ -1,13 +1,14 @@
 import { useRef } from 'react'
+import Icon from '../../design/Icon.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
 import AnnotationToolSettings from './AnnotationToolSettings.jsx'
 import ToolbarPopover, { ToolbarIconButton } from '../ui/ToolbarPopover.jsx'
 
 const DRAW_TOOLS = [
-  { id: ANNOTATION_TOOLS.POINTER, icon: '↖', label: 'Select / navigate' },
-  { id: ANNOTATION_TOOLS.PEN, icon: '✎', label: 'Pen' },
-  { id: ANNOTATION_TOOLS.HIGHLIGHTER, icon: '▬', label: 'Highlighter' },
-  { id: ANNOTATION_TOOLS.ERASER, icon: '⌫', label: 'Eraser' },
+  { id: ANNOTATION_TOOLS.POINTER, icon: <Icon name="follow" size={16} />, label: 'Select / navigate' },
+  { id: ANNOTATION_TOOLS.PEN, icon: <Icon name="pen" size={16} />, label: 'Pen' },
+  { id: ANNOTATION_TOOLS.HIGHLIGHTER, icon: <Icon name="highlighter" size={16} />, label: 'Highlighter' },
+  { id: ANNOTATION_TOOLS.ERASER, icon: <Icon name="eraser" size={16} />, label: 'Eraser' },
 ]
 
 export default function PdfViewerToolbar({
@@ -39,6 +40,8 @@ export default function PdfViewerToolbar({
   onExportAnnotations,
   onImportAnnotations,
   onClose,
+  managedFocus = false,
+  saveStatus = 'saved',
 }) {
   const importInputRef = useRef(null)
 
@@ -69,7 +72,7 @@ export default function PdfViewerToolbar({
     >
       <div className="viewer-float-toolbar__bar">
         <ToolbarIconButton
-          icon="‹"
+          icon={<Icon name="prev" size={16} />}
           label="Previous page"
           disabled={disabled || !canGoPrev}
           onClick={onPrevPage}
@@ -78,7 +81,7 @@ export default function PdfViewerToolbar({
           {pageLabel}
         </span>
         <ToolbarIconButton
-          icon="›"
+          icon={<Icon name="next" size={16} />}
           label="Next page"
           disabled={disabled || !canGoNext}
           onClick={onNextPage}
@@ -86,7 +89,7 @@ export default function PdfViewerToolbar({
 
         <span className="viewer-float-toolbar__sep" aria-hidden="true" />
 
-        <ToolbarPopover icon="⤢" label="Fit mode" disabled={disabled}>
+        <ToolbarPopover icon={<Icon name="zoom" size={16} />} label="Fit mode" disabled={disabled}>
           <div className="tb-menu">
             <button
               type="button"
@@ -110,7 +113,7 @@ export default function PdfViewerToolbar({
         <span className="viewer-float-toolbar__sep" aria-hidden="true" />
 
         <ToolbarPopover
-          icon="✎"
+          icon={<Icon name="pen" size={16} />}
           label="Markup"
           active={activeTool !== ANNOTATION_TOOLS.POINTER}
           disabled={disabled}
@@ -175,7 +178,7 @@ export default function PdfViewerToolbar({
 
         <span className="viewer-float-toolbar__sep" aria-hidden="true" />
 
-        <ToolbarPopover icon="⋯" label="More options" disabled={disabled}>
+        <ToolbarPopover icon={<Icon name="settings" size={16} />} label="More options" disabled={disabled}>
           <div className="tb-menu">
             <button
               type="button"
@@ -185,7 +188,7 @@ export default function PdfViewerToolbar({
             >
               {paperTheme === 'dark' ? 'Light paper' : 'Dark paper'}
             </button>
-            {variant === 'embedded' ? (
+            {managedFocus ? null : variant === 'embedded' ? (
               <button
                 type="button"
                 className="tb-menu__item"
@@ -224,8 +227,8 @@ export default function PdfViewerToolbar({
       </div>
 
       {fileName && variant === 'embedded' && (
-        <span className="viewer-float-toolbar__hint" title="Annotations autosave locally">
-          Saved
+        <span className="viewer-float-toolbar__hint" data-save-state={saveStatus} title="Annotations save on this device" role="status">
+          {saveStatus === 'saved' ? 'Marks saved' : saveStatus === 'error' ? 'Could not save marks — export a copy' : 'Marks are temporary'}
         </span>
       )}
     </div>

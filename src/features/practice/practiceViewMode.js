@@ -11,7 +11,7 @@ export const PRACTICE_VIEW_MODE = {
 
 export const PRACTICE_VIEW_MODE_LABELS = {
   [PRACTICE_VIEW_MODE.SCORE]: 'Score',
-  [PRACTICE_VIEW_MODE.VISUAL]: 'Visual',
+  [PRACTICE_VIEW_MODE.VISUAL]: 'Note guide',
 }
 
 const VIEW_MODE_KEY = 'scoreflow-practice-view-mode-v1'

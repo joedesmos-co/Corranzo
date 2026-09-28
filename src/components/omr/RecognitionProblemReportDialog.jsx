@@ -67,23 +67,28 @@ export default function RecognitionProblemReportDialog({
     }
     previousFocusRef.current =
       typeof document !== 'undefined' ? document.activeElement : null
+    const appRoot = document.getElementById('root')
+    const previousInert = appRoot?.inert
+    if (appRoot) appRoot.inert = true
     const frame = requestAnimationFrame(() => {
       focusFirstElement(dialogRef.current)
     })
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         event.preventDefault()
+        event.stopPropagation()
         onClose?.()
         return
       }
       handleFocusTrap(dialogRef.current, event)
     }
-    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown, true)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       cancelAnimationFrame(frame)
-      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keydown', onKeyDown, true)
+      if (appRoot) appRoot.inert = previousInert
       document.body.style.overflow = previousOverflow
       const previous = previousFocusRef.current
       if (previous && typeof previous.focus === 'function') {
@@ -163,7 +168,7 @@ export default function RecognitionProblemReportDialog({
         aria-modal="true"
         aria-labelledby={titleId}
       >
-        <header className="recognition-report-modal__header">
+        <div className="recognition-report-modal__header">
           <h2 id={titleId}>Report recognition problem</h2>
           <button
             type="button"
@@ -173,7 +178,7 @@ export default function RecognitionProblemReportDialog({
           >
             Close
           </button>
-        </header>
+        </div>
 
         <p className="recognition-report-modal__lead">
           Export a local diagnostic package for this score. Nothing is uploaded.

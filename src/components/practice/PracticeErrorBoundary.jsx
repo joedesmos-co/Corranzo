@@ -50,13 +50,12 @@ export default class PracticeErrorBoundary extends Component {
         this.state.error instanceof Error ? this.state.error.message : String(this.state.error)
       return (
         <div className="practice-workspace__empty" role="alert">
-          <h2>Practice view hit an error</h2>
+          <h2>Your score couldn’t be opened</h2>
           <p className="practice-workspace__empty-lead">
-            Something went wrong while updating practice. Reload this piece or return to Library to
-            keep going.
+            Try opening the score again, or return to Library. Your saved files are still on this device.
           </p>
           {import.meta.env?.DEV && message ? (
-            <p className="practice-workspace__empty-lead">{message}</p>
+            <details><summary>Advanced details</summary><p>{message}</p></details>
           ) : null}
           <div className="practice-view-switch" role="group" aria-label="Practice error recovery">
             <button

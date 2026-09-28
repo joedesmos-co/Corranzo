@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
       lede="How Corranzo handles data in your browser and through third-party services."
     >
       <section>
-        <h3>Overview</h3>
+        <h2>Overview</h2>
         <p>
           Corranzo is a browser-based sheet music practice app. Your uploaded scores,
           practice preferences, and local stats stay on your device unless you choose to
@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section>
-        <h3>Google Analytics</h3>
+        <h2>Google Analytics</h2>
         <p>
           We use Google Analytics (measurement ID G-PRT6SWTWK1) to understand how visitors
           use Corranzo — for example which pages are viewed and how the app performs in
@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section>
-        <h3>Advertising</h3>
+        <h2>Advertising</h2>
         <p>
           Corranzo may display ads through Google AdSense and other advertising partners
           in the future. Those partners may use cookies or similar technologies to show
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section>
-        <h3>Cookies</h3>
+        <h2>Cookies</h2>
         <p>
           Cookies and similar technologies may be used for analytics (Google Analytics) and,
           when advertising is enabled, for ad delivery and measurement. You can control
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section>
-        <h3>Contact</h3>
+        <h2>Contact</h2>
         <p>
           For privacy questions or requests, email us at{' '}
           <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>.

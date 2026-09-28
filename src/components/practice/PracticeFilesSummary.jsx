@@ -50,7 +50,7 @@ export default function PracticeFilesSummary({
         <span className="practice-files__label-row">
           <span className="practice-files__label">Sound file</span>
           <PracticeHelpTip label="About the sound file">
-            Optional MIDI backing for Normal playback. Not required for Wait For You.
+            Optional MIDI backing for Preview and Play Along. Not required for Wait For You.
           </PracticeHelpTip>
         </span>
         <span

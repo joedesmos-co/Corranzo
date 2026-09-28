@@ -92,9 +92,9 @@ export default function ProfileView() {
   return (
     <main className="profile-view" aria-labelledby="profile-heading">
       <header className="profile-header">
-        <h2 id="profile-heading" className="profile-header__title">
+        <h1 id="profile-heading" className="profile-header__title">
           Progress
-        </h2>
+        </h1>
         <p className="profile-header__lede">
           Log practice sessions manually below. Corranzo also tracks time automatically while you
           play an open piece in Practice.
@@ -124,9 +124,9 @@ export default function ProfileView() {
 
       {hasPieceActivity ? (
         <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
-          <h3 id="auto-piece-stats-heading" className="profile-panel__title">
+          <h2 id="auto-piece-stats-heading" className="profile-panel__title">
             Per-piece activity
-          </h3>
+          </h2>
           <ul className="profile-list">
             {piecesWithActivity
               .sort((a, b) => (b.lastPracticedAt ?? 0) - (a.lastPracticedAt ?? 0))
@@ -148,9 +148,9 @@ export default function ProfileView() {
         </section>
       ) : (
         <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
-          <h3 id="auto-piece-stats-heading" className="profile-panel__title">
+          <h2 id="auto-piece-stats-heading" className="profile-panel__title">
             Per-piece activity
-          </h3>
+          </h2>
           <div className="profile-empty">
             <p>
               {scopedToInstrument
@@ -176,7 +176,7 @@ export default function ProfileView() {
         <div className="profile-empty">
           {scopedToInstrument ? (
             <>
-              <h3>No {scopeLabel.toLowerCase()} sessions yet</h3>
+              <h2>No {scopeLabel.toLowerCase()} sessions yet</h2>
               <p>
                 Log a session while {scopeLabel} is selected and it shows up here.
                 Use Start timer above.
@@ -184,7 +184,7 @@ export default function ProfileView() {
             </>
           ) : (
             <>
-              <h3>No logged sessions yet</h3>
+              <h2>No logged sessions yet</h2>
               <p>
                 Press Start timer above when you begin practicing, then save the session
                 with what you worked on.
@@ -197,9 +197,9 @@ export default function ProfileView() {
           className="profile-panel"
           aria-labelledby="manual-sessions-heading"
         >
-          <h3 id="manual-sessions-heading" className="profile-panel__title">
+          <h2 id="manual-sessions-heading" className="profile-panel__title">
             Recent logged sessions
-          </h3>
+          </h2>
           <ul className="profile-list">
             {manualSessions.map((session) => (
               <li key={session.id} className="profile-list__item">

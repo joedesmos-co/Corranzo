@@ -1,6 +1,7 @@
 @import './styles/tokens.css';
 @import './styles/ui-shared.css';
 @import './styles/editorial-polish.css';
+@import './design/primitives.css';
 
 @supports (height: 100dvh) {
   :root {
