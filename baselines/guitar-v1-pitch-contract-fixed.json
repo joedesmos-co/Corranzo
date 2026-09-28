@@ -1,0 +1,930 @@
+{
+  "version": 1,
+  "kind": "guitar-vision-phase0-corpus-baseline-pitch-contract-fixed",
+  "engine": "heuristic-js-omr (pre-Guitar-Vision)",
+  "corpus": {
+    "source": "public/fixtures/practice-library (Mutopia / public domain real guitar scores)",
+    "scoreCount": 13,
+    "domain": "vector PDF -> MusicXML",
+    "staffType": "standard 5-line notation only; no TAB scores in this corpus"
+  },
+  "caveat": "Same heuristic engine and same input PDFs as guitar-v1-baseline.json. The only change is that the written/sounding pitch contract (guitar-pitch/1.0) is now enforced at emission. This is a fix to the measurement and to playback, NOT an improvement in recognition: the engine sees identical pixels and makes identical detections. The dominant +12 semitone systematic offset is eliminated on 5 of 12 scores.",
+  "summary": {
+    "scores": 13,
+    "transcribed": 12,
+    "refused": 1,
+    "transcriptionSuccessRate": 0.9231,
+    "pitchAccuracy": {
+      "mean": 0.1739,
+      "median": 0.1295
+    },
+    "orderSensitivePitchRecovery": {
+      "mean": 0.0849,
+      "median": 0.0567
+    },
+    "durationAccuracy": {
+      "mean": 0.3191,
+      "median": 0.2516
+    },
+    "onsetAccuracy": {
+      "mean": 0.3156,
+      "median": 0.265
+    },
+    "timeAccuracy": {
+      "mean": 0.0035,
+      "median": 0.0027
+    },
+    "noteDetectionF1": {
+      "mean": 0.5271,
+      "median": 0.513
+    },
+    "chordGroupingAccuracy": {
+      "mean": 0.3434,
+      "median": 0.3048
+    },
+    "measureCountAccuracy": {
+      "mean": 0.8273,
+      "median": 0.8737
+    },
+    "meanSelfReportedConfidence": 0.8897,
+    "scoresSelfReportedAccepted": 12
+  },
+  "scores": [
+    {
+      "id": "guitar-aguado-a-minor-study",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.3234,
+        "orderSensitivePitchRecovery": 0.2085,
+        "durationAccuracy": 0.4,
+        "onsetAccuracy": 0.3957,
+        "timeAccuracy": 0.0043,
+        "noteDetectionF1": 0.5702,
+        "chordGroupingAccuracy": 0.3988,
+        "measureCountAccuracy": 0.9375
+      },
+      "totals": {
+        "truthNotes": 235,
+        "generatedNotes": 235,
+        "missingNotes": 101,
+        "extraNotes": 101,
+        "wrongPitch": 58,
+        "greedyCorrectPitch": 27,
+        "correctTime": 1,
+        "chordMismatch": 202
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.945378004636665
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 210,
+        "exact": 122,
+        "exactRate": 0.581,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.581,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 122
+          },
+          {
+            "delta": -2,
+            "count": 16
+          },
+          {
+            "delta": 2,
+            "count": 16
+          },
+          {
+            "delta": 1,
+            "count": 11
+          },
+          {
+            "delta": -4,
+            "count": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-allegro-g",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.1221,
+        "orderSensitivePitchRecovery": 0.0779,
+        "durationAccuracy": 0.2727,
+        "onsetAccuracy": 0.2208,
+        "timeAccuracy": 0.0026,
+        "noteDetectionF1": 0.5081,
+        "chordGroupingAccuracy": 0.2962,
+        "measureCountAccuracy": 0.7143
+      },
+      "totals": {
+        "truthNotes": 385,
+        "generatedNotes": 359,
+        "missingNotes": 196,
+        "extraNotes": 170,
+        "wrongPitch": 142,
+        "greedyCorrectPitch": 17,
+        "correctTime": 1,
+        "chordMismatch": 404
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8920738142337907
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 235,
+        "exact": 7,
+        "exactRate": 0.0298,
+        "dominantOffset": 5,
+        "dominantOffsetShare": 0.1191,
+        "topOffsets": [
+          {
+            "delta": 5,
+            "count": 28
+          },
+          {
+            "delta": -2,
+            "count": 12
+          },
+          {
+            "delta": -5,
+            "count": 11
+          },
+          {
+            "delta": 3,
+            "count": 11
+          },
+          {
+            "delta": 7,
+            "count": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-favorites-1",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.1625,
+        "orderSensitivePitchRecovery": 0.0644,
+        "durationAccuracy": 0.2521,
+        "onsetAccuracy": 0.3137,
+        "timeAccuracy": 0.0028,
+        "noteDetectionF1": 0.5256,
+        "chordGroupingAccuracy": 0.3134,
+        "measureCountAccuracy": 0.9107
+      },
+      "totals": {
+        "truthNotes": 357,
+        "generatedNotes": 347,
+        "missingNotes": 172,
+        "extraNotes": 162,
+        "wrongPitch": 127,
+        "greedyCorrectPitch": 35,
+        "correctTime": 1,
+        "chordMismatch": 368
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8819265628942745
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 245,
+        "exact": 44,
+        "exactRate": 0.1796,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.1796,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 44
+          },
+          {
+            "delta": 5,
+            "count": 13
+          },
+          {
+            "delta": -2,
+            "count": 13
+          },
+          {
+            "delta": 7,
+            "count": 13
+          },
+          {
+            "delta": 3,
+            "count": 11
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-1",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.0701,
+        "orderSensitivePitchRecovery": 0.0213,
+        "durationAccuracy": 0.128,
+        "onsetAccuracy": 0.1052,
+        "timeAccuracy": 0.003,
+        "noteDetectionF1": 0.2287,
+        "chordGroupingAccuracy": 0.1164,
+        "measureCountAccuracy": 0.4792
+      },
+      "totals": {
+        "truthNotes": 332,
+        "generatedNotes": 656,
+        "missingNotes": 219,
+        "extraNotes": 543,
+        "wrongPitch": 67,
+        "greedyCorrectPitch": 32,
+        "correctTime": 2,
+        "chordMismatch": 782
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 9,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.9056940182365038
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 164,
+        "exact": 44,
+        "exactRate": 0.2683,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.2683,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 44
+          },
+          {
+            "delta": -1,
+            "count": 8
+          },
+          {
+            "delta": -7,
+            "count": 6
+          },
+          {
+            "delta": -2,
+            "count": 6
+          },
+          {
+            "delta": -10,
+            "count": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-2",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.1692,
+        "orderSensitivePitchRecovery": 0.0308,
+        "durationAccuracy": 0.2092,
+        "onsetAccuracy": 0.28,
+        "timeAccuracy": 0,
+        "noteDetectionF1": 0.5179,
+        "chordGroupingAccuracy": 0.3552,
+        "measureCountAccuracy": 0.9286
+      },
+      "totals": {
+        "truthNotes": 325,
+        "generatedNotes": 316,
+        "missingNotes": 159,
+        "extraNotes": 150,
+        "wrongPitch": 111,
+        "greedyCorrectPitch": 45,
+        "correctTime": 0,
+        "chordMismatch": 305
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 1,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8718322026783822
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 257,
+        "exact": 84,
+        "exactRate": 0.3268,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.3268,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 84
+          },
+          {
+            "delta": -1,
+            "count": 39
+          },
+          {
+            "delta": 5,
+            "count": 13
+          },
+          {
+            "delta": -5,
+            "count": 10
+          },
+          {
+            "delta": -2,
+            "count": 9
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-3",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.0619,
+        "orderSensitivePitchRecovery": 0.0236,
+        "durationAccuracy": 0.1327,
+        "onsetAccuracy": 0.118,
+        "timeAccuracy": 0.0029,
+        "noteDetectionF1": 0.3774,
+        "chordGroupingAccuracy": 0.1887,
+        "measureCountAccuracy": 0.8182
+      },
+      "totals": {
+        "truthNotes": 228,
+        "generatedNotes": 339,
+        "missingNotes": 121,
+        "extraNotes": 232,
+        "wrongPitch": 86,
+        "greedyCorrectPitch": 13,
+        "correctTime": 1,
+        "chordMismatch": 387
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 2,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8729020861385617
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 152,
+        "exact": 8,
+        "exactRate": 0.0526,
+        "dominantOffset": -7,
+        "dominantOffsetShare": 0.0526,
+        "topOffsets": [
+          {
+            "delta": -7,
+            "count": 8
+          },
+          {
+            "delta": 0,
+            "count": 8
+          },
+          {
+            "delta": -5,
+            "count": 8
+          },
+          {
+            "delta": -6,
+            "count": 7
+          },
+          {
+            "delta": -26,
+            "count": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-4",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.1369,
+        "orderSensitivePitchRecovery": 0.0742,
+        "durationAccuracy": 0.2599,
+        "onsetAccuracy": 0.2274,
+        "timeAccuracy": 0,
+        "noteDetectionF1": 0.4821,
+        "chordGroupingAccuracy": 0.284,
+        "measureCountAccuracy": 0.9545
+      },
+      "totals": {
+        "truthNotes": 431,
+        "generatedNotes": 324,
+        "missingNotes": 249,
+        "extraNotes": 142,
+        "wrongPitch": 123,
+        "greedyCorrectPitch": 27,
+        "correctTime": 0,
+        "chordMismatch": 421
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8847793498735689
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 280,
+        "exact": 16,
+        "exactRate": 0.0571,
+        "dominantOffset": 5,
+        "dominantOffsetShare": 0.0679,
+        "topOffsets": [
+          {
+            "delta": 5,
+            "count": 19
+          },
+          {
+            "delta": 0,
+            "count": 16
+          },
+          {
+            "delta": -5,
+            "count": 14
+          },
+          {
+            "delta": -2,
+            "count": 13
+          },
+          {
+            "delta": 10,
+            "count": 11
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-5",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.0781,
+        "orderSensitivePitchRecovery": 0.0491,
+        "durationAccuracy": 0.2031,
+        "onsetAccuracy": 0.25,
+        "timeAccuracy": 0,
+        "noteDetectionF1": 0.4734,
+        "chordGroupingAccuracy": 0.2742,
+        "measureCountAccuracy": 0.8367
+      },
+      "totals": {
+        "truthNotes": 448,
+        "generatedNotes": 342,
+        "missingNotes": 261,
+        "extraNotes": 155,
+        "wrongPitch": 152,
+        "greedyCorrectPitch": 13,
+        "correctTime": 0,
+        "chordMismatch": 450
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 4,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8940083460396144
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 279,
+        "exact": 15,
+        "exactRate": 0.0538,
+        "dominantOffset": 3,
+        "dominantOffsetShare": 0.0573,
+        "topOffsets": [
+          {
+            "delta": 3,
+            "count": 16
+          },
+          {
+            "delta": 0,
+            "count": 15
+          },
+          {
+            "delta": 8,
+            "count": 15
+          },
+          {
+            "delta": -7,
+            "count": 14
+          },
+          {
+            "delta": -4,
+            "count": 14
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-aguado-op03-6",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.0781,
+        "orderSensitivePitchRecovery": 0.0446,
+        "durationAccuracy": 0.2491,
+        "onsetAccuracy": 0.1859,
+        "timeAccuracy": 0.0223,
+        "noteDetectionF1": 0.3806,
+        "chordGroupingAccuracy": 0.2033,
+        "measureCountAccuracy": 0.5938
+      },
+      "totals": {
+        "truthNotes": 246,
+        "generatedNotes": 269,
+        "missingNotes": 148,
+        "extraNotes": 171,
+        "wrongPitch": 77,
+        "greedyCorrectPitch": 9,
+        "correctTime": 6,
+        "chordMismatch": 341
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 4,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8961521498289245
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 137,
+        "exact": 7,
+        "exactRate": 0.0511,
+        "dominantOffset": 7,
+        "dominantOffsetShare": 0.0511,
+        "topOffsets": [
+          {
+            "delta": 7,
+            "count": 7
+          },
+          {
+            "delta": 0,
+            "count": 7
+          },
+          {
+            "delta": 1,
+            "count": 7
+          },
+          {
+            "delta": 12,
+            "count": 7
+          },
+          {
+            "delta": 2,
+            "count": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-bach-menuet-bwv1006a",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.0255,
+        "orderSensitivePitchRecovery": 0.0085,
+        "durationAccuracy": 0.2511,
+        "onsetAccuracy": 0.3319,
+        "timeAccuracy": 0,
+        "noteDetectionF1": 0.5403,
+        "chordGroupingAccuracy": 0.3152,
+        "measureCountAccuracy": 0.7941
+      },
+      "totals": {
+        "truthNotes": 235,
+        "generatedNotes": 224,
+        "missingNotes": 111,
+        "extraNotes": 100,
+        "wrongPitch": 118,
+        "greedyCorrectPitch": 4,
+        "correctTime": 0,
+        "chordMismatch": 239
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8573128099682523
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 145,
+        "exact": 2,
+        "exactRate": 0.0138,
+        "dominantOffset": -9,
+        "dominantOffsetShare": 0.0759,
+        "topOffsets": [
+          {
+            "delta": -9,
+            "count": 11
+          },
+          {
+            "delta": -12,
+            "count": 10
+          },
+          {
+            "delta": -16,
+            "count": 9
+          },
+          {
+            "delta": -7,
+            "count": 9
+          },
+          {
+            "delta": -11,
+            "count": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-bach-prelude-bwv997",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.4838,
+        "orderSensitivePitchRecovery": 0.1677,
+        "durationAccuracy": 0.6939,
+        "onsetAccuracy": 0.6455,
+        "timeAccuracy": 0.004,
+        "noteDetectionF1": 0.83,
+        "chordGroupingAccuracy": 0.6317,
+        "measureCountAccuracy": 0.9825
+      },
+      "totals": {
+        "truthNotes": 986,
+        "generatedNotes": 990,
+        "missingNotes": 166,
+        "extraNotes": 170,
+        "wrongPitch": 341,
+        "greedyCorrectPitch": 313,
+        "correctTime": 4,
+        "chordMismatch": 446
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 28,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8748049963675956
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 824,
+        "exact": 338,
+        "exactRate": 0.4102,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.4102,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 338
+          },
+          {
+            "delta": -1,
+            "count": 66
+          },
+          {
+            "delta": 2,
+            "count": 27
+          },
+          {
+            "delta": 1,
+            "count": 27
+          },
+          {
+            "delta": -5,
+            "count": 23
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-bach-prelude-bwv999",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "transcribed",
+      "metrics": {
+        "pitchAccuracy": 0.375,
+        "orderSensitivePitchRecovery": 0.2482,
+        "durationAccuracy": 0.7776,
+        "onsetAccuracy": 0.7132,
+        "timeAccuracy": 0,
+        "noteDetectionF1": 0.8908,
+        "chordGroupingAccuracy": 0.7434,
+        "measureCountAccuracy": 0.9773
+      },
+      "totals": {
+        "truthNotes": 509,
+        "generatedNotes": 544,
+        "missingNotes": 40,
+        "extraNotes": 75,
+        "wrongPitch": 265,
+        "greedyCorrectPitch": 69,
+        "correctTime": 0,
+        "chordMismatch": 155
+      },
+      "notationDetected": {
+        "restsDetected": 0,
+        "staccatoDetected": 0,
+        "accentDetected": 0,
+        "articulationsDetected": {
+          "tenuto": 0,
+          "marcato": 0,
+          "fermata": 0
+        },
+        "tiesDetected": 0,
+        "tabStavesDetected": 0
+      },
+      "selfReportedQuality": {
+        "acceptance": "accepted",
+        "confidenceBand": "high",
+        "overallConfidence": 0.8994273241555167
+      },
+      "pitchOffsetAnalysis": {
+        "compared": 497,
+        "exact": 154,
+        "exactRate": 0.3099,
+        "dominantOffset": 0,
+        "dominantOffsetShare": 0.3099,
+        "topOffsets": [
+          {
+            "delta": 0,
+            "count": 154
+          },
+          {
+            "delta": 1,
+            "count": 37
+          },
+          {
+            "delta": -2,
+            "count": 34
+          },
+          {
+            "delta": -1,
+            "count": 30
+          },
+          {
+            "delta": 2,
+            "count": 28
+          }
+        ]
+      }
+    },
+    {
+      "id": "guitar-spanish-romance",
+      "domain": "real-mutopia-classical-guitar",
+      "staffType": "standard-5-line-notation",
+      "engineOutcome": "refused-or-crashed",
+      "metrics": {},
+      "totals": {},
+      "notationDetected": {},
+      "selfReportedQuality": {},
+      "pitchOffsetAnalysis": null
+    }
+  ],
+  "predecessor": "guitar-v1-baseline.json"
+}

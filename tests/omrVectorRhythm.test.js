@@ -2477,7 +2477,93 @@ describe('dotted subdivision recovery on dense-like measures', () => {
 })
 
 describe('buildOmrMusicXml guitar sounding pitch', () => {
-  it('emits staff-derived midi as sounding pitch without a second 8vb shift', () => {
+  /**
+   * Guitar Vision pitch contract (guitar-pitch/1.0).
+   *
+   * These assertions previously required the opposite: a staff-derived E4
+   * (64) had to be emitted as WRITTEN pitch `<octave>4</octave>` alongside a
+   * `<clef-octave-change>-1</clef-octave-change>`, with the octave shift left
+   * for a reader to infer. That convention was the defect it claimed to guard
+   * against: Corranzo's own parser reads `<pitch>` and ignores the clef octave
+   * change, so guitar playback, score-following and Wait For You were an
+   * octave sharp, and 41% of the notes in BWV 997 were wrong by exactly +12
+   * semitones. The stored pitch is now SOUNDING pitch and the octave is
+   * applied once, here, rather than being delegated to the clef.
+   */
+  const guitarInstrument = {
+    id: 'guitar',
+    notation: { grandStaff: false, writtenOctaveOffset: -1 },
+    omr: { partName: 'Guitar' },
+  }
+
+  function emitGuitarNotes(notes) {
+    return buildOmrMusicXml({
+      measures: [
+        {
+          measureNumber: 1,
+          uncertain: false,
+          events: [
+            {
+              type: 'note',
+              startDivision: 0,
+              durationDivisions: 4,
+              durationType: 'quarter',
+              clef: 'treble',
+              notes,
+            },
+          ],
+        },
+      ],
+      includeDisclaimer: false,
+      instrument: guitarInstrument,
+    })
+  }
+
+  it('converts a staff-derived written pitch to sounding pitch', () => {
+    const xml = emitGuitarNotes([{ midi: 64, clef: 'treble', naturalMidi: 64 }])
+    // Written E4 on guitar sounds E3.
+    expect(xml).toContain('<step>E</step><octave>3</octave>')
+    expect(xml).not.toContain('<step>E</step><octave>4</octave>')
+  })
+
+  it('never leaves the transposition to the clef', () => {
+    // A sounding pitch plus an 8vb clef would subtract the octave twice, so
+    // the file would contradict itself and any conformant reader.
+    const xml = emitGuitarNotes([{ midi: 64, clef: 'treble', naturalMidi: 64 }])
+    expect(xml).not.toContain('<clef-octave-change>')
+    expect(xml).not.toContain('<transpose>')
+  })
+
+  it('leaves a TAB-derived note alone because it is already sounding', () => {
+    // A fret position is a physical fact, so the string/fret geometry is not
+    // written pitch and must not be shifted a second time.
+    const xml = emitGuitarNotes([
+      { midi: 64, clef: 'treble', naturalMidi: 64, soundingPitch: true },
+    ])
+    expect(xml).toContain('<step>E</step><octave>4</octave>')
+    expect(xml).not.toContain('<clef-octave-change>')
+  })
+
+  it('does not double-shift a note whose detected clef already carried the octave', () => {
+    // A source engraved with a printed 8vb clef has that shift baked into
+    // note.midi by resolvePitchFromGrandStaff, so only the remainder applies.
+    const xml = emitGuitarNotes([
+      {
+        midi: 52,
+        clef: 'treble',
+        naturalMidi: 52,
+        pitchMapping: { clefOctaveChange: -1 },
+      },
+    ])
+    expect(xml).toContain('<step>E</step><octave>3</octave>')
+    expect(xml).not.toContain('<step>E</step><octave>2</octave>')
+  })
+
+  it('keeps guitar on a single staff', () => {
+    expect(emitGuitarNotes([{ midi: 64, clef: 'treble', naturalMidi: 64 }])).not.toContain('<staves>')
+  })
+
+  it('leaves a non-transposing instrument untouched', () => {
     const xml = buildOmrMusicXml({
       measures: [
         {
@@ -2490,21 +2576,19 @@ describe('buildOmrMusicXml guitar sounding pitch', () => {
               durationDivisions: 4,
               durationType: 'quarter',
               clef: 'treble',
-              notes: [{ midi: 64, clef: 'treble', naturalMidi: 64 }],
+              notes: [{ midi: 60, clef: 'treble', naturalMidi: 60 }],
             },
           ],
         },
       ],
       includeDisclaimer: false,
       instrument: {
-        id: 'guitar',
-        notation: { grandStaff: false, writtenOctaveOffset: -1 },
-        omr: { partName: 'Guitar' },
+        id: 'piano',
+        notation: { grandStaff: true, writtenOctaveOffset: 0 },
+        omr: { partName: 'Piano' },
       },
     })
-    expect(xml).toContain('<clef-octave-change>-1</clef-octave-change>')
-    expect(xml).toContain('<step>E</step><octave>4</octave>')
-    expect(xml).not.toContain('<step>E</step><octave>3</octave>')
-    expect(xml).not.toContain('<staves>')
+    expect(xml).toContain('<step>C</step><octave>4</octave>')
+    expect(xml).not.toContain('<clef-octave-change>')
   })
 })

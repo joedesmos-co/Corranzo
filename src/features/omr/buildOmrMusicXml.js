@@ -18,6 +18,7 @@ import {
   shouldEmitWedge,
 } from './detectOmrExpression.js'
 import { midiToWrittenPitch } from './pitchFromStaffPosition.js'
+import { SEMITONES_PER_OCTAVE } from './guitar/pitchContract.js'
 import { buildMeasureStructureUnits } from './measureStructureSemantics.js'
 
 const TYPE_BY_DIVISIONS = {
@@ -241,13 +242,33 @@ export function buildMeasureBeamValues(events = []) {
   return byEvent
 }
 
+/**
+ * Semitones still to apply so the emitted `<pitch>` is SOUNDING pitch.
+ *
+ * Guitar Vision pitch contract (guitar-pitch/1.0): a Corranzo score stores
+ * sounding pitch in `<pitch>`, so playback, score-following, Wait For You and
+ * Play Along can all read one field with one meaning.
+ *
+ * Staff geometry yields the pitch named by the printed staff position.
+ * `note.pitchMapping.clefOctaveChange` records an octave shift the detector
+ * already recovered from a printed 8vb clef, and `resolvePitchFromGrandStaff`
+ * has already baked that shift into `note.midi`. Applying the instrument offset
+ * on top of such a note would subtract the octave twice, so the detected shift
+ * is subtracted from what remains to be done.
+ *
+ * Notes that are sounding by construction (TAB digits, which encode a physical
+ * string and fret) set `soundingPitch` and are never shifted.
+ */
+function octaveShiftForNote(note, writtenOctaveOffset = 0) {
+  if (!writtenOctaveOffset || note?.soundingPitch) {
+    return 0
+  }
+  const detected = note?.pitchMapping?.clefOctaveChange
+  const alreadyApplied = Number.isFinite(detected) ? Number(detected) : 0
+  return (writtenOctaveOffset - alreadyApplied) * SEMITONES_PER_OCTAVE
+}
+
 function writtenPitchForNote(note, octaveShiftSemitones = 0) {
-  // `note.midi` is already the MusicXML sounding pitch for both staff-mapped
-  // heads (`midiFromStaffPosition` concert treble) and TAB digits. An extra
-  // instrument writtenOctaveOffset shift double-applies guitar's 8vb and drops
-  // pitches an octave below truth. Keep octaveShiftSemitones for callers that
-  // still pass an explicit written→sounding delta; default production path
-  // uses 0. Tab-paired notes set soundingPitch and never shift.
   const shift = note.soundingPitch ? 0 : octaveShiftSemitones
   if (
     note.writtenPitch?.step &&
@@ -276,8 +297,8 @@ function writtenPitchForNote(note, octaveShiftSemitones = 0) {
   return midiToWrittenPitch(note.midi + shift)
 }
 
-function pitchXml(note, octaveShiftSemitones = 0) {
-  const pitch = writtenPitchForNote(note, octaveShiftSemitones)
+function pitchXml(note, writtenOctaveOffset = 0) {
+  const pitch = writtenPitchForNote(note, octaveShiftForNote(note, writtenOctaveOffset))
   const alterXml = pitch.alter != null ? `<alter>${pitch.alter}</alter>` : ''
   return `<pitch><step>${pitch.step}</step>${alterXml}<octave>${pitch.octave}</octave></pitch>`
 }
@@ -447,7 +468,7 @@ function noteXml(
     voice = 1,
     staff = null,
     stemDirection = null,
-    octaveShiftSemitones = 0,
+    writtenOctaveOffset = 0,
     timeModification = null,
   } = {},
 ) {
@@ -543,7 +564,7 @@ function noteXml(
     : ''
   return (
     `<note${sourceIdXml}>${chord ? '<chord/>' : ''}` +
-    `${pitchXml(note, octaveShiftSemitones)}` +
+    `${pitchXml(note, writtenOctaveOffset)}` +
     `${accidentalXml(note)}<duration>${duration}</duration>${tieXml}<voice>${voice}</voice>` +
     `<type>${type}</type>${dotXml}${timeModXml}${staffXml}${stemXml}${beamXml}${notationsXml}</note>`
   )
@@ -727,14 +748,18 @@ export function buildOmrMusicXml({
   const emitTempo = shouldEmitTempo(tempo)
 
   const partName = instrument?.omr?.partName ?? 'Piano'
-  // Guitar keeps the transposed-treble clef marker for display, but staff-
-  // derived note.midi is already sounding (matches TAB / CC0 truth). Do not
-  // subtract writtenOctaveOffset again when emitting <pitch>.
+  // Guitar Vision pitch contract (guitar-pitch/1.0): `<pitch>` carries the
+  // SOUNDING pitch for every Corranzo score, so the octave a transposing
+  // instrument writes at is applied exactly once, in octaveShiftForNote, and
+  // never left for a reader to infer.
+  //
+  // Because the shift is applied there, the emitted clef must NOT also carry
+  // `<clef-octave-change>`: with a sounding pitch already stored, an 8vb clef
+  // would subtract the octave a second time, so the file would contradict both
+  // itself and any conformant reader. Printed staff position is a rendering
+  // concern derived from the sounding pitch, not a second transposition.
   const writtenOctaveOffset = instrument?.notation?.writtenOctaveOffset ?? 0
-  const octaveShiftSemitones = 0
-  const clefOctaveXml = writtenOctaveOffset
-    ? `<clef-octave-change>${writtenOctaveOffset}</clef-octave-change>`
-    : ''
+  const clefOctaveXml = ''
 
   // Tuplet sounding durations must remain integral in MusicXML. A fixed triplet
   // scale rounds 5:4 and 7:4 grids; the LCM preserves every source-proven tuplet
@@ -930,7 +955,7 @@ export function buildOmrMusicXml({
           voice,
           staff,
           stemDirection: unit.stemDirection,
-          octaveShiftSemitones,
+          writtenOctaveOffset,
           timeModification,
         })
       })

@@ -1,10 +1,20 @@
 # Guitar Vision — Phase 0 Audit and Root-Cause Report
 
-**Status:** Phase 0 complete. No model has been trained. No existing test has been weakened.
+**Status:** Phase 0 complete. No model has been trained. No existing test weakened.
 **Baseline artifact:** `baselines/guitar-v1-baseline.json` (regenerate: `node tools/guitar-vision/corpus-baseline.mjs --out baselines/guitar-v1-baseline.json`)
 **Coverage artifact:** regenerate with `node tools/guitar-vision/notation-coverage.mjs --json <path>`
 
+> **Update — the pitch contract is now frozen and enforced.** RC-1 has been fixed
+> (`guitar-pitch/1.0`, see `docs/GUITAR_VISION_PITCH_CONTRACT.md`). Mean pitch
+> accuracy on the same 13 real scores moved **5.7% → 17.4%** and the dominant
+> +12-semitone systematic offset is eliminated on 5 of 12 scores. This is a fix to
+> the measurement and to playback, **not** a gain in recognition. Post-fix baseline:
+> `baselines/guitar-v1-pitch-contract-fixed.json`. The numbers in §1 below are the
+> pre-fix floor and are kept deliberately, because they are what Guitar Vision
+> must actually beat.
+
 ---
+
 
 ## 1. Headline
 
@@ -246,9 +256,11 @@ Per the standing instruction, no large training run is launched until the evalua
 
 ## 6. Phase 1 entry criteria (next)
 
-- [ ] Freeze the written↔sounding pitch convention; migrate truth files to a single canonical representation; make
-      emitter, parser, playback and metrics agree. Expect a large, honest metric jump that reflects *fixing the
-      measurement*, not improving recognition.
+- [x] Freeze the written↔sounding pitch convention; migrate truth files to a single canonical representation; make
+      emitter, parser, playback and metrics agree. **Done — `guitar-pitch/1.0`.** Expect a large, honest metric jump
+      that reflects *fixing the measurement*, not improving recognition. Measured: 5.7% → 17.4% mean pitch accuracy,
+      systematic +12 offset eliminated on 5 of 12 scores. 20/20 ground-truth scores already conformed, so no label
+      migration was required.
 - [ ] Replace the bag metric with per-object, alignment-aware metrics (written pitch, sounding pitch, duration, onset,
       note/rest, string, fret, staff/TAB consistency, chord grouping, voice/lane, and the full technique set).
 - [ ] Build frozen split manifests (train / validation / held-out / diagnostic) with pixel + truth fingerprints and
