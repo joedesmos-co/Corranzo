@@ -1,12 +1,12 @@
 {
   "version": 2,
   "root": "/Users/ryland/Documents/scoreflow-guitar",
-  "scoresScanned": 665,
+  "scoresScanned": 725,
   "excludedGenerated": 619,
-  "excludedUnlabelled": 27,
+  "excludedUnlabelled": 87,
   "guitarScores": 19,
   "scoresWithTab": 1,
-  "familiesTracked": 78,
+  "familiesTracked": 83,
   "totals": {
     "note": 5511,
     "rest": 915,
@@ -85,7 +85,12 @@
     "barre": 0,
     "chord-symbol": 0,
     "chord-diagram": 0,
-    "multi-staff": 6
+    "multi-staff": 6,
+    "trill": 0,
+    "mordent": 0,
+    "turn": 0,
+    "double-trill": 0,
+    "tremolo-marking": 0
   },
   "zeroCoverageFamilies": [
     "stacked-notes",
@@ -146,7 +151,12 @@
     "pick-direction",
     "barre",
     "chord-symbol",
-    "chord-diagram"
+    "chord-diagram",
+    "trill",
+    "mordent",
+    "turn",
+    "double-trill",
+    "tremolo-marking"
   ],
   "thinFamilies": [
     "multi-voice",

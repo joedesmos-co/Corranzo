@@ -39,3 +39,7 @@ tmp/uiowa-mic-sources/
 # would bloat the repository while adding no information.
 datasets/guitar-vision/synthetic/train/*.musicxml
 datasets/guitar-vision/synthetic/train/*.events.json
+
+# Python bytecode from read-only inspection of the Piano Vision reference stack
+__pycache__/
+*.pyc

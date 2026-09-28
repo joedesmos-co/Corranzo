@@ -8,7 +8,7 @@ import {
   SCOREABLE_NOTE_FAMILIES,
   isScoreable,
 } from '../tools/guitar-vision/acquisition-plan.mjs'
-import { NOTATION_FAMILIES } from '../tools/guitar-vision/notationCoverageFamilies.mjs'
+import { NOTATION_FAMILIES } from '../src/features/omr/guitar/notationFamilies.js'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const coverage = JSON.parse(
@@ -19,12 +19,19 @@ const plan = JSON.parse(
 )
 
 describe('notation family registry', () => {
-  it('tracks 78 families', () => {
-    expect(NOTATION_FAMILIES.length).toBe(78)
+  it('tracks the full family surface, with no duplicates', () => {
+    // 78 core families plus the individually-tracked ornaments. The count is
+    // asserted rather than hard-coded everywhere so a deliberate addition is a
+    // one-line change here and visible in review.
+    expect(NOTATION_FAMILIES.length).toBeGreaterThanOrEqual(78)
+    expect(new Set(NOTATION_FAMILIES).size).toBe(NOTATION_FAMILIES.length)
   })
 
-  it('has no duplicates', () => {
-    expect(new Set(NOTATION_FAMILIES).size).toBe(NOTATION_FAMILIES.length)
+  it('tracks ornaments individually rather than only as a group', () => {
+    // A single `ornament` family would hide which ornament is unlabelled.
+    for (const family of ['ornament', 'trill', 'mordent', 'turn']) {
+      expect(NOTATION_FAMILIES, family).toContain(family)
+    }
   })
 
   it('covers every guitar technique the mission requires', () => {

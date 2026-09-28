@@ -22,7 +22,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { NOTATION_FAMILIES } from './notationCoverageFamilies.mjs'
+import { NOTATION_FAMILIES } from '../../src/features/omr/guitar/notationFamilies.js'
 import { EXTRACTABLE_FAMILIES } from '../../src/features/omr/guitar/guitarMetrics.js'
 import { MARKING_FAMILIES } from '../../src/features/omr/guitar/guitarObjects.js'
 
@@ -141,6 +141,11 @@ export const FAMILY_POLICY = Object.freeze({
   dynamic: { tier: 'important', synthesis: 'partial', requiresRealPages: true },
   hairpin: { tier: 'important', synthesis: 'partial' },
   ornament: { tier: 'occasional', synthesis: 'partial' },
+  trill: { tier: 'occasional', synthesis: 'partial' },
+  mordent: { tier: 'rare', synthesis: 'partial' },
+  turn: { tier: 'rare', synthesis: 'partial' },
+  'double-trill': { tier: 'rare', synthesis: 'partial' },
+  'tremolo-marking': { tier: 'occasional', synthesis: 'partial' },
   arpeggio: { tier: 'important', synthesis: 'partial' },
   'grace-note': { tier: 'important', synthesis: 'partial' },
   'cue-note': { tier: 'occasional', synthesis: 'partial' },

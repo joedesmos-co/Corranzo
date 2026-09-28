@@ -29,5 +29,8 @@ export const NOTATION_FAMILIES = [
   'staccato', 'tenuto', 'marcato', 'accent', 'sforzando', 'fermata',
   'dynamic', 'hairpin', 'tie', 'slur', 'fingering', 'pick-direction',
   'barre', 'chord-symbol', 'chord-diagram', 'multi-staff',
+  // Ornaments, tracked individually rather than lumped under `ornament` so a
+  // report can say which ornament is actually unlabelled. The architecture has a
+  // marking class for each; a marking class with no family would be a silent drop.
+  'trill', 'mordent', 'turn', 'double-trill', 'tremolo-marking',
 ]
-

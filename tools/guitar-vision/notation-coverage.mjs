@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { NOTATION_FAMILIES } from './notationCoverageFamilies.mjs'
+import { NOTATION_FAMILIES } from '../../src/features/omr/guitar/notationFamilies.js'
 /**
  * Guitar Vision — Phase 0/1 notation coverage inventory.
  *
