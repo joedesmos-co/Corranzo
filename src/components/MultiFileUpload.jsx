@@ -48,6 +48,8 @@ export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidi
     <input ref={inputRef} type="file" multiple={advanced} accept={advanced ? [ACCEPT_ATTRIBUTES.sheetMusic, '.musicxml,.xml,.mxl,.mid,.midi'].join(',') : ACCEPT_ATTRIBUTES.sheetMusic} hidden disabled={disabled || busy}
       aria-label={advanced ? 'Choose optional files' : 'Choose score PDF'}
       onChange={event => { handleFiles(event.target.files); event.target.value = '' }} />
-    {notices.length > 0 && <ul className="score-import-notices" role="alert">{notices.map(notice => <li key={notice}>{notice}</li>)}</ul>}
+    {/* role="alert" is not a permitted role on a list, which hides the list
+        semantics and breaks its children. Announce on a wrapper instead. */}
+    {notices.length > 0 && <div className="score-import-notices" role="alert"><ul>{notices.map(notice => <li key={notice}>{notice}</li>)}</ul></div>}
   </section>
 }

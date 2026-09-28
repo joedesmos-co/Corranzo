@@ -86,7 +86,7 @@
 .score-import-warning { border-left: 2px solid var(--cz-vermilion); padding: 6px 0 6px 14px; margin-block: 18px; font-size: 13px; }
 .score-import-warning p { margin: 5px 0 0; color: var(--cz-sheet-muted); }
 .score-import-capability { font-size: 12px; color: var(--cz-sheet-muted); margin: -8px 0 22px; }
-.score-import-notices { list-style: none; padding: 12px 0; margin: 0; color: var(--cz-vermilion); font-size: 13px; line-height: 1.5; }
+.score-import-notices ul { list-style: none; padding: 12px 0; margin: 0; color: var(--cz-vermilion); font-size: 13px; line-height: 1.5; }
 .score-import-attachment { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--cz-sheet-line); overflow-wrap: anywhere; }
 .score-import-attachment button { min-height: 44px; border: 0; background: transparent; color: var(--cz-ink); text-decoration: underline; font-size: 12px; cursor: pointer; }
 .score-import-detail { overflow-wrap: anywhere; }
