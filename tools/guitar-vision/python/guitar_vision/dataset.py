@@ -1,0 +1,453 @@
+"""Guitar Vision — dataset for proposal-conditioned recognition.
+
+Reads the data-engine records (targets) and the three rendered views (images)
+and turns them into tensors.
+
+## Two things this deliberately does not do
+
+**It does not invent string or fret labels from the target itself at training
+time.** The fret digit is read from the *rendered* SVG, and the string is
+recovered from which TAB line the digit sits on. If the label were derived from
+the same box the model is scored against, the model would be scored on its own
+input and every number would be meaningless. The label path is the engraved
+glyph; the geometry path is the box; they are independent by construction.
+
+**It does not train on anything but the training split.** The synthetic corpus is
+generated train-only (see ``generate-synthetic.mjs``, which refuses any other
+split), and this loader additionally refuses any record whose manifest entry is
+not labelled ``train``.
+
+Shapes per sample:
+    images       (V, 1, H, W)  one grayscale plane per view
+    boxes        (N, 4)        normalised [x0, y0, x1, y1]
+    object_type  (N,)          index into OBJECT_TYPES
+    string       (N,)          0 = none, 1..6 = string, 7 = not on a TAB staff
+    fret         (N,)          0..24 valid, 25 = not a fret
+    view         (N,)          which view the object belongs to
+"""
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Sequence
+
+import numpy as np
+import torch
+from PIL import Image, ImageOps
+
+OBJECT_TYPES = ("notehead", "fret-digit", "accidental", "augmentation-dot", "marking", "rest")
+OBJECT_TYPE_INDEX = {name: index for index, name in enumerate(OBJECT_TYPES)}
+
+VIEW_NAMES = ("full-page", "notation", "tab")
+VIEW_INDEX = {name: index for index, name in enumerate(VIEW_NAMES)}
+
+# Tiles per view. A strip view has to be divided or its glyphs are crushed; a
+# full-page view is nearly square and needs only a couple to keep the smallest
+# notation glyph legible near the bottom of a system.
+TILES_PER_VIEW = {"full-page": 2, "notation": 3, "tab": 4}
+
+NO_STRING = 0
+NO_FRET = 25
+MAX_FRET = 24
+
+
+def view_rect(record: dict[str, Any], is_tab: bool) -> tuple[float, float, float, float]:
+    """The page-relative rectangle a view's image actually covers.
+
+    A view is a *crop* of the page, not the page. The rasteriser crops to the
+    union of that kind's bands, so the PNG's (0,0) is the band's top-left and not
+    the page's. The record's object boxes are page-normalised, so a box has to be
+    brought into the crop's frame before it can index it.
+
+    Getting this wrong is silent and total. Measured on a paired score, the first
+    version of this loader indexed a TAB crop with page coordinates: a digit
+    genuinely at page y 0.73-0.78 landed at crop y 0.21-0.38, so the sampler was
+    pointed at the measure above the digits. An ink test over 710 objects found
+    ink on only 14.5% of them, and no head could have learned anything from that.
+    """
+    bands = [band for band in record["bands"] if bool(band.get("isTab")) == is_tab]
+    width = float(record["contentWidthUnits"])
+    height = float(record["contentHeightUnits"])
+    if not bands or width <= 0 or height <= 0:
+        return (0.0, 0.0, 1.0, 1.0)
+    left = min(band["boxUnits"][0] for band in bands) / width
+    top = min(band["boxUnits"][1] for band in bands) / height
+    right = max(band["boxUnits"][2] for band in bands) / width
+    bottom = max(band["boxUnits"][3] for band in bands) / height
+    return (left, top, right, bottom)
+
+
+def page_box_to_view(
+    box: list[float], frame: tuple[float, float, float, float]
+) -> list[float] | None:
+    """Take a page-normalised box into a view's own normalised frame."""
+    x0, y0, x1, y1 = frame
+    span_x = x1 - x0
+    span_y = y1 - y0
+    if span_x <= 0 or span_y <= 0:
+        return None
+    return [
+        (box[0] - x0) / span_x,
+        (box[1] - y0) / span_y,
+        (box[2] - x0) / span_x,
+        (box[3] - y0) / span_y,
+    ]
+
+
+def plane_box(box: list[float], rect: tuple[float, float, float, float]) -> list[float] | None:
+    """Map a view-space box into the plane coordinates of one tile.
+
+    ``rect`` is the tile's span within the view. The box is shifted and scaled
+    into that span, so a box lands on the same pixels whether the view is one tile
+    wide or four.
+
+    Returns ``None`` when the box falls entirely outside the tile. A box is not
+    clipped: a partly visible object clipped to the tile edge would be reported
+    with a width that no longer matches its glyph, and a detector trained on that
+    learns to expect truncated digits.
+    """
+    x0, y0, x1, y1 = rect
+    span_x = x1 - x0
+    span_y = y1 - y0
+    if span_x <= 0 or span_y <= 0:
+        return None
+    left, top, right, bottom = box
+    # Fully contained, or dropped. A box straddling the tile edge would map to
+    # coordinates outside [0, 1], and the sampler would read off the edge of the
+    # plane. Tiles do not overlap, so a straddling object has to be dropped rather
+    # than clipped: a clipped box is a narrower box than the glyph it names.
+    if left < x0 or right > x1 or top < y0 or bottom > y1:
+        return None
+    return [
+        (left - x0) / span_x,
+        (top - y0) / span_y,
+        (right - x0) / span_x,
+        (bottom - y0) / span_y,
+    ]
+
+
+@dataclass(frozen=True)
+class Paths:
+    records: Path
+    views: Path
+
+
+def _read_record(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text())
+
+
+def _load_view(
+    views_dir: Path, view: str, score_id: str, size: tuple[int, int], tiles: int
+) -> tuple[list[tuple[np.ndarray, tuple[float, float, float, float]]], tuple[float, float, float, float]] | None:
+    """Cut a view into a fixed number of side-by-side tiles, each at full height.
+
+    ## Why a wide view cannot be one plane
+
+    A TAB view is a single wide strip, about 12:1. Fitted into a square plane it
+    becomes 256x20, so the six staff lines collapse into 20 rows and a fret digit
+    into less than one pixel. The model is then asked to read a glyph that is not
+    there, and the answer is not "hard" - it is arbitrary. No amount of training
+    recovers information discarded at load time.
+
+    Scaling to cover instead would preserve resolution but crop most of the page
+    away, so a digit in the last system would simply be missing. Tiling keeps
+    both: every tile gets the full height, so a digit is as tall as it needs to
+    be, and the tiles together cover the page.
+
+    ## Why a fixed count
+
+    The count is fixed rather than derived from the aspect ratio so that a batch
+    of pages stacks. A page that happened to be slightly wider would otherwise
+    produce one more tile than its neighbour and the batch would not collate. A
+    narrow view still gets `tiles` planes, padded with white on the right, which
+    keeps the geometry honest: the content occupies a sub-rect and the boxes say
+    so.
+
+    Each tile returns the span it occupies in the *view's own content*
+    coordinates. Boxes are mapped through that span into plane coordinates.
+    Skipping the mapping is how the first version sampled 55 pixels below the
+    digit it was told to read.
+    """
+    candidate = views_dir / view / f"{score_id}.png"
+    if not candidate.exists():
+        return None
+    width, height = size
+    with Image.open(candidate) as image:
+        grey = image.convert("L")
+        source_width, source_height = grey.size
+
+        # Trim white margins before anything else. The rasteriser crops to the
+        # union of a kind's bands, and a band is a rectangle of engraved space
+        # that includes the indent before the first system, so a TAB crop can
+        # carry a quarter of its width as blank paper. Paying for that in tiles
+        # costs resolution where the glyphs are: a 4-tile split of a strip where
+        # one tile is empty gives every digit a quarter of the pixels it needs.
+        # Trimming first is free, and it recovers that.
+        original_width, original_height = grey.size
+        inverted = ImageOps.invert(grey)
+        trim = inverted.getbbox() or (0, 0, original_width, original_height)
+        if trim != (0, 0, original_width, original_height):
+            grey = grey.crop(trim)
+        source_width, source_height = grey.size
+
+        # Height fills the plane. For a strip view the scaled content is wider
+        # than one tile, which is what the tiling below divides up.
+        scale = height / source_height
+        scaled_width = max(1, int(round(source_width * scale)))
+        scaled_height = max(1, int(round(source_height * scale)))
+        array = np.asarray(
+            grey.resize((scaled_width, scaled_height), Image.LANCZOS), dtype=np.float32
+        ) / 255.0
+
+    # The trim changed the view's content frame, so it has to be reported back and
+    # composed with the band's rect. `inset` is the fraction of the original crop
+    # that was removed, and it is what keeps the boxes aligned after trimming.
+    # Tiles overlap, so an object straddling a boundary is whole in at least one
+    # of them. Without the overlap a boundary object has to be dropped, because a
+    # box that crosses a tile edge maps outside the plane and the sampler reads
+    # off the edge. Measured cost of dropping instead: about a quarter of the
+    # fret digits on a paired score, which is a quarter of the TAB training signal
+    # gone for a bookkeeping reason.
+    #
+    # The overlap is a tenth of a tile on the internal edges, which comfortably
+    # exceeds the widest object: a two-digit fret is about 3% of a system.
+    stride = scaled_width // tiles
+    margin = max(1, stride // 10)
+    output: list[tuple[np.ndarray, tuple[float, float, float, float]]] = []
+    for index in range(tiles):
+        start = max(0, index * stride - margin)
+        end = min(scaled_width, (index + 1) * stride + margin)
+        end = max(end, start + 1)
+        strip = array[:, start:end]
+        # Each strip is resized to the full plane rather than pasted into it. A
+        # 12:1 TAB strip scaled to a 256px height is 3200px wide; pasted into
+        # four 256px planes, only the first 1024px survived and the other three
+        # tiles were the same 256px of margin, so three quarters of every TAB
+        # object pointed at white. Resizing the strip is what makes the tiles
+        # cover the page: each carries its own quarter, at the same glyph height.
+        if strip.shape[1] != width:
+            strip = np.asarray(
+                Image.fromarray((np.clip(strip, 0, 1) * 255).astype(np.uint8)).resize(
+                    (width, height), Image.LANCZOS
+                ),
+                dtype=np.float32,
+            ) / 255.0
+        # The tile's span in content fractions, derived from the *scaled* array,
+        # because `start` and `end` index into that. Dividing by source_width
+        # instead - the same units the boxes are in - was wrong by the scale
+        # factor, which for a 12:1 TAB strip is about 0.8, so every box was
+        # placed 80% of the way off its digit. The ink test found 0 of 21 fret
+        # digits on their own pixels before this was fixed.
+        output.append((strip, (start / scaled_width, 0.0, end / scaled_width, 1.0)))
+    # The trim, expressed in the *original crop's* fractions. build_sample
+    # composes this with the band rect so the boxes survive the trim.
+    inset = (
+        trim[0] / original_width,
+        trim[1] / original_height,
+        (original_width - trim[2]) / original_width,
+        (original_height - trim[3]) / original_height,
+    )
+    return output, inset
+
+
+def string_for_object(record: dict[str, Any], obj: dict[str, Any]) -> int:
+    """Which TAB string line a fret digit sits on, 1-based from the top.
+
+    A fret digit's identity as a *TAB* object is entirely which of six lines it
+    is on, so this is the label that matters, and it comes from geometry rather
+    than from anything the engraver wrote. A digit that is not near a line is
+    reported as unknown rather than snapped to the nearest one: a confident wrong
+    string is worse than an abstention.
+    """
+    if obj.get("objectType") != "fret-digit":
+        return NO_STRING
+    tab_bands = [band for band in record["bands"] if band.get("isTab")]
+    if not tab_bands:
+        return NO_STRING
+    band = tab_bands[0]
+    top, bottom = band["boxUnits"][1], band["boxUnits"][3]
+    centre = (obj["boxUnits"][1] + obj["boxUnits"][3]) / 2.0
+    if bottom <= top:
+        return NO_STRING
+    # Six lines evenly spanning the band: line 1 is the topmost.
+    relative = (centre - top) / (bottom - top)
+    index = int(round(relative * 5.0))
+    if index < 0 or index > 5:
+        return NO_STRING
+    distance = abs(relative - index / 5.0)
+    if distance > 0.12:
+        return 7  # off-line: present but not assignable
+    return index + 1
+
+
+def fret_for_object(obj: dict[str, Any]) -> int:
+    text = obj.get("fret")
+    if obj.get("objectType") != "fret-digit" or not text:
+        return NO_FRET
+    try:
+        value = int(str(text).strip())
+    except ValueError:
+        return NO_FRET
+    return value if 0 <= value <= MAX_FRET else NO_FRET
+
+
+def view_for_object(record: dict[str, Any], obj: dict[str, Any]) -> int:
+    """Which view an object belongs to.
+
+    TAB objects live in the TAB view and everything else in the notation view. The
+    full-page view is context, not a detection surface, and keeping it out of the
+    object set stops the model being scored twice for the same note.
+    """
+    return VIEW_INDEX["tab"] if obj.get("onTab") else VIEW_INDEX["notation"]
+
+
+def build_sample(
+    record: dict[str, Any],
+    views_dir: Path,
+    size: tuple[int, int],
+) -> dict[str, torch.Tensor] | None:
+    """Assemble one page: every tile of every view, plus its objects.
+
+    An object is assigned to the single tile that contains it. Tiles do not
+    overlap, so the assignment is unambiguous, and a view that is narrow enough
+    to fit in one plane still reports ``TILES_PER_VIEW`` planes with the content
+    in the first and white to the right, so the tensor shape is the same for
+    every page.
+    """
+    planes: list[np.ndarray] = []
+    rects: list[list[tuple[float, float, float, float]]] = []
+    insets: dict[str, tuple[float, float, float, float]] = {}
+    for name in VIEW_NAMES:
+        loaded = _load_view(views_dir, name, record["scoreId"], size, TILES_PER_VIEW[name])
+        if loaded is None:
+            return None
+        tiles, inset = loaded
+        for plane, rect in tiles:
+            planes.append(plane)
+        rects.append([rect for _, rect in tiles])
+        insets[name] = inset
+    image_stack = torch.from_numpy(np.stack(planes)[:, None, :, :])
+
+    objects = record.get("objects", [])
+    if not objects:
+        return None
+
+    # Each view is a crop of the page, and the record's boxes are page-normalised,
+    # so the frames have to be reconciled before anything can be indexed.
+    # The view's own frame is the band's rectangle on the page, then narrowed by
+    # however much white margin the loader trimmed off the crop. Both are needed:
+    # the band says which part of the page the crop shows, the inset says which
+    # part of the crop survived the trim.
+    frames = {}
+    for name, is_tab in (("full-page", None), ("notation", False), ("tab", True)):
+        base = (0.0, 0.0, 1.0, 1.0) if is_tab is None else view_rect(record, is_tab)
+        i = insets[name]
+        bx0, by0, bx1, by1 = base
+        frames[name] = (
+            bx0 + i[0] * (bx1 - bx0),
+            by0 + i[1] * (by1 - by0),
+            bx0 + (1 - i[2]) * (bx1 - bx0),
+            by0 + (1 - i[3]) * (by1 - by0),
+        )
+
+    boxes, types, strings, frets, views = [], [], [], [], []
+    for obj in objects:
+        if obj["objectType"] not in OBJECT_TYPE_INDEX:
+            continue
+        view_index = view_for_object(record, obj)
+        in_view = page_box_to_view(
+            obj["box"], frames[VIEW_NAMES[view_index]]
+        )
+        if in_view is None:
+            continue
+        placed = False
+        for tile_index, rect in enumerate(rects[view_index]):
+            mapped = plane_box(in_view, rect)
+            if mapped is None:
+                continue
+            boxes.append(mapped)
+            types.append(OBJECT_TYPE_INDEX[obj["objectType"]])
+            strings.append(string_for_object(record, obj))
+            frets.append(fret_for_object(obj))
+            # The global tile index, which is what the samplers index by.
+            views.append(sum(len(tiles) for tiles in rects[:view_index]) + tile_index)
+            placed = True
+            break
+        if not placed:
+            # A glyph the tiling dropped. Counted rather than silently discarded;
+            # a high drop rate means the tile count is too low for the corpus.
+            continue
+
+    if not boxes:
+        return None
+
+    return {
+        "images": image_stack,
+        "boxes": torch.tensor(boxes, dtype=torch.float32),
+        "object_type": torch.tensor(types, dtype=torch.long),
+        "string": torch.tensor(strings, dtype=torch.long),
+        "fret": torch.tensor(frets, dtype=torch.long),
+        "view": torch.tensor(views, dtype=torch.long),
+    }
+
+
+def collate(samples: Sequence[dict[str, torch.Tensor]], max_objects: int) -> dict[str, torch.Tensor]:
+    """Pad a batch to a fixed object count.
+
+    Objects beyond ``max_objects`` are dropped and reported through the mask, so
+    a dense page truncates visibly rather than silently shifting every later
+    object's index.
+    """
+    batch_size = len(samples)
+    tile_count = samples[0]["images"].shape[0]
+    counts = [min(int(sample["object_type"].shape[0]), max_objects) for sample in samples]
+
+    images = torch.stack([sample["images"] for sample in samples])
+    boxes = torch.zeros(batch_size, max_objects, 4)
+    # Padded slots carry the "no object" class, one past the real vocabulary.
+    # Scoring them as a real class would ask the model to classify nothing.
+    object_type = torch.full((batch_size, max_objects), len(OBJECT_TYPES), dtype=torch.long)
+    string = torch.full((batch_size, max_objects), NO_STRING, dtype=torch.long)
+    fret = torch.full((batch_size, max_objects), NO_FRET, dtype=torch.long)
+    view = torch.zeros(batch_size, max_objects, dtype=torch.long)
+    mask = torch.zeros(batch_size, max_objects, dtype=torch.bool)
+
+    for index, (sample, count) in enumerate(zip(samples, counts)):
+        boxes[index, :count] = sample["boxes"][:count]
+        object_type[index, :count] = sample["object_type"][:count]
+        string[index, :count] = sample["string"][:count]
+        fret[index, :count] = sample["fret"][:count]
+        view[index, :count] = sample["view"][:count]
+        mask[index, :count] = True
+
+    return {
+        "images": images,
+        "tiles": tile_count,
+        "boxes": boxes,
+        "object_type": object_type,
+        "string": string,
+        "fret": fret,
+        "view": view,
+        "object_mask": mask,
+        "object_counts": torch.tensor(counts, dtype=torch.long),
+    }
+
+
+def load_dataset(
+    records_dir: Path,
+    views_dir: Path,
+    *,
+    size: tuple[int, int] = (512, 512),
+    limit: int = 0,
+) -> list[dict[str, torch.Tensor]]:
+    records = sorted(records_dir.glob("*.record.json"))
+    if limit:
+        records = records[:limit]
+    samples = []
+    for path in records:
+        record = _read_record(path)
+        sample = build_sample(record, views_dir, size)
+        if sample is not None:
+            samples.append(sample)
+    return samples
