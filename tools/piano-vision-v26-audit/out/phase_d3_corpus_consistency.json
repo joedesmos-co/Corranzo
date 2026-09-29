@@ -1,0 +1,464 @@
+{
+  "analytic_written_pitch_agreement": {
+    "median": 0.8314777883066301,
+    "min": 0.4506024096385542,
+    "scores_above_0.75": 13,
+    "scores_total": 18
+  },
+  "by_engraving": {
+    "corranzo-benchmark": {
+      "gate_refusals": 0,
+      "pitch": 149,
+      "records": 20,
+      "scores": 3
+    },
+    "musescore-feta": {
+      "gate_refusals": 15,
+      "pitch": 1448,
+      "records": 133,
+      "scores": 3
+    },
+    "musescore-legacy-mscore": {
+      "gate_refusals": 21,
+      "pitch": 830,
+      "records": 92,
+      "scores": 1
+    },
+    "musescore4-emmentaler": {
+      "gate_refusals": 21,
+      "pitch": 5198,
+      "records": 533,
+      "scores": 11
+    }
+  },
+  "corpus": "realpdf_d2",
+  "group_rejection_reasons": {
+    "event_coverage_too_low": 80,
+    "no_xml_measure_partner": 230,
+    "residual_std_too_large": 66,
+    "too_few_accepted_matches": 142,
+    "too_few_objects_or_events": 188,
+    "unreliable_staff_lines": 249
+  },
+  "label_gate_refusals": {
+    "dependent_label_dropped": 39,
+    "object_outside_ledger_envelope": 17,
+    "staff_step_outside_ledger_envelope": 1
+  },
+  "ledger_envelope_staff_spaces": 8.0,
+  "per_score": [
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.9200626959247649,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "residual_std_too_large": 1,
+        "too_few_objects_or_events": 1
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 836,
+      "pitch_labels": 638,
+      "records_written": 27,
+      "residual_k_median": 1.4278499999999998,
+      "residual_k_p95": 3.4229,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-bach-fugue-bwv846",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.760806916426513,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 1,
+        "no_xml_measure_partner": 2,
+        "residual_std_too_large": 3,
+        "too_few_accepted_matches": 23,
+        "too_few_objects_or_events": 14
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 1278,
+      "pitch_labels": 694,
+      "records_written": 97,
+      "residual_k_median": 2.042,
+      "residual_k_p95": 4.4963,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-beethoven-sonata-op2-m1",
+      "split": "heldout-test"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8666666666666667,
+      "engraving": "musescore-feta",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 9,
+        "no_xml_measure_partner": 11,
+        "residual_std_too_large": 3,
+        "too_few_accepted_matches": 18,
+        "too_few_objects_or_events": 17,
+        "unreliable_staff_lines": 43
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 816,
+      "pitch_labels": 435,
+      "records_written": 41,
+      "residual_k_median": 1.9275,
+      "residual_k_p95": 4.89743,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-chopin-etude-op10-01",
+      "split": "heldout-test"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8289885297184567,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 3,
+        "residual_std_too_large": 5,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 15
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 1486,
+      "pitch_labels": 959,
+      "records_written": 49,
+      "residual_k_median": 1.543,
+      "residual_k_p95": 4.88938,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-chopin-etude-op10-12",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8339670468948035,
+      "engraving": "musescore-feta",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 5,
+        "no_xml_measure_partner": 1,
+        "residual_std_too_large": 1,
+        "too_few_objects_or_events": 1
+      },
+      "label_gate_detail": {
+        "dependent_label_dropped": 10,
+        "object_outside_ledger_envelope": 5
+      },
+      "label_gate_refusals": 15,
+      "objects_total": 1211,
+      "pitch_labels": 789,
+      "records_written": 33,
+      "residual_k_median": 2.3984,
+      "residual_k_p95": 4.546239999999998,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-chopin-nocturne-op9-n2",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8158567774936062,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 6,
+        "no_xml_measure_partner": 3,
+        "residual_std_too_large": 2,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 8,
+        "unreliable_staff_lines": 15
+      },
+      "label_gate_detail": {
+        "dependent_label_dropped": 15,
+        "object_outside_ledger_envelope": 6
+      },
+      "label_gate_refusals": 21,
+      "objects_total": 1117,
+      "pitch_labels": 782,
+      "records_written": 61,
+      "residual_k_median": 1.4397,
+      "residual_k_p95": 3.5770499999999963,
+      "role_matches_nearest": 1.0,
+      "score_id": "bc-mozart-k153",
+      "split": "validation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.6417910447761194,
+      "engraving": "corranzo-benchmark",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "no_xml_measure_partner": 29,
+        "residual_std_too_large": 1,
+        "unreliable_staff_lines": 8
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 264,
+      "pitch_labels": 67,
+      "records_written": 7,
+      "residual_k_median": 0.9862,
+      "residual_k_p95": 2.8176199999999985,
+      "role_matches_nearest": 1.0,
+      "score_id": "omf-piano-dense-advanced-vector",
+      "split": "heldout-test"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.6666666666666666,
+      "engraving": "corranzo-benchmark",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "too_few_accepted_matches": 8
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 88,
+      "pitch_labels": 48,
+      "records_written": 8,
+      "residual_k_median": 0.9719,
+      "residual_k_p95": 2.3026299999999993,
+      "role_matches_nearest": 1.0,
+      "score_id": "omf-piano-grand-voices-vector",
+      "split": "heldout-test"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 1.0,
+      "engraving": "corranzo-benchmark",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "no_xml_measure_partner": 6,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 1,
+        "unreliable_staff_lines": 7
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 68,
+      "pitch_labels": 34,
+      "records_written": 5,
+      "residual_k_median": 0.5172,
+      "residual_k_p95": 2.0086,
+      "role_matches_nearest": 1.0,
+      "score_id": "omf-piano-rhythm-tuplets-vector",
+      "split": "validation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.9770114942528736,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "no_xml_measure_partner": 1,
+        "residual_std_too_large": 1,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 2
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 749,
+      "pitch_labels": 522,
+      "records_written": 33,
+      "residual_k_median": 2.0239000000000003,
+      "residual_k_p95": 4.4942,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-bach-prelude-bwv846",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8745644599303136,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 2,
+        "residual_std_too_large": 5,
+        "too_few_accepted_matches": 24,
+        "too_few_objects_or_events": 15
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 1107,
+      "pitch_labels": 574,
+      "records_written": 94,
+      "residual_k_median": 1.4337499999999999,
+      "residual_k_p95": 3.030475,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-beethoven-fur-elise",
+      "split": "diagnostic"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.6,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 2,
+        "no_xml_measure_partner": 7,
+        "too_few_accepted_matches": 2,
+        "unreliable_staff_lines": 11
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 147,
+      "pitch_labels": 15,
+      "records_written": 7,
+      "residual_k_median": 1.0482,
+      "residual_k_p95": 2.04968,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-brahms-waltz-op39-3",
+      "split": "validation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.75,
+      "engraving": "musescore-feta",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 11,
+        "no_xml_measure_partner": 105,
+        "residual_std_too_large": 11,
+        "too_few_accepted_matches": 28,
+        "too_few_objects_or_events": 23,
+        "unreliable_staff_lines": 101
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 993,
+      "pitch_labels": 224,
+      "records_written": 59,
+      "residual_k_median": 1.0444,
+      "residual_k_p95": 3.0208999999999997,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-chopin-mazurka-op6-1",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8034188034188035,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 1,
+        "no_xml_measure_partner": 2,
+        "residual_std_too_large": 6,
+        "too_few_accepted_matches": 3,
+        "too_few_objects_or_events": 2
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 245,
+      "pitch_labels": 117,
+      "records_written": 18,
+      "residual_k_median": 1.0535,
+      "residual_k_p95": 3.50354,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-handel-gavotte",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.8442503639010189,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 29,
+        "residual_std_too_large": 22,
+        "too_few_accepted_matches": 20,
+        "too_few_objects_or_events": 42
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 1569,
+      "pitch_labels": 687,
+      "records_written": 105,
+      "residual_k_median": 2.4163,
+      "residual_k_p95": 4.10837,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-mozart-turkish-march",
+      "split": "adaptation"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.9090909090909091,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "no_xml_measure_partner": 49,
+        "residual_std_too_large": 5,
+        "too_few_objects_or_events": 13,
+        "unreliable_staff_lines": 29
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 205,
+      "pitch_labels": 33,
+      "records_written": 11,
+      "residual_k_median": 0.943,
+      "residual_k_p95": 1.710779999999999,
+      "role_matches_nearest": 1.0,
+      "score_id": "pl-tchaikovsky-old-french-song",
+      "split": "heldout-test"
+    },
+    {
+      "analytic_residual_median": 0.0,
+      "analytic_written_pitch_agreement": 0.9943502824858758,
+      "engraving": "musescore4-emmentaler",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "too_few_objects_or_events": 18
+      },
+      "label_gate_detail": {},
+      "label_gate_refusals": 0,
+      "objects_total": 209,
+      "pitch_labels": 177,
+      "records_written": 31,
+      "residual_k_median": 1.0441,
+      "residual_k_p95": 3.41452,
+      "role_matches_nearest": 1.0,
+      "score_id": "std-demo-minuet-in-g",
+      "split": "diagnostic"
+    },
+    {
+      "analytic_residual_median": -1.0,
+      "analytic_written_pitch_agreement": 0.4506024096385542,
+      "engraving": "musescore-legacy-mscore",
+      "frac_abs_k_over_ledger": 0.0,
+      "group_rejections": {
+        "event_coverage_too_low": 11,
+        "no_xml_measure_partner": 14,
+        "too_few_accepted_matches": 12,
+        "too_few_objects_or_events": 16,
+        "unreliable_staff_lines": 35
+      },
+      "label_gate_detail": {
+        "dependent_label_dropped": 14,
+        "object_outside_ledger_envelope": 6,
+        "staff_step_outside_ledger_envelope": 1
+      },
+      "label_gate_refusals": 21,
+      "objects_total": 1404,
+      "pitch_labels": 830,
+      "records_written": 92,
+      "residual_k_median": 1.8426,
+      "residual_k_p95": 4.4808,
+      "role_matches_nearest": 1.0,
+      "score_id": "std-hungarian-dance-no5",
+      "split": "adaptation"
+    }
+  ],
+  "totals": {
+    "group_rejections": 955,
+    "label_gate_refusals": 57,
+    "pitch_labels": 7625,
+    "records_written": 778,
+    "scores": 18
+  }
+}

@@ -182,7 +182,7 @@ def apply_label_gate(target, objects, centers, lines_by_role, gap):
     checks = check_measure(centers, lines_by_role, gap, objects)
     counts = {}
     families = target["families"]
-    kept = []
+    kept, refused = [], []
     for label in families["PITCH_STAFF"]:
         value = label.get("value") or {}
         role = value.get("staffRole")
@@ -193,20 +193,24 @@ def apply_label_gate(target, objects, centers, lines_by_role, gap):
         if ok:
             kept.append(label)
         else:
+            refused.append(label)
             for r in reasons:
                 counts[r] = counts.get(r, 0) + 1
     families["PITCH_STAFF"] = kept
-    # Lane/attack/chord/tie labels are keyed to the same object indexes; drop any
-    # that referenced a refused pitch object so no label survives without its
-    # geometry.
-    surviving = {id(l) for l in kept}
-    surviving_idx = {i for l in kept for i in (l.get("objectIndexes") or [])}
+    # Lane/attack/chord/tie labels are keyed to the same object indexes. Drop only
+    # those that referenced a REFUSED pitch object. A rest object never carries a
+    # PITCH_STAFF label at all, so it is not refused and its REST/DURATION
+    # supervision must survive: dropping on "not a surviving pitch index" would
+    # silently delete every rest and duration label in the corpus.
+    refused_idx = set()
+    for label in refused:
+        for i in (label.get("objectIndexes") or []):
+            refused_idx.add(i)
     for name in ("LANE", "ATTACK", "CHORD", "LANE_CONTINUATION", "TIE_SUSTAIN",
                  "CROSS_STAFF", "SHARED_HEAD", "TUPLET", "REST", "DURATION"):
         rows = families.get(name) or []
         kept_rows = [r for r in rows
-                     if not (r.get("objectIndexes")
-                             and not set(r["objectIndexes"]) <= surviving_idx)]
+                     if not (set(r.get("objectIndexes") or []) & refused_idx)]
         if len(kept_rows) != len(rows):
             counts["dependent_label_dropped"] = counts.get(
                 "dependent_label_dropped", 0) + (len(rows) - len(kept_rows))

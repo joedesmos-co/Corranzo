@@ -1,0 +1,363 @@
+{
+  "analytic": {
+    "octave": 0.966,
+    "per_score": {
+      "bc-bach-fugue-bwv846": {
+        "octave": 0.9969,
+        "written_step": 0.9375
+      },
+      "bc-chopin-etude-op10-12": {
+        "octave": 0.9844,
+        "written_step": 0.8594
+      },
+      "bc-chopin-nocturne-op9-n2": {
+        "octave": 0.9844,
+        "written_step": 0.8719
+      },
+      "bc-mozart-k153": {
+        "octave": 0.9812,
+        "written_step": 0.825
+      },
+      "omf-piano-rhythm-tuplets-vector": {
+        "octave": 1.0,
+        "written_step": 1.0
+      },
+      "pl-bach-prelude-bwv846": {
+        "octave": 1.0,
+        "written_step": 0.9688
+      },
+      "pl-brahms-waltz-op39-3": {
+        "octave": 0.8667,
+        "written_step": 0.6
+      },
+      "pl-chopin-mazurka-op6-1": {
+        "octave": 0.9481,
+        "written_step": 0.7857
+      },
+      "pl-handel-gavotte": {
+        "octave": 0.9658,
+        "written_step": 0.8034
+      },
+      "pl-mozart-turkish-march": {
+        "octave": 0.9595,
+        "written_step": 0.7919
+      },
+      "std-hungarian-dance-no5": {
+        "octave": 0.8385,
+        "written_step": 0.3308
+      }
+    },
+    "pooled": 0.8887,
+    "written_step": 0.8113
+  },
+  "arms": {
+    "detected": {
+      "octave": {
+        "folds": [
+          {
+            "acc": 0.9781,
+            "held": "bc-bach-fugue-bwv846",
+            "n": 320,
+            "train": 0.9975
+          },
+          {
+            "acc": 0.975,
+            "held": "bc-chopin-etude-op10-12",
+            "n": 320,
+            "train": 0.9925
+          },
+          {
+            "acc": 0.9781,
+            "held": "bc-chopin-nocturne-op9-n2",
+            "n": 320,
+            "train": 0.99
+          },
+          {
+            "acc": 0.9781,
+            "held": "bc-mozart-k153",
+            "n": 320,
+            "train": 0.9875
+          },
+          {
+            "acc": 1.0,
+            "held": "omf-piano-rhythm-tuplets-vector",
+            "n": 34,
+            "train": 0.9975
+          },
+          {
+            "acc": 0.9938,
+            "held": "pl-bach-prelude-bwv846",
+            "n": 320,
+            "train": 0.995
+          },
+          {
+            "acc": 0.8667,
+            "held": "pl-brahms-waltz-op39-3",
+            "n": 15,
+            "train": 0.985
+          },
+          {
+            "acc": 0.9416,
+            "held": "pl-chopin-mazurka-op6-1",
+            "n": 154,
+            "train": 1.0
+          },
+          {
+            "acc": 0.9744,
+            "held": "pl-handel-gavotte",
+            "n": 117,
+            "train": 0.9975
+          },
+          {
+            "acc": 0.9595,
+            "held": "pl-mozart-turkish-march",
+            "n": 173,
+            "train": 1.0
+          },
+          {
+            "acc": 0.8654,
+            "held": "std-hungarian-dance-no5",
+            "n": 260,
+            "train": 0.995
+          }
+        ],
+        "loso": 0.963,
+        "majority": 0.3689,
+        "n": 2353
+      },
+      "written_step": {
+        "folds": [
+          {
+            "acc": 0.7562,
+            "held": "bc-bach-fugue-bwv846",
+            "n": 320,
+            "train": 0.97
+          },
+          {
+            "acc": 0.7625,
+            "held": "bc-chopin-etude-op10-12",
+            "n": 320,
+            "train": 0.985
+          },
+          {
+            "acc": 0.8219,
+            "held": "bc-chopin-nocturne-op9-n2",
+            "n": 320,
+            "train": 0.95
+          },
+          {
+            "acc": 0.7344,
+            "held": "bc-mozart-k153",
+            "n": 320,
+            "train": 0.96
+          },
+          {
+            "acc": 0.7353,
+            "held": "omf-piano-rhythm-tuplets-vector",
+            "n": 34,
+            "train": 0.97
+          },
+          {
+            "acc": 0.8875,
+            "held": "pl-bach-prelude-bwv846",
+            "n": 320,
+            "train": 0.97
+          },
+          {
+            "acc": 0.5333,
+            "held": "pl-brahms-waltz-op39-3",
+            "n": 15,
+            "train": 0.9575
+          },
+          {
+            "acc": 0.6948,
+            "held": "pl-chopin-mazurka-op6-1",
+            "n": 154,
+            "train": 0.9725
+          },
+          {
+            "acc": 0.7778,
+            "held": "pl-handel-gavotte",
+            "n": 117,
+            "train": 0.955
+          },
+          {
+            "acc": 0.7514,
+            "held": "pl-mozart-turkish-march",
+            "n": 173,
+            "train": 0.9125
+          },
+          {
+            "acc": 0.5077,
+            "held": "std-hungarian-dance-no5",
+            "n": 260,
+            "train": 0.9675
+          }
+        ],
+        "loso": 0.7484,
+        "majority": 0.1776,
+        "n": 2353
+      }
+    },
+    "pixels_only": {
+      "octave": {
+        "folds": [
+          {
+            "acc": 0.5156,
+            "held": "bc-bach-fugue-bwv846",
+            "n": 320,
+            "train": 0.9825
+          },
+          {
+            "acc": 0.2031,
+            "held": "bc-chopin-etude-op10-12",
+            "n": 320,
+            "train": 0.75
+          },
+          {
+            "acc": 0.4562,
+            "held": "bc-chopin-nocturne-op9-n2",
+            "n": 320,
+            "train": 0.6325
+          },
+          {
+            "acc": 0.6219,
+            "held": "bc-mozart-k153",
+            "n": 320,
+            "train": 0.87
+          },
+          {
+            "acc": 1.0,
+            "held": "omf-piano-rhythm-tuplets-vector",
+            "n": 34,
+            "train": 0.6225
+          },
+          {
+            "acc": 0.6375,
+            "held": "pl-bach-prelude-bwv846",
+            "n": 320,
+            "train": 0.8025
+          },
+          {
+            "acc": 0.8,
+            "held": "pl-brahms-waltz-op39-3",
+            "n": 15,
+            "train": 0.865
+          },
+          {
+            "acc": 0.4805,
+            "held": "pl-chopin-mazurka-op6-1",
+            "n": 154,
+            "train": 0.6575
+          },
+          {
+            "acc": 0.7179,
+            "held": "pl-handel-gavotte",
+            "n": 117,
+            "train": 0.6475
+          },
+          {
+            "acc": 0.6705,
+            "held": "pl-mozart-turkish-march",
+            "n": 173,
+            "train": 0.6175
+          },
+          {
+            "acc": 0.1885,
+            "held": "std-hungarian-dance-no5",
+            "n": 260,
+            "train": 0.87
+          }
+        ],
+        "loso": 0.4879,
+        "majority": 0.3689,
+        "n": 2353
+      },
+      "written_step": {
+        "folds": [
+          {
+            "acc": 0.1437,
+            "held": "bc-bach-fugue-bwv846",
+            "n": 320,
+            "train": 0.235
+          },
+          {
+            "acc": 0.3094,
+            "held": "bc-chopin-etude-op10-12",
+            "n": 320,
+            "train": 0.5375
+          },
+          {
+            "acc": 0.15,
+            "held": "bc-chopin-nocturne-op9-n2",
+            "n": 320,
+            "train": 0.14
+          },
+          {
+            "acc": 0.2,
+            "held": "bc-mozart-k153",
+            "n": 320,
+            "train": 0.225
+          },
+          {
+            "acc": 0.1176,
+            "held": "omf-piano-rhythm-tuplets-vector",
+            "n": 34,
+            "train": 0.14
+          },
+          {
+            "acc": 0.1812,
+            "held": "pl-bach-prelude-bwv846",
+            "n": 320,
+            "train": 0.2
+          },
+          {
+            "acc": 0.5333,
+            "held": "pl-brahms-waltz-op39-3",
+            "n": 15,
+            "train": 0.52
+          },
+          {
+            "acc": 0.0974,
+            "held": "pl-chopin-mazurka-op6-1",
+            "n": 154,
+            "train": 0.1875
+          },
+          {
+            "acc": 0.4872,
+            "held": "pl-handel-gavotte",
+            "n": 117,
+            "train": 0.5
+          },
+          {
+            "acc": 0.1387,
+            "held": "pl-mozart-turkish-march",
+            "n": 173,
+            "train": 0.1825
+          },
+          {
+            "acc": 0.0769,
+            "held": "std-hungarian-dance-no5",
+            "n": 260,
+            "train": 0.47
+          }
+        ],
+        "loso": 0.1883,
+        "majority": 0.1776,
+        "n": 2353
+      }
+    }
+  },
+  "corpus": "realpdf_d2",
+  "protocol": "leave-one-SCORE-out, 20 epochs, seed 0, identical across arms",
+  "roi": {
+    "h_spaces": 12.0,
+    "px_per_staff_space": 8,
+    "shape": [
+      2353,
+      96,
+      48
+    ],
+    "w_spaces": 6.0
+  }
+}

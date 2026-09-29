@@ -1,0 +1,80 @@
+{
+  "L1_score_overlap": {
+    "duplicates": [],
+    "held_out_scores": [
+      "bc-bach-fugue-bwv846",
+      "bc-chopin-etude-op10-12",
+      "bc-chopin-nocturne-op9-n2",
+      "bc-mozart-k153",
+      "omf-piano-rhythm-tuplets-vector",
+      "pl-bach-prelude-bwv846",
+      "pl-brahms-waltz-op39-3",
+      "pl-chopin-mazurka-op6-1",
+      "pl-handel-gavotte",
+      "pl-mozart-turkish-march",
+      "std-hungarian-dance-no5"
+    ],
+    "n_folds": 11,
+    "pass": true
+  },
+  "L2_page_content_overlap": {
+    "distinct_pages": 44,
+    "examples": [],
+    "page_hashes_shared_across_scores": 0,
+    "pages_hashed": 44,
+    "pages_unreadable": 0,
+    "pages_unreadable_examples": [],
+    "pass": true
+  },
+  "L3_target_leakage": {
+    "analytic_agreement_written_step": 0.8113,
+    "features": [
+      "k",
+      "2k",
+      "4k",
+      "k/2",
+      "k^2",
+      "k>=0",
+      "|k|",
+      "sign(k)",
+      "is_upper",
+      "is_lower"
+    ],
+    "n": 2353,
+    "note": "All features are functions of the detected staff band and the notehead centre, both derived from the raster. The target is the MusicXML written step. agreement below 1.0 is the residual detector error being measured, not a leak: a leak would be 1.0 on the pre-fix corpus too, and it is not.",
+    "pass": true,
+    "residual_distribution": {
+      "-1": 203,
+      "-6": 18,
+      "0": 1909,
+      "1": 161,
+      "6": 62
+    }
+  },
+  "L4_protocol_drift": {
+    "corrected_folds": 11,
+    "corrected_metric": "written_step / octave from MusicXML",
+    "frozen_folds": 11,
+    "frozen_metric": "pitch_staff_step (closed-form restatement of the input) - REMOVED as circular",
+    "frozen_missing_input": "band role / clef - ADDED",
+    "note": "Frozen Gate 0 results are retained unchanged in out/phase_c_roi_probe.json as evidence that the instrument was broken. The corrected test is a NEW instrument, not a retuned threshold: the split, the ROI and the seed are identical.",
+    "pass": true,
+    "roi_px_per_staff_space": [
+      8,
+      8
+    ],
+    "roi_shape": [
+      [
+        2808,
+        96,
+        48
+      ],
+      [
+        2353,
+        96,
+        48
+      ]
+    ],
+    "split": "leave-one-score-out in both; fold counts recorded"
+  }
+}
