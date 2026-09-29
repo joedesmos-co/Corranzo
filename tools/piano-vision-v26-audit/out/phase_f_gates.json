@@ -1,0 +1,237 @@
+{
+  "F1_tiny_memorisation": {
+    "majority_on_subset": 0.1875,
+    "octave": 1.0,
+    "pass": true,
+    "records": 4,
+    "score": "bc-bach-fugue-bwv846",
+    "threshold": 0.98,
+    "written_pitch_accuracy": 1.0,
+    "written_step": 1.0
+  },
+  "F2_loso_existing_plus_k": {
+    "by_engraving": {
+      "corranzo-benchmark": {
+        "mean_written_pitch": 0.3021,
+        "scores": 3
+      },
+      "musescore-feta": {
+        "mean_written_pitch": 0.539,
+        "scores": 3
+      },
+      "musescore-legacy-mscore": {
+        "mean_written_pitch": 0.2675,
+        "scores": 1
+      },
+      "musescore4-emmentaler": {
+        "mean_written_pitch": 0.6077,
+        "scores": 11
+      }
+    },
+    "macro_written_pitch": 0.5264,
+    "n_labels": 7625,
+    "n_scores": 18,
+    "pass": false,
+    "per_score": {
+      "bc-bach-fugue-bwv846": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.7712,
+        "octave": 0.9843,
+        "split": "adaptation",
+        "written_pitch": 0.7712,
+        "written_pitch_labels": 638,
+        "written_step": 0.8401
+      },
+      "bc-beethoven-sonata-op2-m1": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.5663,
+        "octave": 0.9798,
+        "split": "heldout-test",
+        "written_pitch": 0.5447,
+        "written_pitch_labels": 694,
+        "written_step": 0.7478
+      },
+      "bc-chopin-etude-op10-01": {
+        "engraving": "musescore-feta",
+        "midi": 0.6368,
+        "octave": 0.9517,
+        "split": "heldout-test",
+        "written_pitch": 0.6368,
+        "written_pitch_labels": 435,
+        "written_step": 0.7632
+      },
+      "bc-chopin-etude-op10-12": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.513,
+        "octave": 0.9562,
+        "split": "adaptation",
+        "written_pitch": 0.512,
+        "written_pitch_labels": 959,
+        "written_step": 0.6371
+      },
+      "bc-chopin-nocturne-op9-n2": {
+        "engraving": "musescore-feta",
+        "midi": 0.5919,
+        "octave": 0.9544,
+        "split": "adaptation",
+        "written_pitch": 0.5919,
+        "written_pitch_labels": 789,
+        "written_step": 0.7782
+      },
+      "bc-mozart-k153": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.5627,
+        "octave": 0.9757,
+        "split": "validation",
+        "written_pitch": 0.5601,
+        "written_pitch_labels": 782,
+        "written_step": 0.8056
+      },
+      "omf-piano-dense-advanced-vector": {
+        "engraving": "corranzo-benchmark",
+        "midi": 0.1194,
+        "octave": 0.7761,
+        "split": "heldout-test",
+        "written_pitch": 0.1194,
+        "written_pitch_labels": 67,
+        "written_step": 0.3881
+      },
+      "omf-piano-grand-voices-vector": {
+        "engraving": "corranzo-benchmark",
+        "midi": 0.375,
+        "octave": 0.9583,
+        "split": "heldout-test",
+        "written_pitch": 0.375,
+        "written_pitch_labels": 48,
+        "written_step": 0.4792
+      },
+      "omf-piano-rhythm-tuplets-vector": {
+        "engraving": "corranzo-benchmark",
+        "midi": 0.4118,
+        "octave": 0.9412,
+        "split": "validation",
+        "written_pitch": 0.4118,
+        "written_pitch_labels": 34,
+        "written_step": 0.4412
+      },
+      "pl-bach-prelude-bwv846": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.8218,
+        "octave": 0.9828,
+        "split": "adaptation",
+        "written_pitch": 0.8218,
+        "written_pitch_labels": 522,
+        "written_step": 0.91
+      },
+      "pl-beethoven-fur-elise": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.7439,
+        "octave": 0.9739,
+        "split": "diagnostic",
+        "written_pitch": 0.7439,
+        "written_pitch_labels": 574,
+        "written_step": 0.8118
+      },
+      "pl-brahms-waltz-op39-3": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.5333,
+        "octave": 0.8667,
+        "split": "validation",
+        "written_pitch": 0.5333,
+        "written_pitch_labels": 15,
+        "written_step": 0.6
+      },
+      "pl-chopin-mazurka-op6-1": {
+        "engraving": "musescore-feta",
+        "midi": 0.3884,
+        "octave": 0.9062,
+        "split": "adaptation",
+        "written_pitch": 0.3884,
+        "written_pitch_labels": 224,
+        "written_step": 0.6607
+      },
+      "pl-handel-gavotte": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.6667,
+        "octave": 0.9487,
+        "split": "adaptation",
+        "written_pitch": 0.6667,
+        "written_pitch_labels": 117,
+        "written_step": 0.7863
+      },
+      "pl-mozart-turkish-march": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.5459,
+        "octave": 0.9592,
+        "split": "adaptation",
+        "written_pitch": 0.5459,
+        "written_pitch_labels": 687,
+        "written_step": 0.7569
+      },
+      "pl-tchaikovsky-old-french-song": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.1212,
+        "octave": 0.7879,
+        "split": "heldout-test",
+        "written_pitch": 0.1212,
+        "written_pitch_labels": 33,
+        "written_step": 0.2424
+      },
+      "std-demo-minuet-in-g": {
+        "engraving": "musescore4-emmentaler",
+        "midi": 0.8644,
+        "octave": 1.0,
+        "split": "diagnostic",
+        "written_pitch": 0.8644,
+        "written_pitch_labels": 177,
+        "written_step": 0.9831
+      },
+      "std-hungarian-dance-no5": {
+        "engraving": "musescore-legacy-mscore",
+        "midi": 0.2675,
+        "octave": 0.8831,
+        "split": "adaptation",
+        "written_pitch": 0.2675,
+        "written_pitch_labels": 830,
+        "written_step": 0.4952
+      }
+    },
+    "threshold": 0.7,
+    "weighted_midi": 0.575,
+    "weighted_octave": 0.9546,
+    "weighted_written_pitch": 0.5726,
+    "weighted_written_step": 0.7356
+  },
+  "F3_causal_ablation": {
+    "A_existing_v25_features_only": {
+      "note": "frozen champion logits, adapter absent",
+      "octave": 0.7764,
+      "written_pitch": 0.1204,
+      "written_step": 0.1755
+    },
+    "B_staff_relative_k_only": {
+      "note": "adapter sees ONLY the 7 staff features; the frozen champion's own representation is withheld",
+      "octave": 0.9756,
+      "written_pitch": 0.5617,
+      "written_step": 0.7641
+    },
+    "C_existing_plus_k": 0.5726,
+    "D_existing_plus_shuffled_k": 0.565,
+    "E_existing_plus_wrong_band_k": 0.5806,
+    "F_embedding_only_k_withheld": 0.5673,
+    "causal_claim_supported": false,
+    "delta_k_over_embedding_only": 0.0053
+  },
+  "added_parameters": {
+    "adapter_total": 206397,
+    "frozen_champion": 26332539,
+    "note": "adapter output layer is zero-initialised, so it is exactly identity at step 0",
+    "trainable_in_campaign": 206397
+  },
+  "frozen_champion_on_corrected_corpus": {
+    "n_labels": 7625,
+    "octave": 0.7764,
+    "written_pitch": 0.1204,
+    "written_step": 0.1755
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "feature_names": [
+    "k",
+    "k_half",
+    "is_upper",
+    "obj_height_over_gap",
+    "obj_width_over_gap",
+    "dist_nearest_line",
+    "gap_over_scope_height"
+  ],
+  "gate": "F0",
+  "per_score": {
+    "bc-bach-fugue-bwv846": {
+      "analytic_written_pitch_agreement": 0.9201,
+      "k_p05": -2.081,
+      "k_p95": 3.451,
+      "n": 638,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.9201,
+      "split": "adaptation"
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "analytic_written_pitch_agreement": 0.7608,
+      "k_p05": -3.567,
+      "k_p95": 4.438,
+      "n": 694,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.7608,
+      "split": "heldout-test"
+    },
+    "bc-chopin-etude-op10-01": {
+      "analytic_written_pitch_agreement": 0.8667,
+      "k_p05": -4.016,
+      "k_p95": 4.497,
+      "n": 435,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8667,
+      "split": "heldout-test"
+    },
+    "bc-chopin-etude-op10-12": {
+      "analytic_written_pitch_agreement": 0.8332,
+      "k_p05": -4.1,
+      "k_p95": 4.44,
+      "n": 959,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8332,
+      "split": "adaptation"
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "analytic_written_pitch_agreement": 0.8416,
+      "k_p05": -2.561,
+      "k_p95": 4.479,
+      "n": 789,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8416,
+      "split": "adaptation"
+    },
+    "bc-mozart-k153": {
+      "analytic_written_pitch_agreement": 0.8159,
+      "k_p05": -3.1,
+      "k_p95": 2.98,
+      "n": 782,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8159,
+      "split": "validation"
+    },
+    "omf-piano-dense-advanced-vector": {
+      "analytic_written_pitch_agreement": 0.6418,
+      "k_p05": -1.878,
+      "k_p95": 2.481,
+      "n": 67,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.6418,
+      "split": "heldout-test"
+    },
+    "omf-piano-grand-voices-vector": {
+      "analytic_written_pitch_agreement": 0.6667,
+      "k_p05": -2.355,
+      "k_p95": 0.986,
+      "n": 48,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.6667,
+      "split": "heldout-test"
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "analytic_written_pitch_agreement": 1.0,
+      "k_p05": -2.009,
+      "k_p95": 0.479,
+      "n": 34,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 1.0,
+      "split": "validation"
+    },
+    "pl-bach-prelude-bwv846": {
+      "analytic_written_pitch_agreement": 0.977,
+      "k_p05": -4.564,
+      "k_p95": 2.934,
+      "n": 522,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.977,
+      "split": "adaptation"
+    },
+    "pl-beethoven-fur-elise": {
+      "analytic_written_pitch_agreement": 0.8746,
+      "k_p05": -3.05,
+      "k_p95": 2.422,
+      "n": 574,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8746,
+      "split": "diagnostic"
+    },
+    "pl-brahms-waltz-op39-3": {
+      "analytic_written_pitch_agreement": 0.6,
+      "k_p05": -2.05,
+      "k_p95": 1.463,
+      "n": 15,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.6,
+      "split": "validation"
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "analytic_written_pitch_agreement": 0.75,
+      "k_p05": -2.537,
+      "k_p95": 2.91,
+      "n": 224,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.75,
+      "split": "adaptation"
+    },
+    "pl-handel-gavotte": {
+      "analytic_written_pitch_agreement": 0.8034,
+      "k_p05": -3.505,
+      "k_p95": 1.977,
+      "n": 117,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8034,
+      "split": "adaptation"
+    },
+    "pl-mozart-turkish-march": {
+      "analytic_written_pitch_agreement": 0.8443,
+      "k_p05": -1.066,
+      "k_p95": 4.008,
+      "n": 687,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.8443,
+      "split": "adaptation"
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "analytic_written_pitch_agreement": 0.9091,
+      "k_p05": -1.452,
+      "k_p95": 1.444,
+      "n": 33,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.9091,
+      "split": "heldout-test"
+    },
+    "std-demo-minuet-in-g": {
+      "analytic_written_pitch_agreement": 0.9944,
+      "k_p05": -1.548,
+      "k_p95": 3.415,
+      "n": 177,
+      "residual_median": 0.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.9944,
+      "split": "diagnostic"
+    },
+    "std-hungarian-dance-no5": {
+      "analytic_written_pitch_agreement": 0.2458,
+      "k_p05": -4.354,
+      "k_p95": 3.709,
+      "n": 830,
+      "residual_median": -1.0,
+      "residual_within_1_frac": 1.0,
+      "residual_zero_frac": 0.2458,
+      "split": "adaptation"
+    }
+  },
+  "verdict": {
+    "GATE_F0_PASS": true,
+    "analytic_written_pitch_agreement_pooled": 0.783607,
+    "k_computable": true,
+    "k_not_clipped": {
+      "clip_bounds_avoided": "-2/2 (the existing object_features clip)",
+      "k_max": 4.497,
+      "k_min": -4.564
+    },
+    "k_subspace_precision_preserved": {
+      "distinct_k_values": 3,
+      "statement": "k is not rounded to whole staff spaces anywhere in the feature"
+    },
+    "n_labels": 7625,
+    "no_score_specific_transform": {
+      "free_parameters": 0,
+      "pass": true,
+      "statement": "one global closed form, k -> middle-line diatonic index, applied identically to every score with no per-score calibration, offset or scaling"
+    },
+    "per_score_agreement_median": 0.8374,
+    "per_score_agreement_min": 0.2458,
+    "records_unusable": 0,
+    "residual_abs_ge_2_frac": 0.0,
+    "residual_distribution": {
+      "-1": 944,
+      "0": 5975,
+      "1": 706
+    },
+    "residual_within_1_frac": 1.0,
+    "residual_zero_frac": 0.783607,
+    "scores_above_0.75": 13,
+    "scores_total": 18
+  }
+}
