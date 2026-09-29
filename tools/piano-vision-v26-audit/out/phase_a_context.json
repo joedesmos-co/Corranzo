@@ -1,0 +1,90 @@
+{
+  "production": {
+    "_written_step_by_clef": {
+      "clef_correct": [
+        0,
+        0
+      ],
+      "clef_wrong": [
+        0,
+        0
+      ],
+      "overall": [
+        0,
+        0
+      ]
+    },
+    "clef": {
+      "accuracy": 1.0,
+      "labels": 51,
+      "majority_class_baseline": 0.019608
+    },
+    "clef_line": {
+      "accuracy": 1.0,
+      "labels": 51,
+      "majority_class_baseline": null
+    },
+    "clef_octave": {
+      "accuracy": 1.0,
+      "labels": 51,
+      "majority_class_baseline": null
+    },
+    "key_fifths": {
+      "accuracy": 0.980392,
+      "labels": 51,
+      "majority_class_baseline": null
+    },
+    "meter_denominator": {
+      "accuracy": null,
+      "labels": 0
+    },
+    "meter_numerator": {
+      "accuracy": null,
+      "labels": 0
+    }
+  },
+  "source": {
+    "_written_step_by_clef": {
+      "clef_correct": [
+        0,
+        0
+      ],
+      "clef_wrong": [
+        0,
+        0
+      ],
+      "overall": [
+        0,
+        0
+      ]
+    },
+    "clef": {
+      "accuracy": 0.990385,
+      "labels": 104,
+      "majority_class_baseline": 0.009615
+    },
+    "clef_line": {
+      "accuracy": 0.990385,
+      "labels": 104,
+      "majority_class_baseline": null
+    },
+    "clef_octave": {
+      "accuracy": 1.0,
+      "labels": 104,
+      "majority_class_baseline": null
+    },
+    "key_fifths": {
+      "accuracy": 1.0,
+      "labels": 104,
+      "majority_class_baseline": null
+    },
+    "meter_denominator": {
+      "accuracy": null,
+      "labels": 0
+    },
+    "meter_numerator": {
+      "accuracy": null,
+      "labels": 0
+    }
+  }
+}

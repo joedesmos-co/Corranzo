@@ -1,0 +1,56 @@
+{
+  "OCTAVE": {
+    "n_prod": 210,
+    "n_source": 988,
+    "prod_majority_baseline": 0.4476,
+    "prod_zero_shot_accuracy": 0.4286,
+    "source_fit_accuracy": 1.0,
+    "target": "octave"
+  },
+  "OCTAVE_production_self": {
+    "heldout": 0.5238,
+    "train": 1.0
+  },
+  "STAFF STEP": {
+    "n_prod": 200,
+    "n_source": 988,
+    "prod_majority_baseline": 0.195,
+    "prod_zero_shot_accuracy": 0.12,
+    "source_fit_accuracy": 1.0,
+    "target": "staff_step"
+  },
+  "STAFF STEP_production_self": {
+    "heldout": 0.5167,
+    "train": 1.0
+  },
+  "WRITTEN STEP": {
+    "n_prod": 210,
+    "n_source": 988,
+    "prod_majority_baseline": 0.2286,
+    "prod_zero_shot_accuracy": 0.219,
+    "source_fit_accuracy": 1.0,
+    "target": "written_step"
+  },
+  "WRITTEN STEP_production_self": {
+    "heldout": 0.2222,
+    "train": 1.0
+  },
+  "channel_ablation": {
+    "model_24dim_object_vector_only|staff_step": {
+      "heldout": 0.4,
+      "train": 1.0
+    },
+    "model_24dim_object_vector_only|written_step": {
+      "heldout": 0.2063,
+      "train": 1.0
+    },
+    "plus_scale_free_staff_channels|staff_step": {
+      "heldout": 0.5333,
+      "train": 1.0
+    },
+    "plus_scale_free_staff_channels|written_step": {
+      "heldout": 0.2381,
+      "train": 1.0
+    }
+  }
+}

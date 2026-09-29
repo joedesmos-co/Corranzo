@@ -1,0 +1,276 @@
+{
+  "arms": {
+    "P0_production_as_is": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.723256,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.238411,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.059603,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.527778,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.764706,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.058824,
+          "written_pitch_correct": 2,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.617647,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.666667,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.0,
+          "written_pitch_correct": 0,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": 0.0,
+        "duration_accuracy": 0.690299,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.36,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.055,
+        "written_pitch_correct": 11,
+        "written_pitch_labels": 200
+      }
+    },
+    "P1_prod_raster_box_1.18x1.84": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.748837,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.18543,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.059603,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.527778,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.617647,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.294118,
+          "written_pitch_correct": 10,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.558824,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.8,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.0,
+          "written_pitch_correct": 0,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": 0.04,
+        "duration_accuracy": 0.70709,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.305,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.095,
+        "written_pitch_correct": 19,
+        "written_pitch_labels": 200
+      }
+    },
+    "P2_prod_raster_box_1.3x2.0": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.718605,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.231788,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.059603,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.5,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.764706,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.176471,
+          "written_pitch_correct": 6,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.617647,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.8,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.066667,
+          "written_pitch_correct": 1,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": 0.025,
+        "duration_accuracy": 0.682836,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.365,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.08,
+        "written_pitch_correct": 16,
+        "written_pitch_labels": 200
+      }
+    },
+    "P3_prod_raster_retype_source": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.718605,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.245033,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.059603,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.527778,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.764706,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.088235,
+          "written_pitch_correct": 3,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.617647,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.666667,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.0,
+          "written_pitch_correct": 0,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": 0.005,
+        "duration_accuracy": 0.686567,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.365,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.06,
+        "written_pitch_correct": 12,
+        "written_pitch_labels": 200
+      }
+    },
+    "P4_FACTORY_RASTER_same_geometry": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.690698,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.231788,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.059603,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.513889,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.823529,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.029412,
+          "written_pitch_correct": 1,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.588235,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.733333,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.0,
+          "written_pitch_correct": 0,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": -0.005,
+        "duration_accuracy": 0.660448,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.37,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.05,
+        "written_pitch_correct": 10,
+        "written_pitch_labels": 200
+      }
+    },
+    "P5_FACTORY_RASTER_plus_box_1.18x1.84": {
+      "per_score": {
+        "bc-mozart-k153": {
+          "duration_accuracy": 0.725581,
+          "duration_labels": 430,
+          "pitch_staff_step_accuracy": 0.198675,
+          "pitch_staff_step_labels": 151,
+          "records": 25,
+          "written_pitch_accuracy": 0.066225,
+          "written_pitch_correct": 10,
+          "written_pitch_labels": 151
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "duration_accuracy": 0.472222,
+          "duration_labels": 72,
+          "pitch_staff_step_accuracy": 0.647059,
+          "pitch_staff_step_labels": 34,
+          "records": 5,
+          "written_pitch_accuracy": 0.264706,
+          "written_pitch_correct": 9,
+          "written_pitch_labels": 34
+        },
+        "pl-brahms-waltz-op39-3": {
+          "duration_accuracy": 0.617647,
+          "duration_labels": 34,
+          "pitch_staff_step_accuracy": 0.866667,
+          "pitch_staff_step_labels": 15,
+          "records": 7,
+          "written_pitch_accuracy": 0.066667,
+          "written_pitch_correct": 1,
+          "written_pitch_labels": 15
+        }
+      },
+      "summary": {
+        "delta_written_pitch_vs_P0": 0.045,
+        "duration_accuracy": 0.684701,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.325,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.1,
+        "written_pitch_correct": 20,
+        "written_pitch_labels": 200
+      }
+    }
+  },
+  "max_records_per_score": 25,
+  "split": "validation"
+}

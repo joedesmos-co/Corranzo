@@ -1,0 +1,44 @@
+{
+  "p1_source_channel_dependence": {
+    "baseline": {
+      "duration_accuracy": 0.996496,
+      "duration_labels": 1998,
+      "pitch_staff_step_accuracy": 0.987854,
+      "pitch_staff_step_labels": 988,
+      "records": 56,
+      "written_pitch_accuracy": 0.988866,
+      "written_pitch_correct": 977,
+      "written_pitch_labels": 988
+    },
+    "zero_both": {
+      "duration_accuracy": 0.986486,
+      "duration_labels": 1998,
+      "pitch_staff_step_accuracy": 0.986842,
+      "pitch_staff_step_labels": 988,
+      "records": 56,
+      "written_pitch_accuracy": 0.988866,
+      "written_pitch_correct": 977,
+      "written_pitch_labels": 988
+    },
+    "zero_graph_features": {
+      "duration_accuracy": 0.987487,
+      "duration_labels": 1998,
+      "pitch_staff_step_accuracy": 0.986842,
+      "pitch_staff_step_labels": 988,
+      "records": 56,
+      "written_pitch_accuracy": 0.987854,
+      "written_pitch_correct": 976,
+      "written_pitch_labels": 988
+    },
+    "zero_source_features": {
+      "duration_accuracy": 0.996496,
+      "duration_labels": 1998,
+      "pitch_staff_step_accuracy": 0.987854,
+      "pitch_staff_step_labels": 988,
+      "records": 56,
+      "written_pitch_accuracy": 0.988866,
+      "written_pitch_correct": 977,
+      "written_pitch_labels": 988
+    }
+  }
+}

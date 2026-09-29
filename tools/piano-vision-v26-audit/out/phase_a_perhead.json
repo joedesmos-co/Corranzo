@@ -1,0 +1,182 @@
+{
+  "production": {
+    "heads": {
+      "_written_pitch_conjunction": {
+        "duration_accuracy": 0.690299,
+        "duration_labels": 536,
+        "pitch_staff_step_accuracy": 0.36,
+        "pitch_staff_step_labels": 200,
+        "records": 37,
+        "written_pitch_accuracy": 0.055,
+        "written_pitch_correct": 11,
+        "written_pitch_labels": 200
+      },
+      "cross_staff": {
+        "accuracy": null,
+        "labels": 0
+      },
+      "duration_dots": {
+        "accuracy": 0.966102,
+        "labels": 295
+      },
+      "duration_type": {
+        "accuracy": 0.352697,
+        "labels": 241
+      },
+      "lane": {
+        "accuracy": 0.33829,
+        "labels": 269
+      },
+      "pitch_accidental": {
+        "accuracy": 0.692946,
+        "labels": 241
+      },
+      "pitch_octave": {
+        "accuracy": 0.580952,
+        "labels": 210
+      },
+      "pitch_staff": {
+        "accuracy": 0.8,
+        "labels": 200
+      },
+      "pitch_staff_step": {
+        "accuracy": 0.36,
+        "labels": 200
+      },
+      "pitch_written_step": {
+        "accuracy": 0.104762,
+        "labels": 210
+      },
+      "rest": {
+        "accuracy": 0.898204,
+        "labels": 167
+      },
+      "tuplet": {
+        "accuracy": null,
+        "labels": 0
+      }
+    },
+    "staff_step_offsets": {
+      "exact": 72,
+      "median_pred_minus_true": 0.0,
+      "n": 200,
+      "pearson_pred_vs_true": 0.4695,
+      "top_offsets": [
+        [
+          0,
+          72
+        ],
+        [
+          -1,
+          43
+        ],
+        [
+          1,
+          39
+        ],
+        [
+          -8,
+          11
+        ],
+        [
+          8,
+          10
+        ],
+        [
+          -9,
+          7
+        ],
+        [
+          9,
+          7
+        ],
+        [
+          -2,
+          5
+        ],
+        [
+          -10,
+          3
+        ]
+      ]
+    }
+  },
+  "source": {
+    "heads": {
+      "_written_pitch_conjunction": {
+        "duration_accuracy": 0.996496,
+        "duration_labels": 1998,
+        "pitch_staff_step_accuracy": 0.987854,
+        "pitch_staff_step_labels": 988,
+        "records": 56,
+        "written_pitch_accuracy": 0.988866,
+        "written_pitch_correct": 977,
+        "written_pitch_labels": 988
+      },
+      "cross_staff": {
+        "accuracy": null,
+        "labels": 0
+      },
+      "duration_dots": {
+        "accuracy": 0.994995,
+        "labels": 999
+      },
+      "duration_type": {
+        "accuracy": 0.997998,
+        "labels": 999
+      },
+      "lane": {
+        "accuracy": 0.744939,
+        "labels": 988
+      },
+      "pitch_accidental": {
+        "accuracy": 0.989879,
+        "labels": 988
+      },
+      "pitch_octave": {
+        "accuracy": 1.0,
+        "labels": 988
+      },
+      "pitch_staff": {
+        "accuracy": 1.0,
+        "labels": 988
+      },
+      "pitch_staff_step": {
+        "accuracy": 0.987854,
+        "labels": 988
+      },
+      "pitch_written_step": {
+        "accuracy": 0.998988,
+        "labels": 988
+      },
+      "rest": {
+        "accuracy": 1.0,
+        "labels": 117
+      },
+      "tuplet": {
+        "accuracy": null,
+        "labels": 0
+      }
+    },
+    "staff_step_offsets": {
+      "exact": 976,
+      "median_pred_minus_true": 0.0,
+      "n": 988,
+      "pearson_pred_vs_true": 0.9983,
+      "top_offsets": [
+        [
+          0,
+          976
+        ],
+        [
+          -1,
+          9
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    }
+  }
+}
