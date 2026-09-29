@@ -232,12 +232,23 @@ def main():
 
 
 def extract_merged(score_groups, resolver_factory, max_records, limit):
-    Xs, Ys = [], []
+    X, Y, _ = extract_merged_with_meta(score_groups, resolver_factory, max_records, limit)
+    return X, Y
+
+
+def extract_merged_with_meta(score_groups, resolver_factory, max_records, limit):
+    Xs, Ys, Ms = [], [], []
     for entry in score_groups:
-        ordered = entry[1] if isinstance(entry, tuple) else entry
-        X, Y, _ = extract(ordered, resolver_factory(), max_records, limit)
-        Xs.append(X); Ys.extend(Y)
-    return np.concatenate(Xs, 0), Ys
+        if isinstance(entry, tuple):
+            sid, ordered = entry
+        else:
+            ordered = entry
+            sid = ordered[0]["scoreId"] if ordered else "?"
+        X, Y, meta = extract(ordered, resolver_factory(), max_records, limit)
+        Xs.append(X)
+        Ys.extend(Y)
+        Ms.extend([(sid, m[1], m[2]) for m in meta])
+    return np.concatenate(Xs, 0), Ys, Ms
 
 
 if __name__ == "__main__":

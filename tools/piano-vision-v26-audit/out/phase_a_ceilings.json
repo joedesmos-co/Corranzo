@@ -1,0 +1,501 @@
+{
+  "proposal_recall_adaptation": {
+    "note": "objects the aligner could bind to MusicXML truth / objects the raster detector emitted; an upper bound on evaluable pitch, not on detection recall of unlabelled objects",
+    "objects_bound_to_truth": 4777,
+    "objects_total": 8493,
+    "per_score": {
+      "bc-bach-fugue-bwv846": {
+        "binding_rate": 0.7632,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 638,
+        "objects_total": 836,
+        "true_printed_events": 863
+      },
+      "bc-chopin-etude-op10-12": {
+        "binding_rate": 0.6454,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 959,
+        "objects_total": 1486,
+        "true_printed_events": 2171
+      },
+      "bc-chopin-nocturne-op9-n2": {
+        "binding_rate": 0.6557,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 794,
+        "objects_total": 1211,
+        "true_printed_events": 1343
+      },
+      "pl-bach-prelude-bwv846": {
+        "binding_rate": 0.6969,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 522,
+        "objects_total": 749,
+        "true_printed_events": 615
+      },
+      "pl-chopin-mazurka-op6-1": {
+        "binding_rate": 0.2256,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 224,
+        "objects_total": 993,
+        "true_printed_events": 1134
+      },
+      "pl-handel-gavotte": {
+        "binding_rate": 0.4776,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 117,
+        "objects_total": 245,
+        "true_printed_events": 258
+      },
+      "pl-mozart-turkish-march": {
+        "binding_rate": 0.4379,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 687,
+        "objects_total": 1569,
+        "true_printed_events": 1816
+      },
+      "std-hungarian-dance-no5": {
+        "binding_rate": 0.5954,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 836,
+        "objects_total": 1404,
+        "true_printed_events": 1584
+      },
+      "std-la-campanella": {
+        "binding_rate": null,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 0,
+        "objects_total": 0,
+        "true_printed_events": null
+      }
+    },
+    "pooled_binding_rate": 0.5625,
+    "split": "adaptation"
+  },
+  "proposal_recall_heldout-test": {
+    "note": "objects the aligner could bind to MusicXML truth / objects the raster detector emitted; an upper bound on evaluable pitch, not on detection recall of unlabelled objects",
+    "objects_bound_to_truth": 1277,
+    "objects_total": 2651,
+    "per_score": {
+      "bc-beethoven-sonata-op2-m1": {
+        "binding_rate": 0.543,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 694,
+        "objects_total": 1278,
+        "true_printed_events": 1993
+      },
+      "bc-chopin-etude-op10-01": {
+        "binding_rate": 0.5331,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 435,
+        "objects_total": 816,
+        "true_printed_events": 1561
+      },
+      "omf-piano-dense-advanced-vector": {
+        "binding_rate": 0.2538,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 67,
+        "objects_total": 264,
+        "true_printed_events": 264
+      },
+      "omf-piano-grand-voices-vector": {
+        "binding_rate": 0.5455,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 48,
+        "objects_total": 88,
+        "true_printed_events": 88
+      },
+      "pl-tchaikovsky-old-french-song": {
+        "binding_rate": 0.161,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 33,
+        "objects_total": 205,
+        "true_printed_events": 256
+      }
+    },
+    "pooled_binding_rate": 0.4817,
+    "split": "heldout-test"
+  },
+  "proposal_recall_validation": {
+    "note": "objects the aligner could bind to MusicXML truth / objects the raster detector emitted; an upper bound on evaluable pitch, not on detection recall of unlabelled objects",
+    "objects_bound_to_truth": 837,
+    "objects_total": 1332,
+    "per_score": {
+      "bc-mozart-k153": {
+        "binding_rate": 0.7055,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 788,
+        "objects_total": 1117,
+        "true_printed_events": 1376
+      },
+      "omf-piano-rhythm-tuplets-vector": {
+        "binding_rate": 0.5,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 34,
+        "objects_total": 68,
+        "true_printed_events": 68
+      },
+      "pl-brahms-waltz-op39-3": {
+        "binding_rate": 0.102,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 15,
+        "objects_total": 147,
+        "true_printed_events": 290
+      },
+      "std-spider-dance-undertale": {
+        "binding_rate": null,
+        "note_recall_of_detected": null,
+        "objects_labelled_pitch": 0,
+        "objects_total": 0,
+        "true_printed_events": null
+      }
+    },
+    "pooled_binding_rate": 0.6284,
+    "split": "validation"
+  },
+  "representation_ceiling_validation": {
+    "octave": {
+      "folds": [
+        {
+          "acc": 0.323,
+          "correct": 52,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.4099,
+          "n": 161
+        },
+        {
+          "acc": 0.8824,
+          "correct": 30,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.8824,
+          "n": 34
+        },
+        {
+          "acc": 0.1333,
+          "correct": 2,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.8,
+          "n": 15
+        }
+      ],
+      "loso_accuracy": 0.4,
+      "n_objects": 210,
+      "n_scores": 3,
+      "pooled_majority_baseline": 0.4476
+    },
+    "staff_step": {
+      "folds": [
+        {
+          "acc": 0.1391,
+          "correct": 21,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.1391,
+          "n": 151
+        },
+        {
+          "acc": 0.0,
+          "correct": 0,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.3529,
+          "n": 34
+        },
+        {
+          "acc": 0.1333,
+          "correct": 2,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.4,
+          "n": 15
+        }
+      ],
+      "loso_accuracy": 0.115,
+      "n_objects": 200,
+      "n_scores": 3,
+      "pooled_majority_baseline": 0.195
+    },
+    "written_step": {
+      "folds": [
+        {
+          "acc": 0.2422,
+          "correct": 39,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.2422,
+          "n": 161
+        },
+        {
+          "acc": 0.1176,
+          "correct": 4,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.2059,
+          "n": 34
+        },
+        {
+          "acc": 0.4,
+          "correct": 6,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.3333,
+          "n": 15
+        }
+      ],
+      "loso_accuracy": 0.2333,
+      "n_objects": 210,
+      "n_scores": 3,
+      "pooled_majority_baseline": 0.2286
+    }
+  },
+  "representation_ceiling_validation_plus_adaptation": {
+    "octave": {
+      "folds": [
+        {
+          "acc": 0.2403,
+          "correct": 68,
+          "held_out_score": "bc-bach-fugue-bwv846",
+          "majority": 0.5088,
+          "n": 283
+        },
+        {
+          "acc": 0.1853,
+          "correct": 78,
+          "held_out_score": "bc-chopin-etude-op10-12",
+          "majority": 0.4513,
+          "n": 421
+        },
+        {
+          "acc": 0.2513,
+          "correct": 96,
+          "held_out_score": "bc-chopin-nocturne-op9-n2",
+          "majority": 0.4188,
+          "n": 382
+        },
+        {
+          "acc": 0.2919,
+          "correct": 47,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.4099,
+          "n": 161
+        },
+        {
+          "acc": 0.8824,
+          "correct": 30,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.8824,
+          "n": 34
+        },
+        {
+          "acc": 0.3754,
+          "correct": 122,
+          "held_out_score": "pl-bach-prelude-bwv846",
+          "majority": 0.5538,
+          "n": 325
+        },
+        {
+          "acc": 0.9333,
+          "correct": 14,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.8,
+          "n": 15
+        },
+        {
+          "acc": 0.5081,
+          "correct": 63,
+          "held_out_score": "pl-chopin-mazurka-op6-1",
+          "majority": 0.629,
+          "n": 124
+        },
+        {
+          "acc": 0.3733,
+          "correct": 28,
+          "held_out_score": "pl-handel-gavotte",
+          "majority": 0.4133,
+          "n": 75
+        },
+        {
+          "acc": 0.3272,
+          "correct": 53,
+          "held_out_score": "pl-mozart-turkish-march",
+          "majority": 0.4136,
+          "n": 162
+        },
+        {
+          "acc": 0.1688,
+          "correct": 27,
+          "held_out_score": "std-hungarian-dance-no5",
+          "majority": 0.3625,
+          "n": 160
+        }
+      ],
+      "loso_accuracy": 0.2923,
+      "n_objects": 2142,
+      "n_scores": 11,
+      "pooled_majority_baseline": 0.3894
+    },
+    "staff_step": {
+      "folds": [
+        {
+          "acc": 0.4528,
+          "correct": 115,
+          "held_out_score": "bc-bach-fugue-bwv846",
+          "majority": 0.1181,
+          "n": 254
+        },
+        {
+          "acc": 0.2225,
+          "correct": 89,
+          "held_out_score": "bc-chopin-etude-op10-12",
+          "majority": 0.12,
+          "n": 400
+        },
+        {
+          "acc": 0.2553,
+          "correct": 85,
+          "held_out_score": "bc-chopin-nocturne-op9-n2",
+          "majority": 0.1562,
+          "n": 333
+        },
+        {
+          "acc": 0.5033,
+          "correct": 76,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.1391,
+          "n": 151
+        },
+        {
+          "acc": 0.3235,
+          "correct": 11,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.3529,
+          "n": 34
+        },
+        {
+          "acc": 0.4006,
+          "correct": 125,
+          "held_out_score": "pl-bach-prelude-bwv846",
+          "majority": 0.1667,
+          "n": 312
+        },
+        {
+          "acc": 0.8667,
+          "correct": 13,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.4,
+          "n": 15
+        },
+        {
+          "acc": 0.5126,
+          "correct": 61,
+          "held_out_score": "pl-chopin-mazurka-op6-1",
+          "majority": 0.2101,
+          "n": 119
+        },
+        {
+          "acc": 0.5333,
+          "correct": 40,
+          "held_out_score": "pl-handel-gavotte",
+          "majority": 0.1467,
+          "n": 75
+        },
+        {
+          "acc": 0.3851,
+          "correct": 62,
+          "held_out_score": "pl-mozart-turkish-march",
+          "majority": 0.1366,
+          "n": 161
+        },
+        {
+          "acc": 0.3856,
+          "correct": 59,
+          "held_out_score": "std-hungarian-dance-no5",
+          "majority": 0.0915,
+          "n": 153
+        }
+      ],
+      "loso_accuracy": 0.3667,
+      "n_objects": 2007,
+      "n_scores": 11,
+      "pooled_majority_baseline": 0.1221
+    },
+    "written_step": {
+      "folds": [
+        {
+          "acc": 0.1633,
+          "correct": 48,
+          "held_out_score": "bc-bach-fugue-bwv846",
+          "majority": 0.1599,
+          "n": 294
+        },
+        {
+          "acc": 0.1441,
+          "correct": 68,
+          "held_out_score": "bc-chopin-etude-op10-12",
+          "majority": 0.2542,
+          "n": 472
+        },
+        {
+          "acc": 0.1575,
+          "correct": 63,
+          "held_out_score": "bc-chopin-nocturne-op9-n2",
+          "majority": 0.2825,
+          "n": 400
+        },
+        {
+          "acc": 0.1801,
+          "correct": 29,
+          "held_out_score": "bc-mozart-k153",
+          "majority": 0.2422,
+          "n": 161
+        },
+        {
+          "acc": 0.1765,
+          "correct": 6,
+          "held_out_score": "omf-piano-rhythm-tuplets-vector",
+          "majority": 0.2059,
+          "n": 34
+        },
+        {
+          "acc": 0.1463,
+          "correct": 49,
+          "held_out_score": "pl-bach-prelude-bwv846",
+          "majority": 0.2179,
+          "n": 335
+        },
+        {
+          "acc": 0.4667,
+          "correct": 7,
+          "held_out_score": "pl-brahms-waltz-op39-3",
+          "majority": 0.3333,
+          "n": 15
+        },
+        {
+          "acc": 0.2097,
+          "correct": 26,
+          "held_out_score": "pl-chopin-mazurka-op6-1",
+          "majority": 0.2258,
+          "n": 124
+        },
+        {
+          "acc": 0.1375,
+          "correct": 11,
+          "held_out_score": "pl-handel-gavotte",
+          "majority": 0.225,
+          "n": 80
+        },
+        {
+          "acc": 0.1228,
+          "correct": 21,
+          "held_out_score": "pl-mozart-turkish-march",
+          "majority": 0.2222,
+          "n": 171
+        },
+        {
+          "acc": 0.1543,
+          "correct": 29,
+          "held_out_score": "std-hungarian-dance-no5",
+          "majority": 0.2606,
+          "n": 188
+        }
+      ],
+      "loso_accuracy": 0.157,
+      "n_objects": 2274,
+      "n_scores": 11,
+      "pooled_majority_baseline": 0.1891
+    }
+  }
+}
