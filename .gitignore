@@ -40,3 +40,6 @@ __pycache__/
 # Derived audit data (rebuilt by build_corpus.py / the audit scripts)
 /out/
 /tools/piano-vision-v26-audit/out/visual/
+
+# Read-only symlink to the primary checkout campaign artifacts
+/tmp/campaign
