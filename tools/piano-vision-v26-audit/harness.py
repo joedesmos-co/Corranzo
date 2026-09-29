@@ -31,8 +31,11 @@ INDEX = CAMPAIGN / "full-semantic-index.json"
 ORIG_VAL_MANIFEST = CAMPAIGN / "v2-serious-medium-full-v1/validation.json"
 ORIG_TRAIN_MANIFEST = CAMPAIGN / "v2-serious-medium-full-v1/train.json"
 
-# Rebuilt locally by tools/real-pdf-adaptation/build_corpus.py
-REALPDF_ROOT = V26_ROOT / "out/realpdf"
+# Rebuilt locally by tools/real-pdf-adaptation/build_corpus.py.
+# PV_REALPDF selects the corpus REVISION. "out/realpdf" is the frozen pre-Phase-D
+# corpus; "out/realpdf_d2" is the post-index-fix corpus. The Gate 0 protocol is
+# byte-identical across both - only the corpus under test changes.
+REALPDF_ROOT = V26_ROOT / os.environ.get("PV_REALPDF", "out/realpdf")
 REALPDF_INDEX = REALPDF_ROOT / "index.json"
 
 OUT = V26_ROOT / "tools/piano-vision-v26-audit/out"

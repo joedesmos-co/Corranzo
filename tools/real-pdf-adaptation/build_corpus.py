@@ -55,6 +55,7 @@ from piano_vision_service.v25_canonical_features import build_page_records, staf
 from align_objects import (align_band, align_measure_sequence,  # noqa: E402
                           analytic_band_delta, build_targets)
 from musicxml_truth import expected_measured_steps  # noqa: E402
+from staff_geometry_verify import check_measure, label_is_admissible  # noqa: E402
 from musicxml_truth import score_report  # noqa: E402
 
 ASSEMBLER_VERSION = "real-pdf-adaptation/1.0"
@@ -165,6 +166,54 @@ def band_centers_for(measure):
     return centers, lines
 
 
+
+def apply_label_gate(target, objects, centers, lines_by_role, gap):
+    """Phase D2/D3: refuse geometrically inadmissible labels, never repair them.
+
+    Every emitted PITCH_STAFF label is re-checked against the DETECTED STAFF
+    ALONE, with no ground truth: the object it names must belong to the band it
+    claims, and its staff step must lie inside the ledger envelope of a
+    five-line staff. A label that fails is dropped and counted.
+
+    The gate is a floor, not a target: a small corpus that is consistent beats
+    a large corpus that is not, and nothing here widens a threshold to admit
+    more records.
+    """
+    checks = check_measure(centers, lines_by_role, gap, objects)
+    counts = {}
+    families = target["families"]
+    kept = []
+    for label in families["PITCH_STAFF"]:
+        value = label.get("value") or {}
+        role = value.get("staffRole")
+        indexes = label.get("objectIndexes") or []
+        index = indexes[0] if indexes else -1
+        ok, reasons = label_is_admissible(
+            checks.get(role), role, index, objects, centers, gap)
+        if ok:
+            kept.append(label)
+        else:
+            for r in reasons:
+                counts[r] = counts.get(r, 0) + 1
+    families["PITCH_STAFF"] = kept
+    # Lane/attack/chord/tie labels are keyed to the same object indexes; drop any
+    # that referenced a refused pitch object so no label survives without its
+    # geometry.
+    surviving = {id(l) for l in kept}
+    surviving_idx = {i for l in kept for i in (l.get("objectIndexes") or [])}
+    for name in ("LANE", "ATTACK", "CHORD", "LANE_CONTINUATION", "TIE_SUSTAIN",
+                 "CROSS_STAFF", "SHARED_HEAD", "TUPLET", "REST", "DURATION"):
+        rows = families.get(name) or []
+        kept_rows = [r for r in rows
+                     if not (r.get("objectIndexes")
+                             and not set(r["objectIndexes"]) <= surviving_idx)]
+        if len(kept_rows) != len(rows):
+            counts["dependent_label_dropped"] = counts.get(
+                "dependent_label_dropped", 0) + (len(rows) - len(kept_rows))
+        families[name] = kept_rows
+    return target, counts
+
+
 def build_score(entry, config, out_root, verbose):
     score_id = entry["id"]
     split = entry["split"]
@@ -178,6 +227,7 @@ def build_score(entry, config, out_root, verbose):
         "objects_total": 0, "objects_labelled_pitch": 0, "objects_labelled_rest": 0,
         "objects_labelled_duration": 0, "groups_accepted": 0,
         "group_reasons": {}, "pages_skipped": 0, "band_offsets": {},
+        "label_gate": {},
         "measure_map": {}, "measure_map_size": 0,
         "true_printed_events": None, "true_printed_rests": None,
         "note_recall_of_detected": None, "rejected": [],
@@ -325,9 +375,20 @@ def build_score(entry, config, out_root, verbose):
                 members = state["by_band"][band]
                 events = [e for e in truth_measure.events
                           if e.printed and e.band == band]
-                alignments[band] = align_band(
+                alignment = align_band(
                     band, [objects[i] for i in members], events,
                     centers[band], gap, delta=state["analytic_delta"].get(band))
+                # INDEX-SPACE REMAP (Phase D2).
+                # `align_band` reports object indices LOCAL to the subset it was
+                # handed ([objects[i] for i in members]). `build_targets` and the
+                # record's object order are in the FULL measure list. Without this
+                # remap every label points at objects[local_index], which is a
+                # different notehead whenever `members` does not start at 0 - i.e.
+                # always, because by_band splits upper/lower. That is what put
+                # ~50% of the corpus at |stepsFromBandCenter| > 4, a physically
+                # impossible position on a five-line staff.
+                alignment.object_index = [members[j] for j in alignment.object_index]
+                alignments[band] = alignment
             for alignment in alignments.values():
                 if alignment.accepted:
                     report["groups_accepted"] += 1
@@ -336,8 +397,21 @@ def build_score(entry, config, out_root, verbose):
                         report["group_reasons"].get(alignment.reason, 0) + 1
             if not any(a.accepted for a in alignments.values()):
                 continue
+            lines_by_role = {
+                "upper": measure["staff_lines"].get("treble") or [],
+                "lower": measure["staff_lines"].get("bass") or []}
             target = build_targets(record["exampleId"], truth, truth_measure, objects,
                                    alignments, centers, gap)
+            target, gate_counts = apply_label_gate(
+                target, objects, centers, lines_by_role, gap)
+            for reason, n in gate_counts.items():
+                report["label_gate"][reason] = report["label_gate"].get(reason, 0) + n
+            if not target["families"]["PITCH_STAFF"] and \
+                    not target["families"]["REST"] and \
+                    not target["families"]["DURATION"]:
+                report["group_reasons"]["label_gate_emptied_group"] = \
+                    report["group_reasons"].get("label_gate_emptied_group", 0) + 1
+                continue
             record = dict(record)
             record["split"] = RECORD_SPLIT[split]
             record["campaign_split"] = split

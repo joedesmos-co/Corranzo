@@ -1,0 +1,162 @@
+{
+  "realpdf_adaptation": {
+    "analytic_written_pitch_agreement": 0.7902,
+    "analytic_written_step_agreement": 0.7902,
+    "corpus": "realpdf adaptation",
+    "diatonic_residual": {
+      "frac_within_1": 1.0,
+      "frac_zero": 0.790180444817457,
+      "median": 0.0,
+      "p05": -1.0,
+      "p95": 1.0
+    },
+    "n": 4766,
+    "per_score": {
+      "bc-bach-fugue-bwv846": {
+        "n": 638,
+        "written_pitch_agreement": 0.9201,
+        "written_step_agreement": 0.9201
+      },
+      "bc-chopin-etude-op10-12": {
+        "n": 959,
+        "written_pitch_agreement": 0.829,
+        "written_step_agreement": 0.829
+      },
+      "bc-chopin-nocturne-op9-n2": {
+        "n": 789,
+        "written_pitch_agreement": 0.834,
+        "written_step_agreement": 0.834
+      },
+      "pl-bach-prelude-bwv846": {
+        "n": 522,
+        "written_pitch_agreement": 0.977,
+        "written_step_agreement": 0.977
+      },
+      "pl-chopin-mazurka-op6-1": {
+        "n": 224,
+        "written_pitch_agreement": 0.75,
+        "written_step_agreement": 0.75
+      },
+      "pl-handel-gavotte": {
+        "n": 117,
+        "written_pitch_agreement": 0.8034,
+        "written_step_agreement": 0.8034
+      },
+      "pl-mozart-turkish-march": {
+        "n": 687,
+        "written_pitch_agreement": 0.8443,
+        "written_step_agreement": 0.8443
+      },
+      "std-hungarian-dance-no5": {
+        "n": 830,
+        "written_pitch_agreement": 0.4506,
+        "written_step_agreement": 0.4506
+      }
+    }
+  },
+  "realpdf_heldout-test": {
+    "analytic_written_pitch_agreement": 0.7909,
+    "analytic_written_step_agreement": 0.7909,
+    "corpus": "realpdf heldout-test",
+    "diatonic_residual": {
+      "frac_within_1": 1.0,
+      "frac_zero": 0.7909162098668755,
+      "median": 0.0,
+      "p05": -1.0,
+      "p95": 1.0
+    },
+    "n": 1277,
+    "per_score": {
+      "bc-beethoven-sonata-op2-m1": {
+        "n": 694,
+        "written_pitch_agreement": 0.7608,
+        "written_step_agreement": 0.7608
+      },
+      "bc-chopin-etude-op10-01": {
+        "n": 435,
+        "written_pitch_agreement": 0.8667,
+        "written_step_agreement": 0.8667
+      },
+      "omf-piano-dense-advanced-vector": {
+        "n": 67,
+        "written_pitch_agreement": 0.6418,
+        "written_step_agreement": 0.6418
+      },
+      "omf-piano-grand-voices-vector": {
+        "n": 48,
+        "written_pitch_agreement": 0.6667,
+        "written_step_agreement": 0.6667
+      },
+      "pl-tchaikovsky-old-french-song": {
+        "n": 33,
+        "written_pitch_agreement": 0.9091,
+        "written_step_agreement": 0.9091
+      }
+    }
+  },
+  "realpdf_validation": {
+    "analytic_written_pitch_agreement": 0.8195,
+    "analytic_written_step_agreement": 0.8195,
+    "corpus": "realpdf validation",
+    "diatonic_residual": {
+      "frac_within_1": 1.0,
+      "frac_zero": 0.8194945848375451,
+      "median": 0.0,
+      "p05": 0.0,
+      "p95": 1.0
+    },
+    "n": 831,
+    "per_score": {
+      "bc-mozart-k153": {
+        "n": 782,
+        "written_pitch_agreement": 0.8159,
+        "written_step_agreement": 0.8159
+      },
+      "omf-piano-rhythm-tuplets-vector": {
+        "n": 34,
+        "written_pitch_agreement": 1.0,
+        "written_step_agreement": 1.0
+      },
+      "pl-brahms-waltz-op39-3": {
+        "n": 15,
+        "written_pitch_agreement": 0.6,
+        "written_step_agreement": 0.6
+      }
+    }
+  },
+  "source_validation": {
+    "analytic_written_pitch_agreement": 0.0707,
+    "analytic_written_step_agreement": 0.0996,
+    "corpus": "source (control)",
+    "diatonic_residual": {
+      "frac_within_1": 0.2763744427934621,
+      "frac_zero": 0.07068562937805137,
+      "median": 1.0,
+      "p05": -6.0,
+      "p95": 12.0
+    },
+    "n": 4711,
+    "per_score": {
+      "QmR6ksJEfck9BzGLtbLCrPqb5StrBetMrzRkswaz52YoSt": {
+        "n": 487,
+        "written_pitch_agreement": 0.0657,
+        "written_step_agreement": 0.0903
+      },
+      "QmReAFwCejeyHAoBsegKGqiJQDXNkpP2qdvtsXqf6ot1Lz": {
+        "n": 3723,
+        "written_pitch_agreement": 0.0782,
+        "written_step_agreement": 0.1115
+      },
+      "Qmd6MYhXKDbMBnhYW6cy9vPZvvdvEWcJL674Cg2sMMqMYv": {
+        "n": 309,
+        "written_pitch_agreement": 0.0194,
+        "written_step_agreement": 0.0194
+      },
+      "QmexnAbV95GCxNGaG2f9yEKFTyQSwbXFE3rCrVpXquCbc9": {
+        "n": 192,
+        "written_pitch_agreement": 0.0208,
+        "written_step_agreement": 0.0208
+      }
+    }
+  }
+}

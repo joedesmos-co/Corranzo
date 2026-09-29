@@ -39,7 +39,7 @@ from piano_vision.v25.performance import prepare_batch  # noqa: E402
 
 ROI_W_SPACES = 6.0
 ROI_H_SPACES = 12.0
-CACHE = H.V26_ROOT / "out/roi_cache.npz"
+CACHE = H.V26_ROOT / ("out/roi_cache_" + H.REALPDF_ROOT.name + ".npz")
 CURRENT = None
 
 
