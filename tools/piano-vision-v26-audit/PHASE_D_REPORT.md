@@ -156,11 +156,14 @@ Held-out residual of the analytic prediction, in diatonic steps (`n=2353`):
 |---|---|---|---|
 | 0 | 1909 | 81.1% | exact |
 | ±1 | 364 | 15.5% | one half-space off — a detector/localisation error |
-| ±6 | 80 | 3.4% | a staff-role or clef mismatch (an octave-class jump) |
+| ±6 | 80 | 3.4% | **MISLABELLED — see correction** |
 
-The ±1 tail is genuine remaining detector error. The ±6 tail is concentrated in
-`std-hungarian-dance-no5` (musescore-legacy-mscore, analytic agreement 0.331) and
-is the one score that should not be trusted without investigation.
+**Correction (Phase E).** The ±6 row does not exist. This table compared a
+*step index mod 7* against what the text called a *diatonic* residual; ±6 ≡ ∓1
+(mod 7), so those 80 rows were the ordinary ±1 errors counted twice. Measured
+directly on the corrected corpus (n = 7,625, full diatonic residual): 0 → 80.5%,
+−1 → 10.4%, +1 → 9.2%, **|r| ≥ 2 → 0.0%**. There is no clef or staff-role
+tail. The real residual is at most one half-space on every label.
 
 ---
 

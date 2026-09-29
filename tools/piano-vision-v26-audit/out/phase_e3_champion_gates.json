@@ -1,0 +1,467 @@
+{
+  "checkpoint": "/Users/ryland/Documents/scoreflow/tmp/campaign/piano-vision-phase214/v25-windows-transfer-20260927/checkpoint-final.pt",
+  "checkpoint_step": 2100,
+  "checkpoint_tag": "final",
+  "device": "cpu",
+  "gpu": null,
+  "metric_definition": {
+    "canonical_duration_formula": "mean over MusicXML-aligned objects of [predicted(writtenType,dots) == MusicXML(writtenType,dots)], scored on the duration heads only, never conditioned on pitch",
+    "canonical_duration_metric": "duration_accuracy",
+    "canonical_midi_formula": "mean over the same objects of [midi(predicted) == midi(MusicXML)], midi = 12*(octave+1)+pc[step]+alter",
+    "canonical_midi_metric": "derived_midi_accuracy",
+    "canonical_note_prf": "object-level: detector proposals vs MusicXML truth",
+    "canonical_pitch_formula": "mean over MusicXML-aligned detected objects of [predicted(step,octave,alter) == MusicXML writtenPitch(step,alter,octave)]",
+    "canonical_pitch_metric": "written_pitch_accuracy",
+    "canonical_pitch_population": "objects accepted by align_objects.align_band",
+    "frozen_utc": "2026-09-28",
+    "historical_pitch_formula": "bag intersection on (measure, staff, (step,alter,octave)); discards which object in a measure received which pitch",
+    "historical_pitch_metric": "written_pitch_multiset",
+    "historical_reference_value": {
+      "actual": 204,
+      "checkpoint": "step-2100",
+      "predicted": 204,
+      "reproduced_on_canonical_population": 0.2542,
+      "score": "demo-minuet-in-g",
+      "source": "tmp/v25-diagnostics/minuet-report.json",
+      "tp": 75,
+      "value": 0.3676
+    },
+    "selection_rule": "written_pitch_accuracy",
+    "selection_uses_diagnostic": false,
+    "selection_uses_heldout": true,
+    "version": "real-pdf-metric-v1"
+  },
+  "real_pdf_gates": {
+    "diagnostic": {
+      "campaign_split": "diagnostic",
+      "manifest": "out/realpdf_d2/diagnostic.json",
+      "per_score": {
+        "pl-beethoven-fur-elise": {
+          "derived_midi_accuracy": 0.06968641114982578,
+          "duration_accuracy": 0.5754437869822485,
+          "note": {
+            "actual": 574,
+            "correct": 574,
+            "f1": 0.8434974283614989,
+            "precision": 0.7293519695044473,
+            "predicted": 787,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 114,
+            "correct": 114,
+            "f1": 0.7702702702702703,
+            "precision": 0.6263736263736264,
+            "predicted": 182,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.06620209059233449
+        },
+        "std-demo-minuet-in-g": {
+          "derived_midi_accuracy": 0.1638418079096045,
+          "duration_accuracy": 0.7528089887640449,
+          "note": {
+            "actual": 177,
+            "correct": 177,
+            "f1": 0.9365079365079364,
+            "precision": 0.8805970149253731,
+            "predicted": 201,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 1,
+            "correct": 1,
+            "f1": 0.33333333333333337,
+            "precision": 0.2,
+            "predicted": 5,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.15819209039548024
+        }
+      },
+      "per_score_multiset": {
+        "pl-beethoven-fur-elise": {
+          "actual": 574,
+          "f1": 0.21951219512195122,
+          "precision": 0.21951219512195122,
+          "predicted": 574,
+          "recall": 0.21951219512195122,
+          "true_positive": 126
+        },
+        "std-demo-minuet-in-g": {
+          "actual": 177,
+          "f1": 0.3615819209039548,
+          "precision": 0.3615819209039548,
+          "predicted": 177,
+          "recall": 0.3615819209039548,
+          "true_positive": 64
+        }
+      },
+      "real_pdf": {
+        "derived_midi_accuracy": 0.09187749667110519,
+        "duration_accuracy": 0.6124121779859485,
+        "mean_written_pitch_confidence": 0.6246244332364967,
+        "note": {
+          "actual": 751,
+          "correct": 751,
+          "f1": 0.8637147786083956,
+          "precision": 0.7601214574898786,
+          "predicted": 988,
+          "recall": 1.0
+        },
+        "records_skipped": 0,
+        "rest": {
+          "actual": 115,
+          "correct": 115,
+          "f1": 0.7615894039735099,
+          "precision": 0.6149732620320856,
+          "predicted": 187,
+          "recall": 1.0
+        },
+        "rest_head_note": "the object.rest head is deliberately not trained by this campaign; rest precision/recall/F1 above is measured on the detector's proposals against MusicXML rests",
+        "written_pitch_accuracy": 0.08788282290279627,
+        "written_pitch_multiset": {
+          "actual": 751,
+          "f1": 0.2636484687083888,
+          "precision": 0.2636484687083888,
+          "predicted": 751,
+          "recall": 0.2636484687083888,
+          "true_positive": 198
+        }
+      },
+      "records": 125,
+      "scores": [
+        "pl-beethoven-fur-elise",
+        "std-demo-minuet-in-g"
+      ]
+    },
+    "heldout-test": {
+      "campaign_split": "heldout-test",
+      "manifest": "out/realpdf_d2/heldout-test.json",
+      "per_score": {
+        "bc-beethoven-sonata-op2-m1": {
+          "derived_midi_accuracy": 0.21613832853025935,
+          "duration_accuracy": 0.5582901554404145,
+          "note": {
+            "actual": 694,
+            "correct": 694,
+            "f1": 0.7736900780379041,
+            "precision": 0.6309090909090909,
+            "predicted": 1100,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 83,
+            "correct": 83,
+            "f1": 0.7867298578199052,
+            "precision": 0.6484375,
+            "predicted": 128,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.17002881844380405
+        },
+        "bc-chopin-etude-op10-01": {
+          "derived_midi_accuracy": 0.15862068965517243,
+          "duration_accuracy": 0.5077605321507761,
+          "note": {
+            "actual": 435,
+            "correct": 435,
+            "f1": 0.848780487804878,
+            "precision": 0.7372881355932204,
+            "predicted": 590,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 16,
+            "correct": 16,
+            "f1": 0.888888888888889,
+            "precision": 0.8,
+            "predicted": 20,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.14482758620689656
+        },
+        "omf-piano-dense-advanced-vector": {
+          "derived_midi_accuracy": 0.05970149253731343,
+          "duration_accuracy": 0.07462686567164178,
+          "note": {
+            "actual": 67,
+            "correct": 67,
+            "f1": 0.9054054054054054,
+            "precision": 0.8271604938271605,
+            "predicted": 81,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 0,
+            "correct": 0,
+            "f1": null,
+            "precision": null,
+            "predicted": 0,
+            "recall": null
+          },
+          "written_pitch_accuracy": 0.029850746268656716
+        },
+        "omf-piano-grand-voices-vector": {
+          "derived_midi_accuracy": 0.0,
+          "duration_accuracy": 0.125,
+          "note": {
+            "actual": 48,
+            "correct": 48,
+            "f1": 0.7058823529411764,
+            "precision": 0.5454545454545454,
+            "predicted": 88,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 0,
+            "correct": 0,
+            "f1": null,
+            "precision": null,
+            "predicted": 0,
+            "recall": null
+          },
+          "written_pitch_accuracy": 0.0
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "derived_midi_accuracy": 0.09090909090909091,
+          "duration_accuracy": 0.3333333333333333,
+          "note": {
+            "actual": 33,
+            "correct": 33,
+            "f1": 0.868421052631579,
+            "precision": 0.7674418604651163,
+            "predicted": 43,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 0,
+            "correct": 0,
+            "f1": null,
+            "precision": null,
+            "predicted": 0,
+            "recall": null
+          },
+          "written_pitch_accuracy": 0.030303030303030304
+        }
+      },
+      "per_score_multiset": {
+        "bc-beethoven-sonata-op2-m1": {
+          "actual": 694,
+          "f1": 0.25360230547550433,
+          "precision": 0.25360230547550433,
+          "predicted": 694,
+          "recall": 0.25360230547550433,
+          "true_positive": 176
+        },
+        "bc-chopin-etude-op10-01": {
+          "actual": 435,
+          "f1": 0.3310344827586207,
+          "precision": 0.3310344827586207,
+          "predicted": 435,
+          "recall": 0.3310344827586207,
+          "true_positive": 144
+        },
+        "omf-piano-dense-advanced-vector": {
+          "actual": 67,
+          "f1": 0.26865671641791045,
+          "precision": 0.26865671641791045,
+          "predicted": 67,
+          "recall": 0.26865671641791045,
+          "true_positive": 18
+        },
+        "omf-piano-grand-voices-vector": {
+          "actual": 48,
+          "f1": 0.14583333333333334,
+          "precision": 0.14583333333333334,
+          "predicted": 48,
+          "recall": 0.14583333333333334,
+          "true_positive": 7
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "actual": 33,
+          "f1": 0.2727272727272727,
+          "precision": 0.2727272727272727,
+          "predicted": 33,
+          "recall": 0.2727272727272727,
+          "true_positive": 9
+        }
+      },
+      "real_pdf": {
+        "derived_midi_accuracy": 0.17697729052466718,
+        "duration_accuracy": 0.4974471188913202,
+        "mean_written_pitch_confidence": 0.5602096609987126,
+        "note": {
+          "actual": 1277,
+          "correct": 1277,
+          "f1": 0.8033972947467758,
+          "precision": 0.6713985278654049,
+          "predicted": 1902,
+          "recall": 1.0
+        },
+        "records_skipped": 0,
+        "rest": {
+          "actual": 99,
+          "correct": 99,
+          "f1": 0.8016194331983807,
+          "precision": 0.668918918918919,
+          "predicted": 148,
+          "recall": 1.0
+        },
+        "rest_head_note": "the object.rest head is deliberately not trained by this campaign; rest precision/recall/F1 above is measured on the detector's proposals against MusicXML rests",
+        "written_pitch_accuracy": 0.14408770555990602,
+        "written_pitch_multiset": {
+          "actual": 1277,
+          "f1": 0.3054032889584965,
+          "precision": 0.3054032889584965,
+          "predicted": 1277,
+          "recall": 0.3054032889584965,
+          "true_positive": 390
+        }
+      },
+      "records": 164,
+      "scores": [
+        "bc-beethoven-sonata-op2-m1",
+        "bc-chopin-etude-op10-01",
+        "omf-piano-dense-advanced-vector",
+        "omf-piano-grand-voices-vector",
+        "pl-tchaikovsky-old-french-song"
+      ]
+    },
+    "validation": {
+      "campaign_split": "validation",
+      "manifest": "out/realpdf_d2/validation.json",
+      "per_score": {
+        "bc-mozart-k153": {
+          "derived_midi_accuracy": 0.12404092071611253,
+          "duration_accuracy": 0.5252152521525215,
+          "note": {
+            "actual": 782,
+            "correct": 782,
+            "f1": 0.9130180969060129,
+            "precision": 0.8399570354457573,
+            "predicted": 931,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 35,
+            "correct": 35,
+            "f1": 0.5932203389830509,
+            "precision": 0.42168674698795183,
+            "predicted": 83,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.08312020460358056
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "derived_midi_accuracy": 0.058823529411764705,
+          "duration_accuracy": 0.16666666666666666,
+          "note": {
+            "actual": 34,
+            "correct": 34,
+            "f1": 0.9714285714285714,
+            "precision": 0.9444444444444444,
+            "predicted": 36,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 2,
+            "correct": 2,
+            "f1": 1.0,
+            "precision": 1.0,
+            "predicted": 2,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.058823529411764705
+        },
+        "pl-brahms-waltz-op39-3": {
+          "derived_midi_accuracy": 0.0,
+          "duration_accuracy": 0.23529411764705882,
+          "note": {
+            "actual": 15,
+            "correct": 15,
+            "f1": 0.4166666666666667,
+            "precision": 0.2631578947368421,
+            "predicted": 57,
+            "recall": 1.0
+          },
+          "rest": {
+            "actual": 2,
+            "correct": 2,
+            "f1": 0.5714285714285715,
+            "precision": 0.4,
+            "predicted": 5,
+            "recall": 1.0
+          },
+          "written_pitch_accuracy": 0.0
+        }
+      },
+      "per_score_multiset": {
+        "bc-mozart-k153": {
+          "actual": 782,
+          "f1": 0.309462915601023,
+          "precision": 0.309462915601023,
+          "predicted": 782,
+          "recall": 0.309462915601023,
+          "true_positive": 242
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "actual": 34,
+          "f1": 0.29411764705882354,
+          "precision": 0.29411764705882354,
+          "predicted": 34,
+          "recall": 0.29411764705882354,
+          "true_positive": 10
+        },
+        "pl-brahms-waltz-op39-3": {
+          "actual": 15,
+          "f1": 0.13333333333333333,
+          "precision": 0.13333333333333333,
+          "predicted": 15,
+          "recall": 0.13333333333333333,
+          "true_positive": 2
+        }
+      },
+      "real_pdf": {
+        "derived_midi_accuracy": 0.11913357400722022,
+        "duration_accuracy": 0.5046189376443418,
+        "mean_written_pitch_confidence": 0.5493362827313936,
+        "note": {
+          "actual": 831,
+          "correct": 831,
+          "f1": 0.8959568733153639,
+          "precision": 0.8115234375,
+          "predicted": 1024,
+          "recall": 1.0
+        },
+        "records_skipped": 0,
+        "rest": {
+          "actual": 39,
+          "correct": 39,
+          "f1": 0.6046511627906976,
+          "precision": 0.43333333333333335,
+          "predicted": 90,
+          "recall": 1.0
+        },
+        "rest_head_note": "the object.rest head is deliberately not trained by this campaign; rest precision/recall/F1 above is measured on the detector's proposals against MusicXML rests",
+        "written_pitch_accuracy": 0.08062575210589651,
+        "written_pitch_multiset": {
+          "actual": 831,
+          "f1": 0.3128760529482551,
+          "precision": 0.3128760529482551,
+          "predicted": 831,
+          "recall": 0.3128760529482551,
+          "true_positive": 260
+        }
+      },
+      "records": 73,
+      "scores": [
+        "bc-mozart-k153",
+        "omf-piano-rhythm-tuplets-vector",
+        "pl-brahms-waltz-op39-3"
+      ]
+    }
+  },
+  "selection_use": "measurement only; this script never trains",
+  "torch": "2.13.0"
+}

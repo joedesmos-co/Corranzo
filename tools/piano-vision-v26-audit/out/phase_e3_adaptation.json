@@ -1,0 +1,110 @@
+{
+  "metric_definition_version": "real-pdf-metric-v1",
+  "note": "adaptation split is scored here for reporting only. The frozen evaluator refuses to gate on it because it is the only split an optimizer may see. Same canonical formulas, quoted from the frozen report.",
+  "splits": {
+    "adaptation": {
+      "ci95_written_pitch": [
+        0.117,
+        0.1358
+      ],
+      "derived_midi_accuracy": 0.1292,
+      "duration_accuracy": 0.5751,
+      "duration_labels": 4973,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "ci95_written_pitch": [
+            0.1176,
+            0.1719
+          ],
+          "derived_midi_accuracy": 0.1442,
+          "duration_accuracy": 0.536,
+          "n_duration": 666,
+          "n_pitch": 638,
+          "written_pitch_accuracy": 0.1426
+        },
+        "bc-chopin-etude-op10-12": {
+          "ci95_written_pitch": [
+            0.126,
+            0.1708
+          ],
+          "derived_midi_accuracy": 0.1543,
+          "duration_accuracy": 0.6707,
+          "n_duration": 984,
+          "n_pitch": 959,
+          "written_pitch_accuracy": 0.147
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "ci95_written_pitch": [
+            0.0972,
+            0.1422
+          ],
+          "derived_midi_accuracy": 0.1217,
+          "duration_accuracy": 0.4861,
+          "n_duration": 790,
+          "n_pitch": 789,
+          "written_pitch_accuracy": 0.1179
+        },
+        "pl-bach-prelude-bwv846": {
+          "ci95_written_pitch": [
+            0.0751,
+            0.1262
+          ],
+          "derived_midi_accuracy": 0.0977,
+          "duration_accuracy": 0.6024,
+          "n_duration": 581,
+          "n_pitch": 522,
+          "written_pitch_accuracy": 0.0977
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "ci95_written_pitch": [
+            0.0309,
+            0.0913
+          ],
+          "derived_midi_accuracy": 0.0536,
+          "duration_accuracy": 0.2742,
+          "n_duration": 248,
+          "n_pitch": 224,
+          "written_pitch_accuracy": 0.0536
+        },
+        "pl-handel-gavotte": {
+          "ci95_written_pitch": [
+            0.041,
+            0.1398
+          ],
+          "derived_midi_accuracy": 0.0769,
+          "duration_accuracy": 0.6525,
+          "n_duration": 118,
+          "n_pitch": 117,
+          "written_pitch_accuracy": 0.0769
+        },
+        "pl-mozart-turkish-march": {
+          "ci95_written_pitch": [
+            0.0723,
+            0.1156
+          ],
+          "derived_midi_accuracy": 0.0975,
+          "duration_accuracy": 0.6293,
+          "n_duration": 696,
+          "n_pitch": 687,
+          "written_pitch_accuracy": 0.0917
+        },
+        "std-hungarian-dance-no5": {
+          "ci95_written_pitch": [
+            0.1459,
+            0.1969
+          ],
+          "derived_midi_accuracy": 0.1699,
+          "duration_accuracy": 0.591,
+          "n_duration": 890,
+          "n_pitch": 830,
+          "written_pitch_accuracy": 0.1699
+        }
+      },
+      "records_scored": 8,
+      "split": "adaptation",
+      "written_pitch_accuracy": 0.1261,
+      "written_pitch_correct": 601,
+      "written_pitch_labels": 4766
+    }
+  }
+}

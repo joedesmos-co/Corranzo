@@ -1,0 +1,801 @@
+{
+  "assembler_version": "real-pdf-adaptation/1.0",
+  "contract_version": "real-pdf-corpus/2.0",
+  "corpus_digest": "c7897bb2217a2999a6af5bfba5c6ac2655065bb5276b75ecb492d535642d2f9b",
+  "corpus_root": "/Users/ryland/Documents/scoreflow-piano-v26/out/realpdf_d2",
+  "generated_utc": null,
+  "implementation_commit": "da7b7814432eb7c7610658c5a6532a4de0f9138a",
+  "implementation_sha256": {
+    "server/piano_vision_service/omr_staff_geometry.py": "34f83a072584c139304a4434ce5ea9ed6470974eaa2ecd6108c9fbd0301e27b1",
+    "server/piano_vision_service/v25_adapter.py": "14b76bf06a4513d31933123a8e4c1c77b3af7575ac052f426ef6894d788429aa",
+    "server/piano_vision_service/v25_canonical_features.py": "c27f8011a1e4c89efea34b4e8f474330b81ddd28d0de17e1b9a39d85a813f3ef",
+    "tools/real-pdf-adaptation/align_objects.py": "9d975b26ee699e167848fc7c6edfe2a5659dabc2f71857d3208a6d397586d698",
+    "tools/real-pdf-adaptation/build_corpus.py": "926c50e7d06d76c94592241a7d60370f4759262d7723f8499f7ebf0059cdf3b8",
+    "tools/real-pdf-adaptation/evaluate_realpdf.py": "3a27af17737572d9ff1392870e20ab1970f8b5d60aa1c376698104bc487bbeb7",
+    "tools/real-pdf-adaptation/realpdf_data.py": "cc06d39a15049dc4968bb857331c7d1c902b17220aaa692147a3ce6e4b695a3f",
+    "tools/real-pdf-adaptation/staff_geometry_verify.py": "95d479f1b92b67d9c6129492417df7c17f76db26d0c4ecac6fddff4a603f4f57"
+  },
+  "leakage": {
+    "distinct_page_hashes": 44,
+    "grouping": "by score; a score belongs to exactly one split",
+    "page_hash_examples": [],
+    "page_hashes_shared_across_scores": 0,
+    "pass": true,
+    "split_disjointness": "asserted by realpdf_data.SPLIT_GUARD and re-checked by make_manifests.py"
+  },
+  "manifest_digest": "05ebf53ad503e11947347231546b54b1fe4bba921881759bc7c92d6d616440a9",
+  "refusals": {
+    "dependent_labels_dropped": 39,
+    "group_rejections": {
+      "event_coverage_too_low": 80,
+      "no_xml_measure_partner": 230,
+      "residual_std_too_large": 66,
+      "too_few_accepted_matches": 142,
+      "too_few_objects_or_events": 188,
+      "unreliable_staff_lines": 249
+    },
+    "label_gate_reasons": {
+      "object_outside_ledger_envelope": 17,
+      "staff_step_outside_ledger_envelope": 1
+    },
+    "label_gate_total": 57
+  },
+  "render_dpi": 150,
+  "residual_diatonic_steps": {
+    "distribution": {
+      "-1": 791,
+      "0": 6135,
+      "1": 699
+    },
+    "frac_abs_ge_2": 0.0,
+    "frac_within_1": 1.0,
+    "frac_zero": 0.80459,
+    "n": 7625,
+    "note": "Full diatonic residual of the detected geometry against the MusicXML written pitch. |r|>=2 would indicate a staff-role or clef-classification failure; it is 0."
+  },
+  "scores": [
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0238095238095228,
+          "measures": 11,
+          "spread": 1.3766765505351941e-14
+        },
+        "upper": {
+          "delta": -0.976190476190477,
+          "measures": 11,
+          "spread": 0.011904761904766081
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "residual_std_too_large": 1,
+        "too_few_objects_or_events": 1
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/cache/bach-fugue-bwv846/score.musicxml",
+      "objects_labelled_duration": 666,
+      "objects_labelled_pitch": 638,
+      "objects_total": 836,
+      "page_sha256": [
+        "50f0ba9900350f92a49bf32cbeca5bd6f1feba4bb6b92f745d2aa9cecf679418",
+        "fbe1eb49b5b8da3e6e39726bed0a3a1c604bbc2d44cd9a51ab4a24295645f9bb"
+      ],
+      "records": 27,
+      "score_id": "bc-bach-fugue-bwv846",
+      "shard_sha256": "2ab3871220b65b479cb3c436397576998ce0609b64c8812b96c11f50394c8344",
+      "source_pdf": "benchmarks/cache/bach-fugue-bwv846/score.pdf",
+      "source_pdf_sha256": "bb1e08c6768256be507af65da04446af143b7033a7a067c939f2d63b779d218c",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0238095238095206,
+          "measures": 25,
+          "spread": 9.103828801926284e-15
+        },
+        "upper": {
+          "delta": -0.9761904761904864,
+          "measures": 25,
+          "spread": 0.0
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 1,
+        "no_xml_measure_partner": 2,
+        "residual_std_too_large": 3,
+        "too_few_accepted_matches": 23,
+        "too_few_objects_or_events": 14
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/cache/beethoven-sonata-op2-m1/score.musicxml",
+      "objects_labelled_duration": 772,
+      "objects_labelled_pitch": 694,
+      "objects_total": 1278,
+      "page_sha256": [
+        "2f285122ee548694e9468137e2dac1044d398c4e5c855367f4e9319f68d13a24",
+        "ce40b53f8e4ec3f0517b3dc7a5deaa55d002603d239ed557f2991bd31bee2175",
+        "67bd6dd674fda02d61aaf855afd7f418012098be6ff9503c518ec680cb1088f7",
+        "0b72e7a1c5e05a535bf33c469cec52197d95ebb86974354c92cc9bb727a38db6"
+      ],
+      "records": 97,
+      "score_id": "bc-beethoven-sonata-op2-m1",
+      "shard_sha256": "88143ea53afe9cefb8dcf2fb32f92f6126201ee148896c4467ae849eabb38e8f",
+      "source_pdf": "benchmarks/cache/beethoven-sonata-op2-m1/score.pdf",
+      "source_pdf_sha256": "c27b92fce9408c552df05e7cdd6bbcd925ce05350d91b43c36442ad171684df4",
+      "split": "heldout-test",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0238095238095137,
+          "measures": 13,
+          "spread": 0.0
+        },
+        "upper": {
+          "delta": -0.9761904761904864,
+          "measures": 13,
+          "spread": 1.1546319456101628e-14
+        }
+      },
+      "engraving": "musescore-feta",
+      "group_rejections": {
+        "event_coverage_too_low": 9,
+        "no_xml_measure_partner": 11,
+        "residual_std_too_large": 3,
+        "too_few_accepted_matches": 18,
+        "too_few_objects_or_events": 17,
+        "unreliable_staff_lines": 43
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/cache/chopin-etude-op10-01/score.musicxml",
+      "objects_labelled_duration": 451,
+      "objects_labelled_pitch": 435,
+      "objects_total": 816,
+      "page_sha256": [
+        "1bc97e3babe7272ec2a5d781c3dcee4357645376339dae672aaa89bbf1180a7c",
+        "3b6eef04340e9f25993d94cf0906326d1c4b079192e8758482fde8ea56127288",
+        "73b4b2c2448604196b17b6a54cf16c13ae069479d248b1000a43e6aac637a669",
+        "eff975ec520777986c62cb221a0732ae27e8c8e9d2be919c8e9ef3b0f91c312f"
+      ],
+      "records": 41,
+      "score_id": "bc-chopin-etude-op10-01",
+      "shard_sha256": "1170b17a7bf4076bb7eb908b92e70fce4513f3999ebcbb83f1ae733b5650317e",
+      "source_pdf": "benchmarks/cache/chopin-etude-op10-01/score.pdf",
+      "source_pdf_sha256": "6f8ea4b25f30dc071d79538548b201a6e0470e683144ce21da35a4b4886573b2",
+      "split": "heldout-test",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0238095238095322,
+          "measures": 15,
+          "spread": 1.5987211554602254e-14
+        },
+        "upper": {
+          "delta": -0.9999999999999907,
+          "measures": 15,
+          "spread": 0.023809523809513622
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 3,
+        "residual_std_too_large": 5,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 15
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/cache/chopin-etude-op10-12/score.musicxml",
+      "objects_labelled_duration": 984,
+      "objects_labelled_pitch": 959,
+      "objects_total": 1486,
+      "page_sha256": [
+        "66a79a61402cb070ee357b0c96b6179cfbc26964fea403d28ff90b2920747b8c",
+        "d454f5b877ee3ec3fb9915c051bddcd6844fe3020c1176f1255c1f60d8d73cbc",
+        "ece51d8d9c087382c7c754a9108678bba59104d5d7289a2bca4cc592ef60bd5a",
+        "465af4b50c7a565a9544e331d6c554b9cba01b7f0a5ec04c9c118d59bfa57e83"
+      ],
+      "records": 49,
+      "score_id": "bc-chopin-etude-op10-12",
+      "shard_sha256": "e373a1bec6d4db76f7b9a984d8afa35d28e9197c9dae6703f67c4fa4d78a8986",
+      "source_pdf": "benchmarks/cache/chopin-etude-op10-12/score.pdf",
+      "source_pdf_sha256": "a98f9062f12248db9479115d954e4847230d9bfaefd30d9e7b037c60b25f0ae7",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0263157894736832,
+          "measures": 9,
+          "spread": 0.02631578947368829
+        },
+        "upper": {
+          "delta": -1.0,
+          "measures": 9,
+          "spread": 2.55351295663786e-15
+        }
+      },
+      "engraving": "musescore-feta",
+      "group_rejections": {
+        "event_coverage_too_low": 5,
+        "no_xml_measure_partner": 1,
+        "residual_std_too_large": 1,
+        "too_few_objects_or_events": 1
+      },
+      "label_gate_refusals": {
+        "dependent_label_dropped": 10,
+        "object_outside_ledger_envelope": 5
+      },
+      "musicxml": "benchmarks/cache/chopin-nocturne-op9-n2/score.musicxml",
+      "objects_labelled_duration": 790,
+      "objects_labelled_pitch": 789,
+      "objects_total": 1211,
+      "page_sha256": [
+        "d8bc75b0b16f78c601c68ab7c8d6e233b2fa1bd6db2f017e516acd70121fa319",
+        "98311abd6e6d249c69318b2c61f1586681fec1f48cf4d62b85cc866c6aeb9976",
+        "eddd2a47b66195b2fdb80ad63b54aeeb76da8508fa041ab3f9679d1263dd3db9"
+      ],
+      "records": 33,
+      "score_id": "bc-chopin-nocturne-op9-n2",
+      "shard_sha256": "51738a1cb49e7794eb41449e3cd04a9aff80c4f931925c6e077f73351bfc5912",
+      "source_pdf": "benchmarks/cache/chopin-nocturne-op9-n2/score.pdf",
+      "source_pdf_sha256": "049a434aa4c5b5c7b837001cbc02245c220c429fed27728df98b0860c05f6438",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -0.9761904761904864,
+          "measures": 17,
+          "spread": 0.023809523809521616
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 6,
+        "no_xml_measure_partner": 3,
+        "residual_std_too_large": 2,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 8,
+        "unreliable_staff_lines": 15
+      },
+      "label_gate_refusals": {
+        "dependent_label_dropped": 15,
+        "object_outside_ledger_envelope": 6
+      },
+      "musicxml": "benchmarks/cache/mozart-k153/score.musicxml",
+      "objects_labelled_duration": 813,
+      "objects_labelled_pitch": 782,
+      "objects_total": 1117,
+      "page_sha256": [
+        "b3d39f2b970a3745236fda48e7fb24d0649e8c242f7cbacafbad205d951669d4",
+        "4457e87c1288a88587e20fc182e7d41546df0c5d545e4b1d5eb57b2e6611435b",
+        "c450880f8ac6e6783b69d3a0044f13b9a070d98bdfd11f168ef9dc6be97d6fa9",
+        "1078c9ef75eec8a7f15c6fd82e0057cd0c4c7031dfad6d3edc20abaa217de099"
+      ],
+      "records": 61,
+      "score_id": "bc-mozart-k153",
+      "shard_sha256": "d4edc7f04782d3d5e8d379ebaea8755db40290c92b0e508a50202d521ec5bb41",
+      "source_pdf": "benchmarks/cache/mozart-k153/score.pdf",
+      "source_pdf_sha256": "1abb54fdd4f0e6361573ce8a589331e2e8fbdfe00e8962d6ac69e70d7fe54f13",
+      "split": "validation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -0.9705882352941227,
+          "measures": 41,
+          "spread": 0.044563279857395055
+        }
+      },
+      "engraving": "corranzo-benchmark",
+      "group_rejections": {
+        "no_xml_measure_partner": 29,
+        "residual_std_too_large": 1,
+        "unreliable_staff_lines": 8
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.musicxml",
+      "objects_labelled_duration": 67,
+      "objects_labelled_pitch": 67,
+      "objects_total": 264,
+      "page_sha256": [
+        "6f7af71af29eaba6ab7f71fd77eb4dc115e30f5e4e362f062a914821f9b15d46"
+      ],
+      "records": 7,
+      "score_id": "omf-piano-dense-advanced-vector",
+      "shard_sha256": "d4e609de0c4aaf26437e5f41e327fe8a6c1fcfd04fda703876d7588b44e84af2",
+      "source_pdf": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf",
+      "source_pdf_sha256": "7f2390081104a4f328ba16ae39b86c301f2df526553a26169cd6888d19d72705",
+      "split": "heldout-test",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0367647058823466,
+          "measures": 8,
+          "spread": 0.01470588235293846
+        },
+        "upper": {
+          "delta": -0.9632352941176547,
+          "measures": 8,
+          "spread": 0.014705882352936017
+        }
+      },
+      "engraving": "corranzo-benchmark",
+      "group_rejections": {
+        "too_few_accepted_matches": 8
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.musicxml",
+      "objects_labelled_duration": 48,
+      "objects_labelled_pitch": 48,
+      "objects_total": 88,
+      "page_sha256": [
+        "69739de32f5a57a4e6eac7ce808151a9a7d25a4f498623dd4b7d7a50a9461ec1"
+      ],
+      "records": 8,
+      "score_id": "omf-piano-grand-voices-vector",
+      "shard_sha256": "de077808ddfa6fac48634b489abeee4a79c2dfc1a0da733c393ab2cfca5036da",
+      "source_pdf": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
+      "source_pdf_sha256": "d56380dfdb2820c0a26bbe1716276a7f6e15026877f266a6826ea350c6f6ecb9",
+      "split": "heldout-test",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -0.9705882352941175,
+          "measures": 13,
+          "spread": 0.029411764705883803
+        }
+      },
+      "engraving": "corranzo-benchmark",
+      "group_rejections": {
+        "no_xml_measure_partner": 6,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 1,
+        "unreliable_staff_lines": 7
+      },
+      "label_gate_refusals": {},
+      "musicxml": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+      "objects_labelled_duration": 36,
+      "objects_labelled_pitch": 34,
+      "objects_total": 68,
+      "page_sha256": [
+        "832d111b443af2a911bd3aff1b0ba0b8d89a1f9f633327ddb3f1e02b83eb1bac"
+      ],
+      "records": 5,
+      "score_id": "omf-piano-rhythm-tuplets-vector",
+      "shard_sha256": "69a091f19c745745c450ff2f08ce7ec544066d025ded9055c9adfbf6d61ca1be",
+      "source_pdf": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
+      "source_pdf_sha256": "36c4cf23305903f9114161ec930b5a1775c2dffe16340ea46044ea2339a78635",
+      "split": "validation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0238095238095228,
+          "measures": 17,
+          "spread": 0.02380952380952306
+        },
+        "upper": {
+          "delta": -0.9523809523809541,
+          "measures": 17,
+          "spread": 0.023809523809513733
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "no_xml_measure_partner": 1,
+        "residual_std_too_large": 1,
+        "too_few_accepted_matches": 1,
+        "too_few_objects_or_events": 2
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-bach-prelude-bwv846/piano-bach-prelude-bwv846.musicxml",
+      "objects_labelled_duration": 581,
+      "objects_labelled_pitch": 522,
+      "objects_total": 749,
+      "page_sha256": [
+        "2c96153ccba2ed5dbd99c3bd7790c3465eb76b23f52dd036a2a8c29a592b8396",
+        "c0397c83c0359a1982cde0515ba7616e0c276d260884ad12f1a0e051386efd9f"
+      ],
+      "records": 33,
+      "score_id": "pl-bach-prelude-bwv846",
+      "shard_sha256": "a3ff9883e8e00b087f0767c5b5156b765e42525ea27067d3e2b576bbe0bb902c",
+      "source_pdf": "public/fixtures/practice-library/piano-bach-prelude-bwv846/piano-bach-prelude-bwv846.pdf",
+      "source_pdf_sha256": "b1c5be9fb63954df9c1a3e7b651ae930c4e5e332a5ab3e14b197379cfa04c35a",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 0.9999999999999907,
+          "measures": 34,
+          "spread": 0.07380952380951178
+        },
+        "upper": {
+          "delta": -0.9761904761904678,
+          "measures": 34,
+          "spread": 0.09761904761902784
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 2,
+        "residual_std_too_large": 5,
+        "too_few_accepted_matches": 24,
+        "too_few_objects_or_events": 15
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.musicxml",
+      "objects_labelled_duration": 676,
+      "objects_labelled_pitch": 574,
+      "objects_total": 1107,
+      "page_sha256": [
+        "35f07182867f08a2422f4b5211c5ba115cc3bd356f0630b41fc33ab6d43feb5a",
+        "179316c27f9f4c2a83a2f81af1db473aa0e000fd91a66f8591ac8f74de4303b1",
+        "157e33c473d4317e9fa8c1a571ab1594f60ef654239c69c4d48035be2343b1d2"
+      ],
+      "records": 94,
+      "score_id": "pl-beethoven-fur-elise",
+      "shard_sha256": "e9121e9fbe4b9c8358136913d70e90e8678cd0c233a3b9f34f7bed0825b1effe",
+      "source_pdf": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf",
+      "source_pdf_sha256": "0641395b4e97811bb89751352719bb9994cacd4f13da7b9429fe65716dfdc328",
+      "split": "diagnostic",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -1.0000000000000022,
+          "measures": 18,
+          "spread": 0.037499999999995204
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 2,
+        "no_xml_measure_partner": 7,
+        "too_few_accepted_matches": 2,
+        "unreliable_staff_lines": 11
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.musicxml",
+      "objects_labelled_duration": 17,
+      "objects_labelled_pitch": 15,
+      "objects_total": 147,
+      "page_sha256": [
+        "c3f15790e44bfe6d1dca84f6f51d5f1536a5381b1fdc5dc76a051edc2bd81c53"
+      ],
+      "records": 7,
+      "score_id": "pl-brahms-waltz-op39-3",
+      "shard_sha256": "f84c43e3274126e80ef1508e4bb7ee32b3d403dd044a75f6a28266037f8e9b27",
+      "source_pdf": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.pdf",
+      "source_pdf_sha256": "eec6814a25568e86ed4922651dd7fdc90fc125bdc3a24b2c8b3561e7b33f42e0",
+      "split": "validation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -1.0,
+          "measures": 95,
+          "spread": 0.05000000000000038
+        }
+      },
+      "engraving": "musescore-feta",
+      "group_rejections": {
+        "event_coverage_too_low": 11,
+        "no_xml_measure_partner": 105,
+        "residual_std_too_large": 11,
+        "too_few_accepted_matches": 28,
+        "too_few_objects_or_events": 23,
+        "unreliable_staff_lines": 101
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.musicxml",
+      "objects_labelled_duration": 248,
+      "objects_labelled_pitch": 224,
+      "objects_total": 993,
+      "page_sha256": [
+        "668026f76d6147925fff4f18660e494670cc7738f1174dca3b2307a0530e71b5",
+        "6458afe7d37c7daeb7274332059e2c3bad083cbae1da5308b349b24afa5b4e80",
+        "9c2d6d5a646fada5aee36a3500b4247381cac853e39d6fe02818b4969cd3739d"
+      ],
+      "records": 59,
+      "score_id": "pl-chopin-mazurka-op6-1",
+      "shard_sha256": "372dfd81e2bd34a6d69f64f68deb5b8446afc872e34da2924a965209112033ce",
+      "source_pdf": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf",
+      "source_pdf_sha256": "27bb16a99e38f570d15d34579f68f926b12c406eb21e6c23743dbda6275eda9c",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 0.9999999999999907,
+          "measures": 22,
+          "spread": 0.023809523809529942
+        },
+        "upper": {
+          "delta": -0.9880952380952455,
+          "measures": 22,
+          "spread": 0.023809523809521838
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 1,
+        "no_xml_measure_partner": 2,
+        "residual_std_too_large": 6,
+        "too_few_accepted_matches": 3,
+        "too_few_objects_or_events": 2
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.musicxml",
+      "objects_labelled_duration": 118,
+      "objects_labelled_pitch": 117,
+      "objects_total": 245,
+      "page_sha256": [
+        "8dfb34e23bfdeafd05315d6a9cbb3582428449e2fe6564986e7977c9bee1071a"
+      ],
+      "records": 18,
+      "score_id": "pl-handel-gavotte",
+      "shard_sha256": "19fa9724bfe0fb33a3dbe62574522ead5406af42e150417f3adf39afbc72938b",
+      "source_pdf": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf",
+      "source_pdf_sha256": "5165a9766293aac3671c46df5cd22178e0575ffca108b0c197a510896163f1e3",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 0.950000000000002,
+          "measures": 31,
+          "spread": 0.07380952380952088
+        },
+        "upper": {
+          "delta": -1.049999999999998,
+          "measures": 31,
+          "spread": 0.09761904761903928
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "event_coverage_too_low": 29,
+        "residual_std_too_large": 22,
+        "too_few_accepted_matches": 20,
+        "too_few_objects_or_events": 42
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.musicxml",
+      "objects_labelled_duration": 696,
+      "objects_labelled_pitch": 687,
+      "objects_total": 1569,
+      "page_sha256": [
+        "f77756a317f3b2e0287606c291918cb33a6cd28dad5593a518907e69e8bc3ead",
+        "9c834df71adc18919296acd190a20b0a0fdc149d2be3dcb8f21b4f7d27e56b5f",
+        "55e38a6eb7fe02a5f79f2705721767867060a29ce51c69d2a4c8d20b86ee5f2b",
+        "913c81e5f215c46742b26ab0e6766b00cd9d295b6f9415027472f753eebd0a22"
+      ],
+      "records": 105,
+      "score_id": "pl-mozart-turkish-march",
+      "shard_sha256": "9cb8847624a4e42d23508e52c8580c4ab7da3a9366e1824bffd65158bc486f71",
+      "source_pdf": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf",
+      "source_pdf_sha256": "605b2f3f18f50f202fb80efadada57548757b19fc7d9529ef9cd55a591a16259",
+      "split": "adaptation",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -1.0,
+          "measures": 81,
+          "spread": 0.02439024390244049
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "no_xml_measure_partner": 49,
+        "residual_std_too_large": 5,
+        "too_few_objects_or_events": 13,
+        "unreliable_staff_lines": 29
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/practice-library/piano-tchaikovsky-old-french-song/piano-tchaikovsky-old-french-song.musicxml",
+      "objects_labelled_duration": 33,
+      "objects_labelled_pitch": 33,
+      "objects_total": 205,
+      "page_sha256": [
+        "4d373e473e78787ead4a34b6b00952d90cd43eee43a44499ef6bd590d6a6af4e"
+      ],
+      "records": 11,
+      "score_id": "pl-tchaikovsky-old-french-song",
+      "shard_sha256": "67e303a0760b962d7aae66795ca921817caf529cb074a1953c421e343bc034e8",
+      "source_pdf": "public/fixtures/practice-library/piano-tchaikovsky-old-french-song/piano-tchaikovsky-old-french-song.pdf",
+      "source_pdf_sha256": "e051dabc69b63bf9e665ac8579273a5f2583768ea4c453de8ea138d55fae5c7e",
+      "split": "heldout-test",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": 1.0227272727272632,
+          "measures": 32,
+          "spread": 0.02272727272726316
+        },
+        "upper": {
+          "delta": -0.9772727272727304,
+          "measures": 32,
+          "spread": 1.7541523789077473e-14
+        }
+      },
+      "engraving": "musescore4-emmentaler",
+      "group_rejections": {
+        "too_few_objects_or_events": 18
+      },
+      "label_gate_refusals": {},
+      "musicxml": "public/fixtures/demo-minuet-in-g.musicxml",
+      "objects_labelled_duration": 178,
+      "objects_labelled_pitch": 177,
+      "objects_total": 209,
+      "page_sha256": [
+        "e838dac1f544e66699ced9935d6ed807af48b7761d589b0de7fc745fd947364b"
+      ],
+      "records": 31,
+      "score_id": "std-demo-minuet-in-g",
+      "shard_sha256": "3ada64c760e02161e225f9658cfcfae8adf427d7f3d9f962fe90279d782f4058",
+      "source_pdf": "public/fixtures/demo-minuet-in-g.pdf",
+      "source_pdf_sha256": "6b34ba44122d9694156a113c749eee0bf3232f54ead431a44be6f2a1b6f32c8b",
+      "split": "diagnostic",
+      "title": null
+    },
+    {
+      "band_offsets": {
+        "lower": {
+          "delta": null,
+          "measures": 0,
+          "spread": null
+        },
+        "upper": {
+          "delta": -0.9761904761904759,
+          "measures": 52,
+          "spread": 1.3877787807814457e-14
+        }
+      },
+      "engraving": "musescore-legacy-mscore",
+      "group_rejections": {
+        "event_coverage_too_low": 11,
+        "no_xml_measure_partner": 14,
+        "too_few_accepted_matches": 12,
+        "too_few_objects_or_events": 16,
+        "unreliable_staff_lines": 35
+      },
+      "label_gate_refusals": {
+        "dependent_label_dropped": 14,
+        "object_outside_ledger_envelope": 6,
+        "staff_step_outside_ledger_envelope": 1
+      },
+      "musicxml": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl",
+      "objects_labelled_duration": 890,
+      "objects_labelled_pitch": 830,
+      "objects_total": 1404,
+      "page_sha256": [
+        "01c29d20e86ed5d92b61d6f924a61e48bf012d8b3dfa6706617466e610d0f6c0",
+        "75a2bdeee32b5ed311ba60d93835e14f70814306bebbbf0e6aa9b5b2e33f2d45",
+        "8ca187a2967233d6bfcae6df075af96017d0dec106aaf4326c17ea28560800f6",
+        "b496cdac0802bc24196d59d5a0655d375c0653a443182e7e719c4d049056d33d"
+      ],
+      "records": 92,
+      "score_id": "std-hungarian-dance-no5",
+      "shard_sha256": "42d9cffb78ee0b88080dd9e18bee5eb137b594f98516ad230edbd844bdcf9b4d",
+      "source_pdf": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf",
+      "source_pdf_sha256": "9b9383a5ddc725bba7e2930736ef827aee28b50de0b2f8527759f9c0ba53b1f8",
+      "split": "adaptation",
+      "title": null
+    }
+  ],
+  "split_manifests": {
+    "adaptation": {
+      "campaign_split": "adaptation",
+      "digest": "a4f462c54442d76b1029bdf48a209744be702f986ef70b9bfd7cfcbcfb896d2e",
+      "path": "realpdf_d2/adaptation.json",
+      "records": 416,
+      "scores": [
+        "bc-bach-fugue-bwv846",
+        "bc-chopin-etude-op10-12",
+        "bc-chopin-nocturne-op9-n2",
+        "pl-bach-prelude-bwv846",
+        "pl-chopin-mazurka-op6-1",
+        "pl-handel-gavotte",
+        "pl-mozart-turkish-march",
+        "std-hungarian-dance-no5"
+      ]
+    },
+    "diagnostic": {
+      "campaign_split": "diagnostic",
+      "digest": "c0498e192a5cddd0e23dddbfd20b7940ba4ea7e535d1448a5cee3fbd23613c18",
+      "path": "realpdf_d2/diagnostic.json",
+      "records": 125,
+      "scores": [
+        "pl-beethoven-fur-elise",
+        "std-demo-minuet-in-g"
+      ]
+    },
+    "heldout-test": {
+      "campaign_split": "heldout-test",
+      "digest": "f551d178e29a3c2d683097d19eba2530729dce6130dfded8ad80425d1dcfd7a8",
+      "path": "realpdf_d2/heldout-test.json",
+      "records": 164,
+      "scores": [
+        "bc-beethoven-sonata-op2-m1",
+        "bc-chopin-etude-op10-01",
+        "omf-piano-dense-advanced-vector",
+        "omf-piano-grand-voices-vector",
+        "pl-tchaikovsky-old-french-song"
+      ]
+    },
+    "validation": {
+      "campaign_split": "validation",
+      "digest": "ad1a9accc463b9c61d3724807f592a68273aa37181725186cffb9b57e21e31da",
+      "path": "realpdf_d2/validation.json",
+      "records": 73,
+      "scores": [
+        "bc-mozart-k153",
+        "omf-piano-rhythm-tuplets-vector",
+        "pl-brahms-waltz-op39-3"
+      ]
+    }
+  },
+  "supersedes": "real-pdf-corpus/1.0 (local out/realpdf) - INVALIDATED: pitch labels were attached to the wrong object",
+  "totals": {
+    "accepted_pitch_labels": 7625,
+    "objects_total": 13792,
+    "records_written": 778,
+    "scores": 18
+  }
+}

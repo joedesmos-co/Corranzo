@@ -110,6 +110,13 @@ def build_cache(max_records=30, per_score=320):
                 continue
             m = rec["input"]["modelInput"]
             bands = m.get("geometry", {}).get("staffBands", {}).get("staffBands", [])
+            # label lookup by THIS record's own object index
+            label_for = {}
+            for lab in rec["target"]["families"].get("PITCH_STAFF", []):
+                if lab.get("state") != "KNOWN" or not lab.get("isPositive"):
+                    continue
+                for ix in (lab.get("objectIndexes") or []):
+                    label_for[ix] = lab
             t = batch["targets"]["object"]
             n_obj = int(t["pitch_staff_step"]["mask"][0].shape[0])
             for i, obj in enumerate(m.get("physicalObjects", [])):
@@ -117,10 +124,23 @@ def build_cache(max_records=30, per_score=320):
                     continue
                 if not bool(t["pitch_written_step"]["mask"][0][i].item()):
                     continue
+                if i not in label_for:
+                    continue
                 r = extract_roi(page, obj, bands)
                 if r is None:
                     continue
-                roi, k, is_upper = r
+                roi, k_local, is_upper_local = r
+                # k and the band role are taken from the PIPELINE's own staff
+                # geometry (staffPosition.stepsFromBandCenter / staffRole), not
+                # from a local recomputation. Both are detector-derived, so
+                # neither is the target - but they are what production actually
+                # feeds the model, and recomputing the gap band-locally
+                # disagrees with the pooled staff_space on ~3% of objects,
+                # which manufactured a spurious +/-6 residual that does not
+                # exist in the corpus.
+                lab = label_for[i]
+                k = float((lab["value"]["staffPosition"] or {})["stepsFromBandCenter"])
+                is_upper = 1.0 if lab["value"].get("staffRole") == "upper" else 0.0
                 tgt_step = int(t["pitch_written_step"]["target"][0][i].item())
                 tgt_oct = int(t["pitch_octave"]["target"][0][i].item())
                 if tgt_step < 0 or tgt_oct < 0:
