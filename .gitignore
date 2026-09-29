@@ -36,3 +36,7 @@ tmp/uiowa-mic-sources/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Derived audit data (rebuilt by build_corpus.py / the audit scripts)
+/out/
+/tools/piano-vision-v26-audit/out/visual/
