@@ -253,7 +253,37 @@ def _tab_digit_boxes(inner: str) -> tuple[list[Box], list[str]]:
         # characters rather than tspan elements: Verovio may emit "12" as one
         # tspan or as two.
         characters = sum(len(value.strip()) for _size, value in digits)
-        # Cap height of the digit sits above the baseline; centre the box there.
+        # The box has to be the *glyph*, not the string gap around it.
+        #
+        # A TAB staff is engraved with one digit centred on its string line, and
+        # the string gap here is 360 units against a 324px font. A box built from
+        # the line pitch is 43 pixels tall in a 256-pixel plane while the ink
+        # inside it is 13 — the digit occupies 30% of its own target box, and the
+        # other 70% is the staff line and the gaps above and below it.
+        #
+        # That is not a small error. A 3x3 sampling grid over such a box puts two
+        # of its three rows on blank paper, the ink-weighted ROI branch spends
+        # 64 of its 64 crop samples reading background, and the digit head is
+        # asked to separate 26 classes from a third of its input carrying
+        # information. Measured on the rendered corpus: median ink coverage inside
+        # a fret-digit box is 9.1%.
+        #
+        # The glyph's own extents come from the font's cap height above the
+        # baseline, and the width from the advance per character. Both are
+        # fractions of the font size, so the box scales with the engraving
+        # instead of with the page.
+        # The glyph's own extents, from the font's cap height above the baseline
+        # and the advance per character. Verovio draws TAB digits as live <text>
+        # rather than as outlines, so there is no path geometry to read and these
+        # have to come from font metrics.
+        #
+        # The vertical centre is the part that matters and it is not a free
+        # parameter: the digit sits with its *bottom* on the string line, so the
+        # box is centred at ``baseline - cap_height / 2``. An earlier attempt
+        # "calibrated" this against rendered ink and produced a box whose ink
+        # landed 78 pixels above its own staff line - the digit was no longer
+        # inside its target at all. Engraving geometry is not to be fitted by eye;
+        # the ink tests verify it, they do not define it.
         center_y = y - font_size * 0.36
         width = font_size * 0.58 * max(1, characters)
         height = font_size * 0.78

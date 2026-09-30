@@ -118,9 +118,57 @@ class HeadReport:
     correct: int = 0
     total: int = 0
     confusion: dict[str, int] = field(default_factory=dict)
+    # True class -> {count, correct}. Kept whole rather than summarised, because
+    # the aggregate hides the only thing that matters for fret: whether the
+    # errors are one class failing or a systematic split between one-digit and
+    # two-digit frets.
+    per_class: dict[int, dict[str, int]] = field(default_factory=dict)
+
+    def record(self, true_value: int, predicted_value: int) -> None:
+        entry = self.per_class.setdefault(true_value, {"count": 0, "correct": 0})
+        entry["count"] += 1
+        if true_value == predicted_value:
+            entry["correct"] += 1
+        else:
+            key = f"pred{predicted_value}->true{true_value}"
+            self.confusion[key] = self.confusion.get(key, 0) + 1
+
+    def class_accuracy(self) -> dict[str, dict]:
+        return {
+            str(value): {
+                "count": entry["count"],
+                "correct": entry["correct"],
+                "accuracy": round(entry["correct"] / entry["count"], 4)
+                if entry["count"]
+                else 0.0,
+            }
+            for value, entry in sorted(self.per_class.items())
+        }
+
+    def digit_count_split(self, high: int = 10) -> dict:
+        """Accuracy on one-digit frets against two-digit frets.
+
+        A two-digit fret is roughly twice as wide as a one-digit fret, so if the
+        two populations score differently the representation is not resolving
+        glyph *content* and the split is worth knowing before any capacity is
+        added. `high` is the first two-digit value.
+        """
+        groups: dict[str, dict[str, int]] = {
+            "one_digit": {"count": 0, "correct": 0},
+            "two_digit": {"count": 0, "correct": 0},
+        }
+        for value, entry in self.per_class.items():
+            key = "two_digit" if value >= high else "one_digit"
+            groups[key]["count"] += entry["count"]
+            groups[key]["correct"] += entry["correct"]
+        for entry in groups.values():
+            entry["accuracy"] = (
+                round(entry["correct"] / entry["count"], 4) if entry["count"] else 0.0
+            )
+        return groups
 
     def as_dict(self) -> dict:
-        return {
+        out = {
             "head": self.name,
             "accuracy": round(self.accuracy, 6),
             "correct": self.correct,
@@ -129,6 +177,10 @@ class HeadReport:
                 sorted(self.confusion.items(), key=lambda item: -item[1])[:5]
             ),
         }
+        if self.name == "fret":
+            out["per_class"] = self.class_accuracy()
+            out["digit_count_split"] = self.digit_count_split()
+        return out
 
 
 def transfer(
@@ -171,16 +223,32 @@ def transfer(
             total = int(mask.sum())
             accuracy = int(correct.sum()) / total
             chance = baseline.get(name, 0.0)
-            heads.append(
-                {
-                    "head": name,
-                    "accuracy": round(accuracy, 6),
-                    "correct": int(correct.sum()),
-                    "total": total,
-                    "majority_class_rate": round(chance, 6),
-                    "lift_over_chance": round(accuracy - chance, 6),
-                }
-            )
+            report = HeadReport(name=name)
+            flat_predicted = predicted.reshape(-1)
+            flat_target = moved[name].reshape(-1)
+            flat_correct = correct.reshape(-1)
+            flat_mask = mask.reshape(-1)
+            for value, prediction, was_right in zip(
+                flat_target[flat_mask].tolist(),
+                flat_predicted[flat_mask].tolist(),
+                flat_correct[flat_mask].tolist(),
+            ):
+                report.record(value, value if was_right else prediction)
+            entry = {
+                "head": name,
+                "accuracy": round(accuracy, 6),
+                "correct": int(correct.sum()),
+                "total": total,
+                "majority_class_rate": round(chance, 6),
+                "lift_over_chance": round(accuracy - chance, 6),
+            }
+            if name == "fret":
+                # The same one-digit / two-digit split as the training report, on
+                # the pages that decide the gate. A split that only shows up here
+                # is a generalisation failure rather than a capacity failure.
+                entry["per_class"] = report.class_accuracy()
+                entry["digit_count_split"] = report.digit_count_split()
+            heads.append(entry)
     return {
         "heads": heads,
         "note": (
@@ -312,6 +380,36 @@ def _head_masks(batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
     }
 
 
+def _print_fret_detail(report: HeadReport, label: str) -> None:
+    """Per-fret-class accuracy, and the one-digit / two-digit split.
+
+    Printed rather than only serialised, because the split decides what to do
+    next: if one-digit frets are solid and two-digit ones are not, the digit is
+    being read but the second glyph is not being resolved, which is a different
+    fix from "the representation cannot read digits at all".
+    """
+    split = report.digit_count_split()
+    print(
+        f"    fret digits on {label}: one-digit {split['one_digit']['accuracy']:.1%} "
+        f"({split['one_digit']['correct']}/{split['one_digit']['count']}), "
+        f"two-digit {split['two_digit']['accuracy']:.1%} "
+        f"({split['two_digit']['correct']}/{split['two_digit']['count']})"
+    )
+    weak = [
+        (value, entry)
+        for value, entry in sorted(report.per_class.items())
+        if entry["count"] >= 3 and entry["correct"] / entry["count"] < 0.9
+    ]
+    if weak:
+        detail = ", ".join(
+            f"{value}:{entry['correct']}/{entry['count']}" for value, entry in weak
+        )
+        print(f"    frets below 90% ({len(weak)} classes): {detail}")
+    top = sorted(report.confusion.items(), key=lambda item: -item[1])[:4]
+    if top:
+        print("    top confusions: " + ", ".join(f"{key} x{count}" for key, count in top))
+
+
 def evaluate(
     model: GuitarVisionModel,
     batch: dict[str, torch.Tensor],
@@ -349,18 +447,16 @@ def evaluate(
             # Flatten before indexing: `wrong` is a boolean mask over (B, N), so
             # `predicted[wrong]` is already a flat 1-D tensor and calling .item()
             # on it raises for any batch with more than one mistake.
-            wrong = ((~correct) & mask).reshape(-1)
-            if wrong.any():
-                flat_predicted = predicted.reshape(-1)
-                flat_target = moved[name].reshape(-1)
-                # A per-class breakdown rather than one key per wrong object, so
-                # the report shows which classes are confused and not how many
-                # times the same single mistake happened.
-                for predicted_value, true_value in torch.unique(
-                    torch.stack((flat_predicted[wrong], flat_target[wrong]), dim=1), dim=0
-                ).tolist():
-                    key = f"pred{predicted_value}->true{true_value}"
-                    report.confusion[key] = report.confusion.get(key, 0) + 1
+            flat_predicted = predicted.reshape(-1)
+            flat_target = moved[name].reshape(-1)
+            flat_correct = (correct & mask).reshape(-1)
+            flat_mask = mask.reshape(-1)
+            for value, prediction, was_right in zip(
+                flat_target[flat_mask].tolist(),
+                flat_predicted[flat_mask].tolist(),
+                flat_correct[flat_mask].tolist(),
+            ):
+                report.record(value, value if was_right else prediction)
             reports[name] = report
     return (loss / terms if terms else 0.0), reports
 
@@ -665,6 +761,9 @@ def main() -> int:
     for report in reports.values():
         print(f"  {report.name:<12} {report.accuracy:6.2%}  ({report.correct}/{report.total})")
 
+    if "fret" in reports:
+        _print_fret_detail(reports["fret"], "train pages")
+
     transfer_report: dict | None = None
     transferred = False
     if held_out is not None:
@@ -678,6 +777,21 @@ def main() -> int:
                 f"chance {head['majority_class_rate']:6.2%}  "
                 f"lift {head['lift_over_chance']:+7.2%}  ({head['correct']}/{head['total']})"
             )
+        for head in transfer_report["heads"]:
+            if head["head"] == "fret":
+                _print_fret_detail(
+                    HeadReport(
+                        name="fret",
+                        accuracy=head["accuracy"],
+                        correct=head["correct"],
+                        total=head["total"],
+                        per_class={
+                            int(value): entry
+                            for value, entry in head["per_class"].items()
+                        },
+                    ),
+                    "held-out pages",
+                )
         # The gate is the transfer result, not the memorisation result. Chance is
         # re-measured on these pages, so a head that beats it is extracting
         # something it was not handed.

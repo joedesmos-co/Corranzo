@@ -42,10 +42,35 @@ OBJECT_TYPE_INDEX = {name: index for index, name in enumerate(OBJECT_TYPES)}
 VIEW_NAMES = ("full-page", "notation", "tab")
 VIEW_INDEX = {name: index for index, name in enumerate(VIEW_NAMES)}
 
-# Tiles per view. A strip view has to be divided or its glyphs are crushed; a
-# full-page view is nearly square and needs only a couple to keep the smallest
-# notation glyph legible near the bottom of a system.
-TILES_PER_VIEW = {"full-page": 2, "notation": 3, "tab": 4}
+# Minimum planes per view. The actual count is derived from the view's own aspect
+# ratio, because a plane can be filled contiguously *and* without distortion only
+# when it shows a square of the content — so the number of planes needed is the
+# content's aspect, rounded up.
+#
+# Getting this wrong is what cost three loader revisions:
+#
+#  - 3 planes for a 12:1 strip stretched each one into a square, squashing every
+#    digit to 30% of its width. "3" and "8" differ mostly in how much of their
+#    width is closed, so that is not a cosmetic distortion.
+#  - stretching replaced by scale-to-fit, at a fixed count, made each plane show
+#    only the part of its slot that fitted, so consecutive planes had *gaps*
+#    between them and any object in a gap belonged to no plane at all: 27% of
+#    objects survived, and the ones that did were fine. This is the failure that
+#    looks least like a bug.
+#
+# Deriving the count from the aspect fixes both, and the counts differ per page, so
+# ``collate`` pads the plane axis to the batch maximum with blank planes. No
+# object ever references a padded plane, so the padding is inert.
+MIN_PLANES_PER_VIEW = {"full-page": 1, "notation": 1, "tab": 1}
+
+# How much consecutive planes overlap, as a fraction of a plane's width.
+#
+# Sized to the widest object a plane can hold. A two-digit fret is about 23% of a
+# TAB plane's width, and an object straddling a boundary has to be *whole* in one
+# of the two planes: ``plane_box`` drops a box that crosses an edge rather than
+# clipping it, because a clipped box is narrower than the glyph it names. So the
+# overlap has to exceed the widest object, and 0.3 is that with margin.
+PLANE_OVERLAP = 0.30
 
 NO_STRING = 0
 NO_FRET = 25
@@ -203,43 +228,45 @@ def _load_view(
     # The trim changed the view's content frame, so it has to be reported back and
     # composed with the band's rect. `inset` is the fraction of the original crop
     # that was removed, and it is what keeps the boxes aligned after trimming.
-    # Tiles overlap, so an object straddling a boundary is whole in at least one
-    # of them. Without the overlap a boundary object has to be dropped, because a
-    # box that crosses a tile edge maps outside the plane and the sampler reads
-    # off the edge. Measured cost of dropping instead: about a quarter of the
-    # fret digits on a paired score, which is a quarter of the TAB training signal
-    # gone for a bookkeeping reason.
+    # A plane shows a **square** of the content, so the resize is uniform on both
+    # axes and no glyph is squashed. The advance is that square, so the planes
+    # cover the strip with no gaps, and each one is widened by ``PLANE_OVERLAP``
+    # so an object straddling a boundary is whole in at least one of them.
     #
-    # The overlap is a tenth of a tile on the internal edges, which comfortably
-    # exceeds the widest object: a two-digit fret is about 3% of a system.
-    stride = scaled_width // tiles
-    margin = max(1, stride // 10)
+    # The overlap is not optional and not cosmetic. ``plane_box`` refuses to clip a
+    # box that crosses a plane edge, because a clipped box is narrower than the
+    # glyph it names and a detector trained on that learns to expect truncated
+    # digits. So without overlap a boundary object is dropped instead, and a
+    # two-digit fret is about 23% of a plane's width, so the overlap has to be
+    # at least that. Measured cost of getting it wrong: a quarter of the fret
+    # digits vanished from the corpus.
+    span = scaled_height
+    overlap = max(1, int(round(span * PLANE_OVERLAP)))
     output: list[tuple[np.ndarray, tuple[float, float, float, float]]] = []
-    for index in range(tiles):
-        start = max(0, index * stride - margin)
-        end = min(scaled_width, (index + 1) * stride + margin)
-        end = max(end, start + 1)
+    start = 0
+    while start < scaled_width:
+        end = min(scaled_width, start + span + overlap)
         strip = array[:, start:end]
-        # Each strip is resized to the full plane rather than pasted into it. A
-        # 12:1 TAB strip scaled to a 256px height is 3200px wide; pasted into
-        # four 256px planes, only the first 1024px survived and the other three
-        # tiles were the same 256px of margin, so three quarters of every TAB
-        # object pointed at white. Resizing the strip is what makes the tiles
-        # cover the page: each carries its own quarter, at the same glyph height.
-        if strip.shape[1] != width:
+        strip_width = max(1, end - start)
+        plane = np.ones((height, width), dtype=np.float32)
+        if strip.shape[0] != height or strip_width != width:
             strip = np.asarray(
-                Image.fromarray((np.clip(strip, 0, 1) * 255).astype(np.uint8)).resize(
-                    (width, height), Image.LANCZOS
-                ),
+                Image.fromarray(
+                    (np.clip(strip, 0, 1) * 255).astype(np.uint8)
+                ).resize((width, height), Image.LANCZOS),
                 dtype=np.float32,
             ) / 255.0
-        # The tile's span in content fractions, derived from the *scaled* array,
-        # because `start` and `end` index into that. Dividing by source_width
-        # instead - the same units the boxes are in - was wrong by the scale
-        # factor, which for a 12:1 TAB strip is about 0.8, so every box was
-        # placed 80% of the way off its digit. The ink test found 0 of 21 fret
-        # digits on their own pixels before this was fixed.
-        output.append((strip, (start / scaled_width, 0.0, end / scaled_width, 1.0)))
+        plane[:, : min(width, strip_width)] = strip[:, : min(width, strip_width)]
+        output.append((plane, (start / scaled_width, 0.0, end / scaled_width, 1.0)))
+        start = end
+    if len(output) < tiles:
+        # Honour the requested minimum with blank planes. A batch pads to its own
+        # maximum anyway, so these only matter for a page that is narrower than the
+        # minimum; they carry no object and are inert.
+        for _ in range(tiles - len(output)):
+            output.append(
+                (np.ones((height, width), dtype=np.float32), (0.0, 0.0, 0.0, 0.0))
+            )
     # The trim, expressed in the *original crop's* fractions. build_sample
     # composes this with the band rect so the boxes survive the trim.
     inset = (
@@ -307,19 +334,20 @@ def build_sample(
     views_dir: Path,
     size: tuple[int, int],
 ) -> dict[str, torch.Tensor] | None:
-    """Assemble one page: every tile of every view, plus its objects.
+    """Assemble one page: every plane of every view, plus its objects.
 
-    An object is assigned to the single tile that contains it. Tiles do not
-    overlap, so the assignment is unambiguous, and a view that is narrow enough
-    to fit in one plane still reports ``TILES_PER_VIEW`` planes with the content
-    in the first and white to the right, so the tensor shape is the same for
-    every page.
+    An object is assigned to the single plane that contains it. Planes within a
+    view do not overlap, so the assignment is unambiguous.
+
+    The plane count is per page, derived from each view's aspect ratio, so pages
+    do not all have the same shape. ``collate`` pads the plane axis to the batch
+    maximum with blank planes; no object references one, so the padding is inert.
     """
     planes: list[np.ndarray] = []
     rects: list[list[tuple[float, float, float, float]]] = []
     insets: dict[str, tuple[float, float, float, float]] = {}
     for name in VIEW_NAMES:
-        loaded = _load_view(views_dir, name, record["scoreId"], size, TILES_PER_VIEW[name])
+        loaded = _load_view(views_dir, name, record["scoreId"], size, MIN_PLANES_PER_VIEW[name])
         if loaded is None:
             return None
         tiles, inset = loaded
@@ -400,10 +428,28 @@ def collate(samples: Sequence[dict[str, torch.Tensor]], max_objects: int) -> dic
     object's index.
     """
     batch_size = len(samples)
-    tile_count = samples[0]["images"].shape[0]
     counts = [min(int(sample["object_type"].shape[0]), max_objects) for sample in samples]
 
-    images = torch.stack([sample["images"] for sample in samples])
+    # Pages have different plane counts, because the count follows each view's
+    # aspect ratio. Padded with blank planes up to the batch maximum, so a batch
+    # stacks. No object references a padded plane - an object is only ever
+    # assigned to a plane that contains it - so the padding cannot be sampled and
+    # cannot leak anything.
+    tile_count = max(int(sample["images"].shape[0]) for sample in samples)
+    if any(int(sample["images"].shape[0]) != tile_count for sample in samples):
+        padded = []
+        for sample in samples:
+            planes = sample["images"]
+            missing = tile_count - int(planes.shape[0])
+            if missing > 0:
+                planes = torch.cat(
+                    [planes, planes.new_ones((missing, 1, *planes.shape[2:]))], dim=0
+                )
+            padded.append(planes)
+        images = torch.stack(padded)
+    else:
+        images = torch.stack([sample["images"] for sample in samples])
+
     boxes = torch.zeros(batch_size, max_objects, 4)
     # Padded slots carry the "no object" class, one past the real vocabulary.
     # Scoring them as a real class would ask the model to classify nothing.

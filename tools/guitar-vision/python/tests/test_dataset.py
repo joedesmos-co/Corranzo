@@ -22,15 +22,18 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from guitar_vision.dataset import (  # noqa: E402
-    TILES_PER_VIEW,
+    MIN_PLANES_PER_VIEW,
     build_sample,
+    collate,
     load_dataset,
     page_box_to_view,
     plane_box,
     view_rect,
 )
 
-TILE_COUNT = sum(TILES_PER_VIEW.values())
+# The plane count is per page now, derived from each view's aspect ratio, so these
+# tests use the count the loader actually produced rather than a fixed one.
+
 
 
 def _corpus() -> tuple[Path, Path]:
@@ -109,11 +112,13 @@ def test_every_object_box_lands_on_ink(corpus: tuple[Path, Path]) -> None:
 def test_boxes_are_inside_the_plane_they_index(corpus: tuple[Path, Path]) -> None:
     records, views = corpus
     for sample in load_dataset(records, views, size=(256, 256), limit=3):
+        # The plane count is derived per page from each view's aspect ratio.
+        sample_planes = int(sample["images"].shape[0])
         boxes, tiles = sample["boxes"], sample["view"]
         assert float(boxes.min()) >= -0.001, "a box starts outside its plane"
         assert float(boxes.max()) <= 1.001, "a box ends outside its plane"
         assert int(tiles.min()) >= 0
-        assert int(tiles.max()) < TILE_COUNT
+        assert int(tiles.max()) < sample_planes
         # x1 must exceed x0. A zero-width box is a degenerate target that a
         # cross-entropy head still scores, so it would train without complaint.
         assert bool((boxes[..., 2] > boxes[..., 0]).all()), "zero-width box"
@@ -128,7 +133,7 @@ def test_every_tile_carries_content(corpus: tuple[Path, Path]) -> None:
     """
     records, views = corpus
     for sample in load_dataset(records, views, size=(256, 256), limit=3):
-        for tile in range(TILE_COUNT):
+        for tile in range(int(sample["images"].shape[0])):
             plane = sample["images"][tile, 0].numpy()
             assert (plane < 0.85).sum() > 20, f"tile {tile} is blank"
 
@@ -201,8 +206,6 @@ def test_collate_reports_truncation_instead_of_hiding_it(corpus: tuple[Path, Pat
     Dropping the overflow silently would shift every later object's index and
     make the loss meaningless without any error.
     """
-    from guitar_vision.dataset import collate
-
     records, views = corpus
     samples = load_dataset(records, views, size=(128, 128), limit=1)
     if not samples:
