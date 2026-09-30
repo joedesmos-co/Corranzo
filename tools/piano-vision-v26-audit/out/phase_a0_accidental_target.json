@@ -1,0 +1,90 @@
+{
+  "N": 6775,
+  "P_accidental_frozen_head": 0.68738,
+  "class_distribution": {
+    "2": 969,
+    "3": 4915,
+    "4": 891
+  },
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      127,
+      814,
+      28,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      232,
+      4415,
+      268,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      94,
+      682,
+      115,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "majority_baseline": 0.725461,
+  "semantics": {
+    "matched_objects": 1095,
+    "objects_with_printed_accidental": 0,
+    "rule_key_or_printed": 0.8748858447488584,
+    "rule_key_signature_only": 0.8748858447488584
+  },
+  "vocabulary": {
+    "0": "alter-3",
+    "1": "double-flat(-2)",
+    "2": "FLAT(-1)",
+    "3": "NATURAL(0)",
+    "4": "SHARP(+1)",
+    "5": "double-sharp(+2)",
+    "6": "alter+3"
+  }
+}

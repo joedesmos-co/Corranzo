@@ -1,0 +1,204 @@
+{
+  "N": 6775,
+  "by_engraving": {
+    "corranzo-benchmark": {
+      "mean": 0.6154,
+      "scores": 3
+    },
+    "musescore-feta": {
+      "mean": 0.7077,
+      "scores": 3
+    },
+    "musescore4-emmentaler": {
+      "mean": 0.7219,
+      "scores": 11
+    }
+  },
+  "closed_form": {
+    "accidental": 0.798967,
+    "key_rule_accidental_given_true_step": 0.827601,
+    "octave": 0.978155,
+    "step": 0.837048,
+    "step_and_octave": 0.837048,
+    "written_pitch": 0.73417
+  },
+  "macro_closed_form_written_pitch": 0.700606,
+  "per_score": {
+    "bc-bach-fugue-bwv846": {
+      "closed_form_accidental": 0.9269,
+      "closed_form_octave": 0.9936,
+      "closed_form_step": 0.9253,
+      "closed_form_written_pitch": 0.8617,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.9269,
+      "n": 629,
+      "step_and_octave": 0.9253
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "closed_form_accidental": 0.6558,
+      "closed_form_octave": 0.9612,
+      "closed_form_step": 0.7116,
+      "closed_form_written_pitch": 0.5876,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.7023,
+      "n": 645,
+      "step_and_octave": 0.7116
+    },
+    "bc-chopin-etude-op10-01": {
+      "closed_form_accidental": 0.8529,
+      "closed_form_octave": 0.98,
+      "closed_form_step": 0.8853,
+      "closed_form_written_pitch": 0.7756,
+      "engraving": "musescore-feta",
+      "key_rule_accidental_given_true_step": 0.8529,
+      "n": 401,
+      "step_and_octave": 0.8853
+    },
+    "bc-chopin-etude-op10-12": {
+      "closed_form_accidental": 0.7247,
+      "closed_form_octave": 0.9715,
+      "closed_form_step": 0.7955,
+      "closed_form_written_pitch": 0.6539,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.7699,
+      "n": 1017,
+      "step_and_octave": 0.7955
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "closed_form_accidental": 0.7646,
+      "closed_form_octave": 0.9696,
+      "closed_form_step": 0.8506,
+      "closed_form_written_pitch": 0.7241,
+      "engraving": "musescore-feta",
+      "key_rule_accidental_given_true_step": 0.7924,
+      "n": 790,
+      "step_and_octave": 0.8506
+    },
+    "bc-mozart-k153": {
+      "closed_form_accidental": 0.7551,
+      "closed_form_octave": 0.9809,
+      "closed_form_step": 0.801,
+      "closed_form_written_pitch": 0.7181,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.8036,
+      "n": 784,
+      "step_and_octave": 0.801
+    },
+    "omf-piano-dense-advanced-vector": {
+      "closed_form_accidental": 0.5373,
+      "closed_form_octave": 0.9701,
+      "closed_form_step": 0.6418,
+      "closed_form_written_pitch": 0.2836,
+      "engraving": "corranzo-benchmark",
+      "key_rule_accidental_given_true_step": 0.5373,
+      "n": 67,
+      "step_and_octave": 0.6418
+    },
+    "omf-piano-grand-voices-vector": {
+      "closed_form_accidental": 0.7708,
+      "closed_form_octave": 0.9792,
+      "closed_form_step": 0.6667,
+      "closed_form_written_pitch": 0.5625,
+      "engraving": "corranzo-benchmark",
+      "key_rule_accidental_given_true_step": 0.7708,
+      "n": 48,
+      "step_and_octave": 0.6667
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "closed_form_accidental": 1.0,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 1.0,
+      "closed_form_written_pitch": 1.0,
+      "engraving": "corranzo-benchmark",
+      "key_rule_accidental_given_true_step": 1.0,
+      "n": 34,
+      "step_and_octave": 1.0
+    },
+    "pl-bach-prelude-bwv846": {
+      "closed_form_accidental": 0.9272,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 0.977,
+      "closed_form_written_pitch": 0.9119,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.9272,
+      "n": 522,
+      "step_and_octave": 0.977
+    },
+    "pl-beethoven-fur-elise": {
+      "closed_form_accidental": 0.8862,
+      "closed_form_octave": 0.9935,
+      "closed_form_step": 0.8683,
+      "closed_form_written_pitch": 0.8228,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.8862,
+      "n": 615,
+      "step_and_octave": 0.8683
+    },
+    "pl-brahms-waltz-op39-3": {
+      "closed_form_accidental": 1.0,
+      "closed_form_octave": 0.9167,
+      "closed_form_step": 0.5,
+      "closed_form_written_pitch": 0.5,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 1.0,
+      "n": 12,
+      "step_and_octave": 0.5
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "closed_form_accidental": 0.7229,
+      "closed_form_octave": 0.9221,
+      "closed_form_step": 0.71,
+      "closed_form_written_pitch": 0.6234,
+      "engraving": "musescore-feta",
+      "key_rule_accidental_given_true_step": 0.8442,
+      "n": 231,
+      "step_and_octave": 0.71
+    },
+    "pl-handel-gavotte": {
+      "closed_form_accidental": 0.78,
+      "closed_form_octave": 0.98,
+      "closed_form_step": 0.82,
+      "closed_form_written_pitch": 0.71,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.83,
+      "n": 100,
+      "step_and_octave": 0.82
+    },
+    "pl-mozart-turkish-march": {
+      "closed_form_accidental": 0.8478,
+      "closed_form_octave": 0.9791,
+      "closed_form_step": 0.8284,
+      "closed_form_written_pitch": 0.7328,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.8851,
+      "n": 670,
+      "step_and_octave": 0.8284
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "closed_form_accidental": 0.6667,
+      "closed_form_octave": 0.9697,
+      "closed_form_step": 0.9091,
+      "closed_form_written_pitch": 0.6061,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.6667,
+      "n": 33,
+      "step_and_octave": 0.9091
+    },
+    "std-demo-minuet-in-g": {
+      "closed_form_accidental": 0.8418,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 0.9944,
+      "closed_form_written_pitch": 0.8362,
+      "engraving": "musescore4-emmentaler",
+      "key_rule_accidental_given_true_step": 0.8418,
+      "n": 177,
+      "step_and_octave": 0.9944
+    }
+  },
+  "trained_readout_reference": {
+    "accidental": 0.7629,
+    "octave": 0.9596,
+    "step": 0.7591,
+    "written_pitch": 0.6494
+  }
+}
