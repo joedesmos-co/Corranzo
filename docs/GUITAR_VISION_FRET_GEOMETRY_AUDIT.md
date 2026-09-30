@@ -167,3 +167,47 @@ Neither candidate is proven. Both remaining stages (`band -> crop` and
 `crop -> tile`) need the same treatment: derive the equation, then check it against
 independently located glyphs over a fixture set large enough to separate a
 consistent bias from a real discontinuity. Nothing has been changed.
+
+---
+
+## H14/H15 — tile stage derived; the displacement claim is withdrawn again
+
+Production equations, from the code:
+
+    crop -> array   array = crop * s,  s = plane_h / crop_h            (uniform)
+    array -> strip  strip = array[:, start : start + span + overlap]
+                    span = array_h = plane_h;  overlap = 0.3 * span
+                    so strip is 1.3 : 1
+    strip -> plane  plane = strip.resize((plane_w, plane_h))
+                    x by plane_w/(span+overlap) = 1/1.3 = 0.769,  y by 1.0
+                    => anisotropic: x compressed 0.769 against y
+    rect            (start/scaled_w, 0, end/scaled_w, 1)
+
+**The rect does not over-claim.** `plane[:, :min(w, strip_w)] = strip[...]`
+fills the plane with the *whole* strip, so the emitted x-domain is exactly the
+domain the plane shows. A point at array x lands at
+`plane_x = (x - start) * 0.769`, and `plane_box` computes
+`(x - start)/(span+overlap) * plane_w` - the same number.
+
+**So the "boxes land ~30% right" claim in 4919d63 is wrong, and is withdrawn.**
+Position is consistent through the tile stage. The strip defect is a *shape*
+distortion: a digit is rendered 23% narrower relative to its height. That is a
+real defect and it is the only one derived so far, but it displaces nothing, so
+it does not explain a box that fails to contain its digit.
+
+Neither the reframe nor the tile stage displaces anything. The remaining
+transforms (trim/inset composition, view_rect) are algebraically consistent on
+inspection. **The first bad stage has still not been located.**
+
+## Blocker on the fixture suite
+
+Glyph isolation on a TAB crop cannot be done by column projection: the staff lines
+run the full width of the crop, so `ink.any(0)` is true for essentially every
+column and the projection returns a single 24x317 blob spanning the whole page.
+Every fixture was rejected as ambiguous (1162/1162).
+
+This is the same contamination that invalidated four earlier raster measurements,
+and it is not incidental — it is a property of engraved music. Resolving it needs
+the staff lines blanked at their exact SVG positions before any blob search,
+which is independent evidence and is available. The fixture tool must do that;
+nothing else about the method needs to change.
