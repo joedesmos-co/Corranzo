@@ -117,3 +117,53 @@ and all three variants are untouched.
   baseline check it gets right.
 - `tools/guitar-vision/measure_fret_ink.py` — the raster measurement, kept as the
   *refutation* of the earlier claim. Its outputs should not be used to set boxes.
+
+---
+
+## H11 algebraic audit — the reframe is NOT the bad transform
+
+Deriving the production reframe symbolically rather than by probing it:
+
+    frame   = (band.boxUnits / contentUnits)            # band as page-normalised
+    in_view = (page_box - frame.origin) / frame.span    # what page_box_to_view does
+
+Substituting `page_box = boxUnits / contentUnits`, the content-unit factors
+cancel:
+
+    in_view = (boxUnits - band.boxUnits) / band_spanUnits
+
+which is **algebraically identical** to mapping `boxUnits` directly against
+`band.boxUnits` — the "candidate correct transform". So A and C are the same
+function. The earlier fixture result (A: 3/5, C: 0/5) was an artifact of my probe,
+not evidence against the reframe, and **I withdraw the claim that the reframe is
+the suspect stage.** It was the best-supported statement I had at the time and it
+did not survive the algebra.
+
+## The tile stage does have a real defect
+
+In `_load_view`, a strip is `span + overlap` wide and `span` tall, with
+`span = scaled_height = plane height`. The plane is filled by resizing that strip
+to `(width, height)`:
+
+    strip is 1.3 * height wide, height tall  ->  resized to height x height
+
+Two consequences, both derived from the code and not yet measured against glyphs:
+
+1. **Anisotropy.** x is compressed by ~1.3x relative to y. This is the same class
+   of defect as the original squash, at a third of the magnitude.
+2. **The rect over-claims the strip.** The emitted rect is
+   `(start/scaled_width, ..., end/scaled_width)` where `end = start + span +
+   overlap`, but the plane shows only `width / (span + overlap)` = 1/1.3 of that
+   span. Every box in the tile is therefore placed ~30% too far right of where the
+   plane actually holds its content.
+
+Defect 2 alone puts every TAB box systematically right of its digit, which would
+degrade alignment rather than destroy it — so on its own it does not obviously
+explain a 97% miss, and I am not claiming it does.
+
+## Status
+
+Neither candidate is proven. Both remaining stages (`band -> crop` and
+`crop -> tile`) need the same treatment: derive the equation, then check it against
+independently located glyphs over a fixture set large enough to separate a
+consistent bias from a real discontinuity. Nothing has been changed.
