@@ -1,70 +1,88 @@
 {
   "assembler_version": "real-pdf-adaptation/1.0",
-  "contract_version": "real-pdf-corpus/2.0",
-  "corpus_digest": "c7897bb2217a2999a6af5bfba5c6ac2655065bb5276b75ecb492d535642d2f9b",
-  "corpus_root": "/Users/ryland/Documents/scoreflow-piano-v26/out/realpdf_d2",
+  "changes_from_2_0": [
+    "band-local staff gap divisor for all band-relative quantities",
+    "analytic band offset invariant replaces the 1.35x cross-band guard (MAX_ANALYTIC_OFFSET_ERROR = 0.10, label-free)",
+    "std-hungarian-dance-no5 refused: source_mismatch:pdf_key_differs_from_paired_musicxml"
+  ],
+  "contract_version": "real-pdf-corpus/2.1",
+  "corpus_digest": "4b18fc89f7732578389081a42b7bb9a75f69ef46a9d582379347cbd025696ba3",
+  "corpus_root": "/Users/ryland/Documents/scoreflow-piano-v26/out/realpdf_21",
+  "frozen_baseline_on_this_corpus": {
+    "corpus_2_0_for_comparison": {
+      "macro": 0.5264,
+      "n_labels": 7625,
+      "weighted": 0.5726
+    },
+    "macro_written_pitch": 0.5349,
+    "midi": 0.6075,
+    "n_labels": 6775,
+    "note": "fresh pitch head on the unchanged frozen V2.5 object embedding, leave-one-score-out, corpus/2.1, 17 scores",
+    "octave": 0.9619,
+    "weighted_written_pitch": 0.6056,
+    "written_step": 0.7537
+  },
   "generated_utc": null,
-  "implementation_commit": "da7b7814432eb7c7610658c5a6532a4de0f9138a",
+  "implementation_commit": "09d181a556e0c7c8450a8bf08dd48ce7432e2c24",
   "implementation_sha256": {
     "server/piano_vision_service/omr_staff_geometry.py": "34f83a072584c139304a4434ce5ea9ed6470974eaa2ecd6108c9fbd0301e27b1",
     "server/piano_vision_service/v25_adapter.py": "14b76bf06a4513d31933123a8e4c1c77b3af7575ac052f426ef6894d788429aa",
     "server/piano_vision_service/v25_canonical_features.py": "c27f8011a1e4c89efea34b4e8f474330b81ddd28d0de17e1b9a39d85a813f3ef",
-    "tools/real-pdf-adaptation/align_objects.py": "9d975b26ee699e167848fc7c6edfe2a5659dabc2f71857d3208a6d397586d698",
-    "tools/real-pdf-adaptation/build_corpus.py": "926c50e7d06d76c94592241a7d60370f4759262d7723f8499f7ebf0059cdf3b8",
+    "tools/real-pdf-adaptation/align_objects.py": "5f1f32594b0a97e41f8d138ec55f04311885ed49f2399c03b8efdd8117cb6f6e",
+    "tools/real-pdf-adaptation/build_corpus.py": "63b27dca130a5bc4b940182bc937bd1a6092b2ce87a7081bb85a8e25c1dd70aa",
     "tools/real-pdf-adaptation/evaluate_realpdf.py": "3a27af17737572d9ff1392870e20ab1970f8b5d60aa1c376698104bc487bbeb7",
     "tools/real-pdf-adaptation/realpdf_data.py": "cc06d39a15049dc4968bb857331c7d1c902b17220aaa692147a3ce6e4b695a3f",
-    "tools/real-pdf-adaptation/staff_geometry_verify.py": "95d479f1b92b67d9c6129492417df7c17f76db26d0c4ecac6fddff4a603f4f57"
+    "tools/real-pdf-adaptation/staff_geometry_verify.py": "92a5ee2032b05e68627748f8d894c07fb798fad83a5ecc17862c016a8a413b50"
   },
   "leakage": {
-    "distinct_page_hashes": 44,
+    "distinct_page_hashes": 40,
     "grouping": "by score; a score belongs to exactly one split",
     "page_hash_examples": [],
     "page_hashes_shared_across_scores": 0,
     "pass": true,
     "split_disjointness": "asserted by realpdf_data.SPLIT_GUARD and re-checked by make_manifests.py"
   },
-  "manifest_digest": "05ebf53ad503e11947347231546b54b1fe4bba921881759bc7c92d6d616440a9",
+  "manifest_digest": "6275fefd7a18f2ac985149255bd5543141083370b339cfd93cd58ec8a48ee8f1",
   "refusals": {
-    "dependent_labels_dropped": 39,
+    "dependent_labels_dropped": 25,
     "group_rejections": {
-      "event_coverage_too_low": 80,
-      "no_xml_measure_partner": 230,
-      "residual_std_too_large": 66,
-      "too_few_accepted_matches": 142,
-      "too_few_objects_or_events": 188,
-      "unreliable_staff_lines": 249
+      "event_coverage_too_low": 68,
+      "no_xml_measure_partner": 215,
+      "residual_std_too_large": 93,
+      "too_few_accepted_matches": 120,
+      "too_few_objects_or_events": 165,
+      "unreliable_staff_lines": 215
     },
     "label_gate_reasons": {
-      "object_outside_ledger_envelope": 17,
-      "staff_step_outside_ledger_envelope": 1
+      "object_outside_ledger_envelope": 11
     },
-    "label_gate_total": 57
+    "label_gate_total": 36
   },
   "render_dpi": 150,
   "residual_diatonic_steps": {
     "distribution": {
-      "-1": 791,
-      "0": 6135,
-      "1": 699
+      "-1": 435,
+      "0": 5671,
+      "1": 669
     },
     "frac_abs_ge_2": 0.0,
     "frac_within_1": 1.0,
-    "frac_zero": 0.80459,
-    "n": 7625,
+    "frac_zero": 0.837048,
+    "n": 6775,
     "note": "Full diatonic residual of the detected geometry against the MusicXML written pitch. |r|>=2 would indicate a staff-role or clef-classification failure; it is 0."
   },
   "scores": [
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0238095238095228,
+          "delta": 1.0000000000000024,
           "measures": 11,
-          "spread": 1.3766765505351941e-14
+          "spread": 1.2323475573339238e-14
         },
         "upper": {
-          "delta": -0.976190476190477,
+          "delta": -0.9999999999999977,
           "measures": 11,
-          "spread": 0.011904761904766081
+          "spread": 2.3314683517128287e-15
         }
       },
       "engraving": "musescore4-emmentaler",
@@ -74,8 +92,8 @@
       },
       "label_gate_refusals": {},
       "musicxml": "benchmarks/cache/bach-fugue-bwv846/score.musicxml",
-      "objects_labelled_duration": 666,
-      "objects_labelled_pitch": 638,
+      "objects_labelled_duration": 657,
+      "objects_labelled_pitch": 629,
       "objects_total": 836,
       "page_sha256": [
         "50f0ba9900350f92a49bf32cbeca5bd6f1feba4bb6b92f745d2aa9cecf679418",
@@ -83,7 +101,7 @@
       ],
       "records": 27,
       "score_id": "bc-bach-fugue-bwv846",
-      "shard_sha256": "2ab3871220b65b479cb3c436397576998ce0609b64c8812b96c11f50394c8344",
+      "shard_sha256": "dd7469584ad2bfd612e86af0174f61fc25b8d998441b0b387c96f65919d322a9",
       "source_pdf": "benchmarks/cache/bach-fugue-bwv846/score.pdf",
       "source_pdf_sha256": "bb1e08c6768256be507af65da04446af143b7033a7a067c939f2d63b779d218c",
       "split": "adaptation",
@@ -92,28 +110,28 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0238095238095206,
+          "delta": 1.0000000000000024,
           "measures": 25,
-          "spread": 9.103828801926284e-15
+          "spread": 1.3988810110276972e-14
         },
         "upper": {
-          "delta": -0.9761904761904864,
+          "delta": -1.0,
           "measures": 25,
-          "spread": 0.0
+          "spread": 4.773959005888173e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 1,
+        "event_coverage_too_low": 3,
         "no_xml_measure_partner": 2,
-        "residual_std_too_large": 3,
-        "too_few_accepted_matches": 23,
-        "too_few_objects_or_events": 14
+        "residual_std_too_large": 2,
+        "too_few_accepted_matches": 30,
+        "too_few_objects_or_events": 15
       },
       "label_gate_refusals": {},
       "musicxml": "benchmarks/cache/beethoven-sonata-op2-m1/score.musicxml",
-      "objects_labelled_duration": 772,
-      "objects_labelled_pitch": 694,
+      "objects_labelled_duration": 714,
+      "objects_labelled_pitch": 645,
       "objects_total": 1278,
       "page_sha256": [
         "2f285122ee548694e9468137e2dac1044d398c4e5c855367f4e9319f68d13a24",
@@ -121,9 +139,9 @@
         "67bd6dd674fda02d61aaf855afd7f418012098be6ff9503c518ec680cb1088f7",
         "0b72e7a1c5e05a535bf33c469cec52197d95ebb86974354c92cc9bb727a38db6"
       ],
-      "records": 97,
+      "records": 95,
       "score_id": "bc-beethoven-sonata-op2-m1",
-      "shard_sha256": "88143ea53afe9cefb8dcf2fb32f92f6126201ee148896c4467ae849eabb38e8f",
+      "shard_sha256": "1f6e79bd760ae88e832dbc383962ce35f1cefacee8b2d6589c090b36c1032083",
       "source_pdf": "benchmarks/cache/beethoven-sonata-op2-m1/score.pdf",
       "source_pdf_sha256": "c27b92fce9408c552df05e7cdd6bbcd925ce05350d91b43c36442ad171684df4",
       "split": "heldout-test",
@@ -132,29 +150,29 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0238095238095137,
+          "delta": 1.0000000000000093,
           "measures": 13,
-          "spread": 0.0
+          "spread": 7.105427357601002e-15
         },
         "upper": {
-          "delta": -0.9761904761904864,
+          "delta": -0.9999999999999982,
           "measures": 13,
-          "spread": 1.1546319456101628e-14
+          "spread": 1.63202784619898e-14
         }
       },
       "engraving": "musescore-feta",
       "group_rejections": {
-        "event_coverage_too_low": 9,
+        "event_coverage_too_low": 12,
         "no_xml_measure_partner": 11,
-        "residual_std_too_large": 3,
-        "too_few_accepted_matches": 18,
+        "residual_std_too_large": 7,
+        "too_few_accepted_matches": 16,
         "too_few_objects_or_events": 17,
         "unreliable_staff_lines": 43
       },
       "label_gate_refusals": {},
       "musicxml": "benchmarks/cache/chopin-etude-op10-01/score.musicxml",
-      "objects_labelled_duration": 451,
-      "objects_labelled_pitch": 435,
+      "objects_labelled_duration": 417,
+      "objects_labelled_pitch": 401,
       "objects_total": 816,
       "page_sha256": [
         "1bc97e3babe7272ec2a5d781c3dcee4357645376339dae672aaa89bbf1180a7c",
@@ -162,9 +180,9 @@
         "73b4b2c2448604196b17b6a54cf16c13ae069479d248b1000a43e6aac637a669",
         "eff975ec520777986c62cb221a0732ae27e8c8e9d2be919c8e9ef3b0f91c312f"
       ],
-      "records": 41,
+      "records": 38,
       "score_id": "bc-chopin-etude-op10-01",
-      "shard_sha256": "1170b17a7bf4076bb7eb908b92e70fce4513f3999ebcbb83f1ae733b5650317e",
+      "shard_sha256": "fd60120eb2b0ec968a8d8d2f0c91aa086282bf174e248f37a1b6164d03c10fb0",
       "source_pdf": "benchmarks/cache/chopin-etude-op10-01/score.pdf",
       "source_pdf_sha256": "6f8ea4b25f30dc071d79538548b201a6e0470e683144ce21da35a4b4886573b2",
       "split": "heldout-test",
@@ -173,27 +191,27 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0238095238095322,
+          "delta": 1.0000000000000095,
           "measures": 15,
-          "spread": 1.5987211554602254e-14
+          "spread": 1.1546319456101628e-14
         },
         "upper": {
-          "delta": -0.9999999999999907,
+          "delta": -1.0000000000000069,
           "measures": 15,
-          "spread": 0.023809523809513622
+          "spread": 9.325873406851315e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 3,
-        "residual_std_too_large": 5,
+        "event_coverage_too_low": 5,
+        "residual_std_too_large": 3,
         "too_few_accepted_matches": 1,
-        "too_few_objects_or_events": 15
+        "too_few_objects_or_events": 11
       },
       "label_gate_refusals": {},
       "musicxml": "benchmarks/cache/chopin-etude-op10-12/score.musicxml",
-      "objects_labelled_duration": 984,
-      "objects_labelled_pitch": 959,
+      "objects_labelled_duration": 1044,
+      "objects_labelled_pitch": 1017,
       "objects_total": 1486,
       "page_sha256": [
         "66a79a61402cb070ee357b0c96b6179cfbc26964fea403d28ff90b2920747b8c",
@@ -201,9 +219,9 @@
         "ece51d8d9c087382c7c754a9108678bba59104d5d7289a2bca4cc592ef60bd5a",
         "465af4b50c7a565a9544e331d6c554b9cba01b7f0a5ec04c9c118d59bfa57e83"
       ],
-      "records": 49,
+      "records": 52,
       "score_id": "bc-chopin-etude-op10-12",
-      "shard_sha256": "e373a1bec6d4db76f7b9a984d8afa35d28e9197c9dae6703f67c4fa4d78a8986",
+      "shard_sha256": "26a6965f3fd477e391262c7aff9c6401e218908e6043f9e36fc1a337d2b3ad23",
       "source_pdf": "benchmarks/cache/chopin-etude-op10-12/score.pdf",
       "source_pdf_sha256": "a98f9062f12248db9479115d954e4847230d9bfaefd30d9e7b037c60b25f0ae7",
       "split": "adaptation",
@@ -212,14 +230,14 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0263157894736832,
+          "delta": 1.0,
           "measures": 9,
-          "spread": 0.02631578947368829
+          "spread": 7.882583474838611e-15
         },
         "upper": {
           "delta": -1.0,
           "measures": 9,
-          "spread": 2.55351295663786e-15
+          "spread": 3.9968028886505635e-15
         }
       },
       "engraving": "musescore-feta",
@@ -234,8 +252,8 @@
         "object_outside_ledger_envelope": 5
       },
       "musicxml": "benchmarks/cache/chopin-nocturne-op9-n2/score.musicxml",
-      "objects_labelled_duration": 790,
-      "objects_labelled_pitch": 789,
+      "objects_labelled_duration": 791,
+      "objects_labelled_pitch": 790,
       "objects_total": 1211,
       "page_sha256": [
         "d8bc75b0b16f78c601c68ab7c8d6e233b2fa1bd6db2f017e516acd70121fa319",
@@ -244,7 +262,7 @@
       ],
       "records": 33,
       "score_id": "bc-chopin-nocturne-op9-n2",
-      "shard_sha256": "51738a1cb49e7794eb41449e3cd04a9aff80c4f931925c6e077f73351bfc5912",
+      "shard_sha256": "01924a509e76f37fbef9d75e5774486cc8fb57b3ad0fd9120f8ff0edff0bccbb",
       "source_pdf": "benchmarks/cache/chopin-nocturne-op9-n2/score.pdf",
       "source_pdf_sha256": "049a434aa4c5b5c7b837001cbc02245c220c429fed27728df98b0860c05f6438",
       "split": "adaptation",
@@ -258,16 +276,16 @@
           "spread": null
         },
         "upper": {
-          "delta": -0.9761904761904864,
+          "delta": -1.0000000000000029,
           "measures": 17,
-          "spread": 0.023809523809521616
+          "spread": 4.440892098500626e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
         "event_coverage_too_low": 6,
         "no_xml_measure_partner": 3,
-        "residual_std_too_large": 2,
+        "residual_std_too_large": 3,
         "too_few_accepted_matches": 1,
         "too_few_objects_or_events": 8,
         "unreliable_staff_lines": 15
@@ -277,8 +295,8 @@
         "object_outside_ledger_envelope": 6
       },
       "musicxml": "benchmarks/cache/mozart-k153/score.musicxml",
-      "objects_labelled_duration": 813,
-      "objects_labelled_pitch": 782,
+      "objects_labelled_duration": 816,
+      "objects_labelled_pitch": 784,
       "objects_total": 1117,
       "page_sha256": [
         "b3d39f2b970a3745236fda48e7fb24d0649e8c242f7cbacafbad205d951669d4",
@@ -286,9 +304,9 @@
         "c450880f8ac6e6783b69d3a0044f13b9a070d98bdfd11f168ef9dc6be97d6fa9",
         "1078c9ef75eec8a7f15c6fd82e0057cd0c4c7031dfad6d3edc20abaa217de099"
       ],
-      "records": 61,
+      "records": 60,
       "score_id": "bc-mozart-k153",
-      "shard_sha256": "d4edc7f04782d3d5e8d379ebaea8755db40290c92b0e508a50202d521ec5bb41",
+      "shard_sha256": "93a87cf7857d484c7740f81154fe57ad83c8f30008ace0689f25b33919acf53c",
       "source_pdf": "benchmarks/cache/mozart-k153/score.pdf",
       "source_pdf_sha256": "1abb54fdd4f0e6361573ce8a589331e2e8fbdfe00e8962d6ac69e70d7fe54f13",
       "split": "validation",
@@ -302,9 +320,9 @@
           "spread": null
         },
         "upper": {
-          "delta": -0.9705882352941227,
+          "delta": -0.9999999999999987,
           "measures": 41,
-          "spread": 0.044563279857395055
+          "spread": 3.3306690738754696e-15
         }
       },
       "engraving": "corranzo-benchmark",
@@ -323,7 +341,7 @@
       ],
       "records": 7,
       "score_id": "omf-piano-dense-advanced-vector",
-      "shard_sha256": "d4e609de0c4aaf26437e5f41e327fe8a6c1fcfd04fda703876d7588b44e84af2",
+      "shard_sha256": "52745f85e56e4862640841e1921299f1ad7a327a0a638f3e274ffb9e37ebabe9",
       "source_pdf": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.pdf",
       "source_pdf_sha256": "7f2390081104a4f328ba16ae39b86c301f2df526553a26169cd6888d19d72705",
       "split": "heldout-test",
@@ -332,14 +350,14 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0367647058823466,
+          "delta": 0.9999999999999992,
           "measures": 8,
-          "spread": 0.01470588235293846
+          "spread": 9.547918011776346e-15
         },
         "upper": {
-          "delta": -0.9632352941176547,
+          "delta": -1.0000000000000009,
           "measures": 8,
-          "spread": 0.014705882352936017
+          "spread": 1.9984014443252818e-15
         }
       },
       "engraving": "corranzo-benchmark",
@@ -356,7 +374,7 @@
       ],
       "records": 8,
       "score_id": "omf-piano-grand-voices-vector",
-      "shard_sha256": "de077808ddfa6fac48634b489abeee4a79c2dfc1a0da733c393ab2cfca5036da",
+      "shard_sha256": "d08f55f4fad3472f7790d001b013499a972b73fa00bdeaf6452d47f9ccffbc8d",
       "source_pdf": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.pdf",
       "source_pdf_sha256": "d56380dfdb2820c0a26bbe1716276a7f6e15026877f266a6826ea350c6f6ecb9",
       "split": "heldout-test",
@@ -370,9 +388,9 @@
           "spread": null
         },
         "upper": {
-          "delta": -0.9705882352941175,
+          "delta": -0.9999999999999972,
           "measures": 13,
-          "spread": 0.029411764705883803
+          "spread": 4.107825191113079e-15
         }
       },
       "engraving": "corranzo-benchmark",
@@ -392,7 +410,7 @@
       ],
       "records": 5,
       "score_id": "omf-piano-rhythm-tuplets-vector",
-      "shard_sha256": "69a091f19c745745c450ff2f08ce7ec544066d025ded9055c9adfbf6d61ca1be",
+      "shard_sha256": "78e21919bcc8b56211a01a7a8ed9ef180655557faee43cd3521094857fcafc75",
       "source_pdf": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.pdf",
       "source_pdf_sha256": "36c4cf23305903f9114161ec930b5a1775c2dffe16340ea46044ea2339a78635",
       "split": "validation",
@@ -401,14 +419,14 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0238095238095228,
+          "delta": 0.9999999999999982,
           "measures": 17,
-          "spread": 0.02380952380952306
+          "spread": 1.1657341758564144e-14
         },
         "upper": {
-          "delta": -0.9523809523809541,
+          "delta": -0.9999999999999988,
           "measures": 17,
-          "spread": 0.023809523809513733
+          "spread": 8.992806499463768e-15
         }
       },
       "engraving": "musescore4-emmentaler",
@@ -429,7 +447,7 @@
       ],
       "records": 33,
       "score_id": "pl-bach-prelude-bwv846",
-      "shard_sha256": "a3ff9883e8e00b087f0767c5b5156b765e42525ea27067d3e2b576bbe0bb902c",
+      "shard_sha256": "722be532f6afc55949d6592b11a6241f87e9f3e4de8ebcb9a91426fe8dd88ea1",
       "source_pdf": "public/fixtures/practice-library/piano-bach-prelude-bwv846/piano-bach-prelude-bwv846.pdf",
       "source_pdf_sha256": "b1c5be9fb63954df9c1a3e7b651ae930c4e5e332a5ab3e14b197379cfa04c35a",
       "split": "adaptation",
@@ -438,36 +456,36 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 0.9999999999999907,
+          "delta": 1.0,
           "measures": 34,
-          "spread": 0.07380952380951178
+          "spread": 7.105427357601002e-15
         },
         "upper": {
-          "delta": -0.9761904761904678,
+          "delta": -1.000000000000001,
           "measures": 34,
-          "spread": 0.09761904761902784
+          "spread": 9.325873406851315e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 2,
-        "residual_std_too_large": 5,
-        "too_few_accepted_matches": 24,
-        "too_few_objects_or_events": 15
+        "event_coverage_too_low": 3,
+        "residual_std_too_large": 7,
+        "too_few_accepted_matches": 15,
+        "too_few_objects_or_events": 13
       },
       "label_gate_refusals": {},
       "musicxml": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.musicxml",
-      "objects_labelled_duration": 676,
-      "objects_labelled_pitch": 574,
+      "objects_labelled_duration": 725,
+      "objects_labelled_pitch": 615,
       "objects_total": 1107,
       "page_sha256": [
         "35f07182867f08a2422f4b5211c5ba115cc3bd356f0630b41fc33ab6d43feb5a",
         "179316c27f9f4c2a83a2f81af1db473aa0e000fd91a66f8591ac8f74de4303b1",
         "157e33c473d4317e9fa8c1a571ab1594f60ef654239c69c4d48035be2343b1d2"
       ],
-      "records": 94,
+      "records": 96,
       "score_id": "pl-beethoven-fur-elise",
-      "shard_sha256": "e9121e9fbe4b9c8358136913d70e90e8678cd0c233a3b9f34f7bed0825b1effe",
+      "shard_sha256": "1a7cb25d4f1bcb8977514752ab8ecc57276d94b51745be3dda40634811859eb6",
       "source_pdf": "public/fixtures/practice-library/piano-beethoven-fur-elise/piano-beethoven-fur-elise.pdf",
       "source_pdf_sha256": "0641395b4e97811bb89751352719bb9994cacd4f13da7b9429fe65716dfdc328",
       "split": "diagnostic",
@@ -481,29 +499,30 @@
           "spread": null
         },
         "upper": {
-          "delta": -1.0000000000000022,
+          "delta": -0.9999999999999988,
           "measures": 18,
-          "spread": 0.037499999999995204
+          "spread": 4.218847493575595e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 2,
+        "event_coverage_too_low": 1,
         "no_xml_measure_partner": 7,
-        "too_few_accepted_matches": 2,
+        "too_few_accepted_matches": 3,
+        "too_few_objects_or_events": 1,
         "unreliable_staff_lines": 11
       },
       "label_gate_refusals": {},
       "musicxml": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.musicxml",
-      "objects_labelled_duration": 17,
-      "objects_labelled_pitch": 15,
+      "objects_labelled_duration": 14,
+      "objects_labelled_pitch": 12,
       "objects_total": 147,
       "page_sha256": [
         "c3f15790e44bfe6d1dca84f6f51d5f1536a5381b1fdc5dc76a051edc2bd81c53"
       ],
-      "records": 7,
+      "records": 6,
       "score_id": "pl-brahms-waltz-op39-3",
-      "shard_sha256": "f84c43e3274126e80ef1508e4bb7ee32b3d403dd044a75f6a28266037f8e9b27",
+      "shard_sha256": "cc5ea880b02e7e08eef1a017354d6cdc4722a19c5b57ad613ed81cc8f3f1c90c",
       "source_pdf": "public/fixtures/practice-library/piano-brahms-waltz-op39-3/piano-brahms-waltz-op39-3.pdf",
       "source_pdf_sha256": "eec6814a25568e86ed4922651dd7fdc90fc125bdc3a24b2c8b3561e7b33f42e0",
       "split": "validation",
@@ -517,33 +536,33 @@
           "spread": null
         },
         "upper": {
-          "delta": -1.0,
+          "delta": -0.9999999999999977,
           "measures": 95,
-          "spread": 0.05000000000000038
+          "spread": 2.3314683517128287e-15
         }
       },
       "engraving": "musescore-feta",
       "group_rejections": {
-        "event_coverage_too_low": 11,
-        "no_xml_measure_partner": 105,
-        "residual_std_too_large": 11,
-        "too_few_accepted_matches": 28,
-        "too_few_objects_or_events": 23,
-        "unreliable_staff_lines": 101
+        "event_coverage_too_low": 6,
+        "no_xml_measure_partner": 104,
+        "residual_std_too_large": 16,
+        "too_few_accepted_matches": 26,
+        "too_few_objects_or_events": 22,
+        "unreliable_staff_lines": 102
       },
       "label_gate_refusals": {},
       "musicxml": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.musicxml",
-      "objects_labelled_duration": 248,
-      "objects_labelled_pitch": 224,
+      "objects_labelled_duration": 256,
+      "objects_labelled_pitch": 231,
       "objects_total": 993,
       "page_sha256": [
         "668026f76d6147925fff4f18660e494670cc7738f1174dca3b2307a0530e71b5",
         "6458afe7d37c7daeb7274332059e2c3bad083cbae1da5308b349b24afa5b4e80",
         "9c2d6d5a646fada5aee36a3500b4247381cac853e39d6fe02818b4969cd3739d"
       ],
-      "records": 59,
+      "records": 61,
       "score_id": "pl-chopin-mazurka-op6-1",
-      "shard_sha256": "372dfd81e2bd34a6d69f64f68deb5b8446afc872e34da2924a965209112033ce",
+      "shard_sha256": "c937e6086738060b218385e672add4b533a5a7bbfd95d1b08ad6ee4c7649aeda",
       "source_pdf": "public/fixtures/practice-library/piano-chopin-mazurka-op6-1/piano-chopin-mazurka-op6-1.pdf",
       "source_pdf_sha256": "27bb16a99e38f570d15d34579f68f926b12c406eb21e6c23743dbda6275eda9c",
       "split": "adaptation",
@@ -552,35 +571,34 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 0.9999999999999907,
+          "delta": 0.9999999999999964,
           "measures": 22,
-          "spread": 0.023809523809529942
+          "spread": 2.3314683517128287e-15
         },
         "upper": {
-          "delta": -0.9880952380952455,
+          "delta": -1.0000000000000069,
           "measures": 22,
-          "spread": 0.023809523809521838
+          "spread": 7.771561172376096e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 1,
         "no_xml_measure_partner": 2,
-        "residual_std_too_large": 6,
+        "residual_std_too_large": 9,
         "too_few_accepted_matches": 3,
         "too_few_objects_or_events": 2
       },
       "label_gate_refusals": {},
       "musicxml": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.musicxml",
-      "objects_labelled_duration": 118,
-      "objects_labelled_pitch": 117,
+      "objects_labelled_duration": 101,
+      "objects_labelled_pitch": 100,
       "objects_total": 245,
       "page_sha256": [
         "8dfb34e23bfdeafd05315d6a9cbb3582428449e2fe6564986e7977c9bee1071a"
       ],
-      "records": 18,
+      "records": 16,
       "score_id": "pl-handel-gavotte",
-      "shard_sha256": "19fa9724bfe0fb33a3dbe62574522ead5406af42e150417f3adf39afbc72938b",
+      "shard_sha256": "e3ea8b81816d3ed9be2336e02e17e9cf6277b33914dc07499bd119263e8cf9df",
       "source_pdf": "public/fixtures/practice-library/piano-handel-gavotte/piano-handel-gavotte.pdf",
       "source_pdf_sha256": "5165a9766293aac3671c46df5cd22178e0575ffca108b0c197a510896163f1e3",
       "split": "adaptation",
@@ -589,27 +607,27 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 0.950000000000002,
+          "delta": 1.0000000000000093,
           "measures": 31,
-          "spread": 0.07380952380952088
+          "spread": 9.547918011776346e-15
         },
         "upper": {
-          "delta": -1.049999999999998,
+          "delta": -0.9999999999999977,
           "measures": 31,
-          "spread": 0.09761904761903928
+          "spread": 8.659739592076221e-15
         }
       },
       "engraving": "musescore4-emmentaler",
       "group_rejections": {
-        "event_coverage_too_low": 29,
-        "residual_std_too_large": 22,
-        "too_few_accepted_matches": 20,
-        "too_few_objects_or_events": 42
+        "event_coverage_too_low": 27,
+        "residual_std_too_large": 37,
+        "too_few_accepted_matches": 15,
+        "too_few_objects_or_events": 40
       },
       "label_gate_refusals": {},
       "musicxml": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.musicxml",
-      "objects_labelled_duration": 696,
-      "objects_labelled_pitch": 687,
+      "objects_labelled_duration": 679,
+      "objects_labelled_pitch": 670,
       "objects_total": 1569,
       "page_sha256": [
         "f77756a317f3b2e0287606c291918cb33a6cd28dad5593a518907e69e8bc3ead",
@@ -617,9 +635,9 @@
         "55e38a6eb7fe02a5f79f2705721767867060a29ce51c69d2a4c8d20b86ee5f2b",
         "913c81e5f215c46742b26ab0e6766b00cd9d295b6f9415027472f753eebd0a22"
       ],
-      "records": 105,
+      "records": 102,
       "score_id": "pl-mozart-turkish-march",
-      "shard_sha256": "9cb8847624a4e42d23508e52c8580c4ab7da3a9366e1824bffd65158bc486f71",
+      "shard_sha256": "4d9cc605d80685f25ae03bd33ec03967831eebd31dbe831ec1e68a4b27a72313",
       "source_pdf": "public/fixtures/practice-library/piano-mozart-turkish-march/piano-mozart-turkish-march.pdf",
       "source_pdf_sha256": "605b2f3f18f50f202fb80efadada57548757b19fc7d9529ef9cd55a591a16259",
       "split": "adaptation",
@@ -633,9 +651,9 @@
           "spread": null
         },
         "upper": {
-          "delta": -1.0,
+          "delta": -0.9999999999999988,
           "measures": 81,
-          "spread": 0.02439024390244049
+          "spread": 2.3314683517128287e-15
         }
       },
       "engraving": "musescore4-emmentaler",
@@ -655,7 +673,7 @@
       ],
       "records": 11,
       "score_id": "pl-tchaikovsky-old-french-song",
-      "shard_sha256": "67e303a0760b962d7aae66795ca921817caf529cb074a1953c421e343bc034e8",
+      "shard_sha256": "22ee91670d3478612cc46c3b90cab8ddddca0ed2c2355453b70b8283094c5175",
       "source_pdf": "public/fixtures/practice-library/piano-tchaikovsky-old-french-song/piano-tchaikovsky-old-french-song.pdf",
       "source_pdf_sha256": "e051dabc69b63bf9e665ac8579273a5f2583768ea4c453de8ea138d55fae5c7e",
       "split": "heldout-test",
@@ -664,14 +682,14 @@
     {
       "band_offsets": {
         "lower": {
-          "delta": 1.0227272727272632,
+          "delta": 1.0,
           "measures": 32,
-          "spread": 0.02272727272726316
+          "spread": 8.992806499463768e-15
         },
         "upper": {
-          "delta": -0.9772727272727304,
+          "delta": -1.0,
           "measures": 32,
-          "spread": 1.7541523789077473e-14
+          "spread": 1.3433698597964394e-14
         }
       },
       "engraving": "musescore4-emmentaler",
@@ -688,63 +706,19 @@
       ],
       "records": 31,
       "score_id": "std-demo-minuet-in-g",
-      "shard_sha256": "3ada64c760e02161e225f9658cfcfae8adf427d7f3d9f962fe90279d782f4058",
+      "shard_sha256": "776b5f6a5e5ff708aa7720f76e1b05cdfc5fda31172bd47dcef9eb414b251f1d",
       "source_pdf": "public/fixtures/demo-minuet-in-g.pdf",
       "source_pdf_sha256": "6b34ba44122d9694156a113c749eee0bf3232f54ead431a44be6f2a1b6f32c8b",
       "split": "diagnostic",
-      "title": null
-    },
-    {
-      "band_offsets": {
-        "lower": {
-          "delta": null,
-          "measures": 0,
-          "spread": null
-        },
-        "upper": {
-          "delta": -0.9761904761904759,
-          "measures": 52,
-          "spread": 1.3877787807814457e-14
-        }
-      },
-      "engraving": "musescore-legacy-mscore",
-      "group_rejections": {
-        "event_coverage_too_low": 11,
-        "no_xml_measure_partner": 14,
-        "too_few_accepted_matches": 12,
-        "too_few_objects_or_events": 16,
-        "unreliable_staff_lines": 35
-      },
-      "label_gate_refusals": {
-        "dependent_label_dropped": 14,
-        "object_outside_ledger_envelope": 6,
-        "staff_step_outside_ledger_envelope": 1
-      },
-      "musicxml": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl",
-      "objects_labelled_duration": 890,
-      "objects_labelled_pitch": 830,
-      "objects_total": 1404,
-      "page_sha256": [
-        "01c29d20e86ed5d92b61d6f924a61e48bf012d8b3dfa6706617466e610d0f6c0",
-        "75a2bdeee32b5ed311ba60d93835e14f70814306bebbbf0e6aa9b5b2e33f2d45",
-        "8ca187a2967233d6bfcae6df075af96017d0dec106aaf4326c17ea28560800f6",
-        "b496cdac0802bc24196d59d5a0655d375c0653a443182e7e719c4d049056d33d"
-      ],
-      "records": 92,
-      "score_id": "std-hungarian-dance-no5",
-      "shard_sha256": "42d9cffb78ee0b88080dd9e18bee5eb137b594f98516ad230edbd844bdcf9b4d",
-      "source_pdf": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.pdf",
-      "source_pdf_sha256": "9b9383a5ddc725bba7e2930736ef827aee28b50de0b2f8527759f9c0ba53b1f8",
-      "split": "adaptation",
       "title": null
     }
   ],
   "split_manifests": {
     "adaptation": {
       "campaign_split": "adaptation",
-      "digest": "a4f462c54442d76b1029bdf48a209744be702f986ef70b9bfd7cfcbcfb896d2e",
-      "path": "realpdf_d2/adaptation.json",
-      "records": 416,
+      "digest": "a0d581906d20a0c1235f83dedd1ef2b84221ef02cc5b50b43fac48664a051307",
+      "path": "realpdf_21/adaptation.json",
+      "records": 324,
       "scores": [
         "bc-bach-fugue-bwv846",
         "bc-chopin-etude-op10-12",
@@ -752,15 +726,14 @@
         "pl-bach-prelude-bwv846",
         "pl-chopin-mazurka-op6-1",
         "pl-handel-gavotte",
-        "pl-mozart-turkish-march",
-        "std-hungarian-dance-no5"
+        "pl-mozart-turkish-march"
       ]
     },
     "diagnostic": {
       "campaign_split": "diagnostic",
-      "digest": "c0498e192a5cddd0e23dddbfd20b7940ba4ea7e535d1448a5cee3fbd23613c18",
-      "path": "realpdf_d2/diagnostic.json",
-      "records": 125,
+      "digest": "cd935ba2d4343900e011a1a2aea707511e81d30f0fd392c160c35235cdc5181b",
+      "path": "realpdf_21/diagnostic.json",
+      "records": 127,
       "scores": [
         "pl-beethoven-fur-elise",
         "std-demo-minuet-in-g"
@@ -768,9 +741,9 @@
     },
     "heldout-test": {
       "campaign_split": "heldout-test",
-      "digest": "f551d178e29a3c2d683097d19eba2530729dce6130dfded8ad80425d1dcfd7a8",
-      "path": "realpdf_d2/heldout-test.json",
-      "records": 164,
+      "digest": "0ac757a66e8110dc3f2d60da02e4f5c28982275e7a52b8b2ff27c48853abc5a4",
+      "path": "realpdf_21/heldout-test.json",
+      "records": 159,
       "scores": [
         "bc-beethoven-sonata-op2-m1",
         "bc-chopin-etude-op10-01",
@@ -781,9 +754,9 @@
     },
     "validation": {
       "campaign_split": "validation",
-      "digest": "ad1a9accc463b9c61d3724807f592a68273aa37181725186cffb9b57e21e31da",
-      "path": "realpdf_d2/validation.json",
-      "records": 73,
+      "digest": "c78996d8bab67b732d11277f3ce8603c5fc5a2930d6ee0e1b57f38bb516aed7c",
+      "path": "realpdf_21/validation.json",
+      "records": 71,
       "scores": [
         "bc-mozart-k153",
         "omf-piano-rhythm-tuplets-vector",
@@ -791,11 +764,11 @@
       ]
     }
   },
-  "supersedes": "real-pdf-corpus/1.0 (local out/realpdf) - INVALIDATED: pitch labels were attached to the wrong object",
+  "supersedes": "real-pdf-corpus/2.0 (local out/realpdf_d2) - preserved unchanged for reproducibility. 2.1 differs in exactly two ways: (a) stepsFromBandCenter and the analytic band offset are divided by EACH BAND's own detected five-line spacing instead of one pooled value, which makes the analytic band offset exactly +-1 on all 29 score x role pairs (2.0 deviated up to 0.05); (b) std-hungarian-dance-no5 is REFUSED as a source mismatch. 2.0 also supersedes 1.0 (out/realpdf), invalidated because pitch labels were attached to the wrong object.",
   "totals": {
-    "accepted_pitch_labels": 7625,
-    "objects_total": 13792,
-    "records_written": 778,
-    "scores": 18
+    "accepted_pitch_labels": 6775,
+    "objects_total": 12388,
+    "records_written": 681,
+    "scores": 17
   }
 }

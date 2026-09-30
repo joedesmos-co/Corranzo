@@ -1,0 +1,227 @@
+{
+  "changed_labels": 6391,
+  "corpus_20": {
+    "digest_source": "phase_e2 contract c7897bb2...",
+    "root": "realpdf_d2"
+  },
+  "corpus_21_candidate": {
+    "root": "realpdf_21"
+  },
+  "divisor_is_band_local_gap": {
+    "checked": 113,
+    "fraction_matching_own_band_gap": 1.0
+  },
+  "labels": {
+    "20": 7625,
+    "21": 7605
+  },
+  "per_score": {
+    "bc-bach-fugue-bwv846": {
+      "agree_20": 0.9201,
+      "agree_21": 0.9253,
+      "changed": 526,
+      "delta_agreement": 0.0052,
+      "n_20": 638,
+      "n_21": 629,
+      "split": "adaptation"
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "agree_20": 0.7608,
+      "agree_21": 0.7116,
+      "changed": 641,
+      "delta_agreement": -0.0492,
+      "n_20": 694,
+      "n_21": 645,
+      "split": "heldout-test"
+    },
+    "bc-chopin-etude-op10-01": {
+      "agree_20": 0.8667,
+      "agree_21": 0.8853,
+      "changed": 422,
+      "delta_agreement": 0.0186,
+      "n_20": 435,
+      "n_21": 401,
+      "split": "heldout-test"
+    },
+    "bc-chopin-etude-op10-12": {
+      "agree_20": 0.829,
+      "agree_21": 0.7955,
+      "changed": 833,
+      "delta_agreement": -0.0335,
+      "n_20": 959,
+      "n_21": 1017,
+      "split": "adaptation"
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "agree_20": 0.834,
+      "agree_21": 0.8506,
+      "changed": 348,
+      "delta_agreement": 0.0166,
+      "n_20": 789,
+      "n_21": 790,
+      "split": "adaptation"
+    },
+    "bc-mozart-k153": {
+      "agree_20": 0.8159,
+      "agree_21": 0.801,
+      "changed": 587,
+      "delta_agreement": -0.0149,
+      "n_20": 782,
+      "n_21": 784,
+      "split": "validation"
+    },
+    "omf-piano-dense-advanced-vector": {
+      "agree_20": 0.6418,
+      "agree_21": 0.6418,
+      "changed": 67,
+      "delta_agreement": 0.0,
+      "n_20": 67,
+      "n_21": 67,
+      "split": "heldout-test"
+    },
+    "omf-piano-grand-voices-vector": {
+      "agree_20": 0.6667,
+      "agree_21": 0.6667,
+      "changed": 48,
+      "delta_agreement": 0.0,
+      "n_20": 48,
+      "n_21": 48,
+      "split": "heldout-test"
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "agree_20": 1.0,
+      "agree_21": 1.0,
+      "changed": 5,
+      "delta_agreement": 0.0,
+      "n_20": 34,
+      "n_21": 34,
+      "split": "validation"
+    },
+    "pl-bach-prelude-bwv846": {
+      "agree_20": 0.977,
+      "agree_21": 0.977,
+      "changed": 438,
+      "delta_agreement": 0.0,
+      "n_20": 522,
+      "n_21": 522,
+      "split": "adaptation"
+    },
+    "pl-beethoven-fur-elise": {
+      "agree_20": 0.8746,
+      "agree_21": 0.8683,
+      "changed": 440,
+      "delta_agreement": -0.0063,
+      "n_20": 574,
+      "n_21": 615,
+      "split": "diagnostic"
+    },
+    "pl-brahms-waltz-op39-3": {
+      "agree_20": 0.6,
+      "agree_21": 0.5,
+      "changed": 11,
+      "delta_agreement": -0.1,
+      "n_20": 15,
+      "n_21": 12,
+      "split": "validation"
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "agree_20": 0.75,
+      "agree_21": 0.71,
+      "changed": 244,
+      "delta_agreement": -0.04,
+      "n_20": 224,
+      "n_21": 231,
+      "split": "adaptation"
+    },
+    "pl-handel-gavotte": {
+      "agree_20": 0.8034,
+      "agree_21": 0.82,
+      "changed": 69,
+      "delta_agreement": 0.0166,
+      "n_20": 117,
+      "n_21": 100,
+      "split": "adaptation"
+    },
+    "pl-mozart-turkish-march": {
+      "agree_20": 0.8443,
+      "agree_21": 0.8284,
+      "changed": 708,
+      "delta_agreement": -0.0159,
+      "n_20": 687,
+      "n_21": 670,
+      "split": "adaptation"
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "agree_20": 0.9091,
+      "agree_21": 0.9091,
+      "changed": 12,
+      "delta_agreement": 0.0,
+      "n_20": 33,
+      "n_21": 33,
+      "split": "heldout-test"
+    },
+    "std-demo-minuet-in-g": {
+      "agree_20": 0.9944,
+      "agree_21": 0.9944,
+      "changed": 159,
+      "delta_agreement": 0.0,
+      "n_20": 177,
+      "n_21": 177,
+      "split": "diagnostic"
+    },
+    "std-hungarian-dance-no5": {
+      "agree_20": 0.4506,
+      "agree_21": 0.253,
+      "changed": 833,
+      "delta_agreement": -0.1976,
+      "n_20": 830,
+      "n_21": 830,
+      "split": "adaptation"
+    }
+  },
+  "pooled_residual": {
+    "20": {
+      "abs_ge_2": 0.0,
+      "dist": {
+        "0": 1
+      },
+      "n": 1,
+      "within_1": 1.0,
+      "zero": 1.0
+    },
+    "21": {
+      "abs_ge_2": 0.0,
+      "dist": {
+        "0": 1
+      },
+      "n": 1,
+      "within_1": 1.0,
+      "zero": 1.0
+    }
+  },
+  "records": {
+    "20": 778,
+    "21": 773
+  },
+  "scores_affected": [
+    "bc-bach-fugue-bwv846",
+    "bc-beethoven-sonata-op2-m1",
+    "bc-chopin-etude-op10-01",
+    "bc-chopin-etude-op10-12",
+    "bc-chopin-nocturne-op9-n2",
+    "bc-mozart-k153",
+    "omf-piano-dense-advanced-vector",
+    "omf-piano-grand-voices-vector",
+    "omf-piano-rhythm-tuplets-vector",
+    "pl-bach-prelude-bwv846",
+    "pl-beethoven-fur-elise",
+    "pl-brahms-waltz-op39-3",
+    "pl-chopin-mazurka-op6-1",
+    "pl-handel-gavotte",
+    "pl-mozart-turkish-march",
+    "pl-tchaikovsky-old-french-song",
+    "std-demo-minuet-in-g",
+    "std-hungarian-dance-no5"
+  ],
+  "unchanged_labels": 1684
+}

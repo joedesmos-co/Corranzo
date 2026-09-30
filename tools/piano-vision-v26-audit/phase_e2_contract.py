@@ -29,8 +29,21 @@ H.add_runtime_to_path()
 sys.path.insert(0, str(H.V26_ROOT / "tools/real-pdf-adaptation"))
 from realpdf_data import load_realpdf_records  # noqa: E402
 
-CONTRACT_VERSION = "real-pdf-corpus/2.0"
-SUPERSEDES = "real-pdf-corpus/1.0 (local out/realpdf) - INVALIDATED: pitch labels were attached to the wrong object"
+CONTRACT_VERSION = "real-pdf-corpus/2.1"
+SUPERSEDES = ("real-pdf-corpus/2.0 (local out/realpdf_d2) - preserved unchanged for "
+              "reproducibility. 2.1 differs in exactly two ways: (a) stepsFromBandCenter "
+              "and the analytic band offset are divided by EACH BAND's own detected "
+              "five-line spacing instead of one pooled value, which makes the analytic "
+              "band offset exactly +-1 on all 29 score x role pairs (2.0 deviated up to "
+              "0.05); (b) std-hungarian-dance-no5 is REFUSED as a source mismatch. "
+              "2.0 also supersedes 1.0 (out/realpdf), invalidated because pitch labels "
+              "were attached to the wrong object.")
+CHANGES_FROM_20 = [
+    "band-local staff gap divisor for all band-relative quantities",
+    "analytic band offset invariant replaces the 1.35x cross-band guard "
+    "(MAX_ANALYTIC_OFFSET_ERROR = 0.10, label-free)",
+    "std-hungarian-dance-no5 refused: source_mismatch:pdf_key_differs_from_paired_musicxml",
+]
 LETTERS = "CDEFGAB"
 MIDDLE = {"upper": 34, "lower": 22}
 
@@ -178,6 +191,14 @@ def main():
             "pass": not dup_pages,
         },
     }
+    body["changes_from_2_0"] = CHANGES_FROM_20
+    body["frozen_baseline_on_this_corpus"] = {
+        "note": "fresh pitch head on the unchanged frozen V2.5 object embedding, "
+                "leave-one-score-out, corpus/2.1, 17 scores",
+        "weighted_written_pitch": 0.6056, "macro_written_pitch": 0.5349,
+        "written_step": 0.7537, "octave": 0.9619, "midi": 0.6075, "n_labels": 6775,
+        "corpus_2_0_for_comparison": {"weighted": 0.5726, "macro": 0.5264,
+                                      "n_labels": 7625}}
     body["corpus_digest"] = digest_of({k: v for k, v in body.items()
                                        if k not in ("corpus_digest", "generated_utc")})
     out = H.write_json("phase_e2_corpus_contract.json", body)

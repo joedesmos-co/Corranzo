@@ -11,63 +11,63 @@
   "gate": "F0",
   "per_score": {
     "bc-bach-fugue-bwv846": {
-      "analytic_written_pitch_agreement": 0.9201,
-      "k_p05": -2.081,
-      "k_p95": 3.451,
-      "n": 638,
+      "analytic_written_pitch_agreement": 0.9253,
+      "k_p05": -2.076,
+      "k_p95": 3.45,
+      "n": 629,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.9201,
+      "residual_zero_frac": 0.9253,
       "split": "adaptation"
     },
     "bc-beethoven-sonata-op2-m1": {
-      "analytic_written_pitch_agreement": 0.7608,
-      "k_p05": -3.567,
-      "k_p95": 4.438,
-      "n": 694,
+      "analytic_written_pitch_agreement": 0.7116,
+      "k_p05": -3.571,
+      "k_p95": 4.439,
+      "n": 645,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.7608,
+      "residual_zero_frac": 0.7116,
       "split": "heldout-test"
     },
     "bc-chopin-etude-op10-01": {
-      "analytic_written_pitch_agreement": 0.8667,
-      "k_p05": -4.016,
+      "analytic_written_pitch_agreement": 0.8853,
+      "k_p05": -4.555,
       "k_p95": 4.497,
-      "n": 435,
+      "n": 401,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8667,
+      "residual_zero_frac": 0.8853,
       "split": "heldout-test"
     },
     "bc-chopin-etude-op10-12": {
-      "analytic_written_pitch_agreement": 0.8332,
-      "k_p05": -4.1,
-      "k_p95": 4.44,
-      "n": 959,
+      "analytic_written_pitch_agreement": 0.7955,
+      "k_p05": -4.095,
+      "k_p95": 4.415,
+      "n": 1017,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8332,
+      "residual_zero_frac": 0.7955,
       "split": "adaptation"
     },
     "bc-chopin-nocturne-op9-n2": {
-      "analytic_written_pitch_agreement": 0.8416,
+      "analytic_written_pitch_agreement": 0.8506,
       "k_p05": -2.561,
-      "k_p95": 4.479,
-      "n": 789,
+      "k_p95": 4.466,
+      "n": 790,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8416,
+      "residual_zero_frac": 0.8506,
       "split": "adaptation"
     },
     "bc-mozart-k153": {
-      "analytic_written_pitch_agreement": 0.8159,
+      "analytic_written_pitch_agreement": 0.801,
       "k_p05": -3.1,
       "k_p95": 2.98,
-      "n": 782,
+      "n": 784,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8159,
+      "residual_zero_frac": 0.801,
       "split": "validation"
     },
     "omf-piano-dense-advanced-vector": {
@@ -111,53 +111,53 @@
       "split": "adaptation"
     },
     "pl-beethoven-fur-elise": {
-      "analytic_written_pitch_agreement": 0.8746,
+      "analytic_written_pitch_agreement": 0.8683,
       "k_p05": -3.05,
-      "k_p95": 2.422,
-      "n": 574,
+      "k_p95": 2.952,
+      "n": 615,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8746,
+      "residual_zero_frac": 0.8683,
       "split": "diagnostic"
     },
     "pl-brahms-waltz-op39-3": {
-      "analytic_written_pitch_agreement": 0.6,
-      "k_p05": -2.05,
+      "analytic_written_pitch_agreement": 0.5,
+      "k_p05": -2.056,
       "k_p95": 1.463,
-      "n": 15,
-      "residual_median": 0.0,
+      "n": 12,
+      "residual_median": 0.5,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.6,
+      "residual_zero_frac": 0.5,
       "split": "validation"
     },
     "pl-chopin-mazurka-op6-1": {
-      "analytic_written_pitch_agreement": 0.75,
-      "k_p05": -2.537,
-      "k_p95": 2.91,
-      "n": 224,
+      "analytic_written_pitch_agreement": 0.71,
+      "k_p05": -2.066,
+      "k_p95": 2.987,
+      "n": 231,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.75,
+      "residual_zero_frac": 0.71,
       "split": "adaptation"
     },
     "pl-handel-gavotte": {
-      "analytic_written_pitch_agreement": 0.8034,
-      "k_p05": -3.505,
-      "k_p95": 1.977,
-      "n": 117,
+      "analytic_written_pitch_agreement": 0.82,
+      "k_p05": -3.518,
+      "k_p95": 1.999,
+      "n": 100,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8034,
+      "residual_zero_frac": 0.82,
       "split": "adaptation"
     },
     "pl-mozart-turkish-march": {
-      "analytic_written_pitch_agreement": 0.8443,
-      "k_p05": -1.066,
+      "analytic_written_pitch_agreement": 0.8284,
+      "k_p05": -1.549,
       "k_p95": 4.008,
-      "n": 687,
+      "n": 670,
       "residual_median": 0.0,
       "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.8443,
+      "residual_zero_frac": 0.8284,
       "split": "adaptation"
     },
     "pl-tchaikovsky-old-french-song": {
@@ -179,21 +179,11 @@
       "residual_within_1_frac": 1.0,
       "residual_zero_frac": 0.9944,
       "split": "diagnostic"
-    },
-    "std-hungarian-dance-no5": {
-      "analytic_written_pitch_agreement": 0.2458,
-      "k_p05": -4.354,
-      "k_p95": 3.709,
-      "n": 830,
-      "residual_median": -1.0,
-      "residual_within_1_frac": 1.0,
-      "residual_zero_frac": 0.2458,
-      "split": "adaptation"
     }
   },
   "verdict": {
     "GATE_F0_PASS": true,
-    "analytic_written_pitch_agreement_pooled": 0.783607,
+    "analytic_written_pitch_agreement_pooled": 0.837048,
     "k_computable": true,
     "k_not_clipped": {
       "clip_bounds_avoided": "-2/2 (the existing object_features clip)",
@@ -204,24 +194,24 @@
       "distinct_k_values": 3,
       "statement": "k is not rounded to whole staff spaces anywhere in the feature"
     },
-    "n_labels": 7625,
+    "n_labels": 6775,
     "no_score_specific_transform": {
       "free_parameters": 0,
       "pass": true,
       "statement": "one global closed form, k -> middle-line diatonic index, applied identically to every score with no per-score calibration, offset or scaling"
     },
-    "per_score_agreement_median": 0.8374,
-    "per_score_agreement_min": 0.2458,
+    "per_score_agreement_median": 0.8284,
+    "per_score_agreement_min": 0.5,
     "records_unusable": 0,
     "residual_abs_ge_2_frac": 0.0,
     "residual_distribution": {
-      "-1": 944,
-      "0": 5975,
-      "1": 706
+      "-1": 435,
+      "0": 5671,
+      "1": 669
     },
     "residual_within_1_frac": 1.0,
-    "residual_zero_frac": 0.783607,
-    "scores_above_0.75": 13,
-    "scores_total": 18
+    "residual_zero_frac": 0.837048,
+    "scores_above_0.75": 12,
+    "scores_total": 17
   }
 }

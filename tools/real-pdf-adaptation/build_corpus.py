@@ -65,6 +65,23 @@ CLEF_FOR_BAND = {"upper": ("G", 2), "lower": ("F", 4)}
 RECORD_SPLIT = {"adaptation": "train", "validation": "validation",
                "heldout-test": "validation", "diagnostic": "validation"}
 MAX_PAGES_PER_SCORE = 4
+# corpus/2.1 candidate: use each band's OWN detected five-line spacing as the
+# divisor for that band's staff-relative quantities. corpus/2.0 pools both
+# bands. Default stays 2.0 so the accepted corpus is never silently mutated.
+BAND_LOCAL_GAP = False
+
+# corpus/2.1 - scores REFUSED from supervised paired evaluation, with the reason.
+# Established in Phase G0B, not guessed: the staff geometry for this score is
+# pixel-verified correct (line rows 391/401/411/422/432, gaps 10/10/11/10), and
+# the geometric-to-MusicXML disagreement is NOT a constant offset (MIDI deltas
+# -2,-2,-2,-1,-1,0,0 across measure 1), so it is neither a detection error nor a
+# transposition. Naturals agree and key-signature-sharped notes land exactly one
+# diatonic step low, which is the signature of the PDF being engraved in a
+# different key from the MusicXML it is paired with. The same detector
+# reproduces the other 16 usable scores at 0.75-0.99. Verdict: SOURCE MISMATCH.
+REFUSED_SCORES = {
+    "std-hungarian-dance-no5": "source_mismatch:pdf_key_differs_from_paired_musicxml",
+}
 MAX_MEASURES_PER_SCORE = 200
 
 
@@ -152,6 +169,28 @@ def detect_page(adapter, image, page_number, measure_start, printed_base):
     return measures, content_bounds
 
 
+
+def band_local_gaps(measure):
+    """Each band's OWN detected five-line spacing.
+
+    `staff_space()` pools the line gaps of BOTH bands and returns one median.
+    `stepsFromBandCenter` is a band-relative quantity, so dividing a band's
+    offset by the other band's spacing scales every staff step on that band.
+    Measured on std-hungarian-dance-no5: upper 10.5 px, lower 10.25 px, i.e.
+    a 2.4% error on every bass-clef note. This returns the per-band value and
+    is the CORRECT divisor for a band-relative step.
+    """
+    out = {}
+    for role, key in (("upper", "treble"), ("lower", "bass")):
+        lines = sorted(float(v) for v in (measure["staff_lines"].get(key) or []))
+        if len(lines) >= 2:
+            span = lines[-1] - lines[0]
+            out[role] = span / 4.0 if span > 1e-9 else None
+        else:
+            out[role] = None
+    return out
+
+
 def band_centers_for(measure):
     """Centre of every detected staff band, and how many lines produced it."""
     centers, lines = {}, {}
@@ -221,6 +260,14 @@ def apply_label_gate(target, objects, centers, lines_by_role, gap):
 def build_score(entry, config, out_root, verbose):
     score_id = entry["id"]
     split = entry["split"]
+    if score_id in REFUSED_SCORES:
+        return {"score_id": score_id, "split": split, "status": "refused",
+                "refused_reason": REFUSED_SCORES[score_id],
+                "records_written": 0, "objects_total": 0,
+                "objects_labelled_pitch": 0, "objects_labelled_duration": 0,
+                "objects_labelled_rest": 0,
+                "groups_accepted": 0, "group_reasons": {}, "label_gate": {},
+                "measures_detected": 0, "band_offsets": {}}, []
     report = {
         "score_id": score_id, "split": split, "title": entry.get("title"),
         "pdf": entry["pdf"], "musicxml": entry["musicxml"],
@@ -280,6 +327,7 @@ def build_score(entry, config, out_root, verbose):
         for record_index, measure in enumerate(measures):
             centers, line_counts = band_centers_for(measure)
             gap = staff_space(measure["staff_lines"])
+            local = band_local_gaps(measure) if BAND_LOCAL_GAP else None
             objects = canonical[record_index]["input"]["modelInput"]["physicalObjects"]
             by_band = {"upper": [], "lower": []}
             for object_index, obj in enumerate(objects):
@@ -288,7 +336,7 @@ def build_score(entry, config, out_root, verbose):
             page_state.append({
                 "record_index": record_index, "measure": measure, "centers": centers,
                 "line_counts": line_counts, "gap": gap, "objects": objects,
-                "by_band": by_band,
+                "by_band": by_band, "band_gaps": local,
             })
 
         # 2. per-measure analytic band offset, straight from the detected staff
@@ -300,12 +348,14 @@ def build_score(entry, config, out_root, verbose):
         #    it from the labels would be circular, and fitting it per measure
         #    from a handful of objects is what breaks polyphonic material.
         for state in page_state:
-            state["analytic_delta"] = {
-                band: analytic_band_delta(
-                    [float(v) for v in (state["measure"]["staff_lines"].get(
-                        "treble" if band == "upper" else "bass") or [])],
-                    state["gap"], *CLEF_FOR_BAND[band])
-                for band in ("upper", "lower")}
+            state["analytic_delta"] = {}
+            for band in ("upper", "lower"):
+                _lines = [float(v) for v in (state["measure"]["staff_lines"].get(
+                    "treble" if band == "upper" else "bass") or [])]
+                _gap = ((state["band_gaps"] or {}).get(band)
+                        if state["band_gaps"] else state["gap"])
+                state["analytic_delta"][band] = analytic_band_delta(
+                    _lines, _gap if _gap else state["gap"], *CLEF_FOR_BAND[band])
 
         # 3. page-level consensus of the analytic offsets, used only to score
         #    candidate measure pairings. This is a median of a purely geometric
@@ -334,10 +384,12 @@ def build_score(entry, config, out_root, verbose):
                 members = state["by_band"][band]
                 note_members = [i for i in members
                                 if state["objects"][i].get("kind") == "notehead"]
-                if note_members and state["gap"] and state["gap"] > 1e-9:
+                _g = ((state["band_gaps"] or {}).get(band)
+                      if state["band_gaps"] else state["gap"])
+                if note_members and _g and _g > 1e-9:
                     band_measured[(d, band)] = [
                         ((state["centers"][band] - float(state["objects"][i]["center"]["y"]))
-                         / state["gap"]) for i in note_members]
+                         / _g) for i in note_members]
         for x, truth_measure in enumerate(truth.measures):
             for band in ("upper", "lower"):
                 lattice = [expected_measured_steps(e.diatonic, e.center_diatonic)
@@ -405,7 +457,8 @@ def build_score(entry, config, out_root, verbose):
                 "upper": measure["staff_lines"].get("treble") or [],
                 "lower": measure["staff_lines"].get("bass") or []}
             target = build_targets(record["exampleId"], truth, truth_measure, objects,
-                                   alignments, centers, gap)
+                                   alignments, centers, gap,
+                                   band_gaps=state.get("band_gaps"))
             target, gate_counts = apply_label_gate(
                 target, objects, centers, lines_by_role, gap)
             for reason, n in gate_counts.items():
@@ -485,10 +538,17 @@ def _closer(obj, centers, role) -> bool:
 
 
 def main():
+    global BAND_LOCAL_GAP
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--split-config", default=str(Path(__file__).with_name("split_manifest.json")))
     parser.add_argument("--out", required=True)
+    parser.add_argument("--band-local-gap", action="store_true",
+                        help="corpus/2.1 candidate: divide each band's "
+                             "staff-relative quantity by that band's OWN "
+                             "detected five-line spacing instead of one pooled "
+                             "value. corpus/2.0 is the default and is never "
+                             "mutated.")
     parser.add_argument("--config", default=None,
                         help="model config json; defaults to the qualified step-2100 contract")
     parser.add_argument("--contract", default=str(REPO / "tmp/campaign/piano-vision-phase214/"
@@ -499,6 +559,7 @@ def main():
     parser.add_argument("--min-records", type=int, default=250,
                         help="refuse to emit a manifest below this many adaptation records")
     args = parser.parse_args()
+    BAND_LOCAL_GAP = bool(args.band_local_gap)
 
     config_doc = json.loads(Path(args.config).read_text()) if args.config else \
         json.loads(Path(args.contract).read_text())["model_config"]

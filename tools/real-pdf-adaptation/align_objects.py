@@ -406,8 +406,16 @@ def _duration_value(event: Event) -> dict:
 
 
 def build_targets(scope_id, truth: ScoreTruth, measure: PrintedMeasure, objects,
-                  alignments, band_centers, staff_gap, confidence=0.865) -> dict:
-    """Assemble ``target.families`` for one canonical record."""
+                  alignments, band_centers, staff_gap, confidence=0.865,
+                  band_gaps=None) -> dict:
+    """Assemble ``target.families`` for one canonical record.
+
+    ``band_gaps`` is the corpus/2.1 candidate: the divisor for
+    ``stepsFromBandCenter`` is the band's OWN detected five-line spacing rather
+    than one pooled value from both bands. ``None`` keeps the corpus/2.0
+    behaviour byte-identical, and any band with no own gap falls back to the
+    pooled ``staff_gap`` rather than inventing one.
+    """
     measure_number = measure.index + 1
     families = {name: [] for name in FAMILY_NAMES}
 
@@ -416,6 +424,7 @@ def build_targets(scope_id, truth: ScoreTruth, measure: PrintedMeasure, objects,
         if alignment is None or not alignment.accepted:
             continue
         band_center = band_centers[band]
+        band_gap = ((band_gaps or {}).get(band) or staff_gap) if band_gaps else staff_gap
         for object_index, event in zip(alignment.object_index, alignment.event):
             cy = float(objects[object_index]["center"]["y"])
             event_id = f"m{measure_number}-n{event.xml_note_index}"
@@ -446,9 +455,9 @@ def build_targets(scope_id, truth: ScoreTruth, measure: PrintedMeasure, objects,
                         "staffPosition": {
                             "state": "KNOWN",
                             "representation": "SOURCE_GEOMETRIC_STEPS_FROM_LOCAL_BAND_CENTER",
-                            "stepsFromBandCenter": round((band_center - cy) / staff_gap, 4),
+                            "stepsFromBandCenter": round((band_center - cy) / band_gap, 4),
                             "sourceY": cy,
-                            "staffGapNormalized": staff_gap,
+                            "staffGapNormalized": band_gap,
                         },
                         "writtenPitch": {"step": event.step, "alter": event.alter,
                                          "octave": event.octave},

@@ -30,10 +30,21 @@ from dataclasses import dataclass, field
 # A five-line staff spans exactly 4 staff spaces. Ledger lines extend it; a
 # notehead further than this from the band centre is not on that staff.
 MAX_LEDGER_SPACES = 8.0
-# A detected band whose own line spacing disagrees with the pooled gap by more
-# than this factor has its staff steps scaled wrongly.
-MAX_GAP_DISAGREEMENT = 1.35
 MIN_BAND_LINES = 4
+# (clef sign, clef line) per band role, as the campaign uses throughout
+CLEF_FOR_BAND = {"upper": ("G", 2), "lower": ("F", 4)}
+# corpus/2.1: `stepsFromBandCenter` is a BAND-RELATIVE quantity, so it must be
+# divided by THAT band's own detected five-line spacing. The old 1.35x
+# "do the two bands agree" guard was useless - a 2.4% cross-band scale error
+# passed it while silently distorting every staff step on the other staff. It is
+# replaced by the analytic band offset, which is exactly +-1 by construction for
+# a correct five-line detection and is computed WITHOUT any label:
+#
+#     delta = (bandCentre - clefReferenceLineY) / staffGap
+#
+# G clef on line 2 -> -1, F clef on line 4 -> +1, whatever the rasterisation.
+# A deviation here is a direct, label-free read-out of detection error.
+MAX_ANALYTIC_OFFSET_ERROR = 0.10
 
 
 @dataclass
@@ -56,6 +67,19 @@ class BandCheck:
         }
 
 
+def analytic_offset_error(lines, band_gap, clef_sign, clef_line):
+    """|delta| - 1 for this band, or None if it cannot be computed.
+
+    Label-free. A correct five-line detection gives exactly 1.
+    """
+    ordered = sorted(float(v) for v in (lines or []))
+    if len(ordered) < 2 or not band_gap or band_gap <= 1e-9:
+        return None
+    centre = (ordered[0] + ordered[-1]) / 2.0
+    reference = ordered[-1] - (max(1, int(clef_line)) - 1) * band_gap
+    return abs(abs((centre - reference) / band_gap) - 1.0)
+
+
 def check_band(role, lines, pooled_gap, object_cy):
     """Verify one band against the analytic invariants, without ground truth."""
     ordered = sorted(float(v) for v in (lines or []))
@@ -71,9 +95,9 @@ def check_band(role, lines, pooled_gap, object_cy):
     elif local_gap <= 1e-9:
         reasons.append("degenerate_band_span")
     else:
-        ratio = local_gap / pooled_gap
-        if ratio > MAX_GAP_DISAGREEMENT or ratio < 1.0 / MAX_GAP_DISAGREEMENT:
-            reasons.append("band_gap_disagrees_with_pooled")
+        err = analytic_offset_error(ordered, local_gap, *CLEF_FOR_BAND[role])
+        if err is not None and err > MAX_ANALYTIC_OFFSET_ERROR:
+            reasons.append("analytic_band_offset_off")
     ks = [(center - float(cy)) / pooled_gap for cy in object_cy] if pooled_gap else []
     ok = not reasons
     if ks:
