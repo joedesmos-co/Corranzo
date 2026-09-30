@@ -177,7 +177,165 @@ def _iter_group_elements(svg: str, class_name: str):
         position = max(index, start)
 
 
-def derive_staff_bands(objects: list[dict[str, Any]], page_width: float, page_height: float) -> list[StaffBand]:
+def svg_staff_extents(svg: str) -> list[tuple[float, float, bool]]:
+    """Vertical extent of every staff the engraver actually drew.
+
+    Returns ``(top, bottom, is_tab)`` per ``class="staff"`` group, measured from the
+    coordinates inside the group, and grouped across systems: a score with two
+    systems yields two entries per kind.
+
+    ## Why this and not a note-derived band
+
+    A band is the crop rectangle for a whole view, so it has to span the entire
+    staff - six lines for TAB, five for notation. Deriving it from the notes on the
+    staff cannot work, and did not:
+
+      - spanning the notes' own extent covers only the strings that happen to be
+        used. A generated score played on strings 1-3 produces a three-line band
+        for a six-line staff.
+      - padding by a median note height cannot work either. A TAB staff spaces its
+        digits a full line gap apart, so a band padded by half a note height
+        reaches about three of six lines.
+
+    Either way the crop is short, the digit boxes are placed in page coordinates by
+    the engraver, and they fall outside the crop they belong to. Measured: a TAB
+    crop held 3 staff lines instead of 6, and 96% of the ROI crop's sample points
+    had no ink under them - which reads as "the model cannot see the glyph" and is
+    in fact "the crop does not contain the glyph".
+
+    The engraver already knows where the staff is, so it is read rather than
+    inferred. A staff group is classified as TAB by whether it contains the
+    ``tabGrp`` class, which is what the engraver uses for that distinction.
+    """
+    extents: list[tuple[float, float, bool]] = []
+    for body in _iter_groups(svg, "staff"):
+        values = [
+            float(value)
+            for value in re.findall(r'\b(?:y|y1|y2|cy)="(-?[\d.]+)"', body)
+        ]
+        if not values:
+            continue
+        extents.append((min(values), max(values), "tabGrp" in body))
+    # Only TAB extents are taken from the SVG, and only the tallest of them.
+    #
+    # A TAB staff is engraved as a *vertical stack of staff groups* - one per
+    # system position - so a score yields several, and they nest, and a depth
+    # scan reports overlapping spans of which only the largest is the staff. The
+    # notation staff, by contrast, draws its five lines as a single element with
+    # no usable y attributes, so it never yields a value here at all.
+    #
+    # So TAB is taken from the engraver - the one case where the note-derived span
+    # is provably wrong, since it can only cover the strings in use - and notation
+    # is padded from its own noteheads by a line gap, which is enough because a
+    # notehead is half a gap tall and sits within one gap of its line.
+    tab_spans = [span for span in extents if span[2]]
+    if tab_spans:
+        # The tightest span that still contains every other span. The engraver
+        # emits one group per string position and they nest, so the outermost is
+        # the *system* - notation staff plus TAB staff - and would crop both views
+        # to the same rectangle. The innermost complete span is the TAB staff.
+        top = max(span[0] for span in tab_spans)
+        bottom = min(span[1] for span in tab_spans)
+        if bottom > top:
+            return [(top, bottom, True)]
+    return []
+
+
+def _iter_groups(svg: str, wanted_class: str):
+    """Yield the body of each ``<g class="wanted_class">`` element.
+
+    Scanned with a depth counter rather than a non-greedy regex. A regex stops at
+    the first ``</g>``, which for a staff containing nested groups - a layer, a
+    clef, a note - returns a fragment ending mid-tree. That is how the notation
+    staff went missing entirely: 8 staff elements exist in a typical score, and a
+    naive pattern found 1.
+    """
+    open_tag = re.compile(r'<g\b[^>]*>')
+    for match in re.finditer(r'<g\b[^>]*class="([^"]*)"[^>]*>', svg):
+        classes = match.group(1)
+        if wanted_class not in classes.split():
+            continue
+        depth = 1
+        cursor = match.end()
+        while depth and cursor < len(svg):
+            nxt_open = open_tag.search(svg, cursor)
+            nxt_close = svg.find("</g>", cursor)
+            if nxt_close == -1:
+                break
+            if nxt_open is not None and nxt_open.start() < nxt_close:
+                depth += 1
+                cursor = nxt_open.end()
+                continue
+            depth -= 1
+            cursor = nxt_close + 4
+            if depth == 0:
+                yield svg[match.end() : nxt_close]
+                break
+
+
+def derive_staff_bands(
+    objects: list[dict[str, Any]],
+    page_width: float,
+    page_height: float,
+    svg: str = "",
+) -> tuple[list[StaffBand], list[str]]:
+    bands: list[StaffBand] = []
+    extents = svg_staff_extents(svg) if svg else []
+    if extents:
+        # Widen the engraver's span to cover every digit on the staff.
+        #
+        # The SVG's nested staff groups describe the *used* portion of the staff,
+        # not all six lines: the innermost complete span started below the topmost
+        # engraved digit, and a band that starts below a digit puts that digit
+        # outside its own crop. The band's contract is that it contains the objects
+        # it is a crop for, so the digit boxes - which are in the same coordinate
+        # frame - bound it as well.
+        for obj in objects:
+            if not obj.get("onTab"):
+                continue
+            extents = [
+                (min(top, obj["box"][1]), max(bottom, obj["box"][3]), is_tab)
+                for top, bottom, is_tab in extents
+            ]
+        for index, (top, bottom, is_tab) in enumerate(extents):
+            bands.append(
+                StaffBand(
+                    index=index,
+                    box=Box(0.0, top, page_width, bottom),
+                    is_tab=is_tab,
+                    staff_lines=6 if is_tab else 5,
+                )
+            )
+        return bands, []
+    # No staff groups found - a score with no music on it, or an engraver that
+    # groups differently. Fall back to clustering the notes, which at least yields
+    # usable boxes, and say so, because a band derived this way does not cover the
+    # whole staff and every crop made from it is short.
+    return _clustered_bands(objects, page_width)
+
+
+def _clustered_bands(
+    objects: list[dict[str, Any]], page_width: float
+) -> tuple[list[StaffBand], list[str]]:
+    warnings: list[str] = [
+        "no staff elements found in the SVG; bands fall back to clustering the "
+        "notes, which does not span the full staff and produces short crops"
+    ]
+    if not objects:
+        return [], warnings
+    entries = sorted(
+        ((object_["box"][1] + object_["box"][3]) / 2, bool(object_.get("onTab"))) for object_ in objects
+    )
+    heights = sorted(object_["box"][3] - object_["box"][1] for object_ in objects)
+    typical = heights[len(heights) // 2] or 1.0
+    gap = typical * 2.5
+
+    clusters: list[list[tuple[float, bool]]] = [[entries[0]]]
+    for center, is_tab in entries[1:]:
+        if center - clusters[-1][-1][0] <= gap:
+            clusters[-1].append((center, is_tab))
+        else:
+            clusters.append([(center, is_tab)])
     """Cluster note objects into engraved staff bands.
 
     Bands are derived from the notes themselves rather than from Verovio's
@@ -189,7 +347,7 @@ def derive_staff_bands(objects: list[dict[str, Any]], page_width: float, page_he
     the band boundaries right matters more than any other geometry here.
     """
     if not objects:
-        return []
+        return [], warnings
     entries = sorted(
         ((object_["box"][1] + object_["box"][3]) / 2, bool(object_.get("onTab"))) for object_ in objects
     )
@@ -210,18 +368,29 @@ def derive_staff_bands(objects: list[dict[str, Any]], page_width: float, page_he
 
     bands: list[StaffBand] = []
     for index, cluster in enumerate(clusters):
-        top = min(center - typical / 2 for center, _ in cluster)
-        bottom = max(center + typical / 2 for center, _ in cluster)
         is_tab = sum(1 for item in cluster if item[1]) > len(cluster) / 2
+        centers = sorted(center for center, _ in cluster)
+        # Line spacing, from adjacent note centres on adjacent staff positions.
+        # A five-line notation staff is four gaps tall and a notehead is about half
+        # a gap, so padding the outermost note centres by half a gap each way
+        # brackets the whole staff. The same padding on a six-line TAB staff would
+        # not - which is why TAB comes from the engraver and not from here.
+        steps = [b - a for a, b in zip(centers, centers[1:])]
+        gap = min(steps) if steps else typical
         bands.append(
             StaffBand(
                 index=index,
-                box=Box(0.0, top, page_width, bottom),
+                box=Box(
+                    0.0,
+                    centers[0] - gap / 2,
+                    page_width,
+                    centers[-1] + gap / 2,
+                ),
                 is_tab=is_tab,
                 staff_lines=6 if is_tab else 5,
             )
         )
-    return bands
+    return bands, warnings
 
 
 def _tab_digit_boxes(inner: str) -> tuple[list[Box], list[str]]:
@@ -614,7 +783,8 @@ def render_score(musicxml_path: Path) -> RenderResult:
     outlines = glyph_outline_bounds(svg)
     objects = extract_note_objects(svg, outlines) + _decorations(svg, outlines)
     content_width = max((obj["box"][2] for obj in objects), default=float(width))
-    bands = derive_staff_bands(objects, content_width, height)
+    bands, band_warnings = derive_staff_bands(objects, content_width, height, svg)
+    warnings.extend(band_warnings)
 
     return RenderResult(
         score_id=musicxml_path.stem,
