@@ -78,8 +78,24 @@ def build():
             msk = np.stack(
                 [batch["targets"]["object"][h]["mask"][0].cpu().numpy()
                  for h in ADAPTED_PITCH_HEADS], -1)
+            # frozen CONTEXT head outputs: what the champion itself predicts for
+            # clef / key / meter over this scope's hierarchy nodes. Available at
+            # inference; never ground truth.
+            ctx = np.concatenate(
+                [out["context"][h][0].float().cpu().numpy() for h in
+                 ("clef", "clef_line", "clef_octave", "key_fifths",
+                  "meter_numerator")], -1)
+            htype = batch["hierarchy_type"][0].cpu().numpy()
+            # staff nodes (type 2) carry the clef/key for the system
+            staff_nodes = np.where(htype == 2)[0]
+            if len(staff_nodes):
+                ctx_staff = ctx[staff_nodes].max(0)
+            else:
+                ctx_staff = ctx.max(0)
             rows.append({
                 "emb": emb.numpy().astype(np.float16),
+                "context": ctx.astype(np.float16),
+                "context_staff": ctx_staff.astype(np.float32),
                 "logits": logits.astype(np.float16),
                 "target": tgt.astype(np.int16),
                 "mask": msk,
@@ -115,6 +131,7 @@ def build():
         CACHE,
         emb=emb, logits=logits, target=target, mask=mask,
         staff=staff, object_mask=object_mask,
+        context_staff=np.stack([r["context_staff"] for r in rows]),
         n_objects=np.asarray([int(r["object_mask"].shape[0]) for r in rows]),
         score=np.asarray([r["score"] for r in rows]),
         split=np.asarray([r["split"] for r in rows]),

@@ -56,14 +56,15 @@ def corrected(adapter, e, s, base, om):
     return base + torch.cat([delta[h] for h in ADAPTED_PITCH_HEADS], -1)
 
 
-def new_adapter(drop_emb=False, width=256, seed=SEED):
+def new_adapter(drop_emb=False, width=256, seed=SEED, n_features=S.N_FEATURES):
     torch.manual_seed(seed)
-    return StaffPitchAdapter(0 if drop_emb else EMB_DIM, width)
+    return StaffPitchAdapter(0 if drop_emb else EMB_DIM, width, n_features=n_features)
 
 
 def fit(d, tr, epochs=60, width=256, lr=3e-3, seed=SEED, staff=None,
-        zero_emb=False, wd=1e-4, verbose=False):
-    ad = new_adapter(zero_emb, width, seed)
+        zero_emb=False, wd=1e-4, verbose=False, n_features=None):
+    nf = S.N_FEATURES if n_features is None else n_features
+    ad = new_adapter(zero_emb, width, seed, n_features=nf)
     opt = torch.optim.AdamW(ad.parameters(), lr=lr, weight_decay=wd)
     lossf = nn.CrossEntropyLoss()
     tgt = torch.tensor(d["target"][tr].astype(np.int64))
