@@ -1,0 +1,1099 @@
+{
+  "G5I_pass": false,
+  "best": "D_mlp_joint",
+  "best_weighted_written_pitch": 0.6494,
+  "embedding_dim": 480,
+  "epochs": 60,
+  "frozen_representation_sha256": "24d4ad8b3322eddfa9d07a620d030ed6668dfa14528e46ac0895256e519cfe33",
+  "improvement_over_0_61_baseline": 0.0362,
+  "input": "champion object embedding (480) + 7 staff features",
+  "structures": {
+    "A_factorized": {
+      "G5A_identity": {
+        "Frechet_lower_bound_on_step_and_octave": 0.713745,
+        "N_shared_population": 793,
+        "P_accidental": 0.751576,
+        "P_midi": 0.602774,
+        "P_octave": 0.957125,
+        "P_step": 0.75662,
+        "P_step_and_octave": 0.747793,
+        "P_step_and_octave_and_accidental": 0.601513,
+        "accidental_cost_given_step_and_octave": 0.14628,
+        "bound_respected": true,
+        "note": "written_pitch is by construction the intersection of all three components on one shared population, so it is EXPECTED to sit below the two-component Frechet bound. The bound constrains P(step AND octave), and that is what is tested.",
+        "written_pitch_equals_triple_intersection": true
+      },
+      "G5B_intersection": {
+        "step=F_oct=F_acc=F": {
+          "n": 9,
+          "pct": 0.011349
+        },
+        "step=F_oct=F_acc=T": {
+          "n": 18,
+          "pct": 0.022699
+        },
+        "step=F_oct=T_acc=F": {
+          "n": 69,
+          "pct": 0.087011
+        },
+        "step=F_oct=T_acc=T": {
+          "n": 97,
+          "pct": 0.12232
+        },
+        "step=T_oct=F_acc=F": {
+          "n": 3,
+          "pct": 0.003783
+        },
+        "step=T_oct=F_acc=T": {
+          "n": 4,
+          "pct": 0.005044
+        },
+        "step=T_oct=T_acc=F": {
+          "n": 116,
+          "pct": 0.14628
+        },
+        "step=T_oct=T_acc=T": {
+          "n": 477,
+          "pct": 0.601513
+        }
+      },
+      "G5E_oracles": {
+        "TRUE_step + TRUE_octave + pred_acc": {
+          "written_pitch": 0.7516
+        },
+        "TRUE_step + pred_oct + pred_acc": {
+          "written_pitch": 0.7238
+        },
+        "TRUE_step + pred_octave": {
+          "written_pitch": 0.7238
+        },
+        "pred_step + TRUE_octave": {
+          "written_pitch": 0.6066
+        },
+        "pred_step + TRUE_octave + TRUE_acc": {
+          "written_pitch": 0.7566
+        },
+        "pred_step + pred_oct + TRUE_acc": {
+          "written_pitch": 0.7478
+        },
+        "predicted_all (no oracle)": {
+          "written_pitch": 0.6015
+        }
+      },
+      "G5H_in_sample_memorisation": 0.7637,
+      "G5H_train_minus_LOSO_gap": 0.1622,
+      "macro_written_pitch": 0.6769,
+      "n": 793,
+      "param_count": 198119,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.8602,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6989,
+          "n": 93,
+          "octave": 0.957,
+          "step": 0.7742,
+          "written_pitch": 0.6989
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.7239,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6493,
+          "n": 134,
+          "octave": 0.9701,
+          "step": 0.7985,
+          "written_pitch": 0.6418
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.7667,
+          "engraving": "musescore-feta",
+          "midi": 0.6222,
+          "n": 90,
+          "octave": 0.9444,
+          "step": 0.8222,
+          "written_pitch": 0.6222
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.7342,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.4873,
+          "n": 158,
+          "octave": 0.9557,
+          "step": 0.6582,
+          "written_pitch": 0.4873
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.7403,
+          "engraving": "musescore-feta",
+          "midi": 0.6039,
+          "n": 154,
+          "octave": 0.9416,
+          "step": 0.7597,
+          "written_pitch": 0.6039
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.7111,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6222,
+          "n": 45,
+          "octave": 0.9556,
+          "step": 0.8,
+          "written_pitch": 0.6222
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.9,
+          "engraving": "corranzo-benchmark",
+          "midi": 0.4,
+          "n": 10,
+          "octave": 0.9,
+          "step": 0.4,
+          "written_pitch": 0.4
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.8889,
+          "n": 18,
+          "octave": 1.0,
+          "step": 0.9444,
+          "written_pitch": 0.8889
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9583,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9583,
+          "n": 24,
+          "octave": 1.0,
+          "step": 0.9583,
+          "written_pitch": 0.9583
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.25,
+          "engraving": "musescore-feta",
+          "midi": 0.0,
+          "n": 4,
+          "octave": 0.5,
+          "step": 0.25,
+          "written_pitch": 0.0
+        },
+        "pl-handel-gavotte": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 1.0,
+          "n": 5,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 1.0
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.4565,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.2826,
+          "n": 46,
+          "octave": 1.0,
+          "step": 0.6304,
+          "written_pitch": 0.2826
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9167,
+          "n": 12,
+          "octave": 1.0,
+          "step": 0.9167,
+          "written_pitch": 0.9167
+        }
+      },
+      "weighted_accidental": 0.7516,
+      "weighted_octave": 0.9571,
+      "weighted_step": 0.7566,
+      "weighted_written_pitch": 0.6015
+    },
+    "B_direct_joint": {
+      "G5A_identity": {
+        "Frechet_lower_bound_on_step_and_octave": 0.721311,
+        "N_shared_population": 793,
+        "P_accidental": 0.764187,
+        "P_midi": 0.645649,
+        "P_octave": 0.957125,
+        "P_step": 0.764187,
+        "P_step_and_octave": 0.764187,
+        "P_step_and_octave_and_accidental": 0.645649,
+        "accidental_cost_given_step_and_octave": 0.118537,
+        "bound_respected": true,
+        "note": "written_pitch is by construction the intersection of all three components on one shared population, so it is EXPECTED to sit below the two-component Frechet bound. The bound constrains P(step AND octave), and that is what is tested.",
+        "written_pitch_equals_triple_intersection": true
+      },
+      "G5B_intersection": {
+        "step=F_oct=F_acc=F": {
+          "n": 12,
+          "pct": 0.015132
+        },
+        "step=F_oct=F_acc=T": {
+          "n": 22,
+          "pct": 0.027743
+        },
+        "step=F_oct=T_acc=F": {
+          "n": 81,
+          "pct": 0.102144
+        },
+        "step=F_oct=T_acc=T": {
+          "n": 72,
+          "pct": 0.090794
+        },
+        "step=T_oct=F_acc=F": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "step=T_oct=F_acc=T": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "step=T_oct=T_acc=F": {
+          "n": 94,
+          "pct": 0.118537
+        },
+        "step=T_oct=T_acc=T": {
+          "n": 512,
+          "pct": 0.645649
+        }
+      },
+      "G5E_oracles": {
+        "TRUE_step + TRUE_octave + pred_acc": {
+          "written_pitch": 0.7642
+        },
+        "TRUE_step + pred_oct + pred_acc": {
+          "written_pitch": 0.7364
+        },
+        "TRUE_step + pred_octave": {
+          "written_pitch": 0.7364
+        },
+        "pred_step + TRUE_octave": {
+          "written_pitch": 0.6456
+        },
+        "pred_step + TRUE_octave + TRUE_acc": {
+          "written_pitch": 0.7642
+        },
+        "pred_step + pred_oct + TRUE_acc": {
+          "written_pitch": 0.7642
+        },
+        "predicted_all (no oracle)": {
+          "written_pitch": 0.6456
+        }
+      },
+      "G5H_in_sample_memorisation": 0.8178,
+      "G5H_train_minus_LOSO_gap": 0.1722,
+      "macro_written_pitch": 0.6477,
+      "n": 793,
+      "param_count": 330217,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.8387,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6882,
+          "n": 93,
+          "octave": 0.957,
+          "step": 0.8065,
+          "written_pitch": 0.6882
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.7313,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6716,
+          "n": 134,
+          "octave": 0.9627,
+          "step": 0.8209,
+          "written_pitch": 0.6716
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.7222,
+          "engraving": "musescore-feta",
+          "midi": 0.6333,
+          "n": 90,
+          "octave": 0.9667,
+          "step": 0.7444,
+          "written_pitch": 0.6333
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.7658,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.5696,
+          "n": 158,
+          "octave": 0.962,
+          "step": 0.6772,
+          "written_pitch": 0.5696
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.7987,
+          "engraving": "musescore-feta",
+          "midi": 0.6948,
+          "n": 154,
+          "octave": 0.9416,
+          "step": 0.7792,
+          "written_pitch": 0.6948
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.6667,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6,
+          "n": 45,
+          "octave": 0.9556,
+          "step": 0.7111,
+          "written_pitch": 0.6
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.8,
+          "engraving": "corranzo-benchmark",
+          "midi": 0.3,
+          "n": 10,
+          "octave": 0.8,
+          "step": 0.4,
+          "written_pitch": 0.3
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.8889,
+          "n": 18,
+          "octave": 0.9444,
+          "step": 0.9444,
+          "written_pitch": 0.8889
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9167,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9167,
+          "n": 24,
+          "octave": 1.0,
+          "step": 0.9583,
+          "written_pitch": 0.9167
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.5,
+          "engraving": "musescore-feta",
+          "midi": 0.25,
+          "n": 4,
+          "octave": 0.5,
+          "step": 0.5,
+          "written_pitch": 0.25
+        },
+        "pl-handel-gavotte": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 1.0,
+          "n": 5,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 1.0
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.587,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.4565,
+          "n": 46,
+          "octave": 1.0,
+          "step": 0.7174,
+          "written_pitch": 0.4565
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.8333,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.75,
+          "n": 12,
+          "octave": 1.0,
+          "step": 0.9167,
+          "written_pitch": 0.75
+        }
+      },
+      "weighted_accidental": 0.7642,
+      "weighted_octave": 0.9571,
+      "weighted_step": 0.7642,
+      "weighted_written_pitch": 0.6456
+    },
+    "C_hierarchical": {
+      "G5A_identity": {
+        "Frechet_lower_bound_on_step_and_octave": 0.745271,
+        "N_shared_population": 793,
+        "P_accidental": 0.708701,
+        "P_midi": 0.577554,
+        "P_octave": 0.960908,
+        "P_step": 0.784363,
+        "P_step_and_octave": 0.778058,
+        "P_step_and_octave_and_accidental": 0.576293,
+        "accidental_cost_given_step_and_octave": 0.201765,
+        "bound_respected": true,
+        "note": "written_pitch is by construction the intersection of all three components on one shared population, so it is EXPECTED to sit below the two-component Frechet bound. The bound constrains P(step AND octave), and that is what is tested.",
+        "written_pitch_equals_triple_intersection": true
+      },
+      "G5B_intersection": {
+        "step=F_oct=F_acc=F": {
+          "n": 8,
+          "pct": 0.010088
+        },
+        "step=F_oct=F_acc=T": {
+          "n": 18,
+          "pct": 0.022699
+        },
+        "step=F_oct=T_acc=F": {
+          "n": 62,
+          "pct": 0.078184
+        },
+        "step=F_oct=T_acc=T": {
+          "n": 83,
+          "pct": 0.104666
+        },
+        "step=T_oct=F_acc=F": {
+          "n": 1,
+          "pct": 0.001261
+        },
+        "step=T_oct=F_acc=T": {
+          "n": 4,
+          "pct": 0.005044
+        },
+        "step=T_oct=T_acc=F": {
+          "n": 160,
+          "pct": 0.201765
+        },
+        "step=T_oct=T_acc=T": {
+          "n": 457,
+          "pct": 0.576293
+        }
+      },
+      "G5E_oracles": {
+        "TRUE_step + TRUE_octave + pred_acc": {
+          "written_pitch": 0.7087
+        },
+        "TRUE_step + pred_oct + pred_acc": {
+          "written_pitch": 0.681
+        },
+        "TRUE_step + pred_octave": {
+          "written_pitch": 0.681
+        },
+        "pred_step + TRUE_octave": {
+          "written_pitch": 0.5813
+        },
+        "pred_step + TRUE_octave + TRUE_acc": {
+          "written_pitch": 0.7844
+        },
+        "pred_step + pred_oct + TRUE_acc": {
+          "written_pitch": 0.7781
+        },
+        "predicted_all (no oracle)": {
+          "written_pitch": 0.5763
+        }
+      },
+      "G5H_in_sample_memorisation": 0.7311,
+      "G5H_train_minus_LOSO_gap": 0.1548,
+      "macro_written_pitch": 0.6585,
+      "n": 793,
+      "param_count": 284944,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.8495,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.7634,
+          "n": 93,
+          "octave": 0.9677,
+          "step": 0.871,
+          "written_pitch": 0.7634
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.709,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6418,
+          "n": 134,
+          "octave": 0.9701,
+          "step": 0.8209,
+          "written_pitch": 0.6418
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.7778,
+          "engraving": "musescore-feta",
+          "midi": 0.6556,
+          "n": 90,
+          "octave": 0.9778,
+          "step": 0.8333,
+          "written_pitch": 0.6556
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.7278,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.5127,
+          "n": 158,
+          "octave": 0.9747,
+          "step": 0.6772,
+          "written_pitch": 0.5127
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.5649,
+          "engraving": "musescore-feta",
+          "midi": 0.4091,
+          "n": 154,
+          "octave": 0.9156,
+          "step": 0.7468,
+          "written_pitch": 0.4026
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.6444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.5778,
+          "n": 45,
+          "octave": 0.9556,
+          "step": 0.7778,
+          "written_pitch": 0.5778
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.8,
+          "engraving": "corranzo-benchmark",
+          "midi": 0.3,
+          "n": 10,
+          "octave": 0.9,
+          "step": 0.4,
+          "written_pitch": 0.3
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.8889,
+          "n": 18,
+          "octave": 0.9444,
+          "step": 1.0,
+          "written_pitch": 0.8889
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9167,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9167,
+          "n": 24,
+          "octave": 1.0,
+          "step": 0.9583,
+          "written_pitch": 0.9167
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.25,
+          "engraving": "musescore-feta",
+          "midi": 0.0,
+          "n": 4,
+          "octave": 0.75,
+          "step": 0.75,
+          "written_pitch": 0.0
+        },
+        "pl-handel-gavotte": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 1.0,
+          "n": 5,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 1.0
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.4783,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.3261,
+          "n": 46,
+          "octave": 1.0,
+          "step": 0.7609,
+          "written_pitch": 0.3261
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9167,
+          "n": 12,
+          "octave": 1.0,
+          "step": 0.9167,
+          "written_pitch": 0.9167
+        }
+      },
+      "weighted_accidental": 0.7087,
+      "weighted_octave": 0.9609,
+      "weighted_step": 0.7844,
+      "weighted_written_pitch": 0.5763
+    },
+    "D_mlp_joint": {
+      "G5A_identity": {
+        "Frechet_lower_bound_on_step_and_octave": 0.723834,
+        "N_shared_population": 793,
+        "P_accidental": 0.762926,
+        "P_midi": 0.649433,
+        "P_octave": 0.959647,
+        "P_step": 0.764187,
+        "P_step_and_octave": 0.764187,
+        "P_step_and_octave_and_accidental": 0.649433,
+        "accidental_cost_given_step_and_octave": 0.114754,
+        "bound_respected": true,
+        "note": "written_pitch is by construction the intersection of all three components on one shared population, so it is EXPECTED to sit below the two-component Frechet bound. The bound constrains P(step AND octave), and that is what is tested.",
+        "written_pitch_equals_triple_intersection": true
+      },
+      "G5B_intersection": {
+        "step=F_oct=F_acc=F": {
+          "n": 13,
+          "pct": 0.016393
+        },
+        "step=F_oct=F_acc=T": {
+          "n": 19,
+          "pct": 0.02396
+        },
+        "step=F_oct=T_acc=F": {
+          "n": 84,
+          "pct": 0.105927
+        },
+        "step=F_oct=T_acc=T": {
+          "n": 71,
+          "pct": 0.089533
+        },
+        "step=T_oct=F_acc=F": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "step=T_oct=F_acc=T": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "step=T_oct=T_acc=F": {
+          "n": 91,
+          "pct": 0.114754
+        },
+        "step=T_oct=T_acc=T": {
+          "n": 515,
+          "pct": 0.649433
+        }
+      },
+      "G5E_oracles": {
+        "TRUE_step + TRUE_octave + pred_acc": {
+          "written_pitch": 0.7629
+        },
+        "TRUE_step + pred_oct + pred_acc": {
+          "written_pitch": 0.739
+        },
+        "TRUE_step + pred_octave": {
+          "written_pitch": 0.739
+        },
+        "pred_step + TRUE_octave": {
+          "written_pitch": 0.6494
+        },
+        "pred_step + TRUE_octave + TRUE_acc": {
+          "written_pitch": 0.7642
+        },
+        "pred_step + pred_oct + TRUE_acc": {
+          "written_pitch": 0.7642
+        },
+        "predicted_all (no oracle)": {
+          "written_pitch": 0.6494
+        }
+      },
+      "G5H_in_sample_memorisation": 0.7997,
+      "G5H_train_minus_LOSO_gap": 0.1503,
+      "macro_written_pitch": 0.658,
+      "n": 793,
+      "param_count": 396009,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.8817,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.7742,
+          "n": 93,
+          "octave": 0.9677,
+          "step": 0.8495,
+          "written_pitch": 0.7742
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.7313,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6567,
+          "n": 134,
+          "octave": 0.9552,
+          "step": 0.7761,
+          "written_pitch": 0.6567
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.7667,
+          "engraving": "musescore-feta",
+          "midi": 0.6111,
+          "n": 90,
+          "octave": 0.9667,
+          "step": 0.7556,
+          "written_pitch": 0.6111
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.7152,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.5506,
+          "n": 158,
+          "octave": 0.9684,
+          "step": 0.6709,
+          "written_pitch": 0.5506
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.7857,
+          "engraving": "musescore-feta",
+          "midi": 0.7013,
+          "n": 154,
+          "octave": 0.9416,
+          "step": 0.7987,
+          "written_pitch": 0.7013
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.7111,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6667,
+          "n": 45,
+          "octave": 0.9556,
+          "step": 0.7333,
+          "written_pitch": 0.6667
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.8,
+          "engraving": "corranzo-benchmark",
+          "midi": 0.3,
+          "n": 10,
+          "octave": 0.8,
+          "step": 0.4,
+          "written_pitch": 0.3
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9444,
+          "n": 18,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 0.9444
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9167,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.875,
+          "n": 24,
+          "octave": 1.0,
+          "step": 0.9167,
+          "written_pitch": 0.875
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.5,
+          "engraving": "musescore-feta",
+          "midi": 0.25,
+          "n": 4,
+          "octave": 0.5,
+          "step": 0.5,
+          "written_pitch": 0.25
+        },
+        "pl-handel-gavotte": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 1.0,
+          "n": 5,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 1.0
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.5435,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.3913,
+          "n": 46,
+          "octave": 1.0,
+          "step": 0.6957,
+          "written_pitch": 0.3913
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.9167,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.8333,
+          "n": 12,
+          "octave": 1.0,
+          "step": 0.8333,
+          "written_pitch": 0.8333
+        }
+      },
+      "weighted_accidental": 0.7629,
+      "weighted_octave": 0.9596,
+      "weighted_step": 0.7642,
+      "weighted_written_pitch": 0.6494
+    },
+    "E_compatible": {
+      "G5A_identity": {
+        "Frechet_lower_bound_on_step_and_octave": 0.713745,
+        "N_shared_population": 793,
+        "P_accidental": 0.751576,
+        "P_midi": 0.602774,
+        "P_octave": 0.957125,
+        "P_step": 0.75662,
+        "P_step_and_octave": 0.747793,
+        "P_step_and_octave_and_accidental": 0.601513,
+        "accidental_cost_given_step_and_octave": 0.14628,
+        "bound_respected": true,
+        "note": "written_pitch is by construction the intersection of all three components on one shared population, so it is EXPECTED to sit below the two-component Frechet bound. The bound constrains P(step AND octave), and that is what is tested.",
+        "written_pitch_equals_triple_intersection": true
+      },
+      "G5B_intersection": {
+        "step=F_oct=F_acc=F": {
+          "n": 9,
+          "pct": 0.011349
+        },
+        "step=F_oct=F_acc=T": {
+          "n": 18,
+          "pct": 0.022699
+        },
+        "step=F_oct=T_acc=F": {
+          "n": 69,
+          "pct": 0.087011
+        },
+        "step=F_oct=T_acc=T": {
+          "n": 97,
+          "pct": 0.12232
+        },
+        "step=T_oct=F_acc=F": {
+          "n": 3,
+          "pct": 0.003783
+        },
+        "step=T_oct=F_acc=T": {
+          "n": 4,
+          "pct": 0.005044
+        },
+        "step=T_oct=T_acc=F": {
+          "n": 116,
+          "pct": 0.14628
+        },
+        "step=T_oct=T_acc=T": {
+          "n": 477,
+          "pct": 0.601513
+        }
+      },
+      "G5E_oracles": {
+        "TRUE_step + TRUE_octave + pred_acc": {
+          "written_pitch": 0.7516
+        },
+        "TRUE_step + pred_oct + pred_acc": {
+          "written_pitch": 0.7238
+        },
+        "TRUE_step + pred_octave": {
+          "written_pitch": 0.7238
+        },
+        "pred_step + TRUE_octave": {
+          "written_pitch": 0.6066
+        },
+        "pred_step + TRUE_octave + TRUE_acc": {
+          "written_pitch": 0.7566
+        },
+        "pred_step + pred_oct + TRUE_acc": {
+          "written_pitch": 0.7478
+        },
+        "predicted_all (no oracle)": {
+          "written_pitch": 0.6015
+        }
+      },
+      "G5H_in_sample_memorisation": 0.7637,
+      "G5H_train_minus_LOSO_gap": 0.1622,
+      "macro_written_pitch": 0.6769,
+      "n": 793,
+      "param_count": 198273,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.8602,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6989,
+          "n": 93,
+          "octave": 0.957,
+          "step": 0.7742,
+          "written_pitch": 0.6989
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.7239,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6493,
+          "n": 134,
+          "octave": 0.9701,
+          "step": 0.7985,
+          "written_pitch": 0.6418
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.7667,
+          "engraving": "musescore-feta",
+          "midi": 0.6222,
+          "n": 90,
+          "octave": 0.9444,
+          "step": 0.8222,
+          "written_pitch": 0.6222
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.7342,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.4873,
+          "n": 158,
+          "octave": 0.9557,
+          "step": 0.6582,
+          "written_pitch": 0.4873
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.7403,
+          "engraving": "musescore-feta",
+          "midi": 0.6039,
+          "n": 154,
+          "octave": 0.9416,
+          "step": 0.7597,
+          "written_pitch": 0.6039
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.7111,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.6222,
+          "n": 45,
+          "octave": 0.9556,
+          "step": 0.8,
+          "written_pitch": 0.6222
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.9,
+          "engraving": "corranzo-benchmark",
+          "midi": 0.4,
+          "n": 10,
+          "octave": 0.9,
+          "step": 0.4,
+          "written_pitch": 0.4
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9444,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.8889,
+          "n": 18,
+          "octave": 1.0,
+          "step": 0.9444,
+          "written_pitch": 0.8889
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9583,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9583,
+          "n": 24,
+          "octave": 1.0,
+          "step": 0.9583,
+          "written_pitch": 0.9583
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.25,
+          "engraving": "musescore-feta",
+          "midi": 0.0,
+          "n": 4,
+          "octave": 0.5,
+          "step": 0.25,
+          "written_pitch": 0.0
+        },
+        "pl-handel-gavotte": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 1.0,
+          "n": 5,
+          "octave": 1.0,
+          "step": 1.0,
+          "written_pitch": 1.0
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.4565,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.2826,
+          "n": 46,
+          "octave": 1.0,
+          "step": 0.6304,
+          "written_pitch": 0.2826
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 0,
+          "written_pitch": null
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 1.0,
+          "engraving": "musescore4-emmentaler",
+          "midi": 0.9167,
+          "n": 12,
+          "octave": 1.0,
+          "step": 0.9167,
+          "written_pitch": 0.9167
+        }
+      },
+      "weighted_accidental": 0.7516,
+      "weighted_octave": 0.9571,
+      "weighted_step": 0.7566,
+      "weighted_written_pitch": 0.6015
+    }
+  },
+  "subsample": 0,
+  "width": 256
+}

@@ -1,0 +1,294 @@
+{
+  "G5A_identity": {
+    "Frechet_lower_bound_on_step_and_octave": -0.057712,
+    "N_shared_population": 6775,
+    "P_accidental": 0.68738,
+    "P_octave": 0.780074,
+    "P_step": 0.162214,
+    "P_step_and_octave": 0.148192,
+    "P_step_and_octave_and_accidental": 0.110554,
+    "bound_respected": true,
+    "cost_of_accidental_given_step_and_octave": 0.037638,
+    "resolution": "written_pitch requires a THIRD component (accidental), so it is expected to sit below the two-component bound. The bound is tested against P(step AND octave), which is the only quantity the bound actually constrains.",
+    "written_pitch_below_step_octave_bound": false
+  },
+  "G5B_intersection_step_octave": {
+    "step=F_oct=F": {
+      "n": 1395,
+      "pct": 0.205904
+    },
+    "step=F_oct=T": {
+      "n": 4281,
+      "pct": 0.631882
+    },
+    "step=T_oct=F": {
+      "n": 95,
+      "pct": 0.014022
+    },
+    "step=T_oct=T": {
+      "n": 1004,
+      "pct": 0.148192
+    }
+  },
+  "G5B_intersection_step_octave_accidental": {
+    "step=F_oct=F_acc=F": {
+      "n": 359,
+      "pct": 0.052989
+    },
+    "step=F_oct=F_acc=T": {
+      "n": 1036,
+      "pct": 0.152915
+    },
+    "step=F_oct=T_acc=F": {
+      "n": 1483,
+      "pct": 0.218893
+    },
+    "step=F_oct=T_acc=T": {
+      "n": 2798,
+      "pct": 0.412989
+    },
+    "step=T_oct=F_acc=F": {
+      "n": 21,
+      "pct": 0.0031
+    },
+    "step=T_oct=F_acc=T": {
+      "n": 74,
+      "pct": 0.010923
+    },
+    "step=T_oct=T_acc=F": {
+      "n": 255,
+      "pct": 0.037638
+    },
+    "step=T_oct=T_acc=T": {
+      "n": 749,
+      "pct": 0.110554
+    }
+  },
+  "frozen_representation": {
+    "cache": "out/phase_f_cache.npz",
+    "embedding_dim": 480,
+    "note": "unchanged for every readout experiment in Phase G5",
+    "records": 681,
+    "sha256": "24d4ad8b3322eddfa9d07a620d030ed6668dfa14528e46ac0895256e519cfe33"
+  },
+  "metric_definitions": {
+    "accidental": {
+      "class_vocabulary": "alter - 3, clamped to 0..6 (7 classes)",
+      "includes_accidental": true,
+      "masking": "m_step & m_oct & m_acc & object_mask",
+      "population": "IDENTICAL to written_step (same `_m`)",
+      "predicate": "argmax(pitch_accidental logits) == target",
+      "target_field": "targets.object.pitch_accidental"
+    },
+    "closed_form_staff_position": {
+      "includes_accidental": false,
+      "population": "every PITCH_STAFF label in corpus 2.1 with a stepsFromBandCenter and a writtenPitch",
+      "predicate": "diatonic_index(formula) == diatonic_index(MusicXML writtenPitch)",
+      "target_field": "NOT a model metric. A closed form applied to the DETECTED geometry: k = (bandCentreY - cy)/staffGap, band chosen by nearest centre, middle-line diatonic index = 34 (upper, G2) or 22 (lower, F4), plus round(2k).",
+      "warning": "This measures a LETTER+REGISTER match derived from staff geometry. It is NOT written pitch: it never tests an accidental. It must not be cited as a written-pitch target."
+    },
+    "derived_midi": {
+      "includes_accidental": true,
+      "population": "IDENTICAL to written_step",
+      "predicate": "midi(pred_step,pred_oct,pred_acc-3) == midi(true_step,true_oct,true_acc-3)",
+      "target_field": "same three targets, mapped to MIDI"
+    },
+    "octave": {
+      "class_vocabulary": "0..10 (clamped)",
+      "includes_accidental": false,
+      "masking": "m_step & m_oct & m_acc & object_mask",
+      "population": "IDENTICAL to written_step (same `_m`)",
+      "predicate": "argmax(pitch_octave logits) == target",
+      "target_field": "targets.object.pitch_octave"
+    },
+    "written_pitch_joint": {
+      "class_vocabulary": "n/a - a conjunction, not a classifier",
+      "includes_accidental": true,
+      "masking": "m_step & m_oct & m_acc & object_mask",
+      "note": "This is the campaign's canonical `written_pitch_accuracy`: the per-object conjunction of (step, octave, accidental).",
+      "population": "IDENTICAL to written_step (same `_m`)",
+      "predicate": "step_correct AND octave_correct AND accidental_correct",
+      "target_field": "the same three targets, simultaneously"
+    },
+    "written_step": {
+      "class_vocabulary": "CDEFGAB -> 0..6 (piano_vision/data.py WRITTEN_STEPS)",
+      "includes_accidental": false,
+      "masking": "m_step & m_oct & m_acc & object_mask",
+      "population": "objects whose written_step, octave AND accidental masks are ALL true (the shared `_m`), intersected with object_mask",
+      "predicate": "argmax(pitch_written_step logits) == target",
+      "target_field": "targets.object.pitch_written_step"
+    }
+  },
+  "per_score": {
+    "bc-bach-fugue-bwv846": {
+      "accidental": 1.0,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.1667,
+      "n": 12,
+      "octave": 0.8333,
+      "step": 0.1667,
+      "step_and_octave": 0.1667,
+      "written_pitch": 0.1667
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "accidental": 0.3333,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.1667,
+      "n": 6,
+      "octave": 0.8333,
+      "step": 0.1667,
+      "step_and_octave": 0.1667,
+      "written_pitch": 0.1667
+    },
+    "bc-chopin-etude-op10-01": {
+      "accidental": 0.8571,
+      "engraving": "musescore-feta",
+      "midi": 0.1429,
+      "n": 14,
+      "octave": 0.9286,
+      "step": 0.1429,
+      "step_and_octave": 0.1429,
+      "written_pitch": 0.1429
+    },
+    "bc-chopin-etude-op10-12": {
+      "accidental": 0.5946,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.1081,
+      "n": 37,
+      "octave": 0.8378,
+      "step": 0.1081,
+      "step_and_octave": 0.1081,
+      "written_pitch": 0.0811
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "accidental": 0.375,
+      "engraving": "musescore-feta",
+      "midi": 0.0,
+      "n": 8,
+      "octave": 0.5,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "bc-mozart-k153": {
+      "accidental": 0.25,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.0,
+      "n": 4,
+      "octave": 0.75,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "omf-piano-dense-advanced-vector": {
+      "accidental": 0.4211,
+      "engraving": "corranzo-benchmark",
+      "midi": 0.0,
+      "n": 19,
+      "octave": 0.6842,
+      "step": 0.1053,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "omf-piano-grand-voices-vector": {
+      "accidental": 0.5,
+      "engraving": "corranzo-benchmark",
+      "midi": 0.0,
+      "n": 6,
+      "octave": 0.8333,
+      "step": 0.1667,
+      "step_and_octave": 0.1667,
+      "written_pitch": 0.0
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "accidental": 1.0,
+      "engraving": "corranzo-benchmark",
+      "midi": 0.0,
+      "n": 5,
+      "octave": 0.6,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "pl-bach-prelude-bwv846": {
+      "accidental": 1.0,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.0,
+      "n": 14,
+      "octave": 0.6429,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "pl-beethoven-fur-elise": {
+      "accidental": 0.8571,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.0,
+      "n": 7,
+      "octave": 0.7143,
+      "step": 0.1429,
+      "step_and_octave": 0.1429,
+      "written_pitch": 0.0
+    },
+    "pl-brahms-waltz-op39-3": {
+      "accidental": 1.0,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.0,
+      "n": 3,
+      "octave": 1.0,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "accidental": 0.6667,
+      "engraving": "musescore-feta",
+      "midi": 0.0,
+      "n": 3,
+      "octave": 0.3333,
+      "step": 0.0,
+      "step_and_octave": 0.0,
+      "written_pitch": 0.0
+    },
+    "pl-handel-gavotte": {
+      "accidental": 1.0,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.1667,
+      "n": 6,
+      "octave": 0.8333,
+      "step": 0.1667,
+      "step_and_octave": 0.1667,
+      "written_pitch": 0.1667
+    },
+    "pl-mozart-turkish-march": {
+      "accidental": 0.6111,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.0556,
+      "n": 18,
+      "octave": 0.6667,
+      "step": 0.0556,
+      "step_and_octave": 0.0556,
+      "written_pitch": 0.0556
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "accidental": 0.6667,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.3333,
+      "n": 3,
+      "octave": 0.6667,
+      "step": 0.6667,
+      "step_and_octave": 0.3333,
+      "written_pitch": 0.3333
+    },
+    "std-demo-minuet-in-g": {
+      "accidental": 1.0,
+      "engraving": "musescore4-emmentaler",
+      "midi": 0.3333,
+      "n": 6,
+      "octave": 0.8333,
+      "step": 0.3333,
+      "step_and_octave": 0.3333,
+      "written_pitch": 0.3333
+    }
+  }
+}
