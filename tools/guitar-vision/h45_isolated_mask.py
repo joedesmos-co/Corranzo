@@ -64,10 +64,20 @@ const fs = require('fs');
       return s && /^[0-9]+$/.test(s.textContent.trim());
     })[k];
     if (!target) return null;
-    // Hide every drawable except the target text.
+    // Hide drawable *leaves* only, and never a group.
+    //
+    // The previous version hid every element under the svg except the target,
+    // which included the target's own ancestors - the layer group and the tabGrp.
+    // Hiding an ancestor hides its descendants, so the target was hidden along
+    // with them and every mask came back empty. Groups carry transforms, styles,
+    // clipping and the positioning context the target depends on, so hiding them
+    // for anything but the target's own subtree destroys the target itself.
+    const DRAWABLE = new Set(['path', 'use', 'text', 'line', 'rect',
+                              'polygon', 'polyline', 'circle', 'ellipse']);
+    const inTarget = (el) => el === target || target.contains(el);
     for (const el of document.querySelectorAll('svg *')) {
-      if (el === target || target.contains(el)) continue;
-      el.style.display = 'none';
+      if (inTarget(el)) continue;
+      if (DRAWABLE.has(el.tagName)) el.style.display = 'none';
     }
     const box = target.getBBox();
     const r = target.getBoundingClientRect();
