@@ -1,0 +1,458 @@
+{
+  "matrix": {
+    "A_frozen_embedding_only": {
+      "macro_written_pitch": 0.5423,
+      "n": 5590,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.9157,
+          "engraving": "bc-bach-fugue-bwv846",
+          "n": 629,
+          "octave": 0.9793,
+          "written_pitch": 0.6343,
+          "written_step": 0.69
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.5429,
+          "engraving": "bc-beethoven-sonata-op2-m1",
+          "n": 396,
+          "octave": 0.9419,
+          "written_pitch": 0.4444,
+          "written_step": 0.6364
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.8541,
+          "engraving": "bc-chopin-etude-op10-01",
+          "n": 377,
+          "octave": 0.9469,
+          "written_pitch": 0.5889,
+          "written_step": 0.6923
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.6519,
+          "engraving": "bc-chopin-etude-op10-12",
+          "n": 1017,
+          "octave": 0.9459,
+          "written_pitch": 0.469,
+          "written_step": 0.6686
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.5671,
+          "engraving": "bc-chopin-nocturne-op9-n2",
+          "n": 790,
+          "octave": 0.9582,
+          "written_pitch": 0.3696,
+          "written_step": 0.6772
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.5532,
+          "engraving": "bc-mozart-k153",
+          "n": 714,
+          "octave": 0.972,
+          "written_pitch": 0.4594,
+          "written_step": 0.7647
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.7708,
+          "engraving": "omf-piano-grand-voices-vector",
+          "n": 48,
+          "octave": 0.9375,
+          "written_pitch": 0.3958,
+          "written_step": 0.4792
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9234,
+          "engraving": "pl-bach-prelude-bwv846",
+          "n": 522,
+          "octave": 0.9981,
+          "written_pitch": 0.7605,
+          "written_step": 0.8218
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9024,
+          "engraving": "pl-beethoven-fur-elise",
+          "n": 369,
+          "octave": 0.9593,
+          "written_pitch": 0.6992,
+          "written_step": 0.7371
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.5739,
+          "engraving": "pl-chopin-mazurka-op6-1",
+          "n": 115,
+          "octave": 0.9304,
+          "written_pitch": 0.4348,
+          "written_step": 0.7043
+        },
+        "pl-handel-gavotte": {
+          "accidental": 0.87,
+          "engraving": "pl-handel-gavotte",
+          "n": 100,
+          "octave": 0.97,
+          "written_pitch": 0.69,
+          "written_step": 0.77
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.6548,
+          "engraving": "pl-mozart-turkish-march",
+          "n": 336,
+          "octave": 0.9375,
+          "written_pitch": 0.4315,
+          "written_step": 0.6786
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.8362,
+          "engraving": "std-demo-minuet-in-g",
+          "n": 177,
+          "octave": 0.9718,
+          "written_pitch": 0.6723,
+          "written_step": 0.8079
+        }
+      },
+      "weighted_written_pitch": 0.5279
+    },
+    "B_roi_only": {
+      "macro_written_pitch": 0.2438,
+      "n": 5590,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.9269,
+          "engraving": "bc-bach-fugue-bwv846",
+          "n": 629,
+          "octave": 0.9285,
+          "written_pitch": 0.283,
+          "written_step": 0.3037
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.5101,
+          "engraving": "bc-beethoven-sonata-op2-m1",
+          "n": 396,
+          "octave": 0.8864,
+          "written_pitch": 0.2045,
+          "written_step": 0.4141
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.8647,
+          "engraving": "bc-chopin-etude-op10-01",
+          "n": 377,
+          "octave": 0.7003,
+          "written_pitch": 0.305,
+          "written_step": 0.4377
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.6706,
+          "engraving": "bc-chopin-etude-op10-12",
+          "n": 1017,
+          "octave": 0.8771,
+          "written_pitch": 0.1583,
+          "written_step": 0.293
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.5646,
+          "engraving": "bc-chopin-nocturne-op9-n2",
+          "n": 790,
+          "octave": 0.8722,
+          "written_pitch": 0.2,
+          "written_step": 0.3646
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.5826,
+          "engraving": "bc-mozart-k153",
+          "n": 714,
+          "octave": 0.9468,
+          "written_pitch": 0.112,
+          "written_step": 0.2143
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.7708,
+          "engraving": "omf-piano-grand-voices-vector",
+          "n": 48,
+          "octave": 0.9167,
+          "written_pitch": 0.4583,
+          "written_step": 0.625
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9272,
+          "engraving": "pl-bach-prelude-bwv846",
+          "n": 522,
+          "octave": 0.8314,
+          "written_pitch": 0.1724,
+          "written_step": 0.1877
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9024,
+          "engraving": "pl-beethoven-fur-elise",
+          "n": 369,
+          "octave": 0.981,
+          "written_pitch": 0.3442,
+          "written_step": 0.4336
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.513,
+          "engraving": "pl-chopin-mazurka-op6-1",
+          "n": 115,
+          "octave": 0.8261,
+          "written_pitch": 0.3043,
+          "written_step": 0.5217
+        },
+        "pl-handel-gavotte": {
+          "accidental": 0.88,
+          "engraving": "pl-handel-gavotte",
+          "n": 100,
+          "octave": 0.76,
+          "written_pitch": 0.15,
+          "written_step": 0.23
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.7262,
+          "engraving": "pl-mozart-turkish-march",
+          "n": 336,
+          "octave": 0.5446,
+          "written_pitch": 0.0536,
+          "written_step": 0.1429
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.8814,
+          "engraving": "std-demo-minuet-in-g",
+          "n": 177,
+          "octave": 0.9831,
+          "written_pitch": 0.4237,
+          "written_step": 0.4689
+        }
+      },
+      "weighted_written_pitch": 0.2066
+    },
+    "C_embedding_plus_roi": {
+      "macro_written_pitch": 0.5386,
+      "n": 5590,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.9205,
+          "engraving": "bc-bach-fugue-bwv846",
+          "n": 629,
+          "octave": 0.9793,
+          "written_pitch": 0.6518,
+          "written_step": 0.6963
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.5682,
+          "engraving": "bc-beethoven-sonata-op2-m1",
+          "n": 396,
+          "octave": 0.9495,
+          "written_pitch": 0.4495,
+          "written_step": 0.6338
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.8515,
+          "engraving": "bc-chopin-etude-op10-01",
+          "n": 377,
+          "octave": 0.9363,
+          "written_pitch": 0.6446,
+          "written_step": 0.7215
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.6352,
+          "engraving": "bc-chopin-etude-op10-12",
+          "n": 1017,
+          "octave": 0.944,
+          "written_pitch": 0.4376,
+          "written_step": 0.6421
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.5924,
+          "engraving": "bc-chopin-nocturne-op9-n2",
+          "n": 790,
+          "octave": 0.9544,
+          "written_pitch": 0.4215,
+          "written_step": 0.7139
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.5532,
+          "engraving": "bc-mozart-k153",
+          "n": 714,
+          "octave": 0.9664,
+          "written_pitch": 0.4384,
+          "written_step": 0.7689
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.7708,
+          "engraving": "omf-piano-grand-voices-vector",
+          "n": 48,
+          "octave": 0.9375,
+          "written_pitch": 0.375,
+          "written_step": 0.4375
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9272,
+          "engraving": "pl-bach-prelude-bwv846",
+          "n": 522,
+          "octave": 0.9904,
+          "written_pitch": 0.7299,
+          "written_step": 0.7989
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9024,
+          "engraving": "pl-beethoven-fur-elise",
+          "n": 369,
+          "octave": 0.9675,
+          "written_pitch": 0.7073,
+          "written_step": 0.7371
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.5391,
+          "engraving": "pl-chopin-mazurka-op6-1",
+          "n": 115,
+          "octave": 0.9217,
+          "written_pitch": 0.3826,
+          "written_step": 0.713
+        },
+        "pl-handel-gavotte": {
+          "accidental": 0.87,
+          "engraving": "pl-handel-gavotte",
+          "n": 100,
+          "octave": 0.97,
+          "written_pitch": 0.68,
+          "written_step": 0.76
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.6577,
+          "engraving": "pl-mozart-turkish-march",
+          "n": 336,
+          "octave": 0.9435,
+          "written_pitch": 0.4286,
+          "written_step": 0.6667
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.8305,
+          "engraving": "std-demo-minuet-in-g",
+          "n": 177,
+          "octave": 0.9774,
+          "written_pitch": 0.6554,
+          "written_step": 0.774
+        }
+      },
+      "weighted_written_pitch": 0.5284
+    },
+    "D_embedding_roi_context": {
+      "macro_written_pitch": 0.5028,
+      "n": 5590,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "accidental": 0.9269,
+          "engraving": "bc-bach-fugue-bwv846",
+          "n": 629,
+          "octave": 0.9634,
+          "written_pitch": 0.663,
+          "written_step": 0.7107
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "accidental": 0.4444,
+          "engraving": "bc-beethoven-sonata-op2-m1",
+          "n": 396,
+          "octave": 0.9444,
+          "written_pitch": 0.3409,
+          "written_step": 0.5934
+        },
+        "bc-chopin-etude-op10-01": {
+          "accidental": 0.8621,
+          "engraving": "bc-chopin-etude-op10-01",
+          "n": 377,
+          "octave": 0.8276,
+          "written_pitch": 0.5464,
+          "written_step": 0.6446
+        },
+        "bc-chopin-etude-op10-12": {
+          "accidental": 0.6165,
+          "engraving": "bc-chopin-etude-op10-12",
+          "n": 1017,
+          "octave": 0.9479,
+          "written_pitch": 0.413,
+          "written_step": 0.6234
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "accidental": 0.5481,
+          "engraving": "bc-chopin-nocturne-op9-n2",
+          "n": 790,
+          "octave": 0.9519,
+          "written_pitch": 0.3278,
+          "written_step": 0.6139
+        },
+        "bc-mozart-k153": {
+          "accidental": 0.5252,
+          "engraving": "bc-mozart-k153",
+          "n": 714,
+          "octave": 0.9538,
+          "written_pitch": 0.3585,
+          "written_step": 0.7031
+        },
+        "omf-piano-grand-voices-vector": {
+          "accidental": 0.7708,
+          "engraving": "omf-piano-grand-voices-vector",
+          "n": 48,
+          "octave": 0.9375,
+          "written_pitch": 0.3958,
+          "written_step": 0.4792
+        },
+        "pl-bach-prelude-bwv846": {
+          "accidental": 0.9272,
+          "engraving": "pl-bach-prelude-bwv846",
+          "n": 522,
+          "octave": 0.9598,
+          "written_pitch": 0.749,
+          "written_step": 0.818
+        },
+        "pl-beethoven-fur-elise": {
+          "accidental": 0.9024,
+          "engraving": "pl-beethoven-fur-elise",
+          "n": 369,
+          "octave": 0.9593,
+          "written_pitch": 0.6911,
+          "written_step": 0.748
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "accidental": 0.487,
+          "engraving": "pl-chopin-mazurka-op6-1",
+          "n": 115,
+          "octave": 0.9304,
+          "written_pitch": 0.3391,
+          "written_step": 0.6696
+        },
+        "pl-handel-gavotte": {
+          "accidental": 0.88,
+          "engraving": "pl-handel-gavotte",
+          "n": 100,
+          "octave": 0.97,
+          "written_pitch": 0.64,
+          "written_step": 0.7
+        },
+        "pl-mozart-turkish-march": {
+          "accidental": 0.6994,
+          "engraving": "pl-mozart-turkish-march",
+          "n": 336,
+          "octave": 0.9315,
+          "written_pitch": 0.4048,
+          "written_step": 0.6131
+        },
+        "std-demo-minuet-in-g": {
+          "accidental": 0.887,
+          "engraving": "std-demo-minuet-in-g",
+          "n": 177,
+          "octave": 1.0,
+          "written_pitch": 0.6667,
+          "written_step": 0.7797
+        }
+      },
+      "weighted_written_pitch": 0.4857
+    }
+  },
+  "protocol": "leave-one-score-out over 17 corpus/2.1 scores, seed 0, 30 epochs, frozen V2.5, field of view 7.0 x 12.0 staff spaces",
+  "reference": {
+    "champion": 0.1204,
+    "detected_geometry_ceiling": 0.7484,
+    "fresh_embedding_head": 0.6056,
+    "perfect_geometry_ceiling": 0.8054,
+    "threshold": 0.7
+  },
+  "roi_objects": 5590,
+  "section": "matrix"
+}

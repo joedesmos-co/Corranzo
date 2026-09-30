@@ -28,16 +28,24 @@ import harness as H  # noqa: E402
 import v26_staff as S  # noqa: E402
 from v26_adapter import ADAPTED_PITCH_HEADS  # noqa: E402
 
-H.add_runtime_to_path()
-from piano_vision.v2.data import build_inputs, attach_targets, collate  # noqa: E402
-from piano_vision.v25.data import attach_object_page_geo  # noqa: E402
-from piano_vision.v25.performance import prepare_batch  # noqa: E402
+# The frozen runtime is imported LAZILY, inside build() only. The champion
+# checkpoint and its runtime tree live in the primary checkout and are not
+# guaranteed to be present; load() reads the committed-on-disk cache and must
+# keep working without them.
+def _piano_vision():
+    H.add_runtime_to_path()
+    from piano_vision.v2.data import build_inputs, attach_targets, collate
+    from piano_vision.v25.data import attach_object_page_geo
+    from piano_vision.v25.performance import prepare_batch
+    return build_inputs, attach_targets, collate, attach_object_page_geo, prepare_batch
 
 CACHE = H.V26_ROOT / "out/phase_f_cache.npz"
 META = H.V26_ROOT / "out/phase_f_cache_meta.json"
 
 
 def build():
+    build_inputs, attach_targets, collate, attach_object_page_geo, prepare_batch = \
+        _piano_vision()
     runtime = H.load_runtime("cpu")
     model = runtime.model
     index = json.loads(H.REALPDF_INDEX.read_text())
