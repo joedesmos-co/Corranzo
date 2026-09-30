@@ -1,0 +1,30 @@
+{
+  "GLYPH_RATIO_threshold": 2.0,
+  "any_visible_glyph": 61,
+  "by_alter": {
+    "-1": {
+      "ambiguous": 1,
+      "median_ratio": 1.0,
+      "n": 49,
+      "no_glyph": 45,
+      "visible_glyph": 3
+    },
+    "0": {
+      "ambiguous": 27,
+      "median_ratio": 1.0,
+      "n": 502,
+      "no_glyph": 425,
+      "visible_glyph": 50
+    },
+    "1": {
+      "ambiguous": 6,
+      "median_ratio": 1.0,
+      "n": 80,
+      "no_glyph": 66,
+      "visible_glyph": 8
+    }
+  },
+  "left_right_ratio_median": 1.0,
+  "left_right_ratio_p90": 1.975,
+  "n": 631
+}

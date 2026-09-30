@@ -1,0 +1,353 @@
+{
+  "N": 6775,
+  "accidental_decomposition": {
+    "closed_form_step": 0.837048,
+    "keyrule_predkey_predstep": 0.798967,
+    "keyrule_predkey_truestep": 0.827601
+  },
+  "decoder_spec": {
+    "conventions": {
+      "accidental_vocabulary": "class = alter + 3, so 2=FLAT, 3=NATURAL, 4=SHARP",
+      "key_alter_row": "for fifths>0, the first `fifths` letters of FCGDAEB are sharp; for fifths<0, the first |fifths| of BEADGCF are flat",
+      "learned_parameters": 0,
+      "negative_d0": "step0 uses d0 mod 7, always in 0..6; octave0 uses floor division, so a below-middle-line note keeps its register",
+      "no_labels_used": "k, is_upper and fifths are all detector/model outputs. No target, key signature or score identity is read.",
+      "round": "half-to-even, matching numpy/nearest used by the corpus"
+    },
+    "equations": {
+      "accidental": "acc0 = key_alter_row(fifths)[step0] + 3",
+      "d0": "d0 = (34 if is_upper else 22) + round(2*k)",
+      "midi": "midi0 = 12*(octave0+1) + SEMI[step0] + (acc0-3)",
+      "octave": "octave0 = d0 // 7",
+      "written_step": "step0 = LETTERS[d0 mod 7]"
+    },
+    "inputs": {
+      "fifths": "the FROZEN V2.5 context head's key_fifths argmax, a model prediction available at inference. NOT the MusicXML key.",
+      "is_upper": "the DETECTED staff role, 1.0 for the upper band. Chosen by nearest band centre, identical to the corpus builder's rule.",
+      "k": "staff-relative position (bandCentreY - noteheadCentreY)/staffGap, the DETECTED band and the band-local gap (corpus 2.1). Unclipped, sign-preserving, sub-space precision."
+    }
+  },
+  "diatonic_residual": {
+    "-1": 669,
+    "0": 5671,
+    "1": 435
+  },
+  "error_taxonomy": {
+    "A_multiple": {
+      "frac": 0.012694,
+      "n": 86
+    },
+    "A_wrong_step": {
+      "frac": 0.055646,
+      "n": 377
+    },
+    "C_wrong_accidental": {
+      "frac": 0.102878,
+      "n": 697
+    },
+    "D_none": {
+      "frac": 0.73417,
+      "n": 4974
+    },
+    "D_partial": {
+      "frac": 0.094613,
+      "n": 641
+    }
+  },
+  "per_score": {
+    "bc-bach-fugue-bwv846": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.9269,
+      "closed_form_octave": 0.9936,
+      "closed_form_step": 0.9253,
+      "closed_form_written_pitch": 0.8617,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.9269,
+      "keyrule_predkey_truestep": 0.9269,
+      "n": 629
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.6558,
+      "closed_form_octave": 0.9612,
+      "closed_form_step": 0.7116,
+      "closed_form_written_pitch": 0.5876,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.6558,
+      "keyrule_predkey_truestep": 0.7023,
+      "n": 645
+    },
+    "bc-chopin-etude-op10-01": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.8529,
+      "closed_form_octave": 0.98,
+      "closed_form_step": 0.8853,
+      "closed_form_written_pitch": 0.7756,
+      "engraving": "musescore-feta",
+      "keyrule_predkey_predstep": 0.8529,
+      "keyrule_predkey_truestep": 0.8529,
+      "n": 401
+    },
+    "bc-chopin-etude-op10-12": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.7247,
+      "closed_form_octave": 0.9715,
+      "closed_form_step": 0.7955,
+      "closed_form_written_pitch": 0.6539,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.7247,
+      "keyrule_predkey_truestep": 0.7699,
+      "n": 1017
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.7646,
+      "closed_form_octave": 0.9696,
+      "closed_form_step": 0.8506,
+      "closed_form_written_pitch": 0.7241,
+      "engraving": "musescore-feta",
+      "keyrule_predkey_predstep": 0.7646,
+      "keyrule_predkey_truestep": 0.7924,
+      "n": 790
+    },
+    "bc-mozart-k153": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.7551,
+      "closed_form_octave": 0.9809,
+      "closed_form_step": 0.801,
+      "closed_form_written_pitch": 0.7181,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.7551,
+      "keyrule_predkey_truestep": 0.8036,
+      "n": 784
+    },
+    "omf-piano-dense-advanced-vector": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.5373,
+      "closed_form_octave": 0.9701,
+      "closed_form_step": 0.6418,
+      "closed_form_written_pitch": 0.2836,
+      "engraving": "corranzo-benchmark",
+      "keyrule_predkey_predstep": 0.5373,
+      "keyrule_predkey_truestep": 0.5373,
+      "n": 67
+    },
+    "omf-piano-grand-voices-vector": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.7708,
+      "closed_form_octave": 0.9792,
+      "closed_form_step": 0.6667,
+      "closed_form_written_pitch": 0.5625,
+      "engraving": "corranzo-benchmark",
+      "keyrule_predkey_predstep": 0.7708,
+      "keyrule_predkey_truestep": 0.7708,
+      "n": 48
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 1.0,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 1.0,
+      "closed_form_written_pitch": 1.0,
+      "engraving": "corranzo-benchmark",
+      "keyrule_predkey_predstep": 1.0,
+      "keyrule_predkey_truestep": 1.0,
+      "n": 34
+    },
+    "pl-bach-prelude-bwv846": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.9272,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 0.977,
+      "closed_form_written_pitch": 0.9119,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.9272,
+      "keyrule_predkey_truestep": 0.9272,
+      "n": 522
+    },
+    "pl-beethoven-fur-elise": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.8862,
+      "closed_form_octave": 0.9935,
+      "closed_form_step": 0.8683,
+      "closed_form_written_pitch": 0.8228,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.8862,
+      "keyrule_predkey_truestep": 0.8862,
+      "n": 615
+    },
+    "pl-brahms-waltz-op39-3": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 1.0,
+      "closed_form_octave": 0.9167,
+      "closed_form_step": 0.5,
+      "closed_form_written_pitch": 0.5,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 1.0,
+      "keyrule_predkey_truestep": 1.0,
+      "n": 12
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.7229,
+      "closed_form_octave": 0.9221,
+      "closed_form_step": 0.71,
+      "closed_form_written_pitch": 0.6234,
+      "engraving": "musescore-feta",
+      "keyrule_predkey_predstep": 0.7229,
+      "keyrule_predkey_truestep": 0.8442,
+      "n": 231
+    },
+    "pl-handel-gavotte": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.78,
+      "closed_form_octave": 0.98,
+      "closed_form_step": 0.82,
+      "closed_form_written_pitch": 0.71,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.78,
+      "keyrule_predkey_truestep": 0.83,
+      "n": 100
+    },
+    "pl-mozart-turkish-march": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.8478,
+      "closed_form_octave": 0.9791,
+      "closed_form_step": 0.8284,
+      "closed_form_written_pitch": 0.7328,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.8478,
+      "keyrule_predkey_truestep": 0.8851,
+      "n": 670
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.6667,
+      "closed_form_octave": 0.9697,
+      "closed_form_step": 0.9091,
+      "closed_form_written_pitch": 0.6061,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.6667,
+      "keyrule_predkey_truestep": 0.6667,
+      "n": 33
+    },
+    "std-demo-minuet-in-g": {
+      "_krule_truekey_true_step": 0,
+      "closed_form_accidental": 0.8418,
+      "closed_form_octave": 1.0,
+      "closed_form_step": 0.9944,
+      "closed_form_written_pitch": 0.8362,
+      "engraving": "musescore4-emmentaler",
+      "keyrule_predkey_predstep": 0.8418,
+      "keyrule_predkey_truestep": 0.8418,
+      "n": 177
+    }
+  },
+  "residual_within_1_frac": 1.0,
+  "unit_tests": [
+    {
+      "expect": "B4",
+      "expect_value": 34,
+      "name": "k=0 on the upper band lands on the middle line",
+      "pass": true
+    },
+    {
+      "expect": "D3",
+      "expect_value": 22,
+      "name": "k=0 on the lower band lands on the middle line",
+      "pass": true
+    },
+    {
+      "expect": 2,
+      "expect_value": 2,
+      "name": "+1 staff space is +2 diatonic on the upper band",
+      "pass": true
+    },
+    {
+      "expect": 2,
+      "expect_value": 2,
+      "name": "+1 staff space is +2 diatonic on the lower band",
+      "pass": true
+    },
+    {
+      "expect": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "expect_value": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "name": "G major (1 sharp) sharpens F only",
+      "pass": true
+    },
+    {
+      "expect": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -1
+      ],
+      "expect_value": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -1
+      ],
+      "name": "F major (1 flat) flattens B only",
+      "pass": true
+    },
+    {
+      "expect": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expect_value": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "name": "C major alters nothing",
+      "pass": true
+    },
+    {
+      "expect": "fraction of non-integer k > 0.9",
+      "expect_value": 0.9,
+      "name": "k retains sub-space precision",
+      "pass": true
+    },
+    {
+      "expect": 0,
+      "expect_value": 0,
+      "name": "decoder has zero learned parameters",
+      "pass": true
+    }
+  ],
+  "unit_tests_passed": 9,
+  "unit_tests_total": 9
+}
