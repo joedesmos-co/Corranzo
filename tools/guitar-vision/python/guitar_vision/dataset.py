@@ -411,6 +411,7 @@ def build_sample(
         return None
 
     return {
+        "score_id": record["scoreId"],
         "images": image_stack,
         "boxes": torch.tensor(boxes, dtype=torch.float32),
         "object_type": torch.tensor(types, dtype=torch.long),
