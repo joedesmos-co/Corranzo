@@ -1,0 +1,157 @@
+{
+  "rebaseline": {
+    "corpus_2.1": {
+      "accidental": 0.7989667896678967,
+      "n": 6775,
+      "octave": 0.9781549815498155,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "n": 629,
+          "written_pitch": 0.8616852146263911
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "n": 645,
+          "written_pitch": 0.5875968992248062
+        },
+        "bc-chopin-etude-op10-01": {
+          "n": 401,
+          "written_pitch": 0.7755610972568578
+        },
+        "bc-chopin-etude-op10-12": {
+          "n": 1017,
+          "written_pitch": 0.6538839724680433
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "n": 790,
+          "written_pitch": 0.7240506329113924
+        },
+        "bc-mozart-k153": {
+          "n": 784,
+          "written_pitch": 0.7181122448979592
+        },
+        "omf-piano-dense-advanced-vector": {
+          "n": 67,
+          "written_pitch": 0.2835820895522388
+        },
+        "omf-piano-grand-voices-vector": {
+          "n": 48,
+          "written_pitch": 0.5625
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 34,
+          "written_pitch": 1.0
+        },
+        "pl-bach-prelude-bwv846": {
+          "n": 522,
+          "written_pitch": 0.9118773946360154
+        },
+        "pl-beethoven-fur-elise": {
+          "n": 615,
+          "written_pitch": 0.8227642276422764
+        },
+        "pl-brahms-waltz-op39-3": {
+          "n": 12,
+          "written_pitch": 0.5
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "n": 231,
+          "written_pitch": 0.6233766233766234
+        },
+        "pl-handel-gavotte": {
+          "n": 100,
+          "written_pitch": 0.71
+        },
+        "pl-mozart-turkish-march": {
+          "n": 670,
+          "written_pitch": 0.7328358208955223
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 33,
+          "written_pitch": 0.6060606060606061
+        },
+        "std-demo-minuet-in-g": {
+          "n": 177,
+          "written_pitch": 0.8361581920903954
+        }
+      },
+      "step": 0.8370479704797048,
+      "written_pitch_macro": 0.70059088327289,
+      "written_pitch_weighted": 0.734169741697417
+    },
+    "corpus_2.2_candidate": {
+      "accidental": 0.9140803658934988,
+      "n": 3061,
+      "octave": 1.0,
+      "per_score": {
+        "bc-bach-fugue-bwv846": {
+          "n": 286,
+          "written_pitch": 0.9755244755244755
+        },
+        "bc-beethoven-sonata-op2-m1": {
+          "n": 171,
+          "written_pitch": 0.8304093567251462
+        },
+        "bc-chopin-etude-op10-01": {
+          "n": 271,
+          "written_pitch": 0.9261992619926199
+        },
+        "bc-chopin-etude-op10-12": {
+          "n": 348,
+          "written_pitch": 0.9482758620689655
+        },
+        "bc-chopin-nocturne-op9-n2": {
+          "n": 143,
+          "written_pitch": 0.8881118881118881
+        },
+        "bc-mozart-k153": {
+          "n": 192,
+          "written_pitch": 0.8489583333333334
+        },
+        "omf-piano-rhythm-tuplets-vector": {
+          "n": 34,
+          "written_pitch": 1.0
+        },
+        "pl-bach-prelude-bwv846": {
+          "n": 502,
+          "written_pitch": 0.9322709163346613
+        },
+        "pl-beethoven-fur-elise": {
+          "n": 374,
+          "written_pitch": 0.9331550802139037
+        },
+        "pl-chopin-mazurka-op6-1": {
+          "n": 82,
+          "written_pitch": 0.9390243902439024
+        },
+        "pl-handel-gavotte": {
+          "n": 59,
+          "written_pitch": 0.864406779661017
+        },
+        "pl-mozart-turkish-march": {
+          "n": 395,
+          "written_pitch": 0.9139240506329114
+        },
+        "pl-tchaikovsky-old-french-song": {
+          "n": 30,
+          "written_pitch": 0.6666666666666666
+        },
+        "std-demo-minuet-in-g": {
+          "n": 174,
+          "written_pitch": 0.8390804597701149
+        }
+      },
+      "step": 1.0,
+      "written_pitch_macro": 0.8932862515199718,
+      "written_pitch_weighted": 0.9140803658934988
+    },
+    "delta_written_pitch_weighted": 0.17991062419608184
+  },
+  "refusals": {
+    "parent": "real-pdf-corpus/2.1",
+    "policy": "REFUSAL_ONLY__NO_RELABELLING",
+    "rationale": "every true_d != d0 group is refused; labels are never rewritten from d0, per the R6 proof standard",
+    "refused_group_count": 477,
+    "refused_object_count": 1104,
+    "total_objects": 6775
+  }
+}

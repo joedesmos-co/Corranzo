@@ -1,0 +1,96 @@
+{
+  "aligner_attributable": 344,
+  "by_score": {
+    "bc-bach-fugue-bwv846": {
+      "ALIGNER_ALREADY_OPTIMAL": 11,
+      "ORDERING_NOT_MONOTONE": 12,
+      "already_exact": 24
+    },
+    "bc-beethoven-sonata-op2-m1": {
+      "ALIGNER_ALREADY_OPTIMAL": 76,
+      "ORDERING_NOT_MONOTONE": 14,
+      "already_exact": 32
+    },
+    "bc-chopin-etude-op10-01": {
+      "ALIGNER_ALREADY_OPTIMAL": 21,
+      "already_exact": 38
+    },
+    "bc-chopin-etude-op10-12": {
+      "ALIGNER_ALREADY_OPTIMAL": 44,
+      "ORDERING_NOT_MONOTONE": 8,
+      "already_exact": 29
+    },
+    "bc-chopin-nocturne-op9-n2": {
+      "ALIGNER_ALREADY_OPTIMAL": 36,
+      "ORDERING_NOT_MONOTONE": 7,
+      "already_exact": 17
+    },
+    "bc-mozart-k153": {
+      "ALIGNER_ALREADY_OPTIMAL": 52,
+      "ORDERING_NOT_MONOTONE": 17,
+      "already_exact": 30
+    },
+    "omf-piano-dense-advanced-vector": {
+      "ALIGNER_ALREADY_OPTIMAL": 4,
+      "ORDERING_NOT_MONOTONE": 3
+    },
+    "omf-piano-grand-voices-vector": {
+      "ORDERING_NOT_MONOTONE": 8
+    },
+    "omf-piano-rhythm-tuplets-vector": {
+      "already_exact": 4
+    },
+    "pl-bach-prelude-bwv846": {
+      "ALIGNER_ALREADY_OPTIMAL": 3,
+      "already_exact": 61
+    },
+    "pl-beethoven-fur-elise": {
+      "ALIGNER_ALREADY_OPTIMAL": 39,
+      "ORDERING_NOT_MONOTONE": 6,
+      "already_exact": 95
+    },
+    "pl-brahms-waltz-op39-3": {
+      "ALIGNER_ALREADY_OPTIMAL": 4
+    },
+    "pl-chopin-mazurka-op6-1": {
+      "ALIGNER_ALREADY_OPTIMAL": 30,
+      "ORDERING_NOT_MONOTONE": 10,
+      "already_exact": 20
+    },
+    "pl-handel-gavotte": {
+      "ALIGNER_ALREADY_OPTIMAL": 6,
+      "ORDERING_NOT_MONOTONE": 2,
+      "already_exact": 17
+    },
+    "pl-mozart-turkish-march": {
+      "ALIGNER_ALREADY_OPTIMAL": 44,
+      "ORDERING_NOT_MONOTONE": 18,
+      "already_exact": 78
+    },
+    "pl-tchaikovsky-old-french-song": {
+      "ORDERING_NOT_MONOTONE": 1,
+      "already_exact": 10
+    },
+    "std-demo-minuet-in-g": {
+      "ALIGNER_ALREADY_OPTIMAL": 1,
+      "already_exact": 44
+    }
+  },
+  "groups": 976,
+  "mismatched": 1104,
+  "objects": 6775,
+  "verdicts": {
+    "ALIGNER_ALREADY_OPTIMAL": {
+      "groups": 371,
+      "mismatched_objects": 760
+    },
+    "ORDERING_NOT_MONOTONE": {
+      "groups": 106,
+      "mismatched_objects": 344
+    },
+    "already_exact": {
+      "groups": 499,
+      "mismatched_objects": 0
+    }
+  }
+}
