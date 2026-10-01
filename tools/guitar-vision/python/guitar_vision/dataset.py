@@ -163,7 +163,13 @@ def _read_record(path: Path) -> dict[str, Any]:
 
 
 def _load_view(
-    views_dir: Path, view: str, score_id: str, size: tuple[int, int], tiles: int
+    views_dir: Path,
+    view: str,
+    score_id: str,
+    size: tuple[int, int],
+    tiles: int,
+    trace: dict[str, Any] | None = None,
+    trim_override: tuple[int, int, int, int] | None = None,
 ) -> tuple[list[tuple[np.ndarray, tuple[float, float, float, float]]], tuple[float, float, float, float]] | None:
     """Cut a view into a fixed number of side-by-side tiles, each at full height.
 
@@ -211,10 +217,28 @@ def _load_view(
         # Trimming first is free, and it recovers that.
         original_width, original_height = grey.size
         inverted = ImageOps.invert(grey)
-        trim = inverted.getbbox() or (0, 0, original_width, original_height)
+        detected = inverted.getbbox() or (0, 0, original_width, original_height)
+        # ``trim_override`` is diagnostic-only and never consulted unless a caller
+        # passes it. It exists because the trim is derived from the raster content,
+        # so a page rendered with one glyph suppressed can trim differently from the
+        # same page with the glyph present - and a differing trim changes
+        # ``scaled_width``, the span, the overlap and therefore the tile rects.
+        # Differencing two such pages measures a layout change, not the glyph.
+        # Pinning the trim to the A page's own value isolates the glyph again.
+        # The default path below is byte-identical to having no override at all.
+        trim = detected if trim_override is None else trim_override
+        if trace is not None:
+            trace["detected_trim"] = detected
+            trace["trim_applied"] = trim
+            trace["trim_pinned"] = trim_override is not None
+            trace["source_size"] = (original_width, original_height)
+            trace["source_grey"] = np.asarray(grey, dtype=np.uint8)
         if trim != (0, 0, original_width, original_height):
             grey = grey.crop(trim)
         source_width, source_height = grey.size
+        if trace is not None:
+            trace["trimmed_size"] = (source_width, source_height)
+            trace["trimmed_grey"] = np.asarray(grey, dtype=np.uint8)
 
         # Height fills the plane. For a strip view the scaled content is wider
         # than one tile, which is what the tiling below divides up.
@@ -224,6 +248,10 @@ def _load_view(
         array = np.asarray(
             grey.resize((scaled_width, scaled_height), Image.LANCZOS), dtype=np.float32
         ) / 255.0
+        if trace is not None:
+            trace["scale"] = scale
+            trace["scaled_size"] = (scaled_width, scaled_height)
+            trace["resized_array"] = array
 
     # The trim changed the view's content frame, so it has to be reported back and
     # composed with the band's rect. `inset` is the fraction of the original crop
@@ -258,6 +286,22 @@ def _load_view(
             ) / 255.0
         plane[:, : min(width, strip_width)] = strip[:, : min(width, strip_width)]
         output.append((plane, (start / scaled_width, 0.0, end / scaled_width, 1.0)))
+        if trace is not None:
+            # The strip is the slice *before* the strip->square resize, kept
+            # separately from the plane so a stage-by-stage diff can tell a lost
+            # slice from a lost resample.
+            trace["tiles"].append(
+                {
+                    "index": len(trace["tiles"]),
+                    "start": start,
+                    "end": end,
+                    "span": span,
+                    "overlap": overlap,
+                    "rect": (start / scaled_width, 0.0, end / scaled_width, 1.0),
+                    "strip": array[:, start:end].copy(),
+                    "plane": plane.copy(),
+                }
+            )
         start = end
     if len(output) < tiles:
         # Honour the requested minimum with blank planes. A batch pads to its own
@@ -275,6 +319,9 @@ def _load_view(
         (original_width - trim[2]) / original_width,
         (original_height - trim[3]) / original_height,
     )
+    if trace is not None:
+        trace["inset"] = inset
+        trace["plane_count"] = len(output)
     return output, inset
 
 
@@ -333,6 +380,8 @@ def build_sample(
     record: dict[str, Any],
     views_dir: Path,
     size: tuple[int, int],
+    traces: dict[str, dict[str, Any]] | None = None,
+    trim_overrides: dict[str, tuple[int, int, int, int]] | None = None,
 ) -> dict[str, torch.Tensor] | None:
     """Assemble one page: every plane of every view, plus its objects.
 
@@ -342,12 +391,30 @@ def build_sample(
     The plane count is per page, derived from each view's aspect ratio, so pages
     do not all have the same shape. ``collate`` pads the plane axis to the batch
     maximum with blank planes; no object references one, so the padding is inert.
+
+    ``traces`` and ``trim_overrides`` are diagnostic-only pass-throughs, both
+    defaulting to ``None``. Omitted, this function is byte-identical to the
+    two-argument form: they decide only whether production's own intermediates get
+    recorded, and whether a caller-supplied trim replaces the content-derived one.
+    Neither can change a pixel or a coordinate.
     """
     planes: list[np.ndarray] = []
     rects: list[list[tuple[float, float, float, float]]] = []
     insets: dict[str, tuple[float, float, float, float]] = {}
     for name in VIEW_NAMES:
-        loaded = _load_view(views_dir, name, record["scoreId"], size, MIN_PLANES_PER_VIEW[name])
+        if traces is not None:
+            traces.setdefault(name, {})["tiles"] = []
+        loaded = _load_view(
+            views_dir,
+            name,
+            record["scoreId"],
+            size,
+            MIN_PLANES_PER_VIEW[name],
+            trace=traces.get(name) if traces is not None else None,
+            trim_override=(
+                trim_overrides.get(name) if trim_overrides is not None else None
+            ),
+        )
         if loaded is None:
             return None
         tiles, inset = loaded
@@ -487,14 +554,39 @@ def load_dataset(
     *,
     size: tuple[int, int] = (512, 512),
     limit: int = 0,
+    traces: dict[str, dict[str, Any]] | None = None,
+    trim_overrides: dict[str, dict[str, tuple[int, int, int, int]]] | None = None,
 ) -> list[dict[str, torch.Tensor]]:
+    """Load every record in ``records_dir`` through the production path.
+
+    ``traces`` (keyed by scoreId, then view name) and ``trim_overrides`` are
+    diagnostic-only and default to ``None``, which leaves this function
+    byte-identical to the four-keyword form. They exist so the paired-differencing
+    harness can observe production's real intermediates and, for a labelled
+    diagnostic only, pin a content-derived trim; neither adds a transform, a
+    scale or an offset to the load itself.
+    """
     records = sorted(records_dir.glob("*.record.json"))
     if limit:
         records = records[:limit]
     samples = []
     for path in records:
         record = _read_record(path)
-        sample = build_sample(record, views_dir, size)
+        # setdefault, not get: the per-page trace has to be stored back under its
+        # scoreId or the caller receives an empty dict and concludes the loader
+        # captured nothing.
+        page_traces = (
+            traces.setdefault(record["scoreId"], {}) if traces is not None else None
+        )
+        sample = build_sample(
+            record,
+            views_dir,
+            size,
+            traces=page_traces,
+            trim_overrides=(
+                trim_overrides.get(record["scoreId"]) if trim_overrides is not None else None
+            ),
+        )
         if sample is not None:
             samples.append(sample)
     return samples
