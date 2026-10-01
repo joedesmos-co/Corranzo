@@ -48,6 +48,8 @@ PAGE_WIDTH = 2100
 # are rendered wider than the page and then cropped back to their bands.
 VIEW_SCALE = 2.0
 VIEW_PADDING_PX = 24
+# Legacy fallback only. The canonical padded rectangle is recorded per band as
+# `cropUnits`; this constant is used only for a record that predates that field.
 VIEW_PADDING_UNITS = 40
 
 VIEW_SCALES = {"full-page": 1.0, "notation": VIEW_SCALE, "tab": VIEW_SCALE}
@@ -140,15 +142,35 @@ def render_full_page(
         return 0.0, False
     return target_width / viewbox_width, True
 
-def band_box_units(bands: list[dict[str, Any]], is_tab: bool) -> tuple[float, float, float, float] | None:
-    """Union box over every band of one kind, in layout units."""
+def band_crop_units(
+    bands: list[dict[str, Any]], is_tab: bool, padding: float
+) -> tuple[float, float, float, float] | None:
+    """Union crop rectangle over every band of one kind, in canonical page units.
+
+    The record stores each band's padded ``cropUnits``, which is where the crop
+    begins and ends, so the rasteriser and the loader cannot disagree about it.
+    A record written before that field existed falls back to padding the band here
+    - the old behaviour, and the source of a 500-unit frame error, so a record
+    without ``cropUnits`` should be regenerated rather than used.
+    """
     selected = [band for band in bands if bool(band["isTab"]) == is_tab]
     if not selected:
         return None
-    top = min(band["boxUnits"][1] for band in selected)
-    bottom = max(band["boxUnits"][3] for band in selected)
-    left = min(band["boxUnits"][0] for band in selected)
-    right = max(band["boxUnits"][2] for band in selected)
+    boxes = [band.get("cropUnits") for band in selected]
+    if any(box is None for box in boxes):
+        boxes = [
+            (
+                band["boxUnits"][0] - padding,
+                band["boxUnits"][1] - padding,
+                band["boxUnits"][2] + padding,
+                band["boxUnits"][3] + padding,
+            )
+            for band in selected
+        ]
+    top = min(box[1] for box in boxes)
+    bottom = max(box[3] for box in boxes)
+    left = min(box[0] for box in boxes)
+    right = max(box[2] for box in boxes)
     if bottom - top <= 0 or right - left <= 0:
         return None
     return (left, top, right, bottom)
@@ -164,11 +186,11 @@ def crop_view(
     """Crop a rendered page to a band, upscaled, and report an empty crop."""
     if box_units is None:
         return False, "no bands of this kind on the page"
+    # `box_units` is already the padded crop rectangle in canonical page units, so
+    # it is used as-is. Padding it again here would put the crop's origin 40 units
+    # away from where the loader frames the view, which is exactly the kind of
+    # half-pixel-scale disagreement this whole contract exists to remove.
     left, top, right, bottom = box_units
-    left = max(0.0, left - VIEW_PADDING_UNITS)
-    top = max(0.0, top - VIEW_PADDING_UNITS)
-    right = right + VIEW_PADDING_UNITS
-    bottom = bottom + VIEW_PADDING_UNITS
 
     width, height = image.size
     x0 = max(0, min(width - 1, int(round(left * units_to_px * scale))))
@@ -249,7 +271,9 @@ def main() -> int:
                     ).save(out_path)
                     per_view[view_name] += 1
                     continue
-                box = band_box_units(record["bands"], is_tab=view_name == "tab")
+                box = band_crop_units(
+                record["bands"], is_tab=view_name == "tab", padding=VIEW_PADDING_UNITS
+            )
                 ok, reason = crop_view(
                     image,
                     units_to_px,

@@ -81,25 +81,37 @@ def view_rect(record: dict[str, Any], is_tab: bool) -> tuple[float, float, float
     """The page-relative rectangle a view's image actually covers.
 
     A view is a *crop* of the page, not the page. The rasteriser crops to the
-    union of that kind's bands, so the PNG's (0,0) is the band's top-left and not
+    union of that kind's bands - padded by ``VIEW_PADDING_UNITS``, and recorded
+    per band as ``cropUnits`` - so the PNG's (0,0) is the crop's top-left and not
     the page's. The record's object boxes are page-normalised, so a box has to be
     brought into the crop's frame before it can index it.
 
-    Getting this wrong is silent and total. Measured on a paired score, the first
-    version of this loader indexed a TAB crop with page coordinates: a digit
+    It is the **crop** rectangle and not the band rectangle that matters, and the
+    distinction is exact rather than approximate. Composing the trim inset onto the
+    band and then scaling by the crop's pixel width is off by whatever fraction of
+    the padding sits between them; composing it onto the crop makes the inset
+    algebra cancel, so the resulting fraction is exactly the box's fraction of the
+    trimmed content and the tiling needs no correction. Measured over 76 fixtures
+    that difference is worth up to 86 crop pixels - a fifth of a digit's width.
+
+    Getting the frame wrong is silent and total. Measured on a paired score, the
+    first version of this loader indexed a TAB crop with page coordinates: a digit
     genuinely at page y 0.73-0.78 landed at crop y 0.21-0.38, so the sampler was
     pointed at the measure above the digits. An ink test over 710 objects found
-    ink on only 14.5% of them, and no head could have learned anything from that.
+    ink on only 14.5%, and no head could have learned anything from that.
     """
     bands = [band for band in record["bands"] if bool(band.get("isTab")) == is_tab]
     width = float(record["contentWidthUnits"])
     height = float(record["contentHeightUnits"])
     if not bands or width <= 0 or height <= 0:
         return (0.0, 0.0, 1.0, 1.0)
-    left = min(band["boxUnits"][0] for band in bands) / width
-    top = min(band["boxUnits"][1] for band in bands) / height
-    right = max(band["boxUnits"][2] for band in bands) / width
-    bottom = max(band["boxUnits"][3] for band in bands) / height
+    # `cropUnits` is the canonical contract. A record without it predates the
+    # coordinate fix and falls back to the band, which is the old behaviour.
+    boxes = [band.get("cropUnits") or band["boxUnits"] for band in bands]
+    left = min(box[0] for box in boxes) / width
+    top = min(box[1] for box in boxes) / height
+    right = max(box[2] for box in boxes) / width
+    bottom = max(box[3] for box in boxes) / height
     return (left, top, right, bottom)
 
 
@@ -302,7 +314,15 @@ def _load_view(
                     "plane": plane.copy(),
                 }
             )
-        start = end
+        # Advance by the span, not by the tile's width. Advancing by `end - start`
+        # makes consecutive tiles *contiguous* - tile k ends exactly where tile k+1
+        # begins - so the overlap is never realised and `plane_box` refuses every
+        # box that crosses the seam. That is the whole reason `overlap` exists, and
+        # the comment above says so: a boundary object has to be whole in at least
+        # one plane. Advancing by the span makes consecutive planes share `overlap`
+        # array columns, which is what the constant was sized for. Measured cost of
+        # the contiguous version: 26% of fret digits were assigned to no tile at all.
+        start += span
     if len(output) < tiles:
         # Honour the requested minimum with blank planes. A batch pads to its own
         # maximum anyway, so these only matter for a page that is narrower than the
@@ -430,10 +450,11 @@ def build_sample(
 
     # Each view is a crop of the page, and the record's boxes are page-normalised,
     # so the frames have to be reconciled before anything can be indexed.
-    # The view's own frame is the band's rectangle on the page, then narrowed by
-    # however much white margin the loader trimmed off the crop. Both are needed:
-    # the band says which part of the page the crop shows, the inset says which
-    # part of the crop survived the trim.
+    # The view's own frame is the *crop* rectangle the rasteriser cut, then
+    # narrowed by however much white margin the loader trimmed off it. Both are
+    # needed: the crop says which part of the page the image shows, the inset says
+    # which part of the image survived the trim. Composing them in this order makes
+    # the two cancel exactly - see ``view_rect``.
     frames = {}
     for name, is_tab in (("full-page", None), ("notation", False), ("tab", True)):
         base = (0.0, 0.0, 1.0, 1.0) if is_tab is None else view_rect(record, is_tab)

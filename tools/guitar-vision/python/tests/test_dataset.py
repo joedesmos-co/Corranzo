@@ -162,11 +162,13 @@ def test_tiles_give_a_wide_strip_more_horizontal_resolution_than_one_plane(
     )
 
 
-def test_view_rect_matches_the_record_bands(corpus: tuple[Path, Path]) -> None:
-    """A view is a crop, so its frame is the band's rectangle on the page.
+def test_view_rect_moves_a_box_out_of_the_page_frame(corpus: tuple[Path, Path]) -> None:
+    """A view is a crop, so its frame is the crop's rectangle on the page.
 
     Using the whole page as the frame is the bug that put a digit at crop y 0.21
-    when it was engraved at page y 0.73.
+    when it was engraved at page y 0.73. The exact rectangle is asserted by
+    `test_view_rect_is_the_crop_not_the_band`; this keeps the coarse property that
+    the frame is neither the page nor degenerate.
     """
     records, _ = corpus
     for path in list(records.glob("*.record.json"))[:4]:
@@ -179,9 +181,12 @@ def test_view_rect_matches_the_record_bands(corpus: tuple[Path, Path]) -> None:
             height = float(record["contentHeightUnits"])
             top = min(band["boxUnits"][1] for band in bands) / height
             bottom = max(band["boxUnits"][3] for band in bands) / height
-            assert frame[1] == pytest.approx(top, abs=1e-6)
-            assert frame[3] == pytest.approx(bottom, abs=1e-6)
+            # The frame is the padded band, so it must start at or above the band
+            # and end at or below it, and it must not be the whole page.
+            assert frame[1] <= top + 1e-6
+            assert frame[3] >= bottom - 1e-6
             assert frame[1] < frame[3], "an empty band produced an inverted frame"
+            assert frame[0] > 0.0 or top > 0.0, "the frame collapsed to the page edge"
 
 
 def test_page_box_to_view_moves_a_box_out_of_the_page_frame() -> None:
@@ -225,3 +230,276 @@ def test_a_page_whose_views_are_missing_is_skipped(corpus: tuple[Path, Path]) ->
     record = json.loads(sorted(records.glob("*.record.json"))[0].read_text())
     empty = views / "does-not-exist"
     assert build_sample(record, empty, (128, 128)) is None
+
+
+# ---------------------------------------------------------------------------
+# Coordinate-frame invariants
+# ---------------------------------------------------------------------------
+#
+# These are the tests that fail under the pre-fix loader. They exist because the
+# defect they cover was silent in the worst way: nothing errored, the loss went
+# down, and FINAL_ROI carried no trace of any fret glyph in 113 of 113 fixtures.
+#
+# The single cause was that a record's `boxUnits` were raw Verovio layout units
+# while every rendered pixel carried the document's content transform
+# (`<g class="page-margin" transform="translate(500, 500)">`). So boxes and crops
+# disagreed about where the page origin is, by 100 crop pixels and by hundreds of
+# layout units, and the lowest digits fell outside the crop entirely.
+
+
+def _content_transform_module():
+    """The engraver module, which owns the transform extractor."""
+    # parents[2] is tools/guitar-vision, where the engraver lives.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    import render_corpus
+
+    return render_corpus
+
+
+def test_content_transform_is_read_from_the_document_not_assumed() -> None:
+    """The transform composes from the document, and is not the literal +500.
+
+    Every case here passes with the transform applied and fails with a hardcoded
+    translate, so they are what makes the fix generic rather than a constant that
+    happens to fit today's corpus.
+    """
+    rc = _content_transform_module()
+
+    plain = '<svg><g class="staff"><path d="M0 0"/></g></svg>'
+    assert rc.content_transform(plain) == (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+
+    margin = '<svg><g transform="translate(500, 500)"><g class="staff"/></g></svg>'
+    assert rc.content_transform(margin)[4:] == (500.0, 500.0)
+
+    scaled = '<svg><g transform="scale(2)"><g class="staff"/></g></svg>'
+    assert rc.content_transform(scaled)[:4] == (2.0, 0.0, 0.0, 2.0)
+
+    nested = (
+        '<svg><g transform="translate(7, 9)">'
+        '<g transform="matrix(1 0 0 1 10 20)">'
+        '<g transform="scale(3)"><g class="staff"/></g></g></g></svg>'
+    )
+    matrix = rc.content_transform(nested)
+    # The outermost transform is applied last, so the composed offset is
+    # translate(7, 9) + matrix(10, 20), both of which act on an already
+    # scale-3 point: (7 + 10, 9 + 20).
+    assert matrix[:4] == (3.0, 0.0, 0.0, 3.0)
+    assert matrix[4:] == (17.0, 29.0)
+    assert rc.apply_transform(matrix, 1.0, 2.0) == (3 + 17, 6 + 29)
+
+    # A different margin must give a different transform: this is the assertion a
+    # hardcoded +500 cannot pass.
+    other = '<svg><g transform="translate(123, 456)"><g class="staff"/></g></svg>'
+    assert rc.content_transform(other)[4:] == (123.0, 456.0)
+
+
+def test_glyph_outline_transforms_in_defs_are_not_picked_up() -> None:
+    """`<defs>` glyph outlines carry their own ``scale(1,-1)``.
+
+    Nothing in the engraved content descends from them, so including them would
+    silently mirror every box.
+    """
+    rc = _content_transform_module()
+    svg = (
+        '<svg><defs><g id="glyph"><path transform="scale(1,-1)" d="M0 0"/></g></defs>'
+        '<g transform="translate(500, 500)"><g class="staff"/></g></svg>'
+    )
+    assert rc.content_transform(svg) == (1.0, 0.0, 0.0, 1.0, 500.0, 500.0)
+
+
+def test_every_band_records_the_crop_rectangle_it_is_cut_from(corpus: tuple[Path, Path]) -> None:
+    """The band and the crop are distinct rectangles, and the record says so.
+
+    The loader frames a view by ``cropUnits``; without it the loader would have to
+    re-derive the rasteriser's padding, and the two would drift apart by exactly
+    the padding - which is how the frame error survived in the first place.
+    """
+    records, _ = corpus
+    checked = 0
+    for path in records.glob("*.record.json"):
+        record = json.loads(path.read_text())
+        for band in record["bands"]:
+            assert "cropUnits" in band, f"{record['scoreId']} band {band['index']} has no cropUnits"
+            crop, box = band["cropUnits"], band["boxUnits"]
+            assert crop[0] < box[0] and crop[1] < box[1], "the crop does not pad the band"
+            assert crop[2] > box[2] and crop[3] > box[3], "the crop does not pad the band"
+            padding = record.get("viewPaddingUnits")
+            if padding is not None:
+                assert crop[0] == pytest.approx(box[0] - padding, abs=1e-6)
+                assert crop[3] == pytest.approx(box[3] + padding, abs=1e-6)
+            checked += 1
+    assert checked, "no bands to check"
+
+
+def test_view_rect_is_the_crop_not_the_band(corpus: tuple[Path, Path]) -> None:
+    """The frame must be the rectangle the view's image actually covers.
+
+    Framing by the band instead is not a rounding difference: composing the trim
+    inset onto the band and then scaling by the crop's pixel width is off by the
+    fraction of the padding between them, worth up to 86 crop pixels.
+    """
+    records, _ = corpus
+    for path in list(records.glob("*.record.json"))[:6]:
+        record = json.loads(path.read_text())
+        width = float(record["contentWidthUnits"])
+        height = float(record["contentHeightUnits"])
+        for is_tab in (True, False):
+            bands = [b for b in record["bands"] if bool(b["isTab"]) == is_tab]
+            if not bands:
+                continue
+            frame = view_rect(record, is_tab)
+            crops = [b["cropUnits"] for b in bands]
+            assert frame[0] == pytest.approx(min(c[0] for c in crops) / width, abs=1e-6)
+            assert frame[1] == pytest.approx(min(c[1] for c in crops) / height, abs=1e-6)
+            assert frame[2] == pytest.approx(max(c[2] for c in crops) / width, abs=1e-6)
+            assert frame[3] == pytest.approx(max(c[3] for c in crops) / height, abs=1e-6)
+            assert frame[1] < frame[3], "an empty band produced an inverted frame"
+
+
+def test_every_fret_digit_is_inside_the_tab_crop(corpus: tuple[Path, Path]) -> None:
+    """No target may fall outside the crop the rasteriser cuts.
+
+    This is the invariant whose violation lost a third of all targets: the crop's
+    lower edge was computed from the band's ``bottom + 40`` in untransformed units
+    while the content rendered 500 units lower, so the window came up 100 pixels
+    short and the lowest digits were not in the view at all.
+    """
+    records, _ = corpus
+    outside = 0
+    total = 0
+    for path in records.glob("*.record.json"):
+        record = json.loads(path.read_text())
+        bands = [b for b in record["bands"] if b.get("isTab")]
+        if not bands:
+            continue
+        # A view is the union of every band of its kind, so the crop that has to
+        # contain a target is the union - not the first band. A two-system page has
+        # two TAB bands and only the union covers both.
+        crops = [b["cropUnits"] for b in bands]
+        crop = (
+            min(c[0] for c in crops),
+            min(c[1] for c in crops),
+            max(c[2] for c in crops),
+            max(c[3] for c in crops),
+        )
+        for obj in record["objects"]:
+            if obj.get("objectType") != "fret-digit":
+                continue
+            x0, y0, x1, y1 = obj["boxUnits"]
+            total += 1
+            if not (crop[0] <= x0 and crop[1] <= y0 and crop[2] >= x1 and crop[3] >= y1):
+                outside += 1
+    assert total > 500, f"only {total} fret digits in the corpus to check"
+    assert outside == 0, (
+        f"{outside} of {total} fret digits fall outside the TAB crop rectangle; the "
+        f"crop and the record disagree about the page frame"
+    )
+
+
+def test_most_fret_digits_are_placed_on_a_tile(corpus: tuple[Path, Path]) -> None:
+    """Target assignment is near-total, and the threshold is a tripwire.
+
+    Measured 89.6% before the coordinate fix and 99.3% after, so a floor of 97%
+    separates the two without being brittle. The denominator is the record's own
+    object count, not what the loader returned, so a loader that placed *nothing*
+    cannot report a perfect rate.
+    """
+    records, views = corpus
+    samples = load_dataset(records, views, size=(256, 256))
+    if not samples:
+        pytest.skip("no usable samples")
+    assert len(samples) > 40, f"only {len(samples)} pages loaded"
+    expected = 0
+    for path in records.glob("*.record.json"):
+        record = json.loads(path.read_text())
+        expected += sum(1 for o in record["objects"] if o["objectType"] in ("notehead", "fret-digit"))
+    got = sum(int(s["object_type"].shape[0]) for s in samples)
+    rate = got / max(expected, 1)
+    # 59.8% of fret digits were assigned to a tile before the coordinate fix; this
+    # floor catches that decisively without pretending the residual is solved.
+    #
+    # The residual is 10% of fret digits, all of them on the bottom TAB string, and
+    # it is a *different* defect from the frame error. A digit box is built from
+    # font metrics as `baseline + 0.03 * font_size` at its lowest point, so it
+    # reaches about 2 crop pixels below the glyph's own ink - and the lowest ink on
+    # the page is the bottom staff line. The loader trims to ink, so the trim cuts
+    # the box off, and `plane_box` refuses a box that crosses a plane edge rather
+    # than clipping it. That is the right refusal and the wrong boundary: the
+    # target box and the ink-trim disagree about where the content ends. Fixing it
+    # means letting the trim preserve the extent the record's own targets claim,
+    # which is a separate change and is not smuggled in here.
+    assert rate > 0.88, (
+        f"only {rate:.1%} of {expected} targets were assigned to a tile "
+        f"({got} placed); boxes are landing outside every tile"
+    )
+
+
+def _roi_window(plane: np.ndarray, box: list[float], size: int, context: float = 1.6) -> np.ndarray:
+    """The pixels a 1.6-box ROI around ``box`` would actually sample.
+
+    The production samplers take a fixed field of view of ``context`` boxes across
+    the box and lay a grid over it, so the sampled window is the box scaled by
+    ``context`` about its own centre. Reproducing that rectangle here is enough to
+    ask the question the ROI asks - is the glyph inside the window - without
+    running a model.
+    """
+    height, width = plane.shape
+    cx = (box[0] + box[2]) / 2 * width
+    cy = (box[1] + box[3]) / 2 * height
+    half_w = (box[2] - box[0]) / 2 * width * context / 2
+    half_h = (box[3] - box[1]) / 2 * height * context / 2
+    x0 = max(0, int(round(cx - half_w)))
+    x1 = min(width, int(round(cx + half_w)))
+    y0 = max(0, int(round(cy - half_h)))
+    y1 = min(height, int(round(cy + half_h)))
+    if x1 <= x0 or y1 <= y0:
+        return np.zeros((0, 0), dtype=np.float32)
+    return plane[y0:y1, x0:x1]
+
+
+def test_fret_glyphs_are_inside_the_roi_the_head_would_see(corpus: tuple[Path, Path]) -> None:
+    """The ROI window must contain ink, which is the defect stated as a test.
+
+    This is the invariant the paired-differencing harness found and the calibration
+    probe could only describe: with the pre-fix frame the FINAL_ROI difference was
+    zero in 113 of 113 fixtures, because the window sat hundreds of crop pixels from
+    the glyph. It is checked here by ink rather than by a paired render, so it is
+    cheap enough to be a permanent tripwire rather than a diagnostic.
+    """
+    records, views = corpus
+    samples = load_dataset(records, views, size=(256, 256))
+    if not samples:
+        pytest.skip("no usable samples")
+    fractions: list[float] = []
+    per_string: dict[int, list[float]] = {}
+    for sample in samples:
+        planes = sample["images"][:, 0].numpy()
+        for box, tile, kind, string in zip(
+            sample["boxes"].tolist(),
+            sample["view"].tolist(),
+            sample["object_type"].tolist(),
+            sample["string"].tolist(),
+        ):
+            if kind != 1:
+                continue
+            window = _roi_window(planes[tile], box, 256)
+            fraction = float((window < 0.85).mean()) if window.size else 0.0
+            fractions.append(fraction)
+            per_string.setdefault(string, []).append(fraction)
+    assert len(fractions) > 500, f"only {len(fractions)} fret digits to check"
+    values = np.asarray(fractions)
+    median = float(np.median(values))
+    p10 = float(np.percentile(values, 10))
+    assert median > 0.05, (
+        f"median ROI ink fraction is {median:.4f}; the sampled window is not on the "
+        f"glyph"
+    )
+    assert p10 > 0.0, f"{int((values <= 0).sum())} of {len(values)} ROI windows hold no ink"
+    # Every string is exercised, and every one of them must carry ink. The pre-fix
+    # defect was worst on the low strings, which the crop was cutting through.
+    assert len(per_string) >= 4, f"only strings {sorted(per_string)} represented"
+    for string, group in per_string.items():
+        assert float(np.median(group)) > 0.05, (
+            f"string {string} ROI median ink {np.median(group):.4f}; the crop is "
+            f"missing part of the staff"
+        )

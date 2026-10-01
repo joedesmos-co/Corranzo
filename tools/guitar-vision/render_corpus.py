@@ -54,6 +54,172 @@ VIEW_SCALE = 2.0
 # group into a crop box.
 VEROVIO_PAGE_UNITS = 2100  # width of the layout viewport we ask for
 
+# White margin, in canonical page units, added around a band to become the crop
+# that the rasteriser cuts. Recorded into the record as ``bands[].cropUnits`` so
+# the loader and the rasteriser agree on where the crop begins without either of
+# them re-deriving the other's padding.
+VIEW_PADDING_UNITS = 40
+
+# --------------------------------------------------------------------------
+# The content transform: layout units -> canonical page units
+# --------------------------------------------------------------------------
+#
+# ## The coordinate spaces, and why there is more than one
+#
+# 1. **Verovio layout units.** The numbers written in the SVG: staff paths,
+#    ``<text x y>``, note positions. The page grid is 21000 x 29700.
+# 2. **Canonical page units.** Layout units after the document's own content
+#    transform. *This is the canonical frame*: every ``boxUnits``, every
+#    ``band.boxUnits`` and every ``band.cropUnits`` in a record lives here, and
+#    every consumer - the rasteriser and the loader - works in it.
+# 3. **Page raster pixels.** ``canonical * (render_width / viewBoxWidth)``. The
+#    nested ``definition-scale`` viewBox supplies that ratio, not an offset.
+# 4. **View crop-local pixels.** Page pixels minus the crop's origin.
+# 5. **Trimmed, then resized, then plane coordinates**, then ROI coordinates.
+#
+# ## Why the transform has to be read, not assumed
+#
+# Verovio wraps the engraved content in ``<g class="page-margin"
+# transform="translate(500, 500)">`` - the page margin. That translate is part of
+# the document, so it is applied when the browser renders the page, but it is not
+# applied to any coordinate *written into the record*. Every box and every band
+# was therefore in space 1 while every pixel was in space 3, and the two differ by
+# the wrapper transform.
+#
+# The cost was not subtle and was not a rounding error: the crop was cut 500 units
+# (100 crop pixels) up and left of where the band said the content was, so every
+# box landed hundreds of pixels from its glyph and the lowest digits fell outside
+# the crop entirely. Measured over 180 fixtures: FINAL_ROI target signal was zero
+# in 113 of 113, and a third of the targets had no pixels in the TAB view at all.
+#
+# So the transform is *composed from the document* rather than hardcoded as
+# ``+500``: the ancestor chain of a real engraved element is walked and its
+# transforms multiplied together. A different margin, an added scale, a matrix, or
+# another nesting level all compose correctly, and the transforms inside
+# ``<defs>`` - where glyph outlines carry their own ``scale(1,-1)`` - are never
+# picked up, because nothing in the content is descended from them.
+
+_IDENTITY = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+
+# Start tags, end tags and self-closing tags. Attribute values may contain '>'
+# inside quotes, which a naive pattern would mis-split, so both quote styles are
+# consumed explicitly.
+_SVG_TAG = re.compile(
+    r"""<(/?)([a-zA-Z][\w:.-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)(/?)>""", re.S
+)
+
+
+def _affine_multiply(outer: tuple[float, ...], inner: tuple[float, ...]) -> tuple[float, ...]:
+    """Compose two 2-D affine matrices, ``outer`` applied after ``inner``."""
+    a1, b1, c1, d1, e1, f1 = outer
+    a2, b2, c2, d2, e2, f2 = inner
+    return (
+        a1 * a2 + c1 * b2,
+        b1 * a2 + d1 * b2,
+        a1 * c2 + c1 * d2,
+        b1 * c2 + d1 * d2,
+        a1 * e2 + c1 * f2 + e1,
+        b1 * e2 + d1 * f2 + f1,
+    )
+
+
+def _first_number(text: str) -> float:
+    match = re.match(r"\s*(-?[\d.]+(?:[eE][-+]?\d+)?)", text)
+    if not match:
+        raise ValueError(f"no number in transform argument {text!r}")
+    return float(match.group(1))
+
+
+def parse_transform(value: str | None) -> tuple[float, ...]:
+    """An SVG ``transform`` list as one affine.
+
+    ``translate``, ``scale``, ``matrix``, ``rotate``, ``skewX`` and ``skewY`` are
+    supported, applied left to right as the specification requires. An unknown
+    function is skipped rather than guessed at, so an unrecognised transform
+    cannot silently become a wrong number.
+    """
+    result = _IDENTITY
+    if not value:
+        return result
+    for name, body in re.findall(r"([a-zA-Z]+)\s*\(([^)]*)\)", value):
+        parts = [part for part in re.split(r"[,\s]+", body.strip()) if part]
+        try:
+            args = [_first_number(part) for part in parts]
+        except ValueError:
+            continue
+        if name == "translate" and args:
+            step = (1.0, 0.0, 0.0, 1.0, args[0], args[1] if len(args) > 1 else 0.0)
+        elif name == "scale" and args:
+            step = (args[0], 0.0, 0.0, args[1] if len(args) > 1 else args[0], 0.0, 0.0)
+        elif name == "matrix" and len(args) >= 6:
+            step = tuple(args[:6])
+        elif name == "rotate" and args:
+            angle = math.radians(args[0])
+            cos, sin = math.cos(angle), math.sin(angle)
+            step = (cos, sin, -sin, cos, 0.0, 0.0)
+        elif name == "skewX" and args:
+            step = (1.0, 0.0, math.tan(math.radians(args[0])), 1.0, 0.0, 0.0)
+        elif name == "skewY" and args:
+            step = (1.0, math.tan(math.radians(args[0])), 0.0, 1.0, 0.0, 0.0)
+        else:
+            continue
+        result = _affine_multiply(result, step)
+    return result
+
+
+def content_transform(svg: str, probe_class: str = "staff") -> tuple[float, ...]:
+    """The affine taking a content coordinate to a canonical page coordinate.
+
+    Found by walking the document and composing the ``transform`` attributes on
+    the *ancestor chain* of a real engraved element - the first ``class="staff"``
+    group. Nothing is matched by shape, so the margin can be a translate, a scale,
+    a matrix or any nesting of them, and a rename of the wrapper class does not
+    matter.
+
+    A document whose content is not transformed yields the identity, so this is
+    safe to apply unconditionally rather than as a special case.
+    """
+    stack: list[tuple[float, ...]] = []
+    for match in _SVG_TAG.finditer(svg):
+        closing, _tag, attrs, self_closing = match.groups()
+        if closing:
+            if stack:
+                stack.pop()
+            continue
+        transform = re.search(r'\btransform="([^"]*)"', attrs or "")
+        step = parse_transform(transform.group(1) if transform else None)
+        composed = _affine_multiply(stack[-1], step) if stack else step
+        if probe_class in (attrs or ""):
+            return composed
+        if not self_closing:
+            stack.append(composed)
+    return _IDENTITY
+
+
+def apply_transform(matrix: tuple[float, ...], x: float, y: float) -> tuple[float, float]:
+    """Map one point through an affine."""
+    a, b, c, d, e, f = matrix
+    return (a * x + c * y + e, b * x + d * y + f)
+
+
+def transform_box(
+    matrix: tuple[float, ...], box: tuple[float, float, float, float]
+) -> tuple[float, float, float, float]:
+    """Map a box through an affine, keeping it axis-aligned.
+
+    All four corners are mapped and re-bounded rather than mapping two of them,
+    so a transform with a rotation or a shear still yields the box that actually
+    encloses the geometry instead of a smaller one that does not.
+    """
+    x0, y0, x1, y1 = box
+    corners = [
+        apply_transform(matrix, x, y)
+        for x, y in ((x0, y0), (x1, y0), (x0, y1), (x1, y1))
+    ]
+    xs = [point[0] for point in corners]
+    ys = [point[1] for point in corners]
+    return (min(xs), min(ys), max(xs), max(ys))
+
 
 @dataclass
 class Box:
@@ -317,74 +483,80 @@ def derive_staff_bands(
 def _clustered_bands(
     objects: list[dict[str, Any]], page_width: float
 ) -> tuple[list[StaffBand], list[str]]:
-    warnings: list[str] = [
-        "no staff elements found in the SVG; bands fall back to clustering the "
-        "notes, which does not span the full staff and produces short crops"
-    ]
-    if not objects:
-        return [], warnings
-    entries = sorted(
-        ((object_["box"][1] + object_["box"][3]) / 2, bool(object_.get("onTab"))) for object_ in objects
-    )
-    heights = sorted(object_["box"][3] - object_["box"][1] for object_ in objects)
-    typical = heights[len(heights) // 2] or 1.0
-    gap = typical * 2.5
-
-    clusters: list[list[tuple[float, bool]]] = [[entries[0]]]
-    for center, is_tab in entries[1:]:
-        if center - clusters[-1][-1][0] <= gap:
-            clusters[-1].append((center, is_tab))
-        else:
-            clusters.append([(center, is_tab)])
     """Cluster note objects into engraved staff bands.
 
     Bands are derived from the notes themselves rather than from Verovio's
-    ``staff`` container, which carries no usable extent. Clustering on vertical
-    proximity with a gap threshold is stable because a system is a tight stack of
-    staves and the gap between systems is larger than a staff height.
+    ``staff`` container, whose extent is not recoverable for every score. Clustering
+    on vertical proximity with a gap threshold is stable because a system is a tight
+    stack of staves and the gap between systems is larger than a staff height.
 
     This is what makes the separate notation and TAB views possible, so getting
-    the band boundaries right matters more than any other geometry here.
+    the band boundaries right matters more than any other geometry here. Two rules
+    below are load-bearing, and both were found by a digit sitting outside its own
+    crop rather than by reading the code:
+
+    - only **positive** centre-to-centre steps count as a line spacing. A notehead
+      and its digit share a centre, and two digits on one string do too; taking the
+      minimum step including those zeros set the padding to zero and left every band
+      flush with its outermost centres.
+    - a band is then widened to contain the boxes of the objects **it was clustered
+      from**. The contract is that a band contains the objects it is a crop for, and
+      padding from centres by half a gap does not deliver it: the outermost glyph is
+      taller than half its own centre step, so the first and last digit of a staff
+      fell outside the view. Measured on this corpus, that was 86 layout units and
+      250 of 1162 fret digits.
+
+    Both rules are arithmetic on the same coordinate frame the objects are already
+    in, so neither introduces a padding guess.
     """
+    warnings = [
+        "no staff elements found in the SVG; bands fall back to clustering the "
+        "notes"
+    ]
     if not objects:
         return [], warnings
-    entries = sorted(
-        ((object_["box"][1] + object_["box"][3]) / 2, bool(object_.get("onTab"))) for object_ in objects
-    )
-    # Median note height sets the clustering scale, robust to one odd glyph.
-    heights = sorted(object_["box"][3] - object_["box"][1] for object_ in objects)
-    typical = heights[len(heights) // 2] or 1.0
-    gap = typical * 2.5
 
-    # Single-linkage clustering on the gap to the previous note. Comparing to the
-    # running cluster mean instead lets a tall cluster drift across the gap and
-    # produce overlapping bands, which is useless as a crop box.
-    clusters: list[list[tuple[float, bool]]] = [[entries[0]]]
-    for center, is_tab in entries[1:]:
-        if center - clusters[-1][-1][0] <= gap:
-            clusters[-1].append((center, is_tab))
+    # Median object height sets the clustering scale, robust to one odd glyph.
+    heights = sorted(o["box"][3] - o["box"][1] for o in objects)
+    typical = heights[len(heights) // 2] or 1.0
+    clustering_gap = typical * 2.5
+
+    # Single-linkage clustering on the gap to the previous object's centre.
+    # Comparing to a running mean instead lets a tall cluster drift across the gap
+    # and produce overlapping bands, which is useless as a crop box. Indices are
+    # carried so a band can later be widened by exactly the objects it came from.
+    order = sorted(
+        range(len(objects)), key=lambda i: (objects[i]["box"][1] + objects[i]["box"][3]) / 2
+    )
+    clusters: list[list[int]] = [[order[0]]]
+    for index in order[1:]:
+        centre = (objects[index]["box"][1] + objects[index]["box"][3]) / 2
+        previous = clusters[-1][-1]
+        previous_centre = (objects[previous]["box"][1] + objects[previous]["box"][3]) / 2
+        if centre - previous_centre <= clustering_gap:
+            clusters[-1].append(index)
         else:
-            clusters.append([(center, is_tab)])
+            clusters.append([index])
 
     bands: list[StaffBand] = []
     for index, cluster in enumerate(clusters):
-        is_tab = sum(1 for item in cluster if item[1]) > len(cluster) / 2
-        centers = sorted(center for center, _ in cluster)
-        # Line spacing, from adjacent note centres on adjacent staff positions.
-        # A five-line notation staff is four gaps tall and a notehead is about half
-        # a gap, so padding the outermost note centres by half a gap each way
-        # brackets the whole staff. The same padding on a six-line TAB staff would
-        # not - which is why TAB comes from the engraver and not from here.
-        steps = [b - a for a, b in zip(centers, centers[1:])]
-        gap = min(steps) if steps else typical
+        members = [objects[i] for i in cluster]
+        is_tab = sum(1 for o in members if o.get("onTab")) > len(members) / 2
+        centres = sorted((o["box"][1] + o["box"][3]) / 2 for o in members)
+        # Line spacing, from adjacent centres on adjacent staff positions. Zeros are
+        # excluded: two objects sharing a centre is not a spacing.
+        steps = [b - a for a, b in zip(centres, centres[1:]) if b - a > 1e-6]
+        spacing = min(steps) if steps else typical
+        top = min(o["box"][1] for o in members)
+        bottom = max(o["box"][3] for o in members)
         bands.append(
             StaffBand(
                 index=index,
                 box=Box(
                     0.0,
-                    centers[0] - gap / 2,
+                    min(centres[0] - spacing / 2, top),
                     page_width,
-                    centers[-1] + gap / 2,
+                    max(centres[-1] + spacing / 2, bottom),
                 ),
                 is_tab=is_tab,
                 staff_lines=6 if is_tab else 5,
@@ -843,9 +1015,25 @@ def to_record(result: RenderResult) -> dict[str, Any]:
     The page extent is taken from the **content**, not from the SVG's declared
     width/height, because those disagree; see {@link resize_svg_to_content}.
     """
-    if result.objects:
-        content_width = max(obj["box"][2] for obj in result.objects)
-        content_height = max(obj["box"][3] for obj in result.objects)
+    # The document's own content transform, composed from the SVG rather than
+    # assumed. Everything written into this record is mapped through it, so the
+    # record and the rasterised page agree about where the page origin is. See the
+    # coordinate-space notes above the transform helpers.
+    transform = content_transform(result.svg)
+
+    # Objects and bands are transformed *first*, and the content extent is then
+    # measured on the canonical geometry. Measuring the extent first and adding a
+    # margin afterwards would leave the normalised `box` fields in the old frame.
+    canonical_objects = [
+        (obj, transform_box(transform, tuple(obj["box"]))) for obj in result.objects
+    ]
+    canonical_bands = [
+        (band, transform_box(transform, (band.box.x0, band.box.y0, band.box.x1, band.box.y1)))
+        for band in result.bands
+    ]
+    if canonical_objects:
+        content_width = max(box[2] for _obj, box in canonical_objects)
+        content_height = max(box[3] for _obj, box in canonical_objects)
     else:
         content_width = max(1.0, float(result.width))
         content_height = max(1.0, float(result.height))
@@ -859,8 +1047,7 @@ def to_record(result: RenderResult) -> dict[str, Any]:
     page_height_px = page_height_units / units_per_px
 
     objects = []
-    for index, obj in enumerate(result.objects):
-        x0, y0, x1, y1 = obj["box"]
+    for index, (obj, (x0, y0, x1, y1)) in enumerate(canonical_objects):
         objects.append(
             {
                 "index": index,
@@ -870,6 +1057,28 @@ def to_record(result: RenderResult) -> dict[str, Any]:
                 "boxUnits": [round(x0, 2), round(y0, 2), round(x1, 2), round(y1, 2)],
                 "fret": obj.get("fret"),
                 "onTab": bool(obj.get("onTab")),
+            }
+        )
+
+    # Each band also records the padded rectangle the rasteriser will cut. The
+    # loader frames a view by this rectangle rather than by the band, which is what
+    # makes a box's fraction of the view image exactly its fraction of the trimmed
+    # content - the inset composition and the tiling then need no correction.
+    bands = []
+    for band, (x0, y0, x1, y1) in canonical_bands:
+        bands.append(
+            {
+                "index": band.index,
+                "isTab": band.is_tab,
+                "staffLines": band.staff_lines,
+                "box": [x0 / content_width, y0 / content_height, x1 / content_width, y1 / content_height],
+                "boxUnits": [round(x0, 2), round(y0, 2), round(x1, 2), round(y1, 2)],
+                "cropUnits": [
+                    round(x0 - VIEW_PADDING_UNITS, 2),
+                    round(y0 - VIEW_PADDING_UNITS, 2),
+                    round(x1 + VIEW_PADDING_UNITS, 2),
+                    round(y1 + VIEW_PADDING_UNITS, 2),
+                ],
             }
         )
     return {
@@ -883,18 +1092,14 @@ def to_record(result: RenderResult) -> dict[str, Any]:
         "unitsPerPixel": round(units_per_px, 6),
         "viewBoxWidth": (definition_viewbox(result.svg) or (content_width, content_height))[0],
         "viewBoxHeight": (definition_viewbox(result.svg) or (content_width, content_height))[1],
-        "bands": [
-            {
-                "index": band.index,
-                "isTab": band.is_tab,
-                "staffLines": band.staff_lines,
-                "box": [band.box.x0 / content_width, band.box.y0 / content_height,
-                        band.box.x1 / content_width, band.box.y1 / content_height],
-                "boxUnits": [round(band.box.x0, 2), round(band.box.y0, 2),
-                             round(band.box.x1, 2), round(band.box.y1, 2)],
-            }
-            for band in result.bands
-        ],
+        "bands": bands,
+        # Recorded so the transform applied to every box above is auditable without
+        # re-parsing the SVG, and so a mismatch is diagnosable rather than inferred.
+        "contentTransform": {
+            "a": transform[0], "b": transform[1], "c": transform[2],
+            "d": transform[3], "e": transform[4], "f": transform[5],
+        },
+        "viewPaddingUnits": VIEW_PADDING_UNITS,
         "objects": objects,
         "objectCounts": _count_by_type(objects),
         "warnings": result.warnings,

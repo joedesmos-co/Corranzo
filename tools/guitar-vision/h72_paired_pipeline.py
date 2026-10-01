@@ -155,6 +155,22 @@ def suppress(svg_text: str, index: int) -> str:
     return svg_text[:start] + svg_text[end:]
 
 
+def record_transform(record: dict[str, Any]) -> tuple[float, float, float, float, float, float]:
+    """The content transform a record was built with, as recorded by the engraver.
+
+    Read from the record rather than re-parsed, so the harness compares geometry in
+    the same frame the record is written in. A record without the field predates the
+    coordinate fix, where boxUnits were raw layout units - the identity applies.
+    """
+    stored = record.get("contentTransform")
+    if not stored:
+        return (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+    return (
+        float(stored["a"]), float(stored["b"]), float(stored["c"]),
+        float(stored["d"]), float(stored["e"]), float(stored["f"]),
+    )
+
+
 def pair_targets(record: dict[str, Any], targets: list[dict[str, Any]]) -> dict[int, int]:
     """Map each record fret-digit object to its semantic target index.
 
@@ -162,15 +178,26 @@ def pair_targets(record: dict[str, Any], targets: list[dict[str, Any]]) -> dict[
     position must be within tolerance. The digit string alone is not enough - the
     same fret recurs on a page many times - and position alone is not enough
     either. An object matching zero or several targets is discarded, not guessed.
+
+    Both sides are compared in one frame. A semantic target is a raw SVG position,
+    and a record's ``boxUnits`` are canonical, so the target is mapped through the
+    record's own content transform first. Comparing them untransformed is not a
+    subtle failure: it mismatches almost every pair, which reads as an empty
+    fixture set rather than as an error.
     """
     band = next((b for b in record["bands"] if b.get("isTab")), None)
     if band is None:
         return {}
+    matrix = record_transform(record)
     band_span = band["boxUnits"][3] - band["boxUnits"][1]
     tolerance = 0.6 * band_span / 5
     by_value: dict[str, list[int]] = {}
     for index, target in enumerate(targets):
         by_value.setdefault(target["digits"], []).append(index)
+
+    def canonical(target: dict[str, Any]) -> tuple[float, float]:
+        x, y = _apply(matrix, target["x"], target["baseline"] - target["font"] * 0.36)
+        return x, y
 
     pairs: dict[int, int] = {}
     for obj in record["objects"]:
@@ -180,16 +207,19 @@ def pair_targets(record: dict[str, Any], targets: list[dict[str, Any]]) -> dict[
         units = obj["boxUnits"]
         centre_x = (units[0] + units[2]) / 2
         centre_y = (units[1] + units[3]) / 2
-        matches = [
-            index
-            for index in by_value.get(fret, [])
-            if abs(targets[index]["x"] - centre_x) <= tolerance
-            and abs((targets[index]["baseline"] - targets[index]["font"] * 0.36) - centre_y)
-            <= tolerance
-        ]
+        matches = []
+        for index in by_value.get(fret, []):
+            cx, cy = canonical(targets[index])
+            if abs(cx - centre_x) <= tolerance and abs(cy - centre_y) <= tolerance:
+                matches.append(index)
         if len(matches) == 1:
             pairs[obj["index"]] = matches[0]
     return pairs
+
+
+def _apply(matrix: tuple[float, ...], x: float, y: float) -> tuple[float, float]:
+    a, b, c, d, e, f = matrix
+    return (a * x + c * y + e, b * x + d * y + f)
 
 
 def choose_fixtures(
@@ -287,7 +317,9 @@ def render_views(
                     Image.LANCZOS,
                 ).save(path)
                 continue
-            box = rv.band_box_units(record["bands"], is_tab=view_name == "tab")
+            box = rv.band_crop_units(
+                record["bands"], is_tab=view_name == "tab", padding=rv.VIEW_PADDING_UNITS
+            )
             ok, _reason = rv.crop_view(image, units_to_px, box, 1.0, path)
             if not ok:
                 carried.append(view_name)
@@ -613,7 +645,7 @@ def _load_side(
     return samples[0], traces[score_id]
 
 
-def _box_centre_per_stage(
+def _box_geometry_per_stage(
     in_view: list[float],
     inset: tuple[float, float, float, float],
     source: tuple[int, int],
@@ -621,35 +653,65 @@ def _box_centre_per_stage(
     scaled: tuple[int, int],
     tile: dict[str, Any],
     plane_box: list[float],
-    plane_shape: tuple[int, int],
     crop: int,
-) -> dict[str, tuple[float, float]]:
-    """Where production's target box centre falls in each stage's pixel grid.
+) -> dict[str, tuple[float, float, float, float]]:
+    """Where production's target box sits in each stage's pixel grid.
 
-    All the scale factors come from production's own trace - the insets, the
-    scaled size, the tile's own start - so this is a measurement of where the box
-    already is, not a second implementation of how it got there.
+    Returns ``(centre_x, centre_y, width, height)`` per stage. All the scale factors
+    come from production's own trace - the insets, the scaled size, the tile's own
+    start - so this reports where the box already is rather than re-deriving how it
+    got there.
+
+    Two things this gets right that an earlier version of this harness did not, both
+    of which fabricate a placement failure that does not exist:
+
+    - the **centre** of the box is used, not its left edge. Using the left edge put
+      the box half its own width away from the glyph at every fractional stage, while
+      the plane stages - which take the box straight from production - disagreed with
+      it by exactly that half-width.
+    - the inset is composed **once**. Composing it twice narrows the fraction twice,
+      which moved the early stages by tens of pixels and again disagreed with the
+      plane stages.
     """
     left, right = inset[0], 1.0 - inset[2]
     top, bottom = inset[1], 1.0 - inset[3]
-    fx = (in_view[0] - left) / max(right - left, 1e-9)
-    fy = (in_view[1] - top) / max(bottom - top, 1e-9)
+    span_x = max(right - left, 1e-9)
+    span_y = max(bottom - top, 1e-9)
+    # `in_view` is a fraction of the whole crop; the inset says which part of the
+    # crop survived the trim. The result is a fraction of the trimmed content, which
+    # is also a fraction of the resized array because the resize is uniform.
+    crop_cx = (in_view[0] + in_view[2]) / 2
+    crop_cy = (in_view[1] + in_view[3]) / 2
+    crop_w = in_view[2] - in_view[0]
+    crop_h = in_view[3] - in_view[1]
+    cx = (crop_cx - left) / span_x
+    cy = (crop_cy - top) / span_y
+    w = crop_w / span_x
+    h = crop_h / span_y
+
     source_w, source_h = source
     trimmed_w, trimmed_h = trimmed
     scaled_w, scaled_h = scaled
-    out: dict[str, tuple[float, float]] = {
-        # PAGE is the view crop itself, in crop pixels.
-        "PAGE": (in_view[0] * source_w, in_view[1] * source_h),
-        "TRIMMED_CROP": (fx * trimmed_w, fy * trimmed_h),
-        "RESIZED_ARRAY": (fx * scaled_w, fy * scaled_h),
-        "TILE": (fx * scaled_w - float(tile["start"]), fy * scaled_h),
+    out: dict[str, tuple[float, float, float, float]] = {
+        "PAGE": (crop_cx * source_w, crop_cy * source_h, crop_w * source_w, crop_h * source_h),
+        "TRIMMED_CROP": (cx * trimmed_w, cy * trimmed_h, w * trimmed_w, h * trimmed_h),
+        "RESIZED_ARRAY": (cx * scaled_w, cy * scaled_h, w * scaled_w, h * scaled_h),
+        "TILE": (cx * scaled_w - float(tile["start"]), cy * scaled_h, w * scaled_w, h * scaled_h),
     }
-    height, width = plane_shape
-    out["SQUARE_PLANE"] = ((plane_box[0] + plane_box[2]) / 2 * width, (plane_box[1] + plane_box[3]) / 2 * height)
+    # The plane stages use production's own box, not a reconstruction of it.
+    plane_w = 256.0
+    box_w = (plane_box[2] - plane_box[0]) * plane_w
+    box_h = (plane_box[3] - plane_box[1]) * 256.0
+    out["SQUARE_PLANE"] = (
+        (plane_box[0] + plane_box[2]) / 2 * plane_w,
+        (plane_box[1] + plane_box[3]) / 2 * 256.0,
+        box_w,
+        box_h,
+    )
     out["PRE_ROI"] = out["SQUARE_PLANE"]
-    # The ROI grid runs -1..1 across a 1.6-box field of view, so the box itself
-    # always sits at the grid's centre and spans crop/1.6 samples across.
-    out["FINAL_ROI"] = (crop / 2.0, crop / 2.0)
+    # The sampler lays `crop` samples across a 1.6-box field of view centred on the
+    # box, so the box itself spans crop / 1.6 samples and sits at the grid's centre.
+    out["FINAL_ROI"] = (crop / 2.0, crop / 2.0, crop / 1.6, crop / 1.6)
     return out
 
 
@@ -788,7 +850,7 @@ def stage_diffs(
     )
 
     # ---- where the box is, against where the difference is --------------------
-    box_px = _box_centre_per_stage(
+    box_geometry = _box_geometry_per_stage(
         in_view,
         a_tab["inset"],
         a_tab["source_size"],
@@ -796,36 +858,8 @@ def stage_diffs(
         a_tab["scaled_size"],
         a_tile,
         plane_box,
-        pre_d.shape,
         crop,
     )
-    box_wh = {
-        "PAGE": (
-            (in_view[2] - in_view[0]) * a_tab["source_size"][0],
-            (in_view[3] - in_view[1]) * a_tab["source_size"][1],
-        ),
-        "TRIMMED_CROP": (
-            (in_view[2] - in_view[0]) * a_tab["trimmed_size"][0],
-            (in_view[3] - in_view[1]) * a_tab["trimmed_size"][1],
-        ),
-        "RESIZED_ARRAY": (
-            (in_view[2] - in_view[0]) * scaled_w,
-            (in_view[3] - in_view[1]) * scaled_h,
-        ),
-        "TILE": (
-            (in_view[2] - in_view[0]) * scaled_w,
-            (in_view[3] - in_view[1]) * scaled_h,
-        ),
-        "SQUARE_PLANE": (
-            (plane_box[2] - plane_box[0]) * pre_d.shape[1],
-            (plane_box[3] - plane_box[1]) * pre_d.shape[0],
-        ),
-        "PRE_ROI": (
-            (plane_box[2] - plane_box[0]) * pre_d.shape[1],
-            (plane_box[3] - plane_box[1]) * pre_d.shape[0],
-        ),
-        "FINAL_ROI": (crop / 1.6, crop / 1.6),
-    }
     arrays = {
         "PAGE": page_d,
         "TRIMMED_CROP": crop_d,
@@ -836,14 +870,12 @@ def stage_diffs(
         "FINAL_ROI": roi_d,
     }
     for stage, d in arrays.items():
-        width, height = d.shape[1], d.shape[0]
-        cx, cy = box_px[stage]
-        bw, bh = box_wh[stage]
+        cx, cy, bw, bh = box_geometry[stage]
         stages[stage]["box_centre_px"] = [round(cx, 2), round(cy, 2)]
         stages[stage]["box_size_px"] = [round(bw, 2), round(bh, 2)]
         stages[stage]["energy_in_box"] = _energy_in_window(d, cx, cy, bw, bh)
         stages[stage]["displacement"] = _displacement(
-            d, cx, cy, bw, bh, (float(width), float(height))
+            d, cx, cy, bw, bh, (float(d.shape[1]), float(d.shape[0]))
         )
 
     # ---- DIAGNOSTIC: the ROI re-centred on the glyph --------------------------
@@ -852,7 +884,7 @@ def stage_diffs(
     # window blind? Only one box is moved, by the offset measured above, and only
     # for this diagnostic.
     plane_c = _centroid(pre_d)
-    plane_centre = box_px["PRE_ROI"]
+    plane_centre = box_geometry["PRE_ROI"][:2]
     if plane_c is not None:
         dx = plane_c[0] - plane_centre[0]
         dy = plane_c[1] - plane_centre[1]
@@ -1023,9 +1055,14 @@ def measure(
     # The box as the loader's own view frame expresses it, for the displacement
     # measurement. Production computes this same value inside build_sample; here it
     # is only read, to compare where the box is against where the ink is.
+    # The un-composed fraction of the view *crop*. The trim inset is applied once,
+    # in `_box_geometry_per_stage`, against the same inset production reports.
+    # Composing it here as well measures a box that is inset-compounded twice, which
+    # reads as a placement failure that does not exist - the plane stages, which use
+    # production's own box, are unaffected and disagree with it.
     in_view = page_box_to_view(
         next(o for o in local["objects"] if o["index"] == fixture["object_index"])["box"],
-        compose_frame(local, True, a_tab["inset"]),
+        view_rect(local, True),
     )
     out["in_view"] = in_view
     out["mechanism"] = mechanism(
@@ -1062,31 +1099,27 @@ def mechanism(
 
     ``render``
         Where the SVG's own declared position lands in the TAB view, from the
-        production crop geometry plus Verovio's outer ``translate(500, 500)``. If
+        production crop geometry with the document's content transform applied. If
         this matches the measurement, the render and the crop are faithful and the
         glyph is exactly where the SVG says it is.
 
     ``box``
         Where production's target box lands in the same view, same units.
 
-    The gap is the defect. It is reported in layout units as well as crop pixels so
-    it can be read against the frozen page-space figures, which were sub-pixel.
+    The gap is the defect. Before the coordinate fix it was 505-2212 layout units;
+    after it, both predictions should agree to within raster rounding, and any
+    remaining gap is reported rather than explained away.
     """
+    matrix = record_transform(record)
     band = next(b for b in record["bands"] if b.get("isTab"))
-    left, top, right, bottom = band["boxUnits"]
-    left = max(0.0, left - rv.VIEW_PADDING_UNITS)
-    top = max(0.0, top - rv.VIEW_PADDING_UNITS)
-    x0 = int(round(left * units_to_px))
-    y0 = int(round(top * units_to_px))
+    crop = band.get("cropUnits") or band["boxUnits"]
+    x0 = int(round(float(crop[0]) * units_to_px))
+    y0 = int(round(float(crop[1]) * units_to_px))
+
     declared = semantic_targets(svg_text)[target_index]
-    # The page render is the SVG at PAGE_WIDTH * VIEW_SCALE, and the SVG wraps its
-    # content in translate(500, 500); the crop is cut by raw layout units, so the
-    # rendered content sits 500 units lower and further right than the crop origin.
-    render_x = declared["x"] * units_to_px + 500.0 * units_to_px - x0
-    render_y = (
-        (declared["baseline"] - declared["font"] * 0.36) * units_to_px
-        + 500.0 * units_to_px
-        - y0
+    # Read out of the SVG, not assumed: the same extractor the engraver used.
+    render_x, render_y = _apply(
+        matrix, declared["x"], declared["baseline"] - declared["font"] * 0.36
     )
 
     a = np.asarray(Image.open(a_views / TABS / f"{fixture_id}.png").convert("L"), np.int32)
@@ -1101,29 +1134,18 @@ def mechanism(
     box_x = (in_view[0] + in_view[2]) / 2 * a.shape[1]
     box_y = (in_view[1] + in_view[3]) / 2 * a.shape[0]
     return {
-        "render_error_px": [round(measured_x - render_x, 2), round(measured_y - render_y, 2)],
+        "render_error_px": [
+            round(measured_x - (render_x * units_to_px - x0), 2),
+            round(measured_y - (render_y * units_to_px - y0), 2),
+        ],
         "box_error_px": [round(measured_x - box_x, 2), round(measured_y - box_y, 2)],
         "box_error_units": [
             round((measured_x - box_x) / units_to_px, 1),
             round((measured_y - box_y) / units_to_px, 1),
         ],
         "crop_width_px": int(a.shape[1]),
-        "page_translate_units": 500,
+        "content_translate": [matrix[4], matrix[5]],
     }
-
-
-def compose_frame(
-    record: dict[str, Any], is_tab: bool, inset: tuple[float, float, float, float]
-) -> tuple[float, float, float, float]:
-    """The band rect composed with the trim inset, as build_sample composes it."""
-    base = view_rect(record, is_tab)
-    x0, y0, x1, y1 = base
-    return (
-        x0 + inset[0] * (x1 - x0),
-        y0 + inset[1] * (y1 - y0),
-        x0 + (1.0 - inset[2]) * (x1 - x0),
-        y0 + (1.0 - inset[3]) * (y1 - y0),
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -1339,12 +1361,18 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
                     round(max(m["box_error_units"][1] for m in mech if m.get("box_error_units")), 1),
                 ],
             ],
+            "content_translate_units": [
+                _median([m["content_translate"][0] for m in mech if m.get("content_translate")]),
+                _median([m["content_translate"][1] for m in mech if m.get("content_translate")]),
+            ],
             "box_error_units_after_subtracting_translate": [
                 _median([
-                    m["box_error_units"][0] - 500 for m in mech if m.get("box_error_units")
+                    m["box_error_units"][0] - m["content_translate"][0]
+                    for m in mech if m.get("box_error_units") and m.get("content_translate")
                 ]),
                 _median([
-                    m["box_error_units"][1] - 500 for m in mech if m.get("box_error_units")
+                    m["box_error_units"][1] - m["content_translate"][1]
+                    for m in mech if m.get("box_error_units") and m.get("content_translate")
                 ]),
             ],
         }
