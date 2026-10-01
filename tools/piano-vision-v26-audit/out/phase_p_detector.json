@@ -1,0 +1,174 @@
+{
+  "bc-bach-fugue-bwv846": {
+    "ambiguous": 2,
+    "events": 89,
+    "rejects": {
+      "endpoint_miss": 35,
+      "insufficient_vertical_coverage": 22063
+    },
+    "strokes": 184,
+    "systems": 10
+  },
+  "bc-beethoven-sonata-op2-m1": {
+    "ambiguous": 16,
+    "events": 376,
+    "rejects": {
+      "endpoint_miss": 143,
+      "insufficient_vertical_coverage": 43812
+    },
+    "strokes": 787,
+    "systems": 20
+  },
+  "bc-chopin-etude-op10-01": {
+    "ambiguous": 2,
+    "events": 263,
+    "rejects": {
+      "endpoint_miss": 143,
+      "insufficient_vertical_coverage": 39148
+    },
+    "strokes": 466,
+    "systems": 21
+  },
+  "bc-chopin-etude-op10-12": {
+    "ambiguous": 20,
+    "events": 400,
+    "rejects": {
+      "endpoint_miss": 119,
+      "insufficient_vertical_coverage": 46147
+    },
+    "strokes": 722,
+    "systems": 21
+  },
+  "bc-chopin-nocturne-op9-n2": {
+    "ambiguous": 7,
+    "events": 336,
+    "rejects": {
+      "endpoint_miss": 145,
+      "insufficient_vertical_coverage": 26079
+    },
+    "strokes": 550,
+    "systems": 12
+  },
+  "bc-mozart-k153": {
+    "ambiguous": 1,
+    "events": 190,
+    "rejects": {
+      "endpoint_miss": 69,
+      "insufficient_vertical_coverage": 44298
+    },
+    "strokes": 375,
+    "systems": 22
+  },
+  "omf-piano-dense-advanced-vector": {
+    "ambiguous": 3,
+    "events": 15,
+    "rejects": {
+      "disconnected_stems": 9,
+      "endpoint_miss": 16,
+      "insufficient_vertical_coverage": 1961
+    },
+    "strokes": 52,
+    "systems": 2
+  },
+  "omf-piano-grand-voices-vector": {
+    "ambiguous": 0,
+    "events": 32,
+    "rejects": {
+      "endpoint_miss": 13,
+      "insufficient_vertical_coverage": 3982
+    },
+    "strokes": 81,
+    "systems": 2
+  },
+  "omf-piano-rhythm-tuplets-vector": {
+    "ambiguous": 1,
+    "events": 11,
+    "rejects": {
+      "insufficient_vertical_coverage": 1995
+    },
+    "strokes": 43,
+    "systems": 2
+  },
+  "pl-bach-prelude-bwv846": {
+    "ambiguous": 3,
+    "events": 180,
+    "rejects": {
+      "disconnected_stems": 1,
+      "endpoint_miss": 69,
+      "insufficient_vertical_coverage": 26530
+    },
+    "strokes": 352,
+    "systems": 12
+  },
+  "pl-beethoven-fur-elise": {
+    "ambiguous": 16,
+    "events": 418,
+    "rejects": {
+      "disconnected_stems": 2,
+      "endpoint_miss": 226,
+      "insufficient_vertical_coverage": 41446
+    },
+    "strokes": 822,
+    "systems": 19
+  },
+  "pl-brahms-waltz-op39-3": {
+    "ambiguous": 4,
+    "events": 22,
+    "rejects": {
+      "endpoint_miss": 1,
+      "insufficient_vertical_coverage": 3208
+    },
+    "strokes": 68,
+    "systems": 3
+  },
+  "pl-chopin-mazurka-op6-1": {
+    "ambiguous": 15,
+    "events": 274,
+    "rejects": {
+      "endpoint_miss": 88,
+      "insufficient_vertical_coverage": 30593
+    },
+    "strokes": 585,
+    "systems": 23
+  },
+  "pl-handel-gavotte": {
+    "ambiguous": 4,
+    "events": 52,
+    "rejects": {
+      "endpoint_miss": 19,
+      "insufficient_vertical_coverage": 8647
+    },
+    "strokes": 140,
+    "systems": 4
+  },
+  "pl-mozart-turkish-march": {
+    "ambiguous": 29,
+    "events": 505,
+    "rejects": {
+      "endpoint_miss": 239,
+      "insufficient_vertical_coverage": 54620
+    },
+    "strokes": 1113,
+    "systems": 25
+  },
+  "pl-tchaikovsky-old-french-song": {
+    "ambiguous": 1,
+    "events": 38,
+    "rejects": {
+      "endpoint_miss": 12,
+      "insufficient_vertical_coverage": 4307
+    },
+    "strokes": 84,
+    "systems": 4
+  },
+  "std-demo-minuet-in-g": {
+    "ambiguous": 6,
+    "events": 90,
+    "rejects": {
+      "endpoint_miss": 24,
+      "insufficient_vertical_coverage": 13062
+    },
+    "strokes": 212,
+    "systems": 6
+  }
+}

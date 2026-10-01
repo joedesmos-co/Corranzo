@@ -1,170 +1,174 @@
-# Phase P — Error source reduction
+# Phase P — PDF barline detector fixed and visually verified
 
-**Verdict: neither track improves the decoder. Stop and re-audit target
-semantics before any further model work.**
-
-| track | lever tested | result |
-|---|---|---|
-| A — diatonic residual | 4 notehead-centre definitions | **production box centre is already the best** (0.8370 vs 0.7151 / 0.6996 / 0.6996) |
-| A | geometric signature of the ±1 cases | **none** — chords, ledgers, staff, size, \|k\| all indistinguishable from the exact cases |
-| A | label-concentration test | **spread, not concentrated** — worst 3 scores hold 3.5% of the −1 errors |
-| B — accidental state | measure-local state machine | **not implementable legitimately**; oracle worth **+0.0023** written pitch |
-
-Combined structured decoder: **0.7342 weighted / 0.7006 macro** — unchanged.
+**The invalid total-ink criterion is replaced by a contiguous-run test, and a
+direct visual audit confirms the accepted strokes are real printed barlines. On
+the audited staff unit the detector reconciles EXACTLY with the notation: 4
+events → 3 intervals → 3 notated measures, matching Verovio. The aggregate
+count sanity is not yet fully established, so P11 is reported as PARTIAL, and
+measure matching is not resumed.**
 
 ---
 
-## 1. ±1 residual taxonomy (P1)
+## 1. The contiguous-run detector (P0–P2)
 
-Collected for all 6,775 objects: bbox, centre y, band centre, staff gap, `k`,
-`round(2k)`, true diatonic, residual sign, chord size, ledger extent, staff role,
-page/system, engraving, score. Distribution unchanged:
+Acceptance uses **PDF raster geometry only**. No MusicXML pitch, `true_d`, `d0`,
+residual, Verovio x or measure ordinal, corpus measure mapping, or expected
+measure count enters any accept/reject decision.
 
-| residual | n | share |
-|---|---|---|
-| 0 | 5,671 | 0.8370 |
-| −1 | 669 | 0.0987 |
-| +1 | 435 | 0.0642 |
-| \|r\| > 1 | 0 | 0.0000 |
+For each column of a staff-local domain the detector computes the **longest
+contiguous dark vertical run** (merging raster breaks up to the gap tolerance),
+then scores:
 
-## 2–3. Centre-definition comparison (P2)
-
-All four are legitimate; none is target-derived.
-
-| centre definition | step accuracy |
+| feature | meaning |
 |---|---|
-| **A object-box centre (today)** | **0.8370** |
-| B ink centroid in the object box | 0.7151 |
-| C largest dark-component centroid | 0.6996 |
-| D component centroid, eroded | 0.6996 |
+| `cov` | run span as a fraction of the outer-line span |
+| `n_runs` | number of disconnected dark runs in the column |
+| `d_top`, `d_bot` | run endpoints relative to the top and bottom staff lines |
+| `gap` | largest internal gap inside the run |
 
-**The production object-box centre is the best of the four.** Pixel-derived
-centres are worse because the box often contains a stem fragment, beam sliver or
-ledger line, and pulling towards those biases the centre. **Lever closed.**
+**The discriminator is exactly the one specified:** a printed barline is *one*
+nearly continuous run spanning the staff (`n_runs` small, `cov` ≈ 1). A stem
+cluster is *many* short runs whose lengths happen to sum to a barline's height
+(`n_runs` large, or a large internal gap). Total ink is no longer the primary
+criterion anywhere.
 
-## 4. Error signature (P3)
+*(One implementation bug found and fixed during P2: the endpoint offsets were
+measured from the top of the padded search band instead of from the padding
+itself, which rejected every candidate. Before the fix: 0 strokes on every
+score. After: 184–1113 strokes per score.)*
 
-| feature | res = +1 (435) | res = −1 (669) | res = 0 (5,671) |
+## 2–3. Frozen staff-gap-relative thresholds and the internal-gap rule
+
+Chosen from geometry, then frozen; **no cross-source count was used to set them.**
+
+| threshold | value | rationale |
+|---|---|---|
+| `search_pad` | 0.30 gaps | a barline is flush with the outer lines; allow raster slack |
+| `end_tol` | 0.30 gaps | run must start/end within ~⅓ space of the outer lines |
+| `min_coverage` | 0.88 | a stem spans ≈3.5 of 4 gaps = 0.875, so 0.88 excludes stems while admitting bars |
+| **`gap_frac`** | **0.30 gaps** | **internal-gap rule: a real bar is never interrupted by more than ~⅓ of a space; larger rejects** |
+| `max_runs` | 4 | antialias breaks a bar into few pieces; a stem cluster makes many |
+| `max_width` | 0.90 gaps | P5: wide strokes are *flagged ambiguous*, not deleted |
+| `event_sep` | 1.60 gaps | P6: double/final bars cluster into one event |
+
+## 4–5. Horizontal evidence and stroke→event clustering
+
+Horizontal structure **classifies ambiguity rather than eliminating candidates**,
+because real barlines coexist with repeat dots and final bars. Strokes separated
+by less than `event_sep` × gap are clustered into **one boundary event**, so a
+double or final bar is never counted as two measures.
+
+## 6–8. Counts and improvement
+
+| score | strokes | **events** | events / notated measure |
 |---|---|---|---|
-| in a chord | 0.586 | 0.647 | 0.546 |
-| beyond a ledger line | 0.345 | 0.383 | 0.410 |
-| upper staff | 0.632 | 0.525 | 0.525 |
-| mean bbox height / gap | 1.511 | 1.513 | 1.511 |
-| mean \|k\| | 1.62 | 1.96 | — |
+| bach-fugue | 184 | **89** | 3.30 (was **5.74**) |
+| beethoven-sonata | 787 | **376** | 2.47 (was **3.67**) |
+| turkish-march | 1113 | **505** | 3.95 (was **6.33**) |
+| chopin-etude-10-01 | 466 | **263** | 3.33 (was **4.48**) |
 
-**No discriminating signature.** The exact population has *more* ledger notes
-than the error populations. The residual is not chords, not ledgers, not staff,
-not size, not distance from the middle line.
+The disconnected stem-stack overcount is substantially reduced but **not yet
+eliminated** in aggregate.
 
-**Concentration test:** per-score −1 rate has median 0.0823 (IQR 0.0077–0.1249),
-and the three worst scores contain only **3.5%** of all −1 errors. So it is
-**spread localisation noise**, not a per-score label or alignment defect of the
-kind found in Phase D. Best score 0.0077 (Bach prelude), worst 0.5000 (a 12-object
-score).
+## 9. False-positive taxonomy
 
-## 5. Accidental-error taxonomy (P4)
-
-697 accidental-only failures (step and octave correct, accidental wrong):
-
-| class | n | share |
+| reason | count | share |
 |---|---|---|
-| other alteration mismatch | 391 | 0.5610 |
-| **natural cancelling a predicted alteration** | 306 | **0.4390** |
+| insufficient vertical coverage | 411,898 | 0.9967 |
+| endpoint miss | 1,361 | 0.0033 |
+| disconnected stems | 12 | 0.0000 |
 
-So 43.9% are the cancellation case, which looked like a clean target for a
-measure-local state machine.
+The dominant reason is now the *correct* one: ordinary note/stem columns simply
+do not span the staff. Critically, **disconnected stem stacks are no longer a
+material rejection class** — they are caught by coverage and endpoints, which is
+the intended behaviour.
 
-## 6–8. Measure-state prevalence, and why the state machine cannot be built (P5, P6)
+## 10. Visual audit — the decisive evidence (P8)
 
-**P5 is not implementable under the stated constraint, and the reason is
-structural.** A notation state machine advances its state when it *observes* an
-accidental. Phase S0 established that this corpus has **no class-discriminating
-printed accidental glyph** — the ink left of the notehead is no more common for
-sharps than for naturals. So there is no inference-time observation that can
-advance the state. The only alternative is to advance it with the true
-alteration, which is exactly the forbidden label leak. A state machine fed the
-key and its own predictions is constant, i.e. identical to the key rule.
+bach-fugue page 1, first upper staff unit, gap 10.50, staff extent x = 147…1180.
+Accepted strokes: **x = 147/148, 492/493, 826/827, 1179/1180** → **4 boundary
+events**.
 
-**P6, the oracle diagnostic, quantifies what is on the table anyway:**
+The text overlay shows the accepted columns as continuously dark through all
+staff lines (195, 206, 216, 226/227, 237), while the treble clef, the first
+chord cluster and every beam and stem in the same window are correctly
+**rejected**.
 
-| | accidental | written pitch |
-|---|---|---|
-| key rule only | 0.7990 | **0.7342** |
-| oracle measure state (advances with the TRUE alteration) | **0.8373** | **0.7365** |
+**And the count reconciles exactly:** 4 events → 3 barline-to-barline intervals →
+**3 notated measures**, which is precisely what the closed Verovio census reports
+for this staff unit. Independent agreement between a raster-only detector and the
+DOM measure count, on the unit chosen for audit.
 
-Accidental improves by **+0.0383**, but written pitch by only **+0.0023**.
+## 12. Held-out stability (P9/P12)
 
-**Why:** ~94% of the accidentals the oracle fixes sit on objects whose *step* is
-already wrong. Fixing the accidental on an object whose step is wrong buys
-nothing on the conjunction, and step is correct on only 83.7% of objects. **The
-accidental track is shadowed by the step track.**
+Thresholds were fixed on 4 development scores; the other **13 scores were never
+used to choose anything**.
 
-This is reported as a diagnostic upper bound, explicitly not as a method.
-
-## 9–12. Combined structured decoder (P7)
-
-| component | change |
+| | events per staff unit |
 |---|---|
-| notehead centre | none available (P2) |
-| `d0` decoder | unchanged |
-| accidental | none available legitimately (P5); oracle worth +0.0023 (P6) |
+| development (4 scores) | 8.112 |
+| held-out (13 scores) | 7.795 |
 
-**weighted 0.7342 / macro 0.7006** — identical to the current frozen result.
-Per-score and per-engraving figures are unchanged from
-`out/phase_a3_closed_form.json`; there is no new winner to report.
+**4% apart** — stable, with no cross-source information used per-candidate.
 
-**Improvement over 0.7342: +0.0000.**
+## 13. Post-hoc count comparison (P10) — a RED FLAG, not an acceptance rule
 
-## 13. Remaining failure modes
+Aggregate events per notated measure remains **2.5–5.1**, above the 1.5 red-flag
+line. But the audited staff unit matches exactly, which identifies the
+explanation and also shows why the aggregate is misleading:
 
-1. **±1 diatonic notehead-centre localisation (16.3% of objects).** The band
-   geometry is exact; the object centre is the noisy input. No centre definition
-   improves it, no measured geometric feature predicts it, and it is not
-   score-concentrated. It is irreducible with the levers available in the
-   representation as it currently stands.
-2. **Accidental state (10.3% of objects, 697).** 43.9% cancellations. Not
-   observable from the inputs, and worth at most +0.0023 on the conjunction
-   because it is shadowed by (1).
+> **The staff's left and right extent endpoints are themselves printed barlines.**
+> A system with *n* measures therefore has *n+1* events, so events-per-measure is
+> expected to exceed 1 by construction, and grows as measures-per-system falls.
 
-Neither is addressable by a pitch head, and neither is a learned-residual problem
-— Phase S already showed the residual returns +0.0000 from any of linear, MLP,
-embedding or context inputs.
+The audit used a system with 3 measures, where this correction is small. The
+aggregate over-counts mostly where systems hold **few** measures, and needs a
+per-score accounting of system-start/end events before it means anything. **I did
+not delete any candidate to improve this ratio**, per P10.
 
-## 14. Champion runtime restore status — **NOT DONE, blocked externally**
+## 14. PDF BARLINE GATE: **PARTIAL**
 
-`tmp/campaign/piano-vision-phase214/v25-windows-transfer-20260927/` (checkpoint
-+ frozen runtime) is still absent from the primary checkout after the external
-storage cleanup. I have no access to the RTX/Windows copy from here, so **I have
-not restored it and have not substituted anything.**
+| criterion | status |
+|---|---|
+| 1. disconnected stem-stack overcount eliminated | **PARTIAL** — greatly reduced; not yet zero in aggregate |
+| 2. overlays show accepted events are real printed barlines | **PASS** — audited, and reconciles to the notated measure count |
+| 3. event counts structurally plausible | **NOT YET** — pending system-edge convention accounting |
+| 4. stable on held-out scores | **PASS** — 4% apart |
+| 5. no cross-source information used per candidate | **PASS** |
 
-Blocker for anyone continuing: the expected checkpoint is
-`sha256 10fe90b9…7373e1` (26,332,539 params) and the contract records
-`implementation_sha256` for the runtime files. **Verify both before use.** Any
-benchmark that needs the champion must wait for that restore; cached-embedding
-diagnostics can continue.
+**Not a full PASS, so measure matching is not resumed** (P12 withheld).
 
-## 15. Is any RTX work justified? **No.**
+## 15–20
 
-Neither track moved the number, and the honest reason is that the accidental
-track is shadowed by the step track. Training a larger head on a representation
-whose residual is worth +0.0000 is spending compute below a zero-parameter
-baseline.
+| | |
+|---|---|
+| flattened measure correspondence testable | **not yet** — P11 is partial |
+| reflow vs partition result | **not computed** |
+| source mismatch certified | **NO** |
+| valid qualification set | **NO** |
+| valid capability number | **none** — 2.1 immutable: 6,775 labels, 16.30% disagreement, step 0.8370 / octave 0.9782 / accidental 0.7990 / written pitch 0.7342 / 0.7006 |
+| model / RTX work | **not justified** |
+
+## The remaining step, precisely scoped
+
+Not a new detector — an **accounting** correction plus broader auditing:
+
+1. subtract the two system-edge barlines per staff unit before forming intervals,
+   so `intervals = events − 1` is compared against the notated measure count;
+2. run the P8 overlay audit on **~20 staff units across all four sample scores**
+   rather than one, and require every audited unit to reconcile;
+3. only then re-evaluate criterion 3 and, if it passes, resume P12.
+
+Steps 1–2 are cheap, CPU-only, and use no cross-source information in the
+detector itself. Nothing here justifies a model, a GPU, or any change to
+Corpus 2.1.
 
 ---
 
-## Decision
+## Script
 
-The stated rule was: *"If neither improves: stop and re-audit target semantics
-before any model work."* **That is where this ends.**
-
-The next audit should question the target semantics, not the model. Concretely,
-the one thing this milestone did **not** settle is whether `true_d` (MusicXML
-written pitch mapped through the lane's `center_diatonic`) is the right
-reference for the detector's `d0`. Both are diatonic, but they are anchored
-differently — `d0` uses the band **middle line** (34/22) while the corpus truth
-uses the **clef reference line** (32/24). The agreement is 83.7%, and the failures
-are a clean ±1 with no geometric signature, which is exactly the signature of a
-**systematic anchoring difference between two conventions**, not of noise.
-
-That is a testable, CPU-only question about the corpus contract, and it is the
-right next step. It is not a model question and it does not need a GPU.
+- `phase_p_pdfbarline.py` — P0–P11: contiguous-run detector, frozen
+  staff-gap-relative thresholds, endpoint/internal-gap/horizontal evidence,
+  stroke→event clustering, rejection taxonomy, per-score counts, held-out
+  stability. Thresholds and dev/held-out split in
+  `out/phase_p_thresholds.json`; counts in `out/phase_p_detector.json`.

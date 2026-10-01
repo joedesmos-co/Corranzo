@@ -1,0 +1,32 @@
+{
+  "development": [
+    "bc-bach-fugue-bwv846",
+    "bc-beethoven-sonata-op2-m1",
+    "bc-chopin-etude-op10-01",
+    "pl-mozart-turkish-march"
+  ],
+  "held_out": [
+    "bc-chopin-etude-op10-12",
+    "bc-chopin-nocturne-op9-n2",
+    "bc-mozart-k153",
+    "omf-piano-dense-advanced-vector",
+    "omf-piano-grand-voices-vector",
+    "omf-piano-rhythm-tuplets-vector",
+    "pl-bach-prelude-bwv846",
+    "pl-beethoven-fur-elise",
+    "pl-brahms-waltz-op39-3",
+    "pl-chopin-mazurka-op6-1",
+    "pl-handel-gavotte",
+    "pl-tchaikovsky-old-french-song",
+    "std-demo-minuet-in-g"
+  ],
+  "thresholds": {
+    "end_tol": 0.3,
+    "event_sep": 1.6,
+    "gap_frac": 0.3,
+    "max_runs": 4,
+    "max_width": 0.9,
+    "min_coverage": 0.88,
+    "search_pad": 0.3
+  }
+}
