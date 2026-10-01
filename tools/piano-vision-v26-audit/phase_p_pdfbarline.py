@@ -111,6 +111,58 @@ def staff_rows(im, y0, y1, min_run_frac=0.25):
     return rows
 
 
+def refine_staff(im, y0, y1, gap0, half_span=2.6, tol=0.35):
+    """Find the true 5 staff lines near the corpus band, from the raster alone.
+
+    The corpus band y0/y1 is the extractor's glyph-font bbox, which is only
+    approximately the true staff, so it is not a trustworthy search domain.
+    This returns (y_top, y_bot, gap) from independently detected line rows, or
+    None when no regular 4-or-5 line set is found nearby.
+    """
+    Hh, Ww = im.shape
+    lo = max(0, int(y0 - half_span * gap0))
+    hi = min(Hh - 1, int(y1 + half_span * gap0))
+    if hi - lo < 4 * gap0:
+        return None
+    sub = im[lo:hi + 1, :]
+    ink = sub < 140
+    rows = []
+    for r in range(ink.shape[0]):
+        xs = np.nonzero(ink[r])[0]
+        if not len(xs):
+            continue
+        brk = np.nonzero(np.diff(xs) > 1)[0]
+        best = max(np.split(xs, brk + 1), key=len)
+        if len(best) >= 0.25 * Ww:
+            rows.append(lo + r)
+    if len(rows) < 4:
+        return None
+    # cluster adjacent rows
+    groups, cur = [], [rows[0]]
+    for r in rows[1:]:
+        if r - cur[-1] <= 1:
+            cur.append(r)
+        else:
+            groups.append(cur)
+            cur = [r]
+    groups.append(cur)
+    cent = [float(np.mean(g)) for g in groups]
+    # best window of 4 or 5 centres with near-uniform spacing close to gap0
+    best = None
+    for n in (5, 4):
+        for i in range(len(cent) - n + 1):
+            seg = cent[i:i + n]
+            sp = np.diff(seg)
+            if not (tol * gap0 <= sp.min() and sp.max() <= (1 / tol) * gap0):
+                continue
+            score = abs(np.mean(sp) - gap0) + 0.5 * np.std(sp)
+            if best is None or score < best[0]:
+                best = (score, seg[0], seg[-1], float(np.mean(sp)))
+    if best is None:
+        return None
+    return best[1], best[2], best[3]
+
+
 def detect_band(im, y_top, y_bot, x_lo, x_hi, T):
     """P2-P6 for one staff unit. Returns dict with strokes, events, taxonomy."""
     gap = (y_bot - y_top) / 4.0
