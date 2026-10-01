@@ -1,0 +1,65 @@
+{
+  "Q0_Q2_semantics": {
+    "passed": 10,
+    "tests": [
+      [
+        "middle line of the upper staff: true_d == anchor",
+        true
+      ],
+      [
+        "middle line of the lower staff: true_d == anchor",
+        true
+      ],
+      [
+        "treble top line F5: d0 at k=+2 spaces == true_d",
+        true
+      ],
+      [
+        "treble bottom line E4: d0 at k=-2 spaces == true_d",
+        true
+      ],
+      [
+        "treble space above middle (C5) at k=+0.5 -> true_d",
+        true
+      ],
+      [
+        "treble space below middle (A4) at k=-0.5 -> true_d",
+        true
+      ],
+      [
+        "one ledger line above treble: A5 at k=+3 -> true_d",
+        true
+      ],
+      [
+        "one ledger line below treble: C4 at k=-3 -> true_d",
+        true
+      ],
+      [
+        "clef_center_diatonic(G,2) == 32 == G4",
+        true
+      ],
+      [
+        "clef_center_diatonic(F,4) == 24 == F3",
+        true
+      ]
+    ]
+  },
+  "Q5_rounding": {
+    "objects_at_integer": 0,
+    "objects_near_half": 0,
+    "rules_differ_at": [
+      "-2.5",
+      "-1.5",
+      "-0.5",
+      "0.5",
+      "2.5"
+    ],
+    "verdict": "not_a_bug"
+  },
+  "Q6_band_origin": {
+    "bands": 0,
+    "is_middle_line": true,
+    "max": 0.0,
+    "median": 0.0
+  }
+}

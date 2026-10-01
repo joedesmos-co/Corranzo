@@ -1,0 +1,189 @@
+{
+  "Q3_decoders": {
+    "A_band_middle": {
+      "n": 6775,
+      "octave": 0.9781549815498155,
+      "residual": {
+        "-1": 669,
+        "0": 5671,
+        "1": 435
+      },
+      "step": 0.8370479704797048,
+      "written_pitch": 0.8370479704797048
+    },
+    "B_clef_reference": {
+      "n": 6775,
+      "octave": 0.9781549815498155,
+      "residual": {
+        "-1": 669,
+        "0": 5671,
+        "1": 435
+      },
+      "step": 0.8370479704797048,
+      "written_pitch": 0.8370479704797048
+    },
+    "C_oracle_clef": {
+      "n": 6775,
+      "octave": 0.9781549815498155,
+      "residual": {
+        "-1": 669,
+        "0": 5671,
+        "1": 435
+      },
+      "step": 0.8370479704797048,
+      "written_pitch": 0.8370479704797048
+    }
+  },
+  "Q3_identical": true,
+  "Q4_conditioning": {
+    "per_score": {
+      "bc-bach-fugue-bwv846": {
+        "n": 629,
+        "rate": 0.07472178060413355,
+        "residual": 47
+      },
+      "bc-beethoven-sonata-op2-m1": {
+        "n": 645,
+        "rate": 0.28837209302325584,
+        "residual": 186
+      },
+      "bc-chopin-etude-op10-01": {
+        "n": 401,
+        "rate": 0.11471321695760599,
+        "residual": 46
+      },
+      "bc-chopin-etude-op10-12": {
+        "n": 1017,
+        "rate": 0.20452310717797442,
+        "residual": 208
+      },
+      "bc-chopin-nocturne-op9-n2": {
+        "n": 790,
+        "rate": 0.14936708860759493,
+        "residual": 118
+      },
+      "bc-mozart-k153": {
+        "n": 784,
+        "rate": 0.1989795918367347,
+        "residual": 156
+      },
+      "omf-piano-dense-advanced-vector": {
+        "n": 67,
+        "rate": 0.3582089552238806,
+        "residual": 24
+      },
+      "omf-piano-grand-voices-vector": {
+        "n": 48,
+        "rate": 0.3333333333333333,
+        "residual": 16
+      },
+      "omf-piano-rhythm-tuplets-vector": {
+        "n": 34,
+        "rate": 0.0,
+        "residual": 0
+      },
+      "pl-bach-prelude-bwv846": {
+        "n": 522,
+        "rate": 0.022988505747126436,
+        "residual": 12
+      },
+      "pl-beethoven-fur-elise": {
+        "n": 615,
+        "rate": 0.13170731707317074,
+        "residual": 81
+      },
+      "pl-brahms-waltz-op39-3": {
+        "n": 12,
+        "rate": 0.5,
+        "residual": 6
+      },
+      "pl-chopin-mazurka-op6-1": {
+        "n": 231,
+        "rate": 0.29004329004329005,
+        "residual": 67
+      },
+      "pl-handel-gavotte": {
+        "n": 100,
+        "rate": 0.18,
+        "residual": 18
+      },
+      "pl-mozart-turkish-march": {
+        "n": 670,
+        "rate": 0.17164179104477612,
+        "residual": 115
+      },
+      "pl-tchaikovsky-old-french-song": {
+        "n": 33,
+        "rate": 0.09090909090909091,
+        "residual": 3
+      },
+      "std-demo-minuet-in-g": {
+        "n": 177,
+        "rate": 0.005649717514124294,
+        "residual": 1
+      }
+    },
+    "strata": {
+      "1355": {
+        "n": 1355,
+        "rate": 0.16900369003690036,
+        "residual": 229
+      },
+      "1381": {
+        "n": 1381,
+        "rate": 0.12816799420709632,
+        "residual": 177
+      },
+      "1919": {
+        "n": 1919,
+        "rate": 0.15737363210005212,
+        "residual": 302
+      },
+      "2120": {
+        "n": 2120,
+        "rate": 0.18679245283018867,
+        "residual": 396
+      },
+      "2736": {
+        "n": 2736,
+        "rate": 0.14839181286549707,
+        "residual": 406
+      },
+      "3173": {
+        "n": 3173,
+        "rate": 0.1506460762685156,
+        "residual": 478
+      },
+      "3368": {
+        "n": 3368,
+        "rate": 0.17280285035629453,
+        "residual": 582
+      },
+      "3407": {
+        "n": 3407,
+        "rate": 0.15321397123569122,
+        "residual": 522
+      },
+      "3602": {
+        "n": 3602,
+        "rate": 0.17379233759022766,
+        "residual": 626
+      },
+      "4039": {
+        "n": 4039,
+        "rate": 0.17281505323099777,
+        "residual": 698
+      }
+    }
+  },
+  "Q6_Q7_contract": {
+    "band_height_over_gap": {
+      "max": 4.0,
+      "median": 4.0,
+      "n": 6775
+    },
+    "disagreements": {},
+    "steps_consistent": 6775,
+    "steps_total": 6775
+  }
+}
