@@ -13,7 +13,9 @@ from __future__ import annotations
 
 import json
 import sys
+from collections import Counter
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -23,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from guitar_vision.dataset import (  # noqa: E402
     MIN_PLANES_PER_VIEW,
+    _load_view,
     build_sample,
     collate,
     load_dataset,
@@ -503,3 +506,169 @@ def test_fret_glyphs_are_inside_the_roi_the_head_would_see(corpus: tuple[Path, P
             f"string {string} ROI median ink {np.median(group):.4f}; the crop is "
             f"missing part of the staff"
         )
+
+
+# ---------------------------------------------------------------------------
+# Residual placement defects
+# ---------------------------------------------------------------------------
+#
+# Two separate bugs survived the coordinate-frame fix, and both are pinned here.
+# They are kept apart because they have different causes and different fixes: one
+# is a coordinate-domain mistake, the other a resize/paste truncation.
+
+
+def _fret_rois(records: Path, views: Path, plane: int = 256) -> list[float]:
+    """Ink fraction inside the ROI window of every fret digit that gets placed."""
+    samples = load_dataset(records, views, size=(plane, plane))
+    out: list[float] = []
+    for sample in samples:
+        planes = sample["images"][:, 0].numpy()
+        for box, tile, kind in zip(
+            sample["boxes"].tolist(), sample["view"].tolist(),
+            sample["object_type"].tolist(),
+        ):
+            if kind != 1:
+                continue
+            height, width = planes[tile].shape
+            cx = (box[0] + box[2]) / 2 * width
+            cy = (box[1] + box[3]) / 2 * height
+            half_w = (box[2] - box[0]) / 2 * width * 0.8
+            half_h = (box[3] - box[1]) / 2 * height * 0.8
+            window = planes[tile][
+                max(0, int(cy - half_h)) : int(cy + half_h),
+                max(0, int(cx - half_w)) : int(cx + half_w),
+            ]
+            out.append(float((window < 0.85).mean()) if window.size else 0.0)
+    return out
+
+
+def test_every_fret_digit_that_is_placed_has_ink_under_it(corpus: tuple[Path, Path]) -> None:
+    """A box may be placed on blank paper; that is a bug, not a boundary case.
+
+    This is what the partial-tile paste truncation looked like from the outside:
+    every digit on the first and last tile of a strip was assigned to a plane, the
+    plane carried a rect that covered it, and the pixels under the box were white.
+    Nothing errored and no object was dropped - the corpus simply contained 14
+    targets pointing at nothing. Before the fix: 14 of 1162 fret boxes had no ink.
+    """
+    records, views = corpus
+    values = _fret_rois(records, views)
+    assert len(values) > 1000, f"only {len(values)} fret digits reached the ROI stage"
+    empty = sum(1 for value in values if value <= 0.0)
+    assert empty == 0, (
+        f"{empty} of {len(values)} placed fret digits sit on blank paper; a placed "
+        f"box with no ink under it is a mis-mapped plane, not a hard example"
+    )
+
+
+def test_a_short_final_tile_is_pasted_whole_not_truncated(
+    corpus: tuple[Path, Path],
+) -> None:
+    """A tile narrower than the plane is stretched, and the whole stretch is kept.
+
+    ``plane_box`` trusts the rect a tile reports, so a tile that reports a rect
+    covering columns it never pasted will be handed boxes pointing at white paper.
+    This reproduces that directly on a real short tile: the strip is genuinely
+    narrower than the plane, so the paste has to cover all ``width`` columns after
+    the resize. When the paste is truncated to the pre-resize width, the right-hand
+    portion of that tile is blank while its rect still claims the content - which
+    is exactly what put 14 two-digit frets on empty paper.
+    """
+    records, views = corpus
+    found_short = 0
+    for path in records.glob("*.record.json"):
+        record = json.loads(path.read_text())
+        traces: dict[str, Any] = {"tiles": []}
+        loaded = _load_view(
+            views, "tab", record["scoreId"], (256, 256), 3, trace=traces
+        )
+        if loaded is None:
+            continue
+        planes, _inset = loaded
+        for (plane, _rect), tile in zip(planes, traces["tiles"]):
+            strip_width = tile["end"] - tile["start"]
+            if strip_width >= 256:
+                continue
+            found_short += 1
+            # This tile was short and therefore resized to the full plane. Its
+            # content must therefore reach the plane's far column whenever the
+            # source strip has ink there. Compare the plane against the strip.
+            strip = tile["strip"]
+            ink_cols = np.where((strip < 0.85).any(0))[0]
+            assert len(ink_cols) > 0, "short tile with no ink to check"
+            last_ink_in_strip = int(ink_cols.max())
+            plane_ink_cols = np.where((plane < 0.85).any(0))[0]
+            # After stretching, the strip's last ink column maps near the plane's
+            # last column. A truncated paste would leave the plane's own tail blank
+            # while the strip clearly has ink there.
+            assert int(plane_ink_cols.max()) >= 200, (
+                f"short tile (strip {strip_width}px) has ink out to strip column "
+                f"{last_ink_in_strip}, but the plane's ink stops at column "
+                f"{int(plane_ink_cols.max())}; the resized paste was truncated"
+            )
+        if found_short >= 8:
+            break
+    assert found_short >= 3, f"only inspected {found_short} short tiles"
+
+
+def test_the_plane_spans_the_whole_crop_not_the_trimmed_content(
+    corpus: tuple[Path, Path],
+) -> None:
+    """The semantic frame is the crop; the trim is storage only.
+
+    If the plane were cut to the ink bbox then the plane's resized width would
+    track the *trimmed* content, and a box reaching a couple of pixels below its own
+    glyph - which is what a font-metric digit box does - would fall outside the
+    frame. 127 bottom-string fret digits were dropped that way: the trim removed
+    the empty lower region and ``plane_box`` then, correctly, refused a box that
+    had been pushed off the edge.
+
+    The assertion is on the width production scales by, which is the whole
+    mechanism: ``scaled_size`` must correspond to the crop, not to the trim.
+    """
+    records, views = corpus
+    checked = 0
+    for path in list(records.glob("*.record.json"))[:10]:
+        record = json.loads(path.read_text())
+        traces: dict[str, Any] = {"tiles": []}
+        loaded = _load_view(views, "tab", record["scoreId"], (256, 256), 3, trace=traces)
+        if loaded is None:
+            continue
+        source_w, source_h = traces["source_size"]
+        scaled_w, scaled_h = traces["scaled_size"]
+        # Height always fills the plane, so the scale is plane_h / full_height.
+        scale = scaled_h / source_h
+        # The plane's width must correspond to the FULL source width.
+        assert scaled_w == max(1, round(source_w * scale)), (
+            f"{record['scoreId']}: plane scaled width {scaled_w} does not match the "
+            f"full crop width {source_w}; the plane was cut to the trimmed content"
+        )
+        checked += 1
+    assert checked >= 8, f"only inspected {checked} views"
+
+
+def test_placement_is_target_independent_and_complete(corpus: tuple[Path, Path]) -> None:
+    """Every semantic object in the record is assigned to a plane.
+
+    No family is special-cased and nothing is excluded from the denominator: a
+    target that cannot be placed is a defect in the loader, not a malformed
+    annotation to be filtered away. All six object families are required to reach
+    100%, which is the assertion that would catch any future fret-only shortcut.
+    """
+    records, views = corpus
+    names = ("notehead", "fret-digit", "accidental", "augmentation-dot", "marking", "rest")
+    index = {name: position for position, name in enumerate(names)}
+    expected = Counter()
+    for path in records.glob("*.record.json"):
+        for obj in json.loads(path.read_text())["objects"]:
+            if obj["objectType"] in index:
+                expected[obj["objectType"]] += 1
+    placed = Counter()
+    for sample in load_dataset(records, views, size=(256, 256)):
+        for kind in sample["object_type"].tolist():
+            placed[names[int(kind)]] += 1
+    for name, total in expected.items():
+        if not total:
+            continue
+        rate = placed[name] / total
+        assert rate == 1.0, f"{name}: only {rate:.2%} of {total} were placed"

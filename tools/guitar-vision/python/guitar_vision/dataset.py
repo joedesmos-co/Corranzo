@@ -245,25 +245,59 @@ def _load_view(
             trace["trim_pinned"] = trim_override is not None
             trace["source_size"] = (original_width, original_height)
             trace["source_grey"] = np.asarray(grey, dtype=np.uint8)
-        if trim != (0, 0, original_width, original_height):
-            grey = grey.crop(trim)
-        source_width, source_height = grey.size
-        if trace is not None:
-            trace["trimmed_size"] = (source_width, source_height)
-            trace["trimmed_grey"] = np.asarray(grey, dtype=np.uint8)
 
-        # Height fills the plane. For a strip view the scaled content is wider
-        # than one tile, which is what the tiling below divides up.
-        scale = height / source_height
-        scaled_width = max(1, int(round(source_width * scale)))
-        scaled_height = max(1, int(round(source_height * scale)))
-        array = np.asarray(
-            grey.resize((scaled_width, scaled_height), Image.LANCZOS), dtype=np.float32
-        ) / 255.0
+        # The trim is a *storage* optimisation and the plane still represents the
+        # **whole crop**. Trimming used to define the plane, which made the raster's
+        # ink decide the semantic coordinate domain - and ink is not the domain a
+        # box lives in. A digit box is built from font metrics and reaches about
+        # 0.03 * font_size below its own visible ink; on the bottom TAB string the
+        # lowest ink on the page is the bottom staff line, so the trim cut exactly
+        # where those boxes end. `plane_box` then refused every one of them,
+        # correctly - a box outside the plane must not be clipped - and 127 fret
+        # digits were dropped for carrying a couple of pixels of their own
+        # whitespace. Measured on this corpus: 100% of refusals were bottom-edge and
+        # 100% had their ink safely inside; the overshoot was a median of 1.1
+        # pixels and never more than 2.3.
+        #
+        # So the plane now covers the full crop and the trimmed content is pasted
+        # into it at its true offset. That makes the crop - which the rasteriser
+        # built from bands that were widened to contain every box - representable by
+        # construction, and it removes the inset composition from `build_sample`
+        # entirely rather than patching its result.
+        #
+        # The cost is resolution: the plane now includes the blank margin the trim
+        # used to remove, so a glyph is smaller by that fraction. On the TAB view
+        # that is 0.912 in x and 0.958 in y, taking a fret box from about 27x41
+        # pixels to 25x39 - still four times the 6-pixel floor the loader asserts.
+        # Buying back that margin by re-introducing a semantic trim is what caused
+        # the loss in the first place.
+        scale = height / original_height
+        scaled_width = max(1, int(round(original_width * scale)))
+        scaled_height = max(1, int(round(original_height * scale)))
+        left, top, right, bottom = (int(round(v * scale)) for v in trim)
+        left = max(0, min(left, scaled_width - 1))
+        top = max(0, min(top, scaled_height - 1))
+        right = max(left + 1, min(right, scaled_width))
+        bottom = max(top + 1, min(bottom, scaled_height))
+
+        # Paste the content into a blank plane of the full crop's size. Written to a
+        # temporary image rather than assembled in numpy so that one LANCZOS pass
+        # does the scaling, exactly as before.
+        canvas = Image.new("L", (scaled_width, scaled_height), 255)
+        content = grey.crop(trim).resize(
+            (right - left, bottom - top), Image.LANCZOS
+        )
+        canvas.paste(content, (left, top))
+        array = np.asarray(canvas, dtype=np.float32) / 255.0
         if trace is not None:
             trace["scale"] = scale
             trace["scaled_size"] = (scaled_width, scaled_height)
             trace["resized_array"] = array
+            trace["trimmed_size"] = (right - left, bottom - top)
+            # The trimmed content expressed in plane pixels, so a stage-by-stage
+            # diagnostic can still look at the ink alone if it wants to.
+            trace["trimmed_array"] = np.asarray(content, dtype=np.float32) / 255.0
+    source_width, source_height = original_width, original_height
 
     # The trim changed the view's content frame, so it has to be reported back and
     # composed with the band's rect. `inset` is the fraction of the original crop
@@ -289,14 +323,26 @@ def _load_view(
         strip = array[:, start:end]
         strip_width = max(1, end - start)
         plane = np.ones((height, width), dtype=np.float32)
+        resized = False
         if strip.shape[0] != height or strip_width != width:
+            # A short final tile is stretched to fill the plane, so its content is
+            # spread across the full `width` columns.
             strip = np.asarray(
                 Image.fromarray(
                     (np.clip(strip, 0, 1) * 255).astype(np.uint8)
                 ).resize((width, height), Image.LANCZOS),
                 dtype=np.float32,
             ) / 255.0
-        plane[:, : min(width, strip_width)] = strip[:, : min(width, strip_width)]
+            resized = True
+        # After the resize the strip *is* `width` wide, so the whole of it belongs in
+        # the plane. Truncating the paste to the pre-resize `strip_width` left the
+        # stretched right-hand region of a short final tile blank while still
+        # reporting a rect that covered it - so `plane_box` placed boxes on ink that
+        # was never written. Measured: every digit on the far-right and far-left
+        # partial tiles (14 objects here, all two-digit frets) was placed on blank
+        # paper. `min(width, strip_width)` is only correct when no resize happened.
+        paste_width = width if resized else min(width, strip_width)
+        plane[:, :paste_width] = strip[:, :paste_width]
         output.append((plane, (start / scaled_width, 0.0, end / scaled_width, 1.0)))
         if trace is not None:
             # The strip is the slice *before* the strip->square resize, kept
@@ -331,8 +377,11 @@ def _load_view(
             output.append(
                 (np.ones((height, width), dtype=np.float32), (0.0, 0.0, 0.0, 0.0))
             )
-    # The trim, expressed in the *original crop's* fractions. build_sample
-    # composes this with the band rect so the boxes survive the trim.
+    # The storage trim, expressed in the crop's fractions: how much blank margin the
+    # trim removed. It is metadata about *storage*, not a coordinate transform - the
+    # plane already represents the whole crop, so `build_sample` frames a view by
+    # `view_rect` alone and composes nothing. Kept because a diagnostic comparing
+    # two renders needs to know the ink-only extent.
     inset = (
         trim[0] / original_width,
         trim[1] / original_height,
@@ -340,6 +389,7 @@ def _load_view(
         (original_height - trim[3]) / original_height,
     )
     if trace is not None:
+        trace["storage_trim"] = inset
         trace["inset"] = inset
         trace["plane_count"] = len(output)
     return output, inset
@@ -421,6 +471,9 @@ def build_sample(
     planes: list[np.ndarray] = []
     rects: list[list[tuple[float, float, float, float]]] = []
     insets: dict[str, tuple[float, float, float, float]] = {}
+    # `insets` records each view's storage trim. It is no longer used to frame the
+    # view - the plane covers the whole crop - but it stays populated because a
+    # diagnostic that differences two renders needs to know the ink-only extent.
     for name in VIEW_NAMES:
         if traces is not None:
             traces.setdefault(name, {})["tiles"] = []
@@ -449,23 +502,15 @@ def build_sample(
         return None
 
     # Each view is a crop of the page, and the record's boxes are page-normalised,
-    # so the frames have to be reconciled before anything can be indexed.
-    # The view's own frame is the *crop* rectangle the rasteriser cut, then
-    # narrowed by however much white margin the loader trimmed off it. Both are
-    # needed: the crop says which part of the page the image shows, the inset says
-    # which part of the image survived the trim. Composing them in this order makes
-    # the two cancel exactly - see ``view_rect``.
+    # so the frame has to be reconciled before anything can be indexed. The frame
+    # is `view_rect` **alone**: a plane already represents the whole crop, so the
+    # storage trim is not a coordinate transform and nothing is composed here.
+    # Composing the trim inset was correct while the plane represented the *trimmed*
+    # content; now that it represents the crop, doing so would shift every box by
+    # the trim margin a second time.
     frames = {}
     for name, is_tab in (("full-page", None), ("notation", False), ("tab", True)):
-        base = (0.0, 0.0, 1.0, 1.0) if is_tab is None else view_rect(record, is_tab)
-        i = insets[name]
-        bx0, by0, bx1, by1 = base
-        frames[name] = (
-            bx0 + i[0] * (bx1 - bx0),
-            by0 + i[1] * (by1 - by0),
-            bx0 + (1 - i[2]) * (bx1 - bx0),
-            by0 + (1 - i[3]) * (by1 - by0),
-        )
+        frames[name] = (0.0, 0.0, 1.0, 1.0) if is_tab is None else view_rect(record, is_tab)
 
     boxes, types, strings, frets, views = [], [], [], [], []
     for obj in objects:

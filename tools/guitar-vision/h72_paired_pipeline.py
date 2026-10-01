@@ -647,9 +647,7 @@ def _load_side(
 
 def _box_geometry_per_stage(
     in_view: list[float],
-    inset: tuple[float, float, float, float],
     source: tuple[int, int],
-    trimmed: tuple[int, int],
     scaled: tuple[int, int],
     tile: dict[str, Any],
     plane_box: list[float],
@@ -657,54 +655,30 @@ def _box_geometry_per_stage(
 ) -> dict[str, tuple[float, float, float, float]]:
     """Where production's target box sits in each stage's pixel grid.
 
-    Returns ``(centre_x, centre_y, width, height)`` per stage. All the scale factors
-    come from production's own trace - the insets, the scaled size, the tile's own
-    start - so this reports where the box already is rather than re-deriving how it
-    got there.
-
-    Two things this gets right that an earlier version of this harness did not, both
-    of which fabricate a placement failure that does not exist:
-
-    - the **centre** of the box is used, not its left edge. Using the left edge put
-      the box half its own width away from the glyph at every fractional stage, while
-      the plane stages - which take the box straight from production - disagreed with
-      it by exactly that half-width.
-    - the inset is composed **once**. Composing it twice narrows the fraction twice,
-      which moved the early stages by tens of pixels and again disagreed with the
-      plane stages.
+    Returns ``(centre_x, centre_y, width, height)`` per stage. Because the plane now
+    covers the *whole crop* - the storage trim no longer frames anything - the box's
+    fraction of the crop is the same fraction at PAGE, RESIZED_ARRAY, TILE and in
+    the plane, and only the per-stage scale differs. All the scale factors come from
+    production's own trace, so this reports where the box already is rather than
+    re-deriving how it got there.
     """
-    left, right = inset[0], 1.0 - inset[2]
-    top, bottom = inset[1], 1.0 - inset[3]
-    span_x = max(right - left, 1e-9)
-    span_y = max(bottom - top, 1e-9)
-    # `in_view` is a fraction of the whole crop; the inset says which part of the
-    # crop survived the trim. The result is a fraction of the trimmed content, which
-    # is also a fraction of the resized array because the resize is uniform.
-    crop_cx = (in_view[0] + in_view[2]) / 2
-    crop_cy = (in_view[1] + in_view[3]) / 2
-    crop_w = in_view[2] - in_view[0]
-    crop_h = in_view[3] - in_view[1]
-    cx = (crop_cx - left) / span_x
-    cy = (crop_cy - top) / span_y
-    w = crop_w / span_x
-    h = crop_h / span_y
-
+    cx = (in_view[0] + in_view[2]) / 2
+    cy = (in_view[1] + in_view[3]) / 2
+    w = in_view[2] - in_view[0]
+    h = in_view[3] - in_view[1]
     source_w, source_h = source
-    trimmed_w, trimmed_h = trimmed
     scaled_w, scaled_h = scaled
     out: dict[str, tuple[float, float, float, float]] = {
-        "PAGE": (crop_cx * source_w, crop_cy * source_h, crop_w * source_w, crop_h * source_h),
-        "TRIMMED_CROP": (cx * trimmed_w, cy * trimmed_h, w * trimmed_w, h * trimmed_h),
+        "PAGE": (cx * source_w, cy * source_h, w * source_w, h * source_h),
         "RESIZED_ARRAY": (cx * scaled_w, cy * scaled_h, w * scaled_w, h * scaled_h),
         "TILE": (cx * scaled_w - float(tile["start"]), cy * scaled_h, w * scaled_w, h * scaled_h),
     }
-    # The plane stages use production's own box, not a reconstruction of it.
     plane_w = 256.0
     box_w = (plane_box[2] - plane_box[0]) * plane_w
-    box_h = (plane_box[3] - plane_box[1]) * 256.0
+    box_h = (plane_box[3] - plane_box[1]) * plane_w
     out["SQUARE_PLANE"] = (
         (plane_box[0] + plane_box[2]) / 2 * plane_w,
-        (plane_box[1] + plane_box[3]) / 2 * 256.0,
+        (plane_box[1] + plane_box[3]) / 2 * plane_w,
         box_w,
         box_h,
     )
@@ -780,35 +754,47 @@ def stage_diffs(
     """Difference A against B at every production stage, plus EXPECTED controls."""
     stages: dict[str, Any] = {}
 
-    # PAGE - the view PNG exactly as production first reads it, before any trim.
+    # PAGE - the view PNG exactly as production reads it. This is the full crop,
+    # which is now also the plane's frame, so it is the semantic reference stage.
     page_d = np.abs(
         np.asarray(a_tab["source_grey"], np.float64)
         - np.asarray(b_tab["source_grey"], np.float64)
     ) / 255.0
     stages["PAGE"] = diff_metrics(page_d)
 
-    # TRIMMED_CROP - production's post-trim array. Its expectation is the page
-    # difference cropped by the same rect: a pure selection, so any discrepancy
-    # here would mean the trim did not do what the trace says it did.
-    crop_d = np.abs(
-        np.asarray(a_tab["trimmed_grey"], np.float64)
-        - np.asarray(b_tab["trimmed_grey"], np.float64)
-    ) / 255.0
+    # INK_CONTENT - the ink-only content that the storage trim isolates and pastes
+    # into the plane. Its expectation is the page difference cropped by the same
+    # rect, then rescaled the way the paste rescales it: a selection followed by the
+    # one LANCZOS that maps the trim rect onto its slot in the plane. The paste
+    # introduces no resampling of its own, so this stage is the first real
+    # resample and its EXPECTED_DIFF is exactly the trimmed-and-scaled page diff.
+    ink_d = np.abs(
+        np.asarray(a_tab["trimmed_array"], np.float64)
+        - np.asarray(b_tab["trimmed_array"], np.float64)
+    )
     trim = tuple(int(v) for v in a_tab["trim_applied"])
-    stages["TRIMMED_CROP"] = diff_metrics(crop_d)
-    stages["TRIMMED_CROP"]["expected"] = compare_actual_expected(
-        crop_d, page_d[trim[1] : trim[3], trim[0] : trim[2]]
+    stages["INK_CONTENT"] = diff_metrics(ink_d)
+    scaled_w, scaled_h = a_tab["scaled_size"]
+    scale_y = scaled_h / a_tab["source_size"][1]
+    paste = (
+        int(round(trim[0] * scale_y)),
+        int(round(trim[1] * scale_y)),
+        int(round(trim[2] * scale_y)),
+        int(round(trim[3] * scale_y)),
+    )
+    stages["INK_CONTENT"]["expected"] = compare_actual_expected(
+        ink_d, lanczos_float(page_d[trim[1] : trim[3], trim[0] : trim[2]],
+                             paste[2] - paste[0], paste[3] - paste[1])
     )
 
-    # RESIZED_ARRAY - the loader's LANCZOS resize onto the plane height.
+    # RESIZED_ARRAY - the whole crop scaled to the plane height (the plane frame).
     res_d = np.abs(
         np.asarray(a_tab["resized_array"], np.float64)
         - np.asarray(b_tab["resized_array"], np.float64)
     )
-    scaled_w, scaled_h = a_tab["scaled_size"]
     stages["RESIZED_ARRAY"] = diff_metrics(res_d)
     stages["RESIZED_ARRAY"]["expected"] = compare_actual_expected(
-        res_d, lanczos_float(crop_d, scaled_w, scaled_h)
+        res_d, lanczos_float(page_d, scaled_w, scaled_h)
     )
 
     # TILE - the slice the loader actually cut for the target's tile.
@@ -852,9 +838,7 @@ def stage_diffs(
     # ---- where the box is, against where the difference is --------------------
     box_geometry = _box_geometry_per_stage(
         in_view,
-        a_tab["inset"],
         a_tab["source_size"],
-        a_tab["trimmed_size"],
         a_tab["scaled_size"],
         a_tile,
         plane_box,
@@ -862,13 +846,22 @@ def stage_diffs(
     )
     arrays = {
         "PAGE": page_d,
-        "TRIMMED_CROP": crop_d,
         "RESIZED_ARRAY": res_d,
         "TILE": strip_d,
         "SQUARE_PLANE": plane_d,
         "PRE_ROI": pre_d,
         "FINAL_ROI": roi_d,
     }
+    # INK_CONTENT is the pasted sub-rectangle, so its geometry is the crop frame
+    # shifted by the paste offset and scaled to the plane. The box routinely extends
+    # below the ink (that is the whole residual this stage exists to show), so its
+    # centre can legitimately fall outside this stage's array - which is why it is
+    # measured here rather than copied from the crop frame.
+    ink_geom = box_geometry["RESIZED_ARRAY"]
+    arrays["INK_CONTENT"] = ink_d
+    box_geometry["INK_CONTENT"] = (
+        ink_geom[0] - paste[0], ink_geom[1] - paste[1], ink_geom[2], ink_geom[3]
+    )
     for stage, d in arrays.items():
         cx, cy, bw, bh = box_geometry[stage]
         stages[stage]["box_centre_px"] = [round(cx, 2), round(cy, 2)]
@@ -981,7 +974,7 @@ def measure(
         "trim_equal": tuple(a_tab["trim_applied"]) == tuple(b_tab["trim_applied"]),
         "trim_a": [int(v) for v in a_tab["trim_applied"]],
         "trim_b": [int(v) for v in b_tab["trim_applied"]],
-        "trimmed_dims_equal": a_tab["trimmed_size"] == b_tab["trimmed_size"],
+        "ink_dims_equal": a_tab["trimmed_size"] == b_tab["trimmed_size"],
         "scaled_dims_equal": a_tab["scaled_size"] == b_tab["scaled_size"],
         "plane_count_equal": a_tab["plane_count"] == b_tab["plane_count"],
         "tile_rects_equal": [t["rect"] for t in a_tab["tiles"]] == [t["rect"] for t in b_tab["tiles"]],
@@ -1154,7 +1147,7 @@ def mechanism(
 
 STAGE_ORDER = (
     "PAGE",
-    "TRIMMED_CROP",
+    "INK_CONTENT",
     "RESIZED_ARRAY",
     "TILE",
     "SQUARE_PLANE",
