@@ -103,3 +103,45 @@ Only if `ROI_DIFF` is non-trivial and the calibration probe still fails does the
 question return to the model. At that point the search space is small: the crop is
 verified, the transform is verified, and only ROI sampling density and the
 backbone remain.
+
+---
+
+## Implementation wrinkle found while planning the harness
+
+`_load_view` derives its trim from the image content:
+
+    trim = ImageOps.invert(grey).getbbox()
+
+and the trim feeds the plane count, the tile rects and the inset fractions, so
+**A and B can produce different tile layouts**. Removing a digit that happens to
+be the leftmost or rightmost ink on a page narrows the bbox, `scaled_width` changes,
+`span` and `overlap` change with it, and the two renders no longer tile the same
+content the same way. The differencing would then be measuring a layout change
+rather than a target contribution.
+
+Three ways to handle it, in order of preference:
+
+1. **Reject fixtures whose A and B trims differ.** A cheap equality check on the
+   two crops' `getbbox()` before running the loader. Most pages will pass,
+   because the trim is usually set by the leftmost system's start rather than by
+   a single digit. This keeps the harness non-invasive and keeps A/B byte-comparable
+   outside the target.
+2. **Freeze the trim for the pair** by taking it from A and passing it to both, if
+   `_load_view` gains an optional trim argument. This is an instrumentation
+   change, not a geometry change, and it makes the comparison exact. Preferred if
+   more than a few percent of fixtures fail check 1.
+3. Do not do this. Differencing two renders that tiled differently produces a
+   number that looks like signal loss and is not.
+
+Whichever is used, the harness must **assert that A and B select the same tile
+index for the same object** (D4). If they do not, the run must stop: that is the
+defect, and it cannot be distinguished from a harness artifact unless the trim is
+pinned.
+
+## Note on the loader's file-based interface
+
+`load_dataset` reads `views/<kind>/<scoreId>.png` and `records/<scoreId>.record.json`
+from disk. Running the A/B pair through it therefore needs either two output
+directories, or an in-memory entry point. Two directories keeps production code
+untouched and is the lower-risk option; the record JSONs are identical apart from
+`scoreId`, so only the crops differ.
