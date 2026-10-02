@@ -56,6 +56,15 @@ CAND["touch_both"] = 0.60
 # the upper and lower staff must agree to raster precision. This is the strict
 # gate applied AFTER the permissive DP, and it is the real cross-staff test.
 CONS_STRICT_GAPS = 0.15
+# Consensus-level width veto. A printed barline is a single thin vertical stroke.
+# Measured on beethoven-sonata p4, the upper staff yielded 16 candidate events of
+# which the ones at x=381/582/785 were 15-17 px WIDE (1.45-1.64 staff gaps) - braces
+# and system connectors - and they occur at the same x on the lower staff, so
+# cross-staff agreement CANNOT reject them. Requiring an event to be no wider than
+# 0.5 staff gaps before it may participate in consensus takes that staff from 16
+# events to 12 and leaves a uniform 9.3-10.6 gap measure spacing. This is a veto on
+# which candidates may be PAIRED, not a change to how candidates are found.
+CONS_WIDTH_GAPS = 1.20
 # ---- A2.5 multi-stroke event clustering
 EVENT_SEP_GAPS = 1.60
 
@@ -189,10 +198,11 @@ def cluster_events(cands, gap, sep_gaps=EVENT_SEP_GAPS):
     return [{"x": float(np.mean([c["x"] for c in e])),
              "n_strokes": len(e), "w": e[-1]["x"] - e[0]["x"] + 1,
              "min_cov": min(c["cov"] for c in e),
-             "max_runs": max(c["n_runs"] for c in e)} for e in ev]
+             "max_runs": max(c["n_runs"] for c in e),
+             "gap": float(gap)} for e in ev]
 
 
-def cross_staff(up_ev, lo_ev, tol):
+def cross_staff(up_ev, lo_ev, tol, width_gaps=CONS_WIDTH_GAPS):
     """A2.3 consensus matching by x, minimising TOTAL displacement.
 
     A greedy monotone walk is wrong here: when one side has a spurious isolated
@@ -203,6 +213,13 @@ def cross_staff(up_ev, lo_ev, tol):
     skipped only when doing so lowers total displacement, so genuine coincident
     boundaries are never discarded in favour of a nearby false positive.
     """
+    # width veto: braces and connectors may not be paired as measure boundaries
+    if width_gaps and up_ev and lo_ev:
+        # the cap is in STAFF GAPS, so scale it by each side's own gap
+        gu = max(e.get("gap", 1.0) for e in up_ev)
+        gl = max(e.get("gap", 1.0) for e in lo_ev)
+        up_ev = [e for e in up_ev if e.get("w", 0) <= width_gaps * gu]
+        lo_ev = [e for e in lo_ev if e.get("w", 0) <= width_gaps * gl]
     n, m = len(up_ev), len(lo_ev)
     if not n or not m:
         return []
