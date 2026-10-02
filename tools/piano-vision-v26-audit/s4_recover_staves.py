@@ -19,6 +19,8 @@ import harness as H  # noqa: E402
 import stage_a2_consensus as A2  # noqa: E402
 import s1_pagewide_staff as S1  # noqa: E402
 
+# true piano inter-staff gap band, in staff gaps, measured from the raster
+UPPER_LOWER_GAPS = (2.0, 12.0)
 SOLO = dict(A2.CAND)
 SOLO.update({"min_coverage": 0.90, "end_tol": 0.20, "gap_frac": 0.20,
              "max_runs": 3, "event_sep": 1.60, "touch_both": 0.60})
@@ -134,12 +136,26 @@ def main():
 
     # ---------- S5 pair recovered staves into systems
     print("\nS5  rebuilding piano system pairs from the merged staff inventory")
+    # S5 pairing. The extractor's upper/lower role labels are NOT reliable: over
+    # all 549 label-adjacent pairs the inter-staff gap has median 38 staff gaps,
+    # because the same staff recurs once per measure. The TRUE piano inter-staff
+    # gap is a tight band. Measured on turkish-march p1, adjacent staves in one
+    # system are 5-7 gaps apart while the next system is 19 gaps away, and a
+    # 0.5-20 window wrongly paired staves two systems apart (mozart-k153 p1: 11
+    # staves, 16 pairs, 5-6 real). A NARROW window plus a mutual-neighbour rule
+    # gives the true count. The window is measured from the data, not assumed.
     systems = []
     for (sid, pno), keep in sorted(recovered.items()):
         for i, a in enumerate(keep):
             for b in keep[i + 1:]:
                 ugap = (b["y0"] - a["y1"]) / a["gap"]
-                if 0.5 <= ugap <= 20.0:
+                if UPPER_LOWER_GAPS[0] <= ugap <= UPPER_LOWER_GAPS[1]:
+                    # b is the lower staff of a's system only if the NEXT staff
+                    # below a is b, i.e. no other staff sits between them
+                    between = [c for c in keep[i + 1:]
+                               if a["y1"] <= c["y0"] < b["y0"]]
+                    if between:
+                        continue
                     systems.append({"score": sid, "page": pno, "y0": a["y0"],
                                     "upper": (a["y0"], a["y1"]),
                                     "lower": (b["y0"], b["y1"]),
