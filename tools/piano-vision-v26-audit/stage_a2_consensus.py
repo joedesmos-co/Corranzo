@@ -36,6 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import harness as H  # noqa: E402
 
 SVGNS = "{http://www.w3.org/2000/svg}"
+import gzip
 
 # ---- A2.2 candidate generation: high recall, geometry only, no cross-source input
 CAND = {
@@ -48,6 +49,9 @@ CAND = {
 }
 # ---- A2.3 cross-staff consensus tolerance, derived from geometry
 CONS_TOL_GAPS = 0.60      # DP pairing tolerance, in staff gaps (permissive)
+# A2 iteration 4: require the run to touch BOTH outer staff lines inside the exact
+# validated span (tolerance 0.6 gaps), measured without a padded search window.
+CAND["touch_both"] = 0.60
 # A printed barline is ONE vertical stroke drawn across both staves, so its x on
 # the upper and lower staff must agree to raster precision. This is the strict
 # gate applied AFTER the permissive DP, and it is the real cross-staff test.
@@ -95,20 +99,56 @@ def staff_rows(im, y0, y1, min_frac=0.25):
 
 
 def candidates(im, y0, y1, x_lo, x_hi, T):
-    """High-recall vertical-stroke candidates for one staff."""
+    """High-recall vertical-stroke candidates for one staff.
+
+    The strongest purely geometric barline test, verified against the raster on a
+    Mazurka system: require the longest contiguous run to TOUCH BOTH OUTER STAFF
+    LINES inside the exact validated staff span. A barline reaches the top and
+    bottom lines; a note stem cannot, and ink bridging beyond the staff (beams,
+    chords, a neighbouring system) is excluded by measuring inside the span
+    rather than in a padded search window.
+    """
     gap = (y1 - y0) / 4.0
     if gap < 3:
         return None
     pad = T["search_pad"] * gap
     dark = max(T["dark_min"], int(round(T["gap_frac"] * gap)))
     span = y1 - y0
+    top_i, bot_i = int(round(y0)), int(round(y1))
+    span_i = bot_i - top_i
+    if span_i < 4:
+        return None
+    touch = T.get("touch_both", 0.0) * gap
     Hh, Ww = im.shape
     x_lo, x_hi = max(0, int(x_lo)), min(Ww - 1, int(x_hi))
     if x_hi - x_lo < 8:
         return None
     sub = im[int(y0 - pad):int(y1 + pad) + 1, x_lo:x_hi + 1] < 140
     out = []
+    exact = im[top_i:bot_i + 1, max(0, int(x_lo)):min(Ww, int(x_hi) + 1)] < 140
     for x in range(sub.shape[1]):
+        if touch:
+            col = exact[:, x] if x < exact.shape[1] else None
+            if col is None or not col.any():
+                continue
+            runs = column_runs(col, dark)
+            if not runs:
+                continue
+            a, b = max(runs, key=lambda r: r[1] - r[0])
+            if a > touch or (span_i - b) > touch:
+                continue
+            cov = (b - a) / span_i
+            if cov < T["min_coverage"]:
+                continue
+            if len(runs) > T.get("max_runs", 99):
+                continue
+            xs = np.nonzero(col[a:b + 1])[0]
+            igap = (int(np.max(np.diff(xs)) - 1) if len(xs) > 1 else 0) / gap
+            if igap > T["gap_frac"]:
+                continue
+            out.append({"x": x_lo + x, "cov": cov, "n_runs": len(runs),
+                        "igap": igap, "d_top": a / gap, "d_bot": (span_i - b) / gap})
+            continue
         runs = column_runs(sub[:, x], dark)
         if not runs:
             continue
@@ -121,7 +161,7 @@ def candidates(im, y0, y1, x_lo, x_hi, T):
         if d_top > T["end_tol"] or d_bot > T["end_tol"]:
             continue
         n_runs = len(runs)
-        if n_runs > T["max_runs"]:
+        if n_runs > T.get("max_runs", 99):
             continue
         xs = np.nonzero(sub[a:b + 1, x])[0]
         igap = (int(np.max(np.diff(xs)) - 1) if len(xs) > 1 else 0) / gap
@@ -267,6 +307,43 @@ def imgs_cache():
             c[k] = np.array(Image.open(p)) if p.is_file() else None
         return c[k]
     return get
+
+
+SOLO_STRICT = None   # set at import below
+
+
+def solo_staff_rows(index):
+    """PDF staff units that have NO sibling staff on the page.
+
+    Several scores/pages carry only `upper` bands because the extractor's
+    glyph-font bbox never produced a lower band there. Cross-staff consensus
+    cannot apply to those, so they are detected and handled by strict
+    single-staff evidence. This uses raster geometry only.
+    """
+    per = defaultdict(dict)
+    for sc in index["scores"]:
+        sid = sc["score_id"]
+        for sh in sc.get("shards", []):
+            p = H.REALPDF_ROOT / "shards" / sh
+            if not p.is_file():
+                continue
+            with gzip.open(p, "rt") as f:
+                for line in f:
+                    rec = json.loads(line)
+                    t = rec["exampleId"].split(":")[-1].split("-")
+                    pno = int(t[0].lstrip("p"))
+                    geo = rec["input"]["modelInput"]["geometry"]
+                    for b in geo.get("staffBands", {}).get("staffBands", []):
+                        per[(sid, pno)][round(b["y0"], 3)] = (b["y0"], b["y1"],
+                                                            b.get("staffRole"))
+    out = []
+    for (sid, pno), rects in sorted(per.items()):
+        if any(r[2] == "lower" for r in rects.values()):
+            continue
+        for y, (yn, yb, role) in sorted(rects.items()):
+            if role == "upper":
+                out.append((sid, pno, y, yn, yb))
+    return out
 
 
 def analyse(index, get, tol_gaps=CONS_TOL_GAPS, cand=None, T=None):
