@@ -61,6 +61,26 @@ def main():
             sr = A2.staff_rows(im, y0, y1)
             ext.append((min((r[1] for r in sr), default=0),
                         max((r[2] for r in sr), default=im.shape[1])))
+        # A page-wide staff detection that has NO valid partner inside the
+        # upper-lower gap window cannot be part of any piano system, so it is a
+        # phantom. Left in place it was worse than useless: on
+        # bc-bach-fugue-bwv846 p1 a phantom at y0=0.1756 sits between the real
+        # staves at 0.1112 and 0.3387, and the `between` guard below then blocked
+        # BOTH real staves from pairing, silently deleting the whole system.
+        # Every real piano staff belongs to a system, so dropping the unpairable
+        # is a layout fact, not a tuned threshold.
+        def _gapok(a, b):
+            return (UPPER_LOWER_GAPS[0] <= (b["y0"] - a["y1"]) / a["gap"]
+                    <= UPPER_LOWER_GAPS[1])
+        pairable = set()
+        for i, a in enumerate(staves):
+            for jj in range(i + 1, len(staves)):
+                if _gapok(a, staves[jj]):
+                    pairable.add(i)
+                    pairable.add(jj)
+        kept = [s_ for i, s_ in enumerate(staves) if i in pairable]
+        stats["unpairable_dropped"] += len(staves) - len(kept)
+        staves = kept
         for i, a in enumerate(staves):
             for jj in range(i + 1, len(staves)):
                 b = staves[jj]
@@ -178,6 +198,12 @@ def main():
                            "unres": d["unres"], "diff": d["iv"] - v})
     print("  TOTAL PDF_iv=%d  Verovio=%d  ratio=%.4f" % (ti, tv, ti / max(1, tv)))
     H.write_json("H_consensus_canonical.json", rows)
+    # emit the exact band rects used, so downstream stages consume the validated
+    # system list instead of re-deriving pairings with different rules
+    H.write_json("F_systems.json",
+                 [{"score": sy["score"], "page": sy["page"], "y0": sy["y0"],
+                   "upper": list(sy["upper"]), "lower": list(sy["lower"]),
+                   "kind": sy["kind"]} for sy in systems])
     H.write_json("J_intervals_canonical.json", detail)
     print("\nwrote out/H_consensus_canonical.json, out/J_intervals_canonical.json")
 
