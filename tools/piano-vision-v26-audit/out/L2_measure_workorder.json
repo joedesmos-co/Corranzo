@@ -1,0 +1,1304 @@
+[
+  {
+    "ambiguous": 0,
+    "bound": true,
+    "labelled": 8,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 2,
+    "onsets_missing": 3,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "empty",
+        "visible": 0
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 8,
+        "missing": 2,
+        "onsets_missing": 3,
+        "state": "A_PARTIAL",
+        "visible": 8
+      }
+    },
+    "score": "bc-bach-fugue-bwv846",
+    "system": 0,
+    "visible": 8,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 2,
+    "pdf_ord": 30,
+    "roles": {
+      "lower": {
+        "ambiguous": 2,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 2
+      },
+      "upper": {
+        "ambiguous": 14,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 14
+      }
+    },
+    "score": "bc-bach-fugue-bwv846",
+    "system": 6,
+    "visible": 16,
+    "xml_ord": 26
+  },
+  {
+    "ambiguous": 4,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "empty",
+        "visible": 0
+      },
+      "upper": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      }
+    },
+    "score": "bc-beethoven-sonata-op2-m1",
+    "system": 0,
+    "visible": 4,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 12,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 5,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 5
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 7,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 12
+      }
+    },
+    "score": "bc-chopin-etude-op10-01",
+    "system": 0,
+    "visible": 17,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 5,
+    "bound": true,
+    "labelled": 17,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 1,
+    "onsets_missing": 4,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 14,
+        "missing": 1,
+        "onsets_missing": 4,
+        "state": "A_PARTIAL",
+        "visible": 14
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 3,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "bc-chopin-etude-op10-12",
+    "system": 0,
+    "visible": 19,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 27,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 21,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 21
+      },
+      "upper": {
+        "ambiguous": 6,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 6
+      }
+    },
+    "score": "bc-chopin-nocturne-op9-n2",
+    "system": 0,
+    "visible": 27,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 4,
+    "bound": true,
+    "labelled": 9,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 3,
+    "pdf_ord": 51,
+    "roles": {
+      "lower": {
+        "ambiguous": 2,
+        "labelled": 7,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 2
+      },
+      "upper": {
+        "ambiguous": 2,
+        "labelled": 2,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 2
+      }
+    },
+    "score": "bc-chopin-nocturne-op9-n2",
+    "system": 3,
+    "visible": 4,
+    "xml_ord": 37
+  },
+  {
+    "ambiguous": 4,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "empty",
+        "visible": 0
+      }
+    },
+    "score": "bc-mozart-k153",
+    "system": 0,
+    "visible": 4,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 4,
+    "pdf_ord": 79,
+    "roles": {},
+    "score": "bc-mozart-k153",
+    "system": 6,
+    "visible": 0,
+    "xml_ord": 66
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 32,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 8,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 9
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 24,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 24
+      }
+    },
+    "score": "omf-piano-dense-advanced-vector",
+    "system": 0,
+    "visible": 33,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 11,
+    "bound": true,
+    "labelled": 5,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 5,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "omf-piano-grand-voices-vector",
+    "system": 0,
+    "visible": 11,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 16,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 12,
+        "labelled": 4,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 12
+      },
+      "upper": {
+        "ambiguous": 4,
+        "labelled": 12,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      }
+    },
+    "score": "pl-bach-prelude-bwv846",
+    "system": 0,
+    "visible": 16,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 5,
+    "bound": true,
+    "labelled": 7,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 2,
+    "pdf_ord": 30,
+    "roles": {
+      "lower": {
+        "ambiguous": 3,
+        "labelled": 1,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 3
+      },
+      "upper": {
+        "ambiguous": 2,
+        "labelled": 6,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 2
+      }
+    },
+    "score": "pl-bach-prelude-bwv846",
+    "system": 5,
+    "visible": 5,
+    "xml_ord": 34
+  },
+  {
+    "ambiguous": 6,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "empty",
+        "visible": 0
+      },
+      "upper": {
+        "ambiguous": 6,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 6
+      }
+    },
+    "score": "pl-beethoven-fur-elise",
+    "system": 0,
+    "visible": 6,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 3,
+    "bound": true,
+    "labelled": 1,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 3,
+    "pdf_ord": 109,
+    "roles": {
+      "lower": {
+        "ambiguous": 2,
+        "labelled": 1,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 2
+      },
+      "upper": {
+        "ambiguous": 1,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 1
+      }
+    },
+    "score": "pl-beethoven-fur-elise",
+    "system": 5,
+    "visible": 3,
+    "xml_ord": 104
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-chopin-mazurka-op6-1",
+    "system": 0,
+    "visible": 9,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 2,
+    "onsets_missing": 0,
+    "page": 3,
+    "pdf_ord": 78,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 2,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 2
+      }
+    },
+    "score": "pl-chopin-mazurka-op6-1",
+    "system": 8,
+    "visible": 2,
+    "xml_ord": 73
+  },
+  {
+    "ambiguous": 10,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 3,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 3
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 0,
+    "visible": 10,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 1,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 0,
+    "visible": 9,
+    "xml_ord": 1
+  },
+  {
+    "ambiguous": 15,
+    "bound": true,
+    "labelled": 8,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 2,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 11,
+        "labelled": 8,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 11
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 0,
+    "visible": 15,
+    "xml_ord": 2
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 4,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 3,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 3,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 1,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 0,
+    "visible": 9,
+    "xml_ord": 3
+  },
+  {
+    "ambiguous": 10,
+    "bound": true,
+    "labelled": 10,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 4,
+    "roles": {
+      "lower": {
+        "ambiguous": 3,
+        "labelled": 1,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 3
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 9,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 1,
+    "visible": 10,
+    "xml_ord": 4
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 5,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 2,
+    "visible": 9,
+    "xml_ord": 5
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 6,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 12,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 12
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 2,
+    "visible": 16,
+    "xml_ord": 6
+  },
+  {
+    "ambiguous": 11,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 7,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 2,
+    "visible": 11,
+    "xml_ord": 7
+  },
+  {
+    "ambiguous": 13,
+    "bound": true,
+    "labelled": 6,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 8,
+    "roles": {
+      "lower": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      },
+      "upper": {
+        "ambiguous": 8,
+        "labelled": 6,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 8
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 2,
+    "visible": 13,
+    "xml_ord": 8
+  },
+  {
+    "ambiguous": 10,
+    "bound": true,
+    "labelled": 3,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 9,
+    "roles": {
+      "lower": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 3,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 2,
+    "visible": 10,
+    "xml_ord": 9
+  },
+  {
+    "ambiguous": 4,
+    "bound": true,
+    "labelled": 11,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 7,
+    "onsets_missing": 6,
+    "page": 1,
+    "pdf_ord": 10,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 2,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 9,
+        "missing": 7,
+        "onsets_missing": 6,
+        "state": "A_PARTIAL",
+        "visible": 10
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 3,
+    "visible": 14,
+    "xml_ord": 10
+  },
+  {
+    "ambiguous": 11,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 11,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 4,
+    "visible": 11,
+    "xml_ord": 11
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 12,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 12,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 12
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 4,
+    "visible": 16,
+    "xml_ord": 12
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 13,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 4,
+    "visible": 9,
+    "xml_ord": 13
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 9,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 14,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 12,
+        "labelled": 9,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 12
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 4,
+    "visible": 16,
+    "xml_ord": 14
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 3,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 15,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 3,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 4,
+    "visible": 9,
+    "xml_ord": 15
+  },
+  {
+    "ambiguous": 14,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 16,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 10,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 10
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 6,
+    "visible": 14,
+    "xml_ord": 16
+  },
+  {
+    "ambiguous": 14,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 17,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 10,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 10
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 6,
+    "visible": 14,
+    "xml_ord": 17
+  },
+  {
+    "ambiguous": 16,
+    "bound": true,
+    "labelled": 8,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 18,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 12,
+        "labelled": 8,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 12
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 6,
+    "visible": 16,
+    "xml_ord": 18
+  },
+  {
+    "ambiguous": 11,
+    "bound": true,
+    "labelled": 3,
+    "mapping_class": "HIGH_CONFIDENCE_COUNT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 19,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 2,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 7,
+        "labelled": 1,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 7
+      }
+    },
+    "score": "pl-handel-gavotte",
+    "system": 6,
+    "visible": 11,
+    "xml_ord": 19
+  },
+  {
+    "ambiguous": 8,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 3,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 3
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "pl-mozart-turkish-march",
+    "system": 0,
+    "visible": 8,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 6,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 2,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 0,
+        "labelled": 0,
+        "missing": 4,
+        "onsets_missing": 0,
+        "state": "A_MISSING_ALL",
+        "visible": 4
+      }
+    },
+    "score": "pl-tchaikovsky-old-french-song",
+    "system": 0,
+    "visible": 8,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 0,
+    "bound": false,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 22,
+    "roles": {},
+    "score": "pl-tchaikovsky-old-french-song",
+    "system": 6,
+    "visible": 0,
+    "xml_ord": 32
+  },
+  {
+    "ambiguous": 9,
+    "bound": true,
+    "labelled": 0,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 0,
+    "roles": {
+      "lower": {
+        "ambiguous": 4,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 4
+      },
+      "upper": {
+        "ambiguous": 5,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 5
+      }
+    },
+    "score": "std-demo-minuet-in-g",
+    "system": 0,
+    "visible": 9,
+    "xml_ord": 0
+  },
+  {
+    "ambiguous": 6,
+    "bound": true,
+    "labelled": 6,
+    "mapping_class": "EXACT_ANCHORED",
+    "missing": 0,
+    "onsets_missing": 0,
+    "page": 1,
+    "pdf_ord": 34,
+    "roles": {
+      "lower": {
+        "ambiguous": 3,
+        "labelled": 0,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_ONSET_COUNT",
+        "visible": 3
+      },
+      "upper": {
+        "ambiguous": 3,
+        "labelled": 6,
+        "missing": 0,
+        "onsets_missing": 0,
+        "state": "B_AMBIGUOUS",
+        "visible": 3
+      }
+    },
+    "score": "std-demo-minuet-in-g",
+    "system": 10,
+    "visible": 6,
+    "xml_ord": 31
+  }
+]

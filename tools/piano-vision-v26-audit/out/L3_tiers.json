@@ -1,0 +1,166 @@
+{
+  "nA": 54,
+  "nB": 365,
+  "tier1": [
+    {
+      "ambiguous": 0,
+      "bound": false,
+      "labelled": 0,
+      "mapping_class": "EXACT_ANCHORED",
+      "missing": 12,
+      "onsets_missing": 0,
+      "page": 1,
+      "pdf_ord": 0,
+      "roles": {
+        "lower": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 5,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 5
+        },
+        "upper": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 7,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 12
+        }
+      },
+      "score": "bc-chopin-etude-op10-01",
+      "system": 0,
+      "visible": 17,
+      "xml_ord": 0
+    },
+    {
+      "ambiguous": 0,
+      "bound": false,
+      "labelled": 0,
+      "mapping_class": "EXACT_ANCHORED",
+      "missing": 32,
+      "onsets_missing": 0,
+      "page": 1,
+      "pdf_ord": 0,
+      "roles": {
+        "lower": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 8,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 9
+        },
+        "upper": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 24,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 24
+        }
+      },
+      "score": "omf-piano-dense-advanced-vector",
+      "system": 0,
+      "visible": 33,
+      "xml_ord": 0
+    },
+    {
+      "ambiguous": 0,
+      "bound": false,
+      "labelled": 0,
+      "mapping_class": "EXACT_ANCHORED",
+      "missing": 6,
+      "onsets_missing": 0,
+      "page": 1,
+      "pdf_ord": 0,
+      "roles": {
+        "lower": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 2,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 4
+        },
+        "upper": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 4,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 4
+        }
+      },
+      "score": "pl-tchaikovsky-old-french-song",
+      "system": 0,
+      "visible": 8,
+      "xml_ord": 0
+    }
+  ],
+  "tier2": [
+    {
+      "ambiguous": 0,
+      "bound": true,
+      "labelled": 8,
+      "mapping_class": "EXACT_ANCHORED",
+      "missing": 2,
+      "onsets_missing": 3,
+      "page": 1,
+      "pdf_ord": 0,
+      "roles": {
+        "lower": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 0,
+          "onsets_missing": 0,
+          "state": "empty",
+          "visible": 0
+        },
+        "upper": {
+          "ambiguous": 0,
+          "labelled": 8,
+          "missing": 2,
+          "onsets_missing": 3,
+          "state": "A_PARTIAL",
+          "visible": 8
+        }
+      },
+      "score": "bc-bach-fugue-bwv846",
+      "system": 0,
+      "visible": 8,
+      "xml_ord": 0
+    },
+    {
+      "ambiguous": 0,
+      "bound": false,
+      "labelled": 0,
+      "mapping_class": "EXACT_ANCHORED",
+      "missing": 2,
+      "onsets_missing": 0,
+      "page": 3,
+      "pdf_ord": 78,
+      "roles": {
+        "lower": {
+          "ambiguous": 0,
+          "labelled": 0,
+          "missing": 2,
+          "onsets_missing": 0,
+          "state": "A_MISSING_ALL",
+          "visible": 2
+        }
+      },
+      "score": "pl-chopin-mazurka-op6-1",
+      "system": 8,
+      "visible": 2,
+      "xml_ord": 73
+    }
+  ],
+  "tier3_count": 35,
+  "unresolved_causes": {
+    "degenerate_verovio_span": 7,
+    "no_corpus_system": 6,
+    "onset_group_count_differs": 58
+  }
+}
