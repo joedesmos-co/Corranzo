@@ -153,8 +153,13 @@ def detect(im, y0, y1, x_lo, x_hi, cfg=None):
         fill = len(ys) / float(w * h)
         if fill < FILL_MIN:
             continue
+        # y is reported in ABSOLUTE raster coordinates: y0c/y1c are relative to
+        # the staff-band sub-image, so the band top must be added back. Returning
+        # it band-relative silently produced empty inspection tiles downstream.
         cands.append({"x": a + (x0c + x1c) / 2.0, "w": w, "h": h,
-                      "fill": round(fill, 3), "y": a * 0 + (y0c + y1c) / 2.0})
+                      "fill": round(fill, 3),
+                      "y": top + (y0c + y1c) / 2.0,
+                      "y_rel": (y0c + y1c) / 2.0})
     cands.sort(key=lambda c: c["x"])
     tol = ONSET_TOL_GAPS * gap
     groups, cur = [], [cands[0]] if cands else []

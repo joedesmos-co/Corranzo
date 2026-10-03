@@ -1,92 +1,99 @@
-# Stage O — raster-only printed-onset detector (STOPPED at O1, CASE D)
+# Stage O — raster-only printed-onset detector: CASE D, now with measured evidence
 
 Nothing mutated. Corpus 2.1 untouched, no labels created, no Corpus 2.2, no RTX,
-no training.
+no training. No MusicXML, Verovio, pitch, `d0`, `true_d`, residual or decoder output
+was read at any point.
 
-## What was built
+## What ran
 
-`o_onset_detector.py` — decides whether a printed onset/notehead group exists using
-**only** the page raster plus already-frozen PDF geometry (validated staff rectangles,
-validated printed measure boundaries from the frozen barline detector).
+`o_onset_detector.py` scanned the 42 frozen high-confidence mapped measures and found
+**407 onset groups**. Truth bootstrap artifacts were then built candidate-first: a glyph
+grid (one tile per candidate, so each false positive can be *named*) plus per-measure
+staff strips (so missed noteheads are visible).
 
-It never reads MusicXML pitch, MusicXML/Verovio onset counts, Verovio notehead
-positions, `d0`, `true_d`, residual sign, decoder output, or the absence of a corpus
-annotation as evidence that nothing is printed. Pitch classification is not attempted.
+24 measures were selected spanning the required range, split **by score**:
+DEV 8 measures / 5 scores, HELDOUT 16 measures / 11 scores.
 
-Method:
-- **O2** connected-component notehead candidates on ink with staff-line runs removed;
-  shape filters on width, height and fill ratio, all expressed in staff gaps so they
-  are resolution- and scale-free. No stem is required, so whole notes survive.
-- **O3** staff-line suppression erases only horizontal runs longer than 3 staff gaps,
-  so a notehead overlapping a line survives as a slotted blob and is still detected.
-- **O4** onset groups by clustering candidate x with a geometry-relative tolerance
-  (1.35 staff gaps).
-- **O5** cardinality from vertically distinct candidates; **no voice assignment**.
+A real bug was found and fixed en route: `detect()` returned candidate `y` relative to
+the staff band while the renderer treated it as absolute, producing empty tiles. With
+that fixed the adjudication became possible.
 
-Scan of the 42 frozen high-confidence mapped measures found **407 onset groups**
-across both staves (`out/O_detect_raw.json`).
+## O6/O7 — what the adjudication shows
 
-One bug worth recording: the montage renderer scaled by `scale/3`, which silently
-*downscaled* the inspection images and made adjudication unreliable until fixed.
+**147 candidates adjudicated** from raster crops. The DEV upper grid alone holds 72.
 
-## O1 — truth adjudication: 2 of the required 30–50 measures
+DEV upper false-positive taxonomy:
 
-Two measures were adjudicated visually at 3× from numbered overlays
-(`out/o_montages/hires.png`), recorded verbatim in `out/O1_adjudication.json`.
-
-**bach-fugue p1 s0 ord 0, upper staff, 9 detected — verdict: sparse regions work.**
-Six onset markers land on real noteheads. Three false positives are clearly visible,
-all at the measure start: a **treble clef**, a **common-time signature**, and an
-**eighth rest**. At least one notehead left of the first beamed group was not marked.
-
-**chopin-etude-op10-01 p1 s0 ord 0, upper staff, 9 detected — verdict: unresolved.**
-The detector emitted a packed cluster of onset markers inside a 32nd-note beamed
-group. Whether that reflects correct 32nd-note density or over-detection could not be
-decided at the available resolution.
-
-## Why this stops here — CASE D
-
-O1 asks for a representative PDF-only truth set of at least 30–50 mapped measures
-spanning sparse notation, dense polyphony, chords, multiple voices, beamed notes,
-accidentals, ledger-line regions, upper/lower staves, and Bach/Beethoven/Chopin/
-Handel/Mozart. **Two measures were adjudicated.**
-
-That is not enough to compute, and it would be fabrication to report:
-
-| Item | Status |
+| Class | Tiles |
 |---|---|
-| baseline onset precision / recall / F1 (O6) | **not established** |
-| notehead membership accuracy (O6) | **not established** |
-| FP / FN taxonomy over a real sample (O7) | 3 FP classes from 1 measure only |
-| the three allowed corrections (O8) | **not attempted** — no dev metrics to target |
-| held-out onset precision / recall / F1 (O9) | **not attempted** |
-| Category B1/B2/B3/B4 split of the 365 noteheads (O10–O12) | **not attempted** |
-| reachable N~100 / N~250 / N~500 (O12) | unchanged from Stage L: ceiling 68 |
-| new Tier-1/Tier-2 schedule (O13) | unchanged from Stage L |
+| clef fragment | 20 |
+| key-signature accidental | 16 |
+| time signature | 9 |
+| rest | 2 |
+| other / uncertain | 9 |
+| **true-positive noteheads** | **16** |
 
-Making corrections now, without dev metrics, would be tuning to an anecdote. Applying
-the detector to Category B now would convert an unvalidated measurement into 365
-apparent findings, which is precisely the failure mode the campaign has avoided so far
-— Stage C was invalidated by exactly this kind of unvalidated correspondence.
+**DEV onset precision ≈ 0.22** (screening estimate, ±~4 tiles, single reader).
 
-## What the two adjudications do establish
+False negatives: staff strips show **unmarked noteheads**, concentrated in dense beamed
+runs and stacked chords, where noteheads merge into one component or fall outside the
+height window. **Recall is not quantified** — it was judged qualitatively, and I am not
+going to present a number I did not measure.
 
-1. The approach is **not** hopeless: in sparse notation it finds real printed onsets
-   from the raster alone, which is the precondition for splitting Category B.
-2. There are at least two concrete, principled, correctable failure modes already
-   visible without tuning: **measure-start non-notehead glyphs** (clef, time
-   signature) and **rest glyphs**, both of which are positional/shape cues, not
-   thresholds to be fitted.
-3. The unresolved case is **dense beamed polyphony**, which is precisely where most of
-   the 365 Category-B noteheads live. So the hard part is confirmed to be the hard part.
+## The mechanism — and why this is not a threshold problem
+
+O3 staff-line suppression removes long horizontal runs. That necessarily **fragments any
+glyph spanning the staff height**: a treble clef, a time signature and several accidentals
+all cross multiple lines, so each breaks into 2–5 fragments whose bounding boxes land
+squarely inside the notehead width/height/fill window. One clef yields several false
+candidates, which is exactly what the grid shows.
+
+This matters because it means **no choice of `W_MIN`, `H_MAX` or `FILL_MIN` fixes it**.
+The fragments genuinely have notehead-sized bounding boxes; rejecting them requires
+knowing they belong to a larger glyph, not tightening a size test.
+
+The indicated correction is therefore structural, not numeric: **detect on
+line-suppressed ink but validate shape on the ORIGINAL unstripped ink**, rejecting any
+candidate whose connected component in the original mask is much larger than a notehead.
+A clef fragment sits inside a component several staff gaps tall; a real notehead does
+not.
+
+## Why I stopped rather than applying it
+
+I could have implemented that correction and reported a precision number. I did not,
+for two reasons:
+
+1. **No reliable truth.** The 0.22 figure is a single-reader visual tally with no
+   pixel-level or second-reader verification. Using it to accept or reject a correction
+   is fitting to an eyeball estimate, and the resulting "improvement" would be
+   uninterpretable.
+2. **The decisive failure is recall, and I cannot yet measure it.** Missed noteheads in
+   dense beamed runs and chords are the reason Category B is unresolved. Tightening
+   precision without measuring recall would move the failure rather than fix it.
+
+## O15 decision
+
+**CASE D** — the detector cannot reliably distinguish printed onset structure.
+
+- Baseline onset precision: **≈0.22** (DEV, screening estimate)
+- Baseline onset recall / F1: **not established**
+- Notehead membership accuracy: **not established**
+- Held-out precision / recall / F1: **not attempted** (O8 corrections were never frozen)
+- Category B1/B2/B3/B4 split of the 365 noteheads: **not attempted**
+- Safe missing-annotation pool: unchanged from Stage L — **62 noteheads / 7 measures**
+- Reachable N~100 / N~250 / N~500: unchanged — ceiling **68**
+- New Tier-1/Tier-2 priorities: unchanged from Stage L (Tier 1 = 3 systems / 3 measures /
+  50 noteheads)
+- Is labelling scientifically justified? **No.**
+
+Applying this detector to Category B would have converted 365 ambiguous noteheads into
+365 confident-looking findings. Given a measured precision near 0.22 and unmeasured
+recall, that would have been actively harmful — the same class of unvalidated
+correspondence that invalidated Stage C.
 
 ## Exact next step
 
-Adjudicate the remaining truth measures at adequate resolution, prioritising the dense
-beamed cases first, because that is where Category B lives and therefore where the
-B1/B2/B3 decision is actually made. Only once O6/O9 give real dev and held-out numbers
-should O8 corrections be applied and the frozen detector be run over Category B.
-
-This is CASE D in the O15 taxonomy: detector reliability is not yet adequate for
-structural use, and the immediate requirement is a stronger, *adjudicated* PDF onset
-measurement — not more detector engineering and not annotation.
+Fix O3 structurally (detect suppressed, validate on original ink) and, in the same pass,
+build a **recall-capable** truth artifact: per-measure strips with candidate boxes
+enumerated so missed noteheads can be counted, not just noticed. Then re-adjudicate.
+Precision near 0.22 is fixable; unmeasured recall is what blocks the B1/B2/B3 decision.
