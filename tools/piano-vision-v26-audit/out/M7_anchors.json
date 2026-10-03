@@ -10,7 +10,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 31,
+        "pdf_ord": 30,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 26
@@ -45,19 +45,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 5,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": null
       }
     ],
     "n_mapped": 27,
-    "n_pdf": 32,
+    "n_pdf": 31,
     "n_xml": 27,
-    "pdf_minus_xml": 5
+    "pdf_minus_xml": 4
   },
   "bc-beethoven-sonata-op2-m1": {
     "anchors": [
@@ -399,12 +392,26 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "START_ANCHORED_TAIL",
         "xml_ord": 47
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 48
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 49
       }
     ],
-    "n_mapped": 105,
-    "n_pdf": 105,
+    "n_mapped": 103,
+    "n_pdf": 103,
     "n_xml": 152,
-    "pdf_minus_xml": -47
+    "pdf_minus_xml": -49
   },
   "bc-chopin-etude-op10-01": {
     "anchors": [
@@ -1009,40 +1016,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "START_ANCHORED_TAIL",
         "xml_ord": 46
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 47
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 48
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 49
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 50
       }
     ],
-    "n_mapped": 34,
-    "n_pdf": 34,
+    "n_mapped": 38,
+    "n_pdf": 38,
     "n_xml": 84,
-    "pdf_minus_xml": -50
+    "pdf_minus_xml": -46
   },
   "bc-chopin-nocturne-op9-n2": {
     "anchors": [
@@ -1055,7 +1034,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 53,
+        "pdf_ord": 51,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 37
@@ -1160,26 +1139,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 15,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 16,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": null
       }
     ],
     "n_mapped": 38,
-    "n_pdf": 54,
+    "n_pdf": 52,
     "n_xml": 38,
-    "pdf_minus_xml": 16
+    "pdf_minus_xml": 14
   },
   "bc-mozart-k153": {
     "anchors": [
@@ -1192,7 +1157,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 78,
+        "pdf_ord": 79,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 66
@@ -1283,12 +1248,19 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 13,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
       }
     ],
     "n_mapped": 67,
-    "n_pdf": 79,
+    "n_pdf": 80,
     "n_xml": 67,
-    "pdf_minus_xml": 12
+    "pdf_minus_xml": 13
   },
   "omf-piano-dense-advanced-vector": {
     "anchors": [
@@ -1300,12 +1272,20 @@
         "xml_ord": 0
       }
     ],
-    "count_agrees": true,
-    "edits": [],
-    "n_mapped": 8,
-    "n_pdf": 8,
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      }
+    ],
+    "n_mapped": 7,
+    "n_pdf": 7,
     "n_xml": 8,
-    "pdf_minus_xml": 0
+    "pdf_minus_xml": -1
   },
   "omf-piano-grand-voices-vector": {
     "anchors": [
@@ -1339,33 +1319,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "START_ANCHORED_TAIL",
         "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 4,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 5,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 6,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": null
       }
     ],
     "n_mapped": 8,
-    "n_pdf": 14,
+    "n_pdf": 11,
     "n_xml": 8,
-    "pdf_minus_xml": 6
+    "pdf_minus_xml": 3
   },
   "pl-bach-prelude-bwv846": {
     "anchors": [
@@ -1378,7 +1337,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 29,
+        "pdf_ord": 30,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 34
@@ -1413,19 +1372,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": 4
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 5
       }
     ],
-    "n_mapped": 30,
-    "n_pdf": 30,
+    "n_mapped": 31,
+    "n_pdf": 31,
     "n_xml": 35,
-    "pdf_minus_xml": -5
+    "pdf_minus_xml": -4
   },
   "pl-beethoven-fur-elise": {
     "anchors": [
@@ -1438,7 +1390,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 98,
+        "pdf_ord": 109,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 104
@@ -1447,52 +1399,45 @@
     "count_agrees": false,
     "edits": [
       {
-        "op": "insert_xml",
-        "pdf_ord": null,
+        "op": "delete_pdf",
+        "pdf_ord": 1,
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 1
+        "xml_ord": null
       },
       {
-        "op": "insert_xml",
-        "pdf_ord": null,
+        "op": "delete_pdf",
+        "pdf_ord": 2,
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 2
+        "xml_ord": null
       },
       {
-        "op": "insert_xml",
-        "pdf_ord": null,
+        "op": "delete_pdf",
+        "pdf_ord": 3,
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 3
+        "xml_ord": null
       },
       {
-        "op": "insert_xml",
-        "pdf_ord": null,
+        "op": "delete_pdf",
+        "pdf_ord": 4,
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 4
+        "xml_ord": null
       },
       {
-        "op": "insert_xml",
-        "pdf_ord": null,
+        "op": "delete_pdf",
+        "pdf_ord": 5,
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 5
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": 6
+        "xml_ord": null
       }
     ],
-    "n_mapped": 99,
-    "n_pdf": 99,
+    "n_mapped": 105,
+    "n_pdf": 110,
     "n_xml": 105,
-    "pdf_minus_xml": -6
+    "pdf_minus_xml": 5
   },
   "pl-chopin-mazurka-op6-1": {
     "anchors": [
@@ -1505,7 +1450,7 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 79,
+        "pdf_ord": 78,
         "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
         "xml_ord": 73
@@ -1547,19 +1492,12 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": null
-      },
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 6,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": null
       }
     ],
     "n_mapped": 74,
-    "n_pdf": 80,
+    "n_pdf": 79,
     "n_xml": 74,
-    "pdf_minus_xml": 6
+    "pdf_minus_xml": 5
   },
   "pl-handel-gavotte": {
     "anchors": [
@@ -1569,56 +1507,16 @@
         "reason": "first printed interval / first MusicXML measure",
         "type": "A_START",
         "xml_ord": 0
-      },
-      {
-        "both_sides": true,
-        "pdf_ord": 20,
-        "reason": "last printed interval closed by a barline 13 px wide vs median 2 px (double/final bar)",
-        "type": "A_END_FINAL_BAR",
-        "xml_ord": 19
       }
     ],
-    "count_agrees": false,
-    "edits": [
-      {
-        "op": "delete_pdf",
-        "pdf_ord": 1,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
-        "xml_ord": null
-      }
-    ],
+    "count_agrees": true,
+    "edits": [],
     "n_mapped": 20,
-    "n_pdf": 21,
+    "n_pdf": 20,
     "n_xml": 20,
-    "pdf_minus_xml": 1
+    "pdf_minus_xml": 0
   },
   "pl-mozart-turkish-march": {
-    "anchors": [
-      {
-        "both_sides": true,
-        "pdf_ord": 0,
-        "reason": "first printed interval / first MusicXML measure",
-        "type": "A_START",
-        "xml_ord": 0
-      }
-    ],
-    "count_agrees": false,
-    "edits": [
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 1
-      }
-    ],
-    "n_mapped": 127,
-    "n_pdf": 127,
-    "n_xml": 128,
-    "pdf_minus_xml": -1
-  },
-  "pl-tchaikovsky-old-french-song": {
     "anchors": [
       {
         "both_sides": true,
@@ -1692,49 +1590,14 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "START_ANCHORED_TAIL",
         "xml_ord": 9
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 10
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 11
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 12
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 13
-      },
-      {
-        "op": "insert_xml",
-        "pdf_ord": null,
-        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
-        "region": "START_ANCHORED_TAIL",
-        "xml_ord": 14
       }
     ],
-    "n_mapped": 19,
-    "n_pdf": 19,
-    "n_xml": 33,
-    "pdf_minus_xml": -14
+    "n_mapped": 119,
+    "n_pdf": 119,
+    "n_xml": 128,
+    "pdf_minus_xml": -9
   },
-  "std-demo-minuet-in-g": {
+  "pl-tchaikovsky-old-french-song": {
     "anchors": [
       {
         "both_sides": true,
@@ -1745,10 +1608,10 @@
       },
       {
         "both_sides": true,
-        "pdf_ord": 28,
-        "reason": "last printed interval closed by a barline 17 px wide vs median 2 px (double/final bar)",
+        "pdf_ord": 22,
+        "reason": "last printed interval closed by a barline 15 px wide vs median 2 px (double/final bar)",
         "type": "A_END_FINAL_BAR",
-        "xml_ord": 31
+        "xml_ord": 32
       }
     ],
     "count_agrees": false,
@@ -1773,11 +1636,106 @@
         "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
         "region": "ANCHORED_A_START|A_END_FINAL_BAR",
         "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 6
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 7
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 8
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 9
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 10
       }
     ],
-    "n_mapped": 29,
-    "n_pdf": 29,
+    "n_mapped": 23,
+    "n_pdf": 23,
+    "n_xml": 33,
+    "pdf_minus_xml": -10
+  },
+  "std-demo-minuet-in-g": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 34,
+        "reason": "last printed interval closed by a barline 17 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 31
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 32,
+    "n_pdf": 35,
     "n_xml": 32,
-    "pdf_minus_xml": -3
+    "pdf_minus_xml": 3
   }
 }
