@@ -1,0 +1,32 @@
+{
+  "method": "visual adjudication of raster-only onset detector output at 3x scale",
+  "measures_inspected": 2,
+  "note": "INSUFFICIENT to establish detector reliability. Recorded verbatim, not extrapolated.",
+  "adjudications": [
+    {
+      "key": "bc-bach-fugue-bwv846|p1|s0|m0",
+      "score": "bc-bach-fugue-bwv846", "page": 1, "system": 0, "xml_ord": 0,
+      "staff": "upper", "staff_gap_px": 10.5, "detected_onsets": 9,
+      "true_positive_onsets_observed": 6,
+      "false_positives_observed": [
+        {"where": "measure start", "glyph": "treble clef", "class": "other(clef)"},
+        {"where": "measure start", "glyph": "common-time signature", "class": "other(time_signature)"},
+        {"where": "measure start", "glyph": "eighth rest", "class": "rest"}
+      ],
+      "false_negatives_observed": ["at least one notehead left of the first beamed group was not marked"],
+      "confidence": "high",
+      "verdict": "SPARSE REGIONS WORK; measure-start non-notehead glyphs are false positives"
+    },
+    {
+      "key": "bc-chopin-etude-op10-01|p1|s0|m0",
+      "score": "bc-chopin-etude-op10-01", "page": 1, "system": 0, "xml_ord": 0,
+      "staff": "upper", "staff_gap_px": 10.4, "detected_onsets": 9,
+      "true_positive_onsets_observed": "uncertain",
+      "false_positives_observed": [],
+      "false_negatives_observed": [],
+      "confidence": "low",
+      "verdict": "DENSE BEAMED RUN UNRESOLVED - detector emitted a packed cluster of onset lines inside the 32nd-note beam group; whether that is correct 32nd-note density or over-detection could not be decided at this resolution"
+    }
+  ],
+  "blocking_gap": "O1 requires 30-50 adjudicated measures spanning sparse, dense, chords, multi-voice, beamed, accidentals, ledger-line and upper/lower cases. 2 were adjudicated. Detector precision/recall, the O7 taxonomy, the O8 corrections and the O9 held-out validation therefore CANNOT be reported, and reporting them from 2 measures would be fabrication."
+}
