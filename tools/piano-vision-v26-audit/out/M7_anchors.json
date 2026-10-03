@@ -1,0 +1,1783 @@
+{
+  "bc-bach-fugue-bwv846": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 31,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 26
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 4,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 5,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 27,
+    "n_pdf": 32,
+    "n_xml": 27,
+    "pdf_minus_xml": 5
+  },
+  "bc-beethoven-sonata-op2-m1": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 6
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 7
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 8
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 9
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 10
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 11
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 12
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 13
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 14
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 15
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 16
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 17
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 18
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 19
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 20
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 21
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 22
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 23
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 24
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 25
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 26
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 27
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 28
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 29
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 30
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 31
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 32
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 33
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 34
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 35
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 36
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 37
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 38
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 39
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 40
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 41
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 42
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 43
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 44
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 45
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 46
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 47
+      }
+    ],
+    "n_mapped": 105,
+    "n_pdf": 105,
+    "n_xml": 152,
+    "pdf_minus_xml": -47
+  },
+  "bc-chopin-etude-op10-01": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 6
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 7
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 8
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 9
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 10
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 11
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 12
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 13
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 14
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 15
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 16
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 17
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 18
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 19
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 20
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 21
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 22
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 23
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 24
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 25
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 26
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 27
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 28
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 29
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 30
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 31
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 32
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 33
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 34
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 35
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 36
+      }
+    ],
+    "n_mapped": 43,
+    "n_pdf": 43,
+    "n_xml": 79,
+    "pdf_minus_xml": -36
+  },
+  "bc-chopin-etude-op10-12": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 6
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 7
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 8
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 9
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 10
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 11
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 12
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 13
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 14
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 15
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 16
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 17
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 18
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 19
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 20
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 21
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 22
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 23
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 24
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 25
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 26
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 27
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 28
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 29
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 30
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 31
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 32
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 33
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 34
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 35
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 36
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 37
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 38
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 39
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 40
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 41
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 42
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 43
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 44
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 45
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 46
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 47
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 48
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 49
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 50
+      }
+    ],
+    "n_mapped": 34,
+    "n_pdf": 34,
+    "n_xml": 84,
+    "pdf_minus_xml": -50
+  },
+  "bc-chopin-nocturne-op9-n2": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 53,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 37
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 4,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 5,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 6,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 7,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 8,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 9,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 10,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 11,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 12,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 13,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 14,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 15,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 16,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 38,
+    "n_pdf": 54,
+    "n_xml": 38,
+    "pdf_minus_xml": 16
+  },
+  "bc-mozart-k153": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 78,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 66
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 4,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 5,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 6,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 7,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 8,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 9,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 10,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 11,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 12,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 67,
+    "n_pdf": 79,
+    "n_xml": 67,
+    "pdf_minus_xml": 12
+  },
+  "omf-piano-dense-advanced-vector": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": true,
+    "edits": [],
+    "n_mapped": 8,
+    "n_pdf": 8,
+    "n_xml": 8,
+    "pdf_minus_xml": 0
+  },
+  "omf-piano-grand-voices-vector": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 4,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 5,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 6,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 8,
+    "n_pdf": 14,
+    "n_xml": 8,
+    "pdf_minus_xml": 6
+  },
+  "pl-bach-prelude-bwv846": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 29,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 34
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 5
+      }
+    ],
+    "n_mapped": 30,
+    "n_pdf": 30,
+    "n_xml": 35,
+    "pdf_minus_xml": -5
+  },
+  "pl-beethoven-fur-elise": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 98,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 104
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 6
+      }
+    ],
+    "n_mapped": 99,
+    "n_pdf": 99,
+    "n_xml": 105,
+    "pdf_minus_xml": -6
+  },
+  "pl-chopin-mazurka-op6-1": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 79,
+        "reason": "last printed interval closed by a barline 11 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 73
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 2,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 3,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 4,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 5,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      },
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 6,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 74,
+    "n_pdf": 80,
+    "n_xml": 74,
+    "pdf_minus_xml": 6
+  },
+  "pl-handel-gavotte": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 20,
+        "reason": "last printed interval closed by a barline 13 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 19
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "delete_pdf",
+        "pdf_ord": 1,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": null
+      }
+    ],
+    "n_mapped": 20,
+    "n_pdf": 21,
+    "n_xml": 20,
+    "pdf_minus_xml": 1
+  },
+  "pl-mozart-turkish-march": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      }
+    ],
+    "n_mapped": 127,
+    "n_pdf": 127,
+    "n_xml": 128,
+    "pdf_minus_xml": -1
+  },
+  "pl-tchaikovsky-old-french-song": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 3
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 4
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 5
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 6
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 7
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 8
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 9
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 10
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 11
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 12
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 13
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "START_ANCHORED_TAIL",
+        "xml_ord": 14
+      }
+    ],
+    "n_mapped": 19,
+    "n_pdf": 19,
+    "n_xml": 33,
+    "pdf_minus_xml": -14
+  },
+  "std-demo-minuet-in-g": {
+    "anchors": [
+      {
+        "both_sides": true,
+        "pdf_ord": 0,
+        "reason": "first printed interval / first MusicXML measure",
+        "type": "A_START",
+        "xml_ord": 0
+      },
+      {
+        "both_sides": true,
+        "pdf_ord": 28,
+        "reason": "last printed interval closed by a barline 17 px wide vs median 2 px (double/final bar)",
+        "type": "A_END_FINAL_BAR",
+        "xml_ord": 31
+      }
+    ],
+    "count_agrees": false,
+    "edits": [
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 1
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 2
+      },
+      {
+        "op": "insert_xml",
+        "pdf_ord": null,
+        "reason": "printed-interval count disagrees with MusicXML measure count in an anchored region",
+        "region": "ANCHORED_A_START|A_END_FINAL_BAR",
+        "xml_ord": 3
+      }
+    ],
+    "n_mapped": 29,
+    "n_pdf": 29,
+    "n_xml": 32,
+    "pdf_minus_xml": -3
+  }
+}
