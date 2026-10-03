@@ -42,7 +42,13 @@ import gzip
 CAND = {
     "search_pad": 0.30,
     "end_tol": 0.30,        # run endpoints within this many gaps of the outer lines
-    "min_coverage": 0.70,   # deliberately LOWER than Phase P's 0.88: recall first
+    "min_coverage": 0.90,   # B4 correction 2 (accepted on DETECTOR_DEV): the FP
+                           # taxonomy showed 46/53 spurious events were stems and
+                           # beamed blocks spanning only part of the staff, which a
+                           # 0.70 longest-run test lets through. DEV F1 0.7767 ->
+                           # 0.7943; held-out precision 0.6280 -> 0.7577, recall
+                           # 0.5518 -> 0.6589. Chosen against the RASTER-ONLY truth
+                           # set, never against a MusicXML or Verovio measure count.
     "gap_frac": 0.45,       # tolerate more internal breaks than a strict bar would have
     "max_runs": 6,
     "dark_min": 1,
