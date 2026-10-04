@@ -315,6 +315,26 @@ class FretVariantModel(nn.Module):
     ``roidigits``
         Per-slot digit distributions plus an occupancy head, on the same ROI
         encoding. Isolates the factorisation effect at the same resolution.
+
+    ``ROI_ONLY_NO_TOKEN``
+        An **experimental** causal variant, not a production change. It is
+        ``roi26`` with exactly one term deleted: the shared token is not added to
+        the ROI encoding before the fret head.
+
+        It exists because the representation localisation at commit 38d6fa7111
+        measured the shared token at 0.0633 score-disjoint and 0.1765 on
+        same-score unseen instances, while the ROI encoding feeding the same head
+        carried far more. ``roi26`` computes::
+
+            fused = self.roi_projection(encoded.flatten(-2)) + tokens
+
+        so it *adds* the collapsed representation to the good one rather than
+        routing around it. Removing the term is the smallest change that can test
+        whether that fusion is causal for the transfer failure.
+
+        Modules are constructed in the same order, with the same shapes, as
+        ``roi26``, so under an equal seed the initial weights are identical and the
+        only difference between the two variants is the term under test.
     """
 
     MAX_DIGITS = 2
@@ -328,11 +348,16 @@ class FretVariantModel(nn.Module):
         hidden = base.config.hidden
         if kind != "shared":
             self.encoder = RoiEncoder(base.backbone.output_channels[0], width=32)
-        if kind == "roi26":
+        if kind == "roi26" or kind == "ROI_ONLY_NO_TOKEN":
             # One vector per object: the crop's columns are flattened, which is
             # what the baseline shared head also does. This variant changes the
             # *resolution* and nothing else, so the comparison against `shared` is
             # about pixels and not about the output parameterisation.
+            #
+            # `ROI_ONLY_NO_TOKEN` builds the identical pair of modules here, in the
+            # identical order and shapes, so an equal seed gives it the same initial
+            # weights as `roi26`. The difference between the two lives entirely in
+            # `forward`.
             self.roi_projection = nn.Linear(self.encoder.out_channels * grid, hidden)
             self.fret_classifier = nn.Linear(hidden, 26)
         elif kind == "roidigits":
@@ -410,6 +435,15 @@ class FretVariantModel(nn.Module):
         if self.kind == "roi26":
             fused = self.roi_projection(encoded.flatten(-2)) + tokens
             out["fret"] = self.fret_classifier(fused)
+        elif self.kind == "ROI_ONLY_NO_TOKEN":
+            # The experiment. `roi26` with the `+ tokens` term removed and nothing
+            # else changed: same crop, same encoder, same projection, same
+            # classifier, same loss, same optimiser, same schedule, same seed.
+            #
+            # `out` is still built from `tokens` above, so the unrelated heads
+            # (`object_type`, `string`, `tile`) keep their existing input and are
+            # untouched by this change.
+            out["fret"] = self.fret_classifier(self.roi_projection(encoded.flatten(-2)))
         else:
             # Two paths from the same crop: per-slot digits, and a whole-object
             # vector for occupancy. Occupancy genuinely is a whole-object
