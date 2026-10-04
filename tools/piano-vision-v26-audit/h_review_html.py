@@ -118,6 +118,17 @@ select{font:inherit;padding:3px 6px;border:1px solid #b9bfc7;border-radius:5px;b
 textarea{width:100%;min-height:52px;font:inherit;padding:6px;border:1px solid #b9bfc7;border-radius:6px}
 .hint{color:#5b6270;font-size:12px}
 .prog{font-size:13px;color:#5b6270}
+.sum{background:#fff;border:1px solid #d8dbe0;border-radius:8px;padding:10px 12px;margin:0 0 14px}
+.sum h2{font-size:13px;margin:0 0 8px;text-transform:uppercase;letter-spacing:.04em;color:#3a4048}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:6px 14px;font-size:13px}
+.grid div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted #e6e8ec;padding:2px 0}
+.grid b{font-variant-numeric:tabular-nums}
+.headline{margin-top:10px;padding:8px 10px;border:2px solid #1f6feb;border-radius:8px;background:#f2f7ff;font-size:14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.headline b{font-size:22px;font-variant-numeric:tabular-nums}
+.ms{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ms span{font-size:12px;padding:2px 8px;border:1px solid #c9ced6;border-radius:999px;color:#6b7280;background:#fff}
+.ms span.on{background:#1f6feb;color:#fff;border-color:#1f6feb;font-weight:600}
+.gate{margin-top:8px;font-size:12px;color:#5b6270}
 .zwrap{margin-top:8px}
 .zwrap img{width:100%;border:1px solid #d8dbe0;border-radius:6px;background:#fff}
 </style></head><body>
@@ -125,15 +136,90 @@ textarea{width:100%;min-height:52px;font:inherit;padding:6px;border:1px solid #b
 <div class="bar">
 <button id="prev">&larr; Prev</button><button id="next" class="pri">Next &rarr;</button>
 <span class="prog" id="prog"></span>
+<button id="nxtu">Next unanswered</button>
 <button id="exp">Export JSON</button>
 <button id="clr">Clear this item</button>
 <span class="hint">autosaves locally &middot; no pitch anywhere</span>
 </div></header><div class="wrap" id="wrap"></div>
+<div class="wrap" style="padding-top:0"><div class="sum" id="sum"></div></div>
 <script>
 const DATA = __DATA__;
 const KEY='piano_review_v1';
 let idx=0, ans=JSON.parse(localStorage.getItem(KEY)||'{}');
-function save(){localStorage.setItem(KEY,JSON.stringify(ans));}
+function save(){localStorage.setItem(KEY,JSON.stringify(ans));recompute();}
+function cardOf(list,id){for(var i=0;i<list.length;i++){if(list[i].pid===id)return list[i].card;if(list[i].sid===id)return list[i].card;}return 0;}
+function xids(it){var o={};it.source_onsets.forEach(function(s){o[s.sid]=1;});return o;}
+function recompute(){
+  var el=document.getElementById('sum'); if(!el) return;
+  var c={items:0,done:0,A_Y:0,A_N:0,A_U:0,A_none:0,
+         b_pr:0,b_np:0,b_u:0,
+         c_m:0,c_nc:0,c_u:0,
+         e_h:0,e_m:0,e_l:0,
+         hcOnsets:0,rankPairs:0,noteheads:0};
+  var ids={};
+  for(var i=0;i<DATA.length;i++){
+    var it=DATA[i]; var a=ans[it.item_id];
+    if(!a) continue;
+    c.items++;
+    if(a.A==='YES')c.A_Y++; else if(a.A==='NO')c.A_N++; else if(a.A==='UNSURE')c.A_U++; else c.A_none++;
+    var xs=xids(it), hit=false;
+    it.source_onsets.forEach(function(o){
+      var v=(a.B&&a.B[o.sid])||'';
+      if(v==='PRINTED_IN_PDF')c.b_pr++; else if(v==='NOT_PRINTED_IN_PDF')c.b_np++;
+      else if(v==='UNSURE')c.b_u++;
+      if(v)hit=true;
+    });
+    var hits=0;
+    it.pdf_onsets.forEach(function(p){
+      var v=(a.C&&a.C[p.pid])||'';
+      if(v&&xs[v]){c.c_m++;hits++;}
+      else if(v==='NO_COUNTERPART')c.c_nc++;
+      else if(v==='UNSURE')c.c_u++;
+    });
+    if(a.D)c.hitD=1;
+    if(a.E==='HIGH')c.e_h++; else if(a.E==='MEDIUM')c.e_m++; else if(a.E==='LOW')c.e_l++;
+    if(a.E==='HIGH'){
+      // onset matches actually made on a HIGH-confidence item
+      it.pdf_onsets.forEach(function(p){
+        var v=(a.C&&a.C[p.pid])||'';
+        if(v&&xs[v]){c.hcOnsets++;}
+      });
+      // notehead pairs only from COMPLETED second-pass vertical-rank matching
+      var z=a.Z||{};
+      it.pdf_onsets.forEach(function(p){
+        if(z[p.pid]!=='RANK_OK')return;
+        var v=(a.C&&a.C[p.pid])||'';
+        if(!(v&&xs[v]))return;
+        c.rankPairs++;
+        c.noteheads+=Math.min(cardOf(it.pdf_onsets,p.pid),cardOf(it.source_onsets,v));
+      });
+    }
+    if(a.E)c.done++;
+    ids[it.item_id]=1;
+  }
+  var row=function(k,v){return '<div><span>'+k+'</span><b>'+v+'</b></div>';};
+  var h='<h2>Live review progress</h2><div class="grid">';
+  h+=row('items completed',c.items+' / '+DATA.length);
+  h+=row('A: SAME',c.A_Y)+row('A: NO',c.A_N)+row('A: UNSURE',c.A_U);
+  h+=row('B: printed',c.b_pr)+row('B: not printed',c.b_np)+row('B: unsure',c.b_u);
+  h+=row('C: matched',c.c_m)+row('C: no counterpart',c.c_nc)+row('C: unsure',c.c_u);
+  h+=row('E: HIGH',c.e_h)+row('E: MEDIUM',c.e_m)+row('E: LOW',c.e_l);
+  h+=row('HIGH-conf onset matches',c.hcOnsets);
+  h+=row('rank-paired onsets',c.rankPairs);
+  h+='</div>';
+  h+='<div class="headline"><span>HIGH-CONFIDENCE MATCHED NOTEHEAD N</span><b>'+c.noteheads+'</b></div>';
+  h+='<div class="ms">';
+  [50,100,150,250].forEach(function(t){
+    h+='<span class="'+(c.noteheads>=t?'on':'')+'">review volume N \u2265 '+t+'</span>';
+  });
+  h+='</div>';
+  h+='<div class="gate">Markers below are REVIEW VOLUME only and are not scientific '
+    +'results. The later clean gate is evaluated only after the correspondence manifest is frozen: '
+    +'&gt;98% |delta_space| &lt; 0.25 AND &gt;98% r_render = 0.</div>';
+  el.innerHTML=h;
+  var pu=document.getElementById('nxtu');
+  if(pu){pu.textContent='Next unanswered';}
+}
 function cur(){return DATA[idx];}
 function get(id){return ans[id]||(ans[id]={});}
 function render(){
@@ -198,6 +284,12 @@ function loadZoom(){
 document.getElementById('prev').onclick=()=>{if(idx>0){idx--;render();}};
 document.getElementById('next').onclick=()=>{if(idx<DATA.length-1){idx++;render();}};
 document.getElementById('clr').onclick=()=>{delete ans[cur().item_id];save();render();};
+document.getElementById('nxtu').onclick=()=>{
+  for(var k=0;k<DATA.length;k++){
+    var t=DATA[(idx+k)%DATA.length], a=ans[t.item_id];
+    if(!a||!a.E||!a.A){idx=(idx+k)%DATA.length;render();return;}
+  }
+};
 document.getElementById('exp').onclick=()=>{
   const blob=new Blob([JSON.stringify({reviewer:'__NAME__',items:ans},null,1)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
@@ -208,6 +300,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'){document.getElementById('prev').click();}
 });
 render();
+recompute();
 </script></body></html>"""
 
 
