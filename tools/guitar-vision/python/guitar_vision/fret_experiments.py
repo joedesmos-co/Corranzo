@@ -335,7 +335,35 @@ class FretVariantModel(nn.Module):
         Modules are constructed in the same order, with the same shapes, as
         ``roi26``, so under an equal seed the initial weights are identical and the
         only difference between the two variants is the term under test.
+
+    ``FROZEN_RANDOM_ROI_ENCODER``
+        The **same** ``ROI_ONLY_NO_TOKEN`` model with one further change: every
+        ``RoiEncoder`` parameter is frozen at initialisation. Everything else --
+        backbone, ``roi_projection``, ``fret_classifier``, the other heads, the
+        loss, the schedule -- trains normally.
+
+        This exists because the ``ROI_ONLY_NO_TOKEN`` run localised the failure one
+        stage further. Its stride-1 crop probed at 0.8076 score-disjoint, its
+        *trained* encoder output at 0.1975, and the projection at 0.1291, with the
+        encoder's effective rank falling from 28.5 to 3.1. The same encoder
+        architecture, untrained, had probed at 0.6354. So the encoder architecture
+        preserves fret identity and something about *training* it destroys that.
+
+        Freezing the parameters is the direct test of that attribution. It is not a
+        new architecture: same module, same shapes, same random initialisation, same
+        seed, same forward pass.
+
+        Note the encoder's *input* is the trainable backbone's stride-1 crop, so C
+        can still change over training even with every encoder weight fixed. That is
+        deliberate and is the point: it separates "updates to the encoder destroyed
+        the representation" from "the backbone co-adapted and changed what the frozen
+        encoder receives".
     """
+
+    #: Kinds whose fret head reads the dedicated ROI encoding alone, with no shared
+    #: token added. Grouped so the forward pass has a single implementation and the
+    #: two variants cannot drift apart in any way other than the encoder freezing.
+    ROI_ONLY_KINDS = ("ROI_ONLY_NO_TOKEN", "FROZEN_RANDOM_ROI_ENCODER")
 
     MAX_DIGITS = 2
 
@@ -348,18 +376,30 @@ class FretVariantModel(nn.Module):
         hidden = base.config.hidden
         if kind != "shared":
             self.encoder = RoiEncoder(base.backbone.output_channels[0], width=32)
-        if kind == "roi26" or kind == "ROI_ONLY_NO_TOKEN":
+        if kind == "roi26" or kind in FretVariantModel.ROI_ONLY_KINDS:
             # One vector per object: the crop's columns are flattened, which is
             # what the baseline shared head also does. This variant changes the
             # *resolution* and nothing else, so the comparison against `shared` is
             # about pixels and not about the output parameterisation.
             #
-            # `ROI_ONLY_NO_TOKEN` builds the identical pair of modules here, in the
-            # identical order and shapes, so an equal seed gives it the same initial
-            # weights as `roi26`. The difference between the two lives entirely in
-            # `forward`.
+            # `ROI_ONLY_NO_TOKEN` and `FROZEN_RANDOM_ROI_ENCODER` build the
+            # identical pair of modules here, in the identical order and shapes, so
+            # an equal seed gives them the same initial weights. The only difference
+            # between them is the encoder freezing below.
             self.roi_projection = nn.Linear(self.encoder.out_channels * grid, hidden)
             self.fret_classifier = nn.Linear(hidden, 26)
+            if kind == "FROZEN_RANDOM_ROI_ENCODER":
+                # Freeze every encoder parameter at initialisation.
+                #
+                # Setting `requires_grad` is sufficient and not merely conventional:
+                # `RoiEncoder` is Conv2d + GroupNorm + GELU, and GroupNorm keeps no
+                # running statistics, so it behaves identically in train() and
+                # eval() and there is no buffer that `train()` could update. With no
+                # gradient, AdamW skips the parameter (`p.grad is None`), so the
+                # weights cannot move by any route.
+                for parameter in self.encoder.parameters():
+                    parameter.requires_grad_(False)
+                self.encoder.eval()
         elif kind == "roidigits":
             # Per column, then grouped into digit slots. The projection is applied
             # along the width axis so each horizontal position keeps its own
@@ -435,10 +475,12 @@ class FretVariantModel(nn.Module):
         if self.kind == "roi26":
             fused = self.roi_projection(encoded.flatten(-2)) + tokens
             out["fret"] = self.fret_classifier(fused)
-        elif self.kind == "ROI_ONLY_NO_TOKEN":
+        elif self.kind in FretVariantModel.ROI_ONLY_KINDS:
             # The experiment. `roi26` with the `+ tokens` term removed and nothing
             # else changed: same crop, same encoder, same projection, same
             # classifier, same loss, same optimiser, same schedule, same seed.
+            # `FROZEN_RANDOM_ROI_ENCODER` takes exactly this path as well, with its
+            # encoder parameters held at initialisation.
             #
             # `out` is still built from `tokens` above, so the unrelated heads
             # (`object_type`, `string`, `tile`) keep their existing input and are
