@@ -290,6 +290,9 @@ def main() -> int:
     parser.add_argument("--checkpoints", default="200,400,700,1200")
     parser.add_argument("--probe-steps", type=int, default=3000)
     parser.add_argument("--log-every", type=int, default=50)
+    parser.add_argument("--save-every", type=int, default=0,
+                        help="also checkpoint every N steps for cheap resume; these are "
+                             "NOT diagnosed, so training and reporting are unaffected")
     parser.add_argument("--out", type=Path,
                         default=Path("tmp/gvprobe/frozen-random-roi.json"))
     parser.add_argument("--ckpt-root", type=Path,
@@ -322,11 +325,18 @@ def main() -> int:
         return 0
 
     initial = initial_encoder_signature(device, args.image_size, args.max_objects)
+    # Save more often than we report. Checkpointing writes a file and touches no
+    # RNG, optimiser or schedule state, so it cannot change the trajectory; it only
+    # bounds how much work a crash or a memory-pressure stop costs. The reported
+    # checkpoints remain exactly the ones asked for.
+    save_points = set(checkpoints)
+    if args.save_every > 0:
+        save_points |= {n for n in range(args.save_every, args.steps + 1, args.save_every)}
     args.ckpt_root.mkdir(parents=True, exist_ok=True)
     print(f"training {args.steps} steps, checkpoints {sorted(checkpoints)}", flush=True)
     started = time.perf_counter()
     _, history = h73.training_loop(
-        args, device, everything[:train_pages], args.ckpt_root, checkpoints,
+        args, device, everything[:train_pages], args.ckpt_root, save_points,
         resume_from=args.resume_from, log_every=args.log_every,
     )
     train_seconds = time.perf_counter() - started
