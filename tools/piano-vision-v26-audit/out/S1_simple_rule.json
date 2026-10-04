@@ -1,0 +1,38 @@
+{
+  "basis": "unsupervised corpus-wide medians",
+  "conditions": {
+    "beam_runs": "<= floor(median)",
+    "ink_density": "<= median",
+    "max_x_overlap": "<= max(2, floor(median))",
+    "n_morph_per_gap": "<= median",
+    "n_text": "== 0 (no clef/timesig/text-scale component in window)"
+  },
+  "forbidden_inputs": [
+    "pitch",
+    "d0",
+    "true_d",
+    "residual",
+    "decoder_correctness",
+    "pdf_vs_musicxml_agreement"
+  ],
+  "medians": {
+    "beam_runs": 0.0,
+    "ink_density": 0.2265663493218004,
+    "max_x_overlap": 3.0,
+    "n_morph_per_gap": 0.43290184391879305,
+    "n_stem": 0.0,
+    "n_text": 0.0
+  },
+  "notehead_morphology": {
+    "fill_min": 0.3,
+    "h_gaps": [
+      0.42,
+      1.85
+    ],
+    "w_gaps": [
+      0.5,
+      2.3
+    ]
+  },
+  "version": "S1-v1"
+}

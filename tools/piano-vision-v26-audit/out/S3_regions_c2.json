@@ -1,0 +1,1974 @@
+{
+  "apply_s3": true,
+  "dev_scores": [
+    "bc-bach-fugue-bwv846",
+    "bc-chopin-nocturne-op9-n2",
+    "bc-mozart-k153",
+    "omf-piano-dense-advanced-vector",
+    "omf-piano-grand-voices-vector",
+    "pl-bach-prelude-bwv846",
+    "pl-beethoven-fur-elise",
+    "pl-chopin-mazurka-op6-1",
+    "pl-tchaikovsky-old-french-song"
+  ],
+  "heldout_scores": [
+    "pl-handel-gavotte",
+    "std-demo-minuet-in-g"
+  ],
+  "prelude_gaps": 8.0,
+  "regions": [
+    {
+      "cands": [
+        {
+          "fill": 0.543,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "9",
+          "x": 160.0,
+          "y": 313.0
+        },
+        {
+          "fill": 0.485,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "11",
+          "x": 172.0,
+          "y": 313.0
+        },
+        {
+          "fill": 0.578,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "9",
+          "x": 173.0,
+          "y": 323.5
+        },
+        {
+          "fill": 0.48,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "10",
+          "x": 203.5,
+          "y": 323.5
+        },
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 203.5,
+          "y": 334.0
+        },
+        {
+          "fill": 0.688,
+          "h": "8",
+          "reject": "glyph_stack",
+          "w": "6",
+          "x": 213.5,
+          "y": 323.5
+        },
+        {
+          "fill": 0.982,
+          "h": "7",
+          "reject": null,
+          "w": "16",
+          "x": 245.5,
+          "y": 343.0
+        }
+      ],
+      "key": "bc-bach-fugue-bwv846|p1|s0|m0",
+      "n_cands": 7,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 245.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "bc-bach-fugue-bwv846",
+      "split": "DEV",
+      "system": 0,
+      "xml_ord": 0
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.583,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "20",
+          "x": 912.5,
+          "y": 1095.0
+        }
+      ],
+      "key": "bc-bach-fugue-bwv846|p2|s6|m26",
+      "n_cands": 1,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 2,
+      "role": "lower",
+      "score": "bc-bach-fugue-bwv846",
+      "split": "DEV",
+      "system": 6,
+      "xml_ord": 26
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.448,
+          "h": "8",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 1014.5,
+          "y": 1397.5
+        },
+        {
+          "fill": 0.827,
+          "h": "8",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1015.0,
+          "y": 1369.5
+        },
+        {
+          "fill": 0.496,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1015.0,
+          "y": 1388.0
+        },
+        {
+          "fill": 0.344,
+          "h": "8",
+          "reject": null,
+          "w": "12",
+          "x": 1130.5,
+          "y": 1397.5
+        }
+      ],
+      "key": "bc-chopin-nocturne-op9-n2|p3|s3|m37",
+      "n_cands": 4,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 1130.5
+        }
+      ],
+      "page": 3,
+      "role": "upper",
+      "score": "bc-chopin-nocturne-op9-n2",
+      "split": "DEV",
+      "system": 3,
+      "xml_ord": 37
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.393,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1074.0,
+          "y": 974.0
+        }
+      ],
+      "key": "bc-mozart-k153|p4|s6|m66",
+      "n_cands": 1,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 4,
+      "role": "upper",
+      "score": "bc-mozart-k153",
+      "split": "DEV",
+      "system": 6,
+      "xml_ord": 66
+    },
+    {
+      "cands": [],
+      "key": "bc-mozart-k153|p4|s6|m66",
+      "n_cands": 0,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 4,
+      "role": "lower",
+      "score": "bc-mozart-k153",
+      "split": "DEV",
+      "system": 6,
+      "xml_ord": 66
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.5,
+          "h": "16",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 158.0,
+          "y": 524.5
+        },
+        {
+          "fill": 0.529,
+          "h": "15",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 159.0,
+          "y": 541.0
+        },
+        {
+          "fill": 0.72,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 239.0,
+          "y": 524.5
+        },
+        {
+          "fill": 0.747,
+          "h": "10",
+          "reject": null,
+          "w": "15",
+          "x": 274.0,
+          "y": 541.5
+        },
+        {
+          "fill": 0.72,
+          "h": "10",
+          "reject": null,
+          "w": "15",
+          "x": 342.0,
+          "y": 524.5
+        },
+        {
+          "fill": 0.747,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 438.0,
+          "y": 541.5
+        },
+        {
+          "fill": 0.521,
+          "h": "16",
+          "reject": null,
+          "w": "9",
+          "x": 496.0,
+          "y": 524.5
+        },
+        {
+          "fill": 0.72,
+          "h": "10",
+          "reject": null,
+          "w": "15",
+          "x": 529.0,
+          "y": 524.5
+        }
+      ],
+      "key": "omf-piano-dense-advanced-vector|p1|s0|m0",
+      "n_cands": 8,
+      "n_kept": 4,
+      "n_onsets": 4,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 274.0
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 342.0
+        },
+        {
+          "card": 1,
+          "onset": 2,
+          "x": 496.0
+        },
+        {
+          "card": 1,
+          "onset": 3,
+          "x": 529.0
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "omf-piano-dense-advanced-vector",
+      "split": "DEV",
+      "system": 0,
+      "xml_ord": 0
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.723,
+          "h": "15",
+          "reject": null,
+          "w": "19",
+          "x": 161.0,
+          "y": 370.0
+        },
+        {
+          "fill": 0.382,
+          "h": "12",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 199.5,
+          "y": 355.5
+        }
+      ],
+      "key": "omf-piano-grand-voices-vector|p1|s0|m0",
+      "n_cands": 2,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 161.0
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "omf-piano-grand-voices-vector",
+      "split": "DEV",
+      "system": 0,
+      "xml_ord": 0
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.5,
+          "h": "16",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 158.0,
+          "y": 524.5
+        },
+        {
+          "fill": 0.529,
+          "h": "15",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 159.0,
+          "y": 541.0
+        },
+        {
+          "fill": 0.747,
+          "h": "10",
+          "reject": null,
+          "w": "15",
+          "x": 308.0,
+          "y": 524.5
+        }
+      ],
+      "key": "omf-piano-grand-voices-vector|p1|s0|m0",
+      "n_cands": 3,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 308.0
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "omf-piano-grand-voices-vector",
+      "split": "DEV",
+      "system": 0,
+      "xml_ord": 0
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.495,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "22",
+          "x": 77.5,
+          "y": 335.5
+        },
+        {
+          "fill": 0.625,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 84.5,
+          "y": 346.0
+        },
+        {
+          "fill": 0.73,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "7",
+          "x": 114.0,
+          "y": 356.0
+        },
+        {
+          "fill": 0.543,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "9",
+          "x": 115.0,
+          "y": 346.0
+        },
+        {
+          "fill": 0.648,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "6",
+          "x": 125.5,
+          "y": 346.0
+        }
+      ],
+      "key": "pl-bach-prelude-bwv846|p1|s0|m0",
+      "n_cands": 5,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-bach-prelude-bwv846",
+      "split": "DEV",
+      "system": 0,
+      "xml_ord": 0
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.889,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 1094.0,
+          "y": 1638.0
+        },
+        {
+          "fill": 0.44,
+          "h": "10",
+          "reject": null,
+          "w": "10",
+          "x": 1104.5,
+          "y": 1617.5
+        }
+      ],
+      "key": "pl-beethoven-fur-elise|p3|s5|m104",
+      "n_cands": 2,
+      "n_kept": 2,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 2,
+          "onset": 0,
+          "x": 1099.25
+        }
+      ],
+      "page": 3,
+      "role": "lower",
+      "score": "pl-beethoven-fur-elise",
+      "split": "DEV",
+      "system": 5,
+      "xml_ord": 104
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.373,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 1018.5,
+          "y": 1342.0
+        },
+        {
+          "fill": 0.554,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1020.0,
+          "y": 1333.0
+        },
+        {
+          "fill": 0.5,
+          "h": "6",
+          "reject": null,
+          "w": "14",
+          "x": 1111.5,
+          "y": 1329.5
+        }
+      ],
+      "key": "pl-chopin-mazurka-op6-1|p3|s8|m73",
+      "n_cands": 3,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 1111.5
+        }
+      ],
+      "page": 3,
+      "role": "lower",
+      "score": "pl-chopin-mazurka-op6-1",
+      "split": "DEV",
+      "system": 8,
+      "xml_ord": 73
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.786,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "7",
+          "x": 484.0,
+          "y": 221.5
+        },
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "7",
+          "x": 484.0,
+          "y": 242.0
+        },
+        {
+          "fill": 0.69,
+          "h": "6",
+          "reject": null,
+          "w": "14",
+          "x": 508.5,
+          "y": 219.5
+        },
+        {
+          "fill": 0.397,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 551.5,
+          "y": 242.0
+        },
+        {
+          "fill": 0.538,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 553.0,
+          "y": 234.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s0|m1",
+      "n_cands": 5,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 508.5
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 0,
+      "xml_ord": 1
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.7,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "6",
+          "x": 483.5,
+          "y": 323.0
+        },
+        {
+          "fill": 0.857,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "7",
+          "x": 484.0,
+          "y": 317.0
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 551.5,
+          "y": 325.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s0|m1",
+      "n_cands": 3,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 0,
+      "xml_ord": 1
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 639.5,
+          "y": 325.0
+        },
+        {
+          "fill": 0.75,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 681.5,
+          "y": 344.0
+        },
+        {
+          "fill": 0.563,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 682.5,
+          "y": 336.0
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 752.5,
+          "y": 336.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 809.5,
+          "y": 344.0
+        },
+        {
+          "fill": 0.53,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 810.0,
+          "y": 336.0
+        },
+        {
+          "fill": 0.863,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 868.0,
+          "y": 346.0
+        },
+        {
+          "fill": 0.504,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 926.0,
+          "y": 346.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s0|m2",
+      "n_cands": 8,
+      "n_kept": 2,
+      "n_onsets": 2,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 868.0
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 926.0
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 0,
+      "xml_ord": 2
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.7,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "6",
+          "x": 957.5,
+          "y": 240.0
+        },
+        {
+          "fill": 0.667,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "7",
+          "x": 958.0,
+          "y": 232.0
+        },
+        {
+          "fill": 0.481,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 998.0,
+          "y": 253.0
+        },
+        {
+          "fill": 0.5,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 998.5,
+          "y": 242.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s0|m3",
+      "n_cands": 4,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 0,
+      "xml_ord": 3
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.444,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 997.0,
+          "y": 336.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 998.5,
+          "y": 327.0
+        },
+        {
+          "fill": 0.825,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 1040.5,
+          "y": 346.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s0|m3",
+      "n_cands": 3,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 1040.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 0,
+      "xml_ord": 3
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 639.5,
+          "y": 325.0
+        },
+        {
+          "fill": 0.75,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 681.5,
+          "y": 344.0
+        },
+        {
+          "fill": 0.563,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 682.5,
+          "y": 336.0
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 752.5,
+          "y": 336.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 809.5,
+          "y": 344.0
+        },
+        {
+          "fill": 0.53,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 810.0,
+          "y": 336.0
+        },
+        {
+          "fill": 0.863,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 868.0,
+          "y": 346.0
+        },
+        {
+          "fill": 0.504,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 926.0,
+          "y": 346.0
+        },
+        {
+          "fill": 0.444,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 997.0,
+          "y": 336.0
+        },
+        {
+          "fill": 0.745,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "11",
+          "x": 998.0,
+          "y": 327.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s1|m4",
+      "n_cands": 10,
+      "n_kept": 2,
+      "n_onsets": 2,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 868.0
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 926.0
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 1,
+      "xml_ord": 4
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.349,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 352.5,
+          "y": 460.0
+        },
+        {
+          "fill": 0.538,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 354.0,
+          "y": 452.0
+        },
+        {
+          "fill": 0.8,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 475.5,
+          "y": 439.5
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s2|m6",
+      "n_cands": 3,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 475.5
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 2,
+      "xml_ord": 6
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.472,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 543.5,
+          "y": 554.0
+        },
+        {
+          "fill": 0.726,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 544.5,
+          "y": 545.5
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 586.5,
+          "y": 533.0
+        },
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 643.5,
+          "y": 533.0
+        },
+        {
+          "fill": 0.807,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 683.5,
+          "y": 564.5
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s2|m7",
+      "n_cands": 5,
+      "n_kept": 3,
+      "n_onsets": 3,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 586.5
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 643.5
+        },
+        {
+          "card": 1,
+          "onset": 2,
+          "x": 683.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 2,
+      "xml_ord": 7
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.597,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 71.5,
+          "y": 751.0
+        },
+        {
+          "fill": 0.522,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "10",
+          "x": 83.5,
+          "y": 751.0
+        },
+        {
+          "fill": 0.625,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 84.5,
+          "y": 762.0
+        },
+        {
+          "fill": 0.63,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 108.5,
+          "y": 751.0
+        },
+        {
+          "fill": 0.62,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 108.5,
+          "y": 762.0
+        },
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 147.5,
+          "y": 751.0
+        },
+        {
+          "fill": 0.521,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 184.5,
+          "y": 782.5
+        },
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 230.5,
+          "y": 751.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m11",
+      "n_cands": 8,
+      "n_kept": 3,
+      "n_onsets": 3,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 147.5
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 184.5
+        },
+        {
+          "card": 1,
+          "onset": 2,
+          "x": 230.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 11
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 412.5,
+          "y": 751.0
+        },
+        {
+          "fill": 0.731,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 508.0,
+          "y": 780.5
+        },
+        {
+          "fill": 0.463,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 508.5,
+          "y": 772.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m12",
+      "n_cands": 3,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 412.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 12
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 576.5,
+          "y": 762.0
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 659.5,
+          "y": 762.0
+        },
+        {
+          "fill": 0.731,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 699.0,
+          "y": 780.5
+        },
+        {
+          "fill": 0.463,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 699.5,
+          "y": 772.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m13",
+      "n_cands": 4,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 13
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.825,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 766.5,
+          "y": 772.0
+        },
+        {
+          "fill": 0.731,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 822.0,
+          "y": 780.5
+        },
+        {
+          "fill": 0.463,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 822.5,
+          "y": 772.0
+        },
+        {
+          "fill": 0.846,
+          "h": "10",
+          "reject": null,
+          "w": "13",
+          "x": 877.0,
+          "y": 782.5
+        },
+        {
+          "fill": 0.485,
+          "h": "10",
+          "reject": null,
+          "w": "13",
+          "x": 932.0,
+          "y": 782.5
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m14",
+      "n_cands": 5,
+      "n_kept": 2,
+      "n_onsets": 2,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 877.0
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 932.0
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 14
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.459,
+          "h": "9",
+          "reject": null,
+          "w": "15",
+          "x": 1001.0,
+          "y": 668.0
+        },
+        {
+          "fill": 0.492,
+          "h": "5",
+          "reject": null,
+          "w": "13",
+          "x": 1001.0,
+          "y": 691.0
+        },
+        {
+          "fill": 0.496,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1129.0,
+          "y": 679.0
+        },
+        {
+          "fill": 0.846,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1130.0,
+          "y": 658.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 1130.5,
+          "y": 670.0
+        },
+        {
+          "fill": 0.744,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1157.0,
+          "y": 666.5
+        },
+        {
+          "fill": 0.504,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1158.0,
+          "y": 658.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m15",
+      "n_cands": 7,
+      "n_kept": 2,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 2,
+          "onset": 0,
+          "x": 1001.0
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 15
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.814,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 1000.5,
+          "y": 782.5
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 1044.5,
+          "y": 762.0
+        },
+        {
+          "fill": 0.538,
+          "h": "9",
+          "reject": null,
+          "w": "13",
+          "x": 1088.0,
+          "y": 751.0
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 1129.5,
+          "y": 751.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s4|m15",
+      "n_cands": 4,
+      "n_kept": 3,
+      "n_onsets": 3,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 1000.5
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 1088.0
+        },
+        {
+          "card": 1,
+          "onset": 2,
+          "x": 1129.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 4,
+      "xml_ord": 15
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.54,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "10",
+          "x": 71.5,
+          "y": 992.5
+        },
+        {
+          "fill": 0.45,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 83.5,
+          "y": 992.5
+        },
+        {
+          "fill": 0.625,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 84.5,
+          "y": 1003.0
+        },
+        {
+          "fill": 0.6,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 108.5,
+          "y": 992.5
+        },
+        {
+          "fill": 0.62,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 108.5,
+          "y": 1003.0
+        },
+        {
+          "fill": 0.5,
+          "h": "10",
+          "reject": null,
+          "w": "13",
+          "x": 147.0,
+          "y": 992.5
+        },
+        {
+          "fill": 0.793,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 195.5,
+          "y": 992.5
+        },
+        {
+          "fill": 0.496,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 244.0,
+          "y": 1003.0
+        },
+        {
+          "fill": 0.731,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 245.0,
+          "y": 994.5
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 301.5,
+          "y": 1003.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s6|m16",
+      "n_cands": 10,
+      "n_kept": 2,
+      "n_onsets": 2,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 147.0
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 195.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 6,
+      "xml_ord": 16
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.492,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 363.5,
+          "y": 907.0
+        },
+        {
+          "fill": 0.325,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "8",
+          "x": 366.5,
+          "y": 896.5
+        },
+        {
+          "fill": 0.75,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 462.5,
+          "y": 905.0
+        },
+        {
+          "fill": 0.521,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 463.5,
+          "y": 896.5
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s6|m17",
+      "n_cands": 4,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "upper",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 6,
+      "xml_ord": 17
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 362.5,
+          "y": 1013.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 363.5,
+          "y": 1005.0
+        },
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 429.5,
+          "y": 1013.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 430.5,
+          "y": 1005.0
+        },
+        {
+          "fill": 0.702,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 463.5,
+          "y": 1021.5
+        },
+        {
+          "fill": 0.504,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 464.0,
+          "y": 1013.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s6|m17",
+      "n_cands": 6,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 6,
+      "xml_ord": 17
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.863,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 531.0,
+          "y": 1013.0
+        },
+        {
+          "fill": 0.556,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 612.5,
+          "y": 1013.0
+        },
+        {
+          "fill": 0.733,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 613.5,
+          "y": 1005.0
+        },
+        {
+          "fill": 0.81,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 705.5,
+          "y": 1003.0
+        },
+        {
+          "fill": 0.519,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "12",
+          "x": 785.5,
+          "y": 1003.0
+        },
+        {
+          "fill": 0.726,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 786.5,
+          "y": 994.5
+        },
+        {
+          "fill": 0.807,
+          "h": "10",
+          "reject": null,
+          "w": "14",
+          "x": 880.5,
+          "y": 992.5
+        },
+        {
+          "fill": 0.817,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 929.5,
+          "y": 1013.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s6|m18",
+      "n_cands": 8,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 880.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 6,
+      "xml_ord": 18
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.538,
+          "h": "9",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 980.0,
+          "y": 1013.0
+        },
+        {
+          "fill": 0.723,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 981.0,
+          "y": 1005.0
+        }
+      ],
+      "key": "pl-handel-gavotte|p1|s6|m19",
+      "n_cands": 2,
+      "n_kept": 0,
+      "n_onsets": 0,
+      "onsets": [],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-handel-gavotte",
+      "split": "HELDOUT",
+      "system": 6,
+      "xml_ord": 19
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.849,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 915.5,
+          "y": 1090.0
+        }
+      ],
+      "key": "pl-tchaikovsky-old-french-song|p1|s6|m32",
+      "n_cands": 1,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 915.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "pl-tchaikovsky-old-french-song",
+      "split": "DEV",
+      "system": 6,
+      "xml_ord": 32
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.421,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 854.5,
+          "y": 1404.5
+        },
+        {
+          "fill": 0.75,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 855.5,
+          "y": 1395.5
+        },
+        {
+          "fill": 0.464,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 888.5,
+          "y": 1393.5
+        },
+        {
+          "fill": 0.762,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 889.5,
+          "y": 1384.5
+        },
+        {
+          "fill": 0.769,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 917.0,
+          "y": 1413.0
+        },
+        {
+          "fill": 0.493,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 917.5,
+          "y": 1404.5
+        },
+        {
+          "fill": 0.865,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 966.5,
+          "y": 1415.0
+        },
+        {
+          "fill": 0.543,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 1029.5,
+          "y": 1413.0
+        },
+        {
+          "fill": 0.36,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 1030.0,
+          "y": 1404.5
+        }
+      ],
+      "key": "std-demo-minuet-in-g|p1|s10|m31",
+      "n_cands": 9,
+      "n_kept": 1,
+      "n_onsets": 1,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 966.5
+        }
+      ],
+      "page": 1,
+      "role": "upper",
+      "score": "std-demo-minuet-in-g",
+      "split": "HELDOUT",
+      "system": 10,
+      "xml_ord": 31
+    },
+    {
+      "cands": [
+        {
+          "fill": 0.849,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 855.5,
+          "y": 1481.0
+        },
+        {
+          "fill": 0.762,
+          "h": "6",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 917.5,
+          "y": 1511.5
+        },
+        {
+          "fill": 0.414,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "14",
+          "x": 918.5,
+          "y": 1502.5
+        },
+        {
+          "fill": 0.52,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 966.0,
+          "y": 1502.5
+        },
+        {
+          "fill": 0.769,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 967.0,
+          "y": 1494.0
+        },
+        {
+          "fill": 0.849,
+          "h": "9",
+          "reject": null,
+          "w": "14",
+          "x": 1029.5,
+          "y": 1481.0
+        },
+        {
+          "fill": 0.52,
+          "h": "10",
+          "reject": "glyph_stack",
+          "w": "15",
+          "x": 1075.0,
+          "y": 1502.5
+        },
+        {
+          "fill": 0.769,
+          "h": "5",
+          "reject": "glyph_stack",
+          "w": "13",
+          "x": 1076.0,
+          "y": 1494.0
+        }
+      ],
+      "key": "std-demo-minuet-in-g|p1|s10|m31",
+      "n_cands": 8,
+      "n_kept": 2,
+      "n_onsets": 2,
+      "onsets": [
+        {
+          "card": 1,
+          "onset": 0,
+          "x": 855.5
+        },
+        {
+          "card": 1,
+          "onset": 1,
+          "x": 1029.5
+        }
+      ],
+      "page": 1,
+      "role": "lower",
+      "score": "std-demo-minuet-in-g",
+      "split": "HELDOUT",
+      "system": 10,
+      "xml_ord": 31
+    }
+  ],
+  "use_prelude": false,
+  "use_stack": true,
+  "variant": "c2"
+}
