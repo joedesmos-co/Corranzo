@@ -1,0 +1,32 @@
+[
+ {
+  "case": "ex1_same_with_one_source_extra",
+  "expect": "A = SAME_STRUCTURE",
+  "why": "source has one extra onset; that is a B question, not an A question",
+  "image": "examples/ex1_same_with_one_source_extra.png"
+ },
+ {
+  "case": "ex2_completely_different_rhythm",
+  "expect": "A = DIFFERENT_MEASURE",
+  "why": "overall rhythmic shape does not correspond at all",
+  "image": "examples/ex2_completely_different_rhythm.png"
+ },
+ {
+  "case": "ex3_same_rhythm_uncertain_dense_chord",
+  "expect": "A = SAME_STRUCTURE, local B/C = UNSURE",
+  "why": "structure matches but one chord is too dense to be sure",
+  "image": "examples/ex3_same_rhythm_uncertain_dense_chord.png"
+ },
+ {
+  "case": "ex4_false_p_marker_on_rest",
+  "expect": "ignore the P on the rest",
+  "why": "a P marker on a rest or clef is NOT a note onset -> NO_SOURCE_COUNTERPART",
+  "image": "examples/ex4_false_p_marker_on_rest.png"
+ },
+ {
+  "case": "ex5_missing_p_proposal",
+  "expect": "record UNLISTED_VISIBLE_ONSET",
+  "why": "a printed notehead with no P label still exists; list it",
+  "image": "examples/ex5_missing_p_proposal.png"
+ }
+]
