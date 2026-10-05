@@ -1,0 +1,56 @@
+{
+ "version": "v3",
+ "label": "AI_BLIND_CONSENSUS_V3",
+ "not": "human ground truth; not manually certified",
+ "A": [
+  "SAME_STRUCTURE",
+  "DIFFERENT_MEASURE",
+  "UNSURE"
+ ],
+ "B_per_source_onset": [
+  "PRINTED",
+  "NOT_PRINTED",
+  "UNSURE"
+ ],
+ "C_per_pdf_proposal": [
+  "X<id>",
+  "NO_SOURCE_COUNTERPART",
+  "UNSURE"
+ ],
+ "D": [
+  "YES",
+  "NO",
+  "UNSURE"
+ ],
+ "E": [
+  "HIGH",
+  "MEDIUM",
+  "LOW"
+ ],
+ "optional": [
+  "unlisted_visible_onsets",
+  "notes",
+  "second_pass"
+ ],
+ "second_pass": {
+  "pid": {
+   "verdict": [
+    "RANK_OK",
+    "AMBIGUOUS"
+   ],
+   "map": {
+    "P<pid><letter>": "X<xid><letter>"
+   }
+  }
+ },
+ "file": {
+  "reviewer": "V3_REVIEWER_n",
+  "batches": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "items": "all 80, unique item_id"
+ }
+}

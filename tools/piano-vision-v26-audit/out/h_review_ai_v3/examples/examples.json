@@ -1,0 +1,27 @@
+[
+ {
+  "case": "ex1_duration_fill",
+  "expect": "hollow whole/half vs filled quarter/eighth",
+  "why": "fill carries the duration"
+ },
+ {
+  "case": "ex2_beams_eighth_and_16th",
+  "expect": "16ths get two beams, 8ths one",
+  "why": "beam count distinguishes duration"
+ },
+ {
+  "case": "ex3_tied_notes",
+  "expect": "tie arc links the two notes",
+  "why": "tie shows continuation, not pitch"
+ },
+ {
+  "case": "ex4_tuplet_non_three",
+  "expect": "real numeral 6, not a fabricated 3",
+  "why": "numerals come from the source"
+ },
+ {
+  "case": "ex5_chord_duration_cardinality",
+  "expect": "3-note half chord then a quarter",
+  "why": "stacking is cardinality-only"
+ }
+]
