@@ -1,0 +1,186 @@
+{
+  "reviewer": "V2_REVIEWER_2",
+  "batch": 4,
+  "items": [
+    {
+      "item_id": "R061",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R062",
+      "A": "DIFFERENT_MEASURE",
+      "B": {"X1": "UNSURE", "X2": "NOT_PRINTED", "X3": "NOT_PRINTED", "X4": "NOT_PRINTED", "X5": "NOT_PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R063",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R064",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R065",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE", "X12": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "NO_SOURCE_COUNTERPART", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R066",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "X2"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R067",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R068",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R069",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE", "X12": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R070",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R071",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R072",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R073",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R074",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "X2", "P6": "X3"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R075",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R076",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R077",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE"},
+      "C": {"P1": "UNSURE", "P2": "UNSURE", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE", "P11": "UNSURE", "P12": "UNSURE", "P13": "UNSURE", "P14": "UNSURE", "P15": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R078",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "UNSURE", "P2": "UNSURE", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE"},
+      "D": "UNSURE",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3", "unlabeled_printed_onset_4"]
+    },
+    {
+      "item_id": "R079",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": []
+    },
+    {
+      "item_id": "R080",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": ["unlabeled_printed_onset_1", "unlabeled_printed_onset_2", "unlabeled_printed_onset_3"]
+    }
+  ]
+}

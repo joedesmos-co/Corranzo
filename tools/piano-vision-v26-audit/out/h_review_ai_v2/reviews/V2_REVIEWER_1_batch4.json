@@ -1,0 +1,197 @@
+{
+  "reviewer": "V2_REVIEWER_1",
+  "batch": 4,
+  "items": [
+    {
+      "item_id": "R061",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster holds a repeat sign, a tie and overlapping hollow and filled events after it; the source is four onsets ending in a two-notehead chord, and the printed stacking cannot be read reliably."
+    },
+    {
+      "item_id": "R062",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster shows a repeat sign then roughly four printed onsets spread over two voices, against five single-note source onsets."
+    },
+    {
+      "item_id": "R063",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster opens with a dotted hollow two-notehead event, whereas the source opens with a single onset; no printed rest is visible and the printed chord sizes do not line up with the source."
+    },
+    {
+      "item_id": "R064",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "X2"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["first, third and fourth notes of the target measure carry no P label"],
+      "notes": "The measure after the key signature holds four evenly spaced staccato single notes before the barline, matching the four source onsets."
+    },
+    {
+      "item_id": "R065",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE", "X12": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "NO_SOURCE_COUNTERPART", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster holds a beamed upper line of about eight events over a lower line of about four after an internal divider; the source holds twelve single onsets, so the grouping cannot be confirmed."
+    },
+    {
+      "item_id": "R066",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "X2"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["first, third and fourth notes of the target measure carry no P label"],
+      "notes": "The measure between the internal divider and the closing barline holds four evenly spaced staccato single notes, matching the four source onsets."
+    },
+    {
+      "item_id": "R067",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster opens with a dotted hollow three-notehead chord, whereas the source opens with a single onset; the printed measure also has no rest."
+    },
+    {
+      "item_id": "R068",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["the remaining notes of the target measure carry no P label"],
+      "notes": "The measure between the internal divider and the closing barline holds four evenly spaced staccato single notes, matching the four source onsets."
+    },
+    {
+      "item_id": "R069",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED", "X5": "PRINTED", "X6": "PRINTED", "X7": "PRINTED", "X8": "PRINTED", "X9": "PRINTED", "X10": "PRINTED", "X11": "PRINTED", "X12": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "X1", "P5": "X2", "P6": "X3", "P7": "X4", "P8": "X5"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["seven further printed noteheads of the target measure carry no P label"],
+      "notes": "The measure after the internal divider holds a beamed line of eight single notes over a second line of four, twelve printed onsets against twelve source onsets."
+    },
+    {
+      "item_id": "R070",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "X1", "P4": "X2"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["third and fourth notes of the target measure carry no P label"],
+      "notes": "The measure between the internal divider and the closing barline holds four evenly spaced staccato single notes, matching the four source onsets."
+    },
+    {
+      "item_id": "R071",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster shows a dotted hollow two-notehead chord followed by about three further onsets; the source has five onsets beginning with two single notes, and no printed rest appears."
+    },
+    {
+      "item_id": "R072",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["the notes of the target measure carry no P label"],
+      "notes": "The measure between the internal divider and the closing barline holds four evenly spaced staccato single notes, matching the four source onsets."
+    },
+    {
+      "item_id": "R073",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster holds a beamed upper line of about nine events over a lower line of four after the key signature; the source holds six onsets in a two, one, two, two, one, two pattern."
+    },
+    {
+      "item_id": "R074",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["first note of the target measure carries no P label"],
+      "notes": "The measure after the key signature holds four evenly spaced staccato single notes before the barline, matching the four source onsets."
+    },
+    {
+      "item_id": "R075",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "UNSURE", "P3": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster shows a dotted hollow two-notehead chord then roughly three further onsets before the barline; the source has six onsets in an alternating chord and single pattern."
+    },
+    {
+      "item_id": "R076",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["all four notes of the target measure carry no P label"],
+      "notes": "The measure between the internal divider and the closing barline holds four evenly spaced staccato single notes, matching the four source onsets."
+    },
+    {
+      "item_id": "R077",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE"},
+      "C": {"P1": "UNSURE", "P2": "UNSURE", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE", "P11": "UNSURE", "P12": "UNSURE", "P13": "UNSURE", "P14": "UNSURE", "P15": "UNSURE"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "notes": "Raster is an extremely dense two-voice passage spanning at least three measures; the source holds eleven onsets including a three-notehead chord and two rests."
+    },
+    {
+      "item_id": "R078",
+      "A": "SAME_STRUCTURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+      "C": {"P1": "X1", "P2": "X2", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "NO_SOURCE_COUNTERPART", "P6": "NO_SOURCE_COUNTERPART"},
+      "D": "YES",
+      "E": "MEDIUM",
+      "unlisted_visible_onsets": ["third and fourth notes of the target measure carry no P label"],
+      "notes": "The first full measure in the raster holds four printed single note events across two voices, matching the four source onsets; later proposals sit in following measures."
+    },
+    {
+      "item_id": "R079",
+      "A": "UNSURE",
+      "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": ["several printed noteheads in the raster carry no P label"],
+      "notes": "All four proposals fall in blank margin to the left of the staff; the printed beamed pairs and hollow chords cannot be aligned with the five source onsets."
+    },
+    {
+      "item_id": "R080",
+      "A": "UNSURE",
+      "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "UNSURE"},
+      "C": {"P1": "NO_SOURCE_COUNTERPART"},
+      "D": "UNSURE",
+      "E": "LOW",
+      "unlisted_visible_onsets": ["the three staccato notes of the printed measure carry no P label"],
+      "notes": "The printed window shows three staccato notes before a barline while the source holds four evenly spaced single notes; the raster window appears incomplete."
+    }
+  ]
+}

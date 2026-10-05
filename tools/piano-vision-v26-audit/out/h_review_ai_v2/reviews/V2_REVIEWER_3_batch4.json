@@ -1,0 +1,206 @@
+{
+ "reviewer": "V2_REVIEWER_3",
+ "batch": 4,
+ "items": [
+  {
+   "item_id": "R061",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed two-notehead chord just after the repeat barline, no P label", "printed notehead under a slur with an upward stem, no P label", "printed beamed notehead near the top right with an open notehead below it, no P label"],
+   "notes": "After the repeat barline the printed fragment holds about three onsets, the first of them a stacked chord, against the source's four onsets whose last is a chord; the printed chord-first ordering does not match the source's note-first ordering and no rest or rest equivalent is printed, so the structure cannot be confirmed."
+  },
+  {
+   "item_id": "R062",
+   "A": "DIFFERENT_MEASURE",
+   "B": {"X1": "PRINTED", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["printed notehead with a downward stem just after the repeat barline, no P label", "printed notehead with an open notehead above it near the right end, no P label"],
+   "notes": "The printed fragment holds one onset per short measure (a repeat barline and an internal barline divide it), so at most two attacks are printed in total against the source's five evenly spaced notes. The densities are irreconcilable."
+  },
+  {
+   "item_id": "R063",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "NOT_PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed dotted open noteheads at the start of the measure, no P label", "printed noteheads in the second half of the measure including an open notehead under a slur, no P label"],
+   "notes": "The printed measure holds about four onsets beginning with a dotted stacked chord, against the source's five onsets ending in a printed-nowhere rest; the first onset differs in cardinality and the closing rest is absent."
+  },
+  {
+   "item_id": "R064",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label", "printed staccato notehead just right of the barline, no P label"],
+   "notes": "The printed measure before the barline holds four single staccato noteheads, matching the source's four evenly spaced notes; proposals fall on the brace, clef, key signature and possibly a stem, so no P label covers the measure's notes."
+  },
+  {
+   "item_id": "R065",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED", "X5": "PRINTED", "X6": "PRINTED", "X7": "PRINTED", "X8": "PRINTED", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE", "X12": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "NO_SOURCE_COUNTERPART", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed open notehead chord at the right end of the fragment, no P label"],
+   "notes": "Both panels are dense beamed runs of roughly the same order of magnitude, the printed about ten onsets against the source's twelve, but an internal barline in the printed fragment makes the exact measure boundaries uncertain, so only the early onsets are called printed."
+  },
+  {
+   "item_id": "R066",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "X2"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["three printed staccato noteheads inside the measure that carry no P label", "printed staccato notehead after the second barline, no P label"],
+   "notes": "The printed measure between the two barlines holds four single staccato noteheads, matching the source's four evenly spaced notes."
+  },
+  {
+   "item_id": "R067",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED", "X5": "NOT_PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed flagged notehead at the left of the fragment, no P label", "printed beamed pair near the right end, no P label", "printed notehead just right of the last barline, no P label"],
+   "notes": "Read without the internal barline the printed fragment gives note, dotted stacked chord, note, beamed pair, i.e. five onsets against the source's five; the chord cardinality differs (three printed noteheads against a two-notehead source chord) and the source's closing rest is not printed."
+  },
+  {
+   "item_id": "R068",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label", "printed staccato notehead after the barline, no P label"],
+   "notes": "The printed measure between the two barlines holds four single staccato noteheads, matching the source's four evenly spaced notes."
+  },
+  {
+   "item_id": "R069",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE", "X12": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "UNSURE", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed lower-voice noteheads with downward stems under four upper noteheads, no P label", "printed open notehead chord after the barline, no P label"],
+   "notes": "The printed fragment is a two-voice beamed run of about ten upper and four lower onsets against the source's twelve single-note onsets; the texture is compatible in density but the measure boundaries are unclear, so individual onset identities are not established."
+  },
+  {
+   "item_id": "R070",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label", "printed staccato notehead after the barline, no P label"],
+   "notes": "The printed measure between the two barlines holds four single staccato noteheads descending in position, matching the source's four evenly spaced notes."
+  },
+  {
+   "item_id": "R071",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "PRINTED", "X4": "UNSURE", "X5": "NOT_PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE", "P4": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed flagged notehead at the left of the fragment, no P label", "printed stacked noteheads under a beam near the right end, no P label"],
+   "notes": "Barlines divide the printed fragment into a single flagged note, a dotted stacked chord and a three-onset group, against the source's five onsets; no rest is printed, so the source's closing rest has no counterpart and the measure cannot be aligned."
+  },
+  {
+   "item_id": "R072",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "UNSURE"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label"],
+   "notes": "The printed measure between the two barlines holds four single staccato noteheads, matching the source's four evenly spaced notes."
+  },
+  {
+   "item_id": "R073",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed lower noteheads with downward stems under three upper noteheads, no P label", "printed open noteheads with dots at the right end, no P label"],
+   "notes": "The printed fragment is a dense two-voice beamed run of roughly nine to twelve onsets against the source's six chord-and-note onsets; the measure boundaries are not determinable, so the correspondence cannot be judged."
+  },
+  {
+   "item_id": "R074",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART", "P5": "UNSURE", "P6": "UNSURE"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label", "printed staccato notehead after the barline, no P label"],
+   "notes": "The printed measure before the barline holds four single staccato noteheads, matching the source's four evenly spaced notes."
+  },
+  {
+   "item_id": "R075",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed flagged notehead at the left of the fragment, no P label", "printed dotted open two-notehead chord, no P label", "printed group of three noteheads with a natural before the staff end, no P label"],
+   "notes": "Barlines split the printed fragment into measures of one, one and three onsets, none of which matches the source's six onsets with four chords; the fragment is too small to say whether the source measure lies outside it."
+  },
+  {
+   "item_id": "R076",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART"},
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": ["four printed staccato noteheads inside the measure, none carrying a P label", "printed staccato notehead after the barline, no P label"],
+   "notes": "The printed measure between the two barlines holds four single staccato noteheads, matching the source's four evenly spaced notes; all three proposals fall on the staff's left margin or on the barline."
+  },
+  {
+   "item_id": "R077",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "UNSURE", "X6": "UNSURE", "X7": "UNSURE", "X8": "UNSURE", "X9": "UNSURE", "X10": "UNSURE", "X11": "UNSURE"},
+   "C": {"P1": "UNSURE", "P2": "UNSURE", "P3": "UNSURE", "P4": "UNSURE", "P5": "UNSURE", "P6": "UNSURE", "P7": "UNSURE", "P8": "UNSURE", "P9": "UNSURE", "P10": "UNSURE", "P11": "UNSURE", "P12": "UNSURE", "P13": "UNSURE", "P14": "UNSURE", "P15": "UNSURE"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [],
+   "notes": "Both panels are dense, but the printed raster is a two-voice beamed texture with far more noteheads than the source's eleven onsets, and the fragment's measure boundaries cannot be located; nothing can be matched with confidence."
+  },
+  {
+   "item_id": "R078",
+   "A": "SAME_STRUCTURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "PRINTED"},
+   "C": {"P1": "X1", "P2": "X2", "P3": "UNSURE", "P4": "UNSURE", "P5": "NO_SOURCE_COUNTERPART", "P6": "NO_SOURCE_COUNTERPART"},
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed lower-voice noteheads with staccato dots inside the fragment, none carrying a P label"],
+   "notes": "Each printed measure holds four onsets, but split between an upper and a lower voice (two each), whereas the source has four consecutive single-note onsets in one voice. The onset count agrees and every onset is a single notehead, but the voice distribution differs, and the second printed measure is an identical repeat so P3 and P4 cannot be tied to a specific measure."
+  },
+  {
+   "item_id": "R079",
+   "A": "UNSURE",
+   "B": {"X1": "UNSURE", "X2": "UNSURE", "X3": "UNSURE", "X4": "UNSURE", "X5": "NOT_PRINTED"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART", "P2": "NO_SOURCE_COUNTERPART", "P3": "NO_SOURCE_COUNTERPART", "P4": "NO_SOURCE_COUNTERPART"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["printed beamed pair with a lower notehead sharing an x position, no P label", "printed stacked noteheads with beams mid-fragment, no P label", "printed open two-notehead chord after the barline, no P label"],
+   "notes": "The printed measure holds four onsets that are mostly two-notehead chords, against the source's five onsets whose third is a three-note chord and which ends in a rest; the opening onset differs in cardinality and no rest is printed."
+  },
+  {
+   "item_id": "R080",
+   "A": "UNSURE",
+   "B": {"X1": "PRINTED", "X2": "PRINTED", "X3": "PRINTED", "X4": "UNSURE"},
+   "C": {"P1": "NO_SOURCE_COUNTERPART"},
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": ["three printed staccato noteheads before the barline, no P label", "printed staccato notehead after the barline, no P label"],
+   "notes": "A vertical line inside the printed fragment splits it into three noteheads plus one notehead, so either the printed last measure holds a single attack or the line is a stem and the measure holds four; the source measure holds four notes, and the ambiguity cannot be resolved from the raster."
+  }
+ ]
+}
