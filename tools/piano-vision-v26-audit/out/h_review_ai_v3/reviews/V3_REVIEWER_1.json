@@ -1,0 +1,2024 @@
+{
+ "reviewer": "V3_REVIEWER_1",
+ "batches": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "items": [
+  {
+   "item_id": "R001",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_printed_note_a",
+    "visible_printed_note_b"
+   ],
+   "notes": "Both panels show one early rest followed by a short run of small filled noteheads with beam groups, a dot, and a beamed pair near the end. Printed appears to carry at least as many heads as the source's 8 onsets."
+  },
+  {
+   "item_id": "R002",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "PRINTED",
+    "X10": "PRINTED",
+    "X11": "PRINTED",
+    "X12": "PRINTED",
+    "X13": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "X1",
+    "P5": "X2",
+    "P6": "X3",
+    "P7": "X4",
+    "P8": "X5",
+    "P9": "X6",
+    "P10": "X7",
+    "P11": "X8",
+    "P12": "X9"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "notes": "Both panels are one uninterrupted run of very short beamed notes filling the bar, all single noteheads. Printed groups appear beamed in fours, source in pairs - beaming difference only. Only 10 note-level proposals for 13 onsets, so mapping is order-based within a uniform run.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R003",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed starts with a rest then a short ascending beamed run tied on to a long held note at the far right. Source skeleton leads with a hollow (long) notehead then two clustered groups. Ordering of the long note differs and the resolution is too low to resolve the clusters.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R004",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "PRINTED",
+    "X10": "PRINTED",
+    "X11": "PRINTED",
+    "X12": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE",
+    "P11": "UNSURE",
+    "P12": "UNSURE",
+    "P13": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_chord_cluster_a",
+    "visible_chord_cluster_b",
+    "visible_chord_cluster_c"
+   ],
+   "notes": "Source is nine 3-note chords followed by three 2-note chords. Printed is a continuous block-chord passage with stacked noteheads throughout, tightening toward the end - consistent shape, though individual clusters are not countable at this size."
+  },
+  {
+   "item_id": "R005",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE"
+   },
+   "D": "NO",
+   "E": "LOW",
+   "notes": "Same source shape as R004 (nine 3-note chords then three 2-note chords) but the printed measure here is a run of unstacked single noteheads with beam groups. Onset rhythm plausibly lines up, cardinality clearly does not.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R006",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is a single filled notehead followed by a rest and then empty space to the barline. Printed is a beamed triplet figure under a numeral 3 with a slur and a lower-voice dotted note - a completely different rhythmic shape.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R007",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is note, note, rest - very sparse. Printed shows an upper group of beamed notes plus a fermata-marked hollow note and a separate dotted hollow lower voice, i.e. roughly five onsets with no visible rest.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R008",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop contains only clef, a flat key signature, a 2/4 meter and a rehearsal mark; no printed noteheads are visible, so nothing can be compared against the four-eighth source.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R009",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop shows bass clef, flat key signature and 2/4 meter only - the measure content is not in the crop. Source is rest, eighth, beamed pair, rest, dotted note.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R010",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "UNSURE",
+    "P6": "X1",
+    "P7": "X1",
+    "P8": "X2"
+   },
+   "D": "UNSURE",
+   "E": "HIGH",
+   "second_pass": {
+    "P6": {
+     "verdict": "AMBIGUOUS"
+    },
+    "P7": {
+     "verdict": "AMBIGUOUS"
+    },
+    "P8": {
+     "verdict": "RANK_OK",
+     "map": {
+      "P8a": "X2a"
+     }
+    }
+   },
+   "notes": "Both panels open with a single tall stacked chord (source five noteheads with ledger lines above) and then a long rest to the barline. Overall shape matches cleanly; per-notehead rank inside the printed stack cannot be resolved, hence AMBIGUOUS.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R011",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "PRINTED",
+    "X10": "PRINTED",
+    "X11": "PRINTED",
+    "X12": "PRINTED",
+    "X13": "PRINTED",
+    "X14": "PRINTED",
+    "X15": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "X1",
+    "P6": "X2",
+    "P7": "X3",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE",
+    "P11": "UNSURE",
+    "P12": "UNSURE",
+    "P13": "UNSURE",
+    "P14": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d",
+    "visible_note_e"
+   ],
+   "notes": "Source: one rest then fourteen short notes in seven beamed pairs. Printed: a rest after the meter then a dense run of short beamed single notes, comparable in count. Printed carries clearly more noteheads than there are proposals."
+  },
+  {
+   "item_id": "R012",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE",
+    "P11": "UNSURE",
+    "P12": "UNSURE",
+    "P13": "UNSURE",
+    "P14": "UNSURE",
+    "P15": "UNSURE",
+    "P16": "UNSURE",
+    "P17": "UNSURE",
+    "P18": "UNSURE",
+    "P19": "UNSURE",
+    "P20": "UNSURE",
+    "P21": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is ten onsets: three beamed pairs, a 2-note chord, a hollow note, a note, a rest. Printed is far denser - roughly 25-plus noteheads with an internal repeat sign dividing the crop, so the onset count and shape do not correspond.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R013",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART",
+    "P7": "NO_SOURCE_COUNTERPART",
+    "P8": "NO_SOURCE_COUNTERPART",
+    "P9": "NO_SOURCE_COUNTERPART",
+    "P10": "NO_SOURCE_COUNTERPART",
+    "P11": "NO_SOURCE_COUNTERPART",
+    "P12": "NO_SOURCE_COUNTERPART",
+    "P13": "NO_SOURCE_COUNTERPART",
+    "P14": "NO_SOURCE_COUNTERPART",
+    "P15": "NO_SOURCE_COUNTERPART",
+    "P16": "NO_SOURCE_COUNTERPART",
+    "P17": "NO_SOURCE_COUNTERPART",
+    "P18": "NO_SOURCE_COUNTERPART",
+    "P19": "NO_SOURCE_COUNTERPART",
+    "P20": "NO_SOURCE_COUNTERPART",
+    "P21": "NO_SOURCE_COUNTERPART",
+    "P22": "NO_SOURCE_COUNTERPART",
+    "P23": "NO_SOURCE_COUNTERPART",
+    "P24": "NO_SOURCE_COUNTERPART",
+    "P25": "NO_SOURCE_COUNTERPART",
+    "P26": "NO_SOURCE_COUNTERPART",
+    "P27": "NO_SOURCE_COUNTERPART",
+    "P28": "NO_SOURCE_COUNTERPART",
+    "P29": "NO_SOURCE_COUNTERPART",
+    "P30": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is four plain evenly spaced quarter notes. Printed shows a dotted hollow note followed by a long run of multi-beamed short notes, then a repeat barline and a second such unit - a wholly different texture.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R014",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop shows only treble clef, three flats, a 12/8 meter and a text direction. No noteheads visible; all five proposals sit in blank area left of the staff.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R015",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop is a bare head-of-system: bass clef, two flats, 12/8. Source is a 12/8 rest followed by a repeating single/2-note/3-note chord cycle, but nothing printed is visible to compare.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R016",
+   "A": "UNSURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b"
+   ],
+   "notes": "Crop is cut off just after two printed notes (one low with a stem, one higher under a slur) following clef, flats and common time. Source is four notes then a rest; the tail is not in the crop, and all six proposals land in the clef/meter region."
+  },
+  {
+   "item_id": "R017",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART",
+    "P7": "NO_SOURCE_COUNTERPART",
+    "P8": "NO_SOURCE_COUNTERPART",
+    "P9": "NO_SOURCE_COUNTERPART",
+    "P10": "NO_SOURCE_COUNTERPART",
+    "P11": "NO_SOURCE_COUNTERPART",
+    "P12": "NO_SOURCE_COUNTERPART",
+    "P13": "NO_SOURCE_COUNTERPART",
+    "P14": "NO_SOURCE_COUNTERPART",
+    "P15": "NO_SOURCE_COUNTERPART",
+    "P16": "NO_SOURCE_COUNTERPART",
+    "P17": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is four plain long values (hollow, dotted filled, hollow, dotted filled). Printed is an eighth rest followed by two dense multi-beamed note groups, another rest, and a third group - an entirely different rhythmic shape.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R018",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE",
+    "X13": "UNSURE",
+    "X14": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is rest, six short notes in three beamed pairs, rest, six short notes in three beamed pairs. Printed shows only about seven widely spaced noteheads with accent-like marks above and no visible rest, so the dense paired runs cannot be confirmed.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R019",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop shows treble clef, 3/8 meter, a dynamic and a bracket-like mark but no noteheads. Source is six 32nd notes under a three-beam group in 3/8.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R020",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop is only treble clef, one sharp and a 3/4 meter; no measure content is visible. Source is a quarter plus two beamed eighth pairs, which would fit 3/4 but cannot be checked.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R021",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "unlabelled_printed_rest"
+   ],
+   "notes": "Printed crop holds only bass clef, a sharp, 3/4 and one rest glyph; no noteheads. Source is a 3-note hollow chord with ledger lines then a single stemmed note. All three proposals sit left of the staff."
+  },
+  {
+   "item_id": "R022",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE",
+    "X13": "UNSURE"
+   },
+   "C": {
+    "P1": "UNSURE",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source totals fourteen noteheads over thirteen onsets including a 3-note chord, two 2-note chords and three rests. Printed shows a comparable total head count with a rest in the middle and a stacked hollow group near the end, but nine proposals against thirteen onsets is too few to pair anything reliably.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R023",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b"
+   ],
+   "notes": "Both panels are extremely sparse with two hollow noteheads and nothing else before the final barline. Source spaces its two onsets apart; the printed stacks its two heads at one horizontal position, so it is unclear whether that is one chord or two events."
+  },
+  {
+   "item_id": "R024",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Crop is truncated vertically and horizontally: clef, four flats, common time, a tempo word, an internal barline and two clipped noteheads. Source is four evenly spaced quarters; too little is visible to compare.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R025",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed shows a short low-clef staff fragment cut off at the bottom edge with two barlines and about six single noteheads, while the source needs eleven noteheads over six onsets including a 3-note chord. Truncation makes both count and cardinality unreadable.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R026",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Same source shape as R025 (3-note chord, single, 2-note, single, 2-note, 2-note). Printed fragment is again clipped at the bottom and shows only four or five visible heads between two barlines.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R027",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop ends just after the meter, showing only clipped accent marks. Source is a hollow note followed by triplet-bracketed notes; nothing printed is available to compare.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R028",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop is bass clef, sharps and 3/4 only. Source is rest, single note, 3-note chord, rest.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R029",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Both panels open with a beamed pair, then a single note, then another beamed pair. Printed carries more heads than the source's seven and runs past the right crop edge, so the closing 2-note chord cannot be checked.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R030",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed shows a rest before an internal barline and about five detached notes after it, whereas the source has a rest plus three notes. Whether the crop is exactly one measure is unclear, so no structural verdict.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R031",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop holds only treble clef, 2/4 and a clipped mark. Source is two 16th pairs, a flagged note and a rest.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R032",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop is bass clef and 2/4 only, ending before any note content. Source is rest, single note, 2-note chord.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R033",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is a single 2-note chord followed by a rest and then nothing to the barline. Printed shows a five-note multi-beamed group under long straight and curved marks - a fast run, not a chord-plus-rest measure.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R034",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset",
+    "visible_note_onset"
+   ],
+   "notes": "Both panels open with one stacked 2-note chord, matching cardinality. The printed then shows a further single stemmed note where the source has a rest, which is an event-level difference only; the sparse two-onset shape still corresponds."
+  },
+  {
+   "item_id": "R035",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is a 2-note chord then two rests. Printed runs note, dotted dyad, dotted dyad, then a fermata-marked dotted hollow note before the final barline - four sounding onsets where the source has one.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R036",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Same source shape as R035 (2-note chord then two rests) but the printed crop spans a clef change and carries a dotted chord, two more notes and a fermata-marked hollow note - far more sounding content than the source.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R037",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "UNSURE"
+   },
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset_a",
+    "visible_chord_onset_b"
+   ],
+   "notes": "Both panels are two stacked 2-note chord events and nothing else. Printed ties the second hollow chord to the first, where the source has a rest at that onset; the single printed chord pairs cleanly with X1 on cardinality."
+  },
+  {
+   "item_id": "R038",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "NOT_PRINTED"
+   },
+   "C": {},
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_whole_note"
+   ],
+   "notes": "No proposals at all. Printed shows one hollow notehead below the staff under a tie arc and otherwise an empty staff to the final barline; source is one note then a rest, so the shape agrees and the printed carries no rest."
+  },
+  {
+   "item_id": "R039",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "NO",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset",
+    "visible_leading_note"
+   ],
+   "notes": "Single-onset measure. Printed adds a low filled note ahead of a wavy arpeggio line and a fermata-marked hollow chord of about three noteheads; the source onset is a 2-note chord, so cardinality disagrees while the one-chord shape corresponds."
+  },
+  {
+   "item_id": "R040",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset"
+   ],
+   "notes": "Single-onset measure: source is one stacked hollow chord with ledger lines. Printed shows a wavy arpeggio spanning the staff with hollow noteheads inside it before the final barline. Head count inside the roll cannot be resolved, so cardinality is left open."
+  },
+  {
+   "item_id": "R041",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed fragment has a two-note beamed group, a tall vertical line, a flagged note and a rest; whether that line is a barline deciding which span is the measure is unclear. Source is a single note plus a rest. Both proposals sit left of the staff.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R042",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_rest_a",
+    "visible_chord_onset",
+    "visible_rest_b"
+   ],
+   "notes": "Printed reads rest, low chord, rest; the leading rest is plausibly the tail of the previous measure, after which chord-then-rest matches the source exactly. Two-note cardinality of the printed chord is not fully resolvable."
+  },
+  {
+   "item_id": "R043",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed crop holds two measures: four single notes, a barline, then a dotted hollow chord. Source is one 3-note chord onset, which only the second printed group resembles, and the crop does not say which span is the target measure.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R044",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "notes": "Printed is split by a barline into two three-note measures; the second one gives exactly three evenly spaced single notes like the source. All noteheads are single in both panels.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R045",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_chord_onset"
+   ],
+   "notes": "Printed shows a beamed pair then a dotted 2-note hollow chord, matching source onsets X1-X3 including cardinality; the source's trailing note and rest have no visible printed counterpart. All three proposals fall left of the staff."
+  },
+  {
+   "item_id": "R046",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Printed gives four detached single noteheads with staccato marks, evenly spread like the source's four quarters. No proposal lands on any of them, so the match rests on my eyes alone."
+  },
+  {
+   "item_id": "R047",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "UNSURE",
+    "X10": "PRINTED",
+    "X11": "PRINTED",
+    "X12": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c"
+   ],
+   "notes": "Both panels are a near-continuous run of beamed pairs with occasional singles, printed also carrying a lower voice. The source's mid-measure rest has no clearly identifiable printed glyph; printed noteheads outnumber proposals, and many proposals land on beams rather than heads."
+  },
+  {
+   "item_id": "R048",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed shows six detached single notes with tall verticals that may be barlines or stems; depending on which reading is right, a printed span holds two, four or six onsets against the source's four. No structural verdict is safe.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R049",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_chord_onset",
+    "visible_note_c"
+   ],
+   "notes": "Printed reads beamed pair, dotted 2-note hollow chord, then a further single note before the crop ends - the first four source onsets in order with matching cardinality. The trailing source rest is outside the crop. All proposals sit left of the staff."
+  },
+  {
+   "item_id": "R050",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d",
+    "visible_rest"
+   ],
+   "notes": "Printed shows four detached single notes then a rest before the staff ends; the source has the four notes and no rest, which is a single extra printed event. Cardinality agrees throughout."
+  },
+  {
+   "item_id": "R051",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed is divided by two tall verticals into spans of roughly two, four and one-plus notes, while the source needs six onsets arranged as pair, single, pair, chord. Which span is the target measure is not determinable, and the pair/chord pattern is not visible.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R052",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART",
+    "P7": "NO_SOURCE_COUNTERPART",
+    "P8": "NO_SOURCE_COUNTERPART",
+    "P9": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is a rest followed by three plain single notes. Printed is a chordal passage with stacked noteheads, accidentals, dotted hollow chords and an internal repeat sign - many more onsets and a different texture.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R053",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Printed opens with a dotted note, a beamed pair and then stacked chords - the source's opening note, note, 2-note chord run is present but the printed continues with more material than the source's five onsets, and the trailing rest is unaccounted for.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R054",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "X1",
+    "P5": "UNSURE",
+    "P6": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_b",
+    "visible_note_c"
+   ],
+   "notes": "Between the key signature and the barline the printed holds four detached single notes, matching the source's four quarters in order and cardinality; a fifth printed note sits after that barline and belongs elsewhere."
+  },
+  {
+   "item_id": "R055",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE",
+    "X7": "UNSURE",
+    "X8": "UNSURE",
+    "X9": "UNSURE",
+    "X10": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is ten onsets including two 3-note chords and two rests. Printed clearly carries two voices - an upper line of note plus three chords and a lower line of dotted hollow notes - and the crop ends mid-measure, so the ten-onset sequence cannot be verified.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R056",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "X1",
+    "P4": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "The span between the two tall verticals holds four detached single notes (one with an accidental), matching the source's four quarters. P3 sits on the first of those noteheads."
+  },
+  {
+   "item_id": "R057",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED",
+    "X5": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART",
+    "P7": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is five onsets totalling seven noteheads (single, single, 3-note chord, 2-note chord, rest). Printed after its barline is a run of roughly seven stacked-notehead chords totalling far more heads, with an accidental among them.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R058",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "X2"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the leading barline and the one at about two thirds across, the printed holds four detached single notes with staccato marks, matching the source's four quarters; a further note follows that barline. P4 lands on the second notehead."
+  },
+  {
+   "item_id": "R059",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED",
+    "X5": "NOT_PRINTED",
+    "X6": "NOT_PRINTED",
+    "X7": "NOT_PRINTED",
+    "X8": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is a half note followed by five short notes in paired beamed groups. Printed has a single note, a barline, one dotted hollow chord and then a repeat sign - at most three onsets, nothing like an eight-onset run.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R060",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is a half note then four quarters. Printed shows three detached notes between a barline and a repeat sign, with one more note after the repeat, so the measure content is three onsets against the source's five and the reading of the crop is ambiguous.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R061",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "NO",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset_a",
+    "visible_note_a",
+    "visible_note_b",
+    "visible_chord_onset_b"
+   ],
+   "notes": "Printed gives roughly four onsets ending in a tied 2-note hollow chord, matching the source's closing 2-note chord; but the printed opens with a stacked chord where the source's first onset is a single note, so cardinality fails at the head. Both proposals sit left of the staff."
+  },
+  {
+   "item_id": "R062",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is five evenly spaced quarters with no tied arcs. Printed is a repeat ending containing a single note, a tie to another note and one stacked group - about three onsets and a tie the source does not have. Confidence is limited because the crop is a system fragment.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R063",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is single, single, 3-note chord, 2-note chord, rest. Printed opens with one dotted hollow note and then a run of five or six notes carrying accidentals and tie arcs below; the printed is denser and the source's trailing rest has no counterpart. Proposals P5-P7 fall on empty staff.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R064",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "X1",
+    "P5": "X2"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the key signature and the barline the printed holds four detached single notes with staccato marks, matching the source's four quarters in order and cardinality; a fifth printed note follows that barline. P4 and P5 land on the first two of the four."
+  },
+  {
+   "item_id": "R065",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c"
+   ],
+   "notes": "Both panels are beamed pairs followed by detached singles. The printed yields about nine onsets against the source's twelve and ends in a hollow chord, so the family matches but the count does not close; several proposals land on beams rather than noteheads."
+  },
+  {
+   "item_id": "R066",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the two tall verticals the printed holds four detached single notes with staccato marks, matching the source's four quarters; a fifth note follows the second vertical. P1 sits on the leading vertical; P2 falls between noteheads."
+  },
+  {
+   "item_id": "R067",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE"
+   },
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_chord_onset"
+   ],
+   "notes": "Printed reads single note, dotted 2-note hollow chord, then further notes with an accidental and a beamed pair - the source's single, 2-note chord, single, single run with matching cardinality. The printed continues past the source's trailing rest, which is why X5 is left open."
+  },
+  {
+   "item_id": "R068",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the leading vertical and the one at about four fifths across, the printed holds four detached single notes with staccato marks, matching the source's four quarters; a further note follows that vertical."
+  },
+  {
+   "item_id": "R069",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "PRINTED",
+    "X6": "PRINTED",
+    "X7": "PRINTED",
+    "X8": "PRINTED",
+    "X9": "UNSURE",
+    "X10": "UNSURE",
+    "X11": "UNSURE",
+    "X12": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Same source family as R065: four beamed pairs then singles. Printed carries two voices, an upper line of beamed pairs and a lower line of detached notes, ending in hollow noteheads, so the twelve single onsets cannot be lined up one for one."
+  },
+  {
+   "item_id": "R070",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the two tall verticals the printed holds four detached single notes with staccato marks below, matching the source's four quarters in order and cardinality; a fifth note follows the second vertical."
+  },
+  {
+   "item_id": "R071",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "UNSURE",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "UNSURE",
+    "P4": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_chord_onset",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Both panels mix a single note, a 2-note hollow chord, further singles and a trailing rest, and both show about five onsets. The printed places its chord one position earlier than the source does, so the individual pairing is left open."
+  },
+  {
+   "item_id": "R072",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "UNSURE"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "The printed measure, bounded by the leading vertical and the final barline, holds exactly four detached single notes with staccato marks, matching the source's four quarters in order and cardinality."
+  },
+  {
+   "item_id": "R073",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "UNSURE",
+    "P6": "UNSURE",
+    "P7": "UNSURE",
+    "P8": "UNSURE",
+    "P9": "UNSURE",
+    "P10": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "notes": "Source is six onsets alternating 2-note chords with singles. Printed is a two-voice chordal passage of roughly nine upper notes plus a lower line, with an accidental and closing hollow noteheads - same texture family, different onset count.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R074",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "X1",
+    "P5": "X2",
+    "P6": "X3"
+   },
+   "D": "YES",
+   "E": "HIGH",
+   "unlisted_visible_onsets": [
+    "visible_note_d"
+   ],
+   "second_pass": {
+    "P4": {
+     "verdict": "RANK_OK",
+     "map": {
+      "P4a": "X1a"
+     }
+    },
+    "P5": {
+     "verdict": "RANK_OK",
+     "map": {
+      "P5a": "X2a"
+     }
+    },
+    "P6": {
+     "verdict": "RANK_OK",
+     "map": {
+      "P6a": "X3a"
+     }
+    }
+   },
+   "notes": "Between the key signature and the barline the printed holds four evenly spaced detached single notes with staccato marks, one per source onset, all single noteheads; a fifth printed note follows the barline and is not part of this measure. Each labelled proposal is a lone notehead, so top-to-top rank pairing is trivial."
+  },
+  {
+   "item_id": "R075",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "UNSURE",
+    "X4": "UNSURE",
+    "X5": "UNSURE",
+    "X6": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "UNSURE"
+   },
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_chord_onset",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Printed reads single note, 2-note hollow chord, then singles with an accidental, a beamed pair and a lower note - about five or six onsets against the source's six, with the chord cardinality matching at the first two positions."
+  },
+  {
+   "item_id": "R076",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "UNSURE",
+    "P3": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "MEDIUM",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Between the two tall verticals the printed holds four detached single notes with staccato marks, matching the source's four quarters; a fifth note follows the second vertical. P3 sits on the leading vertical."
+  },
+  {
+   "item_id": "R077",
+   "A": "DIFFERENT_MEASURE",
+   "B": {
+    "X1": "NOT_PRINTED",
+    "X2": "NOT_PRINTED",
+    "X3": "NOT_PRINTED",
+    "X4": "NOT_PRINTED",
+    "X5": "NOT_PRINTED",
+    "X6": "NOT_PRINTED",
+    "X7": "NOT_PRINTED",
+    "X8": "NOT_PRINTED",
+    "X9": "NOT_PRINTED",
+    "X10": "NOT_PRINTED",
+    "X11": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "NO_SOURCE_COUNTERPART",
+    "P5": "NO_SOURCE_COUNTERPART",
+    "P6": "NO_SOURCE_COUNTERPART",
+    "P7": "NO_SOURCE_COUNTERPART",
+    "P8": "NO_SOURCE_COUNTERPART",
+    "P9": "NO_SOURCE_COUNTERPART",
+    "P10": "NO_SOURCE_COUNTERPART",
+    "P11": "NO_SOURCE_COUNTERPART",
+    "P12": "NO_SOURCE_COUNTERPART",
+    "P13": "NO_SOURCE_COUNTERPART",
+    "P14": "NO_SOURCE_COUNTERPART",
+    "P15": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "UNSURE",
+   "E": "MEDIUM",
+   "notes": "Source is eleven onsets including a 3-note chord and two rests, arranged as a pair, singles, a chord, a rest, a pair and a rest. Printed is far denser, with two internal verticals splitting it into spans of roughly seven, five and five or more upper-voice notes plus accidentals and beamed groups.",
+   "unlisted_visible_onsets": []
+  },
+  {
+   "item_id": "R078",
+   "A": "UNSURE",
+   "B": {
+    "X1": "UNSURE",
+    "X2": "UNSURE",
+    "X3": "UNSURE",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "UNSURE",
+    "P2": "UNSURE",
+    "P3": "UNSURE",
+    "P4": "UNSURE",
+    "P5": "UNSURE",
+    "P6": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_lower_note_a",
+    "visible_lower_note_b",
+    "visible_lower_note_c",
+    "visible_lower_note_d"
+   ],
+   "notes": "Printed is two voices: each measure holds two upper notes and two lower notes at two shared time positions. The source is a single line of four sequential onsets. Flattening the voices would give four noteheads, but simultaneity differs, so no structural verdict is safe."
+  },
+  {
+   "item_id": "R079",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "PRINTED",
+    "X5": "NOT_PRINTED"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART",
+    "P2": "NO_SOURCE_COUNTERPART",
+    "P3": "NO_SOURCE_COUNTERPART",
+    "P4": "UNSURE"
+   },
+   "D": "UNSURE",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_chord_onset_a",
+    "visible_note_b",
+    "visible_chord_onset_b",
+    "visible_chord_onset_c",
+    "visible_note_c",
+    "visible_chord_onset_d"
+   ],
+   "notes": "Printed opens with a beamed pair then two stacked groups and closes with a hollow chord, matching the source's pair, 3-note chord, 2-note chord in order; the source's trailing rest has no printed rest glyph, only that hollow chord. Whether some printed stacks are two voices rather than chords is unresolved."
+  },
+  {
+   "item_id": "R080",
+   "A": "SAME_STRUCTURE",
+   "B": {
+    "X1": "PRINTED",
+    "X2": "PRINTED",
+    "X3": "PRINTED",
+    "X4": "UNSURE"
+   },
+   "C": {
+    "P1": "NO_SOURCE_COUNTERPART"
+   },
+   "D": "YES",
+   "E": "LOW",
+   "unlisted_visible_onsets": [
+    "visible_note_a",
+    "visible_note_b",
+    "visible_note_c",
+    "visible_note_d"
+   ],
+   "notes": "Printed shows four detached single notes with staccato marks, all single noteheads like the source. Three sit before the barline and one after, so whether the fourth belongs to this measure is unresolved. P1 lies left of the staff, on blank space."
+  }
+ ]
+}
