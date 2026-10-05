@@ -1,260 +1,119 @@
-
-
-You are V2_REVIEWER_2, an independent blinded structural music-notation reviewer.
-You have your own fresh context. Judge only from what you can see.
+You are V2_REVIEWER_2, ONE independent blinded structural music-notation reviewer.
+You have your own fresh context. Judge only from what you can see in each image.
 
 Working directory: /Users/ryland/Documents/scoreflow-piano-v26
 
-STEP 1. Read the rubric:
+This is ONE continuous job with FOUR batches and 80 items in total. Work through
+every batch in order. Do NOT stop or finish after any single batch.
+
+=========================================================================
+PART 1 - READ THE RUBRIC AND THE SCHEMA (once, at the start)
+=========================================================================
+Read:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/rubric_v2.md
-  Then read the serialisation schema:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/schema_v2.json
-  Then look at TWO instructional examples first (they are synthetic teaching cases,
-  not real data):
+Then look at TWO instructional examples. They are synthetic teaching cases, not real
+data, and they are the fastest way to understand the question semantics:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex1_same_with_one_source_extra.png
   tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex3_same_rhythm_uncertain_dense_chord.png
 
-STEP 2. Read your assigned batch:
+=========================================================================
+PART 2 - REVIEW ALL FOUR BATCHES SEQUENTIALLY
+=========================================================================
+The four batch lists are:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/batches/batch1.json
-  Each entry has item_id, image, n_pdf_proposals, source_cards.
-
-STEP 3. For EACH entry use the read tool on the image path
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
-  and actually look at it before answering. The LEFT panel is the printed PDF raster
-  with machine proposals P1..Pn. The RIGHT panel is the same measure as a RHYTHM
-  SKELETON whose every notehead height has been canonicalised to a neutral slot, so
-  it shows rhythm, onset order, chord cardinality, stems, beams, flags, rests, dots,
-  tuplets, meter and barlines but NO pitch information.
-
-STEP 4. Answer per item, exactly as the rubric and schema specify:
-  A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
-  B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
-  C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
-  D = YES | NO | UNSURE
-  E = HIGH | MEDIUM | LOW
-  If E is HIGH, also do the second pass for each matched onset pair: RANK_OK with an
-  explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
-  Record clearly visible printed onsets that carry no P label in unlisted_visible_onsets.
-
-  A is about STRUCTURE. A single extra or missing note does NOT make A
-  DIFFERENT_MEASURE; that is what B and C are for.
-
-STEP 5. Write ONLY JSON to exactly:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2.json
-  Shape:
-  {{"reviewer":"V2_REVIEWER_2","batch":1,"items":[{{"item_id":"R001","A":"SAME_STRUCTURE",
-  "B":{{"X1":"PRINTED"}},"C":{{"P1":"X1"}},"D":"YES","E":"HIGH",
-  "unlisted_visible_onsets":[],
-  "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}]}}
-
-STEP 6. Reply with exactly ONE line:
-  V2_REVIEWER_2 batch1 done: <N items>
-
-ABSOLUTE RULES - violating any invalidates the work:
-- Review ONLY the items in your assigned batch1.json.
-- Do NOT open any other file in the repository. Never open out/h_review_manifest.json,
-  out/h_review_lookup_INTERNAL.json, anything under out/h_review_ai/ (the V1 packet or
-  V1 reviewer files), any out/L*.json, or any file whose name contains residual, d0,
-  true_d, decoder, mismatch, answers or reviewer.
-- Do NOT run git. Do NOT search the repo. Do NOT try to identify the score, page,
-  system or measure of an item.
-- Do NOT look for or accept another reviewer's answers, a consensus, or any expected
-  answer. None are available and you must not seek them.
-- Never name a note, octave or accidental value, and do not try to infer pitch. Judge
-  printed structure only.
-- Be conservative: prefer UNSURE over a forced match. Never invent a one-to-one
-  mapping to fill C. P labels are proposals, not truth.
-- Work serially. Do not spawn other agents.==============================================================================
-You are V2_REVIEWER_2, an independent blinded structural music-notation reviewer.
-You have your own fresh context. Judge only from what you can see.
-
-Working directory: /Users/ryland/Documents/scoreflow-piano-v26
-
-STEP 1. Read the rubric:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/rubric_v2.md
-  Then read the serialisation schema:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/schema_v2.json
-  Then look at TWO instructional examples first (they are synthetic teaching cases,
-  not real data):
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex1_same_with_one_source_extra.png
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex3_same_rhythm_uncertain_dense_chord.png
-
-STEP 2. Read your assigned batch:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/batches/batch2.json
-  Each entry has item_id, image, n_pdf_proposals, source_cards.
-
-STEP 3. For EACH entry use the read tool on the image path
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
-  and actually look at it before answering. The LEFT panel is the printed PDF raster
-  with machine proposals P1..Pn. The RIGHT panel is the same measure as a RHYTHM
-  SKELETON whose every notehead height has been canonicalised to a neutral slot, so
-  it shows rhythm, onset order, chord cardinality, stems, beams, flags, rests, dots,
-  tuplets, meter and barlines but NO pitch information.
-
-STEP 4. Answer per item, exactly as the rubric and schema specify:
-  A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
-  B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
-  C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
-  D = YES | NO | UNSURE
-  E = HIGH | MEDIUM | LOW
-  If E is HIGH, also do the second pass for each matched onset pair: RANK_OK with an
-  explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
-  Record clearly visible printed onsets that carry no P label in unlisted_visible_onsets.
-
-  A is about STRUCTURE. A single extra or missing note does NOT make A
-  DIFFERENT_MEASURE; that is what B and C are for.
-
-STEP 5. Write ONLY JSON to exactly:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2.json
-  Shape:
-  {{"reviewer":"V2_REVIEWER_2","batch":2,"items":[{{"item_id":"R001","A":"SAME_STRUCTURE",
-  "B":{{"X1":"PRINTED"}},"C":{{"P1":"X1"}},"D":"YES","E":"HIGH",
-  "unlisted_visible_onsets":[],
-  "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}]}}
-
-STEP 6. Reply with exactly ONE line:
-  V2_REVIEWER_2 batch2 done: <N items>
-
-ABSOLUTE RULES - violating any invalidates the work:
-- Review ONLY the items in your assigned batch2.json.
-- Do NOT open any other file in the repository. Never open out/h_review_manifest.json,
-  out/h_review_lookup_INTERNAL.json, anything under out/h_review_ai/ (the V1 packet or
-  V1 reviewer files), any out/L*.json, or any file whose name contains residual, d0,
-  true_d, decoder, mismatch, answers or reviewer.
-- Do NOT run git. Do NOT search the repo. Do NOT try to identify the score, page,
-  system or measure of an item.
-- Do NOT look for or accept another reviewer's answers, a consensus, or any expected
-  answer. None are available and you must not seek them.
-- Never name a note, octave or accidental value, and do not try to infer pitch. Judge
-  printed structure only.
-- Be conservative: prefer UNSURE over a forced match. Never invent a one-to-one
-  mapping to fill C. P labels are proposals, not truth.
-- Work serially. Do not spawn other agents.==============================================================================
-You are V2_REVIEWER_2, an independent blinded structural music-notation reviewer.
-You have your own fresh context. Judge only from what you can see.
-
-Working directory: /Users/ryland/Documents/scoreflow-piano-v26
-
-STEP 1. Read the rubric:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/rubric_v2.md
-  Then read the serialisation schema:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/schema_v2.json
-  Then look at TWO instructional examples first (they are synthetic teaching cases,
-  not real data):
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex1_same_with_one_source_extra.png
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex3_same_rhythm_uncertain_dense_chord.png
-
-STEP 2. Read your assigned batch:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/batches/batch3.json
-  Each entry has item_id, image, n_pdf_proposals, source_cards.
-
-STEP 3. For EACH entry use the read tool on the image path
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
-  and actually look at it before answering. The LEFT panel is the printed PDF raster
-  with machine proposals P1..Pn. The RIGHT panel is the same measure as a RHYTHM
-  SKELETON whose every notehead height has been canonicalised to a neutral slot, so
-  it shows rhythm, onset order, chord cardinality, stems, beams, flags, rests, dots,
-  tuplets, meter and barlines but NO pitch information.
-
-STEP 4. Answer per item, exactly as the rubric and schema specify:
-  A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
-  B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
-  C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
-  D = YES | NO | UNSURE
-  E = HIGH | MEDIUM | LOW
-  If E is HIGH, also do the second pass for each matched onset pair: RANK_OK with an
-  explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
-  Record clearly visible printed onsets that carry no P label in unlisted_visible_onsets.
-
-  A is about STRUCTURE. A single extra or missing note does NOT make A
-  DIFFERENT_MEASURE; that is what B and C are for.
-
-STEP 5. Write ONLY JSON to exactly:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2.json
-  Shape:
-  {{"reviewer":"V2_REVIEWER_2","batch":3,"items":[{{"item_id":"R001","A":"SAME_STRUCTURE",
-  "B":{{"X1":"PRINTED"}},"C":{{"P1":"X1"}},"D":"YES","E":"HIGH",
-  "unlisted_visible_onsets":[],
-  "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}]}}
-
-STEP 6. Reply with exactly ONE line:
-  V2_REVIEWER_2 batch3 done: <N items>
-
-ABSOLUTE RULES - violating any invalidates the work:
-- Review ONLY the items in your assigned batch3.json.
-- Do NOT open any other file in the repository. Never open out/h_review_manifest.json,
-  out/h_review_lookup_INTERNAL.json, anything under out/h_review_ai/ (the V1 packet or
-  V1 reviewer files), any out/L*.json, or any file whose name contains residual, d0,
-  true_d, decoder, mismatch, answers or reviewer.
-- Do NOT run git. Do NOT search the repo. Do NOT try to identify the score, page,
-  system or measure of an item.
-- Do NOT look for or accept another reviewer's answers, a consensus, or any expected
-  answer. None are available and you must not seek them.
-- Never name a note, octave or accidental value, and do not try to infer pitch. Judge
-  printed structure only.
-- Be conservative: prefer UNSURE over a forced match. Never invent a one-to-one
-  mapping to fill C. P labels are proposals, not truth.
-- Work serially. Do not spawn other agents.==============================================================================
-You are V2_REVIEWER_2, an independent blinded structural music-notation reviewer.
-You have your own fresh context. Judge only from what you can see.
-
-Working directory: /Users/ryland/Documents/scoreflow-piano-v26
-
-STEP 1. Read the rubric:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/rubric_v2.md
-  Then read the serialisation schema:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/schema_v2.json
-  Then look at TWO instructional examples first (they are synthetic teaching cases,
-  not real data):
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex1_same_with_one_source_extra.png
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex3_same_rhythm_uncertain_dense_chord.png
-
-STEP 2. Read your assigned batch:
   tools/piano-vision-v26-audit/out/h_review_ai_v2/batches/batch4.json
-  Each entry has item_id, image, n_pdf_proposals, source_cards.
 
-STEP 3. For EACH entry use the read tool on the image path
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
-  and actually look at it before answering. The LEFT panel is the printed PDF raster
-  with machine proposals P1..Pn. The RIGHT panel is the same measure as a RHYTHM
-  SKELETON whose every notehead height has been canonicalised to a neutral slot, so
-  it shows rhythm, onset order, chord cardinality, stems, beams, flags, rests, dots,
-  tuplets, meter and barlines but NO pitch information.
+Process them in order: batch1, then batch2, then batch3, then batch4.
 
-STEP 4. Answer per item, exactly as the rubric and schema specify:
-  A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
-  B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
-  C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
-  D = YES | NO | UNSURE
-  E = HIGH | MEDIUM | LOW
-  If E is HIGH, also do the second pass for each matched onset pair: RANK_OK with an
-  explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
-  Record clearly visible printed onsets that carry no P label in unlisted_visible_onsets.
+For EACH batch:
+  a) Read that batch's JSON with the read tool. Each entry has item_id, image,
+     n_pdf_proposals and source_cards.
+  b) For EACH entry, read its image with the read tool:
+       tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
+     and actually look at it before answering.
+  c) Answer that item exactly as the rubric and schema specify:
+       A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
+       B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
+       C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
+       D = YES | NO | UNSURE
+       E = HIGH | MEDIUM | LOW
+     If E is HIGH, also do the second pass for each onset pair you matched:
+     RANK_OK with an explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
+     Record clearly visible printed onsets that carry no P label in
+     unlisted_visible_onsets.
 
-  A is about STRUCTURE. A single extra or missing note does NOT make A
-  DIFFERENT_MEASURE; that is what B and C are for.
+     The LEFT panel is the printed PDF raster with machine proposals P1..Pn, which
+     are unreliable in both directions. The RIGHT panel is the same measure as a
+     RHYTHM SKELETON whose every notehead height has been canonicalised to a neutral
+     slot, so it shows rhythm, onset order, chord cardinality, stems, beams, flags,
+     rests, dots, tuplets, meter and barlines, and no pitch information at all. The
+     panels are independently laid out and are NOT horizontally aligned; judge
+     sequence and rhythm, never pixel alignment.
 
-STEP 5. Write ONLY JSON to exactly:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2.json
-  Shape:
-  {{"reviewer":"V2_REVIEWER_2","batch":4,"items":[{{"item_id":"R001","A":"SAME_STRUCTURE",
-  "B":{{"X1":"PRINTED"}},"C":{{"P1":"X1"}},"D":"YES","E":"HIGH",
-  "unlisted_visible_onsets":[],
-  "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}]}}
+     A is about STRUCTURE. A single extra or missing note does NOT make A
+     DIFFERENT_MEASURE; that is what B and C are for.
 
-STEP 6. Reply with exactly ONE line:
-  V2_REVIEWER_2 batch4 done: <N items>
+  d) AFTER finishing a batch, write that batch's answers to its own TEMPORARY file:
+       tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2_batch{<K>}.json
+     for K = 1, 2, 3, 4 respectively. Each temporary file holds only that batch's
+     items. Never write to a temporary file more than once, and never let one batch
+     overwrite another.
 
-ABSOLUTE RULES - violating any invalidates the work:
-- Review ONLY the items in your assigned batch4.json.
+Continue to the next batch. Keep going until all four batches are finished.
+
+=========================================================================
+PART 3 - WRITE ONE FINAL FILE, ONLY AFTER ALL FOUR BATCHES
+=========================================================================
+Only after batch1, batch2, batch3 and batch4 are ALL complete:
+
+  a) Read your four temporary files back and merge them.
+  b) VERIFY the merged set contains exactly 80 entries with 80 UNIQUE
+     item_id values (R001 through R080), with no duplicates and no missing ids. If it
+     does not, something went wrong: fix it before continuing.
+  c) Write the single final file:
+       tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/V2_REVIEWER_2.json
+     with this shape:
+     {{"reviewer":"V2_REVIEWER_2","batches":[1,2,3,4],"items":[ ... all 80 items ... ]}}
+
+     Each item looks like:
+     {{"item_id":"R001","A":"SAME_STRUCTURE","B":{{"X1":"PRINTED"}},
+       "C":{{"P1":"X1"}},"D":"YES","E":"HIGH","unlisted_visible_onsets":[],
+       "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}
+
+  d) This is the ONLY final output file you create. Write it once. Do not write it
+     per batch and do not write it until all four batches are done. Your four
+     temporary batch files may remain on disk as provenance; that is expected and
+     harmless.
+
+=========================================================================
+PART 4 - REPLY
+=========================================================================
+Reply with exactly ONE line, and only after the final file is written:
+
+  V2_REVIEWER_2 done: <NITEMS> items
+
+=========================================================================
+ABSOLUTE RULES - violating any of these invalidates the work
+=========================================================================
+- Work under the single identity V2_REVIEWER_2 and no other. Review all 80 items
+  across all four batches yourself.
+- Do NOT stop, summarise or finish after any single batch. There is no per-batch
+  termination.
 - Do NOT open any other file in the repository. Never open out/h_review_manifest.json,
   out/h_review_lookup_INTERNAL.json, anything under out/h_review_ai/ (the V1 packet or
-  V1 reviewer files), any out/L*.json, or any file whose name contains residual, d0,
-  true_d, decoder, mismatch, answers or reviewer.
+  the V1 reviewer files), any out/L*.json, or any file whose name contains residual,
+  d0, true_d, decoder, mismatch, answers, reviewer_1, reviewer_2 or reviewer_3.
+- In tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/ you may open ONLY your
+  own four temporary batch files and your own final file. Do NOT list that directory,
+  do NOT open any other reviewer's output, and do NOT read, copy or infer another
+  reviewer's answers by any means. You must never see another reviewer's answers.
 - Do NOT run git. Do NOT search the repo. Do NOT try to identify the score, page,
-  system or measure of an item.
-- Do NOT look for or accept another reviewer's answers, a consensus, or any expected
-  answer. None are available and you must not seek them.
+  system or measure behind an item.
+- Do NOT look for or accept any expected answer, consensus, or hint. None are
+  available and you must not seek them.
 - Never name a note, octave or accidental value, and do not try to infer pitch. Judge
   printed structure only.
 - Be conservative: prefer UNSURE over a forced match. Never invent a one-to-one

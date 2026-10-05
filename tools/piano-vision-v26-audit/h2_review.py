@@ -25,97 +25,13 @@ E_VALS = {"HIGH", "MEDIUM", "LOW"}
 D_VALS = {"YES", "NO", "UNSURE"}
 NAMES = ["V2_REVIEWER_1", "V2_REVIEWER_2", "V2_REVIEWER_3"]
 
-PROMPT = """You are {NAME}, an independent blinded structural music-notation reviewer.
-You have your own fresh context. Judge only from what you can see.
-
-Working directory: /Users/ryland/Documents/scoreflow-piano-v26
-
-STEP 1. Read the rubric:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/rubric_v2.md
-  Then read the serialisation schema:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/schema_v2.json
-  Then look at TWO instructional examples first (they are synthetic teaching cases,
-  not real data):
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex1_same_with_one_source_extra.png
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/examples/ex3_same_rhythm_uncertain_dense_chord.png
-
-STEP 2. Read your assigned batch:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/batches/batch{N}.json
-  Each entry has item_id, image, n_pdf_proposals, source_cards.
-
-STEP 3. For EACH entry use the read tool on the image path
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/<image>
-  and actually look at it before answering. The LEFT panel is the printed PDF raster
-  with machine proposals P1..Pn. The RIGHT panel is the same measure as a RHYTHM
-  SKELETON whose every notehead height has been canonicalised to a neutral slot, so
-  it shows rhythm, onset order, chord cardinality, stems, beams, flags, rests, dots,
-  tuplets, meter and barlines but NO pitch information.
-
-STEP 4. Answer per item, exactly as the rubric and schema specify:
-  A = SAME_STRUCTURE | DIFFERENT_MEASURE | UNSURE
-  B = per source onset Xn: PRINTED | NOT_PRINTED | UNSURE
-  C = per PDF proposal Pn: an X id, or NO_SOURCE_COUNTERPART, or UNSURE
-  D = YES | NO | UNSURE
-  E = HIGH | MEDIUM | LOW
-  If E is HIGH, also do the second pass for each matched onset pair: RANK_OK with an
-  explicit map like {{"P1a":"X1a","P1b":"X1b"}}, or AMBIGUOUS.
-  Record clearly visible printed onsets that carry no P label in unlisted_visible_onsets.
-
-  A is about STRUCTURE. A single extra or missing note does NOT make A
-  DIFFERENT_MEASURE; that is what B and C are for.
-
-STEP 5. Write ONLY JSON to exactly:
-  tools/piano-vision-v26-audit/out/h_review_ai_v2/reviews/{NAME}.json
-  Shape:
-  {{"reviewer":"{NAME}","batch":{N},"items":[{{"item_id":"R001","A":"SAME_STRUCTURE",
-  "B":{{"X1":"PRINTED"}},"C":{{"P1":"X1"}},"D":"YES","E":"HIGH",
-  "unlisted_visible_onsets":[],
-  "second_pass":{{"P1":{{"verdict":"RANK_OK","map":{{"P1a":"X1a"}}}}}}}}]}}
-
-STEP 6. Reply with exactly ONE line:
-  {NAME} batch{N} done: <N items>
-
-ABSOLUTE RULES - violating any invalidates the work:
-- Review ONLY the items in your assigned batch{N}.json.
-- Do NOT open any other file in the repository. Never open out/h_review_manifest.json,
-  out/h_review_lookup_INTERNAL.json, anything under out/h_review_ai/ (the V1 packet or
-  V1 reviewer files), any out/L*.json, or any file whose name contains residual, d0,
-  true_d, decoder, mismatch, answers or reviewer.
-- Do NOT run git. Do NOT search the repo. Do NOT try to identify the score, page,
-  system or measure of an item.
-- Do NOT look for or accept another reviewer's answers, a consensus, or any expected
-  answer. None are available and you must not seek them.
-- Never name a note, octave or accidental value, and do not try to infer pitch. Judge
-  printed structure only.
-- Be conservative: prefer UNSURE over a forced match. Never invent a one-to-one
-  mapping to fill C. P labels are proposals, not truth.
-- Work serially. Do not spawn other agents."""
-
-
+# The prompt text now lives in h2_prompts.py, which generates ONE unified flow per
+# reviewer (four batches, per-batch temporary artifacts, a single final write) and runs
+# the preflight validation. This module keeps only the consensus runner, so the old
+# four-block generator that could overwrite batch answers cannot be resurrected.
 def write_prompts():
-    V2.mkdir(parents=True, exist_ok=True)
-    (V2 / "batches").mkdir(exist_ok=True)
-    items = json.loads((V2 / "items_neutral.json").read_text())["items"]
-    n = len(items)
-    B = 4
-    per = n // B
-    for b in range(B):
-        chunk = items[b * per:(b + 1) * per] if b < B - 1 else items[b * per:]
-        (V2 / "batches" / ("batch%d.json" % (b + 1))).write_text(
-            json.dumps(chunk, indent=1))
-    outs = []
-    for i, name in enumerate(NAMES):
-        parts = []
-        for b in range(1, B + 1):
-            parts.append(PROMPT.replace("{NAME}", name).replace("{N}", str(b)))
-        p = V2 / ("prompt_%d.txt" % (i + 1))
-        p.write_text("\n\n" + ("=" * 78 + "\n") .join(parts))
-        outs.append(str(p))
-    (V2 / "batches").mkdir(exist_ok=True)
-    print("P11 batches written : %d x ~%d items" % (B, per))
-    for o in outs:
-        print("P12 prompt          : %s" % o)
-    return outs
+    import h2_prompts
+    return h2_prompts.write_prompts()
 
 
 def consensus():
