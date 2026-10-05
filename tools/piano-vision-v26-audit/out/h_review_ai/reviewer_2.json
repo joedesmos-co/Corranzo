@@ -1,0 +1,1964 @@
+[
+ {
+  "item_id": "R001",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "onset before P4 (beamed, ~x295)",
+   "onset before P4 (beamed, ~x355)",
+   "onset after the barline at right edge"
+  ],
+  "notes": "P1=treble clef, P2=common-time sign, P3=rest/beam fragment, none are note onsets. 8 real PDF onsets vs 7 source onsets (source X5 carries 2 noteheads)."
+ },
+ {
+  "item_id": "R002",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE",
+   "X9": "UNSURE",
+   "X10": "UNSURE",
+   "X11": "UNSURE",
+   "X12": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "unmarked notehead between P4 and P5"
+  ],
+  "notes": "P1/P2 on treble clef, P3 on the common-time sign. ~11-12 PDF onsets vs 12 source onsets; the tail of the beamed run is hard to split, so no mapping forced."
+ },
+ {
+  "item_id": "R003",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "X1",
+   "P4": "X2",
+   "P5": "X3"
+  },
+  "D": "YES",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: 4th PDF onset, unmarked, right of P5 - matches X4"
+  ],
+  "notes": "P1=bass clef, P2=common-time sign. PDF: 4 onsets / 5 noteheads; source: 4 onsets / 5 noteheads with X1 a 2-notehead onset, matching the 2-notehead stack under P3."
+ },
+ {
+  "item_id": "R004",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "UNSURE",
+   "P13": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 on a percussion-style clef, P2 on rests. The raster spans a dense chromatic passage plus the start of the next bar (barline sits under P8) - far more noteheads than the 8 clean 3-note chords of the source panel."
+ },
+ {
+  "item_id": "R005",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 on a percussion clef, P2 on rests. ~16 noteheads in the raster against 9 in the source."
+ },
+ {
+  "item_id": "R006",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "Raster shows a triplet figure with fermata plus two half notes (P1 carries 2 noteheads); source shows a single onset with a single notehead."
+ },
+ {
+  "item_id": "R007",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "Blurred low-resolution raster. ~5 visible noteheads (two ledger-line notes, a dotted open notehead, two open noteheads) against 2 source onsets / 2 noteheads."
+ },
+ {
+  "item_id": "R008",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 on treble clef, P2 on a key-signature flat, P3 on the 2/4 time signature. No note onset is printed anywhere in the raster; source has 4 onsets."
+ },
+ {
+  "item_id": "R009",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 on bass clef, P2 on a flat, P3 on the 2/4 time signature. No note onset printed; source has 3."
+ },
+ {
+  "item_id": "R010",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "NO_SOURCE_COUNTERPART",
+   "P6": "NO_SOURCE_COUNTERPART",
+   "P7": "UNSURE",
+   "P8": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P1 treble clef, P2/P3/P4 key-signature flats, P5 common-time sign, P6 barline, P8 whole rest. Only P7 is a real onset (a chord). Source: 1 onset / 5 noteheads; chord size in the raster is not reliably countable at this resolution."
+ },
+ {
+  "item_id": "R011",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE",
+   "X9": "UNSURE",
+   "X10": "UNSURE",
+   "X11": "UNSURE",
+   "X12": "UNSURE",
+   "X13": "UNSURE",
+   "X14": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "NO_SOURCE_COUNTERPART",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "UNSURE",
+   "P13": "UNSURE",
+   "P14": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "~5 unmarked noteheads in the first beamed group, before P7"
+  ],
+  "notes": "P1 bass clef, P2/P3 flats, P4 common-time sign, P5 eighth rest. ~14 PDF onsets against 14 source onsets, but the alignment of the last four P rules is ambiguous, so no mapping forced."
+ },
+ {
+  "item_id": "R012",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "NO_SOURCE_COUNTERPART",
+   "P13": "UNSURE",
+   "P14": "UNSURE",
+   "P15": "UNSURE",
+   "P16": "NO_SOURCE_COUNTERPART",
+   "P17": "UNSURE",
+   "P18": "UNSURE",
+   "P19": "UNSURE",
+   "P20": "NO_SOURCE_COUNTERPART",
+   "P21": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "Raster spans four separate measures (barlines under P7/P12/P16/P20) with ~18 onsets; source has 7 onsets. Which measure the source refers to cannot be established visually."
+ },
+ {
+  "item_id": "R013",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "UNSURE",
+   "P13": "UNSURE",
+   "P14": "UNSURE",
+   "P15": "UNSURE",
+   "P16": "UNSURE",
+   "P17": "UNSURE",
+   "P18": "UNSURE",
+   "P19": "UNSURE",
+   "P20": "UNSURE",
+   "P21": "UNSURE",
+   "P22": "UNSURE",
+   "P23": "UNSURE",
+   "P24": "UNSURE",
+   "P25": "UNSURE",
+   "P26": "UNSURE",
+   "P27": "UNSURE",
+   "P28": "UNSURE",
+   "P29": "UNSURE",
+   "P30": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "Raster shows a dense multi-measure passage (~40 noteheads, measure number '10' at left); source has 4 onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R014",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1/P2 on treble clef, P3 on a flat, P4 on blank staff, P5 on the 12/8 time signature. No note onset printed; source has 6 onsets."
+ },
+ {
+  "item_id": "R015",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE",
+   "X9": "UNSURE",
+   "X10": "UNSURE",
+   "X11": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 bass clef, P2/P3 flats, P4 on the 12/8 time signature. At most one ambiguous onset before the time signature; source has 11 onsets / 21 noteheads."
+ },
+ {
+  "item_id": "R016",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "UNSURE",
+   "P6": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 bass clef, P2/P3 flats, P4 common-time sign, P6 barline. Only P5 is a real onset inside the measure; source has 4 onsets."
+ },
+ {
+  "item_id": "R017",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "NO_SOURCE_COUNTERPART",
+   "P12": "UNSURE",
+   "P13": "UNSURE",
+   "P14": "UNSURE",
+   "P15": "UNSURE",
+   "P16": "UNSURE",
+   "P17": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1/P2 treble clef, P3 common-time sign, P4 eighth rest, P11 eighth rest, P17 barline. 11 real PDF onsets against 4 source onsets."
+ },
+ {
+  "item_id": "R018",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE",
+   "X9": "UNSURE",
+   "X10": "UNSURE",
+   "X11": "UNSURE",
+   "X12": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 bass clef, P2 common-time sign. Raster shows a 2-note figure repeating (6 noteheads before the barline); source has 12 onsets / 12 noteheads."
+ },
+ {
+  "item_id": "R019",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 treble clef, P2 on the 3/8 time signature. No note onset printed; source has 6 onsets."
+ },
+ {
+  "item_id": "R020",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 treble clef, P2 key-signature sharps, P3 on the 3/4 time signature. No note onset printed; source has 5 onsets."
+ },
+ {
+  "item_id": "R021",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 bass clef, P2 key-signature sharps, P3 on the 3/4 time signature. No note onset printed; source has 2 onsets."
+ },
+ {
+  "item_id": "R022",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE",
+   "X9": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "unlisted_visible_onsets": [
+   "unmarked onsets at the far left before P1"
+  ],
+  "notes": "P9 marks a 2-notehead chord; P6 appears to fall on a rest rather than a notehead. ~10-14 PDF onsets against 9 source onsets - too uncertain to map."
+ },
+ {
+  "item_id": "R023",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P1 spans two open noteheads at the same x (a chord or two voices); source shows 2 separate single-notehead onsets. Cannot separate visually."
+ },
+ {
+  "item_id": "R024",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 treble clef, P2/P3 flats, P4 common-time sign. Only one note onset before the barline; source has 4 onsets."
+ },
+ {
+  "item_id": "R025",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: U1 (3-notehead chord, left) - X1",
+   "UNLISTED_VISIBLE_ONSET: U2 (single notehead) - X2",
+   "UNLISTED_VISIBLE_ONSET: U3 (2-notehead chord) - X3",
+   "UNLISTED_VISIBLE_ONSET: U4 (single notehead) - X4"
+  ],
+  "second_pass": {
+   "U1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U1a": "X1a",
+     "U1b": "X1b",
+     "U1c": "X1c"
+    }
+   },
+   "U2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U2a": "X2a"
+    }
+   },
+   "U3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U3a": "X3a",
+     "U3b": "X3b"
+    }
+   },
+   "U4": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U4a": "X4a"
+    }
+   }
+  },
+  "notes": "P1 on a percussion clef, P2 on rests. PDF 4 onsets / 7 noteheads with per-onset 3-1-2-1; source 4 onsets / 7 noteheads with per-onset 3-1-2-1. Exact agreement; all four PDF onsets carry no P rule."
+ },
+ {
+  "item_id": "R026",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "X2"
+  },
+  "D": "YES",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: 2-notehead chord left of P2 - X1"
+  ],
+  "notes": "P1 on a percussion clef. PDF 2 onsets / 4 noteheads (2+2); source 2 onsets / 4 noteheads (2+2)."
+ },
+ {
+  "item_id": "R027",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 treble clef, P2 blank staff, P3/P4 key-signature sharps, P5 on the 3/4 time signature. No note onset printed; source has 5 onsets."
+ },
+ {
+  "item_id": "R028",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 bass clef, P2/P3 key-signature sharps, P4 on the 5/4 time signature. No note onset printed; source has 2 onsets."
+ },
+ {
+  "item_id": "R029",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P1 treble clef, P2 sharp, P3 common-time sign. PDF ~7 onsets / 9 noteheads (last two P rules mark 2-notehead chords); source 6 onsets / 7 noteheads."
+ },
+ {
+  "item_id": "R030",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P1 bass clef, P2 sharp, P3 common-time sign, P4 quarter rest. 4 real PDF onsets against 3 source onsets."
+ },
+ {
+  "item_id": "R031",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1/P2 treble clef, P3 on the 2/4 time signature. No note onset printed; source has 5 onsets."
+ },
+ {
+  "item_id": "R032",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "HIGH",
+  "second_pass": {},
+  "notes": "P1 bass clef, P2 on the 2/4 time signature. No note onset printed; source has 2 onsets."
+ },
+ {
+  "item_id": "R033",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "All four P rules sit on real noteheads of a beamed run, but the raster holds 4-5 onsets against a single source onset."
+ },
+ {
+  "item_id": "R034",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P1 marks a single notehead; the raster also carries an unmarked 2-notehead chord at the left edge (2 onsets / 3 noteheads) against 1 source onset / 2 noteheads."
+ },
+ {
+  "item_id": "R035",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "Both P rules mark real 2-notehead chords; an unmarked 2-notehead chord sits between them. 3 PDF onsets / 6 noteheads against 1 source onset / 2 noteheads."
+ },
+ {
+  "item_id": "R036",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P2 sits on a treble clef and P4 on a bass clef appearing mid-staff - both are not note onsets. 4 PDF onsets / ~7 noteheads against 1 source onset / 2 noteheads."
+ },
+ {
+  "item_id": "R037",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P1 marks an open notehead with a tie; a second unmarked open-notehead onset sits to the left and the lower notehead is cut off by the crop. Counting is unreliable."
+ },
+ {
+  "item_id": "R038",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED"
+  },
+  "C": {},
+  "D": "YES",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: single open notehead on a ledger line - X1"
+  ],
+  "notes": "No P rules at all in this item. Raster shows exactly one note onset with one notehead; source shows one onset with one notehead."
+ },
+ {
+  "item_id": "R039",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "X1"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 sits on an arpeggio/roll sign. One onset on each side, but the printed chord has 3 noteheads against 2 in the source."
+ },
+ {
+  "item_id": "R040",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "X1"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 sits on an arpeggio/roll sign. One onset on each side, but the printed sonority has 2 noteheads against 3 in the source."
+ },
+ {
+  "item_id": "R041",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "Raster carries three noteheads in a beamed group plus an eighth rest; source has a single onset."
+ },
+ {
+  "item_id": "R042",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED"
+  },
+  "C": {
+   "P1": "X1"
+  },
+  "D": "YES",
+  "E": "MEDIUM",
+  "notes": "Only one P rule, on a real notehead. One onset on each side with 2 noteheads; the raster also shows eighth rests either side, which carry no source counterpart."
+ },
+ {
+  "item_id": "R043",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "All five P rules mark real onsets (P5 a 2-notehead chord). 5 PDF onsets / 6 noteheads against 1 source onset / 3 noteheads."
+ },
+ {
+  "item_id": "R044",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: single notehead right of P5"
+  ],
+  "notes": "6 PDF onsets / 6 noteheads against 3 source onsets / 3 noteheads."
+ },
+ {
+  "item_id": "R045",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED"
+  },
+  "C": {
+   "P1": "X1",
+   "P2": "X2",
+   "P3": "X3"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "second_pass": {
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X1a",
+     "P1b": "X1b"
+    }
+   },
+   "P2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P2a": "X2a"
+    }
+   },
+   "P3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P3a": "X3a",
+     "P3b": "X3b"
+    }
+   }
+  },
+  "notes": "P1 a 2-notehead chord, P2 a single notehead, P3 a 2-notehead chord of open noteheads. PDF 3 onsets / 5 noteheads with per-onset 2-1-2; source identical."
+ },
+ {
+  "item_id": "R046",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "X1",
+   "P2": "X2"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: single notehead between P2 and P3 - X3",
+   "UNLISTED_VISIBLE_ONSET: single notehead right of that - X4"
+  ],
+  "second_pass": {
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X1a"
+    }
+   },
+   "P2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P2a": "X2a"
+    }
+   },
+   "U2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U2a": "X3a"
+    }
+   },
+   "U3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U3a": "X4a"
+    }
+   }
+  },
+  "notes": "PDF 4 onsets / 4 noteheads; source 4 onsets / 4 noteheads, all single-notehead."
+ },
+ {
+  "item_id": "R047",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE",
+   "X8": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P rules largely sit on real noteheads of a beamed run. ~10 PDF onsets / 13 noteheads against 8 source onsets / 11 noteheads - close but not equal."
+ },
+ {
+  "item_id": "R048",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "All six P rules mark real noteheads: 6 PDF onsets / 6 noteheads against 4 source onsets."
+ },
+ {
+  "item_id": "R049",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead at the left edge"
+  ],
+  "notes": "P3 sits on augmentation dots, not a notehead. 4 PDF onsets / 4 noteheads against 3 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R050",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "X2",
+   "P2": "X3"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead at the left edge - X1",
+   "UNLISTED_VISIBLE_ONSET: notehead right of P2 - X4"
+  ],
+  "second_pass": {
+   "U1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U1a": "X1a"
+    }
+   },
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X2a"
+    }
+   },
+   "P2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P2a": "X3a"
+    }
+   },
+   "U2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U2a": "X4a"
+    }
+   }
+  },
+  "notes": "PDF 4 onsets / 4 noteheads; source 4 onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R051",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "All seven P rules mark real noteheads: 7 PDF onsets / 7 noteheads against 6 source onsets / 7 noteheads."
+ },
+ {
+  "item_id": "R052",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "NO_SOURCE_COUNTERPART",
+   "P7": "NO_SOURCE_COUNTERPART",
+   "P8": "UNSURE",
+   "P9": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P2 on a sharp, P6/P7 on a repeat barline. ~9 PDF onsets / 13 noteheads against 3 source onsets."
+ },
+ {
+  "item_id": "R053",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 treble clef, P2 sharp. 6 PDF onsets / 8 noteheads against 3 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R054",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead right of P6"
+  ],
+  "notes": "P1 bass clef, P2 sharp. 5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R055",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P2 sits on augmentation dots. ~5 PDF onsets / 9 noteheads against 6 source onsets / 12 noteheads."
+ },
+ {
+  "item_id": "R056",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead between P1 and P2",
+   "UNLISTED_VISIBLE_ONSET: notehead right of P4"
+  ],
+  "notes": "P3 sits on a sharp. 5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R057",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "NO_SOURCE_COUNTERPART",
+   "P6": "UNSURE",
+   "P7": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P5 sits on a sharp. ~8 PDF onsets / 16 noteheads against 3 source onsets / 7 noteheads."
+ },
+ {
+  "item_id": "R058",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R059",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P2 sits on a double barline. Only 2 PDF onsets / 4 noteheads against 7 source onsets / 8 noteheads."
+ },
+ {
+  "item_id": "R060",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "NO_SOURCE_COUNTERPART"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead between P2 and P3"
+  ],
+  "notes": "P3 sits on a double barline. 3 PDF onsets / 3 noteheads against 4 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R061",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "LOW",
+  "notes": "P1 sits on a repeat barline. Both sides give 4 onsets / 5 noteheads, but the 2-notehead onset is the FIRST onset in the raster and the LAST in the source, so the correspondence is not established."
+ },
+ {
+  "item_id": "R062",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P1 on a double barline. ~2 PDF onsets / 4 noteheads against 5 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R063",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "NO_SOURCE_COUNTERPART",
+   "P5": "UNSURE",
+   "P6": "NO_SOURCE_COUNTERPART",
+   "P7": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P1 treble clef, P2/P6 sharps, P4 augmentation dots. ~4 PDF onsets / 7 noteheads against 3 source onsets / 7 noteheads."
+ },
+ {
+  "item_id": "R064",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead right of P5"
+  ],
+  "notes": "P1 bass clef, P2 sharp. 5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R065",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED",
+   "X5": "PRINTED",
+   "X6": "PRINTED",
+   "X7": "PRINTED",
+   "X8": "PRINTED"
+  },
+  "C": {
+   "P1": "X1",
+   "P2": "X2",
+   "P3": "NO_SOURCE_COUNTERPART",
+   "P4": "X3",
+   "P5": "X4",
+   "P6": "X5",
+   "P7": "X6",
+   "P8": "X7",
+   "P9": "X8"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P3 sits on a sharp. Totals agree exactly - 8 PDF onsets / 12 noteheads against 8 source onsets / 12 noteheads - but the 2-notehead onsets fall in different positions in the two panels, so the per-onset pairing and hence cardinality cannot be confirmed."
+ },
+ {
+  "item_id": "R066",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead left of P1",
+   "UNLISTED_VISIBLE_ONSET: notehead between P1 and P2",
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R067",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P2 sits on augmentation dots, P3 falls between a notehead and its accidental. ~5 PDF onsets / 6 noteheads against 3 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R068",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead between P1 and P2",
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "5 PDF onsets / 5 noteheads against 4 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R069",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED",
+   "X5": "PRINTED",
+   "X6": "PRINTED",
+   "X7": "PRINTED",
+   "X8": "PRINTED"
+  },
+  "C": {
+   "P1": "X1",
+   "P2": "X2",
+   "P3": "X3",
+   "P4": "X4",
+   "P5": "X5",
+   "P6": "X6",
+   "P7": "X7",
+   "P8": "X8"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "second_pass": {
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X1a",
+     "P1b": "X1b"
+    }
+   },
+   "P2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P2a": "X2a"
+    }
+   },
+   "P3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P3a": "X3a",
+     "P3b": "X3b"
+    }
+   },
+   "P4": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P4a": "X4a"
+    }
+   },
+   "P5": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P5a": "X5a",
+     "P5b": "X5b"
+    }
+   },
+   "P6": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P6a": "X6a"
+    }
+   },
+   "P7": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P7a": "X7a",
+     "P7b": "X7b"
+    }
+   },
+   "P8": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P8a": "X8a"
+    }
+   }
+  },
+  "notes": "Exact agreement: 8 PDF onsets / 12 noteheads with per-onset 2-1-2-1-2-1-2-1, identical to the source panel. Every P rule lands on a real notehead."
+ },
+ {
+  "item_id": "R070",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R071",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead at the left edge"
+  ],
+  "notes": "P2 sits on augmentation dots. 4 PDF onsets / 5 noteheads against 3 source onsets / 5 noteheads."
+ },
+ {
+  "item_id": "R072",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "X1",
+   "P2": "X2",
+   "P3": "X3",
+   "P4": "X4"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "second_pass": {
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X1a"
+    }
+   },
+   "P2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P2a": "X2a"
+    }
+   },
+   "P3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P3a": "X3a"
+    }
+   },
+   "P4": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P4a": "X4a"
+    }
+   }
+  },
+  "notes": "Exact agreement: 4 PDF onsets / 4 noteheads, all single-notehead, matching the source panel."
+ },
+ {
+  "item_id": "R073",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "P1 treble clef, P2 sharp. ~8 PDF onsets / 11 noteheads against 6 source onsets / 10 noteheads."
+ },
+ {
+  "item_id": "R074",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "NO_SOURCE_COUNTERPART",
+   "P2": "NO_SOURCE_COUNTERPART",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "P1 bass clef, P2 sharp. 5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R075",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "notes": "~5 PDF onsets / 7 noteheads against 6 source onsets / 10 noteheads. Lower part of the raster is cut off, so the PDF side is an undercount."
+ },
+ {
+  "item_id": "R076",
+  "A": "UNSURE",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE"
+  },
+  "D": "UNSURE",
+  "E": "MEDIUM",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead between P1 and P2",
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline"
+  ],
+  "notes": "5 PDF onsets / 5 noteheads against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R077",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE",
+   "X5": "UNSURE",
+   "X6": "UNSURE",
+   "X7": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE",
+   "P7": "UNSURE",
+   "P8": "UNSURE",
+   "P9": "UNSURE",
+   "P10": "UNSURE",
+   "P11": "UNSURE",
+   "P12": "UNSURE",
+   "P13": "UNSURE",
+   "P14": "UNSURE",
+   "P15": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "Extremely dense raster of stacked 2-notehead chords (~17 onsets / ~33 noteheads) against 7 source onsets / 12 noteheads."
+ },
+ {
+  "item_id": "R078",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE",
+   "X4": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE",
+   "P5": "UNSURE",
+   "P6": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "All six P rules mark real noteheads and the raster holds 10 onsets / 10 noteheads, against 4 source onsets / 4 noteheads."
+ },
+ {
+  "item_id": "R079",
+  "A": "NO",
+  "B": {
+   "X1": "UNSURE",
+   "X2": "UNSURE",
+   "X3": "UNSURE"
+  },
+  "C": {
+   "P1": "UNSURE",
+   "P2": "UNSURE",
+   "P3": "UNSURE",
+   "P4": "UNSURE"
+  },
+  "D": "NO",
+  "E": "MEDIUM",
+  "notes": "P2 and P3 mark 3-notehead chords. ~6 PDF onsets / 12 noteheads against 3 source onsets / 7 noteheads."
+ },
+ {
+  "item_id": "R080",
+  "A": "SAME",
+  "B": {
+   "X1": "PRINTED",
+   "X2": "PRINTED",
+   "X3": "PRINTED",
+   "X4": "PRINTED"
+  },
+  "C": {
+   "P1": "X2"
+  },
+  "D": "YES",
+  "E": "HIGH",
+  "unlisted_visible_onsets": [
+   "UNLISTED_VISIBLE_ONSET: notehead left of P1 - X1",
+   "UNLISTED_VISIBLE_ONSET: notehead below, between P1 and the barline - X3",
+   "UNLISTED_VISIBLE_ONSET: notehead right of the barline - X4"
+  ],
+  "second_pass": {
+   "U1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U1a": "X1a"
+    }
+   },
+   "P1": {
+    "verdict": "RANK_OK",
+    "map": {
+     "P1a": "X2a"
+    }
+   },
+   "U2": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U2a": "X3a"
+    }
+   },
+   "U3": {
+    "verdict": "RANK_OK",
+    "map": {
+     "U3a": "X4a"
+    }
+   }
+  },
+  "notes": "PDF 4 onsets / 4 noteheads, all single-notehead; source identical."
+ }
+]

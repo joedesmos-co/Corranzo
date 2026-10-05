@@ -1,0 +1,1098 @@
+{
+ "label": "AI_BLIND_CONSENSUS",
+ "warning": "NOT human ground truth. NOT manually certified. Internal R&D only.",
+ "packet_sha256": "eb298a329590d37afe22b60a7ef881d7228fa2517ce767185370876941abb092",
+ "reviewer_sha256": {
+  "reviewer_1": "8a6f130f306e27b10ab9202977516a495e615d68e8b0d3ff4769be5f2ded65d1",
+  "reviewer_2": "69228a4c0c70b49bb0c5b2de972f2c2b2fce3e68cdac7be3a8f6e9aa9227b7c9",
+  "reviewer_3": "ac067b6804c4ac2b81be72ee69c5188f3bfed51c429d3bb15a392ee728094042"
+ },
+ "rules": {
+  "measure_identity": "unanimous SAME",
+  "onset_presence": "unanimous PRINTED",
+  "P_to_X": "unanimous identical X id",
+  "cardinality": "unanimous",
+  "rank_pairing": "unanimous RANK_OK with identical map",
+  "admission": "unanimous structure AND >=2/3 HIGH AND no LOW",
+  "otherwise": "AI_CONSENSUS_UNRESOLVED",
+  "bias_policy": "precision over coverage"
+ },
+ "agreement": {
+  "A_same_unanimous": [
+   0,
+   80
+  ],
+  "B_printed_unanimous": [
+   0,
+   341
+  ],
+  "C_map_unanimous": [
+   0,
+   435
+  ],
+  "D_card_unanimous": [
+   28,
+   80
+  ],
+  "E_high_2of3_no_low": [
+   11,
+   80
+  ]
+ },
+ "rank_pairing": [
+  0,
+  31,
+  31
+ ],
+ "pairwise": {
+  "reviewer_1|reviewer_2": 0.1,
+  "reviewer_1|reviewer_3": 0.1875,
+  "reviewer_2|reviewer_3": 0.0375
+ },
+ "consensus_matched_onsets": 0,
+ "consensus_matched_noteheads": 0,
+ "unresolved_items": 80,
+ "items": [
+  {
+   "item_id": "R001",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R002",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R003",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R004",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "LOW"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R005",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "LOW"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R006",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R007",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R008",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R009",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R010",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R011",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "LOW"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R012",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R013",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R014",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R015",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "MEDIUM",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R016",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R017",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R018",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R019",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R020",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R021",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R022",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R023",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R024",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R025",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "LOW"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R026",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R027",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R028",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R029",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R030",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R031",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R032",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "HIGH",
+    "HIGH"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R033",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R034",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R035",
+   "A_unanimous": null,
+   "E_values": [
+    "HIGH",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R036",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R037",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R038",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R039",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "LOW"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R040",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R041",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R042",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R043",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R044",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R045",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R046",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R047",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R048",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R049",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R050",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R051",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R052",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R053",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R054",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R055",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R056",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R057",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R058",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R059",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R060",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R061",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "LOW",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R062",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R063",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R064",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R065",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R066",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R067",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R068",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R069",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R070",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R071",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R072",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R073",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R074",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R075",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R076",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R077",
+   "A_unanimous": null,
+   "E_values": [
+    "LOW",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R078",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R079",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "MEDIUM",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  },
+  {
+   "item_id": "R080",
+   "A_unanimous": null,
+   "E_values": [
+    "MEDIUM",
+    "HIGH",
+    "MEDIUM"
+   ],
+   "accepted": false,
+   "onsets": [],
+   "rank_pairs": {},
+   "status": "AI_CONSENSUS_UNRESOLVED"
+  }
+ ],
+ "consensus_manifest_sha256": "95aaeae41673ab62bf8cef32adadb56870ff3fed9d96965e42cb1e1fa9922495"
+}

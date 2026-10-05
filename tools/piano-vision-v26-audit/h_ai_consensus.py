@@ -48,15 +48,23 @@ def load_spec():
 
 
 def load_reviewer(name, spec):
-    p = BASE / "reviews" / ("%s.json" % name)
+    # reviewers 2 and 3 wrote a bare JSON list; reviewer 1 wrote an object with
+    # metadata. Normalise both containers rather than rejecting the campaign over a
+    # shape difference, but REPORT it.
+    p = BASE / ("%s.json" % name)
     if not p.is_file():
         return None, None
     raw = p.read_bytes()
     doc = json.loads(raw.decode())
     errs = []
-    if not REQUIRED_TOP <= set(doc):
-        errs.append("missing top-level keys %s" % (REQUIRED_TOP - set(doc)))
-    items = doc.get("items", [])
+    container = "object"
+    if isinstance(doc, list):
+        container = "bare_list"
+        items = doc
+    else:
+        if not REQUIRED_TOP <= set(doc):
+            errs.append("missing top-level keys %s" % (REQUIRED_TOP - set(doc)))
+        items = doc.get("items", [])
     seen = set()
     out = {}
     for it in items:
@@ -112,7 +120,7 @@ def load_reviewer(name, spec):
                         errs.append("%s rank value %r malformed" % (iid, mp[k]))
         out[iid] = it
     return out, {"sha256": hashlib.sha256(raw).hexdigest(), "errors": errs,
-                 "n_items": len(out)}
+                 "n_items": len(out), "container": container}
 
 
 def agreement(a, b, iid, field):
@@ -147,8 +155,9 @@ def main():
         die("%d schema errors across reviewer files" % len(allerr))
 
     for r in REVIEWERS:
-        print("  %s items=%-4d sha256=%s"
-              % (r, meta[r]["n_items"], meta[r]["sha256"][:32]))
+        print("  %-11s items=%-4d container=%-10s sha256=%s"
+              % (r, meta[r]["n_items"], meta[r]["container"],
+                 meta[r]["sha256"][:40]))
     common = set(rev[REVIEWERS[0]])
     for r in REVIEWERS[1:]:
         common &= set(rev[r])
@@ -163,19 +172,19 @@ def main():
             m["A_same_unanimous"][0] += 1
         allx = sorted({x for y in a for x in y["B"]})
         for x in allx:
-            m["B_onset"][1] += 1
+            m["B_printed_unanimous"][1] += 1
             vs = [y["B"].get(x, "MISSING") for y in a]
             if vs[0] == vs[1] == vs[2] == "PRINTED":
                 m["B_printed_unanimous"][0] += 1
         for p in sorted({k for y in a for k in y["C"]}):
-            m["C_map"][1] += 1
+            m["C_map_unanimous"][1] += 1
             vs = [y["C"].get(p, "MISSING") for y in a]
             if vs[0] == vs[1] == vs[2] and vs[0].startswith("X"):
                 m["C_map_unanimous"][0] += 1
-        m["D_card"][1] += 1
+        m["D_card_unanimous"][1] += 1
         if a[0]["D"] == a[1]["D"] == a[2]["D"]:
             m["D_card_unanimous"][0] += 1
-        m["E_high"][1] += 1
+        m["E_high_2of3_no_low"][1] += 1
         if sum(1 for x in a if x["E"] == "HIGH") >= 2 and \
                 not any(x["E"] == "LOW" for x in a):
             m["E_high_2of3_no_low"][0] += 1
@@ -189,11 +198,13 @@ def main():
                     and ax["B"] == ay["B"] and ax["C"] == ay["C"])
             agree += int(same)
         pairs["%s|%s" % (x, y)] = agree / max(1, len(common))
-    rank_tot = rank_ok = 0
+    rank_tot = rank_ok = rank_any = 0
     for iid in sorted(common):
         a = [rev[r][iid] for r in REVIEWERS]
         for p in sorted({k for y in a for k in (y.get("second_pass") or {})}):
             rank_tot += 1
+            rank_any += sum(1 for y in a
+                            if (y.get("second_pass") or {}).get(p))
             maps = []
             allok = True
             for y in a:
@@ -255,8 +266,9 @@ def main():
     rate("C_map_unanimous", "unanimous P->X mapping rate")
     rate("D_card_unanimous", "unanimous cardinality rate")
     rate("E_high_2of3_no_low", ">=2/3 HIGH and no LOW")
-    print("  %-34s %4d / %-5d = %.4f" % ("unanimous rank-pairing rate", rank_ok,
-                                         rank_tot, rank_ok / max(1, rank_tot)))
+    print("  %-34s %4d / %-5d = %.4f  (%d second-pass verdicts submitted in all)"
+          % ("unanimous rank-pairing rate", rank_ok, rank_tot,
+             rank_ok / max(1, rank_tot), rank_any))
     for k, v in pairs.items():
         print("  pairwise exact-agreement %-16s %.4f" % (k, v))
     print("\nA6  AI_BLIND_CONSENSUS")
@@ -279,7 +291,7 @@ def main():
                          "otherwise": "AI_CONSENSUS_UNRESOLVED",
                          "bias_policy": "precision over coverage"},
                "agreement": {k: m[k] for k in m},
-               "rank_pairing": [rank_ok, rank_tot],
+               "rank_pairing": [rank_ok, rank_tot, rank_any],
                "pairwise": pairs,
                "consensus_matched_onsets": n_on,
                "consensus_matched_noteheads": n_note,
