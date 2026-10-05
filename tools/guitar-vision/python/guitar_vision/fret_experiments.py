@@ -302,6 +302,134 @@ def digit_losses(
 # --------------------------------------------------------------------------
 
 
+class TrainStatsStandardizer(nn.Module):
+    """Per-feature standardisation from training statistics only.
+
+    ## Why this exists
+
+    The head-only diagnostic at commit ``ca400d984e`` measured the exact same
+    representation ``P`` two ways. On raw ``P`` the production ``Linear(192 -> 26)``
+    recipe reached 0.1671 score-disjoint; on per-feature standardised ``P`` the same
+    recipe reached 0.4203. Changing the optimiser instead was worth 0.0152.
+
+    The mechanism is scale, not spectrum. ``P``'s median per-feature standard
+    deviation is about 0.045, while ``Linear(192, 26)`` initialises weights to
+    +/-1/sqrt(192) = +/-0.0722, so initial logits land near 0.045 and the classes are
+    indistinguishable at that magnitude. Adam moves each weight by roughly ``lr`` per
+    step regardless of gradient size, so a unit logit response needs a weight change
+    of about 1/0.045 = 22, i.e. roughly 7,400 steps at lr 3e-3. The budget is 1,200.
+    The head is not stuck; it is travelling too slowly to arrive. Standardising makes
+    the requirement about 333 steps.
+
+    The covariance condition number barely moved under standardisation (3.92e6 to
+    2.29e6), so this is deliberately *not* described as a spectral conditioning fix.
+
+    ## No learnable parameters
+
+    ``count``, ``mean`` and ``m2`` are buffers, not parameters. There is no learned
+    affine, so nothing here is initialised, nothing is in the optimiser, and the
+    module cannot overfit. Buffers ride along in ``state_dict``, which is what makes
+    the resume test able to compare them exactly.
+
+    ## Deterministic cumulative statistics
+
+    Welford's algorithm, merged chunk by chunk, accumulated in float64. There is no
+    momentum and no exponential moving average, because a momentum would be a
+    hyperparameter that could only be chosen by looking at held-out accuracy. After
+    ``N`` rows the buffers are a pure function of those rows, so a run and a resumed
+    run that see the same batches agree bit for bit.
+
+    ## Population standard deviation
+
+    ``sqrt(m2 / count)``, i.e. ``ddof=0``, because that is what ``numpy.std`` computes
+    by default and therefore what the successful diagnostic used. The sample
+    convention would rescale every feature by ``sqrt(count / (count - 1))`` relative
+    to the measurement this module exists to reproduce.
+
+    ## Train-only, and evaluation never updates
+
+    ``forward`` updates the buffers only when ``self.training`` is true, and only from
+    the rows selected by the fret mask. Every evaluation mode -- real, blank, wrong
+    ROI, pixel ablation, geometry-neutralised, and all three splits -- reads the same
+    stored statistics. No held-out, blank or ablated example can reach ``mu`` or
+    ``sigma``: they are never passed to ``update`` while in eval mode.
+
+    ## Not per-row
+
+    Normalising each object by its own statistics is what LayerNorm does, and it
+    measured 0.2288 same-score against 0.5033 for this module. Per-row statistics
+    inject noise when the informative variation is small relative to the row's norm.
+    """
+
+    def __init__(self, dim: int, eps: float = 1e-6) -> None:
+        super().__init__()
+        self.dim = dim
+        self.eps = eps
+        self.register_buffer("count", torch.zeros((), dtype=torch.float64))
+        self.register_buffer("mean", torch.zeros(dim, dtype=torch.float64))
+        self.register_buffer("m2", torch.zeros(dim, dtype=torch.float64))
+
+    @torch.no_grad()
+    def update(self, rows: torch.Tensor) -> None:
+        """Fold one batch of valid rows into the cumulative moments."""
+        if rows.numel() == 0:
+            return
+        x = rows.detach().to(torch.float64)
+        rows_in_batch = x.shape[0]
+        batch_mean = x.mean(dim=0)
+        batch_m2 = ((x - batch_mean) ** 2).sum(dim=0)
+        seen = float(self.count.item())
+        delta = batch_mean - self.mean
+        total = seen + rows_in_batch
+        self.mean += delta * (rows_in_batch / total)
+        self.m2 += batch_m2 + (delta ** 2) * (seen * rows_in_batch / total)
+        self.count += rows_in_batch
+
+    def scale(self) -> torch.Tensor:
+        """Population standard deviation plus epsilon, matching the diagnostic."""
+        seen = float(self.count.item())
+        if seen <= 0.0:
+            return torch.full_like(self.mean, self.eps)
+        variance = (self.m2 / seen).clamp_min(0.0)
+        return variance.sqrt() + self.eps
+
+    def forward(
+        self, values: torch.Tensor, mask: torch.Tensor | None = None
+    ) -> torch.Tensor:
+        """Standardise the last axis, updating statistics first when training."""
+        if mask is None:
+            rows = values.reshape(-1, values.shape[-1])
+        else:
+            rows = values[mask]
+        if self.training:
+            self.update(rows)
+        scale = self.scale().to(values.dtype)
+        shift = self.mean.to(values.dtype)
+        standardised = (values - shift) / scale
+        if mask is not None:
+            # Zero the slots the mask excludes so no padding can contribute a
+            # gradient or an infinity. Those slots are already excluded from the
+            # loss, so this changes no trained quantity.
+            keep = mask.unsqueeze(-1)
+            standardised = torch.where(
+                keep, standardised,
+                torch.zeros((), dtype=standardised.dtype, device=standardised.device),
+            )
+        return standardised
+
+    def diagnostics(self) -> dict[str, Any]:
+        """Standardizer state, for the checkpoint reports."""
+        scale = self.scale()
+        return {
+            "count": float(self.count.item()),
+            "median_abs_mean": round(float(self.mean.abs().median()), 8),
+            "median_std": round(float(scale.median()), 8),
+            "min_std": round(float(scale.min()), 8),
+            "max_std": round(float(scale.max()), 8),
+            "near_zero_variance_features": int((scale < 10 * self.eps).sum()),
+        }
+
+
 class FretVariantModel(nn.Module):
     """The shared model with one of three fret heads, chosen by name.
 
@@ -358,12 +486,43 @@ class FretVariantModel(nn.Module):
         deliberate and is the point: it separates "updates to the encoder destroyed
         the representation" from "the backbone co-adapted and changed what the frozen
         encoder receives".
+    ``FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED``
+        ``FROZEN_RANDOM_ROI_ENCODER`` with exactly one addition: a
+        :class:`TrainStatsStandardizer` between ``roi_projection`` and
+        ``fret_classifier``::
+
+            encoded = self.encoder(...)                    # frozen
+            p = self.roi_projection(encoded.flatten(-2))
+            z = self.p_standardizer(p, is_fret)            # train statistics only
+            out["fret"] = self.fret_classifier(z)          # Linear(192 -> 26)
+
+        It exists because the head-only diagnostic showed the same ``P`` is readable at
+        0.4506 score-disjoint once standardised and at 0.1671 when raw, under an
+        otherwise identical optimiser. The cause is input *scale*: ``P``'s median
+        per-feature std is ~0.045 against a head initialised at +/-1/sqrt(192), so
+        useful logit growth needs roughly 7,400 steps at lr 3e-3 and the budget is
+        1,200.
+
+        The encoder stays frozen, the head stays ``Linear(192 -> 26)``, there is still
+        no ``+ tokens``, and the standardizer holds no learnable parameters, so it
+        consumes no RNG at construction and the initial weights are bit-identical to
+        ``FROZEN_RANDOM_ROI_ENCODER``.
     """
 
     #: Kinds whose fret head reads the dedicated ROI encoding alone, with no shared
     #: token added. Grouped so the forward pass has a single implementation and the
-    #: two variants cannot drift apart in any way other than the encoder freezing.
-    ROI_ONLY_KINDS = ("ROI_ONLY_NO_TOKEN", "FROZEN_RANDOM_ROI_ENCODER")
+    #: variants cannot drift apart in any way other than the encoder freezing and the
+    #: standardizer.
+    ROI_ONLY_KINDS = (
+        "ROI_ONLY_NO_TOKEN",
+        "FROZEN_RANDOM_ROI_ENCODER",
+        "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
+    )
+    #: Kinds whose ``RoiEncoder`` parameters are held at initialisation.
+    FROZEN_ENCODER_KINDS = (
+        "FROZEN_RANDOM_ROI_ENCODER",
+        "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
+    )
 
     MAX_DIGITS = 2
 
@@ -388,7 +547,7 @@ class FretVariantModel(nn.Module):
             # between them is the encoder freezing below.
             self.roi_projection = nn.Linear(self.encoder.out_channels * grid, hidden)
             self.fret_classifier = nn.Linear(hidden, 26)
-            if kind == "FROZEN_RANDOM_ROI_ENCODER":
+            if kind in FretVariantModel.FROZEN_ENCODER_KINDS:
                 # Freeze every encoder parameter at initialisation.
                 #
                 # Setting `requires_grad` is sufficient and not merely conventional:
@@ -400,6 +559,10 @@ class FretVariantModel(nn.Module):
                 for parameter in self.encoder.parameters():
                     parameter.requires_grad_(False)
                 self.encoder.eval()
+            if kind == "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED":
+                # Buffers only: no parameters, so no RNG is consumed here and the
+                # initial weights stay bit-identical to the unstandardized variant.
+                self.p_standardizer = TrainStatsStandardizer(hidden)
         elif kind == "roidigits":
             # Per column, then grouped into digit slots. The projection is applied
             # along the width axis so each horizontal position keeps its own
@@ -479,13 +642,21 @@ class FretVariantModel(nn.Module):
             # The experiment. `roi26` with the `+ tokens` term removed and nothing
             # else changed: same crop, same encoder, same projection, same
             # classifier, same loss, same optimiser, same schedule, same seed.
-            # `FROZEN_RANDOM_ROI_ENCODER` takes exactly this path as well, with its
-            # encoder parameters held at initialisation.
+            # The frozen variants take exactly this path with their encoder
+            # parameters held at initialisation.
             #
             # `out` is still built from `tokens` above, so the unrelated heads
             # (`object_type`, `string`, `tile`) keep their existing input and are
             # untouched by this change.
-            out["fret"] = self.fret_classifier(self.roi_projection(encoded.flatten(-2)))
+            p = self.roi_projection(encoded.flatten(-2))
+            if self.kind == "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED":
+                # Only fret rows enter the statistics. Padding slots and non-fret
+                # objects would otherwise contribute their own degenerate
+                # distributions to mu and sigma.
+                p = self.p_standardizer(
+                    p, batch["object_mask"] & (batch["object_type"] == 1)
+                )
+            out["fret"] = self.fret_classifier(p)
         else:
             # Two paths from the same crop: per-slot digits, and a whole-object
             # vector for occupancy. Occupancy genuinely is a whole-object
