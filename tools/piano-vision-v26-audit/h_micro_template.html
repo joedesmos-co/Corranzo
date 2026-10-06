@@ -1,0 +1,353 @@
+
+<!doctype html>
+<meta charset="utf-8">
+<title>Human micro review</title>
+<style>
+:root{--bd:#c8ccd4;--fg:#16181d;--mut:#5d6470;--ok:#0a7d3f;--warn:#8a5a00;--sel:#0b57d0}
+*{box-sizing:border-box}
+body{margin:0;font:13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;color:var(--fg);background:#fff}
+header{position:sticky;top:0;z-index:9;background:#fff;border-bottom:1px solid var(--bd);padding:8px 12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:14px;margin:0 12px 0 0}
+.st{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
+.st b{font-size:15px}
+.st span{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;display:block}
+.sc{color:var(--ok);font-weight:600;font-size:12px;border:1px solid var(--ok);padding:3px 8px;border-radius:10px}
+button{font:inherit;padding:5px 10px;border:1px solid var(--bd);background:#fff;border-radius:5px;cursor:pointer}
+button:hover{background:#f2f4f7}
+button:disabled{opacity:.4;cursor:default}
+.panes{display:flex;gap:12px;padding:12px;align-items:flex-start;flex-wrap:wrap}
+.pane{flex:1 1 0;min-width:420px}
+.pane h2{font-size:12px;margin:0 0 5px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.pane img{width:100%;border:1px solid var(--bd);background:#fff;display:block}
+.row{position:relative;margin-top:6px}
+.mk{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;
+ border:2px solid var(--mut);background:#fff;color:var(--fg);font:600 11px/1 sans-serif;
+ display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:0}
+.mk.p{border-color:#7a4bd0}
+.mk.x{border-color:#0b7a8a}
+.mk.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.mk.sel{outline:3px solid var(--sel);outline-offset:2px}
+.mk.false{background:#b3261e;border-color:#b3261e;color:#fff;text-decoration:line-through}
+.mk.uns{background:#f2f4f7;border-style:dashed}
+.mk:hover{box-shadow:0 0 0 3px #0001}
+.legend{font-size:11px;color:var(--mut);padding:0 12px 8px;display:flex;gap:14px;flex-wrap:wrap}
+.ctl{padding:0 12px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctl input[type=text]{font:inherit;padding:5px 8px;border:1px solid var(--bd);border-radius:5px;min-width:190px}
+.rank{background:#f7f9fb;border:1px solid var(--bd);border-radius:6px;padding:9px 11px;margin:12px}
+.rank h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.rp{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.chip{font:600 11px/1 sans-serif;border:1px solid var(--ok);color:var(--ok);border-radius:11px;padding:4px 9px;background:#fff}
+.rp button{border-color:var(--ok);color:var(--ok)}
+.note{color:var(--warn);font-size:11px}
+.big{font-size:17px;font-weight:700;color:var(--ok)}
+.ms{color:var(--mut);font-size:11px}
+.ms b{color:var(--ok)}
+ul.pairs{margin:6px 0 0;padding-left:18px;font-size:12px}
+ul.pairs li{margin:1px 0}
+.done-item{color:var(--ok)}
+.kbd{border:1px solid var(--bd);border-bottom-width:2px;border-radius:3px;padding:0 4px;font-size:10px;background:#fff}
+</style>
+<header>
+  <h1>Human micro review</h1>
+  <div class="sc">STRUCTURE CONSENSUS: YES &nbsp;(3/3, preselected)</div>
+  <div class="st">
+    <div><span>items</span><b id="sItems">0 / 0</b></div>
+    <div><span>confirmed onset pairs</span><b id="sPairs">0</b></div>
+    <div><span>confirmed noteheads</span><b id="sNotes">0</b></div>
+    <div><span>matched notehead N</span><b class="big" id="sN">0</b></div>
+  </div>
+  <div class="ms" id="sMs">milestones <b>N&ge;25</b> <b>N&ge;50</b> <b>N&ge;100</b></div>
+  <button id="prev">&larr; prev</button>
+  <button id="next">next &rarr;</button>
+  <button id="export" style="border-color:var(--ok);color:var(--ok);font-weight:600">EXPORT REVIEW JSON</button>
+  <button id="undo" title="Ctrl+Z">undo</button>
+</header>
+<div class="legend">
+  <span><span class="mk p" style="position:static;display:inline-flex;vertical-align:middle">P</span> = onset proposal in the PDF</span>
+  <span><span class="mk x" style="position:static;display:inline-flex;vertical-align:middle">X</span> = onset in the source rendering</span>
+  <span>click a <b>P</b>, then an <b>X</b> to pair</span>
+  <span>green = confirmed &middot; red strike = not a note onset &middot; dashed = unsure</span>
+</div>
+<div class="pane" style="padding:0 12px">
+  <div style="border:1px solid var(--bd);border-radius:6px;padding:9px 11px;background:#f7f9fb">
+    <h3 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)">This measure</h3>
+    <div id="notehead"></div>
+    <div id="pairs"></div>
+  </div>
+</div>
+<div class="ctl">
+  <button id="bUnS">all unsure <span class="kbd">U</span></button>
+  <button id="bNo">not printed / no counterpart <span class="kbd">N</span></button>
+  <button id="bConfirm">confirm rank pairing <span class="kbd">Enter</span></button>
+  <input type="text" id="unlisted" placeholder="unlisted onset note (e.g. PDF onset between P3 and P4)">
+  <button id="bAdd">ADD UNLISTED ONSET</button>
+</div>
+<div class="ctl ms">
+  <span class="kbd">U</span> unsure &middot; <span class="kbd">N</span> not printed / no counterpart &middot;
+  <span class="kbd">Enter</span> confirm &middot; <span class="kbd">&larr;&rarr;</span> prev / next
+</div>
+<div class="panes">
+  <div class="pane"><h2>PDF (actual raster)</h2><div class="row" id="rowPdf"></div></div>
+  <div class="pane"><h2>source rendering (pitch-blind structure)</h2><div class="row" id="rowSrc"></div></div>
+</div>
+<script>
+const DATA = __DATA__;
+const POP  = __POP__;
+const KEY = 'human_micro_v1';
+let st = load() || {idx:0, sel:null, items:{}};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){localStorage.setItem(KEY,JSON.stringify(st))}
+function it(){return DATA.items[st.idx]}
+function blank(){return {x:{}, pairs:{}, falseP:{}, rank:{}, rankAmbig:{}, unlisted:[], done:false}}
+function rec(i){return st.items[i]||(st.items[i]=blank())}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+// Marker layout: each marker sits at the x coordinate the notation was actually
+// drawn at (renderer-computed for the source panel, measured off the printed
+// overlay for the PDF panel). Evenly spaced markers drift away from the music
+// and would make click-pairing misleading.
+function layout(row, list, side){
+  row.innerHTML='';
+  const img=document.createElement('img'); img.src=side==='pdf'?it().pdf_image:it().src_image;
+  row.appendChild(img);
+  const n=list.length; if(!n) return;
+  const el=img;
+  const place=()=>{
+    const w=el.clientWidth||900, h=el.clientHeight||200;
+    list.forEach((o,i)=>{
+      const frac = (typeof o.fx==='number' && o.fx>0 && o.fx<1) ? o.fx
+                 : (n===1?0.5:(i+0.5)/n);
+      const m=row.querySelector('[data-id="'+o.id+'"]');
+      if(!m) return;
+      m.style.left=(frac*100)+'%';
+      m.style.top=Math.min(h*0.5, h-6)+'px';
+    });
+  };
+  list.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='mk '+side; b.dataset.id=o.id; b.textContent=o.id;
+    b.onclick=()=>onMarker(side,o.id);
+    row.appendChild(b);
+  });
+  el.onload=place; place(); window.addEventListener('resize',place);
+}
+
+function xdec(i){return rec(i).x[i]}
+function pstate(i){
+  const r=rec(i);
+  if(r.pairs[i]) return 'done';
+  if(r.falseP[i]) return 'false';
+  return '';
+}
+
+function onMarker(side,id){
+  const i=st.idx, r=rec(i);
+  // Decide by the id itself, not by `side`: layout() passes 'src', so a
+  // side==='x' test silently treated every source click as a P selection.
+  if(id[0]==='X'){
+    // clicking an X pairs it with the selected P (or selects the X if none)
+    if(st.sel && st.sel.startsWith('P')){ pair(st.sel,id); st.sel=null; }
+    else { st.sel = (st.sel===id? null : id); }
+  } else {
+    if(st.sel && st.sel.startsWith('X')){ pair(id,st.sel); st.sel=null; }
+    else { st.sel = (st.sel===id? null : id); }
+  }
+  save(); render();
+}
+function pair(p,x){
+  const r=rec(st.idx);
+  for(const k in r.pairs) if(r.pairs[k]===x) delete r.pairs[k];   // X is unique
+  r.pairs[p]=x;
+  delete r.falseP[p];
+  autoRank(p,x);
+  save();
+}
+function unpair(p){ const r=rec(st.idx); delete r.pairs[p]; autoRankAll(); save(); }
+
+// H5: propose rank pairing only when both sides share unambiguous cardinality
+function autoRank(p,x){
+  const r=rec(st.idx);
+  const P=it().pdf_onsets.find(o=>o.pid===p), X=it().src_onsets.find(o=>o.sid===x);
+  if(!P||!X){ return; }
+  if(P.card===X.card && P.card>0 && !amb(X.card)){
+    r.rank[p]={auto:true, card:P.card,
+      pairs:Array.from({length:P.card},(_,k)=>({p:p+'.'+(k+1), x:x+'.'+(k+1)}))};
+    r.rankAmbig[p]=false;
+  } else {
+    r.rank[p]={auto:false, card:P.card};
+    r.rankAmbig[p]=true;
+  }
+}
+function amb(c){ return false; }   // canonical stacking is unambiguous for a given cardinality
+function autoRankAll(){ const r=rec(st.idx); for(const p in r.pairs) autoRank(p,r.pairs[p]); }
+
+function noteheads(){
+  const r=rec(st.idx); let n=0;
+  for(const p in r.pairs){
+    if(r.rank[p] && r.rank[p].auto && r.rank[p].pairs){ n+=r.rank[p].pairs.length; }
+  }
+  return n;
+}
+function pairCount(){ return Object.keys(rec(st.idx).pairs).length; }
+function itemDone(i){
+  const d=DATA.items[i]; const r=st.items[i]||blank();
+  const n=Object.keys(r.pairs).length + Object.keys(r.falseP).length
+          + Object.keys(r.x).length + r.unlisted.length;
+  return n>0;
+}
+function doneCount(){ return DATA.items.map((_,i)=>i).filter(itemDone).length; }
+function totalNotes(){ let n=0; for(let i=0;i<DATA.items.length;i++){ const r=st.items[i]; if(!r) continue;
+  for(const p in r.pairs) if(r.rank[p]&&r.rank[p].auto&&r.rank[p].pairs) n+=r.rank[p].pairs.length; } return n; }
+
+function render(){
+  const i=st.idx, d=it(), r=rec(i);
+  document.getElementById('sItems').textContent = doneCount()+' / '+DATA.items.length;
+  document.getElementById('sPairs').textContent  = DATA.items.reduce((a,_,k)=>a+Object.keys((st.items[k]||{pairs:{}}).pairs||{}).length,0);
+  document.getElementById('sNotes').textContent = totalNotes();
+  const N=totalNotes();
+  document.getElementById('sN').textContent = N;
+  document.getElementById('sMs').innerHTML = 'milestones N&ge;25 '+(N>=25?'<b>&#10003; reached</b>':'')
+    +' &middot; N&ge;50 '+(N>=50?'<b>&#10003; reached</b>':'')
+    +' &middot; N&ge;100 '+(N>=100?'<b>&#10003; reached</b>':'')
+    + ' &nbsp;|&nbsp; ceiling '+POP.max_potential_noteheads
+    + (N>=50 ? ' &nbsp;<span class="big">Enough for the first clean-gate evaluation.</span>' : '');
+
+  const P=d.pdf_onsets.map(o=>({id:o.pid,card:o.card,fx:o.fx}));
+  const X=d.src_onsets.map(o=>({id:o.sid,card:o.card,fx:o.fx}));
+  layout(document.getElementById('rowPdf'),P,'pdf');
+  layout(document.getElementById('rowSrc'),X,'src');
+
+  // marker states
+  document.querySelectorAll('#rowPdf .mk').forEach(b=>{
+    const id=b.dataset.id;
+    b.classList.toggle('sel', st.sel===id);
+    b.classList.toggle('done', !!r.pairs[id]);
+    b.classList.toggle('false', !!r.falseP[id]);
+    if(r.pairs[id]) b.textContent = r.pairs[id];
+  });
+  document.querySelectorAll('#rowSrc .mk').forEach(b=>{
+    const id=b.dataset.id;
+    b.classList.toggle('sel', st.sel===id);
+    b.classList.toggle('done', !!Object.values(r.pairs).includes(id));
+    b.classList.toggle('uns', r.x[id]==='UNSURE');
+  });
+
+  document.getElementById('notehead').innerHTML =
+    '<b>'+esc(d.item_id)+'</b> &nbsp;<span class="ms">'+P.length+' PDF proposals &middot; '+X.length+' source onsets</span>';
+
+  const lines=Object.keys(r.pairs).sort(nat).map(p=>{
+    const rk=r.rank[p];
+    const rtxt = rk&&rk.auto ? 'rank '+rk.card+' auto-confirmed' :
+                rk&&!rk.auto ? '<span class="note">ambiguous (P card '+rk.card+') - not counted</span>' :
+                '<span class="ms">no rank</span>';
+    return '<li class="done-item"><b>'+p+' &harr; '+r.pairs[p]+'</b> &nbsp;<span class="ms">'+rtxt+'</span>'
+         + ' <button onclick="unpair(\''+p+'\')">unpair</button></li>';
+  });
+  const fp=Object.keys(r.falseP).map(p=>'<li>'+p+' &mdash; <b>NOT A NOTE ONSET</b></li>');
+  const un=r.unlisted.map((u,k)=>'<li><b>UNLISTED</b> '+esc(u)+' <button onclick="rmUn('+k+')">remove</button></li>');
+  document.getElementById('pairs').innerHTML =
+    '<ul class="pairs">'+(lines.join('')+fp.join('')+un.join(''))+'</ul>'
+    + (lines.length+fp.length+un.length? '' : '<div class="ms">nothing recorded yet</div>');
+  document.getElementById('prev').disabled = st.idx===0;
+  document.getElementById('next').disabled = st.idx===DATA.items.length-1;
+}
+function nat(a,b){return a.localeCompare(b,undefined,{numeric:true})}
+
+function setX(id,v){ const r=rec(st.idx); if(r.x[id]===v) delete r.x[id]; else r.x[id]=v; save(); render(); }
+function setP(id,v){
+  const r=rec(st.idx);
+  delete r.pairs[id]; delete r.rank[id]; delete r.rankAmbig[id];
+  if(v==='NOTA'||v==='NO_COUNTERPART'){ r.falseP[id]=v; }
+  else { delete r.falseP[id]; }
+  save(); render();
+}
+function addUn(){ const el=document.getElementById('unlisted'); const v=el.value.trim();
+  if(!v) return; const r=rec(st.idx); r.unlisted.push(v); el.value=''; save(); render(); }
+function rmUn(k){ const r=rec(st.idx); r.unlisted.splice(k,1); save(); render(); }
+function confirmAll(){ save(); render(); }
+function allUnsure(){
+  const r=rec(st.idx);
+  it().src_onsets.forEach(o=>r.x[o.sid]='UNSURE');
+  it().pdf_onsets.forEach(o=>{ if(!r.pairs[o.pid]&&!r.falseP[o.pid]) r.falseP[o.pid]='NO_COUNTERPART'; });
+  save(); render();
+}
+function allNo(){
+  const r=rec(st.idx);
+  it().src_onsets.forEach(o=>r.x[o.sid]='NOT_PRINTED');
+  it().pdf_onsets.forEach(o=>{ delete r.pairs[o.pid]; delete r.rank[o.pid]; r.falseP[o.pid]='NO_COUNTERPART'; });
+  save(); render();
+}
+function undo(){
+  const keys=['pairs','falseP','rank','rankAmbig','x','unlisted'];
+  for(const k of keys){ const r=rec(st.idx);
+    if(r[k]&&!Array.isArray(r[k])&&Object.keys(r[k]).length){ clearLast(k); break; }
+    if(Array.isArray(r[k])&&r[k].length){ r[k].pop(); break; } }
+  save(); render();
+}
+function clearLast(k){
+  const r=rec(st.idx); const ks=Object.keys(r[k]);
+  if(!ks.length) return;
+  const last=ks.sort(nat)[ks.length-1];
+  delete r[k][last];
+  if(k==='pairs'){ delete r.rank[last]; delete r.rankAmbig[last]; }
+}
+function go(d){ const n=Math.max(0,Math.min(DATA.items.length-1,st.idx+d)); if(n!==st.idx){st.idx=n; st.sel=null; save(); render(); } }
+
+function exportJSON(){
+  const items=DATA.items.map((d,i)=>{
+    const r=st.items[i]||blank();
+    const confirmedPairs=[];
+    for(const p in r.pairs){
+      const rk=r.rank[p];
+      confirmedPairs.push({
+        p:p, x:r.pairs[p],
+        rank_status: rk&&rk.auto?'CONFIRMED':(rk?'AMBIGUOUS':'UNCONFIRMED'),
+        rank_pairs: rk&&rk.auto?rk.pairs:[]
+      });
+    }
+    return {
+      item_id:d.item_id,
+      x_presence:r.x,
+      p_to_x:confirmedPairs,
+      false_p:Object.keys(r.falseP).reduce((a,k)=>(a[k]=r.falseP[k],a),{}),
+      unlisted_onsets:r.unlisted
+    };
+  });
+  const out={
+    label:'HUMAN_MICRO_REVIEW_ANSWERS',
+    population_sha256:POP.population_sha256,
+    population_n:POP.population_n,
+    structure_consensus:'3/3 SAME_STRUCTURE (preselected)',
+    notehead_scale:'CONFIRMED or UNSURE only; UNSURE excluded',
+    matched_notehead_N: totalNotes(),
+    items:items
+  };
+  const blob=new Blob([JSON.stringify(out,null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='human_review_answers.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('export').onclick=exportJSON;
+document.getElementById('undo').onclick=undo;
+document.getElementById('bUnS').onclick=allUnsure;
+document.getElementById('bNo').onclick=allNo;
+document.getElementById('bConfirm').onclick=confirmAll;
+document.getElementById('bAdd').onclick=addUn;
+window.unpair=unpair; window.rmUn=rmUn;
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'){ if(e.key==='Enter'){addUn();} return; }
+  if(e.key==='u'||e.key==='U'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('X')) setX(s,'UNSURE'); else setP(s,'NO_COUNTERPART'); st.sel=null; render(); } else allUnsure(); }
+  else if(e.key==='n'||e.key==='N'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('X')) setX(s,'NOT_PRINTED'); else setP(s,'NO_COUNTERPART'); st.sel=null; render(); } else allNo(); }
+  else if(e.key==='Enter'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('P')&&st.sel2){} confirmAll(); } else confirmAll(); }
+  else if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if((e.ctrlKey||e.metaKey)&&e.key==='z'){ e.preventDefault(); undo(); }
+});
+render();
+</script>

@@ -1,0 +1,1991 @@
+
+<!doctype html>
+<meta charset="utf-8">
+<title>Human micro review</title>
+<style>
+:root{--bd:#c8ccd4;--fg:#16181d;--mut:#5d6470;--ok:#0a7d3f;--warn:#8a5a00;--sel:#0b57d0}
+*{box-sizing:border-box}
+body{margin:0;font:13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;color:var(--fg);background:#fff}
+header{position:sticky;top:0;z-index:9;background:#fff;border-bottom:1px solid var(--bd);padding:8px 12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:14px;margin:0 12px 0 0}
+.st{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
+.st b{font-size:15px}
+.st span{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;display:block}
+.sc{color:var(--ok);font-weight:600;font-size:12px;border:1px solid var(--ok);padding:3px 8px;border-radius:10px}
+button{font:inherit;padding:5px 10px;border:1px solid var(--bd);background:#fff;border-radius:5px;cursor:pointer}
+button:hover{background:#f2f4f7}
+button:disabled{opacity:.4;cursor:default}
+.panes{display:flex;gap:12px;padding:12px;align-items:flex-start;flex-wrap:wrap}
+.pane{flex:1 1 0;min-width:420px}
+.pane h2{font-size:12px;margin:0 0 5px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.pane img{width:100%;border:1px solid var(--bd);background:#fff;display:block}
+.row{position:relative;margin-top:6px}
+.mk{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;
+ border:2px solid var(--mut);background:#fff;color:var(--fg);font:600 11px/1 sans-serif;
+ display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:0}
+.mk.p{border-color:#7a4bd0}
+.mk.x{border-color:#0b7a8a}
+.mk.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.mk.sel{outline:3px solid var(--sel);outline-offset:2px}
+.mk.false{background:#b3261e;border-color:#b3261e;color:#fff;text-decoration:line-through}
+.mk.uns{background:#f2f4f7;border-style:dashed}
+.mk:hover{box-shadow:0 0 0 3px #0001}
+.legend{font-size:11px;color:var(--mut);padding:0 12px 8px;display:flex;gap:14px;flex-wrap:wrap}
+.ctl{padding:0 12px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctl input[type=text]{font:inherit;padding:5px 8px;border:1px solid var(--bd);border-radius:5px;min-width:190px}
+.rank{background:#f7f9fb;border:1px solid var(--bd);border-radius:6px;padding:9px 11px;margin:12px}
+.rank h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.rp{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.chip{font:600 11px/1 sans-serif;border:1px solid var(--ok);color:var(--ok);border-radius:11px;padding:4px 9px;background:#fff}
+.rp button{border-color:var(--ok);color:var(--ok)}
+.note{color:var(--warn);font-size:11px}
+.big{font-size:17px;font-weight:700;color:var(--ok)}
+.ms{color:var(--mut);font-size:11px}
+.ms b{color:var(--ok)}
+ul.pairs{margin:6px 0 0;padding-left:18px;font-size:12px}
+ul.pairs li{margin:1px 0}
+.done-item{color:var(--ok)}
+.kbd{border:1px solid var(--bd);border-bottom-width:2px;border-radius:3px;padding:0 4px;font-size:10px;background:#fff}
+</style>
+<header>
+  <h1>Human micro review</h1>
+  <div class="sc">STRUCTURE CONSENSUS: YES &nbsp;(3/3, preselected)</div>
+  <div class="st">
+    <div><span>items</span><b id="sItems">0 / 0</b></div>
+    <div><span>confirmed onset pairs</span><b id="sPairs">0</b></div>
+    <div><span>confirmed noteheads</span><b id="sNotes">0</b></div>
+    <div><span>matched notehead N</span><b class="big" id="sN">0</b></div>
+  </div>
+  <div class="ms" id="sMs">milestones <b>N&ge;25</b> <b>N&ge;50</b> <b>N&ge;100</b></div>
+  <button id="prev">&larr; prev</button>
+  <button id="next">next &rarr;</button>
+  <button id="export" style="border-color:var(--ok);color:var(--ok);font-weight:600">EXPORT REVIEW JSON</button>
+  <button id="undo" title="Ctrl+Z">undo</button>
+</header>
+<div class="legend">
+  <span><span class="mk p" style="position:static;display:inline-flex;vertical-align:middle">P</span> = onset proposal in the PDF</span>
+  <span><span class="mk x" style="position:static;display:inline-flex;vertical-align:middle">X</span> = onset in the source rendering</span>
+  <span>click a <b>P</b>, then an <b>X</b> to pair</span>
+  <span>green = confirmed &middot; red strike = not a note onset &middot; dashed = unsure</span>
+</div>
+<div class="pane" style="padding:0 12px">
+  <div style="border:1px solid var(--bd);border-radius:6px;padding:9px 11px;background:#f7f9fb">
+    <h3 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)">This measure</h3>
+    <div id="notehead"></div>
+    <div id="pairs"></div>
+  </div>
+</div>
+<div class="ctl">
+  <button id="bUnS">all unsure <span class="kbd">U</span></button>
+  <button id="bNo">not printed / no counterpart <span class="kbd">N</span></button>
+  <button id="bConfirm">confirm rank pairing <span class="kbd">Enter</span></button>
+  <input type="text" id="unlisted" placeholder="unlisted onset note (e.g. PDF onset between P3 and P4)">
+  <button id="bAdd">ADD UNLISTED ONSET</button>
+</div>
+<div class="ctl ms">
+  <span class="kbd">U</span> unsure &middot; <span class="kbd">N</span> not printed / no counterpart &middot;
+  <span class="kbd">Enter</span> confirm &middot; <span class="kbd">&larr;&rarr;</span> prev / next
+</div>
+<div class="panes">
+  <div class="pane"><h2>PDF (actual raster)</h2><div class="row" id="rowPdf"></div></div>
+  <div class="pane"><h2>source rendering (pitch-blind structure)</h2><div class="row" id="rowSrc"></div></div>
+</div>
+<script>
+const DATA = {
+ "items": [
+  {
+   "item_id": "R001",
+   "pdf_image": "../h_review/sheets/R001_bc-bach-fugue-bwv8_upper_p1_s0_m0.png",
+   "src_image": "sheets/R001.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 4,
+     "fx": 0.0617
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.10941
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.15331
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.26018
+    },
+    {
+     "pid": "P5",
+     "card": 1,
+     "fx": 0.2958
+    },
+    {
+     "pid": "P6",
+     "card": 2,
+     "fx": 0.34288
+    },
+    {
+     "pid": "P7",
+     "card": 1,
+     "fx": 0.36641
+    },
+    {
+     "pid": "P8",
+     "card": 1,
+     "fx": 0.39059
+    },
+    {
+     "pid": "P9",
+     "card": 1,
+     "fx": 0.42939
+    }
+   ],
+   "p_fractions": [
+    0.0617,
+    0.10941,
+    0.15331,
+    0.26018,
+    0.2958,
+    0.34288,
+    0.36641,
+    0.39059,
+    0.42939
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 0,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.17213
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.3987
+    },
+    {
+     "sid": "X5",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X6",
+     "card": 2,
+     "fx": 0.68192
+    },
+    {
+     "sid": "X7",
+     "card": 1,
+     "fx": 0.73856
+    },
+    {
+     "sid": "X8",
+     "card": 1,
+     "fx": 0.85184
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.17213,
+    0.28542,
+    0.3987,
+    0.51199,
+    0.68192,
+    0.73856,
+    0.85184
+   ]
+  },
+  {
+   "item_id": "R002",
+   "pdf_image": "../h_review/sheets/R002_bc-chopin-etude-op_upper_p1_s0_m0.png",
+   "src_image": "sheets/R002.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 4,
+     "fx": 0.03817
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.04707
+    },
+    {
+     "pid": "P3",
+     "card": 2,
+     "fx": 0.07061
+    },
+    {
+     "pid": "P4",
+     "card": 2,
+     "fx": 0.19847
+    },
+    {
+     "pid": "P5",
+     "card": 2,
+     "fx": 0.24046
+    },
+    {
+     "pid": "P6",
+     "card": 1,
+     "fx": 0.26527
+    },
+    {
+     "pid": "P7",
+     "card": 1,
+     "fx": 0.2888
+    },
+    {
+     "pid": "P8",
+     "card": 1,
+     "fx": 0.31107
+    },
+    {
+     "pid": "P9",
+     "card": 1,
+     "fx": 0.34987
+    },
+    {
+     "pid": "P10",
+     "card": 1,
+     "fx": 0.38168
+    },
+    {
+     "pid": "P11",
+     "card": 1,
+     "fx": 0.40394
+    },
+    {
+     "pid": "P12",
+     "card": 1,
+     "fx": 0.44338
+    }
+   ],
+   "p_fractions": [
+    0.03817,
+    0.04707,
+    0.07061,
+    0.19847,
+    0.24046,
+    0.26527,
+    0.2888,
+    0.31107,
+    0.34987,
+    0.38168,
+    0.40394,
+    0.44338
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 0,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.34206
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.3987
+    },
+    {
+     "sid": "X5",
+     "card": 1,
+     "fx": 0.45534
+    },
+    {
+     "sid": "X6",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X7",
+     "card": 1,
+     "fx": 0.56863
+    },
+    {
+     "sid": "X8",
+     "card": 1,
+     "fx": 0.62527
+    },
+    {
+     "sid": "X9",
+     "card": 1,
+     "fx": 0.68192
+    },
+    {
+     "sid": "X10",
+     "card": 1,
+     "fx": 0.73856
+    },
+    {
+     "sid": "X11",
+     "card": 1,
+     "fx": 0.7952
+    },
+    {
+     "sid": "X12",
+     "card": 1,
+     "fx": 0.85184
+    },
+    {
+     "sid": "X13",
+     "card": 1,
+     "fx": 0.90849
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.34206,
+    0.3987,
+    0.45534,
+    0.51199,
+    0.56863,
+    0.62527,
+    0.68192,
+    0.73856,
+    0.7952,
+    0.85184,
+    0.90849
+   ]
+  },
+  {
+   "item_id": "R004",
+   "pdf_image": "../h_review/sheets/R004_omf-piano-dense-ad_upper_p1_s0_m0.png",
+   "src_image": "sheets/R004.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 1,
+     "fx": 0.05534
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.09033
+    },
+    {
+     "pid": "P3",
+     "card": 2,
+     "fx": 0.13232
+    },
+    {
+     "pid": "P4",
+     "card": 4,
+     "fx": 0.15522
+    },
+    {
+     "pid": "P5",
+     "card": 4,
+     "fx": 0.18193
+    },
+    {
+     "pid": "P6",
+     "card": 2,
+     "fx": 0.21247
+    },
+    {
+     "pid": "P7",
+     "card": 2,
+     "fx": 0.23601
+    },
+    {
+     "pid": "P8",
+     "card": 1,
+     "fx": 0.27608
+    },
+    {
+     "pid": "P9",
+     "card": 2,
+     "fx": 0.31425
+    },
+    {
+     "pid": "P10",
+     "card": 3,
+     "fx": 0.35242
+    },
+    {
+     "pid": "P11",
+     "card": 2,
+     "fx": 0.38104
+    },
+    {
+     "pid": "P12",
+     "card": 2,
+     "fx": 0.40458
+    },
+    {
+     "pid": "P13",
+     "card": 2,
+     "fx": 0.43575
+    }
+   ],
+   "p_fractions": [
+    0.05534,
+    0.09033,
+    0.13232,
+    0.15522,
+    0.18193,
+    0.21247,
+    0.23601,
+    0.27608,
+    0.31425,
+    0.35242,
+    0.38104,
+    0.40458,
+    0.43575
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 3,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 3,
+     "fx": 0.11549
+    },
+    {
+     "sid": "X3",
+     "card": 3,
+     "fx": 0.17213
+    },
+    {
+     "sid": "X4",
+     "card": 3,
+     "fx": 0.22877
+    },
+    {
+     "sid": "X5",
+     "card": 3,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X6",
+     "card": 3,
+     "fx": 0.34206
+    },
+    {
+     "sid": "X7",
+     "card": 3,
+     "fx": 0.3987
+    },
+    {
+     "sid": "X8",
+     "card": 3,
+     "fx": 0.45534
+    },
+    {
+     "sid": "X9",
+     "card": 3,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X10",
+     "card": 2,
+     "fx": 0.62527
+    },
+    {
+     "sid": "X11",
+     "card": 2,
+     "fx": 0.73856
+    },
+    {
+     "sid": "X12",
+     "card": 2,
+     "fx": 0.85184
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.11549,
+    0.17213,
+    0.22877,
+    0.28542,
+    0.34206,
+    0.3987,
+    0.45534,
+    0.51199,
+    0.62527,
+    0.73856,
+    0.85184
+   ]
+  },
+  {
+   "item_id": "R010",
+   "pdf_image": "../h_review/sheets/R010_bc-chopin-etude-op_upper_p1_s0_m0.png",
+   "src_image": "sheets/R010.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 4,
+     "fx": 0.03817
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.04707
+    },
+    {
+     "pid": "P3",
+     "card": 3,
+     "fx": 0.06425
+    },
+    {
+     "pid": "P4",
+     "card": 2,
+     "fx": 0.07697
+    },
+    {
+     "pid": "P5",
+     "card": 2,
+     "fx": 0.09542
+    },
+    {
+     "pid": "P6",
+     "card": 2,
+     "fx": 0.11578
+    },
+    {
+     "pid": "P7",
+     "card": 2,
+     "fx": 0.1374
+    },
+    {
+     "pid": "P8",
+     "card": 1,
+     "fx": 0.31234
+    }
+   ],
+   "p_fractions": [
+    0.03817,
+    0.04707,
+    0.06425,
+    0.07697,
+    0.09542,
+    0.11578,
+    0.1374,
+    0.31234
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 5,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 0,
+     "fx": 0.51199
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.51199
+   ]
+  },
+  {
+   "item_id": "R011",
+   "pdf_image": "../h_review/sheets/R011_bc-chopin-etude-op_lower_p1_s0_m0.png",
+   "src_image": "sheets/R011.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.03817
+    },
+    {
+     "pid": "P2",
+     "card": 3,
+     "fx": 0.06489
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.07761
+    },
+    {
+     "pid": "P4",
+     "card": 2,
+     "fx": 0.09606
+    },
+    {
+     "pid": "P5",
+     "card": 2,
+     "fx": 0.13613
+    },
+    {
+     "pid": "P6",
+     "card": 1,
+     "fx": 0.17875
+    },
+    {
+     "pid": "P7",
+     "card": 1,
+     "fx": 0.30089
+    },
+    {
+     "pid": "P8",
+     "card": 1,
+     "fx": 0.33142
+    },
+    {
+     "pid": "P9",
+     "card": 1,
+     "fx": 0.35178
+    },
+    {
+     "pid": "P10",
+     "card": 1,
+     "fx": 0.37341
+    },
+    {
+     "pid": "P11",
+     "card": 2,
+     "fx": 0.3944
+    },
+    {
+     "pid": "P12",
+     "card": 2,
+     "fx": 0.41476
+    },
+    {
+     "pid": "P13",
+     "card": 1,
+     "fx": 0.43575
+    },
+    {
+     "pid": "P14",
+     "card": 2,
+     "fx": 0.45611
+    }
+   ],
+   "p_fractions": [
+    0.03817,
+    0.06489,
+    0.07761,
+    0.09606,
+    0.13613,
+    0.17875,
+    0.30089,
+    0.33142,
+    0.35178,
+    0.37341,
+    0.3944,
+    0.41476,
+    0.43575,
+    0.45611
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 0,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.17213
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.22877
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X5",
+     "card": 1,
+     "fx": 0.34206
+    },
+    {
+     "sid": "X6",
+     "card": 1,
+     "fx": 0.3987
+    },
+    {
+     "sid": "X7",
+     "card": 1,
+     "fx": 0.45534
+    },
+    {
+     "sid": "X8",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X9",
+     "card": 1,
+     "fx": 0.56863
+    },
+    {
+     "sid": "X10",
+     "card": 1,
+     "fx": 0.62527
+    },
+    {
+     "sid": "X11",
+     "card": 1,
+     "fx": 0.68192
+    },
+    {
+     "sid": "X12",
+     "card": 1,
+     "fx": 0.73856
+    },
+    {
+     "sid": "X13",
+     "card": 1,
+     "fx": 0.7952
+    },
+    {
+     "sid": "X14",
+     "card": 1,
+     "fx": 0.85184
+    },
+    {
+     "sid": "X15",
+     "card": 1,
+     "fx": 0.90849
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.17213,
+    0.22877,
+    0.28542,
+    0.34206,
+    0.3987,
+    0.45534,
+    0.51199,
+    0.56863,
+    0.62527,
+    0.68192,
+    0.73856,
+    0.7952,
+    0.85184,
+    0.90849
+   ]
+  },
+  {
+   "item_id": "R039",
+   "pdf_image": "../h_review/sheets/R039_pl-bach-prelude-bw_upper_p2_s5_m34.png",
+   "src_image": "sheets/R039.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.1444
+    },
+    {
+     "pid": "P2",
+     "card": 3,
+     "fx": 0.19466
+    }
+   ],
+   "p_fractions": [
+    0.1444,
+    0.19466
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 2,
+     "fx": 0.05885
+    }
+   ],
+   "x_fractions": [
+    0.05885
+   ]
+  },
+  {
+   "item_id": "R040",
+   "pdf_image": "../h_review/sheets/R040_pl-bach-prelude-bw_lower_p2_s5_m34.png",
+   "src_image": "sheets/R040.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 4,
+     "fx": 0.1444
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.19466
+    }
+   ],
+   "p_fractions": [
+    0.1444,
+    0.19466
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 3,
+     "fx": 0.05885
+    }
+   ],
+   "x_fractions": [
+    0.05885
+   ]
+  },
+  {
+   "item_id": "R047",
+   "pdf_image": "../h_review/sheets/R047_pl-handel-gavotte_upper_p1_s0_m2.png",
+   "src_image": "sheets/R047.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 2,
+     "fx": 0.10305
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.14059
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.19338
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.23155
+    },
+    {
+     "pid": "P5",
+     "card": 3,
+     "fx": 0.26845
+    },
+    {
+     "pid": "P6",
+     "card": 2,
+     "fx": 0.30598
+    },
+    {
+     "pid": "P7",
+     "card": 3,
+     "fx": 0.34288
+    },
+    {
+     "pid": "P8",
+     "card": 2,
+     "fx": 0.38295
+    },
+    {
+     "pid": "P9",
+     "card": 3,
+     "fx": 0.4173
+    },
+    {
+     "pid": "P10",
+     "card": 2,
+     "fx": 0.45165
+    }
+   ],
+   "p_fractions": [
+    0.10305,
+    0.14059,
+    0.19338,
+    0.23155,
+    0.26845,
+    0.30598,
+    0.34288,
+    0.38295,
+    0.4173,
+    0.45165
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.11549
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.17213
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.22877
+    },
+    {
+     "sid": "X5",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X6",
+     "card": 1,
+     "fx": 0.3987
+    },
+    {
+     "sid": "X7",
+     "card": 1,
+     "fx": 0.45534
+    },
+    {
+     "sid": "X8",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X9",
+     "card": 0,
+     "fx": 0.62527
+    },
+    {
+     "sid": "X10",
+     "card": 1,
+     "fx": 0.73856
+    },
+    {
+     "sid": "X11",
+     "card": 1,
+     "fx": 0.7952
+    },
+    {
+     "sid": "X12",
+     "card": 1,
+     "fx": 0.85184
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.11549,
+    0.17213,
+    0.22877,
+    0.28542,
+    0.3987,
+    0.45534,
+    0.51199,
+    0.62527,
+    0.73856,
+    0.7952,
+    0.85184
+   ]
+  },
+  {
+   "item_id": "R049",
+   "pdf_image": "../h_review/sheets/R049_pl-handel-gavotte_upper_p1_s0_m3.png",
+   "src_image": "sheets/R049.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 2,
+     "fx": 0.07761
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.16858
+    },
+    {
+     "pid": "P3",
+     "card": 2,
+     "fx": 0.20165
+    }
+   ],
+   "p_fractions": [
+    0.07761,
+    0.16858,
+    0.20165
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.11549
+    },
+    {
+     "sid": "X3",
+     "card": 2,
+     "fx": 0.17213
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X5",
+     "card": 0,
+     "fx": 0.62527
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.11549,
+    0.17213,
+    0.51199,
+    0.62527
+   ]
+  },
+  {
+   "item_id": "R050",
+   "pdf_image": "../h_review/sheets/R050_pl-handel-gavotte_lower_p1_s0_m3.png",
+   "src_image": "sheets/R050.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.16667
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.26336
+    }
+   ],
+   "p_fractions": [
+    0.16667,
+    0.26336
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R054",
+   "pdf_image": "../h_review/sheets/R054_pl-handel-gavotte_lower_p1_s2_m5.png",
+   "src_image": "sheets/R054.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.07575
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.11967
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.17696
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.23425
+    },
+    {
+     "pid": "P5",
+     "card": 1,
+     "fx": 0.31763
+    },
+    {
+     "pid": "P6",
+     "card": 2,
+     "fx": 0.3781
+    }
+   ],
+   "p_fractions": [
+    0.07575,
+    0.11967,
+    0.17696,
+    0.23425,
+    0.31763,
+    0.3781
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R056",
+   "pdf_image": "../h_review/sheets/R056_pl-handel-gavotte_lower_p1_s2_m6.png",
+   "src_image": "sheets/R056.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 2,
+     "fx": 0.0986
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.26018
+    },
+    {
+     "pid": "P3",
+     "card": 3,
+     "fx": 0.30852
+    },
+    {
+     "pid": "P4",
+     "card": 2,
+     "fx": 0.33969
+    }
+   ],
+   "p_fractions": [
+    0.0986,
+    0.26018,
+    0.30852,
+    0.33969
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R058",
+   "pdf_image": "../h_review/sheets/R058_pl-handel-gavotte_lower_p1_s2_m7.png",
+   "src_image": "sheets/R058.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.09288
+    },
+    {
+     "pid": "P2",
+     "card": 1,
+     "fx": 0.17048
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.27417
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.34733
+    }
+   ],
+   "p_fractions": [
+    0.09288,
+    0.17048,
+    0.27417,
+    0.34733
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R064",
+   "pdf_image": "../h_review/sheets/R064_pl-handel-gavotte_lower_p1_s4_m11.png",
+   "src_image": "sheets/R064.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.07634
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.12087
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.17875
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.23346
+    },
+    {
+     "pid": "P5",
+     "card": 1,
+     "fx": 0.30216
+    }
+   ],
+   "p_fractions": [
+    0.07634,
+    0.12087,
+    0.17875,
+    0.23346,
+    0.30216
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R066",
+   "pdf_image": "../h_review/sheets/R066_pl-handel-gavotte_lower_p1_s4_m12.png",
+   "src_image": "sheets/R066.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 1,
+     "fx": 0.19466
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.35878
+    }
+   ],
+   "p_fractions": [
+    0.19466,
+    0.35878
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R068",
+   "pdf_image": "../h_review/sheets/R068_pl-handel-gavotte_lower_p1_s4_m13.png",
+   "src_image": "sheets/R068.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 1,
+     "fx": 0.0986
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.26081
+    },
+    {
+     "pid": "P3",
+     "card": 2,
+     "fx": 0.33969
+    }
+   ],
+   "p_fractions": [
+    0.0986,
+    0.26081,
+    0.33969
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R070",
+   "pdf_image": "../h_review/sheets/R070_pl-handel-gavotte_lower_p1_s4_m14.png",
+   "src_image": "sheets/R070.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 1,
+     "fx": 0.0827
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.17621
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.26781
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.36005
+    }
+   ],
+   "p_fractions": [
+    0.0827,
+    0.17621,
+    0.26781,
+    0.36005
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R072",
+   "pdf_image": "../h_review/sheets/R072_pl-handel-gavotte_lower_p1_s4_m15.png",
+   "src_image": "sheets/R072.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 1,
+     "fx": 0.09478
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.17812
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.26209
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.3416
+    }
+   ],
+   "p_fractions": [
+    0.09478,
+    0.17812,
+    0.26209,
+    0.3416
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R074",
+   "pdf_image": "../h_review/sheets/R074_pl-handel-gavotte_lower_p1_s6_m16.png",
+   "src_image": "sheets/R074.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 3,
+     "fx": 0.07379
+    },
+    {
+     "pid": "P2",
+     "card": 2,
+     "fx": 0.11578
+    },
+    {
+     "pid": "P3",
+     "card": 1,
+     "fx": 0.17048
+    },
+    {
+     "pid": "P4",
+     "card": 1,
+     "fx": 0.23855
+    },
+    {
+     "pid": "P5",
+     "card": 2,
+     "fx": 0.30789
+    },
+    {
+     "pid": "P6",
+     "card": 1,
+     "fx": 0.38804
+    }
+   ],
+   "p_fractions": [
+    0.07379,
+    0.11578,
+    0.17048,
+    0.23855,
+    0.30789,
+    0.38804
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  },
+  {
+   "item_id": "R076",
+   "pdf_image": "../h_review/sheets/R076_pl-handel-gavotte_lower_p1_s6_m17.png",
+   "src_image": "sheets/R076.png",
+   "pdf_onsets": [
+    {
+     "pid": "P1",
+     "card": 2,
+     "fx": 0.10751
+    },
+    {
+     "pid": "P2",
+     "card": 3,
+     "fx": 0.25573
+    },
+    {
+     "pid": "P3",
+     "card": 2,
+     "fx": 0.33015
+    }
+   ],
+   "p_fractions": [
+    0.10751,
+    0.25573,
+    0.33015
+   ],
+   "src_onsets": [
+    {
+     "sid": "X1",
+     "card": 1,
+     "fx": 0.05885
+    },
+    {
+     "sid": "X2",
+     "card": 1,
+     "fx": 0.28542
+    },
+    {
+     "sid": "X3",
+     "card": 1,
+     "fx": 0.51199
+    },
+    {
+     "sid": "X4",
+     "card": 1,
+     "fx": 0.73856
+    }
+   ],
+   "x_fractions": [
+    0.05885,
+    0.28542,
+    0.51199,
+    0.73856
+   ]
+  }
+ ]
+}
+;
+const POP  = {"population": ["R001", "R002", "R004", "R010", "R011", "R039", "R040", "R047", "R049", "R050", "R054", "R056", "R058", "R064", "R066", "R068", "R070", "R072", "R074", "R076"], "population_n": 20, "population_sha256": "6abeebd9a717a03d0d40f2e09460c910e9b727b7517b198fc4fad97e1d65534d", "max_potential_noteheads": 137, "n50_reachable": true, "selection_basis": "preselected by unanimous structural agreement on the frozen packet"};
+const KEY = 'human_micro_v1';
+let st = load() || {idx:0, sel:null, items:{}};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){localStorage.setItem(KEY,JSON.stringify(st))}
+function it(){return DATA.items[st.idx]}
+function blank(){return {x:{}, pairs:{}, falseP:{}, rank:{}, rankAmbig:{}, unlisted:[], done:false}}
+function rec(i){return st.items[i]||(st.items[i]=blank())}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+// Marker layout: each marker sits at the x coordinate the notation was actually
+// drawn at (renderer-computed for the source panel, measured off the printed
+// overlay for the PDF panel). Evenly spaced markers drift away from the music
+// and would make click-pairing misleading.
+function layout(row, list, side){
+  row.innerHTML='';
+  const img=document.createElement('img'); img.src=side==='pdf'?it().pdf_image:it().src_image;
+  row.appendChild(img);
+  const n=list.length; if(!n) return;
+  const el=img;
+  const place=()=>{
+    const w=el.clientWidth||900, h=el.clientHeight||200;
+    list.forEach((o,i)=>{
+      const frac = (typeof o.fx==='number' && o.fx>0 && o.fx<1) ? o.fx
+                 : (n===1?0.5:(i+0.5)/n);
+      const m=row.querySelector('[data-id="'+o.id+'"]');
+      if(!m) return;
+      m.style.left=(frac*100)+'%';
+      m.style.top=Math.min(h*0.5, h-6)+'px';
+    });
+  };
+  list.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='mk '+side; b.dataset.id=o.id; b.textContent=o.id;
+    b.onclick=()=>onMarker(side,o.id);
+    row.appendChild(b);
+  });
+  el.onload=place; place(); window.addEventListener('resize',place);
+}
+
+function xdec(i){return rec(i).x[i]}
+function pstate(i){
+  const r=rec(i);
+  if(r.pairs[i]) return 'done';
+  if(r.falseP[i]) return 'false';
+  return '';
+}
+
+function onMarker(side,id){
+  const i=st.idx, r=rec(i);
+  // Decide by the id itself, not by `side`: layout() passes 'src', so a
+  // side==='x' test silently treated every source click as a P selection.
+  if(id[0]==='X'){
+    // clicking an X pairs it with the selected P (or selects the X if none)
+    if(st.sel && st.sel.startsWith('P')){ pair(st.sel,id); st.sel=null; }
+    else { st.sel = (st.sel===id? null : id); }
+  } else {
+    if(st.sel && st.sel.startsWith('X')){ pair(id,st.sel); st.sel=null; }
+    else { st.sel = (st.sel===id? null : id); }
+  }
+  save(); render();
+}
+function pair(p,x){
+  const r=rec(st.idx);
+  for(const k in r.pairs) if(r.pairs[k]===x) delete r.pairs[k];   // X is unique
+  r.pairs[p]=x;
+  delete r.falseP[p];
+  autoRank(p,x);
+  save();
+}
+function unpair(p){ const r=rec(st.idx); delete r.pairs[p]; autoRankAll(); save(); }
+
+// H5: propose rank pairing only when both sides share unambiguous cardinality
+function autoRank(p,x){
+  const r=rec(st.idx);
+  const P=it().pdf_onsets.find(o=>o.pid===p), X=it().src_onsets.find(o=>o.sid===x);
+  if(!P||!X){ return; }
+  if(P.card===X.card && P.card>0 && !amb(X.card)){
+    r.rank[p]={auto:true, card:P.card,
+      pairs:Array.from({length:P.card},(_,k)=>({p:p+'.'+(k+1), x:x+'.'+(k+1)}))};
+    r.rankAmbig[p]=false;
+  } else {
+    r.rank[p]={auto:false, card:P.card};
+    r.rankAmbig[p]=true;
+  }
+}
+function amb(c){ return false; }   // canonical stacking is unambiguous for a given cardinality
+function autoRankAll(){ const r=rec(st.idx); for(const p in r.pairs) autoRank(p,r.pairs[p]); }
+
+function noteheads(){
+  const r=rec(st.idx); let n=0;
+  for(const p in r.pairs){
+    if(r.rank[p] && r.rank[p].auto && r.rank[p].pairs){ n+=r.rank[p].pairs.length; }
+  }
+  return n;
+}
+function pairCount(){ return Object.keys(rec(st.idx).pairs).length; }
+function itemDone(i){
+  const d=DATA.items[i]; const r=st.items[i]||blank();
+  const n=Object.keys(r.pairs).length + Object.keys(r.falseP).length
+          + Object.keys(r.x).length + r.unlisted.length;
+  return n>0;
+}
+function doneCount(){ return DATA.items.map((_,i)=>i).filter(itemDone).length; }
+function totalNotes(){ let n=0; for(let i=0;i<DATA.items.length;i++){ const r=st.items[i]; if(!r) continue;
+  for(const p in r.pairs) if(r.rank[p]&&r.rank[p].auto&&r.rank[p].pairs) n+=r.rank[p].pairs.length; } return n; }
+
+function render(){
+  const i=st.idx, d=it(), r=rec(i);
+  document.getElementById('sItems').textContent = doneCount()+' / '+DATA.items.length;
+  document.getElementById('sPairs').textContent  = DATA.items.reduce((a,_,k)=>a+Object.keys((st.items[k]||{pairs:{}}).pairs||{}).length,0);
+  document.getElementById('sNotes').textContent = totalNotes();
+  const N=totalNotes();
+  document.getElementById('sN').textContent = N;
+  document.getElementById('sMs').innerHTML = 'milestones N&ge;25 '+(N>=25?'<b>&#10003; reached</b>':'')
+    +' &middot; N&ge;50 '+(N>=50?'<b>&#10003; reached</b>':'')
+    +' &middot; N&ge;100 '+(N>=100?'<b>&#10003; reached</b>':'')
+    + ' &nbsp;|&nbsp; ceiling '+POP.max_potential_noteheads
+    + (N>=50 ? ' &nbsp;<span class="big">Enough for the first clean-gate evaluation.</span>' : '');
+
+  const P=d.pdf_onsets.map(o=>({id:o.pid,card:o.card,fx:o.fx}));
+  const X=d.src_onsets.map(o=>({id:o.sid,card:o.card,fx:o.fx}));
+  layout(document.getElementById('rowPdf'),P,'pdf');
+  layout(document.getElementById('rowSrc'),X,'src');
+
+  // marker states
+  document.querySelectorAll('#rowPdf .mk').forEach(b=>{
+    const id=b.dataset.id;
+    b.classList.toggle('sel', st.sel===id);
+    b.classList.toggle('done', !!r.pairs[id]);
+    b.classList.toggle('false', !!r.falseP[id]);
+    if(r.pairs[id]) b.textContent = r.pairs[id];
+  });
+  document.querySelectorAll('#rowSrc .mk').forEach(b=>{
+    const id=b.dataset.id;
+    b.classList.toggle('sel', st.sel===id);
+    b.classList.toggle('done', !!Object.values(r.pairs).includes(id));
+    b.classList.toggle('uns', r.x[id]==='UNSURE');
+  });
+
+  document.getElementById('notehead').innerHTML =
+    '<b>'+esc(d.item_id)+'</b> &nbsp;<span class="ms">'+P.length+' PDF proposals &middot; '+X.length+' source onsets</span>';
+
+  const lines=Object.keys(r.pairs).sort(nat).map(p=>{
+    const rk=r.rank[p];
+    const rtxt = rk&&rk.auto ? 'rank '+rk.card+' auto-confirmed' :
+                rk&&!rk.auto ? '<span class="note">ambiguous (P card '+rk.card+') - not counted</span>' :
+                '<span class="ms">no rank</span>';
+    return '<li class="done-item"><b>'+p+' &harr; '+r.pairs[p]+'</b> &nbsp;<span class="ms">'+rtxt+'</span>'
+         + ' <button onclick="unpair(\''+p+'\')">unpair</button></li>';
+  });
+  const fp=Object.keys(r.falseP).map(p=>'<li>'+p+' &mdash; <b>NOT A NOTE ONSET</b></li>');
+  const un=r.unlisted.map((u,k)=>'<li><b>UNLISTED</b> '+esc(u)+' <button onclick="rmUn('+k+')">remove</button></li>');
+  document.getElementById('pairs').innerHTML =
+    '<ul class="pairs">'+(lines.join('')+fp.join('')+un.join(''))+'</ul>'
+    + (lines.length+fp.length+un.length? '' : '<div class="ms">nothing recorded yet</div>');
+  document.getElementById('prev').disabled = st.idx===0;
+  document.getElementById('next').disabled = st.idx===DATA.items.length-1;
+}
+function nat(a,b){return a.localeCompare(b,undefined,{numeric:true})}
+
+function setX(id,v){ const r=rec(st.idx); if(r.x[id]===v) delete r.x[id]; else r.x[id]=v; save(); render(); }
+function setP(id,v){
+  const r=rec(st.idx);
+  delete r.pairs[id]; delete r.rank[id]; delete r.rankAmbig[id];
+  if(v==='NOTA'||v==='NO_COUNTERPART'){ r.falseP[id]=v; }
+  else { delete r.falseP[id]; }
+  save(); render();
+}
+function addUn(){ const el=document.getElementById('unlisted'); const v=el.value.trim();
+  if(!v) return; const r=rec(st.idx); r.unlisted.push(v); el.value=''; save(); render(); }
+function rmUn(k){ const r=rec(st.idx); r.unlisted.splice(k,1); save(); render(); }
+function confirmAll(){ save(); render(); }
+function allUnsure(){
+  const r=rec(st.idx);
+  it().src_onsets.forEach(o=>r.x[o.sid]='UNSURE');
+  it().pdf_onsets.forEach(o=>{ if(!r.pairs[o.pid]&&!r.falseP[o.pid]) r.falseP[o.pid]='NO_COUNTERPART'; });
+  save(); render();
+}
+function allNo(){
+  const r=rec(st.idx);
+  it().src_onsets.forEach(o=>r.x[o.sid]='NOT_PRINTED');
+  it().pdf_onsets.forEach(o=>{ delete r.pairs[o.pid]; delete r.rank[o.pid]; r.falseP[o.pid]='NO_COUNTERPART'; });
+  save(); render();
+}
+function undo(){
+  const keys=['pairs','falseP','rank','rankAmbig','x','unlisted'];
+  for(const k of keys){ const r=rec(st.idx);
+    if(r[k]&&!Array.isArray(r[k])&&Object.keys(r[k]).length){ clearLast(k); break; }
+    if(Array.isArray(r[k])&&r[k].length){ r[k].pop(); break; } }
+  save(); render();
+}
+function clearLast(k){
+  const r=rec(st.idx); const ks=Object.keys(r[k]);
+  if(!ks.length) return;
+  const last=ks.sort(nat)[ks.length-1];
+  delete r[k][last];
+  if(k==='pairs'){ delete r.rank[last]; delete r.rankAmbig[last]; }
+}
+function go(d){ const n=Math.max(0,Math.min(DATA.items.length-1,st.idx+d)); if(n!==st.idx){st.idx=n; st.sel=null; save(); render(); } }
+
+function exportJSON(){
+  const items=DATA.items.map((d,i)=>{
+    const r=st.items[i]||blank();
+    const confirmedPairs=[];
+    for(const p in r.pairs){
+      const rk=r.rank[p];
+      confirmedPairs.push({
+        p:p, x:r.pairs[p],
+        rank_status: rk&&rk.auto?'CONFIRMED':(rk?'AMBIGUOUS':'UNCONFIRMED'),
+        rank_pairs: rk&&rk.auto?rk.pairs:[]
+      });
+    }
+    return {
+      item_id:d.item_id,
+      x_presence:r.x,
+      p_to_x:confirmedPairs,
+      false_p:Object.keys(r.falseP).reduce((a,k)=>(a[k]=r.falseP[k],a),{}),
+      unlisted_onsets:r.unlisted
+    };
+  });
+  const out={
+    label:'HUMAN_MICRO_REVIEW_ANSWERS',
+    population_sha256:POP.population_sha256,
+    population_n:POP.population_n,
+    structure_consensus:'3/3 SAME_STRUCTURE (preselected)',
+    notehead_scale:'CONFIRMED or UNSURE only; UNSURE excluded',
+    matched_notehead_N: totalNotes(),
+    items:items
+  };
+  const blob=new Blob([JSON.stringify(out,null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='human_review_answers.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+document.getElementById('export').onclick=exportJSON;
+document.getElementById('undo').onclick=undo;
+document.getElementById('bUnS').onclick=allUnsure;
+document.getElementById('bNo').onclick=allNo;
+document.getElementById('bConfirm').onclick=confirmAll;
+document.getElementById('bAdd').onclick=addUn;
+window.unpair=unpair; window.rmUn=rmUn;
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'){ if(e.key==='Enter'){addUn();} return; }
+  if(e.key==='u'||e.key==='U'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('X')) setX(s,'UNSURE'); else setP(s,'NO_COUNTERPART'); st.sel=null; render(); } else allUnsure(); }
+  else if(e.key==='n'||e.key==='N'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('X')) setX(s,'NOT_PRINTED'); else setP(s,'NO_COUNTERPART'); st.sel=null; render(); } else allNo(); }
+  else if(e.key==='Enter'){ if(st.sel){ const s=st.sel;
+      if(s.startsWith('P')&&st.sel2){} confirmAll(); } else confirmAll(); }
+  else if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if((e.ctrlKey||e.metaKey)&&e.key==='z'){ e.preventDefault(); undo(); }
+});
+render();
+</script>
