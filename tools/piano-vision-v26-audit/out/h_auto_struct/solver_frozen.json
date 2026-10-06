@@ -1,0 +1,94 @@
+{
+ "solver_version": "auto-structural-align-1",
+ "weights": {
+  "W_X": 1.0,
+  "W_SPACE": 0.85,
+  "W_CARD": 1.25,
+  "W_BEAM": 0.45,
+  "W_DUR": 0.35,
+  "W_SEQ": 0.6,
+  "SKIP_P": 0.55,
+  "SKIP_X": 1.3,
+  "SKIP_X_RELAX": 0.0,
+  "DOT_TOL": 0.35,
+  "P_MATCH_NONNOTE": -1.8,
+  "P_MATCH_AMBIG": -0.55
+ },
+ "accept_margin": 2.0,
+ "min_match_fraction": 0.8,
+ "perturbation": {
+  "n": 24,
+  "dx": 0.004,
+  "dx2": 0.01,
+  "confidence_nudge": 0.15,
+  "seed": 20261005
+ },
+ "beam_compat": {
+  "(0, 0)": 1.0,
+  "(1, 1)": 1.0,
+  "(0, 1)": 0.0,
+  "(1, 0)": 0.0
+ },
+ "card_tolerance_exact_only": true,
+ "uses_pitch": false,
+ "reads_scientific_fields": false,
+ "label": "AUTOMATIC_STRUCTURAL_CORRESPONDENCE (not human-certified)",
+ "margin_selection": {
+  "method": "synthetic structural stability only; no residual, no pitch",
+  "cases": [
+   {
+    "case": "det_distinct_cardinality_and_beams",
+    "margin": 7.1,
+    "kind": "determined",
+    "n_pdf": 7,
+    "n_src": 7
+   },
+   {
+    "case": "det_widely_separated",
+    "margin": 7.425,
+    "kind": "determined",
+    "n_pdf": 5,
+    "n_src": 5
+   },
+   {
+    "case": "det_false_proposal_skipped",
+    "margin": 2.6737,
+    "kind": "determined",
+    "n_pdf": 5,
+    "n_src": 4
+   },
+   {
+    "case": "det_chord_and_beam_signature",
+    "margin": 7.4333,
+    "kind": "determined",
+    "n_pdf": 5,
+    "n_src": 5
+   },
+   {
+    "case": "det_dense_twelve",
+    "margin": 6.575,
+    "kind": "determined",
+    "n_pdf": 12,
+    "n_src": 12
+   },
+   {
+    "case": "amb_source_pair_inside_one_pdf",
+    "margin": 0.8324,
+    "kind": "ambiguous",
+    "n_pdf": 3,
+    "n_src": 4
+   },
+   {
+    "case": "amb_twin_plus_spare",
+    "margin": 0.8667,
+    "kind": "ambiguous",
+    "n_pdf": 3,
+    "n_src": 4
+   }
+  ],
+  "max_ambiguous_margin": 0.8667,
+  "min_determined_margin": 2.6737,
+  "separating": true
+ },
+ "solver_code_sha256": "4c9c4d3956ffe91ec4f8ad858d00d94fc5836fe6dbbc64e75635294c2aefd9f2"
+}

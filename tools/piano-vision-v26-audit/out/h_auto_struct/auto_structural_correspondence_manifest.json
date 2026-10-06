@@ -1,0 +1,1665 @@
+{
+ "label": "AUTOMATIC_STRUCTURAL_CORRESPONDENCE",
+ "provenance": "AUTOMATIC STRUCTURAL CORRESPONDENCE - not human-certified",
+ "population_sha256": "6abeebd9a717a03d0d40f2e09460c910e9b727b7517b198fc4fad97e1d65534d",
+ "population_n": 20,
+ "solver_sha256": "317ec4ca33795797d0909eae7e8665eea9a8029aed0a6e953d3acf8352a697c9",
+ "accept_margin": 2.0,
+ "min_match_fraction": 0.8,
+ "reads_scientific_fields": false,
+ "attempted": 20,
+ "accepted_measures": 3,
+ "unresolved_measures": 17,
+ "accepted_onset_mappings": 12,
+ "matched_notehead_n": 12,
+ "skipped_false_p": 0,
+ "unlisted_pdf_onsets": 0,
+ "clean_gate_required_n": 50,
+ "clean_gate_state": "NOT_EVALUATED",
+ "items": [
+  {
+   "item_id": "R001",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.3213,
+   "match_fraction": 1.0,
+   "perturbation_flips": 6,
+   "perturbation_n": 24,
+   "n_pdf": 9,
+   "n_src": 8,
+   "n_matched": 8,
+   "matched_noteheads": 8,
+   "skipped_p_ids": [
+    "P8"
+   ],
+   "n_skipped_p": 1,
+   "n_unlisted": 0,
+   "n_raster_groups": 9,
+   "n_raster_dropped": 0,
+   "packet_p_n": 9,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P8"
+   ],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.3213 < 2.00",
+    "perturbation flipped 6/24"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0218,
+     "s_x": 0.0251,
+     "p_card": 2,
+     "x_card": 0,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.1468,
+     "s_x": 0.1486,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.2611,
+     "s_x": 0.2721,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.5375,
+     "s_x": 0.3955,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P5",
+     "sid": "X5",
+     "p_x": 0.6307,
+     "s_x": 0.519,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P6",
+     "sid": "X6",
+     "p_x": 0.7531,
+     "s_x": 0.7042,
+     "p_card": 1,
+     "x_card": 2,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P7",
+     "sid": "X7",
+     "p_x": 0.8139,
+     "s_x": 0.7659,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P9",
+     "sid": "X8",
+     "p_x": 0.9782,
+     "s_x": 0.8894,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    }
+   ]
+  },
+  {
+   "item_id": "R002",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.4447,
+   "match_fraction": 0.9231,
+   "perturbation_flips": 8,
+   "perturbation_n": 24,
+   "n_pdf": 12,
+   "n_src": 13,
+   "n_matched": 12,
+   "matched_noteheads": 11,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 12,
+   "n_raster_dropped": 0,
+   "packet_p_n": 12,
+   "skipped_x_ids": [
+    "X9"
+   ],
+   "ambiguous_proposals": [
+    "P1",
+    "P9",
+    "P12"
+   ],
+   "not_note_matched": [
+    "P1",
+    "P9",
+    "P12"
+   ],
+   "blocking": [
+    "margin 0.4447 < 2.00",
+    "perturbation flipped 8/24",
+    "matched a proposal the raster does not affirm as a note: P1,P9,P12"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0212,
+     "s_x": 0.051,
+     "p_card": 2,
+     "x_card": 0,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.0425,
+     "s_x": 0.2906,
+     "p_card": 3,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.0986,
+     "s_x": 0.3505,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.4,
+     "s_x": 0.4105,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P5",
+     "sid": "X5",
+     "p_x": 0.5,
+     "s_x": 0.4704,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P6",
+     "sid": "X6",
+     "p_x": 0.5574,
+     "s_x": 0.5303,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P7",
+     "sid": "X7",
+     "p_x": 0.613,
+     "s_x": 0.5902,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P8",
+     "sid": "X8",
+     "p_x": 0.6667,
+     "s_x": 0.6501,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P9",
+     "sid": "X10",
+     "p_x": 0.7584,
+     "s_x": 0.7699,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 1
+    },
+    {
+     "pid": "P10",
+     "sid": "X11",
+     "p_x": 0.8334,
+     "s_x": 0.8298,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P11",
+     "sid": "X12",
+     "p_x": 0.8862,
+     "s_x": 0.8897,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P12",
+     "sid": "X13",
+     "p_x": 0.9788,
+     "s_x": 0.9497,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 1
+    }
+   ]
+  },
+  {
+   "item_id": "R004",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.4162,
+   "match_fraction": 0.9167,
+   "perturbation_flips": 2,
+   "perturbation_n": 24,
+   "n_pdf": 13,
+   "n_src": 12,
+   "n_matched": 11,
+   "matched_noteheads": 30,
+   "skipped_p_ids": [
+    "P11",
+    "P12"
+   ],
+   "n_skipped_p": 2,
+   "n_unlisted": 0,
+   "n_raster_groups": 13,
+   "n_raster_dropped": 0,
+   "packet_p_n": 13,
+   "skipped_x_ids": [
+    "X3"
+   ],
+   "ambiguous_proposals": [
+    "P3",
+    "P6",
+    "P9",
+    "P10",
+    "P12"
+   ],
+   "not_note_matched": [
+    "P3",
+    "P6",
+    "P9",
+    "P10"
+   ],
+   "blocking": [
+    "margin 0.4162 < 2.00",
+    "perturbation flipped 2/24",
+    "matched a proposal the raster does not affirm as a note: P3,P6,P9,P10"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0204,
+     "s_x": 0.0571,
+     "p_card": 1,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.1089,
+     "s_x": 0.1149,
+     "p_card": 1,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X4",
+     "p_x": 0.214,
+     "s_x": 0.2305,
+     "p_card": 2,
+     "x_card": 3,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X5",
+     "p_x": 0.2724,
+     "s_x": 0.2882,
+     "p_card": 3,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P5",
+     "sid": "X6",
+     "p_x": 0.3387,
+     "s_x": 0.346,
+     "p_card": 3,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P6",
+     "sid": "X7",
+     "p_x": 0.4166,
+     "s_x": 0.4038,
+     "p_card": 3,
+     "x_card": 3,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P7",
+     "sid": "X8",
+     "p_x": 0.4755,
+     "s_x": 0.4616,
+     "p_card": 2,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P8",
+     "sid": "X9",
+     "p_x": 0.5766,
+     "s_x": 0.5194,
+     "p_card": 1,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P9",
+     "sid": "X10",
+     "p_x": 0.6731,
+     "s_x": 0.635,
+     "p_card": 2,
+     "x_card": 2,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P10",
+     "sid": "X11",
+     "p_x": 0.7693,
+     "s_x": 0.7506,
+     "p_card": 1,
+     "x_card": 2,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P13",
+     "sid": "X12",
+     "p_x": 0.9796,
+     "s_x": 0.8662,
+     "p_card": 2,
+     "x_card": 2,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R010",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0522,
+   "match_fraction": 1.0,
+   "perturbation_flips": 9,
+   "perturbation_n": 24,
+   "n_pdf": 8,
+   "n_src": 2,
+   "n_matched": 2,
+   "matched_noteheads": 5,
+   "skipped_p_ids": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+   ],
+   "n_skipped_p": 6,
+   "n_unlisted": 0,
+   "n_raster_groups": 8,
+   "n_raster_dropped": 0,
+   "packet_p_n": 8,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P1",
+    "P2",
+    "P7",
+    "P8"
+   ],
+   "not_note_matched": [
+    "P2",
+    "P8"
+   ],
+   "blocking": [
+    "margin 0.0522 < 2.00",
+    "perturbation flipped 9/24",
+    "matched a proposal the raster does not affirm as a note: P2,P8"
+   ],
+   "pairs": [
+    {
+     "pid": "P2",
+     "sid": "X1",
+     "p_x": 0.0615,
+     "s_x": 0.0733,
+     "p_card": 3,
+     "x_card": 5,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P8",
+     "sid": "X2",
+     "p_x": 0.9693,
+     "s_x": 0.7684,
+     "p_card": 1,
+     "x_card": 0,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R011",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.7497,
+   "match_fraction": 1.0,
+   "perturbation_flips": 2,
+   "perturbation_n": 24,
+   "n_pdf": 14,
+   "n_src": 15,
+   "n_matched": 14,
+   "matched_noteheads": 14,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 14,
+   "n_raster_dropped": 0,
+   "packet_p_n": 14,
+   "skipped_x_ids": [
+    "X1"
+   ],
+   "ambiguous_proposals": [
+    "P1",
+    "P6"
+   ],
+   "not_note_matched": [
+    "P1",
+    "P6"
+   ],
+   "blocking": [
+    "margin 0.7497 < 2.00",
+    "perturbation flipped 2/24",
+    "matched a proposal the raster does not affirm as a note: P1,P6"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X2",
+     "p_x": 0.0206,
+     "s_x": 0.1648,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 1
+    },
+    {
+     "pid": "P2",
+     "sid": "X3",
+     "p_x": 0.0808,
+     "s_x": 0.2231,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P3",
+     "sid": "X4",
+     "p_x": 0.1099,
+     "s_x": 0.2814,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P4",
+     "sid": "X5",
+     "p_x": 0.1536,
+     "s_x": 0.3396,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P5",
+     "sid": "X6",
+     "p_x": 0.2449,
+     "s_x": 0.3979,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P6",
+     "sid": "X7",
+     "p_x": 0.3434,
+     "s_x": 0.4562,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 1
+    },
+    {
+     "pid": "P7",
+     "sid": "X8",
+     "p_x": 0.6233,
+     "s_x": 0.5144,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P8",
+     "sid": "X9",
+     "p_x": 0.6937,
+     "s_x": 0.5727,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P9",
+     "sid": "X10",
+     "p_x": 0.7401,
+     "s_x": 0.631,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P10",
+     "sid": "X11",
+     "p_x": 0.79,
+     "s_x": 0.6892,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P11",
+     "sid": "X12",
+     "p_x": 0.8381,
+     "s_x": 0.7475,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P12",
+     "sid": "X13",
+     "p_x": 0.884,
+     "s_x": 0.8058,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P13",
+     "sid": "X14",
+     "p_x": 0.9326,
+     "s_x": 0.864,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P14",
+     "sid": "X15",
+     "p_x": 0.9794,
+     "s_x": 0.9223,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    }
+   ]
+  },
+  {
+   "item_id": "R039",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.2625,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 2,
+   "n_src": 1,
+   "n_matched": 1,
+   "matched_noteheads": 2,
+   "skipped_p_ids": [
+    "P1"
+   ],
+   "n_skipped_p": 1,
+   "n_unlisted": 0,
+   "n_raster_groups": 2,
+   "n_raster_dropped": 0,
+   "packet_p_n": 2,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P2"
+   ],
+   "not_note_matched": [
+    "P2"
+   ],
+   "blocking": [
+    "margin 0.2625 < 2.00",
+    "matched a proposal the raster does not affirm as a note: P2"
+   ],
+   "pairs": [
+    {
+     "pid": "P2",
+     "sid": "X1",
+     "p_x": 0.9377,
+     "s_x": 0.0623,
+     "p_card": 2,
+     "x_card": 2,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R040",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.9875,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 2,
+   "n_src": 1,
+   "n_matched": 1,
+   "matched_noteheads": 3,
+   "skipped_p_ids": [
+    "P2"
+   ],
+   "n_skipped_p": 1,
+   "n_unlisted": 0,
+   "n_raster_groups": 2,
+   "n_raster_dropped": 0,
+   "packet_p_n": 2,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P2"
+   ],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.9875 < 2.00"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.4775,
+     "s_x": 0.0623,
+     "p_card": 4,
+     "x_card": 3,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R047",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.1127,
+   "match_fraction": 0.75,
+   "perturbation_flips": 13,
+   "perturbation_n": 24,
+   "n_pdf": 10,
+   "n_src": 12,
+   "n_matched": 9,
+   "matched_noteheads": 8,
+   "skipped_p_ids": [
+    "P8"
+   ],
+   "n_skipped_p": 1,
+   "n_unlisted": 0,
+   "n_raster_groups": 10,
+   "n_raster_dropped": 0,
+   "packet_p_n": 10,
+   "skipped_x_ids": [
+    "X1",
+    "X2",
+    "X5"
+   ],
+   "ambiguous_proposals": [
+    "P1",
+    "P8"
+   ],
+   "not_note_matched": [
+    "P1"
+   ],
+   "blocking": [
+    "margin 0.1127 < 2.00",
+    "match fraction 0.750 < 0.80",
+    "perturbation flipped 13/24",
+    "matched a proposal the raster does not affirm as a note: P1"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X3",
+     "p_x": 0.1164,
+     "s_x": 0.1387,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 1
+    },
+    {
+     "pid": "P2",
+     "sid": "X4",
+     "p_x": 0.2102,
+     "s_x": 0.1976,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P3",
+     "sid": "X6",
+     "p_x": 0.3428,
+     "s_x": 0.3744,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 2
+    },
+    {
+     "pid": "P4",
+     "sid": "X7",
+     "p_x": 0.4382,
+     "s_x": 0.4333,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 2
+    },
+    {
+     "pid": "P5",
+     "sid": "X8",
+     "p_x": 0.5303,
+     "s_x": 0.4923,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P6",
+     "sid": "X9",
+     "p_x": 0.6241,
+     "s_x": 0.6101,
+     "p_card": 1,
+     "x_card": 0,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P7",
+     "sid": "X10",
+     "p_x": 0.7168,
+     "s_x": 0.728,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 3
+    },
+    {
+     "pid": "P9",
+     "sid": "X11",
+     "p_x": 0.9033,
+     "s_x": 0.7869,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 3
+    },
+    {
+     "pid": "P10",
+     "sid": "X12",
+     "p_x": 0.9887,
+     "s_x": 0.8459,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R049",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0375,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 3,
+   "n_src": 5,
+   "n_matched": 3,
+   "matched_noteheads": 3,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 3,
+   "n_raster_dropped": 0,
+   "packet_p_n": 3,
+   "skipped_x_ids": [
+    "X3",
+    "X5"
+   ],
+   "ambiguous_proposals": [],
+   "not_note_matched": [
+    "P3"
+   ],
+   "blocking": [
+    "margin 0.0375 < 2.00",
+    "matched a proposal the raster does not affirm as a note: P3"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0246,
+     "s_x": 0.0912,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.4231,
+     "s_x": 0.179,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 1
+    },
+    {
+     "pid": "P3",
+     "sid": "X4",
+     "p_x": 0.5682,
+     "s_x": 0.7934,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NON_NOTE_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R050",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.3219,
+   "match_fraction": 0.5,
+   "perturbation_flips": 1,
+   "perturbation_n": 24,
+   "n_pdf": 2,
+   "n_src": 4,
+   "n_matched": 2,
+   "matched_noteheads": 2,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 2,
+   "n_raster_dropped": 0,
+   "packet_p_n": 2,
+   "skipped_x_ids": [
+    "X1",
+    "X4"
+   ],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.3219 < 2.00",
+    "match fraction 0.500 < 0.80",
+    "perturbation flipped 1/24"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X2",
+     "p_x": 0.3217,
+     "s_x": 0.3426,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X3",
+     "p_x": 0.6981,
+     "s_x": 0.6574,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R054",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0636,
+   "match_fraction": 1.0,
+   "perturbation_flips": 7,
+   "perturbation_n": 24,
+   "n_pdf": 6,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [
+    "P2",
+    "P4"
+   ],
+   "n_skipped_p": 2,
+   "n_unlisted": 0,
+   "n_raster_groups": 6,
+   "n_raster_dropped": 0,
+   "packet_p_n": 6,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.0636 < 2.00",
+    "perturbation flipped 7/24"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0426,
+     "s_x": 0.0249,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X2",
+     "p_x": 0.3542,
+     "s_x": 0.3073,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P5",
+     "sid": "X3",
+     "p_x": 0.7885,
+     "s_x": 0.5897,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P6",
+     "sid": "X4",
+     "p_x": 0.9751,
+     "s_x": 0.872,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R056",
+   "status": "AUTO_HIGH_CONFIDENCE",
+   "margin": 2.0004,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 4,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 4,
+   "n_raster_dropped": 0,
+   "packet_p_n": 4,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.082,
+     "s_x": 0.0275,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.6799,
+     "s_x": 0.3394,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.8569,
+     "s_x": 0.6512,
+     "p_card": 3,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.9725,
+     "s_x": 0.963,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R058",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 4.0329,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 4,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 4,
+   "n_raster_dropped": 0,
+   "packet_p_n": 4,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P1"
+   ],
+   "not_note_matched": [
+    "P1"
+   ],
+   "blocking": [
+    "matched a proposal the raster does not affirm as a note: P1"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0734,
+     "s_x": 0.027,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.3475,
+     "s_x": 0.3323,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.7151,
+     "s_x": 0.6377,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.973,
+     "s_x": 0.9431,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R064",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0887,
+   "match_fraction": 1.0,
+   "perturbation_flips": 2,
+   "perturbation_n": 24,
+   "n_pdf": 5,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [
+    "P2"
+   ],
+   "n_skipped_p": 1,
+   "n_unlisted": 0,
+   "n_raster_groups": 5,
+   "n_raster_dropped": 0,
+   "packet_p_n": 5,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P1"
+   ],
+   "not_note_matched": [
+    "P1"
+   ],
+   "blocking": [
+    "margin 0.0887 < 2.00",
+    "perturbation flipped 2/24",
+    "matched a proposal the raster does not affirm as a note: P1"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0495,
+     "s_x": 0.0278,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X2",
+     "p_x": 0.4007,
+     "s_x": 0.3426,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X3",
+     "p_x": 0.5897,
+     "s_x": 0.6574,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P5",
+     "sid": "X4",
+     "p_x": 0.8246,
+     "s_x": 0.9722,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R066",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0,
+   "match_fraction": 0.5,
+   "perturbation_flips": 9,
+   "perturbation_n": 24,
+   "n_pdf": 2,
+   "n_src": 4,
+   "n_matched": 2,
+   "matched_noteheads": 2,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 2,
+   "n_raster_dropped": 0,
+   "packet_p_n": 2,
+   "skipped_x_ids": [
+    "X1",
+    "X2"
+   ],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.0000 < 2.00",
+    "match fraction 0.500 < 0.80",
+    "perturbation flipped 9/24"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X3",
+     "p_x": 0.4219,
+     "s_x": 0.6191,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X4",
+     "p_x": 0.9738,
+     "s_x": 0.9156,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R068",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0638,
+   "match_fraction": 0.75,
+   "perturbation_flips": 4,
+   "perturbation_n": 24,
+   "n_pdf": 3,
+   "n_src": 4,
+   "n_matched": 3,
+   "matched_noteheads": 3,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 3,
+   "n_raster_dropped": 0,
+   "packet_p_n": 3,
+   "skipped_x_ids": [
+    "X2"
+   ],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [
+    "margin 0.0638 < 2.00",
+    "match fraction 0.750 < 0.80",
+    "perturbation flipped 4/24"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0838,
+     "s_x": 0.0277,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X3",
+     "p_x": 0.6828,
+     "s_x": 0.6541,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X4",
+     "p_x": 0.9723,
+     "s_x": 0.9674,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R070",
+   "status": "AUTO_HIGH_CONFIDENCE",
+   "margin": 4.2342,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 4,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 4,
+   "n_raster_dropped": 0,
+   "packet_p_n": 4,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0498,
+     "s_x": 0.0261,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.361,
+     "s_x": 0.3222,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.6668,
+     "s_x": 0.6182,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.9739,
+     "s_x": 0.9142,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R072",
+   "status": "AUTO_HIGH_CONFIDENCE",
+   "margin": 5.159,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 4,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 4,
+   "n_raster_dropped": 0,
+   "packet_p_n": 4,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [],
+   "not_note_matched": [],
+   "blocking": [],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0722,
+     "s_x": 0.0275,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X2",
+     "p_x": 0.3775,
+     "s_x": 0.339,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X3",
+     "p_x": 0.6829,
+     "s_x": 0.6505,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X4",
+     "p_x": 0.9725,
+     "s_x": 0.962,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R074",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.2183,
+   "match_fraction": 1.0,
+   "perturbation_flips": 0,
+   "perturbation_n": 24,
+   "n_pdf": 6,
+   "n_src": 4,
+   "n_matched": 4,
+   "matched_noteheads": 4,
+   "skipped_p_ids": [
+    "P2",
+    "P5"
+   ],
+   "n_skipped_p": 2,
+   "n_unlisted": 0,
+   "n_raster_groups": 6,
+   "n_raster_dropped": 0,
+   "packet_p_n": 6,
+   "skipped_x_ids": [],
+   "ambiguous_proposals": [
+    "P1"
+   ],
+   "not_note_matched": [
+    "P1"
+   ],
+   "blocking": [
+    "margin 0.2183 < 2.00",
+    "matched a proposal the raster does not affirm as a note: P1"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X1",
+     "p_x": 0.0381,
+     "s_x": 0.0242,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X2",
+     "p_x": 0.3254,
+     "s_x": 0.2989,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P4",
+     "sid": "X3",
+     "p_x": 0.5296,
+     "s_x": 0.5736,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P6",
+     "sid": "X4",
+     "p_x": 0.9758,
+     "s_x": 0.8482,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    }
+   ]
+  },
+  {
+   "item_id": "R076",
+   "status": "AUTO_UNRESOLVED",
+   "margin": 0.0,
+   "match_fraction": 0.75,
+   "perturbation_flips": 10,
+   "perturbation_n": 24,
+   "n_pdf": 3,
+   "n_src": 4,
+   "n_matched": 3,
+   "matched_noteheads": 3,
+   "skipped_p_ids": [],
+   "n_skipped_p": 0,
+   "n_unlisted": 0,
+   "n_raster_groups": 3,
+   "n_raster_dropped": 0,
+   "packet_p_n": 3,
+   "skipped_x_ids": [
+    "X1"
+   ],
+   "ambiguous_proposals": [
+    "P3"
+   ],
+   "not_note_matched": [
+    "P3"
+   ],
+   "blocking": [
+    "margin 0.0000 < 2.00",
+    "match fraction 0.750 < 0.80",
+    "perturbation flipped 10/24",
+    "matched a proposal the raster does not affirm as a note: P3"
+   ],
+   "pairs": [
+    {
+     "pid": "P1",
+     "sid": "X2",
+     "p_x": 0.0884,
+     "s_x": 0.3426,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P2",
+     "sid": "X3",
+     "p_x": 0.6666,
+     "s_x": 0.6574,
+     "p_card": 1,
+     "x_card": 1,
+     "verdict": "NOTE_ONSET_LIKELY",
+     "beam_group": 0
+    },
+    {
+     "pid": "P3",
+     "sid": "X4",
+     "p_x": 0.9579,
+     "s_x": 0.9722,
+     "p_card": 2,
+     "x_card": 1,
+     "verdict": "AMBIGUOUS",
+     "beam_group": 0
+    }
+   ]
+  }
+ ]
+}
