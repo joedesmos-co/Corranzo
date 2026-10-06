@@ -430,6 +430,95 @@ class TrainStatsStandardizer(nn.Module):
         }
 
 
+class FrozenTrainStatsStandardizer(nn.Module):
+    """Fixed train-only standardisation for phase-2 heads. It never updates.
+
+    ## Why a separate module rather than a flag
+
+    :class:`TrainStatsStandardizer` accumulates statistics while training, which is the
+    right behaviour for a joint run and the wrong behaviour for phase 2. Phase 2 trains
+    the fret head against a *frozen* representation, so its statistics must be fixed
+    constants: any update would make the head's input move, which is the exact failure
+    being removed. A boolean flag on the accumulating module would make the two
+    behaviours differ by a buffer value, and a checkpoint loaded without that buffer
+    would silently accumulate instead of holding. Two module types make the behaviour a
+    property of the variant, and the variant is recorded in every checkpoint config.
+
+    ## Provenance
+
+    ``mean``, ``sigma``, ``count`` and ``eps`` are buffers, so a plain ``state_dict``
+    round trip preserves every number and a phase-2 checkpoint loads without needing the
+    cached feature matrix. The source phase-1 checkpoint digest is not a tensor and
+    lives in the checkpoint metadata alongside the split and config.
+
+    ## No train/eval difference
+
+    ``forward`` reads the stored buffers and does not consult ``self.training`` at all,
+    so the same values are used whether the module is in train or eval mode. There is
+    nothing to leak: no evaluation batch, blank image, wrong ROI or ablated page can
+    reach ``mu`` or ``sigma`` because no code path writes to them.
+    """
+
+    def __init__(self, dim: int, eps: float = 1e-6) -> None:
+        super().__init__()
+        self.dim = dim
+        self.register_buffer("count", torch.zeros((), dtype=torch.float64))
+        self.register_buffer("mean", torch.zeros(dim, dtype=torch.float64))
+        # Identity by default rather than zero: an unset sigma of 0 would divide by
+        # eps and produce a ~1e6 blow-up instead of an obviously untrained module.
+        self.register_buffer("sigma", torch.ones(dim, dtype=torch.float64))
+        self.register_buffer("eps", torch.tensor(eps, dtype=torch.float64))
+
+    @torch.no_grad()
+    def set_statistics(
+        self, mean: torch.Tensor, sigma: torch.Tensor, count: float | int
+    ) -> None:
+        """Install statistics computed elsewhere, e.g. from a phase-1 extraction."""
+        mean = torch.as_tensor(mean, dtype=torch.float64).reshape(-1)
+        sigma = torch.as_tensor(sigma, dtype=torch.float64).reshape(-1)
+        if mean.numel() != self.dim or sigma.numel() != self.dim:
+            raise ValueError(
+                f"expected {self.dim} statistics, got mean={mean.numel()} "
+                f"sigma={sigma.numel()}"
+            )
+        if not torch.isfinite(mean).all() or not torch.isfinite(sigma).all():
+            raise ValueError("statistics must be finite")
+        if float(sigma.min()) <= 0.0:
+            raise ValueError("sigma must be strictly positive")
+        self.mean.copy_(mean)
+        self.sigma.copy_(sigma)
+        self.count.fill_(float(count))
+
+    def scale(self) -> torch.Tensor:
+        return self.sigma + self.eps
+
+    def forward(
+        self, values: torch.Tensor, mask: torch.Tensor | None = None
+    ) -> torch.Tensor:
+        scale = self.scale().to(values.dtype)
+        shift = self.mean.to(values.dtype)
+        standardised = (values - shift) / scale
+        if mask is not None:
+            keep = mask.unsqueeze(-1)
+            standardised = torch.where(
+                keep, standardised,
+                torch.zeros((), dtype=standardised.dtype, device=standardised.device),
+            )
+        return standardised
+
+    def diagnostics(self) -> dict[str, Any]:
+        return {
+            "kind": "frozen_train_stats",
+            "count": float(self.count.item()),
+            "epsilon": float(self.eps.item()),
+            "median_abs_mean": round(float(self.mean.abs().median()), 8),
+            "median_sigma": round(float(self.sigma.median()), 8),
+            "min_sigma": round(float(self.sigma.min()), 8),
+            "max_sigma": round(float(self.sigma.max()), 8),
+            "near_zero_variance_features": int((self.sigma < 1e-6).sum()),
+        }
+
+
 class FretVariantModel(nn.Module):
     """The shared model with one of three fret heads, chosen by name.
 
@@ -507,6 +596,25 @@ class FretVariantModel(nn.Module):
         no ``+ tokens``, and the standardizer holds no learnable parameters, so it
         consumes no RNG at construction and the initial weights are bit-identical to
         ``FROZEN_RANDOM_ROI_ENCODER``.
+
+    ``TWO_PHASE_STANDARDIZED``
+        Phase 2 of the two-phase recipe, as validated at commit ``d35d3e2964``. It is
+        ``FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED`` with the accumulating standardizer
+        replaced by a :class:`FrozenTrainStatsStandardizer` that holds fixed train-only
+        statistics and **never updates them**.
+
+        The static-head experiment showed that a production ``Linear(192 -> 26)``
+        reaches 0.5873 score-disjoint on a frozen, exactly standardised ``P`` against
+        0.0304 for the joint run, so the representation and the head are both
+        sufficient and the joint optimisation is the remaining fault. This variant is
+        the serialisable form of that experiment: phase 1 trains the representation,
+        phase 2 freezes everything but ``fret_classifier``, installs exact train-only
+        statistics, and retrains the head alone.
+
+        Distinguishing it from the accumulating variant by *type* rather than by a
+        buffer value is deliberate. A checkpoint carrying no statistics must not be
+        silently standardised, and a checkpoint carrying fixed statistics must not
+        silently accumulate; the variant name is recorded in every checkpoint config.
     """
 
     #: Kinds whose fret head reads the dedicated ROI encoding alone, with no shared
@@ -517,11 +625,19 @@ class FretVariantModel(nn.Module):
         "ROI_ONLY_NO_TOKEN",
         "FROZEN_RANDOM_ROI_ENCODER",
         "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
+        "TWO_PHASE_STANDARDIZED",
     )
     #: Kinds whose ``RoiEncoder`` parameters are held at initialisation.
     FROZEN_ENCODER_KINDS = (
         "FROZEN_RANDOM_ROI_ENCODER",
         "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
+        "TWO_PHASE_STANDARDIZED",
+    )
+    #: Kinds whose fret head reads a standardised ``P``. ``..._STANDARDIZED`` accumulates
+    #: statistics during training; ``TWO_PHASE_STANDARDIZED`` holds them fixed.
+    STANDARDIZED_KINDS = (
+        "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
+        "TWO_PHASE_STANDARDIZED",
     )
 
     MAX_DIGITS = 2
@@ -563,6 +679,10 @@ class FretVariantModel(nn.Module):
                 # Buffers only: no parameters, so no RNG is consumed here and the
                 # initial weights stay bit-identical to the unstandardized variant.
                 self.p_standardizer = TrainStatsStandardizer(hidden)
+            elif kind == "TWO_PHASE_STANDARDIZED":
+                # Fixed statistics, installed by the phase-2 loader. Buffers only, so
+                # again no RNG is consumed and the initial weights match.
+                self.p_standardizer = FrozenTrainStatsStandardizer(hidden)
         elif kind == "roidigits":
             # Per column, then grouped into digit slots. The projection is applied
             # along the width axis so each horizontal position keeps its own
@@ -649,7 +769,7 @@ class FretVariantModel(nn.Module):
             # (`object_type`, `string`, `tile`) keep their existing input and are
             # untouched by this change.
             p = self.roi_projection(encoded.flatten(-2))
-            if self.kind == "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED":
+            if self.kind in FretVariantModel.STANDARDIZED_KINDS:
                 # Only fret rows enter the statistics. Padding slots and non-fret
                 # objects would otherwise contribute their own degenerate
                 # distributions to mu and sigma.

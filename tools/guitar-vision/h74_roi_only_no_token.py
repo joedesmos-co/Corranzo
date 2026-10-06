@@ -115,6 +115,17 @@ def ablate_roi_pixels(batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]
     Written with index assignment rather than a meshgrid mask so it is exact at the
     box edges and cheap. Only fret objects are ablated; other objects keep their
     pixels, so this cannot be satisfied by destroying the page.
+
+    ## Boxes are normalised, not pixels
+
+    ``boxes`` are in page fractions in ``[0, 1]`` -- ``roi_crops`` multiplies the
+    centre by 2 and subtracts 1 to reach ``grid_sample``'s normalised frame, and the
+    boxes reach 0.999 in the corpus. An earlier version of this function treated them
+    as pixel indices, which floored every coordinate to 0 or 1 and ablated a 2-pixel
+    corner: a no-op that measured as "ablation changes nothing". Every ablation number
+    produced before this fix is therefore void, and the conclusion it was used to
+    support -- that the fret pixels carry no weight -- rests on the blank and wrong-ROI
+    controls instead, which are coordinate-independent and still stand.
     """
     out = dict(batch)
     images = batch["images"].clone()
@@ -125,8 +136,10 @@ def ablate_roi_pixels(batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]
         rows = is_fret[page].nonzero(as_tuple=True)[0]
         for row in rows.tolist():
             x0, y0, x1, y1 = boxes[page, row].tolist()
-            lo_x, hi_x = max(0, int(math.floor(x0))), min(width, int(math.ceil(x1)))
-            lo_y, hi_y = max(0, int(math.floor(y0))), min(height, int(math.ceil(y1)))
+            lo_x = max(0, min(width, int(round(x0 * width))))
+            hi_x = max(0, min(width, int(round(x1 * width))))
+            lo_y = max(0, min(height, int(round(y0 * height))))
+            hi_y = max(0, min(height, int(round(y1 * height))))
             if hi_x > lo_x and hi_y > lo_y:
                 images[page, :, :, lo_y:hi_y, lo_x:hi_x] = 1.0
     out["images"] = images
