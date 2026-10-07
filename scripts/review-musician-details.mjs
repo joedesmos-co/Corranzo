@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { writeFileSync } from 'node:fs'
 import { chromium } from 'playwright'
-assert.equal(process.cwd(), '/Users/ryland/Documents/scoreflow-ui-redesign')
+assert.equal(process.cwd(), process.env.UI_REVIEW_ROOT || '/Users/ryland/Documents/scoreflow-ui-redesign')
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
 const checks = [], accessibility = []

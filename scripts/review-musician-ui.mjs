@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { chromium } from 'playwright'
-assert.equal(process.cwd(), '/Users/ryland/Documents/scoreflow-ui-redesign')
+assert.equal(process.cwd(), process.env.UI_REVIEW_ROOT || '/Users/ryland/Documents/scoreflow-ui-redesign')
 const dir = 'docs/musician-ui/after'
 mkdirSync(dir, { recursive: true })
 const browser = await chromium.launch({ headless: true })
