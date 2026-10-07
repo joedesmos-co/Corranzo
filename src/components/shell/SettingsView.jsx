@@ -73,20 +73,9 @@ export default function SettingsView({
           </Button>
         </Panel>
 
-        <Panel title="About" headingLevel={2} sub="Corranzo is local-first. There is no account and nothing uploads.">
+        <Panel title="About" headingLevel={2} sub="Corranzo is local-first. There is no account and nothing uploads. Legal notes live in the page footer.">
           <div className="cz-settings__actions">
             <FeedbackLink label="Email feedback" />
-            <span className="cz-settings__legal">
-              <Button variant="ghost" size="sm" onClick={() => onNavigate('privacy')}>
-                Privacy
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate('terms')}>
-                Terms
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate('contact')}>
-                Contact
-              </Button>
-            </span>
           </div>
         </Panel>
       </div>

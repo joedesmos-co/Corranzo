@@ -97,6 +97,15 @@
 .profile-stat__value {
   color: var(--sf-text-primary);
   font: 400 24px/1.3 var(--cz-font-edition);
+  font-variant-numeric: tabular-nums;
+}
+
+.profile-stat__value--placeholder {
+  font-family: var(--cz-font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--sf-text-faint);
 }
 
 .profile-empty {

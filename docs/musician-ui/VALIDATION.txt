@@ -77,3 +77,24 @@ dist/assets/index--r99y2Qw.js                   1,508.02 kB │ gzip: 447.06 kB
 
 
 === new-code-lint.log ===
+
+=== polish-pass (above ba66f1ba5c; see POLISH.md) ===
+
+Targeted suites (13 files: shell, design, stats, manual log, library, import,
+workspace, home nav, visual practice, session persistence, annotations,
+piano instructions): 118 passed, 1 failed — the failure is the pre-existing
+designPhaseA contrast assertion, failing identically on the unmodified
+ba66f1ba5c baseline.
+
+Full suite: 3546 passed; 7 failed, all pre-existing baseline failures
+(betaOnboarding, designPhaseA, ipadLayout, launchReadiness Progress naming,
+minimalAudioUi, mobileOverlays, uxPolishSprint). No new failures introduced.
+
+Production build: passes; only the pre-existing chunk-size warning.
+Changed-file ESLint output identical to baseline; git diff --check passes.
+
+Browser reviews re-run against the working tree (dev server, fresh contexts):
+review.json 21/21 axe-clean, shell-browser-results.json 7/7 checks axe-clean
+(one transient viewport-transition timeout on first attempt; clean re-run
+passed), details-review.json 6/6 checks axe-clean. Responsive matrix
+390–1920px: no overflow. Screenshots in after/ regenerated where pixels changed.

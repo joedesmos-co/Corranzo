@@ -68,7 +68,6 @@
 .cz-settings__label { margin: 0; font-weight: 500; color: var(--sf-text-primary); }
 .cz-settings__hint { margin: 4px 0 0; font-size: 13px; color: var(--sf-text-muted); }
 .cz-settings__actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.cz-settings__legal { display: flex; flex-wrap: wrap; gap: 4px; }
 .cz-settings :is(.cz-btn, .cz-segmented__option, .instrument-selector__option) { min-height: 44px; }
 .cz-settings .feedback-link { color: var(--cz-vermilion); }
 

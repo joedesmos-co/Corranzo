@@ -26,6 +26,9 @@
 .score-import-how strong { display: block; font-size: 14px; font-weight: 500; color: var(--cz-ink); margin-bottom: 3px; }
 .score-import-empty { padding: 24px 0 32px; }
 .score-import :is(.score-import-empty, .score-import-processing, .score-import-ready, .score-import-message) h2 { font: 400 33px/1.15 var(--cz-font-edition); letter-spacing: -.025em; margin: 12px 0 16px; }
+/* Guidance stays subordinate to the page's single h1. Copy unchanged. Must
+follow the group rule above: equal specificity, later source order wins. */
+.score-import .score-import-empty h2 { font-size: 25px; }
 .score-import-empty p:not(.cz-edition-label) { max-width: 340px; font-size: 14px; color: var(--cz-sheet-muted); }
 .score-import-empty p:last-child { margin-top: 28px; font-size: 12px; }
 .score-import-advanced, .score-import-diagnostics { border-top: 1px solid var(--cz-sheet-line); margin-top: 28px; padding-top: 10px; font-size: 12px; color: var(--cz-sheet-muted); }

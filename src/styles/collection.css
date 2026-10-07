@@ -94,6 +94,36 @@
   .cz-shell[data-view='library'] .practice-library__filters { justify-content: start; }
 }
 .cz-shell[data-view='library'] :is(.multi-upload__cta, .upload-btn--practice) { background: var(--cz-ink); color: var(--cz-sheet-raised); }
+
+/* Single-selects on paper use the same ruled choice language as the library
+tabs: one shared selection idiom per surface instead of nested pill boxes
+competing with tab underlines. Pill boxes stay on the dark desk. */
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) :is(.cz-segmented, .cz-settings .instrument-selector) {
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--cz-sheet-line);
+  border-radius: 0;
+  background: transparent;
+}
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) :is(.cz-segmented__option, .cz-settings .instrument-selector__option) {
+  min-height: 44px;
+  padding: 0 2px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  font-weight: 500;
+}
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) :is(.cz-segmented__option[aria-pressed='true'], .cz-settings .instrument-selector__option--active) {
+  border-bottom-color: var(--cz-vermilion);
+  background: transparent;
+  color: var(--cz-ink);
+}
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) :is(.cz-segmented__option:hover:not(:disabled):not([aria-pressed='true']), .cz-settings .instrument-selector__option:hover) {
+  background: transparent;
+  color: var(--cz-vermilion);
+}
 .cz-shell[data-view='library'] .upload-btn--practice:hover { background: var(--cz-ink-raised); color: var(--cz-sheet-raised); }
 
 /* Final shell polish: resilient titles, targets and restrained saved-score states. */

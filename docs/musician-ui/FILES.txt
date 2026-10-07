@@ -2,6 +2,7 @@ docs/musician-ui/DESIGN.md
 docs/musician-ui/FILES.txt
 docs/musician-ui/REPORT.md
 docs/musician-ui/VALIDATION.txt
+docs/musician-ui/POLISH.md
 docs/musician-ui/after/focus.png
 docs/musician-ui/after/history-1440.png
 docs/musician-ui/after/history-390.png
@@ -66,6 +67,7 @@ src/components/home/home.css
 src/components/pdf/AnnotationToolSettings.jsx
 src/components/pdf/PdfViewerToolbar.jsx
 src/components/pdf/annotationConstants.js
+src/components/practice/VisualPracticeView.jsx
 src/components/practice/WorkspaceTools.jsx
 src/components/practice/WorkspaceTransport.jsx
 src/components/profile/ProfileView.jsx
