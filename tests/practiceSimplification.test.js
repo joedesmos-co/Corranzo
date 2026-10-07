@@ -94,7 +94,14 @@ describe('Practice page simplification', () => {
     expect(practiceCss).toContain('.practice-control-panel__primary > .wait-for-you')
     expect(practiceCss).toMatch(/\.wait-for-you__btn--primary \{[\s\S]*#d8f5e4/)
     expect(waitForYouHook).toContain('goToCheckpoint(startIndex, { sync: false })')
-    expect(waitForYouHook).toContain('goToCheckpoint(0, { sync: false })')
+    // B04 restored-first-match fix (codex/corranzo-practice-engine): async timing
+    // load after restore syncs to the NEAREST checkpoint of the loaded list
+    // (findCheckpointIndexAtTime with the saved practiceTime) and clears the
+    // stale consumed marker — not an unconditional rewind to 0, which broke
+    // restore position and left the first correct attack counted-but-stuck.
+    // Replacement behavior check for the old `goToCheckpoint(0, ...)` pin:
+    expect(waitForYouHook).toContain('findCheckpointIndexAtTime(checkpoints, Math.max(0, anchorTime))')
+    expect(waitForYouHook).toContain('consumedCheckpointIdRef.current = null')
     expect(practiceSession).toMatch(/if \(options\.sync === false\)[\s\S]*setPracticeTime\(\)[\s\S]*else[\s\S]*flushSync/)
   })
 

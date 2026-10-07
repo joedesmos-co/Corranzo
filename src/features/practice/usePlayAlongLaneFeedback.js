@@ -3,12 +3,21 @@ import {
   createPlayAlongFeedbackState,
   evaluatePlayAlongNoteInput,
   playAlongOutcomesMap,
+  prunePlayAlongOutcomesAfterSeek,
   resetPlayAlongFeedbackState,
+  resetPlayAlongForLoopIteration,
   updatePlayAlongMisses,
 } from './playAlongLaneFeedback.js'
 
 /**
  * Tracks per-note green/red outcomes during Play Along without pausing playback.
+ *
+ * Attempt lifecycle (B03):
+ * - Pause/resume/completion PRESERVE outcomes (same attempt). The old
+ *   `!active → reset` behavior wiped earned outcomes on every pause — removed.
+ * - New score / loop-bounds / scope / explicit attempt id resets outcomes.
+ * - Seek prunes stale future outcomes via `pruneAfterSeek`.
+ * - Loop wrap resets the current iteration via `resetForLoopIteration`.
  */
 export default function usePlayAlongLaneFeedback({
   active = false,
@@ -16,10 +25,14 @@ export default function usePlayAlongLaneFeedback({
   practiceTime = 0,
   matchSettings = {},
   isPlaying = false,
+  attemptId = null,
+  getAuthoritativeTime = null,
 }) {
   const stateRef = useRef(createPlayAlongFeedbackState())
   const timelineRef = useRef({ groups, practiceTime })
   timelineRef.current = { groups, practiceTime }
+  const getTimeRef = useRef(getAuthoritativeTime)
+  getTimeRef.current = getAuthoritativeTime
   const [version, setVersion] = useState(0)
   const bump = useCallback(() => setVersion((value) => value + 1), [])
 
@@ -33,12 +46,18 @@ export default function usePlayAlongLaneFeedback({
     bump()
   }, [groupsKey, bump])
 
+  const attemptIdRef = useRef(attemptId)
   useEffect(() => {
-    if (!active) {
-      resetPlayAlongFeedbackState(stateRef.current)
-      bump()
+    if (attemptIdRef.current !== attemptId) {
+      attemptIdRef.current = attemptId
+      // New attempt (mode change / score restart): fresh outcomes. The very
+      // first attempt id mount is already empty, so only bump when non-empty.
+      if (stateRef.current.outcomes.size > 0 || stateRef.current.activeGroupId != null) {
+        resetPlayAlongFeedbackState(stateRef.current)
+        bump()
+      }
     }
-  }, [active, bump])
+  }, [attemptId, bump])
 
   useEffect(() => {
     if (!active || !isPlaying) {
@@ -57,23 +76,39 @@ export default function usePlayAlongLaneFeedback({
     return () => window.clearInterval(intervalId)
   }, [active, isPlaying, bump])
 
-  const handlePlayedMidi = useCallback(
-    (midi) => {
-      if (!active || !isPlaying) {
-        return
+  const resolveInputTime = useCallback(
+    (explicitTime = null) => {
+      if (Number.isFinite(Number(explicitTime))) return Number(explicitTime)
+      try {
+        const authoritative = getTimeRef.current?.()
+        if (Number.isFinite(Number(authoritative))) return Number(authoritative)
+      } catch {
+        // fall through to React clock
       }
+      return timelineRef.current.practiceTime
+    },
+    [],
+  )
+
+  const handlePlayedMidi = useCallback(
+    (midi, explicitTime = null) => {
+      if (!active || !isPlaying) {
+        return null
+      }
+      const inputTime = resolveInputTime(explicitTime)
       const outcome = evaluatePlayAlongNoteInput(
         stateRef.current,
         groups,
-        practiceTime,
+        inputTime,
         midi,
         matchSettings,
       )
       if (outcome) {
         bump()
       }
+      return outcome
     },
-    [active, isPlaying, groups, practiceTime, matchSettings, bump],
+    [active, isPlaying, groups, matchSettings, bump, resolveInputTime],
   )
 
   const setGroupOutcome = useCallback(
@@ -87,6 +122,26 @@ export default function usePlayAlongLaneFeedback({
     [bump],
   )
 
+  const pruneAfterSeek = useCallback(
+    (seekTimeSeconds) => {
+      const timeline = timelineRef.current
+      if (prunePlayAlongOutcomesAfterSeek(stateRef.current, timeline.groups, seekTimeSeconds)) {
+        bump()
+      }
+    },
+    [bump],
+  )
+
+  const resetForLoopIteration = useCallback(() => {
+    resetPlayAlongForLoopIteration(stateRef.current)
+    bump()
+  }, [bump])
+
+  const resetForAttempt = useCallback(() => {
+    resetPlayAlongFeedbackState(stateRef.current)
+    bump()
+  }, [bump])
+
   const outcomes = useMemo(() => {
     void version
     return new Map(playAlongOutcomesMap(stateRef.current))
@@ -96,5 +151,8 @@ export default function usePlayAlongLaneFeedback({
     outcomes,
     handlePlayedMidi,
     setGroupOutcome,
+    pruneAfterSeek,
+    resetForLoopIteration,
+    resetForAttempt,
   }
 }

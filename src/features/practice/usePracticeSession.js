@@ -56,6 +56,15 @@ import { pausePlaybackAtAuthoritativeTime } from './practicePlaybackPause.js'
 import { releaseReferenceVoices } from './referenceNotePlayer.js'
 import { PERFORMANCE_MODE } from '../microphone-input/v3/performanceExpectation.js'
 import { RECOGNITION_TIMING } from '../microphone-input/v3/micRecognitionIr.js'
+import {
+  createPracticeAttempt,
+  nextLoopIteration,
+  nextSubAttempt,
+} from './practiceAttempt.js'
+import {
+  INPUT_SOURCE,
+  normalizeMidiInputEvent,
+} from './canonicalInputEvent.js'
 
 /**
  * Wires playback, timing, navigation, loop, and Wait For You hooks for the Practice view.
@@ -280,11 +289,35 @@ export default function usePracticeSession({
     prefs.loop,
   )
 
+  // Practice attempt identity (B03): one session holds many attempts. New
+  // attempt on mode/score change or manual restart; pause preserves the same
+  // attempt; seek creates a sub-attempt (prunes future); loop wrap bumps the
+  // iteration (resets current-iteration outcomes, preserves history by id).
+  const [practiceAttempt, setPracticeAttempt] = useState(() =>
+    createPracticeAttempt({ mode: normalizePracticeMode(prefs.practiceMode) }),
+  )
+  const practiceAttemptRef = useRef(practiceAttempt)
+  practiceAttemptRef.current = practiceAttempt
+  const startNewAttempt = useCallback((reason, overrides = {}) => {
+    setPracticeAttempt((previous) => ({
+      ...createPracticeAttempt({
+        mode: overrides.mode ?? previous?.mode ?? normalizePracticeMode(prefs.practiceMode),
+        scoreRevisionKey: overrides.scoreRevisionKey ?? previous?.scoreRevisionKey ?? null,
+        loopBoundsKey: overrides.loopBoundsKey ?? previous?.loopBoundsKey ?? null,
+        startScoreSeconds: overrides.startScoreSeconds ?? 0,
+      }),
+      reason,
+    }))
+  }, [prefs.practiceMode])
+
   const waitForYou = useWaitForYou({
     practiceMode,
     checkpointMode,
     timingMap: timing.timingMap,
-    loopRegion: loop.region,
+    // Honor disabled loop state consistently (B06): WFY must not filter to a
+    // stale region when the loop toggle is off. Play Along already uses the
+    // enabled-only filter; this aligns both modes to the canonical bounds.
+    loopRegion: loop.enabled ? loop.region : null,
     seekToPracticeTime,
     onEnsurePaused: ensurePaused,
     practiceTime: clock.practiceTime,
@@ -301,11 +334,17 @@ export default function usePracticeSession({
     onRecordWfyEventRef.current = onRecordWfyEvent
   }, [onRecordWfyEvent])
 
+  // Correct-count emission corresponds to a COMMITTED advancement (B04):
+  // only count when the engine accepts (returns true). The old code counted
+  // first, then advanced in a microtask — producing counted-but-stuck
+  // restored-first-match states.
   const handleWfyPlayerInputMatched = useCallback(() => {
-    onRecordWfyEventRef.current?.('correct')
     queueMicrotask(() => {
       try {
-        wfyAdvanceRef.current()
+        const accepted = wfyAdvanceRef.current?.()
+        if (accepted) {
+          onRecordWfyEventRef.current?.('correct')
+        }
       } catch (error) {
         if (import.meta.env?.DEV) {
           console.error('[Practice] WFY mic advance callback failed:', error)
@@ -375,12 +414,24 @@ export default function usePracticeSession({
     guidanceTabPositions,
   ])
 
+  const getAuthoritativeScoreTime = useCallback(() => {
+    try {
+      const authoritative = playbackRef.current?.getScoreTime?.()
+      if (Number.isFinite(Number(authoritative))) return Number(authoritative)
+    } catch {
+      // fall through to React clock
+    }
+    return clock.practiceTime
+  }, [clock.practiceTime])
+
   const playAlongFeedback = usePlayAlongLaneFeedback({
     active: playAlongInputActive,
     groups: playAlongLaneGroups,
     practiceTime,
     matchSettings: matchSettingsState.settings,
     isPlaying: playback.isPlaying,
+    attemptId: practiceAttempt.id,
+    getAuthoritativeTime: getAuthoritativeScoreTime,
   })
 
   const playAlongRecognitionCheckpoints = useMemo(
@@ -507,16 +558,61 @@ export default function usePracticeSession({
     instrumentId,
   })
 
-  const playAlongMidi = useWaitForYouMidiInput({
-    active: playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MIDI,
-    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
-    currentCheckpoint: playAlongTargetCheckpoint,
-    checkpointIndex: resolvePlayAlongTargetIndex(playAlongLaneGroups, practiceTime),
-    matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: handlePlayAlongCorrect,
-    onWrongNote: handlePlayAlongWrong,
-    webMidi,
-  })
+  // Play Along MIDI — BOUNDED evaluator only (B03 fix). The old path reused
+  // useWaitForYouMidiInput (pitch-only, no score-time window) and accepted
+  // notes ~437 ms early. Live MIDI now enters the exact canonical contract
+  // as synthetic input: normalize → evaluatePlayAlongNoteInput with the
+  // AUTHORITATIVE score time → lane outcome. No direct success/advance path.
+  const playAlongFeedbackRef = useRef(playAlongFeedback)
+  playAlongFeedbackRef.current = playAlongFeedback
+  const playAlongGroupsRef = useRef(playAlongLaneGroups)
+  playAlongGroupsRef.current = playAlongLaneGroups
+  useEffect(() => {
+    if (!(playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
+      return undefined
+    }
+    if (!webMidi?.subscribeNoteOn) return undefined
+    const handleBoundedMidi = (midi, rawEvent = null) => {
+      try {
+        let authoritative = null
+        try {
+          authoritative = playbackRef.current?.getScoreTime?.()
+        } catch {
+          authoritative = null
+        }
+        const scoreTime = Number.isFinite(Number(authoritative))
+          ? Number(authoritative)
+          : clock.practiceTime
+        // Canonical input event: identical shape for MIDI vs synthetic, so
+        // MIDI/synthetic equivalence holds by construction (E5).
+        const inputEvent = normalizeMidiInputEvent(midi, {
+          scoreTimeSeconds: scoreTime,
+          rawTimestamp: rawEvent?.timeStamp ?? null,
+          attemptId: practiceAttemptRef.current?.id ?? null,
+          iterationIndex: practiceAttemptRef.current?.iterationIndex ?? 0,
+        })
+        const feedback = playAlongFeedbackRef.current
+        const groups = playAlongGroupsRef.current
+        const outcome = feedback?.handlePlayedMidi?.(inputEvent.midi, inputEvent.scoreTimeSeconds)
+        void groups
+        void outcome
+      } catch (error) {
+        if (import.meta.env?.DEV) {
+          console.error('[Practice] Play Along MIDI evaluation failed:', error)
+        }
+      }
+    }
+    return webMidi.subscribeNoteOn(handleBoundedMidi)
+  }, [playAlongInputActive, wfyInputSource, webMidi, clock.practiceTime])
+  // Kept for the session-input debug surface; the live grading path above
+  // (bounded evaluator) is authoritative, not this pitch-only matcher.
+  const playAlongMidi = {
+    matchingEnabled: playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MIDI,
+    inputFeedback: idleFeedbackForCheckpoint(playAlongTargetCheckpoint),
+    feedbackOutcome: 'idle',
+    boundedEvaluator: true,
+    source: INPUT_SOURCE.MIDI,
+  }
 
   const handleWfyInputSourceChange = useCallback(
     (source) => {
@@ -538,6 +634,18 @@ export default function usePracticeSession({
   useEffect(() => {
     setWfyInputSourceSelectedThisSession(false)
   }, [sourcesRevision])
+
+  // Score replacement: new attempt (never carry outcomes across scores).
+  const sourcesRevisionKeyForAttempt = sourcesRevisionKey
+  useEffect(() => {
+    startNewAttempt('score-load', { scoreRevisionKey: sourcesRevisionKeyForAttempt, startScoreSeconds: 0 })
+    try {
+      playAlongFeedbackRef.current?.resetForAttempt?.()
+    } catch {
+      // ignore (feedback may not be mounted yet)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- new score only
+  }, [sourcesRevisionKeyForAttempt])
 
   useEffect(() => {
     if (!(wfyInputSourceReady && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
@@ -708,9 +816,23 @@ export default function usePracticeSession({
 
   const seekToPracticeTimeWithWfy = useCallback(
     (seconds, options = {}) => {
-      seekToPracticeTime(seconds, options)
+      const safeSeconds = Number.isFinite(Number(seconds)) ? Number(seconds) : 0
+      seekToPracticeTime(safeSeconds, options)
+      // Seek semantics (B03): same attempt, new sub-traversal. Backward seek
+      // must not retain stale future misses; forward seek must not inherit
+      // them either. Prune outcomes AFTER the seek position; the natural miss
+      // pass re-marks genuinely skipped groups as the playhead advances.
+      try {
+        playAlongFeedbackRef.current?.pruneAfterSeek?.(safeSeconds)
+      } catch {
+        // ignore prune failures; WFY sync below still applies
+      }
+      setPracticeAttempt((previous) => {
+        if (!previous) return previous
+        return { ...nextSubAttempt(previous, { seekScoreSeconds: safeSeconds }) }
+      })
       if (practiceMode === PRACTICE_MODE.WAIT_FOR_YOU) {
-        waitForYouRef.current.syncToNearestCheckpoint(seconds)
+        waitForYouRef.current.syncToNearestCheckpoint(safeSeconds)
       }
     },
     [seekToPracticeTime, practiceMode],
@@ -730,6 +852,19 @@ export default function usePracticeSession({
 
   const handleLoopRestart = useCallback(
     (seconds) => {
+      // Loop semantics (B06/E8): same attempt, new iteration. Current-
+      // iteration outcomes reset (no inherited misses/hits); prior iterations
+      // stay attributable via iterationId in the ledger. Cursor/playback/
+      // evaluator share the exact same loop bounds (loop.region).
+      setPracticeAttempt((previous) => {
+        if (!previous) return previous
+        return { ...nextLoopIteration(previous) }
+      })
+      try {
+        playAlongFeedbackRef.current?.resetForLoopIteration?.()
+      } catch {
+        // ignore; seek below still re-anchors the clock
+      }
       // Loop wrap is dispatched by useLoopPlayback's effect. Avoid flushSync
       // inside that lifecycle while keeping the same clock + playback seek.
       seekToPracticeTimeWithWfy(seconds, { sync: false })
@@ -764,10 +899,17 @@ export default function usePracticeSession({
       clock.syncManualTimeToMidi(0)
       clock.setManualTime(0)
     }
+    // Score restart: new attempt with cleared outcomes (deliberate semantics).
+    startNewAttempt('manual-restart', { startScoreSeconds: 0 })
+    try {
+      playAlongFeedbackRef.current?.resetForAttempt?.()
+    } catch {
+      // ignore
+    }
     if (isWaitForYou) {
       waitForYou.restart()
     }
-  }, [hasMusicXml, clock, isWaitForYou, waitForYou])
+  }, [hasMusicXml, clock, isWaitForYou, waitForYou, startNewAttempt])
 
   const handleMidiSeek = useCallback(
     (seconds) => {
@@ -785,9 +927,17 @@ export default function usePracticeSession({
       ensurePaused()
       releaseReferenceVoices()
       if (mode === PRACTICE_MODE.PREVIEW) microphone.disable()
-      setPracticeMode(normalizePracticeMode(mode))
+      const normalized = normalizePracticeMode(mode)
+      // Mode change: new attempt (old outcomes must not leak into the new mode).
+      startNewAttempt('mode-change', { mode: normalized, startScoreSeconds: 0 })
+      try {
+        playAlongFeedbackRef.current?.resetForAttempt?.()
+      } catch {
+        // ignore
+      }
+      setPracticeMode(normalized)
     },
-    [ensurePaused, microphone],
+    [ensurePaused, microphone, startNewAttempt],
   )
 
   const practiceTimeForSnapshotDeps = playback.isPlaying
@@ -996,6 +1146,11 @@ export default function usePracticeSession({
       checkpointMode,
       setCheckpointMode,
       webMidi,
+      playAlongMidi,
+      playAlongMic,
+      playAlongFeedback,
+      playAlongLaneGroups,
+      practiceAttempt,
       laneOutcomesByGroupId,
       timingDisabled,
       seekToPracticeTime: seekToPracticeTimeWithWfy,
@@ -1049,6 +1204,11 @@ export default function usePracticeSession({
       checkpointMode,
       setCheckpointMode,
       webMidi,
+      playAlongMidi,
+      playAlongMic,
+      playAlongFeedback,
+      playAlongLaneGroups,
+      practiceAttempt,
       laneOutcomesByGroupId,
       timingDisabled,
       seekToPracticeTimeWithWfy,
