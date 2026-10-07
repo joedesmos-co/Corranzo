@@ -66,6 +66,12 @@ from guitar_vision.qualify import (  # noqa: E402
     _jitter,
     chance_baselines,
 )
+from guitar_vision.roi import (  # noqa: E402
+    ROI_CONTEXT,
+    ROI_CROP,
+    RoiFretCnn,
+    sample_roi,
+)
 
 NO_DIGIT = 10  # the "no digit in this slot" class
 
@@ -615,6 +621,25 @@ class FretVariantModel(nn.Module):
         buffer value is deliberate. A checkpoint carrying no statistics must not be
         silently standardised, and a checkpoint carrying fixed statistics must not
         silently accumulate; the variant name is recorded in every checkpoint config.
+
+    ``DEDICATED_ROI_FRET``
+        A **separate** fret branch, reading the raw ``FINAL_ROI`` pixels rather than any
+        shared feature. ``out["fret"]`` comes from :class:`~guitar_vision.roi.RoiFretCnn`
+        applied to :func:`~guitar_vision.roi.sample_roi` crops, while ``object_type``,
+        ``string`` and ``tile`` continue to read the shared token exactly as before.
+
+        It exists because raw ROI pixels classify the held-out scores at ~0.93 while the
+        shared representation reaches 0.5899. This is the cheapest way to ask whether
+        that signal can be added to the real model without disturbing anything else.
+
+        **The branch cannot affect the shared model.** Its input is ``images`` and
+        ``boxes`` -- data, not features -- so the fret loss has no path to the backbone,
+        the samplers or the token path. That is a structural property, not an empirical
+        observation, and the test suite asserts the zero gradient rather than trusting it.
+
+        The shared ``base.heads["fret"]`` is left constructed but unused, so the base
+        model's parameter set and initialisation order are identical to every other
+        variant's under the same seed.
     """
 
     #: Kinds whose fret head reads the dedicated ROI encoding alone, with no shared
@@ -639,6 +664,9 @@ class FretVariantModel(nn.Module):
         "FROZEN_RANDOM_ROI_ENCODER_STANDARDIZED",
         "TWO_PHASE_STANDARDIZED",
     )
+    #: Kinds whose fret head reads the raw ROI pixels directly, bypassing the shared
+    #: visual path entirely.
+    DEDICATED_ROI_KINDS = ("DEDICATED_ROI_FRET",)
 
     MAX_DIGITS = 2
 
@@ -649,7 +677,12 @@ class FretVariantModel(nn.Module):
         self.grid = grid
         self.context = context
         hidden = base.config.hidden
-        if kind != "shared":
+        if kind in FretVariantModel.DEDICATED_ROI_KINDS:
+            # The dedicated branch. Constructed last so the base model's parameter
+            # set and RNG draw order are identical to every other variant's under the
+            # same seed, which is what makes a shared-model comparison meaningful.
+            self.roi_head = RoiFretCnn(26)
+        if kind != "shared" and kind not in FretVariantModel.DEDICATED_ROI_KINDS:
             self.encoder = RoiEncoder(base.backbone.output_channels[0], width=32)
         if kind == "roi26" or kind in FretVariantModel.ROI_ONLY_KINDS:
             # One vector per object: the crop's columns are flattened, which is
@@ -749,6 +782,13 @@ class FretVariantModel(nn.Module):
         }
         if self.kind == "shared":
             return out
+        if self.kind in FretVariantModel.DEDICATED_ROI_KINDS:
+            # Raw pixels, not features. `sample_roi` reads `images` and `boxes` only,
+            # so the fret loss has no path back into the backbone, the samplers or the
+            # token path: `object_type`, `string` and `tile` cannot be affected by this
+            # branch, structurally rather than by observation.
+            out["fret"] = self.roi_fret_logits(batch)
+            return out
         crops = roi_crops(
             self.features[0], batch["boxes"], batch["object_mask"], self.grid, self.context
         )
@@ -787,6 +827,19 @@ class FretVariantModel(nn.Module):
             fused = self.roi_projection(encoded.flatten(-2)) + tokens
             out["presence"] = self.presence_head(fused)
         return out
+
+
+    def roi_crops(self, batch: dict[str, torch.Tensor]) -> torch.Tensor:
+        """The dedicated branch's input, computed the one way it is ever computed."""
+        return sample_roi(
+            batch["images"], batch["boxes"], batch["object_mask"], batch["view"],
+            ROI_CROP, ROI_CONTEXT,
+        )
+
+    def roi_fret_logits(self, batch: dict[str, torch.Tensor]) -> torch.Tensor:
+        """Fret logits from raw ROI pixels alone. ``forward`` and the harness both
+        call this, so training and inference cannot diverge."""
+        return self.roi_head(self.roi_crops(batch))
 
 
 def _source(batch: dict[str, torch.Tensor]) -> torch.Tensor:
