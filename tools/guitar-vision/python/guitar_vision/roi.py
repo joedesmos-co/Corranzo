@@ -22,6 +22,13 @@ import torch.nn as nn
 #: Crop size and context the validated probe used. Not tunable here.
 ROI_CROP = 32
 ROI_CONTEXT = 1.6
+#: Versioned identifiers for the validated production ROI input and architecture.
+ROI_EXTRACTION_NAME = "sample_roi"
+ROI_EXTRACTION_VERSION = "roi-sample/v1"
+ROI_ARCHITECTURE_NAME = "RoiFretCnn"
+ROI_ARCHITECTURE_VERSION = "roi-fret-cnn/v1"
+ROI_VOCABULARY_NAME = "guitar-fret-vocabulary"
+ROI_VOCABULARY_VERSION = "guitar-fret-vocabulary/v1"
 
 
 def sample_roi(
@@ -134,4 +141,4 @@ class RoiFretCnn(nn.Module):
         return self.head(self.body(planes)).reshape(*leading, self.classes)
 
 
-__all__ = ["ROI_CROP", "ROI_CONTEXT", "sample_roi", "RoiFretCnn"]
+__all__ = ["ROI_CROP", "ROI_CONTEXT", "ROI_EXTRACTION_NAME", "ROI_EXTRACTION_VERSION", "ROI_ARCHITECTURE_NAME", "ROI_ARCHITECTURE_VERSION", "ROI_VOCABULARY_NAME", "ROI_VOCABULARY_VERSION", "sample_roi", "RoiFretCnn"]

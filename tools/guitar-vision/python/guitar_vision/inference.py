@@ -2,40 +2,56 @@
 
 ## What this is
 
-The validated two-phase recipe, behind a loading and inference abstraction that a
-runtime can depend on. It is not a training harness: nothing here trains, and the
-experimental scripts under ``tools/guitar-vision/h*.py`` are deliberately not the
-product API.
+Validated Guitar fret recipes, behind a loading and inference abstraction that a
+runtime can depend on: the two-phase representation recipe and the dedicated raw-ROI
+fret branch. It is not a training harness: nothing here trains, and the experimental
+scripts under ``tools/guitar-vision/h*.py`` are deliberately not the product API.
 
-## The recipe it serves
+## The recipes it serves
+
+Two-phase representation:
 
     phase 1   joint training, unchanged
     phase 2   freeze the representation, take exact per-feature mean/std over the FIT
               fret rows, reinitialise ``fret_classifier``, train it alone
 
-Inference is then::
+Dedicated raw-ROI fret branch:
 
-    image -> backbone -> RoiEncoder -> roi_projection
-          -> fixed train-stat standardisation -> phase-2 fret classifier
+    canonical FINAL_ROI
+    -> 32x32 grayscale
+    -> Conv(1,32,3)-BN-ReLU
+    -> Conv(32,64,3)-BN-ReLU
+    -> Conv(64,128,3)-BN-ReLU
+    -> global average pooling
+    -> Linear(128,26)
 
-The standardisation statistics are read-only. They are never updated and never
+For the dedicated branch, the shared model continues to produce the unrelated tasks,
+while the fret number comes from the raw crop. No shared token, encoder
+representation, projection, or shared fusion contributes to that fret output.
+
+The two-phase standardisation statistics are read-only. They are never updated and never
 recomputed from user input.
 
 ## One page per forward is enforced, and why
 
-``roi_crops`` builds a tile dimension from ``plane_count // batch`` and softmaxes a
-per-tile score across it. ``collate`` pads pages to the batch's maximum plane count,
-and pages in this corpus carry between 7 and 29 planes, so **padded planes enter the
-softmax** and the combined crop for a real object changes with whatever else shares its
-batch. Measured on the validated phase-1 checkpoint: 1.12e-01 maximum change in ``P``
-between a one-page and a three-page forward, moving 623 of 1162 objects.
+The shared ``roi_crops`` representation builds a tile dimension from
+``plane_count // batch`` and softmaxes a per-tile score across it. ``collate`` pads
+pages to the batch's maximum plane count, and pages in this corpus carry between 7 and
+29 planes, so **padded planes enter the softmax** and the combined crop for a real
+object changes with whatever else shares its batch. Measured on the validated phase-1
+checkpoint: 1.12e-01 maximum change in ``P`` between a one-page and a three-page
+forward, moving 623 of 1162 objects.
 
-That is a real bug in the model, not in this module, and it is not fixed here: fixing
-it would change the phase-1 representation and invalidate the checkpoint the validated
-numbers were measured against. Until it is fixed, the correct production contract is
-one page per forward. :meth:`GuitarFretModel.infer` enforces that by looping, and
+That is a real bug in the shared model path, not in this module, and it is not fixed
+here: fixing it would change the phase-1 representation and invalidate the checkpoint
+the validated numbers were measured against. Until it is fixed, the correct production
+contract for every full-model forward is one page at a time.
+:meth:`GuitarFretModel.infer` enforces that by looping, and
 :meth:`GuitarFretModel.infer_batch` refuses anything longer than one page rather than
-silently returning representations that depend on their batch neighbours.
+silently returning representations that depend on their batch neighbours. The dedicated
+raw-ROI crop itself is separately tested to be batch invariant, but full-model inference
+retains the conservative one-page contract because the shared backbone and heads use the
+same forward.
 
 ## Legacy checkpoints
 
@@ -63,9 +79,30 @@ from .fret_experiments import (
     decode,
 )
 from .qualify import Device
+from .roi import (
+    ROI_ARCHITECTURE_NAME,
+    ROI_ARCHITECTURE_VERSION,
+    ROI_CONTEXT,
+    ROI_CROP,
+    ROI_EXTRACTION_NAME,
+    ROI_EXTRACTION_VERSION,
+    ROI_VOCABULARY_NAME,
+    ROI_VOCABULARY_VERSION,
+    RoiFretCnn,
+)
 
 #: Marker that identifies a checkpoint as carrying fixed phase-2 statistics.
 TWO_PHASE_FORMAT = "guitar-vision-two-phase-v1"
+
+#: Marker that identifies a production checkpoint for the dedicated raw-ROI fret branch.
+DEDICATED_ROI_FORMAT = "guitar-vision-dedicated-roi-v1"
+DEDICATED_ROI_FORMAT_VERSION = 1
+DEDICATED_ROI_KIND = "DEDICATED_ROI_FRET"
+DEDICATED_FRET_MODEL = "guitar-fret-dedicated-roi/1.0"
+
+#: Formats this loader understands. A declared format outside this set is rejected rather
+#: than silently treated as legacy.
+KNOWN_FORMATS = (TWO_PHASE_FORMAT, DEDICATED_ROI_FORMAT)
 
 #: Variants whose fret head reads a standardised ``P``.
 STANDARDIZED_VARIANTS = (
@@ -86,6 +123,28 @@ class MultiPageBatchError(RuntimeError):
     Raised instead of quietly returning representations that depend on which other
     pages shared the batch. See the module docstring for the measurement.
     """
+
+
+def _validate_dedicated_implementation(
+    model: FretVariantModel, metadata: "DedicatedRoiMetadata"
+) -> None:
+    """Require the declared CNN to be the implementation that actually loaded."""
+    head = getattr(model, "roi_head", None)
+    if not isinstance(head, RoiFretCnn):
+        raise CheckpointFormatError(
+            f"dedicated checkpoint's fret branch is {type(head).__name__}, expected "
+            f"RoiFretCnn")
+    widths = tuple(module.out_channels for module in head.body
+                   if isinstance(module, torch.nn.Conv2d))
+    if widths != (32, 64, 128) or head.head.out_features != 26:
+        raise CheckpointFormatError(
+            f"loaded CNN has widths {widths} and {head.head.out_features} outputs, "
+            f"not the validated (32, 64, 128) and 26")
+    actual_parameters = sum(parameter.numel() for parameter in head.parameters())
+    if actual_parameters != metadata.head_parameter_count:
+        raise CheckpointFormatError(
+            f"loaded CNN has {actual_parameters:,} parameters, but the checkpoint "
+            f"declares {metadata.head_parameter_count:,}")
 
 
 @dataclass(frozen=True)
@@ -168,6 +227,244 @@ class TwoPhaseMetadata:
             extra={k: v for k, v in payload.items()
                    if k not in cls.REQUIRED + ("model",)},
         )
+
+
+@dataclass(frozen=True)
+class DedicatedRoiMetadata:
+    """Validated provenance for a dedicated raw-ROI fret checkpoint."""
+    format: str
+    format_version: int
+    variant: str
+    architecture_name: str
+    architecture_version: str
+    extraction_name: str
+    extraction_version: str
+    output_classes: int
+    head_parameter_count: int
+    seed: int
+    steps: int
+    batch: int
+    optimizer: str
+    learning_rate: float
+    weight_decay: float
+    schedule: str
+    split: dict[str, int]
+    held_score_ids: tuple[str, ...]
+    model_config: dict[str, Any]
+    experiment_commit: str
+    source_phase1_path: str
+    source_phase1_sha256: str
+    source_phase1_step: int
+    source_phase1_variant: str
+    source_head_checkpoint: str
+    source_head_sha256: str
+    vocabulary: dict[str, Any]
+    extra: dict[str, Any] = field(default_factory=dict)
+
+    REQUIRED = ("format", "format_version", "variant", "architecture", "roi_extraction",
+                "model", "model_config", "training", "vocabulary", "provenance")
+
+    @classmethod
+    def from_checkpoint(cls, payload: dict[str, Any]) -> "DedicatedRoiMetadata":
+        missing = [key for key in cls.REQUIRED if key not in payload]
+        if missing:
+            raise CheckpointFormatError(
+                f"dedicated-ROI checkpoint is missing required keys: {missing}")
+        if payload["format"] != DEDICATED_ROI_FORMAT:
+            raise CheckpointFormatError(
+                f"unknown format {payload['format']!r}, expected {DEDICATED_ROI_FORMAT!r}")
+        if payload["format_version"] != DEDICATED_ROI_FORMAT_VERSION:
+            raise CheckpointFormatError(
+                f"unsupported dedicated-ROI format version {payload['format_version']!r}")
+        variant = str(payload["variant"])
+        if variant != DEDICATED_ROI_KIND:
+            raise CheckpointFormatError(
+                f"variant {variant!r} is not the dedicated raw-ROI fret variant")
+
+        architecture = payload["architecture"]
+        for key in ("name", "version", "input_channels", "crop", "widths",
+                    "spatial_pooling", "output_classes", "parameter_count"):
+            if key not in architecture:
+                raise CheckpointFormatError(f"architecture is missing {key!r}")
+        if (architecture["name"] != ROI_ARCHITECTURE_NAME
+                or architecture["version"] != ROI_ARCHITECTURE_VERSION):
+            raise CheckpointFormatError(
+                f"architecture {architecture['name']!r} "
+                f"version {architecture['version']!r} is not the validated "
+                f"{ROI_ARCHITECTURE_NAME} {ROI_ARCHITECTURE_VERSION}")
+        if (architecture["input_channels"] != 1 or architecture["crop"] != ROI_CROP
+                or tuple(architecture["widths"]) != (32, 64, 128)
+                or architecture["spatial_pooling"] != "AdaptiveAvgPool2d(1)->Flatten"
+                or architecture["output_classes"] != 26
+                or architecture["parameter_count"] != 96_474):
+            raise CheckpointFormatError(
+                f"architecture declaration does not match the validated CNN: {architecture!r}")
+
+        extraction = payload["roi_extraction"]
+        for key in ("name", "version", "crop", "context", "interpolation",
+                    "align_corners", "padding_mode"):
+            if key not in extraction:
+                raise CheckpointFormatError(f"roi_extraction is missing {key!r}")
+        if (extraction["name"] != ROI_EXTRACTION_NAME
+                or extraction["version"] != ROI_EXTRACTION_VERSION
+                or extraction["crop"] != ROI_CROP
+                or float(extraction["context"]) != ROI_CONTEXT
+                or extraction["interpolation"] != "bilinear"
+                or extraction["align_corners"] is not False
+                or extraction["padding_mode"] != "zeros"):
+            raise CheckpointFormatError(
+                f"ROI extraction declaration does not match the validated sampler: "
+                f"{extraction!r}")
+
+        model = payload["model"]
+        if not isinstance(model, dict) or not model:
+            raise CheckpointFormatError("model state_dict is missing or empty")
+
+        model_config = payload["model_config"]
+        for key in ("image_size", "max_objects", "hidden", "layers", "roi_grid",
+                    "roi_context"):
+            if key not in model_config:
+                raise CheckpointFormatError(f"model_config is missing {key!r}")
+        model_config = {key: model_config[key] for key in
+                        ("image_size", "max_objects", "hidden", "layers", "roi_grid",
+                         "roi_context")}
+
+        training = payload["training"]
+        model_config = {
+            "image_size": int(model_config["image_size"]),
+            "max_objects": int(model_config["max_objects"]),
+            "hidden": int(model_config["hidden"]),
+            "layers": int(model_config["layers"]),
+            "roi_grid": int(model_config["roi_grid"]),
+            "roi_context": float(model_config["roi_context"]),
+        }
+        if (model_config["image_size"] <= 0 or model_config["max_objects"] <= 0
+                or model_config["hidden"] <= 0 or model_config["layers"] <= 0
+                or model_config["roi_grid"] <= 0 or model_config["roi_context"] <= 0.0):
+            raise CheckpointFormatError(
+                f"model_config is not usable: {model_config!r}")
+        for key in ("seed", "steps", "batch", "optimizer", "learning_rate",
+                    "weight_decay", "schedule", "split", "split_scores",
+                    "experiment_commit", "source_phase1", "source_head_checkpoint",
+                    "reference_metrics"):
+            if key not in training:
+                raise CheckpointFormatError(f"training is missing {key!r}")
+        split = training["split"]
+        if (not isinstance(split, dict)
+                or {k: int(v) for k, v in split.items()}
+                != {"fit": 614, "same_score": 153, "score_disjoint": 395}):
+            raise CheckpointFormatError(
+                f"split does not match the validated 614/153/395 partition: {split!r}")
+        split_scores = training["split_scores"]
+        for key in ("train", "held_out"):
+            if key not in split_scores or not isinstance(split_scores[key], list):
+                raise CheckpointFormatError(f"split_scores is missing list {key!r}")
+        held_scores = tuple(split_scores["held_out"])
+        train_scores = tuple(split_scores["train"])
+        if (len(held_scores) != 20 or len(set(held_scores)) != 20
+                or len(train_scores) != 40 or len(set(train_scores)) != 40):
+            raise CheckpointFormatError(
+                "split-score provenance does not contain 40 unique train scores and "
+                "20 unique held-out scores")
+        if set(held_scores) & set(train_scores):
+            raise CheckpointFormatError("train and held-out score IDs must be disjoint")
+        experiment_commit = str(training["experiment_commit"])
+        if not re.fullmatch(r"[0-9a-f]{40}", experiment_commit):
+            raise CheckpointFormatError(
+                f"experiment_commit is not a 40-character hex digest: {experiment_commit!r}")
+
+        phase1 = training["source_phase1"]
+        for key in ("path", "sha256", "step", "variant"):
+            if key not in phase1:
+                raise CheckpointFormatError(f"source_phase1 is missing {key!r}")
+        if not _HEX64.match(str(phase1["sha256"])):
+            raise CheckpointFormatError(
+                f"source_phase1.sha256 is not a 64-character hex digest: {phase1['sha256']!r}")
+        head_source = training["source_head_checkpoint"]
+        for key in ("path", "sha256"):
+            if key not in head_source:
+                raise CheckpointFormatError(f"source_head_checkpoint is missing {key!r}")
+        if not _HEX64.match(str(head_source["sha256"])):
+            raise CheckpointFormatError(
+                f"source_head_checkpoint.sha256 is not a hex digest: "
+                f"{head_source['sha256']!r}")
+
+        vocabulary = payload["vocabulary"]
+        for key in ("name", "version", "classes", "represented", "unused", "semantics"):
+            if key not in vocabulary:
+                raise CheckpointFormatError(f"vocabulary is missing {key!r}")
+        if (vocabulary["name"] != ROI_VOCABULARY_NAME
+                or vocabulary["version"] != ROI_VOCABULARY_VERSION
+                or vocabulary["classes"] != 26
+                or list(vocabulary["represented"]) != list(range(20))
+                or list(vocabulary["unused"]) != [20, 21, 22, 23, 24, 25]):
+            raise CheckpointFormatError(
+                f"vocabulary declaration does not match the validated output: "
+                f"{vocabulary!r}")
+
+        return cls(
+            format=str(payload["format"]), format_version=int(payload["format_version"]),
+            variant=variant, architecture_name=str(architecture["name"]),
+            architecture_version=str(architecture["version"]),
+            extraction_name=str(extraction["name"]),
+            extraction_version=str(extraction["version"]),
+            output_classes=int(architecture["output_classes"]),
+            head_parameter_count=int(architecture["parameter_count"]),
+            seed=int(training["seed"]), steps=int(training["steps"]),
+            batch=int(training["batch"]), optimizer=str(training["optimizer"]),
+            learning_rate=float(training["learning_rate"]),
+            weight_decay=float(training["weight_decay"]),
+            schedule=str(training["schedule"]),
+            split={key: int(value) for key, value in split.items()},
+            held_score_ids=tuple(str(score) for score in held_scores),
+            model_config=model_config,
+            experiment_commit=experiment_commit,
+            source_phase1_path=str(phase1["path"]),
+            source_phase1_sha256=str(phase1["sha256"]),
+            source_phase1_step=int(phase1["step"]),
+            source_phase1_variant=str(phase1["variant"]),
+            source_head_checkpoint=str(head_source["path"]),
+            source_head_sha256=str(head_source["sha256"]),
+            vocabulary={key: vocabulary[key] for key in
+                        ("name", "version", "classes", "represented", "unused", "semantics")},
+            extra={key: value for key, value in payload.items()
+                   if key not in cls.REQUIRED},
+        )
+
+    def public_dict(self) -> dict[str, Any]:
+        """Serializable metadata, with no tensors."""
+        return {
+            "format": self.format,
+            "format_version": self.format_version,
+            "variant": self.variant,
+            "fret_model": DEDICATED_FRET_MODEL,
+            "architecture": {
+                "name": self.architecture_name,
+                "version": self.architecture_version,
+                "output_classes": self.output_classes,
+                "parameter_count": self.head_parameter_count,
+            },
+            "roi_extraction": {
+                "name": self.extraction_name,
+                "version": self.extraction_version,
+            },
+            "training": {
+                "seed": self.seed,
+                "steps": self.steps,
+                "batch": self.batch,
+                "optimizer": self.optimizer,
+                "learning_rate": self.learning_rate,
+                "weight_decay": self.weight_decay,
+                "schedule": self.schedule,
+                "split": dict(self.split),
+                "held_score_ids": list(self.held_score_ids),
+            },
+            "model_config": dict(self.model_config),
+            "vocabulary": dict(self.vocabulary),
+            "experiment_commit": self.experiment_commit,
+            "source_phase1_sha256": self.source_phase1_sha256,
+            "source_head_sha256": self.source_head_sha256,
+        }
 
 
 @dataclass
@@ -267,7 +564,7 @@ class GuitarFretModel:
         model: FretVariantModel,
         device: Device,
         *,
-        metadata: TwoPhaseMetadata | None,
+        metadata: TwoPhaseMetadata | DedicatedRoiMetadata | None,
         checkpoint_path: Path,
         checkpoint_sha256: str,
         variant: str,
@@ -286,10 +583,10 @@ class GuitarFretModel:
 
     @classmethod
     def load(cls, checkpoint: str | Path, device: str | Device = "cpu") -> "GuitarFretModel":
-        """Load a two-phase or legacy checkpoint.
+        """Load a dedicated, two-phase, or legacy checkpoint.
 
-        A checkpoint carrying the two-phase marker is validated strictly and its stored
-        statistics are used. Any other checkpoint is loaded under the variant recorded
+        A checkpoint carrying a recognised marker is validated strictly and its stored
+        behaviour is used. Any other checkpoint is loaded under the variant recorded
         in its own config, with no statistics invented and no standardisation enabled.
         """
         path = Path(checkpoint)
@@ -306,28 +603,53 @@ class GuitarFretModel:
 
         # A checkpoint that declares a format we do not know is an error, not a legacy
         # checkpoint. Treating an unrecognised marker as legacy would silently ignore a
-        # newer file's statistics, which is the failure this guard exists to prevent.
-        if "format" in payload and payload["format"] != TWO_PHASE_FORMAT:
+        # newer file's statistics or fret branch, which is the failure this guard exists
+        # to prevent.
+        if "format" in payload and payload["format"] not in KNOWN_FORMATS:
             raise CheckpointFormatError(
-                f"{path} declares unknown format {payload['format']!r}, expected "
-                f"{TWO_PHASE_FORMAT!r} or no format key at all")
+                f"{path} declares unknown format {payload['format']!r}, expected one of "
+                f"{KNOWN_FORMATS!r} or no format key at all")
         two_phase = payload.get("format") == TWO_PHASE_FORMAT
-        namespace = argparse.Namespace(
-            variant=variant,
-            steps=int(payload.get("phase2_step", payload.get("step", 1200)) or 1200),
-            pages=40, batch_pages=1, held_out=20,
-            image_size=int(config.get("image_size", 256)),
-            max_objects=int(config.get("max_objects", 128)),
-            hidden=int(config.get("hidden", 192)),
-            layers=int(config.get("layers", 4)),
-            lr=3e-3, train_jitter=0.35,
-            roi_grid=int(config.get("roi_grid", 8)),
-            roi_context=float(config.get("roi_context", 1.6)),
-            seed=int(config.get("seed", 11)), device=str(resolved_device.name), out=None,
-        )
+        dedicated = payload.get("format") == DEDICATED_ROI_FORMAT
+        if dedicated:
+            metadata = DedicatedRoiMetadata.from_checkpoint(payload)
+            model_config = dict(metadata.model_config)
+            namespace = argparse.Namespace(
+                variant=variant,
+                steps=int(metadata.steps),
+                pages=40, batch_pages=1, held_out=20,
+                image_size=int(model_config["image_size"]),
+                max_objects=int(model_config["max_objects"]),
+                hidden=int(model_config["hidden"]),
+                layers=int(model_config["layers"]),
+                lr=3e-3, train_jitter=0.35,
+                roi_grid=int(model_config["roi_grid"]),
+                roi_context=float(model_config["roi_context"]),
+                seed=int(metadata.seed), device=str(resolved_device.name), out=None,
+            )
+        else:
+            namespace = argparse.Namespace(
+                variant=variant,
+                steps=int(payload.get("phase2_step", payload.get("step", 1200)) or 1200),
+                pages=40, batch_pages=1, held_out=20,
+                image_size=int(config.get("image_size", 256)),
+                max_objects=int(config.get("max_objects", 128)),
+                hidden=int(config.get("hidden", 192)),
+                layers=int(config.get("layers", 4)),
+                lr=3e-3, train_jitter=0.35,
+                roi_grid=int(config.get("roi_grid", 8)),
+                roi_context=float(config.get("roi_context", 1.6)),
+                seed=int(config.get("seed", 11)), device=str(resolved_device.name), out=None,
+            )
 
         if two_phase:
             metadata = TwoPhaseMetadata.from_checkpoint(payload, namespace.hidden)
+            if metadata.variant != variant:
+                raise CheckpointFormatError(
+                    f"payload variant {variant!r} disagrees with metadata "
+                    f"{metadata.variant!r}")
+        elif dedicated:
+            metadata = DedicatedRoiMetadata.from_checkpoint(payload)
             if metadata.variant != variant:
                 raise CheckpointFormatError(
                     f"payload variant {variant!r} disagrees with metadata "
@@ -338,6 +660,8 @@ class GuitarFretModel:
         model = build(variant, namespace, resolved_device)
         model.load_state_dict(payload["model"])
         model.eval()
+        if dedicated:
+            _validate_dedicated_implementation(model, metadata)
 
         # Read-only statistics: assert the type, and assert nothing can write to it.
         if two_phase:
@@ -361,11 +685,29 @@ class GuitarFretModel:
 
     @property
     def two_phase(self) -> bool:
-        return self.metadata is not None
+        return isinstance(self.metadata, TwoPhaseMetadata)
+
+    @property
+    def dedicated(self) -> bool:
+        """Whether this is the dedicated raw-ROI fret path."""
+        return isinstance(self.metadata, DedicatedRoiMetadata)
+
+    @property
+    def fret_path(self) -> str:
+        """The validated fret behaviour selected by the checkpoint."""
+        if self.dedicated:
+            return "dedicated-raw-roi"
+        if self.two_phase:
+            return "shared-two-phase"
+        return "legacy"
 
     def statistics(self) -> dict[str, Any]:
-        """A copy of the fixed statistics, or an empty dict for a legacy checkpoint."""
-        if self.metadata is None:
+        """A copy of the fixed two-phase statistics, if present.
+
+        Dedicated and legacy checkpoints do not use a ``P`` standardizer, so for them
+        this remains empty rather than inventing values.
+        """
+        if not isinstance(self.metadata, TwoPhaseMetadata):
             return {}
         standardizer = self._model.p_standardizer
         return {
@@ -442,12 +784,8 @@ class GuitarFretModel:
     # ------------------------------------------------------------------ stats
 
     def describe(self) -> dict[str, Any]:
-        return {
-            "variant": self.variant,
-            "two_phase": self.two_phase,
-            "checkpoint": str(self.checkpoint_path),
-            "checkpoint_sha256": self.checkpoint_sha256,
-            "metadata": None if self.metadata is None else {
+        if isinstance(self.metadata, TwoPhaseMetadata):
+            metadata: dict[str, Any] | None = {
                 "format": self.metadata.format,
                 "phase1_sha256": self.metadata.phase1_sha256,
                 "phase1_step": self.metadata.phase1_step,
@@ -456,7 +794,19 @@ class GuitarFretModel:
                 "sample_count": self.metadata.sample_count,
                 "split": self.metadata.split,
                 "statistics_provenance": self.metadata.statistics_provenance,
-            },
+            }
+        elif isinstance(self.metadata, DedicatedRoiMetadata):
+            metadata = self.metadata.public_dict()
+        else:
+            metadata = None
+        return {
+            "variant": self.variant,
+            "two_phase": self.two_phase,
+            "dedicated": self.dedicated,
+            "fret_path": self.fret_path,
+            "checkpoint": str(self.checkpoint_path),
+            "checkpoint_sha256": self.checkpoint_sha256,
+            "metadata": metadata,
         }
 
 
@@ -467,11 +817,17 @@ def load(path: str | Path, device: str | Device = "cpu") -> GuitarFretModel:
 
 __all__ = [
     "TWO_PHASE_FORMAT",
+    "DEDICATED_ROI_FORMAT",
+    "DEDICATED_ROI_FORMAT_VERSION",
+    "DEDICATED_ROI_KIND",
+    "DEDICATED_FRET_MODEL",
+    "KNOWN_FORMATS",
     "INTERVENTIONS",
     "STANDARDIZED_VARIANTS",
     "CheckpointFormatError",
     "MultiPageBatchError",
     "TwoPhaseMetadata",
+    "DedicatedRoiMetadata",
     "PagePrediction",
     "GuitarFretModel",
     "load",

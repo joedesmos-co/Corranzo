@@ -217,15 +217,20 @@ the mistake this line of work exists to undo.
 Two things to settle first:
 
 1. **Scale.** The branch fails on the 8.5 px score. A production branch should either be
-   trained with scale variation or be given a crop that normalises glyph size, and that is
-   a decision to make with evidence rather than by assumption.
+   trained with scale variation or be given a crop that normalises glyph size. The
+   train/dev-only scale-stress benchmark below now supplies that evidence: the branch has
+   no resolution margin, so scale handling is the prerequisite for any production switch.
 2. **Batch invariance.** The dedicated branch uses `sample_roi`, which addresses each
-   object's own plane and is therefore batch-invariant, unlike `roi_crops`. That should be
-   asserted explicitly before any batched production path is allowed near it.
+   object's own plane and is therefore batch-invariant, unlike `roi_crops`. That is now
+   asserted explicitly (`test_raw_roi_branch_is_batch_invariant`); the public API still
+   enforces one page per forward because the shared forward is unchanged.
 
 ## Artifacts
 
-    checkpoint  tmp/gvprobe/dedicated-roi-ckpt/head.pt  (format guitar-vision-dedicated-roi-v1)
+    experimental head  tmp/gvprobe/dedicated-roi-ckpt/head.pt  (head weights only, not loadable as production)
+    production         tmp/gvprobe/dedicated-roi-production.pt  (format guitar-vision-dedicated-roi-v1)
+    verify report      tmp/gvprobe/dedicated-roi-production-verify.json
+    scale stress       tmp/gvprobe/scale-stress-train-dev.json  (train/dev only)
     report      tmp/gvprobe/dedicated-roi.json
     figure      tmp/gvprobe/roi_scale_compare.png
 
@@ -237,9 +242,44 @@ python3 -u tools/guitar-vision/h82_dedicated_roi_branch.py
 
 Crops are extracted once through the model's own path, then the head trains in seconds.
 
+## Production integration
+
+The branch is now served through the production loader as
+`guitar-vision-dedicated-roi-v1` (`DEDICATED_ROI_FRET`), assembled without retraining by
+`tools/guitar-vision/h83_dedicated_roi_production.py`:
+
+- shared phase-1 model from `tmp/gvprobe/std-ckpt/step1200/state.pt` (SHA
+  `8878bab7…`) supplies the backbone and the unrelated heads;
+- the frozen h82 head supplies the 96,474-parameter `RoiFretCnn`;
+- the production artifact is `tmp/gvprobe/dedicated-roi-production.pt` (SHA
+  `89093b66c19c75261056b74b1e574f4ca6e3de7be0b7cbf57c8fc30274701ce8`).
+
+Golden reproduction through the public loader: train 1.0, same-score 1.0,
+score-disjoint 0.9266 (366/395), cached-vs-production logits delta 0.0, head
+bit-identical, reload deterministic, unrelated heads (`object_type`, `string`, `tile`)
+bit-identical to phase-1 on train pages, full-model inference one page per forward.
+Batch invariance is asserted for the raw-ROI branch itself (identical crops and logits
+across five batch compositions with 7–29 planes per page); the conservative one-page
+contract stays because the shared forward still carries the padded-plane softmax bug.
+
+Pixel causality through the production API: blank 0.0709, wrong-ROI 0.0785,
+pixel-ablation 0.0709 vs normal 0.9266.
+
+## Scale stress (train/dev only, characterization, not tuning)
+
+`tools/guitar-vision/scale_stress_benchmark.py` degrades the 32x32 production crops
+(downsample + blur + contrast, fixed lattice 1.00→0.25) and scores only FIT and
+SAME-SCORE rows. No held-out row enters. At native resolution fit and same-score hold at
+1.0; every degraded level collapses both to 0.06–0.10 (chance). The branch has no
+resolution margin: this is consistent with the known concentration of all 29 held-out
+errors on the single tiny-glyph score, and it is the evidence for training with scale
+variation or normalising glyph size before any production switch. That step is out of
+scope here: no retraining, no tuning, held-out read once at the terminal step.
+
 ## What was not done
 
-Production was not modified and the production fret path was not replaced. The
+The production fret path was not replaced: the dedicated artifact is versioned separately
+(`guitar-vision-dedicated-roi-v1`) and the two-phase default is unchanged. The
 padded-plane softmax was not fixed. Geometry, data, split and augmentation are unchanged.
 No synthetic data. The CNN was not enlarged. No shared token was fused in. Nothing was
 tuned from score-disjoint held-out, which was read once at the terminal step. Piano and
