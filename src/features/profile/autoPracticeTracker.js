@@ -1,9 +1,20 @@
 import { normalizeInstrumentId } from '../instruments/instruments.js'
-import { loadStats, saveStats } from './profileStorage.js'
-import { reconcileProfileStats } from './profileStatsSchema.js'
+import { loadStats, loadStatsWithStatus, saveStats } from './profileStorage.js'
+import { MAX_RECENT_SESSIONS, reconcileProfileStats } from './profileStatsSchema.js'
+import { resolveCanonicalPieceId, titleAliasKey } from './pieceIdentity.js'
+
+export const AUTO_CHECKPOINT_KEY = 'scoreflow-auto-checkpoint-v1'
 
 let activeSession = null
 let lastTickAt = null
+
+function getLocalStorage() {
+  try {
+    return typeof globalThis.localStorage === 'undefined' ? null : globalThis.localStorage
+  } catch {
+    return null
+  }
+}
 
 function slugify(value) {
   return String(value)
@@ -19,15 +30,8 @@ export function resolvePracticePieceId({
   pdfFileName = null,
   musicXmlFileName = null,
 }) {
-  if (pdfFingerprint) {
-    return `piece:${pdfFingerprint}`
-  }
-  const name = musicXmlFileName || pdfFileName
-  if (name) {
-    const slug = slugify(name.replace(/\.[^.]+$/, ''))
-    return slug ? `piece:${slug}` : null
-  }
-  return null
+  const { pieceId } = resolveCanonicalPieceId({ pdfFingerprint, pdfFileName, musicXmlFileName })
+  return pieceId
 }
 
 function normalizePieceTitle(title) {
@@ -37,7 +41,69 @@ function normalizePieceTitle(title) {
   return 'Untitled piece'
 }
 
-export function beginAutoPracticeSession(piece, { instrumentId = null } = {}) {
+function readCheckpoint() {
+  try {
+    const storage = getLocalStorage()
+    if (!storage) {
+      return null
+    }
+    const raw = storage.getItem(AUTO_CHECKPOINT_KEY)
+    if (!raw) {
+      return null
+    }
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object' || !parsed.pieceId) {
+      return null
+    }
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+function writeCheckpoint() {
+  try {
+    const storage = getLocalStorage()
+    if (!storage || !activeSession) {
+      return
+    }
+    storage.setItem(
+      AUTO_CHECKPOINT_KEY,
+      JSON.stringify({
+        pieceId: activeSession.pieceId,
+        pieceTitle: activeSession.pieceTitle,
+        instrumentId: activeSession.instrumentId,
+        startedAt: activeSession.startedAt,
+        accumulatedSeconds: activeSession.accumulatedSeconds,
+        measuresVisited: [...activeSession.measuresVisited],
+        loopsCompleted: activeSession.loopsCompleted,
+        tempoBpm: activeSession.tempoBpm,
+        wfyCorrect: activeSession.wfyCorrect,
+        wfyMissed: activeSession.wfyMissed,
+        wfySkipped: activeSession.wfySkipped,
+        wfyManualContinues: activeSession.wfyManualContinues,
+        practiceMode: activeSession.practiceMode ?? null,
+        updatedAt: Date.now(),
+      }),
+    )
+  } catch {
+    // ignore checkpoint write failures; in-memory session still tracks
+  }
+}
+
+function clearCheckpoint() {
+  try {
+    getLocalStorage()?.removeItem(AUTO_CHECKPOINT_KEY)
+  } catch {
+    // ignore
+  }
+}
+
+export function loadAutoCheckpoint() {
+  return readCheckpoint()
+}
+
+export function beginAutoPracticeSession(piece, { instrumentId = null, practiceMode = null } = {}) {
   const id = String(piece?.id ?? '').trim()
   if (!id) {
     activeSession = null
@@ -45,21 +111,47 @@ export function beginAutoPracticeSession(piece, { instrumentId = null } = {}) {
     return null
   }
 
-  activeSession = {
-    pieceId: id,
-    pieceTitle: normalizePieceTitle(piece.title),
-    instrumentId: normalizeInstrumentId(instrumentId),
-    startedAt: Date.now(),
-    accumulatedSeconds: 0,
-    measuresVisited: new Set(),
-    loopsCompleted: 0,
-    tempoBpm: null,
-    wfyCorrect: 0,
-    wfyMissed: 0,
-    wfySkipped: 0,
-    wfyManualContinues: 0,
+  // Reload safety: resume durable checkpoint for the same piece instead of
+  // silently dropping the active segment. The reload gap itself is not added.
+  const checkpoint = readCheckpoint()
+  const normalizedInstrument = normalizeInstrumentId(instrumentId)
+  if (checkpoint && checkpoint.pieceId === id) {
+    activeSession = {
+      pieceId: id,
+      pieceTitle: normalizePieceTitle(piece.title ?? checkpoint.pieceTitle),
+      instrumentId: normalizedInstrument,
+      startedAt: Number(checkpoint.startedAt) > 0 ? Number(checkpoint.startedAt) : Date.now(),
+      accumulatedSeconds: Math.max(0, Math.floor(Number(checkpoint.accumulatedSeconds) || 0)),
+      measuresVisited: new Set(
+        Array.isArray(checkpoint.measuresVisited) ? checkpoint.measuresVisited : [],
+      ),
+      loopsCompleted: Math.max(0, Math.floor(Number(checkpoint.loopsCompleted) || 0)),
+      tempoBpm: Number.isFinite(Number(checkpoint.tempoBpm)) ? Math.round(Number(checkpoint.tempoBpm)) : null,
+      wfyCorrect: Math.max(0, Math.floor(Number(checkpoint.wfyCorrect) || 0)),
+      wfyMissed: Math.max(0, Math.floor(Number(checkpoint.wfyMissed) || 0)),
+      wfySkipped: Math.max(0, Math.floor(Number(checkpoint.wfySkipped) || 0)),
+      wfyManualContinues: Math.max(0, Math.floor(Number(checkpoint.wfyManualContinues) || 0)),
+      practiceMode: typeof practiceMode === 'string' ? practiceMode : checkpoint.practiceMode ?? null,
+    }
+  } else {
+    activeSession = {
+      pieceId: id,
+      pieceTitle: normalizePieceTitle(piece.title),
+      instrumentId: normalizedInstrument,
+      startedAt: Date.now(),
+      accumulatedSeconds: 0,
+      measuresVisited: new Set(),
+      loopsCompleted: 0,
+      tempoBpm: null,
+      wfyCorrect: 0,
+      wfyMissed: 0,
+      wfySkipped: 0,
+      wfyManualContinues: 0,
+      practiceMode: typeof practiceMode === 'string' ? practiceMode : null,
+    }
   }
   lastTickAt = Date.now()
+  writeCheckpoint()
   return snapshotActiveSession()
 }
 
@@ -92,7 +184,18 @@ export function tickAutoPracticeSession() {
   if (delta >= 1) {
     activeSession.accumulatedSeconds += delta
     lastTickAt = now
+    writeCheckpoint()
   }
+  return activeSession.accumulatedSeconds
+}
+
+/** Durably persist the current active segment without ending it (reload/background safe). */
+export function checkpointAutoPracticeSession() {
+  if (!activeSession) {
+    return 0
+  }
+  tickAutoPracticeSession()
+  writeCheckpoint()
   return activeSession.accumulatedSeconds
 }
 
@@ -101,6 +204,7 @@ export function recordAutoPracticeMeasure(measureNumber) {
     return
   }
   activeSession.measuresVisited.add(measureNumber)
+  writeCheckpoint()
 }
 
 export function recordAutoPracticeLoop() {
@@ -108,6 +212,7 @@ export function recordAutoPracticeLoop() {
     return
   }
   activeSession.loopsCompleted += 1
+  writeCheckpoint()
 }
 
 export function recordAutoPracticeTempo(bpm) {
@@ -115,6 +220,7 @@ export function recordAutoPracticeTempo(bpm) {
     return
   }
   activeSession.tempoBpm = Math.round(bpm)
+  writeCheckpoint()
 }
 
 export function recordWfyPracticeEvent(type) {
@@ -137,6 +243,7 @@ export function recordWfyPracticeEvent(type) {
     default:
       break
   }
+  writeCheckpoint()
 }
 
 function applySessionToStats(stats, session) {
@@ -146,7 +253,7 @@ function applySessionToStats(stats, session) {
     title: session.pieceTitle,
   }
   const endedAt = Date.now()
-  const duration = session.accumulatedSeconds
+  const duration = Math.max(0, Math.floor(Number(session.accumulatedSeconds) || 0))
   const instrumentId = normalizeInstrumentId(session.instrumentId)
   const secondsByInstrument = { ...(stats.autoPracticeSecondsByInstrument ?? {}) }
   secondsByInstrument[instrumentId] = (secondsByInstrument[instrumentId] ?? 0) + duration
@@ -157,6 +264,33 @@ function applySessionToStats(stats, session) {
     (pieceSecondsByInstrument[instrumentId] ?? 0) + duration
   const pieceLastByInstrument = { ...(existing.lastPracticedAtByInstrument ?? {}) }
   pieceLastByInstrument[instrumentId] = endedAt
+
+  const autoSession = {
+    id: `auto-${session.startedAt}-${Math.random().toString(36).slice(2, 8)}`,
+    source: 'auto',
+    pieceId,
+    pieceTitle: session.pieceTitle,
+    instrumentId,
+    startedAt: session.startedAt,
+    endedAt,
+    durationSeconds: duration,
+    practiceMode: session.practiceMode ?? null,
+    measuresVisited: session.measuresVisited.size,
+    measuresPlayed: session.measuresVisited.size,
+    loopsCompleted: session.loopsCompleted,
+    tempoBpm: session.tempoBpm,
+    wfyCorrect: session.wfyCorrect,
+    wfyMissed: session.wfyMissed,
+    wfySkipped: session.wfySkipped,
+    wfyManualContinues: session.wfyManualContinues,
+    completed: true,
+  }
+
+  const aliasSlug = titleAliasKey(session.pieceTitle) ?? slugify(session.pieceTitle)
+  const pieceTitleAliases = { ...(stats.pieceTitleAliases ?? {}) }
+  if (aliasSlug) {
+    pieceTitleAliases[aliasSlug] = pieceId
+  }
 
   return reconcileProfileStats({
     ...stats,
@@ -183,26 +317,49 @@ function applySessionToStats(stats, session) {
         lastPracticedAt: endedAt,
         lastPracticedAtByInstrument: pieceLastByInstrument,
         lastInstrumentId: normalizeInstrumentId(session.instrumentId),
+        totalPracticeSeconds: existing.totalPracticeSeconds ?? 0,
+        totalSessions: existing.totalSessions ?? 0,
       },
     },
+    recentSessions: [autoSession, ...(stats.recentSessions ?? [])]
+      .sort((a, b) => (b.endedAt ?? 0) - (a.endedAt ?? 0))
+      .slice(0, MAX_RECENT_SESSIONS),
+    pieceTitleAliases,
   })
 }
 
-export function endAutoPracticeSession() {
+export function tryEndAutoPracticeSession() {
   tickAutoPracticeSession()
   if (!activeSession) {
-    return loadStats()
+    return { ok: true, stats: loadStats(), session: null }
   }
-  const stats = loadStats()
-  const next = applySessionToStats(stats, activeSession)
-  saveStats(next)
-  activeSession = null
-  lastTickAt = null
-  return next
+  const sessionSnapshot = activeSession
+  const stats = loadStatsWithStatus().stats
+  const next = applySessionToStats(stats, sessionSnapshot)
+  if (saveStats(next)) {
+    activeSession = null
+    lastTickAt = null
+    clearCheckpoint()
+    return { ok: true, stats: next, session: sessionSnapshot }
+  }
+  // Truthful failure: keep the checkpoint so the active segment is not
+  // silently dropped; caller can retry.
+  writeCheckpoint()
+  return { ok: false, stats: loadStats(), error: 'storage-full', session: sessionSnapshot }
+}
+
+export function endAutoPracticeSession() {
+  const result = tryEndAutoPracticeSession()
+  return result.stats
 }
 
 /** Test helper — reset in-memory session without touching storage. */
 export function __resetAutoPracticeSession() {
   activeSession = null
   lastTickAt = null
+}
+
+/** Test helper — clear durable checkpoint without touching stats. */
+export function __clearAutoCheckpointForTest() {
+  clearCheckpoint()
 }

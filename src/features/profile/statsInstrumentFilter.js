@@ -82,14 +82,23 @@ export function filterStatsByInstrument(stats, scopeId) {
     }
   }
 
+  // Honest scoped lifetime totals: durable per-instrument counters (repaired
+  // on load for legacy data), never truncated by the 20-item display slice.
+  // Fall back to slice sums only when counters are absent (pre-V2 data that
+  // bypassed normalization).
+  const scopedManualSeconds =
+    stats.manualPracticeSecondsByInstrument?.[scope] ?? sumDurations(manualSessions)
+  const scopedManualSessions =
+    stats.manualSessionsByInstrument?.[scope] ?? manualSessions.length
+
   return {
     ...stats,
     statsScope: scope,
     statsScopeLabel: getInstrument(scope).label,
     recentSessions,
-    totalPracticeSeconds: sumDurations(manualSessions),
-    totalSessions: manualSessions.length,
-    manualSessionsCompleted: manualSessions.length,
+    totalPracticeSeconds: Math.max(scopedManualSeconds, sumDurations(manualSessions)),
+    totalSessions: Math.max(scopedManualSessions, manualSessions.length),
+    manualSessionsCompleted: Math.max(scopedManualSessions, manualSessions.length),
     legacyAutoPracticeSeconds: sumDurations(legacyAutoSessions),
     legacyAutoSessionsCompleted: legacyAutoSessions.length,
     autoPracticeSeconds: scopedAutoTotal,

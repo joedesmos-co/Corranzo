@@ -81,7 +81,7 @@ function StatsScopeSelector({ scope, onScopeChange }) {
 }
 
 export default function ProfileView() {
-  const { stats, resetAllStats } = useProfileStats()
+  const { stats, resetAllStats, statsCorrupted, statsRecovered } = useProfileStats()
   const [statsScope, setStatsScope] = useState(STATS_SCOPE_ALL)
 
   // One stats implementation, three projections (all / piano / guitar).
@@ -110,6 +110,14 @@ export default function ProfileView() {
           Keep a record of what you worked on. Time with an open score is saved automatically.
         </p>
       </header>
+
+      {statsCorrupted || statsRecovered ? (
+        <p className="profile-empty" role="status">
+          {statsRecovered
+            ? 'Your practice history needed recovery, but your last good save is shown. Nothing was deleted.'
+            : 'Your saved practice data looks damaged. Your history is paused to protect it — export what you can, then clear stats to start fresh.'}
+        </p>
+      ) : null}
 
       <ManualPracticeLog />
 
