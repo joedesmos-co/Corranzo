@@ -1,0 +1,1585 @@
+[
+ {
+  "id": "cc0-beginner-single",
+  "path": "benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.musicxml",
+  "license": "CC0-1.0",
+  "provenance": "Corranzo deterministic fixture generator",
+  "source_sha256": "5b1627f9133ef1f876359b25cdc76de1c81b4106086a74b78a8771841f261498",
+  "pages": 1,
+  "mei_sha256": "846670cd951dc55c5c1622e0d448837b8c2748ef069f7fba3c89a21af74af511",
+  "svg_sha256": "fcba70183c457ab939563f4c3825d562ba448e15bd44acbf6de829a0083baa27",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 1,
+   "keySig": 1,
+   "meterSig": 1,
+   "note": 32,
+   "tempo": 1,
+   "rest": 1
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 8,
+  "svg_group_ids": 378,
+  "svg_bboxes": 97,
+  "staff_groups": 0,
+  "join": {
+   "clef": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "keySig": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "meterSig": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "note": {
+    "mei": 32,
+    "in_svg": 32,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 1,
+    "matched": 1,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 32,
+  "notes_bad_bbox": 32,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 32,
+  "mei_pitched_notes": 32,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 37,
+  "join_missing_total": 3,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "fcba70183c457ab939563f4c3825d562ba448e15bd44acbf6de829a0083baa27"
+  ]
+ },
+ {
+  "id": "cc0-grand-voices",
+  "path": "benchmarks/omr-fixtures/piano-grand-voices-vector/piano-grand-voices-vector.musicxml",
+  "license": "CC0-1.0",
+  "provenance": "Corranzo deterministic fixture generator",
+  "source_sha256": "bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561",
+  "pages": 1,
+  "mei_sha256": "086a5f14458a54b2a7e09adeae492d35e04e36329d578910764b6957c1ce859a",
+  "svg_sha256": "9574235c4f8df8873c8c582f0abc832a785d048f5f19aacdb15775aed2f8864f",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "artic": 24,
+   "note": 88,
+   "tempo": 1,
+   "slur": 1,
+   "tie": 1,
+   "ending": 2
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 8,
+  "svg_group_ids": 870,
+  "svg_bboxes": 221,
+  "staff_groups": 0,
+  "join": {
+   "artic": {
+    "mei": 24,
+    "in_svg": 24,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "ending": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 88,
+    "in_svg": 88,
+    "missing": 0
+   },
+   "slur": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 4,
+    "matched": 4,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 4,
+    "matched": 4,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 88,
+  "notes_bad_bbox": 88,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 88,
+  "mei_pitched_notes": 88,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 123,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "9574235c4f8df8873c8c582f0abc832a785d048f5f19aacdb15775aed2f8864f"
+  ]
+ },
+ {
+  "id": "cc0-rhythm-tuplets",
+  "path": "benchmarks/omr-fixtures/piano-rhythm-tuplets-vector/piano-rhythm-tuplets-vector.musicxml",
+  "license": "CC0-1.0",
+  "provenance": "Corranzo deterministic fixture generator",
+  "source_sha256": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b",
+  "pages": 1,
+  "mei_sha256": "eab042a758efb8a2ca2485044f6cb3f95c20f81cd3b96db249196ad6e40f779b",
+  "svg_sha256": "95256b34f4a12313f0538033b57884a620e93139bcf70361dbea78a5dc85d464",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 1,
+   "keySig": 1,
+   "meterSig": 1,
+   "note": 63,
+   "tempo": 1,
+   "tuplet": 12,
+   "rest": 5,
+   "tie": 1
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 8,
+  "svg_group_ids": 837,
+  "svg_bboxes": 228,
+  "staff_groups": 0,
+  "join": {
+   "clef": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "keySig": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "meterSig": {
+    "mei": 1,
+    "in_svg": 0,
+    "missing": 1
+   },
+   "note": {
+    "mei": 63,
+    "in_svg": 63,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 5,
+    "in_svg": 5,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "tuplet": {
+    "mei": 12,
+    "in_svg": 12,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 1,
+    "matched": 1,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 1,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 63,
+  "notes_bad_bbox": 63,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 63,
+  "mei_pitched_notes": 63,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 85,
+  "join_missing_total": 3,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "95256b34f4a12313f0538033b57884a620e93139bcf70361dbea78a5dc85d464"
+  ]
+ },
+ {
+  "id": "cc0-dense-advanced",
+  "path": "benchmarks/omr-fixtures/piano-dense-advanced-vector/piano-dense-advanced-vector.musicxml",
+  "license": "CC0-1.0",
+  "provenance": "Corranzo deterministic fixture generator",
+  "source_sha256": "0951bd7d7a833886fccfb22cfd0c3b5f2437fecfcb42b853df992383fbef87d8",
+  "pages": 1,
+  "mei_sha256": "1950cc9f01d732ace09cffc4702353f63d4687778fdc148dbd5e08494e9ff7e3",
+  "svg_sha256": "825e02d6d6ba4bbe7a01e782ac0575453cb5da7af1130874d44c86bc5fafb5dd",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "artic": 48,
+   "note": 264,
+   "tempo": 1
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 8,
+  "svg_group_ids": 2207,
+  "svg_bboxes": 604,
+  "staff_groups": 0,
+  "join": {
+   "artic": {
+    "mei": 48,
+    "in_svg": 48,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 264,
+    "in_svg": 264,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 4,
+    "matched": 4,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 4,
+    "matched": 4,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 264,
+  "notes_bad_bbox": 264,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 264,
+  "mei_pitched_notes": 264,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 319,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "825e02d6d6ba4bbe7a01e782ac0575453cb5da7af1130874d44c86bc5fafb5dd"
+  ]
+ },
+ {
+  "id": "pd-minuet",
+  "path": "public/fixtures/demo-minuet-in-g.musicxml",
+  "license": "Public domain (Mutopia Project)",
+  "provenance": "Mutopia / Corranzo fixture",
+  "source_sha256": "11500f576cee656a1eba662c0e62e1aada911d4762314a5e145a866c7cb883f2",
+  "pages": 1,
+  "mei_sha256": "c0755c8e6923278f6bcdbdd341c8e64af2374b9d8d6679c8abf6d4d2fed69127",
+  "svg_sha256": "df78b00aef376296094f988af25ae293dc7232d379af4db52d0cc9778add4b01",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "note": 204,
+   "beam": 42,
+   "tempo": 2,
+   "rest": 3,
+   "accid": 5
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 32,
+  "svg_group_ids": 2221,
+  "svg_bboxes": 624,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 5,
+    "in_svg": 5,
+    "missing": 0
+   },
+   "beam": {
+    "mei": 42,
+    "in_svg": 42,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 204,
+    "in_svg": 204,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 3,
+    "in_svg": 3,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 10,
+    "matched": 10,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 10,
+    "matched": 10,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 204,
+  "notes_bad_bbox": 204,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 204,
+  "mei_pitched_notes": 204,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 262,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "df78b00aef376296094f988af25ae293dc7232d379af4db52d0cc9778add4b01"
+  ]
+ },
+ {
+  "id": "pd-hungarian-dance",
+  "path": "public/fixtures/hungarian-dance-no5/hungarian-dance-no5.mxl",
+  "license": "Public domain (Brahms WoO 1)",
+  "provenance": "Corranzo demo fixture",
+  "source_sha256": "01a9680ade6411a59b21623ba6b4f83a49219eed7f845acb257a763529ed6df3",
+  "pages": 3,
+  "mei_sha256": "d17fd54a68dc91c5aea5e38831ba070daa996012f1e58cbcca287abc804c929e",
+  "svg_sha256": "eb30d1d708de8772cf6c781f4790acd6200f8ea6e9ecd5c00d7fbd6e490e04b6",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 4,
+   "meterSig": 2,
+   "note": 1503,
+   "beam": 205,
+   "artic": 285,
+   "dynam": 38,
+   "tempo": 18,
+   "slur": 72,
+   "arpeg": 41,
+   "accid": 68,
+   "rest": 81,
+   "hairpin": 4,
+   "tie": 29,
+   "dir": 8,
+   "tuplet": 2
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 104,
+  "svg_group_ids": 16139,
+  "svg_bboxes": 4597,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 68,
+    "in_svg": 68,
+    "missing": 0
+   },
+   "arpeg": {
+    "mei": 41,
+    "in_svg": 41,
+    "missing": 0
+   },
+   "artic": {
+    "mei": 285,
+    "in_svg": 285,
+    "missing": 0
+   },
+   "beam": {
+    "mei": 205,
+    "in_svg": 205,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "dir": {
+    "mei": 8,
+    "in_svg": 8,
+    "missing": 0
+   },
+   "dynam": {
+    "mei": 38,
+    "in_svg": 38,
+    "missing": 0
+   },
+   "hairpin": {
+    "mei": 4,
+    "in_svg": 4,
+    "missing": 0
+   },
+   "keySig": {
+    "mei": 4,
+    "in_svg": 0,
+    "missing": 4
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 1503,
+    "in_svg": 1503,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 81,
+    "in_svg": 81,
+    "missing": 0
+   },
+   "slur": {
+    "mei": 72,
+    "in_svg": 72,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 18,
+    "in_svg": 18,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 29,
+    "in_svg": 29,
+    "missing": 0
+   },
+   "tuplet": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 28,
+    "matched": 28,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 32,
+    "matched": 32,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 6,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 1503,
+  "notes_bad_bbox": 1503,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 1503,
+  "mei_pitched_notes": 1503,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 2362,
+  "join_missing_total": 8,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "eb30d1d708de8772cf6c781f4790acd6200f8ea6e9ecd5c00d7fbd6e490e04b6"
+  ]
+ },
+ {
+  "id": "pd-la-campanella",
+  "path": "public/fixtures/la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.mxl",
+  "license": "Public domain (Liszt S.141/3)",
+  "provenance": "Corranzo fixture",
+  "source_sha256": "2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd",
+  "pages": 14,
+  "mei_sha256": "e0f30445f3459402680a89ec7dd93ff01e29f218b595f44bdb286f3bd4e8a95c",
+  "svg_sha256": "dea0a85100d24d366606f5a3d85f39c7c4bf917e9af8b14f821bf9407ef9d0ba",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 77,
+   "keySig": 3,
+   "meterSig": 2,
+   "rest": 214,
+   "beam": 539,
+   "artic": 1978,
+   "note": 4388,
+   "dynam": 70,
+   "tempo": 286,
+   "dir": 13,
+   "octave": 39,
+   "pedal": 236,
+   "fermata": 5,
+   "accid": 714,
+   "arpeg": 28,
+   "slur": 27,
+   "hairpin": 45,
+   "mRest": 4,
+   "tuplet": 93,
+   "tie": 10,
+   "trill": 4
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 150,
+  "svg_group_ids": 56539,
+  "svg_bboxes": 17004,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 714,
+    "in_svg": 714,
+    "missing": 0
+   },
+   "arpeg": {
+    "mei": 28,
+    "in_svg": 28,
+    "missing": 0
+   },
+   "artic": {
+    "mei": 1978,
+    "in_svg": 1978,
+    "missing": 0
+   },
+   "beam": {
+    "mei": 539,
+    "in_svg": 539,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 77,
+    "in_svg": 75,
+    "missing": 2
+   },
+   "dir": {
+    "mei": 13,
+    "in_svg": 13,
+    "missing": 0
+   },
+   "dynam": {
+    "mei": 70,
+    "in_svg": 70,
+    "missing": 0
+   },
+   "fermata": {
+    "mei": 5,
+    "in_svg": 5,
+    "missing": 0
+   },
+   "hairpin": {
+    "mei": 45,
+    "in_svg": 45,
+    "missing": 0
+   },
+   "keySig": {
+    "mei": 3,
+    "in_svg": 0,
+    "missing": 3
+   },
+   "mRest": {
+    "mei": 4,
+    "in_svg": 4,
+    "missing": 0
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 4388,
+    "in_svg": 4388,
+    "missing": 0
+   },
+   "octave": {
+    "mei": 39,
+    "in_svg": 39,
+    "missing": 0
+   },
+   "pedal": {
+    "mei": 236,
+    "in_svg": 236,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 214,
+    "in_svg": 214,
+    "missing": 0
+   },
+   "slur": {
+    "mei": 27,
+    "in_svg": 27,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 286,
+    "in_svg": 286,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 10,
+    "in_svg": 10,
+    "missing": 0
+   },
+   "trill": {
+    "mei": 4,
+    "in_svg": 4,
+    "missing": 0
+   },
+   "tuplet": {
+    "mei": 93,
+    "in_svg": 93,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 187,
+    "matched": 158,
+    "courtesy_matched": 4,
+    "within_measure_matched": 25,
+    "mismatch": 0,
+    "mei_declarations": 77,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 114,
+    "matched": 114,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 4,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 4388,
+  "notes_bad_bbox": 4388,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 4388,
+  "mei_pitched_notes": 4388,
+  "diatonic_histogram_diff": {
+   "xml_only": {
+    "d7": 325,
+    "g6": 128,
+    "f6": 84,
+    "a6": 103,
+    "c7": 98,
+    "b6": 84,
+    "f7": 12,
+    "e7": 127,
+    "g1": 1,
+    "b1": 2,
+    "c2": 1,
+    "a1": 1,
+    "f1": 1,
+    "e1": 1
+   },
+   "mei_only": {
+    "d5": 210,
+    "d6": 37,
+    "d4": 72,
+    "c5": 72,
+    "b4": 73,
+    "a4": 51,
+    "g4": 62,
+    "f4": 54,
+    "b5": 10,
+    "a5": 44,
+    "g5": 62,
+    "f5": 39,
+    "g3": 2,
+    "b3": 3,
+    "e5": 57,
+    "c4": 10,
+    "e4": 11,
+    "a3": 9,
+    "d3": 6,
+    "g2": 3,
+    "f3": 4,
+    "c6": 16,
+    "e6": 59,
+    "e3": 1,
+    "c3": 1
+   },
+   "xml_only_total": 968,
+   "mei_only_total": 968
+  },
+  "element_table_size": 8775,
+  "join_missing_total": 7,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "dea0a85100d24d366606f5a3d85f39c7c4bf917e9af8b14f821bf9407ef9d0ba"
+  ]
+ },
+ {
+  "id": "pd-gymnopedie",
+  "path": "tmp/sprint1/gymnopedie-no-1-satie.mxl",
+  "license": "Composition public domain (Satie); file provenance unverified",
+  "provenance": "local sprint fixture",
+  "source_sha256": "a655f6bb407557e5531103353267ed32015e77ff56ea76e4625d902c465f314d",
+  "pages": 2,
+  "mei_sha256": "bc0880cc84bef58189fe6923a9239af34294985623e9d47b529ded8a9351a042",
+  "svg_sha256": "0ddcb23c42925f62404231979e53000c3e54b7e880a426b5c165394f3f45e679",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "mRest": 8,
+   "rest": 80,
+   "note": 469,
+   "dynam": 34,
+   "tempo": 3,
+   "hairpin": 25,
+   "slur": 10,
+   "tie": 14,
+   "accid": 43
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 78,
+  "svg_group_ids": 5675,
+  "svg_bboxes": 1491,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 43,
+    "in_svg": 43,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "dynam": {
+    "mei": 34,
+    "in_svg": 34,
+    "missing": 0
+   },
+   "hairpin": {
+    "mei": 25,
+    "in_svg": 25,
+    "missing": 0
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "mRest": {
+    "mei": 8,
+    "in_svg": 8,
+    "missing": 0
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 469,
+    "in_svg": 469,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 80,
+    "in_svg": 80,
+    "missing": 0
+   },
+   "slur": {
+    "mei": 10,
+    "in_svg": 10,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 3,
+    "in_svg": 3,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 14,
+    "in_svg": 14,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 18,
+    "matched": 18,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 18,
+    "matched": 18,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 469,
+  "notes_bad_bbox": 469,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 469,
+  "mei_pitched_notes": 469,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 692,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "0ddcb23c42925f62404231979e53000c3e54b7e880a426b5c165394f3f45e679"
+  ]
+ },
+ {
+  "id": "diag-bach-fugue",
+  "path": "benchmarks/cache/bach-fugue-bwv846/score.musicxml",
+  "license": "diagnostic only, not redistributed",
+  "provenance": "local benchmark cache",
+  "source_sha256": "820781cfb736f40af00886d2b47e52edc8cf4b0fdb2e3fbe16f444ff68336874",
+  "pages": 2,
+  "mei_sha256": "5ec56bd77b87342180feee234d8d98cb93e357f657f073b2be3c9364c79045af",
+  "svg_sha256": "9ca44550db32bbaa56b1814f09b33b94bc40810fa49a75e7e871d7ee2e5a627d",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "rest": 110,
+   "note": 750,
+   "beam": 170,
+   "mRest": 3,
+   "tempo": 2,
+   "accid": 89,
+   "tie": 22,
+   "tuplet": 1
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 27,
+  "svg_group_ids": 7122,
+  "svg_bboxes": 2102,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 89,
+    "in_svg": 89,
+    "missing": 0
+   },
+   "beam": {
+    "mei": 170,
+    "in_svg": 170,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "mRest": {
+    "mei": 3,
+    "in_svg": 3,
+    "missing": 0
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 750,
+    "in_svg": 750,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 110,
+    "in_svg": 110,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 22,
+    "in_svg": 22,
+    "missing": 0
+   },
+   "tuplet": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 20,
+    "matched": 20,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 20,
+    "matched": 20,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 750,
+  "notes_bad_bbox": 750,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 750,
+  "mei_pitched_notes": 750,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 1153,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "9ca44550db32bbaa56b1814f09b33b94bc40810fa49a75e7e871d7ee2e5a627d"
+  ]
+ },
+ {
+  "id": "diag-beethoven-sonata",
+  "path": "benchmarks/cache/beethoven-sonata-op2-m1/score.musicxml",
+  "license": "diagnostic only, not redistributed",
+  "provenance": "local benchmark cache",
+  "source_sha256": "df5567fa0da761950f239fd33c154f7f843e7a0325613e027ec5b22e17d93d8d",
+  "pages": 6,
+  "mei_sha256": "f7084e205e76e95d8b0945fc72812a02d8eac12f6d2a4571bb018885c4c03c6b",
+  "svg_sha256": "e86d67d1b432eb3890c426629524cde6e967f6354b3343f14aa3b66b69e8274c",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "note": 1754,
+   "accid": 671,
+   "mRest": 7,
+   "tempo": 2,
+   "beam": 361,
+   "rest": 232,
+   "tuplet": 5,
+   "tie": 79
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 152,
+  "svg_group_ids": 18610,
+  "svg_bboxes": 5395,
+  "staff_groups": 0,
+  "join": {
+   "accid": {
+    "mei": 671,
+    "in_svg": 671,
+    "missing": 0
+   },
+   "beam": {
+    "mei": 361,
+    "in_svg": 361,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "mRest": {
+    "mei": 7,
+    "in_svg": 7,
+    "missing": 0
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "note": {
+    "mei": 1754,
+    "in_svg": 1754,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 232,
+    "in_svg": 232,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   },
+   "tie": {
+    "mei": 79,
+    "in_svg": 79,
+    "missing": 0
+   },
+   "tuplet": {
+    "mei": 5,
+    "in_svg": 5,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 68,
+    "matched": 68,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 68,
+    "matched": 68,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 1754,
+  "notes_bad_bbox": 1754,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 1754,
+  "mei_pitched_notes": 1754,
+  "diatonic_histogram_diff": {
+   "xml_only": {},
+   "mei_only": {},
+   "xml_only_total": 0,
+   "mei_only_total": 0
+  },
+  "element_table_size": 3117,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "e86d67d1b432eb3890c426629524cde6e967f6354b3343f14aa3b66b69e8274c"
+  ]
+ },
+ {
+  "id": "cc0-coverage-probe",
+  "path": "docs/piano-truth-unblock/proof/inputs/coverage_probe.musicxml",
+  "license": "CC0-1.0",
+  "provenance": "authored for this proof (grace, cue, tremolo, gliss, fingering, ornaments, cross-staff)",
+  "source_sha256": "4657937c07ade49ef45b4547d1eab2092876b0b110646053309aa5bf71fce4bb",
+  "pages": 1,
+  "mei_sha256": "617b7bca4f24167ba358ba42b621971d65cddc88e1426bfeb6f6095617b31af0",
+  "svg_sha256": "a38c7443ca956b82056b59ece601c6efd24813132abebdeb4422ede09295bfd0",
+  "verovio_version": "6.3.0-425dd7b",
+  "mei_counts": {
+   "clef": 2,
+   "keySig": 2,
+   "meterSig": 2,
+   "note": 19,
+   "mRest": 7,
+   "reh": 1,
+   "tempo": 1,
+   "dynam": 1,
+   "hairpin": 1,
+   "fing": 1,
+   "trill": 1,
+   "mordent": 1,
+   "turn": 1,
+   "fermata": 1,
+   "pedal": 2,
+   "octave": 1,
+   "gliss": 1,
+   "arpeg": 1,
+   "rest": 2
+  },
+  "mei_elements_without_id": 0,
+  "mei_measures": 4,
+  "svg_group_ids": 339,
+  "svg_bboxes": 82,
+  "staff_groups": 0,
+  "join": {
+   "arpeg": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "clef": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "dynam": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "fermata": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "fing": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "gliss": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "hairpin": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "keySig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "mRest": {
+    "mei": 7,
+    "in_svg": 7,
+    "missing": 0
+   },
+   "meterSig": {
+    "mei": 2,
+    "in_svg": 0,
+    "missing": 2
+   },
+   "mordent": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "note": {
+    "mei": 19,
+    "in_svg": 19,
+    "missing": 0
+   },
+   "octave": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "pedal": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   },
+   "reh": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "rest": {
+    "mei": 2,
+    "in_svg": 2,
+    "missing": 0
+   },
+   "tempo": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "trill": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   },
+   "turn": {
+    "mei": 1,
+    "in_svg": 1,
+    "missing": 0
+   }
+  },
+  "all_ids_join": false,
+  "id_join_ok_excluding_state_classes": true,
+  "state_join": {
+   "clef": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "keySig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   },
+   "meterSig": {
+    "rendered": 2,
+    "matched": 2,
+    "courtesy_matched": 0,
+    "within_measure_matched": 0,
+    "mismatch": 0,
+    "mei_declarations": 2,
+    "mismatch_examples": []
+   }
+  },
+  "state_join_ok": true,
+  "notes_joined": 19,
+  "notes_bad_bbox": 19,
+  "staff_visual_agree": 0,
+  "staff_visual_disagree": 0,
+  "music21_notes": 19,
+  "mei_pitched_notes": 19,
+  "diatonic_histogram_diff": {
+   "xml_only": {
+    "c5": 1,
+    "g4": 2,
+    "a4": 1,
+    "e4": 1
+   },
+   "mei_only": {
+    "g3": 2,
+    "a3": 1,
+    "c3": 1,
+    "e3": 1
+   },
+   "xml_only_total": 5,
+   "mei_only_total": 5
+  },
+  "element_table_size": 48,
+  "join_missing_total": 6,
+  "cross_process_svg_stable": true,
+  "cross_process_hashes": [
+   "a38c7443ca956b82056b59ece601c6efd24813132abebdeb4422ede09295bfd0"
+  ]
+ }
+]
