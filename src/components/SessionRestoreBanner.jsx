@@ -38,7 +38,8 @@ export default function SessionRestoreBanner({
         <button type="button" className="session-restore-banner__btn" onClick={onDismiss}>
           Dismiss
         </button>
-        {(status === RESTORE_STATUS.FAILED || status === RESTORE_STATUS.EXPIRED) && (
+        {(status === RESTORE_STATUS.FAILED || status === RESTORE_STATUS.EXPIRED) &&
+          typeof onClearSaved === 'function' && (
           <button
             type="button"
             className="session-restore-banner__btn session-restore-banner__btn--ghost"

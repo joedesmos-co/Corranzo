@@ -148,6 +148,7 @@ import { releaseOmrUiLocks } from './features/omr/omrUiGuard.js'
 import { clearWarmPages } from './features/pdf/pdfPagePerf.js'
 import { buildPdfFingerprint } from './features/score-follow/scoreFollowStorage.js'
 import { clearScoreFollowAnchors } from './features/score-follow/scoreFollowStorage.js'
+import { resolvePracticePieceId } from './features/profile/autoPracticeTracker.js'
 import {
   buildSessionMeta,
   clearSessionCompanionFiles,
@@ -2278,14 +2279,28 @@ export default function App() {
     navigateToView('practice')
   }
   const sessionFilesReady = practiceReady
+  // Integrator seam (storage): canonical current-score identity shared with
+  // PracticeSessionContext's practicePiece so manual + auto sessions join the
+  // same ledger record without title heuristics. Null when no score is open.
+  const currentScorePieceId = useMemo(
+    () =>
+      resolvePracticePieceId({
+        pdfFingerprint: buildPdfFingerprint(pdfMeta),
+        pdfFileName: fileName ?? pdfMeta?.fileName ?? null,
+        musicXmlFileName: musicXmlSource?.fileName ?? null,
+      }),
+    [pdfMeta, fileName, musicXmlSource?.fileName],
+  )
   const uploadedPracticePieces = useMemo(
     () =>
       buildUploadedPracticePieces(getInstrumentSessionBundles(), {
         activeInstrumentId: instrumentId,
+        saveStatus: sessionPersistence.saveStatus,
       }),
     [
       getInstrumentSessionBundles,
       instrumentId,
+      sessionPersistence.saveStatus,
       pdfFile,
       pdfBuffer,
       pdfMeta,
@@ -2748,6 +2763,13 @@ export default function App() {
             onDismiss={sessionPersistence.dismissRestoreMessage}
             onClearSaved={sessionPersistence.clearSavedSession}
           />
+          {sessionPersistence.saveStatus === 'failed' && sessionPersistence.saveMessage ? (
+            <SessionRestoreBanner
+              status="failed"
+              message={sessionPersistence.saveMessage}
+              onDismiss={sessionPersistence.dismissSaveMessage}
+            />
+          ) : null}
 
           {showLibraryWorkspace && (
         <main className={`library-main${activeView === 'import' ? ' score-import-main' : ''}`}>
@@ -2825,7 +2847,7 @@ export default function App() {
             <AppViewPlaceholder title="Opening your journal" message="Finding your practice sessions…" />
           }
         >
-          <ProfileView />
+          <ProfileView currentPieceId={currentScorePieceId} />
         </Suspense>
       )}
 

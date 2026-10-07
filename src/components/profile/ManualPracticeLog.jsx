@@ -61,7 +61,7 @@ function getInitialDraft() {
   }
 }
 
-export default function ManualPracticeLog() {
+export default function ManualPracticeLog({ defaultPieceId = null }) {
   const { saveManualPracticeSession } = useProfileStats()
   const { instrumentId } = useInstrument()
   const [initialDraft] = useState(getInitialDraft)
@@ -185,6 +185,10 @@ export default function ManualPracticeLog() {
       startedAt: pendingSave.startedAt,
       endedAt: pendingSave.endedAt,
       instrumentId: pendingSave.instrumentId,
+      // Integrator seam: exact current-score identity when the product has
+      // it (App.jsx passes practicePiece.id). trySaveManualSession joins this
+      // canonical id; when null it falls back to title/slug aliases.
+      ...(defaultPieceId ? { pieceId: defaultPieceId } : {}),
     })
 
     if (result?.ok) {

@@ -80,7 +80,7 @@ function StatsScopeSelector({ scope, onScopeChange }) {
   )
 }
 
-export default function ProfileView() {
+export default function ProfileView({ currentPieceId = null }) {
   const { stats, resetAllStats, statsCorrupted, statsRecovered } = useProfileStats()
   const [statsScope, setStatsScope] = useState(STATS_SCOPE_ALL)
 
@@ -119,7 +119,7 @@ export default function ProfileView() {
         </p>
       ) : null}
 
-      <ManualPracticeLog />
+      <ManualPracticeLog defaultPieceId={currentPieceId} />
 
       <StatsScopeSelector scope={statsScope} onScopeChange={setStatsScope} />
 
