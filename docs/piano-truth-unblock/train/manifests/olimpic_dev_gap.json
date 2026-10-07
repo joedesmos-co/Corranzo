@@ -1,0 +1,49 @@
+{
+ "schema": "piano-trainfit-olimpic-dev-gap/1",
+ "dev_samples_listed": 1438,
+ "missing": 0,
+ "test_touched": false,
+ "image_width_px": {
+  "n": 1438,
+  "min": 672,
+  "median": 2847,
+  "max": 5831
+ },
+ "image_height_px": {
+  "n": 1438,
+  "min": 140,
+  "median": 820,
+  "max": 1514
+ },
+ "contrast_std": {
+  "n": 1438,
+  "min": 15.896,
+  "median": 66.515,
+  "max": 94.171
+ },
+ "blur_laplacian_var": {
+  "n": 1438,
+  "min": 1046.686,
+  "median": 11047.747,
+  "max": 23601.953
+ },
+ "ink_fraction": {
+  "n": 1438,
+  "min": 0.027,
+  "median": 0.15,
+  "max": 0.447
+ },
+ "lmx_tokens_per_system": {
+  "n": 1438,
+  "min": 32,
+  "median": 248,
+  "max": 808
+ },
+ "pilot_render_reference": {
+  "page_width_px": 2480,
+  "staff_gap_raster_px": 21.257,
+  "contrast_std_median": 30.905,
+  "blur_laplacian_var_median": 2066.494,
+  "ink_fraction_median": 0.037
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "schema": "piano-capture-batch/1",
+ "n_pages": 8,
+ "packet_pdf": "print_packet.pdf",
+ "packet_sha256": "74cb34214242b1f1a0b9962de34aff54ed98c6d977c1c1e164195142445babf8",
+ "status": "STAGED \u2014 physical print/scan/photo capture pending; not validation data yet",
+ "registration_procedure": "re-render source at capture aspect; estimate homography/warp; map element table; require >=99% notehead centres within tolerance of ink; human spot-check >=50 notes over >=10 pages; freeze only then",
+ "pages": [
+  {
+   "source_id": "QmXurrRshYAu5q23HY4JHpc4sxHwktWwe9hFwkWVoSD5kj",
+   "title": "As a Sailor and a Soldier were Walking One Day",
+   "license": "publicdomain",
+   "source_sha256": "c3d6a8c533c6ff46794e911daada097936410264c59ab448ce53684f750b91b2",
+   "render_svg_sha256": "0bd010773668a66f9d6ba3ec8c0410561fd7d84568dba642ca6e5ef104c060df",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "QmPKNHa33oJHatrbczcz4FDLueSXj4xV1EjymuLXyTj29F",
+   "title": "Tico-Tico No Fub\\'a",
+   "license": "publicdomain",
+   "source_sha256": "dfaf755af110d570021e8fee1e23b597f326025f4f7f25414367f876b835c325",
+   "render_svg_sha256": "176c3e21b429687d2f6727438e4a2d1e7fa29f9ca907b4f55026bb9f7b47e8d7",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "QmdzTZM9EPrSMCraTR9pxFrWUaU9YekAVnmbBVSMp4zw47",
+   "title": "The Sleeping Tune",
+   "license": "publicdomain",
+   "source_sha256": "c92cc32d3c37dedc107fd38ba8a480d32bafa9e23194ac19bc542ade6b7ff11e",
+   "render_svg_sha256": "e4b70c3681c732f7ada1aba0a41f3e024468cd6cb76d59ec467575645f8d42ce",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "QmTmMnchrM39gE5Z5zJgWp8uuk7ptWZCzBDr28QPunm6Jy",
+   "title": "Drummore Bay",
+   "license": "publicdomain",
+   "source_sha256": "ce6b1e15ac2a5d09115a8647580a1311dfbecff6a266f8e22b7e28c1083768e2",
+   "render_svg_sha256": "7045566ec7c356f130724e6174b26ba85a43af93a37760b2cb3b1a080e759fbd",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "Qmc3RHSn8kLoqLb5TZ5avxWyAi2gZGe1BdwfL77Dya3eio",
+   "title": "Heyho My Honey WCD3/1.137",
+   "license": "publicdomain",
+   "source_sha256": "ce7ae4287cb46b190686afcfdabba34b9a39587d563d0898452c5e6c6c56149d",
+   "render_svg_sha256": "a4a655c1e075946037d02344d37567c78fa1bf6c5dfa801d6b09fab31f2e1792",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "QmS5AHPV1tRNwfySy9qFKiAF7eRAM1iykt43pDBJdjXWoB",
+   "title": "Reel Du Semeur",
+   "license": "publicdomain",
+   "source_sha256": "1322652c56284b83fca1992a408e6617767e4ef5a33053b0b3d5fca41a9e3ebb",
+   "render_svg_sha256": "f6913676ecd0f2064f60e4d655519ba4934f7fb5ce54f8cc7893221cc836ab98",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "Qma9751GRwxrwX2eXQPkfvj5fF2MALFKHqAq2rmdiQ51AF",
+   "title": "the battle of aughrim",
+   "license": "publicdomain",
+   "source_sha256": "8df363412110132db8c587e2b91c63306470fd4d7a43fe35539bf2b66d83b930",
+   "render_svg_sha256": "b8d9c225e9369643e0680c96139b34ea082b38f9cfe2fd96eab704d476d53b17",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  },
+  {
+   "source_id": "QmcN7LRoF9qXGhwB5o8iQC4CTZDEdHyxLEaFBVmNAGvsZt",
+   "title": "Beethoven Waltz. CJF.119",
+   "license": "publicdomain",
+   "source_sha256": "2bff32759eed5a3b42b34573c77b7a32f4afc84448cb0f81766fa559bcc04f26",
+   "render_svg_sha256": "305c6c71f023831effa93e78e87b9daf68bd537f417c4d296807a381a5172b02",
+   "page": 1,
+   "print_png": "page-01.png",
+   "print_dpi": 200
+  }
+ ]
+}
