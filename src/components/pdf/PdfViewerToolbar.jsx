@@ -186,7 +186,7 @@ export default function PdfViewerToolbar({
               disabled={disabled}
               onClick={onTogglePaper}
             >
-              {paperTheme === 'dark' ? 'Light paper' : 'Dark paper'}
+              {paperTheme === 'dark' ? 'Light surround' : 'Dark surround'}
             </button>
             {managedFocus ? null : variant === 'embedded' ? (
               <button

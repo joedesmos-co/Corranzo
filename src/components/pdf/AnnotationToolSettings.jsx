@@ -12,21 +12,27 @@ import {
   widthToSlider,
 } from './annotationConstants.js'
 
+const COLOR_NAMES = {
+  '#57534b': 'Graphite', '#a63c2d': 'Vermilion', '#a855f7': 'Purple',
+  '#f87171': 'Red', '#60a5fa': 'Blue', '#1e293b': 'Ink', '#ffffff': 'White',
+  '#facc15': 'Yellow', '#4ade80': 'Green', '#f472b6': 'Pink', '#fb923c': 'Orange', '#38bdf8': 'Sky blue',
+}
+
 function ColorSwatches({ colors, value, onChange, disabled }) {
   const selectedColor = colors.includes(value) ? value : colors[0]
 
   return (
-    <div className="ann-settings__colors" role="listbox" aria-label="Color">
+    <div className="ann-settings__colors" role="group" aria-label="Markup color">
       {colors.map((color) => (
         <button
           key={color}
           type="button"
-          role="option"
-          aria-selected={selectedColor === color}
+          aria-label={COLOR_NAMES[color] || color}
+          aria-pressed={selectedColor === color}
           className={`ann-settings__swatch${selectedColor === color ? ' ann-settings__swatch--active' : ''}`}
           style={{ backgroundColor: color }}
           disabled={disabled}
-          title={color}
+          title={COLOR_NAMES[color] || color}
           onClick={() => onChange(color)}
         />
       ))}

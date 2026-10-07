@@ -20,11 +20,17 @@ function isWhiteColor(color) {
 }
 
 describe('annotation color picker', () => {
-  it('uses a visible purple default pen color instead of white', () => {
-    expect(DEFAULT_PEN_COLOR).toBe('#a855f7')
+  it('uses a visible graphite default pen color instead of white', () => {
+    expect(DEFAULT_PEN_COLOR).toBe('#57534b')
     expect(DEFAULT_TOOL_SETTINGS.pen.color).toBe(DEFAULT_PEN_COLOR)
     expect(isWhiteColor(DEFAULT_TOOL_SETTINGS.pen.color)).toBe(false)
     expect(isWhiteColor(DEFAULT_PEN_COLOR)).toBe(false)
+  })
+
+  it('preserves existing saved purple marks and custom stroke widths', () => {
+    const saved = { color: '#a855f7', opacity: 0.7, width: 0.009 }
+    expect(normalizeToolSettings({ pen: saved }).pen).toEqual(saved)
+    expect(resolveAnnotationStrokeStyle(saved, ANNOTATION_TOOLS.PEN)).toMatchObject(saved)
   })
 
   it('exposes only one white swatch in the pen palette', () => {

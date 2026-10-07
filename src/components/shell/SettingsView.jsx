@@ -31,11 +31,11 @@ export default function SettingsView({
           <div className="cz-settings__rows">
             <div className="cz-settings__row">
               <div>
-                <p className="cz-settings__label">Score paper</p>
-                <p className="cz-settings__hint">Notation always renders on paper, never inverted.</p>
+                <p className="cz-settings__label">Score surround</p>
+                <p className="cz-settings__hint">Choose the desk behind the page. The music stays dark on paper.</p>
               </div>
               <SegmentedControl
-                label="Score paper"
+                label="Score surround"
                 value={paperTheme === 'light' ? 'light' : 'dark'}
                 onChange={onPaperThemeChange}
                 options={[
@@ -59,7 +59,7 @@ export default function SettingsView({
           </div>
         </Panel>
 
-        <Panel title="Instrument" headingLevel={2} sub="Switching returns to Library — live sessions never carry over silently.">
+        <Panel title="Instrument" headingLevel={2} sub="Choose the instrument you’re practicing. Switching opens its library.">
           <InstrumentSelector />
         </Panel>
 

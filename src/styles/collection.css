@@ -1,5 +1,5 @@
-/* Review proof. Collection palette does not leak into the practice canvas. */
-.cz-shell:is([data-view='home'], [data-view='library']) .cz-shell__main {
+/* Paper surfaces share one theme. The score workspace keeps its studio theme. */
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) .cz-shell__main {
   --sf-bg-app: var(--cz-sheet);
   --sf-bg-raised: var(--cz-sheet);
   --sf-bg-panel: var(--cz-sheet-raised);
@@ -9,6 +9,13 @@
   --sf-text-body: var(--cz-ink);
   --sf-text-muted: var(--cz-sheet-muted);
   --sf-text-subtle: var(--cz-sheet-muted);
+  --sf-text-faint: var(--cz-sheet-muted);
+  --sf-border-focus: var(--cz-vermilion);
+  --sf-accent: var(--cz-vermilion);
+  --cz-signal-muted: #a63c2d0d;
+  --cz-signal-border: #a63c2d80;
+  --cz-err-text: #9e3026;
+  --cz-warn-text: #864714;
   --sf-border: var(--cz-sheet-line);
   --sf-border-muted: var(--cz-sheet-line);
   --sf-border-strong: var(--cz-sheet-muted);
@@ -27,15 +34,15 @@
 .cz-collection-button:active { transform: translateY(1px); }
 .cz-text-link { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0; background: transparent; border: 0; color: var(--cz-ink); font-size: 12px; cursor: pointer; }
 .cz-text-link:hover { color: var(--cz-vermilion); }
-.cz-shell:is([data-view='home'], [data-view='library']) .cz-shell__main :is(button, a, input):focus-visible { outline: 2px solid var(--cz-vermilion); outline-offset: 4px; box-shadow: none; }
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) .cz-shell__main :is(button, a, input):focus-visible { outline: 2px solid var(--cz-vermilion); outline-offset: 4px; box-shadow: none; }
 .cz-home__open-featured:focus-visible { outline-color: var(--cz-vermilion-light) !important; }
 .cz-piece-list { border-top: 1px solid var(--cz-ink); }
 .cz-piece-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 95px 50px 118px; align-items: center; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--cz-sheet-line); transition: background 150ms; }
 .cz-piece-row:hover { background: var(--cz-sheet-raised); }
-.cz-piece-row__number { font-family: var(--cz-font-mono); font-size: 11px; color: var(--cz-sheet-muted); align-self: start; padding-top: 6px; }
+.cz-piece-row__number { font-family: var(--cz-font-mono); font-size: 12px; color: var(--cz-sheet-muted); align-self: start; padding-top: 6px; }
 .cz-piece-row__title { margin: 0; font: 400 22px/1.25 var(--cz-font-edition); letter-spacing: -.025em; color: var(--cz-ink); }
-.cz-piece-row__composer { margin: 5px 0 0; font-size: 11px; color: var(--cz-sheet-muted); }
-.cz-piece-row__level, .cz-piece-row__duration { font-size: 11px; color: var(--cz-sheet-muted); }
+.cz-piece-row__composer { margin: 5px 0 0; font-size: 12px; color: var(--cz-sheet-muted); }
+.cz-piece-row__level, .cz-piece-row__duration { font-size: 12px; color: var(--cz-sheet-muted); }
 .cz-piece-row__duration { font-variant-numeric: tabular-nums; }
 .cz-piece-row__open { display: flex; justify-content: end; align-items: center; gap: 10px; min-height: 44px; border: 0; padding: 0; background: transparent; color: var(--cz-ink); font-size: 12px; cursor: pointer; }
 .cz-piece-row__open:hover:not(:disabled) { color: var(--cz-vermilion); }
@@ -45,10 +52,10 @@
 .cz-collection-error, .cz-collection-notice { font-size: 13px; padding: 16px 0; border-block: 1px solid var(--cz-sheet-line); color: var(--cz-vermilion); }
 .cz-collection-notice { color: var(--cz-sheet-muted); }
 .cz-collection-notice button { color: var(--cz-ink); background: transparent; border: 0; text-decoration: underline; cursor: pointer; }
-.cz-shell[data-view='library'] .library-main { min-height: 0; padding: 40px var(--cz-collection-gutter) 48px; }
+.cz-shell[data-view='library'] .library-main { min-height: 0; padding: 32px var(--cz-collection-gutter) 48px; }
 .cz-shell[data-view='library'] .library-panel { width: 100%; max-width: var(--cz-collection-max); gap: 28px; }
-.cz-shell[data-view='library'] .library-panel__hero { max-width: none; padding: 0 0 28px; margin: 0; }
-.cz-shell[data-view='library'] .library-panel__tagline { color: var(--cz-ink); font: 400 62px/1.05 var(--cz-font-edition); letter-spacing: -.055em; margin: 10px 0 12px; }
+.cz-shell[data-view='library'] .library-panel__hero { max-width: none; padding: 0 0 16px; margin: 0; }
+.cz-shell[data-view='library'] .library-panel__tagline { color: var(--cz-ink); font: 400 46px/1.1 var(--cz-font-edition); letter-spacing: -.055em; margin: 10px 0 12px; }
 .cz-shell[data-view='library'] .library-panel__browser-hint { font-size: 14px; color: var(--cz-sheet-muted); }
 .cz-shell[data-view='library'] .library-panel__tabs { display: flex; gap: 28px; padding: 0; border: 0; border-bottom: 1px solid var(--cz-sheet-line); border-radius: 0; background: transparent; }
 .cz-shell[data-view='library'] .library-panel__tab { padding: 0 0 12px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; font-weight: 500; color: var(--cz-sheet-muted); }
@@ -67,12 +74,12 @@
 .cz-shell[data-view='library'] .practice-library__groups { gap: 30px; }
 .cz-shell[data-view='library'] .practice-library__group { gap: 12px; }
 .cz-shell[data-view='library'] .practice-library__group-title { font: 11px var(--cz-font-sans); letter-spacing: .1em; }
-.cz-collection-credit { margin: 0; font-size: 11px; color: var(--cz-sheet-muted); }
+.cz-collection-credit { margin: 0; font-size: 12px; color: var(--cz-sheet-muted); }
 .cz-shell[data-view='library'] .practice-piece-card { padding: 24px; }
 .cz-shell[data-view='library'] .practice-piece-card__button { background: var(--cz-ink); color: var(--cz-sheet); }
 .cz-shell[data-view='library'] .practice-piece-card__button:hover { background: var(--cz-ink-raised); }
 .cz-shell[data-view='library'] .practice-piece-card__title { font-family: var(--cz-font-edition); }
-.cz-shell:is([data-view='home'], [data-view='library']) .app-footer { margin-top: auto; padding: 20px var(--cz-collection-gutter); background: transparent; border-color: var(--cz-sheet-line); color: var(--cz-sheet-muted); font-size: 11px; }
+.cz-shell:is([data-view='home'], [data-view='library'], [data-view='import'], [data-view='profile'], [data-view='settings']) .app-footer { margin-top: auto; padding: 20px var(--cz-collection-gutter); background: transparent; border-color: var(--cz-sheet-line); color: var(--cz-sheet-muted); font-size: 12px; }
 @media (max-width: 1050px) { .cz-piece-row { grid-template-columns: 28px minmax(0, 1fr) 85px 44px 100px; gap: 14px; } }
 @media (max-width: 640px) {
   .cz-piece-row { grid-template-columns: 24px minmax(0, 1fr) 44px; gap: 12px; padding-block: 18px; }
@@ -81,7 +88,7 @@
   .cz-piece-row__open { justify-content: center; }
   .cz-piece-row__open span { display: none; }
   .cz-shell[data-view='library'] .library-main { padding-top: 26px; }
-  .cz-shell[data-view='library'] .library-panel__tagline { font-size: 48px; }
+  .cz-shell[data-view='library'] .library-panel__tagline { font-size: 38px; }
   .cz-shell[data-view='library'] .practice-library__tools { width: 100%; gap: 16px; }
   .cz-shell[data-view='library'] .library-search { width: 100%; }
   .cz-shell[data-view='library'] .practice-library__filters { justify-content: start; }
@@ -99,4 +106,18 @@
 .cz-shell[data-view='library'] .library-panel__tab { min-height: 44px; }
 @media (prefers-reduced-motion: reduce) {
   .cz-shell :is(.cz-collection-button, .cz-piece-row, .cz-piece-row__open svg, .cz-home__open-featured) { transition: none; }
+}
+
+/* Saved works use the same repertoire rhythm as the built-in collection. */
+.cz-shell[data-view='library'] .library-panel__uploads-grid { display: flex; flex-direction: column; gap: 0; }
+.cz-shell[data-view='library'] .practice-piece-card { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 0; border: 0; border-top: 1px solid var(--cz-sheet-line); border-radius: 0; background: transparent; box-shadow: none; }
+.cz-shell[data-view='library'] .practice-piece-card__main { min-width: 0; flex: 1; }
+.cz-shell[data-view='library'] .practice-piece-card__title { font: 400 26px/1.2 var(--cz-font-edition); }
+.cz-shell[data-view='library'] .practice-piece-card__action { width: auto; flex-shrink: 0; }
+.cz-shell[data-view='library'] .practice-piece-card__button { width: auto; min-width: 120px; border-radius: var(--cz-radius-control); }
+.cz-shell[data-view='library'] .practice-piece-card--add-files { order: 1; }
+.cz-collection-button:disabled { opacity: .5; cursor: wait; }
+@media (max-width: 640px) {
+  .cz-shell[data-view='library'] .practice-piece-card { align-items: start; flex-direction: column; gap: 16px; }
+  .cz-shell[data-view='library'] .practice-piece-card__action { width: 100%; }
 }

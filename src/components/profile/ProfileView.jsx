@@ -92,12 +92,12 @@ export default function ProfileView() {
   return (
     <main className="profile-view" aria-labelledby="profile-heading">
       <header className="profile-header">
+        <span className="cz-edition-label">Time with your instrument</span>
         <h1 id="profile-heading" className="profile-header__title">
-          Progress
+          Practice journal
         </h1>
         <p className="profile-header__lede">
-          Log practice sessions manually below. Corranzo also tracks time automatically while you
-          play an open piece in Practice.
+          Keep a record of what you worked on. Time with an open score is saved automatically.
         </p>
       </header>
 
@@ -107,7 +107,7 @@ export default function ProfileView() {
 
       <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
-          label="Auto-tracked practice"
+          label="Time with your scores"
           value={
             (viewStats.autoPracticeSeconds ?? 0) > 0
               ? formatDuration(viewStats.autoPracticeSeconds ?? 0)
@@ -115,7 +115,7 @@ export default function ProfileView() {
           }
         />
         <StatCard
-          label="Last auto session"
+          label="Last played"
           value={
             viewStats.lastAutoPracticedAt ? formatDate(viewStats.lastAutoPracticedAt) : 'None yet'
           }
@@ -125,7 +125,7 @@ export default function ProfileView() {
       {hasPieceActivity ? (
         <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
           <h2 id="auto-piece-stats-heading" className="profile-panel__title">
-            Per-piece activity
+            Pieces in practice
           </h2>
           <ul className="profile-list">
             {piecesWithActivity
@@ -149,7 +149,7 @@ export default function ProfileView() {
       ) : (
         <section className="profile-panel" aria-labelledby="auto-piece-stats-heading">
           <h2 id="auto-piece-stats-heading" className="profile-panel__title">
-            Per-piece activity
+            Pieces in practice
           </h2>
           <div className="profile-empty">
             <p>
@@ -163,11 +163,11 @@ export default function ProfileView() {
 
       <div className="profile-stats-grid profile-stats-grid--two">
         <StatCard
-          label="Logged practice time"
+          label="Practice you’ve logged"
           value={formatDuration(viewStats.totalPracticeSeconds)}
         />
         <StatCard
-          label="Logged sessions"
+          label="Sessions you’ve logged"
           value={viewStats.manualSessionsCompleted ?? 0}
         />
       </div>
@@ -198,7 +198,7 @@ export default function ProfileView() {
           aria-labelledby="manual-sessions-heading"
         >
           <h2 id="manual-sessions-heading" className="profile-panel__title">
-            Recent logged sessions
+            Session notes
           </h2>
           <ul className="profile-list">
             {manualSessions.map((session) => (
@@ -222,7 +222,7 @@ export default function ProfileView() {
       )}
 
       <footer className="profile-footer">
-        <p>Clearing browser data also removes these stats.</p>
+        <p>Your practice journal stays in this browser. Clearing browser data removes it.</p>
         <button
           type="button"
           className="profile-footer__reset"

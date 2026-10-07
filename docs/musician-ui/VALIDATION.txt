@@ -1,0 +1,79 @@
+=== tests.log ===
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow-ui-redesign
+
+ ✓ tests/appShell.test.js (10 tests) 4ms
+ ✓ tests/designPhaseA.test.js (7 tests) 4ms
+ ✓ tests/profileStats.test.js (8 tests) 4ms
+ ✓ tests/manualPracticeLog.test.js (9 tests) 4ms
+ ✓ tests/practiceLibrary.test.js (14 tests) 12ms
+ ✓ tests/importPresentation.test.js (9 tests) 5ms
+ ✓ tests/scoreWorkspace.test.js (9 tests) 7ms
+ ✓ tests/homeNavigation.test.js (4 tests) 3ms
+(node:23918) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tests/visualPracticeMode.test.js (27 tests) 22ms
+ ✓ tests/sessionViewPersistence.test.js (4 tests) 2ms
+(node:23922) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tests/practiceVisualRuntime.test.js (2 tests) 2358ms
+   ✓ Practice visual runtime integration > opens Practice and survives Score -> Visual -> Score in a real browser  2199ms
+
+ Test Files  11 passed (11)
+      Tests  103 passed (103)
+   Start at  09:12:06
+   Duration  3.26s (transform 515ms, setup 0ms, collect 1.54s, tests 2.43s, environment 1ms, prepare 501ms)
+
+
+
+=== annotations-tests.log ===
+
+ RUN  v3.2.6 /Users/ryland/Documents/scoreflow-ui-redesign
+
+ ✓ tests/annotationLayer.test.js (6 tests) 2ms
+ ✓ tests/annotationColorPicker.test.js (7 tests) 2ms
+
+ Test Files  2 passed (2)
+      Tests  13 passed (13)
+   Start at  09:14:54
+   Duration  156ms (transform 16ms, setup 0ms, collect 21ms, tests 4ms, environment 0ms, prepare 80ms)
+
+
+
+=== build.log ===
+
+> scoreflow-v2@0.0.0 build
+> vite build
+
+vite v8.0.13 building client environment for production...
+[2K
+transforming...✓ 1519 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     3.17 kB │ gzip:   1.09 kB
+dist/assets/omr.worker-CMke01m1.js                574.65 kB
+dist/assets/pdf.worker.min-qwK7q_zL.mjs         1,046.21 kB
+dist/assets/pdf-vendor-ChVDk_g3.css                 9.09 kB │ gzip:   1.95 kB
+dist/assets/PracticeView-CuKUxppw.css             114.50 kB │ gzip:  19.56 kB
+dist/assets/index-Dq-8tLax.css                    148.73 kB │ gzip:  25.83 kB
+dist/assets/rolldown-runtime-BM3Ffeng.js            1.21 kB │ gzip:   0.67 kB
+dist/assets/guitarInstrument-BTHeJx8j.js            2.11 kB │ gzip:   1.09 kB
+dist/assets/pianoInstrument-Daaw_HzN.js             2.64 kB │ gzip:   1.25 kB
+dist/assets/instrumentVoiceStatus-mK5uuGgW.js       2.72 kB │ gzip:   1.25 kB
+dist/assets/sampledInstrumentVoice-BIhxrBNE.js      9.28 kB │ gzip:   3.49 kB
+dist/assets/ProfileView-CvpJ-m9K.js                11.77 kB │ gzip:   3.45 kB
+dist/assets/PracticeView-C8hWKQ3U.js              181.13 kB │ gzip:  50.96 kB
+dist/assets/audio-vendor-VLR0g-sR.js              341.10 kB │ gzip:  79.50 kB
+dist/assets/PracticeSessionContext-DB5OGZox.js    394.72 kB │ gzip: 121.05 kB
+dist/assets/pdf-vendor-BhWFS5Oj.js                428.60 kB │ gzip: 127.10 kB
+dist/assets/index--r99y2Qw.js                   1,508.02 kB │ gzip: 447.06 kB
+
+✓ built in 429ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 650 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+
+=== new-code-lint.log ===

@@ -2822,7 +2822,7 @@ export default function App() {
       {activeView === 'profile' && (
         <Suspense
           fallback={
-            <AppViewPlaceholder title="Loading profile" message="Opening your practice log…" />
+            <AppViewPlaceholder title="Opening your journal" message="Finding your practice sessions…" />
           }
         >
           <ProfileView />
