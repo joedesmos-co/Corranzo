@@ -3,7 +3,7 @@ import { Document, Page } from 'react-pdf'
 import '../../pdf/setupPdfWorker.js'
 
 /** A decorative excerpt with its own cancellable source, never practice state. */
-export default memo(function ScoreCover({ file }) {
+export default memo(function ScoreCover({ file, pageNumber = 1 }) {
   const [preview, setPreview] = useState(null)
 
   useEffect(() => {
@@ -25,12 +25,12 @@ export default memo(function ScoreCover({ file }) {
     return () => controller.abort()
   }, [file])
 
-  const placeholder = <span className="cz-score-cover__placeholder">Corranzo<br /><em>Score edition</em></span>
+  const placeholder = <span className="cz-score-cover__placeholder">Score preview<br /><em>Open the score to read the page.</em></span>
   return (
     <div className="cz-score-cover" aria-hidden="true">
       {preview?.file === file && preview.data ? (
         <Document file={preview.data} loading={placeholder} error={placeholder}>
-          <Page pageNumber={1} width={420} renderTextLayer={false} renderAnnotationLayer={false} loading={placeholder} />
+          <Page pageNumber={pageNumber} width={900} renderTextLayer={false} renderAnnotationLayer={false} loading={placeholder} />
         </Document>
       ) : placeholder}
     </div>

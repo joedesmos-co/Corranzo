@@ -1,0 +1,247 @@
+{
+  "checks": [
+    "First launch, skip link, route focus, active navigation, collection, search/one result, keyboard tabs, empty uploads",
+    "Cancellation has truthful Home state; unfinished Library score returns to import; ready and onboarding fit all seven widths",
+    "Corrupt notation cannot bypass readiness through Home or Library; recovery returns to the saved PDF",
+    "Long upload titles wrap; missing metadata remains useful; dialog focus includes native disclosure summaries and returns correctly",
+    "Collection replacement is explicit; cancelling preserves the imported score",
+    "All modes, Note guide, focus and tools audited with axe; mobile drawer keyboard trap and reduced motion verified",
+    "Collapsed navigation preference survives Library return and browser reload"
+  ],
+  "errors": [],
+  "failure": null,
+  "accessibility": [
+    {
+      "name": "Home / first launch",
+      "violations": [],
+      "passes": 38,
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Library / collection",
+      "violations": [],
+      "passes": 42,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "targets": [
+            [
+              ".practice-library__filters"
+            ]
+          ]
+        },
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Library / empty uploads",
+      "violations": [],
+      "passes": 42,
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Import / empty",
+      "violations": [],
+      "passes": 37,
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Import / ready and first-use modes",
+      "violations": [],
+      "passes": 38,
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Library / one upload with long title and no composer metadata",
+      "violations": [],
+      "passes": 42,
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "targets": [
+            [
+              ".cz-iconbtn"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Workspace settings / keyboard help",
+      "violations": [],
+      "passes": 40,
+      "incomplete": []
+    },
+    {
+      "name": "Preview",
+      "violations": [],
+      "passes": 39,
+      "incomplete": []
+    },
+    {
+      "name": "Play Along",
+      "violations": [],
+      "passes": 39,
+      "incomplete": []
+    },
+    {
+      "name": "Wait For You",
+      "violations": [],
+      "passes": 40,
+      "incomplete": []
+    },
+    {
+      "name": "Wait For You / input",
+      "violations": [],
+      "passes": 36,
+      "incomplete": []
+    },
+    {
+      "name": "Note guide",
+      "violations": [],
+      "passes": 38,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "targets": [
+            [
+              ".visual-practice"
+            ]
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "targets": [
+            [
+              ".visual-practice__target-meta"
+            ],
+            [
+              "text[font-size=\"67.19999999999999\"]"
+            ],
+            [
+              "text[font-size=\"40.8\"]"
+            ],
+            [
+              "text[y=\"60\"]"
+            ],
+            [
+              ".staff-lane__key-accidental.staff-lane__key-accidental--flat[data-key-accidental=\"flat\"]:nth-child(15)"
+            ],
+            [
+              "text[y=\"48\"]"
+            ],
+            [
+              "text[y=\"72\"][x=\"65.03999999999999\"][font-size=\"26.400000000000002\"]"
+            ],
+            [
+              "text[y=\"168\"][x=\"65.03999999999999\"][font-size=\"26.400000000000002\"]"
+            ],
+            [
+              "text[y=\"192\"][x=\"65.03999999999999\"][font-size=\"26.400000000000002\"]"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Focus",
+      "violations": [],
+      "passes": 39,
+      "incomplete": []
+    },
+    {
+      "name": "Tempo dialog",
+      "violations": [],
+      "passes": 37,
+      "incomplete": []
+    },
+    {
+      "name": "Loop dialog",
+      "violations": [],
+      "passes": 39,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "targets": [
+            [
+              ".practice-loop"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sound & accompaniment dialog",
+      "violations": [],
+      "passes": 41,
+      "incomplete": []
+    },
+    {
+      "name": "Mobile navigation drawer",
+      "violations": [],
+      "passes": 28,
+      "incomplete": [
+        {
+          "id": "skip-link",
+          "targets": [
+            [
+              ".cz-skip-link"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "widths": [
+    1920,
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390
+  ]
+}

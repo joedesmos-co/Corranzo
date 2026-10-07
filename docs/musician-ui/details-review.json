@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "A real graphite annotation and bars 1–4 loop render in the score workspace",
+    "Restore notice does not shorten the score workspace",
+    "Graphite annotation survives reload",
+    "Light and dark score surrounds are distinct; notation remains dark on paper",
+    "Manual practice session saves with piece and musical notes",
+    "Existing Guitar product UI uses the same visual system; research code untouched"
+  ],
+  "accessibility": [
+    {
+      "name": "Markup palette",
+      "violations": []
+    },
+    {
+      "name": "Light surround",
+      "violations": []
+    },
+    {
+      "name": "Journal with notes",
+      "violations": []
+    },
+    {
+      "name": "Guitar home",
+      "violations": []
+    }
+  ],
+  "failure": null
+}

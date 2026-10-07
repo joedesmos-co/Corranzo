@@ -5,7 +5,7 @@ export const ANNOTATION_TOOLS = {
   ERASER: 'eraser',
 }
 
-export const DEFAULT_PEN_COLOR = '#a855f7'
+export const DEFAULT_PEN_COLOR = '#57534b'
 
 const DEPRECATED_PEN_COLORS = new Set(['#e8eef8'])
 
@@ -13,7 +13,7 @@ export const DEFAULT_TOOL_SETTINGS = {
   [ANNOTATION_TOOLS.PEN]: {
     color: DEFAULT_PEN_COLOR,
     opacity: 1,
-    width: 0.004,
+    width: 0.002,
   },
   [ANNOTATION_TOOLS.HIGHLIGHTER]: {
     color: '#facc15',
@@ -74,6 +74,8 @@ export function resolveAnnotationStrokeStyle(
 
 export const PEN_COLORS = [
   DEFAULT_PEN_COLOR,
+  '#a63c2d',
+  '#a855f7', // Keep existing saved purple marks and preferences valid.
   '#f87171',
   '#60a5fa',
   '#1e293b',

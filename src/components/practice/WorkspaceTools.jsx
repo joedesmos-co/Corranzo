@@ -41,7 +41,7 @@ export default function WorkspaceTools({ tool, onClose, returnFocusTo, session: 
       <section ref={ref} className={`workspace-tool-panel workspace-tool-panel--${tool}`} role="dialog" aria-label={TITLES[tool]} aria-modal="true">
         <header><h2>{TITLES[tool]}</h2><button className="workspace-icon" aria-label="Close tools" onClick={onClose}><Icon name="close" size={18} /></button></header>
         {tool === 'tempo' && <>
-          <div className="workspace-tempo-number">{p.effectiveTempo ?? '—'}<span>BPM</span></div>
+          <div className="workspace-tempo-number"><span aria-hidden="true">♩ =</span>{p.effectiveTempo ?? '—'}<span>BPM</span></div>
           <label className="workspace-field">Playback speed <output>{Math.round(p.playbackRate * 100)}%</output><input id="playback-rate" aria-label="Playback speed" type="range" min="0.25" max="1.5" step="0.05" value={p.playbackRate} disabled={p.controlsDisabled} onChange={e => p.setPlaybackRate(Number(e.target.value))} /></label>
           <div className="workspace-presets">{[.5, .75, 1].map(rate => <button key={rate} aria-pressed={p.playbackRate === rate} onClick={() => p.setPlaybackRate(rate)} disabled={p.controlsDisabled}>{rate * 100}%</button>)}</div>
           <p>Adjust the pace without changing the notes. Use − / + from the score.</p>

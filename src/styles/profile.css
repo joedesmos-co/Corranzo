@@ -1,24 +1,21 @@
 .profile-view {
   flex: 1;
   width: 100%;
-  max-width: var(--sf-content-max);
+  max-width: calc(960px + 2 * var(--cz-collection-gutter));
   margin: 0 auto;
-  padding: var(--sf-space-4xl) max(var(--sf-space-3xl), env(safe-area-inset-right, 0px))
-    max(56px, calc(env(safe-area-inset-bottom, 0px) + 40px))
-    max(var(--sf-space-3xl), env(safe-area-inset-left, 0px));
+  padding: 32px var(--cz-collection-gutter) 48px;
   overflow-y: auto;
   background: var(--sf-bg-raised);
 }
 
 .profile-header {
-  margin-bottom: var(--sf-space-3xl);
+  margin-bottom: 28px;
 }
 
 .profile-header__title {
   margin: 0;
   color: var(--sf-text-primary);
-  font-size: var(--sf-font-title);
-  font-weight: 600;
+  font: 400 46px/1.1 var(--cz-font-edition);
   letter-spacing: -0.02em;
 }
 
@@ -31,23 +28,24 @@
 /* Stats instrument scope: All instruments · Piano · Guitar. */
 .profile-scope {
   display: inline-flex;
-  padding: 3px;
-  gap: 2px;
-  margin-bottom: var(--sf-space-2xl);
-  background: var(--sf-bg-panel-inset);
-  border: 1px solid var(--sf-border-strong);
-  border-radius: var(--sf-radius-md);
+  padding: 0;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--sf-border);
+  border-radius: 0;
 }
 
 .profile-scope__option {
   background: transparent;
   border: 1px solid transparent;
   color: var(--sf-text-muted);
-  padding: 6px 16px;
-  border-radius: calc(var(--sf-radius-md) - 3px);
+  padding: 8px 12px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 0.9rem;
-  min-height: 32px;
+  min-height: 44px;
 }
 
 .profile-scope__option:hover {
@@ -58,14 +56,15 @@
 .profile-scope__option--active {
   color: var(--sf-text-primary);
   background: var(--sf-bg-panel);
-  border-color: var(--sf-border-strong);
+  border-color: transparent;
+  border-bottom-color: var(--cz-vermilion);
 }
 
 .profile-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sf-space-md);
-  margin-bottom: var(--sf-space-3xl);
+  margin-bottom: 28px;
 }
 
 .profile-stats-grid--two {
@@ -75,16 +74,17 @@
 .profile-stat,
 .profile-panel,
 .profile-empty {
-  border: 1px solid var(--sf-border);
-  border-radius: var(--sf-radius-xl);
-  background: var(--sf-bg-panel);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .profile-stat {
   display: flex;
   flex-direction: column;
   gap: var(--sf-space-xs);
-  padding: var(--sf-space-lg) var(--sf-space-xl);
+  padding: 0 20px 0 0;
+  border-right: 1px solid var(--sf-border);
 }
 
 .profile-stat__label {
@@ -96,13 +96,12 @@
 
 .profile-stat__value {
   color: var(--sf-text-primary);
-  font-size: 1.35rem;
-  font-weight: 600;
+  font: 400 24px/1.3 var(--cz-font-edition);
 }
 
 .profile-empty {
-  padding: var(--sf-space-3xl);
-  text-align: center;
+  padding: 16px 0;
+  text-align: left;
 }
 
 .profile-empty h3 {
@@ -125,14 +124,15 @@
 }
 
 .profile-panel {
-  padding: var(--sf-space-xl) var(--sf-space-2xl);
+  padding: 24px 0;
+  border-top: 1px solid var(--sf-border);
+  margin-bottom: 24px;
 }
 
 .profile-panel__title {
   margin: 0 0 var(--sf-space-md);
   color: var(--sf-text-secondary);
-  font-size: var(--sf-font-section);
-  font-weight: 600;
+  font: 400 25px/1.2 var(--cz-font-edition);
 }
 
 .profile-list {
@@ -165,7 +165,7 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
 }
 
 .profile-list__item strong {
@@ -190,8 +190,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--sf-space-md);
-  margin-top: var(--sf-space-4xl);
-  padding-top: var(--sf-space-xl);
+  margin-top: 32px;
+  padding-top: 20px;
   border-top: 1px solid var(--sf-border);
 }
 
@@ -218,47 +218,18 @@
   color: var(--sf-text-secondary);
 }
 
-@media (max-width: 900px) {
-  .profile-view {
-    padding: var(--sf-space-3xl) max(var(--sf-space-2xl), env(safe-area-inset-right, 0px))
-      max(48px, calc(env(safe-area-inset-bottom, 0px) + 36px))
-      max(var(--sf-space-2xl), env(safe-area-inset-left, 0px));
-  }
-}
-
-@media (max-width: 760px) {
-  .profile-view {
-    padding: var(--sf-space-2xl) max(var(--sf-space-lg), env(safe-area-inset-right, 0px))
-      max(40px, calc(env(safe-area-inset-bottom, 0px) + 32px))
-      max(var(--sf-space-lg), env(safe-area-inset-left, 0px));
-  }
-
-  .profile-scope {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .profile-scope__option {
-    flex: 1 1 0;
-    min-width: min(100%, 9rem);
-    min-height: 44px;
-    text-align: center;
-  }
-
-  .profile-stats-grid,
-  .profile-panels {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+@media (max-width: 640px) {
+  .profile-view { padding: 24px var(--cz-collection-gutter) 40px; }
+  .profile-header__title { font-size: 38px; }
+  .profile-scope { display: flex; flex-wrap: wrap; gap: 0; }
+  .profile-scope__option { flex: 1; padding-inline: 8px; font-size: 12px; }
+  .profile-stats-grid { gap: 16px; }
+  .profile-stat__value { font-size: 21px; }
+  .profile-footer { align-items: start; flex-direction: column; }
 }
 
 .profile-manual-log {
-  margin-bottom: var(--sf-space-3xl);
+  margin-bottom: 28px;
 }
 
 .profile-manual-log__lede {
@@ -277,7 +248,7 @@
 
 .profile-manual-log__time {
   color: var(--sf-text-primary);
-  font-size: 2rem;
+  font: 400 40px/1.2 var(--cz-font-edition);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -386,3 +357,15 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.profile-header .cz-edition-label { display: block; margin-bottom: 10px; }
+.profile-stat:last-child { border-right: 0; }
+.profile-empty h2 { font: 400 24px var(--cz-font-edition); margin: 0 0 8px; }
+.profile-panel .profile-empty { padding: 0; }
+.profile-manual-log { border-top-color: var(--cz-ink); }
+.profile-manual-log__btn, .profile-footer__reset { min-height: 44px; }
+.profile-manual-log__btn--primary { background: var(--cz-ink); border-color: var(--cz-ink); color: var(--cz-sheet-raised); }
+.profile-manual-log__btn--primary:hover { background: var(--cz-ink-raised); color: var(--cz-sheet-raised); }
+.profile-list__item strong { white-space: normal; overflow-wrap: anywhere; font: 400 22px/1.3 var(--cz-font-edition); }
+.profile-list__notes { white-space: normal; overflow-wrap: anywhere; border-left: 2px solid var(--cz-sheet-line); padding-left: 12px; margin-top: 8px; }
+.profile-manual-log__field :is(input, select, textarea) { min-height: 44px; }

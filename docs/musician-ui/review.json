@@ -1,0 +1,95 @@
+{
+  "checks": [
+    "Playback starts and pauses; three practice modes selectable",
+    "Dialogs restore focus; score/guide, focus mode and reduced motion work",
+    "Practice journal timer starts and pauses"
+  ],
+  "errors": [],
+  "accessibility": [
+    {
+      "name": "home",
+      "violations": []
+    },
+    {
+      "name": "home-mobile",
+      "violations": []
+    },
+    {
+      "name": "Library",
+      "violations": []
+    },
+    {
+      "name": "library-mobile",
+      "violations": []
+    },
+    {
+      "name": "Import",
+      "violations": []
+    },
+    {
+      "name": "import-mobile",
+      "violations": []
+    },
+    {
+      "name": "History",
+      "violations": []
+    },
+    {
+      "name": "history-mobile",
+      "violations": []
+    },
+    {
+      "name": "Settings",
+      "violations": []
+    },
+    {
+      "name": "settings-mobile",
+      "violations": []
+    },
+    {
+      "name": "Preview",
+      "violations": []
+    },
+    {
+      "name": "Play Along",
+      "violations": []
+    },
+    {
+      "name": "Wait For You",
+      "violations": []
+    },
+    {
+      "name": "practice-mobile",
+      "violations": []
+    },
+    {
+      "name": "Tempo",
+      "violations": []
+    },
+    {
+      "name": "Loop",
+      "violations": []
+    },
+    {
+      "name": "Sound & accompaniment",
+      "violations": []
+    },
+    {
+      "name": "Workspace settings",
+      "violations": []
+    },
+    {
+      "name": "note-guide",
+      "violations": []
+    },
+    {
+      "name": "home-returning",
+      "violations": []
+    },
+    {
+      "name": "uploads",
+      "violations": []
+    }
+  ],
+  "failure": null
+}

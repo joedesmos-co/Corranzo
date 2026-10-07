@@ -115,9 +115,9 @@ export default function LibraryPanel({
     <div className={`library-panel ${className}`.trim()}>
       <header className="library-panel__hero">
         <span className="cz-edition-label">Corranzo / Library</span>
-        <h1 className="library-panel__tagline">{selectedTab === LIBRARY_TABS.PRACTICE ? 'The collection.' : 'Your scores.'}</h1>
+        <h1 className="library-panel__tagline">{selectedTab === LIBRARY_TABS.PRACTICE ? 'Repertoire.' : 'Your scores.'}</h1>
         <p className="library-panel__browser-hint" role="note">
-          Find a piece that stays with you. Then make it your own.
+          Studies, familiar pieces, and something to grow into.
         </p>
       </header>
 
@@ -242,7 +242,7 @@ export default function LibraryPanel({
             <article className="practice-piece-card practice-piece-card--add-files">
               <div className="practice-piece-card__main">
                 <p className="practice-piece-card__meta">Your music</p>
-                <h3 className="practice-piece-card__title">Bring your next piece.</h3>
+                <h3 className="practice-piece-card__title">Add to your repertoire.</h3>
                 <p className="practice-piece-card__teaches">Choose a PDF. We’ll help you get it ready to play.</p>
               </div>
               <button className="cz-collection-button" onClick={onImportScore}>Import a score</button>
