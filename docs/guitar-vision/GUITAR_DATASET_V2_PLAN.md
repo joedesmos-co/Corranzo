@@ -1,0 +1,105 @@
+# Guitar Dataset v2 Plan (design only — no download, no training)
+
+**Status:** plan. Nothing in this doc has been collected, generated, or trained on.
+**Sealed reference:** the current 20-score benchmark stays historical evidence
+and must NOT tune Dataset v2 (no selection, no temperature, no risk, no
+eyeballing failures to steer collection).
+
+## G11 — composition: ~100–200 new high-quality scores
+
+Target **~150 usable scores** (minimum 100, cap 200). "Usable" = exact
+symbolic truth (MusicXML/MXL with verified string/fret/pitch agreement) +
+deterministic render with retained ids (G7 loop closed first). Diversity is
+mandatory across every axis; near-duplicates are rejected at intake:
+
+- composers / publishers / eras / styles (classical, flamenco, jazz, rock,
+  fingerstyle — each with its idiomatic techniques, not generic etudes);
+- engraving styles and tools (MuseScore, Finale, Sibelius, Dorico, LilyPond,
+  hand-engraved editions) — one engraver must not dominate;
+- standard notation only / TAB only / standard+TAB (roughly even thirds);
+- rhythms (simple → nested tuplets, syncopation, multi-voice), fret range
+  (open → 12th+ with multi-digit frets), chord density, technique density
+  (bend/slide/legato/harmonic vocabularies per style);
+- tunings (standard, drop-D, DADGAD, open-G…), capo positions;
+- page layouts (single systems → multi-page), measure counts, repeats/endings
+  and D.S./Coda navigation instances with resolvable semantics;
+- rare notation deliberately included (harmonics, tapping, rasgueado where
+  encodable) so the 3 UNKNOWN families either gain a schema path or stay
+  explicitly out of scope.
+
+Intake gate per score: provenance declared (licensed or CC0/public-domain),
+`validateGuitarMusicXml` clean, pairing verification ≥ 99% of fretted notes
+(the rest quarantined with reasons, never auto-fixed), truth-digest + pixel
+digest recorded for leakage control.
+
+## G12 — split design (score-level, collection-grouped, pre-registered)
+
+At ~150 scores: **~120 train / ~15 dev / ~15 sealed test**, exact counts set
+by collection grouping (same rules as `corpusSplits.js`: shared
+composer/edition/engraver never straddles a split; validation partitioned
+into selection/temperature/risk; truth+pixel digests checked across splits).
+Page/measure splits are forbidden — leakage unit is the score. The split
+manifest (seed, ratios, digest) is frozen and committed BEFORE any training;
+`assertUsableForSelection` refuses sealed splits. Dev is for iteration; test
+is touched once per candidate, after selection.
+
+## G13 — real-world capture and evaluation
+
+Symbolic truth stays exact while inputs degrade, in staged order:
+
+1. clean vector PDFs (deterministic render from truth);
+2. exported raster PDFs (DPI sweep);
+3. print/display → scan/photocopy (controlled degradation);
+4. phone photos (perspective, blur, lighting, crop variance) with
+   print/display → capture → registration, mirroring Piano's
+   controlled-capture route.
+
+Each stage reuses the same truth; the input-quality gate (blur, contrast,
+resolution, page-quad, cropping) decides readability before recognition, so
+a photo failure is a *rejection*, not a hallucination. Stage 4 needs a small
+paired pilot (tens of scores, registered captures) before any training on
+photos is considered.
+
+## G14 — input quality labels (kept per score/page)
+
+Effective fret-glyph size, staff-space size, resolution/DPI, contrast, blur
+(Laplacian variance), skew, perspective (page-quad convexity), crop
+completeness, vector/raster/photo provenance. These feed the existing quality
+gate and future calibration (selection/temperature/risk need quality
+stratification, or confidence will be miscalibrated across clean-vs-photo).
+
+## G15 — training target/head plan (decomposed, not one giant classifier)
+
+Fret-branch lesson applies: do not fuse features because we can. Proposed
+decomposition, sharing the detail backbone + relation attention, splitting
+where geometry or supervision differs:
+
+| head(s) | supervision | notes |
+|---|---|---|
+| object family (notehead/rest/fret-digit/marking/…) | boxes + classes | shared trunk |
+| string (1–6) + fret (0–24) + digit-count | TAB digits | high-res TAB view; string-conditioned sampling (already architected) |
+| rhythm/duration (type, dots, tuplet, beams) | symbolic rhythm truth (G5) | needs voice-aware decoding, not per-glyph classification |
+| voice + staff + chord membership | grouping relations | relation heads (`chordMember`, `beamOwnership`, `staffPair`) |
+| standard pitch (step/octave/accidental) | notation noteheads | notation view; octave-convention aware |
+| notation↔TAB pairing | `notationTabPair` relation | joint prediction, disagreement → uncertainty (per architecture) |
+| technique family + parameters | techniques with params (G3) | one family head + per-family parameter heads; amount heads train ONLY on amount-labelled data (no fake truth) |
+| articulation / dynamics / text-navigation | marking + context heads | per-staff-band context (key/meter/tempo/capo/tuning), not per-note |
+
+Families with no honest labels keep their head but train abstention and
+evaluate as unsupported (the acquisition plan's `claimable` rule); the 3
+UNKNOWN families get no head until a schema path exists. New heads require a
+data-support check (labels in train/validation/held-out) before they can
+carry a product claim.
+
+## Readiness verdict (G16–G17)
+
+- Truth/data foundation for the 100–200 score campaign: **READY** —
+  versioned vocabulary (113 families), canonical event schema with verified
+  pairing/rhythm/playability, 38-fixture corpus with machine-readable gate
+  (0 blocking, 3 honestly unknown), quarantine-by-construction for everything
+  unsupported.
+- Model training justified yet: **NO.** Two prerequisites remain: (1) close
+  the G7 Verovio id loop so renders carry identity instead of
+  order-assumption; (2) collect Dataset v2 under the intake/split discipline
+  above. The next step is a small render-identity pilot (emit ids → render →
+  parse back, asserted in a test), then score acquisition — not training.

@@ -1,0 +1,1816 @@
+{
+  "version": "guitar-coverage/1.0",
+  "vocabulary": "guitar-vocab/1.0",
+  "generatedAt": "2026-10-07T21:27:59.623Z",
+  "fixtureCount": 38,
+  "fixturesPassed": 38,
+  "familyCount": 113,
+  "gates": {
+    "VERIFIED_SUPPORTED": 72,
+    "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR": 38,
+    "UNKNOWN": 3
+  },
+  "blocking": [],
+  "unknown": [
+    "tremolo-picking",
+    "rasgueado",
+    "golpe"
+  ],
+  "families": [
+    {
+      "family": "score",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "score-partwise",
+        "part-list",
+        "score-part"
+      ],
+      "fixtures": [],
+      "implicit": true,
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "part",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "part",
+        "part-name"
+      ],
+      "fixtures": [],
+      "implicit": true,
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "system",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "print"
+      ],
+      "fixtures": [],
+      "implicit": true,
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "measure",
+      "category": "structure",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "measure"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm",
+        "pickup-anacrusis"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "staff-standard",
+      "category": "structure",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "staff",
+        "clef",
+        "staff-details",
+        "staff-lines"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "staff-tab",
+      "category": "structure",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "clef(sign=TAB)",
+        "staff-lines(6)"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "staff-pairing",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "clef",
+        "staff-details"
+      ],
+      "fixtures": [
+        "paired-staff-tab"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "barline",
+      "category": "structure",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "barline",
+        "bar-style"
+      ],
+      "fixtures": [
+        "repeat-endings"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "measure-number",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "measure@number"
+      ],
+      "fixtures": [
+        "pickup-anacrusis"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "pickup-anacrusis",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "measure@implicit",
+        "divisions"
+      ],
+      "fixtures": [
+        "pickup-anacrusis"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "voice",
+      "category": "structure",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "voice"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm",
+        "multi-voice"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "layer",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": null,
+      "musicXml": [
+        "voice",
+        "staff"
+      ],
+      "fixtures": [
+        "multi-voice"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "cross-measure-continuity",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "tie",
+        "tied",
+        "slur"
+      ],
+      "fixtures": [
+        "ties-across-measures"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-whole",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "divisions"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-half",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "divisions"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm",
+        "dotted-rhythm"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-quarter",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "divisions"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm",
+        "dotted-rhythm"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-eighth",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "beam"
+      ],
+      "fixtures": [
+        "dotted-rhythm",
+        "tuplets"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-16th",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "beam"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-32nd",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "beam"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "duration-64th",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "duration",
+        "beam"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "dots",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "dot"
+      ],
+      "fixtures": [
+        "dotted-rhythm",
+        "rests"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "double-dots",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "dot",
+        "dot"
+      ],
+      "fixtures": [
+        "dotted-rhythm"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "rest",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "rest",
+        "display-step",
+        "display-octave"
+      ],
+      "fixtures": [
+        "rests"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "measure-rest",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "parser has no measure-style multiple-rest handling; a full-measure rest parses as an ordinary rest",
+      "musicXml": [
+        "measure-style(multiple-rest)"
+      ],
+      "fixtures": [
+        "measure-rest-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "beam",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "beam"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "beam-group",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "beam",
+        "stem"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "tuplet",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "time-modification",
+        "actual-notes",
+        "normal-notes",
+        "tuplet"
+      ],
+      "fixtures": [
+        "tuplets"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "nested-tuplet",
+      "category": "rhythm",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "time-modification is flat (one ratio per note); nested ratios have no representation in the parser",
+      "musicXml": [
+        "time-modification"
+      ],
+      "fixtures": [
+        "nested-tuplet-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tie",
+      "category": "rhythm",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "tie",
+        "tied"
+      ],
+      "fixtures": [
+        "ties-across-measures"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "grace-note",
+      "category": "rhythm",
+      "support": "AMBIGUOUS",
+      "parser": "partial",
+      "reason": "parser detects <grace/> but drops the note from the note list, so timing truth silently loses it",
+      "musicXml": [
+        "grace",
+        "slash"
+      ],
+      "fixtures": [
+        "grace-note-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "cue-note",
+      "category": "rhythm",
+      "support": "AMBIGUOUS",
+      "parser": "absent",
+      "reason": "parser never reads <cue/>; cue notes parse as full-sounding notes, overstating timing",
+      "musicXml": [
+        "cue"
+      ],
+      "fixtures": [
+        "cue-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "acciaccatura-appoggiatura",
+      "category": "rhythm",
+      "support": "AMBIGUOUS",
+      "parser": "absent",
+      "reason": "slash attribute on <grace/> is never read; the two ornaments are indistinguishable downstream",
+      "musicXml": [
+        "grace@slash"
+      ],
+      "fixtures": [
+        "grace-note-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tremolo",
+      "category": "rhythm",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "neither <tremolo> (single-note subdivision) nor <tremolo> strokes are read by the parser",
+      "musicXml": [
+        "tremolo"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "multi-voice-rhythm",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "voice",
+        "backup",
+        "forward",
+        "chord"
+      ],
+      "fixtures": [
+        "multi-voice"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "syncopation",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "note",
+        "beam",
+        "tuplet"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "sustained-note",
+      "category": "rhythm",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "tie",
+        "tied"
+      ],
+      "fixtures": [
+        "ties-across-measures"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "pitch",
+      "category": "pitch",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "pitch",
+        "step",
+        "octave",
+        "alter"
+      ],
+      "fixtures": [
+        "simple-4-4-rhythm",
+        "tab-chord-verified"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "accidental",
+      "category": "pitch",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "accidental",
+        "alter"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "enharmonic-spelling",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "step",
+        "alter"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "clef",
+      "category": "pitch",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "clef",
+        "sign",
+        "line"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "key-signature",
+      "category": "pitch",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "key",
+        "fifths",
+        "mode",
+        "cancel"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "key-change",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "key"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "time-sig-change",
+      "category": "structure",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "time",
+        "beats",
+        "beat-type"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "clef-change",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "clef",
+        "sign",
+        "line"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "ledger-line",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "pitch"
+      ],
+      "fixtures": [
+        "accidentals-key-ledger"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "chord",
+      "category": "pitch",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "chord"
+      ],
+      "fixtures": [
+        "tab-chord-verified"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "unison",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "chord",
+        "notehead"
+      ],
+      "fixtures": [
+        "multi-voice"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "notehead-variant",
+      "category": "pitch",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<notehead> (diamond, x, triangle for harmonics/dead notes) is never read",
+      "musicXml": [
+        "notehead"
+      ],
+      "fixtures": [
+        "dead-ghost-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "stem-direction",
+      "category": "pitch",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "stem"
+      ],
+      "fixtures": [
+        "beams-stems-durations"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "string-number",
+      "category": "tab",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "technical",
+        "string"
+      ],
+      "fixtures": [
+        "tab-chord-verified",
+        "paired-staff-tab"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "fret-number",
+      "category": "tab",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "technical",
+        "fret"
+      ],
+      "fixtures": [
+        "tab-chord-verified",
+        "paired-staff-tab"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "multi-digit-fret",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "fret"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "muted-dead-x",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "x noteheads/dead-string encoding (<notehead>x</notehead>) is never read; parser has no dead-note field from notehead shape",
+      "musicXml": [
+        "notehead(x)",
+        "technical(dead-note)"
+      ],
+      "fixtures": [
+        "dead-ghost-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tab-chord",
+      "category": "tab",
+      "support": "SUPPORTED_AND_LABELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "chord",
+        "string",
+        "fret"
+      ],
+      "fixtures": [
+        "tab-chord-verified"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "tab-rhythm",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "type",
+        "stem",
+        "beam",
+        "tuplet"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "tab-rest",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "rest"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "standard-tab-pairing",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "pitch",
+        "string",
+        "fret"
+      ],
+      "fixtures": [
+        "tab-chord-verified",
+        "pairing-mismatch-quarantine",
+        "alternate-tuning-drop-d",
+        "paired-staff-tab"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "tab-line-identity",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "staff-tuning(line)",
+        "staff-lines"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "string-indication",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "parser reads the string value but never distinguishes it; the canonical layer resolves positionKind (tab-fret vs string-indication) from staff role",
+      "musicXml": [
+        "technical(string)"
+      ],
+      "fixtures": [
+        "tab-staff-rests-digits"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "fingering-tab",
+      "category": "tab",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "<fingering> is never read by the parser",
+      "musicXml": [
+        "technical(fingering)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "bend",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "parser records bend presence only; bend-amount, release, pre-bend flags are dropped",
+      "musicXml": [
+        "technical(bend)",
+        "bend-alter",
+        "release",
+        "pre-bend"
+      ],
+      "fixtures": [
+        "bend-partial"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "bend-amount",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "<bend-alter> semitone value is never read",
+      "musicXml": [
+        "bend-alter"
+      ],
+      "fixtures": [
+        "bend-params-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "pre-bend",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "<pre-bend/> is never read",
+      "musicXml": [
+        "pre-bend"
+      ],
+      "fixtures": [
+        "bend-params-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "bend-release",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "<release/> inside <bend> is never read",
+      "musicXml": [
+        "release"
+      ],
+      "fixtures": [
+        "bend-params-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "slide",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "parser keeps <slide> type attr but never validates endpoints or distinguishes shift/legato in/out",
+      "musicXml": [
+        "slide",
+        "glissando"
+      ],
+      "fixtures": [
+        "slide-pair"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "glissando",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "present in generated fixtures and architecture but parser has no glissando reader distinct from slide",
+      "musicXml": [
+        "glissando"
+      ],
+      "fixtures": [
+        "glissando-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "hammer-on",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "technical(hammer-on)"
+      ],
+      "fixtures": [
+        "hammer-pull-chain"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "pull-off",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "technical(pull-off)"
+      ],
+      "fixtures": [
+        "hammer-pull-chain"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "vibrato",
+      "category": "technique",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "only via other-technical text heuristic (/vib/) or ornaments/wavy-line; <vibrato> element and wide-vibrato params are never read",
+      "musicXml": [
+        "ornaments(wavy-line)",
+        "other-technical",
+        "vibrato"
+      ],
+      "fixtures": [
+        "vibrato-wavy"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "natural-harmonic",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<harmonic/> + diamond notehead semantics are never read",
+      "musicXml": [
+        "technical(harmonic)",
+        "notehead(diamond)"
+      ],
+      "fixtures": [
+        "harmonics-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "artificial-harmonic",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "artificial/natural/touch distinctions plus base-pitch/touching-pitch/sounding-pitch triple are never read",
+      "musicXml": [
+        "harmonic(natural|artificial)",
+        "base-pitch",
+        "touching-pitch",
+        "sounding-pitch"
+      ],
+      "fixtures": [
+        "artificial-pinch-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "pinch-harmonic",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "no MusicXML encoding distinguished from artificial harmonic; engraver text only",
+      "musicXml": [
+        "other-technical(P.H.)"
+      ],
+      "fixtures": [
+        "artificial-pinch-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tapping",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<tapped/> / T indications are never read",
+      "musicXml": [
+        "technical(tapped)"
+      ],
+      "fixtures": [
+        "palm-mute-tapping-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "palm-mute",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<palm-mute/> is never read",
+      "musicXml": [
+        "technical(palm-mute)"
+      ],
+      "fixtures": [
+        "palm-mute-tapping-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "dead-note",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "neither x noteheads nor dead-note encodings are read",
+      "musicXml": [
+        "notehead(x)"
+      ],
+      "fixtures": [
+        "dead-ghost-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "ghost-note",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "parenthesised/ghost encodings are never read",
+      "musicXml": [
+        "notehead(parentheses)"
+      ],
+      "fixtures": [
+        "dead-ghost-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "let-ring",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<let-ring/> (l.v.) is never read",
+      "musicXml": [
+        "technical(let-ring)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tremolo-picking",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "tremolo strokes on TAB notes are never read",
+      "musicXml": [
+        "tremolo"
+      ],
+      "fixtures": [],
+      "roundTrip": null,
+      "gate": "UNKNOWN"
+    },
+    {
+      "family": "pick-direction",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<up-bow>/<down-bow> pick marks are never read",
+      "musicXml": [
+        "technical(up-bow)",
+        "technical(down-bow)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "arpeggio",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<arpeggiate/> is never read",
+      "musicXml": [
+        "notations(arpeggiate)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "rasgueado",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "rasgueado lives in free text or exporter-specific articulation; no structured encoding is read",
+      "musicXml": [
+        "direction-type(words: rasg.)",
+        "other-technical"
+      ],
+      "fixtures": [],
+      "roundTrip": null,
+      "gate": "UNKNOWN"
+    },
+    {
+      "family": "golpe",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "golpe (flamenco tap) has no structured MusicXML encoding; text only",
+      "musicXml": [
+        "direction-type(words: golpe)"
+      ],
+      "fixtures": [],
+      "roundTrip": null,
+      "gate": "UNKNOWN"
+    },
+    {
+      "family": "whammy-bar",
+      "category": "technique",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "whammy/dive encodings vary by exporter and are never read",
+      "musicXml": [
+        "other-technical"
+      ],
+      "fixtures": [
+        "whammy-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "staccato",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "articulations(staccato)"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "staccatissimo",
+      "category": "expression",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<staccatissimo/> is a distinct element and is never read",
+      "musicXml": [
+        "articulations(staccatissimo)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "breath-mark",
+      "category": "expression",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<breath-mark/> is never read",
+      "musicXml": [
+        "articulations(breath-mark)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "accent",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "articulations(accent)",
+        "articulations(strong-accent)"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "marcato",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "articulations(strong-accent)"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "tenuto",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "articulations(tenuto)"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "fermata",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "notations(fermata)"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "dynamic",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "direction-type(dynamics)",
+        "sound@dynamics"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "hairpin",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "wedge"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "slur",
+      "category": "expression",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "slur"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "ornament-trill",
+      "category": "expression",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<ornaments> children (trill-mark, mordent, turn) are never read",
+      "musicXml": [
+        "ornaments(trill-mark|mordent|turn)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tuning",
+      "category": "performance",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "staff-details",
+        "staff-tuning",
+        "tuning-step",
+        "tuning-octave",
+        "tuning-alter"
+      ],
+      "fixtures": [
+        "alternate-tuning-drop-d"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "alternate-tuning",
+      "category": "performance",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "staff-details(staff-tuning)"
+      ],
+      "fixtures": [
+        "alternate-tuning-drop-d"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "capo",
+      "category": "performance",
+      "support": "AMBIGUOUS",
+      "parser": "absent",
+      "reason": "MusicXML has no capo element; capo lives in free text (<words>Capo 2</words>) or exporter-specificcredit; pitch math accepts capoFret as input but nothing extracts it",
+      "musicXml": [
+        "direction-type(words: Capo N)"
+      ],
+      "fixtures": [
+        "capo-text-ambiguous"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "position-indication",
+      "category": "performance",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "absent",
+      "reason": "Roman-numeral positions are text directions; no parser field",
+      "musicXml": [
+        "direction-type(words: III, V, VII...)"
+      ],
+      "fixtures": [
+        "text-directions-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "barre",
+      "category": "performance",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "barre indications are text (BII, 1/2BIII); no structured encoding is read",
+      "musicXml": [
+        "direction-type(words)"
+      ],
+      "fixtures": [
+        "text-directions-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "left-hand-fingering",
+      "category": "performance",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<fingering> is never read",
+      "musicXml": [
+        "technical(fingering)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "right-hand-fingering",
+      "category": "performance",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<pluck> (p-i-m-a) is never read",
+      "musicXml": [
+        "technical(pluck)"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "octave-shift",
+      "category": "performance",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<octave-shift> (8va) is never read",
+      "musicXml": [
+        "octave-shift"
+      ],
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "chord-symbol",
+      "category": "harmony",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "harmony",
+        "root",
+        "kind",
+        "bass"
+      ],
+      "fixtures": [
+        "chord-symbol-plain"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "chord-diagram",
+      "category": "harmony",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<frame> (strings/frets/barre in chord diagrams) is never read",
+      "musicXml": [
+        "harmony(frame)",
+        "frame-strings",
+        "frame-frets",
+        "frame-note"
+      ],
+      "fixtures": [
+        "chord-diagram-frame-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "lyrics",
+      "category": "harmony",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<lyric> is never read",
+      "musicXml": [
+        "lyric",
+        "syllabic",
+        "text"
+      ],
+      "fixtures": [
+        "text-directions-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "tempo-marking",
+      "category": "harmony",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "metronome",
+        "beat-unit",
+        "per-minute",
+        "sound@tempo"
+      ],
+      "fixtures": [
+        "dynamics-expression"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "rehearsal-mark",
+      "category": "harmony",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<rehearsal> is never read",
+      "musicXml": [
+        "direction-type(rehearsal)"
+      ],
+      "fixtures": [
+        "text-directions-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "text-direction",
+      "category": "harmony",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "only dynamics/tempo/wedge directions are interpreted; other <words> are ignored",
+      "musicXml": [
+        "direction-type(words)"
+      ],
+      "fixtures": [
+        "text-directions-gap"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "repeat",
+      "category": "navigation",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "barline(repeat)"
+      ],
+      "fixtures": [
+        "repeat-endings"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "ending",
+      "category": "navigation",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": null,
+      "musicXml": [
+        "barline(ending)"
+      ],
+      "fixtures": [
+        "repeat-endings"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "segno",
+      "category": "navigation",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<segno> is never read",
+      "musicXml": [
+        "direction-type(segno)"
+      ],
+      "fixtures": [
+        "ds-coda-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "coda",
+      "category": "navigation",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "<coda> is never read",
+      "musicXml": [
+        "direction-type(coda)"
+      ],
+      "fixtures": [
+        "ds-coda-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    },
+    {
+      "family": "ds-dc-navigation",
+      "category": "navigation",
+      "support": "EXPLICITLY_UNSUPPORTED",
+      "parser": "absent",
+      "reason": "D.S./D.C./Fine/To Coda live in free <words>; no semantic extraction exists",
+      "musicXml": [
+        "direction-type(words: D.S. al Coda...)"
+      ],
+      "fixtures": [
+        "ds-coda-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+    }
+  ]
+}
