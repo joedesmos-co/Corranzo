@@ -12,6 +12,9 @@
 .cz-home__work h2 { font: 400 clamp(26px, 3vw, 38px)/1.12 var(--cz-font-edition); letter-spacing: -.025em; margin: 0; overflow-wrap: anywhere; }
 .cz-home__work p { font-size: 12px; color: var(--cz-sheet-muted); margin: 8px 0 0; }
 .cz-home__score-stage { height: 212px; position: relative; overflow: hidden; margin: 0 24px; border-block: 1px solid var(--cz-sheet-line); }
+/* The excerpt is cropped by design; a soft falloff at the cut keeps the
+sliced system from reading as a rendering accident. Solid color only. */
+.cz-home__score-stage::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 46px; background: linear-gradient(to bottom, transparent, var(--cz-sheet-raised)); pointer-events: none; }
 .cz-score-cover { position: absolute; width: 100%; inset: 0 0 auto; pointer-events: none; }
 .cz-score-cover canvas { width: 100% !important; height: auto !important; mix-blend-mode: multiply; }
 .cz-score-cover .react-pdf__Page { background: transparent !important; }
@@ -47,7 +50,14 @@
   .cz-home__stand-footer .cz-collection-button { width: 100%; }
   .cz-home__margin { padding: 0; }
   .cz-home__margin h2 { max-width: none; margin-bottom: 12px; }
-  .cz-home__practice-prompts { display: none; }
-  .cz-home__bring { margin-top: 0; border: 0; }
+  /* Narrow screens keep the three working verbs as one quiet line instead of
+  hiding the list and orphaning its heading above the import link. */
+  .cz-home__practice-prompts { display: flex; gap: 8px; padding: 0; border-left: 0; }
+  .cz-home__practice-prompts li + li { margin-top: 0; }
+  .cz-home__practice-prompts li { display: flex; align-items: baseline; gap: 8px; }
+  .cz-home__practice-prompts li + li::before { content: '·'; color: var(--cz-sheet-muted); }
+  .cz-home__practice-prompts span { font-size: 12px; }
+  .cz-home__practice-prompts p { display: none; }
+  .cz-home__bring { margin-top: 16px; border-top: 1px solid var(--cz-sheet-line); padding-top: 12px; }
   .cz-home__section-heading { align-items: start; flex-direction: column; gap: 4px; }
 }

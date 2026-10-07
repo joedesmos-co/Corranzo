@@ -117,7 +117,9 @@ export default function LibraryPanel({
         <span className="cz-edition-label">Corranzo / Library</span>
         <h1 className="library-panel__tagline">{selectedTab === LIBRARY_TABS.PRACTICE ? 'Repertoire.' : 'Your scores.'}</h1>
         <p className="library-panel__browser-hint" role="note">
-          Studies, familiar pieces, and something to grow into.
+          {selectedTab === LIBRARY_TABS.PRACTICE
+            ? 'Studies, familiar pieces, and something to grow into.'
+            : `Imported PDFs for ${activeInstrument.label.toLowerCase()}, kept on this device.`}
         </p>
       </header>
 
@@ -241,7 +243,7 @@ export default function LibraryPanel({
           <div className="practice-library__grid library-panel__uploads-grid">
             <article className="practice-piece-card practice-piece-card--add-files">
               <div className="practice-piece-card__main">
-                <p className="practice-piece-card__meta">Your music</p>
+                <p className="practice-piece-card__meta">{activeInstrument.label} · PDF</p>
                 <h3 className="practice-piece-card__title">Add to your repertoire.</h3>
                 <p className="practice-piece-card__teaches">Choose a PDF. We’ll help you get it ready to play.</p>
               </div>

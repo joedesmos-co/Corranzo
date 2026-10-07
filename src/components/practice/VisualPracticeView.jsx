@@ -444,6 +444,16 @@ function describeTargetNotes(targetGroup, strings, tabPositions, instrumentId = 
     .join(' + ')
 }
 
+/**
+ * Preview mode is a listening cue, not an instruction: "Play both notes
+ * together" becomes "Both notes together". Stripping the verb without
+ * recapitalizing left a lowercase fragment that read like a debug string.
+ */
+function toListeningCue(label) {
+  const cue = String(label ?? '').replace(/^Play /, '')
+  return cue ? cue.charAt(0).toUpperCase() + cue.slice(1) : cue
+}
+
 const VisualTargetHeader = memo(function VisualTargetHeader({
   targetGroup,
   targetIndex,
@@ -492,7 +502,7 @@ const VisualTargetHeader = memo(function VisualTargetHeader({
         {isPreview ? 'Listen for' : isWaitForYou ? 'Play this' : 'Next up'}
       </span>
       <strong className="visual-practice__target-notes">
-        {isPreview ? describeTargetNotes(targetGroup, strings, tabPositions, instrumentId).replace(/^Play /, '') : describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)}
+        {isPreview ? toListeningCue(describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)) : describeTargetNotes(targetGroup, strings, tabPositions, instrumentId)}
         {targetGroup.isChord && micChordSequence ? ' (one at a time)' : ''}
       </strong>
       <span className="visual-practice__target-meta">

@@ -12,6 +12,9 @@ import ManualPracticeLog from './ManualPracticeLog.jsx'
 
 function formatDuration(seconds) {
   const totalSeconds = Math.max(0, Math.floor(Number(seconds) || 0))
+  if (totalSeconds <= 0) {
+    return '—'
+  }
   if (totalSeconds < 60) {
     return `${totalSeconds}s`
   }
@@ -40,10 +43,17 @@ function formatDate(timestamp) {
 }
 
 function StatCard({ label, value }) {
+  // Placeholder values ("None yet", "—") are quiet by design: an empty
+  // journal should invite the single Start timer action, not headline absence.
+  const isPlaceholder = value === 'None yet' || value === '—'
   return (
     <div className="profile-stat">
       <span className="profile-stat__label">{label}</span>
-      <span className="profile-stat__value">{value}</span>
+      <span
+        className={`profile-stat__value${isPlaceholder ? ' profile-stat__value--placeholder' : ''}`}
+      >
+        {value}
+      </span>
     </div>
   )
 }
@@ -168,7 +178,7 @@ export default function ProfileView() {
         />
         <StatCard
           label="Sessions you’ve logged"
-          value={viewStats.manualSessionsCompleted ?? 0}
+          value={(viewStats.manualSessionsCompleted ?? 0) > 0 ? viewStats.manualSessionsCompleted : '—'}
         />
       </div>
 
@@ -223,17 +233,19 @@ export default function ProfileView() {
 
       <footer className="profile-footer">
         <p>Your practice journal stays in this browser. Clearing browser data removes it.</p>
-        <button
-          type="button"
-          className="profile-footer__reset"
-          onClick={() => {
-            if (window.confirm('Clear all local practice stats? This cannot be undone.')) {
-              resetAllStats()
-            }
-          }}
-        >
-          Clear stats
-        </button>
+        {hasPieceActivity || hasManualHistory || (viewStats.autoPracticeSeconds ?? 0) > 0 ? (
+          <button
+            type="button"
+            className="profile-footer__reset"
+            onClick={() => {
+              if (window.confirm('Clear all local practice stats? This cannot be undone.')) {
+                resetAllStats()
+              }
+            }}
+          >
+            Clear stats
+          </button>
+        ) : null}
       </footer>
     </main>
   )
