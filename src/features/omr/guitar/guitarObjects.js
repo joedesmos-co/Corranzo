@@ -95,6 +95,22 @@ export const MARKING_FAMILIES = Object.freeze([
   'tuning',
   'octaveShift',
   'arpeggio',
+  'golpe',
+  'trill',
+  'mordent',
+  'turn',
+  'staccatissimo',
+  'breathMark',
+  'tremoloPicking',
+  'lyric',
+  'rehearsal',
+  'fine',
+  'toCoda',
+  'daCapo',
+  'dalSegno',
+  'soundJump',
+  'unresolvedText',
+  'positionMark',
 ])
 
 function normalizeToken(value) {
@@ -131,10 +147,28 @@ function noteMarkingTokens(note) {
   if (note.tieStart) tokens.push('tie')
   if ((note.slurs ?? []).length) tokens.push('slur')
   if (note.staccato) tokens.push('staccato')
+  if (note.staccatissimo) tokens.push('staccatissimo')
+  if (note.breathMark) tokens.push('breath-mark')
   if (note.accent) tokens.push('accent')
   if (note.tenuto) tokens.push('tenuto')
   if (note.marcato) tokens.push('marcato')
   if (note.fermata) tokens.push('fermata')
+  for (const other of note.otherArticulations ?? []) {
+    if (other?.kind) tokens.push(normalizeToken(other.kind))
+  }
+  if (note.notehead && note.notehead.value && note.notehead.value !== 'normal') {
+    tokens.push(`notehead-${normalizeToken(note.notehead.value)}`)
+  }
+  if (note.notehead?.value === 'x') tokens.push('dead-note')
+  if (note.lyric?.text) tokens.push('lyric')
+  if (note.fingering?.length) tokens.push('fingering')
+  if (note.pluck) tokens.push('pluck')
+  for (const technique of note.guitarTechniques ?? []) {
+    tokens.push(normalizeToken(technique.kind))
+    if (technique.number != null) tokens.push(`${normalizeToken(technique.kind)}-amount`)
+    if (technique.bend?.alterSemitones != null) tokens.push('bend-amount')
+    if (technique.harmonic) tokens.push(technique.harmonic.artificial ? 'artificial-harmonic' : 'natural-harmonic')
+  }
   for (const technique of note.guitarTechniques ?? []) {
     tokens.push(normalizeToken(technique.kind))
     if (technique.number != null) tokens.push(`${normalizeToken(technique.kind)}-amount`)
@@ -230,14 +264,28 @@ export function extractMarkingObjects(parsed) {
     if (note.tieStart) push('tie', anchor)
     for (const slur of note.slurs ?? []) push('slur', anchor, { number: slur.number ?? 1 })
     if (note.staccato) push('staccato', anchor)
+    if (note.staccatissimo) push('staccatissimo', anchor)
+    if (note.breathMark) push('breathMark', anchor)
     if (note.accent) push('accent', anchor)
     if (note.tenuto) push('tenuto', anchor)
     if (note.marcato) push('marcato', anchor)
     if (note.fermata) push('fermata', anchor)
+    for (const other of note.otherArticulations ?? []) {
+      if (other?.kind) push(normalizeToken(other.kind), anchor)
+    }
     if (note.isGrace) push('graceNote', anchor)
+    if (note.isCue) push('cueNote', anchor)
+    if (note.notehead?.value === 'x') push('deadNote', anchor)
+    if (note.notehead?.parentheses === 'yes') push('ghostNote', anchor)
+    if (note.lyric?.text) push('lyric', anchor, { text: normalizeToken(note.lyric.text) })
+    if (note.fingering?.length) push('fingering', anchor, { text: note.fingering.map((f) => f.value ?? f).join(',') })
+    if (note.pluck || note.pickDirection) {
+      push('pickDirection', anchor, { text: normalizeToken(note.pickDirection ?? note.pluck) })
+    }
     for (const technique of note.guitarTechniques ?? []) {
-      const family = normalizeToken(technique.kind)
-      push(family, anchor, { text: technique.text ?? null, number: technique.number ?? null })
+      const family = techniqueFamilyOf(technique)
+      if (!family) continue
+      push(family, anchor, techniquePayloadOf(technique))
     }
     for (const [key, value] of Object.entries(note.technical ?? {})) {
       if (!value) continue
@@ -272,7 +320,81 @@ export function extractMarkingObjects(parsed) {
     })
   }
 
+  for (const mark of parsed.scoreMarks ?? []) {
+    const family = scoreMarkFamilyOf(mark.kind)
+    if (!family) continue
+    push(family, { measureNumber: mark.measureNumber ?? 0, positionInMeasure: mark.quarterTime ?? 0, staff: mark.staff ?? null }, {
+      text: normalizeToken(mark.sourceText ?? mark.kind),
+    })
+  }
+
+  for (const frame of parsed.frames ?? []) {
+    push('chordDiagram', { measureNumber: frame.measureNumber ?? 0, positionInMeasure: frame.quarterTime ?? 0 }, {
+      text: `${frame.frame?.strings ?? '?' }x${frame.frame?.frets ?? '?'}`,
+    })
+  }
+
   return markings
+}
+
+/**
+ * Technique kind (kebab-case, as encoded) to marking family (camelCase, as
+ * scored). Unknown kinds return null: they stay visible in canonical truth
+ * quarantine, never in a scored family they do not belong to.
+ */
+export function techniqueFamilyOf(technique) {
+  const kind = String(technique?.kind ?? '').toLowerCase()
+  switch (kind) {
+    case 'hammer-on': return 'hammerOn'
+    case 'pull-off': return 'pullOff'
+    case 'slide': return 'slide'
+    case 'glissando': return 'glissando'
+    case 'bend': return 'bend'
+    case 'harmonic': return technique?.harmonic?.artificial ? 'artificialHarmonic' : 'naturalHarmonic'
+    case 'tapping': return 'tapping'
+    case 'palm-mute': return 'palmMute'
+    case 'let-ring': return 'letRing'
+    case 'golpe': return 'golpe'
+    case 'vibrato': return 'vibrato'
+    case 'tremolo-picking': return 'tremoloPicking'
+    case 'arpeggio': return 'arpeggio'
+    case 'trill': return 'trill'
+    case 'mordent': return 'mordent'
+    case 'turn': return 'turn'
+    case 'shake': return 'turn'
+    default: return null
+  }
+}
+
+function techniquePayloadOf(technique) {
+  const payload = { text: technique.text ?? null, number: technique.number ?? null }
+  if (technique.bend?.alterSemitones != null) payload.semitones = technique.bend.alterSemitones
+  if (technique.marks != null) payload.marks = technique.marks
+  return payload
+}
+
+/** Score-mark kind to marking family. Navigation variants fold with payload. */
+export function scoreMarkFamilyOf(kind) {
+  switch (String(kind ?? '')) {
+    case 'segno': return 'segno'
+    case 'coda': return 'coda'
+    case 'rehearsal': return 'rehearsal'
+    case 'fine': return 'fine'
+    case 'to-coda': return 'toCoda'
+    case 'da-capo':
+    case 'da-capo-al-fine':
+    case 'da-capo-al-coda': return 'daCapo'
+    case 'dal-segno':
+    case 'dal-segno-al-fine':
+    case 'dal-segno-al-coda': return 'dalSegno'
+    case 'sound-jump': return 'soundJump'
+    case 'capo': return 'capo'
+    case 'barre': return 'barre'
+    case 'position': return 'positionMark'
+    case 'octave-shift': return 'octaveShift'
+    case 'unresolved-text': return 'unresolvedText'
+    default: return null
+  }
 }
 
 /**

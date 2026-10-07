@@ -80,8 +80,16 @@ describe('scoreability', () => {
     }
   })
 
+  it('treats newly parsed technique families as scoreable', () => {
+    // Parser gap closure: these families now arrive as structured fields
+    // (proven by notation-v1 fixtures), so they are scoreable.
+    for (const family of ['palm-mute', 'let-ring', 'tremolo-picking', 'natural-harmonic', 'golpe', 'trill', 'lyric', 'rehearsal']) {
+      expect(isScoreable(family), family).toBe(true)
+    }
+  })
+
   it('treats unparsed marking families as not scoreable', () => {
-    for (const family of ['palm-mute', 'let-ring', 'tremolo-picking', 'natural-harmonic']) {
+    for (const family of ['performance-text', 'pinch-harmonic', 'whammy-bar', 'pre-bend']) {
       expect(isScoreable(family), family).toBe(false)
     }
   })

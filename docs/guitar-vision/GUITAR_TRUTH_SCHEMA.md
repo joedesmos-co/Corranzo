@@ -2,9 +2,14 @@
 
 **Version:** `guitar-event/1.0`
 **Modules:** `src/features/omr/guitar/guitarCanonicalEvents.js` (G3/G4/G5),
-`src/features/omr/guitar/guitarPlayability.js` (G6)
-**Tests:** `tests/guitarNotationFoundation.test.js` (47 assertions, all passing)
-**Fixtures:** `datasets/guitar-vision/fixtures/notation-v1/` (38 deterministic scores + manifest)
+`src/features/omr/guitar/guitarPlayability.js` (G6),
+`src/features/musicxml/guitarTextMarks.js` (shared text mining)
+**Parser:** `src/features/musicxml/parseMusicXml.js` — extended additively
+(new fields, new `scoreMarks`/`frames`/`capo` outputs, opt-in
+`includeNonSoundingNotes`); default behavior byte-identical for existing callers
+**Tests:** `tests/guitarNotationFoundation.test.js` (52 passing) +
+`tools/guitar-vision/tests/test_render_identity.py` (6 passing)
+**Fixtures:** `datasets/guitar-vision/fixtures/notation-v1/` (40 deterministic scores + manifest)
 
 ## GuitarEvent
 
@@ -17,82 +22,70 @@ source              { score, partId, measure, noteId }
 time                { onsetQuarters, durationQuarters, measureRelativeQuarters,
                       voice, staff, tuplet ("3:2"), dots, noteType,
                       beams (["1:begin",…]), stemDirection,
-                      isGrace, isChordTone, isRest,
+                      isGrace, graceSlash, graceKind (acciaccatura/appoggiatura),
+                      isCue, isChordTone, isRest, isMeasureRest,
                       isTieContinuation, tieChainId, tie {start, stop} }
 pitch               { soundingMidi, step, alter, octave, accidental } | null (rests)
+notehead            { value, filled, parentheses } | null
+deadNote / ghostNote  booleans derived from notehead shape
 tab                 { string, fret, pairing, positionKind }
 techniques[]        { kind, <params>, support }
-articulations       { staccato, accent, tenuto, marcato, fermata, slurs[] }
+articulations       { staccato, accent, tenuto, marcato, fermata,
+                      staccatissimo, breathMark, other[], slurs[] }
+fingering           { left[], right (p-i-m-a), pick, openString }
+lyric               { number, syllabic, text } | null
 dynamics            { velocity }
 support             G0 support state
 ```
 
-Techniques carry parameters where required — `bend: { semitones, prebend,
-release }`, `slide: { direction, style }` — and `null` where the source
-layer cannot know (bend amount today). Null is honest; inventing 2 semitones
-would be fake truth and would poison a future bend-amount head.
+Plus top-level `relations[]` (technique links), `navigation[]` (score
+marks), `frames[]` (chord diagrams), `capo` (mined, confidence-tagged).
 
-`tab.positionKind` distinguishes `tab-fret` (string+fret) from
-`string-indication` (circled string number on the notation staff, string
-without fret, resolved by staff role) and `unresolved` (staff unknown).
-This closed the last BLOCKING_GAP without touching the shared parser.
+Techniques carry parameters: `bend{semitones, alterRaw, prebend, release,
+shape}`, `slide/glissando{direction, lineType, number}`,
+`harmonic{artificial, natural, basePitch, touchingPitch, soundingPitch}`,
+`tapping{hand, fret}`, `palm-mute/let-ring{spanType}`,
+`tremolo-picking{marks, strokeType}`, `arpeggio{direction}`. Nulls where the
+source cannot know (vibrato width, slide style) — never invented.
 
-## G4 — standard↔TAB pairing
+## G4 — standard↔TAB pairing + technique relations
 
-For every event with string+fret+pitch, the layer checks
-`soundingFromTab(string, fret, { tuning, capoFret }) === soundingMidi`
-under the part's declared tuning (standard or `staff-details`-declared, e.g.
-drop-D) plus capo offset. Matches become `pairing: 'verified'`; mismatches
-become `pairing: 'quarantined'` with the semitone delta and the list of
-playable positions for the notated pitch (so a reviewer can see the fix, but
-the layer never applies it). TAB-mirror duplicates link as `pairings[]`
-with their own verified flag. Proven by `tab-chord-verified`,
-`pairing-mismatch-quarantine`, `alternate-tuning-drop-d`, `paired-staff-tab`.
+Pairing verifies `sounding = tuning[string-1] + fret + capoFret` under the
+part's declared tuning with automatically mined capo. Relations resolve to
+event identities: `slide-link` / `legato-link` (paired by number, unified
+legato family for hammer/pull alternation, `inferred` flag for one-sided
+exporter marks), `bend-destination` (next pitched event in lane;
+self-contained pre-bends need none), with dangling-start/stop quarantine.
 
-## G5 — rhythm truth
+## G5 — rhythm truth + playable events
 
-Every event preserves onset, duration (quarters, divisions-independent),
-measure-relative position, voice, tuplet ratio, dots, tie chain, beams, grace
-and chord simultaneity. Round-trip rule: per (measure, voice, staff), sounded
-quarters must reconstruct the measure length. Two deliberate semantics:
-
-- **Tie chains are de-merged.** The parser merges tie-stop durations into the
-  chain head for playback sustain; notation truth restores each segment to its
-  notated length in its own measure (members share `tieChainId`, continuations
-  carry `isTieContinuation`). Without this, a tied note overstates its
-  measure and the round-trip fails — which is exactly what the first test run
-  caught (`ties-across-measures`).
-- **Chord tones share their head's onset** and are excluded from duration
-  totals; grace notes contribute no time; pickups (`implicit="yes"`) and
-  under-full TAB voices are not corruption.
+Per-(measure, voice, staff) reconstruction; tie chains de-merged into
+per-measure segments sharing `tieChainId`; chord tones share onsets; grace
+(zero-duration) and cue (marked, non-attacking) count no time. G5 proof
+tests cover standard-only / TAB-only / paired × alternate tuning, capo,
+chords, multi-voice, ties, grace, and technique chains.
 
 ## G6 — playability validation (quarantine, never repair)
 
-`validatePlayability()` reports: string/fret range, impossible positions,
-unverified pairings (with playable alternatives), simultaneous same-string
-conflicts, tie chains that change pitch (grouped by chain id), dangling or
-pitch-less hammer/pulls, bends without parameters (info), voice overflows.
-Severity `error` fails the gate; `info` does not. Invalid source data is
-reported with event ids — never silently repaired into plausible truth.
+Unchanged policy; extended to chain-aware tie checks (grouped by chain id)
+and bend-destination presence. Severity `error` fails the gate.
 
-## G7 — render/truth correspondence
+## G7 — render/truth correspondence: LOOP CLOSED
 
-Borrowed from Piano Vision: truth declared by construction. Findings:
+Pilot (`tools/guitar-vision/render_identity.py` +
+`test_render_identity.py`, Verovio 6.3.0):
 
-- **Today the render path does NOT retain source IDs.** The Verovio SVG
-  pipeline (`tools/guitar-vision/render_corpus.py::extract_note_objects`)
-  derives correspondence from SVG structure (`class="note"` groups) in
-  document order — 1:1 with MusicXML note order by assumption, not by
-  identity. Reordered or dropped elements break it silently.
-- **The plumbing for identity exists but is unverified end-to-end.**
-  `buildOmrMusicXml.js` emits `id="sfnh-…"` on notes and the parser reads
-  those ids back; Verovio propagates `xml:id` into SVG group ids. What is
-  missing is the deterministic link: emit stable per-note ids from the
-  fixture/synthetic generator → confirm they survive Verovio rendering →
-  parse them back into `sourceNoteheadId`. Until that loop is closed and
-  tested, any render-derived box must be treated as *unverified* correspondence.
-- **This foundation does not depend on that loop.** Fixture truth uses
-  canonical source ids (`fixture:eN`) assigned at parse time, so schema,
-  pairing, rhythm and quarantine verification are valid regardless of render
-  identity. The Verovio id loop is a prerequisite for Dataset v2 *render*
-  generation (G13), not for the schema.
+- Verovio propagates `<note id="…">` into `<g id="…" class="note">` — stable
+  source IDs survive rendering (MusicXML 3.1+ sanctions element ids).
+- `inject_stable_ids()` is a pure function of the input: separate processes
+  stamp byte-identical IDs (asserted via subprocess test).
+- Exact joins by ID string equality: standard-only 3/3, paired 2/2
+  (notehead vs TAB-text distinguished per group), TAB chord 5/5 —
+  identity rate 1.0, zero duplicates, zero unmatched on either side, page +
+  transform-composed bboxes per join.
+- No document-order fallback: tampered IDs join 0.0 (test-pinned).
+- All 40 fixtures load in Verovio (smoke test).
+
+Remaining note: only `note` (and Verovio-generated) IDs are asserted;
+technique-marking SVG identity (bend curves, harmonic diamonds) is future
+render-target work, not truth-schema work.

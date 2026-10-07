@@ -1,21 +1,17 @@
 {
   "version": "guitar-coverage/1.0",
   "vocabulary": "guitar-vocab/1.0",
-  "generatedAt": "2026-10-07T21:27:59.623Z",
-  "fixtureCount": 38,
-  "fixturesPassed": 38,
-  "familyCount": 113,
+  "generatedAt": "2026-10-07T22:38:41.015Z",
+  "fixtureCount": 40,
+  "fixturesPassed": 40,
+  "familyCount": 115,
   "gates": {
-    "VERIFIED_SUPPORTED": 72,
-    "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR": 38,
-    "UNKNOWN": 3
+    "VERIFIED_SUPPORTED": 111,
+    "VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION": 3,
+    "AMBIGUOUS": 1
   },
   "blocking": [],
-  "unknown": [
-    "tremolo-picking",
-    "rasgueado",
-    "golpe"
-  ],
+  "unknown": [],
   "families": [
     {
       "family": "score",
@@ -399,8 +395,8 @@
       "family": "measure-rest",
       "category": "structure",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "parser has no measure-style multiple-rest handling; a full-measure rest parses as an ordinary rest",
+      "parser": "partial",
+      "reason": "measure-style count is parsed into measures; span application to timing is explicit future work",
       "musicXml": [
         "measure-style(multiple-rest)"
       ],
@@ -408,7 +404,7 @@
         "measure-rest-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "beam",
@@ -472,7 +468,7 @@
         "nested-tuplet-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION"
     },
     {
       "family": "tie",
@@ -493,9 +489,9 @@
     {
       "family": "grace-note",
       "category": "rhythm",
-      "support": "AMBIGUOUS",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
       "parser": "partial",
-      "reason": "parser detects <grace/> but drops the note from the note list, so timing truth silently loses it",
+      "reason": "parsed as zero-duration events with includeNonSoundingNotes; dropped by default (historical behavior)",
       "musicXml": [
         "grace",
         "slash"
@@ -504,14 +500,14 @@
         "grace-note-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "cue-note",
       "category": "rhythm",
-      "support": "AMBIGUOUS",
-      "parser": "absent",
-      "reason": "parser never reads <cue/>; cue notes parse as full-sounding notes, overstating timing",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "isCue is always marked; cue notes never attack and count no time",
       "musicXml": [
         "cue"
       ],
@@ -519,14 +515,14 @@
         "cue-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "acciaccatura-appoggiatura",
       "category": "rhythm",
-      "support": "AMBIGUOUS",
-      "parser": "absent",
-      "reason": "slash attribute on <grace/> is never read; the two ornaments are indistinguishable downstream",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "grace slash=yes vs absent distinguishes acciaccatura from appoggiatura (flag-gated)",
       "musicXml": [
         "grace@slash"
       ],
@@ -534,14 +530,14 @@
         "grace-note-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "tremolo",
       "category": "rhythm",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "neither <tremolo> (single-note subdivision) nor <tremolo> strokes are read by the parser",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "tremolo subdivision marks preserved as tremolo-picking parameters",
       "musicXml": [
         "tremolo"
       ],
@@ -549,7 +545,7 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "multi-voice-rhythm",
@@ -564,7 +560,8 @@
         "chord"
       ],
       "fixtures": [
-        "multi-voice"
+        "multi-voice",
+        "multivoice-tab"
       ],
       "roundTrip": true,
       "gate": "VERIFIED_SUPPORTED"
@@ -786,9 +783,9 @@
     {
       "family": "notehead-variant",
       "category": "pitch",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<notehead> (diamond, x, triangle for harmonics/dead notes) is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "notehead value/filled/parentheses preserved per event",
       "musicXml": [
         "notehead"
       ],
@@ -796,7 +793,7 @@
         "dead-ghost-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "stem-direction",
@@ -866,8 +863,8 @@
       "family": "muted-dead-x",
       "category": "tab",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "x noteheads/dead-string encoding (<notehead>x</notehead>) is never read; parser has no dead-note field from notehead shape",
+      "parser": "extracted",
+      "reason": "x notehead maps to deadNote on the event",
       "musicXml": [
         "notehead(x)",
         "technical(dead-note)"
@@ -876,7 +873,7 @@
         "dead-ghost-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "tab-chord",
@@ -908,6 +905,7 @@
         "tuplet"
       ],
       "fixtures": [
+        "multivoice-tab",
         "tab-staff-rests-digits"
       ],
       "roundTrip": true,
@@ -943,7 +941,8 @@
         "tab-chord-verified",
         "pairing-mismatch-quarantine",
         "alternate-tuning-drop-d",
-        "paired-staff-tab"
+        "paired-staff-tab",
+        "multivoice-tab"
       ],
       "roundTrip": true,
       "gate": "VERIFIED_SUPPORTED"
@@ -983,8 +982,8 @@
       "family": "fingering-tab",
       "category": "tab",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "<fingering> is never read by the parser",
+      "parser": "extracted",
+      "reason": "fingering values preserved per event",
       "musicXml": [
         "technical(fingering)"
       ],
@@ -992,7 +991,7 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "bend",
@@ -1016,8 +1015,8 @@
       "family": "bend-amount",
       "category": "technique",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "<bend-alter> semitone value is never read",
+      "parser": "extracted",
+      "reason": "bend-alter semitones preserved (raw text retained)",
       "musicXml": [
         "bend-alter"
       ],
@@ -1025,14 +1024,14 @@
         "bend-params-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "pre-bend",
       "category": "technique",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "<pre-bend/> is never read",
+      "parser": "extracted",
+      "reason": "pre-bend flag preserved",
       "musicXml": [
         "pre-bend"
       ],
@@ -1040,14 +1039,14 @@
         "bend-params-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "bend-release",
       "category": "technique",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "<release/> inside <bend> is never read",
+      "parser": "extracted",
+      "reason": "release flag preserved",
       "musicXml": [
         "release"
       ],
@@ -1055,14 +1054,14 @@
         "bend-params-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "slide",
       "category": "technique",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
       "parser": "partial",
-      "reason": "parser keeps <slide> type attr but never validates endpoints or distinguishes shift/legato in/out",
+      "reason": "type/number/line-type preserved; shift-vs-legato style is not encoded in MusicXML",
       "musicXml": [
         "slide",
         "glissando"
@@ -1123,7 +1122,7 @@
       "category": "technique",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
       "parser": "partial",
-      "reason": "only via other-technical text heuristic (/vib/) or ornaments/wavy-line; <vibrato> element and wide-vibrato params are never read",
+      "reason": "presence via wavy-line/other-technical heuristic; width unencoded",
       "musicXml": [
         "ornaments(wavy-line)",
         "other-technical",
@@ -1138,9 +1137,9 @@
     {
       "family": "natural-harmonic",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<harmonic/> + diamond notehead semantics are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "harmonic kind + pitch triple preserved",
       "musicXml": [
         "technical(harmonic)",
         "notehead(diamond)"
@@ -1149,14 +1148,14 @@
         "harmonics-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "artificial-harmonic",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "artificial/natural/touch distinctions plus base-pitch/touching-pitch/sounding-pitch triple are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "artificial flag + base/touching/sounding pitches preserved",
       "musicXml": [
         "harmonic(natural|artificial)",
         "base-pitch",
@@ -1167,7 +1166,7 @@
         "artificial-pinch-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "pinch-harmonic",
@@ -1182,14 +1181,14 @@
         "artificial-pinch-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION"
     },
     {
       "family": "tapping",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<tapped/> / T indications are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "tap (fret/hand) and tapped (hand) preserved",
       "musicXml": [
         "technical(tapped)"
       ],
@@ -1197,14 +1196,14 @@
         "palm-mute-tapping-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "palm-mute",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<palm-mute/> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "span type preserved",
       "musicXml": [
         "technical(palm-mute)"
       ],
@@ -1212,14 +1211,14 @@
         "palm-mute-tapping-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "dead-note",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "neither x noteheads nor dead-note encodings are read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "x notehead maps to deadNote on the event",
       "musicXml": [
         "notehead(x)"
       ],
@@ -1227,14 +1226,14 @@
         "dead-ghost-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "ghost-note",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "parenthesised/ghost encodings are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "parenthesised notehead maps to ghostNote on the event",
       "musicXml": [
         "notehead(parentheses)"
       ],
@@ -1242,14 +1241,14 @@
         "dead-ghost-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "let-ring",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<let-ring/> (l.v.) is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "span type preserved",
       "musicXml": [
         "technical(let-ring)"
       ],
@@ -1257,27 +1256,29 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "tremolo-picking",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "tremolo strokes on TAB notes are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "stroke marks + single/measured type preserved",
       "musicXml": [
         "tremolo"
       ],
-      "fixtures": [],
-      "roundTrip": null,
-      "gate": "UNKNOWN"
+      "fixtures": [
+        "notation-gaps-quarantine"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "pick-direction",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<up-bow>/<down-bow> pick marks are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "up-bow/down-bow preserved as pick direction",
       "musicXml": [
         "technical(up-bow)",
         "technical(down-bow)"
@@ -1286,14 +1287,14 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "arpeggio",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<arpeggiate/> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "arpeggiate direction preserved",
       "musicXml": [
         "notations(arpeggiate)"
       ],
@@ -1301,34 +1302,36 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "rasgueado",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
+      "support": "AMBIGUOUS",
       "parser": "absent",
-      "reason": "rasgueado lives in free text or exporter-specific articulation; no structured encoding is read",
+      "reason": "no structured MusicXML encoding found (4.x reference, music21, exporter behavior); arrives as staff text",
       "musicXml": [
         "direction-type(words: rasg.)",
         "other-technical"
       ],
       "fixtures": [],
       "roundTrip": null,
-      "gate": "UNKNOWN"
+      "gate": "AMBIGUOUS"
     },
     {
       "family": "golpe",
       "category": "technique",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "golpe (flamenco tap) has no structured MusicXML encoding; text only",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "structured MusicXML 3.1 technical element; preserved",
       "musicXml": [
         "direction-type(words: golpe)"
       ],
-      "fixtures": [],
-      "roundTrip": null,
-      "gate": "UNKNOWN"
+      "fixtures": [
+        "golpe-mark"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "whammy-bar",
@@ -1343,7 +1346,7 @@
         "whammy-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION"
     },
     {
       "family": "staccato",
@@ -1363,9 +1366,9 @@
     {
       "family": "staccatissimo",
       "category": "expression",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<staccatissimo/> is a distinct element and is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "distinct element preserved",
       "musicXml": [
         "articulations(staccatissimo)"
       ],
@@ -1373,14 +1376,14 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "breath-mark",
       "category": "expression",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<breath-mark/> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "element preserved",
       "musicXml": [
         "articulations(breath-mark)"
       ],
@@ -1388,7 +1391,7 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "accent",
@@ -1500,9 +1503,9 @@
     {
       "family": "ornament-trill",
       "category": "expression",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<ornaments> children (trill-mark, mordent, turn) are never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "trill/mordent/turn/shake preserved by kind",
       "musicXml": [
         "ornaments(trill-mark|mordent|turn)"
       ],
@@ -1510,7 +1513,7 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "tuning",
@@ -1549,24 +1552,25 @@
     {
       "family": "capo",
       "category": "performance",
-      "support": "AMBIGUOUS",
-      "parser": "absent",
-      "reason": "MusicXML has no capo element; capo lives in free text (<words>Capo 2</words>) or exporter-specificcredit; pitch math accepts capoFret as input but nothing extracts it",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "MusicXML has no capo element; direction-text mining with confidence tag drives pitch math",
       "musicXml": [
         "direction-type(words: Capo N)"
       ],
       "fixtures": [
+        "alternate-tuning-drop-d",
         "capo-text-ambiguous"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "position-indication",
       "category": "performance",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "absent",
-      "reason": "Roman-numeral positions are text directions; no parser field",
+      "parser": "partial",
+      "reason": "Roman-numeral text mining with source text retained",
       "musicXml": [
         "direction-type(words: III, V, VII...)"
       ],
@@ -1574,14 +1578,14 @@
         "text-directions-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "barre",
       "category": "performance",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "barre indications are text (BII, 1/2BIII); no structured encoding is read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "barre text mining (B/1-2B/C + numeral) with source text retained",
       "musicXml": [
         "direction-type(words)"
       ],
@@ -1589,14 +1593,14 @@
         "text-directions-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "left-hand-fingering",
       "category": "performance",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<fingering> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "fingering values + substitution/alternate preserved",
       "musicXml": [
         "technical(fingering)"
       ],
@@ -1604,14 +1608,14 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "right-hand-fingering",
       "category": "performance",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<pluck> (p-i-m-a) is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "pluck p-i-m-a preserved",
       "musicXml": [
         "technical(pluck)"
       ],
@@ -1619,14 +1623,14 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "octave-shift",
       "category": "performance",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<octave-shift> (8va) is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "shift spans recorded as score marks",
       "musicXml": [
         "octave-shift"
       ],
@@ -1634,7 +1638,7 @@
         "notation-gaps-quarantine"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "chord-symbol",
@@ -1657,9 +1661,9 @@
     {
       "family": "chord-diagram",
       "category": "harmony",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<frame> (strings/frets/barre in chord diagrams) is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "frame strings/frets/first-fret/notes/barre preserved",
       "musicXml": [
         "harmony(frame)",
         "frame-strings",
@@ -1670,14 +1674,14 @@
         "chord-diagram-frame-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "lyrics",
       "category": "harmony",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<lyric> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "lyric number/syllabic/text preserved per note",
       "musicXml": [
         "lyric",
         "syllabic",
@@ -1687,7 +1691,7 @@
         "text-directions-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "tempo-marking",
@@ -1710,9 +1714,9 @@
     {
       "family": "rehearsal-mark",
       "category": "harmony",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<rehearsal> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "rehearsal text recorded as score mark",
       "musicXml": [
         "direction-type(rehearsal)"
       ],
@@ -1720,14 +1724,14 @@
         "text-directions-gap"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "text-direction",
       "category": "harmony",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
       "parser": "partial",
-      "reason": "only dynamics/tempo/wedge directions are interpreted; other <words> are ignored",
+      "reason": "mined patterns resolve; unmatched words quarantine as unresolved-text",
       "musicXml": [
         "direction-type(words)"
       ],
@@ -1770,9 +1774,9 @@
     {
       "family": "segno",
       "category": "navigation",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<segno> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "segno position recorded as score mark",
       "musicXml": [
         "direction-type(segno)"
       ],
@@ -1780,14 +1784,14 @@
         "ds-coda-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "coda",
       "category": "navigation",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "<coda> is never read",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "coda position recorded as score mark",
       "musicXml": [
         "direction-type(coda)"
       ],
@@ -1795,14 +1799,14 @@
         "ds-coda-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
     },
     {
       "family": "ds-dc-navigation",
       "category": "navigation",
-      "support": "EXPLICITLY_UNSUPPORTED",
-      "parser": "absent",
-      "reason": "D.S./D.C./Fine/To Coda live in free <words>; no semantic extraction exists",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "partial",
+      "reason": "sound-jump attrs + D.C./D.S./Fine/To-Coda text mining; free variants quarantine as unresolved-text",
       "musicXml": [
         "direction-type(words: D.S. al Coda...)"
       ],
@@ -1810,7 +1814,39 @@
         "ds-coda-unsupported"
       ],
       "roundTrip": true,
-      "gate": "VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR"
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "fine",
+      "category": "navigation",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "Fine word + sound@fine recorded as score marks",
+      "musicXml": [
+        "direction-type(words: Fine)",
+        "sound@fine"
+      ],
+      "fixtures": [
+        "ds-coda-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
+    },
+    {
+      "family": "to-coda",
+      "category": "navigation",
+      "support": "SUPPORTED_BUT_NOT_YET_MODELED",
+      "parser": "extracted",
+      "reason": "To Coda word + sound@tocoda recorded as score marks",
+      "musicXml": [
+        "direction-type(words: To Coda)",
+        "sound@tocoda"
+      ],
+      "fixtures": [
+        "ds-coda-unsupported"
+      ],
+      "roundTrip": true,
+      "gate": "VERIFIED_SUPPORTED"
     }
   ]
 }

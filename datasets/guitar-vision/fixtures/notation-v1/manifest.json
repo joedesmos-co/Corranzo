@@ -1,6 +1,6 @@
 {
   "version": "guitar-fixtures/1.0",
-  "count": 38,
+  "count": 40,
   "fixtures": [
     {
       "name": "simple-4-4-rhythm",
@@ -125,7 +125,10 @@
         "quarantined": 0,
         "timingPreserved": true,
         "techniqueKind": "bend",
-        "bendSemitonesNull": true
+        "bendSemitonesNull": true,
+        "relations": [
+          "bend-destination"
+        ]
       },
       "tuning": null
     },
@@ -138,7 +141,10 @@
       "expect": {
         "events": 3,
         "quarantined": 0,
-        "timingPreserved": true
+        "timingPreserved": true,
+        "relations": [
+          "legato-link"
+        ]
       },
       "tuning": null
     },
@@ -148,10 +154,14 @@
         "slide"
       ],
       "expect": {
-        "events": 2,
+        "events": 4,
         "quarantined": 0,
         "timingPreserved": true,
-        "techniqueKind": "slide"
+        "techniqueKind": "slide",
+        "relations": [
+          "slide-link"
+        ],
+        "tabVerified": 4
       },
       "tuning": null
     },
@@ -162,12 +172,19 @@
       ],
       "expect": {
         "events": 1,
-        "quarantined": 2,
-        "quarantineCodes": [
-          "unmodelled-technique-flag",
-          "notehead-variant"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniques": [
+          "harmonic"
         ],
-        "vocabularySupport": "EXPLICITLY_UNSUPPORTED"
+        "techniqueParams": [
+          {
+            "kind": "harmonic",
+            "match": {
+              "artificial": false
+            }
+          }
+        ]
       },
       "tuning": null
     },
@@ -179,9 +196,11 @@
       ],
       "expect": {
         "events": 2,
-        "quarantined": 2,
-        "quarantineCodes": [
-          "unmodelled-technique-flag"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniques": [
+          "palm-mute",
+          "tapping"
         ]
       },
       "tuning": null
@@ -191,13 +210,15 @@
       "families": [
         "alternate-tuning",
         "tuning",
-        "standard-tab-pairing"
+        "standard-tab-pairing",
+        "capo"
       ],
       "expect": {
         "events": 2,
         "quarantined": 0,
         "timingPreserved": true,
-        "tabVerified": 2
+        "tabVerified": 2,
+        "capoFret": 2
       },
       "tuning": [
         64,
@@ -215,11 +236,13 @@
       ],
       "expect": {
         "events": 1,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "ignored-text-direction"
-        ],
-        "vocabularySupport": "AMBIGUOUS"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "tabVerified": 1,
+        "capoFret": 2,
+        "navigation": [
+          "capo"
+        ]
       },
       "tuning": null
     },
@@ -241,12 +264,9 @@
       ],
       "expect": {
         "events": 4,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "unsupported-element"
-        ],
-        "vocabularySupport": "EXPLICITLY_UNSUPPORTED",
-        "parserGap": "frame-dropped-silently"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "frames": 1
       },
       "tuning": null
     },
@@ -270,16 +290,22 @@
       "families": [
         "segno",
         "coda",
-        "ds-dc-navigation"
+        "ds-dc-navigation",
+        "fine",
+        "to-coda"
       ],
       "expect": {
-        "events": 2,
-        "quarantined": 2,
-        "quarantineCodes": [
-          "unsupported-element"
-        ],
-        "vocabularySupport": "EXPLICITLY_UNSUPPORTED",
-        "parserGap": "segno-coda-dropped-silently"
+        "events": 4,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "navigation": [
+          "segno",
+          "coda",
+          "to-coda",
+          "dal-segno-al-coda",
+          "fine",
+          "sound-jump"
+        ]
       },
       "tuning": null
     },
@@ -290,13 +316,10 @@
         "acciaccatura-appoggiatura"
       ],
       "expect": {
-        "events": 1,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "grace-dropped"
-        ],
-        "vocabularySupport": "AMBIGUOUS",
-        "parserGap": "grace-dropped-silently"
+        "events": 2,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "graceEvents": 1
       },
       "tuning": null
     },
@@ -363,6 +386,36 @@
         "timingPreserved": true,
         "tabVerified": 1,
         "pairings": 1
+      },
+      "tuning": null
+    },
+    {
+      "name": "multivoice-tab",
+      "families": [
+        "multi-voice-rhythm",
+        "tab-rhythm",
+        "standard-tab-pairing"
+      ],
+      "expect": {
+        "events": 6,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "tabVerified": 6
+      },
+      "tuning": null
+    },
+    {
+      "name": "golpe-mark",
+      "families": [
+        "golpe"
+      ],
+      "expect": {
+        "events": 1,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniques": [
+          "golpe"
+        ]
       },
       "tuning": null
     },
@@ -517,8 +570,7 @@
         "quarantineCodes": [
           "unsupported-element"
         ],
-        "vocabularySupport": "SUPPORTED_BUT_NOT_YET_MODELED",
-        "parserGap": "multiple-rest-unhandled"
+        "multipleRest": 4
       },
       "tuning": null
     },
@@ -533,11 +585,14 @@
       ],
       "expect": {
         "events": 2,
-        "quarantined": 3,
-        "quarantineCodes": [
-          "ignored-text-direction",
-          "unsupported-element"
-        ]
+        "quarantined": 0,
+        "timingPreserved": true,
+        "navigation": [
+          "rehearsal",
+          "position",
+          "barre"
+        ],
+        "lyricText": "la"
       },
       "tuning": null
     },
@@ -549,12 +604,22 @@
         "bend-release"
       ],
       "expect": {
-        "events": 1,
-        "quarantined": 3,
-        "quarantineCodes": [
-          "unsupported-element"
+        "events": 2,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniqueParams": [
+          {
+            "kind": "bend",
+            "match": {
+              "semitones": 2,
+              "prebend": true,
+              "release": true
+            }
+          }
         ],
-        "vocabularySupport": "SUPPORTED_BUT_NOT_YET_MODELED"
+        "relations": [
+          "bend-destination"
+        ]
       },
       "tuning": null
     },
@@ -565,11 +630,14 @@
       ],
       "expect": {
         "events": 2,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "unsupported-element"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniques": [
+          "glissando"
         ],
-        "vocabularySupport": "SUPPORTED_BUT_NOT_YET_MODELED"
+        "relations": [
+          "slide-link"
+        ]
       },
       "tuning": null
     },
@@ -577,6 +645,7 @@
       "name": "notation-gaps-quarantine",
       "families": [
         "tremolo",
+        "tremolo-picking",
         "octave-shift",
         "left-hand-fingering",
         "right-hand-fingering",
@@ -590,10 +659,29 @@
       ],
       "expect": {
         "events": 3,
-        "quarantined": 9,
-        "quarantineCodes": [
-          "unsupported-element",
-          "unmodelled-technique-flag"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "techniques": [
+          "tremolo-picking",
+          "arpeggio",
+          "trill",
+          "let-ring"
+        ],
+        "techniqueParams": [
+          {
+            "kind": "tremolo-picking",
+            "match": {
+              "marks": 3
+            }
+          }
+        ],
+        "fingeringLeft": [
+          "2"
+        ],
+        "fingeringRight": "p",
+        "pickDirection": "up",
+        "navigation": [
+          "octave-shift"
         ]
       },
       "tuning": null
@@ -606,11 +694,31 @@
       ],
       "expect": {
         "events": 2,
-        "quarantined": 3,
+        "quarantined": 1,
         "quarantineCodes": [
           "unmodelled-technique-flag"
         ],
-        "vocabularySupport": "EXPLICITLY_UNSUPPORTED"
+        "techniques": [
+          "harmonic"
+        ],
+        "techniqueParams": [
+          {
+            "kind": "harmonic",
+            "match": {
+              "artificial": true,
+              "touchingPitch": {
+                "step": "D",
+                "alter": 0,
+                "octave": 5
+              },
+              "soundingPitch": {
+                "step": "A",
+                "alter": 0,
+                "octave": 6
+              }
+            }
+          }
+        ]
       },
       "tuning": null
     },
@@ -624,15 +732,15 @@
       ],
       "expect": {
         "events": 2,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "notehead-variant"
-        ],
+        "quarantined": 0,
+        "timingPreserved": true,
+        "deadNotes": 1,
+        "ghostNotes": 1,
         "vocabularySupport": {
-          "dead-note": "EXPLICITLY_UNSUPPORTED",
-          "ghost-note": "EXPLICITLY_UNSUPPORTED",
+          "dead-note": "SUPPORTED_BUT_NOT_YET_MODELED",
+          "ghost-note": "SUPPORTED_BUT_NOT_YET_MODELED",
           "muted-dead-x": "SUPPORTED_BUT_NOT_YET_MODELED",
-          "notehead-variant": "EXPLICITLY_UNSUPPORTED"
+          "notehead-variant": "SUPPORTED_BUT_NOT_YET_MODELED"
         }
       },
       "tuning": null
@@ -644,12 +752,9 @@
       ],
       "expect": {
         "events": 3,
-        "quarantined": 1,
-        "quarantineCodes": [
-          "cue-misread"
-        ],
-        "vocabularySupport": "AMBIGUOUS",
-        "parserGap": "cue-parses-as-sounding"
+        "quarantined": 0,
+        "timingPreserved": true,
+        "cueEvents": 1
       },
       "tuning": null
     },

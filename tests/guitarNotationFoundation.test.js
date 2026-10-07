@@ -26,10 +26,13 @@ import { FIXTURES } from '../tools/guitar-vision/build-notation-fixtures.mjs'
 
 function runFixture(fixture) {
   const xml = fixture.build()
-  const parsed = parseMusicXml(xml, `${fixture.name}.musicxml`)
+  // Guitar truth always parses with non-sounding notes included: grace notes
+  // arrive as zero-duration events instead of vanishing.
+  const parsed = parseMusicXml(xml, `${fixture.name}.musicxml`, { includeNonSoundingNotes: true })
   const canonical = canonicalEventsFromParsed(parsed, {
     sourceId: fixture.name,
     rawXml: xml,
+    includeNonSoundingNotes: true,
     ...(fixture.tuning ? { tuning: fixture.tuning } : {}),
   })
   const playability = validatePlayability(canonical)
@@ -100,6 +103,67 @@ describe('notation fixture round-trips (G9)', () => {
       if (expectSpec.pickupSeen) {
         expect(parsed.measures[0].implicit).toBe(true)
       }
+      if (expectSpec.techniques) {
+        const kinds = canonical.events.flatMap((e) => e.techniques.map((t) => t.kind))
+        for (const kind of expectSpec.techniques) {
+          expect(kinds).toContain(kind)
+        }
+      }
+      if (expectSpec.relations) {
+        const kinds = canonical.relations.map((r) => r.kind)
+        for (const kind of expectSpec.relations) {
+          expect(kinds).toContain(kind)
+        }
+      }
+      if (expectSpec.navigation) {
+        const kinds = canonical.navigation.map((m) => m.kind)
+        for (const kind of expectSpec.navigation) {
+          expect(kinds).toContain(kind)
+        }
+      }
+      if (expectSpec.frames != null) {
+        expect(canonical.frames.length).toBe(expectSpec.frames)
+      }
+      if (expectSpec.capoFret != null) {
+        expect(canonical.capoFret).toBe(expectSpec.capoFret)
+        expect(canonical.capo?.fret).toBe(expectSpec.capoFret)
+      }
+      if (expectSpec.techniqueParams) {
+        for (const { kind, match } of expectSpec.techniqueParams) {
+          const found = canonical.events.flatMap((e) => e.techniques).filter((t) => t.kind === kind)
+          expect(found.length).toBeGreaterThan(0)
+          for (const [key, value] of Object.entries(match)) {
+            expect(found.some((t) => JSON.stringify(t[key]) === JSON.stringify(value)), `${kind}.${key}=${JSON.stringify(value)}`).toBe(true)
+          }
+        }
+      }
+      if (expectSpec.lyricText != null) {
+        expect(canonical.events.map((e) => e.lyric?.text)).toContain(expectSpec.lyricText)
+      }
+      if (expectSpec.deadNotes != null) {
+        expect(canonical.events.filter((e) => e.deadNote).length).toBe(expectSpec.deadNotes)
+      }
+      if (expectSpec.ghostNotes != null) {
+        expect(canonical.events.filter((e) => e.ghostNote).length).toBe(expectSpec.ghostNotes)
+      }
+      if (expectSpec.graceEvents != null) {
+        expect(canonical.events.filter((e) => e.time.isGrace).length).toBe(expectSpec.graceEvents)
+      }
+      if (expectSpec.cueEvents != null) {
+        expect(canonical.events.filter((e) => e.time.isCue).length).toBe(expectSpec.cueEvents)
+      }
+      if (expectSpec.multipleRest != null) {
+        expect(parsed.measures.map((m) => m.multipleRest ?? null)).toContain(expectSpec.multipleRest)
+      }
+      if (expectSpec.fingeringLeft != null) {
+        expect(canonical.events.flatMap((e) => e.fingering.left)).toEqual(expect.arrayContaining(expectSpec.fingeringLeft))
+      }
+      if (expectSpec.fingeringRight != null) {
+        expect(canonical.events.map((e) => e.fingering.right)).toContain(expectSpec.fingeringRight)
+      }
+      if (expectSpec.pickDirection != null) {
+        expect(canonical.events.map((e) => e.fingering.pick)).toContain(expectSpec.pickDirection)
+      }
       if (expectSpec.vocabularySupport) {
         if (typeof expectSpec.vocabularySupport === 'string') {
           for (const family of fixture.families) {
@@ -156,6 +220,51 @@ describe('G4 standard<->TAB pairing truth', () => {
   })
 })
 
+describe('G5 playable events (standard-only, TAB-only, paired)', () => {
+  it('one event reconstructs pitch/string/fret/onset/duration/voice/techniques/relations', () => {
+    const fixture = FIXTURES.find((f) => f.name === 'slide-pair')
+    const { canonical } = runFixture(fixture)
+    // Standard+TAB positions with verified pairing on every event.
+    expect(canonical.events.length).toBe(4)
+    for (const event of canonical.events) {
+      expect(event.pitch.soundingMidi).toBeGreaterThan(0)
+      expect(event.tab.string).toBe(3)
+      expect(event.tab.pairing).toBe('verified')
+      expect(event.time.voice).toBe(1)
+    }
+    // Technique chain resolves to event identities.
+    const links = canonical.relations.filter((r) => r.kind === 'slide-link')
+    expect(links.length).toBe(2)
+    expect(links[0].toEventId).toBe(links[1].fromEventId)
+    // Onset/duration reconstruct the bar exactly.
+    expect(canonical.rhythm.totalQuarters).toBe(4)
+  })
+
+  it('capo + alternate tuning compose in pairing math', () => {
+    const fixture = FIXTURES.find((f) => f.name === 'alternate-tuning-drop-d')
+    const { canonical } = runFixture(fixture)
+    expect(canonical.capoFret).toBe(2)
+    expect(canonical.tuning).toEqual([64, 59, 55, 50, 45, 38])
+    // string 6 fret 2 under drop-D + capo 2 sounds F#2 = 42.
+    expect(canonical.events[0].pitch.soundingMidi).toBe(42)
+    expect(canonical.events.every((e) => e.tab.pairing === 'verified')).toBe(true)
+  })
+
+  it('ties, grace and multi-voice coexist without double-counting time', () => {
+    const ties = runFixture(FIXTURES.find((f) => f.name === 'ties-across-measures'))
+    expect(ties.canonical.rhythm.totalQuarters).toBe(8)
+    expect(ties.canonical.events.filter((e) => e.time.isTieContinuation).length).toBe(1)
+    const grace = runFixture(FIXTURES.find((f) => f.name === 'grace-note-gap'))
+    const graceEvent = grace.canonical.events.find((e) => e.time.isGrace)
+    expect(graceEvent.time.durationQuarters).toBe(0)
+    expect(graceEvent.time.graceKind).toBe('acciaccatura')
+    const multi = runFixture(FIXTURES.find((f) => f.name === 'multivoice-tab'))
+    const voices = new Set(multi.canonical.events.map((e) => e.time.voice))
+    expect(voices).toEqual(new Set([1, 2]))
+    expect(multi.canonical.rhythm.timingPreserved).toBe(true)
+  })
+})
+
 describe('G10 unknown notation (never silently dropped)', () => {
   it('unregistered elements classify AMBIGUOUS, never "none"', () => {
     expect(classifySourceElement('squiggle').support).toBe(SUPPORT.AMBIGUOUS)
@@ -174,14 +283,20 @@ describe('G10 unknown notation (never silently dropped)', () => {
     expect(canonical.events[0].tab.string).toBe(9)
   })
 
-  it('raw audit catches what the parser drops: frame, segno/coda, grace, words', () => {
+  it('raw audit catches what the parser cannot represent', () => {
     const byName = Object.fromEntries(FIXTURES.map((f) => [f.name, f.build()]))
-    expect(auditRawXmlGaps(byName['chord-diagram-frame-gap']).map((g) => g.element)).toContain('frame')
-    expect(auditRawXmlGaps(byName['ds-coda-unsupported']).map((g) => g.element)).toEqual(
-      expect.arrayContaining(['segno', 'coda']),
-    )
+    // Frames, segno/coda, grace (flag-gated) and mined words are structured
+    // now: the audit stays silent for them.
+    expect(auditRawXmlGaps(byName['chord-diagram-frame-gap'], { includeNonSoundingNotes: true })).toEqual([])
+    expect(auditRawXmlGaps(byName['ds-coda-unsupported'], { includeNonSoundingNotes: true })).toEqual([])
+    expect(auditRawXmlGaps(byName['grace-note-gap'], { includeNonSoundingNotes: true })).toEqual([])
+    expect(auditRawXmlGaps(byName['capo-text-ambiguous'], { includeNonSoundingNotes: true })).toEqual([])
+    // Without the flag, dropped grace notes still quarantine.
     expect(auditRawXmlGaps(byName['grace-note-gap']).map((g) => g.code)).toContain('grace-dropped')
-    expect(auditRawXmlGaps(byName['capo-text-ambiguous']).map((g) => g.code)).toContain('ignored-text-direction')
+    // Genuinely unrepresented content still quarantines: multi-measure-rest
+    // counts, unmined free text, exotic technical children.
+    expect(auditRawXmlGaps(byName['measure-rest-gap']).map((g) => g.element)).toContain('measure-style')
+    expect(auditRawXmlGaps('<score-partwise><part><measure><direction><direction-type><words>mysterious Italian</words></direction-type></direction></measure></part></score-partwise>').map((g) => g.code)).toContain('ignored-text-direction')
     // Clean fixtures audit clean: no false quarantines.
     expect(auditRawXmlGaps(byName['simple-4-4-rhythm'])).toEqual([])
     expect(auditRawXmlGaps(byName['tab-chord-verified'])).toEqual([])

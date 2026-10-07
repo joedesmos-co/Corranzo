@@ -128,46 +128,53 @@ export const FIXTURES = [
     expect: { events: 1, quarantined: 1, quarantineCodes: ['pairing-pitch-mismatch'], playabilityCode: 'unverified-pairing' },
     build: () => scoreXml([measureXml(1, noteXml({ midi: 60, type: 'whole', string: 1, fret: 0 }) /* string1/fret0 sounds E4=64, not C4=60 */)]) },
   { name: 'bend-partial', families: ['bend'],
-    expect: { events: 2, quarantined: 0, timingPreserved: true, techniqueKind: 'bend', bendSemitonesNull: true },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, techniqueKind: 'bend', bendSemitonesNull: true, relations: ['bend-destination'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>2</string><fret>3</fret><bend/></technical></notations></note>` +
       noteXml({ midi: 64, type: 'half' }))]) },
   { name: 'hammer-pull-chain', families: ['hammer-on', 'pull-off'],
-    expect: { events: 3, quarantined: 0, timingPreserved: true },
+    expect: { events: 3, quarantined: 0, timingPreserved: true, relations: ['legato-link'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>3</string><fret>2</fret><hammer-on type="start" number="1"/></technical></notations></note>` +
       `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><technical><string>3</string><fret>5</fret><pull-off type="stop" number="1"/></technical></notations></note>` +
       noteXml({ midi: 57, type: 'half', string: 3, fret: 2 }))]) },
   { name: 'slide-pair', families: ['slide'],
-    expect: { events: 2, quarantined: 0, timingPreserved: true, techniqueKind: 'slide' },
+    expect: { events: 4, quarantined: 0, timingPreserved: true, techniqueKind: 'slide', relations: ['slide-link'], tabVerified: 4 },
     build: () => scoreXml([measureXml(1,
-      `<note><pitch><step>G</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><slide type="start" number="1"/><technical><string>3</string><fret>0</fret></technical></notations></note>` +
-      `<note><pitch><step>A</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><slide type="stop" number="1"/><technical><string>3</string><fret>2</fret></technical></notations></note>`)])},
+      `<note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><slide type="start" number="1"/><technical><string>3</string><fret>0</fret></technical></notations></note>` +
+      `<note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><slide type="stop" number="1"/><slide type="start" number="2"/><technical><string>3</string><fret>2</fret></technical></notations></note>` +
+      `<note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><slide type="stop" number="2"/><technical><string>3</string><fret>4</fret></technical></notations></note>` +
+      noteXml({ midi: 60, type: 'quarter', string: 3, fret: 5 }))]) },
   { name: 'harmonics-unsupported', families: ['natural-harmonic'],
-    expect: { events: 1, quarantined: 2, quarantineCodes: ['unmodelled-technique-flag', 'notehead-variant'], vocabularySupport: 'EXPLICITLY_UNSUPPORTED' },
+    expect: { events: 1, quarantined: 0, timingPreserved: true, techniques: ['harmonic'],
+      techniqueParams: [{ kind: 'harmonic', match: { artificial: false } }] },
     build: () => scoreXml([measureXml(1,
       // 12th-fret harmonic sounds the octave above open string 1: E5 = 76.
       `<note><pitch><step>E</step><octave>5</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><notehead>diamond</notehead><notations><technical><string>1</string><fret>12</fret><harmonic/></technical></notations></note>`)])},
   { name: 'palm-mute-tapping-unsupported', families: ['palm-mute', 'tapping'],
-    expect: { events: 2, quarantined: 2, quarantineCodes: ['unmodelled-technique-flag'] },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, techniques: ['palm-mute', 'tapping'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>4</string><fret>2</fret><palm-mute type="start"/></technical></notations></note>` +
       `<note><pitch><step>A</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>3</string><fret>2</fret><tapped/></technical></notations></note>`)])},
-  { name: 'alternate-tuning-drop-d', families: ['alternate-tuning', 'tuning', 'standard-tab-pairing'],
-    expect: { events: 2, quarantined: 0, timingPreserved: true, tabVerified: 2 },
+  { name: 'alternate-tuning-drop-d', families: ['alternate-tuning', 'tuning', 'standard-tab-pairing', 'capo'],
+    expect: { events: 2, quarantined: 0, timingPreserved: true, tabVerified: 2, capoFret: 2 },
     tuning: [64, 59, 55, 50, 45, 38],
     build: () => {
       const tuning = [64, 59, 55, 50, 45, 38]
+      const capo = 2
       return scoreXml([measureXml(1,
-        noteXml({ midi: sound(tuning, 6, 2), type: 'half', string: 6, fret: 2 }) +
-        noteXml({ midi: sound(tuning, 1, 0), type: 'half', string: 1, fret: 0 }),
+        `<direction><direction-type><words>Capo 2</words></direction-type></direction>` +
+        noteXml({ midi: sound(tuning, 6, 2) + capo, type: 'half', string: 6, fret: 2 }) +
+        noteXml({ midi: sound(tuning, 1, 0) + capo, type: 'half', string: 1, fret: 0 }),
         { clef: tabStaffClef() + dropDTuning() })])
     } },
   { name: 'capo-text-ambiguous', families: ['capo'],
-    expect: { events: 1, quarantined: 1, quarantineCodes: ['ignored-text-direction'], vocabularySupport: 'AMBIGUOUS' },
+    expect: { events: 1, quarantined: 0, timingPreserved: true, tabVerified: 1, capoFret: 2, navigation: ['capo'] },
     build: () => scoreXml([measureXml(1,
+      // Capo 2: open string 1 sounds F#4 = 66. Pairing math runs under the
+      // text-mined capo, so a written E4 here would (correctly) quarantine.
       `<direction><direction-type><words>Capo 2</words></direction-type></direction>` +
-      noteXml({ midi: 64, type: 'whole' }))]) },
+      `<note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><notations><technical><string>1</string><fret>0</fret></technical></notations></note>`)])},
   { name: 'chord-symbol-plain', families: ['chord-symbol'],
     expect: { events: 4, harmonyEvents: 1 },
     build: () => scoreXml([measureXml(1,
@@ -176,7 +183,7 @@ export const FIXTURES = [
       `<harmony><root><root-step>G</root-step></root><kind text="m">minor</kind></harmony>` +
       noteXml({ midi: 67 }) + noteXml({ midi: 70 }) + noteXml({ midi: 74 }) + noteXml({ midi: 79 }))]) },
   { name: 'chord-diagram-frame-gap', families: ['chord-diagram'],
-    expect: { events: 4, quarantined: 1, quarantineCodes: ['unsupported-element'], vocabularySupport: 'EXPLICITLY_UNSUPPORTED', parserGap: 'frame-dropped-silently' },
+    expect: { events: 4, quarantined: 0, timingPreserved: true, frames: 1 },
     build: () => scoreXml([measureXml(1,
       `<harmony><root><root-step>C</root-step></root><kind>major</kind><frame><frame-strings>6</frame-strings><frame-frets>4</frame-frets><frame-note><string>1</string><fret>0</fret></frame-note></frame></harmony>` +
       noteXml({ midi: 60 }) + noteXml({ midi: 64 }) + noteXml({ midi: 67 }) + noteXml({ midi: 72 }))]) },
@@ -187,14 +194,16 @@ export const FIXTURES = [
       `<measure number="2">${noteXml({ midi: 62, type: 'whole' })}<barline location="right"><ending type="start" number="1"/><repeat direction="backward" times="2"/></barline></measure>`,
       `<measure number="3">${noteXml({ midi: 64, type: 'whole' })}<barline location="right"><ending type="stop" number="2"/></barline></measure>`,
     ]) },
-  { name: 'ds-coda-unsupported', families: ['segno', 'coda', 'ds-dc-navigation'],
-    expect: { events: 2, quarantined: 2, quarantineCodes: ['unsupported-element'], vocabularySupport: 'EXPLICITLY_UNSUPPORTED', parserGap: 'segno-coda-dropped-silently' },
+  { name: 'ds-coda-unsupported', families: ['segno', 'coda', 'ds-dc-navigation', 'fine', 'to-coda'],
+    expect: { events: 4, quarantined: 0, timingPreserved: true, navigation: ['segno', 'coda', 'to-coda', 'dal-segno-al-coda', 'fine', 'sound-jump'] },
     build: () => scoreXml([
       measureXml(1, `<direction><direction-type><segno/></direction-type></direction>` + noteXml({ midi: 60, type: 'whole' })),
-      measureXml(2, `<direction><direction-type><coda/></direction-type></direction>` + noteXml({ midi: 62, type: 'whole' })),
+      measureXml(2, `<direction><direction-type><coda/></direction-type></direction><direction><direction-type><words>To Coda</words></direction-type></direction>` + noteXml({ midi: 62, type: 'whole' })),
+      measureXml(3, `<direction><direction-type><words>D.S. al Coda</words></direction-type></direction>` + noteXml({ midi: 64, type: 'whole' })),
+      measureXml(4, `<direction><direction-type><words>Fine</words></direction-type></direction><sound fine="yes"/>` + noteXml({ midi: 65, type: 'whole' })),
     ]) },
   { name: 'grace-note-gap', families: ['grace-note', 'acciaccatura-appoggiatura'],
-    expect: { events: 1, quarantined: 1, quarantineCodes: ['grace-dropped'], vocabularySupport: 'AMBIGUOUS', parserGap: 'grace-dropped-silently' },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, graceEvents: 1 },
     build: () => scoreXml([measureXml(1,
       `<note><grace slash="yes"/><pitch><step>D</step><octave>5</octave></pitch><voice>1</voice><type>eighth</type></note>` +
       noteXml({ midi: 64, type: 'whole' }))]) },
@@ -231,6 +240,20 @@ export const FIXTURES = [
       `<backup><duration>16</duration></backup>` +
       `<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>2</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note></measure>`,
     ]) },
+  { name: 'multivoice-tab', families: ['multi-voice-rhythm', 'tab-rhythm', 'standard-tab-pairing'],
+    expect: { events: 6, quarantined: 0, timingPreserved: true, tabVerified: 6 },
+    build: () => scoreXml([measureXml(1,
+      noteXml({ midi: sound(STD, 1, 0), type: 'quarter', voice: 1, string: 1, fret: 0 }) +
+      noteXml({ midi: sound(STD, 1, 3), type: 'quarter', voice: 1, string: 1, fret: 3 }) +
+      noteXml({ midi: sound(STD, 1, 5), type: 'quarter', voice: 1, string: 1, fret: 5 }) +
+      noteXml({ midi: sound(STD, 1, 7), type: 'quarter', voice: 1, string: 1, fret: 7 }) +
+      `<backup><duration>16</duration></backup>` +
+      noteXml({ midi: sound(STD, 2, 1), type: 'half', voice: 2, string: 2, fret: 1 }) +
+      noteXml({ midi: sound(STD, 2, 3), type: 'half', voice: 2, string: 2, fret: 3 }))]) },
+  { name: 'golpe-mark', families: ['golpe'],
+    expect: { events: 1, quarantined: 0, timingPreserved: true, techniques: ['golpe'] },
+    build: () => scoreXml([measureXml(1,
+      `<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><notations><technical><string>1</string><fret>0</fret><golpe/></technical></notations></note>`)])},
   { name: 'unknown-notation-quarantine', families: [],
     expect: { events: 1, quarantined: 2, quarantineCodes: ['unmodelled-technique-flag', 'impossible-position'], vocabularySupport: 'AMBIGUOUS', playabilityCode: 'string-out-of-range' },
     build: () => scoreXml([measureXml(1,
@@ -303,13 +326,13 @@ export const FIXTURES = [
       `<note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>eighth</type><staff>2</staff><notations><technical><string>2</string><fret>3</fret></technical></notations></note>`,
       { clef: tabStaffClef() })]) },
   { name: 'measure-rest-gap', families: ['measure-rest'],
-    expect: { events: 2, quarantined: 1, quarantineCodes: ['unsupported-element'], vocabularySupport: 'SUPPORTED_BUT_NOT_YET_MODELED', parserGap: 'multiple-rest-unhandled' },
+    expect: { events: 2, quarantined: 1, quarantineCodes: ['unsupported-element'], multipleRest: 4 },
     build: () => scoreXml([
       measureXml(1, noteXml({ midi: 60, type: 'whole' })),
       `<measure number="2"><measure-style><multiple-rest>4</multiple-rest></measure-style><note><rest measure="yes"/><duration>16</duration><voice>1</voice><type>whole</type></note></measure>`,
     ]) },
   { name: 'text-directions-gap', families: ['text-direction', 'position-indication', 'barre', 'rehearsal-mark', 'lyrics'],
-    expect: { events: 2, quarantined: 3, quarantineCodes: ['ignored-text-direction', 'unsupported-element'] },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, navigation: ['rehearsal', 'position', 'barre'], lyricText: 'la' },
     build: () => scoreXml([measureXml(1,
       `<direction><direction-type><rehearsal>A</rehearsal></direction-type></direction>` +
       `<direction><direction-type><words>III</words></direction-type></direction>` +
@@ -317,35 +340,43 @@ export const FIXTURES = [
       `<note><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><lyric number="1"><syllabic>single</syllabic><text>la</text></lyric></note>` +
       noteXml({ midi: 64, type: 'half' }))]) },
   { name: 'bend-params-gap', families: ['bend-amount', 'pre-bend', 'bend-release'],
-    expect: { events: 1, quarantined: 3, quarantineCodes: ['unsupported-element'], vocabularySupport: 'SUPPORTED_BUT_NOT_YET_MODELED' },
+    expect: { events: 2, quarantined: 0, timingPreserved: true,
+      techniqueParams: [{ kind: 'bend', match: { semitones: 2, prebend: true, release: true } }],
+      relations: ['bend-destination'] },
     build: () => scoreXml([measureXml(1,
-      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><notations><technical><string>2</string><fret>3</fret><bend><bend-alter>2</bend-alter><pre-bend/><release/></bend></technical></notations></note>`)])},
+      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>2</string><fret>3</fret><bend><bend-alter>2</bend-alter><pre-bend/><release/></bend></technical></notations></note>` +
+      noteXml({ midi: 64, type: 'half' }))])},
   { name: 'glissando-gap', families: ['glissando'],
-    expect: { events: 2, quarantined: 1, quarantineCodes: ['unsupported-element'], vocabularySupport: 'SUPPORTED_BUT_NOT_YET_MODELED' },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, techniques: ['glissando'], relations: ['slide-link'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><glissando type="start" number="1" line-type="wavy"/></notations></note>` +
-      noteXml({ midi: 62, type: 'half' }))]) },
-  { name: 'notation-gaps-quarantine', families: ['tremolo', 'octave-shift', 'left-hand-fingering', 'right-hand-fingering', 'fingering-tab', 'arpeggio', 'ornament-trill', 'pick-direction', 'let-ring', 'breath-mark', 'staccatissimo'],
-    expect: { events: 3, quarantined: 9, quarantineCodes: ['unsupported-element', 'unmodelled-technique-flag'] },
+      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><glissando type="stop" number="1"/></notations></note>`)])},
+  { name: 'notation-gaps-quarantine', families: ['tremolo', 'tremolo-picking', 'octave-shift', 'left-hand-fingering', 'right-hand-fingering', 'fingering-tab', 'arpeggio', 'ornament-trill', 'pick-direction', 'let-ring', 'breath-mark', 'staccatissimo'],
+    expect: { events: 3, quarantined: 0, timingPreserved: true,
+      techniques: ['tremolo-picking', 'arpeggio', 'trill', 'let-ring'],
+      techniqueParams: [{ kind: 'tremolo-picking', match: { marks: 3 } }],
+      fingeringLeft: ['2'], fingeringRight: 'p', pickDirection: 'up',
+      navigation: ['octave-shift'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><arpeggiate/><technical><fingering>2</fingering><pluck>P</pluck><up-bow/><let-ring type="start"/></technical></notations></note>` +
       `<note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><notations><articulations><staccatissimo/><breath-mark/></articulations><ornaments><trill-mark/></ornaments><tremolo type="single">3</tremolo></notations></note>` +
       `<direction><direction-type><octave-shift type="down" size="8"/></direction-type></direction>` +
       noteXml({ midi: 64, type: 'half' }))]) },
   { name: 'artificial-pinch-gap', families: ['artificial-harmonic', 'pinch-harmonic'],
-    expect: { events: 2, quarantined: 3, quarantineCodes: ['unmodelled-technique-flag'], vocabularySupport: 'EXPLICITLY_UNSUPPORTED' },
+    expect: { events: 2, quarantined: 1, quarantineCodes: ['unmodelled-technique-flag'],
+      techniques: ['harmonic'],
+      techniqueParams: [{ kind: 'harmonic', match: { artificial: true, touchingPitch: { step: 'D', alter: 0, octave: 5 }, soundingPitch: { step: 'A', alter: 0, octave: 6 } } }] },
     build: () => scoreXml([measureXml(1,
-      // Touched-5th artificial harmonic notated at sounding pitch A4 = string 1 fret 5.
-      `<note><pitch><step>A</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>1</string><fret>5</fret><harmonic><artificial/></harmonic></technical></notations></note>` +
+      `<note><pitch><step>A</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>1</string><fret>5</fret><harmonic><artificial/><touching-pitch><step>D</step><octave>5</octave></touching-pitch><sounding-pitch><step>A</step><octave>6</octave></sounding-pitch></harmonic></technical></notations></note>` +
       `<note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notations><technical><string>1</string><fret>0</fret><other-technical>P.H.</other-technical></technical></notations></note>`)])},
   { name: 'dead-ghost-gap', families: ['dead-note', 'ghost-note', 'muted-dead-x', 'notehead-variant'],
-    expect: { events: 2, quarantined: 1, quarantineCodes: ['notehead-variant'],
-      vocabularySupport: { 'dead-note': 'EXPLICITLY_UNSUPPORTED', 'ghost-note': 'EXPLICITLY_UNSUPPORTED', 'muted-dead-x': 'SUPPORTED_BUT_NOT_YET_MODELED', 'notehead-variant': 'EXPLICITLY_UNSUPPORTED' } },
+    expect: { events: 2, quarantined: 0, timingPreserved: true, deadNotes: 1, ghostNotes: 1,
+      vocabularySupport: { 'dead-note': 'SUPPORTED_BUT_NOT_YET_MODELED', 'ghost-note': 'SUPPORTED_BUT_NOT_YET_MODELED', 'muted-dead-x': 'SUPPORTED_BUT_NOT_YET_MODELED', 'notehead-variant': 'SUPPORTED_BUT_NOT_YET_MODELED' } },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notehead>x</notehead></note>` +
-      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notehead filled="no">diamond</notehead></note>`)])},
+      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><notehead parentheses="yes">normal</notehead></note>`)])},
   { name: 'cue-gap', families: ['cue-note'],
-    expect: { events: 3, quarantined: 1, quarantineCodes: ['cue-misread'], vocabularySupport: 'AMBIGUOUS', parserGap: 'cue-parses-as-sounding' },
+    expect: { events: 3, quarantined: 0, timingPreserved: true, cueEvents: 1 },
     build: () => scoreXml([measureXml(1,
       `<note><cue/><pitch><step>G</step><octave>5</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type></note>` +
       noteXml({ midi: 64, type: 'half' }) + noteXml({ midi: 65, type: 'quarter' }))]) },

@@ -91,15 +91,29 @@ UNKNOWN families get no head until a schema path exists. New heads require a
 data-support check (labels in train/validation/held-out) before they can
 carry a product claim.
 
-## Readiness verdict (G16–G17)
+## Readiness verdict (G10 go/no-go)
 
-- Truth/data foundation for the 100–200 score campaign: **READY** —
-  versioned vocabulary (113 families), canonical event schema with verified
-  pairing/rhythm/playability, 38-fixture corpus with machine-readable gate
-  (0 blocking, 3 honestly unknown), quarantine-by-construction for everything
-  unsupported.
-- Model training justified yet: **NO.** Two prerequisites remain: (1) close
-  the G7 Verovio id loop so renders carry identity instead of
-  order-assumption; (2) collect Dataset v2 under the intake/split discipline
-  above. The next step is a small render-identity pilot (emit ids → render →
-  parse back, asserted in a test), then score acquisition — not training.
+Decision criteria and results:
+
+1. **Render/source identity loop exact? YES.** Pilot proves stable IDs
+   across processes, 1.0 exact join rate (standard, paired, TAB chord), no
+   order fallback, all 40 fixtures Verovio-loadable.
+2. **Common V1 notation has structured truth where source permits? YES.**
+   111/115 families VERIFIED_SUPPORTED; the G3 priority list (bends with
+   parameters, slides, legato, harmonics, tapping, palm-mute, let-ring,
+   dead/ghost, vibrato, tremolo-picking, tuning/capo/positions/fingering,
+   grace/cue, chord symbols + diagrams, full navigation) is implemented
+   with round-trip fixtures.
+3. **Unknowns resolved? YES.** Tremolo-picking and golpe are structured
+   (implemented); rasgueado is confirmed text-only with 3-leg evidence and
+   retains AMBIGUOUS status.
+4. **Round-trip tests pass? YES.** 52 JS + 6 Python, 40/40 fixtures.
+5. **Remaining unsupported genuinely source-limited and documented? YES.**
+   3 source-limited + 1 ambiguous, each with evidence in the gap audit.
+
+- **Dataset v2 collection: AUTHORIZED** — under the intake/split discipline
+  in this plan (provenance declared, pairing verification ≥ 99%, frozen
+  score-level splits, sealed 20-score benchmark untouched).
+- **Model training: NOT YET AUTHORIZED** — training needs the collected
+  dataset first, plus the head/data-support checks in G15. The next step is
+  score acquisition, not training.

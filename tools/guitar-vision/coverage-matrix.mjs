@@ -22,32 +22,35 @@ import { FIXTURES } from './build-notation-fixtures.mjs'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
 /**
- * Gate status per family (G16):
- * - VERIFIED_SUPPORTED: truth-verifiable today AND a fixture proves the round-trip.
- * - VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR: quarantined by
- *   construction (audit + quarantine path proven by a fixture); the product
- *   must decline rather than invent.
- * - BLOCKING_GAP: truth cannot represent it yet, or the parser drops it with
- *   no quarantine path. Training must not claim it.
- * - UNKNOWN: no fixture, no verification — must not proceed into training.
+ * Gate status per family (G9 — V1 matrix):
+ * - VERIFIED_SUPPORTED: truth-verifiable today AND a fixture proves the
+ *   round-trip (source -> parser -> canonical -> serialized truth).
+ * - VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION: the source format cannot
+ *   express it (or only as free text), and a fixture proves the explicit
+ *   quarantine path. Decline-by-construction, not a silent gap.
+ * - AMBIGUOUS: no structured encoding and no fixture can verify it.
+ *   Must not silently proceed into training.
+ * - BLOCKING_GAP: the source structurally supports it but Corranzo truth
+ *   does not yet, or no passing fixture proves it. Training must not claim it.
+ *
+ * A common V1 family is never marked acceptable merely because Corranzo can
+ * decline it: decline paths land in SOURCE_LIMITATION or AMBIGUOUS, and
+ * anything source-supported-but-unhandled is BLOCKING_GAP.
  */
 function gateStatus(entry, fixtureResult, quarantines = 0) {
   if (!fixtureResult) {
-    return entry.support === SUPPORT.SUPPORTED_AND_LABELED ? 'BLOCKING_GAP' : 'UNKNOWN'
+    if (entry.support === SUPPORT.AMBIGUOUS) return 'AMBIGUOUS'
+    return 'BLOCKING_GAP'
   }
   if (!fixtureResult.passed) return 'BLOCKING_GAP'
   switch (entry.support) {
     case SUPPORT.SUPPORTED_AND_LABELED:
-      return 'VERIFIED_SUPPORTED'
     case SUPPORT.SUPPORTED_BUT_NOT_YET_MODELED:
-      // Parsed-and-proven is supportable. Absent-from-parser splits two ways:
-      // a verified quarantine path means the product can explicitly decline
-      // (defined behavior); zero quarantine means the gap is silent (blocking).
-      if (entry.parser !== 'absent') return 'VERIFIED_SUPPORTED'
-      return quarantines > 0 ? 'VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR' : 'BLOCKING_GAP'
+      return entry.parser === 'absent' && quarantines === 0 ? 'BLOCKING_GAP' : 'VERIFIED_SUPPORTED'
     case SUPPORT.EXPLICITLY_UNSUPPORTED:
+      return 'VERIFIED_UNSUPPORTED_WITH_SOURCE_LIMITATION'
     case SUPPORT.AMBIGUOUS:
-      return 'VERIFIED_UNSUPPORTED_WITH_EXPLICIT_PRODUCT_BEHAVIOR'
+      return 'AMBIGUOUS'
     default:
       return 'BLOCKING_GAP'
   }
@@ -56,9 +59,9 @@ function gateStatus(entry, fixtureResult, quarantines = 0) {
 function runFixture(fixture) {
   try {
     const xml = fixture.build()
-    const parsed = parseMusicXml(xml, `${fixture.name}.musicxml`)
+    const parsed = parseMusicXml(xml, `${fixture.name}.musicxml`, { includeNonSoundingNotes: true })
     const canonical = canonicalEventsFromParsed(parsed, {
-      sourceId: fixture.name, rawXml: xml, ...(fixture.tuning ? { tuning: fixture.tuning } : {}),
+      sourceId: fixture.name, rawXml: xml, includeNonSoundingNotes: true, ...(fixture.tuning ? { tuning: fixture.tuning } : {}),
     })
     const playability = validatePlayability(canonical)
     const spec = fixture.expect

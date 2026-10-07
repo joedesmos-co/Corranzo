@@ -17,6 +17,7 @@ import {
   buildChordSheetNoteEvents,
 } from './chordSymbolSheet.js'
 import { DEFAULT_MUSICXML_VELOCITY, dynamicsFromDirection, wedgeFromDirection, staffFromDirection } from './dynamicsMap.js'
+import { mineTextDirection } from './guitarTextMarks.js'
 import { WEDGE_ENDPOINT_FALLBACK_DELTA } from '../playback/playbackExpressionPolicy.js'
 
 const DEFAULT_BPM = 120
@@ -314,6 +315,9 @@ function emptyArticulations() {
     tenuto: false,
     marcato: false,
     fermata: false,
+    staccatissimo: false,
+    breathMark: false,
+    otherArticulations: [],
     articulationPlacements: {},
   }
 }
@@ -358,6 +362,8 @@ function readArticulations(noteNode) {
   const staccatoNode = findChild(articulations, 'staccato')
   const accentNode = findChild(articulations, 'accent')
   const tenutoNode = findChild(articulations, 'tenuto')
+  const staccatissimoNode = findChild(articulations, 'staccatissimo')
+  const breathMarkNode = findChild(articulations, 'breath-mark')
   const marcatoNode =
     findChild(articulations, 'strong-accent') ??
     findChild(articulations, 'marcato')
@@ -368,11 +374,22 @@ function readArticulations(noteNode) {
     ['tenuto', tenutoNode, false],
     ['marcato', marcatoNode, true],
     ['fermata', fermataNode, true],
+    ['staccatissimo', staccatissimoNode, false],
+    ['breath-mark', breathMarkNode, false],
   ]) {
     const placement = notationPlacement(node, { orientation })
     if (placement) {
       articulationPlacements[type] = placement
     }
+  }
+  // Structured preservation for remaining articulations (spiccato, legato,
+  // detached-legato, scoop, falloff, ...): kept with kind so truth can type
+  // or quarantine. Nothing here may be silently dropped.
+  const knownArticulations = new Set(['staccato', 'accent', 'tenuto', 'strong-accent', 'marcato', 'staccatissimo', 'breath-mark'])
+  const otherArticulations = []
+  for (const child of childNodes(articulations)) {
+    if (!child.tag || knownArticulations.has(child.tag)) continue
+    otherArticulations.push({ kind: child.tag, placement: notationPlacement(child, {}) ?? null })
   }
   return {
     staccato: staccatoNode != null,
@@ -380,6 +397,9 @@ function readArticulations(noteNode) {
     tenuto: tenutoNode != null,
     marcato: marcatoNode != null,
     fermata,
+    staccatissimo: staccatissimoNode != null,
+    breathMark: breathMarkNode != null,
+    otherArticulations,
     articulationPlacements,
   }
 }
@@ -473,6 +493,58 @@ function techniqueMarking(kind, node, index) {
   }
 }
 
+/** Attributes snapshot: structured preservation for elements whose full
+ * semantics the truth layer resolves later (or quarantines explicitly). */
+function attrsOf(node, names) {
+  const out = {}
+  for (const name of names) {
+    const value = attr(node, name)
+    if (value != null) out[name] = value
+  }
+  return out
+}
+
+/** Parameterized bend: amount, pre-bend and release, never presence-only. */
+function readBend(technical) {
+  const node = findChild(technical, 'bend')
+  if (!node) return null
+  const alterText = childText(node, 'bend-alter')
+  const alter = alterText != null ? Number(alterText) : NaN
+  return {
+    alterSemitones: Number.isFinite(alter) ? alter : null,
+    alterRaw: alterText ?? null,
+    prebend: findChild(node, 'pre-bend') != null,
+    release: findChild(node, 'release') != null,
+    ...attrsOf(node, ['shape', 'accelerate', 'beats', 'first-beat', 'last-beat']),
+  }
+}
+
+/** Harmonic semantics: kind + the notated pitch triple when present. */
+function readHarmonic(technical, noteNode) {
+  const node = findChild(technical, 'harmonic')
+  if (!node) return null
+  const naturalAttr = attr(node, 'natural')
+  const readTechPitch = (tag) => {
+    const pitchNode = findChild(node, tag)
+    if (!pitchNode) return null
+    return {
+      step: childText(pitchNode, 'step') ?? null,
+      alter: numberOf(childText(pitchNode, 'alter'), 0),
+      octave: numberOf(childText(pitchNode, 'octave'), NaN),
+    }
+  }
+  void noteNode
+  return {
+    artificial: findChild(node, 'artificial') != null,
+    natural: findChild(node, 'natural') != null || naturalAttr === 'yes',
+    naturalAttr: naturalAttr ?? null,
+    basePitch: readTechPitch('base-pitch'),
+    touchingPitch: readTechPitch('touching-pitch'),
+    soundingPitch: readTechPitch('sounding-pitch'),
+    ...attrsOf(node, ['print-object', 'placement']),
+  }
+}
+
 function readGuitarTechniques(noteNode) {
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
@@ -488,24 +560,67 @@ function readGuitarTechniques(noteNode) {
     findChildren(technical, 'pull-off').forEach((node, index) => {
       techniques.push(techniqueMarking('pull-off', node, index))
     })
-    if (findChild(technical, 'bend')) {
-      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
+    const bend = readBend(technical)
+    if (bend || findChild(technical, 'bend')) {
+      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0, bend })
     }
+    const harmonic = readHarmonic(technical, noteNode)
+    if (harmonic) {
+      techniques.push({ kind: 'harmonic', type: null, number: '1', text: null, index: 0, harmonic })
+    }
+    for (const [tag, kind] of [['tapped', 'tapping'], ['palm-mute', 'palm-mute'], ['let-ring', 'let-ring'], ['golpe', 'golpe']]) {
+      findChildren(technical, tag).forEach((node, index) => {
+        techniques.push({ ...techniqueMarking(kind, node, index), ...attrsOf(node, ['hand', 'placement']) })
+      })
+    }
+    findChildren(technical, 'tap').forEach((node, index) => {
+      techniques.push({ kind: 'tapping', type: null, number: '1', text: textOf(node) ?? null, index, tap: { fret: childText(node, 'fret') ?? null, ...attrsOf(node, ['hand']) } })
+    })
     findChildren(technical, 'other-technical').forEach((node, index) => {
       const text = textOf(node)
       if (text && /vib(?:rato)?/i.test(text)) {
         techniques.push({ kind: 'vibrato', type: null, number: '1', text, index })
+      } else {
+        techniques.push({ kind: 'other-technical', type: null, number: '1', text, index, smufl: attr(node, 'smufl') ?? null })
       }
     })
+    // Structured preservation for every remaining technical child: the parser
+    // keeps kind + attrs + text so the truth layer can type or quarantine it
+    // instead of dropping it.
+    const interpreted = new Set(['hammer-on', 'pull-off', 'bend', 'harmonic', 'tapped', 'palm-mute', 'let-ring', 'golpe', 'tap', 'other-technical', 'string', 'fret', 'fingering', 'pluck', 'up-bow', 'down-bow', 'open-string', 'stopped'])
+    for (const child of childNodes(technical)) {
+      if (!child.tag || interpreted.has(child.tag)) continue
+      techniques.push({ kind: `technical:${child.tag}`, type: attr(child, 'type') ?? null, number: attr(child, 'number') ?? '1', text: textOf(child) ?? null, index: 0 })
+    }
   }
 
   findChildren(notations, 'slide').forEach((node, index) => {
-    techniques.push(techniqueMarking('slide', node, index))
+    techniques.push({ ...techniqueMarking('slide', node, index), lineType: attr(node, 'line-type') ?? null })
+  })
+  findChildren(notations, 'glissando').forEach((node, index) => {
+    techniques.push({ ...techniqueMarking('glissando', node, index), lineType: attr(node, 'line-type') ?? null })
   })
 
   const ornaments = findChild(notations, 'ornaments')
-  if (ornaments && findChild(ornaments, 'wavy-line')) {
-    techniques.push({ kind: 'vibrato', type: null, number: '1', text: null, index: 0 })
+  if (ornaments) {
+    if (findChild(ornaments, 'wavy-line')) {
+      techniques.push({ kind: 'vibrato', type: attr(findChild(ornaments, 'wavy-line'), 'type') ?? null, number: '1', text: null, index: 0 })
+    }
+    for (const [tag, kind] of [['trill-mark', 'trill'], ['mordent', 'mordent'], ['inverted-mordent', 'mordent'], ['turn', 'turn'], ['inverted-turn', 'turn'], ['shake', 'shake']]) {
+      findChildren(ornaments, tag).forEach((node, index) => {
+        techniques.push({ kind, type: null, number: '1', text: null, index })
+      })
+    }
+  }
+
+  // Single-note tremolo subdivision (<tremolo type="single">N</tremolo> under
+  // <notations>) is how tremolo picking is encoded on guitar staves.
+  for (const tremolo of findChildren(notations, 'tremolo')) {
+    techniques.push({ kind: 'tremolo-picking', type: attr(tremolo, 'type') ?? null, number: '1', text: textOf(tremolo) ?? null, index: 0, marks: Number(textOf(tremolo)) || null })
+  }
+
+  if (findChild(notations, 'arpeggiate')) {
+    techniques.push({ kind: 'arpeggio', type: null, number: '1', text: null, index: 0, direction: attr(findChild(notations, 'arpeggiate'), 'direction') ?? null })
   }
 
   return techniques
@@ -533,6 +648,117 @@ function readTechnicalPosition(noteNode) {
     ...(Number.isFinite(string) && string > 0 ? { string } : {}),
     ...(Number.isFinite(fret) && fret >= 0 ? { fret } : {}),
   }
+}
+
+/** Notehead shape: diamond/x/triangle carry harmonic/dead-note semantics. */
+function readNotehead(noteNode) {
+  const node = findChild(noteNode, 'notehead')
+  if (!node) return null
+  return {
+    value: String(textOf(node) ?? '').trim().toLowerCase() || 'normal',
+    filled: attr(node, 'filled') ?? null,
+    parentheses: attr(node, 'parentheses') ?? null,
+  }
+}
+
+/** Left-hand fingering, right-hand pluck (p-i-m-a), bow/pick direction. */
+function readHandMarks(noteNode) {
+  const notations = findChild(noteNode, 'notations')
+  if (!notations) return null
+  const technical = findChild(notations, 'technical')
+  if (!technical) return null
+  const out = {}
+  const fingerings = findChildren(technical, 'fingering').map((node) => ({
+    value: String(textOf(node) ?? '').trim(),
+    substitution: attr(node, 'substitution') ?? null,
+    alternate: attr(node, 'alternate') ?? null,
+  })).filter((f) => f.value)
+  if (fingerings.length) out.fingering = fingerings
+  const pluck = childText(technical, 'pluck')
+  if (pluck) out.pluck = String(pluck).trim().toLowerCase()
+  if (findChild(technical, 'up-bow')) out.pickDirection = 'up'
+  if (findChild(technical, 'down-bow')) out.pickDirection = 'down'
+  if (findChild(technical, 'open-string')) out.openString = true
+  if (findChild(technical, 'stopped')) out.stopped = true
+  return Object.keys(out).length ? out : null
+}
+
+/** Lyric underlay attached to a note. */
+function readLyric(noteNode) {
+  const node = findChild(noteNode, 'lyric')
+  if (!node) return null
+  return {
+    number: attr(node, 'number') ?? '1',
+    syllabic: childText(node, 'syllabic') ?? null,
+    text: childText(node, 'text') ?? null,
+  }
+}
+
+/** Chord-diagram frame attached to a <harmony> element (NIFF-based). */
+function readFrame(harmonyNode) {
+  const frame = findChild(harmonyNode, 'frame')
+  if (!frame) return null
+  const notes = findChildren(frame, 'frame-note').map((frameNote) => {
+    const entry = {
+      string: numberOf(childText(frameNote, 'string'), NaN),
+      fret: numberOf(childText(frameNote, 'fret'), NaN),
+    }
+    const fingering = numberOf(childText(frameNote, 'fingering'), NaN)
+    if (Number.isFinite(fingering)) entry.fingering = fingering
+    const barre = findChild(frameNote, 'barre')
+    if (barre) entry.barre = attr(barre, 'type') ?? 'start'
+    return entry
+  })
+  const firstFret = numberOf(childText(frame, 'first-fret'), NaN)
+  return {
+    strings: numberOf(childText(frame, 'frame-strings'), NaN),
+    frets: numberOf(childText(frame, 'frame-frets'), NaN),
+    ...(Number.isFinite(firstFret) ? { firstFret } : {}),
+    notes,
+  }
+}
+
+/**
+ * Score-level marks from a <direction>: segno/coda/rehearsal/octave-shift
+ * plus mined free text (capo, positions, barre, navigation words).
+ * Purely additive: dynamics/tempo/wedge handling is untouched.
+ */
+function readScoreMarks(directionNode, { measureNumber, quarterTime, partId, staff }) {
+  const marks = []
+  for (const directionType of findChildren(directionNode, 'direction-type')) {
+    if (findChild(directionType, 'segno')) {
+      marks.push({ kind: 'segno', measureNumber, quarterTime, partId, staff })
+    }
+    if (findChild(directionType, 'coda')) {
+      marks.push({ kind: 'coda', measureNumber, quarterTime, partId, staff })
+    }
+    const rehearsal = childText(directionType, 'rehearsal')
+    if (rehearsal != null) {
+      marks.push({ kind: 'rehearsal', text: String(rehearsal), measureNumber, quarterTime, partId, staff })
+    }
+    for (const shift of findChildren(directionType, 'octave-shift')) {
+      marks.push({ kind: 'octave-shift', shiftType: attr(shift, 'type') ?? null, size: numberOf(attr(shift, 'size'), 8), measureNumber, quarterTime, partId, staff })
+    }
+    for (const words of findChildren(directionType, 'words')) {
+      const text = textOf(words)
+      if (text == null || !String(text).trim()) continue
+      const mined = mineTextDirection(text)
+      if (mined) {
+        marks.push({ ...mined, measureNumber, quarterTime, partId, staff })
+      } else {
+        marks.push({ kind: 'unresolved-text', sourceText: String(text).trim(), confidence: 'unresolved', measureNumber, quarterTime, partId, staff })
+      }
+    }
+  }
+  return marks
+}
+
+/** Jump semantics from a bare <sound> element (da capo / dal segno / fine…). */
+function readSoundJumps(soundNode, { measureNumber, quarterTime, partId }) {
+  if (!soundNode) return null
+  const jumps = attrsOf(soundNode, ['dacapo', 'dalsegno', 'tocoda', 'fine', 'segno', 'coda'])
+  if (!Object.keys(jumps).length) return null
+  return { kind: 'sound-jump', jumps, measureNumber, quarterTime, partId }
 }
 
 /** Clef declarations from an <attributes> node, keyed by staff number. */
@@ -707,6 +933,9 @@ function walkPart({
   harmonyEvents,
   partNotation = null,
   wedgeSpans = null,
+  scoreMarks = null,
+  frames = null,
+  options = {},
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -846,10 +1075,25 @@ function walkPart({
               measureNumber,
             })
           }
+          // Score-level marks (segno/coda/rehearsal/octave-shift/mined text)
+          // ride on the primary part's timeline; other parts contribute notes only.
+          if (Array.isArray(scoreMarks)) {
+            scoreMarks.push(
+              ...readScoreMarks(child, { measureNumber, quarterTime, partId, staff: directionStaff }),
+            )
+          }
           break
         }
 
         case 'sound': {
+          if (Array.isArray(scoreMarks)) {
+            const jumps = readSoundJumps(child, {
+              measureNumber,
+              quarterTime: measureStartQuarters + cursorDivisions / divisions,
+              partId,
+            })
+            if (jumps) scoreMarks.push(jumps)
+          }
           if (!isPrimary) {
             break
           }
@@ -881,13 +1125,18 @@ function walkPart({
 
         case 'harmony': {
           const symbol = readHarmonySymbol(child)
+          const quarterTime = measureStartQuarters + cursorDivisions / divisions
           if (symbol) {
             harmonyEvents.push({
               partId,
               measureNumber,
-              quarterTime: measureStartQuarters + cursorDivisions / divisions,
+              quarterTime,
               symbol,
             })
+          }
+          const frame = readFrame(child)
+          if (frame && Array.isArray(frames)) {
+            frames.push({ partId, measureNumber, quarterTime, symbol, frame })
           }
           break
         }
@@ -895,14 +1144,19 @@ function walkPart({
         case 'note': {
           const isChord = findChild(child, 'chord') != null
           const isGrace = findChild(child, 'grace') != null
+          const isCue = findChild(child, 'cue') != null
           const isRest = findChild(child, 'rest') != null
           const duration = numberOf(childText(child, 'duration'), 0)
           const voice = numberOf(childText(child, 'voice'), NaN)
           const startDivisions = isChord ? lastNoteStartDivisions : cursorDivisions
           const quarterTime = measureStartQuarters + startDivisions / divisions
-          const durationQuarters = duration / divisions
+          // Grace notes carry no <duration>: they steal no time.
+          const durationQuarters = isGrace ? 0 : duration / divisions
 
-          if (!isGrace) {
+          // Grace notes are dropped by default (historical behavior: every
+          // downstream consumer assumes sounded notes only). Opt in with
+          // includeNonSoundingNotes to receive them as zero-duration events.
+          if (!isGrace || options.includeNonSoundingNotes) {
             const layout = readNoteLayoutOrdered(child)
             const pitchNode = isRest ? null : findChild(child, 'pitch')
             const midi = isRest ? null : pitchNodeToMidi(pitchNode)
@@ -918,11 +1172,21 @@ function walkPart({
               tenuto,
               marcato,
               fermata,
+              staccatissimo,
+              breathMark,
+              otherArticulations,
               articulationPlacements,
             } = readArticulations(child)
             const slurs = readSlurs(child)
             const guitarTechniques = isRest ? [] : readGuitarTechniques(child)
             const technicalPosition = isRest ? null : readTechnicalPosition(child)
+            const notehead = isRest ? null : readNotehead(child)
+            const handMarks = isRest ? null : readHandMarks(child)
+            const lyric = readLyric(child)
+            const graceNode = findChild(child, 'grace')
+            const slash = graceNode ? attr(graceNode, 'slash') ?? null : null
+            const restNode = isRest ? findChild(child, 'rest') : null
+            const isMeasureRest = restNode ? attr(restNode, 'measure') === 'yes' : false
             const serializedSourceNoteheadId = attr(child, 'id')
             const sourceNoteheadId =
               typeof serializedSourceNoteheadId === 'string' &&
@@ -948,6 +1212,9 @@ function walkPart({
               ...(slurs.length ? { slurs } : {}),
               ...(guitarTechniques.length ? { guitarTechniques } : {}),
               ...(timeModification ? { timeModification } : {}),
+              ...(notehead ? { notehead } : {}),
+              ...(handMarks ?? {}),
+              ...(lyric ? { lyric } : {}),
               id: `${partId}-m${measureNumber}-n${notes.length}`,
               ...(sourceNoteheadId ? { sourceNoteheadId } : {}),
               partId,
@@ -963,6 +1230,9 @@ function walkPart({
               isRest,
               isChord,
               isGrace,
+              ...(isCue ? { isCue: true } : {}),
+              ...(slash ? { slash } : {}),
+              ...(isMeasureRest ? { isMeasureRest: true } : {}),
               tieStart,
               tieStop,
               tiePlacement,
@@ -971,6 +1241,9 @@ function walkPart({
               tenuto,
               marcato,
               fermata,
+              ...(staccatissimo ? { staccatissimo: true } : {}),
+              ...(breathMark ? { breathMark: true } : {}),
+              ...(otherArticulations.length ? { otherArticulations } : {}),
               articulationPlacements,
               dots,
               noteType,
@@ -981,7 +1254,8 @@ function walkPart({
               ...layout,
             })
 
-            if (!isRest && midi != null) {
+            // Grace and cue notes never attack: they are guides, not onsets.
+            if (!isRest && !isGrace && !isCue && midi != null) {
               rawTimingEvents.push({
                 type: 'note-on',
                 quarterTime,
@@ -1013,6 +1287,13 @@ function walkPart({
         lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
       const { newSystem, newPage } = measurePrintFlags(measureNode)
       const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
+      // Multi-measure rests: <measure-style><multiple-rest>N</multiple-rest>.
+      // The count is semantics (how many bars the rest spans), not layout.
+      let multipleRest = null
+      for (const style of findChildren(measureNode, 'measure-style')) {
+        const count = numberOf(childText(style, 'multiple-rest'), NaN)
+        if (Number.isFinite(count) && count >= 1) multipleRest = Math.round(count)
+      }
       // MusicXML marks pickup/anacrusis (and some courtesy) measures with
       // implicit="yes". Preserve it as honest metadata for pickup detection.
       const implicit = attr(measureNode, 'implicit') === 'yes'
@@ -1036,6 +1317,7 @@ function walkPart({
         // Engraved measure width in tenths (<measure width>), if present — used
         // to map MusicXML horizontal layout onto detected PDF barline spans.
         engravedWidth: Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
+        ...(multipleRest != null ? { multipleRest } : {}),
         marking: extractMarkings(measureNode),
       })
       measureStartQuarters += lengthQuarters
@@ -1067,7 +1349,15 @@ function walkPart({
   return boundaries
 }
 
-export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
+/**
+ * Parse score-partwise MusicXML into the app's note/timeline model.
+ *
+ * Additive options (all default off/empty, so existing callers see
+ * byte-identical behavior):
+ * - includeNonSoundingNotes: keep <grace/> notes as zero-duration events
+ *   (and mark <cue/> notes). Default false: grace notes are dropped.
+ */
+export function parseMusicXml(xmlString, fileName = 'score.musicxml', options = {}) {
   const parsed = parseXmlOrdered(xmlString)
 
   if (rootElement(parsed, 'score-timewise')) {
@@ -1103,6 +1393,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const rawTimingEvents = []
   const harmonyEvents = []
   const wedgeSpans = []
+  const scoreMarks = []
+  const frames = []
   const partNotationById = new Map()
 
   const notationForPart = (partId) => {
@@ -1130,6 +1422,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
+    scoreMarks,
+    frames,
+    options,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -1147,6 +1442,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       harmonyEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
+      scoreMarks,
+      frames,
+      options,
     })
   })
 
@@ -1158,7 +1456,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   applyTieSustainToNotes(notes)
   rawTimingEvents.length = 0
   for (const note of notes) {
-    if (note.isRest || note.midi == null || note.suppressPlaybackAttack || note.isTabMirror) {
+    if (note.isRest || note.isGrace || note.isCue || note.midi == null || note.suppressPlaybackAttack || note.isTabMirror) {
       continue
     }
     rawTimingEvents.push({
@@ -1255,6 +1553,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     implicit: boundary.implicit,
     notatedLengthQuarters: boundary.notatedLengthQuarters,
     engravedWidth: boundary.engravedWidth,
+    ...(boundary.multipleRest != null ? { multipleRest: boundary.multipleRest } : {}),
     // Repeat / volta markings for written-score evaluation (not playback expansion).
     marking: boundary.marking ?? null,
   }))
@@ -1380,11 +1679,19 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     suggestedInstrumentId: hasTabStaff || partNameSuggestsGuitar ? 'guitar' : null,
   }
 
+  // First capo declaration wins for pitch math; every mark is retained with
+  // its source text so text-mined confidence never masquerades as structure.
+  const capoMark = scoreMarks.find((mark) => mark.kind === 'capo')
+  const capo = capoMark
+    ? { fret: capoMark.fret, partial: capoMark.partial ?? false, sourceText: capoMark.sourceText, confidence: capoMark.confidence, measureNumber: capoMark.measureNumber, quarterTime: capoMark.quarterTime }
+    : null
+
   return {
     version: 2,
     fileName,
     title: getWorkTitle(score),
     notation,
+    capo,
     durationSeconds,
     writtenDurationSeconds,
     noteCount: pitchNotes.length,
@@ -1398,6 +1705,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     notes,
     timingEvents,
     harmonyEvents,
+    frames,
+    scoreMarks,
     wedgeSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {
