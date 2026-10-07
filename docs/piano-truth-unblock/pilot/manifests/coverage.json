@@ -1,0 +1,278 @@
+{
+ "classes": [
+  {
+   "class": "note",
+   "mapped": 170623,
+   "mapping_rate": "1.0000",
+   "objects": 170623,
+   "scores": 990
+  },
+  {
+   "class": "rest",
+   "mapped": 5641,
+   "mapping_rate": "1.0000",
+   "objects": 5641,
+   "scores": 274
+  },
+  {
+   "class": "mRest",
+   "mapped": 907,
+   "mapping_rate": "1.0000",
+   "objects": 907,
+   "scores": 40
+  },
+  {
+   "class": "accid",
+   "mapped": 6343,
+   "mapping_rate": "1.0000",
+   "objects": 6343,
+   "scores": 371
+  },
+  {
+   "class": "dot",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  },
+  {
+   "class": "clef",
+   "mapped": 2001,
+   "mapping_rate": "1.0000 semantic state join",
+   "objects": 2001,
+   "scores": 990
+  },
+  {
+   "class": "keySig",
+   "mapped": 1203,
+   "mapping_rate": "1.0000 semantic state join",
+   "objects": 1203,
+   "scores": 990
+  },
+  {
+   "class": "meterSig",
+   "mapped": 1510,
+   "mapping_rate": "1.0000 semantic state join",
+   "objects": 1510,
+   "scores": 988
+  },
+  {
+   "class": "beam",
+   "mapped": 34247,
+   "mapping_rate": "1.0000",
+   "objects": 34247,
+   "scores": 959
+  },
+  {
+   "class": "tuplet",
+   "mapped": 1330,
+   "mapping_rate": "1.0000",
+   "objects": 1330,
+   "scores": 196
+  },
+  {
+   "class": "tie",
+   "mapped": 3530,
+   "mapping_rate": "1.0000",
+   "objects": 3530,
+   "scores": 160
+  },
+  {
+   "class": "slur",
+   "mapped": 2971,
+   "mapping_rate": "1.0000",
+   "objects": 2971,
+   "scores": 278
+  },
+  {
+   "class": "artic",
+   "mapped": 4761,
+   "mapping_rate": "1.0000",
+   "objects": 4761,
+   "scores": 144
+  },
+  {
+   "class": "dynam",
+   "mapped": 654,
+   "mapping_rate": "1.0000",
+   "objects": 654,
+   "scores": 34
+  },
+  {
+   "class": "hairpin",
+   "mapped": 248,
+   "mapping_rate": "1.0000",
+   "objects": 248,
+   "scores": 20
+  },
+  {
+   "class": "tempo",
+   "mapped": 485,
+   "mapping_rate": "1.0000",
+   "objects": 485,
+   "scores": 311
+  },
+  {
+   "class": "trill",
+   "mapped": 239,
+   "mapping_rate": "1.0000",
+   "objects": 239,
+   "scores": 56
+  },
+  {
+   "class": "mordent",
+   "mapped": 52,
+   "mapping_rate": "1.0000",
+   "objects": 52,
+   "scores": 12
+  },
+  {
+   "class": "turn",
+   "mapped": 1,
+   "mapping_rate": "1.0000",
+   "objects": 1,
+   "scores": 1
+  },
+  {
+   "class": "trem",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  },
+  {
+   "class": "bTrem",
+   "mapped": 17,
+   "mapping_rate": "1.0000",
+   "objects": 17,
+   "scores": 4
+  },
+  {
+   "class": "fTrem",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  },
+  {
+   "class": "arpeg",
+   "mapped": 178,
+   "mapping_rate": "1.0000",
+   "objects": 178,
+   "scores": 11
+  },
+  {
+   "class": "gliss",
+   "mapped": 3,
+   "mapping_rate": "1.0000",
+   "objects": 3,
+   "scores": 2
+  },
+  {
+   "class": "pedal",
+   "mapped": 1152,
+   "mapping_rate": "1.0000",
+   "objects": 1152,
+   "scores": 12
+  },
+  {
+   "class": "octave",
+   "mapped": 89,
+   "mapping_rate": "1.0000",
+   "objects": 89,
+   "scores": 8
+  },
+  {
+   "class": "fing",
+   "mapped": 168,
+   "mapping_rate": "1.0000",
+   "objects": 168,
+   "scores": 4
+  },
+  {
+   "class": "fermata",
+   "mapped": 166,
+   "mapping_rate": "1.0000",
+   "objects": 166,
+   "scores": 63
+  },
+  {
+   "class": "breath",
+   "mapped": 1,
+   "mapping_rate": "1.0000",
+   "objects": 1,
+   "scores": 1
+  },
+  {
+   "class": "grace",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  },
+  {
+   "class": "cue",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  },
+  {
+   "class": "reh",
+   "mapped": 67,
+   "mapping_rate": "1.0000",
+   "objects": 67,
+   "scores": 30
+  },
+  {
+   "class": "dir",
+   "mapped": 611,
+   "mapping_rate": "1.0000",
+   "objects": 611,
+   "scores": 159
+  },
+  {
+   "class": "ending",
+   "mapped": 309,
+   "mapping_rate": "1.0000",
+   "objects": 309,
+   "scores": 115
+  },
+  {
+   "class": "harm",
+   "mapped": 2843,
+   "mapping_rate": "1.0000",
+   "objects": 2843,
+   "scores": 116
+  },
+  {
+   "class": "mNum",
+   "mapped": 8,
+   "mapping_rate": "1.0000",
+   "objects": 8,
+   "scores": 8
+  },
+  {
+   "class": "volta",
+   "mapped": 0,
+   "mapping_rate": "not present",
+   "objects": 0,
+   "scores": 0
+  }
+ ],
+ "note_features": {
+  "accidental": 6343,
+  "cue": 36,
+  "grace": 1045,
+  "octave_shifted": 3545
+ },
+ "objects": 242358,
+ "quarantines": {
+  "ambiguous_state_join": 1,
+  "broken_id_join": 1,
+  "source_identity_unverifiable": 2,
+  "unsupported_notation_transformation:articulation": 6
+ },
+ "schema": "corranzo.piano.pilot.coverage/1",
+ "scores": 990
+}

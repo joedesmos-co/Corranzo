@@ -73,8 +73,10 @@ Proven in `proof/REPORT.md` (11 scores, CPU-only, no training):
 - clef/keySig/meterSig have no id link (layout-generated ids); the semantic
   state join resolved **641/641** rendered groups (612 exact, 4 courtesy at
   system ends, 25 within-measure/previous-state).
-- **9,534/9,534** notes agree with their MEI staff visually, including a
-  cross-staff note; 0 disagreements.
+- **9,253/9,534** notes (97.05%) are geometrically nearest to the staff the
+  source assigns; the 281 disagreements are ledger-line/between-staff and
+  octave-shift placements where the geometric heuristic is ambiguous. Source
+  staff ancestry itself is exact; a probe cross-staff note joins correctly.
 - Byte-identical renders across processes with a pinned seed (11/11).
 - music21 cross-check exact on 9/11; the two differences are fully explained by
   octave-shift pitch semantics.
@@ -116,7 +118,8 @@ becomes 10 source hashes with verification reports. Detail in `RESEARCH.md` §8.
 ## 11. Small proof results
 
 Executed and passed (see `proof/REPORT.md`): 11 symbolic scores, 9,534 notes,
-exact element/state joins, 100% visual staff agreement, cross-process
+exact element/state joins, corrected staff-geometry check (97.05%, ambiguity
+characterised), cross-process
 determinism, rasterisation to ~300 DPI, plus a controlled coverage probe. The
 proof also produced five falsification findings (state-element ids, rest
 normalisation edge case, tremolo drop, octave-shift pitch semantics,

@@ -66,6 +66,25 @@ grace notes, cue notes, tremolo, glissando, fingering, trill/mordent/turn,
 fermata, rehearsal mark, tempo text, dynamics, hairpin, pedal, octave shift,
 arpeggio, cross-staff ownership, multi-voice, and chord stacks.
 
+## P0 reproduction check (pilot)
+
+Re-run during the pilot (2026-10-07): SVG output is byte-identical and all
+9,534 note joins, all state joins and cross-process stability reproduce. Three
+provenance defects were found and fixed before scaling:
+
+1. `getMEI()` embeds `<application isodate="...">`, so raw MEI bytes are
+   **not** reproducible even though ids, content and SVG are. All provenance
+   hashes now use **canonical MEI** (`canonical_mei()` strips `isodate`).
+2. The staff-line extractor filtered vertical paths (`|x1-x2| < 0.5`) while
+   staff lines are horizontal, so the visual-staff check had silently compared
+   zero notes and reported a vacuous "0 disagreements". It now selects the five
+   longest horizontal paths per staff group (excluding ledger lines).
+3. A second extraction bug (body slice ending at the first `</g>`) was fixed by
+   scanning to the staff's layer group.
+
+Two consecutive full runs then produce byte-identical `out/summary.json`
+(sha256 `813012f89614ab3654112be47371e3772f3efe237a5739085d00b186f996a8a8`).
+
 ## Results
 
 | id | notes id-joined | non-state classes joined | state groups resolved | histogram diff | cross-process stable |
@@ -116,9 +135,14 @@ within-measure / previous-state placement**; 0 unresolved.
 
 Other checks:
 
-- **visual staff ownership**: 9,534/9,534 notes agree with their MEI staff,
-  including the probe's cross-staff note (`<staff>2</staff>` inside a voice
-  whose default staff is 1). 0 disagreements.
+- **visual staff ownership**: with the corrected staff-line extractor,
+  9,253/9,534 notes (97.05%) are geometrically nearest to the staff that the
+  source assigns them to; 281 notes disagree. The disagreements are
+  ledger-line/between-staff placements and octave-shifted notes printed away
+  from their staff (e.g. middle C equidistant to both staves at ~4.3 staff
+  gaps; 8vb notes printed over the other staff). Source staff ancestry (the
+  truth recorded in the objects) is unaffected; the geometric heuristic is what
+  is ambiguous, not the correspondence.
 - **music21 histogram**: exact on 9/11 scores. The two differences
   (la-campanella 968/4388, probe 5/19) are entirely notes under octave shifts
   (see finding 4).
@@ -145,11 +169,13 @@ Other checks:
    join 728 rests 1:1. Consequence: rest duration truth should come from the
    source symbolic file joined by order; do not trust MEI `mRest` for partial
    rests in unusual voice layouts.
-3. **MusicXML single tremolo is dropped.** The probe's
+3. **MusicXML single tremolo is dropped (encoding-dependent).** The probe's
    `<tremolo type="single">3</tremolo>` produces no `trem`/`bTrem`/`fTrem`
-   element in MEI and no tremolo in SVG. Consequence: tremolo cannot be
-   labelled from MusicXML through Verovio; a tremolo-bearing pipeline needs MEI
-   input (`bTrem`/`fTrem`) or another renderer.
+   element in MEI and no tremolo in SVG. Corpus evidence from the pilot refines
+   this: some single-tremolo encodings do import as `bTrem` and map (4 scores /
+   17 tremolos in the pilot), so support is encoding-dependent. Consequence:
+   the pipeline must check each source for dropped features (it does) and
+   quarantine or route those through MEI input.
 4. **Octave shifts are applied to the notated pitch.** For notes under an
    octave shift, Verovio writes MEI `oct` = shifted (printed) pitch and keeps
    the source pitch in `oct.ges` (e.g. source G4 under 8vb -> `oct="3"
@@ -166,9 +192,19 @@ Other checks:
    accidentals, dots, dynamics, hairpins, pedal, octave, arpeggios, glissandi,
    fingerings, ornaments, fermatas, directions or endings: all were rendered
    and id-joined.
-7. **Determinism is opt-in.** `xmlIdSeed` must be set; otherwise ids are
-   random per run (geometry content is unchanged). This is a build parameter,
-   not a truth gap, but it must be pinned and recorded.
+7. **Determinism is opt-in and MEI needs canonicalisation.** `xmlIdSeed` must
+   be set; otherwise ids are random per run (geometry content is unchanged).
+   `getMEI()` additionally embeds `<application isodate="...">`, so raw MEI
+   bytes vary by run; provenance hashes must use canonical MEI. Both are build
+   parameters, not truth gaps, but they must be pinned and recorded.
+8. **The visual-staff check was initially vacuous and is now honest.** The
+   original extractor filtered vertical paths and therefore found zero staff
+   lines; `staff_visual_agree = staff_visual_disagree = 0` was reported as
+   "100% agreement". The corrected check gives 9,253/9,534 (97.05%); the 281
+   disagreements are ledger-line/between-staff/octave-shift placements where a
+   geometric nearest-staff heuristic is genuinely ambiguous. The id join and
+   source staff ancestry are unaffected. This defect was caught only because the
+   pilot re-ran the proof as a hard gate.
 
 ## Reproduction
 
@@ -190,21 +226,21 @@ sharp('out/coverage_probe.svg', {density: 96, limitInputPixels: false})
 
 ## Artifacts
 
-- script: `render_probe.py` (sha256 `b1c8642ff94d5bfbc81c5519a0cdb089185640ddefc59ee0167898cb403f5fa9`)
+- script: `render_probe.py` (sha256 `d58531cd9b4e2137bc2d1d784293b50e977efde3f4659319995b31abecac1bf3`)
 - inputs: `inputs/coverage_probe.musicxml` (sha256
   `4657937c07ade49ef45b4547d1eab2092876b0b110646053309aa5bf71fce4bb`)
 - paired sample: `out/<score>.paired.json` (element tables with id, tag,
   measure/staff/layer, pitch/duration/grace/cue, bbox)
 - summary: `out/summary.json` (sha256
-  `12a45d4e8d172fe7887b24a3df4378b317aa37184f4df8eab2825a931aca0569`)
+  `813012f89614ab3654112be47371e3772f3efe237a5739085d00b186f996a8a8`)
 - raster sample: `out/coverage_probe.png` (sha256
   `4eca6c5920ae71caea5e550923ca080350ef739ea9b82bd673b2cca7d3b2d78e`),
   `out/coverage_probe.svg` (sha256
   `48ede281f28dd4e45c7b223909d7536295799b7f116d51c99ec255e9ec7fae73`)
 - representative paired file: `out/cc0-coverage-probe.paired.json` (sha256
-  `473fe097668343da99bf56a07cec16ad91b7fbf27ec54dc9dbb23e9b3ef73fc9`),
+  `a0d19bbceb301d3e869843f5d5a2effcdac98ba472b1483d6ae7a2100daf900d`),
   `out/pd-la-campanella.paired.json` (sha256
-  `1f783a2838712711487b5f79f0033bd6b05faa97f8d5aa84bb0c3b0385d9d599`)
+  `263c945b02ab3d7142c93216bca265c6235d3c423da16bb1c7a0e57bbcc87800`)
 
 Environment: Python 3.13.14, verovio 6.3.0, music21 10.5.0, macOS (darwin).
 

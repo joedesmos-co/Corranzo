@@ -5,7 +5,8 @@
  "provenance": "local benchmark cache",
  "source_sha256": "820781cfb736f40af00886d2b47e52edc8cf4b0fdb2e3fbe16f444ff68336874",
  "pages": 2,
- "mei_sha256": "5ec56bd77b87342180feee234d8d98cb93e357f657f073b2be3c9364c79045af",
+ "mei_sha256": "425653e4c0884c6b5817c5609ffc452b435f7688d6e8ea1884960c90481572fc",
+ "mei_canonicalized": true,
  "svg_sha256": "9ca44550db32bbaa56b1814f09b33b94bc40810fa49a75e7e871d7ee2e5a627d",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -25,7 +26,7 @@
  "mei_measures": 27,
  "svg_group_ids": 7122,
  "svg_bboxes": 2102,
- "staff_groups": 0,
+ "staff_groups": 54,
  "join": {
   "accid": {
    "mei": 89,
@@ -117,7 +118,7 @@
  "state_join_ok": true,
  "notes_joined": 750,
  "notes_bad_bbox": 750,
- "staff_visual_agree": 0,
+ "staff_visual_agree": 750,
  "staff_visual_disagree": 0,
  "music21_notes": 750,
  "mei_pitched_notes": 750,

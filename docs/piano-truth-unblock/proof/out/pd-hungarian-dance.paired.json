@@ -5,7 +5,8 @@
  "provenance": "Corranzo demo fixture",
  "source_sha256": "01a9680ade6411a59b21623ba6b4f83a49219eed7f845acb257a763529ed6df3",
  "pages": 3,
- "mei_sha256": "d17fd54a68dc91c5aea5e38831ba070daa996012f1e58cbcca287abc804c929e",
+ "mei_sha256": "aa6752518d2d75b02f782760e12fcf1c817786e6865fe499198edc3065947499",
+ "mei_canonicalized": true,
  "svg_sha256": "eb30d1d708de8772cf6c781f4790acd6200f8ea6e9ecd5c00d7fbd6e490e04b6",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -30,7 +31,7 @@
  "mei_measures": 104,
  "svg_group_ids": 16139,
  "svg_bboxes": 4597,
- "staff_groups": 0,
+ "staff_groups": 208,
  "join": {
   "accid": {
    "mei": 68,
@@ -147,7 +148,7 @@
  "state_join_ok": true,
  "notes_joined": 1503,
  "notes_bad_bbox": 1503,
- "staff_visual_agree": 0,
+ "staff_visual_agree": 1503,
  "staff_visual_disagree": 0,
  "music21_notes": 1503,
  "mei_pitched_notes": 1503,

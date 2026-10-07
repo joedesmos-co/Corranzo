@@ -5,7 +5,8 @@
  "provenance": "Mutopia / Corranzo fixture",
  "source_sha256": "11500f576cee656a1eba662c0e62e1aada911d4762314a5e145a866c7cb883f2",
  "pages": 1,
- "mei_sha256": "c0755c8e6923278f6bcdbdd341c8e64af2374b9d8d6679c8abf6d4d2fed69127",
+ "mei_sha256": "443863e3c906722add05c2cc9f68722fd821a16be6815ac265b8c16f45175ef1",
+ "mei_canonicalized": true,
  "svg_sha256": "df78b00aef376296094f988af25ae293dc7232d379af4db52d0cc9778add4b01",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -22,7 +23,7 @@
  "mei_measures": 32,
  "svg_group_ids": 2221,
  "svg_bboxes": 624,
- "staff_groups": 0,
+ "staff_groups": 64,
  "join": {
   "accid": {
    "mei": 5,
@@ -99,8 +100,8 @@
  "state_join_ok": true,
  "notes_joined": 204,
  "notes_bad_bbox": 204,
- "staff_visual_agree": 0,
- "staff_visual_disagree": 0,
+ "staff_visual_agree": 203,
+ "staff_visual_disagree": 1,
  "music21_notes": 204,
  "mei_pitched_notes": 204,
  "diatonic_histogram_diff": {

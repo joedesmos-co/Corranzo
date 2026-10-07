@@ -5,7 +5,8 @@
  "provenance": "Corranzo deterministic fixture generator",
  "source_sha256": "5b1627f9133ef1f876359b25cdc76de1c81b4106086a74b78a8771841f261498",
  "pages": 1,
- "mei_sha256": "846670cd951dc55c5c1622e0d448837b8c2748ef069f7fba3c89a21af74af511",
+ "mei_sha256": "ddede729b829ea9c2478d5428492f22a596314c9c353d45a546f7002171b5831",
+ "mei_canonicalized": true,
  "svg_sha256": "fcba70183c457ab939563f4c3825d562ba448e15bd44acbf6de829a0083baa27",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -20,7 +21,7 @@
  "mei_measures": 8,
  "svg_group_ids": 378,
  "svg_bboxes": 97,
- "staff_groups": 0,
+ "staff_groups": 8,
  "join": {
   "clef": {
    "mei": 1,
@@ -87,7 +88,7 @@
  "state_join_ok": true,
  "notes_joined": 32,
  "notes_bad_bbox": 32,
- "staff_visual_agree": 0,
+ "staff_visual_agree": 32,
  "staff_visual_disagree": 0,
  "music21_notes": 32,
  "mei_pitched_notes": 32,

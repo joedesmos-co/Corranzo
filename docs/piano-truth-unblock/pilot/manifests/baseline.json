@@ -1,0 +1,33 @@
+{
+ "checks": {
+  "dataset_manifest_sha256_present": true,
+  "determinism_all_ok": true,
+  "determinism_sample": 25,
+  "geometry_bad_total": 0,
+  "id_join_missing_total": 0,
+  "identity_fail": 0,
+  "identity_ok": 990,
+  "object_sample_errors": [],
+  "object_sample_ok": 30,
+  "pages_without_staff_groups": 0,
+  "pass_with_missing_hashes": 0,
+  "quarantined_with_reason": true,
+  "raster_checked": 20,
+  "raster_ok": 20,
+  "selection_sha256_present": true,
+  "split_counts": {
+   "dev": 99,
+   "test": 99,
+   "train": 792
+  },
+  "split_covers_pass": true,
+  "split_disjoint": true,
+  "staff_gap_px_max": 18.0,
+  "staff_gap_px_min": 18.0,
+  "state_rendered_total": 14157,
+  "state_resolved_total": 14028,
+  "state_unresolved_total": 129
+ },
+ "schema": "corranzo.piano.pilot.baseline/1",
+ "verdict": "PASS"
+}

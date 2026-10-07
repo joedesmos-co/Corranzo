@@ -5,7 +5,8 @@
  "provenance": "authored for this proof (grace, cue, tremolo, gliss, fingering, ornaments, cross-staff)",
  "source_sha256": "4657937c07ade49ef45b4547d1eab2092876b0b110646053309aa5bf71fce4bb",
  "pages": 1,
- "mei_sha256": "617b7bca4f24167ba358ba42b621971d65cddc88e1426bfeb6f6095617b31af0",
+ "mei_sha256": "df2b38c9a5f348872611af0cb7ddca7f69fd8773693dd7874f6d9d4a60f52f7b",
+ "mei_canonicalized": true,
  "svg_sha256": "a38c7443ca956b82056b59ece601c6efd24813132abebdeb4422ede09295bfd0",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -33,7 +34,7 @@
  "mei_measures": 4,
  "svg_group_ids": 339,
  "svg_bboxes": 82,
- "staff_groups": 0,
+ "staff_groups": 8,
  "join": {
   "arpeg": {
    "mei": 1,
@@ -165,8 +166,8 @@
  "state_join_ok": true,
  "notes_joined": 19,
  "notes_bad_bbox": 19,
- "staff_visual_agree": 0,
- "staff_visual_disagree": 0,
+ "staff_visual_agree": 18,
+ "staff_visual_disagree": 1,
  "music21_notes": 19,
  "mei_pitched_notes": 19,
  "diatonic_histogram_diff": {

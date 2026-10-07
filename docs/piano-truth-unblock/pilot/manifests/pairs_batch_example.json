@@ -1,0 +1,394 @@
+{
+ "counts": {
+  "pass": 9,
+  "quarantined": 0,
+  "total": 9
+ },
+ "pairs": [
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": false,
+     "mei_measures": 32,
+     "mei_notes": 204,
+     "mei_rests": 3,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 64,
+     "xml_notes": 204,
+     "xml_rests": 0
+    },
+    "mei_sha256": "443863e3c906722add05c2cc9f68722fd821a16be6815ac265b8c16f45175ef1",
+    "notes": 204,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "df78b00aef376296094f988af25ae293dc7232d379af4db52d0cc9778add4b01",
+    "xml_id_seed": 20261007
+   },
+   "pair": "demo-minuet-in-g",
+   "pdf": {
+    "bytes": 180708,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1654,
+     2339
+    ],
+    "pages": 1,
+    "sha256": "6b34ba44122d9694156a113c749eee0bf3232f54ead431a44be6f2a1b6f32c8b"
+   },
+   "pdf_path": "demo-minuet-in-g.pdf",
+   "status": "PASS",
+   "symbolic_path": "demo-minuet-in-g.musicxml",
+   "symbolic_sha256": "11500f576cee656a1eba662c0e62e1aada911d4762314a5e145a866c7cb883f2"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 104,
+     "mei_notes": 1503,
+     "mei_rests": 81,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 104,
+     "xml_notes": 1503,
+     "xml_rests": 0
+    },
+    "mei_sha256": "aa6752518d2d75b02f782760e12fcf1c817786e6865fe499198edc3065947499",
+    "notes": 1503,
+    "pages": 3,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "eb30d1d708de8772cf6c781f4790acd6200f8ea6e9ecd5c00d7fbd6e490e04b6",
+    "xml_id_seed": 20261007
+   },
+   "pair": "hungarian-dance-no5",
+   "pdf": {
+    "bytes": 97937,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1653,
+     2339
+    ],
+    "pages": 4,
+    "sha256": "9b9383a5ddc725bba7e2930736ef827aee28b50de0b2f8527759f9c0ba53b1f8"
+   },
+   "pdf_path": "hungarian-dance-no5.pdf",
+   "status": "PASS",
+   "symbolic_path": "hungarian-dance-no5.mxl",
+   "symbolic_sha256": "01a9680ade6411a59b21623ba6b4f83a49219eed7f845acb257a763529ed6df3"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 150,
+     "mei_notes": 4388,
+     "mei_rests": 218,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 150,
+     "xml_notes": 4388,
+     "xml_rests": 0
+    },
+    "mei_sha256": "7b3cd094c9b478b581e45f7428b7a31404f4a4aa6f0f7277405d03852bbf47b6",
+    "notes": 4388,
+    "pages": 14,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "dea0a85100d24d366606f5a3d85f39c7c4bf917e9af8b14f821bf9407ef9d0ba",
+    "xml_id_seed": 20261007
+   },
+   "pair": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt",
+   "pdf": {
+    "bytes": 252970,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1653,
+     2339
+    ],
+    "pages": 11,
+    "sha256": "3ab86a247c2c38d36ece65c1c977c0d24217a5c77d9b8caeefbce55f84cc8b60"
+   },
+   "pdf_path": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.pdf",
+   "status": "PASS",
+   "symbolic_path": "la-campanella-grandes-etudes-de-paganini-no-3-franz-liszt.mxl",
+   "symbolic_sha256": "2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 8,
+     "mei_notes": 88,
+     "mei_rests": 0,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 8,
+     "xml_notes": 88,
+     "xml_rests": 0
+    },
+    "mei_sha256": "e6704e60786a905cfe100c7b1ff328526e4163be7daa146b1ca113cb8af58d1f",
+    "notes": 88,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "360dce670696b3337d2968f1d3d30bfc126e657cdf19ab0ac19bdd5b6c021bed",
+    "xml_id_seed": 20261007
+   },
+   "pair": "piano-articulation-scan",
+   "pdf": {
+    "bytes": 200561,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 1,
+    "sha256": "39429e2b422b6f7d56ffce662462112d818d828e5286cb44781dc836bc126d4b"
+   },
+   "pdf_path": "piano-articulation-scan.pdf",
+   "status": "PASS",
+   "symbolic_path": "piano-articulation-scan.musicxml",
+   "symbolic_sha256": "30d3c4389a7f2259fb180c6c0c2cda805054691f10987cd9954870495f30ee15"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 8,
+     "mei_notes": 32,
+     "mei_rests": 1,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 8,
+     "xml_notes": 32,
+     "xml_rests": 0
+    },
+    "mei_sha256": "ddede729b829ea9c2478d5428492f22a596314c9c353d45a546f7002171b5831",
+    "notes": 32,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "fcba70183c457ab939563f4c3825d562ba448e15bd44acbf6de829a0083baa27",
+    "xml_id_seed": 20261007
+   },
+   "pair": "piano-beginner-single-vector",
+   "pdf": {
+    "bytes": 5584,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 1,
+    "sha256": "593dbea7ce6859fec1884869aa345110bae7d548886ef28045f565e5c9786367"
+   },
+   "pdf_path": "piano-beginner-single-vector.pdf",
+   "status": "PASS",
+   "symbolic_path": "piano-beginner-single-vector.musicxml",
+   "symbolic_sha256": "5b1627f9133ef1f876359b25cdc76de1c81b4106086a74b78a8771841f261498"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 8,
+     "mei_notes": 264,
+     "mei_rests": 0,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 8,
+     "xml_notes": 264,
+     "xml_rests": 0
+    },
+    "mei_sha256": "7e638453e6fdd9c2eaf7bd5473b1cc4ae8dcf8e4f9309deb3973ff3464d1c970",
+    "notes": 264,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "825e02d6d6ba4bbe7a01e782ac0575453cb5da7af1130874d44c86bc5fafb5dd",
+    "xml_id_seed": 20261007
+   },
+   "pair": "piano-dense-advanced-vector",
+   "pdf": {
+    "bytes": 16253,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 1,
+    "sha256": "7f2390081104a4f328ba16ae39b86c301f2df526553a26169cd6888d19d72705"
+   },
+   "pdf_path": "piano-dense-advanced-vector.pdf",
+   "status": "PASS",
+   "symbolic_path": "piano-dense-advanced-vector.musicxml",
+   "symbolic_sha256": "0951bd7d7a833886fccfb22cfd0c3b5f2437fecfcb42b853df992383fbef87d8"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 8,
+     "mei_notes": 88,
+     "mei_rests": 0,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 8,
+     "xml_notes": 88,
+     "xml_rests": 0
+    },
+    "mei_sha256": "d15a291b3e828049e48e747a3ac82f358a9d6c11aed4b3c2d55dcb0030f949b7",
+    "notes": 88,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "9574235c4f8df8873c8c582f0abc832a785d048f5f19aacdb15775aed2f8864f",
+    "xml_id_seed": 20261007
+   },
+   "pair": "piano-grand-voices-vector",
+   "pdf": {
+    "bytes": 7937,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 1,
+    "sha256": "d56380dfdb2820c0a26bbe1716276a7f6e15026877f266a6826ea350c6f6ecb9"
+   },
+   "pdf_path": "piano-grand-voices-vector.pdf",
+   "status": "PASS",
+   "symbolic_path": "piano-grand-voices-vector.musicxml",
+   "symbolic_sha256": "bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": true,
+     "mei_measures": 8,
+     "mei_notes": 63,
+     "mei_rests": 5,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 8,
+     "xml_notes": 63,
+     "xml_rests": 0
+    },
+    "mei_sha256": "538aa55395e9b8a8f0ae0eb37b003b78c2cdead71afa558bb7cb1d0e9de57bc3",
+    "notes": 63,
+    "pages": 1,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "95256b34f4a12313f0538033b57884a620e93139bcf70361dbea78a5dc85d464",
+    "xml_id_seed": 20261007
+   },
+   "pair": "piano-rhythm-tuplets-vector",
+   "pdf": {
+    "bytes": 6944,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 1,
+    "sha256": "36c4cf23305903f9114161ec930b5a1775c2dffe16340ea46044ea2339a78635"
+   },
+   "pdf_path": "piano-rhythm-tuplets-vector.pdf",
+   "status": "PASS",
+   "symbolic_path": "piano-rhythm-tuplets-vector.musicxml",
+   "symbolic_sha256": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b"
+  },
+  {
+   "checks": {
+    "dropped_features": {},
+    "id_join_missing_nonstate": {},
+    "identity": {
+     "measures_match": false,
+     "mei_measures": 87,
+     "mei_notes": 1025,
+     "mei_rests": 59,
+     "ok": true,
+     "pitch_diff_mei_only": 0,
+     "pitch_diff_xml_only": 0,
+     "pitch_histogram_equal": true,
+     "xml_measures": 174,
+     "xml_notes": 1025,
+     "xml_rests": 0
+    },
+    "mei_sha256": "17e49d693564a8721d5aa1d017ebdcee86c1c037392bc58d96e71be25c075488",
+    "notes": 1025,
+    "pages": 3,
+    "renderer": "6.3.0-425dd7b",
+    "state_mismatch": 0,
+    "state_unresolved": 0,
+    "svg_sha256": "6de4a98cf8fe65af78c17ce047dddfc0505f0767fecc0267a7d3311a80651110",
+    "xml_id_seed": 20261007
+   },
+   "pair": "spider-dance-undertale",
+   "pdf": {
+    "bytes": 68997,
+    "page1_png": "pdf-page-01.png",
+    "page1_size": [
+     1700,
+     2200
+    ],
+    "pages": 4,
+    "sha256": "2ebc4c42cf572baa9f8f4c91f41d5551e76efa00a976cfb329649ab78011f78b"
+   },
+   "pdf_path": "spider-dance-undertale.pdf",
+   "status": "PASS",
+   "symbolic_path": "spider-dance-undertale.mxl",
+   "symbolic_sha256": "af6a6c339f302e8b1e6dcd0b4ce85f071701fb63177a9fddea8c7219b79f1a61"
+  }
+ ],
+ "renderer": {
+  "name": "verovio",
+  "version_pin": "6.3.0",
+  "xml_id_seed": 20261007
+ },
+ "schema": "corranzo.piano.pilot.pairs/1",
+ "source_dir": "<user-provided directory>"
+}

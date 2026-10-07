@@ -81,12 +81,21 @@ def sha256_file(p: Path) -> str:
     return h.hexdigest()
 
 
+def canonical_mei(mei: str) -> str:
+    """Strip the run timestamp Verovio embeds in <application isodate=...>.
+
+    Without this, getMEI() bytes are not reproducible even though ids, content
+    and SVG are. All provenance hashes must use the canonical form.
+    """
+    return re.sub(r'\s+isodate="[^"]*"', "", mei)
+
+
 def svg_bboxes(svg: str) -> dict:
     """id -> {class, x, y, w, h} from bbox groups emitted by svgBoundingBoxes."""
     out = {}
     for m in re.finditer(r'<g id="bbox-([^"]+)" class="([^"]*?)\s*bounding-box"[^>]*>\s*<rect([^/]*)/>', svg):
         eid, cls, attrs = m.group(1), m.group(2), m.group(3)
-        a = dict(re.findall(r'(\w+)="([^"]*)"', attrs))
+        a = dict(re.findall(r'([\w.-]+)="([^"]*)"', attrs))
         try:
             out[eid] = {"class": cls.strip(), "x": float(a["x"]), "y": float(a["y"]),
                         "w": float(a["width"]), "h": float(a["height"])}
@@ -155,17 +164,21 @@ def staff_spans(svg: str, page: int):
                             "id": im.group(1), "ys": None})
     # fill y spans from each staff group body
     for e in entries:
-        mm = re.search(r'<g\b[^>]*id="%s"[^>]*class="staff"[^>]*>(.*?)(?=<g\b[^>]*class="layer"|</g>)'
-                       % re.escape(e["id"]), svg, re.S)
-        if not mm:
+        start = re.search(r'<g\b[^>]*id="%s"[^>]*class="staff"[^>]*>' % re.escape(e["id"]), svg)
+        if not start:
             continue
+        layer = re.search(r'<g\b[^>]*class="layer"', svg[start.end():])
+        body = svg[start.end(): start.end() + layer.start()] if layer else svg[start.end(): start.end() + 20000]
         ys = []
-        for p in re.finditer(r'<path d="M\s*([-0-9.]+)\s+([-0-9.]+)\s*L\s*([-0-9.]+)\s+([-0-9.]+)"', mm.group(1)):
+        horiz = []
+        for p in re.finditer(r'<path d="M\s*([-0-9.]+)\s+([-0-9.]+)\s*L\s*([-0-9.]+)\s+([-0-9.]+)"', body):
             x1, y1, x2, y2 = map(float, p.groups())
-            if abs(x1 - x2) < 0.5:
-                ys.append(round((y1 + y2) / 2.0, 2))
+            if abs(y1 - y2) < 0.5:
+                horiz.append((abs(x2 - x1), (y1 + y2) / 2.0))
+        horiz.sort(reverse=True)
+        ys = sorted({round(y, 2) for _, y in horiz[:5]})
         if len(ys) >= 5:
-            e["ys"] = sorted(set(ys))
+            e["ys"] = ys
     return [e for e in entries if e["ys"]]
 
 
@@ -392,7 +405,8 @@ def render_score(spec):
     pages = tk.getPageCount()
     result["pages"] = pages
     mei = tk.getMEI()
-    result["mei_sha256"] = hashlib.sha256(mei.encode()).hexdigest()
+    result["mei_sha256"] = hashlib.sha256(canonical_mei(mei).encode()).hexdigest()
+    result["mei_canonicalized"] = True
 
     svgs = [tk.renderToSVG(i) for i in range(1, pages + 1)]
     result["svg_sha256"] = hashlib.sha256("".join(svgs).encode()).hexdigest()

@@ -5,7 +5,8 @@
  "provenance": "Corranzo fixture",
  "source_sha256": "2da9b329953a588aa0bc430aa798216fb726b5eaf6bcdeba0e45e454990324bd",
  "pages": 14,
- "mei_sha256": "e0f30445f3459402680a89ec7dd93ff01e29f218b595f44bdb286f3bd4e8a95c",
+ "mei_sha256": "7b3cd094c9b478b581e45f7428b7a31404f4a4aa6f0f7277405d03852bbf47b6",
+ "mei_canonicalized": true,
  "svg_sha256": "dea0a85100d24d366606f5a3d85f39c7c4bf917e9af8b14f821bf9407ef9d0ba",
  "verovio_version": "6.3.0-425dd7b",
  "mei_counts": {
@@ -35,7 +36,7 @@
  "mei_measures": 150,
  "svg_group_ids": 56539,
  "svg_bboxes": 17004,
- "staff_groups": 0,
+ "staff_groups": 300,
  "join": {
   "accid": {
    "mei": 714,
@@ -177,8 +178,8 @@
  "state_join_ok": true,
  "notes_joined": 4388,
  "notes_bad_bbox": 4388,
- "staff_visual_agree": 0,
- "staff_visual_disagree": 0,
+ "staff_visual_agree": 4266,
+ "staff_visual_disagree": 122,
  "music21_notes": 4388,
  "mei_pitched_notes": 4388,
  "diatonic_histogram_diff": {

@@ -280,7 +280,7 @@ counts in parentheses are joined elements across the 11-score proof):
 | repeats/endings/navigation | ending + barlines | partial (ending 2) | repeat semantics are source-level, not glyph-level |
 | text/directions | dir | yes (21) | |
 | multi-voice | layer | yes | |
-| cross-staff | note@staff | yes (probe; 100% visual staff agreement) | |
+| cross-staff | note@staff | yes (probe; source staff ancestry exact; geometric nearest-staff heuristic 97.05% and ambiguous on ledger/octave-shift placements) | |
 | uncommon notation | varies | not exhaustively tested | pilot must quantify import failures |
 
 Sufficiency is not "contains noteheads": the pipeline must be judged on the
@@ -347,7 +347,10 @@ Full detail in `proof/REPORT.md`. Summary:
   non-state classes 100%). Yes for clef/keySig/meterSig rendered groups — but
   they carry their semantics and are resolved exactly by the state join.
 - **Layout coordinates unstable?** No. Deterministic with `xmlIdSeed`;
-  official bboxes; measure/staff ancestry exact; 100% staff agreement.
+  official bboxes; measure/staff ancestry exact. A naive geometric
+  nearest-staff heuristic agrees with source staff ancestry for 9,253/9,534
+  notes (97.05%); the 281 disagreements are ledger-line/between-staff and
+  octave-shift placements where the heuristic is ambiguous, not source loss.
 - **Grace/cue notes omitted?** No; both preserved and rendered.
 - **Cross-staff ownership lost?** No; probe cross-staff note joined and landed
   on the correct visual staff.
