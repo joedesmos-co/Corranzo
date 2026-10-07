@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   beginAutoPracticeSession,
+  checkpointAutoPracticeSession,
   endAutoPracticeSession,
   recordAutoPracticeLoop,
   recordAutoPracticeMeasure,
@@ -8,11 +9,15 @@ import {
   recordWfyPracticeEvent,
   snapshotActiveSession,
   tickAutoPracticeSession,
+  tryEndAutoPracticeSession,
 } from './autoPracticeTracker.js'
 
 /**
  * Tracks local-only practice activity while the Practice view is open.
- * Flushes accumulated stats to localStorage when the session ends.
+ * Durably checkpoints the active segment every tick and on
+ * visibility/pagehide so reload/background/crash neither double-counts nor
+ * silently drops time. Flushes accumulated stats to localStorage when the
+ * session ends; failed flushes preserve the checkpoint for retry.
  */
 export default function usePracticeStatsTracker({
   active = false,
@@ -26,7 +31,7 @@ export default function usePracticeStatsTracker({
 
   useEffect(() => {
     if (!active || !piece?.id) {
-      endAutoPracticeSession()
+      tryEndAutoPracticeSession()
       setLiveSession(null)
       return undefined
     }
@@ -39,8 +44,22 @@ export default function usePracticeStatsTracker({
       setLiveSession(snapshotActiveSession())
     }, 1000)
 
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        checkpointAutoPracticeSession()
+        setLiveSession(snapshotActiveSession())
+      }
+    }
+    const handlePageHide = () => {
+      checkpointAutoPracticeSession()
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('pagehide', handlePageHide)
+
     return () => {
       clearInterval(tickId)
+      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('pagehide', handlePageHide)
       const nextStats = endAutoPracticeSession()
       setLiveSession(null)
       onStatsFlush?.(nextStats)

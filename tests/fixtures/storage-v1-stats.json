@@ -1,0 +1,41 @@
+{
+  "_comment": "V1 stats fixture: 20-item recent slice with headline 20/1200 while piece claims 21/1260 (B08 defect). Migration must heal to 21/1260 and canonicalize manual: -> piece:.",
+  "version": 1,
+  "totalPracticeSeconds": 1200,
+  "totalSessions": 20,
+  "manualSessionsCompleted": 20,
+  "legacyAutoPracticeSeconds": 0,
+  "legacyAutoSessionsCompleted": 0,
+  "autoPracticeSeconds": 0,
+  "pieces": {
+    "manual:same-piece": {
+      "id": "manual:same-piece",
+      "title": "Same piece",
+      "totalPracticeSeconds": 1260,
+      "totalSessions": 21,
+      "lastPracticedAt": 2000
+    }
+  },
+  "recentSessions": [
+    { "id": "manual-19", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1019, "durationSeconds": 60 },
+    { "id": "manual-18", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1018, "durationSeconds": 60 },
+    { "id": "manual-17", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1017, "durationSeconds": 60 },
+    { "id": "manual-16", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1016, "durationSeconds": 60 },
+    { "id": "manual-15", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1015, "durationSeconds": 60 },
+    { "id": "manual-14", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1014, "durationSeconds": 60 },
+    { "id": "manual-13", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1013, "durationSeconds": 60 },
+    { "id": "manual-12", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1012, "durationSeconds": 60 },
+    { "id": "manual-11", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1011, "durationSeconds": 60 },
+    { "id": "manual-10", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1010, "durationSeconds": 60 },
+    { "id": "manual-9", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1009, "durationSeconds": 60 },
+    { "id": "manual-8", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1008, "durationSeconds": 60 },
+    { "id": "manual-7", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1007, "durationSeconds": 60 },
+    { "id": "manual-6", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1006, "durationSeconds": 60 },
+    { "id": "manual-5", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1005, "durationSeconds": 60 },
+    { "id": "manual-4", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1004, "durationSeconds": 60 },
+    { "id": "manual-3", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1003, "durationSeconds": 60 },
+    { "id": "manual-2", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1002, "durationSeconds": 60 },
+    { "id": "manual-1", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1001, "durationSeconds": 60 },
+    { "id": "manual-0", "source": "manual", "pieceId": "manual:same-piece", "pieceTitle": "Same piece", "endedAt": 1000, "durationSeconds": 60 }
+  ]
+}

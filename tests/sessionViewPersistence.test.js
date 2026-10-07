@@ -17,10 +17,13 @@ describe('immediate route persistence for a saved score', () => {
     expect(updateSavedSessionView('import', pdfMeta, 'guitar')).toBe(false)
     expect(loadSessionMeta().meta).toMatchObject(snapshot)
   })
-  it('does not create a partial session or revive expired storage', () => {
+  it('does not create a partial session and never expires old saves', () => {
     expect(updateSavedSessionView('home', pdfMeta, 'piano')).toBe(false)
+    // Durable contract (S2): user-owned saves never auto-expire. An old save
+    // remains readable and its view stays updatable; nothing is deleted.
     saveSessionMeta({ ...snapshot, savedAt: Date.now() - SESSION_MAX_AGE_MS - 1000 })
-    expect(updateSavedSessionView('home', pdfMeta, 'piano')).toBe(false)
+    expect(updateSavedSessionView('home', pdfMeta, 'piano')).toBe(true)
+    expect(loadSessionMeta()?.meta?.pdfMeta?.fileName).toBe('Menuet.pdf')
   })
   it('handles unavailable storage without breaking navigation', () => {
     saveSessionMeta(snapshot)

@@ -6,11 +6,14 @@ import {
   MANUAL_TIMER_IDLE,
   MANUAL_TIMER_PAUSED,
   MANUAL_TIMER_RUNNING,
+  clearManualDraft,
   createManualTimerState,
   formatTimerDisplay,
   getManualTimerElapsedMs,
+  loadManualDraft,
   pauseManualTimer,
   resumeManualTimer,
+  saveManualDraft,
   startManualTimer,
   stopManualTimer,
 } from '../../features/profile/manualPracticeTimer.js'
@@ -27,6 +30,8 @@ function timerReducer(state, action) {
       return action.nextState
     case 'reset':
       return createManualTimerState()
+    case 'restore':
+      return action.timerState
     default:
       return state
   }
@@ -48,21 +53,39 @@ function formatDuration(seconds) {
   return minutes ? `${hours}h ${minutes}m` : `${hours}h`
 }
 
+function getInitialDraft() {
+  try {
+    return loadManualDraft()
+  } catch {
+    return null
+  }
+}
+
 export default function ManualPracticeLog() {
   const { saveManualPracticeSession } = useProfileStats()
   const { instrumentId } = useInstrument()
+  const [initialDraft] = useState(getInitialDraft)
   const [timerState, dispatchTimer] = useReducer(
     timerReducer,
     undefined,
-    createManualTimerState,
+    () => initialDraft?.timerState ?? createManualTimerState(),
   )
-  const [displayMs, setDisplayMs] = useState(0)
-  const [pendingSave, setPendingSave] = useState(null)
-  const [sessionInstrumentId, setSessionInstrumentId] = useState(null)
-  const [pieceTitle, setPieceTitle] = useState('')
-  const [exerciseType, setExerciseType] = useState('scales')
-  const [notes, setNotes] = useState('')
-  const [saveMessage, setSaveMessage] = useState('')
+  const [displayMs, setDisplayMs] = useState(() =>
+    getManualTimerElapsedMs(initialDraft?.timerState ?? createManualTimerState()),
+  )
+  const [pendingSave, setPendingSave] = useState(() => initialDraft?.pendingSave ?? null)
+  const [sessionInstrumentId, setSessionInstrumentId] = useState(
+    () => initialDraft?.sessionInstrumentId ?? null,
+  )
+  const [pieceTitle, setPieceTitle] = useState(() => initialDraft?.pieceTitle ?? '')
+  const [exerciseType, setExerciseType] = useState(() => initialDraft?.exerciseType ?? 'scales')
+  const [notes, setNotes] = useState(() => initialDraft?.notes ?? '')
+  const [saveMessage, setSaveMessage] = useState(() =>
+    initialDraft?.pendingSave || (initialDraft && initialDraft.timerState.status !== MANUAL_TIMER_IDLE)
+      ? 'Your timer was restored after reloading. Nothing was lost.'
+      : '',
+  )
+  const [saveFailed, setSaveFailed] = useState(false)
 
   const isRunning = timerState.status === MANUAL_TIMER_RUNNING
   const isPaused = timerState.status === MANUAL_TIMER_PAUSED
@@ -83,8 +106,25 @@ export default function ManualPracticeLog() {
     return () => window.clearInterval(intervalId)
   }, [isRunning, timerState])
 
+  // Durable draft: reload restores the timer + pending form.
+  useEffect(() => {
+    if (timerState.status === MANUAL_TIMER_IDLE && !pendingSave && !pieceTitle && !notes) {
+      clearManualDraft()
+      return
+    }
+    saveManualDraft({
+      timerState,
+      sessionInstrumentId,
+      pieceTitle,
+      exerciseType,
+      notes,
+      pendingSave,
+    })
+  }, [timerState, sessionInstrumentId, pieceTitle, exerciseType, notes, pendingSave])
+
   function handleStart() {
     setSaveMessage('')
+    setSaveFailed(false)
     setPendingSave(null)
     setSessionInstrumentId(instrumentId)
     dispatchTimer({ type: 'start', now: Date.now() })
@@ -104,11 +144,13 @@ export default function ManualPracticeLog() {
 
     if (result.elapsedSeconds < 1) {
       setSaveMessage('Practice for at least one second before saving.')
+      setSaveFailed(false)
       setPendingSave(null)
       return
     }
 
     setSaveMessage('')
+    setSaveFailed(false)
     setPendingSave({
       durationSeconds: result.elapsedSeconds,
       startedAt: result.startedAt,
@@ -124,7 +166,9 @@ export default function ManualPracticeLog() {
     setExerciseType('scales')
     setNotes('')
     setSaveMessage('')
+    setSaveFailed(false)
     dispatchTimer({ type: 'reset' })
+    clearManualDraft()
   }
 
   function handleSave(event) {
@@ -133,7 +177,7 @@ export default function ManualPracticeLog() {
       return
     }
 
-    saveManualPracticeSession({
+    const result = saveManualPracticeSession({
       pieceTitle,
       exerciseType,
       notes,
@@ -143,13 +187,23 @@ export default function ManualPracticeLog() {
       instrumentId: pendingSave.instrumentId,
     })
 
-    setSaveMessage('Session saved to your practice log.')
-    setPendingSave(null)
-    setSessionInstrumentId(null)
-    setPieceTitle('')
-    setExerciseType('scales')
-    setNotes('')
-    dispatchTimer({ type: 'reset' })
+    if (result?.ok) {
+      setSaveMessage('Session saved to your practice log.')
+      setSaveFailed(false)
+      setPendingSave(null)
+      setSessionInstrumentId(null)
+      setPieceTitle('')
+      setExerciseType('scales')
+      setNotes('')
+      dispatchTimer({ type: 'reset' })
+      clearManualDraft()
+    } else {
+      // Truthful failure: keep the pending work for retry, never claim success.
+      setSaveFailed(true)
+      setSaveMessage(
+        'Your session couldn’t be saved — device storage may be full. Your work is kept here; try saving again.',
+      )
+    }
   }
 
   return (
@@ -282,7 +336,7 @@ export default function ManualPracticeLog() {
               type="submit"
               className="profile-manual-log__btn profile-manual-log__btn--primary"
             >
-              Save session
+              {saveFailed ? 'Try saving again' : 'Save session'}
             </button>
           </div>
         </form>

@@ -1,5 +1,6 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
+  __clearAutoCheckpointForTest,
   __resetAutoPracticeSession,
   beginAutoPracticeSession,
   endAutoPracticeSession,
@@ -13,8 +14,25 @@ import {
 } from '../src/features/profile/autoPracticeTracker.js'
 import { clearStats, loadStats } from '../src/features/profile/profileStorage.js'
 
+function installFakeStorage() {
+  const store = new Map()
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    value: {
+      getItem: (key) => (store.has(key) ? store.get(key) : null),
+      setItem: (key, value) => store.set(key, String(value)),
+      removeItem: (key) => store.delete(key),
+    },
+  })
+}
+
+beforeEach(() => {
+  installFakeStorage()
+})
+
 afterEach(() => {
   __resetAutoPracticeSession()
+  __clearAutoCheckpointForTest()
   clearStats()
 })
 

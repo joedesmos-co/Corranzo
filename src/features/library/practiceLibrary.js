@@ -79,7 +79,10 @@ function formatApproxDuration(seconds) {
   return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`
 }
 
-export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId = null } = {}) {
+export function buildUploadedPracticePieces(
+  bundles = {},
+  { activeInstrumentId = null, saveStatus = null } = {},
+) {
   const activeInstrument = activeInstrumentId ? normalizeInstrumentId(activeInstrumentId) : null
   return Object.entries(bundles)
     .map(([instrumentId, bundle]) => {
@@ -103,9 +106,15 @@ export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId =
       const hasMidi = Boolean(bundle.midiSource?.data)
       const approxDuration = formatApproxDuration(bundle.musicXmlSource?.omrMeta?.durationSeconds)
       const title = stripExtension(bundle.pdfMeta.fileName) || 'Uploaded score'
-      const description = hasTiming
-        ? 'Your score is saved on this device.'
-        : 'Your PDF is saved. Continue import to prepare playback.'
+      // Truthful save copy: when the persistence lane reports failure, never
+      // claim success. Integrator passes saveStatus from useSessionPersistence;
+      // without it we keep the established saved copy for the success path.
+      const description =
+        saveStatus === 'failed'
+          ? 'Your score couldn’t be saved — it’s still open. Free up space and try again.'
+          : hasTiming
+            ? 'Your score is saved on this device.'
+            : 'Your PDF is saved. Continue import to prepare playback.'
 
       return {
         id: `upload:${normalizedInstrument}:${bundle.pdfMeta.fileName}`,
@@ -116,7 +125,8 @@ export function buildUploadedPracticePieces(bundles = {}, { activeInstrumentId =
         difficulty: 'Uploaded',
         approxDuration: approxDuration ?? 'PDF score',
         teaches: description,
-        subtitle: hasTiming ? 'Saved score' : 'Preparation needed',
+        subtitle:
+          saveStatus === 'failed' ? 'Save needed' : hasTiming ? 'Saved score' : 'Preparation needed',
         attribution: hasMidi ? 'Accompaniment attached' : 'No extra sound file needed',
         pdfFileName: bundle.pdfMeta.fileName,
         musicXmlFileName: bundle.musicXmlSource?.fileName ?? null,
