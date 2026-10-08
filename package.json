@@ -36,6 +36,7 @@
     "mic:stage2-compare": "node scripts/mic-stage2-comparison.mjs",
     "mic:realbench-excerpts": "node scripts/mic-realbench-excerpts.mjs",
     "mic:realbench": "node scripts/mic-realbench-run.mjs",
+    "mic:neural-compare": "node scripts/mic-neural-compare.mjs",
     "mic:v3-replay": "node scripts/mic-v3-performance-replay.mjs",
     "mic:manual-validate": "node scripts/mic-v3-manual-validation.mjs",
     "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
