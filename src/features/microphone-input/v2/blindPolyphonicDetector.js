@@ -27,6 +27,11 @@
 
 import { midiToFrequency } from '../micSyntheticClips.js'
 import {
+  createChordGroupingState,
+  flushChordGrouping,
+  pushChordGroupingFrame,
+} from '../micChordGrouping.js'
+import {
   applyWindow,
   computeMagnitudeSpectrum,
   DEFAULT_FFT_SIZE,
@@ -189,19 +194,44 @@ export function detectBlindPolyphony(samples, sampleRate, options = {}) {
   // register, so a peak between bins can round to the WRONG neighbor
   // (measured: B3 straddling bins rounded to Bb3 and was lost). Score the
   // rounded peak AND its semitone neighbors — the harmonic-family scorer,
-  // not the peak grid, decides which pitch has real support.
+  // not the peak grid, decides which pitch has real support. Candidates
+  // whose own fundamental lies outside the resolvable band are skipped
+  // (measured: sub-50 Hz room rumble rounded up into F#1/G1 ghosts).
+  //
+  // Exhaustive mode (Stage 4 P2): skip peak pruning and score every MIDI
+  // in range. Measured 2026-10-07 on real piano dense harmony: masked
+  // fundamentals are not spectrum local maxima at all, so no peak floor
+  // can reveal them — only family scoring finds them. Brute force costs
+  // ~88×5 Goertzel passes (≈1 ms/window, affordable); the acceptance
+  // guards (ratio, fundamental floor, overtone, adjacent) are unchanged,
+  // so widening the net cannot manufacture evidence-free notes.
   const seenMidis = new Set()
   const midiFloats = []
-  for (const peak of peaks) {
-    const midiFloat = frequencyToFloatMidi(peak.frequency)
-    const center = Math.round(midiFloat)
-    for (const midi of [center - 1, center, center + 1]) {
-      if (midi < config.minMidi || midi > config.maxMidi || seenMidis.has(midi)) {
+  if (config.exhaustive) {
+    for (let midi = config.minMidi; midi <= config.maxMidi; midi += 1) {
+      const candidateHz = midiToFrequency(midi)
+      if (candidateHz < config.minHz || candidateHz > config.maxHz) {
         continue
       }
       seenMidis.add(midi)
+      midiFloats.push(midi)
+    }
+  } else {
+    for (const peak of peaks) {
+      const midiFloat = frequencyToFloatMidi(peak.frequency)
+      const center = Math.round(midiFloat)
       // Nudge the float so the family scorer targets the neighbor integer.
-      midiFloats.push(midiFloat + (midi - center))
+      for (const midi of [center - 1, center, center + 1]) {
+        if (midi < config.minMidi || midi > config.maxMidi || seenMidis.has(midi)) {
+          continue
+        }
+        const candidateHz = midiToFrequency(midi)
+        if (candidateHz < config.minHz || candidateHz > config.maxHz) {
+          continue
+        }
+        seenMidis.add(midi)
+        midiFloats.push(midiFloat + (midi - center))
+      }
     }
   }
 
@@ -334,4 +364,47 @@ export function replayBlindPolyphonySamples(samples, sampleRate, options = {}) {
     .map(([midi]) => midi)
     .sort((left, right) => left - right)
   return { engine: BLIND_POLY_ENGINE_ID, frames, stableMidis }
+}
+
+/**
+ * Strum-aware replay (Stage 4 P1): blind frames → onset-anchored chord
+ * grouping instead of vote counting.
+ *
+ * Vote counting keeps only tones present ≥20% of the clip, which drops
+ * short melody notes, staggered strum strings, and masked voices the
+ * detector DID hear. Grouping retains any onset-anchored tone (attack +
+ * persistence + release tracking) with per-note onset and max confidence —
+ * persistence through musical structure, not stretched windows.
+ */
+export function replayBlindPolyphonyEvents(samples, sampleRate, options = {}) {
+  const {
+    fftSize = BLIND_POLY_DEFAULTS.fftSize,
+    frameHopMs = 1000 / 60,
+    groupingOptions = {},
+    ...detectorOptions
+  } = options
+  if (!samples?.length || !sampleRate) {
+    return { engine: `${BLIND_POLY_ENGINE_ID}+groups`, frames: [], groups: [] }
+  }
+  const hop = Math.max(1, Math.round((frameHopMs / 1000) * sampleRate))
+  const grouping = createChordGroupingState(groupingOptions)
+  const frames = []
+  const groups = []
+  for (let end = fftSize; end <= samples.length; end += hop) {
+    const slice = samples.subarray(end - fftSize, end)
+    const result = detectBlindPolyphony(slice, sampleRate, { fftSize, ...detectorOptions })
+    const timeMs = ((end - fftSize) / sampleRate) * 1000
+    const byMidi = new Map(result.candidates.map((candidate) => [candidate.midi, candidate]))
+    frames.push({ timeMs, detectedMidis: result.detectedMidis, noiseFloor: result.noiseFloor })
+    const { events } = pushChordGroupingFrame(grouping, {
+      timeMs,
+      candidates: result.detectedMidis.map((midi) => ({
+        midi,
+        confidence: byMidi.get(midi)?.confidence ?? 0,
+      })),
+    })
+    groups.push(...events)
+  }
+  groups.push(...flushChordGrouping(grouping).events)
+  return { engine: `${BLIND_POLY_ENGINE_ID}+groups`, frames, groups }
 }

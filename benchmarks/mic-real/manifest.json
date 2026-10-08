@@ -3,13 +3,15 @@
   "excerptSeconds": 3,
   "preRollSeconds": 0.5,
   "provenance": "Independent dataset annotations (JAMS per-string / MIDI). Detector output never used as truth.",
-  "naturalRecordings": 32,
+  "naturalRecordings": 42,
   "clips": [
     {
       "id": "piano-mozart-single",
       "instrument": "piano",
       "category": "single",
       "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
@@ -99,6 +101,8 @@
       "instrument": "piano",
       "category": "dyad",
       "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
@@ -209,6 +213,8 @@
       "instrument": "piano",
       "category": "triad",
       "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
@@ -305,6 +311,8 @@
       "instrument": "piano",
       "category": "dense",
       "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
@@ -417,6 +425,8 @@
       "instrument": "piano",
       "category": "single",
       "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Schubert_D783_no15_p01.wav",
@@ -536,6 +546,8 @@
       "instrument": "piano",
       "category": "triad",
       "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Schubert_D783_no15_p01.wav",
@@ -697,6 +709,8 @@
       "instrument": "piano",
       "category": "dense",
       "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
       "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Schubert_D783_no15_p01.wav",
@@ -870,10 +884,523 @@
       }
     },
     {
+      "id": "piano-mozart2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-mozart-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_mozart_p02.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p02.mid",
+      "audio": {
+        "file": "clips/piano-mozart2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.23,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57,
+          64,
+          73
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": 0.504,
+            "offset": 1.217
+          },
+          {
+            "midi": 64,
+            "onset": 0.506,
+            "offset": 1.085
+          },
+          {
+            "midi": 57,
+            "onset": 0.521,
+            "offset": 1.08
+          },
+          {
+            "midi": 74,
+            "onset": 1.245,
+            "offset": 1.342
+          },
+          {
+            "midi": 61,
+            "onset": 1.273,
+            "offset": 1.358
+          },
+          {
+            "midi": 64,
+            "onset": 1.311,
+            "offset": 1.361
+          },
+          {
+            "midi": 73,
+            "onset": 1.485,
+            "offset": 1.775
+          },
+          {
+            "midi": 57,
+            "onset": 1.5,
+            "offset": 1.785
+          },
+          {
+            "midi": 64,
+            "onset": 1.506,
+            "offset": 1.77
+          },
+          {
+            "midi": 64,
+            "onset": 1.984,
+            "offset": 2.523
+          },
+          {
+            "midi": 76,
+            "onset": 1.989,
+            "offset": 2.425
+          },
+          {
+            "midi": 61,
+            "onset": 2.001,
+            "offset": 2.526
+          },
+          {
+            "midi": 76,
+            "onset": 2.845,
+            "offset": 3.087
+          },
+          {
+            "midi": 64,
+            "onset": 2.865,
+            "offset": 3.104
+          },
+          {
+            "midi": 61,
+            "onset": 2.874,
+            "offset": 3.109
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-mozart2-dense",
+      "instrument": "piano",
+      "category": "dense",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-mozart-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_mozart_p02.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p02.mid",
+      "audio": {
+        "file": "clips/piano-mozart2-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 22.54,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          66,
+          71,
+          74
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": -0.306,
+            "offset": 0.101
+          },
+          {
+            "midi": 57,
+            "onset": -0.293,
+            "offset": 0.046
+          },
+          {
+            "midi": 74,
+            "onset": 0.498,
+            "offset": 0.797
+          },
+          {
+            "midi": 71,
+            "onset": 0.499,
+            "offset": 0.791
+          },
+          {
+            "midi": 50,
+            "onset": 0.503,
+            "offset": 0.875
+          },
+          {
+            "midi": 66,
+            "onset": 0.504,
+            "offset": 0.791
+          },
+          {
+            "midi": 73,
+            "onset": 1.152,
+            "offset": 1.556
+          },
+          {
+            "midi": 52,
+            "onset": 1.156,
+            "offset": 2
+          },
+          {
+            "midi": 64,
+            "onset": 1.165,
+            "offset": 1.609
+          },
+          {
+            "midi": 69,
+            "onset": 1.176,
+            "offset": 1.536
+          },
+          {
+            "midi": 40,
+            "onset": 2.03,
+            "offset": 2.736
+          },
+          {
+            "midi": 68,
+            "onset": 2.049,
+            "offset": 2.339
+          },
+          {
+            "midi": 71,
+            "onset": 2.054,
+            "offset": 2.309
+          },
+          {
+            "midi": 62,
+            "onset": 2.081,
+            "offset": 2.165
+          },
+          {
+            "midi": 69,
+            "onset": 2.661,
+            "offset": 3.295
+          },
+          {
+            "midi": 64,
+            "onset": 2.686,
+            "offset": 3.284
+          },
+          {
+            "midi": 61,
+            "onset": 2.688,
+            "offset": 3.271
+          },
+          {
+            "midi": 45,
+            "onset": 2.704,
+            "offset": 3.457
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "instrument": "piano",
+      "category": "single",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.01,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          48
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.007,
+            "offset": 1.244
+          },
+          {
+            "midi": 48,
+            "onset": 0.504,
+            "offset": 0.65
+          },
+          {
+            "midi": 58,
+            "onset": 1.059,
+            "offset": 1.311
+          },
+          {
+            "midi": 64,
+            "onset": 1.068,
+            "offset": 1.279
+          },
+          {
+            "midi": 55,
+            "onset": 1.086,
+            "offset": 1.416
+          },
+          {
+            "midi": 73,
+            "onset": 1.283,
+            "offset": 1.475
+          },
+          {
+            "midi": 64,
+            "onset": 1.411,
+            "offset": 1.451
+          },
+          {
+            "midi": 55,
+            "onset": 1.416,
+            "offset": 1.504
+          },
+          {
+            "midi": 72,
+            "onset": 1.425,
+            "offset": 2.39
+          },
+          {
+            "midi": 58,
+            "onset": 1.429,
+            "offset": 1.551
+          },
+          {
+            "midi": 48,
+            "onset": 1.84,
+            "offset": 1.951
+          },
+          {
+            "midi": 60,
+            "onset": 2.235,
+            "offset": 2.465
+          },
+          {
+            "midi": 65,
+            "onset": 2.236,
+            "offset": 2.396
+          },
+          {
+            "midi": 56,
+            "onset": 2.258,
+            "offset": 2.435
+          },
+          {
+            "midi": 73,
+            "onset": 2.414,
+            "offset": 2.64
+          },
+          {
+            "midi": 65,
+            "onset": 2.556,
+            "offset": 2.596
+          },
+          {
+            "midi": 72,
+            "onset": 2.56,
+            "offset": 3.486
+          },
+          {
+            "midi": 60,
+            "onset": 2.563,
+            "offset": 2.658
+          },
+          {
+            "midi": 56,
+            "onset": 2.593,
+            "offset": 2.695
+          },
+          {
+            "midi": 48,
+            "onset": 2.96,
+            "offset": 3.078
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.75,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          60,
+          65
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.315,
+            "offset": 0.65
+          },
+          {
+            "midi": 48,
+            "onset": 0.1,
+            "offset": 0.211
+          },
+          {
+            "midi": 60,
+            "onset": 0.495,
+            "offset": 0.725
+          },
+          {
+            "midi": 65,
+            "onset": 0.496,
+            "offset": 0.656
+          },
+          {
+            "midi": 56,
+            "onset": 0.518,
+            "offset": 0.695
+          },
+          {
+            "midi": 73,
+            "onset": 0.674,
+            "offset": 0.9
+          },
+          {
+            "midi": 65,
+            "onset": 0.816,
+            "offset": 0.856
+          },
+          {
+            "midi": 72,
+            "onset": 0.82,
+            "offset": 1.746
+          },
+          {
+            "midi": 60,
+            "onset": 0.822,
+            "offset": 0.918
+          },
+          {
+            "midi": 56,
+            "onset": 0.853,
+            "offset": 0.955
+          },
+          {
+            "midi": 48,
+            "onset": 1.22,
+            "offset": 1.338
+          },
+          {
+            "midi": 64,
+            "onset": 1.59,
+            "offset": 1.809
+          },
+          {
+            "midi": 58,
+            "onset": 1.593,
+            "offset": 1.926
+          },
+          {
+            "midi": 55,
+            "onset": 1.606,
+            "offset": 1.831
+          },
+          {
+            "midi": 73,
+            "onset": 1.765,
+            "offset": 1.987
+          },
+          {
+            "midi": 72,
+            "onset": 1.902,
+            "offset": 2.01
+          },
+          {
+            "midi": 64,
+            "onset": 1.912,
+            "offset": 1.989
+          },
+          {
+            "midi": 58,
+            "onset": 1.926,
+            "offset": 2.09
+          },
+          {
+            "midi": 55,
+            "onset": 1.949,
+            "offset": 2.045
+          },
+          {
+            "midi": 72,
+            "onset": 2.104,
+            "offset": 2.207
+          },
+          {
+            "midi": 73,
+            "onset": 2.221,
+            "offset": 2.308
+          },
+          {
+            "midi": 75,
+            "onset": 2.321,
+            "offset": 2.416
+          },
+          {
+            "midi": 73,
+            "onset": 2.398,
+            "offset": 3.329
+          },
+          {
+            "midi": 48,
+            "onset": 2.426,
+            "offset": 2.609
+          },
+          {
+            "midi": 60,
+            "onset": 2.901,
+            "offset": 3.29
+          },
+          {
+            "midi": 65,
+            "onset": 2.918,
+            "offset": 3.141
+          },
+          {
+            "midi": 56,
+            "onset": 2.918,
+            "offset": 3.13
+          }
+        ]
+      }
+    },
+    {
       "id": "acoustic-jazz-single",
       "instrument": "acoustic-guitar",
       "category": "single",
       "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs04-jazz",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
@@ -928,6 +1455,8 @@
       "instrument": "acoustic-guitar",
       "category": "dyad",
       "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs04-jazz",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
@@ -993,6 +1522,8 @@
       "instrument": "acoustic-guitar",
       "category": "single",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs00-bossa",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
@@ -1047,6 +1578,8 @@
       "instrument": "acoustic-guitar",
       "category": "dense",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs00-bossa",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
@@ -1134,6 +1667,8 @@
       "instrument": "acoustic-guitar",
       "category": "single",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03solo-rock",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
@@ -1193,6 +1728,8 @@
       "instrument": "acoustic-guitar",
       "category": "dyad",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03solo-rock",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
@@ -1293,6 +1830,8 @@
       "instrument": "acoustic-guitar",
       "category": "dyad",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03-rockcomp",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
@@ -1413,6 +1952,8 @@
       "instrument": "acoustic-guitar",
       "category": "dense",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03-rockcomp",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
@@ -1560,6 +2101,8 @@
       "instrument": "acoustic-guitar",
       "category": "triad",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs02-funk",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
@@ -1781,6 +2324,8 @@
       "instrument": "acoustic-guitar",
       "category": "dense",
       "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs02-funk",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
@@ -2023,6 +2568,8 @@
       "instrument": "acoustic-guitar",
       "category": "strum",
       "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs01-strum",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
@@ -2229,6 +2776,8 @@
       "instrument": "acoustic-guitar",
       "category": "strum",
       "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs01-strum",
       "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
@@ -2436,6 +2985,8 @@
       "instrument": "electric-guitar",
       "category": "single",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg07",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_07.wav",
@@ -2520,6 +3071,8 @@
       "instrument": "electric-guitar",
       "category": "dyad",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg07",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_07.wav",
@@ -2590,6 +3143,8 @@
       "instrument": "electric-guitar",
       "category": "triad",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg01",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_01.wav",
@@ -2666,6 +3221,8 @@
       "instrument": "electric-guitar",
       "category": "dense",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg01",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_01.wav",
@@ -2748,6 +3305,8 @@
       "instrument": "electric-guitar",
       "category": "dense",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg02",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_02.wav",
@@ -3002,6 +3561,8 @@
       "instrument": "electric-guitar",
       "category": "dyad",
       "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg05",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_05.wav",
@@ -3092,6 +3653,8 @@
       "instrument": "electric-guitar",
       "category": "dense",
       "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg10",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_10.wav",
@@ -3171,6 +3734,8 @@
       "instrument": "electric-guitar",
       "category": "dense",
       "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg03",
       "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "eg_03.wav",
@@ -3244,10 +3809,718 @@
       }
     },
     {
+      "id": "electric-eg04-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg04",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_04.wav",
+      "sourceTruthFile": "egset12/04.jams",
+      "audio": {
+        "file": "clips/electric-eg04-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 8.91,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          53,
+          54
+        ],
+        "notes": [
+          {
+            "midi": 51,
+            "onset": -0.054,
+            "offset": 0.09
+          },
+          {
+            "midi": 55,
+            "onset": 0.09,
+            "offset": 0.214
+          },
+          {
+            "midi": 56,
+            "onset": 0.226,
+            "offset": 0.362
+          },
+          {
+            "midi": 53,
+            "onset": 0.502,
+            "offset": 0.59
+          },
+          {
+            "midi": 54,
+            "onset": 0.61,
+            "offset": 0.734
+          },
+          {
+            "midi": 55,
+            "onset": 0.77,
+            "offset": 0.914
+          },
+          {
+            "midi": 55,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 59,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 65,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 70,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 48,
+            "onset": 1.998,
+            "offset": 2.138
+          },
+          {
+            "midi": 51,
+            "onset": 2.138,
+            "offset": 2.274
+          },
+          {
+            "midi": 55,
+            "onset": 2.274,
+            "offset": 2.378
+          },
+          {
+            "midi": 56,
+            "onset": 2.406,
+            "offset": 2.53
+          },
+          {
+            "midi": 53,
+            "onset": 2.678,
+            "offset": 2.774
+          },
+          {
+            "midi": 54,
+            "onset": 2.806,
+            "offset": 2.922
+          },
+          {
+            "midi": 55,
+            "onset": 2.958,
+            "offset": 3.102
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg06-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg06",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_06.wav",
+      "sourceTruthFile": "egset12/06.jams",
+      "audio": {
+        "file": "clips/electric-eg06-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 7.92,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          48,
+          53,
+          55,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 40,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 48,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 53,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 55,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 64,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 64,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 40,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 48,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 53,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 55,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 64,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 64,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 40,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 48,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 53,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 55,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 64,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 64,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 40,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 48,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 53,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 55,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 64,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 64,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 40,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 48,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 52,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 55,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 59,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 64,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 40,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 48,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 52,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 55,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 59,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 64,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 40,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 48,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 52,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 55,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 59,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 64,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 40,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 48,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 52,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 55,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 59,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 64,
+            "onset": 2.82,
+            "offset": 3.144
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg08-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg08",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_08.wav",
+      "sourceTruthFile": "egset12/08.jams",
+      "audio": {
+        "file": "clips/electric-eg08-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.95,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          47,
+          58,
+          72
+        ],
+        "notes": [
+          {
+            "midi": 71,
+            "onset": -0.094,
+            "offset": 0.162
+          },
+          {
+            "midi": 47,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 58,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 72,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 47,
+            "onset": 2.978,
+            "offset": 4.109
+          },
+          {
+            "midi": 58,
+            "onset": 2.978,
+            "offset": 4.109
+          },
+          {
+            "midi": 72,
+            "onset": 2.978,
+            "offset": 4.109
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg09-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg09",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_09.wav",
+      "sourceTruthFile": "egset12/09.jams",
+      "audio": {
+        "file": "clips/electric-eg09-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.6,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          70
+        ],
+        "notes": [
+          {
+            "midi": 52,
+            "onset": -1.074,
+            "offset": 0.186
+          },
+          {
+            "midi": 56,
+            "onset": 0.498,
+            "offset": 0.804
+          },
+          {
+            "midi": 70,
+            "onset": 0.498,
+            "offset": 0.804
+          },
+          {
+            "midi": 62,
+            "onset": 1.128,
+            "offset": 1.434
+          },
+          {
+            "midi": 71,
+            "onset": 1.128,
+            "offset": 1.434
+          },
+          {
+            "midi": 56,
+            "onset": 2.082,
+            "offset": 2.352
+          },
+          {
+            "midi": 70,
+            "onset": 2.082,
+            "offset": 2.352
+          },
+          {
+            "midi": 62,
+            "onset": 2.724,
+            "offset": 3.024
+          },
+          {
+            "midi": 71,
+            "onset": 2.724,
+            "offset": 3.024
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg11-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg11",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_11.wav",
+      "sourceTruthFile": "egset12/11.jams",
+      "audio": {
+        "file": "clips/electric-eg11-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.17,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          50,
+          56,
+          57,
+          59,
+          66
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": -0.925,
+            "offset": 0.142
+          },
+          {
+            "midi": 68,
+            "onset": -0.925,
+            "offset": 0.142
+          },
+          {
+            "midi": 40,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 57,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 50,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 56,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 59,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 66,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 67,
+            "onset": 1.794,
+            "offset": 1.966
+          },
+          {
+            "midi": 65,
+            "onset": 1.994,
+            "offset": 2.142
+          },
+          {
+            "midi": 63,
+            "onset": 2.17,
+            "offset": 2.338
+          },
+          {
+            "midi": 57,
+            "onset": 2.338,
+            "offset": 2.638
+          },
+          {
+            "midi": 63,
+            "onset": 2.682,
+            "offset": 2.81
+          },
+          {
+            "midi": 65,
+            "onset": 2.854,
+            "offset": 2.99
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg12-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg12",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_12.wav",
+      "sourceTruthFile": "egset12/12.jams",
+      "audio": {
+        "file": "clips/electric-eg12-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 11.69,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          45,
+          62,
+          67
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 62,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 67,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 48,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 54,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 64,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 45,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 62,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 67,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 50,
+            "onset": 2.473,
+            "offset": 2.856
+          },
+          {
+            "midi": 56,
+            "onset": 2.473,
+            "offset": 2.856
+          },
+          {
+            "midi": 66,
+            "onset": 2.473,
+            "offset": 2.856
+          }
+        ]
+      }
+    },
+    {
       "id": "electric-gtechs-low",
       "instrument": "electric-guitar",
       "category": "single",
       "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
       "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gt_singles.wav",
@@ -3282,6 +4555,8 @@
       "instrument": "electric-guitar",
       "category": "single",
       "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
       "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gt_singles.wav",
@@ -3311,6 +4586,8 @@
       "instrument": "electric-guitar",
       "category": "single",
       "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
       "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gt_singles.wav",
@@ -3340,6 +4617,8 @@
       "instrument": "electric-guitar",
       "category": "single",
       "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
       "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
       "license": "CC-BY-4.0",
       "sourceFile": "gt_singles.wav",
@@ -3374,6 +4653,8 @@
       "instrument": "piano",
       "category": "pause",
       "dataset": "same-as-audio",
+      "split": "eval",
+      "performance": "vienna-mozart-p01",
       "attribution": "see source file entry",
       "license": "CC-BY-4.0",
       "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",

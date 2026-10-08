@@ -113,4 +113,15 @@ describe('blind polyphonic detector', () => {
     expect(replayBlindPolyphonySamples(samples, SAMPLE_RATE, {}).stableMidis)
       .toEqual([60, 64, 67])
   })
+
+  it('exhaustive mode finds masked tones peak pruning misses, stays silent on silence', () => {
+    const chord = synthSimultaneousChord([60, 64, 67], SAMPLE_RATE, {})
+    const mid = chord.subarray(Math.floor(chord.length / 2), Math.floor(chord.length / 2) + 2048)
+    expect(detectBlindPolyphony(mid, SAMPLE_RATE, { exhaustive: true }).detectedMidis)
+      .toEqual([60, 64, 67])
+    const silence = synthSilence(SAMPLE_RATE, 0.6)
+    const quiet = silence.subarray(Math.floor(silence.length / 2), Math.floor(silence.length / 2) + 2048)
+    expect(detectBlindPolyphony(quiet, SAMPLE_RATE, { exhaustive: true }).detectedMidis)
+      .toEqual([])
+  })
 })

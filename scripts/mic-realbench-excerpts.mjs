@@ -38,37 +38,55 @@ const ATTRIBUTION = {
  * Selections: { id, instrument, category, dataset, audioFile, jamsOrMidi,
  * kind: 'jams'|'midi', onset } — onset = anchor chord/single-note attack.
  */
+/**
+ * Selections: { id, instrument, category, dataset, audioFile, truthFile,
+ * kind: 'jams'|'midi', onset, split: 'dev'|'eval', performance }.
+ *
+ * Split discipline (Stage 4 P5): NEVER split clips from one performance
+ * across dev/eval. Dev tunes; eval only reports. Same room/mic across
+ * Vienna takes is disclosed, not hidden.
+ */
 const SELECTIONS = [
-  // ---- piano (Vienna 4x22) ----
-  { id: 'piano-mozart-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 12.32 },
-  { id: 'piano-mozart-dyad', instrument: 'piano', category: 'dyad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 3.57 },
-  { id: 'piano-mozart-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 2.91 },
-  { id: 'piano-mozart-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 22.02 },
-  { id: 'piano-schubert-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 3.95 },
-  { id: 'piano-schubert-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 5.55 },
-  { id: 'piano-schubert-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 4.85 },
-  // ---- acoustic guitar (GuitarSet mic) ----
-  { id: 'acoustic-jazz-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 1.84 },
-  { id: 'acoustic-jazz-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 4.66 },
-  { id: 'acoustic-bossa-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 0.75 },
-  { id: 'acoustic-bossa-chord', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 14.62 },
-  { id: 'acoustic-rock-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 0.86 },
-  { id: 'acoustic-rock-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 15.86 },
-  { id: 'acoustic-power-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 0.85 },
-  { id: 'acoustic-power-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 11.34 },
-  { id: 'acoustic-funk-triad', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 1.88 },
-  { id: 'acoustic-funk-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 5.12 },
-  { id: 'acoustic-strum-triad', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 2.34 },
-  { id: 'acoustic-strum-dense', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 5.70 },
-  // ---- electric guitar (EGSet12 amp-mic) ----
-  { id: 'electric-eg07-single', instrument: 'electric-guitar', category: 'single', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 0.36 },
-  { id: 'electric-eg07-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 16.02 },
-  { id: 'electric-eg01-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 4.87 },
-  { id: 'electric-eg01-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 10.50 },
-  { id: 'electric-eg02-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_02.wav', truthFile: '/tmp/corranzo-realbench/egset12/02.jams', kind: 'jams', onset: 13.71 },
-  { id: 'electric-eg05-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_05.wav', truthFile: '/tmp/corranzo-realbench/egset12/05.jams', kind: 'jams', onset: 10.04 },
-  { id: 'electric-eg10-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_10.wav', truthFile: '/tmp/corranzo-realbench/egset12/10.jams', kind: 'jams', onset: 9.97 },
-  { id: 'electric-eg03-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_03.wav', truthFile: '/tmp/corranzo-realbench/egset12/03.jams', kind: 'jams', onset: 2.04 },
+  // ---- piano (Vienna 4x22) — dev: Mozart p01; eval: Schubert p01 + p02 takes ----
+  { id: 'piano-mozart-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 12.32, split: 'dev', performance: 'vienna-mozart-p01' },
+  { id: 'piano-mozart-dyad', instrument: 'piano', category: 'dyad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 3.57, split: 'dev', performance: 'vienna-mozart-p01' },
+  { id: 'piano-mozart-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 2.91, split: 'dev', performance: 'vienna-mozart-p01' },
+  { id: 'piano-mozart-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 22.02, split: 'dev', performance: 'vienna-mozart-p01' },
+  { id: 'piano-schubert-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 3.95, split: 'eval', performance: 'vienna-schubert-p01' },
+  { id: 'piano-schubert-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 5.55, split: 'eval', performance: 'vienna-schubert-p01' },
+  { id: 'piano-schubert-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 4.85, split: 'eval', performance: 'vienna-schubert-p01' },
+  { id: 'piano-mozart2-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'norm2_vn_mozart_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p02.mid', kind: 'midi', onset: 4.73, split: 'eval', performance: 'vienna-mozart-p02' },
+  { id: 'piano-mozart2-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'norm2_vn_mozart_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p02.mid', kind: 'midi', onset: 23.04, split: 'eval', performance: 'vienna-mozart-p02' },
+  { id: 'piano-schubert2-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'norm2_vn_schubert_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p02.mid', kind: 'midi', onset: 2.51, split: 'eval', performance: 'vienna-schubert-p02' },
+  { id: 'piano-schubert2-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'norm2_vn_schubert_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p02.mid', kind: 'midi', onset: 4.25, split: 'eval', performance: 'vienna-schubert-p02' },
+  // ---- acoustic guitar (GuitarSet mic) — dev: gs00/gs02/gs03*; eval: gs01/gs04 ----
+  { id: 'acoustic-jazz-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 1.84, split: 'eval', performance: 'gs04-jazz' },
+  { id: 'acoustic-jazz-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 4.66, split: 'eval', performance: 'gs04-jazz' },
+  { id: 'acoustic-bossa-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 0.75, split: 'dev', performance: 'gs00-bossa' },
+  { id: 'acoustic-bossa-chord', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 14.62, split: 'dev', performance: 'gs00-bossa' },
+  { id: 'acoustic-rock-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 0.86, split: 'dev', performance: 'gs03solo-rock' },
+  { id: 'acoustic-rock-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 15.86, split: 'dev', performance: 'gs03solo-rock' },
+  { id: 'acoustic-power-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 0.85, split: 'dev', performance: 'gs03-rockcomp' },
+  { id: 'acoustic-power-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 11.34, split: 'dev', performance: 'gs03-rockcomp' },
+  { id: 'acoustic-funk-triad', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 1.88, split: 'dev', performance: 'gs02-funk' },
+  { id: 'acoustic-funk-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 5.12, split: 'dev', performance: 'gs02-funk' },
+  { id: 'acoustic-strum-triad', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 2.34, split: 'eval', performance: 'gs01-strum' },
+  { id: 'acoustic-strum-dense', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 5.70, split: 'eval', performance: 'gs01-strum' },
+  // ---- electric guitar (EGSet12 amp-mic) — dev: eg01/eg02/eg05/eg07; eval: eg03/eg04/eg06/eg08-eg12 ----
+  { id: 'electric-eg07-single', instrument: 'electric-guitar', category: 'single', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 0.36, split: 'dev', performance: 'eg07' },
+  { id: 'electric-eg07-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 16.02, split: 'dev', performance: 'eg07' },
+  { id: 'electric-eg01-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 4.87, split: 'dev', performance: 'eg01' },
+  { id: 'electric-eg01-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 10.50, split: 'dev', performance: 'eg01' },
+  { id: 'electric-eg02-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_02.wav', truthFile: '/tmp/corranzo-realbench/egset12/02.jams', kind: 'jams', onset: 13.71, split: 'dev', performance: 'eg02' },
+  { id: 'electric-eg05-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_05.wav', truthFile: '/tmp/corranzo-realbench/egset12/05.jams', kind: 'jams', onset: 10.04, split: 'dev', performance: 'eg05' },
+  { id: 'electric-eg10-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_10.wav', truthFile: '/tmp/corranzo-realbench/egset12/10.jams', kind: 'jams', onset: 9.97, split: 'eval', performance: 'eg10' },
+  { id: 'electric-eg03-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_03.wav', truthFile: '/tmp/corranzo-realbench/egset12/03.jams', kind: 'jams', onset: 2.04, split: 'eval', performance: 'eg03' },
+  { id: 'electric-eg04-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_04.wav', truthFile: '/tmp/corranzo-realbench/egset12/04.jams', kind: 'jams', onset: 9.41, split: 'eval', performance: 'eg04' },
+  { id: 'electric-eg06-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_06.wav', truthFile: '/tmp/corranzo-realbench/egset12/06.jams', kind: 'jams', onset: 8.42, split: 'eval', performance: 'eg06' },
+  { id: 'electric-eg08-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_08.wav', truthFile: '/tmp/corranzo-realbench/egset12/08.jams', kind: 'jams', onset: 2.45, split: 'eval', performance: 'eg08' },
+  { id: 'electric-eg09-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_09.wav', truthFile: '/tmp/corranzo-realbench/egset12/09.jams', kind: 'jams', onset: 10.10, split: 'eval', performance: 'eg09' },
+  { id: 'electric-eg11-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_11.wav', truthFile: '/tmp/corranzo-realbench/egset12/11.jams', kind: 'jams', onset: 13.67, split: 'eval', performance: 'eg11' },
+  { id: 'electric-eg12-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_12.wav', truthFile: '/tmp/corranzo-realbench/egset12/12.jams', kind: 'jams', onset: 12.19, split: 'eval', performance: 'eg12' },
 ]
 
 /** Guitar-Techs isolated amp-mic notes: low / mid / high / quietest. */
@@ -93,7 +111,7 @@ function guitarTechsPicks() {
       id, instrument: 'electric-guitar', category: 'single', dataset: 'guitar-techs',
       audioFile: 'gt_singles.wav',
       truthFile: '/tmp/corranzo-realbench/gtechs/midi_allsinglenotes.mid',
-      kind: 'midi', onset: note.onset,
+      kind: 'midi', onset: note.onset, split: 'eval', performance: 'gtechs-session',
     }))
 }
 
@@ -145,6 +163,8 @@ function buildExcerpt(selection) {
     instrument: selection.instrument,
     category: selection.category,
     dataset: selection.dataset,
+    split: selection.split ?? 'dev',
+    performance: selection.performance ?? selection.id,
     attribution: ATTRIBUTION[selection.dataset],
     license: 'CC-BY-4.0',
     sourceFile: selection.audioFile,
@@ -171,7 +191,7 @@ function findPauses() {
   // loud continuous playing — no silence exists there, so no control is
   // cut from them. Do not manufacture silence controls from music.
   const targets = [
-    { id: 'pause-mozart', instrument: 'piano', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav' },
+    { id: 'pause-mozart', instrument: 'piano', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', split: 'eval', performance: 'vienna-mozart-p01' },
   ]
   return targets.map((target) => {
     const { samples, sampleRate } = loadAudio(target)
@@ -193,6 +213,7 @@ function findPauses() {
     rms = Math.sqrt(rms / Math.ceil(clip.length / 3))
     return {
       id: target.id, instrument: target.instrument, category: 'pause', dataset: 'same-as-audio',
+      split: target.split, performance: target.performance,
       attribution: 'see source file entry', license: 'CC-BY-4.0', sourceFile: target.audioFile,
       sourceTruthFile: null,
       audio: { file: `clips/${target.id}.wav`, sampleRate, startSeconds: Math.round(startSeconds * 1000) / 1000, durationSeconds: 1.5 },
