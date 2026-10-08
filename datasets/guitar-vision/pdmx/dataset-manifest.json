@@ -1,0 +1,4598 @@
+{
+ "version": "guitar-dataset-v2/1.0",
+ "generatedAt": "2026-10-08T12:42:53.905Z",
+ "scale": {
+  "tabDigits": 8829,
+  "tabDigitMin": 252.72,
+  "tabDigitMax": 252.72,
+  "tabDigitsReal": 8829,
+  "noteheads": 109860,
+  "noteheadMin": 25.92,
+  "noteheadMax": 560.88,
+  "units": "verovio-page-units"
+ },
+ "candidates": 52,
+ "pass": 51,
+ "passReal": 51,
+ "passEtudes": 0,
+ "quarantined": [
+  {
+   "id": "pdmx-QmbxSDdxZ285",
+   "status": "QUARANTINED:read-failure",
+   "reason": "missing file: datasets/guitar-vision/pdmx/pdmx-QmbxSDdxZ285.mxl"
+  }
+ ],
+ "classification": {
+  "standard-only:real": 40,
+  "paired:real": 11
+ },
+ "splits": {
+  "seed": 20261007,
+  "digest": "3a6e85288057e7f1fb281ff3cc05d5827c99064c29fb1f9559cbc5575aec6c11",
+  "ratios": {
+   "train": 6,
+   "validation": 3,
+   "heldout": 2,
+   "diagnostic": 1
+  },
+  "audit": {
+   "ok": true,
+   "violations": []
+  },
+  "sufficiency": {
+   "totalCollections": 29,
+   "labelableCollections": 29,
+   "minimumCollections": 6,
+   "validationRolesPresent": 3,
+   "validationRolesRequired": 3,
+   "shortages": [],
+   "sufficient": true
+  },
+  "assignments": [
+   {
+    "sample": "pdmx-Qmb4fV3H5Efc",
+    "collection": "pdmx-bach",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-Qmb8X8sqA6FX",
+    "collection": "pdmx-giuliani",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-Qmbgcj3cCzhC",
+    "collection": "pdmx-franz-schubert",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmbJQYNqLKKf",
+    "collection": "pdmx-johann-kaspar-mertz",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "pdmx-QmbW1fqPrYqC",
+    "collection": "pdmx-fernando-sor",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmbXCC5EpL31",
+    "collection": "pdmx-na",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPaAnQ9gEgh",
+    "collection": "pdmx-na",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPBshWs1LKA",
+    "collection": "pdmx-ferdinando-carulli",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPcXanBnKBz",
+    "collection": "pdmx-matteo-carcassi",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmPe1WQzQ7q8",
+    "collection": "pdmx-johann-sebastian-bach",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPKpa1JoZ87",
+    "collection": "pdmx-js-bach-arr-dempsey",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPQ589isdKo",
+    "collection": "pdmx-johann-sebastian-bach",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmPQSpyNYTfk",
+    "collection": "pdmx-fernando-sor",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmPxCX56tvSF",
+    "collection": "pdmx-johann-sebastian-bachtranscribed-by-jona",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmQHNvedtwuh",
+    "collection": "pdmx-unknown",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmQkpBKzApz6",
+    "collection": "pdmx-ferdinando-carulli",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmQRo9MPJgZP",
+    "collection": "pdmx-johann-sebastian-guitar-bach-bwv-anh",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmTddaPpyvpq",
+    "collection": "pdmx-fernando-sor",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmTJRwrHUET3",
+    "collection": "pdmx-mauro-giuliani",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmTtiJN97SLE",
+    "collection": "pdmx-matteo-carcassi",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmTxoAbitsi9",
+    "collection": "pdmx-na",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmTyVsS8Rm93",
+    "collection": "pdmx-na",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmW1pwz5v6SC",
+    "collection": "pdmx-francisco-tarrega",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmWAopKo27JK",
+    "collection": "pdmx-mauro-giuliani",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmWox2EnjyF2",
+    "collection": "pdmx-matteo-carcassi",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmWP7U8ppwsN",
+    "collection": "pdmx-mauro-giuliani",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmWpoJjhLSsS",
+    "collection": "pdmx-grieg-arr-solo-guitar-g-dempsey",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmWtU5XzSXYE",
+    "collection": "pdmx-mauro-giuliani",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmWUU3iiqd6M",
+    "collection": "pdmx-johann-sebastian-bach-arrangement-by-lea",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "pdmx-QmWvkp1mCnkV",
+    "collection": "pdmx-slow-theme-from-chopin-s-posthumous-fant",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmZ2JSSWForn",
+    "collection": "pdmx-ferdinando-carulli",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmZ5K3BV9FDR",
+    "collection": "pdmx-chopin",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmZNQx6WUKNa",
+    "collection": "pdmx-chopin",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx-QmZpMVFCQAAm",
+    "collection": "pdmx-fernando-sor",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx-QmZtV9sBwXzB",
+    "collection": "pdmx-beethoven",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx2-QmbDx27eQFvL",
+    "collection": "pdmx-franz-schubert",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-Qme6EwjyP1uq",
+    "collection": "pdmx-mozart-arr-solo-guitar-g-dempsey",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "pdmx2-QmeASCmeLpLj",
+    "collection": "pdmx-antonio-vivaldiarr-biel-mart-n",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmeceqXerwVf",
+    "collection": "pdmx-ferdinando-carulli",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmekLmWeUSck",
+    "collection": "pdmx-m-carcassi",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmekQbhC1yAP",
+    "collection": "pdmx-johann-sebastian-bach",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmeNbCM8jt7T",
+    "collection": "pdmx-beethoven",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx2-QmeRZdGXL7PY",
+    "collection": "pdmx-mauro-giuliani-arranged-by-jake-russell",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmeUpnZqgdH2",
+    "collection": "pdmx-matteo-carcassireedi-o-e-cifras-por-solm",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmeYm4rEpodg",
+    "collection": "pdmx-matteo-carcassi",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx2-QmVDaX5YmZCx",
+    "collection": "pdmx-f-carulli",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmVry3t5TdS8",
+    "collection": "pdmx-dinioso-aguado",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmYeTFaApUgx",
+    "collection": "pdmx-mauro-giuliani",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmYnaoNLbcJQ",
+    "collection": "pdmx-isaac-albeniz",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "pdmx2-QmYY91puRp85",
+    "collection": "pdmx-fernando-sor",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "pdmx2-QmYyG5prCb7E",
+    "collection": "pdmx-johann-sebastion-bach",
+    "split": "train",
+    "role": null
+   }
+  ]
+ },
+ "duplicates": [],
+ "coverage": {
+  "accent": {
+   "scores": 7,
+   "scoreIds": [
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "accidental": {
+   "scores": 48,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "barre": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "heldout",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "chord": {
+   "scores": 41,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "chord-symbol": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx2-QmeUpnZqgdH2"
+   ],
+   "splits": [
+    "diagnostic"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "coda": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "dots": {
+   "scores": 41,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "double-dots": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-16th": {
+   "scores": 31,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-32nd": {
+   "scores": 10,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-64th": {
+   "scores": 3,
+   "scoreIds": [
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-eighth": {
+   "scores": 49,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-half": {
+   "scores": 42,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-quarter": {
+   "scores": 49,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-whole": {
+   "scores": 17,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "ending": {
+   "scores": 11,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "fermata": {
+   "scores": 11,
+   "scoreIds": [
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYnaoNLbcJQ"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "fret-number": {
+   "scores": 11,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "ghost-note": {
+   "scores": 4,
+   "scoreIds": [
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx2-Qme6EwjyP1uq"
+   ],
+   "splits": [
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "grace-note": {
+   "scores": 17,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "key-signature": {
+   "scores": 51,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "left-hand-fingering": {
+   "scores": 22,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "lyrics": {
+   "scores": 3,
+   "scoreIds": [
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx2-QmbDx27eQFvL"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "marcato": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx2-QmYnaoNLbcJQ"
+   ],
+   "splits": [
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "multi-voice-rhythm": {
+   "scores": 48,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:barre": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "heldout",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:coda": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:da-capo-al-fine": {
+   "scores": 3,
+   "scoreIds": [
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx2-QmeceqXerwVf"
+   ],
+   "splits": [
+    "diagnostic",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:dal-segno-al-coda": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmWvkp1mCnkV"
+   ],
+   "splits": [
+    "heldout",
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:fine": {
+   "scores": 4,
+   "scoreIds": [
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx2-QmeceqXerwVf"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:octave-shift": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx-QmQHNvedtwuh"
+   ],
+   "splits": [
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:position": {
+   "scores": 9,
+   "scoreIds": [
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmeYm4rEpodg"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:rehearsal": {
+   "scores": 4,
+   "scoreIds": [
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:segno": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmWP7U8ppwsN"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:to-coda": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmWvkp1mCnkV"
+   ],
+   "splits": [
+    "heldout",
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "navigation:unresolved-text": {
+   "scores": 31,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeRZdGXL7PY",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "notehead-variant": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmYnaoNLbcJQ"
+   ],
+   "splits": [
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "octave-shift": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx-QmQHNvedtwuh"
+   ],
+   "splits": [
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "position-indication": {
+   "scores": 9,
+   "scoreIds": [
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmeYm4rEpodg"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "rehearsal-mark": {
+   "scores": 4,
+   "scoreIds": [
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "repeat": {
+   "scores": 28,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "rest": {
+   "scores": 48,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx-QmbW1fqPrYqC",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmYyG5prCb7E",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "segno": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmWP7U8ppwsN"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "slur": {
+   "scores": 26,
+   "scoreIds": [
+    "pdmx-QmPQ589isdKo",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPcXanBnKBz",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmW1pwz5v6SC",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-QmZtV9sBwXzB",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-QmeASCmeLpLj",
+    "pdmx2-QmeUpnZqgdH2",
+    "pdmx2-QmeYm4rEpodg",
+    "pdmx2-QmekLmWeUSck",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "staccato": {
+   "scores": 5,
+   "scoreIds": [
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmbJQYNqLKKf",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmbDx27eQFvL"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "standard-tab-pairing": {
+   "scores": 11,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "string-number": {
+   "scores": 25,
+   "scoreIds": [
+    "pdmx-QmPBshWs1LKA",
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPQSpyNYTfk",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmQRo9MPJgZP",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZ2JSSWForn",
+    "pdmx-QmZ5K3BV9FDR",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx2-QmVDaX5YmZCx",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-Qme6EwjyP1uq",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeceqXerwVf",
+    "pdmx2-QmekQbhC1yAP"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "technique:arpeggio": {
+   "scores": 11,
+   "scoreIds": [
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQHNvedtwuh",
+    "pdmx-QmTJRwrHUET3",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWox2EnjyF2",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmbDx27eQFvL",
+    "pdmx2-QmeNbCM8jt7T"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "technique:mordent": {
+   "scores": 3,
+   "scoreIds": [
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-Qmbgcj3cCzhC"
+   ],
+   "splits": [
+    "heldout",
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "technique:slide": {
+   "scores": 6,
+   "scoreIds": [
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmeYm4rEpodg"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "technique:trill": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmQHNvedtwuh",
+    "pdmx2-QmeASCmeLpLj"
+   ],
+   "splits": [
+    "heldout",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "technique:turn": {
+   "scores": 2,
+   "scoreIds": [
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm"
+   ],
+   "splits": [
+    "heldout",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "tempo-marking": {
+   "scores": 7,
+   "scoreIds": [
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmPxCX56tvSF",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx2-QmVry3t5TdS8"
+   ],
+   "splits": [
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "tenuto": {
+   "scores": 1,
+   "scoreIds": [
+    "pdmx-QmbJQYNqLKKf"
+   ],
+   "splits": [
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "tie": {
+   "scores": 22,
+   "scoreIds": [
+    "pdmx-QmPKpa1JoZ87",
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmPe1WQzQ7q8",
+    "pdmx-QmQkpBKzApz6",
+    "pdmx-QmTddaPpyvpq",
+    "pdmx-QmTxoAbitsi9",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWP7U8ppwsN",
+    "pdmx-QmWUU3iiqd6M",
+    "pdmx-QmWpoJjhLSsS",
+    "pdmx-QmWvkp1mCnkV",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-Qmb4fV3H5Efc",
+    "pdmx-QmbXCC5EpL31",
+    "pdmx-Qmbgcj3cCzhC",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYY91puRp85",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeYm4rEpodg"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "tuplet": {
+   "scores": 13,
+   "scoreIds": [
+    "pdmx-QmPaAnQ9gEgh",
+    "pdmx-QmTtiJN97SLE",
+    "pdmx-QmTyVsS8Rm93",
+    "pdmx-QmWAopKo27JK",
+    "pdmx-QmWtU5XzSXYE",
+    "pdmx-QmZNQx6WUKNa",
+    "pdmx-QmZpMVFCQAAm",
+    "pdmx-Qmb8X8sqA6FX",
+    "pdmx2-QmVry3t5TdS8",
+    "pdmx2-QmYeTFaApUgx",
+    "pdmx2-QmYnaoNLbcJQ",
+    "pdmx2-QmeNbCM8jt7T",
+    "pdmx2-QmeUpnZqgdH2"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  }
+ },
+ "dataGaps": [
+  {
+   "family": "bend-amount",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "pre-bend",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "bend-release",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "slide",
+   "tier": "COMMON",
+   "scores": 6,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "hammer-on",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "pull-off",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "natural-harmonic",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "artificial-harmonic",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "tapping",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "palm-mute",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "let-ring",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "dead-note",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "vibrato",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "tremolo-picking",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "alternate-tuning",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "tuning",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "capo",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "chord-diagram",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "ds-dc-navigation",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "cue-note",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "chord-symbol",
+   "tier": "UNCOMMON",
+   "scores": 1,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  }
+ ],
+ "masks": {
+  "policy": "A9: failing measures are excluded from rhythm/voice supervision, kept in truth, recorded here",
+  "perScore": {
+   "pdmx-QmbW1fqPrYqC": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 681
+   },
+   "pdmx-Qmb4fV3H5Efc": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 376
+   },
+   "pdmx-QmbJQYNqLKKf": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 131
+   },
+   "pdmx-Qmbgcj3cCzhC": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-Qmbgcj3cCzhC-n001",
+     "pdmx-Qmbgcj3cCzhC-n002",
+     "pdmx-Qmbgcj3cCzhC-n003",
+     "pdmx-Qmbgcj3cCzhC-n004",
+     "pdmx-Qmbgcj3cCzhC-n005",
+     "pdmx-Qmbgcj3cCzhC-n006",
+     "pdmx-Qmbgcj3cCzhC-n075",
+     "pdmx-Qmbgcj3cCzhC-n111",
+     "pdmx-Qmbgcj3cCzhC-n112",
+     "pdmx-Qmbgcj3cCzhC-n113",
+     "pdmx-Qmbgcj3cCzhC-n114",
+     "pdmx-Qmbgcj3cCzhC-n115",
+     "pdmx-Qmbgcj3cCzhC-n1484",
+     "pdmx-Qmbgcj3cCzhC-n1485",
+     "pdmx-Qmbgcj3cCzhC-n185",
+     "pdmx-Qmbgcj3cCzhC-n218",
+     "pdmx-Qmbgcj3cCzhC-n219",
+     "pdmx-Qmbgcj3cCzhC-n220",
+     "pdmx-Qmbgcj3cCzhC-n221",
+     "pdmx-Qmbgcj3cCzhC-n222",
+     "pdmx-Qmbgcj3cCzhC-n293",
+     "pdmx-Qmbgcj3cCzhC-n333",
+     "pdmx-Qmbgcj3cCzhC-n334",
+     "pdmx-Qmbgcj3cCzhC-n335",
+     "pdmx-Qmbgcj3cCzhC-n336",
+     "pdmx-Qmbgcj3cCzhC-n337",
+     "pdmx-Qmbgcj3cCzhC-n338"
+    ],
+    "events": 1815
+   },
+   "pdmx-Qmb8X8sqA6FX": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-Qmb8X8sqA6FX-n514",
+     "pdmx-Qmb8X8sqA6FX-n635"
+    ],
+    "events": 1074
+   },
+   "pdmx-QmbXCC5EpL31": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 1060
+   },
+   "pdmx-QmWtU5XzSXYE": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmWtU5XzSXYE-n322",
+     "pdmx-QmWtU5XzSXYE-n323"
+    ],
+    "events": 1913
+   },
+   "pdmx-QmWox2EnjyF2": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 446
+   },
+   "pdmx-QmWAopKo27JK": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 1058
+   },
+   "pdmx-QmWvkp1mCnkV": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 324
+   },
+   "pdmx-QmWP7U8ppwsN": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 689
+   },
+   "pdmx-QmWpoJjhLSsS": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 721
+   },
+   "pdmx-QmWUU3iiqd6M": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmWUU3iiqd6M-n163",
+     "pdmx-QmWUU3iiqd6M-n178"
+    ],
+    "events": 120
+   },
+   "pdmx-QmW1pwz5v6SC": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 194
+   },
+   "pdmx-QmPKpa1JoZ87": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 492
+   },
+   "pdmx-QmPcXanBnKBz": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 234
+   },
+   "pdmx-QmPxCX56tvSF": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 548
+   },
+   "pdmx-QmPe1WQzQ7q8": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmPe1WQzQ7q8-n448"
+    ],
+    "events": 599
+   },
+   "pdmx-QmPaAnQ9gEgh": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmPaAnQ9gEgh-n163"
+    ],
+    "events": 729
+   },
+   "pdmx-QmPQ589isdKo": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 797
+   },
+   "pdmx-QmPQSpyNYTfk": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmPQSpyNYTfk-n240",
+     "pdmx-QmPQSpyNYTfk-n280",
+     "pdmx-QmPQSpyNYTfk-n291"
+    ],
+    "events": 687
+   },
+   "pdmx-QmPBshWs1LKA": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 194
+   },
+   "pdmx-QmQHNvedtwuh": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 317
+   },
+   "pdmx-QmQkpBKzApz6": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmQkpBKzApz6-n329",
+     "pdmx-QmQkpBKzApz6-n330",
+     "pdmx-QmQkpBKzApz6-n331",
+     "pdmx-QmQkpBKzApz6-n342",
+     "pdmx-QmQkpBKzApz6-n343",
+     "pdmx-QmQkpBKzApz6-n344"
+    ],
+    "events": 710
+   },
+   "pdmx-QmQRo9MPJgZP": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 198
+   },
+   "pdmx-QmZtV9sBwXzB": {
+    "maskedMeasures": [
+     15,
+     32,
+     33
+    ],
+    "maskedEvents": 51,
+    "boxMaskedEvents": [],
+    "events": 308
+   },
+   "pdmx-QmZ5K3BV9FDR": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmZ5K3BV9FDR-n001",
+     "pdmx-QmZ5K3BV9FDR-n002",
+     "pdmx-QmZ5K3BV9FDR-n114",
+     "pdmx-QmZ5K3BV9FDR-n115"
+    ],
+    "events": 287
+   },
+   "pdmx-QmZpMVFCQAAm": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmZpMVFCQAAm-n125",
+     "pdmx-QmZpMVFCQAAm-n138",
+     "pdmx-QmZpMVFCQAAm-n152",
+     "pdmx-QmZpMVFCQAAm-n154"
+    ],
+    "events": 364
+   },
+   "pdmx-QmZ2JSSWForn": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 189
+   },
+   "pdmx-QmZNQx6WUKNa": {
+    "maskedMeasures": [
+     75
+    ],
+    "maskedEvents": 31,
+    "boxMaskedEvents": [],
+    "events": 1725
+   },
+   "pdmx-QmTtiJN97SLE": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 382
+   },
+   "pdmx-QmTddaPpyvpq": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 1245
+   },
+   "pdmx-QmTyVsS8Rm93": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmTyVsS8Rm93-n682"
+    ],
+    "events": 2357
+   },
+   "pdmx-QmTxoAbitsi9": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 724
+   },
+   "pdmx-QmTJRwrHUET3": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx-QmTJRwrHUET3-n1069",
+     "pdmx-QmTJRwrHUET3-n1128",
+     "pdmx-QmTJRwrHUET3-n430"
+    ],
+    "events": 1279
+   },
+   "pdmx2-QmYnaoNLbcJQ": {
+    "maskedMeasures": [
+     96
+    ],
+    "maskedEvents": 16,
+    "boxMaskedEvents": [
+     "pdmx2-QmYnaoNLbcJQ-n089",
+     "pdmx2-QmYnaoNLbcJQ-n113",
+     "pdmx2-QmYnaoNLbcJQ-n1517",
+     "pdmx2-QmYnaoNLbcJQ-n165",
+     "pdmx2-QmYnaoNLbcJQ-n1906",
+     "pdmx2-QmYnaoNLbcJQ-n1930",
+     "pdmx2-QmYnaoNLbcJQ-n1982",
+     "pdmx2-QmYnaoNLbcJQ-n667",
+     "pdmx2-QmYnaoNLbcJQ-n668",
+     "pdmx2-QmYnaoNLbcJQ-n914",
+     "pdmx2-QmYnaoNLbcJQ-n938",
+     "pdmx2-QmYnaoNLbcJQ-n990"
+    ],
+    "events": 2253
+   },
+   "pdmx2-QmYeTFaApUgx": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 745
+   },
+   "pdmx2-QmeNbCM8jt7T": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 1525
+   },
+   "pdmx2-QmeYm4rEpodg": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 503
+   },
+   "pdmx2-QmeUpnZqgdH2": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 371
+   },
+   "pdmx2-QmeASCmeLpLj": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx2-QmeASCmeLpLj-n002",
+     "pdmx2-QmeASCmeLpLj-n003"
+    ],
+    "events": 236
+   },
+   "pdmx2-QmekLmWeUSck": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 379
+   },
+   "pdmx2-QmYyG5prCb7E": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 101
+   },
+   "pdmx2-QmbDx27eQFvL": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx2-QmbDx27eQFvL-n002",
+     "pdmx2-QmbDx27eQFvL-n032",
+     "pdmx2-QmbDx27eQFvL-n075",
+     "pdmx2-QmbDx27eQFvL-n076",
+     "pdmx2-QmbDx27eQFvL-n077",
+     "pdmx2-QmbDx27eQFvL-n078"
+    ],
+    "events": 612
+   },
+   "pdmx2-QmeceqXerwVf": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 260
+   },
+   "pdmx2-QmeRZdGXL7PY": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 162
+   },
+   "pdmx2-QmVry3t5TdS8": {
+    "maskedMeasures": [
+     151,
+     152
+    ],
+    "maskedEvents": 81,
+    "boxMaskedEvents": [
+     "pdmx2-QmVry3t5TdS8-n1348"
+    ],
+    "events": 3505
+   },
+   "pdmx2-QmVDaX5YmZCx": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 152
+   },
+   "pdmx2-QmekQbhC1yAP": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 1066
+   },
+   "pdmx2-Qme6EwjyP1uq": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [],
+    "events": 317
+   },
+   "pdmx2-QmYY91puRp85": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "boxMaskedEvents": [
+     "pdmx2-QmYY91puRp85-n001"
+    ],
+    "events": 256
+   }
+  },
+  "maskedEventsTotal": 179,
+  "boxMaskedTotal": 78
+ },
+ "sanity": {
+  "passed": 408,
+  "total": 412,
+  "checks": [
+   {
+    "name": "pdmx-QmbW1fqPrYqC:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbW1fqPrYqC:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb4fV3H5Efc:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbJQYNqLKKf:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:masks-accounted",
+    "ok": true,
+    "detail": "27 masked events"
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmbgcj3cCzhC:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:masks-accounted",
+    "ok": true,
+    "detail": "2 masked events"
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-Qmb8X8sqA6FX:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmbXCC5EpL31:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:masks-accounted",
+    "ok": true,
+    "detail": "2 masked events"
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWtU5XzSXYE:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWox2EnjyF2:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWAopKo27JK:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWvkp1mCnkV:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWP7U8ppwsN:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWpoJjhLSsS:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:masks-accounted",
+    "ok": true,
+    "detail": "2 masked events"
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmWUU3iiqd6M:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmW1pwz5v6SC:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPKpa1JoZ87:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPcXanBnKBz:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPxCX56tvSF:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:masks-accounted",
+    "ok": true,
+    "detail": "1 masked events"
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPe1WQzQ7q8:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:masks-accounted",
+    "ok": true,
+    "detail": "1 masked events"
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPaAnQ9gEgh:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQ589isdKo:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:masks-accounted",
+    "ok": true,
+    "detail": "3 masked events"
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPQSpyNYTfk:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmPBshWs1LKA:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQHNvedtwuh:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:masks-accounted",
+    "ok": true,
+    "detail": "6 masked events"
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQkpBKzApz6:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmQRo9MPJgZP:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:timing",
+    "ok": false,
+    "detail": "masked 15,32,33"
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:timing-unmasked",
+    "ok": true,
+    "detail": "failing 15,32,33 masked 15,32,33"
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZtV9sBwXzB:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:masks-accounted",
+    "ok": true,
+    "detail": "4 masked events"
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ5K3BV9FDR:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:masks-accounted",
+    "ok": true,
+    "detail": "4 masked events"
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZpMVFCQAAm:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZ2JSSWForn:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:timing",
+    "ok": false,
+    "detail": "masked 75"
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:timing-unmasked",
+    "ok": true,
+    "detail": "failing 75 masked 75"
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmZNQx6WUKNa:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTtiJN97SLE:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTddaPpyvpq:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:masks-accounted",
+    "ok": true,
+    "detail": "1 masked events"
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTyVsS8Rm93:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTxoAbitsi9:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:masks-accounted",
+    "ok": true,
+    "detail": "3 masked events"
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx-QmTJRwrHUET3:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:timing",
+    "ok": false,
+    "detail": "masked 96"
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:timing-unmasked",
+    "ok": true,
+    "detail": "failing 96 masked 96"
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:masks-accounted",
+    "ok": true,
+    "detail": "12 masked events"
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYnaoNLbcJQ:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYeTFaApUgx:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeNbCM8jt7T:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeYm4rEpodg:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeUpnZqgdH2:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:masks-accounted",
+    "ok": true,
+    "detail": "2 masked events"
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeASCmeLpLj:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekLmWeUSck:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYyG5prCb7E:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:masks-accounted",
+    "ok": true,
+    "detail": "6 masked events"
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmbDx27eQFvL:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeceqXerwVf:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmeRZdGXL7PY:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:timing",
+    "ok": false,
+    "detail": "masked 151,152"
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:timing-unmasked",
+    "ok": true,
+    "detail": "failing 151,152 masked 151,152"
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:masks-accounted",
+    "ok": true,
+    "detail": "1 masked events"
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVry3t5TdS8:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmVDaX5YmZCx:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmekQbhC1yAP:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:masks-accounted",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-Qme6EwjyP1uq:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:masks-accounted",
+    "ok": true,
+    "detail": "1 masked events"
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "pdmx2-QmYY91puRp85:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "splits:integrity",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "splits:sealed-test-untouched",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "duplicates:no-cross-split-collision",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "quality:metadata-valid",
+    "ok": true,
+    "detail": null
+   }
+  ]
+ },
+ "targets": {
+  "total": {
+   "objects": 37332,
+   "string": 4927,
+   "fret": 4608,
+   "rhythm": 37153,
+   "pitch": 34809,
+   "voice": 37153,
+   "pairing": 2892,
+   "techniqueFamily": 220,
+   "techniqueParams": 101,
+   "articulation": 2202,
+   "context": 35
+  },
+  "bySplit": {
+   "validation": {
+    "objects": 7506,
+    "string": 919,
+    "fret": 826,
+    "rhythm": 7455,
+    "pitch": 6889,
+    "voice": 7455,
+    "pairing": 605,
+    "techniqueFamily": 37,
+    "techniqueParams": 29,
+    "articulation": 469,
+    "context": 11,
+    "scores": 15
+   },
+   "heldout": {
+    "objects": 9880,
+    "string": 1593,
+    "fret": 1498,
+    "rhythm": 9849,
+    "pitch": 9080,
+    "voice": 9849,
+    "pairing": 885,
+    "techniqueFamily": 20,
+    "techniqueParams": 16,
+    "articulation": 242,
+    "context": 10,
+    "scores": 13
+   },
+   "train": {
+    "objects": 18228,
+    "string": 1888,
+    "fret": 1757,
+    "rhythm": 18131,
+    "pitch": 17316,
+    "voice": 18131,
+    "pairing": 875,
+    "techniqueFamily": 163,
+    "techniqueParams": 56,
+    "articulation": 1439,
+    "context": 11,
+    "scores": 18
+   },
+   "diagnostic": {
+    "objects": 1718,
+    "string": 527,
+    "fret": 527,
+    "rhythm": 1718,
+    "pitch": 1524,
+    "voice": 1718,
+    "pairing": 527,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 52,
+    "context": 3,
+    "scores": 5
+   }
+  },
+  "byTier": {
+   "real": {
+    "objects": 37332,
+    "string": 4927,
+    "fret": 4608,
+    "rhythm": 37153,
+    "pitch": 34809,
+    "voice": 37153,
+    "pairing": 2892,
+    "techniqueFamily": 220,
+    "techniqueParams": 101,
+    "articulation": 2202,
+    "context": 35,
+    "scores": 51
+   },
+   "controlled-original": {
+    "objects": 0,
+    "string": 0,
+    "fret": 0,
+    "rhythm": 0,
+    "pitch": 0,
+    "voice": 0,
+    "pairing": 0,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 0
+   }
+  }
+ }
+}

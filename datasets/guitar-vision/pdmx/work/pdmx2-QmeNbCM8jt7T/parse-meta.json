@@ -1,0 +1,66 @@
+{
+ "title": "raz 1:3",
+ "attribution": {
+  "workTitle": "raz 1:3",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Beethoven"
+   }
+  ],
+  "rights": [],
+  "encodingSoftware": "MuseScore 3.6.2"
+ },
+ "capo": null,
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  }
+ ],
+ "measures": 65,
+ "notes": 1525,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "unresolved-text",
+   "sourceText": "Beethoven Rasumofsky Quartet #I:iii Adagio molto e mesto              arr. solo guitar Dempsey",
+   "confidence": "unresolved",
+   "measureNumber": 2,
+   "quarterTime": 2.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "barre",
+   "sourceText": "CVI",
+   "confidence": "text-mined",
+   "half": false,
+   "position": "VI",
+   "measureNumber": 34,
+   "quarterTime": 66,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "unresolved-text",
+   "sourceText": "CV......................................................................",
+   "confidence": "unresolved",
+   "measureNumber": 43,
+   "quarterTime": 84,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "unresolved-text",
+   "sourceText": "Natural harmonics if possible",
+   "confidence": "unresolved",
+   "measureNumber": 61,
+   "quarterTime": 120.75,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}

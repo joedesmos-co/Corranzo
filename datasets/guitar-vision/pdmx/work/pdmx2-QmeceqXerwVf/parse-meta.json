@@ -1,0 +1,55 @@
+{
+ "title": "Waltz in E Minor",
+ "attribution": {
+  "workTitle": "Waltz in E Minor",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Ferdinando Carulli"
+   }
+  ],
+  "rights": [],
+  "encodingSoftware": "MuseScore 3.6.2"
+ },
+ "capo": null,
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "tabStaves": [
+    2
+   ]
+  }
+ ],
+ "measures": 32,
+ "notes": 496,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "fine",
+   "sourceText": "Fine",
+   "confidence": "text-mined",
+   "measureNumber": 16,
+   "quarterTime": 24,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "da-capo-al-fine",
+   "sourceText": "D.C. al Fine",
+   "confidence": "text-mined",
+   "measureNumber": 32,
+   "quarterTime": 48,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}
