@@ -6,6 +6,9 @@ import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
 const SmokeTestChecklist = import.meta.env.DEV
   ? lazy(() => import('../../dev/SmokeTestChecklist.jsx'))
   : null
+const MicRecordingHarness = import.meta.env.DEV
+  ? lazy(() => import('./MicRecordingHarness.jsx'))
+  : null
 
 export default function PracticeDiagnosticsPanel({
   session,
@@ -132,6 +135,12 @@ export default function PracticeDiagnosticsPanel({
       {import.meta.env.DEV && SmokeTestChecklist && (
         <Suspense fallback={null}>
           <SmokeTestChecklist />
+        </Suspense>
+      )}
+
+      {import.meta.env.DEV && MicRecordingHarness && (
+        <Suspense fallback={null}>
+          <MicRecordingHarness />
         </Suspense>
       )}
     </div>
