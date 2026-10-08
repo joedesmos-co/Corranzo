@@ -1,0 +1,29 @@
+{
+ "schema": "piano-v1-domain-check/1",
+ "pages": 6,
+ "boxes_checked": 240,
+ "in_frame": 240,
+ "with_ink": 240,
+ "recipe": {
+  "blur_sigma": [
+   0.8,
+   1.5
+  ],
+  "noise_sigma": [
+   4.0,
+   8.0
+  ],
+  "gamma": [
+   0.8,
+   1.25
+  ],
+  "gain_tilt": 0.15,
+  "jpeg_quality": [
+   85,
+   70
+  ],
+  "perspective_max_frac": 0.03,
+  "min_staff_gap_px": 10.0,
+  "max_crop_margin_frac": 0.05
+ }
+}

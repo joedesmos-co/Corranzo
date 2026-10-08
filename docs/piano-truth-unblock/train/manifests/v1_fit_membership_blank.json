@@ -1,0 +1,551 @@
+{
+ "schema": "piano-v1-fit/1",
+ "mode": "blank",
+ "probe": "membership",
+ "budget": {
+  "epochs": 12,
+  "batch": 256,
+  "lr": 0.0003,
+  "seed": 7,
+  "device": "cpu"
+ },
+ "runtime_s": 726.6,
+ "model": "v1_probe_membership_blank.pt",
+ "model_sha256": "9cf867ac03804047efa9b375e126b06d84a8f42d05b23a3722d7c7307dd21844",
+ "majority": {
+  "grace": {
+   "label": 0,
+   "train_acc": 0.995997879671349
+  },
+  "cue": {
+   "label": 0,
+   "train_acc": 0.9990458521070766
+  },
+  "in_beam": {
+   "label": 1,
+   "train_acc": 0.6481049562682216
+  },
+  "tie_start": {
+   "label": 0,
+   "train_acc": 0.9654121388815267
+  },
+  "tie_end": {
+   "label": 0,
+   "train_acc": 0.9654121388815267
+  },
+  "slur_member": {
+   "label": 0,
+   "train_acc": 0.9809700503578055
+  },
+  "tuplet_member": {
+   "label": 0,
+   "train_acc": 0.9541478929234031
+  },
+  "has_artic": {
+   "label": 0,
+   "train_acc": 0.9407898224224754
+  },
+  "has_ornament": {
+   "label": 0,
+   "train_acc": 1.0
+  },
+  "has_fingering": {
+   "label": 0,
+   "train_acc": 0.9971905645375033
+  },
+  "arpeg_member": {
+   "label": 0,
+   "train_acc": 0.9896103896103896
+  },
+  "gliss_member": {
+   "label": 0,
+   "train_acc": 0.9999734958918632
+  },
+  "pedal_active": {
+   "label": 0,
+   "train_acc": 0.9890272992313809
+  },
+  "octave_shifted": {
+   "label": 0,
+   "train_acc": 0.9421945401537238
+  },
+  "hairpin_member": {
+   "label": 0,
+   "train_acc": 0.9790617545719587
+  },
+  "chord_tone": {
+   "label": 0,
+   "train_acc": 0.6166180758017493
+  },
+  "dotted": {
+   "label": 0,
+   "train_acc": 0.963821892393321
+  },
+  "accidental": {
+   "label": 0,
+   "train_acc": 0.9089053803339517
+  }
+ },
+ "loss": "uniform (sqrt weights evaluated on train100 and rejected: shared-trunk collapse)",
+ "loss_weights_rejected": {
+  "grace": 5.0,
+  "cue": 5.0,
+  "in_beam": 0.736858170893555,
+  "tie_start": 5.0,
+  "tie_end": 5.0,
+  "slur_member": 5.0,
+  "tuplet_member": 4.561715527618233,
+  "has_artic": 3.986099391847007,
+  "has_ornament": 5.0,
+  "has_fingering": 5.0,
+  "arpeg_member": 5.0,
+  "gliss_member": 5.0,
+  "pedal_active": 5.0,
+  "octave_shifted": 4.037252028687997,
+  "hairpin_member": 5.0,
+  "chord_tone": 1.2682133176289416,
+  "dotted": 5.0,
+  "accidental": 3.158733407767138,
+  "kind": 0.24700699773655044
+ },
+ "train": {
+  "grace": {
+   "acc": 0.9959978811468523
+  },
+  "cue": {
+   "acc": 0.9990458533961672
+  },
+  "in_beam": {
+   "acc": 0.6481049595336019
+  },
+  "tie_start": {
+   "acc": 0.9654121366398359
+  },
+  "tie_end": {
+   "acc": 0.9654121414976223
+  },
+  "slur_member": {
+   "acc": 0.9809700505031441
+  },
+  "tuplet_member": {
+   "acc": 0.9541478940718944
+  },
+  "has_artic": {
+   "acc": 0.9407898268063315
+  },
+  "has_ornament": {
+   "acc": 1.0
+  },
+  "has_fingering": {
+   "acc": 0.9971905632626306
+  },
+  "arpeg_member": {
+   "acc": 0.9896103891475176
+  },
+  "gliss_member": {
+   "acc": 0.999973497220448
+  },
+  "pedal_active": {
+   "acc": 0.9890272956389885
+  },
+  "octave_shifted": {
+   "acc": 0.9421945439609646
+  },
+  "hairpin_member": {
+   "acc": 0.9790617550553676
+  },
+  "chord_tone": {
+   "acc": 0.6166180769368126
+  },
+  "dotted": {
+   "acc": 0.9638218955970904
+  },
+  "accidental": {
+   "acc": 0.9089053776357081
+  }
+ },
+ "dev": {
+  "grace": {
+   "loss": 0.3168298900127411,
+   "acc": 0.991401731967926,
+   "n": 5001
+  },
+  "cue": {
+   "loss": 0.2157897800207138,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "in_beam": {
+   "loss": 0.5939472913742065,
+   "acc": 0.7322535514831543,
+   "n": 5001
+  },
+  "tie_start": {
+   "loss": 0.3137531280517578,
+   "acc": 0.9664067029953003,
+   "n": 5001
+  },
+  "tie_end": {
+   "loss": 0.3602055013179779,
+   "acc": 0.9664067029953003,
+   "n": 5001
+  },
+  "slur_member": {
+   "loss": 0.3369857668876648,
+   "acc": 0.9814037084579468,
+   "n": 5001
+  },
+  "tuplet_member": {
+   "loss": 0.41099509596824646,
+   "acc": 0.9656068682670593,
+   "n": 5001
+  },
+  "has_artic": {
+   "loss": 0.20474812388420105,
+   "acc": 0.9962007403373718,
+   "n": 5001
+  },
+  "has_ornament": {
+   "loss": 0.2478138655424118,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "has_fingering": {
+   "loss": 0.3594458997249603,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "arpeg_member": {
+   "loss": 0.18783020973205566,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "gliss_member": {
+   "loss": 0.25278759002685547,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "pedal_active": {
+   "loss": 0.3027896285057068,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "octave_shifted": {
+   "loss": 0.4041280746459961,
+   "acc": 1.0,
+   "n": 5001
+  },
+  "hairpin_member": {
+   "loss": 0.2377394139766693,
+   "acc": 0.999200165271759,
+   "n": 5001
+  },
+  "chord_tone": {
+   "loss": 0.6480911374092102,
+   "acc": 0.8558288216590881,
+   "n": 5001
+  },
+  "dotted": {
+   "loss": 0.3649671673774719,
+   "acc": 0.9590082168579102,
+   "n": 5001
+  },
+  "accidental": {
+   "loss": 0.42591822147369385,
+   "acc": 0.9634073376655579,
+   "n": 5001
+  }
+ },
+ "curve": [
+  {
+   "epoch": 1,
+   "train_loss": 0.6686182758610719,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.03439312055706978,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 0.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 0.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.14417116343975067,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.03659268096089363
+   }
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.6310279221291755,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.03439312055706978,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 0.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.14417116343975067,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.5964174092195595,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 0.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.14417116343975067,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.5645308076955711,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.14417116343975067,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.5351760121667462,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.14417116343975067,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.5080705212939317,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.48310872551741874,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.4600599823863643,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.43877867832305323,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 10,
+   "train_loss": 0.4191183051106277,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 11,
+   "train_loss": 0.40091238526781653,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  },
+  {
+   "epoch": 12,
+   "train_loss": 0.3840835352612149,
+   "dev": {
+    "grace": 0.991401731967926,
+    "cue": 1.0,
+    "in_beam": 0.7322535514831543,
+    "tie_start": 0.9664067029953003,
+    "tie_end": 0.9664067029953003,
+    "slur_member": 0.9814037084579468,
+    "tuplet_member": 0.9656068682670593,
+    "has_artic": 0.9962007403373718,
+    "has_ornament": 1.0,
+    "has_fingering": 1.0,
+    "arpeg_member": 1.0,
+    "gliss_member": 1.0,
+    "pedal_active": 1.0,
+    "octave_shifted": 1.0,
+    "hairpin_member": 0.999200165271759,
+    "chord_tone": 0.8558288216590881,
+    "dotted": 0.9590082168579102,
+    "accidental": 0.9634073376655579
+   }
+  }
+ ],
+ "n_train": 40032,
+ "n_dev": 5371
+}
