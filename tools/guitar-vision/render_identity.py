@@ -91,6 +91,97 @@ def _group_id(attrs: str) -> str | None:
     return match.group(1) if match else None
 
 
+
+
+def _stem_box(stem_inner: str) -> list[float] | None:
+    """Bounding box of a <g class="stem"> path (explicit coordinates)."""
+    path = re.search(r'<path[^>]*d="M([\d.\-]+)[\s,]+([\d.\-]+)[\s,]+L([\d.\-]+)[\s,]+([\d.\-]+)"', stem_inner)
+    if not path:
+        return None
+    x1, y1, x2, y2 = (float(path.group(i)) for i in range(1, 5))
+    width_match = re.search(r'stroke-width="([\d.]+)"', stem_inner)
+    half = float(width_match.group(1)) / 2 if width_match else 9.0
+    return [min(x1, x2) - half, min(y1, y2), max(x1, x2) + half, max(y1, y2)]
+
+
+def _rhythm_primitives(inner: str, ancestors: list) -> dict:
+    """Stems, beams, dots, flags for one note group (G5 truth readiness).
+
+    - stem: child g.stem path box (None when stemless).
+    - beam: nearest ancestor g.beam id (shared by the beamed group).
+    - dots: count of child g.dots ellipses.
+    - flag: child g.flag present (unbeamed flagged note).
+    Tuplets have no SVG object in this renderer (verified): bracket/number
+    groups are absent, so tuplet truth stays symbolic (time-modification).
+    """
+    stem_box, beam_id, dots, flag = None, None, 0, False
+    stem_match = re.search(r'<g[^>]*class="stem"[^>]*>(.*?)</g>', inner, re.S)
+    if stem_match:
+        stem_box = _stem_box(stem_match.group(0))
+        flag = 'class="flag"' in stem_match.group(1)
+    dots_match = re.search(r'<g[^>]*class="dots"[^>]*>(.*?)</g>', inner, re.S)
+    if dots_match:
+        dots = len(re.findall(r"<ellipse", dots_match.group(1)))
+    for ancestor_id, classes in reversed(ancestors):
+        if "beam" in classes:
+            beam_id = ancestor_id
+            break
+    return {"stem": stem_box, "beam": beam_id, "dots": dots, "flag": flag}
+
+
+def _iter_groups_with_ancestors(svg: str):
+    """Yield (attrs, inner, ancestors) for every <g> group.
+
+    ancestors: list of (id, class-list) from outermost to parent. Pre-order:
+    the stack stays live while descendants yield, so beam ancestry resolves.
+    """
+    pattern = re.compile(r"<g\b([^>]*)>")
+    position = 0
+    stack: list = []  # each: [attrs, inner_start, id, classes]
+    while True:
+        open_match = pattern.search(svg, position)
+        close_index = svg.find("</g>", position)
+        if open_match is None and close_index == -1:
+            return
+        if open_match is not None and (close_index == -1 or open_match.start() < close_index):
+            attrs = open_match.group(1)
+            if attrs.rstrip().endswith("/"):
+                position = open_match.end()
+                continue
+            group_id = _group_id(attrs)
+            class_match = re.search(r'class="([^"]*)"', attrs)
+            classes = class_match.group(1).split() if class_match else []
+            stack.append([attrs, open_match.end(), group_id, classes])
+            ancestors = [(entry[2], entry[3]) for entry in stack[:-1]]
+            # Inner span via depth walk from here.
+            depth = 1
+            index = open_match.end()
+            close_start = -1
+            while depth > 0:
+                inner_open = pattern.search(svg, index)
+                inner_close = svg.find("</g>", index)
+                if inner_close == -1:
+                    break
+                if inner_open is not None and inner_open.start() < inner_close:
+                    if inner_open.group(1).rstrip().endswith("/"):
+                        index = inner_open.end()
+                    else:
+                        depth += 1
+                        index = inner_open.end()
+                else:
+                    depth -= 1
+                    if depth == 0:
+                        close_start = inner_close
+                    index = inner_close + 4
+            inner = svg[open_match.end():close_start] if close_start >= 0 else ""
+            yield attrs, inner, ancestors
+            position = open_match.end()
+        else:
+            if stack:
+                stack.pop()
+            position = close_index + 4
+
+
 def identity_join(svg: str, source_ids: list[str], toolkit) -> dict:
     """Join rendered note groups to source IDs by exact string equality.
 
@@ -106,15 +197,23 @@ def identity_join(svg: str, source_ids: list[str], toolkit) -> dict:
     # Notes AND rests carry source IDs: Verovio propagates <note id> onto
     # <g class="note"> for pitched notes and <g class="rest"> for rest notes.
     # Scanning only one class would silently drop the other.
-    for wanted in ("note", "rest"):
-        for attrs, inner in _iter_group_elements(svg, wanted):
-            group_id = _group_id(attrs)
-            if group_id is None:
-                continue
-            if group_id in rendered:
-                duplicates.append(group_id)
-                continue
-            rendered[group_id] = _join_record(attrs, inner, outlines, page_matrix, toolkit, group_id, wanted)
+    wanted = {"note", "rest"}
+    for attrs, inner, ancestors in _iter_groups_with_ancestors(svg):
+        class_match = re.search(r'class="([^"]*)"', attrs)
+        classes = set(class_match.group(1).split()) if class_match else set()
+        if not (classes & wanted):
+            continue
+        group_id = _group_id(attrs)
+        if group_id is None:
+            continue
+        if group_id in rendered:
+            duplicates.append(group_id)
+            continue
+        record = _join_record(attrs, inner, outlines, page_matrix, toolkit, group_id,
+                              "rest" if "rest" in classes else "note")
+        if record is not None:
+            record["rhythm"] = _rhythm_primitives(inner, ancestors)
+            rendered[group_id] = record
 
     source_set = set(source_ids)
     rendered_set = set(rendered)
@@ -131,7 +230,7 @@ def identity_join(svg: str, source_ids: list[str], toolkit) -> dict:
     }
 
 
-def _join_record(attrs: str, inner: str, outlines: dict, page_matrix, toolkit, group_id: str, wanted: str) -> dict:
+def _join_record(attrs: str, inner: str, outlines: dict, page_matrix, toolkit, group_id: str, wanted: str, ancestors: list | None = None) -> dict:
     tx_match = re.search(r'transform="translate\(([^)]+)\)', attrs)
     tx = ty = 0.0
     if tx_match:
@@ -164,7 +263,14 @@ def _join_record(attrs: str, inner: str, outlines: dict, page_matrix, toolkit, g
         page = toolkit.getPageWithElement(group_id)
     except Exception:
         page = None
-    return {"page": page, "children": children, "boxes": boxes}
+    record = {"page": page, "children": children, "boxes": boxes}
+    rhythm = _rhythm_primitives(inner, ancestors or [])
+    if rhythm["stem"] is not None:
+        x0, y0 = apply_transform(page_matrix, rhythm["stem"][0] + tx, rhythm["stem"][1] + ty)
+        x1, y1 = apply_transform(page_matrix, rhythm["stem"][2] + tx, rhythm["stem"][3] + ty)
+        rhythm["stem"] = [x0, y0, x1, y1]
+    record["rhythm"] = rhythm
+    return record
 
 
 def pilot_for_file(path: Path, prefix: str) -> dict:

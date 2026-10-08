@@ -23,10 +23,13 @@ const get = (flag, fallback) => {
 const workDir = resolve(ROOT, get('--work'))
 const outDir = resolve(ROOT, get('--out'))
 const cssWidth = Number(get('--width', 2100))
+const layout = get('--layout', 'standard')
+const tag = layout === 'standard' ? '' : `-${layout}`
 mkdirSync(outDir, { recursive: true })
 
 const browser = await chromium.launch()
-const svgs = readdirSync(workDir).filter((f) => /^render(-p\d+)?\.svg$/.test(f))
+const svgPattern = new RegExp(`^render${tag}(-p\\d+)?\\.svg$`)
+const svgs = readdirSync(workDir).filter((f) => svgPattern.test(f))
 const manifest = {}
 for (const svgFile of svgs) {
   const svg = readFileSync(resolve(workDir, svgFile), 'utf8')
@@ -39,12 +42,16 @@ for (const svgFile of svgs) {
     `<!DOCTYPE html><html><body style="margin:0;background:white"><style>svg{width:${cssWidth}px;height:auto;display:block}</style>${svg}</body></html>`,
     { waitUntil: 'load' },
   )
-  const tag = svgFile === 'render.svg' ? 'page1' : `page${svgFile.match(/-p(\d+)\.svg/)[1]}`
-  const out = resolve(outDir, `${basename(workDir)}-${tag}.png`)
+  const pageTag = svgFile === `render${tag}.svg` ? 'page1' : `page${svgFile.match(/-p(\d+)\.svg/)[1]}`
+  // Standard layout keeps historical filenames (<sample>-pageN.png,
+  // <sample>-manifest.json); other layouts prefix with the layout name.
+  const namePrefix = layout === 'standard' ? basename(workDir) : `${basename(workDir)}-${layout}`
+  const out = resolve(outDir, `${namePrefix}-${pageTag}.png`)
   await page.screenshot({ path: out, fullPage: false })
   await page.close()
-  manifest[tag] = { file: out, cssWidth, viewBox: [vbw, vbh], height }
+  manifest[pageTag] = { file: out, cssWidth, viewBox: [vbw, vbh], height, layout }
   console.log(`wrote ${out}`)
 }
 await browser.close()
-writeFileSync(resolve(outDir, `${basename(workDir)}-manifest.json`), JSON.stringify(manifest, null, 1))
+const manifestName = layout === 'standard' ? `${basename(workDir)}-manifest.json` : `${basename(workDir)}-${layout}-manifest.json`
+writeFileSync(resolve(outDir, manifestName), JSON.stringify(manifest, null, 1))

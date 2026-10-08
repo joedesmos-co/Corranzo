@@ -1,0 +1,28 @@
+{
+ "digits": 9,
+ "stringCorrect": 0,
+ "fretCorrect": 0,
+ "bothCorrect": 0,
+ "pitchCorrect": 0,
+ "decoded": 4,
+ "abstained": 5,
+ "byTier": {
+  "real": {
+   "decoded": 4,
+   "pitchCorrect": 0
+  }
+ },
+ "truth": {
+  "string": 4,
+  "fret": 4,
+  "both": 4,
+  "pitch": 4,
+  "n": 4
+ },
+ "truthRates": {
+  "string": 1.0,
+  "fret": 1.0,
+  "both": 1.0,
+  "pitch": 1.0
+ }
+}
