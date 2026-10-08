@@ -1,0 +1,109 @@
+{
+ "title": null,
+ "attribution": {
+  "workTitle": null,
+  "creators": [],
+  "rights": [],
+  "encodingSoftware": "MuseScore 3.6.2"
+ },
+ "capo": null,
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  },
+  {
+   "id": "P2",
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "tabStaves": [
+    1
+   ]
+  }
+ ],
+ "measures": 63,
+ "notes": 1279,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "segno",
+   "measureNumber": 1,
+   "quarterTime": 2,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "rehearsal",
+   "text": "A",
+   "measureNumber": 1,
+   "quarterTime": 2,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "to-coda",
+   "sourceText": "To Coda",
+   "confidence": "text-mined",
+   "measureNumber": 15,
+   "quarterTime": 32,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "rehearsal",
+   "text": "B",
+   "measureNumber": 17,
+   "quarterTime": 34,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "rehearsal",
+   "text": "C",
+   "measureNumber": 25,
+   "quarterTime": 50,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "rehearsal",
+   "text": "D",
+   "measureNumber": 33,
+   "quarterTime": 66,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "rehearsal",
+   "text": "E",
+   "measureNumber": 47,
+   "quarterTime": 94,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "dal-segno-al-coda",
+   "sourceText": "D.S. al Coda",
+   "confidence": "text-mined",
+   "measureNumber": 61,
+   "quarterTime": 124,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "coda",
+   "measureNumber": 62,
+   "quarterTime": 124,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}

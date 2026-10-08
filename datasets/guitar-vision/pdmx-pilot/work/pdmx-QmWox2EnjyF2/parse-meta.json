@@ -1,0 +1,149 @@
+{
+ "title": "Siciliana",
+ "attribution": {
+  "workTitle": "Siciliana",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Matteo Carcassi (1792 - 1853)"
+   }
+  ],
+  "rights": [],
+  "encodingSoftware": "MuseScore 3.6.2"
+ },
+ "capo": null,
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  },
+  {
+   "id": "P2",
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "tabStaves": [
+    1
+   ]
+  }
+ ],
+ "measures": 30,
+ "notes": 446,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "fine",
+   "sourceText": "Fine",
+   "confidence": "text-mined",
+   "measureNumber": 21,
+   "quarterTime": 63,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "fine",
+   "sourceText": "Fine",
+   "confidence": "text-mined",
+   "measureNumber": 22,
+   "quarterTime": 63.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "V",
+   "confidence": "text-mined",
+   "position": "V",
+   "measureNumber": 24,
+   "quarterTime": 69,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "IV",
+   "confidence": "text-mined",
+   "position": "IV",
+   "measureNumber": 24,
+   "quarterTime": 70.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "II",
+   "confidence": "text-mined",
+   "position": "II",
+   "measureNumber": 24,
+   "quarterTime": 71.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "II",
+   "confidence": "text-mined",
+   "position": "II",
+   "measureNumber": 26,
+   "quarterTime": 77.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "V",
+   "confidence": "text-mined",
+   "position": "V",
+   "measureNumber": 28,
+   "quarterTime": 81,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "IV",
+   "confidence": "text-mined",
+   "position": "IV",
+   "measureNumber": 28,
+   "quarterTime": 82.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "II",
+   "confidence": "text-mined",
+   "position": "II",
+   "measureNumber": 28,
+   "quarterTime": 83.5,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "V",
+   "confidence": "text-mined",
+   "position": "V",
+   "measureNumber": 29,
+   "quarterTime": 84,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "da-capo-al-fine",
+   "sourceText": "D.C. al Fine",
+   "confidence": "text-mined",
+   "measureNumber": 30,
+   "quarterTime": 90,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}
