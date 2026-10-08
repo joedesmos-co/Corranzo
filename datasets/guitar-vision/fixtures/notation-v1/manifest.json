@@ -1,6 +1,6 @@
 {
   "version": "guitar-fixtures/1.0",
-  "count": 40,
+  "count": 44,
   "fixtures": [
     {
       "name": "simple-4-4-rhythm",
@@ -418,6 +418,71 @@
         ]
       },
       "tuning": null
+    },
+    {
+      "name": "cross-part-tab-basic",
+      "families": [
+        "standard-tab-pairing"
+      ],
+      "expect": {
+        "events": 2,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "crossPairings": 1,
+        "tabVerified": 2
+      },
+      "tuning": null
+    },
+    {
+      "name": "cross-part-tab-chord",
+      "families": [
+        "standard-tab-pairing",
+        "tab-chord"
+      ],
+      "expect": {
+        "events": 8,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "crossPairings": 4,
+        "tabVerified": 8
+      },
+      "tuning": null
+    },
+    {
+      "name": "cross-part-tab-ambiguous",
+      "families": [
+        "standard-tab-pairing"
+      ],
+      "expect": {
+        "events": 3,
+        "quarantined": 3,
+        "quarantineCodes": [
+          "ambiguous-cross-part-pairing"
+        ]
+      },
+      "tuning": null
+    },
+    {
+      "name": "cross-part-tab-drop-d",
+      "families": [
+        "standard-tab-pairing",
+        "alternate-tuning"
+      ],
+      "expect": {
+        "events": 2,
+        "quarantined": 0,
+        "timingPreserved": true,
+        "crossPairings": 1,
+        "tabVerified": 2
+      },
+      "tuning": [
+        64,
+        59,
+        55,
+        50,
+        45,
+        38
+      ]
     },
     {
       "name": "unknown-notation-quarantine",

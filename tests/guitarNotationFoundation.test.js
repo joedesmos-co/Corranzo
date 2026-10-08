@@ -65,6 +65,11 @@ describe('notation fixture round-trips (G9)', () => {
         expect(canonical.pairings.length).toBe(expectSpec.pairings)
         expect(canonical.pairings.every((p) => p.verified)).toBe(true)
       }
+      if (expectSpec.crossPairings != null) {
+        const links = canonical.pairings.filter((p) => p.scope === 'cross-part')
+        expect(links.length).toBe(expectSpec.crossPairings)
+        expect(links.every((p) => p.verified)).toBe(true)
+      }
       if (expectSpec.dotsSeen) {
         expect(canonical.events.map((e) => e.time.dots)).toEqual(expect.arrayContaining(expectSpec.dotsSeen))
       }

@@ -525,8 +525,8 @@ describe('manifest immutability', () => {
 })
 
 describe('provenance contract', () => {
-  it('treats only real-printed and synthetic-cc0 as labelable', () => {
-    expect(LABELABLE_PROVENANCE).toEqual([PROVENANCE.REAL_PRINTED, PROVENANCE.SYNTHETIC_CC0])
+  it('treats real-printed, synthetic-cc0 and controlled-original as labelable', () => {
+    expect(LABELABLE_PROVENANCE).toEqual([PROVENANCE.REAL_PRINTED, PROVENANCE.SYNTHETIC_CC0, PROVENANCE.CONTROLLED_ORIGINAL])
     expect(LABELABLE_PROVENANCE).not.toContain(PROVENANCE.GENERATED)
     expect(LABELABLE_PROVENANCE).not.toContain(PROVENANCE.UNLABELLED)
   })

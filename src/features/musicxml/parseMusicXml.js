@@ -1776,6 +1776,14 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml', options = 
         info && tabStaves.length > 0
           ? ([...info.staffDetails.values()].find((details) => details.tuning)?.tuning ?? null)
           : null
+      // Declared tuning independent of staff type: staff-details tuning on a
+      // standard-notation staff is still the composer's tuning statement.
+      // Kept under a separate key so existing `tuning` consumers (TAB-gated)
+      // see byte-identical behavior.
+      const declaredTuning =
+        info
+          ? ([...info.staffDetails.values()].find((details) => details.tuning)?.tuning ?? null)
+          : null
       return {
         id,
         name: partNames.get(id) ?? id,
@@ -1785,6 +1793,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml', options = 
         clefs,
         tabStaves,
         tuning,
+        ...(declaredTuning && !tuning ? { declaredTuning } : {}),
       }
     }),
     // Total staves drawn per system (e.g. 2 for a piano grand staff). Used to

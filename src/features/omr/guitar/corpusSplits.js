@@ -72,6 +72,12 @@ export const PROVENANCE = Object.freeze({
   REAL_PRINTED: 'real-printed',
   /** Deliberately generated, deterministic, with a known-correct truth file. */
   SYNTHETIC_CC0: 'synthetic-cc0',
+  /**
+   * Original etudes composed for targeted supervision (A6). Deterministic,
+   * source-authoritative, CC0 — valid supervision, but tracked separately
+   * from real-world coverage and never misrepresented as independent scores.
+   */
+  CONTROLLED_ORIGINAL: 'controlled-original',
   /** Machine output. Never a label. */
   GENERATED: 'generated',
   /** A real PDF with no authoritative truth. Cannot be scored. */
@@ -79,7 +85,7 @@ export const PROVENANCE = Object.freeze({
 })
 
 /** Provenance values that may be used as a supervised label. */
-export const LABELABLE_PROVENANCE = Object.freeze([PROVENANCE.REAL_PRINTED, PROVENANCE.SYNTHETIC_CC0])
+export const LABELABLE_PROVENANCE = Object.freeze([PROVENANCE.REAL_PRINTED, PROVENANCE.SYNTHETIC_CC0, PROVENANCE.CONTROLLED_ORIGINAL])
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex')

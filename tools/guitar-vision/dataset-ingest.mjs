@@ -114,7 +114,11 @@ function familyPresence(parsed, canonical) {
   for (const event of canonical.events ?? []) {
     for (const technique of event.techniques ?? []) {
       families.add(`technique:${technique.kind}`)
-      if (technique.kind === 'bend' && technique.semitones != null) families.add('bend-amount')
+      if (technique.kind === 'bend') {
+        if (technique.semitones != null) families.add('bend-amount')
+        if (technique.prebend) families.add('pre-bend')
+        if (technique.release) families.add('bend-release')
+      }
       if (technique.kind === 'harmonic') families.add(technique.artificial ? 'artificial-harmonic' : 'natural-harmonic')
     }
     if (event.deadNote) families.add('dead-note')
@@ -211,6 +215,13 @@ export async function ingestCandidate(candidate, workDir) {
   }
 
   const classification = classifyScore(parsed, canonical)
+  // A9: explicit per-measure rhythm-truth masks. Measures whose sounded
+  // union overruns the bar carry voice-duration-mismatch quarantine; they
+  // stay in truth (never repaired) but are masked from rhythm supervision.
+  // Masked here = failing measure checks; finalize verifies the set matches.
+  const maskedMeasures = [...new Set(
+    (canonical.rhythm?.measureChecks ?? []).filter((c) => !c.ok).map((c) => c.measure),
+  )].sort((a, b) => a - b)
   const { stamped, ids } = stampSourceIds(loaded.xml, candidate.id)
   const scoreDir = join(workDir, candidate.id)
   mkdirSync(scoreDir, { recursive: true })
@@ -234,6 +245,8 @@ export async function ingestCandidate(candidate, workDir) {
     classification,
     eventCount: canonical.events.length,
     soundedCount: sounded,
+    maskedMeasures,
+    maskedEvents: canonical.events.filter((e) => maskedMeasures.includes(e.source.measure)).length,
     pairingsVerified: canonical.events.filter((e) => e.tab.pairing === 'verified').length,
     pairingsQuarantined: canonical.events.filter((e) => e.tab.pairing === 'quarantined').length,
     relations: (canonical.relations ?? []).length,
@@ -259,10 +272,21 @@ if (isMain) {
     const i = args.indexOf(flag)
     return i >= 0 ? args[i + 1] : fallback
   }
-  const candidatesPath = resolve(ROOT, get('--candidates', 'tools/guitar-vision/dataset-candidates.json'))
+  const getAll = (flag) => {
+    const out = []
+    for (let i = 0; i < args.length; i += 1) {
+      if (args[i] === flag && i + 1 < args.length) out.push(args[i + 1])
+    }
+    return out
+  }
+  const candidatePaths = getAll('--candidates')
+  if (!candidatePaths.length) candidatePaths.push(get('--candidates', 'tools/guitar-vision/dataset-candidates.json'))
   const workDir = resolve(ROOT, get('--work', 'datasets/guitar-vision/v2-pilot/work'))
   mkdirSync(workDir, { recursive: true })
-  const candidates = JSON.parse(readFileSync(candidatesPath, 'utf8'))
+  const candidates = []
+  for (const candidatePath of candidatePaths) {
+    candidates.push(...JSON.parse(readFileSync(resolve(ROOT, candidatePath), 'utf8')))
+  }
   const records = []
   for (const candidate of candidates) {
     const record = await ingestCandidate(candidate, workDir)

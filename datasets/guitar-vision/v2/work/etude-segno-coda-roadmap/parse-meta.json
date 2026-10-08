@@ -1,0 +1,80 @@
+{
+ "title": "Segno coda roadmap",
+ "attribution": {
+  "workTitle": "Segno coda roadmap",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Corranzo Etude Generator (original study)"
+   }
+  ],
+  "rights": [
+   "CC0-1.0 — Corranzo original etude (project composition, no source material)"
+  ],
+  "encodingSoftware": "corranzo-etude-composer/1.0"
+ },
+ "capo": null,
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  }
+ ],
+ "measures": 4,
+ "notes": 4,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "segno",
+   "measureNumber": 1,
+   "quarterTime": 0,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "coda",
+   "measureNumber": 2,
+   "quarterTime": 4,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "to-coda",
+   "sourceText": "To Coda",
+   "confidence": "text-mined",
+   "measureNumber": 2,
+   "quarterTime": 4,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "dal-segno-al-coda",
+   "sourceText": "D.S. al Coda",
+   "confidence": "text-mined",
+   "measureNumber": 3,
+   "quarterTime": 8,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "fine",
+   "sourceText": "Fine",
+   "confidence": "text-mined",
+   "measureNumber": 4,
+   "quarterTime": 12,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "sound-jump",
+   "jumps": {
+    "fine": "yes"
+   },
+   "measureNumber": 4,
+   "quarterTime": 12,
+   "partId": "P1"
+  }
+ ]
+}

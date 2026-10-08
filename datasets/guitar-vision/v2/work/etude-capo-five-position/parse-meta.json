@@ -1,0 +1,69 @@
+{
+ "title": "Capo five position study",
+ "attribution": {
+  "workTitle": "Capo five position study",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Corranzo Etude Generator (original study)"
+   }
+  ],
+  "rights": [
+   "CC0-1.0 — Corranzo original etude (project composition, no source material)"
+  ],
+  "encodingSoftware": "corranzo-etude-composer/1.0"
+ },
+ "capo": {
+  "fret": 5,
+  "partial": false,
+  "sourceText": "Capo 5",
+  "confidence": "text-mined",
+  "measureNumber": 1,
+  "quarterTime": 0
+ },
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  }
+ ],
+ "measures": 2,
+ "notes": 8,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "capo",
+   "sourceText": "Capo 5",
+   "confidence": "text-mined",
+   "fret": 5,
+   "partial": false,
+   "measureNumber": 1,
+   "quarterTime": 0,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "position",
+   "sourceText": "V",
+   "confidence": "text-mined",
+   "position": "V",
+   "measureNumber": 1,
+   "quarterTime": 0,
+   "partId": "P1",
+   "staff": null
+  },
+  {
+   "kind": "barre",
+   "sourceText": "BIII",
+   "confidence": "text-mined",
+   "half": false,
+   "position": "III",
+   "measureNumber": 2,
+   "quarterTime": 4,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}

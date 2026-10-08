@@ -1,9 +1,9 @@
 {
   "version": "guitar-coverage/1.0",
   "vocabulary": "guitar-vocab/1.0",
-  "generatedAt": "2026-10-07T22:38:41.015Z",
-  "fixtureCount": 40,
-  "fixturesPassed": 40,
+  "generatedAt": "2026-10-08T01:04:05.173Z",
+  "fixtureCount": 44,
+  "fixturesPassed": 44,
   "familyCount": 115,
   "gates": {
     "VERIFIED_SUPPORTED": 111,
@@ -887,7 +887,8 @@
         "fret"
       ],
       "fixtures": [
-        "tab-chord-verified"
+        "tab-chord-verified",
+        "cross-part-tab-chord"
       ],
       "roundTrip": true,
       "gate": "VERIFIED_SUPPORTED"
@@ -942,7 +943,11 @@
         "pairing-mismatch-quarantine",
         "alternate-tuning-drop-d",
         "paired-staff-tab",
-        "multivoice-tab"
+        "multivoice-tab",
+        "cross-part-tab-basic",
+        "cross-part-tab-chord",
+        "cross-part-tab-ambiguous",
+        "cross-part-tab-drop-d"
       ],
       "roundTrip": true,
       "gate": "VERIFIED_SUPPORTED"
@@ -1544,7 +1549,8 @@
         "staff-details(staff-tuning)"
       ],
       "fixtures": [
-        "alternate-tuning-drop-d"
+        "alternate-tuning-drop-d",
+        "cross-part-tab-drop-d"
       ],
       "roundTrip": true,
       "gate": "VERIFIED_SUPPORTED"
@@ -1553,9 +1559,10 @@
       "family": "capo",
       "category": "performance",
       "support": "SUPPORTED_BUT_NOT_YET_MODELED",
-      "parser": "partial",
-      "reason": "MusicXML has no capo element; direction-text mining with confidence tag drives pitch math",
+      "parser": "extracted",
+      "reason": "structured staff-details/capo outranks text-mined Capo-N directions (confidence-tagged); drives pairing math",
       "musicXml": [
+        "staff-details(capo)",
         "direction-type(words: Capo N)"
       ],
       "fixtures": [

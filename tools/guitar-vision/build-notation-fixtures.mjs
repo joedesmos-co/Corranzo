@@ -69,6 +69,13 @@ function scoreXml(measures, { partName = 'Guitar' } = {}) {
     `<part id="P1">${measures.join('')}</part></score-partwise>`
 }
 
+function scoreXmlParts(parts) {
+  const list = parts.map((p) => `<score-part id="${p.id}"><part-name>${p.name}</part-name></score-part>`).join('')
+  const bodies = parts.map((p) => `<part id="${p.id}">${p.measures.join('')}</part>`).join('')
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<score-partwise version="4.0">` +
+    `<part-list>${list}</part-list>${bodies}</score-partwise>`
+}
+
 function tabStaffClef() {
   return `<clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>TAB</sign><line>5</line></clef>`
 }
@@ -254,6 +261,47 @@ export const FIXTURES = [
     expect: { events: 1, quarantined: 0, timingPreserved: true, techniques: ['golpe'] },
     build: () => scoreXml([measureXml(1,
       `<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><notations><technical><string>1</string><fret>0</fret><golpe/></technical></notations></note>`)])},
+  { name: 'cross-part-tab-basic', families: ['standard-tab-pairing'],
+    expect: { events: 2, quarantined: 0, timingPreserved: true, crossPairings: 1, tabVerified: 2 },
+    build: () => scoreXmlParts([
+      { id: 'P1', name: 'Guitar', measures: [measureXml(1, noteXml({ midi: 64, type: 'whole' })) ] },
+      { id: 'P2', name: 'Guitar TAB', measures: [measureXml(1,
+        `<attributes><divisions>4</divisions><clef><sign>TAB</sign><line>5</line></clef></attributes>` +
+        `<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>1</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>`)] },
+    ]) },
+  { name: 'cross-part-tab-chord', families: ['standard-tab-pairing', 'tab-chord'],
+    expect: { events: 8, quarantined: 0, timingPreserved: true, crossPairings: 4, tabVerified: 8 },
+    build: () => scoreXmlParts([
+      { id: 'P1', name: 'Guitar', measures: [measureXml(1,
+        noteXml({ midi: 64, type: 'half' }) + noteXml({ midi: 59, type: 'half', chord: true }) +
+        noteXml({ midi: 67, type: 'quarter' }) + noteXml({ midi: 69, type: 'quarter' })) ] },
+      { id: 'P2', name: 'Guitar TAB', measures: [measureXml(1,
+        `<attributes><divisions>4</divisions><clef><sign>TAB</sign><line>5</line></clef></attributes>` +
+        `<note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>` +
+        `<note><chord/><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><staff>1</staff><notations><technical><string>2</string><fret>0</fret></technical></notations></note>` +
+        `<note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><technical><string>1</string><fret>3</fret></technical></notations></note>` +
+        `<note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><technical><string>1</string><fret>5</fret></technical></notations></note>`)] },
+    ]) },
+  { name: 'cross-part-tab-ambiguous', families: ['standard-tab-pairing'],
+    expect: { events: 3, quarantined: 3, quarantineCodes: ['ambiguous-cross-part-pairing'] },
+    build: () => scoreXmlParts([
+      // Two voices, same pitch, same onset: no unique association exists.
+      { id: 'P1', name: 'Guitar', measures: [measureXml(1,
+        noteXml({ midi: 64, type: 'whole', voice: 1 }) +
+        `<backup><duration>16</duration></backup>` + noteXml({ midi: 64, type: 'whole', voice: 2 })) ] },
+      { id: 'P2', name: 'Guitar TAB', measures: [measureXml(1,
+        `<attributes><divisions>4</divisions><clef><sign>TAB</sign><line>5</line></clef></attributes>` +
+        `<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>1</staff><notations><technical><string>1</string><fret>0</fret></technical></notations></note>`)] },
+    ]) },
+  { name: 'cross-part-tab-drop-d', families: ['standard-tab-pairing', 'alternate-tuning'],
+    expect: { events: 2, quarantined: 0, timingPreserved: true, crossPairings: 1, tabVerified: 2 },
+    tuning: [64, 59, 55, 50, 45, 38],
+    build: () => scoreXmlParts([
+      { id: 'P1', name: 'Guitar', measures: [measureXml(1, noteXml({ midi: 40, type: 'whole' })) ] },
+      { id: 'P2', name: 'Guitar TAB', measures: [measureXml(1,
+        `<attributes><divisions>4</divisions><clef><sign>TAB</sign><line>5</line></clef>` + dropDTuning() + `</attributes>` +
+        `<note><pitch><step>E</step><octave>2</octave></pitch><duration>16</duration><voice>1</voice><type>whole</type><staff>1</staff><notations><technical><string>6</string><fret>2</fret></technical></notations></note>`)] },
+    ]) },
   { name: 'unknown-notation-quarantine', families: [],
     expect: { events: 1, quarantined: 2, quarantineCodes: ['unmodelled-technique-flag', 'impossible-position'], vocabularySupport: 'AMBIGUOUS', playabilityCode: 'string-out-of-range' },
     build: () => scoreXml([measureXml(1,

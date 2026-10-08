@@ -24,6 +24,46 @@ import { isMinedText } from '../../musicxml/guitarTextMarks.js'
 
 export const GUITAR_EVENT_SCHEMA_VERSION = 'guitar-event/1.0'
 
+/** Natural harmonic sounding offsets above the open string, by touched fret. */
+export const NATURAL_HARMONIC_OFFSETS = Object.freeze({ 12: 12, 7: 19, 5: 24 })
+
+const PITCH_CLASS = Object.freeze({ C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 })
+
+/** MIDI for a preserved technical pitch {step, alter, octave}, or null. */
+function techPitchMidi(pitch) {
+  if (!pitch || !pitch.step || !Number.isFinite(pitch.octave)) return null
+  const base = PITCH_CLASS[String(pitch.step).toUpperCase()]
+  if (base == null) return null
+  return (pitch.octave + 1) * 12 + base + (Number(pitch.alter) || 0)
+}
+
+/**
+ * Shared string/fret→pitch verification (canonical truth AND playability
+ * use this one function so they can never disagree). Returns
+ * { status: 'verified'|'quarantined'|'unplayable', expected, candidates }.
+ *
+ * Natural harmonics sound the series, not the stopped pitch; artificial
+ * harmonics arbitrate via the preserved sounding/touching/base triple.
+ */
+export function verifyPairing(string, fret, midi, { tuning, capoFret = 0, techniques = [] } = {}) {
+  const expected = soundingFromTab(string, fret, { tuning, capoFret })
+  if (expected == null || !Number.isFinite(midi)) {
+    return { status: 'unplayable', expected, candidates: [] }
+  }
+  const harmonic = (techniques ?? []).find((t) => t.kind === 'harmonic')
+  const candidates = [expected]
+  if (harmonic && !harmonic.artificial && NATURAL_HARMONIC_OFFSETS[fret] != null) {
+    candidates.push(tuning[string - 1] + capoFret + NATURAL_HARMONIC_OFFSETS[fret])
+  }
+  if (harmonic?.artificial) {
+    for (const key of ['soundingPitch', 'touchingPitch', 'basePitch']) {
+      const triple = techPitchMidi(harmonic[key])
+      if (triple != null) candidates.push(triple)
+    }
+  }
+  return { status: candidates.includes(midi) ? 'verified' : 'quarantined', expected, candidates }
+}
+
 /** Technique kinds the canonical model represents with parameters. */
 export const TECHNIQUE_KINDS = Object.freeze([
   'bend', 'slide', 'glissando', 'hammer-on', 'pull-off', 'vibrato',
@@ -285,8 +325,8 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
       deadNote: note.notehead?.value === 'x',
       ghostNote: note.notehead?.parentheses === 'yes',
       tab: note.string != null || note.fret != null
-        ? { string: note.string ?? null, fret: note.fret ?? null, pairing: 'explicit', positionKind: positionKindOf(note, tabStaves) }
-        : { string: null, fret: null, pairing: 'none', positionKind: 'none' },
+        ? { string: note.string ?? null, fret: note.fret ?? null, pairing: 'explicit', positionKind: positionKindOf(note, tabStaves), source: 'explicit' }
+        : { string: null, fret: null, pairing: 'none', positionKind: 'none', source: 'none' },
       techniques,
       articulations: {
         staccato: Boolean(note.staccato),
@@ -310,14 +350,16 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
       support: SUPPORT.SUPPORTED_BUT_NOT_YET_MODELED,
     }
 
-    // G4: verify string/fret implies the sounding pitch.
+    // G4: verify string/fret implies the sounding pitch (shared verifier;
+    // harmonics arbitrate via series physics / the preserved pitch triple).
     if (!note.isRest && event.tab.string != null && event.tab.fret != null && Number.isFinite(note.midi)) {
-      const expected = soundingFromTab(event.tab.string, event.tab.fret, { tuning, capoFret })
-      if (expected == null) {
+      const verdict = verifyPairing(event.tab.string, event.tab.fret, note.midi,
+        { tuning, capoFret, techniques: event.techniques })
+      if (verdict.status === 'unplayable') {
         quarantined.push({ eventId, code: 'impossible-position', detail: `string ${event.tab.string} fret ${event.tab.fret} is unplayable on ${tuning.length}-string tuning` })
         event.tab.pairing = 'quarantined'
-      } else if (expected !== note.midi) {
-        quarantined.push({ eventId, code: 'pairing-pitch-mismatch', detail: `string ${event.tab.string} fret ${event.tab.fret} sounds ${expected} but notation stores ${note.midi} (off by ${note.midi - expected})` })
+      } else if (verdict.status === 'quarantined') {
+        quarantined.push({ eventId, code: 'pairing-pitch-mismatch', detail: `string ${event.tab.string} fret ${event.tab.fret} sounds ${verdict.expected}${verdict.candidates.length > 1 ? ` (harmonic candidates ${verdict.candidates.join('/')})` : ''} but notation stores ${note.midi}` })
         event.tab.pairing = 'quarantined'
       } else {
         event.tab.pairing = 'verified'
@@ -331,6 +373,7 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
       if (mirrors?.length) {
         const mirror = mirrors.shift()
         pairings.push({
+          scope: 'staff-mirror',
           eventId,
           mirrorNoteId: mirror.id ?? null,
           mirrorStaff: mirror.staff ?? null,
@@ -343,6 +386,10 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
 
     events.push(event)
   })
+
+  // A3: cross-part TAB pairing. Notation and TAB often live in separate
+  // PARTS (not staves); link them by onset+pitch with tuning verification.
+  pairCrossPartTab(events, parsed, { tuning, capoFret, tabStaves }, pairings, quarantined)
 
   // Measure-relative positions + rhythm round-trip (G5).
   const rhythm = rhythmTruth(events, parsed.measures ?? [], quarantined)
@@ -465,6 +512,9 @@ function nextPitched(ordered, event) {
 function firstTuning(parsed) {
   for (const part of parsed.parts ?? []) {
     if (Array.isArray(part.tuning) && part.tuning.length) return part.tuning
+    // Declared tuning on a standard staff counts: it is still the score's
+    // tuning statement (TAB-gated `tuning` stays untouched for consumers).
+    if (Array.isArray(part.declaredTuning) && part.declaredTuning.length) return part.declaredTuning
   }
   return null
 }
@@ -560,14 +610,91 @@ function isPickupOrCadenza(measure, sounded, length) {
 }
 
 function positionKindOf(note, tabStaves) {
-  if (note.fret != null) return 'tab-fret'
   if (note.string == null) return 'none'
+  if (note.fret != null) return 'tab-fret'
   // String with no fret: a circled string indication on the notation staff,
   // unless the staff itself is TAB (where a bare string is under-specified).
   if (note.staff == null) return 'unresolved'
   const tabs = tabStaves.get(note.partId)
   if (tabs && tabs.has(note.staff)) return 'unresolved'
   return 'string-indication'
+}
+
+/**
+ * A3 — cross-part TAB pairing.
+ *
+ * Notation and TAB often live in separate PARTS (BrookeWest-style: P1
+ * notation without positions, P2 TAB with positions+pitch). Staff-mirror
+ * reconciliation never sees these; link them here by onset+pitch with
+ * tuning verification. Never guess: duplicate candidates on either side
+ * quarantine every involved event and link nothing. TAB-only and
+ * standard-only parts need no counterpart and quarantine nothing.
+ */
+export function pairCrossPartTab(events, parsed, { tuning, capoFret, tabStaves }, pairings, quarantined = []) {
+  const partTuning = new Map()
+  for (const part of parsed.parts ?? []) {
+    if (Array.isArray(part.tuning) && part.tuning.length) partTuning.set(part.id, part.tuning)
+  }
+  const isTabStaff = (partId, staff) => {
+    const tabs = tabStaves.get(partId)
+    return tabs ? tabs.has(staff) : false
+  }
+  const eligible = (event) =>
+    !event.time.isRest && !event.time.isGrace && !event.time.isCue && Number.isFinite(event.pitch?.soundingMidi)
+
+  // TAB-side: positioned events on known TAB staves. Standard-side: pitched
+  // events carrying no position of their own. Events that already verified
+  // (explicit positions) never need a cross-part link.
+  const tabByKey = new Map()
+  const stdByKey = new Map()
+  for (const event of events) {
+    if (!eligible(event)) continue
+    const key = `${event.time.onsetQuarters.toFixed(6)}|${event.pitch.soundingMidi}`
+    if (event.tab.string != null && event.tab.fret != null && isTabStaff(event.source.partId, event.time.staff)) {
+      if (!tabByKey.has(key)) tabByKey.set(key, [])
+      tabByKey.get(key).push(event)
+    } else if (event.tab.string == null && event.tab.pairing !== 'verified') {
+      if (!stdByKey.has(key)) stdByKey.set(key, [])
+      stdByKey.get(key).push(event)
+    }
+  }
+
+  for (const [key, tabs] of tabByKey) {
+    const stds = stdByKey.get(key) ?? []
+    if (stds.length === 0) continue // TAB-only music: valid class, nothing to link.
+    if (stds.length > 1 || tabs.length > 1) {
+      // Duplicate pitches (unisons, doubled chords): any association is a guess.
+      for (const event of [...stds, ...tabs]) {
+        quarantined.push({ eventId: event.id, code: 'ambiguous-cross-part-pairing', detail: `onset/pitch ${key} matches ${stds.length} notation + ${tabs.length} TAB events; linked none` })
+      }
+      continue
+    }
+    const std = stds[0]
+    const tab = tabs[0]
+    const partTune = partTuning.get(tab.source.partId) ?? tuning
+    const expected = soundingFromTab(tab.tab.string, tab.tab.fret, { tuning: partTune, capoFret })
+    if (expected == null) {
+      quarantined.push({ eventId: tab.id, code: 'impossible-position', detail: `string ${tab.tab.string} fret ${tab.tab.fret} is unplayable` })
+      tab.tab.pairing = 'quarantined'
+      continue
+    }
+    if (expected !== std.pitch.soundingMidi) {
+      quarantined.push({ eventId: tab.id, code: 'pairing-pitch-mismatch', detail: `string ${tab.tab.string} fret ${tab.tab.fret} sounds ${expected} but paired notation stores ${std.pitch.soundingMidi}` })
+      tab.tab.pairing = 'quarantined'
+      continue
+    }
+    std.tab = { string: tab.tab.string, fret: tab.tab.fret, pairing: 'verified', positionKind: 'tab-fret', source: 'cross-part' }
+    pairings.push({
+      scope: 'cross-part',
+      eventId: std.id,
+      tabEventId: tab.id,
+      tabPartId: tab.source.partId,
+      tabStaff: tab.time.staff,
+      onsetQuarters: std.time.onsetQuarters,
+      soundingMidi: std.pitch.soundingMidi,
+      verified: true,
+    })
+  }
 }
 
 function round6(value) {

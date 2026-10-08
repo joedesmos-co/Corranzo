@@ -138,7 +138,8 @@ function verdict(provenance, rule, reasons, requiresHumanReview) {
     provenance,
     rule,
     labelable:
-      provenance === PROVENANCE.REAL_PRINTED || provenance === PROVENANCE.SYNTHETIC_CC0,
+      provenance === PROVENANCE.REAL_PRINTED || provenance === PROVENANCE.SYNTHETIC_CC0 ||
+      provenance === PROVENANCE.CONTROLLED_ORIGINAL,
     reasons,
     requiresHumanReview,
   }

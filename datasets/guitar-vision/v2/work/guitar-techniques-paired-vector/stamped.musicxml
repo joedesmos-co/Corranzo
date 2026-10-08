@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work><work-title>CC0 Guitar Technique Pairing Study</work-title></work>
+  <identification>
+    <creator type="composer">Corranzo OMR Benchmark Project</creator>
+    <rights>CC0 1.0 Universal - public domain dedication</rights>
+    <encoding><software>Corranzo deterministic OMR benchmark generator</software></encoding>
+  </identification>
+  <part-list><score-part id="P1">
+    <part-name>Guitar</part-name>
+    <score-instrument id="P1-I1"><instrument-name>Guitar</instrument-name></score-instrument>
+    <midi-instrument id="P1-I1"><midi-channel>1</midi-channel><midi-program>25</midi-program></midi-instrument>
+  </score-part></part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>12</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <staves>1</staves>
+        <clef number="1"><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>88</per-minute></metronome></direction-type><sound tempo="88"/></direction>
+      <note id="guitar-techniques-paired-vector-n001">
+        <pitch><step>A</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>5</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n002">
+        <pitch><step>B</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n003">
+        <pitch><step>C</step>
+          <octave>5</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>8</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n004">
+        <pitch><step>B</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>7</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="2">
+      <note id="guitar-techniques-paired-vector-n005">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>5</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n006">
+        <pitch><step>F</step>
+          <alter>1</alter>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n007">
+        <pitch><step>G</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>8</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n008">
+        <pitch><step>A</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>10</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="3">
+      <note id="guitar-techniques-paired-vector-n009">
+        <pitch><step>D</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n010">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>9</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n011">
+        <pitch><step>F</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>10</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n012">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>9</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="4">
+      <note id="guitar-techniques-paired-vector-n013">
+        <pitch><step>A</step>
+          <octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n014">
+        <pitch><step>B</step>
+          <octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>9</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n015">
+        <pitch><step>C</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>10</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n016">
+        <pitch><step>D</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <tie type="start"/>
+        <staff>1</staff>
+        <notations><tied type="start"/><technical><string>4</string><fret>12</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="5">
+      <note id="guitar-techniques-paired-vector-n017">
+        <pitch><step>A</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <tie type="stop"/>
+        <staff>1</staff>
+        <notations><tied type="stop"/><technical><string>1</string><fret>5</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n018">
+        <pitch><step>B</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n019">
+        <pitch><step>C</step>
+          <octave>5</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>8</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n020">
+        <pitch><step>B</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>1</string><fret>7</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="6">
+      <note id="guitar-techniques-paired-vector-n021">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>5</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n022">
+        <pitch><step>F</step>
+          <alter>1</alter>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n023">
+        <pitch><step>G</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>8</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n024">
+        <pitch><step>A</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>2</string><fret>10</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="7">
+      <note id="guitar-techniques-paired-vector-n025">
+        <pitch><step>D</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n026">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>9</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n027">
+        <pitch><step>F</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>10</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n028">
+        <pitch><step>E</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>3</string><fret>9</fret></technical></notations>
+      </note>
+    </measure>
+    <measure number="8">
+      <note id="guitar-techniques-paired-vector-n029">
+        <pitch><step>A</step>
+          <octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>7</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n030">
+        <pitch><step>B</step>
+          <octave>3</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>9</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n031">
+        <pitch><step>C</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>10</fret></technical></notations>
+      </note>
+      <note id="guitar-techniques-paired-vector-n032">
+        <pitch><step>D</step>
+          <octave>4</octave></pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations><technical><string>4</string><fret>12</fret></technical></notations>
+      </note>
+    </measure>
+  </part>
+</score-partwise>

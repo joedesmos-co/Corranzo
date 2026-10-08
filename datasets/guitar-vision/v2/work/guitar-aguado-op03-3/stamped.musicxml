@@ -1,0 +1,3534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE score-partwise  PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1"><work><work-title>Petites Pièces Op. 3 No. 3</work-title></work> version="4.0">
+  <movement-title>Music21 Fragment</movement-title>
+  <identification>
+    <creator type="composer">Music21</creator>
+    <encoding>
+      <encoding-date>2026-07-15</encoding-date>
+      <software>music21 v.10.1.0</software>
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+      <supports element="accidental" type="yes" />
+    </encoding>
+  <rights>CC BY-SA 4.0 — Mutopia Project #2065 — Aguado Op.3 No.3</rights></identification>
+  <defaults>
+    <scaling>
+      <millimeters>7</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+  </defaults>
+  <part-list>
+    <score-part id="P55103060f38df3e2217b44af44ba09c1">
+      <part-name>Guitar:</part-name>
+      <part-abbreviation>Ac Gtr</part-abbreviation>
+      <score-instrument id="I730c26129712b36bc8168e7efaea19e3">
+        <instrument-name>Guitar:</instrument-name>
+        <instrument-abbreviation>Ac Gtr</instrument-abbreviation>
+      </score-instrument>
+      <midi-instrument id="I730c26129712b36bc8168e7efaea19e3">
+        <midi-channel>1</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <!--=========================== Part 1 ===========================-->
+  <part id="P55103060f38df3e2217b44af44ba09c1">
+    <!--========================= Measure 1 ==========================-->
+    <measure implicit="no" number="1">
+      <attributes>
+        <divisions>10080</divisions>
+        <key>
+          <fifths>3</fifths>
+          <mode>major</mode>
+        </key>
+        <time>
+          <beats>3</beats>
+          <beat-type>8</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <direction>
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>90</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="90" />
+      </direction>
+      <note id="guitar-aguado-op03-3-n001" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n002" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n003" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n004" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n005" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n006" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 2 ==========================-->
+    <measure implicit="no" number="2">
+      <note id="guitar-aguado-op03-3-n007" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n008" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n009" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n010">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n011" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure implicit="no" number="3">
+      <note id="guitar-aguado-op03-3-n012" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n013" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n014" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n015">
+        <rest />
+        <duration>7560</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-op03-3-n016" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1680</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n017">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n018" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n019">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n020" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure implicit="no" number="4">
+      <note id="guitar-aguado-op03-3-n021" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>840</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>32nd</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>32nd</normal-type>
+        </time-modification>
+        <notations>
+          <tied type="stop" />
+          <tuplet bracket="no" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>32nd</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>32nd</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-op03-3-n022" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5880</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n023" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n024">
+        <rest />
+        <duration>1680</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n025" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n026">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n027">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n028">
+        <rest />
+        <duration>2520</duration>
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n029" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n030" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 5 ==========================-->
+    <measure implicit="no" number="5">
+      <note id="guitar-aguado-op03-3-n031" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n032" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n033" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n034" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n035" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n036" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 6 ==========================-->
+    <measure implicit="no" number="6">
+      <note id="guitar-aguado-op03-3-n037" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n038" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n039" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n040">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n041" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 7 ==========================-->
+    <measure implicit="no" number="7">
+      <note id="guitar-aguado-op03-3-n042" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n043" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n044" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n045">
+        <rest />
+        <duration>4200</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>5</normal-notes>
+          <normal-type>64th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n046" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n047">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n048" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n049">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n050" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n051">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 8 ==========================-->
+    <measure implicit="no" number="8">
+      <note id="guitar-aguado-op03-3-n052" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n053" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-op03-3-n054">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n055">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 9 ==========================-->
+    <measure implicit="no" number="9">
+      <note id="guitar-aguado-op03-3-n056" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n057" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n058" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n059" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n060" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n061" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 10 =========================-->
+    <measure implicit="no" number="10">
+      <note id="guitar-aguado-op03-3-n062" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n063" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n064" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n065">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n066">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n067">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 11 =========================-->
+    <measure implicit="no" number="11">
+      <note id="guitar-aguado-op03-3-n068" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n069">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n070">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n071">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n072" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n073">
+        <rest />
+        <duration>3360</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n074" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n075">
+        <rest />
+        <duration>4200</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>5</normal-notes>
+          <normal-type>64th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n076">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n077">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n078">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n079" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 12 =========================-->
+    <measure implicit="no" number="12">
+      <note id="guitar-aguado-op03-3-n080" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n081">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n082">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n083" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n084" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n085" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13">
+      <note id="guitar-aguado-op03-3-n086" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n087" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-op03-3-n088" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n089" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n090" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n091" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n092" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 14 =========================-->
+    <measure implicit="no" number="14">
+      <note id="guitar-aguado-op03-3-n093" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n094" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n095" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <dot />
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n096" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 15 =========================-->
+    <measure implicit="no" number="15">
+      <note id="guitar-aguado-op03-3-n097" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n098" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n099" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n100">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n101" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 16 =========================-->
+    <measure implicit="no" number="16">
+      <note id="guitar-aguado-op03-3-n102">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n103">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n104">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n105">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n106">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n107">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 17 =========================-->
+    <measure implicit="no" number="17">
+      <note id="guitar-aguado-op03-3-n108">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n109">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n110">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n111" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n112">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n113">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n114">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n115" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n116">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n117">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n118">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n119">
+        <rest />
+        <duration>2520</duration>
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 18 =========================-->
+    <measure implicit="no" number="18">
+      <note id="guitar-aguado-op03-3-n120" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n121">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n122">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n123">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n124">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n125">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n126" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n127" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 19 =========================-->
+    <measure implicit="no" number="19">
+      <note id="guitar-aguado-op03-3-n128">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n129">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n130">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n131" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n132">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n133">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n134">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n135" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n136">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n137">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n138">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n139">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n140">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n141">
+        <rest />
+        <duration>2520</duration>
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 20 =========================-->
+    <measure implicit="no" number="20">
+      <note id="guitar-aguado-op03-3-n142" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n143">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n144">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n145">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n146">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n147">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n148" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n149" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 21 =========================-->
+    <measure implicit="no" number="21">
+      <note id="guitar-aguado-op03-3-n150">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n151">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n152">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n153">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n154">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n155">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n156" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n157" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>1680</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n158">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n159" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n160">
+        <rest />
+        <duration>1680</duration>
+        <voice>2</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+    </measure>
+    <!--========================= Measure 22 =========================-->
+    <measure implicit="no" number="22">
+      <note id="guitar-aguado-op03-3-n161" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>840</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>32nd</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>32nd</normal-type>
+        </time-modification>
+        <notations>
+          <tied type="stop" />
+          <tuplet bracket="no" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>32nd</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>32nd</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>840</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n162" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n163">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n164">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n165">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n166" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n167">
+        <rest />
+        <duration>1680</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n168">
+        <rest />
+        <duration>8400</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>5</normal-notes>
+          <normal-type>32nd</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n169" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n170">
+        <rest />
+        <duration>1680</duration>
+        <voice>2</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n171" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 23 =========================-->
+    <measure implicit="no" number="23">
+      <note id="guitar-aguado-op03-3-n172" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n173" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n174" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n175" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n176" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n177">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n178">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-op03-3-n179">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 24 =========================-->
+    <measure implicit="no" number="24">
+      <note id="guitar-aguado-op03-3-n180">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-op03-3-n181">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n182" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n183" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n184">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n185">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n186" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n187" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n188" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n189">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n190" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 25 =========================-->
+    <measure implicit="no" number="25">
+      <note id="guitar-aguado-op03-3-n191" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n192" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n193" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n194">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n195">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n196" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n197" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n198">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n199" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n200">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-op03-3-n201" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n202">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 26 =========================-->
+    <measure implicit="no" number="26">
+      <note id="guitar-aguado-op03-3-n203" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n204" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n205" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n206" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n207">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n208">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n209">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n210" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n211">
+        <rest />
+        <duration>1680</duration>
+        <voice>2</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n212" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n213">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n214">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n215">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n216">
+        <rest />
+        <duration>1680</duration>
+        <voice>3</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+    </measure>
+    <!--========================= Measure 27 =========================-->
+    <measure implicit="no" number="27">
+      <note id="guitar-aguado-op03-3-n217" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n218">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n219">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n220">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n221">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n222">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n223" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n224" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 28 =========================-->
+    <measure implicit="no" number="28">
+      <note id="guitar-aguado-op03-3-n225">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n226">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n227">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n228">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n229">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n230" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n231">
+        <rest />
+        <duration>1680</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+      </note>
+      <note id="guitar-aguado-op03-3-n232">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n233">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n234">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n235" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="start" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n236">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n237">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n238">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n239">
+        <rest />
+        <duration>2520</duration>
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 29 =========================-->
+    <measure implicit="no" number="29">
+      <note id="guitar-aguado-op03-3-n240" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n241">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n242">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n243" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n244" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n245">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n246">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n247">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 30 =========================-->
+    <measure implicit="no" number="30">
+      <note id="guitar-aguado-op03-3-n248">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n249">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n250">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n251">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n252">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n253">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n254">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n255">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n256">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 31 =========================-->
+    <measure implicit="no" number="31">
+      <note id="guitar-aguado-op03-3-n257">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n258">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n259">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n260">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n261">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n262" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n263" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>15120</duration>
+      </backup>
+      <note id="guitar-aguado-op03-3-n264">
+        <rest />
+        <duration>7560</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-op03-3-n265" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n266">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 32 =========================-->
+    <measure implicit="no" number="32">
+      <note id="guitar-aguado-op03-3-n267" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n268" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-op03-3-n269" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 33 =========================-->
+    <measure implicit="no" number="33">
+      <note id="guitar-aguado-op03-3-n270">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n271">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n272">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n273">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-op03-3-n274">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-op03-3-n275">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I730c26129712b36bc8168e7efaea19e3" />
+        <type>quarter</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

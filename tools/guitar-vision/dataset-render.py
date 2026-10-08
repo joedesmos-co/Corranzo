@@ -66,11 +66,31 @@ def svg_structure_key(svg: str) -> str:
     return key
 
 
-def render_score(stamped_path: Path, out_dir: Path) -> dict:
+# A7: deterministic engraving layouts. Same symbolic score, genuinely
+# different layout passes (page geometry, staff size, spacing) — not
+# post-hoc reshrinks. Every layout must join at identity 1.0 or the score
+# quarantines. Layouts are variants of one score, never independent scores.
+LAYOUTS = {
+    "standard": {"pageWidth": 2100, "pageHeight": 2970, "scale": 40},
+    "compact": {"pageWidth": 1400, "pageHeight": 1980, "scale": 30},
+    "large": {"pageWidth": 2800, "pageHeight": 3960, "scale": 56},
+}
+
+
+def layout_options(name: str) -> dict:
+    options = dict(VEROVIO_OPTIONS)
+    options.update(LAYOUTS[name])
+    options["adjustPageWidth"] = True
+    options["adjustPageHeight"] = True
+    return options
+
+
+def render_score(stamped_path: Path, out_dir: Path, layout: str = "standard") -> dict:
     """Render every page (SVG + PNG), twice for determinism."""
+    prefix = "" if layout == "standard" else f"-{layout}"
     xml = stamped_path.read_text(encoding="utf-8")
     probe = verovio.toolkit()
-    probe.setOptions(dict(VEROVIO_OPTIONS))
+    probe.setOptions(layout_options(layout))
     if not probe.loadData(xml):
         return {"ok": False, "error": "verovio refused stamped musicxml"}
     try:
@@ -82,7 +102,7 @@ def render_score(stamped_path: Path, out_dir: Path) -> dict:
         svgs = []
         for _ in range(2):
             toolkit = verovio.toolkit()
-            toolkit.setOptions(dict(VEROVIO_OPTIONS))
+            toolkit.setOptions(layout_options(layout))
             toolkit.loadData(xml)
             svgs.append(toolkit.renderToSVG(page))
         canon = [svg_structure_key(svg) for svg in svgs]
@@ -90,20 +110,20 @@ def render_score(stamped_path: Path, out_dir: Path) -> dict:
             return {"ok": False, "error": f"page {page} differs geometrically across two passes"}
         svg = svgs[0]
         tag = "" if page == 1 else f"-p{page}"
-        (out_dir / f"render{tag}.svg").write_text(svg, encoding="utf-8")
+        (out_dir / f"render{prefix}{tag}.svg").write_text(svg, encoding="utf-8")
 
         # Rasterize full-page PNGs at two widths (vector + raster provenance,
         # D8 quality metrics and the D18 tiny-sample path).
         raster = subprocess.run(
-            ["node", str(TOOLS / "rasterize-svg.mjs"), "--in", str(out_dir / f"render{tag}.svg"),
-             "--out", str(out_dir / f"page{tag}"), "--widths", "1050,2100"],
+            ["node", str(TOOLS / "rasterize-svg.mjs"), "--in", str(out_dir / f"render{prefix}{tag}.svg"),
+             "--out", str(out_dir / f"page{prefix}{tag}"), "--widths", "1050,2100"],
             capture_output=True, text=True, cwd=str(ROOT),
         )
         if raster.returncode != 0:
             return {"ok": False, "error": f"rasterizer failed p{page}: {raster.stderr[-500:]}"}
         qualities = {}
         for width in (1050, 2100):
-            png = out_dir / f"page{tag}-w{width}.png"
+            png = out_dir / f"page{prefix}{tag}-w{width}.png"
             if not png.exists():
                 return {"ok": False, "error": f"rasterizer produced no {png.name}"}
             qualities[str(width)] = png_quality(png)
@@ -147,92 +167,109 @@ def main() -> int:
             continue
         score_dir = work / record["candidateId"]
         stamped = score_dir / "stamped.musicxml"
-        result = render_score(stamped, score_dir)
-        if not result["ok"]:
-            record["status"] = "QUARANTINED:render-failure"
-            record["quarantineReason"] = result["error"]
-            verdicts.append(f"{record['status']} {record['candidateId']} — {result['error']}")
-            continue
-        # Exact ID joins by string equality across ALL pages.
         from render_identity import identity_join
 
         source_ids = [f"{record['candidateId']}-n{i:03d}" for i in range(1, record["stampedIds"] + 1)]
-        toolkit = verovio.toolkit()
-        toolkit.setOptions(dict(VEROVIO_OPTIONS))
-        toolkit.loadData(stamped.read_text(encoding="utf-8"))
-        all_joins = {}
-        page_joins = []
-        for page_info in result["pages"]:
-            tag = "" if page_info["page"] == 1 else f"-p{page_info['page']}"
-            svg = (score_dir / f"render{tag}.svg").read_text(encoding="utf-8")
-            joins = identity_join(svg, source_ids, toolkit)
-            page_joins.append({"page": page_info["page"], **{k: v for k, v in joins.items() if k != "joins"}})
-            for sid, join in joins["joins"].items():
-                if sid in all_joins:
-                    all_joins[sid]["pages"] = sorted(set(all_joins[sid].get("pages", []) + [page_info["page"]]))
-                else:
-                    all_joins[sid] = {**join, "pages": [page_info["page"]]}
-        (score_dir / "joins.json").write_text(json.dumps({"pages": page_joins, "joins": all_joins}, indent=1), encoding="utf-8")
-        joined = len(all_joins)
-        unmatched_source = sorted(set(source_ids) - set(all_joins))
-        identity_rate = joined / len(source_ids) if source_ids else None
-        # D9 glyph-scale evidence: joined box heights by kind (page units).
-        tab_heights = []
-        head_heights = []
-        for join in all_joins.values():
-            for box in join["boxes"]:
-                height = box[3] - box[1]
-                if "tab-text" in join["children"]:
-                    tab_heights.append(round(height, 2))
-                if "notehead" in join["children"]:
-                    head_heights.append(round(height, 2))
+        layouts_out = {}
+        failed = None
+        for layout in LAYOUTS:
+            result = render_score(stamped, score_dir, layout)
+            if not result["ok"]:
+                failed = f"QUARANTINED:render-failure {record['candidateId']} [{layout}] — {result['error']}"
+                break
+            outcome = join_layout(score_dir, stamped, source_ids, result, layout)
+            if not outcome["ok"]:
+                failed = f"QUARANTINED:source-id-failure {record['candidateId']} [{layout}] — {outcome['error']}"
+                break
+            layouts_out[layout] = outcome["layout"]
+        if failed:
+            record["status"] = failed.split(" ", 1)[0]
+            record["quarantineReason"] = failed.split(" — ", 1)[1]
+            verdicts.append(failed)
+            continue
+        # D9 glyph-scale evidence aggregates genuine layout variation.
+        tab_heights = [h for layout in layouts_out.values() for h in layout["glyphScale"]["tabDigitHeights"]]
+        head_heights = [h for layout in layouts_out.values() for h in layout["glyphScale"]["noteheadHeights"]]
         record["glyphScale"] = {
             "tabDigitHeights": tab_heights,
             "noteheadHeights": head_heights,
             "units": "verovio-page-units",
+            "layouts": sorted(layouts_out),
         }
-        if identity_rate != 1.0 or unmatched_source:
-            record["status"] = "QUARANTINED:source-id-failure"
-            record["quarantineReason"] = (
-                f"identityRate={identity_rate} unmatchedSource={len(unmatched_source)}"
-            )
-            verdicts.append(f"{record['status']} {record['candidateId']} — {record['quarantineReason']}")
-            continue
-        png_meta = {}
-        pages_meta = []
-        for page_info in result["pages"]:
-            tag = "" if page_info["page"] == 1 else "-p" + str(page_info["page"])
-            svg_path = score_dir / ("render" + tag + ".svg")
-            # Stable hash covers the structure key (geometry), not the random
-            # per-render ids: regenerating the dataset reproduces this hash.
-            # The raw SVG keeps full fidelity for rasterization and joins.
-            structure_hash = hashlib.sha256(svg_structure_key(svg_path.read_text(encoding="utf-8")).encode()).hexdigest()
-            pages_meta.append({
-                "page": page_info["page"],
-                "svg": "render" + tag + ".svg",
-                "svgHash": structure_hash,
-                "svgBytes": page_info["svgBytes"],
-            })
-            for width in ("1050", "2100"):
-                name = "page" + tag + "-w" + width + ".png"
-                png_meta[name] = {**page_info["pngQuality"][width], "sha256": sha_file(score_dir / name), "provenance": "raster-export"}
         record["render"] = {
             "version": RENDER_VERSION,
             "verovio": "6.3.0",
-            "options": VEROVIO_OPTIONS,
-            "pages": pages_meta,
-            "deterministic": True,
-            "identityRate": identity_rate,
-            "joinedGroups": joined,
+            "layouts": layouts_out,
             "provenance": "vector",
-            "png": png_meta,
         }
-        verdicts.append(f"PASS {record['candidateId']} pages={len(result['pages'])} joins={joined}/{len(source_ids)}")
+        total_joins = sum(layout["joinedGroups"] for layout in layouts_out.values())
+        verdicts.append(f"PASS {record['candidateId']} layouts={len(layouts_out)} joins={total_joins}")
     records_path.write_text(json.dumps({"version": "guitar-dataset-ingest/1.0", "records": records}, indent=1), encoding="utf-8")
     print("\n".join(verdicts))
     passed = sum(1 for r in records if r["status"] == "PASS")
     print(f"PASS {passed}/{len(records)}")
     return 0
+
+
+def join_layout(score_dir: Path, stamped: Path, source_ids: list, result: dict, layout: str) -> dict:
+    """Exact ID joins for one rendered layout. Returns ok/layout or ok/error."""
+    from render_identity import identity_join
+
+    prefix = "" if layout == "standard" else f"-{layout}"
+    toolkit = verovio.toolkit()
+    toolkit.setOptions(layout_options(layout))
+    toolkit.loadData(stamped.read_text(encoding="utf-8"))
+    all_joins = {}
+    page_joins = []
+    for page_info in result["pages"]:
+        tag = "" if page_info["page"] == 1 else f"-p{page_info['page']}"
+        svg = (score_dir / f"render{prefix}{tag}.svg").read_text(encoding="utf-8")
+        joins = identity_join(svg, source_ids, toolkit)
+        page_joins.append({"page": page_info["page"], **{k: v for k, v in joins.items() if k != "joins"}})
+        for sid, join in joins["joins"].items():
+            if sid in all_joins:
+                all_joins[sid]["pages"] = sorted(set(all_joins[sid].get("pages", []) + [page_info["page"]]))
+            else:
+                all_joins[sid] = {**join, "pages": [page_info["page"]]}
+    (score_dir / f"joins{prefix}.json").write_text(json.dumps({"pages": page_joins, "joins": all_joins}, indent=1), encoding="utf-8")
+    joined = len(all_joins)
+    unmatched_source = sorted(set(source_ids) - set(all_joins))
+    identity_rate = joined / len(source_ids) if source_ids else None
+    if identity_rate != 1.0 or unmatched_source:
+        return {"ok": False, "error": f"identityRate={identity_rate} unmatchedSource={len(unmatched_source)}"}
+    tab_heights = []
+    head_heights = []
+    for join in all_joins.values():
+        for box in join["boxes"]:
+            height = box[3] - box[1]
+            if "tab-text" in join["children"]:
+                tab_heights.append(round(height, 2))
+            if "notehead" in join["children"]:
+                head_heights.append(round(height, 2))
+    png_meta = {}
+    pages_meta = []
+    for page_info in result["pages"]:
+        tag = "" if page_info["page"] == 1 else "-p" + str(page_info["page"])
+        svg_path = score_dir / f"render{prefix}{tag}.svg"
+        structure_hash = hashlib.sha256(svg_structure_key(svg_path.read_text(encoding="utf-8")).encode()).hexdigest()
+        pages_meta.append({
+            "page": page_info["page"],
+            "svg": f"render{prefix}{tag}.svg",
+            "svgHash": structure_hash,
+            "svgBytes": page_info["svgBytes"],
+        })
+        for width in ("1050", "2100"):
+            name = f"page{prefix}{tag}-w{width}.png"
+            png_meta[name] = {**page_info["pngQuality"][width], "sha256": sha_file(score_dir / name), "provenance": "raster-export"}
+    return {"ok": True, "layout": {
+        "options": layout_options(layout),
+        "pages": pages_meta,
+        "deterministic": True,
+        "identityRate": identity_rate,
+        "joinedGroups": joined,
+        "png": png_meta,
+        "glyphScale": {"tabDigitHeights": tab_heights, "noteheadHeights": head_heights, "units": "verovio-page-units"},
+    }}
 
 
 if __name__ == "__main__":

@@ -1,0 +1,5667 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE score-partwise  PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1"><work><work-title>Allegro in G Major</work-title></work> version="4.0">
+  <movement-title>Music21 Fragment</movement-title>
+  <identification>
+    <creator type="composer">Music21</creator>
+    <encoding>
+      <encoding-date>2026-07-15</encoding-date>
+      <software>music21 v.10.1.0</software>
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+      <supports element="accidental" type="yes" />
+    </encoding>
+  <rights>CC BY-SA 4.0 — Mutopia Project #2090 — Aguado Allegro in G</rights></identification>
+  <defaults>
+    <scaling>
+      <millimeters>7</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+  </defaults>
+  <part-list>
+    <score-part id="P30fd17b165b34a25418595cf5a64a5d0">
+      <part-name>Acoustic Guitar</part-name>
+      <part-abbreviation>Ac Gtr</part-abbreviation>
+      <score-instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0">
+        <instrument-name>Acoustic Guitar</instrument-name>
+        <instrument-abbreviation>Ac Gtr</instrument-abbreviation>
+      </score-instrument>
+      <score-instrument id="Iefe527f97fb30b516e18dcfc82cf88aa">
+        <instrument-name>None</instrument-name>
+      </score-instrument>
+      <midi-instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0">
+        <midi-channel>1</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+      <midi-instrument id="Iefe527f97fb30b516e18dcfc82cf88aa">
+        <midi-channel>2</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <!--=========================== Part 1 ===========================-->
+  <part id="P30fd17b165b34a25418595cf5a64a5d0">
+    <!--========================= Measure 1 ==========================-->
+    <measure implicit="no" number="1">
+      <attributes>
+        <divisions>10080</divisions>
+        <key>
+          <fifths>1</fifths>
+          <mode>major</mode>
+        </key>
+        <time>
+          <beats>2</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <direction>
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>92</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="92" />
+      </direction>
+      <note id="guitar-aguado-allegro-g-n001" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n002" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n003" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n004" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n005" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n006">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n007">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n008">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n009">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 2 ==========================-->
+    <measure implicit="no" number="2">
+      <note id="guitar-aguado-allegro-g-n010">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n011">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n012" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n013">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n014">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n015">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n016" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n017" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure implicit="no" number="3">
+      <note id="guitar-aguado-allegro-g-n018">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n019">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n020">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n021">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n022">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n023">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n024">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n025">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n026">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n027">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n028">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n029" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure implicit="no" number="4">
+      <note id="guitar-aguado-allegro-g-n030" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n031">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n032">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n033">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n034">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n035">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n036">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n037">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n038">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n039" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n040">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 5 ==========================-->
+    <measure implicit="no" number="5">
+      <note id="guitar-aguado-allegro-g-n041" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n042" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n043" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n044" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n045" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n046">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n047">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n048">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n049">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 6 ==========================-->
+    <measure implicit="no" number="6">
+      <note id="guitar-aguado-allegro-g-n050">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n051">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n052" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n053" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n054">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n055" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n056" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n057" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 7 ==========================-->
+    <measure implicit="no" number="7">
+      <note id="guitar-aguado-allegro-g-n058" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n059" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n060" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n061" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n062" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n063" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n064">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n065" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n066" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 8 ==========================-->
+    <measure implicit="no" number="8">
+      <note id="guitar-aguado-allegro-g-n067">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n068">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n069" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n070">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n071">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n072">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n073">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 9 ==========================-->
+    <measure implicit="no" number="9">
+      <note id="guitar-aguado-allegro-g-n074" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n075" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n076" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n077" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n078" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n079">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n080">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n081">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n082">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 10 =========================-->
+    <measure implicit="no" number="10">
+      <note id="guitar-aguado-allegro-g-n083">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n084">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n085" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n086">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n087">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n088">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n089" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n090" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 11 =========================-->
+    <measure implicit="no" number="11">
+      <note id="guitar-aguado-allegro-g-n091">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n092">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n093">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n094">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n095">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n096">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n097">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n098">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n099">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n100">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n101">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n102" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 12 =========================-->
+    <measure implicit="no" number="12">
+      <note id="guitar-aguado-allegro-g-n103" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n104">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n105">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n106">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n107">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n108">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n109">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n110">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n111">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n112" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n113">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13">
+      <note id="guitar-aguado-allegro-g-n114" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n115">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n116">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n117" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n118">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n119" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n120" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n121" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n122">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 14 =========================-->
+    <measure implicit="no" number="14">
+      <note id="guitar-aguado-allegro-g-n123">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n124">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n125" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n126" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n127">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n128" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n129" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n130" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 15 =========================-->
+    <measure implicit="no" number="15">
+      <note id="guitar-aguado-allegro-g-n131" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n132" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n133" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n134" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n135" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n136" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n137">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n138" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n139" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 16 =========================-->
+    <measure implicit="no" number="16">
+      <note id="guitar-aguado-allegro-g-n140">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n141">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n142" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n143">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n144">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n145">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n146">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 17 =========================-->
+    <measure implicit="no" number="17">
+      <note id="guitar-aguado-allegro-g-n147">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n148">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n149">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n150" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n151">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n152">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n153">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n154">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n155">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n156" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n157">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n158">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n159">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n160">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 18 =========================-->
+    <measure implicit="no" number="18">
+      <note id="guitar-aguado-allegro-g-n161" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n162">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n163">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n164">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n165">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n166" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n167">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n168" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n169">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 19 =========================-->
+    <measure implicit="no" number="19">
+      <note id="guitar-aguado-allegro-g-n170">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n171" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n172">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n173">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n174">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n175" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n176">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n177">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n178">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n179">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n180">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n181">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n182">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n183">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 20 =========================-->
+    <measure implicit="no" number="20">
+      <note id="guitar-aguado-allegro-g-n184" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n185">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n186">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n187">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n188">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n189" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n190">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n191" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n192">
+        <rest />
+        <duration>7560</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n193">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n194" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n195">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 21 =========================-->
+    <measure implicit="no" number="21">
+      <note id="guitar-aguado-allegro-g-n196">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n197">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n198">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n199" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n200">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n201">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n202">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n203">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n204">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n205" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n206">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n207">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n208">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n209">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 22 =========================-->
+    <measure implicit="no" number="22">
+      <note id="guitar-aguado-allegro-g-n210" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n211">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n212">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n213">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n214">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n215">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n216">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n217">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n218">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n219">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n220" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 23 =========================-->
+    <measure implicit="no" number="23">
+      <note id="guitar-aguado-allegro-g-n221">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n222" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n223" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n224" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n225" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n226">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n227" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n228">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n229">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n230" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n231">
+        <rest />
+        <duration>10080</duration>
+        <voice>4</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n232" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>4</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n233">
+        <rest />
+        <duration>7560</duration>
+        <voice>4</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 24 =========================-->
+    <measure implicit="no" number="24">
+      <note id="guitar-aguado-allegro-g-n234" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n235">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n236">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n237">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n238">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n239">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n240" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n241">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n242">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n243" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n244" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n245">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 25 =========================-->
+    <measure implicit="no" number="25">
+      <note id="guitar-aguado-allegro-g-n246" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n247">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n248">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n249">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n250" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n251">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n252">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n253">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n254">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n255">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n256" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n257">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n258">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n259">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n260">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 26 =========================-->
+    <measure implicit="no" number="26">
+      <note id="guitar-aguado-allegro-g-n261" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n262">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n263">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n264">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n265">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n266" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n267">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n268" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n269">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 27 =========================-->
+    <measure implicit="no" number="27">
+      <note id="guitar-aguado-allegro-g-n270">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n271">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n272">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n273" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n274">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n275">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n276">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n277">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n278">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n279" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n280">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n281">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n282">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n283">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 28 =========================-->
+    <measure implicit="no" number="28">
+      <note id="guitar-aguado-allegro-g-n284" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n285">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n286">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n287">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n288">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n289" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n290">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n291" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n292">
+        <rest />
+        <duration>7560</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n293">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n294" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n295">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 29 =========================-->
+    <measure implicit="no" number="29">
+      <note id="guitar-aguado-allegro-g-n296">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n297">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n298">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n299" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n300">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n301">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n302">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n303">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n304">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n305" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n306">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n307">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n308">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n309">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 30 =========================-->
+    <measure implicit="no" number="30">
+      <note id="guitar-aguado-allegro-g-n310" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n311">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n312">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n313">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n314">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n315">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n316">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n317">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n318">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n319">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n320" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 31 =========================-->
+    <measure implicit="no" number="31">
+      <note id="guitar-aguado-allegro-g-n321">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n322" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n323">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n324" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n325" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n326">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n327" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n328" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n329" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n330">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n331">
+        <rest />
+        <duration>10080</duration>
+        <voice>4</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n332" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>4</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n333">
+        <rest />
+        <duration>7560</duration>
+        <voice>4</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 32 =========================-->
+    <measure implicit="no" number="32">
+      <note id="guitar-aguado-allegro-g-n334" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n335">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n336">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n337">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n338">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n339">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n340" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n341">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n342">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n343" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n344" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n345">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 33 =========================-->
+    <measure implicit="no" number="33">
+      <note id="guitar-aguado-allegro-g-n346" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <attributes>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+      </attributes>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n347">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n348" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n349" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n350" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n351">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n352">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n353">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 34 =========================-->
+    <measure implicit="no" number="34">
+      <note id="guitar-aguado-allegro-g-n354" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>10080</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n355">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n356">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n357">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n358">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n359" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet bracket="yes" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n360">
+        <rest />
+        <duration>1680</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n361">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n362" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n363" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n364">
+        <rest />
+        <duration>2520</duration>
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n365" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 35 =========================-->
+    <measure implicit="no" number="35">
+      <note id="guitar-aguado-allegro-g-n366">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n367" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet bracket="yes" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n368">
+        <rest />
+        <duration>6720</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>quarter</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n369" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n370" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n371">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n372">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n373">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n374">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n375" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n376">
+        <rest />
+        <duration>7560</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 36 =========================-->
+    <measure implicit="no" number="36">
+      <note id="guitar-aguado-allegro-g-n377">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n378">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n379">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n380">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n381" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 37 =========================-->
+    <measure implicit="no" number="37">
+      <note id="guitar-aguado-allegro-g-n382">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n383" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n384" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n385" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n386" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 38 =========================-->
+    <measure implicit="no" number="38">
+      <note id="guitar-aguado-allegro-g-n387">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n388">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n389">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n390">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n391">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n392">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n393">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n394">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n395">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n396">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n397">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 39 =========================-->
+    <measure implicit="no" number="39">
+      <note id="guitar-aguado-allegro-g-n398">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n399">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n400" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n401" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n402">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n403">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n404">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n405" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n406" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 40 =========================-->
+    <measure implicit="no" number="40">
+      <note id="guitar-aguado-allegro-g-n407">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n408">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n409" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n410" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n411" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n412" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n413">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n414">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n415">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 41 =========================-->
+    <measure implicit="no" number="41">
+      <note id="guitar-aguado-allegro-g-n416" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n417">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n418" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n419" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n420" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n421">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n422">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n423">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 42 =========================-->
+    <measure implicit="no" number="42">
+      <note id="guitar-aguado-allegro-g-n424" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n425">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n426">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n427">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n428">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n429">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n430" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n431" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n432" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tuplet bracket="yes" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n433">
+        <rest />
+        <duration>1680</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>16th</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n434">
+        <rest />
+        <duration>17640</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n435" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 43 =========================-->
+    <measure implicit="no" number="43">
+      <note id="guitar-aguado-allegro-g-n436">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n437" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3360</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>eighth</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet bracket="yes" number="1" placement="above" type="start">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>eighth</tuplet-type>
+            </tuplet-normal>
+          </tuplet>
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n438">
+        <rest />
+        <duration>6720</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <time-modification>
+          <actual-notes>3</actual-notes>
+          <normal-notes>2</normal-notes>
+          <normal-type>quarter</normal-type>
+        </time-modification>
+        <notations>
+          <tuplet number="1" type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n439" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">forward hook</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n440" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n441">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n442" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n443">
+        <rest />
+        <duration>7560</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n444">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n445">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n446">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>3</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 44 =========================-->
+    <measure implicit="no" number="44">
+      <note id="guitar-aguado-allegro-g-n447">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n448">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n449" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n450" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n451">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n452" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 45 =========================-->
+    <measure implicit="no" number="45">
+      <note id="guitar-aguado-allegro-g-n453">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n454" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n455" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n456" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>16th</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n457" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 46 =========================-->
+    <measure implicit="no" number="46">
+      <note id="guitar-aguado-allegro-g-n458">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n459">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n460">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n461">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n462">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n463">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n464">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n465">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n466">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n467">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n468">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 47 =========================-->
+    <measure implicit="no" number="47">
+      <note id="guitar-aguado-allegro-g-n469">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n470">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-allegro-g-n471" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n472">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n473">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n474">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n475" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n476" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n477" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 48 =========================-->
+    <measure implicit="no" number="48">
+      <note id="guitar-aguado-allegro-g-n478">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n479">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <backup>
+        <duration>5040</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n480" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n481">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-allegro-g-n482">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-allegro-g-n483">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n484" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-allegro-g-n485" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-allegro-g-n486" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="start" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 49 =========================-->
+    <measure implicit="no" number="49">
+      <note id="guitar-aguado-allegro-g-n487" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <tie type="stop" />
+        <instrument id="I6e1048f04ee8c7ab993608e2dd67c8c0" />
+        <type>eighth</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-allegro-g-n488">
+        <rest />
+        <duration>15120</duration>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

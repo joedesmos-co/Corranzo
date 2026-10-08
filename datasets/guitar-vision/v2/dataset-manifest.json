@@ -1,0 +1,3416 @@
+{
+ "version": "guitar-dataset-v2/1.0",
+ "generatedAt": "2026-10-08T01:04:30.734Z",
+ "scale": {
+  "tabDigits": 144,
+  "tabDigitMin": 252.72,
+  "tabDigitMax": 252.72,
+  "tabDigitsReal": 84,
+  "noteheads": 17706,
+  "noteheadMin": 25.92,
+  "noteheadMax": 560.88,
+  "units": "verovio-page-units"
+ },
+ "candidates": 52,
+ "pass": 50,
+ "passReal": 12,
+ "passEtudes": 33,
+ "quarantined": [
+  {
+   "id": "guitar-bach-prelude-bwv999",
+   "status": "QUARANTINED:playability",
+   "reason": "84 errors over 509 sounded events (rate 16.5% > 5%)"
+  },
+  {
+   "id": "guitar-aguado-a-minor-study",
+   "status": "QUARANTINED:playability",
+   "reason": "32 errors over 235 sounded events (rate 13.6% > 5%)"
+  }
+ ],
+ "classification": {
+  "standard-only:real": 11,
+  "paired:real": 1,
+  "standard-only:controlled-original": 32,
+  "paired:controlled-original": 1
+ },
+ "splits": {
+  "seed": 20261007,
+  "digest": "40c07fda2210dad73454602d29a867078319c3c974b476e32883aef06c1e6ba8",
+  "ratios": {
+   "train": 6,
+   "validation": 3,
+   "heldout": 2,
+   "diagnostic": 1
+  },
+  "audit": {
+   "ok": true,
+   "violations": []
+  },
+  "sufficiency": {
+   "totalCollections": 31,
+   "labelableCollections": 31,
+   "minimumCollections": 6,
+   "validationRolesPresent": 3,
+   "validationRolesRequired": 3,
+   "shortages": [],
+   "sufficient": true
+  },
+  "assignments": [
+   {
+    "sample": "etude-bend-chain",
+    "collection": "etudes-bend",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-bend-full",
+    "collection": "etudes-bend",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-bend-half",
+    "collection": "etudes-bend",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-bend-pre",
+    "collection": "etudes-bend",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-bend-release",
+    "collection": "etudes-bend",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-capo-five-position",
+    "collection": "etudes-capo",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-capo-two",
+    "collection": "etudes-capo",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-chord-diagrams",
+    "collection": "etudes-chord-diagram",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "etude-cross-part-etude",
+    "collection": "etudes-standard-tab-pairing",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-dadgad-drone",
+    "collection": "etudes-alternate-tuning",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-dead-ghost-strum",
+    "collection": "etudes-dead-note",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-drop-d-riff",
+    "collection": "etudes-alternate-tuning",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-dynamics-hairpins",
+    "collection": "etudes-dynamic",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-fingering-position",
+    "collection": "etudes-left-hand-fingering",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "etude-golpe-accent",
+    "collection": "etudes-golpe",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "etude-grace-cue-figures",
+    "collection": "etudes-grace-note",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-harmonic-artificial",
+    "collection": "etudes-artificial-harmonic",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-harmonic-natural",
+    "collection": "etudes-natural-harmonic",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-legato-hammer",
+    "collection": "etudes-hammer-on",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "etude-legato-pull",
+    "collection": "etudes-pull-off",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-let-ring-arpeggio",
+    "collection": "etudes-let-ring",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "etude-multivoice-tab",
+    "collection": "etudes-multi-voice-rhythm",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-ornament-trills",
+    "collection": "etudes-ornament-trill",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-palm-mute-span",
+    "collection": "etudes-palm-mute",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-repeats-endings",
+    "collection": "etudes-repeat",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-segno-coda-roadmap",
+    "collection": "etudes-segno",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "etude-slide-chain",
+    "collection": "etudes-slide",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-slide-legato-gliss",
+    "collection": "etudes-slide",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "etude-tapping-phrase",
+    "collection": "etudes-tapping",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "etude-tapping-tap-fret",
+    "collection": "etudes-tapping",
+    "split": "validation",
+    "role": "risk"
+   },
+   {
+    "sample": "etude-tremolo-picking-run",
+    "collection": "etudes-tremolo",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "etude-tuplet-figures",
+    "collection": "etudes-tuplet",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "etude-vibrato-lines",
+    "collection": "etudes-vibrato",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-allegro-g",
+    "collection": "solo:guitar-aguado-allegro-g",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "guitar-aguado-favorites-1",
+    "collection": "solo:guitar-aguado-favorites-1",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-1",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-2",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-3",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-4",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-5",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-6",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-bach-menuet-bwv1006a",
+    "collection": "bach-lute-suite",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "guitar-bach-prelude-bwv997",
+    "collection": "bach-lute-suite",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "guitar-ode-to-joy",
+    "collection": "ode-to-joy",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "guitar-spanish-romance",
+    "collection": "solo:guitar-spanish-romance",
+    "split": "train",
+    "role": null
+   }
+  ]
+ },
+ "duplicates": [
+  {
+   "digest": "506e5baf6560f536",
+   "owners": [
+    "guitar-paired-chords-vector",
+    "guitar-paired-scan"
+   ]
+  },
+  {
+   "digest": "9cc7500a0d278fc3",
+   "owners": [
+    "guitar-paired-chords-vector",
+    "guitar-paired-scan"
+   ]
+  },
+  {
+   "digest": "e4cd3d588177e4ac",
+   "owners": [
+    "guitar-paired-chords-vector",
+    "guitar-paired-scan"
+   ]
+  }
+ ],
+ "coverage": {
+  "accent": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "accidental": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "artificial-harmonic": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-harmonic-artificial"
+   ]
+  },
+  "barre": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-capo-five-position"
+   ]
+  },
+  "bend-amount": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 5,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release"
+   ]
+  },
+  "breath-mark": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "capo": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-capo-five-position",
+    "etude-capo-two"
+   ]
+  },
+  "chord": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-chord-diagrams",
+    "etude-let-ring-arpeggio"
+   ]
+  },
+  "chord-diagram": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-chord-diagrams"
+   ]
+  },
+  "chord-symbol": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-chord-diagrams"
+   ]
+  },
+  "coda": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "cue-note": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-grace-cue-figures"
+   ]
+  },
+  "dead-note": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-dead-ghost-strum"
+   ]
+  },
+  "dots": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "double-dots": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-aguado-allegro-g"
+   ],
+   "splits": [
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-16th": {
+   "scores": 10,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-tremolo-picking-run"
+   ]
+  },
+  "duration-32nd": {
+   "scores": 6,
+   "scoreIds": [
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6"
+   ],
+   "splits": [
+    "train"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "duration-eighth": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-grace-cue-figures",
+    "etude-tuplet-figures"
+   ]
+  },
+  "duration-half": {
+   "scores": 4,
+   "scoreIds": [
+    "guitar-aguado-favorites-1",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 5,
+   "etudeIds": [
+    "etude-grace-cue-figures",
+    "etude-harmonic-artificial",
+    "etude-ornament-trills",
+    "etude-slide-legato-gliss",
+    "etude-tapping-tap-fret"
+   ]
+  },
+  "duration-quarter": {
+   "scores": 12,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-ode-to-joy",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 26,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release",
+    "etude-capo-five-position",
+    "etude-capo-two",
+    "etude-cross-part-etude",
+    "etude-dadgad-drone",
+    "etude-dead-ghost-strum",
+    "etude-drop-d-riff",
+    "etude-dynamics-hairpins",
+    "etude-fingering-position",
+    "etude-golpe-accent",
+    "etude-grace-cue-figures",
+    "etude-harmonic-natural",
+    "etude-legato-hammer",
+    "etude-legato-pull",
+    "etude-let-ring-arpeggio",
+    "etude-multivoice-tab",
+    "etude-ornament-trills",
+    "etude-palm-mute-span",
+    "etude-repeats-endings",
+    "etude-slide-chain",
+    "etude-tapping-phrase",
+    "etude-tuplet-figures"
+   ]
+  },
+  "duration-whole": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 3,
+   "etudeIds": [
+    "etude-chord-diagrams",
+    "etude-segno-coda-roadmap",
+    "etude-vibrato-lines"
+   ]
+  },
+  "ending": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-repeats-endings"
+   ]
+  },
+  "fermata": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-dynamics-hairpins"
+   ]
+  },
+  "fret-number": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 33,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release",
+    "etude-capo-five-position",
+    "etude-capo-two",
+    "etude-chord-diagrams",
+    "etude-cross-part-etude",
+    "etude-dadgad-drone",
+    "etude-dead-ghost-strum",
+    "etude-drop-d-riff",
+    "etude-dynamics-hairpins",
+    "etude-fingering-position",
+    "etude-golpe-accent",
+    "etude-grace-cue-figures",
+    "etude-harmonic-artificial",
+    "etude-harmonic-natural",
+    "etude-legato-hammer",
+    "etude-legato-pull",
+    "etude-let-ring-arpeggio",
+    "etude-multivoice-tab",
+    "etude-ornament-trills",
+    "etude-palm-mute-span",
+    "etude-repeats-endings",
+    "etude-segno-coda-roadmap",
+    "etude-slide-chain",
+    "etude-slide-legato-gliss",
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret",
+    "etude-tremolo-picking-run",
+    "etude-tuplet-figures",
+    "etude-vibrato-lines"
+   ]
+  },
+  "ghost-note": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-dead-ghost-strum"
+   ]
+  },
+  "grace-note": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-grace-cue-figures"
+   ]
+  },
+  "key-signature": {
+   "scores": 12,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-ode-to-joy",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 33,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release",
+    "etude-capo-five-position",
+    "etude-capo-two",
+    "etude-chord-diagrams",
+    "etude-cross-part-etude",
+    "etude-dadgad-drone",
+    "etude-dead-ghost-strum",
+    "etude-drop-d-riff",
+    "etude-dynamics-hairpins",
+    "etude-fingering-position",
+    "etude-golpe-accent",
+    "etude-grace-cue-figures",
+    "etude-harmonic-artificial",
+    "etude-harmonic-natural",
+    "etude-legato-hammer",
+    "etude-legato-pull",
+    "etude-let-ring-arpeggio",
+    "etude-multivoice-tab",
+    "etude-ornament-trills",
+    "etude-palm-mute-span",
+    "etude-repeats-endings",
+    "etude-segno-coda-roadmap",
+    "etude-slide-chain",
+    "etude-slide-legato-gliss",
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret",
+    "etude-tremolo-picking-run",
+    "etude-tuplet-figures",
+    "etude-vibrato-lines"
+   ]
+  },
+  "left-hand-fingering": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-fingering-position"
+   ]
+  },
+  "multi-voice-rhythm": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-multivoice-tab"
+   ]
+  },
+  "natural-harmonic": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-harmonic-natural"
+   ]
+  },
+  "navigation:barre": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-capo-five-position"
+   ]
+  },
+  "navigation:capo": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-capo-five-position",
+    "etude-capo-two"
+   ]
+  },
+  "navigation:coda": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "navigation:dal-segno-al-coda": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "navigation:fine": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "navigation:position": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-capo-five-position"
+   ]
+  },
+  "navigation:segno": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "navigation:sound-jump": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "navigation:to-coda": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "notehead-variant": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-dead-ghost-strum",
+    "etude-harmonic-natural"
+   ]
+  },
+  "position-indication": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-capo-five-position"
+   ]
+  },
+  "repeat": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-repeats-endings"
+   ]
+  },
+  "rest": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "segno": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  "slur": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-dynamics-hairpins"
+   ]
+  },
+  "staccatissimo": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "staccato": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "standard-tab-pairing": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 33,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release",
+    "etude-capo-five-position",
+    "etude-capo-two",
+    "etude-chord-diagrams",
+    "etude-cross-part-etude",
+    "etude-dadgad-drone",
+    "etude-dead-ghost-strum",
+    "etude-drop-d-riff",
+    "etude-dynamics-hairpins",
+    "etude-fingering-position",
+    "etude-golpe-accent",
+    "etude-grace-cue-figures",
+    "etude-harmonic-artificial",
+    "etude-harmonic-natural",
+    "etude-legato-hammer",
+    "etude-legato-pull",
+    "etude-let-ring-arpeggio",
+    "etude-multivoice-tab",
+    "etude-ornament-trills",
+    "etude-palm-mute-span",
+    "etude-repeats-endings",
+    "etude-segno-coda-roadmap",
+    "etude-slide-chain",
+    "etude-slide-legato-gliss",
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret",
+    "etude-tremolo-picking-run",
+    "etude-tuplet-figures",
+    "etude-vibrato-lines"
+   ]
+  },
+  "string-number": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ],
+   "etudeScores": 33,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release",
+    "etude-capo-five-position",
+    "etude-capo-two",
+    "etude-chord-diagrams",
+    "etude-cross-part-etude",
+    "etude-dadgad-drone",
+    "etude-dead-ghost-strum",
+    "etude-drop-d-riff",
+    "etude-dynamics-hairpins",
+    "etude-fingering-position",
+    "etude-golpe-accent",
+    "etude-grace-cue-figures",
+    "etude-harmonic-artificial",
+    "etude-harmonic-natural",
+    "etude-legato-hammer",
+    "etude-legato-pull",
+    "etude-let-ring-arpeggio",
+    "etude-multivoice-tab",
+    "etude-ornament-trills",
+    "etude-palm-mute-span",
+    "etude-repeats-endings",
+    "etude-segno-coda-roadmap",
+    "etude-slide-chain",
+    "etude-slide-legato-gliss",
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret",
+    "etude-tremolo-picking-run",
+    "etude-tuplet-figures",
+    "etude-vibrato-lines"
+   ]
+  },
+  "technique:arpeggio": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-let-ring-arpeggio"
+   ]
+  },
+  "technique:bend": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 5,
+   "etudeIds": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release"
+   ]
+  },
+  "technique:glissando": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-slide-legato-gliss"
+   ]
+  },
+  "technique:golpe": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-golpe-accent"
+   ]
+  },
+  "technique:hammer-on": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-legato-hammer",
+    "etude-legato-pull"
+   ]
+  },
+  "technique:harmonic": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-harmonic-artificial",
+    "etude-harmonic-natural"
+   ]
+  },
+  "technique:let-ring": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-let-ring-arpeggio"
+   ]
+  },
+  "technique:palm-mute": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-palm-mute-span"
+   ]
+  },
+  "technique:pull-off": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-legato-hammer",
+    "etude-legato-pull"
+   ]
+  },
+  "technique:slide": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-slide-chain",
+    "etude-slide-legato-gliss"
+   ]
+  },
+  "technique:tapping": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 2,
+   "etudeIds": [
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret"
+   ]
+  },
+  "technique:tremolo-picking": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-tremolo-picking-run"
+   ]
+  },
+  "technique:trill": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "technique:vibrato": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-vibrato-lines"
+   ]
+  },
+  "tenuto": {
+   "scores": 0,
+   "scoreIds": [],
+   "splits": [],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-ornament-trills"
+   ]
+  },
+  "tie": {
+   "scores": 8,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ],
+   "etudeScores": 0,
+   "etudeIds": []
+  },
+  "tuplet": {
+   "scores": 8,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "train",
+    "validation"
+   ],
+   "etudeScores": 1,
+   "etudeIds": [
+    "etude-tuplet-figures"
+   ]
+  }
+ },
+ "dataGaps": [
+  {
+   "family": "bend-amount",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 5,
+   "rescuedByEtudes": [
+    "etude-bend-chain",
+    "etude-bend-full",
+    "etude-bend-half",
+    "etude-bend-pre",
+    "etude-bend-release"
+   ]
+  },
+  {
+   "family": "pre-bend",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "bend-release",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "slide",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 2,
+   "rescuedByEtudes": [
+    "etude-slide-chain",
+    "etude-slide-legato-gliss"
+   ]
+  },
+  {
+   "family": "hammer-on",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 2,
+   "rescuedByEtudes": [
+    "etude-legato-hammer",
+    "etude-legato-pull"
+   ]
+  },
+  {
+   "family": "pull-off",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 2,
+   "rescuedByEtudes": [
+    "etude-legato-hammer",
+    "etude-legato-pull"
+   ]
+  },
+  {
+   "family": "natural-harmonic",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-harmonic-natural"
+   ]
+  },
+  {
+   "family": "artificial-harmonic",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-harmonic-artificial"
+   ]
+  },
+  {
+   "family": "tapping",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 2,
+   "rescuedByEtudes": [
+    "etude-tapping-phrase",
+    "etude-tapping-tap-fret"
+   ]
+  },
+  {
+   "family": "palm-mute",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-palm-mute-span"
+   ]
+  },
+  {
+   "family": "let-ring",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-let-ring-arpeggio"
+   ]
+  },
+  {
+   "family": "dead-note",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-dead-ghost-strum"
+   ]
+  },
+  {
+   "family": "ghost-note",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-dead-ghost-strum"
+   ]
+  },
+  {
+   "family": "vibrato",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-vibrato-lines"
+   ]
+  },
+  {
+   "family": "tremolo-picking",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-tremolo-picking-run"
+   ]
+  },
+  {
+   "family": "arpeggio",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-let-ring-arpeggio"
+   ]
+  },
+  {
+   "family": "alternate-tuning",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "tuning",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "capo",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 2,
+   "rescuedByEtudes": [
+    "etude-capo-five-position",
+    "etude-capo-two"
+   ]
+  },
+  {
+   "family": "left-hand-fingering",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-fingering-position"
+   ]
+  },
+  {
+   "family": "chord-diagram",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-chord-diagrams"
+   ]
+  },
+  {
+   "family": "repeat",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-repeats-endings"
+   ]
+  },
+  {
+   "family": "ending",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-repeats-endings"
+   ]
+  },
+  {
+   "family": "segno",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  {
+   "family": "coda",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-segno-coda-roadmap"
+   ]
+  },
+  {
+   "family": "ds-dc-navigation",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 0,
+   "rescuedByEtudes": []
+  },
+  {
+   "family": "grace-note",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-grace-cue-figures"
+   ]
+  },
+  {
+   "family": "cue-note",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-grace-cue-figures"
+   ]
+  },
+  {
+   "family": "chord-symbol",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3,
+   "etudeScores": 1,
+   "rescuedByEtudes": [
+    "etude-chord-diagrams"
+   ]
+  }
+ ],
+ "masks": {
+  "policy": "A9: failing measures are excluded from rhythm/voice supervision, kept in truth, recorded here",
+  "perScore": {
+   "guitar-aguado-op03-1": {
+    "maskedMeasures": [
+     16,
+     20,
+     28,
+     44
+    ],
+    "maskedEvents": 35,
+    "events": 397
+   },
+   "guitar-aguado-op03-2": {
+    "maskedMeasures": [
+     22,
+     24
+    ],
+    "maskedEvents": 19,
+    "events": 427
+   },
+   "guitar-aguado-op03-3": {
+    "maskedMeasures": [
+     8,
+     13
+    ],
+    "maskedEvents": 11,
+    "events": 275
+   },
+   "guitar-aguado-op03-4": {
+    "maskedMeasures": [
+     6,
+     22,
+     33,
+     38,
+     41
+    ],
+    "maskedEvents": 53,
+    "events": 539
+   },
+   "guitar-aguado-op03-5": {
+    "maskedMeasures": [
+     13,
+     16,
+     24,
+     32,
+     45,
+     48
+    ],
+    "maskedEvents": 62,
+    "events": 571
+   },
+   "guitar-aguado-op03-6": {
+    "maskedMeasures": [
+     26,
+     31
+    ],
+    "maskedEvents": 25,
+    "events": 302
+   },
+   "guitar-bach-menuet-bwv1006a": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "events": 267
+   },
+   "guitar-bach-prelude-bwv997": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "events": 1091
+   },
+   "guitar-ode-to-joy": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "events": 28
+   },
+   "guitar-aguado-allegro-g": {
+    "maskedMeasures": [
+     8,
+     16
+    ],
+    "maskedEvents": 14,
+    "events": 488
+   },
+   "guitar-aguado-favorites-1": {
+    "maskedMeasures": [
+     11,
+     13,
+     51
+    ],
+    "maskedEvents": 32,
+    "events": 435
+   },
+   "guitar-spanish-romance": {
+    "maskedMeasures": [],
+    "maskedEvents": 0,
+    "events": 400
+   }
+  },
+  "maskedEventsTotal": 251
+ },
+ "sanity": {
+  "passed": 311,
+  "total": 319,
+  "checks": [
+   {
+    "name": "guitar-aguado-op03-1:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:timing",
+    "ok": false,
+    "detail": "masked 16,20,28,44"
+   },
+   {
+    "name": "guitar-aguado-op03-1:timing-unmasked",
+    "ok": true,
+    "detail": "failing 16,20,28,44 masked 16,20,28,44"
+   },
+   {
+    "name": "guitar-aguado-op03-1:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:timing",
+    "ok": false,
+    "detail": "masked 22,24"
+   },
+   {
+    "name": "guitar-aguado-op03-2:timing-unmasked",
+    "ok": true,
+    "detail": "failing 22,24 masked 22,24"
+   },
+   {
+    "name": "guitar-aguado-op03-2:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:timing",
+    "ok": false,
+    "detail": "masked 8,13"
+   },
+   {
+    "name": "guitar-aguado-op03-3:timing-unmasked",
+    "ok": true,
+    "detail": "failing 8,13 masked 8,13"
+   },
+   {
+    "name": "guitar-aguado-op03-3:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:timing",
+    "ok": false,
+    "detail": "masked 6,22,33,38,41"
+   },
+   {
+    "name": "guitar-aguado-op03-4:timing-unmasked",
+    "ok": true,
+    "detail": "failing 6,22,33,38,41 masked 6,22,33,38,41"
+   },
+   {
+    "name": "guitar-aguado-op03-4:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:timing",
+    "ok": false,
+    "detail": "masked 13,16,24,32,45,48"
+   },
+   {
+    "name": "guitar-aguado-op03-5:timing-unmasked",
+    "ok": true,
+    "detail": "failing 13,16,24,32,45,48 masked 13,16,24,32,45,48"
+   },
+   {
+    "name": "guitar-aguado-op03-5:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:timing",
+    "ok": false,
+    "detail": "masked 26,31"
+   },
+   {
+    "name": "guitar-aguado-op03-6:timing-unmasked",
+    "ok": true,
+    "detail": "failing 26,31 masked 26,31"
+   },
+   {
+    "name": "guitar-aguado-op03-6:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:timing",
+    "ok": false,
+    "detail": "masked 8,16"
+   },
+   {
+    "name": "guitar-aguado-allegro-g:timing-unmasked",
+    "ok": true,
+    "detail": "failing 8,16 masked 8,16"
+   },
+   {
+    "name": "guitar-aguado-allegro-g:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:timing",
+    "ok": false,
+    "detail": "masked 11,13,51"
+   },
+   {
+    "name": "guitar-aguado-favorites-1:timing-unmasked",
+    "ok": true,
+    "detail": "failing 11,13,51 masked 11,13,51"
+   },
+   {
+    "name": "guitar-aguado-favorites-1:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-half:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-full:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-pre:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-release:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-bend-chain:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-chain:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-slide-legato-gliss:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-hammer:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-legato-pull:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-natural:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-harmonic-artificial:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-phrase:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tapping-tap-fret:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-palm-mute-span:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-let-ring-arpeggio:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dead-ghost-strum:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-vibrato-lines:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tremolo-picking-run:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-golpe-accent:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-two:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-capo-five-position:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-drop-d-riff:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dadgad-drone:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-fingering-position:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-chord-diagrams:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-repeats-endings:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-segno-coda-roadmap:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-grace-cue-figures:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-tuplet-figures:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-multivoice-tab:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-ornament-trills:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-dynamics-hairpins:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:timing-unmasked",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:masks-consistent",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "etude-cross-part-etude:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "splits:integrity",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "splits:sealed-test-untouched",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "duplicates:no-cross-split-collision",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "quality:metadata-valid",
+    "ok": true,
+    "detail": null
+   }
+  ]
+ },
+ "targets": {
+  "total": {
+   "objects": 5480,
+   "string": 276,
+   "fret": 276,
+   "rhythm": 5229,
+   "pitch": 4569,
+   "voice": 5229,
+   "pairing": 32,
+   "techniqueFamily": 103,
+   "techniqueParams": 76,
+   "articulation": 5,
+   "context": 4
+  },
+  "bySplit": {
+   "train": {
+    "objects": 3033,
+    "string": 113,
+    "fret": 113,
+    "rhythm": 2828,
+    "pitch": 2440,
+    "voice": 2828,
+    "pairing": 4,
+    "techniqueFamily": 57,
+    "techniqueParams": 46,
+    "articulation": 5,
+    "context": 0,
+    "scores": 23
+   },
+   "validation": {
+    "objects": 1912,
+    "string": 66,
+    "fret": 66,
+    "rhythm": 1898,
+    "pitch": 1672,
+    "voice": 1898,
+    "pairing": 0,
+    "techniqueFamily": 24,
+    "techniqueParams": 12,
+    "articulation": 0,
+    "context": 2,
+    "scores": 11
+   },
+   "heldout": {
+    "objects": 92,
+    "string": 89,
+    "fret": 89,
+    "rhythm": 92,
+    "pitch": 92,
+    "voice": 92,
+    "pairing": 28,
+    "techniqueFamily": 22,
+    "techniqueParams": 18,
+    "articulation": 0,
+    "context": 2,
+    "scores": 9
+   },
+   "diagnostic": {
+    "objects": 443,
+    "string": 8,
+    "fret": 8,
+    "rhythm": 411,
+    "pitch": 365,
+    "voice": 411,
+    "pairing": 0,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 2
+   }
+  },
+  "byTier": {
+   "real": {
+    "objects": 5220,
+    "string": 28,
+    "fret": 28,
+    "rhythm": 4969,
+    "pitch": 4309,
+    "voice": 4969,
+    "pairing": 28,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 12
+   },
+   "controlled-original": {
+    "objects": 260,
+    "string": 248,
+    "fret": 248,
+    "rhythm": 260,
+    "pitch": 260,
+    "voice": 260,
+    "pairing": 4,
+    "techniqueFamily": 103,
+    "techniqueParams": 76,
+    "articulation": 5,
+    "context": 4,
+    "scores": 33
+   }
+  }
+ }
+}

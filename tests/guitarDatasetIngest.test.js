@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { ingestCandidate, stampSourceIds, LICENSE_ALLOWLIST } from '../tools/guitar-vision/dataset-ingest.mjs'
+import { assignChord, assignPosition, etudeManifest, ETUDE_LICENSE } from '../tools/guitar-vision/build-original-etudes.mjs'
 import { mkdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 
@@ -54,5 +55,29 @@ describe('dataset ingest gate', () => {
     )
     expect(record.status).toBe('QUARANTINED:read-failure')
     expect(record.quarantineReason).toBeTruthy()
+  })
+})
+
+describe('controlled original etudes', () => {
+  it('assigns playable positions and voicings', () => {
+    for (const midi of [40, 48, 55, 64, 72, 76]) {
+      const pos = assignPosition(midi)
+      expect(pos.fret).toBeGreaterThanOrEqual(0)
+      expect(pos.string).toBeGreaterThanOrEqual(1)
+    }
+    const voicing = assignChord([62, 67, 71, 74])
+    expect(voicing).not.toBeNull()
+    expect(new Set(voicing.map((v) => v.string)).size).toBe(4)
+    expect(assignChord([20, 30, 90, 100])).toBeNull()
+  })
+
+  it('declares CC0 original provenance for every etude', () => {
+    const manifest = etudeManifest()
+    expect(manifest.license).toBe(ETUDE_LICENSE)
+    expect(manifest.count).toBeGreaterThan(25)
+    const families = new Set(manifest.etudes.flatMap((e) => e.families))
+    for (const required of ['bend-amount', 'slide', 'hammer-on', 'natural-harmonic', 'tapping', 'palm-mute', 'capo', 'chord-diagram', 'tuplet']) {
+      expect(families.has(required), required).toBe(true)
+    }
   })
 })

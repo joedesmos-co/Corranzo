@@ -8,6 +8,7 @@
  */
 
 import { soundingFromTab, tabPositionsForSounding } from './pitchContract.js'
+import { verifyPairing } from './guitarCanonicalEvents.js'
 import { STANDARD_GUITAR_TUNING } from '../../instruments/instruments.js'
 
 export const PLAYABILITY_VERSION = 'guitar-playability/1.0'
@@ -48,12 +49,15 @@ export function validatePlayability(canonical, options = {}) {
       issues.push(issue(event, PLAYABILITY_CODES.FRET_OUT_OF_RANGE, `fret ${fret} outside 0..${maxFret}`))
     }
     if (string != null && fret != null && Number.isFinite(event.pitch?.soundingMidi)) {
-      const expected = soundingFromTab(string, fret, { tuning, capoFret })
-      if (expected == null) {
+      // Shared verifier: truth and playability can never disagree (harmonics
+      // arbitrate via series physics / the preserved pitch triple).
+      const verdict = verifyPairing(string, fret, event.pitch.soundingMidi,
+        { tuning, capoFret, techniques: event.techniques })
+      if (verdict.status === 'unplayable') {
         issues.push(issue(event, PLAYABILITY_CODES.IMPOSSIBLE_POSITION, `string ${string} fret ${fret} is unplayable`))
-      } else if (expected !== event.pitch.soundingMidi) {
+      } else if (verdict.status === 'quarantined') {
         issues.push(issue(event, PLAYABILITY_CODES.UNVERIFIED_PAIRING,
-          `string ${string} fret ${fret} sounds ${expected} but event pitch is ${event.pitch.soundingMidi}; ` +
+          `string ${string} fret ${fret} sounds ${verdict.expected} but event pitch is ${event.pitch.soundingMidi}; ` +
           `playable positions: ${tabPositionsForSounding(event.pitch.soundingMidi, { tuning, capoFret, maxFret }).map((p) => `${p.string}/${p.fret}`).join(', ') || 'none'}`))
       }
     }
@@ -66,13 +70,23 @@ export function validatePlayability(canonical, options = {}) {
   }
 
   // Simultaneous same-string conflicts: two fretted events, one string, one onset.
+  // Cross-part pairing copies (tab.source === 'cross-part') coexist with
+  // their TAB originals by design: the copy is the same finger, not a
+  // second one. Exempt a copy when its TAB original shares the onset.
   const byOnset = new Map()
   for (const event of events) {
     if (event.time?.isRest || event.tab?.string == null) continue
-    const key = `${event.time.onsetQuarters}|${event.time.staff}`
+    const key = `${event.time.onsetQuarters}|${event.time.staff}|${event.source.partId}`
     if (!byOnset.has(key)) byOnset.set(key, [])
     byOnset.get(key).push(event)
   }
+  const isCrossPartCopy = (event, group) =>
+    event.tab?.source === 'cross-part' &&
+    group.some((other) =>
+      other.id !== event.id &&
+      other.tab?.source !== 'cross-part' &&
+      other.tab?.string === event.tab.string &&
+      other.tab?.fret === event.tab.fret)
   for (const [, group] of byOnset) {
     const seen = new Map()
     for (const event of group) {
@@ -81,6 +95,30 @@ export function validatePlayability(canonical, options = {}) {
           `string ${event.tab.string} fretted twice at onset ${event.time.onsetQuarters} (${seen.get(event.tab.string)} and ${event.id})`))
       } else {
         seen.set(event.tab.string, event.id)
+      }
+    }
+  }
+  // Cross-staff conflicts within one part (paired notation+TAB leftovers the
+  // mirror pass did not consume). Different parts are different instruments
+  // and may share strings freely; same-part+staff pairs are reported by the
+  // lane loop above, so key by part+string here to avoid double-reporting.
+  const byPartOnset = new Map()
+  for (const event of events) {
+    if (event.time?.isRest || event.tab?.string == null) continue
+    const key = `${event.time.onsetQuarters}|${event.source.partId}`
+    if (!byPartOnset.has(key)) byPartOnset.set(key, [])
+    byPartOnset.get(key).push(event)
+  }
+  for (const [, group] of byPartOnset) {
+    const candidates = group.filter((event) => !isCrossPartCopy(event, group))
+    const seen = new Map()
+    for (const event of candidates) {
+      const key = `${event.tab.string}|${event.time.staff}`
+      if (seen.has(key)) {
+        issues.push(issue(event, PLAYABILITY_CODES.SAME_STRING_SIMULTANEOUS,
+          `string ${event.tab.string} fretted twice at onset ${event.time.onsetQuarters} (${seen.get(key)} and ${event.id})`))
+      } else {
+        seen.set(key, event.id)
       }
     }
   }

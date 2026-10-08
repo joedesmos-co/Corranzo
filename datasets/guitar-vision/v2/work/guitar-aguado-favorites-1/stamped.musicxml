@@ -1,0 +1,4814 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE score-partwise  PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1"><work><work-title>Les Favorites No. 1</work-title></work> version="4.0">
+  <movement-title>Music21 Fragment</movement-title>
+  <identification>
+    <creator type="composer">Music21</creator>
+    <encoding>
+      <encoding-date>2026-07-15</encoding-date>
+      <software>music21 v.10.1.0</software>
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+      <supports element="accidental" type="yes" />
+    </encoding>
+  <rights>CC BY-SA 4.0 — Mutopia Project #2091 — Aguado Les Favorites No.1</rights></identification>
+  <defaults>
+    <scaling>
+      <millimeters>7</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+  </defaults>
+  <part-list>
+    <score-part id="Pce6ee0ac1528329d213f807044f9bc84">
+      <part-name>Acoustic Guitar</part-name>
+      <part-abbreviation>Ac Gtr</part-abbreviation>
+      <score-instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc">
+        <instrument-name>Acoustic Guitar</instrument-name>
+        <instrument-abbreviation>Ac Gtr</instrument-abbreviation>
+      </score-instrument>
+      <score-instrument id="Ibeacc221e44a5448554470ce4f8bbc0c">
+        <instrument-name>None</instrument-name>
+      </score-instrument>
+      <midi-instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc">
+        <midi-channel>1</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+      <midi-instrument id="Ibeacc221e44a5448554470ce4f8bbc0c">
+        <midi-channel>2</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <!--=========================== Part 1 ===========================-->
+  <part id="Pce6ee0ac1528329d213f807044f9bc84">
+    <!--========================= Measure 1 ==========================-->
+    <measure implicit="no" number="1">
+      <attributes>
+        <divisions>10080</divisions>
+        <key>
+          <fifths>2</fifths>
+          <mode>major</mode>
+        </key>
+        <time>
+          <beats>2</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
+      </attributes>
+      <direction>
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>74</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="74" />
+      </direction>
+      <note id="guitar-aguado-favorites-1-n001" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n002" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n003" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n004" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n005" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n006" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 2 ==========================-->
+    <measure implicit="no" number="2">
+      <note id="guitar-aguado-favorites-1-n007" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n008" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n009" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n010" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n011">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n012">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n013">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure implicit="no" number="3">
+      <note id="guitar-aguado-favorites-1-n014" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n015" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n016" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n017" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n018" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n019" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n020" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure implicit="no" number="4">
+      <note id="guitar-aguado-favorites-1-n021">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n022">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n023">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n024">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n025">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n026">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n027">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n028">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n029">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 5 ==========================-->
+    <measure implicit="no" number="5">
+      <note id="guitar-aguado-favorites-1-n030" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n031" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n032" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n033" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n034" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n035" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 6 ==========================-->
+    <measure implicit="no" number="6">
+      <note id="guitar-aguado-favorites-1-n036">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n037">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n038">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n039">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n040">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n041">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n042">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 7 ==========================-->
+    <measure implicit="no" number="7">
+      <note id="guitar-aguado-favorites-1-n043" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n044" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n045" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n046" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n047">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n048">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n049">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n050">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n051">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n052">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 8 ==========================-->
+    <measure implicit="no" number="8">
+      <note id="guitar-aguado-favorites-1-n053">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n054">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n055">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n056">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 9 ==========================-->
+    <measure implicit="no" number="9">
+      <note id="guitar-aguado-favorites-1-n057">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n058">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n059" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n060" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n061" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n062">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n063">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n064">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n065">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 10 =========================-->
+    <measure implicit="no" number="10">
+      <note id="guitar-aguado-favorites-1-n066">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n067">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n068">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n069">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n070">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n071">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n072">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n073">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n074">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n075" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="start" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 11 =========================-->
+    <measure implicit="no" number="11">
+      <note id="guitar-aguado-favorites-1-n076" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n077" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="stop" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-favorites-1-n078" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n079">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n080">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n081">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n082">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n083">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n084">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n085">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n086">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 12 =========================-->
+    <measure implicit="no" number="12">
+      <note id="guitar-aguado-favorites-1-n087">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n088">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n089">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n090">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n091">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n092">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n093">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n094">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n095">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n096" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="start" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13">
+      <note id="guitar-aguado-favorites-1-n097">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n098">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n099" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="stop" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-favorites-1-n100">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n101">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n102">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n103">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n104">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n105">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 14 =========================-->
+    <measure implicit="no" number="14">
+      <note id="guitar-aguado-favorites-1-n106">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n107">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n108">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n109">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n110">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 15 =========================-->
+    <measure implicit="no" number="15">
+      <note id="guitar-aguado-favorites-1-n111" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n112" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n113" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n114">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n115" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n116" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n117">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n118">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n119">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n120">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n121">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n122" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n123">
+        <rest />
+        <duration>5040</duration>
+        <voice>3</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 16 =========================-->
+    <measure implicit="no" number="16">
+      <note id="guitar-aguado-favorites-1-n124">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n125">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n126">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n127">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 17 =========================-->
+    <measure implicit="no" number="17">
+      <attributes>
+        <key>
+          <fifths>1</fifths>
+          <mode>minor</mode>
+        </key>
+      </attributes>
+      <note id="guitar-aguado-favorites-1-n128" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n129" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n130" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n131" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n132" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n133">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n134" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n135">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 18 =========================-->
+    <measure implicit="no" number="18">
+      <note id="guitar-aguado-favorites-1-n136">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n137">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n138">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n139" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n140" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n141" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n142">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 19 =========================-->
+    <measure implicit="no" number="19">
+      <note id="guitar-aguado-favorites-1-n143">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n144">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n145">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n146" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n147" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n148" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n149">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 20 =========================-->
+    <measure implicit="no" number="20">
+      <note id="guitar-aguado-favorites-1-n150">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n151">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n152">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n153" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n154" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n155" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n156">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 21 =========================-->
+    <measure implicit="no" number="21">
+      <note id="guitar-aguado-favorites-1-n157" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n158" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n159" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n160" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n161" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n162">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n163" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n164">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 22 =========================-->
+    <measure implicit="no" number="22">
+      <note id="guitar-aguado-favorites-1-n165">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n166">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n167" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n168" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n169" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n170" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n171">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 23 =========================-->
+    <measure implicit="no" number="23">
+      <note id="guitar-aguado-favorites-1-n172" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n173" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n174" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n175" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n176" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n177">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n178">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n179">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n180" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n181">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 24 =========================-->
+    <measure implicit="no" number="24">
+      <note id="guitar-aguado-favorites-1-n182">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n183">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n184">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n185" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n186" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n187" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n188">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 25 =========================-->
+    <measure implicit="no" number="25">
+      <note id="guitar-aguado-favorites-1-n189" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n190" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n191" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n192" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n193" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 26 =========================-->
+    <measure implicit="no" number="26">
+      <note id="guitar-aguado-favorites-1-n194" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n195">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n196">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n197">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n198">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n199" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n200" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 27 =========================-->
+    <measure implicit="no" number="27">
+      <note id="guitar-aguado-favorites-1-n201" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n202" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n203" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n204" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n205" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n206">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>20160</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n207">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 28 =========================-->
+    <measure implicit="no" number="28">
+      <note id="guitar-aguado-favorites-1-n208">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n209">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n210">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n211" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n212" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n213" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n214">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 29 =========================-->
+    <measure implicit="no" number="29">
+      <note id="guitar-aguado-favorites-1-n215" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <dot />
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n216" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n217" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n218" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n219" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n220" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 30 =========================-->
+    <measure implicit="no" number="30">
+      <note id="guitar-aguado-favorites-1-n221" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n222">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n223">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n224">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n225" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n226" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n227" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 31 =========================-->
+    <measure implicit="no" number="31">
+      <note id="guitar-aguado-favorites-1-n228">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n229">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n230">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n231" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n232" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n233" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n234">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n235">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n236">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 32 =========================-->
+    <measure implicit="no" number="32">
+      <note id="guitar-aguado-favorites-1-n237">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n238">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n239">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n240">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 33 =========================-->
+    <measure implicit="no" number="33">
+      <note id="guitar-aguado-favorites-1-n241" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n242" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n243" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n244" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n245" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n246">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n247" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n248">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 34 =========================-->
+    <measure implicit="no" number="34">
+      <note id="guitar-aguado-favorites-1-n249">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n250">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n251">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n252" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n253" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n254" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n255">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 35 =========================-->
+    <measure implicit="no" number="35">
+      <note id="guitar-aguado-favorites-1-n256">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n257">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n258">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n259" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n260" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n261" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n262">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 36 =========================-->
+    <measure implicit="no" number="36">
+      <note id="guitar-aguado-favorites-1-n263">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n264">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n265">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n266" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n267" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n268" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n269">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 37 =========================-->
+    <measure implicit="no" number="37">
+      <note id="guitar-aguado-favorites-1-n270" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n271" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n272" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n273" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n274" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n275">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n276" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n277">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 38 =========================-->
+    <measure implicit="no" number="38">
+      <note id="guitar-aguado-favorites-1-n278" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n279" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n280" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n281" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n282">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n283">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n284">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 39 =========================-->
+    <measure implicit="no" number="39">
+      <note id="guitar-aguado-favorites-1-n285" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n286" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n287" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n288" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n289" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n290">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n291">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n292">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n293" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n294">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 40 =========================-->
+    <measure implicit="no" number="40">
+      <note id="guitar-aguado-favorites-1-n295" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n296" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n297" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n298">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n299">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n300">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n301">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 41 =========================-->
+    <measure implicit="no" number="41">
+      <attributes>
+        <key>
+          <fifths>2</fifths>
+          <mode>major</mode>
+        </key>
+      </attributes>
+      <note id="guitar-aguado-favorites-1-n302" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n303" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n304" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n305" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n306" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n307" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 42 =========================-->
+    <measure implicit="no" number="42">
+      <note id="guitar-aguado-favorites-1-n308" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n309" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n310" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n311" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n312">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n313">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n314">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 43 =========================-->
+    <measure implicit="no" number="43">
+      <note id="guitar-aguado-favorites-1-n315">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n316">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n317" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n318">
+        <rest />
+        <duration>7560</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n319">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n320">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n321" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n322" dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 44 =========================-->
+    <measure implicit="no" number="44">
+      <note id="guitar-aguado-favorites-1-n323">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n324">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n325">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n326">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n327">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n328">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n329">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n330">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n331">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 45 =========================-->
+    <measure implicit="no" number="45">
+      <note id="guitar-aguado-favorites-1-n332" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n333" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n334" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n335" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n336" dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n337" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 46 =========================-->
+    <measure implicit="no" number="46">
+      <note id="guitar-aguado-favorites-1-n338">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n339">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n340">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n341">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n342">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n343">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n344">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 47 =========================-->
+    <measure implicit="no" number="47">
+      <note id="guitar-aguado-favorites-1-n345" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n346" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n347" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n348" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n349">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n350">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n351">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n352">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n353">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n354">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 48 =========================-->
+    <measure implicit="no" number="48">
+      <note id="guitar-aguado-favorites-1-n355">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n356">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n357">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n358">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 49 =========================-->
+    <measure implicit="no" number="49">
+      <note id="guitar-aguado-favorites-1-n359" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n360" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n361" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n362" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n363">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n364">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n365">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n366">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n367" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n368">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 50 =========================-->
+    <measure implicit="no" number="50">
+      <note id="guitar-aguado-favorites-1-n369">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n370">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n371">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n372">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n373">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n374">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n375">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n376">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n377">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n378" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="start" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <!--========================= Measure 51 =========================-->
+    <measure implicit="no" number="51">
+      <note id="guitar-aguado-favorites-1-n379">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n380">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n381" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>20160</duration>
+        <tie type="stop" />
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note id="guitar-aguado-favorites-1-n382" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n383">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n384">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n385">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n386">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n387">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n388">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n389">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n390">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 52 =========================-->
+    <measure implicit="no" number="52">
+      <note id="guitar-aguado-favorites-1-n391">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n392">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n393">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n394">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n395">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n396">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n397">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-aguado-favorites-1-n398">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n399">
+        <rest />
+        <duration>5040</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n400" dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-aguado-favorites-1-n401">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 53 =========================-->
+    <measure implicit="no" number="53">
+      <note id="guitar-aguado-favorites-1-n402">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n403">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n404">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n405">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n406">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n407">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n408">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n409">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n410">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n411">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n412">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n413">
+        <rest />
+        <duration>2520</duration>
+        <type>16th</type>
+      </note>
+    </measure>
+    <!--========================= Measure 54 =========================-->
+    <measure implicit="no" number="54">
+      <note id="guitar-aguado-favorites-1-n414">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n415">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n416">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n417">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n418">
+        <rest />
+        <duration>5040</duration>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <!--========================= Measure 55 =========================-->
+    <measure implicit="no" number="55">
+      <note id="guitar-aguado-favorites-1-n419">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n420">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n421" dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n422">
+        <rest />
+        <duration>2520</duration>
+        <voice>1</voice>
+        <type>16th</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n423" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n424" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n425" dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n426" dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-aguado-favorites-1-n427" dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n428">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <backup>
+        <duration>20160</duration>
+      </backup>
+      <note id="guitar-aguado-favorites-1-n429">
+        <rest />
+        <duration>10080</duration>
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n430">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n431">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <voice>3</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 56 =========================-->
+    <measure implicit="no" number="56">
+      <note id="guitar-aguado-favorites-1-n432">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n433">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n434">
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I1e80e5d9ebfe3c904ff0f0f39e2253bc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-aguado-favorites-1-n435">
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

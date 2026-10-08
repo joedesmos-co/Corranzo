@@ -1,0 +1,48 @@
+{
+ "title": "Capo two study",
+ "attribution": {
+  "workTitle": "Capo two study",
+  "creators": [
+   {
+    "type": "composer",
+    "name": "Corranzo Etude Generator (original study)"
+   }
+  ],
+  "rights": [
+   "CC0-1.0 — Corranzo original etude (project composition, no source material)"
+  ],
+  "encodingSoftware": "corranzo-etude-composer/1.0"
+ },
+ "capo": {
+  "fret": 2,
+  "partial": false,
+  "sourceText": "Capo 2",
+  "confidence": "text-mined",
+  "measureNumber": 1,
+  "quarterTime": 0
+ },
+ "tuning": [
+  {
+   "id": "P1",
+   "tuning": null,
+   "tabStaves": []
+  }
+ ],
+ "measures": 2,
+ "notes": 8,
+ "harmonyEvents": 0,
+ "frames": 0,
+ "scoreMarks": [
+  {
+   "kind": "capo",
+   "sourceText": "Capo 2",
+   "confidence": "text-mined",
+   "fret": 2,
+   "partial": false,
+   "measureNumber": 1,
+   "quarterTime": 0,
+   "partId": "P1",
+   "staff": null
+  }
+ ]
+}
