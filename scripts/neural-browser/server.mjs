@@ -18,6 +18,9 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 // Project root = two levels up from scripts/neural-browser
 const PROJECT_ROOT = join(HERE, '..', '..')
 const VENDOR = process.env.CORRANZO_NEURAL_VENDOR ?? '/tmp/tfjs-probe/node_modules'
+// Synthetic FP controls (silence/noise/speech), generated on demand into
+// tmp/neural-controls (untracked); env-overridable like the vendor root.
+const CONTROLS = process.env.CORRANZO_NEURAL_CONTROLS ?? join(PROJECT_ROOT, 'tmp', 'neural-controls')
 // Patched vendor ESM copies (test setup rewrites bare imports to
 // browser-resolvable URLs). Kept outside the repo: derived artifacts.
 const TMPVENDOR = process.env.CORRANZO_NEURAL_TMPVENDOR ?? join(PROJECT_ROOT, 'tmp', 'neural-vendor')
@@ -27,7 +30,9 @@ const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applica
 const ROOTS = [
   join(VENDOR, '@spotify', 'basic-pitch'),
   join(VENDOR, '@tensorflow', 'tfjs'),
+  join(VENDOR, '@tensorflow', 'tfjs-backend-wasm'),
   join(PROJECT_ROOT, 'benchmarks', 'mic-real', 'clips'),
+  CONTROLS,
   TMPVENDOR,
   HERE,
 ]
@@ -36,12 +41,16 @@ function resolve(urlPath) {
   let filePath = null
   if (urlPath.startsWith('/vendor/bp/')) {
     filePath = join(VENDOR, '@spotify/basic-pitch', urlPath.slice('/vendor/bp/'.length))
-  } else if (urlPath.startsWith('/vendor/tfjs/')) {
+  } else   if (urlPath.startsWith('/vendor/tfjs/')) {
     filePath = join(VENDOR, '@tensorflow/tfjs', urlPath.slice('/vendor/tfjs/'.length))
+  } else if (urlPath.startsWith('/vendor/wasm/')) {
+    filePath = join(VENDOR, '@tensorflow/tfjs-backend-wasm', urlPath.slice('/vendor/wasm/'.length))
   } else if (urlPath.startsWith('/tmpvendor/')) {
     filePath = join(TMPVENDOR, urlPath.slice('/tmpvendor/'.length))
   } else if (urlPath.startsWith('/clip/')) {
     filePath = join(PROJECT_ROOT, 'benchmarks', 'mic-real', 'clips', urlPath.slice('/clip/'.length))
+  } else if (urlPath.startsWith('/control/')) {
+    filePath = join(CONTROLS, urlPath.slice('/control/'.length))
   } else if (urlPath.startsWith('/harness/')) {
     filePath = join(HERE, urlPath.slice('/harness/'.length))
   }

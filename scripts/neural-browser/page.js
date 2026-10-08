@@ -74,41 +74,74 @@ async function sliceBuffer(audioBuffer, startSeconds, lengthSeconds) {
   return out
 }
 
+/** Zero-pad a short window up to the model's fixed native input length. */
+async function padBuffer(audioBuffer, targetLength) {
+  if (audioBuffer.length >= targetLength) {
+    return audioBuffer
+  }
+  const ctx = new OfflineAudioContext(1, targetLength, audioBuffer.sampleRate)
+  const out = ctx.createBuffer(1, targetLength, audioBuffer.sampleRate)
+  out.getChannelData(0).set(audioBuffer.getChannelData(0), 0)
+  return out
+}
+
 async function main() {
   const params = new URLSearchParams(location.search)
   const clip = params.get('clip')
   const heap0 = performance.memory?.usedJSHeapSize ?? null
   try {
     await tf.ready()
-    // Optional ?backend=webgl|cpu override for measurement; default lets
-    // TF.js choose (and records what actually executed — never assume).
+    // Optional ?backend=webgl|cpu|wasm override for measurement; default
+    // lets TF.js choose (and records what actually executed — never assume).
+    // WASM loads its backend bundle on demand, then points at the SIMD
+    // binaries served alongside it.
     const wantBackend = params.get('backend')
-    if (wantBackend) {
+    if (wantBackend === 'wasm') {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = '/vendor/wasm/dist/tf-backend-wasm.es2017.js'
+        script.onload = resolve
+        script.onerror = () => reject(new Error('wasm backend bundle failed'))
+        document.head.appendChild(script)
+      })
+      globalThis.tf.wasm.setWasmPaths('/vendor/wasm/dist/')
+      await tf.setBackend('wasm')
+    } else if (wantBackend) {
       await tf.setBackend(wantBackend)
     }
     const backend = tf.getBackend()
     const loadStart = performance.now()
     const basicPitch = new BasicPitch(MODEL_URL)
     // First inference includes fetch + graph compile (cold start).
-    const audioBuffer = await decodeToMono(`/clip/${clip}`, MODEL_RATE)
+    const pool = params.get('pool') === 'control' ? 'control' : 'clip'
+    const audioBuffer = await decodeToMono(`/${pool}/${clip}`, MODEL_RATE)
     const full = await evaluateBuffer(basicPitch, audioBuffer)
     const initMs = performance.now() - loadStart
     const fullNotes = notesFromOutputs(full.frames, full.onsets)
 
     let chunked = null
     if (params.get('chunked') === '1') {
+      // Window experiment (Stage 7, M3): ?window=0.5|1|2 seconds, hop =
+      // half the window. Shorter-than-native windows are zero-padded to
+      // the model's fixed 43844-sample input — padding is part of what is
+      // being measured (edge artifacts included, honestly).
+      const windowSeconds = Math.min(2.0, Math.max(0.25, Number(params.get('window') ?? 2.0) || 2.0))
+      const hopSeconds = windowSeconds / 2
+      const padLength = 43844
       const duration = audioBuffer.duration
       const windows = []
-      for (let start = 0; start + 2.0 <= duration + 0.001; start += 1.0) {
-        const sliced = await sliceBuffer(audioBuffer, start, Math.min(2.0, duration - start))
-        const result = await evaluateBuffer(basicPitch, sliced)
+      for (let start = 0; start + 0.25 <= duration + 0.001; start += hopSeconds) {
+        const sliced = await sliceBuffer(audioBuffer, start, Math.min(windowSeconds, duration - start))
+        const padded = await padBuffer(sliced, padLength)
+        const result = await evaluateBuffer(basicPitch, padded)
         windows.push({
-          windowStartSeconds: start,
+          windowStartSeconds: Math.round(start * 1000) / 1000,
+          windowSeconds,
           inferMs: result.inferMs,
           notes: notesFromOutputs(result.frames, result.onsets),
         })
       }
-      chunked = { windowSeconds: 2.0, hopSeconds: 1.0, windows }
+      chunked = { windowSeconds, hopSeconds, windows }
     }
 
     let idbCache = null

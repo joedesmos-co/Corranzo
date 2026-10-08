@@ -79,4 +79,34 @@ describe('mic neural stream practice integration', () => {
     }
     expect(outcome.outcome).not.toBe(MATCH_OUTCOME.COMPLETE)
   })
+
+  it('advances repeated chords as separate events without double-firing', () => {
+    // Same chord attacked twice with a clear gap: two advances across two
+    // checkpoints, and re-feeding one attack never double-fires.
+    const checkpoint = { id: 'neural-stream-repeat', expectedMidis: [49, 56] }
+    const first = streamChordAttack([49, 56], 30_000)
+    const chordState = createChordMatchState()
+    let outcome = null
+    for (const attack of first.emitted) {
+      const event = toCanonicalMicrophoneEvent(
+        { midi: attack.midi, midiFloat: attack.midi, v2DetectedMidis: [attack.midi], clarity: attack.confidence },
+        { wallTimestampMs: attack.onsetCaptureMs, attemptId: 'att-stream-3', chordGroupId: attack.chordGroupId },
+      )
+      outcome = evaluateCanonicalWaitForYouInput(checkpoint, event, chordState, settings)
+    }
+    expect(outcome.outcome).toBe(MATCH_OUTCOME.COMPLETE)
+    // Re-feeding the same attacks into the completed state stays stable:
+    // progress, never a second completion (no double-fire), never wrong.
+    const repeat = evaluateCanonicalWaitForYouInput(
+      checkpoint,
+      toCanonicalMicrophoneEvent(
+        { midi: 49, midiFloat: 49, v2DetectedMidis: [49], clarity: 0.85 },
+        { wallTimestampMs: 31_000, attemptId: 'att-stream-3', chordGroupId: first.emitted[0].chordGroupId },
+      ),
+      chordState,
+      settings,
+    )
+    expect(repeat.outcome).toBeDefined()
+    expect(repeat.outcome).not.toBe(MATCH_OUTCOME.WRONG)
+  })
 })

@@ -14,35 +14,15 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { chromium } from 'playwright'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { startNeuralBrowserServer } from '../scripts/neural-browser/server.mjs'
+import { preparePatchedVendor } from '../scripts/neural-browser/prepare-vendor.mjs'
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const neuralVendor = globalThis.process?.env?.CORRANZO_NEURAL_VENDOR ?? null
 const hasVendor = Boolean(neuralVendor)
-
-/**
- * The vendor ESM uses bundler-style imports browsers cannot resolve
- * (extensionless relatives, bare '@tensorflow/tfjs' into a UMD build).
- * beforeAll copies the two needed modules into tmp/neural-vendor with
- * mechanical rewrites (reviewable, regenerable, never committed):
- * tf arrives via the classic UMD bundle as window.tf.
- */
-function preparePatchedVendor() {
-  const vendor = neuralVendor
-  const outDir = join(projectRoot, 'tmp', 'neural-vendor')
-  mkdirSync(outDir, { recursive: true })
-  const inference = readFileSync(join(vendor, '@spotify/basic-pitch/esm/inference.js'), 'utf8')
-    .replaceAll("from '@tensorflow/tfjs'", "from '/tmpvendor/tf-global.js'")
-    .replaceAll('import * as tf', 'import tf')
-  const toMidi = readFileSync(join(vendor, '@spotify/basic-pitch/esm/toMidi.js'), 'utf8')
-    .replaceAll("from '@tonejs/midi'", "from '/harness/tonejs-stub.js'")
-  writeFileSync(join(outDir, 'inference.js'), inference)
-  writeFileSync(join(outDir, 'toMidi.js'), toMidi)
-  writeFileSync(join(outDir, 'tf-global.js'), 'export default globalThis.tf;\n')
-}
 
 const CLIPS = [
   { file: 'acoustic-power-dyad.wav', anchor: [49, 56] },
@@ -59,7 +39,7 @@ describe.skipIf(!hasVendor)('neural browser smoke (real Chromium + TF.js)', () =
   const measured = { clips: [], offline: null }
 
   beforeAll(async () => {
-    preparePatchedVendor()
+    preparePatchedVendor(projectRoot)
     server = await startNeuralBrowserServer(0)
     baseUrl = `http://127.0.0.1:${server.address().port}`
     browser = await chromium.launch({ headless: true })
