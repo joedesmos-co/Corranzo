@@ -32,6 +32,8 @@ const ROOTS = [
   join(VENDOR, '@tensorflow', 'tfjs'),
   join(VENDOR, '@tensorflow', 'tfjs-backend-wasm'),
   join(PROJECT_ROOT, 'benchmarks', 'mic-real', 'clips'),
+  join(PROJECT_ROOT, 'src'),
+  join(PROJECT_ROOT, 'tmp', 'basicpitch'),
   CONTROLS,
   TMPVENDOR,
   HERE,
@@ -49,6 +51,10 @@ function resolve(urlPath) {
     filePath = join(TMPVENDOR, urlPath.slice('/tmpvendor/'.length))
   } else if (urlPath.startsWith('/clip/')) {
     filePath = join(PROJECT_ROOT, 'benchmarks', 'mic-real', 'clips', urlPath.slice('/clip/'.length))
+  } else if (urlPath.startsWith('/src/')) {
+    filePath = join(PROJECT_ROOT, 'src', urlPath.slice('/src/'.length))
+  } else if (urlPath.startsWith('/data/')) {
+    filePath = join(PROJECT_ROOT, 'tmp', 'basicpitch', urlPath.slice('/data/'.length))
   } else if (urlPath.startsWith('/control/')) {
     filePath = join(CONTROLS, urlPath.slice('/control/'.length))
   } else if (urlPath.startsWith('/harness/')) {
