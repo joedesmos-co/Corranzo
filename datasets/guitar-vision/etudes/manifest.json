@@ -2,7 +2,7 @@
  "version": "corranzo-etudes/1.0",
  "collection": "corranzo-original-etudes-v1",
  "license": "CC0-1.0",
- "count": 33,
+ "count": 48,
  "etudes": [
   {
    "name": "bend-half",
@@ -527,6 +527,247 @@
    "name": "cross-part-etude",
    "families": [
     "standard-tab-pairing"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "tab-only-rhythm",
+   "families": [
+    "staff-tab",
+    "tab-rest",
+    "tab-rhythm",
+    "fret-number"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "tab-only-chords",
+   "families": [
+    "tab-chord",
+    "multi-digit-fret"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "tab-multivoice-2",
+   "families": [
+    "multi-voice-rhythm",
+    "tab-rhythm"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "paired-mirrors",
+   "families": [
+    "staff-pairing",
+    "standard-tab-pairing"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "paired-legato",
+   "families": [
+    "staff-pairing",
+    "hammer-on",
+    "pull-off"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "bend-quarter-tone",
+   "families": [
+    "bend",
+    "bend-amount"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "bend-slide-combo",
+   "families": [
+    "bend",
+    "slide",
+    "bend-amount"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "legato-mixed",
+   "families": [
+    "hammer-on",
+    "pull-off"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "palm-mute-chug",
+   "families": [
+    "palm-mute"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "letring-fingerpicked",
+   "families": [
+    "let-ring"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "vibrato-phrase",
+   "families": [
+    "vibrato"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "grace-cadence",
+   "families": [
+    "grace-note",
+    "acciaccatura-appoggiatura"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "frames-sevenths",
+   "families": [
+    "chord-diagram",
+    "chord-symbol"
+   ],
+   "tuning": [
+    64,
+    59,
+    55,
+    50,
+    45,
+    40
+   ],
+   "capo": 0
+  },
+  {
+   "name": "open-g-tuning",
+   "families": [
+    "alternate-tuning",
+    "tuning"
+   ],
+   "tuning": [
+    62,
+    59,
+    55,
+    50,
+    43,
+    38
+   ],
+   "capo": 0
+  },
+  {
+   "name": "harmonic-touch",
+   "families": [
+    "artificial-harmonic",
+    "natural-harmonic"
    ],
    "tuning": [
     64,

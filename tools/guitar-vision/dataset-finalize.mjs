@@ -94,8 +94,10 @@ export function main() {
     .filter(Boolean)
   for (const record of passRecords) {
     const canonical = JSON.parse(readFileSync(join(workDir, record.candidateId, 'canonical.json'), 'utf8'))
-    // Reuse the corpus truthDigest over parsed-equivalent content.
-    const parsed = parseMusicXml(readFileSync(resolve(ROOT, record.sourcePath), 'utf8'), 'x.mxl');
+    // Reuse the corpus truthDigest over parsed-equivalent content. The stamped
+    // MusicXML is byte-identical in notes to the source (IDs added only), and
+    // is already extracted for .mxl inputs — never feed zip bytes to XML.
+    const parsed = parseMusicXml(readFileSync(join(workDir, record.candidateId, 'stamped.musicxml'), 'utf8'), 'x.mxl');
     const td = truthDigest(parsed)
     const fd = fileDigest(record.sourceHash)
     record.truthDigest = td
@@ -223,20 +225,38 @@ export function main() {
   // ---- D15 zero-parameter sanity (no model fitting), over all split tiers.
   const sanity = []
   const check = (name, ok, detail = null) => sanity.push({ name, ok, detail })
+  const maskedByScore = {}
   for (const record of splitRecords) {
+    // Object supervision follows the standard layout (the reference joins);
+    // other layouts' masks are recorded in the render record.
+    const standard = record.render?.layouts?.standard
+    const masked = new Set((standard?.maskedEvents ?? []).map((m) => m.id))
+    maskedByScore[record.candidateId] = masked
     const canonical = canonicalById[record.candidateId]
     check(`${record.candidateId}:id-joins`, Object.values(record.render?.layouts ?? {}).length > 0 && Object.values(record.render.layouts).every((l) => l.identityRate === 1.0))
     // A9: strict timing holds on unmasked measures; masked measures are
     // recorded exclusions, and the mask set must equal the failing set
     // (no silent drift in either direction).
-    const failing = (canonical.rhythm?.measureChecks ?? []).filter((c) => !c.ok).map((c) => c.measure).sort((a, b) => a - b)
-    const masked = [...(record.maskedMeasures ?? [])].sort((a, b) => a - b)
-    check(`${record.candidateId}:timing`, failing.length === 0, failing.length ? `masked ${masked.join(',')}` : null)
+    const failing = [...new Set((canonical.rhythm?.measureChecks ?? []).filter((c) => !c.ok).map((c) => c.measure))].sort((a, b) => a - b)
+    const maskedMeasures = [...(record.maskedMeasures ?? [])].sort((a, b) => a - b)
+    check(`${record.candidateId}:timing`, failing.length === 0, failing.length ? `masked ${maskedMeasures.join(',')}` : null)
     // A9: unmasked timing must be exact; masked measures are recorded
     // exclusions (kept in truth, out of rhythm supervision).
-    check(`${record.candidateId}:timing-unmasked`, failing.every((m) => masked.includes(m)),
-      failing.length ? `failing ${failing.join(',')} masked ${masked.join(',')}` : null)
-    check(`${record.candidateId}:masks-consistent`, JSON.stringify(failing) === JSON.stringify(masked))
+    check(`${record.candidateId}:timing-unmasked`, failing.every((m) => maskedMeasures.includes(m)),
+      failing.length ? `failing ${failing.join(',')} masked ${maskedMeasures.join(',')}` : null)
+    check(`${record.candidateId}:masks-consistent`, JSON.stringify(failing) === JSON.stringify(maskedMeasures))
+    // Event-level box masks must reference stamped note IDs of this score.
+    // Stamped IDs count every <note> in document order (mirrors included),
+    // so the valid range is 1..stampedIds, not the canonical event count.
+    const stampedTotal = record.stampedIds ?? canonical.events.length
+    const maskedIds = maskedByScore[record.candidateId] ?? new Set()
+    check(`${record.candidateId}:masks-accounted`,
+      [...maskedIds].every((sid) => {
+        const m = String(sid).match(/-n(\d+)$/)
+        const idx = m ? Number(m[1]) : -1
+        return idx >= 1 && idx <= stampedTotal
+      }),
+      maskedIds.size ? `${maskedIds.size} masked events` : null)
     const bboxes = JSON.parse(readFileSync(join(workDir, record.candidateId, 'joins.json'), 'utf8'))
     const boxes = Object.values(bboxes.joins ?? {}).flatMap((j) => j.boxes ?? [])
     check(`${record.candidateId}:bboxes`, boxes.length > 0 && boxes.every((b) => b[2] > b[0] && b[3] > b[1] && b.every(Number.isFinite)))
@@ -277,13 +297,24 @@ export function main() {
     const joins = JSON.parse(readFileSync(join(workDir, record.candidateId, 'joins.json'), 'utf8'))
     const joinedIds = new Set(Object.keys(joins.joins ?? {}));
     const masked = new Set(record.maskedMeasures ?? [])
-    // Objects: joined note/rest groups per event (sourceId:eN <-> stamped id mapping
-    // is positional: canonical event index + 1 == stamped note number).
+    // Event-level box masks: masked IDs leave object supervision (no rendered
+    // box), everything else symbolic stays.
+    const maskedIds = maskedByScore[record.candidateId] ?? new Set()
+    // Objects: joined note/rest groups per event. The stamped ID follows the
+    // parser's document-order note counter (noteId P1-m9-n162 -> n163), NOT
+    // the canonical index: parsed notes are time-sorted, stamped IDs are
+    // document-ordered, and the two differ on multi-voice scores.
+    const sidFor = (event) => {
+      const match = String(event.source?.noteId ?? '').match(/-n(\d+)$/)
+      if (!match) return null
+      return `${record.candidateId}-n${String(Number(match[1]) + 1).padStart(3, '0')}`
+    }
     let n = 0
-    canonical.events.forEach((event, index) => {
-      const stampedId = `${record.candidateId}-n${String(index + 1).padStart(3, '0')}`
-      if (!joinedIds.has(stampedId)) return
+    canonical.events.forEach((event) => {
+      const stampedId = sidFor(event)
+      if (!stampedId || !joinedIds.has(stampedId)) return
       n += 1
+      if (maskedIds.has(stampedId)) return // box-masked: object supervision only
       targets.objects += 1; targetsBySplit[split].objects += 1; tierTargets.objects += 1
       // A9: masked-measure events keep object/pitch/position/technique
       // identity (joins, sounding pitch and pairing are measure-independent)
@@ -332,12 +363,14 @@ export function main() {
     dataGaps,
     masks: {
       policy: 'A9: failing measures are excluded from rhythm/voice supervision, kept in truth, recorded here',
-      perScore: Object.fromEntries(realRecords.map((r) => [r.candidateId, {
+      perScore: Object.fromEntries(splitRecords.filter((r) => r.tier === 'real').map((r) => [r.candidateId, {
         maskedMeasures: r.maskedMeasures ?? [],
         maskedEvents: r.maskedEvents ?? 0,
+        boxMaskedEvents: [...(maskedByScore[r.candidateId] ?? [])].sort(),
         events: r.eventCount ?? 0,
       }])),
       maskedEventsTotal: realRecords.reduce((n, r) => n + (r.maskedEvents ?? 0), 0),
+      boxMaskedTotal: Object.values(maskedByScore).reduce((n, s) => n + s.size, 0),
     },
     scale,
     sanity: { passed: sanity.filter((s) => s.ok).length, total: sanity.length, checks: sanity },

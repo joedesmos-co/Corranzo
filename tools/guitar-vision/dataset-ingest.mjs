@@ -43,11 +43,22 @@ async function readScoreXml(path) {
   try {
     if (path.toLowerCase().endsWith('.mxl')) {
       const zip = await JSZip.loadAsync(readFileSync(absolute))
-      const names = Object.keys(zip.files).filter((n) => n.toLowerCase().endsWith('.musicxml') && !n.startsWith('__MACOSX'))
-      if (!names.length) return { ok: false, error: 'mxl contains no .musicxml entry' }
-      names.sort()
-      const text = await zip.files[names[0]].async('string')
-      return { ok: true, xml: text, containerEntry: names[0] }
+      // Resolve via META-INF/container.xml when present (PDMX-style .xml
+      // rootfiles); fall back to the first .musicxml/.xml entry.
+      let entryName = null
+      const container = zip.files['META-INF/container.xml']
+      if (container) {
+        const match = (await container.async('string')).match(/full-path="([^"]+)"/)
+        if (match) entryName = match[1]
+      }
+      if (!entryName || !zip.files[entryName]) {
+        const names = Object.keys(zip.files).filter((n) => /\.musicxml$/i.test(n) && !n.startsWith('__MACOSX'))
+          .concat(Object.keys(zip.files).filter((n) => /\.xml$/i.test(n) && !n.includes('META-INF') && !n.startsWith('__MACOSX')))
+        if (!names.length) return { ok: false, error: 'mxl contains no .musicxml/.xml entry' }
+        entryName = names[0]
+      }
+      const text = await zip.files[entryName].async('string')
+      return { ok: true, xml: text, containerEntry: entryName }
     }
     return { ok: true, xml: readFileSync(absolute, 'utf8') }
   } catch (error) {
@@ -197,6 +208,20 @@ export async function ingestCandidate(candidate, workDir) {
   })
   const playability = validatePlayability(canonical)
 
+  // Structural scope: guitar truth covers one guitar (≤2 pitched parts for
+  // duets). Ensemble scores fail render identity structurally (Verovio
+  // consolidates rests, drops doublings) — quarantine, don't force them.
+  const pitchedParts = new Set(
+    (parsed.notes ?? []).filter((n) => !n.isRest && n.midi != null).map((n) => n.partId),
+  )
+  if (pitchedParts.size > 2) {
+    return {
+      ...record, status: 'QUARANTINED:multi-instrument',
+      quarantineReason: `${pitchedParts.size} pitched parts (${[...pitchedParts].slice(0, 6).join(',')}) — ensemble, not guitar solo/duet`,
+      sourceHash, eventCount: canonical.events.length,
+    }
+  }
+
   // D7 playable-event validation: errors quarantine; infos travel along.
   const errors = [
     ...canonical.quarantined.filter((q) => q.code === 'voice-duration-mismatch' || q.code === 'pairing-pitch-mismatch' || q.code === 'impossible-position' || q.code === 'tie-chain-corrupt'),
@@ -222,6 +247,16 @@ export async function ingestCandidate(candidate, workDir) {
   const maskedMeasures = [...new Set(
     (canonical.rhythm?.measureChecks ?? []).filter((c) => !c.ok).map((c) => c.measure),
   )].sort((a, b) => a - b)
+  // A rhythmically vacuous score (most bars masked) is not supervisable:
+  // objects and pitch stay valid, but rhythm truth is absent.
+  const measureTotal = new Set((parsed.measures ?? []).map((m) => m.number)).size || 1
+  if (maskedMeasures.length / measureTotal > 0.5) {
+    return {
+      ...record, status: 'QUARANTINED:timing-vacuous',
+      quarantineReason: `${maskedMeasures.length}/${measureTotal} measures fail timing — rhythm truth vacuous`,
+      sourceHash, eventCount: canonical.events.length,
+    }
+  }
   const { stamped, ids } = stampSourceIds(loaded.xml, candidate.id)
   const scoreDir = join(workDir, candidate.id)
   mkdirSync(scoreDir, { recursive: true })

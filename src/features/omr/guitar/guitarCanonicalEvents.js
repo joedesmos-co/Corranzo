@@ -277,6 +277,7 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
     const eventId = `${sourceId}:e${index}`
     const isTieContinuation = Boolean(note.suppressPlaybackAttack)
     const techniques = (note.guitarTechniques ?? []).map(techniqueFromParsed).filter(Boolean)
+    const staffRole = staffRoleOf(note, tabStaves)
     // Cross-check raw technical flags the parser ignores (G0: surface, don't drop).
     for (const [key, value] of Object.entries(note.technical ?? {})) {
       if (value == null || value === false) continue
@@ -296,6 +297,7 @@ export function canonicalEventsFromParsed(parsed, options = {}) {
         measureRelativeQuarters: null, // filled below once measures are known
         voice: note.voice ?? 1,
         staff: note.staff ?? 1,
+        staffRole,
         tuplet: note.timeModification ? `${note.timeModification.actualNotes}:${note.timeModification.normalNotes}` : null,
         dots: note.dots ?? 0,
         noteType: note.noteType ?? null,
@@ -528,9 +530,19 @@ function firstTuning(parsed) {
 function tabStavesByPart(parsed) {
   const map = new Map()
   for (const part of parsed.parts ?? []) {
-    map.set(part.id, new Set(part.tabStaves ?? []))
+    map.set(part.id, { tabs: new Set(part.tabStaves ?? []), staves: part.staves ?? 1 })
   }
   return map
+}
+
+/** Staff role for position semantics: tab / standard / unknown. */
+function staffRoleOf(note, tabStaves) {
+  const info = tabStaves.get(note.partId)
+  if (!info || info.tabs.size === 0) return 'standard'
+  if (note.staff != null) return info.tabs.has(note.staff) ? 'tab' : 'standard'
+  // Staffless note in a single-TAB-staff part can only be TAB.
+  if (info.staves === 1 && info.tabs.has(1)) return 'tab'
+  return 'unknown'
 }
 
 /**
@@ -554,7 +566,7 @@ export function rhythmTruth(events, measures, quarantined = []) {
   // the sum of durations: classical guitar notation routinely sustains a bass
   // note through melody onsets in the same voice grid (overlapping spans are
   // sustain, not corruption). Only spans running past the barline fail.
-  const spans = new Map() // `${measure}|${voice}|${staff}` -> [[start, end]]
+  const spans = new Map() // `${measure}|${partId}|${voice}|${staff}` -> [[start, end]]
   for (const event of events) {
     if (event.time.isGrace || event.time.isCue) continue
     // Chord tones share their chord head's onset: counting them would
@@ -562,7 +574,7 @@ export function rhythmTruth(events, measures, quarantined = []) {
     // to notated length above, continuations in their own measures) count
     // normally — each occupies its own measure exactly once.
     if (event.time.isChordTone) continue
-    const key = `${event.source.measure}|${event.time.voice}|${event.time.staff}`
+    const key = `${event.source.measure}|${event.source.partId}|${event.time.voice}|${event.time.staff}`
     if (!spans.has(key)) spans.set(key, [])
     const start = event.time.measureRelativeQuarters ?? 0
     spans.get(key).push([start, start + event.time.durationQuarters])
@@ -584,17 +596,33 @@ export function rhythmTruth(events, measures, quarantined = []) {
   };
 
   const checks = []
+  const seenMeasures = new Set()
   for (const measure of measures) {
+    // Multi-part scores repeat measure numbers per part timeline: check each
+    // number once, and quarantine when the duplicates disagree (different
+    // lengths would make "the bar" ambiguous).
+    if (seenMeasures.has(measure.number)) {
+      const first = measures.find((m) => m.number === measure.number)
+      const sameLength = (first.lengthQuarters ?? first.endQuarters - first.startQuarters) ===
+        (measure.lengthQuarters ?? measure.endQuarters - measure.startQuarters)
+      if (!sameLength) {
+        quarantined.push({ eventId: null, code: 'measure-definitions-disagree', detail: `measure ${measure.number} has inconsistent lengths across parts` })
+      }
+      continue
+    }
+    seenMeasures.add(measure.number)
     const length = measure.lengthQuarters ?? measure.endQuarters - measure.startQuarters
-    const voices = new Set(events.filter((e) => e.source.measure === measure.number).map((e) => `${e.time.voice}|${e.time.staff}`))
-    for (const voiceStaff of voices) {
-      const [voice, staff] = voiceStaff.split('|').map(Number)
-      const sounded = unionLength(spans.get(`${measure.number}|${voice}|${staff}`) ?? [])
+    const lanes = new Set(events
+      .filter((e) => e.source.measure === measure.number)
+      .map((e) => `${e.source.partId}|${e.time.voice}|${e.time.staff}`))
+    for (const lane of lanes) {
+      const [partId, voice, staff] = lane.split('|')
+      const sounded = unionLength(spans.get(`${measure.number}|${partId}|${voice}|${staff}`) ?? [])
       const ok = sounded <= length + 1e-4 || isPickupOrCadenza(measure, sounded, length)
       if (!ok) {
-        quarantined.push({ eventId: null, code: 'voice-duration-mismatch', detail: `measure ${measure.number} voice ${voice} staff ${staff} sounds ${sounded} quarters vs ${length} expected` })
+        quarantined.push({ eventId: null, code: 'voice-duration-mismatch', detail: `measure ${measure.number} part ${partId} voice ${voice} staff ${staff} sounds ${sounded} quarters vs ${length} expected` })
       }
-      checks.push({ measure: measure.number, voice, staff, soundedQuarters: sounded, expectedQuarters: round6(length), ok })
+      checks.push({ measure: measure.number, partId, voice: Number(voice), staff: Number(staff), soundedQuarters: sounded, expectedQuarters: round6(length), ok })
     }
   }
 
@@ -615,7 +643,7 @@ function positionKindOf(note, tabStaves) {
   // String with no fret: a circled string indication on the notation staff,
   // unless the staff itself is TAB (where a bare string is under-specified).
   if (note.staff == null) return 'unresolved'
-  const tabs = tabStaves.get(note.partId)
+  const tabs = tabStaves.get(note.partId)?.tabs
   if (tabs && tabs.has(note.staff)) return 'unresolved'
   return 'string-indication'
 }
@@ -636,7 +664,7 @@ export function pairCrossPartTab(events, parsed, { tuning, capoFret, tabStaves }
     if (Array.isArray(part.tuning) && part.tuning.length) partTuning.set(part.id, part.tuning)
   }
   const isTabStaff = (partId, staff) => {
-    const tabs = tabStaves.get(partId)
+    const tabs = tabStaves.get(partId)?.tabs
     return tabs ? tabs.has(staff) : false
   }
   const eligible = (event) =>

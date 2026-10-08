@@ -46,6 +46,10 @@ VEROVIO_OPTIONS = {
     "adjustPageHeight": True,
     "footer": "none",
     "header": "none",
+    # Fixed seed: auto-generated SVG ids are byte-stable across renders and
+    # processes. Joins never rely on them (stable source IDs only), but
+    # determinism no longer depends on canonicalization alone.
+    "xmlIdSeed": 20261007,
 }
 
 ID_PATTERN = re.compile(r"<note(?=[\s>/])")

@@ -165,6 +165,24 @@ function pitchedRun(rand, count, base, tuning, maxFret = 9) {
   return walk(rand, count, base, [-2, -1, 1, 2, 3]).map((midi) => ({ midi, ...assignPosition(midi, tuning, maxFret) }))
 }
 
+/** Range-safe variant: reflects the walk inside playable guitar range. */
+function pitchedRunSafe(rand, count, base, tuning, maxFret = 9) {
+  const raw = walk(rand, count, base, [-2, -1, 1, 2, 3])
+  const lo = Math.min(...tuning)
+  const midis = []
+  let current = Math.max(lo, Math.min(76, raw[0]))
+  midis.push(current)
+  for (let i = 1; i < raw.length; i += 1) {
+    const step = raw[i] - raw[i - 1]
+    let next = current + step
+    if (next < lo || next > 76) next = current - step
+    if (next < lo || next > 76) next = Math.max(lo, Math.min(76, raw[i]))
+    current = next
+    midis.push(current)
+  }
+  return midis.map((midi) => ({ midi, ...assignPosition(midi, tuning, maxFret) }))
+}
+
 const ETUDES = []
 function etude(name, families, build, extra = {}) {
   ETUDES.push({ name, families, build, tuning: STD, capo: 0, ...extra })
@@ -502,6 +520,212 @@ export function etudeManifest() {
   }
 }
 
+// ---- Wave 2: TAB-only, paired staves, phrase structure ----
+
+const TAB_CLEF = '<clef><sign>TAB</sign><line>5</line></clef>'
+
+/** Single TAB-staff score (TAB-only class). */
+function tabOnlyScore(title, measures) {
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<score-partwise version="4.0">` +
+    `<work><work-title>${title}</work-title></work>` +
+    `<identification><creator type="composer">Corranzo Etude Generator (original study)</creator>` +
+    `<rights>CC0-1.0 — Corranzo original etude (project composition, no source material)</rights>` +
+    `<encoding><software>corranzo-etude-composer/1.0</software></encoding></identification>` +
+    `<part-list><score-part id="P1"><part-name>Guitar TAB</part-name></score-part></part-list>` +
+    `<part id="P1">${measures.map((m, i) => `<measure number="${i + 1}">${i === 0 ? headerXml({ clef: TAB_CLEF }) : ''}${m}</measure>`).join('')}</part></score-partwise>`
+}
+
+/** Paired notation+TAB staves in one part (staff-mirror class). */
+function pairedScore(title, notationBars, tabBars) {
+  const header = `<attributes><divisions>4</divisions><key><fifths>0</fifths></key>` +
+    `<time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves>` +
+    `<clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>TAB</sign><line>5</line></clef></attributes>`
+  const bars = notationBars.map((nb, i) => {
+    const tb = tabBars[i]
+    return `<measure number="${i + 1}">${i === 0 ? header : ''}${nb}<backup><duration>${4 * nbQuarters(nb)}</duration></backup>${tb}</measure>`
+  })
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<score-partwise version="4.0">` +
+    `<work><work-title>${title}</work-title></work>` +
+    `<identification><creator type="composer">Corranzo Etude Generator (original study)</creator>` +
+    `<rights>CC0-1.0 — Corranzo original etude (project composition, no source material)</rights>` +
+    `<encoding><software>corranzo-etude-composer/1.0</software></encoding></identification>` +
+    `<part-list><score-part id="P1"><part-name>Guitar</part-name></score-part></part-list>` +
+    `<part id="P1">${bars.join('')}</part></score-partwise>`
+}
+
+function nbQuarters(barXml) {
+  // Cursor quarters in a bar: chord tones share onsets (no advance).
+  const notes = [...barXml.matchAll(/<note>([\s\S]*?)<\/note>/g)].map((m) => m[1])
+  let units = 0
+  for (const note of notes) {
+    if (/<chord\/>/.test(note)) continue
+    const dur = note.match(/<duration>(\d+)<\/duration>/)
+    units += dur ? Number(dur[1]) : 0
+  }
+  return units / 4 // divisions-4 unit grid used by etude builders
+}
+
+/** 8-quarter antecedent/consequent phrase ending on a cadence pitch. */
+function phrase(rand, base, cadence, tuning = STD) {
+  const q = walk(rand, 7, base, [-2, -1, 1, 2])
+  q.push(cadence)
+  return q.map((midi) => ({ midi, ...assignPosition(midi, tuning, 9) }))
+}
+
+etude('tab-only-rhythm', ['staff-tab', 'tab-rest', 'tab-rhythm', 'fret-number'], (rand) => {
+  const notes = phrase(rand, 64, 62).concat(phrase(rand, 62, 60).slice(0, 7))
+  const types = ['quarter', 'eighth', 'eighth', 'quarter', 'eighth', 'eighth', 'quarter', 'quarter', 'quarter', 'quarter', 'quarter', 'eighth', 'eighth', 'quarter', 'quarter']
+  const quarters = [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 0.5, 0.5, 1, 1]
+  const xmls = notes.map((n, i) => (i === 6
+    ? `<note><rest/><duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>`
+    : noteXml({ ...n, type: types[i], staff: 1 })))
+  return tabOnlyScore('TAB rhythm reading', packBars(xmls, quarters))
+})
+
+etude('tab-only-chords', ['tab-chord', 'multi-digit-fret'], () => {
+  const shapes = [
+    [{ midi: 64, string: 1, fret: 0 }, { midi: 59, string: 2, fret: 0 }, { midi: 55, string: 3, fret: 0 }],
+    [{ midi: 65, string: 1, fret: 1 }, { midi: 60, string: 2, fret: 1 }, { midi: 55, string: 3, fret: 0 }],
+    [{ midi: 76, string: 1, fret: 12 }, { midi: 71, string: 2, fret: 12 }, { midi: 67, string: 3, fret: 12 }],
+    [{ midi: 67, string: 1, fret: 3 }, { midi: 62, string: 2, fret: 3 }, { midi: 59, string: 3, fret: 4 }],
+  ]
+  const bars = shapes.map((shape) => shape.map((n, i) => noteXml({ ...n, type: 'whole', chord: i > 0, staff: 1 })).join(''))
+  return tabOnlyScore('TAB chord shapes', bars)
+})
+
+etude('tab-multivoice-2', ['multi-voice-rhythm', 'tab-rhythm'], (rand) => {
+  const top = phrase(rand, 67, 65).slice(0, 4)
+  const low = [48, 50, 52, 53].map((midi) => ({ midi, ...assignPosition(midi, STD) }))
+  const upper = top.map((n) => noteXml({ ...n, type: 'quarter', voice: 1, staff: 1 })).join('')
+  const lower = `<backup><duration>16</duration></backup>` + low.map((n) => noteXml({ ...n, type: 'quarter', voice: 2, staff: 1 })).join('')
+  return tabOnlyScore('Two-voice TAB study', [upper + lower])
+})
+
+etude('paired-mirrors', ['staff-pairing', 'standard-tab-pairing'], (rand) => {
+  const notes = phrase(rand, 60, 62)
+  const halves = [notes.slice(0, 4), notes.slice(4)]
+  const nb = halves.map((h) => h.map((n) => noteXml({ midi: n.midi, type: 'quarter', staff: 1 })).join(''))
+  const tb = halves.map((h) => h.map((n) => noteXml({ midi: n.midi, string: n.string, fret: n.fret, type: 'quarter', staff: 2 })).join(''))
+  return pairedScore('Paired mirrors', nb, tb)
+})
+
+etude('paired-legato', ['staff-pairing', 'hammer-on', 'pull-off'], (rand) => {
+  const notes = phrase(rand, 57, 59).map((n, i) => ({
+    ...n,
+    tech: i % 2 === 0 ? '<hammer-on type="start" number="1"/>' : '<pull-off type="stop" number="1"/>',
+  }))
+  const halves = [notes.slice(0, 4), notes.slice(4)]
+  const nb = halves.map((h) => h.map((n) => `<note>${pitchXml(n.midi)}<duration>4</duration><voice>1</voice><type>quarter</type><staff>1</staff><notations><technical>${n.tech}</technical></notations></note>`).join(''))
+  const tb = halves.map((h) => h.map((n) => noteXml({ midi: n.midi, string: n.string, fret: n.fret, type: 'quarter', staff: 2 })).join(''))
+  return pairedScore('Paired legato', nb, tb)
+})
+
+etude('bend-quarter-tone', ['bend', 'bend-amount'], (rand) => {
+  const notes = phrase(rand, 62, 64)
+  const xmls = notes.map((n, i) => noteXml({
+    ...n, type: 'quarter',
+    notations: i % 2 === 0 ? '<bend><bend-alter>0.5</bend-alter></bend>' : '',
+  }))
+  return etudeScore('Quarter-tone bends', packBars(xmls.slice(0, 4), [1, 1, 1, 1]).concat(packBars(xmls.slice(4), [1, 1, 1, 1])), headerXml({}))
+})
+
+etude('bend-slide-combo', ['bend', 'slide', 'bend-amount'], (rand) => {
+  const notes = phrase(rand, 60, 64)
+  const xmls = notes.map((n, i) => {
+    let tech = ''
+    let extra = ''
+    if (i % 4 === 0) tech = '<bend><bend-alter>1</bend-alter><release/></bend>'
+    if (i % 4 === 2) extra = `<slide type="start" number="1"/>`
+    if (i % 4 === 3) extra = `<slide type="stop" number="1"/>`
+    return noteXml({ ...n, type: 'quarter', notations: tech, extra })
+  })
+  return etudeScore('Bend and slide combo', packBars(xmls.slice(0, 4), [1, 1, 1, 1]).concat(packBars(xmls.slice(4), [1, 1, 1, 1])), headerXml({}))
+})
+
+etude('legato-mixed', ['hammer-on', 'pull-off'], (rand) => {
+  const notes = phrase(rand, 55, 57)
+  const kinds = ['hammer-on', 'hammer-on', 'pull-off', 'pull-off']
+  const xmls = notes.map((n, i) => {
+    const kind = kinds[i % 4]
+    const type = i % 2 === 0 ? 'start' : 'stop'
+    return noteXml({ ...n, type: 'quarter', notations: `<${kind} type="${type}" number="1"/>` })
+  })
+  return etudeScore('Mixed legato', packBars(xmls.slice(0, 4), [1, 1, 1, 1]).concat(packBars(xmls.slice(4), [1, 1, 1, 1])), headerXml({}))
+})
+
+etude('palm-mute-chug', ['palm-mute'], (rand) => {
+  // Low-string chug roots: all assignable in open position.
+  const roots = [40, 42, 43, 45, 43, 42]
+  const midis = Array.from({ length: 16 }, (_, i) => roots[Math.floor(rand() * roots.length)] + (i % 8 === 7 ? 12 : 0))
+  const xmls = midis.map((midi, i) => {
+    const pos = assignPosition(midi, STD, 12)
+    return noteXml({ midi, ...pos, type: 'eighth', notations: i < 12 ? (i === 0 ? '<palm-mute type="start"/>' : i === 11 ? '<palm-mute type="stop"/>' : '') : '' }, 8)
+  })
+  return etudeScore('Palm mute chug', packBars(xmls, Array(16).fill(0.5)), headerXml({ divisions: 8 }))
+})
+
+etude('letring-fingerpicked', ['let-ring'], () => {
+  const pattern = [48, 52, 55, 60, 64, 60, 55, 52].map((midi) => ({ midi, ...assignPosition(midi, STD) }))
+  const half = (notes, span) => notes.map((n, i) => noteXml({
+    ...n, type: 'quarter', chord: false,
+    notations: span === 'start' && i === 0 ? '<let-ring type="start"/>' : span === 'stop' && i === notes.length - 1 ? '<let-ring type="stop"/>' : '',
+  })).join('')
+  return etudeScore('Fingerpicked let ring',
+    [half(pattern.slice(0, 4), 'start'), half(pattern.slice(4), 'stop')], headerXml({}))
+})
+
+etude('vibrato-phrase', ['vibrato'], (rand) => {
+  const notes = phrase(rand, 65, 64)
+  const bar1 = notes.slice(0, 4).map((n) => noteXml({ ...n, type: 'quarter' })).join('')
+  const bar2 = notes.slice(4, 6).map((n) => noteXml({ ...n, type: 'half' })).join('')
+  const bar3 = noteXml({ ...notes[6], type: 'whole', extra: '<ornaments><wavy-line/></ornaments>' })
+  return etudeScore('Vibrato phrase', [bar1, bar2, bar3], headerXml({}))
+})
+
+etude('grace-cadence', ['grace-note', 'acciaccatura-appoggiatura'], () => {
+  const grace = (midi, slash) => `<note><grace${slash ? ' slash="yes"' : ''}/>${pitchXml(midi)}<voice>1</voice><type>eighth</type></note>`
+  const bar1 = grace(67, true) + noteXml({ midi: 65, ...assignPosition(65, STD), type: 'half' }) +
+    noteXml({ midi: 62, ...assignPosition(62, STD), type: 'quarter' }) + noteXml({ midi: 60, ...assignPosition(60, STD), type: 'quarter' })
+  const bar2 = grace(66, false) + noteXml({ midi: 65, ...assignPosition(65, STD), type: 'half' }) +
+    noteXml({ midi: 64, ...assignPosition(64, STD), type: 'quarter' }) + noteXml({ midi: 60, ...assignPosition(60, STD), type: 'quarter' })
+  return etudeScore('Grace cadence', [bar1, bar2], headerXml({}))
+})
+
+etude('frames-sevenths', ['chord-diagram', 'chord-symbol'], () => {
+  const mkBar = (root, kind, frameNotes, chordMidis) => {
+    const frame = `<frame><frame-strings>6</frame-strings><frame-frets>5</frame-frets>` +
+      frameNotes.map((fn) => `<frame-note><string>${fn[0]}</string><fret>${fn[1]}</fret></frame-note>`).join('') + `</frame>`
+    const voicing = assignChord(chordMidis, STD)
+    const notes = voicing.map((n, i) => noteXml({ ...n, type: 'whole', chord: i > 0 })).join('')
+    return `<harmony><root><root-step>${root}</root-step></root><kind>${kind}</kind>${frame}</harmony>` + notes
+  }
+  return etudeScore('Seventh chord diagrams', [
+    mkBar('G', 'major-seventh', [[1, 2], [2, 0], [3, 0], [4, 0]], [62, 66, 69, 71]),
+    mkBar('C', 'major-seventh', [[1, 0], [2, 1], [3, 0], [4, 2]], [60, 64, 67, 71]),
+  ], headerXml({}))
+})
+
+etude('open-g-tuning', ['alternate-tuning', 'tuning'], (rand) => {
+  const OPEN_G = [62, 59, 55, 50, 43, 38]
+  const notes = pitchedRun(rand, 8, 55, OPEN_G, 7)
+  const xmls = notes.map((n) => noteXml({ ...n, type: 'quarter' }))
+  return etudeScore('Open G tuning', packBars(xmls.slice(0, 4), [1, 1, 1, 1]).concat(packBars(xmls.slice(4), [1, 1, 1, 1])), headerXml({ tuning: tuningDetails(OPEN_G) }))
+}, { tuning: [62, 59, 55, 50, 43, 38] })
+
+etude('harmonic-touch', ['artificial-harmonic', 'natural-harmonic'], () => {
+  const xmls = [
+    harmonicNote(STD[0], 12),
+    `<note>${pitchXml(83)}<duration>4</duration><voice>1</voice><type>quarter</type><notehead>diamond</notehead>` +
+    `<notations><technical><string>1</string><fret>7</fret><harmonic><natural/>` +
+    `<touching-pitch><step>D</step><octave>5</octave></touching-pitch>` +
+    `<sounding-pitch><step>B</step><octave>5</octave></sounding-pitch>` +
+    `</harmonic></technical></notations></note>`,
+    harmonicNote(STD[0], 5),
+    noteXml({ midi: 64, ...assignPosition(64, STD), type: 'quarter' }),
+  ]
+  return etudeScore('Harmonic touches', packBars([...xmls, ...xmls], Array(8).fill(1)), headerXml({}))
+})
+
 const isMain = process.argv[1] === fileURLToPath(import.meta.url)
 if (isMain) {
   const outIndex = process.argv.indexOf('--out')
@@ -516,3 +740,4 @@ if (isMain) {
   writeFileSync(join(outDir, 'manifest.json'), JSON.stringify(etudeManifest(), null, 1))
   console.log(`wrote ${written} etudes to ${outDir}`)
 }
+
