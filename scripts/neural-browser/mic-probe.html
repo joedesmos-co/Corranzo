@@ -7,10 +7,12 @@
 <body>
   <main>fake mic probe</main>
   <script type="module">
-    // Uses the REAL browser capture path (getUserMedia -> MediaStreamSource
-    // -> AnalyserNode) with Chromium's file-backed fake device, then
-    // reports time-domain RMS/peak over 4 s. No model involved: this
-    // validates capture plumbing only.
+    // Exercises the REAL browser capture path (getUserMedia ->
+    // MediaStreamSource -> AnalyserNode polling) plus the committed
+    // silence-skip gate on live meter frames. Works with Chromium's
+    // built-in fake device (no audio file needed); the file-backed
+    // capture flag hangs this headless build (documented Stage 6/8).
+    import { shouldSkipSilence } from '/src/features/microphone-input/micNeuralTfAdapter.js'
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
       const track = stream.getAudioTracks()[0]
@@ -23,21 +25,16 @@
       const buffer = new Float32Array(analyser.fftSize)
       const frames = []
       const started = performance.now()
-      while (performance.now() - started < 4000) {
+      while (performance.now() - started < 2000) {
         analyser.getFloatTimeDomainData(buffer)
         let sum = 0
-        let peak = 0
         for (const value of buffer) {
           sum += value * value
-          const magnitude = Math.abs(value)
-          if (magnitude > peak) {
-            peak = magnitude
-          }
         }
-        frames.push({ rms: Math.sqrt(sum / buffer.length), peak })
+        frames.push(Math.sqrt(sum / buffer.length))
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
-      const audible = frames.filter((frame) => frame.rms > 0.005).length
+      const meanRms = frames.reduce((a, b) => a + b, 0) / frames.length
       window.__micResults = {
         status: 'done',
         deviceLabel: track.label,
@@ -46,8 +43,8 @@
         noiseSuppression: settings.noiseSuppression ?? null,
         autoGainControl: settings.autoGainControl ?? null,
         frames: frames.length,
-        audibleFrames: audible,
-        maxRms: Math.max(...frames.map((frame) => frame.rms)),
+        meanRms,
+        skipDecision: shouldSkipSilence(frames),
       }
       stream.getTracks().forEach((candidate) => candidate.stop())
       await context.close()

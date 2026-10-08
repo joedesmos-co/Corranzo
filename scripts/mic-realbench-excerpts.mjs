@@ -56,7 +56,9 @@ const SELECTIONS = [
   { id: 'piano-schubert-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 5.55, split: 'eval', performance: 'vienna-schubert-p01' },
   { id: 'piano-schubert-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 4.85, split: 'eval', performance: 'vienna-schubert-p01' },
   { id: 'piano-mozart2-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'norm2_vn_mozart_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p02.mid', kind: 'midi', onset: 4.73, split: 'eval', performance: 'vienna-mozart-p02' },
-  { id: 'piano-mozart2-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'norm2_vn_mozart_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p02.mid', kind: 'midi', onset: 23.04, split: 'eval', performance: 'vienna-mozart-p02' },
+  // piano-mozart2-dense EXCLUDED 2026-10-08: independently verified
+  // annotation error (forte MIDI chord at 23.04 over near-silent audio;
+  // see manifest.excluded). Do not re-add without re-verification.
   { id: 'piano-schubert2-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'norm2_vn_schubert_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p02.mid', kind: 'midi', onset: 2.51, split: 'eval', performance: 'vienna-schubert-p02' },
   { id: 'piano-schubert2-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'norm2_vn_schubert_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p02.mid', kind: 'midi', onset: 4.25, split: 'eval', performance: 'vienna-schubert-p02' },
   // ---- acoustic guitar (GuitarSet mic) — dev: gs00/gs02/gs03*; eval: gs01/gs04 ----
@@ -87,6 +89,17 @@ const SELECTIONS = [
   { id: 'electric-eg09-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_09.wav', truthFile: '/tmp/corranzo-realbench/egset12/09.jams', kind: 'jams', onset: 10.10, split: 'eval', performance: 'eg09' },
   { id: 'electric-eg11-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_11.wav', truthFile: '/tmp/corranzo-realbench/egset12/11.jams', kind: 'jams', onset: 13.67, split: 'eval', performance: 'eg11' },
   { id: 'electric-eg12-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_12.wav', truthFile: '/tmp/corranzo-realbench/egset12/12.jams', kind: 'jams', onset: 12.19, split: 'eval', performance: 'eg12' },
+  // ---- fresh disjoint acoustic eval (Stage M8, 2026-10-08): new players
+  // (05) and unused styles. Never touched during development tuning. ----
+  { id: 'acoustic-fresh-jazz-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_00_Jazz2-187-F#_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams', kind: 'jams', onset: 0.6, split: 'eval-fresh', performance: 'gs00-jazz187' },
+  { id: 'acoustic-fresh-jazz-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_00_Jazz2-187-F#_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams', kind: 'jams', onset: 2.58, split: 'eval-fresh', performance: 'gs00-jazz187' },
+  { id: 'acoustic-fresh-rock-triad-b', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_01_Rock3-117-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/01_Rock3-117-Bb_solo.jams', kind: 'jams', onset: 24.02, split: 'eval-fresh', performance: 'gs01-rock3' },
+  { id: 'acoustic-fresh-bossa-triad', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_02_BN1-129-Eb_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/02_BN1-129-Eb_comp.jams', kind: 'jams', onset: 8.16, split: 'eval-fresh', performance: 'gs02-bn1' },
+  { id: 'acoustic-fresh-bossa-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_02_BN1-129-Eb_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/02_BN1-129-Eb_comp.jams', kind: 'jams', onset: 13.95, split: 'eval-fresh', performance: 'gs02-bn1' },
+  { id: 'acoustic-fresh-funk-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_05_Funk2-108-Eb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/05_Funk2-108-Eb_solo.jams', kind: 'jams', onset: 2.0, split: 'eval-fresh', performance: 'gs05-funk2' },
+  { id: 'acoustic-fresh-rock-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_05_Rock1-130-A_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/05_Rock1-130-A_comp.jams', kind: 'jams', onset: 15.23, split: 'eval-fresh', performance: 'gs05-rock1' },
+  { id: 'acoustic-fresh-rock-triad', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_05_Rock1-130-A_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/05_Rock1-130-A_comp.jams', kind: 'jams', onset: 5.76, split: 'eval-fresh', performance: 'gs05-rock1' },
+  { id: 'acoustic-fresh-ss-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_05_SS1-100-C#_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/fresh-jams/05_SS1-100-C#_solo.jams', kind: 'jams', onset: 20.08, split: 'eval-fresh', performance: 'gs05-ss1' },
 ]
 
 /** Guitar-Techs isolated amp-mic notes: low / mid / high / quietest. */
@@ -256,6 +269,12 @@ function main() {
       preRollSeconds: PRE_ROLL_SECONDS,
       provenance: 'Independent dataset annotations (JAMS per-string / MIDI). Detector output never used as truth.',
       naturalRecordings: manifest.length,
+      excluded: [
+        {
+          id: 'piano-mozart2-dense',
+          reason: 'Annotation error, independently verified 2026-10-08: forte MIDI chord at 23.04 falls in near-silent audio (rms ~0.0005); music resumes at 23.3. Clip removed, never retuned.',
+        },
+      ],
       clips: manifest,
     }, null, 2),
   )

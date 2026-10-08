@@ -85,6 +85,10 @@ function NeuralListeningPanelDev({ session = null }) {
                 <dt>Rejected inputs</dt>
                 <dd>{rejected.count}{rejected.reason ? ` — ${rejected.reason}` : ''}</dd>
               </div>
+              <div>
+                <dt>Silence skips</dt>
+                <dd>{neural?.silenceSkips ?? 0}</dd>
+              </div>
             </dl>
             {phase === 'unavailable' && (
               <p className="practice-section__error">Neural mode unavailable on this hardware — spectral detection is running instead.</p>

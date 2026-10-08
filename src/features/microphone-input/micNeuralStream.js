@@ -18,6 +18,17 @@
  * windowStartCaptureMs + model offset. Inference delay NEVER shifts an
  * onset — a note played on time is evaluated on time.
  *
+ * Known honest limits (Stage 8 M4 audit):
+ * - Model flicker (a sustained note dropped for one window, re-detected
+ *   the next) emits a second attack event: the gap exceeds
+ *   continuationGapMs, so the stream cannot know it is one note. The
+ *   confirmation tracker (takeNewlyConfirmed) blocks re-emission to the
+ *   evaluator per checkpoint, so flicker costs UI noise, never double
+ *   awards. True repeats separated by >= the gap still attack cleanly.
+ * - Skipped hops (previous inference still pending) drop that window;
+ *   overlap covers most of it. Sustained overload means the hardware
+ *   gate should have refused activation — see checkNeuralCapability.
+ *
  * Pure + testable (no audio APIs, no DOM, no network).
  */
 
@@ -71,6 +82,11 @@ export function pushNeuralStreamAudio(state, { samples, captureStartMs, infer } 
     throw new TypeError('pushNeuralStreamAudio requires state, samples, captureStartMs and infer')
   }
   const { config } = state
+  if (!Number.isFinite(state.streamSampleRate) || state.streamSampleRate <= 0) {
+    // Fail fast: without a rate every window computation is NaN and the
+    // stream would silently emit nothing. Call setNeuralStreamSampleRate.
+    throw new TypeError('pushNeuralStreamAudio requires setNeuralStreamSampleRate first')
+  }
   if (state.bufferedStartCaptureMs == null) {
     state.bufferedStartCaptureMs = captureStartMs
   }
@@ -130,6 +146,13 @@ export function emitNeuralStreamNotes(state, notes, windowStartCaptureMs) {
   for (const note of notes ?? []) {
     const midi = Math.round(note?.midi)
     if (!Number.isFinite(midi)) {
+      continue
+    }
+    // Poison guard: explicit NaN/Infinite offsets would corrupt
+    // active-note tracks and group timing. Missing offsets still default
+    // below; only malformed present values are dropped.
+    if ((note.startOffsetSeconds != null && !Number.isFinite(note.startOffsetSeconds)) ||
+        (note.endOffsetSeconds != null && !Number.isFinite(note.endOffsetSeconds))) {
       continue
     }
     const startMs = toCaptureMs(windowStartCaptureMs, note.startOffsetSeconds ?? 0)

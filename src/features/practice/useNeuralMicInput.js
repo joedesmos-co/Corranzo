@@ -38,15 +38,18 @@ import {
 } from './micNeuralConfirmTracker.js'
 import {
   createNeuralStreamState,
+  drainNeuralStreamEvents,
   emitNeuralStreamNotes,
   setNeuralStreamSampleRate,
 } from '../microphone-input/micNeuralStream.js'
 import {
   checkNeuralCapability,
+  disposeNeuralRuntime,
   loadNeuralRuntime,
   NEURAL_MODEL_RATE,
   resampleToModelRate,
   runNeuralWindow,
+  shouldSkipSilence,
 } from '../microphone-input/micNeuralTfAdapter.js'
 
 /** Play Along late edge (280 ms) — same rule as the spectral path. */
@@ -55,6 +58,63 @@ const CAPTURE_POLL_MS = 100
 const STREAM_HOP_MS = 250
 const STREAM_WINDOW_SECONDS = 0.5
 const CONFIRM_POOL_SECONDS = 1.5
+
+/**
+ * Map a capture-clock onset to score time (M5, pure + tested).
+ * Finds the nearest clock sample (captureMs + practiceTimeMs pairs
+ * recorded each poll) and extrapolates at playback rate ~1. Returns null
+ * when no mapping exists — callers must treat that as untimed, never as
+ * zero (which would manufacture an exactly-on-time grade).
+ */
+export function mapCaptureToScoreTime(clockMap, captureMs, fallbackPracticeMs = null) {
+  if (!Array.isArray(clockMap) || !clockMap.length || !Number.isFinite(captureMs)) {
+    return fallbackPracticeMs != null ? fallbackPracticeMs / 1000 : null
+  }
+  let best = clockMap[0]
+  for (const entry of clockMap) {
+    if (Math.abs(entry.captureMs - captureMs) < Math.abs(best.captureMs - captureMs)) {
+      best = entry
+    }
+  }
+  if (best.practiceTimeMs == null) {
+    return null
+  }
+  return best.practiceTimeMs / 1000 + (captureMs - best.captureMs) / 1000
+}
+
+/**
+ * Play Along timing under the unchanged 150 ms early / 280 ms late rules
+ * (M5, pure + tested). Returns a RECOGNITION_TIMING label.
+ */
+export function classifyPlayAlongTiming(scoreTime, expectedTime) {
+  if (!Number.isFinite(scoreTime) || !Number.isFinite(expectedTime)) {
+    return RECOGNITION_TIMING.UNTIMED
+  }
+  const delta = scoreTime - expectedTime
+  if (delta < -VISUAL_EARLY_INPUT_SECONDS) {
+    return RECOGNITION_TIMING.EARLY
+  }
+  if (delta > PLAY_ALONG_LATE_INPUT_SECONDS) {
+    return RECOGNITION_TIMING.LATE
+  }
+  return RECOGNITION_TIMING.TARGET
+}
+
+/**
+ * Drift-free capture accounting (M4, pure + tested). Returns how many of
+ * the analyser's newest samples to append so the ring tracks the wall
+ * clock exactly: catch-up is capped at one analyser buffer (sustained
+ * shortfall becomes a gap, never drift). Gaps lose milliseconds; drift
+ * would lose whole beats — gaps are the right trade.
+ */
+export function computeAppendCount({ scratchLength, nowMs, ring, sampleRate, pollMs = CAPTURE_POLL_MS }) {
+  if (ring.streamStartWallMs == null) {
+    ring.streamStartWallMs = nowMs - pollMs
+    ring.totalAppended = 0
+  }
+  const targetTotal = Math.floor(((nowMs - ring.streamStartWallMs) / 1000) * sampleRate)
+  return Math.min(scratchLength, Math.max(1, targetTotal - (ring.totalAppended ?? 0)))
+}
 
 function describePhase(phase) {
   switch (phase) {
@@ -102,6 +162,7 @@ export default function useNeuralMicInput({
   const [inputLevel, setInputLevel] = useState(0)
   const [detectedNotes, setDetectedNotes] = useState([])
   const [rejected, setRejected] = useState({ count: 0, reason: null })
+  const [silenceSkips, setSilenceSkips] = useState(0)
 
   // ---- ref mirrors (interval-loop discipline; never read stale props) ----
   const runtimeRef = useRef(null)
@@ -112,6 +173,7 @@ export default function useNeuralMicInput({
   const chordStateRef = useRef(createChordMatchState())
   const poolRef = useRef([])
   const inferPendingRef = useRef(false)
+  const rmsHistoryRef = useRef([])
   const lastHopRef = useRef(0)
   const lastLevelPublishRef = useRef(0)
   const lastPollMsRef = useRef(null)
@@ -225,28 +287,15 @@ export default function useNeuralMicInput({
       return undefined
     }
     ringRef.current = { samples: [], startCaptureMs: null, inputRate: sampleRate }
+    rmsHistoryRef.current = []
     const scratch = new Float32Array(analyser.fftSize)
     setNeuralStreamSampleRate(streamRef.current, NEURAL_MODEL_RATE)
 
-    const scoreTimeAtCaptureMs = (captureMs) => {
-      const samples = clockMapRef.current
-      const practiceMs = livePropsRef.current.performanceTimeMs
-      if (!samples.length || !Number.isFinite(captureMs)) {
-        return practiceMs != null ? practiceMs / 1000 : null
-      }
-      let best = samples[0]
-      for (const entry of samples) {
-        if (Math.abs(entry.captureMs - captureMs) < Math.abs(best.captureMs - captureMs)) {
-          best = entry
-        }
-      }
-      if (best.practiceTimeMs == null) {
-        return null
-      }
-      // Playback rate ~1 between the sample and the onset (documented
-      // approximation; variable-rate playback is a known limitation).
-      return best.practiceTimeMs / 1000 + (captureMs - best.captureMs) / 1000
-    }
+    const scoreTimeAtCaptureMs = (captureMs) => mapCaptureToScoreTime(
+      clockMapRef.current,
+      captureMs,
+      livePropsRef.current.performanceTimeMs,
+    )
 
     const applyOutcome = (outcome, midi, expected) => {
       if (!outcome) {
@@ -270,15 +319,7 @@ export default function useNeuralMicInput({
     const emitPlayAlongTone = (event, expectedTime) => {
       const scoreTime = scoreTimeAtCaptureMs(event.rawTimestamp ?? event.wallTimestampMs)
       callbacksRef.current.onPlayAlongNote?.(event.midi, scoreTime)
-      let timing = RECOGNITION_TIMING.TARGET
-      if (Number.isFinite(expectedTime) && Number.isFinite(scoreTime)) {
-        const delta = scoreTime - expectedTime
-        if (delta < -VISUAL_EARLY_INPUT_SECONDS) {
-          timing = RECOGNITION_TIMING.EARLY
-        } else if (delta > PLAY_ALONG_LATE_INPUT_SECONDS) {
-          timing = RECOGNITION_TIMING.LATE
-        }
-      }
+      const timing = classifyPlayAlongTiming(scoreTime, expectedTime)
       callbacksRef.current.onRecognitionDecision?.({ timing, reason: 'neural-attack' })
     }
 
@@ -346,7 +387,9 @@ export default function useNeuralMicInput({
     }
 
     const handleNeuralNotes = (notes, windowStartCaptureMs) => {
-      const emitted = emitNeuralStreamNotes(
+      // Drain (not the emit return): state.emitted would otherwise grow
+      // without bound across a take. Draining returns the same events.
+      emitNeuralStreamNotes(
         streamRef.current,
         (notes ?? []).map((note) => ({
           midi: note.midi,
@@ -355,6 +398,7 @@ export default function useNeuralMicInput({
         })),
         windowStartCaptureMs,
       )
+      const emitted = drainNeuralStreamEvents(streamRef.current)
       if (!emitted.length) {
         return
       }
@@ -377,6 +421,14 @@ export default function useNeuralMicInput({
     const pumpNeuralHop = async () => {
       const runtime = runtimeRef.current
       if (!runtime || phaseRef.current !== 'listening' || inferPendingRef.current) {
+        return
+      }
+      // Silence skip (M3): no musical signal below the measured floor —
+      // skip inference entirely (kills room-tone hallucinations at the
+      // source and saves the GPU for real audio). Not a rejection;
+      // silence simply produces no candidates.
+      if (shouldSkipSilence(rmsHistoryRef.current)) {
+        setSilenceSkips((count) => count + 1)
         return
       }
       const ring = ringRef.current
@@ -411,21 +463,31 @@ export default function useNeuralMicInput({
           sumSquares += value * value
         }
         const rms = Math.sqrt(sumSquares / scratch.length)
+        rmsHistoryRef.current.push(rms)
+        if (rmsHistoryRef.current.length > 8) {
+          rmsHistoryRef.current.shift()
+        }
         if (nowMs - lastLevelPublishRef.current > 300) {
           lastLevelPublishRef.current = nowMs
           setInputLevel(Math.min(1, rms * 4))
         }
         const ring = ringRef.current
-        const elapsedMs = lastPollMsRef.current == null ? CAPTURE_POLL_MS : nowMs - lastPollMsRef.current
+        // Drift-free accounting (M4): append exactly what the wall clock
+        // owes since stream start (catch-up capped at one analyser
+        // buffer). The old 1.1x overlap factor dilated timestamps ~10%;
+        // this bounds drift to ±1 poll with micro-gaps instead, which
+        // dedup/grouping absorb. Gaps lose milliseconds; drift loses
+        // whole beats — gaps are the right trade.
+        const appendCount = computeAppendCount({ scratchLength: scratch.length, nowMs, ring, sampleRate })
         lastPollMsRef.current = nowMs
-        const freshCount = Math.min(scratch.length, Math.max(1, Math.round((elapsedMs / 1000) * sampleRate * 1.1)))
-        const fresh = scratch.subarray(scratch.length - freshCount)
+        const fresh = scratch.subarray(scratch.length - appendCount)
         if (ring.startCaptureMs == null) {
           ring.startCaptureMs = nowMs - (fresh.length / sampleRate) * 1000
         }
         for (const value of fresh) {
           ring.samples.push(value)
         }
+        ring.totalAppended = (ring.totalAppended ?? 0) + fresh.length
         // Clock map for capture→score-time mapping (Play Along timing).
         clockMapRef.current.push({ captureMs: nowMs, practiceTimeMs: livePropsRef.current.performanceTimeMs })
         if (clockMapRef.current.length > 40) {
@@ -453,6 +515,17 @@ export default function useNeuralMicInput({
       inferPendingRef.current = false
     }
   }, [active, microphone])
+
+  // Model teardown on unmount only (M4): repeated toggle cycles reuse
+  // the cached runtime (no recompile); unmount releases GPU memory and
+  // the manifest Blob URL. Deactivation alone must NOT dispose.
+  useEffect(() => () => {
+    try {
+      disposeNeuralRuntime()
+    } catch {
+      // Diagnostics only.
+    }
+  }, [])
 
   // Display phase derives from activation (no setState on toggle):
   // an inactive hook always reads idle even if it was listening.
@@ -494,6 +567,7 @@ export default function useNeuralMicInput({
       level: inputLevel,
       detectedNotes,
       rejected,
+      silenceSkips,
     },
   }
 }
