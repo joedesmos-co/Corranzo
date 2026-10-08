@@ -1,0 +1,258 @@
+{
+ "schema": "piano-full-eval/1",
+ "families": {
+  "common": {
+   "kind": {
+    "acc": 0.9955,
+    "n": 5371
+   },
+   "pitch": {
+    "acc": 0.6653,
+    "n": 5001
+   },
+   "dur": {
+    "acc": 0.8038,
+    "n": 4260
+   },
+   "dots": {
+    "acc": 0.9643,
+    "n": 5371
+   },
+   "staff": {
+    "acc": 0.7123,
+    "n": 5371
+   },
+   "acc": {
+    "acc": 0.9796,
+    "n": 5001
+   },
+   "grace": {
+    "acc": 0.9914,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 43
+   },
+   "cue": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "voice": {
+    "acc": 0.8066,
+    "n": 5371
+   }
+  },
+  "membership": {
+   "grace": {
+    "acc": 0.9918,
+    "n": 5001,
+    "precision": 1.0,
+    "recall": 0.0465,
+    "support": 43
+   },
+   "cue": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "in_beam": {
+    "acc": 0.903,
+    "n": 5001,
+    "precision": 0.917,
+    "recall": 0.9539,
+    "support": 3662
+   },
+   "tie_start": {
+    "acc": 0.9654,
+    "n": 5001,
+    "precision": 0.4627,
+    "recall": 0.1845,
+    "support": 168
+   },
+   "tie_end": {
+    "acc": 0.9676,
+    "n": 5001,
+    "precision": 0.6154,
+    "recall": 0.0952,
+    "support": 168
+   },
+   "slur_member": {
+    "acc": 0.9818,
+    "n": 5001,
+    "precision": 0.5556,
+    "recall": 0.1075,
+    "support": 93
+   },
+   "tuplet_member": {
+    "acc": 0.9656,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 172
+   },
+   "has_artic": {
+    "acc": 0.9962,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 19
+   },
+   "has_ornament": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "has_fingering": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "arpeg_member": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "gliss_member": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "pedal_active": {
+    "acc": 1.0,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "octave_shifted": {
+    "acc": 0.999,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 0
+   },
+   "hairpin_member": {
+    "acc": 0.9992,
+    "n": 5001,
+    "precision": 0.0,
+    "recall": 0.0,
+    "support": 4
+   },
+   "chord_tone": {
+    "acc": 0.986,
+    "n": 5001,
+    "precision": 0.9429,
+    "recall": 0.9612,
+    "support": 721
+   },
+   "dotted": {
+    "acc": 0.9774,
+    "n": 5001,
+    "precision": 1.0,
+    "recall": 0.4488,
+    "support": 205
+   },
+   "accidental": {
+    "acc": 0.9916,
+    "n": 5001,
+    "precision": 0.8373,
+    "recall": 0.9563,
+    "support": 183
+   }
+  },
+  "context": {
+   "staff": {
+    "acc": 0.8218,
+    "n": 5371
+   },
+   "voice": {
+    "acc": 0.8071,
+    "n": 5371
+   },
+   "kind": {
+    "acc": 0.9311,
+    "n": 5371
+   },
+   "pitch": {
+    "acc": 0.6693,
+    "n": 5001
+   },
+   "dur": {
+    "acc": 0.6002,
+    "n": 4260
+   }
+  }
+ },
+ "rare": {},
+ "minority_duration": {
+  "16d0": {
+   "acc": 0.8704,
+   "n": 679
+  },
+  "1d0": {
+   "acc": 0.0,
+   "n": 7
+  },
+  "2d0": {
+   "acc": 0.9658,
+   "n": 117
+  },
+  "2d1": {
+   "acc": 0.0,
+   "n": 13
+  },
+  "32d0": {
+   "acc": 0.0,
+   "n": 133
+  },
+  "4d0": {
+   "acc": 0.6066,
+   "n": 633
+  },
+  "4d1": {
+   "acc": 0.0,
+   "n": 125
+  },
+  "8d0": {
+   "acc": 0.932,
+   "n": 2486
+  },
+  "8d1": {
+   "acc": 0.2836,
+   "n": 67
+  }
+ },
+ "relationships": {},
+ "reconstruction": {
+  "joint_pitch_dur_staff_voice_exact": 0.4493,
+  "notes": 5001,
+  "per_score_mean": 0.666,
+  "per_score_min": 0.1548,
+  "note": "per-note attribute sequences in source order; NOT sheet-music equivalence"
+ },
+ "controls": {
+  "blank": {
+   "pitch": 0.0624,
+   "dur": 0.1594,
+   "kind": 0.9311
+  },
+  "wrong_page": {
+   "pitch": 0.0668,
+   "dur": 0.434,
+   "kind": 0.8779
+  }
+ }
+}

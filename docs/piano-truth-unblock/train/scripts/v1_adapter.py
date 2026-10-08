@@ -112,15 +112,23 @@ def main():
     print(f"[adapter] trainRare: {len(train_rare)} scores", file=sys.stderr)
 
     voc = {"dur": [], "pitch": list(range(21, 109)), "acc": ["none", "f", "ff", "n", "s", "ss"],
-           "voice": ["1", "2", "3", "5", "6", "7", "8"], "staff": ["1", "2", "3", "4"]}
-    durset = set()
-    for sid in train100:
+           "voice": [], "staff": []}
+    durset, voiceset, staffset = set(), set(), set()
+    for sid in full_train:
         for e in json.load(gzip.open(EVENTS / f"{sid}.events.json.gz", "rt"))["events"]:
-            if e["kind"] in ("note", "rest") and e.get("dur") is not None:
-                durset.add(str(e["dur"]) + "d%d" % int(e.get("dots") or 0))
+            if e["kind"] in ("note", "rest"):
+                if e.get("dur") is not None:
+                    durset.add(str(e["dur"]) + "d%d" % int(e.get("dots") or 0))
+                if e.get("voice") is not None:
+                    voiceset.add(str(e["voice"]))
+                if e.get("staff") is not None:
+                    staffset.add(str(e["staff"]))
     voc["dur"] = sorted(durset)
+    voc["voice"] = sorted(voiceset, key=lambda v: (len(v), v))
+    voc["staff"] = sorted(staffset, key=lambda v: (len(v), v))
 
-    subsets = {"train100": train100, "trainRare": train_rare, "dev20": dev20}
+    subsets = {"train100": train100, "trainRare": train_rare, "dev20": dev20,
+               "trainFull": sorted(full_train)}
     out = {}
     img_cache, meta_cache = {}, {}
     for subset, ids in subsets.items():
