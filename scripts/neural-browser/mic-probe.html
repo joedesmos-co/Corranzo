@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>fake mic capture probe</title>
+</head>
+<body>
+  <main>fake mic probe</main>
+  <script type="module">
+    // Uses the REAL browser capture path (getUserMedia -> MediaStreamSource
+    // -> AnalyserNode) with Chromium's file-backed fake device, then
+    // reports time-domain RMS/peak over 4 s. No model involved: this
+    // validates capture plumbing only.
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      const track = stream.getAudioTracks()[0]
+      const settings = track.getSettings()
+      const context = new AudioContext({ sampleRate: 44100 })
+      const source = context.createMediaStreamSource(stream)
+      const analyser = context.createAnalyser()
+      analyser.fftSize = 2048
+      source.connect(analyser)
+      const buffer = new Float32Array(analyser.fftSize)
+      const frames = []
+      const started = performance.now()
+      while (performance.now() - started < 4000) {
+        analyser.getFloatTimeDomainData(buffer)
+        let sum = 0
+        let peak = 0
+        for (const value of buffer) {
+          sum += value * value
+          const magnitude = Math.abs(value)
+          if (magnitude > peak) {
+            peak = magnitude
+          }
+        }
+        frames.push({ rms: Math.sqrt(sum / buffer.length), peak })
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+      const audible = frames.filter((frame) => frame.rms > 0.005).length
+      window.__micResults = {
+        status: 'done',
+        deviceLabel: track.label,
+        sampleRate: context.sampleRate,
+        echoCancellation: settings.echoCancellation ?? null,
+        noiseSuppression: settings.noiseSuppression ?? null,
+        autoGainControl: settings.autoGainControl ?? null,
+        frames: frames.length,
+        audibleFrames: audible,
+        maxRms: Math.max(...frames.map((frame) => frame.rms)),
+      }
+      stream.getTracks().forEach((candidate) => candidate.stop())
+      await context.close()
+    } catch (error) {
+      window.__micResults = { status: 'error', message: String(error?.message ?? error) }
+    }
+    document.title = 'DONE'
+  </script>
+</body>
+</html>

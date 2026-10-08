@@ -17,6 +17,15 @@ export const MIC_ENGINE_V3_FLAG = 'micEngineV3'
  */
 export const MIC_BLIND_POLY_FLAG = 'micBlindPoly'
 
+/**
+ * Neural microphone (Stage 6, N9) — EXPERIMENTAL, default OFF.
+ * Development-only toggle for the pretrained-neural listening prototype.
+ * Explicit opt-in only (override, global flag, or localStorage). No live
+ * listening path consults this flag yet; it gates future integration
+ * work behind acceptance, never production behavior.
+ */
+export const MIC_NEURAL_FLAG = 'micNeural'
+
 export const MIC_ENGINE_MODE = {
   V2: 'v2-score-informed',
   V3: 'v3-performance-expectation',
@@ -25,6 +34,7 @@ export const MIC_ENGINE_MODE = {
 export const MIC_ENGINE_V2_STORAGE_KEY = 'scoreflow.flags.micEngineV2'
 export const MIC_ENGINE_V3_STORAGE_KEY = 'scoreflow.flags.micEngineV3'
 export const MIC_BLIND_POLY_STORAGE_KEY = 'scoreflow.flags.micBlindPoly'
+export const MIC_NEURAL_STORAGE_KEY = 'scoreflow.flags.micNeural'
 
 export function resolveFlagOverride(rawValue) {
   if (rawValue === true || rawValue === 1) {
@@ -168,6 +178,50 @@ function readStoredBlindPolyFlag() {
   } catch {
     return null
   }
+}
+
+/**
+ * Neural microphone gate. Default OFF in every environment — production,
+ * dev, and tests — until real browser/device acceptance (Stage 6 N9).
+ * Unlike V2/V3, explicit false values are honored here: this flag must
+ * never turn itself on.
+ */
+export function decideMicNeuralEnabled({
+  override = null,
+  globalValue = null,
+  storageValue = null,
+  defaultEnabled = false,
+} = {}) {
+  for (const value of [override, globalValue, storageValue]) {
+    const resolved = resolveFlagOverride(value)
+    if (resolved != null) return resolved
+  }
+  return Boolean(defaultEnabled)
+}
+
+function readGlobalNeuralFlag() {
+  try {
+    return globalThis.__SCOREFLOW_FLAGS__?.[MIC_NEURAL_FLAG] ?? null
+  } catch {
+    return null
+  }
+}
+
+function readStoredNeuralFlag() {
+  try {
+    return globalThis.localStorage?.getItem(MIC_NEURAL_STORAGE_KEY) ?? null
+  } catch {
+    return null
+  }
+}
+
+export function isMicNeuralEnabled(override = null) {
+  return decideMicNeuralEnabled({
+    override,
+    globalValue: readGlobalNeuralFlag(),
+    storageValue: readStoredNeuralFlag(),
+    defaultEnabled: false,
+  })
 }
 
 export function isMicBlindPolyEnabled(override = null) {

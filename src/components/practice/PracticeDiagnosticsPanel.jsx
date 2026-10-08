@@ -9,6 +9,9 @@ const SmokeTestChecklist = import.meta.env.DEV
 const MicRecordingHarness = import.meta.env.DEV
   ? lazy(() => import('./MicRecordingHarness.jsx'))
   : null
+const NeuralMicFlagPanel = import.meta.env.DEV
+  ? lazy(() => import('./NeuralMicFlagPanel.jsx'))
+  : null
 
 export default function PracticeDiagnosticsPanel({
   session,
@@ -141,6 +144,12 @@ export default function PracticeDiagnosticsPanel({
       {import.meta.env.DEV && MicRecordingHarness && (
         <Suspense fallback={null}>
           <MicRecordingHarness />
+        </Suspense>
+      )}
+
+      {import.meta.env.DEV && NeuralMicFlagPanel && (
+        <Suspense fallback={null}>
+          <NeuralMicFlagPanel />
         </Suspense>
       )}
     </div>

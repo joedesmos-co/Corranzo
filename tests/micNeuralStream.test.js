@@ -1,0 +1,106 @@
+/**
+ * Neural streaming pipeline (Stage 6, N2/N3) — chunking, dedup, filters,
+ * grouping, capture-time preservation. Inference is injected (stubbed
+ * here); the browser adapter supplies TF.js.
+ */
+import { describe, expect, it } from 'vitest'
+import {
+  createNeuralStreamState,
+  drainNeuralStreamEvents,
+  emitNeuralStreamNotes,
+  pushNeuralStreamAudio,
+  setNeuralStreamSampleRate,
+} from '../src/features/microphone-input/micNeuralStream.js'
+
+function note(midi, startOffsetSeconds, endOffsetSeconds) {
+  return { midi, startOffsetSeconds, endOffsetSeconds }
+}
+
+describe('micNeuralStream', () => {
+  it('emits one attack per tone with shared chord group and capture onsets', () => {
+    const state = createNeuralStreamState()
+    const emitted = emitNeuralStreamNotes(state, [
+      note(60, 0.5, 1.2),
+      note(64, 0.52, 1.2),
+      note(67, 0.55, 1.2),
+    ], 10_000)
+    expect(emitted).toHaveLength(3)
+    expect(emitted[0].midi).toBe(60)
+    expect(emitted[0].onsetCaptureMs).toBe(10_500)
+    expect(emitted[0].chordGroupId).toBe(emitted[1].chordGroupId)
+    expect(emitted[0].chordGroupId).toBe(emitted[2].chordGroupId)
+    expect(emitted[0].detectedMidis).toEqual([60])
+  })
+
+  it('suppresses window-edge chunk artifacts', () => {
+    const state = createNeuralStreamState()
+    const emitted = emitNeuralStreamNotes(state, [
+      note(60, 0.01, 0.5),
+      note(64, 1.95, 2.4),
+      note(67, 0.5, 1.2),
+    ], 10_000)
+    expect(emitted.map((event) => event.midi)).toEqual([67])
+    expect(state.stats.droppedEdge).toBe(2)
+  })
+
+  it('merges continuations across windows but keeps true repeats', () => {
+    const state = createNeuralStreamState({ windowSeconds: 4.0 })
+    const first = emitNeuralStreamNotes(state, [note(60, 0.5, 1.5)], 10_000)
+    expect(first).toHaveLength(1)
+    // Same pitch continuing 50 ms after the previous end: merge, no event.
+    const continued = emitNeuralStreamNotes(state, [note(60, 0.55, 1.2)], 11_000)
+    expect(continued).toHaveLength(0)
+    expect(state.stats.merged).toBe(1)
+    // Same pitch after a long gap: a true repeat attack.
+    const repeated = emitNeuralStreamNotes(state, [note(60, 2.7, 3.2)], 12_000)
+    expect(repeated).toHaveLength(1)
+    expect(repeated[0].onsetCaptureMs).toBe(14_700)
+  })
+
+  it('drops lagging octave ghosts but keeps simultaneous doublings', () => {
+    const state = createNeuralStreamState()
+    // Lower octave starts first and fully covers the upper: ghost.
+    const ghost = emitNeuralStreamNotes(state, [
+      note(49, 0.5, 1.5),
+      note(61, 0.7, 1.5),
+    ], 10_000)
+    expect(ghost.map((event) => event.midi)).toEqual([49])
+    expect(state.stats.droppedOctave).toBe(1)
+
+    const state2 = createNeuralStreamState()
+    // True octave doubling: same attack time survives.
+    const doublings = emitNeuralStreamNotes(state2, [
+      note(48, 0.5, 1.5),
+      note(60, 0.5, 1.5),
+    ], 20_000)
+    expect(doublings.map((event) => event.midi).sort()).toEqual([48, 60])
+  })
+
+  it('starts a new chord group after a strum gap', () => {
+    const state = createNeuralStreamState()
+    const first = emitNeuralStreamNotes(state, [note(60, 0.5, 0.9)], 10_000)
+    const second = emitNeuralStreamNotes(state, [note(64, 1.0, 1.4)], 11_000)
+    expect(first[0].chordGroupId).not.toBe(second[0].chordGroupId)
+  })
+
+  it('buffers audio and emits ready windows with capture timestamps', () => {
+    const state = createNeuralStreamState({ windowSeconds: 2.0, hopSeconds: 1.0 })
+    setNeuralStreamSampleRate(state, 1000)
+    const calls = []
+    const infer = ({ samples, sampleRate, windowStartCaptureMs }) => {
+      calls.push({ length: samples.length, sampleRate, windowStartCaptureMs })
+      return []
+    }
+    // 2.5 s of audio at 1 kHz: one 2 s window becomes ready.
+    const ready = pushNeuralStreamAudio(state, {
+      samples: new Float32Array(2500),
+      captureStartMs: 5_000,
+      infer,
+    })
+    expect(ready).toHaveLength(1)
+    expect(calls[0].length).toBe(2000)
+    expect(calls[0].windowStartCaptureMs).toBe(5_000)
+    // Draining works and inference delay never shifts onsets (see above).
+    expect(drainNeuralStreamEvents(state)).toEqual([])
+  })
+})
