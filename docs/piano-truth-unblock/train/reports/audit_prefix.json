@@ -1,0 +1,5236 @@
+{
+ "scores": {
+  "QmPVDdky9Ey86U49v4wPVojr3b4S1BVBW7wFzcRDKRhfm6": {
+   "sid": "QmPVDdky9Ey86U49v4wPVojr3b4S1BVBW7wFzcRDKRhfm6",
+   "match": {
+    "tp_exact": 77,
+    "tp_pitch": 77,
+    "fp": 141,
+    "fn": 136
+   },
+   "pair_agree": {
+    "pitch_ok": 77,
+    "dur_ok": 77,
+    "staff_ok": 77,
+    "onset_ok": 43,
+    "onset_bad": 34
+   },
+   "fn_cls": {
+    "DUR": 18,
+    "MULTI:D+O": 19,
+    "MISSING/no-partner": 15,
+    "MULTI:O+P": 25,
+    "MULTI:D+P": 34,
+    "MULTI:P+V": 6,
+    "MULTI:O+V": 7,
+    "PITCH": 10,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "DUR": 13,
+    "MULTI:D+O": 35,
+    "MULTI:O+P": 42,
+    "EXTRA/no-partner": 28,
+    "MULTI:D+P": 4,
+    "MULTI:O+V": 8,
+    "PITCH": 6,
+    "ONSET": 2,
+    "MULTI:P+V": 2,
+    "MULTI:P+S": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 213,
+    "trest_pnote": 5,
+    "trest_prest": 4
+   },
+   "rest_miss": {
+    "MISSING": 6,
+    "DUR": 1
+   },
+   "rest_extra": 4,
+   "chord_miss": {
+    "dur-split": 25,
+    "onset-split": 9,
+    "voice/staff-split": 16
+   },
+   "chord_pairs": {
+    "t": 130,
+    "p": 80,
+    "tp": 80
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 2
+   },
+   "head_fire": {
+    "truth_beamed": 46,
+    "truth_tied": 24,
+    "pred_in_beam": 108,
+    "pred_tied": 10
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 6,
+    "unpaired_tie_end": 5
+   }
+  },
+  "QmPyTcVQiwzxPNv3PaWZWLGwc4U9TMjTZBdFc6EpcQ2UwW": {
+   "sid": "QmPyTcVQiwzxPNv3PaWZWLGwc4U9TMjTZBdFc6EpcQ2UwW",
+   "match": {
+    "tp_exact": 111,
+    "tp_pitch": 113,
+    "fp": 265,
+    "fn": 258
+   },
+   "pair_agree": {
+    "pitch_ok": 113,
+    "dur_ok": 113,
+    "staff_ok": 111,
+    "onset_ok": 33,
+    "onset_bad": 80,
+    "staff_bad": 2
+   },
+   "fn_cls": {
+    "MULTI:O+P": 26,
+    "MULTI:D+P": 84,
+    "PITCH": 102,
+    "DUR": 18,
+    "ONSET": 3,
+    "MULTI:D+O": 2,
+    "MISSING/no-partner": 16,
+    "MULTI:O+V": 7
+   },
+   "fp_cls": {
+    "MULTI:O+P": 152,
+    "MULTI:D+P": 7,
+    "PITCH": 26,
+    "MULTI:D+O": 33,
+    "DUR": 15,
+    "ONSET": 6,
+    "EXTRA/no-partner": 21,
+    "MULTI:O+V": 5
+   },
+   "kind_conf": {
+    "trest_prest": 11,
+    "tnote_pnote": 371,
+    "trest_pnote": 7
+   },
+   "rest_miss": {
+    "DUR": 1,
+    "MISSING": 11
+   },
+   "rest_extra": 9,
+   "chord_miss": {
+    "dur-split": 26,
+    "onset-split": 28,
+    "voice/staff-split": 5
+   },
+   "chord_pairs": {
+    "t": 204,
+    "p": 146,
+    "tp": 145
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 26
+   },
+   "head_fire": {
+    "truth_beamed": 319,
+    "pred_in_beam": 354
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "duplicate_rest_collapsed": 6
+   }
+  },
+  "QmVjQbrGA3o2J7gFRNfupFMomL7LTbm8AQRP4qupjd7dCv": {
+   "sid": "QmVjQbrGA3o2J7gFRNfupFMomL7LTbm8AQRP4qupjd7dCv",
+   "match": {
+    "tp_exact": 35,
+    "tp_pitch": 35,
+    "fp": 36,
+    "fn": 36
+   },
+   "pair_agree": {
+    "pitch_ok": 35,
+    "dur_ok": 35,
+    "staff_ok": 35,
+    "onset_bad": 17,
+    "onset_ok": 18
+   },
+   "fn_cls": {
+    "DUR": 9,
+    "MULTI:D+O": 12,
+    "MULTI:D+P": 6,
+    "MULTI:O+P": 5,
+    "PITCH": 4
+   },
+   "fp_cls": {
+    "DUR": 9,
+    "MULTI:D+O": 16,
+    "MULTI:O+P": 6,
+    "EXTRA/no-partner": 1,
+    "PITCH": 4
+   },
+   "kind_conf": {
+    "tnote_pnote": 71
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 7
+   },
+   "head_fire": {
+    "truth_beamed": 66,
+    "pred_in_beam": 64
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmbShSjicArWPUa5DVkXhtzTCAqWFvbi9uavbxGbZZWwxL": {
+   "sid": "QmbShSjicArWPUa5DVkXhtzTCAqWFvbi9uavbxGbZZWwxL",
+   "match": {
+    "tp_exact": 111,
+    "tp_pitch": 111,
+    "fp": 16,
+    "fn": 16
+   },
+   "pair_agree": {
+    "pitch_ok": 111,
+    "dur_ok": 111,
+    "staff_ok": 111,
+    "onset_ok": 86,
+    "onset_bad": 25
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:D+O": 6,
+    "PITCH": 3,
+    "ONSET": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "MULTI:D+O": 7,
+    "PITCH": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 127
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 16
+   },
+   "head_fire": {
+    "truth_beamed": 124,
+    "truth_tuplet": 3,
+    "pred_in_beam": 123
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmYkUNDSiAAG6ncy6sahoLLdYYDZiHnwAdpdWqN2DFjQNz": {
+   "sid": "QmYkUNDSiAAG6ncy6sahoLLdYYDZiHnwAdpdWqN2DFjQNz",
+   "match": {
+    "tp_exact": 90,
+    "tp_pitch": 90,
+    "fp": 30,
+    "fn": 30
+   },
+   "pair_agree": {
+    "pitch_ok": 90,
+    "dur_ok": 90,
+    "staff_ok": 90,
+    "onset_bad": 30,
+    "onset_ok": 60
+   },
+   "fn_cls": {
+    "DUR": 16,
+    "MULTI:D+O": 5,
+    "ONSET": 7,
+    "MULTI:O+P": 1,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 16,
+    "MULTI:D+O": 13,
+    "ONSET": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 120
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "pred_in_beam": 7
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmd85PuiGmsoGj25mFKCqTnBfjRYxuiRhwQ4uUJuNNSSzn": {
+   "sid": "Qmd85PuiGmsoGj25mFKCqTnBfjRYxuiRhwQ4uUJuNNSSzn",
+   "match": {
+    "tp_exact": 89,
+    "tp_pitch": 89,
+    "fp": 39,
+    "fn": 39
+   },
+   "pair_agree": {
+    "pitch_ok": 89,
+    "dur_ok": 89,
+    "staff_ok": 89,
+    "onset_ok": 48,
+    "onset_bad": 41
+   },
+   "fn_cls": {
+    "DUR": 27,
+    "MULTI:D+O": 8,
+    "MULTI:D+P": 3,
+    "PITCH": 1
+   },
+   "fp_cls": {
+    "DUR": 27,
+    "MULTI:D+O": 10,
+    "MULTI:D+P": 1,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 128,
+    "trest_prest": 4
+   },
+   "rest_miss": {
+    "MISSING": 2,
+    "DUR": 2
+   },
+   "rest_extra": 4,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 92,
+    "pred_in_beam": 105
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmdNWdo1uXAaD5qdCqeYa3fP6vryfXD2L7XLWxAFu31k9U": {
+   "sid": "QmdNWdo1uXAaD5qdCqeYa3fP6vryfXD2L7XLWxAFu31k9U",
+   "match": {
+    "tp_exact": 388,
+    "tp_pitch": 397,
+    "fp": 1036,
+    "fn": 1034
+   },
+   "pair_agree": {
+    "pitch_ok": 397,
+    "dur_ok": 397,
+    "staff_ok": 388,
+    "onset_ok": 262,
+    "staff_bad": 9,
+    "onset_bad": 135
+   },
+   "fn_cls": {
+    "PITCH": 222,
+    "MULTI:O+P": 195,
+    "MULTI:P+V": 56,
+    "MISSING/no-partner": 491,
+    "ONSET": 5,
+    "MULTI:": 3,
+    "MULTI:P+S": 3,
+    "MULTI:O+V": 35,
+    "VOICE": 1,
+    "DUR": 5,
+    "MULTI:D+P": 10,
+    "MULTI:D+O": 7,
+    "MULTI:O+S": 1
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 615,
+    "PITCH": 213,
+    "MULTI:P+V": 49,
+    "MULTI:O+P": 75,
+    "MULTI:": 3,
+    "ONSET": 19,
+    "MULTI:P+S": 8,
+    "MULTI:O+V": 16,
+    "VOICE": 1,
+    "DUR": 5,
+    "MULTI:D+P": 25,
+    "MULTI:D+O": 5,
+    "MULTI:S+V": 1,
+    "MULTI:O+S": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 1431,
+    "trest_pnote": 2,
+    "trest_prest": 10
+   },
+   "rest_miss": {
+    "MISSING": 6
+   },
+   "rest_extra": 6,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 128
+   },
+   "head_fire": {
+    "truth_beamed": 1333,
+    "truth_tied": 8,
+    "truth_tuplet": 16,
+    "pred_in_beam": 1346
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "octave_dir_unknown": 1,
+    "duplicate_rest_collapsed": 8
+   }
+  },
+  "QmS1ewzuUH7yR5CPr25D5UPAsARce1wTpewKTSDbasajTP": {
+   "sid": "QmS1ewzuUH7yR5CPr25D5UPAsARce1wTpewKTSDbasajTP",
+   "match": {
+    "tp_exact": 76,
+    "tp_pitch": 76,
+    "fp": 25,
+    "fn": 25
+   },
+   "pair_agree": {
+    "pitch_ok": 76,
+    "dur_ok": 76,
+    "staff_ok": 76,
+    "onset_ok": 59,
+    "onset_bad": 17
+   },
+   "fn_cls": {
+    "DUR": 14,
+    "PITCH": 1,
+    "MULTI:D+O": 9,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 14,
+    "PITCH": 1,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 8
+   },
+   "kind_conf": {
+    "tnote_pnote": 101
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 39,
+    "pred_in_beam": 48,
+    "pred_tied": 1
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1,
+    "slur_omitted": 3
+   }
+  },
+  "QmXoEZ4EXoJJsAd6uee7fm55MPbdQt4EhhKprZZACFiRDQ": {
+   "sid": "QmXoEZ4EXoJJsAd6uee7fm55MPbdQt4EhhKprZZACFiRDQ",
+   "match": {
+    "tp_exact": 79,
+    "tp_pitch": 79,
+    "fp": 51,
+    "fn": 51
+   },
+   "pair_agree": {
+    "pitch_ok": 79,
+    "dur_ok": 79,
+    "staff_ok": 79,
+    "onset_ok": 31,
+    "onset_bad": 48
+   },
+   "fn_cls": {
+    "DUR": 15,
+    "MULTI:D+O": 25,
+    "MULTI:O+P": 6,
+    "PITCH": 3,
+    "ONSET": 1,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 14,
+    "MULTI:D+O": 21,
+    "MULTI:O+P": 11,
+    "PITCH": 3,
+    "MULTI:D+P": 1,
+    "ONSET": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 130
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 111,
+    "truth_tuplet": 45,
+    "pred_in_beam": 123
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmRdVV8RuGjCiGvbSM6xwjAKwFHioiSTz84ZKK65Z748AH": {
+   "sid": "QmRdVV8RuGjCiGvbSM6xwjAKwFHioiSTz84ZKK65Z748AH",
+   "match": {
+    "tp_exact": 89,
+    "tp_pitch": 89,
+    "fp": 78,
+    "fn": 78
+   },
+   "pair_agree": {
+    "pitch_ok": 89,
+    "dur_ok": 89,
+    "staff_ok": 89,
+    "onset_ok": 83,
+    "onset_bad": 6
+   },
+   "fn_cls": {
+    "DUR": 3,
+    "MISSING/no-partner": 49,
+    "PITCH": 17,
+    "MULTI:O+P": 8,
+    "MULTI:P+V": 1
+   },
+   "fp_cls": {
+    "DUR": 3,
+    "MULTI:O+P": 4,
+    "EXTRA/no-partner": 56,
+    "PITCH": 13,
+    "MULTI:P+V": 1,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 167,
+    "trest_prest": 2
+   },
+   "rest_miss": {
+    "DUR": 2
+   },
+   "rest_extra": 2,
+   "chord_miss": {
+    "dur-split": 22
+   },
+   "chord_pairs": {
+    "t": 22,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 95,
+    "truth_tied": 6,
+    "pred_in_beam": 97
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmak1uxP117WC7DE12tWeaoccfMDTRrqTuY14iuKSNqT37": {
+   "sid": "Qmak1uxP117WC7DE12tWeaoccfMDTRrqTuY14iuKSNqT37",
+   "match": {
+    "tp_exact": 112,
+    "tp_pitch": 112,
+    "fp": 51,
+    "fn": 51
+   },
+   "pair_agree": {
+    "pitch_ok": 112,
+    "dur_ok": 112,
+    "staff_ok": 112,
+    "onset_ok": 76,
+    "onset_bad": 36
+   },
+   "fn_cls": {
+    "DUR": 16,
+    "MULTI:D+O": 12,
+    "PITCH": 6,
+    "MULTI:O+P": 14,
+    "ONSET": 1,
+    "MULTI:D+P": 1,
+    "MISSING/no-partner": 1
+   },
+   "fp_cls": {
+    "DUR": 16,
+    "EXTRA/no-partner": 2,
+    "MULTI:D+O": 20,
+    "MULTI:O+P": 5,
+    "PITCH": 6,
+    "MULTI:D+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 163,
+    "trest_prest": 5
+   },
+   "rest_miss": {
+    "MISSING": 3,
+    "DUR": 2
+   },
+   "rest_extra": 5,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 10
+   },
+   "head_fire": {
+    "truth_beamed": 108,
+    "truth_tuplet": 12,
+    "pred_in_beam": 118
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQUXDrQzeYYnNyAPkP33NzVmxZ7zLDYxD4ZSyuwQovrW4": {
+   "sid": "QmQUXDrQzeYYnNyAPkP33NzVmxZ7zLDYxD4ZSyuwQovrW4",
+   "match": {
+    "tp_exact": 112,
+    "tp_pitch": 112,
+    "fp": 60,
+    "fn": 60
+   },
+   "pair_agree": {
+    "pitch_ok": 112,
+    "dur_ok": 112,
+    "staff_ok": 112,
+    "onset_bad": 111,
+    "onset_ok": 1
+   },
+   "fn_cls": {
+    "DUR": 14,
+    "ONSET": 4,
+    "MULTI:D+O": 31,
+    "MULTI:O+P": 8,
+    "PITCH": 3
+   },
+   "fp_cls": {
+    "DUR": 14,
+    "ONSET": 8,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 32,
+    "MULTI:D+P": 1,
+    "PITCH": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 172
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 46,
+    "pred_in_beam": 79
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmdF4ZSes7UVXm5RhNt4V3akh93Jm3FnjuRABQYtmg5v6r": {
+   "sid": "QmdF4ZSes7UVXm5RhNt4V3akh93Jm3FnjuRABQYtmg5v6r",
+   "match": {
+    "tp_exact": 88,
+    "tp_pitch": 88,
+    "fp": 4,
+    "fn": 4
+   },
+   "pair_agree": {
+    "pitch_ok": 88,
+    "dur_ok": 88,
+    "staff_ok": 88,
+    "onset_ok": 88
+   },
+   "fn_cls": {
+    "PITCH": 2,
+    "DUR": 2
+   },
+   "fp_cls": {
+    "PITCH": 2,
+    "DUR": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 92
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 90,
+    "pred_in_beam": 92
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmaeo94HL45H8R7UJuYnYMoXVevsx2PbXdc6r2X1TkvZ5h": {
+   "sid": "Qmaeo94HL45H8R7UJuYnYMoXVevsx2PbXdc6r2X1TkvZ5h",
+   "match": {
+    "tp_exact": 90,
+    "tp_pitch": 90,
+    "fp": 5,
+    "fn": 5
+   },
+   "pair_agree": {
+    "pitch_ok": 90,
+    "dur_ok": 90,
+    "staff_ok": 90,
+    "onset_bad": 8,
+    "onset_ok": 82
+   },
+   "fn_cls": {
+    "PITCH": 3,
+    "DUR": 2
+   },
+   "fp_cls": {
+    "PITCH": 3,
+    "DUR": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 95
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 92,
+    "pred_in_beam": 93
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmTDiyEX6KtoU86r66rH7E94GbxmDWyMG8f9Da7Rwy3QY4": {
+   "sid": "QmTDiyEX6KtoU86r66rH7E94GbxmDWyMG8f9Da7Rwy3QY4",
+   "match": {
+    "tp_exact": 57,
+    "tp_pitch": 57,
+    "fp": 1,
+    "fn": 1
+   },
+   "pair_agree": {
+    "pitch_ok": 57,
+    "dur_ok": 57,
+    "staff_ok": 57,
+    "onset_ok": 55,
+    "onset_bad": 2
+   },
+   "fn_cls": {
+    "DUR": 1
+   },
+   "fp_cls": {
+    "DUR": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 58,
+    "trest_prest": 2
+   },
+   "rest_miss": {
+    "DUR": 2
+   },
+   "rest_extra": 2,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 1
+   },
+   "head_fire": {
+    "truth_beamed": 16,
+    "pred_in_beam": 17
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmcjvd8jq8ZPdaZrZGQMjR2j66oLp6ruzi88U5f2L4Cp3B": {
+   "sid": "Qmcjvd8jq8ZPdaZrZGQMjR2j66oLp6ruzi88U5f2L4Cp3B",
+   "match": {
+    "tp_exact": 62,
+    "tp_pitch": 62,
+    "fp": 12,
+    "fn": 12
+   },
+   "pair_agree": {
+    "pitch_ok": 62,
+    "dur_ok": 62,
+    "staff_ok": 62,
+    "onset_ok": 46,
+    "onset_bad": 16
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 74
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 2
+   },
+   "head_fire": {
+    "truth_beamed": 42,
+    "pred_in_beam": 50
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmXuJv6BCsykp26wd7Kh4ifrT8DyrXhC3D8NQ6XYDmwXUm": {
+   "sid": "QmXuJv6BCsykp26wd7Kh4ifrT8DyrXhC3D8NQ6XYDmwXUm",
+   "match": {
+    "tp_exact": 111,
+    "tp_pitch": 111,
+    "fp": 6,
+    "fn": 6
+   },
+   "pair_agree": {
+    "pitch_ok": 111,
+    "dur_ok": 111,
+    "staff_ok": 111,
+    "onset_ok": 82,
+    "onset_bad": 29
+   },
+   "fn_cls": {
+    "DUR": 6
+   },
+   "fp_cls": {
+    "DUR": 6
+   },
+   "kind_conf": {
+    "tnote_pnote": 117
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 106,
+    "pred_in_beam": 108
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmNUhkynxGgKizQzYFL4szTgwpwsHtAgqD8mLCcwaYTLDa": {
+   "sid": "QmNUhkynxGgKizQzYFL4szTgwpwsHtAgqD8mLCcwaYTLDa",
+   "match": {
+    "tp_exact": 71,
+    "tp_pitch": 71,
+    "fp": 20,
+    "fn": 20
+   },
+   "pair_agree": {
+    "pitch_ok": 71,
+    "dur_ok": 71,
+    "staff_ok": 71,
+    "onset_bad": 18,
+    "onset_ok": 53
+   },
+   "fn_cls": {
+    "DUR": 5,
+    "PITCH": 7,
+    "MULTI:O+P": 5,
+    "MULTI:D+O": 1,
+    "MULTI:D+P": 1,
+    "ONSET": 1
+   },
+   "fp_cls": {
+    "DUR": 5,
+    "PITCH": 6,
+    "MULTI:O+P": 5,
+    "MULTI:D+O": 2,
+    "MULTI:D+P": 1,
+    "ONSET": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 91
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 9
+   },
+   "head_fire": {
+    "truth_beamed": 82,
+    "pred_in_beam": 82
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmPefJHswd28c1YNPuYvjLcUK6SAAiA9gq1A9t8vaZJF5R": {
+   "sid": "QmPefJHswd28c1YNPuYvjLcUK6SAAiA9gq1A9t8vaZJF5R",
+   "match": {
+    "tp_exact": 77,
+    "tp_pitch": 78,
+    "fp": 21,
+    "fn": 21
+   },
+   "pair_agree": {
+    "pitch_ok": 78,
+    "dur_ok": 78,
+    "staff_ok": 77,
+    "onset_ok": 50,
+    "onset_bad": 28,
+    "staff_bad": 1
+   },
+   "fn_cls": {
+    "DUR": 15,
+    "MULTI:O+P": 4,
+    "MULTI:D+O": 2
+   },
+   "fp_cls": {
+    "DUR": 15,
+    "MULTI:D+O": 6
+   },
+   "kind_conf": {
+    "tnote_pnote": 99
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 34,
+    "pred_in_beam": 42
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmUM6KmupxpxrQbDtz8DTYF8XArV438ioFRZr6R18vssbj": {
+   "sid": "QmUM6KmupxpxrQbDtz8DTYF8XArV438ioFRZr6R18vssbj",
+   "match": {
+    "tp_exact": 158,
+    "tp_pitch": 171,
+    "fp": 489,
+    "fn": 489
+   },
+   "pair_agree": {
+    "pitch_ok": 171,
+    "dur_ok": 171,
+    "staff_ok": 158,
+    "onset_ok": 84,
+    "staff_bad": 13,
+    "onset_bad": 87
+   },
+   "fn_cls": {
+    "DUR": 28,
+    "PITCH": 244,
+    "MULTI:O+P": 60,
+    "MULTI:D+P": 86,
+    "MULTI:D+S": 3,
+    "MISSING/no-partner": 30,
+    "MULTI:D+O": 3,
+    "MULTI:S+V": 16,
+    "MULTI:P+S": 11,
+    "MULTI:P+V": 4,
+    "VOICE": 2,
+    "ONSET": 1,
+    "MULTI:": 1
+   },
+   "fp_cls": {
+    "DUR": 26,
+    "EXTRA/no-partner": 47,
+    "MULTI:O+P": 172,
+    "PITCH": 154,
+    "MULTI:D+P": 29,
+    "MULTI:P+V": 29,
+    "MULTI:D+O": 14,
+    "MULTI:D+S": 4,
+    "MULTI:P+S": 4,
+    "VOICE": 2,
+    "MULTI:O+V": 2,
+    "ONSET": 4,
+    "MULTI:S+V": 1,
+    "MULTI:": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 660,
+    "trest_prest": 18
+   },
+   "rest_miss": {
+    "MISSING": 16
+   },
+   "rest_extra": 18,
+   "chord_miss": {
+    "voice/staff-split": 56,
+    "dur-split": 13
+   },
+   "chord_pairs": {
+    "t": 256,
+    "p": 191,
+    "tp": 187
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 8,
+    "truth_tuplet": 3,
+    "pred_in_beam": 33,
+    "pred_tied": 2
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1,
+    "unpaired_tie_end": 1
+   }
+  },
+  "QmQ9zZkfnA6s6ZwxASXjNUgbq2xRGozjz7K4xXRKL2mFvT": {
+   "sid": "QmQ9zZkfnA6s6ZwxASXjNUgbq2xRGozjz7K4xXRKL2mFvT",
+   "match": {
+    "tp_exact": 98,
+    "tp_pitch": 98,
+    "fp": 32,
+    "fn": 32
+   },
+   "pair_agree": {
+    "pitch_ok": 98,
+    "dur_ok": 98,
+    "staff_ok": 98,
+    "onset_ok": 66,
+    "onset_bad": 32
+   },
+   "fn_cls": {
+    "PITCH": 12,
+    "MULTI:O+P": 7,
+    "DUR": 5,
+    "ONSET": 1,
+    "MULTI:D+O": 5,
+    "MULTI:D+P": 1,
+    "MULTI:": 1
+   },
+   "fp_cls": {
+    "PITCH": 12,
+    "MULTI:D+O": 4,
+    "MULTI:O+P": 6,
+    "DUR": 5,
+    "ONSET": 3,
+    "MULTI:D+P": 1,
+    "MULTI:": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 130
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 115,
+    "truth_tuplet": 15,
+    "pred_in_beam": 129
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "slur_omitted": 1
+   }
+  },
+  "QmXdSjFZayXL4VM8LX8yVzkoBLFx1JFrcHxBDrFo847Cjw": {
+   "sid": "QmXdSjFZayXL4VM8LX8yVzkoBLFx1JFrcHxBDrFo847Cjw",
+   "match": {
+    "tp_exact": 119,
+    "tp_pitch": 119,
+    "fp": 11,
+    "fn": 11
+   },
+   "pair_agree": {
+    "pitch_ok": 119,
+    "dur_ok": 119,
+    "staff_ok": 119,
+    "onset_ok": 102,
+    "onset_bad": 17
+   },
+   "fn_cls": {
+    "PITCH": 2,
+    "DUR": 1,
+    "MULTI:O+P": 3,
+    "MULTI:D+O": 5
+   },
+   "fp_cls": {
+    "PITCH": 2,
+    "DUR": 1,
+    "MULTI:D+O": 6,
+    "MULTI:O+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 130
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 15
+   },
+   "head_fire": {
+    "truth_beamed": 124,
+    "truth_tuplet": 15,
+    "pred_in_beam": 124,
+    "pred_tied": 2
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 2,
+    "slur_omitted": 2
+   }
+  },
+  "QmX5kyaEEMmoKtSi4qotq4oGLrWCnS8osZjhBgtYSWEsbh": {
+   "sid": "QmX5kyaEEMmoKtSi4qotq4oGLrWCnS8osZjhBgtYSWEsbh",
+   "match": {
+    "tp_exact": 162,
+    "tp_pitch": 162,
+    "fp": 43,
+    "fn": 43
+   },
+   "pair_agree": {
+    "pitch_ok": 162,
+    "dur_ok": 162,
+    "staff_ok": 162,
+    "onset_ok": 117,
+    "onset_bad": 45
+   },
+   "fn_cls": {
+    "MULTI:D+O": 20,
+    "MULTI:O+P": 1,
+    "DUR": 11,
+    "PITCH": 6,
+    "MULTI:D+P": 3,
+    "MISSING/no-partner": 1,
+    "ONSET": 1
+   },
+   "fp_cls": {
+    "MULTI:D+O": 19,
+    "MULTI:O+P": 3,
+    "DUR": 11,
+    "PITCH": 6,
+    "EXTRA/no-partner": 2,
+    "ONSET": 1,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 205
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 15
+   },
+   "head_fire": {
+    "truth_beamed": 153,
+    "truth_tuplet": 25,
+    "pred_in_beam": 161
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "slur_omitted": 1
+   }
+  },
+  "QmTWJjVHFx2PGypB123JSH6KB6fT8qZ1Vf7om6GzCtanvJ": {
+   "sid": "QmTWJjVHFx2PGypB123JSH6KB6fT8qZ1Vf7om6GzCtanvJ",
+   "match": {
+    "tp_exact": 69,
+    "tp_pitch": 69,
+    "fp": 15,
+    "fn": 15
+   },
+   "pair_agree": {
+    "pitch_ok": 69,
+    "dur_ok": 69,
+    "staff_ok": 69,
+    "onset_ok": 63,
+    "onset_bad": 6
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "PITCH": 8,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "PITCH": 8,
+    "MULTI:D+O": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 84
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 8
+   },
+   "head_fire": {
+    "truth_beamed": 66,
+    "pred_in_beam": 74
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmayHNbE8iQ7kEXPpP4iBXn4LNPmzJV8Q7Wjp4Q3sKBUGz": {
+   "sid": "QmayHNbE8iQ7kEXPpP4iBXn4LNPmzJV8Q7Wjp4Q3sKBUGz",
+   "match": {
+    "tp_exact": 98,
+    "tp_pitch": 98,
+    "fp": 86,
+    "fn": 86
+   },
+   "pair_agree": {
+    "pitch_ok": 98,
+    "dur_ok": 98,
+    "staff_ok": 98,
+    "onset_bad": 16,
+    "onset_ok": 82
+   },
+   "fn_cls": {
+    "PITCH": 8,
+    "MISSING/no-partner": 52,
+    "MULTI:P+V": 3,
+    "MULTI:D+P": 2,
+    "DUR": 7,
+    "MULTI:O+P": 8,
+    "MULTI:P+S": 3,
+    "MULTI:O+S": 1,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "PITCH": 8,
+    "EXTRA/no-partner": 55,
+    "MULTI:P+V": 3,
+    "MULTI:D+P": 2,
+    "DUR": 7,
+    "MULTI:O+P": 7,
+    "MULTI:D+O": 1,
+    "ONSET": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 184
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 13
+   },
+   "head_fire": {
+    "truth_beamed": 112,
+    "pred_in_beam": 159
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmRpUxd861wEvz1FCvjFfnTnSea2m2FxBgF1S4nnDh3KJT": {
+   "sid": "QmRpUxd861wEvz1FCvjFfnTnSea2m2FxBgF1S4nnDh3KJT",
+   "match": {
+    "tp_exact": 68,
+    "tp_pitch": 68,
+    "fp": 18,
+    "fn": 18
+   },
+   "pair_agree": {
+    "pitch_ok": 68,
+    "dur_ok": 68,
+    "staff_ok": 68,
+    "onset_bad": 19,
+    "onset_ok": 49
+   },
+   "fn_cls": {
+    "DUR": 10,
+    "MULTI:D+O": 3,
+    "ONSET": 1,
+    "MULTI:O+P": 3,
+    "PITCH": 1
+   },
+   "fp_cls": {
+    "DUR": 10,
+    "MULTI:D+O": 7,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 86,
+    "trest_prest": 1
+   },
+   "rest_miss": {
+    "DUR": 1
+   },
+   "rest_extra": 1,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 7
+   },
+   "head_fire": {
+    "truth_beamed": 53,
+    "pred_in_beam": 57
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmYG9ZQA7Cejg49sLW2mGTKmjEqc9HxJ5kLsXmtcEim37P": {
+   "sid": "QmYG9ZQA7Cejg49sLW2mGTKmjEqc9HxJ5kLsXmtcEim37P",
+   "match": {
+    "tp_exact": 76,
+    "tp_pitch": 76,
+    "fp": 44,
+    "fn": 44
+   },
+   "pair_agree": {
+    "pitch_ok": 76,
+    "dur_ok": 76,
+    "staff_ok": 76,
+    "onset_ok": 38,
+    "onset_bad": 38
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:O+P": 4,
+    "MULTI:D+P": 2,
+    "MULTI:D+O": 23,
+    "PITCH": 1,
+    "ONSET": 2,
+    "MISSING/no-partner": 1
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 19,
+    "MULTI:D+P": 5,
+    "MULTI:O+P": 5,
+    "ONSET": 2,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 120
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 110,
+    "truth_tuplet": 6,
+    "pred_in_beam": 116
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmbCUMzhmPjPwDTmG8mpsDN31VcPtdKiJFtu8XUZc4hjZv": {
+   "sid": "QmbCUMzhmPjPwDTmG8mpsDN31VcPtdKiJFtu8XUZc4hjZv",
+   "match": {
+    "tp_exact": 69,
+    "tp_pitch": 69,
+    "fp": 7,
+    "fn": 7
+   },
+   "pair_agree": {
+    "pitch_ok": 69,
+    "dur_ok": 69,
+    "staff_ok": 69,
+    "onset_ok": 64,
+    "onset_bad": 5
+   },
+   "fn_cls": {
+    "PITCH": 2,
+    "DUR": 4,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "PITCH": 2,
+    "MULTI:O+P": 1,
+    "DUR": 3,
+    "MULTI:D+O": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 76
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 2
+   },
+   "head_fire": {
+    "truth_beamed": 34,
+    "pred_in_beam": 37,
+    "pred_tied": 1
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1,
+    "slur_omitted": 3
+   }
+  },
+  "QmYuYwYwSesUXTasjvG1Ricqzw8C89enXHaNWDSjkPCMY4": {
+   "sid": "QmYuYwYwSesUXTasjvG1Ricqzw8C89enXHaNWDSjkPCMY4",
+   "match": {
+    "tp_exact": 99,
+    "tp_pitch": 99,
+    "fp": 12,
+    "fn": 12
+   },
+   "pair_agree": {
+    "pitch_ok": 99,
+    "dur_ok": 99,
+    "staff_ok": 99,
+    "onset_ok": 99
+   },
+   "fn_cls": {
+    "DUR": 4,
+    "PITCH": 8
+   },
+   "fp_cls": {
+    "DUR": 4,
+    "PITCH": 8
+   },
+   "kind_conf": {
+    "tnote_pnote": 111
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 16
+   },
+   "head_fire": {
+    "truth_beamed": 107,
+    "pred_in_beam": 110
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmTUtq2k3472GN9nsYth3hGagguHKjocRa1vCFM38gKowd": {
+   "sid": "QmTUtq2k3472GN9nsYth3hGagguHKjocRa1vCFM38gKowd",
+   "match": {
+    "tp_exact": 155,
+    "tp_pitch": 155,
+    "fp": 7,
+    "fn": 7
+   },
+   "pair_agree": {
+    "pitch_ok": 155,
+    "dur_ok": 155,
+    "staff_ok": 155,
+    "onset_ok": 151,
+    "onset_bad": 4
+   },
+   "fn_cls": {
+    "DUR": 5,
+    "MULTI:D+O": 2
+   },
+   "fp_cls": {
+    "DUR": 5,
+    "MULTI:D+O": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 162
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 22
+   },
+   "head_fire": {
+    "truth_beamed": 138,
+    "truth_tuplet": 6,
+    "pred_in_beam": 140
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmPCj8yczhm1HAMiJikLKVu9JerTai61Y8VTniEdpTYxas": {
+   "sid": "QmPCj8yczhm1HAMiJikLKVu9JerTai61Y8VTniEdpTYxas",
+   "match": {
+    "tp_exact": 44,
+    "tp_pitch": 44,
+    "fp": 16,
+    "fn": 16
+   },
+   "pair_agree": {
+    "pitch_ok": 44,
+    "dur_ok": 44,
+    "staff_ok": 44,
+    "onset_ok": 25,
+    "onset_bad": 19
+   },
+   "fn_cls": {
+    "DUR": 3,
+    "MULTI:D+O": 10,
+    "PITCH": 2,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 3,
+    "MULTI:D+O": 8,
+    "PITCH": 2,
+    "MULTI:O+P": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 60,
+    "trest_prest": 4
+   },
+   "rest_miss": {
+    "DUR": 4
+   },
+   "rest_extra": 4,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 5
+   },
+   "head_fire": {
+    "truth_beamed": 48,
+    "truth_tuplet": 12,
+    "truth_tied": 10,
+    "pred_in_beam": 53,
+    "pred_tied": 2
+   },
+   "truth_ties_cross_measure": 8,
+   "flags_b": {
+    "unpaired_tie_start": 2,
+    "unpaired_tie_end": 1
+   }
+  },
+  "QmZP5taEoh4V5jRiiJTDkpotC42mu6u4Dy7G4x76p8L1wj": {
+   "sid": "QmZP5taEoh4V5jRiiJTDkpotC42mu6u4Dy7G4x76p8L1wj",
+   "match": {
+    "tp_exact": 60,
+    "tp_pitch": 60,
+    "fp": 4,
+    "fn": 4
+   },
+   "pair_agree": {
+    "pitch_ok": 60,
+    "dur_ok": 60,
+    "staff_ok": 60,
+    "onset_ok": 50,
+    "onset_bad": 10
+   },
+   "fn_cls": {
+    "DUR": 3,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "DUR": 3,
+    "MULTI:D+O": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 64
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 48,
+    "pred_in_beam": 52
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQWCWjAuWBeGn5BTJX4NmtDBzkvsftnFfuEaXyWWesbGd": {
+   "sid": "QmQWCWjAuWBeGn5BTJX4NmtDBzkvsftnFfuEaXyWWesbGd",
+   "match": {
+    "tp_exact": 49,
+    "tp_pitch": 49,
+    "fp": 13,
+    "fn": 13
+   },
+   "pair_agree": {
+    "pitch_ok": 49,
+    "dur_ok": 49,
+    "staff_ok": 49,
+    "onset_bad": 20,
+    "onset_ok": 29
+   },
+   "fn_cls": {
+    "DUR": 10,
+    "MULTI:D+O": 3
+   },
+   "fp_cls": {
+    "DUR": 10,
+    "MULTI:D+O": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 62,
+    "trest_prest": 2
+   },
+   "rest_miss": {
+    "MISSING": 2
+   },
+   "rest_extra": 2,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 3
+   },
+   "head_fire": {
+    "truth_beamed": 27,
+    "truth_tied": 2,
+    "pred_in_beam": 37
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmeMBojko3mYycvTbMbiUgF42xrf3iie6NCB4xZiUAVKEx": {
+   "sid": "QmeMBojko3mYycvTbMbiUgF42xrf3iie6NCB4xZiUAVKEx",
+   "match": {
+    "tp_exact": 45,
+    "tp_pitch": 45,
+    "fp": 6,
+    "fn": 6
+   },
+   "pair_agree": {
+    "pitch_ok": 45,
+    "dur_ok": 45,
+    "staff_ok": 45,
+    "onset_ok": 30,
+    "onset_bad": 15
+   },
+   "fn_cls": {
+    "DUR": 5,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 5,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 51
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 6
+   },
+   "head_fire": {
+    "truth_beamed": 43,
+    "pred_in_beam": 45
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmTLBDLaHFqUgdWYAZ4xypRFCC4PXPknkJbDaavFt28UG5": {
+   "sid": "QmTLBDLaHFqUgdWYAZ4xypRFCC4PXPknkJbDaavFt28UG5",
+   "match": {
+    "tp_exact": 65,
+    "tp_pitch": 65,
+    "fp": 3,
+    "fn": 3
+   },
+   "pair_agree": {
+    "pitch_ok": 65,
+    "dur_ok": 65,
+    "staff_ok": 65,
+    "onset_ok": 65
+   },
+   "fn_cls": {
+    "DUR": 3
+   },
+   "fp_cls": {
+    "DUR": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 68
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 9
+   },
+   "head_fire": {
+    "truth_beamed": 63,
+    "pred_in_beam": 66
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQCEWXTC9GNsxmQU1iTXdvT3FnF1zzg7MNYGu6rioifBw": {
+   "sid": "QmQCEWXTC9GNsxmQU1iTXdvT3FnF1zzg7MNYGu6rioifBw",
+   "match": {
+    "tp_exact": 129,
+    "tp_pitch": 129,
+    "fp": 45,
+    "fn": 45
+   },
+   "pair_agree": {
+    "pitch_ok": 129,
+    "dur_ok": 129,
+    "staff_ok": 129,
+    "onset_ok": 118,
+    "onset_bad": 11
+   },
+   "fn_cls": {
+    "PITCH": 21,
+    "DUR": 9,
+    "MULTI:O+P": 4,
+    "ONSET": 1,
+    "MULTI:D+P": 1,
+    "MISSING/no-partner": 1,
+    "MULTI:D+O": 8
+   },
+   "fp_cls": {
+    "PITCH": 21,
+    "DUR": 9,
+    "MULTI:O+P": 4,
+    "MULTI:D+O": 9,
+    "MULTI:D+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 174,
+    "trest_prest": 9
+   },
+   "rest_miss": {
+    "DUR": 4,
+    "MISSING": 5
+   },
+   "rest_extra": 9,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 33
+   },
+   "head_fire": {
+    "truth_tied": 18,
+    "truth_beamed": 145,
+    "truth_tuplet": 18,
+    "pred_in_beam": 148
+   },
+   "truth_ties_cross_measure": 18,
+   "flags_b": {}
+  },
+  "Qmf7kWXtRmg1mCxNBEGMHdPA6oNXpK4dH7kaTRcZKtYQXo": {
+   "sid": "Qmf7kWXtRmg1mCxNBEGMHdPA6oNXpK4dH7kaTRcZKtYQXo",
+   "match": {
+    "tp_exact": 49,
+    "tp_pitch": 49,
+    "fp": 13,
+    "fn": 13
+   },
+   "pair_agree": {
+    "pitch_ok": 49,
+    "dur_ok": 49,
+    "staff_ok": 49,
+    "onset_bad": 17,
+    "onset_ok": 32
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "PITCH": 2,
+    "MULTI:D+O": 3,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "PITCH": 2,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 1,
+    "ONSET": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 62
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 3
+   },
+   "head_fire": {
+    "truth_beamed": 38,
+    "pred_in_beam": 42
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmaiQkokGpQ8DvUbDJFXz4sdgjoNZV6ZdeiXiFpcNmXmam": {
+   "sid": "QmaiQkokGpQ8DvUbDJFXz4sdgjoNZV6ZdeiXiFpcNmXmam",
+   "match": {
+    "tp_exact": 36,
+    "tp_pitch": 36,
+    "fp": 82,
+    "fn": 80
+   },
+   "pair_agree": {
+    "pitch_ok": 36,
+    "dur_ok": 36,
+    "staff_ok": 36,
+    "onset_ok": 19,
+    "onset_bad": 17
+   },
+   "fn_cls": {
+    "MULTI:P+V": 6,
+    "MULTI:P+S": 20,
+    "MULTI:D+O": 2,
+    "PITCH": 15,
+    "MULTI:O+P": 4,
+    "MISSING/no-partner": 16,
+    "DUR": 10,
+    "MULTI:D+P": 4,
+    "MULTI:O+V": 3
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 16,
+    "MULTI:P+V": 14,
+    "MULTI:D+O": 5,
+    "MULTI:O+P": 10,
+    "PITCH": 15,
+    "MULTI:P+S": 5,
+    "DUR": 9,
+    "MULTI:D+P": 4,
+    "MULTI:O+V": 3,
+    "MULTI:S+V": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 116,
+    "trest_pnote": 2,
+    "trest_prest": 2
+   },
+   "rest_miss": {
+    "MISSING": 3,
+    "DUR": 1
+   },
+   "rest_extra": 2,
+   "chord_miss": {
+    "dur-split": 5
+   },
+   "chord_pairs": {
+    "t": 20,
+    "p": 19,
+    "tp": 15
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 12,
+    "pred_in_beam": 25
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmZz8FAaKmft9h3n4zobojuKCFaW7TdqQWRC5hAZ7bkzWo": {
+   "sid": "QmZz8FAaKmft9h3n4zobojuKCFaW7TdqQWRC5hAZ7bkzWo",
+   "match": {
+    "tp_exact": 76,
+    "tp_pitch": 76,
+    "fp": 18,
+    "fn": 18
+   },
+   "pair_agree": {
+    "pitch_ok": 76,
+    "dur_ok": 76,
+    "staff_ok": 76,
+    "onset_ok": 49,
+    "onset_bad": 27
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 3,
+    "MULTI:O+P": 2,
+    "PITCH": 2
+   },
+   "fp_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 5,
+    "PITCH": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 94
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 60,
+    "pred_in_beam": 65
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmapF16voWfKLapNckugYrJTVBSPR2Enm8BFgEBdTSWgS4": {
+   "sid": "QmapF16voWfKLapNckugYrJTVBSPR2Enm8BFgEBdTSWgS4",
+   "match": {
+    "tp_exact": 73,
+    "tp_pitch": 73,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 73,
+    "dur_ok": 73,
+    "staff_ok": 73,
+    "onset_ok": 51,
+    "onset_bad": 22
+   },
+   "fn_cls": {
+    "PITCH": 1,
+    "DUR": 10,
+    "MULTI:O+P": 3
+   },
+   "fp_cls": {
+    "PITCH": 1,
+    "DUR": 10,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 87
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 8
+   },
+   "head_fire": {
+    "truth_beamed": 68,
+    "pred_in_beam": 70
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmTVkt2p4t782VcBrkGZo6FLudHtUtmXb45m5swDZmCANG": {
+   "sid": "QmTVkt2p4t782VcBrkGZo6FLudHtUtmXb45m5swDZmCANG",
+   "match": {
+    "tp_exact": 35,
+    "tp_pitch": 35,
+    "fp": 20,
+    "fn": 20
+   },
+   "pair_agree": {
+    "pitch_ok": 35,
+    "dur_ok": 35,
+    "staff_ok": 35,
+    "onset_bad": 19,
+    "onset_ok": 16
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 7,
+    "MULTI:D+P": 2
+   },
+   "fp_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 7,
+    "MULTI:D+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 55
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "pred_in_beam": 1,
+    "pred_tied": 1
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1
+   }
+  },
+  "QmZ6zUEC6KWea3G4RMNJjK6JEgngJUpzz6Uf3v7AGSaMUR": {
+   "sid": "QmZ6zUEC6KWea3G4RMNJjK6JEgngJUpzz6Uf3v7AGSaMUR",
+   "match": {
+    "tp_exact": 79,
+    "tp_pitch": 79,
+    "fp": 5,
+    "fn": 5
+   },
+   "pair_agree": {
+    "pitch_ok": 79,
+    "dur_ok": 79,
+    "staff_ok": 79,
+    "onset_bad": 10,
+    "onset_ok": 69
+   },
+   "fn_cls": {
+    "DUR": 5
+   },
+   "fp_cls": {
+    "DUR": 5
+   },
+   "kind_conf": {
+    "tnote_pnote": 84
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 8
+   },
+   "head_fire": {
+    "truth_beamed": 72,
+    "pred_in_beam": 79
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qma6VwYLLB9xnzahU6LJfvSMGCQa61TdWf8tP77bKNTixu": {
+   "sid": "Qma6VwYLLB9xnzahU6LJfvSMGCQa61TdWf8tP77bKNTixu",
+   "match": {
+    "tp_exact": 95,
+    "tp_pitch": 95,
+    "fp": 8,
+    "fn": 8
+   },
+   "pair_agree": {
+    "pitch_ok": 95,
+    "dur_ok": 95,
+    "staff_ok": 95,
+    "onset_ok": 81,
+    "onset_bad": 14
+   },
+   "fn_cls": {
+    "PITCH": 1,
+    "DUR": 5,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "PITCH": 1,
+    "DUR": 5,
+    "ONSET": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 103
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 10
+   },
+   "head_fire": {
+    "truth_beamed": 95,
+    "pred_in_beam": 94
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qme7isC9Yo98iqTioW7xMA7WAcNx8yPCmgctwnezXxDePk": {
+   "sid": "Qme7isC9Yo98iqTioW7xMA7WAcNx8yPCmgctwnezXxDePk",
+   "match": {
+    "tp_exact": 64,
+    "tp_pitch": 64,
+    "fp": 6,
+    "fn": 6
+   },
+   "pair_agree": {
+    "pitch_ok": 64,
+    "dur_ok": 64,
+    "staff_ok": 64,
+    "onset_ok": 60,
+    "onset_bad": 4
+   },
+   "fn_cls": {
+    "DUR": 4,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "DUR": 4,
+    "MULTI:D+O": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 70
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 3
+   },
+   "head_fire": {
+    "truth_beamed": 47,
+    "truth_tuplet": 3,
+    "pred_in_beam": 52
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmSPeuaiH5ALupK3RAdSxYMZzxwDmKyZUcaykbbgzFs7Jd": {
+   "sid": "QmSPeuaiH5ALupK3RAdSxYMZzxwDmKyZUcaykbbgzFs7Jd",
+   "match": {
+    "tp_exact": 40,
+    "tp_pitch": 40,
+    "fp": 11,
+    "fn": 11
+   },
+   "pair_agree": {
+    "pitch_ok": 40,
+    "dur_ok": 40,
+    "staff_ok": 40,
+    "onset_ok": 28,
+    "onset_bad": 12
+   },
+   "fn_cls": {
+    "DUR": 4,
+    "MULTI:D+O": 6,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 4,
+    "MULTI:D+O": 7
+   },
+   "kind_conf": {
+    "tnote_pnote": 51
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 9,
+    "pred_in_beam": 15
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQVfcHg6kYh9bCGRsFZxASu117mL5zMq1RzVcoESmcStb": {
+   "sid": "QmQVfcHg6kYh9bCGRsFZxASu117mL5zMq1RzVcoESmcStb",
+   "match": {
+    "tp_exact": 35,
+    "tp_pitch": 35,
+    "fp": 9,
+    "fn": 9
+   },
+   "pair_agree": {
+    "pitch_ok": 35,
+    "dur_ok": 35,
+    "staff_ok": 35,
+    "onset_ok": 26,
+    "onset_bad": 9
+   },
+   "fn_cls": {
+    "MISSING/no-partner": 2,
+    "MULTI:D+O": 2,
+    "DUR": 2,
+    "MULTI:O+P": 1,
+    "PITCH": 1,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 2,
+    "MULTI:D+O": 2,
+    "DUR": 2,
+    "MULTI:O+P": 1,
+    "PITCH": 1,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 44,
+    "trest_prest": 1
+   },
+   "rest_miss": {
+    "MISSING": 1
+   },
+   "rest_extra": 1,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 5
+   },
+   "head_fire": {
+    "truth_beamed": 28,
+    "pred_in_beam": 33
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmZNbpHhhXm5AJBfecH3bKt4ZM7iEcB7gw4oKizGfTSW2T": {
+   "sid": "QmZNbpHhhXm5AJBfecH3bKt4ZM7iEcB7gw4oKizGfTSW2T",
+   "match": {
+    "tp_exact": 132,
+    "tp_pitch": 132,
+    "fp": 7,
+    "fn": 7
+   },
+   "pair_agree": {
+    "pitch_ok": 132,
+    "dur_ok": 132,
+    "staff_ok": 132,
+    "onset_ok": 129,
+    "onset_bad": 3
+   },
+   "fn_cls": {
+    "DUR": 4,
+    "PITCH": 2,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 4,
+    "PITCH": 2,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 139
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 20
+   },
+   "head_fire": {
+    "truth_beamed": 132,
+    "pred_in_beam": 136
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmU7jKoQCbrnfwDy4avGUMBJMhPPNXWMejVivX7BkURaLP": {
+   "sid": "QmU7jKoQCbrnfwDy4avGUMBJMhPPNXWMejVivX7BkURaLP",
+   "match": {
+    "tp_exact": 63,
+    "tp_pitch": 63,
+    "fp": 30,
+    "fn": 30
+   },
+   "pair_agree": {
+    "pitch_ok": 63,
+    "dur_ok": 63,
+    "staff_ok": 63,
+    "onset_ok": 54,
+    "onset_bad": 9
+   },
+   "fn_cls": {
+    "PITCH": 19,
+    "MULTI:O+P": 4,
+    "DUR": 6,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "PITCH": 19,
+    "MULTI:O+P": 3,
+    "DUR": 6,
+    "MULTI:D+O": 1,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 93
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 6
+   },
+   "head_fire": {
+    "truth_beamed": 52,
+    "pred_in_beam": 56
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmbL9PGbaMppKiinnANtR7pz1pTVfpi3NYuLvMztEkLfQD": {
+   "sid": "QmbL9PGbaMppKiinnANtR7pz1pTVfpi3NYuLvMztEkLfQD",
+   "match": {
+    "tp_exact": 498,
+    "tp_pitch": 505,
+    "fp": 1249,
+    "fn": 1228
+   },
+   "pair_agree": {
+    "pitch_ok": 505,
+    "dur_ok": 505,
+    "staff_ok": 498,
+    "onset_ok": 190,
+    "onset_bad": 315,
+    "staff_bad": 7
+   },
+   "fn_cls": {
+    "DUR": 74,
+    "MULTI:D+O": 65,
+    "MULTI:O+P": 200,
+    "MULTI:D+P": 145,
+    "MISSING/no-partner": 165,
+    "PITCH": 263,
+    "ONSET": 30,
+    "MULTI:P+V": 109,
+    "MULTI:O+V": 148,
+    "VOICE": 2,
+    "MULTI:D+V": 4,
+    "MULTI:S+V": 17,
+    "MULTI:": 4,
+    "MULTI:P+S": 2
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 236,
+    "DUR": 52,
+    "MULTI:D+O": 148,
+    "MULTI:O+P": 440,
+    "PITCH": 142,
+    "ONSET": 33,
+    "MULTI:D+P": 53,
+    "MULTI:O+V": 89,
+    "MULTI:P+V": 25,
+    "MULTI:S+V": 18,
+    "MULTI:P+S": 5,
+    "VOICE": 1,
+    "MULTI:D+V": 2,
+    "MULTI:": 2,
+    "MULTI:D+S": 3
+   },
+   "kind_conf": {
+    "trest_prest": 105,
+    "tnote_pnote": 1733,
+    "trest_pnote": 21
+   },
+   "rest_miss": {
+    "DUR": 35,
+    "MISSING": 59
+   },
+   "rest_extra": 85,
+   "chord_miss": {
+    "dur-split": 114,
+    "voice/staff-split": 121,
+    "onset-split": 33
+   },
+   "chord_pairs": {
+    "t": 520,
+    "p": 254,
+    "tp": 252
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 77
+   },
+   "head_fire": {
+    "truth_beamed": 1509,
+    "truth_tuplet": 106,
+    "truth_tied": 47,
+    "pred_in_beam": 1510,
+    "pred_tied": 32
+   },
+   "truth_ties_cross_measure": 4,
+   "flags_b": {
+    "unpaired_tie_start": 26,
+    "unpaired_tie_end": 10,
+    "octave_dir_unknown": 5,
+    "slur_omitted": 17,
+    "duplicate_rest_collapsed": 47
+   }
+  },
+  "QmWspVCQRNa3R9gipVTtUak3Cgv8UNWy4AY8nR5R9QFP38": {
+   "sid": "QmWspVCQRNa3R9gipVTtUak3Cgv8UNWy4AY8nR5R9QFP38",
+   "match": {
+    "tp_exact": 281,
+    "tp_pitch": 281,
+    "fp": 61,
+    "fn": 61
+   },
+   "pair_agree": {
+    "pitch_ok": 281,
+    "dur_ok": 281,
+    "staff_ok": 281,
+    "onset_ok": 231,
+    "onset_bad": 50
+   },
+   "fn_cls": {
+    "DUR": 15,
+    "PITCH": 34,
+    "MULTI:O+P": 1,
+    "ONSET": 6,
+    "MULTI:D+O": 4,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 18,
+    "PITCH": 34,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 5,
+    "ONSET": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 342
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 31
+   },
+   "head_fire": {
+    "truth_beamed": 336,
+    "truth_tied": 18,
+    "pred_in_beam": 338
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmchMAVSuF9AZip659NDLeVySEVbRs4jHHDAhus24APEhL": {
+   "sid": "QmchMAVSuF9AZip659NDLeVySEVbRs4jHHDAhus24APEhL",
+   "match": {
+    "tp_exact": 41,
+    "tp_pitch": 108,
+    "fp": 201,
+    "fn": 199
+   },
+   "pair_agree": {
+    "pitch_ok": 108,
+    "dur_ok": 108,
+    "staff_ok": 41,
+    "onset_ok": 11,
+    "staff_bad": 67,
+    "onset_bad": 97
+   },
+   "fn_cls": {
+    "MULTI:P+S": 37,
+    "MISSING/no-partner": 94,
+    "PITCH": 20,
+    "MULTI:O+P": 19,
+    "ONSET": 1,
+    "MULTI:O+V": 5,
+    "DUR": 3,
+    "MULTI:D+P": 12,
+    "MULTI:D+O": 4,
+    "MULTI:P+V": 3,
+    "VOICE": 1
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 100,
+    "MULTI:P+S": 18,
+    "PITCH": 20,
+    "MULTI:D+O": 7,
+    "DUR": 4,
+    "MULTI:O+P": 32,
+    "MULTI:O+V": 7,
+    "MULTI:D+P": 5,
+    "MULTI:P+V": 7,
+    "VOICE": 1
+   },
+   "kind_conf": {
+    "trest_pnote": 2,
+    "trest_prest": 13,
+    "tnote_pnote": 307
+   },
+   "rest_miss": {
+    "MISSING": 12,
+    "DUR": 3
+   },
+   "rest_extra": 13,
+   "chord_miss": {
+    "onset-split": 3,
+    "dur-split": 11
+   },
+   "chord_pairs": {
+    "t": 49,
+    "p": 35,
+    "tp": 35
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 16
+   },
+   "head_fire": {
+    "truth_beamed": 182,
+    "pred_in_beam": 206
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "octave_dir_unknown": 4
+   }
+  },
+  "Qmc1nvG6A6Qzciohp2TGYeSZ5e2Lb8DuVZNsyCAzVBir44": {
+   "sid": "Qmc1nvG6A6Qzciohp2TGYeSZ5e2Lb8DuVZNsyCAzVBir44",
+   "match": {
+    "tp_exact": 100,
+    "tp_pitch": 100,
+    "fp": 12,
+    "fn": 12
+   },
+   "pair_agree": {
+    "pitch_ok": 100,
+    "dur_ok": 100,
+    "staff_ok": 100,
+    "onset_ok": 79,
+    "onset_bad": 21
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:D+O": 6
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "MULTI:D+O": 6
+   },
+   "kind_conf": {
+    "tnote_pnote": 112
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {
+    "dur-split": 2
+   },
+   "chord_pairs": {
+    "t": 6,
+    "p": 4,
+    "tp": 4
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 9
+   },
+   "head_fire": {
+    "truth_beamed": 94,
+    "pred_in_beam": 99
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmP3bUMKS6hGmNAyTVQGWhUtaPcjPgPaJk8Fgk1oQxgLbR": {
+   "sid": "QmP3bUMKS6hGmNAyTVQGWhUtaPcjPgPaJk8Fgk1oQxgLbR",
+   "match": {
+    "tp_exact": 71,
+    "tp_pitch": 71,
+    "fp": 25,
+    "fn": 25
+   },
+   "pair_agree": {
+    "pitch_ok": 71,
+    "dur_ok": 71,
+    "staff_ok": 71,
+    "onset_ok": 52,
+    "onset_bad": 19
+   },
+   "fn_cls": {
+    "DUR": 16,
+    "MULTI:O+P": 3,
+    "ONSET": 2,
+    "PITCH": 1,
+    "MULTI:D+O": 3
+   },
+   "fp_cls": {
+    "DUR": 16,
+    "MULTI:D+O": 8,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 96
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 18,
+    "pred_in_beam": 26
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmSN6e8qeJfzsJoNY82go4jmGmB3ET5VNnwfGz8b9X9333": {
+   "sid": "QmSN6e8qeJfzsJoNY82go4jmGmB3ET5VNnwfGz8b9X9333",
+   "match": {
+    "tp_exact": 25,
+    "tp_pitch": 25,
+    "fp": 11,
+    "fn": 11
+   },
+   "pair_agree": {
+    "pitch_ok": 25,
+    "dur_ok": 25,
+    "staff_ok": 25,
+    "onset_ok": 22,
+    "onset_bad": 3
+   },
+   "fn_cls": {
+    "PITCH": 1,
+    "MISSING/no-partner": 3,
+    "DUR": 3,
+    "MULTI:D+O": 2,
+    "MULTI:D+P": 2
+   },
+   "fp_cls": {
+    "PITCH": 1,
+    "MULTI:D+S": 1,
+    "DUR": 3,
+    "MULTI:D+O": 2,
+    "MULTI:D+P": 2,
+    "EXTRA/no-partner": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 36,
+    "trest_prest": 1
+   },
+   "rest_miss": {
+    "DUR": 1
+   },
+   "rest_extra": 1,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "pred_in_beam": 2
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmYH2y3J5oZt3Wqc27THPak9M43voeCqBkMjWRf8eSsUab": {
+   "sid": "QmYH2y3J5oZt3Wqc27THPak9M43voeCqBkMjWRf8eSsUab",
+   "match": {
+    "tp_exact": 138,
+    "tp_pitch": 138,
+    "fp": 56,
+    "fn": 56
+   },
+   "pair_agree": {
+    "pitch_ok": 138,
+    "dur_ok": 138,
+    "staff_ok": 138,
+    "onset_ok": 99,
+    "onset_bad": 39
+   },
+   "fn_cls": {
+    "DUR": 14,
+    "MULTI:D+P": 2,
+    "PITCH": 13,
+    "MULTI:O+P": 12,
+    "MULTI:D+O": 11,
+    "ONSET": 4
+   },
+   "fp_cls": {
+    "DUR": 14,
+    "MULTI:O+P": 15,
+    "PITCH": 12,
+    "MULTI:D+P": 1,
+    "MULTI:D+O": 5,
+    "ONSET": 9
+   },
+   "kind_conf": {
+    "tnote_pnote": 194,
+    "trest_prest": 3
+   },
+   "rest_miss": {
+    "DUR": 2,
+    "MISSING": 1
+   },
+   "rest_extra": 3,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 33
+   },
+   "head_fire": {
+    "truth_beamed": 190,
+    "pred_in_beam": 190
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmV56qZQLE5pxowVBvz25stMFvmhgJjSXZMp7tDnwhSaHx": {
+   "sid": "QmV56qZQLE5pxowVBvz25stMFvmhgJjSXZMp7tDnwhSaHx",
+   "match": {
+    "tp_exact": 93,
+    "tp_pitch": 93,
+    "fp": 35,
+    "fn": 35
+   },
+   "pair_agree": {
+    "pitch_ok": 93,
+    "dur_ok": 93,
+    "staff_ok": 93,
+    "onset_bad": 31,
+    "onset_ok": 62
+   },
+   "fn_cls": {
+    "DUR": 10,
+    "MULTI:D+O": 9,
+    "PITCH": 7,
+    "MULTI:O+P": 5,
+    "MISSING/no-partner": 1,
+    "MULTI:D+P": 2,
+    "ONSET": 1
+   },
+   "fp_cls": {
+    "DUR": 9,
+    "MULTI:D+O": 8,
+    "PITCH": 7,
+    "MULTI:O+P": 9,
+    "MULTI:D+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 128
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {
+    "dur-split": 2
+   },
+   "chord_pairs": {
+    "t": 2,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 13
+   },
+   "head_fire": {
+    "truth_beamed": 115,
+    "pred_in_beam": 123
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmRHJdG53tyoJR2YUu7zb36gFGHnWrsyxzD3M9LDvDDS27": {
+   "sid": "QmRHJdG53tyoJR2YUu7zb36gFGHnWrsyxzD3M9LDvDDS27",
+   "match": {
+    "tp_exact": 706,
+    "tp_pitch": 714,
+    "fp": 3981,
+    "fn": 3977
+   },
+   "pair_agree": {
+    "pitch_ok": 714,
+    "dur_ok": 714,
+    "staff_ok": 706,
+    "onset_bad": 633,
+    "onset_ok": 81,
+    "staff_bad": 8
+   },
+   "fn_cls": {
+    "DUR": 40,
+    "PITCH": 1462,
+    "MULTI:D+O": 102,
+    "MULTI:O+P": 331,
+    "ONSET": 71,
+    "MULTI:D+P": 1425,
+    "MISSING/no-partner": 324,
+    "MULTI:S+V": 23,
+    "STAFF": 4,
+    "MULTI:": 47,
+    "MULTI:D+S": 4,
+    "VOICE": 5,
+    "MULTI:P+S": 97,
+    "MULTI:P+V": 40,
+    "MULTI:O+V": 1,
+    "MULTI:O+S": 1
+   },
+   "fp_cls": {
+    "DUR": 23,
+    "PITCH": 167,
+    "MULTI:O+P": 2301,
+    "MULTI:D+O": 269,
+    "ONSET": 268,
+    "STAFF": 5,
+    "MULTI:D+P": 73,
+    "EXTRA/no-partner": 786,
+    "MULTI:P+V": 22,
+    "MULTI:P+S": 12,
+    "MULTI:S+V": 6,
+    "MULTI:D+S": 2,
+    "MULTI:": 14,
+    "MULTI:O+V": 12,
+    "VOICE": 4,
+    "MULTI:O+S": 17
+   },
+   "kind_conf": {
+    "tnote_pnote": 4691,
+    "trest_prest": 77,
+    "trest_pnote": 4
+   },
+   "rest_miss": {
+    "DUR": 21,
+    "MISSING": 38
+   },
+   "rest_extra": 77,
+   "chord_miss": {
+    "voice/staff-split": 1007,
+    "onset-split": 903,
+    "dur-split": 668
+   },
+   "chord_pairs": {
+    "t": 4505,
+    "p": 1928,
+    "tp": 1927
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 158,
+    "rest-crossing": 4
+   },
+   "head_fire": {
+    "truth_beamed": 4337,
+    "truth_tuplet": 46,
+    "pred_in_beam": 4118,
+    "pred_tuplet": 2,
+    "pred_tied": 1
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1,
+    "tuplet_unresolved": 2,
+    "octave_dir_unknown": 32,
+    "duplicate_rest_collapsed": 1
+   }
+  },
+  "QmSWo8THqboMW298Fyvp3Z93oe9v8PsK4soYQSHFKWy2KD": {
+   "sid": "QmSWo8THqboMW298Fyvp3Z93oe9v8PsK4soYQSHFKWy2KD",
+   "match": {
+    "tp_exact": 64,
+    "tp_pitch": 64,
+    "fp": 12,
+    "fn": 12
+   },
+   "pair_agree": {
+    "pitch_ok": 64,
+    "dur_ok": 64,
+    "staff_ok": 64,
+    "onset_ok": 55,
+    "onset_bad": 9
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:O+P": 2,
+    "PITCH": 1,
+    "MULTI:D+O": 1,
+    "MULTI:D+P": 1,
+    "MISSING/no-partner": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "MULTI:O+P": 2,
+    "PITCH": 1,
+    "MULTI:D+O": 1,
+    "MULTI:D+P": 1,
+    "EXTRA/no-partner": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 76
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 5
+   },
+   "head_fire": {
+    "truth_beamed": 40,
+    "pred_in_beam": 45
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmX9FszKCRy6RF8Y7FLyzi1aQbrVZUaykhHMnqNZ7NB6wS": {
+   "sid": "QmX9FszKCRy6RF8Y7FLyzi1aQbrVZUaykhHMnqNZ7NB6wS",
+   "match": {
+    "tp_exact": 96,
+    "tp_pitch": 96,
+    "fp": 27,
+    "fn": 27
+   },
+   "pair_agree": {
+    "pitch_ok": 96,
+    "dur_ok": 96,
+    "staff_ok": 96,
+    "onset_ok": 72,
+    "onset_bad": 24
+   },
+   "fn_cls": {
+    "DUR": 12,
+    "MULTI:O+P": 5,
+    "MULTI:D+O": 4,
+    "PITCH": 4,
+    "MULTI:D+P": 2
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:O+P": 6,
+    "EXTRA/no-partner": 2,
+    "PITCH": 4,
+    "MULTI:D+O": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 123
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 120,
+    "pred_in_beam": 123
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQJkgNjM9UsXxSYuwbc9HVw9r1Jump5gCZs218qRTJfve": {
+   "sid": "QmQJkgNjM9UsXxSYuwbc9HVw9r1Jump5gCZs218qRTJfve",
+   "match": {
+    "tp_exact": 118,
+    "tp_pitch": 118,
+    "fp": 46,
+    "fn": 46
+   },
+   "pair_agree": {
+    "pitch_ok": 118,
+    "dur_ok": 118,
+    "staff_ok": 118,
+    "onset_ok": 74,
+    "onset_bad": 44
+   },
+   "fn_cls": {
+    "PITCH": 9,
+    "DUR": 11,
+    "MULTI:O+P": 10,
+    "MULTI:D+O": 9,
+    "MULTI:D+P": 3,
+    "MISSING/no-partner": 4
+   },
+   "fp_cls": {
+    "PITCH": 8,
+    "MULTI:D+O": 16,
+    "DUR": 9,
+    "MULTI:O+P": 9,
+    "EXTRA/no-partner": 1,
+    "MULTI:D+P": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 164
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 127,
+    "truth_tuplet": 6,
+    "pred_in_beam": 139
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "slur_omitted": 5
+   }
+  },
+  "QmcVEffE3y4fRU45rpNMHdWeHAoCUaE6ESriuRRTuEc1f8": {
+   "sid": "QmcVEffE3y4fRU45rpNMHdWeHAoCUaE6ESriuRRTuEc1f8",
+   "match": {
+    "tp_exact": 120,
+    "tp_pitch": 120,
+    "fp": 183,
+    "fn": 179
+   },
+   "pair_agree": {
+    "pitch_ok": 120,
+    "dur_ok": 120,
+    "staff_ok": 120,
+    "onset_ok": 42,
+    "onset_bad": 78
+   },
+   "fn_cls": {
+    "MULTI:P+S": 2,
+    "PITCH": 92,
+    "MULTI:D+O": 7,
+    "MULTI:P+V": 8,
+    "MISSING/no-partner": 7,
+    "MULTI:D+P": 45,
+    "DUR": 14,
+    "MULTI:O+P": 4
+   },
+   "fp_cls": {
+    "MULTI:P+S": 2,
+    "PITCH": 35,
+    "MULTI:O+P": 43,
+    "EXTRA/no-partner": 40,
+    "MULTI:D+O": 29,
+    "MULTI:D+P": 14,
+    "DUR": 14,
+    "MULTI:P+V": 2,
+    "VOICE": 1,
+    "ONSET": 3
+   },
+   "kind_conf": {
+    "trest_prest": 4,
+    "tnote_pnote": 299,
+    "trest_pnote": 4
+   },
+   "rest_miss": {
+    "DUR": 1,
+    "MISSING": 4
+   },
+   "rest_extra": 4,
+   "chord_miss": {
+    "dur-split": 66,
+    "voice/staff-split": 12,
+    "onset-split": 9
+   },
+   "chord_pairs": {
+    "t": 176,
+    "p": 92,
+    "tp": 89
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "pred_in_beam": 16
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "duplicate_rest_collapsed": 1
+   }
+  },
+  "QmSForMmU4cuGRR9WdTqRXnRQ3385dzhJkAixDA2XVLvPE": {
+   "sid": "QmSForMmU4cuGRR9WdTqRXnRQ3385dzhJkAixDA2XVLvPE",
+   "match": {
+    "tp_exact": 80,
+    "tp_pitch": 80,
+    "fp": 24,
+    "fn": 24
+   },
+   "pair_agree": {
+    "pitch_ok": 80,
+    "dur_ok": 80,
+    "staff_ok": 80,
+    "onset_ok": 59,
+    "onset_bad": 21
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 5,
+    "PITCH": 4,
+    "MULTI:": 2,
+    "MULTI:O+P": 2
+   },
+   "fp_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 5,
+    "PITCH": 4,
+    "MULTI:O+P": 2,
+    "MULTI:": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 104
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 102,
+    "pred_in_beam": 102
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmS6QdB5FL39pNZtjdshbGq2L1PU3PpTadXPCK2BjNGn5C": {
+   "sid": "QmS6QdB5FL39pNZtjdshbGq2L1PU3PpTadXPCK2BjNGn5C",
+   "match": {
+    "tp_exact": 60,
+    "tp_pitch": 60,
+    "fp": 10,
+    "fn": 10
+   },
+   "pair_agree": {
+    "pitch_ok": 60,
+    "dur_ok": 60,
+    "staff_ok": 60,
+    "onset_ok": 54,
+    "onset_bad": 6
+   },
+   "fn_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 2
+   },
+   "fp_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 70
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 30,
+    "pred_in_beam": 31
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmPid2HB3D5xJQneTmoNdzhUFhszcU1zfWF7PDHeqsxyNR": {
+   "sid": "QmPid2HB3D5xJQneTmoNdzhUFhszcU1zfWF7PDHeqsxyNR",
+   "match": {
+    "tp_exact": 132,
+    "tp_pitch": 132,
+    "fp": 16,
+    "fn": 16
+   },
+   "pair_agree": {
+    "pitch_ok": 132,
+    "dur_ok": 132,
+    "staff_ok": 132,
+    "onset_ok": 113,
+    "onset_bad": 19
+   },
+   "fn_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 4,
+    "PITCH": 3,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 3,
+    "PITCH": 3,
+    "MULTI:D+P": 1,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 148
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 17
+   },
+   "head_fire": {
+    "truth_beamed": 128,
+    "pred_in_beam": 138
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmb7h1ej1kuESt8pGVs4vMxY43fuUXgQ6iDyedCsN4gFeV": {
+   "sid": "Qmb7h1ej1kuESt8pGVs4vMxY43fuUXgQ6iDyedCsN4gFeV",
+   "match": {
+    "tp_exact": 102,
+    "tp_pitch": 102,
+    "fp": 22,
+    "fn": 22
+   },
+   "pair_agree": {
+    "pitch_ok": 102,
+    "dur_ok": 102,
+    "staff_ok": 102,
+    "onset_bad": 37,
+    "onset_ok": 65
+   },
+   "fn_cls": {
+    "MULTI:D+O": 9,
+    "DUR": 9,
+    "ONSET": 4
+   },
+   "fp_cls": {
+    "MULTI:D+O": 8,
+    "DUR": 9,
+    "ONSET": 4,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 124,
+    "trest_prest": 2
+   },
+   "rest_miss": {
+    "DUR": 2
+   },
+   "rest_extra": 2,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 111,
+    "truth_tuplet": 39,
+    "pred_in_beam": 121
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmR7tGVxSZSZiMkgueWHFF67bPYnvjadxDcwE5KTFeHYcX": {
+   "sid": "QmR7tGVxSZSZiMkgueWHFF67bPYnvjadxDcwE5KTFeHYcX",
+   "match": {
+    "tp_exact": 42,
+    "tp_pitch": 42,
+    "fp": 3,
+    "fn": 3
+   },
+   "pair_agree": {
+    "pitch_ok": 42,
+    "dur_ok": 42,
+    "staff_ok": 42,
+    "onset_ok": 38,
+    "onset_bad": 4
+   },
+   "fn_cls": {
+    "DUR": 3
+   },
+   "fp_cls": {
+    "DUR": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 45
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 3
+   },
+   "head_fire": {
+    "truth_tied": 8,
+    "truth_beamed": 18,
+    "pred_in_beam": 20
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmXS4UdqKYjvqmjyxh2pfAz7e3VgqNRWWukXCB3UYmqHnT": {
+   "sid": "QmXS4UdqKYjvqmjyxh2pfAz7e3VgqNRWWukXCB3UYmqHnT",
+   "match": {
+    "tp_exact": 87,
+    "tp_pitch": 87,
+    "fp": 15,
+    "fn": 15
+   },
+   "pair_agree": {
+    "pitch_ok": 87,
+    "dur_ok": 87,
+    "staff_ok": 87,
+    "onset_ok": 64,
+    "onset_bad": 23
+   },
+   "fn_cls": {
+    "DUR": 8,
+    "MULTI:D+P": 2,
+    "MULTI:D+O": 1,
+    "PITCH": 2,
+    "ONSET": 2
+   },
+   "fp_cls": {
+    "DUR": 10,
+    "MULTI:D+P": 2,
+    "MULTI:D+O": 1,
+    "PITCH": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 102
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 98,
+    "truth_tuplet": 6,
+    "pred_in_beam": 100
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmS2TF7BWBJAfHmpMV2rK7S8degtjAt8xxmDTrZVzij9Mg": {
+   "sid": "QmS2TF7BWBJAfHmpMV2rK7S8degtjAt8xxmDTrZVzij9Mg",
+   "match": {
+    "tp_exact": 152,
+    "tp_pitch": 152,
+    "fp": 28,
+    "fn": 28
+   },
+   "pair_agree": {
+    "pitch_ok": 152,
+    "dur_ok": 152,
+    "staff_ok": 152,
+    "onset_ok": 133,
+    "onset_bad": 19
+   },
+   "fn_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 8,
+    "MULTI:D+P": 1,
+    "PITCH": 2,
+    "ONSET": 2,
+    "MULTI:O+P": 3
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 11,
+    "PITCH": 2,
+    "ONSET": 2,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 180
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 23
+   },
+   "head_fire": {
+    "truth_beamed": 164,
+    "truth_tuplet": 12,
+    "pred_in_beam": 175
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmSbAAHrbxcZnCtVKfd1TgUWSih6NQ7CyCSW47zGm9RQuJ": {
+   "sid": "QmSbAAHrbxcZnCtVKfd1TgUWSih6NQ7CyCSW47zGm9RQuJ",
+   "match": {
+    "tp_exact": 40,
+    "tp_pitch": 40,
+    "fp": 16,
+    "fn": 16
+   },
+   "pair_agree": {
+    "pitch_ok": 40,
+    "dur_ok": 40,
+    "staff_ok": 40,
+    "onset_bad": 22,
+    "onset_ok": 18
+   },
+   "fn_cls": {
+    "MULTI:P+S": 3,
+    "MULTI:O+P": 8,
+    "PITCH": 2,
+    "DUR": 1,
+    "MISSING/no-partner": 1,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "MULTI:P+S": 3,
+    "MULTI:O+P": 8,
+    "PITCH": 2,
+    "DUR": 1,
+    "EXTRA/no-partner": 1,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "trest_prest": 16,
+    "tnote_pnote": 56
+   },
+   "rest_miss": {
+    "DUR": 14
+   },
+   "rest_extra": 14,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 24,
+    "pred_in_beam": 22
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmPyd6Gtnz14B8RJFJsL2VVUiHivd8xHZVu6SEHSDo1NH2": {
+   "sid": "QmPyd6Gtnz14B8RJFJsL2VVUiHivd8xHZVu6SEHSDo1NH2",
+   "match": {
+    "tp_exact": 175,
+    "tp_pitch": 175,
+    "fp": 2,
+    "fn": 2
+   },
+   "pair_agree": {
+    "pitch_ok": 175,
+    "dur_ok": 175,
+    "staff_ok": 175,
+    "onset_ok": 171,
+    "onset_bad": 4
+   },
+   "fn_cls": {
+    "DUR": 2
+   },
+   "fp_cls": {
+    "DUR": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 177
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 21
+   },
+   "head_fire": {
+    "truth_beamed": 162,
+    "pred_in_beam": 164
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmXp5XqmAJucBmdo8mFgCjvNFW8GdZx9nHqTn5nSjHWMKs": {
+   "sid": "QmXp5XqmAJucBmdo8mFgCjvNFW8GdZx9nHqTn5nSjHWMKs",
+   "match": {
+    "tp_exact": 160,
+    "tp_pitch": 160,
+    "fp": 17,
+    "fn": 17
+   },
+   "pair_agree": {
+    "pitch_ok": 160,
+    "dur_ok": 160,
+    "staff_ok": 160,
+    "onset_ok": 116,
+    "onset_bad": 44
+   },
+   "fn_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 1,
+    "PITCH": 1,
+    "ONSET": 3
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 1,
+    "PITCH": 1,
+    "ONSET": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 177
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 19
+   },
+   "head_fire": {
+    "truth_beamed": 176,
+    "pred_in_beam": 176
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmVveikbyECSsB97wM2zZBA53aydp5QFLGxUQ5cBQbdfnj": {
+   "sid": "QmVveikbyECSsB97wM2zZBA53aydp5QFLGxUQ5cBQbdfnj",
+   "match": {
+    "tp_exact": 57,
+    "tp_pitch": 57,
+    "fp": 5,
+    "fn": 5
+   },
+   "pair_agree": {
+    "pitch_ok": 57,
+    "dur_ok": 57,
+    "staff_ok": 57,
+    "onset_ok": 48,
+    "onset_bad": 9
+   },
+   "fn_cls": {
+    "DUR": 5
+   },
+   "fp_cls": {
+    "DUR": 5
+   },
+   "kind_conf": {
+    "tnote_pnote": 62
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 57,
+    "pred_in_beam": 61
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmZwpR84XSe9Vy61oo8cdJ7vaqP2JyM7LKmYLUyE7PhiHe": {
+   "sid": "QmZwpR84XSe9Vy61oo8cdJ7vaqP2JyM7LKmYLUyE7PhiHe",
+   "match": {
+    "tp_exact": 83,
+    "tp_pitch": 83,
+    "fp": 18,
+    "fn": 18
+   },
+   "pair_agree": {
+    "pitch_ok": 83,
+    "dur_ok": 83,
+    "staff_ok": 83,
+    "onset_ok": 56,
+    "onset_bad": 27
+   },
+   "fn_cls": {
+    "MULTI:O+P": 2,
+    "MULTI:D+P": 1,
+    "DUR": 12,
+    "MULTI:D+O": 2,
+    "PITCH": 1
+   },
+   "fp_cls": {
+    "MULTI:D+P": 1,
+    "MULTI:O+P": 2,
+    "DUR": 12,
+    "MULTI:D+O": 2,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 101
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 4
+   },
+   "head_fire": {
+    "truth_beamed": 72,
+    "pred_in_beam": 88
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmazZxNaXbVKhaMKU8tJmLWDZvymJSqX6MFnkd6hWMo6zw": {
+   "sid": "QmazZxNaXbVKhaMKU8tJmLWDZvymJSqX6MFnkd6hWMo6zw",
+   "match": {
+    "tp_exact": 151,
+    "tp_pitch": 223,
+    "fp": 639,
+    "fn": 636
+   },
+   "pair_agree": {
+    "pitch_ok": 223,
+    "dur_ok": 223,
+    "staff_ok": 151,
+    "onset_bad": 129,
+    "staff_bad": 72,
+    "onset_ok": 94
+   },
+   "fn_cls": {
+    "MULTI:O+P": 26,
+    "PITCH": 27,
+    "MULTI:P+S": 93,
+    "MISSING/no-partner": 381,
+    "DUR": 22,
+    "MULTI:D+P": 16,
+    "MULTI:D+O": 12,
+    "MULTI:P+V": 12,
+    "VOICE": 18,
+    "ONSET": 1,
+    "MULTI:O+V": 20,
+    "MULTI:D+V": 6,
+    "MULTI:S+V": 2
+   },
+   "fp_cls": {
+    "MULTI:O+P": 90,
+    "PITCH": 30,
+    "EXTRA/no-partner": 345,
+    "MULTI:P+V": 22,
+    "MULTI:D+P": 26,
+    "DUR": 22,
+    "MULTI:D+O": 31,
+    "MULTI:P+S": 18,
+    "VOICE": 18,
+    "ONSET": 4,
+    "MULTI:O+V": 23,
+    "MULTI:D+V": 6,
+    "MULTI:S+V": 3,
+    "MULTI:D+S": 1
+   },
+   "kind_conf": {
+    "trest_prest": 179,
+    "tnote_pnote": 859,
+    "trest_pnote": 3
+   },
+   "rest_miss": {
+    "MISSING": 127,
+    "DUR": 16
+   },
+   "rest_extra": 155,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 10,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "rest-crossing": 2,
+    "adjacent-merge": 44
+   },
+   "head_fire": {
+    "truth_beamed": 435,
+    "truth_tied": 227,
+    "pred_in_beam": 454,
+    "pred_tied": 30
+   },
+   "truth_ties_cross_measure": 138,
+   "flags_b": {
+    "unpaired_tie_start": 22,
+    "unpaired_tie_end": 7,
+    "duplicate_rest_collapsed": 53
+   }
+  },
+  "QmZj64ULsoLKCeyFcHFCnYni3fmyCzNXzqfCMCqkiKs4Vx": {
+   "sid": "QmZj64ULsoLKCeyFcHFCnYni3fmyCzNXzqfCMCqkiKs4Vx",
+   "match": {
+    "tp_exact": 396,
+    "tp_pitch": 396,
+    "fp": 39,
+    "fn": 39
+   },
+   "pair_agree": {
+    "pitch_ok": 396,
+    "dur_ok": 396,
+    "staff_ok": 396,
+    "onset_ok": 351,
+    "onset_bad": 45
+   },
+   "fn_cls": {
+    "DUR": 22,
+    "PITCH": 2,
+    "MULTI:D+O": 7,
+    "ONSET": 6,
+    "MULTI:O+P": 2
+   },
+   "fp_cls": {
+    "DUR": 22,
+    "PITCH": 2,
+    "MULTI:D+O": 2,
+    "MULTI:O+P": 8,
+    "ONSET": 5
+   },
+   "kind_conf": {
+    "tnote_pnote": 435
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 29
+   },
+   "head_fire": {
+    "truth_beamed": 358,
+    "pred_in_beam": 387,
+    "pred_tied": 1
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "unpaired_tie_start": 1,
+    "slur_omitted": 13
+   }
+  },
+  "QmQuc2i6FddvWJoBi6oTUD33vXMAoScELEpbKxG5bawx31": {
+   "sid": "QmQuc2i6FddvWJoBi6oTUD33vXMAoScELEpbKxG5bawx31",
+   "match": {
+    "tp_exact": 106,
+    "tp_pitch": 106,
+    "fp": 5,
+    "fn": 5
+   },
+   "pair_agree": {
+    "pitch_ok": 106,
+    "dur_ok": 106,
+    "staff_ok": 106,
+    "onset_ok": 72,
+    "onset_bad": 34
+   },
+   "fn_cls": {
+    "DUR": 5
+   },
+   "fp_cls": {
+    "DUR": 5
+   },
+   "kind_conf": {
+    "tnote_pnote": 111,
+    "trest_prest": 8
+   },
+   "rest_miss": {
+    "MISSING": 4,
+    "DUR": 4
+   },
+   "rest_extra": 8,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 94,
+    "pred_in_beam": 96
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmcJFdPPnMw2ZzHssJcfg1CdQ11xkhihWVhg6pKeyyoYoW": {
+   "sid": "QmcJFdPPnMw2ZzHssJcfg1CdQ11xkhihWVhg6pKeyyoYoW",
+   "match": {
+    "tp_exact": 106,
+    "tp_pitch": 106,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 106,
+    "dur_ok": 106,
+    "staff_ok": 106,
+    "onset_ok": 92,
+    "onset_bad": 14
+   },
+   "fn_cls": {
+    "DUR": 2,
+    "MULTI:O+P": 4,
+    "PITCH": 7,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 2,
+    "MULTI:O+P": 4,
+    "PITCH": 7,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 120
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 112,
+    "pred_in_beam": 113
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmaB7GePs7T9tkYGQA9bv3uQpWbsHQPWYhAytKS5951eLo": {
+   "sid": "QmaB7GePs7T9tkYGQA9bv3uQpWbsHQPWYhAytKS5951eLo",
+   "match": {
+    "tp_exact": 79,
+    "tp_pitch": 79,
+    "fp": 25,
+    "fn": 25
+   },
+   "pair_agree": {
+    "pitch_ok": 79,
+    "dur_ok": 79,
+    "staff_ok": 79,
+    "onset_bad": 11,
+    "onset_ok": 68
+   },
+   "fn_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 4,
+    "MISSING/no-partner": 2,
+    "MULTI:D+P": 4,
+    "MULTI:O+P": 4
+   },
+   "fp_cls": {
+    "DUR": 11,
+    "MULTI:D+O": 5,
+    "EXTRA/no-partner": 2,
+    "MULTI:D+P": 3,
+    "MULTI:O+P": 4
+   },
+   "kind_conf": {
+    "tnote_pnote": 104
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 6
+   },
+   "head_fire": {
+    "truth_beamed": 42,
+    "pred_in_beam": 45
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmWeZ2T511JMdrt5hZPv7ted9inof1RPJFNbr1pvfQMqqb": {
+   "sid": "QmWeZ2T511JMdrt5hZPv7ted9inof1RPJFNbr1pvfQMqqb",
+   "match": {
+    "tp_exact": 21,
+    "tp_pitch": 21,
+    "fp": 50,
+    "fn": 50
+   },
+   "pair_agree": {
+    "pitch_ok": 21,
+    "dur_ok": 21,
+    "staff_ok": 21,
+    "onset_ok": 11,
+    "onset_bad": 10
+   },
+   "fn_cls": {
+    "MULTI:D+P": 1,
+    "DUR": 9,
+    "PITCH": 27,
+    "MULTI:D+O": 2,
+    "MISSING/no-partner": 8,
+    "MULTI:O+P": 3
+   },
+   "fp_cls": {
+    "MULTI:D+P": 2,
+    "DUR": 9,
+    "PITCH": 27,
+    "MULTI:O+P": 10,
+    "EXTRA/no-partner": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 71,
+    "trest_prest": 1
+   },
+   "rest_miss": {
+    "MISSING": 1
+   },
+   "rest_extra": 1,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 46,
+    "pred_in_beam": 61
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmX6TtRPSzxovZ8GnxvaGM4jWWeTKLFyvbBQjJy1nCWZgy": {
+   "sid": "QmX6TtRPSzxovZ8GnxvaGM4jWWeTKLFyvbBQjJy1nCWZgy",
+   "match": {
+    "tp_exact": 230,
+    "tp_pitch": 230,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 230,
+    "dur_ok": 230,
+    "staff_ok": 230,
+    "onset_ok": 215,
+    "onset_bad": 15
+   },
+   "fn_cls": {
+    "DUR": 14
+   },
+   "fp_cls": {
+    "DUR": 14
+   },
+   "kind_conf": {
+    "tnote_pnote": 244,
+    "trest_prest": 12
+   },
+   "rest_miss": {
+    "DUR": 8,
+    "MISSING": 4
+   },
+   "rest_extra": 12,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 152,
+    "pred_in_beam": 164
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "Qmc9vqVjJ5Bb84fsJ1xk6KqjApT6cNArNrvjtYMQ5stbaD": {
+   "sid": "Qmc9vqVjJ5Bb84fsJ1xk6KqjApT6cNArNrvjtYMQ5stbaD",
+   "match": {
+    "tp_exact": 115,
+    "tp_pitch": 115,
+    "fp": 9,
+    "fn": 9
+   },
+   "pair_agree": {
+    "pitch_ok": 115,
+    "dur_ok": 115,
+    "staff_ok": 115,
+    "onset_ok": 84,
+    "onset_bad": 31
+   },
+   "fn_cls": {
+    "DUR": 8,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 8,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 124
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 17
+   },
+   "head_fire": {
+    "truth_beamed": 118,
+    "pred_in_beam": 122
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmVaJefsYFWiqfjSPLrgBU3WGjQ43bMKBRa9M1sRJNmf17": {
+   "sid": "QmVaJefsYFWiqfjSPLrgBU3WGjQ43bMKBRa9M1sRJNmf17",
+   "match": {
+    "tp_exact": 39,
+    "tp_pitch": 39,
+    "fp": 16,
+    "fn": 16
+   },
+   "pair_agree": {
+    "pitch_ok": 39,
+    "dur_ok": 39,
+    "staff_ok": 39,
+    "onset_ok": 21,
+    "onset_bad": 18
+   },
+   "fn_cls": {
+    "DUR": 9,
+    "MULTI:O+P": 3,
+    "MULTI:D+P": 2,
+    "MULTI:D+O": 2
+   },
+   "fp_cls": {
+    "DUR": 9,
+    "MULTI:D+P": 2,
+    "MULTI:O+P": 5
+   },
+   "kind_conf": {
+    "tnote_pnote": 55
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 5
+   },
+   "head_fire": {
+    "truth_beamed": 48,
+    "pred_in_beam": 52
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmbyBT4gWrFKJgFcBEhxV2U9mnrCYrPJrkXzo9bcJvfK8t": {
+   "sid": "QmbyBT4gWrFKJgFcBEhxV2U9mnrCYrPJrkXzo9bcJvfK8t",
+   "match": {
+    "tp_exact": 129,
+    "tp_pitch": 141,
+    "fp": 58,
+    "fn": 58
+   },
+   "pair_agree": {
+    "pitch_ok": 141,
+    "dur_ok": 141,
+    "staff_ok": 129,
+    "onset_ok": 92,
+    "onset_bad": 49,
+    "staff_bad": 12
+   },
+   "fn_cls": {
+    "DUR": 22,
+    "MISSING/no-partner": 15,
+    "MULTI:D+O": 5,
+    "MULTI:D+P": 2,
+    "PITCH": 4,
+    "MULTI:D+S": 2,
+    "MULTI:S+V": 7,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 22,
+    "EXTRA/no-partner": 16,
+    "MULTI:D+O": 3,
+    "MULTI:D+P": 3,
+    "PITCH": 4,
+    "MULTI:D+S": 2,
+    "MULTI:S+V": 7,
+    "MULTI:O+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 199,
+    "trest_prest": 15
+   },
+   "rest_miss": {
+    "DUR": 7,
+    "MISSING": 8
+   },
+   "rest_extra": 15,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 20
+   },
+   "head_fire": {
+    "truth_beamed": 110,
+    "truth_tuplet": 9,
+    "truth_tied": 4,
+    "pred_in_beam": 115,
+    "pred_tied": 6
+   },
+   "truth_ties_cross_measure": 2,
+   "flags_b": {
+    "unpaired_tie_start": 6,
+    "unpaired_tie_end": 2
+   }
+  },
+  "QmRFVvgxqgxqpkwuTjPHTkZPE8MKiMyF9roUmjBFVrfNJb": {
+   "sid": "QmRFVvgxqgxqpkwuTjPHTkZPE8MKiMyF9roUmjBFVrfNJb",
+   "match": {
+    "tp_exact": 29,
+    "tp_pitch": 29,
+    "fp": 139,
+    "fn": 139
+   },
+   "pair_agree": {
+    "pitch_ok": 29,
+    "dur_ok": 29,
+    "staff_ok": 29,
+    "onset_bad": 23,
+    "onset_ok": 6
+   },
+   "fn_cls": {
+    "MULTI:O+V": 31,
+    "MULTI:P+V": 38,
+    "DUR": 7,
+    "PITCH": 2,
+    "MULTI:D+V": 5,
+    "VOICE": 3,
+    "MISSING/no-partner": 50,
+    "MULTI:O+P": 2,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "MULTI:O+V": 29,
+    "MULTI:P+V": 19,
+    "EXTRA/no-partner": 64,
+    "DUR": 7,
+    "MULTI:O+P": 8,
+    "MULTI:D+O": 3,
+    "VOICE": 2,
+    "PITCH": 2,
+    "MULTI:D+V": 4,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 168,
+    "trest_prest": 20
+   },
+   "rest_miss": {
+    "MISSING": 14,
+    "DUR": 2
+   },
+   "rest_extra": 17,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 6
+   },
+   "head_fire": {
+    "truth_beamed": 88,
+    "pred_in_beam": 89
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "duplicate_rest_collapsed": 6
+   }
+  },
+  "Qmc4SYgkg2d7sVBqRhhDW1UY9ehPu4FqusTyzLnViRMp12": {
+   "sid": "Qmc4SYgkg2d7sVBqRhhDW1UY9ehPu4FqusTyzLnViRMp12",
+   "match": {
+    "tp_exact": 50,
+    "tp_pitch": 50,
+    "fp": 4,
+    "fn": 4
+   },
+   "pair_agree": {
+    "pitch_ok": 50,
+    "dur_ok": 50,
+    "staff_ok": 50,
+    "onset_ok": 50
+   },
+   "fn_cls": {
+    "DUR": 4
+   },
+   "fp_cls": {
+    "DUR": 4
+   },
+   "kind_conf": {
+    "tnote_pnote": 54
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 8
+   },
+   "head_fire": {
+    "truth_beamed": 44,
+    "pred_in_beam": 50
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmQCLxjaTT22CvePFoYjttTArMyU3W2tySVyBFkas9jKxf": {
+   "sid": "QmQCLxjaTT22CvePFoYjttTArMyU3W2tySVyBFkas9jKxf",
+   "match": {
+    "tp_exact": 92,
+    "tp_pitch": 92,
+    "fp": 26,
+    "fn": 26
+   },
+   "pair_agree": {
+    "pitch_ok": 92,
+    "dur_ok": 92,
+    "staff_ok": 92,
+    "onset_ok": 61,
+    "onset_bad": 31
+   },
+   "fn_cls": {
+    "DUR": 12,
+    "MULTI:O+P": 6,
+    "MULTI:D+O": 4,
+    "MISSING/no-partner": 1,
+    "PITCH": 2,
+    "ONSET": 1
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 6,
+    "MULTI:O+P": 4,
+    "EXTRA/no-partner": 2,
+    "PITCH": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 118
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 7
+   },
+   "head_fire": {
+    "truth_beamed": 94,
+    "pred_in_beam": 102
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {
+    "slur_omitted": 2
+   }
+  },
+  "QmdzBBomyYvY4QZLyCLAu48dEYJpZqcfbLkzB7n4vnnRUS": {
+   "sid": "QmdzBBomyYvY4QZLyCLAu48dEYJpZqcfbLkzB7n4vnnRUS",
+   "match": {
+    "tp_exact": 122,
+    "tp_pitch": 122,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 122,
+    "dur_ok": 122,
+    "staff_ok": 122,
+    "onset_ok": 114,
+    "onset_bad": 8
+   },
+   "fn_cls": {
+    "DUR": 10,
+    "PITCH": 4
+   },
+   "fp_cls": {
+    "DUR": 10,
+    "PITCH": 4
+   },
+   "kind_conf": {
+    "tnote_pnote": 136
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 9
+   },
+   "head_fire": {
+    "truth_beamed": 116,
+    "pred_in_beam": 122
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmSs6Q3r3vfseuB32boAR9drdzyvofEcETmndnCQZiVC5U": {
+   "sid": "QmSs6Q3r3vfseuB32boAR9drdzyvofEcETmndnCQZiVC5U",
+   "match": {
+    "tp_exact": 22,
+    "tp_pitch": 22,
+    "fp": 12,
+    "fn": 12
+   },
+   "pair_agree": {
+    "pitch_ok": 22,
+    "dur_ok": 22,
+    "staff_ok": 22,
+    "onset_ok": 18,
+    "onset_bad": 4
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:D+P": 1,
+    "MULTI:O+P": 2,
+    "PITCH": 2,
+    "MULTI:D+O": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "MULTI:D+P": 1,
+    "MULTI:O+P": 1,
+    "PITCH": 2,
+    "MULTI:D+O": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 34
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 6,
+    "pred_in_beam": 9
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmaAkCzezRk6n7admUc469yWta8dSudHSchVDqFo9SDKpf": {
+   "sid": "QmaAkCzezRk6n7admUc469yWta8dSudHSchVDqFo9SDKpf",
+   "match": {
+    "tp_exact": 93,
+    "tp_pitch": 93,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 93,
+    "dur_ok": 93,
+    "staff_ok": 93,
+    "onset_ok": 73,
+    "onset_bad": 20
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "PITCH": 5,
+    "MULTI:D+O": 2,
+    "MULTI:D+P": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "PITCH": 5,
+    "MULTI:D+O": 2,
+    "MULTI:D+P": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 107
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 9
+   },
+   "head_fire": {
+    "truth_beamed": 82,
+    "pred_in_beam": 91
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmUXWMpkoB87uoivesNq32nbJ1hph2vSEgNazJAXHJbdfZ": {
+   "sid": "QmUXWMpkoB87uoivesNq32nbJ1hph2vSEgNazJAXHJbdfZ",
+   "match": {
+    "tp_exact": 104,
+    "tp_pitch": 104,
+    "fp": 17,
+    "fn": 17
+   },
+   "pair_agree": {
+    "pitch_ok": 104,
+    "dur_ok": 104,
+    "staff_ok": 104,
+    "onset_ok": 80,
+    "onset_bad": 24
+   },
+   "fn_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 6,
+    "MULTI:D+P": 2,
+    "PITCH": 1
+   },
+   "fp_cls": {
+    "DUR": 8,
+    "MULTI:D+O": 8,
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 121
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 14
+   },
+   "head_fire": {
+    "truth_beamed": 111,
+    "truth_tuplet": 9,
+    "pred_in_beam": 115
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmekQpe7kbPytWRcocSMdS15jRbUwVefYfaAU5YJPjqgs7": {
+   "sid": "QmekQpe7kbPytWRcocSMdS15jRbUwVefYfaAU5YJPjqgs7",
+   "match": {
+    "tp_exact": 407,
+    "tp_pitch": 413,
+    "fp": 991,
+    "fn": 974
+   },
+   "pair_agree": {
+    "pitch_ok": 413,
+    "dur_ok": 413,
+    "staff_ok": 407,
+    "onset_bad": 310,
+    "onset_ok": 103,
+    "staff_bad": 6
+   },
+   "fn_cls": {
+    "MISSING/no-partner": 173,
+    "MULTI:P+S": 10,
+    "MULTI:D+P": 186,
+    "MULTI:D+O": 179,
+    "MULTI:O+P": 155,
+    "PITCH": 164,
+    "DUR": 49,
+    "MULTI:P+V": 24,
+    "ONSET": 31,
+    "MULTI:D+S": 1,
+    "MULTI:": 2
+   },
+   "fp_cls": {
+    "EXTRA/no-partner": 189,
+    "MULTI:P+S": 17,
+    "MULTI:D+P": 45,
+    "MULTI:D+O": 213,
+    "PITCH": 88,
+    "MULTI:O+P": 331,
+    "DUR": 42,
+    "ONSET": 46,
+    "MULTI:P+V": 10,
+    "MULTI:O+V": 1,
+    "MULTI:D+V": 3,
+    "MULTI:D+S": 3,
+    "MULTI:O+S": 1,
+    "STAFF": 1,
+    "MULTI:": 1
+   },
+   "kind_conf": {
+    "trest_prest": 100,
+    "trest_pnote": 17,
+    "tnote_pnote": 1387
+   },
+   "rest_miss": {
+    "MISSING": 68,
+    "DUR": 45
+   },
+   "rest_extra": 99,
+   "chord_miss": {
+    "dur-split": 67,
+    "voice/staff-split": 25,
+    "onset-split": 36
+   },
+   "chord_pairs": {
+    "t": 334,
+    "p": 206,
+    "tp": 206
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 43
+   },
+   "head_fire": {
+    "truth_tied": 230,
+    "truth_beamed": 778,
+    "pred_in_beam": 659,
+    "pred_tied": 174
+   },
+   "truth_ties_cross_measure": 220,
+   "flags_b": {
+    "unpaired_tie_start": 143,
+    "unpaired_tie_end": 78,
+    "octave_dir_unknown": 3,
+    "slur_omitted": 8,
+    "duplicate_rest_collapsed": 4
+   }
+  },
+  "QmSuDFJvo4UMB3ZsU7LHKLFsGnN7EtnWCqc3KB4DMQ1YjJ": {
+   "sid": "QmSuDFJvo4UMB3ZsU7LHKLFsGnN7EtnWCqc3KB4DMQ1YjJ",
+   "match": {
+    "tp_exact": 39,
+    "tp_pitch": 39,
+    "fp": 10,
+    "fn": 10
+   },
+   "pair_agree": {
+    "pitch_ok": 39,
+    "dur_ok": 39,
+    "staff_ok": 39,
+    "onset_ok": 38,
+    "onset_bad": 1
+   },
+   "fn_cls": {
+    "PITCH": 6,
+    "MULTI:D+P": 2,
+    "DUR": 2
+   },
+   "fp_cls": {
+    "PITCH": 6,
+    "MULTI:D+P": 2,
+    "DUR": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 49
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_tied": 6
+   },
+   "truth_ties_cross_measure": 6,
+   "flags_b": {}
+  },
+  "QmNhLi8799xSMY9SdjY96iswSDmZp8FYuWLpfDBENL4eEP": {
+   "sid": "QmNhLi8799xSMY9SdjY96iswSDmZp8FYuWLpfDBENL4eEP",
+   "match": {
+    "tp_exact": 120,
+    "tp_pitch": 120,
+    "fp": 21,
+    "fn": 21
+   },
+   "pair_agree": {
+    "pitch_ok": 120,
+    "dur_ok": 120,
+    "staff_ok": 120,
+    "onset_ok": 109,
+    "onset_bad": 11
+   },
+   "fn_cls": {
+    "DUR": 4,
+    "ONSET": 2,
+    "MULTI:O+P": 4,
+    "MULTI:D+O": 2,
+    "PITCH": 9
+   },
+   "fp_cls": {
+    "DUR": 4,
+    "ONSET": 2,
+    "MULTI:D+O": 4,
+    "MULTI:D+P": 2,
+    "PITCH": 9
+   },
+   "kind_conf": {
+    "tnote_pnote": 141
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 20
+   },
+   "head_fire": {
+    "truth_beamed": 134,
+    "pred_in_beam": 136
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmVUBPZcKnkv2PaJwEWhmiNsFYWoDbKv2nAsSKwpEoyGK7": {
+   "sid": "QmVUBPZcKnkv2PaJwEWhmiNsFYWoDbKv2nAsSKwpEoyGK7",
+   "match": {
+    "tp_exact": 41,
+    "tp_pitch": 41,
+    "fp": 18,
+    "fn": 18
+   },
+   "pair_agree": {
+    "pitch_ok": 41,
+    "dur_ok": 41,
+    "staff_ok": 41,
+    "onset_bad": 13,
+    "onset_ok": 28
+   },
+   "fn_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 6
+   },
+   "fp_cls": {
+    "DUR": 12,
+    "MULTI:D+O": 6
+   },
+   "kind_conf": {
+    "tnote_pnote": 59
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 18,
+    "pred_in_beam": 27
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmSzbyBacUYnkxPHpuDZha8Ejb3mNP7UGAfMQVAySM92Mo": {
+   "sid": "QmSzbyBacUYnkxPHpuDZha8Ejb3mNP7UGAfMQVAySM92Mo",
+   "match": {
+    "tp_exact": 59,
+    "tp_pitch": 59,
+    "fp": 14,
+    "fn": 14
+   },
+   "pair_agree": {
+    "pitch_ok": 59,
+    "dur_ok": 59,
+    "staff_ok": 59,
+    "onset_ok": 34,
+    "onset_bad": 25
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:D+O": 5,
+    "PITCH": 2,
+    "MULTI:O+P": 1
+   },
+   "fp_cls": {
+    "DUR": 6,
+    "PITCH": 2,
+    "MULTI:O+P": 3,
+    "MULTI:D+O": 3
+   },
+   "kind_conf": {
+    "tnote_pnote": 73
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {},
+   "head_fire": {
+    "truth_beamed": 8,
+    "pred_in_beam": 10
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmUjy6CUFiGGMsDu6HM75WnZofy3y3VFGRc119w1PsqJgW": {
+   "sid": "QmUjy6CUFiGGMsDu6HM75WnZofy3y3VFGRc119w1PsqJgW",
+   "match": {
+    "tp_exact": 104,
+    "tp_pitch": 104,
+    "fp": 34,
+    "fn": 34
+   },
+   "pair_agree": {
+    "pitch_ok": 104,
+    "dur_ok": 104,
+    "staff_ok": 104,
+    "onset_ok": 61,
+    "onset_bad": 43
+   },
+   "fn_cls": {
+    "DUR": 16,
+    "MULTI:D+O": 14,
+    "ONSET": 2,
+    "MULTI:O+P": 2
+   },
+   "fp_cls": {
+    "DUR": 17,
+    "MULTI:D+O": 14,
+    "ONSET": 1,
+    "MULTI:O+P": 2
+   },
+   "kind_conf": {
+    "tnote_pnote": 138
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 15
+   },
+   "head_fire": {
+    "truth_beamed": 114,
+    "truth_tuplet": 12,
+    "pred_in_beam": 126
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmdWoXNzwAttPaQHJVcGxj16PCmgtYhE8f1JKbxAwcteqw": {
+   "sid": "QmdWoXNzwAttPaQHJVcGxj16PCmgtYhE8f1JKbxAwcteqw",
+   "match": {
+    "tp_exact": 62,
+    "tp_pitch": 62,
+    "fp": 159,
+    "fn": 159
+   },
+   "pair_agree": {
+    "pitch_ok": 62,
+    "dur_ok": 62,
+    "staff_ok": 62,
+    "onset_bad": 53,
+    "onset_ok": 9
+   },
+   "fn_cls": {
+    "DUR": 6,
+    "MULTI:O+P": 53,
+    "MULTI:D+O": 25,
+    "PITCH": 35,
+    "MULTI:D+P": 12,
+    "ONSET": 25,
+    "MISSING/no-partner": 2,
+    "MULTI:": 1
+   },
+   "fp_cls": {
+    "DUR": 3,
+    "MULTI:O+P": 63,
+    "PITCH": 20,
+    "MULTI:D+O": 29,
+    "ONSET": 43,
+    "MULTI:": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 221
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 12
+   },
+   "head_fire": {
+    "truth_beamed": 209,
+    "truth_tuplet": 9,
+    "pred_in_beam": 215
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmZC68y4AVw99Ce3QBiHhqrQCnF1jTi4v2uvW1H7Ffnpo9": {
+   "sid": "QmZC68y4AVw99Ce3QBiHhqrQCnF1jTi4v2uvW1H7Ffnpo9",
+   "match": {
+    "tp_exact": 9,
+    "tp_pitch": 10,
+    "fp": 246,
+    "fn": 246
+   },
+   "pair_agree": {
+    "pitch_ok": 10,
+    "dur_ok": 10,
+    "staff_ok": 9,
+    "onset_bad": 10,
+    "staff_bad": 1
+   },
+   "fn_cls": {
+    "MULTI:D+P": 68,
+    "MULTI:O+P": 110,
+    "PITCH": 27,
+    "MISSING/no-partner": 38,
+    "MULTI:P+V": 1,
+    "VOICE": 1,
+    "MULTI:P+S": 1
+   },
+   "fp_cls": {
+    "MULTI:D+P": 90,
+    "PITCH": 27,
+    "MULTI:O+P": 12,
+    "EXTRA/no-partner": 103,
+    "MULTI:P+V": 5,
+    "MULTI:S+V": 4,
+    "VOICE": 1,
+    "MULTI:P+S": 4
+   },
+   "kind_conf": {
+    "tnote_pnote": 256
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 28
+   },
+   "head_fire": {
+    "truth_beamed": 256,
+    "pred_in_beam": 204
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  },
+  "QmPSigFFfDMW6fYt6dXrG7BazhwkLEEPmCVMd4uo8oBqNB": {
+   "sid": "QmPSigFFfDMW6fYt6dXrG7BazhwkLEEPmCVMd4uo8oBqNB",
+   "match": {
+    "tp_exact": 22,
+    "tp_pitch": 22,
+    "fp": 1,
+    "fn": 1
+   },
+   "pair_agree": {
+    "pitch_ok": 22,
+    "dur_ok": 22,
+    "staff_ok": 22,
+    "onset_ok": 22
+   },
+   "fn_cls": {
+    "PITCH": 1
+   },
+   "fp_cls": {
+    "PITCH": 1
+   },
+   "kind_conf": {
+    "tnote_pnote": 23
+   },
+   "rest_miss": {},
+   "rest_extra": 0,
+   "chord_miss": {},
+   "chord_pairs": {
+    "t": 0,
+    "p": 0,
+    "tp": 0
+   },
+   "beam_overmerge": {
+    "adjacent-merge": 2
+   },
+   "head_fire": {
+    "truth_beamed": 18,
+    "pred_in_beam": 20
+   },
+   "truth_ties_cross_measure": 0,
+   "flags_b": {}
+  }
+ },
+ "fn_cls": {
+  "DUR": 993,
+  "MULTI:D+O": 784,
+  "MISSING/no-partner": 1945,
+  "MULTI:O+P": 1392,
+  "MULTI:D+P": 2188,
+  "MULTI:P+V": 311,
+  "MULTI:O+V": 257,
+  "PITCH": 2991,
+  "ONSET": 234,
+  "MULTI:": 61,
+  "MULTI:P+S": 282,
+  "VOICE": 33,
+  "MULTI:O+S": 3,
+  "MULTI:D+S": 10,
+  "MULTI:S+V": 65,
+  "MULTI:D+V": 15,
+  "STAFF": 4
+ },
+ "fp_cls": {
+  "DUR": 936,
+  "MULTI:D+O": 1206,
+  "MULTI:O+P": 3948,
+  "EXTRA/no-partner": 2737,
+  "MULTI:D+P": 429,
+  "MULTI:O+V": 195,
+  "PITCH": 1244,
+  "ONSET": 480,
+  "MULTI:P+V": 210,
+  "MULTI:P+S": 97,
+  "MULTI:": 25,
+  "VOICE": 31,
+  "MULTI:S+V": 41,
+  "MULTI:O+S": 19,
+  "MULTI:D+S": 16,
+  "MULTI:D+V": 15,
+  "STAFF": 6
+ },
+ "pair_agree": {
+  "pitch_ok": 10731,
+  "dur_ok": 10731,
+  "staff_ok": 10533,
+  "onset_ok": 7013,
+  "onset_bad": 3718,
+  "staff_bad": 198
+ },
+ "kind_conf": {
+  "tnote_pnote": 22299,
+  "trest_pnote": 67,
+  "trest_prest": 631
+ },
+ "rest_miss": {
+  "MISSING": 395,
+  "DUR": 181
+ },
+ "chord_miss": {
+  "dur-split": 1021,
+  "onset-split": 1021,
+  "voice/staff-split": 1242
+ },
+ "beam_overmerge": {
+  "adjacent-merge": 1371,
+  "rest-crossing": 6
+ },
+ "head_fire": {
+  "truth_beamed": 16649,
+  "truth_tied": 608,
+  "pred_in_beam": 16982,
+  "pred_tied": 263,
+  "truth_tuplet": 433,
+  "pred_tuplet": 2
+ },
+ "truth_ties_cross_measure": 396,
+ "rest_extra": 575,
+ "ppq_bad": []
+}

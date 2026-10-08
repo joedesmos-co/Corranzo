@@ -109,3 +109,123 @@ accuracy plus the documented voice/layer and flag-coverage limits.
    is unknown and expected poor without adaptation.
 5. Sealed TEST discipline held throughout: scored 99 ⊆ PDMX DEV, ∩ TEST = ∅;
    OLiMPiC TEST 1493 never opened.
+
+---
+
+# Accuracy rescue pass (P1–P12 autonomous mission)
+
+No retraining. No TEST access. No merge. DEV identities fixed (same 99 sids).
+Leakage re-verified: stage B uses `voice_source=context` (model only);
+`decode_score`/`to_musicxml` never read `*_truth` fields.
+New evidence: `reports/audit_prefix.json` (before),
+`reports/audit_postfix.json` + `reports/recon_dev99_postfix.json` (after),
+`reports/audit_common_voice.json` (P5 control).
+New code: `scripts/audit_errors.py` (decode-only classifier),
+`data/decoded/*.preds.json` (99 frozen prediction caches).
+
+## P1 failure audit (stage B, 99 DEV scores; 11,568 fn / 11,635 fp)
+
+| rank | category | count | origin | fixable w/o retrain? |
+|---|---|---|---|---|
+| 1 | wrong pitch (pure + in MULTI) | 2991 + 2188 D+P + 1392 O+P | visual (pitch head 0.665) | NO |
+| 2 | onset cascade (matched pairs w/ bad onset 3718/10731; pure ONSET 234) | ~4500 notes affected | visual dur errors → accumulation | NO (decoder cannot invent time) |
+| 3 | missing/extra, no partner (severe cascade; kind head is perfect: 22299/22299 notes kind-correct) | 1945 + 2737 | visual | NO |
+| 4 | chord splits: voice/staff 1242, dur 1021, onset 1021 pairs | 3284 pairs | visual splits | PARTIAL (dur/onset via x-snap: fixed 861) |
+| 5 | beam adjacent-merge (1371 groups; rest-crossing only 6) | 1371 groups | decoder (no boundary evidence) | NO → needs beam-boundary head |
+| 6 | cross-measure ties broken (396 truth spans; decoder chained per-measure) | 396 | decoder bug | YES → fixed (77 paired in B) |
+| 7 | rests: misplaced 395 + extra 575; right-place-wrong-dur 181; voice never sole cause | 1151 | visual (onset cascade + rest dur) | NO |
+| 8 | tuplet flag dead (pred 2 vs truth 433 notes) | 615 pairs | visual (flag never fires) | NO → preregistered (P9) |
+| 9 | pure voice/staff substitutions | 37 | visual (context probe good) | n/a (negligible) |
+
+## P2 rest rescue: investigated, no decoder fix justified
+
+Rest kind recognition is good (631/698 rest items kind-correct; only 67 typed
+as notes; zero notes typed as rests). Rest failure is placement/duration:
+onset cascade from note dur errors (MISSING 395) + weak rest-dur predictions
+(DUR 181). Voice is never the sole rest error. No decoder change can reposition
+rests without inventing time (explicitly banned); duplicate-collapse and
+meter-synthesis from the prior mission stand. Rest exact stays 2/578.
+
+## Decoder changes (bounded, before→after on frozen DEV)
+
+- **F1 cross-measure tie chaining** (was per-measure; broke all 396 truth
+  cross-measure spans by construction). Pairing still requires both visual
+  flags, so nothing is fabricated; within-measure pairings provably preserved
+  (measure-ordered scan). Result: 77 cross-measure ties paired in stage B;
+  serialized tie starts 20→52, stops 20→48; music21 still 99/99.
+- **F2 chord onset snap by notehead-x coincidence** (dropped the
+  same-predicted-duration requirement; members keep own durations).
+  Chord recall 0.472→0.611 (+861 pairs), precision 0.992→0.988 (−21 fp pairs).
+  Miss cause after: voice/staff-split 1242 (unfixable in decoder: different
+  lanes), onset-split 960 (non-adjacent interleave), dur-split 221.
+- **P8 input-quality rejection path**: `build_inputs` now records skipped
+  objects (`no_bbox` / `degenerate_crop` / `blank_crop` std<1.0) into
+  `.preds.json`; decode flags OOV drops (`pred_oov_note_dropped`).
+  DEV result: **0 skipped, 0 OOV drops** — guard validated as no-op on
+  readable renders, active for unreadable inputs. Nothing is hallucinated.
+- Beam rest-crossing split NOT implemented (only 6/1377 over-merges; risk
+  without measurable gain). Adjacent-merge needs a beam-boundary head.
+
+## Before → after (frozen DEV99)
+
+| metric | before | after |
+|---|---|---|
+| note exact / pitch / fp / fn | 10533 / 10731 / 11635 / 11568 | identical (matcher is onset/grouping-insensitive by design) |
+| chord P / R | 0.992 / 0.472 | 0.988 / **0.611** |
+| beam P / R | 0.276 / 0.759 | unchanged |
+| tuplet P / R | 0 / 0 | unchanged (dead flag) |
+| rest exact | 2/578 | unchanged |
+| timing-valid slots | 948/3334 | 948/3334 |
+| music21 parse / ties out | 99/99, 20+20 | 99/99, **52+48** |
+| stage A (decoder oracle) | 22299/22299, rests 456/578 | identical (no oracle-path change) |
+
+## P5 context verdict
+
+Context voice 10533 exact vs common-voice control 10225 (+308, +2.9%
+relative). Context helps overall — keep `voice_source=context` default.
+Voice is the least-broken head (33 pure substitutions); the 0.807 ceiling
+binds through chord splits (1242 pairs) and rest lanes, not substitutions.
+
+## P7 rare-notation classification (TRAIN corpus scan, 792 scores + code)
+
+| gap | class | evidence |
+|---|---|---|
+| glissandi (1 TRAIN link) | TRAINING DATA + MODEL-unevaluable | events scan; 0 dev positives (probe report) |
+| turns/mordents (45), trills (177) | TRAINING DATA sparse | events scan; decoder omits by design (flagged) |
+| breaths | SOURCE/PARSER (no `v1_events` handling; SVG class exists) | code grep |
+| measure numbers | RENDER/IDENTITY (SVG-only, no symbolic join) | code grep |
+| endings/voltas (242 in TRAIN truth) | MODEL RECOGNITION (no head) → DECODER-blocked | scan + serializer omits by design |
+| nested tuplets (0 in TRAIN) | TRAINING DATA + UNSUPPORTED | scan |
+| cue notes (36 TRAIN, 0 dev) | TRAINING DATA + DECODER omission (flagged) | scan + flags |
+| rit./tempo/dir text (406+372), harm 2096, dynamics | MODEL RECOGNITION (no heads) → DECODER-blocked | scan + serializer omits by design |
+| scoop/doit/fall, single-tremolo | UNSUPPORTED SOURCE (quarantined at parse) | probe report |
+| arpeggios (505 notes in truth) | MODEL-unevaluable + DECODER omission | scan + probe + serializer |
+
+No TRAIN-only fix is justified: serializing text/endings/dynamics without
+predicted signals would inject truth (leakage). Preregistered focused
+experiments (P9): (E1) beam-boundary head (`beam_start/end`) on TRAIN spans;
+(E2) tuplet_member rare-class uplift (433 TRAIN notes, uniform loss, DEV
+tuplet-pair recall as gate). Neither launched (needs training evidence run).
+
+## P8 scan domain
+
+t10 diagnostic stands (reproduced bit-identically last mission). No new
+scan diagnostic run. Bounded addition: unreadable-input rejection path (above).
+No claim of scanned-PDF recognition: zero evaluated scan transcriptions.
+
+## Bottom line
+
+Playable-score reconstruction is now bounded by probe accuracy, precisely
+located: pitch substitutions (~5.5k fn involving pitch), onset cascade from
+dur errors (~4.5k), chord voice-splits, dead tuplet flag, missing
+beam-boundary flag. Decoder-side losses that were fixable without retraining
+are fixed (ties across barlines, dur-split chords) with zero regressions.
+Joint-exact 47.2% is unchanged numerically (matcher-insensitive dimensions
+improved: chords +13.9pp recall, ties +32 starts) — the number moves only
+with better visual predictions. **Further training is justified iff scoped to
+E1/E2 + pitch/dur head uplifts; another full 792-score campaign with the same
+recipe is NOT justified by these results.**
+
+Recommended next step: run preregistered E1 (beam-boundary head) as a small
+TRAIN-only head-addition experiment with DEV pairwise-beam-precision gate;
+if it fails, E2 (tuplet uplift). Both are bounded and falsifiable.

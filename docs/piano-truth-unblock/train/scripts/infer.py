@@ -76,12 +76,21 @@ def load_models(device="cpu"):
 
 def build_inputs(sid, evs, meta, img_cache):
     """Replicates v1_adapter preprocessing exactly. Returns dict of arrays
-    aligned with `items` = [(event_index, kind)] for note/rest objects."""
-    items, crops, strips, geos = [], [], [], []
+    aligned with `items` = [(event_index, kind)] for note/rest objects, plus
+    a `skipped` list of (event_index, kind, mei_id, reason) for objects that
+    could not be imaged. Skipped objects are REJECTED (never hallucinated):
+    downstream stages must account for them, not invent content for them.
+    Blank-crop rule: a 64x64 uint8 crop with std < 1.0 is essentially uniform
+    (no staff lines, no glyph) and therefore unreadable. Real crops always
+    contain staff lines within the 3-gap margin, so this has no effect on
+    readable renders (verified: zero occurrences on DEV)."""
+    items, crops, strips, geos, skipped = [], [], [], [], []
     for j, e in enumerate(evs):
         if e["kind"] not in ("note", "rest", "mRest", "multiRest"):
             continue
         if not e.get("bbox"):
+            skipped.append({"event": j, "kind": e["kind"], "mei_id": e["id"],
+                            "reason": "no_bbox"})
             continue
         pg = int(e["bbox"]["page"])
         key = (sid, pg)
@@ -105,9 +114,15 @@ def build_inputs(sid, evs, meta, img_cache):
         ix0, iy0 = max(0, x0), max(0, y0)
         ix1, iy1 = min(img.shape[1], x0 + 2 * half), min(img.shape[0], y0 + 2 * half)
         if ix1 <= ix0 or iy1 <= iy0:
+            skipped.append({"event": j, "kind": e["kind"], "mei_id": e["id"],
+                            "reason": "degenerate_crop"})
             continue
         crop[iy0 - y0:iy0 - y0 + (iy1 - iy0), ix0 - x0:ix0 - x0 + (ix1 - ix0)] = img[iy0:iy1, ix0:ix1]
         crop = cv2.resize(crop, (CROP, CROP), interpolation=cv2.INTER_AREA)
+        if float(crop.std()) < 1.0:
+            skipped.append({"event": j, "kind": e["kind"], "mei_id": e["id"],
+                            "reason": "blank_crop"})
+            continue
         sh = int(round(STRIP_GAPS * gap * sx))
         sy0, sy1 = int(round(cy - sh / 2)), int(round(cy + sh / 2))
         band = np.full((max(1, min(img.shape[0], sy1) - max(0, sy0)), img.shape[1]), 255, np.uint8)
@@ -128,18 +143,18 @@ def build_inputs(sid, evs, meta, img_cache):
                       "measure_index": e.get("measure_index"),
                       "staff_truth": e.get("staff"), "voice_truth": e.get("voice")})
     if not items:
-        return items, None, None, None
+        return items, None, None, None, skipped
     X = np.stack(crops).astype(np.uint8)
     S = np.stack(strips).astype(np.uint8)
     G = np.array(geos, np.float32)
-    return items, X, S, G
+    return items, X, S, G, skipped
 
 
 def predict_score(models, sid, evs, meta, img_cache, batch=1024):
-    """Run all three probes; return per-item combined argmax predictions."""
-    items, X, S, G = build_inputs(sid, evs, meta, img_cache)
+    """Run all three probes; return (items, combined argmax predictions, skipped)."""
+    items, X, S, G, skipped = build_inputs(sid, evs, meta, img_cache)
     if not items:
-        return items, {}
+        return items, {}, skipped
     Xt = torch.from_numpy(X[:, None]).float() / 255
     St = torch.from_numpy(S[:, None]).float() / 255
     Gt = torch.from_numpy(G)
@@ -172,7 +187,7 @@ def predict_score(models, sid, evs, meta, img_cache, batch=1024):
         p["voice_id_common"] = voc["voice"][p["voice_common"]] if 0 <= p["voice_common"] < len(voc["voice"]) else None
         p["acc_cls"] = ["none", "f", "ff", "n", "s", "ss"][p["acc"]] if 0 <= p["acc"] < 6 else None
         pred[i] = p
-    return items, pred
+    return items, pred, skipped
 
 
 def main():
@@ -189,9 +204,9 @@ def main():
     for n, sid in enumerate(sids):
         evs = json.load(gzip.open(EVENTS / f"{sid}.events.json.gz", "rt"))["events"]
         meta = json.loads((RENDER / sid / "meta.json").read_text())
-        items, pred = predict_score(models, sid, evs, meta, img_cache)
+        items, pred, skipped = predict_score(models, sid, evs, meta, img_cache)
         (outdir / f"{sid}.preds.json").write_text(json.dumps(
-            {"sid": sid, "items": items,
+            {"sid": sid, "items": items, "skipped": skipped,
              "pred": {str(k): v for k, v in pred.items()}}))
         if (n + 1) % 20 == 0:
             print(f"[infer] {n+1}/{len(sids)}", flush=True)

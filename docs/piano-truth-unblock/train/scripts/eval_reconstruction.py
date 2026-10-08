@@ -255,7 +255,7 @@ def main(args):
         cev = json.load(gzip.open(EVENTS / f"{sid}.events.json.gz", "rt"))
         cevents = cev["events"]
         meta = json.loads((RENDER / sid / "meta.json").read_text())
-        items, pred_b = predict_score(models, sid, cevents, meta, img_cache)
+        items, pred_b, skipped_b = predict_score(models, sid, cevents, meta, img_cache)
         structure = build_structure(sid)
         pred_a = preds_from_truth(sid, items, voc, cevents)
         dec_b = decode_score(sid, items, pred_b, structure, voice_source=args.voice_source)
@@ -263,6 +263,9 @@ def main(args):
         xml_b, _ = serialize(dec_b, structure)
         xml_a, _ = serialize(dec_a, structure)
         rec = {"n_items": len(items), "n_pred_notes": len(dec_b["notes"]),
+               "n_skipped": len(skipped_b),
+               "skipped_reasons": dict(__import__("collections").Counter(
+                   s.get("reason", "?") for s in skipped_b)),
                "flags_b": dec_b["flags"], "stages": {}}
         # truth note/rests sequences with quarter onsets
         ppq = ppq_per_quarter(cevents)

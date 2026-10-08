@@ -13,6 +13,7 @@ trained — stated, not silently skipped), D = decoded playable score
 """
 from __future__ import annotations
 import json
+from collections import defaultdict
 from fractions import Fraction
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -103,6 +104,9 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
         is_note = bool(p["kind"] == 1)
         dur_sym = p["dur_sym"]
         if dur_sym is None and is_note:
+            # model emitted no usable duration class: drop loudly, never invent
+            flags["pred_oov_note_dropped"] = \
+                flags.get("pred_oov_note_dropped", 0) + 1
             continue
         if dur_sym is None and not is_note:
             # dur-less rest whose meter length has no single-symbol form
@@ -124,6 +128,8 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
         prefix, ndots = (m.group(1), int(m.group(2))) if m else (None, 0)
         mtype = DURCLASS_TYPE.get(prefix)
         if mtype not in TYPE_Q:
+            flags["pred_oov_note_dropped" if is_note else "pred_oov_rest_dropped"] = \
+                flags.get("pred_oov_note_dropped" if is_note else "pred_oov_rest_dropped", 0) + 1
             continue
         q = TYPE_Q[mtype] * (2 - Fraction(1, 2 ** ndots)) if ndots else TYPE_Q[mtype]
         voice = p["voice_id"] if voice_source == "context" else p["voice_id_common"]
@@ -188,9 +194,19 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
                 prev_lane, prev_rank = e, _rank
                 continue
             if (prev is not None and e.get("midi") is not None and prev.get("midi") is not None
-                    and e["midi"] != prev["midi"] and e["dur_q"] == prev["dur_q"]
+                    and e["midi"] != prev["midi"]
                     and e.get("notehead_x") is not None and prev.get("notehead_x") is not None
                     and abs(e["notehead_x"] - prev["notehead_x"]) <= 0.5 * structure["gap_svg"]):
+                # Chord by visual x-coincidence. Members share the root onset
+                # even when predicted durations differ (dur-split chords: the
+                # audit shows 2042 missed truth pairs split by dur/onset with
+                # coincident heads). Each member keeps its own duration for
+                # advancement of subsequent onsets; only the onset is snapped.
+                # Same-duration fast path is subsumed (no separate condition).
+                e["onset_q"] = prev["onset_q"]
+                if e["dur_q"] != prev["dur_q"]:
+                    flags["chord_dur_mismatch"] = \
+                        flags.get("chord_dur_mismatch", 0) + 1
                 e["onset_q"] = prev["onset_q"]
                 if prev.get("chord_id") is None:
                     gid += 1
@@ -233,16 +249,29 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
         _seen_rest.add(_rk)
         _kept_rests.append(r)
     rests = _kept_rests
-    # ties: chain start->next end of same pitch within (staff, voice), ordered by onset
+    # ties: chain start->next end of same pitch within (staff, voice),
+    # ACROSS measure boundaries (truth ties routinely span barlines; chaining
+    # per-measure broke all of them). Ordered by (measure_index, onset).
+    # Pairing still requires both visual flags (tie_end + an open tie_start
+    # of the same pitch), so no tie is fabricated from pitch repetition alone.
+    _sv = defaultdict(list)
     for key, lst in by_msv.items():
-        seq = sorted([x for x in lst if x.get("midi") is not None],
-                     key=lambda e: (e["onset_q"], e["midi"]))
+        for e in lst:
+            if e.get("midi") is not None:
+                _sv[(key[1], key[2])].append(e)
+    for key, lst in _sv.items():
+        seq = sorted(lst, key=lambda e: (e["measure_index"]
+                                         if e["measure_index"] is not None else 10 ** 9,
+                                         e["onset_q"], e["midi"]))
         open_tie = {}
         for e in seq:
             if e.get("tie_end") and e["midi"] in open_tie:
                 s = open_tie.pop(e["midi"])
                 s.setdefault("tie_to", []).append(e["mei_id"])
                 e.setdefault("tie_from", []).append(s["mei_id"])
+                if s["measure_index"] != e["measure_index"]:
+                    flags["tie_cross_measure"] = \
+                        flags.get("tie_cross_measure", 0) + 1
             elif e.get("tie_end"):
                 flags["unpaired_tie_end"] += 1
             if e.get("tie_start"):
