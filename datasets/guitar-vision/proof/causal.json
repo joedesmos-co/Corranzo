@@ -1,0 +1,17 @@
+{
+ "blank_family_accuracy": 0.848093543467209,
+ "wrongcrop_family_accuracy": 0.7344178952719878,
+ "wrongcrop_fret_accuracy": 0.16483516483516483,
+ "majority_family": {
+  "label": "note",
+  "accuracy": 0.848093543467209
+ },
+ "majority_duration": {
+  "label": "eighth",
+  "accuracy": 0.42257244534824606
+ },
+ "majority_voice": {
+  "label": 1,
+  "accuracy": 0.6670055922724962
+ }
+}

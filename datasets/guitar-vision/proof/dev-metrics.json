@@ -1,0 +1,190 @@
+{
+ "overall": {
+  "family": 0.993695983731571,
+  "midi": 0.29873022944976607,
+  "duration": 0.4391611528540989,
+  "dots": 0.9671414152741954,
+  "voice": 0.794575230296827,
+  "string": 0.4301412872841444,
+  "fret": 0.9089481946624803,
+  "tech": 0.9928825622775801
+ },
+ "byTier": {
+  "family": {
+   "controlled-original": {
+    "accuracy": 1.0,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.9936207428747813,
+    "support": 9719
+   }
+  },
+  "midi": {
+   "controlled-original": {
+    "accuracy": 0.19827586206896552,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.30004513653802756,
+    "support": 8862
+   }
+  },
+  "duration": {
+   "controlled-original": {
+    "accuracy": 0.7241379310344828,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.4354050676059539,
+    "support": 8801
+   }
+  },
+  "dots": {
+   "controlled-original": {
+    "accuracy": 1.0,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.9667083285990229,
+    "support": 8801
+   }
+  },
+  "voice": {
+   "controlled-original": {
+    "accuracy": 0.9310344827586207,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.7929355707478766,
+    "support": 9654
+   }
+  },
+  "string": {
+   "controlled-original": {
+    "accuracy": 0.4230769230769231,
+    "support": 26
+   },
+   "real": {
+    "accuracy": 0.43044189852700493,
+    "support": 611
+   }
+  },
+  "fret": {
+   "controlled-original": {
+    "accuracy": 0.8846153846153846,
+    "support": 26
+   },
+   "real": {
+    "accuracy": 0.9099836333878887,
+    "support": 611
+   }
+  },
+  "tech": {
+   "controlled-original": {
+    "accuracy": 0.7155172413793104,
+    "support": 116
+   },
+   "real": {
+    "accuracy": 0.9961930239736598,
+    "support": 9719
+   }
+  }
+ },
+ "byFamily": {
+  "family": {
+   "note": {
+    "accuracy": 0.9971226471646085,
+    "support": 8341
+   },
+   "rest": {
+    "accuracy": 0.9568261376896149,
+    "support": 857
+   },
+   "tabdigit": {
+    "accuracy": 0.9984301412872841,
+    "support": 637
+   }
+  },
+  "midi": {
+   "note": {
+    "accuracy": 0.29924469488070976,
+    "support": 8341
+   },
+   "tabdigit": {
+    "accuracy": 0.29199372056514916,
+    "support": 637
+   }
+  },
+  "duration": {
+   "note": {
+    "accuracy": 0.4578502415458937,
+    "support": 8280
+   },
+   "tabdigit": {
+    "accuracy": 0.19623233908948196,
+    "support": 637
+   }
+  },
+  "dots": {
+   "note": {
+    "accuracy": 0.9834541062801933,
+    "support": 8280
+   },
+   "tabdigit": {
+    "accuracy": 0.7551020408163265,
+    "support": 637
+   }
+  },
+  "voice": {
+   "note": {
+    "accuracy": 0.813768115942029,
+    "support": 8280
+   },
+   "rest": {
+    "accuracy": 0.6787807737397421,
+    "support": 853
+   },
+   "tabdigit": {
+    "accuracy": 0.7001569858712716,
+    "support": 637
+   }
+  },
+  "string": {
+   "tabdigit": {
+    "accuracy": 0.4301412872841444,
+    "support": 637
+   }
+  },
+  "fret": {
+   "tabdigit": {
+    "accuracy": 0.9089481946624803,
+    "support": 637
+   }
+  },
+  "tech": {
+   "note": {
+    "accuracy": 0.9919673900011989,
+    "support": 8341
+   },
+   "rest": {
+    "accuracy": 1.0,
+    "support": 857
+   },
+   "tabdigit": {
+    "accuracy": 0.9952904238618524,
+    "support": 637
+   }
+  }
+ },
+ "support": {
+  "family": 9835,
+  "midi": 8978,
+  "duration": 8917,
+  "dots": 8917,
+  "voice": 9770,
+  "string": 637,
+  "fret": 637,
+  "tech": 9835
+ }
+}
