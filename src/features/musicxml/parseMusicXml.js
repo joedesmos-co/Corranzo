@@ -253,6 +253,34 @@ function getWorkTitle(scoreNode) {
 }
 
 /**
+ * Work title, creators and rights statements, verbatim.
+ * Dataset licensing gates cite these as per-file evidence; an absent rights
+ * statement is itself a signal (unclear licensing quarantines).
+ */
+function readAttribution(scoreNode) {
+  const identification = findChild(scoreNode, 'identification')
+  const creators = identification
+    ? findChildren(identification, 'creator').map((node) => ({
+      type: attr(node, 'type') ?? null,
+      name: String(textOf(node) ?? '').trim(),
+    })).filter((c) => c.name)
+    : []
+  const rights = identification
+    ? findChildren(identification, 'rights')
+      .map((node) => String(textOf(node) ?? '').trim())
+      .filter(Boolean)
+    : []
+  const encoding = identification ? findChild(identification, 'encoding') : null
+  const software = encoding ? childText(encoding, 'software') : null
+  return {
+    workTitle: getWorkTitle(scoreNode),
+    creators,
+    rights,
+    ...(software ? { encodingSoftware: String(software) } : {}),
+  }
+}
+
+/**
  * Walk one part's measures in document order.
  * Primary part defines measure boundaries, tempo map, and time signatures.
  * Secondary parts contribute notes only, with their own divisions/attributes.
@@ -780,11 +808,12 @@ function readClefDeclarations(attributesNode, clefsByStaff) {
   }
 }
 
-/** <staff-details> (line count + string tuning) keyed by staff number. */
+/** <staff-details> (line count + string tuning + structured capo) keyed by staff number. */
 function readStaffDetails(attributesNode, staffDetailsByStaff) {
   for (const detailsNode of findChildren(attributesNode, 'staff-details')) {
     const staffNumber = numberOf(attr(detailsNode, 'number'), 1)
     const staffLines = numberOf(childText(detailsNode, 'staff-lines'), NaN)
+    const capoFret = numberOf(childText(detailsNode, 'capo'), NaN)
     const tunings = findChildren(detailsNode, 'staff-tuning')
       .map((tuningNode) => {
         const line = numberOf(attr(tuningNode, 'line'), NaN)
@@ -804,6 +833,11 @@ function readStaffDetails(attributesNode, staffDetailsByStaff) {
     const existing = staffDetailsByStaff.get(staffNumber) ?? { staff: staffNumber }
     if (Number.isFinite(staffLines) && staffLines > 0) {
       existing.staffLines = staffLines
+    }
+    // Structured capo (MusicXML staff-details/capo): fret number, 0 = no capo.
+    // This outranks text-mined capo directions, which keep a confidence tag.
+    if (Number.isFinite(capoFret) && capoFret >= 0) {
+      existing.capoFret = Math.round(capoFret)
     }
     if (tunings.length > 0) {
       // staff-tuning line 1 = bottom line = lowest string; string numbering is
@@ -1386,6 +1420,10 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml', options = 
     }
   }
 
+  // Attribution and license evidence (D2): work title, creators, rights.
+  // Recorded verbatim so dataset manifests can cite per-file evidence.
+  const attribution = readAttribution(score)
+
   const tempoEvents = []
   const timeSignatureEvents = []
   const keySignatureEvents = []
@@ -1679,17 +1717,30 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml', options = 
     suggestedInstrumentId: hasTabStaff || partNameSuggestsGuitar ? 'guitar' : null,
   }
 
-  // First capo declaration wins for pitch math; every mark is retained with
-  // its source text so text-mined confidence never masquerades as structure.
+  // First capo declaration wins for pitch math; structured staff-details
+  // capo outranks text-mined directions. Every mark retains source text or
+  // structured provenance so confidence never masquerades as structure.
+  const structuredCapo = (() => {
+    for (const info of partNotationById.values()) {
+      for (const details of info.staffDetails.values()) {
+        if (Number.isInteger(details.capoFret) && details.capoFret > 0) {
+          return { fret: details.capoFret, staff: details.staff ?? null, confidence: 'structured' }
+        }
+      }
+    }
+    return null
+  })()
   const capoMark = scoreMarks.find((mark) => mark.kind === 'capo')
-  const capo = capoMark
-    ? { fret: capoMark.fret, partial: capoMark.partial ?? false, sourceText: capoMark.sourceText, confidence: capoMark.confidence, measureNumber: capoMark.measureNumber, quarterTime: capoMark.quarterTime }
-    : null
+  const capo = structuredCapo
+    ?? (capoMark
+      ? { fret: capoMark.fret, partial: capoMark.partial ?? false, sourceText: capoMark.sourceText, confidence: capoMark.confidence, measureNumber: capoMark.measureNumber, quarterTime: capoMark.quarterTime }
+      : null)
 
   return {
     version: 2,
     fileName,
     title: getWorkTitle(score),
+    attribution,
     notation,
     capo,
     durationSeconds,

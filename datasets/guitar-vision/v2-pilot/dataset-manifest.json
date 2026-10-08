@@ -1,0 +1,1018 @@
+{
+ "version": "guitar-dataset-v2-pilot/1.0",
+ "generatedAt": "2026-10-08T00:35:08.952Z",
+ "scale": {
+  "tabDigits": 28,
+  "tabDigitMin": 252.72,
+  "tabDigitMax": 252.72,
+  "noteheads": 5615,
+  "noteheadMin": 142.56,
+  "noteheadMax": 560.88,
+  "units": "verovio-page-units"
+ },
+ "candidates": 19,
+ "pass": 17,
+ "passReal": 12,
+ "quarantined": [
+  {
+   "id": "guitar-bach-prelude-bwv999",
+   "status": "QUARANTINED:playability",
+   "reason": "84 errors over 509 sounded events (rate 16.5% > 5%)"
+  },
+  {
+   "id": "guitar-aguado-a-minor-study",
+   "status": "QUARANTINED:playability",
+   "reason": "32 errors over 235 sounded events (rate 13.6% > 5%)"
+  }
+ ],
+ "classification": {
+  "standard-only": 11,
+  "paired": 1
+ },
+ "splits": {
+  "seed": 20261007,
+  "digest": "58c31f9f5c392619f059515f3f2fbdf303567da9d3e7b831f8fe7f647f77fea9",
+  "ratios": {
+   "train": 6,
+   "validation": 3,
+   "heldout": 2,
+   "diagnostic": 1
+  },
+  "audit": {
+   "ok": false,
+   "violations": [
+    {
+     "rule": "validation-role-empty",
+     "detail": "validation has no \"risk\" collection; temperature fitting or risk reporting would silently reuse selection data"
+    }
+   ]
+  },
+  "sufficiency": {
+   "totalCollections": 6,
+   "labelableCollections": 6,
+   "minimumCollections": 6,
+   "validationRolesPresent": 2,
+   "validationRolesRequired": 3,
+   "shortages": [
+    {
+     "split": "validation",
+     "have": 2,
+     "needed": 3,
+     "shortBy": 1
+    }
+   ],
+   "sufficient": false
+  },
+  "assignments": [
+   {
+    "sample": "guitar-aguado-allegro-g",
+    "collection": "solo:guitar-aguado-allegro-g",
+    "split": "validation",
+    "role": "selection"
+   },
+   {
+    "sample": "guitar-aguado-favorites-1",
+    "collection": "solo:guitar-aguado-favorites-1",
+    "split": "diagnostic",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-1",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-2",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-3",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-4",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-5",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-aguado-op03-6",
+    "collection": "aguado-petites-pieces-op3",
+    "split": "train",
+    "role": null
+   },
+   {
+    "sample": "guitar-bach-menuet-bwv1006a",
+    "collection": "bach-lute-suite",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "guitar-bach-prelude-bwv997",
+    "collection": "bach-lute-suite",
+    "split": "validation",
+    "role": "temperature"
+   },
+   {
+    "sample": "guitar-ode-to-joy",
+    "collection": "ode-to-joy",
+    "split": "heldout",
+    "role": null
+   },
+   {
+    "sample": "guitar-spanish-romance",
+    "collection": "solo:guitar-spanish-romance",
+    "split": "train",
+    "role": null
+   }
+  ]
+ },
+ "duplicates": [
+  {
+   "digest": "506e5baf6560f536",
+   "owners": [
+    "guitar-paired-chords-vector",
+    "guitar-paired-scan"
+   ]
+  }
+ ],
+ "coverage": {
+  "accidental": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "chord": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "dots": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "duration-16th": {
+   "scores": 10,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "duration-32nd": {
+   "scores": 6,
+   "scoreIds": [
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6"
+   ],
+   "splits": [
+    "train"
+   ]
+  },
+  "duration-eighth": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "duration-quarter": {
+   "scores": 12,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-ode-to-joy",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ]
+  },
+  "key-signature": {
+   "scores": 12,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-ode-to-joy",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "heldout",
+    "train",
+    "validation"
+   ]
+  },
+  "multi-voice-rhythm": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "rest": {
+   "scores": 11,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "tie": {
+   "scores": 8,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-favorites-1",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "tuplet": {
+   "scores": 8,
+   "scoreIds": [
+    "guitar-aguado-allegro-g",
+    "guitar-aguado-op03-1",
+    "guitar-aguado-op03-2",
+    "guitar-aguado-op03-3",
+    "guitar-aguado-op03-4",
+    "guitar-aguado-op03-5",
+    "guitar-aguado-op03-6",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "train",
+    "validation"
+   ]
+  },
+  "duration-half": {
+   "scores": 4,
+   "scoreIds": [
+    "guitar-aguado-favorites-1",
+    "guitar-bach-menuet-bwv1006a",
+    "guitar-bach-prelude-bwv997",
+    "guitar-spanish-romance"
+   ],
+   "splits": [
+    "diagnostic",
+    "train",
+    "validation"
+   ]
+  },
+  "fret-number": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ]
+  },
+  "standard-tab-pairing": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ]
+  },
+  "string-number": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-ode-to-joy"
+   ],
+   "splits": [
+    "heldout"
+   ]
+  },
+  "double-dots": {
+   "scores": 1,
+   "scoreIds": [
+    "guitar-aguado-allegro-g"
+   ],
+   "splits": [
+    "validation"
+   ]
+  }
+ },
+ "dataGaps": [
+  {
+   "family": "bend-amount",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "pre-bend",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "bend-release",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "slide",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "hammer-on",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "pull-off",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "natural-harmonic",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "artificial-harmonic",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "tapping",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "palm-mute",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "let-ring",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "dead-note",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "ghost-note",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "vibrato",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "tremolo-picking",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "arpeggio",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "alternate-tuning",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "tuning",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "capo",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "left-hand-fingering",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "chord-diagram",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "repeat",
+   "tier": "COMMON",
+   "scores": 0,
+   "required": 8
+  },
+  {
+   "family": "ending",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "segno",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "coda",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "ds-dc-navigation",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "grace-note",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  },
+  {
+   "family": "cue-note",
+   "tier": "RARE",
+   "scores": 0,
+   "required": 1
+  },
+  {
+   "family": "chord-symbol",
+   "tier": "UNCOMMON",
+   "scores": 0,
+   "required": 3
+  }
+ ],
+ "sanity": {
+  "passed": 55,
+  "total": 64,
+  "checks": [
+   {
+    "name": "guitar-aguado-op03-1:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-1:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-2:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-3:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-4:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-5:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-op03-6:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-menuet-bwv1006a:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-bach-prelude-bwv997:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-ode-to-joy:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-allegro-g:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:timing",
+    "ok": false,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-aguado-favorites-1:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:id-joins",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:timing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:bboxes",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:relations",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "guitar-spanish-romance:pairing",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "splits:integrity",
+    "ok": false,
+    "detail": "[{\"rule\":\"validation-role-empty\",\"detail\":\"validation has no \\\"risk\\\" collection; temperature fitting or risk reporting would silently reuse selection data\"}]"
+   },
+   {
+    "name": "splits:sealed-test-untouched",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "duplicates:no-cross-split-collision",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "name": "quality:metadata-valid",
+    "ok": true,
+    "detail": null
+   }
+  ]
+ },
+ "targets": {
+  "total": {
+   "objects": 5220,
+   "string": 28,
+   "fret": 28,
+   "rhythm": 5220,
+   "pitch": 4309,
+   "voice": 5220,
+   "pairing": 28,
+   "techniqueFamily": 0,
+   "techniqueParams": 0,
+   "articulation": 0,
+   "context": 0
+  },
+  "bySplit": {
+   "train": {
+    "objects": 2911,
+    "string": 0,
+    "fret": 0,
+    "rhythm": 2911,
+    "pitch": 2318,
+    "voice": 2911,
+    "pairing": 0,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 7
+   },
+   "validation": {
+    "objects": 1846,
+    "string": 0,
+    "fret": 0,
+    "rhythm": 1846,
+    "pitch": 1606,
+    "voice": 1846,
+    "pairing": 0,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 3
+   },
+   "heldout": {
+    "objects": 28,
+    "string": 28,
+    "fret": 28,
+    "rhythm": 28,
+    "pitch": 28,
+    "voice": 28,
+    "pairing": 28,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 1
+   },
+   "diagnostic": {
+    "objects": 435,
+    "string": 0,
+    "fret": 0,
+    "rhythm": 435,
+    "pitch": 357,
+    "voice": 435,
+    "pairing": 0,
+    "techniqueFamily": 0,
+    "techniqueParams": 0,
+    "articulation": 0,
+    "context": 0,
+    "scores": 1
+   }
+  }
+ }
+}

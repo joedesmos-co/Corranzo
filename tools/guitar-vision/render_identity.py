@@ -48,7 +48,7 @@ VEROVIO_OPTIONS = {
     "header": "none",
 }
 
-ID_PATTERN = re.compile(r"<note(?=[\s>])")
+ID_PATTERN = re.compile(r"<note(?=[\s>/])")
 
 
 def inject_stable_ids(xml: str, prefix: str) -> tuple[str, list[str]]:
@@ -99,39 +99,18 @@ def identity_join(svg: str, source_ids: list[str], toolkit) -> dict:
 
     rendered: dict[str, dict] = {}
     duplicates: list[str] = []
-    for attrs, inner in _iter_group_elements(svg, "note"):
-        group_id = _group_id(attrs)
-        if group_id is None:
-            continue
-        if group_id in rendered:
-            duplicates.append(group_id)
-            continue
-        tx_match = re.search(r'transform="translate\(([^)]+)\)', attrs)
-        tx = ty = 0.0
-        if tx_match:
-            parts = [float(v) for v in re.split(r"[,\s]+", tx_match.group(1).strip()) if v]
-            tx = parts[0] if parts else 0.0
-            ty = parts[1] if len(parts) > 1 else 0.0
-        children = []
-        boxes: list[list[float]] = []
-        if "notehead" in inner or "<use " in inner:
-            children.append("notehead")
-            for box in _use_boxes(inner, outlines):
-                x0, y0 = apply_transform(page_matrix, box.x0 + tx, box.y0 + ty)
-                x1, y1 = apply_transform(page_matrix, box.x1 + tx, box.y1 + ty)
-                boxes.append([x0, y0, x1, y1])
-        if "tabGrp" in inner or _has_tab_text(inner):
-            children.append("tab-text")
-            digit_boxes, _digits = _tab_digit_boxes(inner)
-            for box in digit_boxes:
-                x0, y0 = apply_transform(page_matrix, box.x0 + tx, box.y0 + ty)
-                x1, y1 = apply_transform(page_matrix, box.x1 + tx, box.y1 + ty)
-                boxes.append([x0, y0, x1, y1])
-        try:
-            page = toolkit.getPageWithElement(group_id)
-        except Exception:
-            page = None
-        rendered[group_id] = {"page": page, "children": children, "boxes": boxes}
+    # Notes AND rests carry source IDs: Verovio propagates <note id> onto
+    # <g class="note"> for pitched notes and <g class="rest"> for rest notes.
+    # Scanning only one class would silently drop the other.
+    for wanted in ("note", "rest"):
+        for attrs, inner in _iter_group_elements(svg, wanted):
+            group_id = _group_id(attrs)
+            if group_id is None:
+                continue
+            if group_id in rendered:
+                duplicates.append(group_id)
+                continue
+            rendered[group_id] = _join_record(attrs, inner, outlines, page_matrix, toolkit, group_id, wanted)
 
     source_set = set(source_ids)
     rendered_set = set(rendered)
@@ -146,6 +125,42 @@ def identity_join(svg: str, source_ids: list[str], toolkit) -> dict:
         "unmatchedRendered": sorted(rendered_set - source_set),
         "identityRate": (len(joins) / len(source_ids)) if source_ids else None,
     }
+
+
+def _join_record(attrs: str, inner: str, outlines: dict, page_matrix, toolkit, group_id: str, wanted: str) -> dict:
+    tx_match = re.search(r'transform="translate\(([^)]+)\)', attrs)
+    tx = ty = 0.0
+    if tx_match:
+        parts = [float(v) for v in re.split(r"[,\s]+", tx_match.group(1).strip()) if v]
+        tx = parts[0] if parts else 0.0
+        ty = parts[1] if len(parts) > 1 else 0.0
+    children = []
+    boxes: list[list[float]] = []
+    if wanted == "rest":
+        children.append("rest")
+        for box in _use_boxes(inner, outlines):
+            x0, y0 = apply_transform(page_matrix, box.x0 + tx, box.y0 + ty)
+            x1, y1 = apply_transform(page_matrix, box.x1 + tx, box.y1 + ty)
+            boxes.append([x0, y0, x1, y1])
+    else:
+        if "notehead" in inner or "<use " in inner:
+            children.append("notehead")
+            for box in _use_boxes(inner, outlines):
+                x0, y0 = apply_transform(page_matrix, box.x0 + tx, box.y0 + ty)
+                x1, y1 = apply_transform(page_matrix, box.x1 + tx, box.y1 + ty)
+                boxes.append([x0, y0, x1, y1])
+        if "tabGrp" in inner or _has_tab_text(inner):
+            children.append("tab-text")
+            digit_boxes, _digits = _tab_digit_boxes(inner)
+            for box in digit_boxes:
+                x0, y0 = apply_transform(page_matrix, box.x0 + tx, box.y0 + ty)
+                x1, y1 = apply_transform(page_matrix, box.x1 + tx, box.y1 + ty)
+                boxes.append([x0, y0, x1, y1])
+    try:
+        page = toolkit.getPageWithElement(group_id)
+    except Exception:
+        page = None
+    return {"page": page, "children": children, "boxes": boxes}
 
 
 def pilot_for_file(path: Path, prefix: str) -> dict:

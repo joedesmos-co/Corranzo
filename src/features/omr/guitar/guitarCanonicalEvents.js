@@ -500,9 +500,12 @@ export function rhythmTruth(events, measures, quarantined = []) {
     event.time.measureRelativeQuarters = round6(event.time.onsetQuarters - start)
   }
 
-  const totals = new Map() // `${measure}|${voice}|${staff}` -> sounded quarters
+  // Sounded time per (measure, voice, staff) is the UNION of note spans, not
+  // the sum of durations: classical guitar notation routinely sustains a bass
+  // note through melody onsets in the same voice grid (overlapping spans are
+  // sustain, not corruption). Only spans running past the barline fail.
+  const spans = new Map() // `${measure}|${voice}|${staff}` -> [[start, end]]
   for (const event of events) {
-    // Grace and cue notes are guides: they occupy no measured time.
     if (event.time.isGrace || event.time.isCue) continue
     // Chord tones share their chord head's onset: counting them would
     // double-count one attack as two durations. Tie segments (heads restored
@@ -510,8 +513,25 @@ export function rhythmTruth(events, measures, quarantined = []) {
     // normally — each occupies its own measure exactly once.
     if (event.time.isChordTone) continue
     const key = `${event.source.measure}|${event.time.voice}|${event.time.staff}`
-    totals.set(key, (totals.get(key) ?? 0) + event.time.durationQuarters)
+    if (!spans.has(key)) spans.set(key, [])
+    const start = event.time.measureRelativeQuarters ?? 0
+    spans.get(key).push([start, start + event.time.durationQuarters])
   }
+  const unionLength = (intervals) => {
+    const ordered = [...intervals].sort((a, b) => a[0] - b[0])
+    let total = 0
+    let cur = null
+    for (const [start, end] of ordered) {
+      if (cur == null || start > cur[1] + 1e-9) {
+        if (cur) total += cur[1] - cur[0]
+        cur = [start, end]
+      } else {
+        cur[1] = Math.max(cur[1], end)
+      }
+    }
+    if (cur) total += cur[1] - cur[0]
+    return round6(total)
+  };
 
   const checks = []
   for (const measure of measures) {
@@ -519,8 +539,8 @@ export function rhythmTruth(events, measures, quarantined = []) {
     const voices = new Set(events.filter((e) => e.source.measure === measure.number).map((e) => `${e.time.voice}|${e.time.staff}`))
     for (const voiceStaff of voices) {
       const [voice, staff] = voiceStaff.split('|').map(Number)
-      const sounded = round6(totals.get(`${measure.number}|${voice}|${staff}`) ?? 0)
-      const ok = Math.abs(sounded - length) < 1e-4 || isPickupOrCadenza(measure, sounded, length)
+      const sounded = unionLength(spans.get(`${measure.number}|${voice}|${staff}`) ?? [])
+      const ok = sounded <= length + 1e-4 || isPickupOrCadenza(measure, sounded, length)
       if (!ok) {
         quarantined.push({ eventId: null, code: 'voice-duration-mismatch', detail: `measure ${measure.number} voice ${voice} staff ${staff} sounds ${sounded} quarters vs ${length} expected` })
       }

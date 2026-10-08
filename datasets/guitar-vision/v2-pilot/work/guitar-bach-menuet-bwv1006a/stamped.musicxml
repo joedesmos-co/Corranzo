@@ -1,0 +1,3193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE score-partwise  PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1"><work><work-title>Menuet I, BWV 1006a</work-title></work> version="4.0">
+  <movement-title>Music21 Fragment</movement-title>
+  <identification>
+    <creator type="composer">Music21</creator>
+    <encoding>
+      <encoding-date>2026-07-15</encoding-date>
+      <software>music21 v.10.1.0</software>
+      <supports element="beam" type="yes" />
+      <supports element="stem" type="yes" />
+      <supports element="accidental" type="yes" />
+    </encoding>
+  <rights>CC BY-SA 3.0 — Mutopia Project #1501 — BWV 1006a Menuet I</rights></identification>
+  <defaults>
+    <scaling>
+      <millimeters>7</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+  </defaults>
+  <part-list>
+    <score-part id="P8e0bbf2937e248bef5b1b843fbd53afb">
+      <part-name>Acoustic Guitar</part-name>
+      <part-abbreviation>Ac Gtr</part-abbreviation>
+      <score-instrument id="I707c1bb0dd42a336eca0b94449c848fc">
+        <instrument-name>Acoustic Guitar</instrument-name>
+        <instrument-abbreviation>Ac Gtr</instrument-abbreviation>
+      </score-instrument>
+      <midi-instrument id="I707c1bb0dd42a336eca0b94449c848fc">
+        <midi-channel>2</midi-channel>
+        <midi-program>25</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <!--=========================== Part 1 ===========================-->
+  <part id="P8e0bbf2937e248bef5b1b843fbd53afb">
+    <!--========================= Measure 1 ==========================-->
+    <measure implicit="no" number="1">
+      <attributes>
+        <divisions>10080</divisions>
+        <key>
+          <fifths>4</fifths>
+          <mode>major</mode>
+        </key>
+        <time>
+          <beats>3</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <direction>
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>60</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="60" />
+      </direction>
+      <note id="guitar-bach-menuet-bwv1006a-n001">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n002">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n003" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n004" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n005">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n006">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n007">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n008" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n009">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 2 ==========================-->
+    <measure implicit="no" number="2">
+      <note id="guitar-bach-menuet-bwv1006a-n010">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n011">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n012" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n013" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n014" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 3 ==========================-->
+    <measure implicit="no" number="3">
+      <note id="guitar-bach-menuet-bwv1006a-n015">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n016">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n017">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n018">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n019">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n020">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 4 ==========================-->
+    <measure implicit="no" number="4">
+      <note id="guitar-bach-menuet-bwv1006a-n021" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n022" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n023" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n024" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n025" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n026" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n027" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n028">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 5 ==========================-->
+    <measure implicit="no" number="5">
+      <note id="guitar-bach-menuet-bwv1006a-n029">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n030">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n031">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n032">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n033">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n034">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n035" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n036" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <beam number="2">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n037" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n038">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n039" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 6 ==========================-->
+    <measure implicit="no" number="6">
+      <note id="guitar-bach-menuet-bwv1006a-n040" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n041" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n042" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n043" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n044" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n045" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n046">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n047">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n048">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 7 ==========================-->
+    <measure implicit="no" number="7">
+      <note id="guitar-bach-menuet-bwv1006a-n049">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n050">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n051">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n052">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n053">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n054">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n055">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n056">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n057">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 8 ==========================-->
+    <measure implicit="no" number="8">
+      <note id="guitar-bach-menuet-bwv1006a-n058">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n059">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n060">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 9 ==========================-->
+    <measure implicit="no" number="9">
+      <note id="guitar-bach-menuet-bwv1006a-n061">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n062">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n063" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n064" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n065">
+        <pitch>
+          <step>B</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n066">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n067">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n068" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n069">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 10 =========================-->
+    <measure implicit="no" number="10">
+      <note id="guitar-bach-menuet-bwv1006a-n070">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n071">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n072" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n073" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n074" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 11 =========================-->
+    <measure implicit="no" number="11">
+      <note id="guitar-bach-menuet-bwv1006a-n075">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n076">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n077">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n078">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n079">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n080">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n081">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n082">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n083">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n084" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n085" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n086">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 12 =========================-->
+    <measure implicit="no" number="12">
+      <note id="guitar-bach-menuet-bwv1006a-n087">
+        <pitch>
+          <step>B</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n088">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n089">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+      </note>
+    </measure>
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13">
+      <note id="guitar-bach-menuet-bwv1006a-n090">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n091">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n092">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n093">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n094" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n095" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 14 =========================-->
+    <measure implicit="no" number="14">
+      <note id="guitar-bach-menuet-bwv1006a-n096">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n097">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n098">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n099">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n100">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n101">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n102">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n103">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n104">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n105">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 15 =========================-->
+    <measure implicit="no" number="15">
+      <note id="guitar-bach-menuet-bwv1006a-n106" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n107" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n108">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n109">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n110">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n111">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n112" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n113">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 16 =========================-->
+    <measure implicit="no" number="16">
+      <note id="guitar-bach-menuet-bwv1006a-n114" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n115" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n116" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n117" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n118" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n119" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n120" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n121">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n122">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n123">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 17 =========================-->
+    <measure implicit="no" number="17">
+      <note id="guitar-bach-menuet-bwv1006a-n124">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n125">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n126">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n127">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n128">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n129">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n130">
+        <pitch>
+          <step>C</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n131">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 18 =========================-->
+    <measure implicit="no" number="18">
+      <note id="guitar-bach-menuet-bwv1006a-n132">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <dot />
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n133">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <dot />
+        <accidental>sharp</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n134">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n135">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>15120</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n136" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n137" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n138" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+    </measure>
+    <!--========================= Measure 19 =========================-->
+    <measure implicit="no" number="19">
+      <note id="guitar-bach-menuet-bwv1006a-n139" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n140" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n141" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n142" dynamics="141.11">
+        <pitch>
+          <step>D</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n143">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n144" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n145">
+        <rest />
+        <duration>15120</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n146" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 20 =========================-->
+    <measure implicit="no" number="20">
+      <note id="guitar-bach-menuet-bwv1006a-n147" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n148" dynamics="141.11">
+        <pitch>
+          <step>D</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n149" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n150" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n151" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n152">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n153" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n154">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 21 =========================-->
+    <measure implicit="no" number="21">
+      <note id="guitar-bach-menuet-bwv1006a-n155" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n156" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n157" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n158" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n159" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n160" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n161" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n162">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 22 =========================-->
+    <measure implicit="no" number="22">
+      <note id="guitar-bach-menuet-bwv1006a-n163" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n164" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n165" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n166" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n167" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n168">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n169" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n170">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 23 =========================-->
+    <measure implicit="no" number="23">
+      <note id="guitar-bach-menuet-bwv1006a-n171" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n172" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n173" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n174" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n175" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n176" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n177" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n178">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 24 =========================-->
+    <measure implicit="no" number="24">
+      <note id="guitar-bach-menuet-bwv1006a-n179" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n180" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n181" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n182" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n183" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n184" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n185" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n186">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n187" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 25 =========================-->
+    <measure implicit="no" number="25">
+      <note id="guitar-bach-menuet-bwv1006a-n188" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n189" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n190" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n191" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n192" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n193" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n194" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n195" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n196">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 26 =========================-->
+    <measure implicit="no" number="26">
+      <note id="guitar-bach-menuet-bwv1006a-n197" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n198" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n199" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n200" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n201" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n202" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n203" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n204">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 27 =========================-->
+    <measure implicit="no" number="27">
+      <note id="guitar-bach-menuet-bwv1006a-n205">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n206">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n207" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n208" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n209">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n210">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n211">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n212" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n213">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 28 =========================-->
+    <measure implicit="no" number="28">
+      <note id="guitar-bach-menuet-bwv1006a-n214">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n215">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n216" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n217" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n218" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+    </measure>
+    <!--========================= Measure 29 =========================-->
+    <measure implicit="no" number="29">
+      <note id="guitar-bach-menuet-bwv1006a-n219" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n220" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n221" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n222" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n223" dynamics="141.11">
+        <pitch>
+          <step>D</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n224">
+        <rest />
+        <duration>15120</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n225" dynamics="141.11">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n226">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 30 =========================-->
+    <measure implicit="no" number="30">
+      <note id="guitar-bach-menuet-bwv1006a-n227" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n228" dynamics="141.11">
+        <pitch>
+          <step>D</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n229" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n230" dynamics="141.11">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n231" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n232">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n233" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n234">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 31 =========================-->
+    <measure implicit="no" number="31">
+      <note id="guitar-bach-menuet-bwv1006a-n235" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n236" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>flat</accidental>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n237" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n238" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n239" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n240">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n241" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n242">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 32 =========================-->
+    <measure implicit="no" number="32">
+      <note id="guitar-bach-menuet-bwv1006a-n243" dynamics="141.11">
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n244" dynamics="141.11">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n245" dynamics="141.11">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n246">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n247">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n248">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental>natural</accidental>
+      </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <note id="guitar-bach-menuet-bwv1006a-n249">
+        <rest />
+        <duration>5040</duration>
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n250" dynamics="141.11">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5040</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <voice>2</voice>
+        <type>eighth</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n251">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 33 =========================-->
+    <measure implicit="no" number="33">
+      <note id="guitar-bach-menuet-bwv1006a-n252">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n253">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n254">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n255">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n256">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n257">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n258">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n259">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n260">
+        <chord />
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n261">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+        <accidental>flat</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n262">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>quarter</type>
+      </note>
+    </measure>
+    <!--========================= Measure 34 =========================-->
+    <measure implicit="no" number="34">
+      <note id="guitar-bach-menuet-bwv1006a-n263">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n264">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n265">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n266">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>natural</accidental>
+      </note>
+      <note id="guitar-bach-menuet-bwv1006a-n267">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <alter>0</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>30240</duration>
+        <instrument id="I707c1bb0dd42a336eca0b94449c848fc" />
+        <type>half</type>
+        <dot />
+        <accidental>natural</accidental>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

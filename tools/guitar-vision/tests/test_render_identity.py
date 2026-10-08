@@ -86,6 +86,17 @@ def test_tab_chord_digits_join_by_id():
     assert result["unmatchedRendered"] == []
 
 
+def test_rest_groups_carry_source_ids():
+    stamped, ids = stamp(FIXTURES / "rests.musicxml", "gv-rest")
+    assert len(ids) == 3
+    svg, toolkit = render_svg(stamped)
+    result = identity_join(svg, ids, toolkit)
+    assert result["identityRate"] == 1.0
+    assert result["unmatchedSource"] == []
+    kinds = {tuple(j["children"]) for j in result["joins"].values()}
+    assert kinds == {("rest",)}, kinds
+
+
 def test_no_order_fallback_tampered_id_fails():
     stamped, ids = stamp(FIXTURES / "simple-4-4-rhythm.musicxml", "gv-std")
     svg, toolkit = render_svg(stamped)

@@ -1,0 +1,8675 @@
+{
+ "version": "guitar-event/1.0",
+ "events": [
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e0",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n0"
+   },
+   "time": {
+    "onsetQuarters": 0,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e1",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n1"
+   },
+   "time": {
+    "onsetQuarters": 0,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e2",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n2"
+   },
+   "time": {
+    "onsetQuarters": 0,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 55,
+    "step": "G",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e3",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n3"
+   },
+   "time": {
+    "onsetQuarters": 1,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e4",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n4"
+   },
+   "time": {
+    "onsetQuarters": 1,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e5",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n5"
+   },
+   "time": {
+    "onsetQuarters": 2,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e6",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n6"
+   },
+   "time": {
+    "onsetQuarters": 2,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e7",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n7"
+   },
+   "time": {
+    "onsetQuarters": 2,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 55,
+    "step": "G",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e8",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n8"
+   },
+   "time": {
+    "onsetQuarters": 3,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e9",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 1,
+    "noteId": "P1-m1-n9"
+   },
+   "time": {
+    "onsetQuarters": 3,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e10",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n10"
+   },
+   "time": {
+    "onsetQuarters": 4,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e11",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n11"
+   },
+   "time": {
+    "onsetQuarters": 4,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e12",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n12"
+   },
+   "time": {
+    "onsetQuarters": 4,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e13",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n13"
+   },
+   "time": {
+    "onsetQuarters": 4,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 50,
+    "step": "D",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e14",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n14"
+   },
+   "time": {
+    "onsetQuarters": 5,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e15",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n15"
+   },
+   "time": {
+    "onsetQuarters": 5,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e16",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n16"
+   },
+   "time": {
+    "onsetQuarters": 5,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e17",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n17"
+   },
+   "time": {
+    "onsetQuarters": 6,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e18",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n18"
+   },
+   "time": {
+    "onsetQuarters": 6,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e19",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n19"
+   },
+   "time": {
+    "onsetQuarters": 6,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e20",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n20"
+   },
+   "time": {
+    "onsetQuarters": 6,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 50,
+    "step": "D",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e21",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n21"
+   },
+   "time": {
+    "onsetQuarters": 7,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e22",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 2,
+    "noteId": "P1-m2-n22"
+   },
+   "time": {
+    "onsetQuarters": 7,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e23",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n23"
+   },
+   "time": {
+    "onsetQuarters": 8,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e24",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n24"
+   },
+   "time": {
+    "onsetQuarters": 8,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e25",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n25"
+   },
+   "time": {
+    "onsetQuarters": 8,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e26",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n26"
+   },
+   "time": {
+    "onsetQuarters": 8,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e27",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n27"
+   },
+   "time": {
+    "onsetQuarters": 8,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e28",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n28"
+   },
+   "time": {
+    "onsetQuarters": 9,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e29",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n29"
+   },
+   "time": {
+    "onsetQuarters": 9,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e30",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n30"
+   },
+   "time": {
+    "onsetQuarters": 9,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e31",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n31"
+   },
+   "time": {
+    "onsetQuarters": 9,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e32",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n32"
+   },
+   "time": {
+    "onsetQuarters": 10,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e33",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n33"
+   },
+   "time": {
+    "onsetQuarters": 10,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e34",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n34"
+   },
+   "time": {
+    "onsetQuarters": 10,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e35",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n35"
+   },
+   "time": {
+    "onsetQuarters": 10,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e36",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n36"
+   },
+   "time": {
+    "onsetQuarters": 10,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e37",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n37"
+   },
+   "time": {
+    "onsetQuarters": 11,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e38",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 3,
+    "noteId": "P1-m3-n38"
+   },
+   "time": {
+    "onsetQuarters": 11,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e39",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n39"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 76,
+    "step": "E",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e40",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n40"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e41",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n41"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e42",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n42"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e43",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n43"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 59,
+    "step": "B",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e44",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n44"
+   },
+   "time": {
+    "onsetQuarters": 12,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 6,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e45",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n45"
+   },
+   "time": {
+    "onsetQuarters": 13,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 76,
+    "step": "E",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e46",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n46"
+   },
+   "time": {
+    "onsetQuarters": 13,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e47",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n47"
+   },
+   "time": {
+    "onsetQuarters": 13,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e48",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n48"
+   },
+   "time": {
+    "onsetQuarters": 13,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e49",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n49"
+   },
+   "time": {
+    "onsetQuarters": 13,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 59,
+    "step": "B",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e50",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n50"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 76,
+    "step": "E",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e51",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n51"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e52",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n52"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e53",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n53"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e54",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n54"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 59,
+    "step": "B",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 14,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e55",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n55"
+   },
+   "time": {
+    "onsetQuarters": 14,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 6,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e56",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n56"
+   },
+   "time": {
+    "onsetQuarters": 15,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 76,
+    "step": "E",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e57",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 4,
+    "noteId": "P1-m4-n57"
+   },
+   "time": {
+    "onsetQuarters": 15,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e58",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n58"
+   },
+   "time": {
+    "onsetQuarters": 16,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e59",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n59"
+   },
+   "time": {
+    "onsetQuarters": 16,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 8,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e60",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n60"
+   },
+   "time": {
+    "onsetQuarters": 16,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e61",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n61"
+   },
+   "time": {
+    "onsetQuarters": 17,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e62",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n62"
+   },
+   "time": {
+    "onsetQuarters": 17,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 8,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e63",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n63"
+   },
+   "time": {
+    "onsetQuarters": 18,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e64",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n64"
+   },
+   "time": {
+    "onsetQuarters": 18,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 8,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e65",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n65"
+   },
+   "time": {
+    "onsetQuarters": 18,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e66",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n66"
+   },
+   "time": {
+    "onsetQuarters": 19,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 71,
+    "step": "B",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 7,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e67",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 5,
+    "noteId": "P1-m5-n67"
+   },
+   "time": {
+    "onsetQuarters": 19,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 67,
+    "step": "G",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 8,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e68",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n68"
+   },
+   "time": {
+    "onsetQuarters": 20,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 74,
+    "step": "D",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e69",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n69"
+   },
+   "time": {
+    "onsetQuarters": 20,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e70",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n70"
+   },
+   "time": {
+    "onsetQuarters": 20,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 9,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e71",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n71"
+   },
+   "time": {
+    "onsetQuarters": 20,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e72",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n72"
+   },
+   "time": {
+    "onsetQuarters": 21,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 74,
+    "step": "D",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e73",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n73"
+   },
+   "time": {
+    "onsetQuarters": 21,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e74",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n74"
+   },
+   "time": {
+    "onsetQuarters": 21,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 9,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e75",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n75"
+   },
+   "time": {
+    "onsetQuarters": 22,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 74,
+    "step": "D",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e76",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n76"
+   },
+   "time": {
+    "onsetQuarters": 22,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e77",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n77"
+   },
+   "time": {
+    "onsetQuarters": 22,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 9,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e78",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n78"
+   },
+   "time": {
+    "onsetQuarters": 22,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 12,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e79",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n79"
+   },
+   "time": {
+    "onsetQuarters": 23,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 74,
+    "step": "D",
+    "alter": null,
+    "octave": 5,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e80",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 6,
+    "noteId": "P1-m6-n80"
+   },
+   "time": {
+    "onsetQuarters": 23,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 69,
+    "step": "A",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 10,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e81",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n81"
+   },
+   "time": {
+    "onsetQuarters": 24,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 66,
+    "step": "F",
+    "alter": 1,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e82",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n82"
+   },
+   "time": {
+    "onsetQuarters": 24,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e83",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n83"
+   },
+   "time": {
+    "onsetQuarters": 24,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e84",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n84"
+   },
+   "time": {
+    "onsetQuarters": 24,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 54,
+    "step": "F",
+    "alter": 1,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 4,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e85",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n85"
+   },
+   "time": {
+    "onsetQuarters": 24,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 50,
+    "step": "D",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e86",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n86"
+   },
+   "time": {
+    "onsetQuarters": 25,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 66,
+    "step": "F",
+    "alter": 1,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e87",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n87"
+   },
+   "time": {
+    "onsetQuarters": 25,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e88",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n88"
+   },
+   "time": {
+    "onsetQuarters": 25,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e89",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n89"
+   },
+   "time": {
+    "onsetQuarters": 25,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 54,
+    "step": "F",
+    "alter": 1,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 4,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e90",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n90"
+   },
+   "time": {
+    "onsetQuarters": 26,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 66,
+    "step": "F",
+    "alter": 1,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e91",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n91"
+   },
+   "time": {
+    "onsetQuarters": 26,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e92",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n92"
+   },
+   "time": {
+    "onsetQuarters": 26,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 57,
+    "step": "A",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e93",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n93"
+   },
+   "time": {
+    "onsetQuarters": 26,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 54,
+    "step": "F",
+    "alter": 1,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 4,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e94",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n94"
+   },
+   "time": {
+    "onsetQuarters": 26,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 50,
+    "step": "D",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 5,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e95",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n95"
+   },
+   "time": {
+    "onsetQuarters": 27,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 66,
+    "step": "F",
+    "alter": 1,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e96",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 7,
+    "noteId": "P1-m7-n96"
+   },
+   "time": {
+    "onsetQuarters": 27,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 62,
+    "step": "D",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e97",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n97"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e98",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n98"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e99",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n99"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 55,
+    "step": "G",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e100",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n100"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e101",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n101"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 48,
+    "step": "C",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e102",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n102"
+   },
+   "time": {
+    "onsetQuarters": 28,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 0,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 43,
+    "step": "G",
+    "alter": null,
+    "octave": 2,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 6,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e103",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n103"
+   },
+   "time": {
+    "onsetQuarters": 29,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e104",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n104"
+   },
+   "time": {
+    "onsetQuarters": 29,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e105",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n105"
+   },
+   "time": {
+    "onsetQuarters": 29,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 55,
+    "step": "G",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e106",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n106"
+   },
+   "time": {
+    "onsetQuarters": 29,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e107",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n107"
+   },
+   "time": {
+    "onsetQuarters": 29,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 1,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 48,
+    "step": "C",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e108",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n108"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e109",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n109"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e110",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n110"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 55,
+    "step": "G",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 3,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e111",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n111"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 52,
+    "step": "E",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 4,
+    "fret": 2,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e112",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n112"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 48,
+    "step": "C",
+    "alter": null,
+    "octave": 3,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 5,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e113",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n113"
+   },
+   "time": {
+    "onsetQuarters": 30,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 2,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 43,
+    "step": "G",
+    "alter": null,
+    "octave": 2,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 6,
+    "fret": 3,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e114",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n114"
+   },
+   "time": {
+    "onsetQuarters": 31,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": false,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 64,
+    "step": "E",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 1,
+    "fret": 0,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  },
+  {
+   "schema": "guitar-event/1.0",
+   "id": "guitar-paired-scan:e115",
+   "source": {
+    "score": "guitar-paired-scan",
+    "partId": "P1",
+    "measure": 8,
+    "noteId": "P1-m8-n115"
+   },
+   "time": {
+    "onsetQuarters": 31,
+    "durationQuarters": 1,
+    "measureRelativeQuarters": 3,
+    "voice": 1,
+    "staff": 1,
+    "tuplet": null,
+    "dots": 0,
+    "noteType": "quarter",
+    "beams": [],
+    "stemDirection": null,
+    "isGrace": false,
+    "isCue": false,
+    "graceSlash": null,
+    "graceKind": null,
+    "isChordTone": true,
+    "isRest": false,
+    "isMeasureRest": false,
+    "isTieContinuation": false,
+    "tieChainId": null,
+    "tie": {
+     "start": false,
+     "stop": false
+    }
+   },
+   "pitch": {
+    "soundingMidi": 60,
+    "step": "C",
+    "alter": null,
+    "octave": 4,
+    "accidental": null
+   },
+   "notehead": null,
+   "deadNote": false,
+   "ghostNote": false,
+   "tab": {
+    "string": 2,
+    "fret": 1,
+    "pairing": "verified",
+    "positionKind": "tab-fret"
+   },
+   "techniques": [],
+   "articulations": {
+    "staccato": false,
+    "accent": false,
+    "tenuto": false,
+    "marcato": false,
+    "fermata": false,
+    "staccatissimo": false,
+    "breathMark": false,
+    "other": [],
+    "slurs": []
+   },
+   "fingering": {
+    "left": [],
+    "right": null,
+    "pick": null,
+    "openString": false
+   },
+   "lyric": null,
+   "dynamics": {
+    "velocity": 0.7
+   },
+   "support": "SUPPORTED_BUT_NOT_YET_MODELED"
+  }
+ ],
+ "pairings": [],
+ "relations": [],
+ "quarantined": [],
+ "rhythm": {
+  "totalQuarters": 32,
+  "eventCount": 116,
+  "measureChecks": [
+   {
+    "measure": 1,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 2,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 3,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 4,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 5,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 6,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 7,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   },
+   {
+    "measure": 8,
+    "voice": 1,
+    "staff": 1,
+    "soundedQuarters": 4,
+    "expectedQuarters": 4,
+    "ok": true
+   }
+  ],
+  "timingPreserved": true
+ },
+ "tuning": [
+  64,
+  59,
+  55,
+  50,
+  45,
+  40
+ ],
+ "capoFret": 0,
+ "capo": null,
+ "navigation": [],
+ "frames": []
+}
