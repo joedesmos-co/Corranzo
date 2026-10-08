@@ -65,8 +65,53 @@ def find_best_six(profile: np.ndarray) -> list[float] | None:
     return list(best[1])
 
 
+def find_anchored_comb(profile: np.ndarray, digit_rel: float) -> list[float] | None:
+    """Staff comb constrained through the digit (image evidence only).
+
+    For each hypothesis (digit sits on line k with gap g), score the mean
+    ink sampled AT the 6 line positions. The digit is printed on its TAB
+    line, so the true comb maximizes sampled ink; foreign staves score
+    lower because their lines miss the digit. Requires an ink margin over
+    the half-gap-shifted runner-up and tight regularity.
+    """
+    height = len(profile)
+
+    def sampled(lines):
+        total, count = 0.0, 0
+        for y in lines:
+            if 0 <= y < height:
+                total += float(np.mean(profile[max(int(y) - 1, 0):int(y) + 2]))
+                count += 1
+        return total / max(count, 1)
+
+    best = None
+    for k in range(1, 7):
+        for g in range(8, 61, 2):
+            lines = [digit_rel + (i - k) * g for i in range(1, 7)]
+            if lines[0] < -g or lines[5] >= height + g:
+                continue
+            ink = sampled(lines)
+            shifted = [y + g / 2 for y in lines]
+            margin = ink - sampled(shifted)
+            if best is None or ink > best[0]:
+                best = (ink, margin, lines)
+    if best is None:
+        return None
+    ink, margin, lines = best
+    gaps = [lines[j + 1] - lines[j] for j in range(5)]
+    mean_gap = sum(gaps) / 5
+    regularity = sum(abs(x - mean_gap) / mean_gap for x in gaps) / 5
+    if ink < 0.15 or margin < 0.05 or regularity > 0.20:
+        return None
+    return lines
+
+
 def detect_tab_lines(pixels, cx, cy, img_w, img_h):
-    """Returns (lines, 'exact') or (None, None): 6 observed peaks, anchored."""
+    """Returns (lines, tier) or (None, None).
+
+    Tier 'exact': 6 observed peaks, digit-anchored (high precision).
+    Tier 'anchored': digit-constrained comb search (calibrated on TRAIN).
+    """
     x0 = int(max(cx - STRIP_SIDE[1], 0))
     x1 = int(min(cx - STRIP_SIDE[0], img_w))
     x2 = int(max(cx + STRIP_SIDE[0], 0))
@@ -78,13 +123,15 @@ def detect_tab_lines(pixels, cx, cy, img_w, img_h):
     side = np.concatenate([pixels[y0:y1, x0:x1], pixels[y0:y1, x2:x3]], axis=1)
     profile = (side < 128).mean(axis=1)
     run = find_best_six(profile)
-    if run is None:
+    if run is not None:
+        lines = [y + y0 for y in run]
+        mean_gap = (lines[-1] - lines[0]) / 5
+        if min(abs(line - cy) for line in lines) <= 0.4 * mean_gap:
+            return lines, "exact"
+    anchored = find_anchored_comb(profile, cy - y0)
+    if anchored is None:
         return None, None
-    lines = [y + y0 for y in run]
-    mean_gap = (lines[-1] - lines[0]) / 5
-    if min(abs(line - cy) for line in lines) > 0.4 * mean_gap:
-        return None, None
-    return lines, "exact"
+    return [y + y0 for y in anchored], "anchored"
 
 
 def main() -> int:
@@ -160,20 +207,30 @@ def main() -> int:
             cx_px, cy_px = cx * page["fx"], ((y0 + y1) / 2) * page["fy"]
             detected, tier = detect_tab_lines(pixels, cx_px, cy_px, image.width, image.height)
             geo_string, line_gap = None, None
-            if detected is not None and tier == "exact":
-                # Only the exact tier is trusted (97%-class agreement).
-                # Comb extrapolations warp digits to wrong slots and poison
-                # framing: they fall through to the box-relative fallback.
+            if detected is not None:
+                # geoString recorded for exact (0.97) and anchored (0.79)
+                # tiers alike; the decoder weighs agreement by tier. Only
+                # exact warps framing (anchored lines would mis-slot digits).
                 detected_ok += 1
                 lines = detected
                 digit_y = cy_px
                 geo_string = min(range(6), key=lambda i: abs(lines[i] - digit_y)) + 1
-                line_gap = round(lines[1] - lines[0], 2)
-                # Line-normalized framing: warp so detected lines land at
-                # canonical slots (image evidence only). The digit then sits
-                # in one of 6 fixed slots; the CNN refines, geometry guides.
-                top = max(int(lines[0] - 30), 0)
-                bottom = min(int(lines[5] + 30), image.height)
+                line_gap = round(lines[1] - lines[0], 2) if len(lines) == 6 else None
+                if tier == "exact":
+                    # Line-normalized framing: warp so detected lines land at
+                    # canonical slots (image evidence only). The digit then sits
+                    # in one of 6 fixed slots; the CNN refines, geometry guides.
+                    top = max(int(lines[0] - 30), 0)
+                    bottom = min(int(lines[5] + 30), image.height)
+                    warped = True
+                else:
+                    # Anchored lines are not trusted for framing (0.79): fall
+                    # back to the box-relative window, keep the geo label.
+                    box_h = y1 - y0
+                    half_h = max(160.0, box_h * 1.1) * page["fy"]
+                    top = max(int(cy_px - half_h), 0)
+                    bottom = min(int(cy_px + half_h), image.height)
+                    warped = False
             else:
                 tier = None
                 # Fallback: box-relative window (digit plus staff at any size).
@@ -188,8 +245,8 @@ def main() -> int:
             crop.save(out_dir / "tall" / name)
             warped = tier == 'exact'
             tall_rows.append({**row, "file": name,
-                              "geoString": geo_string if tier == 'exact' else None,
-                              "lineGap": line_gap if tier == 'exact' else None,
+                              "geoString": geo_string,
+                              "lineGap": line_gap,
                               "warped": warped, "warpTier": tier})
         else:
             cy = (y0 + y1) / 2

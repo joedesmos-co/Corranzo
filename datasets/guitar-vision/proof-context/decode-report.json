@@ -1,13 +1,14 @@
 {
  "total": 637,
- "decoded": 323,
- "abstained": 314,
- "coverage": 0.5070643642072213,
- "pitchPrecision": 0.8947368421052632,
+ "decoded": 303,
+ "abstained": 334,
+ "coverage": 0.47566718995290425,
+ "pitchPrecision": 0.9240924092409241,
  "abstainReasons": {
+  "gray-zone-no-geometry": 20,
   "low-confidence": 287,
   "geometry-disagreement": 27
  },
- "jitterFlipRate": 0.2975778546712803,
+ "jitterFlipRate": 0.2785714285714286,
  "tau": 0.6
 }

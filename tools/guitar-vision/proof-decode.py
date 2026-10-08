@@ -28,7 +28,8 @@ from proof_train import ProofNet, collate as collate_isolated  # noqa: E402
 from proof_context_train import StringNet, TallDataset, collate as collate_tall  # noqa: E402
 
 SEED = 20261008
-TAU = 0.6  # abstention threshold on min(string, fret) posterior
+TAU = 0.6  # abstention floor on min(string, fret) posterior
+TAU_HIGH = 0.75  # above: decode unless exact geometry vetoes
 TUNING = [64, 59, 55, 50, 45, 40]
 
 
@@ -81,14 +82,24 @@ def main() -> int:
             string_pred, string_conf = int(string_posterior.argmax()), float(string_posterior.max())
             fret_pred, fret_conf = int(fret_posterior.argmax()), float(fret_posterior.max())
             confidence = min(string_conf, fret_conf)
+            geo = row.get("geoString")
+            geo_tier = row.get("warpTier")
+            # Tier-weighed geometry: exact (0.97) vetoes; anchored (0.79)
+            # only breaks ties in the gray zone; absent geometry abstains
+            # below TAU_HIGH.
             if confidence < TAU:
                 abstained += 1
                 abstain_reasons["low-confidence"] = abstain_reasons.get("low-confidence", 0) + 1
                 continue
-            if row.get("geoString") is not None and row["geoString"] != string_pred + 1:
+            if geo is not None and geo_tier == "exact" and geo != string_pred + 1:
                 abstained += 1
                 abstain_reasons["geometry-disagreement"] = abstain_reasons.get("geometry-disagreement", 0) + 1
                 continue
+            if confidence < TAU_HIGH:
+                if geo is None or geo != string_pred + 1:
+                    abstained += 1
+                    abstain_reasons["gray-zone-no-geometry"] = abstain_reasons.get("gray-zone-no-geometry", 0) + 1
+                    continue
             implied = TUNING[string_pred] + fret_pred
             true_midi = row.get("midi")
             # NOTE: true_midi is evaluation-only (never an inference input).
