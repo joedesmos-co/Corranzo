@@ -53,6 +53,8 @@ def ppq_per_quarter(canonical_events):
     for e in canonical_events:
         if e["kind"] == "note" and str(e.get("dur")) in ref and e.get("dur_ppq") not in (None, ""):
             try:
+                if int(e["dur_ppq"]) == 0:
+                    continue
                 q = ref[str(e["dur"])] * (2 - Fraction(1, 2 ** int(e.get("dots") or 0)))
                 vals[Fraction(int(e["dur_ppq"]), 1) / q] += 1
             except (TypeError, ValueError, ZeroDivisionError):
@@ -264,7 +266,7 @@ def main(args):
                "flags_b": dec_b["flags"], "stages": {}}
         # truth note/rests sequences with quarter onsets
         ppq = ppq_per_quarter(cevents)
-        if ppq is None:
+        if not ppq:
             agg["ppq_inconsistent"].append(sid)
             continue
         truth_notes = []
