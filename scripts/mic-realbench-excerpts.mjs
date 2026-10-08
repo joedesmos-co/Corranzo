@@ -1,0 +1,244 @@
+#!/usr/bin/env node
+/**
+ * Real-audio excerpt builder — cuts 3 s benchmark clips with independent
+ * annotation truth (JAMS per-string notes / MIDI notes; never detector
+ * output) into benchmarks/mic-real/.
+ *
+ * Sources (all CC-BY-4.0, attributed in the manifest):
+ *   GuitarSet      acoustic guitar mic, JAMS per-string truth
+ *   EGSet12        electric amp-mic performances, JAMS per-string truth
+ *   Guitar-Techs   electric amp-mic isolated notes, MIDI truth
+ *   Vienna 4x22    Bösendorfer grand, MIDI truth
+ *
+ * Usage:
+ *   node scripts/mic-realbench-excerpts.mjs [--write]
+ * Without --write: dry run (selection + validation only).
+ */
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { readWavPcm } from './lib/readWavPcm.mjs'
+import { writeWavPcm } from './lib/writeWavPcm.mjs'
+import { clusterOnsets, loadJamsNotes, loadMidiNotes } from './mic-realbench-survey.mjs'
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
+const NORM = '/tmp/corranzo-realbench/norm'
+const OUT_DIR = join(ROOT, 'benchmarks', 'mic-real', 'clips')
+const EXCERPT_SECONDS = 3
+const PRE_ROLL_SECONDS = 0.5
+
+const ATTRIBUTION = {
+  'guitarset': 'GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0',
+  'egset12': 'EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0',
+  'guitar-techs': 'Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0',
+  'vienna-4x22': 'The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0',
+}
+
+/**
+ * Selections: { id, instrument, category, dataset, audioFile, jamsOrMidi,
+ * kind: 'jams'|'midi', onset } — onset = anchor chord/single-note attack.
+ */
+const SELECTIONS = [
+  // ---- piano (Vienna 4x22) ----
+  { id: 'piano-mozart-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 12.32 },
+  { id: 'piano-mozart-dyad', instrument: 'piano', category: 'dyad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 3.57 },
+  { id: 'piano-mozart-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 2.91 },
+  { id: 'piano-mozart-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p01.mid', kind: 'midi', onset: 22.02 },
+  { id: 'piano-schubert-single', instrument: 'piano', category: 'single', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 3.95 },
+  { id: 'piano-schubert-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 5.55 },
+  { id: 'piano-schubert-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 4.85 },
+  // ---- acoustic guitar (GuitarSet mic) ----
+  { id: 'acoustic-jazz-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 1.84 },
+  { id: 'acoustic-jazz-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_04_Jazz2-110-Bb_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/04_Jazz2-110-Bb_solo.jams', kind: 'jams', onset: 4.66 },
+  { id: 'acoustic-bossa-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 0.75 },
+  { id: 'acoustic-bossa-chord', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_00_BN3-119-G_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/00_BN3-119-G_solo.jams', kind: 'jams', onset: 14.62 },
+  { id: 'acoustic-rock-single', instrument: 'acoustic-guitar', category: 'single', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 0.86 },
+  { id: 'acoustic-rock-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock2-142-D_solo_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock2-142-D_solo.jams', kind: 'jams', onset: 15.86 },
+  { id: 'acoustic-power-dyad', instrument: 'acoustic-guitar', category: 'dyad', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 0.85 },
+  { id: 'acoustic-power-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_03_Rock1-90-C#_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/03_Rock1-90-C#_comp.jams', kind: 'jams', onset: 11.34 },
+  { id: 'acoustic-funk-triad', instrument: 'acoustic-guitar', category: 'triad', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 1.88 },
+  { id: 'acoustic-funk-dense', instrument: 'acoustic-guitar', category: 'dense', dataset: 'guitarset', audioFile: 'gs_02_Funk1-114-Ab_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/02_Funk1-114-Ab_comp.jams', kind: 'jams', onset: 5.12 },
+  { id: 'acoustic-strum-triad', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 2.34 },
+  { id: 'acoustic-strum-dense', instrument: 'acoustic-guitar', category: 'strum', dataset: 'guitarset', audioFile: 'gs_01_SS3-98-C_comp_mic.wav', truthFile: '/tmp/corranzo-realbench/guitarset/jams/01_SS3-98-C_comp.jams', kind: 'jams', onset: 5.70 },
+  // ---- electric guitar (EGSet12 amp-mic) ----
+  { id: 'electric-eg07-single', instrument: 'electric-guitar', category: 'single', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 0.36 },
+  { id: 'electric-eg07-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_07.wav', truthFile: '/tmp/corranzo-realbench/egset12/07.jams', kind: 'jams', onset: 16.02 },
+  { id: 'electric-eg01-triad', instrument: 'electric-guitar', category: 'triad', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 4.87 },
+  { id: 'electric-eg01-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_01.wav', truthFile: '/tmp/corranzo-realbench/egset12/01.jams', kind: 'jams', onset: 10.50 },
+  { id: 'electric-eg02-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_02.wav', truthFile: '/tmp/corranzo-realbench/egset12/02.jams', kind: 'jams', onset: 13.71 },
+  { id: 'electric-eg05-dyad', instrument: 'electric-guitar', category: 'dyad', dataset: 'egset12', audioFile: 'eg_05.wav', truthFile: '/tmp/corranzo-realbench/egset12/05.jams', kind: 'jams', onset: 10.04 },
+  { id: 'electric-eg10-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_10.wav', truthFile: '/tmp/corranzo-realbench/egset12/10.jams', kind: 'jams', onset: 9.97 },
+  { id: 'electric-eg03-dense', instrument: 'electric-guitar', category: 'dense', dataset: 'egset12', audioFile: 'eg_03.wav', truthFile: '/tmp/corranzo-realbench/egset12/03.jams', kind: 'jams', onset: 2.04 },
+]
+
+/** Guitar-Techs isolated amp-mic notes: low / mid / high / quietest. */
+function guitarTechsPicks() {
+  const notes = loadMidiNotes('/tmp/corranzo-realbench/gtechs/midi_allsinglenotes.mid')
+  const audio = loadAudio({ audioFile: 'gt_singles.wav' })
+  const duration = audio.samples.length / audio.sampleRate
+  const inBounds = notes.filter((n) => n.onset > 0.6 && n.onset < duration - 2.6)
+  const lowest = inBounds.filter((n) => n.midi <= 44).slice(0, 1)
+  const mid = inBounds.filter((n) => n.midi >= 57 && n.midi <= 64).slice(0, 1)
+  const high = inBounds.filter((n) => n.midi >= 72).slice(-1)
+  const quietest = [...inBounds].sort((a, b) => (a.velocity ?? 1) - (b.velocity ?? 1)).slice(0, 1)
+  const picks = [
+    ['electric-gtechs-low', lowest[0]],
+    ['electric-gtechs-mid', mid[0]],
+    ['electric-gtechs-high', high[0]],
+    ['electric-gtechs-quiet', quietest[0]],
+  ]
+  return picks
+    .filter(([, note]) => note)
+    .map(([id, note]) => ({
+      id, instrument: 'electric-guitar', category: 'single', dataset: 'guitar-techs',
+      audioFile: 'gt_singles.wav',
+      truthFile: '/tmp/corranzo-realbench/gtechs/midi_allsinglenotes.mid',
+      kind: 'midi', onset: note.onset,
+    }))
+}
+
+const truthCache = new Map()
+function loadTruth(selection) {
+  if (!truthCache.has(selection.truthFile)) {
+    const notes = selection.kind === 'jams'
+      ? loadJamsNotes(selection.truthFile)
+      : loadMidiNotes(selection.truthFile)
+    truthCache.set(selection.truthFile, notes)
+  }
+  return truthCache.get(selection.truthFile)
+}
+
+const audioCache = new Map()
+function loadAudio(selection) {
+  if (!audioCache.has(selection.audioFile)) {
+    audioCache.set(selection.audioFile, readWavPcm(`${NORM}/${selection.audioFile}`))
+  }
+  return audioCache.get(selection.audioFile)
+}
+
+function buildExcerpt(selection) {
+  const notes = loadTruth(selection)
+  const { samples, sampleRate } = loadAudio(selection)
+  const duration = samples.length / sampleRate
+  const lastOnset = notes.length ? notes[notes.length - 1].onset : 0
+  if (selection.kind === 'midi' && Math.abs(duration - lastOnset) > 8 && lastOnset > 0) {
+    console.log(`  WARN ${selection.id}: midi/audio duration skew (audio ${duration.toFixed(1)}s, last onset ${lastOnset.toFixed(1)}s)`)
+  }
+  const start = Math.max(0, selection.onset - PRE_ROLL_SECONDS)
+  const startIndex = Math.floor(start * sampleRate)
+  const length = Math.min(Math.floor(EXCERPT_SECONDS * sampleRate), samples.length - startIndex)
+  const clip = samples.subarray(startIndex, startIndex + length)
+  // Anchor cluster: onsets within 120 ms of the anchor.
+  const anchorTones = [...new Set(
+    notes.filter((n) => Math.abs(n.onset - selection.onset) <= 0.12).map((n) => n.midi),
+  )].sort((a, b) => a - b)
+  // All annotated notes overlapping the excerpt (for FP/context analysis).
+  const excerptNotes = notes
+    .filter((n) => n.offset >= start && n.onset <= start + length / sampleRate)
+    .map((n) => ({
+      midi: n.midi,
+      onset: Math.round((n.onset - start) * 1000) / 1000,
+      offset: Math.round((n.offset - start) * 1000) / 1000,
+    }))
+  return {
+    id: selection.id,
+    instrument: selection.instrument,
+    category: selection.category,
+    dataset: selection.dataset,
+    attribution: ATTRIBUTION[selection.dataset],
+    license: 'CC-BY-4.0',
+    sourceFile: selection.audioFile,
+    sourceTruthFile: selection.truthFile.split('/tmp/corranzo-realbench/')[1],
+    audio: {
+      file: `clips/${selection.id}.wav`,
+      sampleRate,
+      startSeconds: Math.round(start * 1000) / 1000,
+      durationSeconds: Math.round((length / sampleRate) * 1000) / 1000,
+    },
+    truth: {
+      anchorOnset: Math.round((selection.onset - start) * 1000) / 1000,
+      anchorTones,
+      notes: excerptNotes,
+    },
+    clip,
+  }
+}
+
+/** Lowest-RMS 1.5 s pause segments (honest room/pause controls). */
+function findPauses() {
+  // Measured 2026-10-07: only the Mozart take contains true silence
+  // (rms 0.00013). The funk comping (0.054) and EG09 (0.044) minima are
+  // loud continuous playing — no silence exists there, so no control is
+  // cut from them. Do not manufacture silence controls from music.
+  const targets = [
+    { id: 'pause-mozart', instrument: 'piano', audioFile: 'vn_Mozart_K331_1st-mov_p01.wav' },
+  ]
+  return targets.map((target) => {
+    const { samples, sampleRate } = loadAudio(target)
+    const window = Math.floor(sampleRate * 1.5)
+    let best = { index: 0, energy: Infinity }
+    for (let start = 0; start + window < samples.length; start += Math.floor(sampleRate * 0.25)) {
+      let energy = 0
+      for (let i = start; i < start + window; i += 7) {
+        energy += samples[i] * samples[i]
+      }
+      if (energy < best.energy) {
+        best = { index: start, energy }
+      }
+    }
+    const startSeconds = best.index / sampleRate
+    const clip = samples.subarray(best.index, best.index + window)
+    let rms = 0
+    for (let i = 0; i < clip.length; i += 3) rms += clip[i] * clip[i]
+    rms = Math.sqrt(rms / Math.ceil(clip.length / 3))
+    return {
+      id: target.id, instrument: target.instrument, category: 'pause', dataset: 'same-as-audio',
+      attribution: 'see source file entry', license: 'CC-BY-4.0', sourceFile: target.audioFile,
+      sourceTruthFile: null,
+      audio: { file: `clips/${target.id}.wav`, sampleRate, startSeconds: Math.round(startSeconds * 1000) / 1000, durationSeconds: 1.5 },
+      truth: { anchorOnset: null, anchorTones: [], notes: [] },
+      pauseRms: Math.round(rms * 1e5) / 1e5,
+      clip,
+    }
+  })
+}
+
+function main() {
+  const write = process.argv.includes('--write')
+  const excerpts = [...SELECTIONS, ...guitarTechsPicks()].map(buildExcerpt)
+  for (const excerpt of excerpts) {
+    console.log(`${excerpt.id}: anchor=${excerpt.truth.anchorOnset}s tones=[${excerpt.truth.anchorTones}] notes=${excerpt.truth.notes.length} src@${excerpt.audio.startSeconds}s`)
+    if (excerpt.truth.anchorTones.length === 0) {
+      console.log(`  WARN ${excerpt.id}: no annotated tones at anchor — check alignment`)
+    }
+  }
+  const pauses = findPauses()
+  for (const pause of pauses) {
+    console.log(`${pause.id}: pause rms=${pause.pauseRms} src@${pause.audio.startSeconds}s`)
+  }
+  if (!write) {
+    console.log('\nDry run. Pass --write to cut clips + manifest.')
+    return
+  }
+  mkdirSync(OUT_DIR, { recursive: true })
+  const manifest = []
+  for (const excerpt of [...excerpts, ...pauses]) {
+    const { clip, ...entry } = excerpt
+    writeWavPcm(join(OUT_DIR, `${excerpt.id}.wav`), clip, excerpt.audio.sampleRate)
+    manifest.push(entry)
+  }
+  writeFileSync(
+    join(dirname(OUT_DIR), 'manifest.json'),
+    JSON.stringify({
+      version: 1,
+      excerptSeconds: EXCERPT_SECONDS,
+      preRollSeconds: PRE_ROLL_SECONDS,
+      provenance: 'Independent dataset annotations (JAMS per-string / MIDI). Detector output never used as truth.',
+      naturalRecordings: manifest.length,
+      clips: manifest,
+    }, null, 2),
+  )
+  console.log(`\nWrote ${manifest.length} clips + manifest.`)
+}
+
+main()

@@ -279,7 +279,17 @@ export function detectBlindPolyphony(samples, sampleRate, options = {}) {
     }
   }
 
-  const detectedMidis = surviving.map((note) => note.midi).sort((left, right) => left - right)
+  // Known limit (measured 2026-10-07 on a real low electric string):
+  // weak-fundamental bass (F2 radiating 0.3× the note-inflated floor) locks
+  // onto the 2nd harmonic and reports the octave above. Suboctave
+  // reassignment was prototyped and REVERTED: every variant either
+  // under-fired on real amp timbre or risked manufacturing octaves in
+  // common triads. Low strings stay on the score-informed bass-boost path
+  // (V2), which handles them correctly; see the Stage-2 realbench report.
+  const detectedMidis = scored
+    .filter((note) => note.detected)
+    .map((note) => note.midi)
+    .sort((left, right) => left - right)
   scored.sort((left, right) => right.confidence - left.confidence)
   return {
     engine: BLIND_POLY_ENGINE_ID,
