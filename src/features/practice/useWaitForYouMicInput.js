@@ -1182,6 +1182,20 @@ export default function useWaitForYouMicInput({
         v2Preview?.outcome === MATCH_OUTCOME.COMPLETE &&
         (!isMicChordCollection || Boolean(v3Evaluation))
       ) {
+        // A V3 acceptance already carries attack authority plus the full
+        // matched set — it must commit immediately. Waiting for three more
+        // hook-level confirmations deadlocks: V3 latches consumed on its
+        // first accept, so subsequent frames report HOLD and the count can
+        // never reach threshold (single-note V3 stalls at "1/1 matched").
+        // V2-direct results (no recognitionDecision) keep the confirm path.
+        if (v2Preview.recognitionDecision?.advance === true) {
+          resetMatchConfirm()
+          const previewMidis = v2Preview.recognitionDecision?.matchedMidis ?? frame.v2DetectedMidis ?? []
+          setLastHeardMidi(previewMidis[0] ?? frame.midi)
+          advancedForTrace = true
+          applyMatchResult(v2Preview, frame)
+          return
+        }
         const previewMidis = v2Preview.recognitionDecision?.matchedMidis ?? frame.v2DetectedMidis ?? []
         const key = `${currentCheckpoint.id}:${micEngineV3Enabled ? 'v3' : 'v2'}:${[...previewMidis]
           .sort((left, right) => left - right)

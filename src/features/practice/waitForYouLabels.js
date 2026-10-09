@@ -13,9 +13,23 @@ export function missingLabels(expectedMidis, matchedIndices) {
   if (!expectedMidis?.length) {
     return []
   }
+  // Defensive: producers pass Sets, but a drifted Array must never crash
+  // the whole practice tree (error boundary remount kills the session).
+  const isMatched = (index) => {
+    if (matchedIndices == null) {
+      return false
+    }
+    if (typeof matchedIndices.has === 'function') {
+      return matchedIndices.has(index)
+    }
+    if (Array.isArray(matchedIndices)) {
+      return matchedIndices.includes(index)
+    }
+    return false
+  }
   return expectedMidis
     .map((midi, index) => ({ midi, index }))
-    .filter(({ midi, index }) => Number.isFinite(midi) && !(matchedIndices && matchedIndices.has(index)))
+    .filter(({ midi, index }) => Number.isFinite(midi) && !isMatched(index))
     .map(({ midi }) => midiToNoteLabel(midi))
 }
 
