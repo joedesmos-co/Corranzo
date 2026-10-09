@@ -95,6 +95,36 @@ const EXAMPLES = [
     notes: [{ name: 'A3', time: 0.2, duration: 1.2, velocity: 0.8 }],
     tailSeconds: 1.5,
   },
+  {
+    name: 'guitar-bend-release',
+    voice: 'guitar',
+    notes: [
+      { name: 'E3', midi: 52, time: 0.2, duration: 1.0, velocity: 0.8, pitchCurve: { type: 'bend', semitones: 2, rampSeconds: 0.3 } },
+      { name: 'E3', midi: 52, time: 1.5, duration: 1.0, velocity: 0.8, pitchCurve: { type: 'bend-release', semitones: 2, rampSeconds: 0.25 } },
+    ],
+    tailSeconds: 1.5,
+  },
+  {
+    name: 'guitar-slide-vibrato',
+    voice: 'guitar',
+    notes: [
+      { name: 'E3', midi: 52, time: 0.2, duration: 0.9, velocity: 0.8, pitchCurve: { type: 'slide', targetMidi: 55, glideSeconds: 0.5 } },
+      { name: 'A3', midi: 57, time: 1.4, duration: 1.4, velocity: 0.8, pitchCurve: { type: 'vibrato', rateHz: 5.5, depthSemitones: 0.5, delaySeconds: 0.15 } },
+    ],
+    tailSeconds: 1.5,
+  },
+  {
+    name: 'piano-trill-mordent',
+    voice: 'piano',
+    musicXml: scoreXml(
+      `<measure number="1">${ATTRS}` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>half</type>` +
+      `<notations><ornaments><trill-mark/></ornaments></notations></note>` +
+      `<note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>half</type>` +
+      `<notations><ornaments><mordent/></ornaments></notations></note></measure>`,
+    ),
+    instrumentId: 'piano',
+  },
 ]
 
 function writeWavMono16(filePath, samples, sampleRate) {

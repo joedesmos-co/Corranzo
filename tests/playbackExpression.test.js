@@ -63,6 +63,19 @@ function makeFakeTone() {
   }
   class Compressor extends Node {}
   class Limiter extends Node {}
+  class Convolver extends Node {
+    constructor() {
+      super()
+      this.buffer = null
+      this.normalize = true
+    }
+  }
+  class ToneAudioBuffer {
+    constructor() {
+      this.loaded = true
+    }
+    set() {}
+  }
   class Filter extends Node {
     constructor() {
       super()
@@ -125,9 +138,18 @@ function makeFakeTone() {
     }
   }
   const tone = {
-    Gain, Reverb, Compressor, Limiter, Filter, Chorus,
+    Gain, Reverb, Compressor, Limiter, Convolver, ToneAudioBuffer, Filter, Chorus,
     PolySynth, Synth, AMSynth, Sampler, ToneAudioBuffers,
     now: () => 0,
+    getContext: () => ({
+      rawContext: {
+        sampleRate: 48000,
+        createBuffer: (channels, length, sampleRate) => ({
+          sampleRate,
+          getChannelData: () => new Float32Array(length),
+        }),
+      },
+    }),
   }
   tone.__createdFilters = createdFilters
   return tone

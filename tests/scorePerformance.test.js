@@ -80,17 +80,18 @@ function timingMap(notes, extra = {}) {
 }
 
 describe('splitPerformedTechniques', () => {
-  it('performs strum/hammer/pull/mute/let-ring, recognizes bends/slides/vibrato only', () => {
+  it('performs pitch/time techniques, recognizes harmonics only', () => {
     const { performed, recognizedOnly } = splitPerformedTechniques([
       { kind: 'hammer-on' },
       { kind: 'bend' },
       { kind: 'slide' },
       { kind: 'vibrato' },
+      { kind: 'harmonic' },
       'pull-off',
       'muted',
     ])
-    expect(performed).toEqual(['hammer-on', 'pull-off', 'muted'])
-    expect(recognizedOnly).toEqual(['bend', 'slide', 'vibrato'])
+    expect(performed).toEqual(['hammer-on', 'bend', 'slide', 'vibrato', 'pull-off', 'muted'])
+    expect(recognizedOnly).toEqual(['harmonic'])
   })
 
   it('never manufactures techniques from nothing', () => {
@@ -129,11 +130,11 @@ describe('score-path sustain pedal', () => {
 describe('technique evidence on schedule events', () => {
   it('passes techniques through with performed/recognized split', () => {
     const [event] = buildScoreNoteSchedule(timingMap([
-      timingNote({ guitarTechniques: [{ kind: 'hammer-on' }, { kind: 'bend' }] }),
+      timingNote({ guitarTechniques: [{ kind: 'hammer-on' }, { kind: 'harmonic' }] }),
     ]))
-    expect(event.techniques).toEqual(['hammer-on', 'bend'])
+    expect(event.techniques).toEqual(['hammer-on', 'harmonic'])
     expect(event.performedTechniques).toEqual(['hammer-on'])
-    expect(event.recognizedOnlyTechniques).toEqual(['bend'])
+    expect(event.recognizedOnlyTechniques).toEqual(['harmonic'])
   })
 
   it('shapes hammer-on notes softer with legato overlap', () => {
@@ -246,7 +247,6 @@ describe('parsed guitar technique paths (parse → perform)', () => {
     expect(event.performedTechniques).toContain('let-ring')
     expect(event.performedDurationSeconds).toBeGreaterThan(event.writtenDurationSeconds)
   })
-
   it('gives written-slur notes legato overlap on any instrument', () => {
     const xml =
       `<measure number="1">${F.attributes()}` +
@@ -260,5 +260,137 @@ describe('parsed guitar technique paths (parse → perform)', () => {
     expect(events[0].performedTechniques).toContain('legato')
     expect(events[0].performedDurationSeconds).toBeGreaterThan(events[0].writtenDurationSeconds)
     expect(events[1].legato).toBe(false)
+  })
+})
+
+describe('pitch curves (bend/slide/vibrato)', () => {
+  it('builds a bend curve with parsed semitones', () => {
+    const xml =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>half</type>` +
+      `<notations><technical><bend><bend-alter>1</bend-alter></bend></technical></notations></note></measure>`
+    const timing = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.performedTechniques).toContain('bend')
+    expect(event.pitchCurve).toMatchObject({ type: 'bend', semitones: 1 })
+  })
+
+  it('builds a bend-release curve when <release/> is present', () => {
+    const xml =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>half</type>` +
+      `<notations><technical><bend><bend-alter>2</bend-alter><release/></bend></technical></notations></note></measure>`
+    const timing = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.pitchCurve).toMatchObject({ type: 'bend-release', semitones: 2 })
+  })
+
+  it('pairs slides start→stop and demotes unpaired starts honestly', () => {
+    const xml =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><slide type="start"/></notations></note>` +
+      `<note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><slide type="stop"/></notations></note></measure>`
+    const timing = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const events = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(events[0].pitchCurve).toMatchObject({ type: 'slide', targetMidi: 55 })
+    expect(events[0].performedTechniques).toContain('slide')
+
+    const lone =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><slide type="start"/></notations></note></measure>`
+    const loneTiming = parseMusicXml(F.scoreWrap(`<part id="P1">${lone}</part>`))
+    const [loneEvent] = buildScoreNoteSchedule(loneTiming, { instrumentId: 'guitar' })
+    expect(loneEvent.pitchCurve).toBeNull()
+    expect(loneEvent.performedTechniques).not.toContain('slide')
+    expect(loneEvent.recognizedOnlyTechniques).toContain('slide')
+  })
+
+  it('builds a vibrato curve with documented defaults', () => {
+    const [event] = buildScoreNoteSchedule(timingMap([
+      timingNote({ guitarTechniques: [{ kind: 'vibrato' }] }),
+    ]))
+    expect(event.performedTechniques).toContain('vibrato')
+    expect(event.pitchCurve).toMatchObject({ type: 'vibrato', rateHz: 5.5 })
+  })
+
+  it('preserves string/fret information onto schedule events', () => {
+    const xml =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><technical><string>6</string><fret>0</fret></technical></notations></note></measure>`
+    const timing = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.string).toBe(6)
+    expect(event.fret).toBe(0)
+  })
+})
+
+describe('ornament expansion', () => {
+  function ornamentScore(extraNotations) {
+    return F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type>` +
+      `<notations>${extraNotations}</notations></note></measure></part>`,
+    )
+  }
+
+  it('expands trills into alternating main/upper attacks (diatonic in C)', () => {
+    const timing = parseMusicXml(ornamentScore(`<ornaments><trill-mark/></ornaments>`))
+    const events = buildScoreNoteSchedule(timing, { instrumentId: 'piano' })
+    expect(events.length).toBeGreaterThanOrEqual(4)
+    expect(events[0].midi).toBe(60)
+    expect(events[1].midi).toBe(62)
+    expect(events[0].ornamentKind).toBe('trill')
+    expect(events[0].ornamentCount).toBe(events.length)
+    for (const event of events) {
+      expect(event.performedTechniques).toEqual(['trill'])
+    }
+  })
+
+  it('expands mordents and turns with exact subdivision counts', () => {
+    const mordent = buildScoreNoteSchedule(
+      parseMusicXml(ornamentScore(`<ornaments><mordent/></ornaments>`)), { instrumentId: 'piano' },
+    )
+    expect(mordent.map((event) => event.midi)).toEqual([60, 62, 60])
+    const turn = buildScoreNoteSchedule(
+      parseMusicXml(ornamentScore(`<ornaments><turn/></ornaments>`)), { instrumentId: 'piano' },
+    )
+    expect(turn.map((event) => event.midi)).toEqual([62, 60, 59, 60])
+  })
+
+  it('staggers arpeggiated chords 12 ms in direction order', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}` +
+      `<note><arpeggiate direction="up"/><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>whole</type></note>` +
+      `<note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice></note>` +
+      `<note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice></note>` +
+      `</measure></part>`,
+    )
+    const events = buildScoreNoteSchedule(parseMusicXml(xml), { instrumentId: 'piano' })
+    expect(events.map((event) => event.midi)).toEqual([60, 64, 67])
+    expect(events[1].scoreTimeSeconds - events[0].scoreTimeSeconds).toBeCloseTo(0.012, 6)
+    expect(events[2].scoreTimeSeconds - events[0].scoreTimeSeconds).toBeCloseTo(0.024, 6)
+    for (const event of events) {
+      expect(event.performedTechniques).toContain('arpeggio')
+    }
+  })
+
+  it('fermata never shifts later onsets (cursor sync source)', () => {
+    const plain = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}${F.note('C')}${F.note('D')}</measure></part>`,
+    )
+    const held = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><fermata/></notations></note>${F.note('D')}</measure></part>`,
+    )
+    const plainEvents = buildScoreNoteSchedule(parseMusicXml(plain))
+    const heldEvents = buildScoreNoteSchedule(parseMusicXml(held))
+    expect(heldEvents[1].scoreTimeSeconds).toBe(plainEvents[1].scoreTimeSeconds)
+    expect(heldEvents[1].writtenOnsetSeconds).toBe(plainEvents[1].writtenOnsetSeconds)
+    expect(heldEvents[0].performedDurationSeconds).toBeGreaterThan(plainEvents[0].performedDurationSeconds)
   })
 })

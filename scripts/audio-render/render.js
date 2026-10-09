@@ -72,6 +72,9 @@ window.__renderApi = {
       for (const note of notes) {
         voice.triggerAttackRelease(note.name, note.duration, note.time, note.velocity ?? 0.8, {
           muted: note.muted ?? false,
+          midi: note.midi ?? null,
+          pitchCurve: note.pitchCurve ?? null,
+          slurAttack: note.slurAttack ?? null,
         })
       }
       // Tone.Offline renders the full duration regardless; the voice is
@@ -82,6 +85,7 @@ window.__renderApi = {
     const voice = window.__renderVoice
     window.__renderVoice = null
     const engineType = voice?.isUsingSampler?.() ? 'sampler' : 'synth'
+    const techniqueError = voice?.getLastTechniqueError?.() ?? null
     try {
       voice?.dispose?.()
     } catch {
@@ -91,6 +95,7 @@ window.__renderApi = {
       sampleRate: rendered.sampleRate,
       samples: Array.from(channel),
       engineType,
+      techniqueError,
     }
   },
 
@@ -108,10 +113,13 @@ window.__renderApi = {
     const events = buildScoreNoteSchedule(timing, { sustainPedal, instrumentId })
     const notes = events.map((event) => ({
       name: midiToName(event.midi),
+      midi: event.midi,
       time: event.scoreTimeSeconds,
       duration: event.performedDurationSeconds,
       velocity: event.velocity,
       muted: event.muted,
+      pitchCurve: event.pitchCurve,
+      slurAttack: event.slurAttack,
     }))
     const rendered = await this.renderNotes(voice, notes, tailSeconds)
     return {
@@ -126,6 +134,12 @@ window.__renderApi = {
         muted: event.muted,
         performedTechniques: event.performedTechniques,
         recognizedOnlyTechniques: event.recognizedOnlyTechniques,
+        pitchCurve: event.pitchCurve,
+        slurAttack: event.slurAttack,
+        ornamentKind: event.ornamentKind,
+        ornamentIndex: event.ornamentIndex,
+        string: event.string,
+        fret: event.fret,
       })),
     }
   },

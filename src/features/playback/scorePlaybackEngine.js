@@ -604,6 +604,9 @@ export class ScorePlaybackEngine {
         this.voice.triggerAttackRelease(name, duration, at, velocity, {
           midi: event.midi ?? null,
           tieChainId: event.tieChainId ?? null,
+          muted: event.muted ?? false,
+          pitchCurve: event.pitchCurve ?? null,
+          slurAttack: event.slurAttack ?? null,
         })
         this.scheduledEvents.add(event)
         triggersThisSlice += 1

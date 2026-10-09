@@ -50,7 +50,7 @@ describe('playback master FX defaults', () => {
       'utf8',
     )
     expect(voiceSrc).toMatch(/PLAYBACK_MASTER_FX/)
-    expect(voiceSrc).toMatch(/reverb\.dispose/)
+    expect(voiceSrc).toMatch(/ambience\.dispose/)
     expect(voiceSrc).toMatch(/await reverbReady/)
   })
 })
@@ -118,11 +118,19 @@ describe('latency configuration', () => {
   })
 })
 
-describe('reverb readiness', () => {
-  it('awaits reverb impulse generation in whenReady', async () => {
-    let resolveReverb
+describe('ambience readiness', () => {
+  it('resolves whenReady with the deterministic impulse (no async generation)', async () => {
     const tone = {
       now: () => 0,
+      getContext: () => ({
+        rawContext: {
+          sampleRate: 48000,
+          createBuffer: (channels, length, sampleRate) => ({
+            sampleRate,
+            getChannelData: () => new Float32Array(length),
+          }),
+        },
+      }),
       Gain: class {
         constructor() {
           this.gain = {
@@ -135,15 +143,15 @@ describe('reverb readiness', () => {
         connect() {}
         dispose() {}
       },
-      Reverb: class {
-        constructor() {}
-        generate() {
-          return new Promise((resolve) => {
-            resolveReverb = resolve
-          })
+      Convolver: class {
+        constructor() {
+          this.buffer = null
         }
         connect() {}
         dispose() {}
+      },
+      ToneAudioBuffer: class {
+        set() {}
       },
       Compressor: class {
         connect() {}
@@ -186,7 +194,6 @@ describe('reverb readiness', () => {
     })
 
     const readyPromise = voice.whenReady()
-    resolveReverb?.()
     await expect(readyPromise).resolves.toBe('sampled')
   })
 })
@@ -220,6 +227,15 @@ function makeVoiceTestTone() {
   }
   class Compressor extends Node {}
   class Limiter extends Node {}
+  class Convolver extends Node {
+    constructor() {
+      super()
+      this.buffer = null
+    }
+  }
+  class ToneAudioBuffer {
+    set() {}
+  }
   class Filter extends Node {}
   class Chorus extends Node {
     start() {}
@@ -265,8 +281,19 @@ function makeVoiceTestTone() {
 
   return {
     now: () => 1,
+    getContext: () => ({
+      rawContext: {
+        sampleRate: 48000,
+        createBuffer: (channels, length, sampleRate) => ({
+          sampleRate,
+          getChannelData: () => new Float32Array(length),
+        }),
+      },
+    }),
     Gain,
     Reverb,
+    Convolver,
+    ToneAudioBuffer,
     Compressor,
     Limiter,
     Filter,

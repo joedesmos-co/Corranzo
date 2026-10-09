@@ -474,12 +474,25 @@ function techniqueMarking(kind, node, index) {
 }
 
 function readGuitarTechniques(noteNode) {
+  const techniques = []
+  // <arpeggiate> is a direct child of <note>, not of <notations>.
+  const arpeggiateNode = findChild(noteNode, 'arpeggiate')
+  if (arpeggiateNode) {
+    const direction = String(attr(arpeggiateNode, 'direction') ?? 'up').toLowerCase()
+    techniques.push({
+      kind: 'arpeggio',
+      type: null,
+      number: '1',
+      text: null,
+      index: 0,
+      direction: direction === 'down' ? 'down' : 'up',
+    })
+  }
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
-    return []
+    return techniques
   }
   const technical = findChild(notations, 'technical')
-  const techniques = []
 
   if (technical) {
     findChildren(technical, 'hammer-on').forEach((node, index) => {
@@ -488,8 +501,23 @@ function readGuitarTechniques(noteNode) {
     findChildren(technical, 'pull-off').forEach((node, index) => {
       techniques.push(techniqueMarking('pull-off', node, index))
     })
-    if (findChild(technical, 'bend')) {
-      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
+    const bendNode = findChild(technical, 'bend')
+    if (bendNode) {
+      // Preserve bend shape: semitone amount, release, pre-bend. The
+      // schedule turns this into a pitch curve; without details a bend
+      // would stay a metadata flag forever.
+      const alterText = textOf(findChild(bendNode, 'bend-alter'))
+      const alter = Number(alterText)
+      techniques.push({
+        kind: 'bend',
+        type: null,
+        number: '1',
+        text: null,
+        index: 0,
+        semitones: Number.isFinite(alter) && alter !== 0 ? Math.max(-12, Math.min(12, alter)) : 2,
+        release: findChild(bendNode, 'release') != null,
+        preBend: findChild(bendNode, 'pre-bend') != null,
+      })
     }
     if (findChild(technical, 'harmonic')) {
       // Natural/artificial alike: the sampler cannot voice a true harmonic
@@ -519,7 +547,26 @@ function readGuitarTechniques(noteNode) {
   })
 
   const ornaments = findChild(notations, 'ornaments')
-  if (ornaments && findChild(ornaments, 'wavy-line')) {
+  const hasTrill = ornaments != null && findChild(ornaments, 'trill-mark') != null
+  if (hasTrill) {
+    techniques.push({ kind: 'trill', type: null, number: '1', text: null, index: 0 })
+  }
+  if (ornaments != null) {
+    if (findChild(ornaments, 'mordent') != null) {
+      techniques.push({ kind: 'mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'inverted-mordent') != null) {
+      techniques.push({ kind: 'inverted-mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'turn') != null) {
+      const turnNode = findChild(ornaments, 'turn')
+      const inverted = String(attr(turnNode, 'inverted') ?? '').toLowerCase() === 'yes'
+      techniques.push({ kind: inverted ? 'inverted-turn' : 'turn', type: null, number: '1', text: null, index: 0 })
+    }
+  }
+  // A wavy line after a trill-mark extends the trill — it is NOT vibrato.
+  // A standalone wavy line is the conventional vibrato marking.
+  if (ornaments && findChild(ornaments, 'wavy-line') && !hasTrill) {
     techniques.push({ kind: 'vibrato', type: null, number: '1', text: null, index: 0 })
   }
 

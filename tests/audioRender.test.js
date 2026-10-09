@@ -29,7 +29,7 @@ function centsError(measuredHz, expectedMidi) {
   return 1200 * Math.log2(measuredHz / (440 * 2 ** ((expectedMidi - 69) / 12)))
 }
 
-function f0Autocorr(samples, sampleRate, fromSeconds, windowSeconds = 0.4) {
+function f0Autocorr(samples, sampleRate, fromSeconds, windowSeconds = 0.4, fminHz = 40, fmaxHz = 1200) {
   const start = Math.floor(fromSeconds * sampleRate)
   const length = Math.min(Math.floor(windowSeconds * sampleRate), samples.length - start)
   if (length <= 0) {
@@ -38,7 +38,7 @@ function f0Autocorr(samples, sampleRate, fromSeconds, windowSeconds = 0.4) {
   const seg = samples.subarray(start, start + length)
   let bestLag = 0
   let bestValue = 0
-  for (let lag = Math.floor(sampleRate / 1200); lag < Math.floor(sampleRate / 40); lag += 1) {
+  for (let lag = Math.floor(sampleRate / fmaxHz); lag <= Math.floor(sampleRate / fminHz); lag += 1) {
     let sum = 0
     for (let index = 0; index + lag < seg.length; index += 4) {
       sum += seg[index] * seg[index + lag]
@@ -108,7 +108,7 @@ function windowEnergy(samples, sampleRate, fromSeconds, toSeconds) {
  * Returns absolute lags in seconds — the TRANSIENTS align, so only
  * relative lag differences are meaningful.
  */
-function matchedFilterLags(solos, mix, sampleRate) {
+function matchedFilterLags(solos, mix, sampleRate, opts = {}) {
   const toIndex = (time) => Math.floor(time * sampleRate)
   const differentiate = (array) => {
     const out = new Float32Array(array.length)
@@ -118,13 +118,15 @@ function matchedFilterLags(solos, mix, sampleRate) {
     return out
   }
   const mixDiff = differentiate(mix)
-  const templateStart = toIndex(0.54)
-  const templateEnd = toIndex(0.6)
+  const templateStart = toIndex(opts.templateStart ?? 0.54)
+  const templateEnd = toIndex(opts.templateEnd ?? 0.6)
+  const searchStart = toIndex(opts.searchStart ?? 0.48)
+  const searchEnd = toIndex(opts.searchEnd ?? 0.6)
   return solos.map((solo) => {
     const template = differentiate(solo.subarray(templateStart, templateEnd))
     let best = -Infinity
     let bestLag = 0
-    for (let lag = toIndex(0.48); lag < toIndex(0.6); lag += 1) {
+    for (let lag = searchStart; lag < searchEnd; lag += 1) {
       let score = 0
       for (let index = 0; index < template.length; index += 2) {
         score += template[index] * mixDiff[lag + index]
@@ -494,28 +496,24 @@ describe('rendered audio validation (real Tone.js render)', () => {
     expect(ratio).toBeLessThan(2.3)
   }, 120_000)
 
-  it('renders bends, slides, vibrato and harmonics at written pitch (no faked glide)', async () => {
-    const markings = {
-      bend: `<technical><bend><bend-alter>2</bend-alter></bend></technical>`,
-      slide: `<slide type="start"/>`,
-      vibrato: `<ornaments><wavy-line type="start"/></ornaments>`,
-      harmonic: `<technical><harmonic/></technical>`,
-    }
-    for (const [kind, marking] of Object.entries(markings)) {
-      const xml = scoreXml(
-        `<measure number="1"><attributes><divisions>1</divisions>` +
-        `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
-        `<direction><sound tempo="120"/></direction>` +
-        `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
-        `<type>quarter</type><notations>${marking}</notations></note></measure>`,
-      )
-      const rendered = await renderScore({ musicXml: xml, voice: 'guitar', instrumentId: 'guitar' })
-      expect(rendered.engineType).toBe('sampler')
-      expect(rendered.schedule[0].recognizedOnlyTechniques).toContain(kind)
-      const f0 = f0Autocorr(rendered.samples, rendered.sampleRate, 0.3)
-      expect(Math.abs(centsError(f0, 52))).toBeLessThan(MODEL_TOLERANCE_CENTS)
-    }
-  }, 240_000)
+  it('renders harmonics honestly at written pitch (no faked harmonic timbre)', async () => {
+    // A real 12th-fret harmonic would sound an octave up; the sampler
+    // cannot voice that, so the note renders at written pitch and the
+    // marking stays recognized-only. This test pins that honesty.
+    const xml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><technical><harmonic/></technical></notations></note></measure>`,
+    )
+    const rendered = await renderScore({ musicXml: xml, voice: 'guitar', instrumentId: 'guitar' })
+    expect(rendered.engineType).toBe('sampler')
+    expect(rendered.schedule[0].recognizedOnlyTechniques).toContain('harmonic')
+    expect(rendered.schedule[0].performedTechniques).not.toContain('harmonic')
+    const f0 = f0Autocorr(rendered.samples, rendered.sampleRate, 0.3)
+    expect(Math.abs(centsError(f0, 52))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+  }, 120_000)
 
   it('renders hammer-on notes softer through the full score path', async () => {
     const plainXml = scoreXml(
@@ -573,8 +571,7 @@ describe('rendered audio validation (real Tone.js render)', () => {
     expect(dot / Math.sqrt(normA * normE)).toBeLessThan(0.9)
   }, 120_000)
 
-  it('renders accents louder and fermatas longer through the score path', async () => {
-    const plainXml = scoreXml(
+  it('renders accents louder and fermatas longer through the score path', async () => {    const plainXml = scoreXml(
       `<measure number="1"><attributes><divisions>1</divisions>` +
       `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
       `<direction><sound tempo="120"/></direction>${qNote('C')}</measure>`,
@@ -607,4 +604,227 @@ describe('rendered audio validation (real Tone.js render)', () => {
     const fermataLate = windowEnergy(fermata.samples, fermata.sampleRate, 0.6, 1.4)
     expect(fermataLate).toBeGreaterThan(plainLate * 1.15)
   }, 180_000)
+
+  function guitarNoteXml(step, octave, duration, notations) {
+    return scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>${step}</step><octave>${octave}</octave></pitch><duration>${duration}</duration><voice>1</voice>` +
+      `<type>half</type><notations>${notations}</notations></note></measure>`,
+    )
+  }
+
+  it('bends a guitar note along the parsed trajectory (E3→F, no chord bleed)', async () => {
+    const rendered = await renderScore({
+      musicXml: guitarNoteXml('E', 3, 2, `<technical><bend><bend-alter>1</bend-alter></bend></technical>`),
+      voice: 'guitar',
+      instrumentId: 'guitar',
+    })
+    expect(rendered.schedule[0].pitchCurve).toMatchObject({ type: 'bend', semitones: 1 })
+    // Technique voice starts immediately (no sample preamble): early
+    // window is still flat, late window holds the bent pitch.
+    const early = f0Autocorr(rendered.samples, rendered.sampleRate, 0.02, 0.08)
+    const late = f0Autocorr(rendered.samples, rendered.sampleRate, 0.5, 0.2)
+    expect(Math.abs(centsError(early, 52))).toBeLessThan(75)
+    expect(Math.abs(centsError(late, 53))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+  }, 120_000)
+
+  it('releases a bent note back to pitch', async () => {
+    const rendered = await renderScore({
+      musicXml: guitarNoteXml('E', 3, 2, `<technical><bend><bend-alter>2</bend-alter><release/></bend></technical>`),
+      voice: 'guitar',
+      instrumentId: 'guitar',
+    })
+    expect(rendered.schedule[0].pitchCurve.type).toBe('bend-release')
+    const mid = f0Autocorr(rendered.samples, rendered.sampleRate, 0.35, 0.12)
+    const late = f0Autocorr(rendered.samples, rendered.sampleRate, 0.75, 0.2)
+    expect(Math.abs(centsError(mid, 54))).toBeLessThan(75)
+    expect(Math.abs(centsError(late, 52))).toBeLessThan(50)
+  }, 120_000)
+
+  it('slides between paired notes with no silence gap', async () => {
+    const xml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><slide type="start"/></notations></note>` +
+      `<note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><slide type="stop"/></notations></note></measure>`,
+    )
+    const rendered = await renderScore({ musicXml: xml, voice: 'guitar', instrumentId: 'guitar' })
+    expect(rendered.schedule[0].pitchCurve).toMatchObject({ type: 'slide', targetMidi: 55 })
+    const early = f0Autocorr(rendered.samples, rendered.sampleRate, 0.03, 0.08)
+    const late = f0Autocorr(rendered.samples, rendered.sampleRate, 0.42, 0.1)
+    expect(Math.abs(centsError(early, 52))).toBeLessThan(75)
+    expect(Math.abs(centsError(late, 55))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+    let floor = Infinity
+    for (let time = 0.05; time < 0.45; time += 0.05) {
+      const energy = windowEnergy(rendered.samples, rendered.sampleRate, time, time + 0.05)
+      if (energy < floor) {
+        floor = energy
+      }
+    }
+    const peak = windowEnergy(rendered.samples, rendered.sampleRate, 0.1, 0.2)
+    expect(floor).toBeGreaterThan(peak * 0.05)
+  }, 120_000)
+
+  it('plays vibrato at the documented rate and depth', async () => {
+    const rendered = await renderScore({
+      musicXml: guitarNoteXml('A', 3, 4, `<ornaments><wavy-line type="start"/></ornaments>`),
+      voice: 'guitar',
+      instrumentId: 'guitar',
+    })
+    expect(rendered.schedule[0].pitchCurve).toMatchObject({ type: 'vibrato', rateHz: 5.5 })
+    const contour = []
+    for (let time = 0.4; time < 1.6; time += 0.04) {
+      contour.push(f0Autocorr(rendered.samples, rendered.sampleRate, time, 0.08, 150, 350))
+    }
+    const mean = contour.reduce((sum, value) => sum + value, 0) / contour.length
+    const peakToPeak = Math.max(...contour) - Math.min(...contour)
+    expect(peakToPeak).toBeGreaterThan(6)
+    let crossings = 0
+    for (let index = 1; index < contour.length; index += 1) {
+      if ((contour[index - 1] - mean) * (contour[index] - mean) < 0) {
+        crossings += 1
+      }
+    }
+    // ~5.5 Hz over ~1.2 s ≈ 6–7 periods ≈ 12–14 crossings; wide gate.
+    expect(crossings).toBeGreaterThanOrEqual(6)
+    expect(crossings).toBeLessThanOrEqual(20)
+  }, 120_000)
+
+  it('bends one chord tone while the other stays static (residue proof)', async () => {
+    const solo = await render({
+      voice: 'guitar',
+      notes: [{ name: 'E3', midi: 52, time: 0.2, duration: 1.2, velocity: 0.8, pitchCurve: { type: 'bend', semitones: 2, rampSeconds: 0.3 } }],
+    })
+    const mix = await render({
+      voice: 'guitar',
+      notes: [
+        { name: 'E3', midi: 52, time: 0.2, duration: 1.2, velocity: 0.8, pitchCurve: { type: 'bend', semitones: 2, rampSeconds: 0.3 } },
+        { name: 'B3', midi: 59, time: 0.2, duration: 1.2, velocity: 0.8 },
+      ],
+    })
+    // Deterministic renders subtract cleanly: what remains must be the
+    // static B3. A whole-chord bend bug would leave a gliding residue.
+    const residue = mix.samples.map((value, index) => value - solo.samples[index])
+    for (const time of [0.4, 0.7, 1.0]) {
+      const f0 = f0Autocorr(Float32Array.from(residue), mix.sampleRate, time, 0.15, 200, 300)
+      expect(Math.abs(centsError(f0, 59))).toBeLessThan(50)
+    }
+  }, 120_000)
+
+  it('sounds hammer-ons connected: earlier tone onset, no pick-weight front', async () => {
+    const plainXml = guitarNoteXml('E', 3, 1, '')
+    const plain = await renderScore({ musicXml: plainXml, voice: 'guitar', instrumentId: 'guitar' })
+    const hammerXml = guitarNoteXml('E', 3, 1, `<technical><hammer-on type="start"/></technical>`)
+    const hammered = await renderScore({ musicXml: hammerXml, voice: 'guitar', instrumentId: 'guitar' })
+    expect(hammered.schedule[0].slurAttack).toMatchObject({ attackSeconds: 0.03 })
+    const frontLoad = (samples, sampleRate) =>
+      windowEnergy(samples, sampleRate, 0.01, 0.06) / windowEnergy(samples, sampleRate, 0.01, 0.2)
+    const timeToTone = (samples, sampleRate) => {
+      const total = windowEnergy(samples, sampleRate, 0, 0.4)
+      let cumulative = 0
+      for (let index = 0; index < Math.floor(0.4 * sampleRate); index += 1) {
+        cumulative += samples[index] * samples[index]
+        if (cumulative >= 0.1 * total) {
+          return index / sampleRate
+        }
+      }
+      return -1
+    }
+    expect(frontLoad(hammered.samples, hammered.sampleRate)).toBeGreaterThan(
+      frontLoad(plain.samples, plain.sampleRate) * 5,
+    )
+    // Deterministic renders make the 15 ms gap stable; margin 10 ms.
+    expect(timeToTone(hammered.samples, hammered.sampleRate)).toBeLessThan(
+      timeToTone(plain.samples, plain.sampleRate) - 0.01,
+    )
+  }, 120_000)
+
+  it('realizes trill alternation, mordent and turn pitches in audio', async () => {
+    const ornamentXml = (notations, duration = 4) => scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>${duration}</duration><voice>1</voice>` +
+      `<type>whole</type><notations>${notations}</notations></note></measure>`,
+    )
+    const trill = await renderScore({
+      musicXml: ornamentXml(`<ornaments><trill-mark/></ornaments>`), voice: 'piano', instrumentId: 'piano',
+    })
+    expect(trill.schedule.length).toBeGreaterThanOrEqual(8)
+    const slices = []
+    for (let index = 0; index < 6; index += 1) {
+      slices.push(f0Autocorr(trill.samples, trill.sampleRate, 0.03 + index * 0.125, 0.06, 200, 350))
+    }
+    for (let index = 0; index < slices.length; index += 1) {
+      expect(Math.abs(centsError(slices[index], index % 2 === 0 ? 60 : 62))).toBeLessThan(75)
+    }
+    const mordent = await renderScore({
+      musicXml: ornamentXml(`<ornaments><mordent/></ornaments>`, 2), voice: 'piano', instrumentId: 'piano',
+    })
+    const mordentPitches = [0.05, 0.38, 0.72].map((time) =>
+      f0Autocorr(mordent.samples, mordent.sampleRate, time, 0.08, 200, 350),
+    )
+    expect(Math.abs(centsError(mordentPitches[0], 60))).toBeLessThan(50)
+    expect(Math.abs(centsError(mordentPitches[1], 62))).toBeLessThan(50)
+    expect(Math.abs(centsError(mordentPitches[2], 60))).toBeLessThan(50)
+    const turn = await renderScore({
+      musicXml: ornamentXml(`<ornaments><turn/></ornaments>`, 2), voice: 'piano', instrumentId: 'piano',
+    })
+    const turnPitches = [0.05, 0.3, 0.55, 0.8].map((time) =>
+      f0Autocorr(turn.samples, turn.sampleRate, time, 0.07, 200, 350),
+    )
+    for (const [pitch, midi] of [[turnPitches[0], 62], [turnPitches[1], 60], [turnPitches[2], 59], [turnPitches[3], 60]]) {
+      expect(Math.abs(centsError(pitch, midi))).toBeLessThan(75)
+    }
+  }, 240_000)
+
+  it('staggers arpeggiated chords 12 ms apart in audio', async () => {
+    const names = ['C4', 'E4', 'G4']
+    const midis = [60, 64, 67]
+    const solos = []
+    for (let index = 0; index < 3; index += 1) {
+      solos.push(await render({
+        voice: 'piano', notes: [{ name: names[index], time: 0.5, duration: 1.5, velocity: 0.8 }],
+      }))
+    }
+    const xml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>` +
+      `<note><arpeggiate direction="up"/><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>` +
+      `<note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice></note>` +
+      `<note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice></note></measure>`,
+    )
+    const arpeggiated = await renderScore({ musicXml: xml, voice: 'piano', instrumentId: 'piano' })
+    const chord = arpeggiated.schedule.filter((event) => midis.includes(event.midi))
+    expect(chord.map((event) => event.midi)).toEqual([60, 64, 67])
+    const lags = matchedFilterLags(
+      solos.map((solo) => solo.samples),
+      arpeggiated.samples,
+      arpeggiated.sampleRate,
+    )
+    expect(lags[1] - lags[0]).toBeGreaterThan(0.006)
+    expect(lags[1] - lags[0]).toBeLessThan(0.018)
+    expect(lags[2] - lags[1]).toBeGreaterThan(0.006)
+    expect(lags[2] - lags[1]).toBeLessThan(0.018)
+  }, 180_000)
+
+  it('keeps fff louder than ff on chords without clipping', async () => {
+    const chord = (velocity) => render({
+      voice: 'piano',
+      notes: ['C4', 'E4', 'G4'].map((name) => ({ name, time: 0.2, duration: 1.0, velocity })),
+    })
+    const ff = await chord(0.91)
+    const fff = await chord(0.98)
+    expect(windowEnergy(fff.samples, fff.sampleRate, 0.25, 0.75)).toBeGreaterThan(
+      windowEnergy(ff.samples, ff.sampleRate, 0.25, 0.75),
+    )
+    expect(peakAbsolute(fff.samples)).toBeLessThan(1.0)
+  }, 120_000)
 })
