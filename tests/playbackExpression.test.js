@@ -74,6 +74,11 @@ function makeFakeTone() {
           this.frequencyCalls.push({ value, startTime, timeConstant })
           this.frequency.value = value
         },
+        cancelScheduledValues: () => {},
+        setValueAtTime: (value, startTime) => {
+          this.frequencyCalls.push({ value, startTime })
+          this.frequency.value = value
+        },
       }
     }
   }

@@ -223,8 +223,10 @@ export function createGuitarInstrument(options = {}) {
     sampledRelease: SAMPLED_RELEASE,
     sampleAttack: SAMPLE_ATTACK,
     velocityLayers: 2,
-    brightnessMinHz: 1500,
-    brightnessMaxHz: 7000,
+    // Same calibration reasoning as piano (see pianoInstrument.js):
+    // soft velocities must reach ~1 kHz to darken audibly, ff stays open.
+    brightnessMinHz: 500,
+    brightnessMaxHz: 9500,
     effects: {
       reverbDecay: 1.55,
       reverbWet: 0.085,

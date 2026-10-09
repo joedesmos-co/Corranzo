@@ -491,10 +491,25 @@ function readGuitarTechniques(noteNode) {
     if (findChild(technical, 'bend')) {
       techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
     }
+    if (findChild(technical, 'harmonic')) {
+      // Natural/artificial alike: the sampler cannot voice a true harmonic
+      // partial stack, so this stays recognized-only downstream. Parsed
+      // here so the technique is never silently dropped from the score.
+      techniques.push({ kind: 'harmonic', type: null, number: '1', text: null, index: 0 })
+    }
     findChildren(technical, 'other-technical').forEach((node, index) => {
       const text = textOf(node)
       if (text && /vib(?:rato)?/i.test(text)) {
         techniques.push({ kind: 'vibrato', type: null, number: '1', text, index })
+      }
+      // MusicXML has no dedicated palm-mute / let-ring elements; scores
+      // notate them as free text. Match conservatively so unrelated text
+      // never mutes a note by accident.
+      if (text && /palm[\s-]?mutes?|p\.?\s*m\.?(?![a-z])/i.test(text)) {
+        techniques.push({ kind: 'muted', type: null, number: '1', text, index })
+      }
+      if (text && /let[\s-]?ring|laissez[\s-]?vibrer/i.test(text)) {
+        techniques.push({ kind: 'let-ring', type: null, number: '1', text, index })
       }
     })
   }

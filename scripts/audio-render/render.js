@@ -15,6 +15,15 @@ import * as Tone from 'tone'
 import { createPianoInstrument } from '/src/features/playback/pianoInstrument.js'
 import { createGuitarInstrument } from '/src/features/playback/guitarInstrument.js'
 import { createElectricGuitarInstrument } from '/src/features/playback/electricGuitarInstrument.js'
+import { parseMusicXml } from '/src/features/musicxml/parseMusicXml.js'
+import { buildScoreNoteSchedule } from '/src/features/playback/scorePlaybackSchedule.js'
+
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+function midiToName(midi) {
+  const safe = Math.round(midi)
+  return `${NOTE_NAMES[((safe % 12) + 12) % 12]}${Math.floor(safe / 12) - 1}`
+}
 
 const FACTORIES = {
   piano: createPianoInstrument,
@@ -29,19 +38,17 @@ const BASE_URLS = {
 }
 
 window.__renderApi = {
-  async render(spec) {
-    const factory = FACTORIES[spec.voice]
+  async renderNotes(voiceId, notes, tailSeconds = 2.5, sampleBase = null) {
+    const factory = FACTORIES[voiceId]
     if (!factory) {
-      throw new Error(`unknown voice: ${spec.voice}`)
+      throw new Error(`unknown voice: ${voiceId}`)
     }
-    const notes = spec.notes ?? []
-    const tailSeconds = spec.tailSeconds ?? 2.5
     const lastEnd = notes.reduce((max, note) => Math.max(max, note.time + note.duration), 0)
     const duration = lastEnd + tailSeconds
     const rendered = await Tone.Offline(async () => {
       const voice = factory({
         tone: Tone,
-        sampleBaseUrl: spec.sampleBase ?? BASE_URLS[spec.voice],
+        sampleBaseUrl: sampleBase ?? BASE_URLS[voiceId],
         autoload: true,
       })
       // The shared voice exposes an `output` gain that engines normally
@@ -84,6 +91,42 @@ window.__renderApi = {
       sampleRate: rendered.sampleRate,
       samples: Array.from(channel),
       engineType,
+    }
+  },
+
+  async render(spec) {
+    return this.renderNotes(spec.voice, spec.notes ?? [], spec.tailSeconds ?? 2.5, spec.sampleBase ?? null)
+  },
+
+  /**
+   * End-to-end: parse MusicXML → build the REAL performance schedule →
+   * render it. The returned schedule summary lets tests assert the
+   * schedule→audio linkage (every event rendered at its scheduled time).
+   */
+  async renderSchedule({ musicXml, voice, instrumentId = null, sustainPedal = false, tailSeconds = 2.5 }) {
+    const timing = parseMusicXml(musicXml, 'harness.musicxml')
+    const events = buildScoreNoteSchedule(timing, { sustainPedal, instrumentId })
+    const notes = events.map((event) => ({
+      name: midiToName(event.midi),
+      time: event.scoreTimeSeconds,
+      duration: event.performedDurationSeconds,
+      velocity: event.velocity,
+      muted: event.muted,
+    }))
+    const rendered = await this.renderNotes(voice, notes, tailSeconds)
+    return {
+      ...rendered,
+      schedule: events.map((event) => ({
+        midi: event.midi,
+        time: event.scoreTimeSeconds,
+        duration: event.performedDurationSeconds,
+        performedDurationSeconds: event.performedDurationSeconds,
+        writtenDurationSeconds: event.writtenDurationSeconds,
+        velocity: event.velocity,
+        muted: event.muted,
+        performedTechniques: event.performedTechniques,
+        recognizedOnlyTechniques: event.recognizedOnlyTechniques,
+      })),
     }
   },
 }

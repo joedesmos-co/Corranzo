@@ -191,4 +191,74 @@ describe('guitar strum staggering', () => {
   it('applyGuitarStrum is a safe no-op on empty input', () => {
     expect(applyGuitarStrum([])).toEqual([])
   })
+
+  it('strum staggering never rewrites written onsets (score-follow sync source)', () => {
+    const events = buildScoreNoteSchedule(timingMap(chord()), { instrumentId: 'guitar' })
+    for (const event of events) {
+      expect(event.writtenOnsetSeconds).toBe(1)
+    }
+    // Performed times stagger; written times stay identical for the cursor.
+    expect(new Set(events.map((event) => event.scoreTimeSeconds)).size).toBe(3)
+  })
+})
+
+function techniqueNote(extraNotations) {
+  const xml =
+    `<measure number="1">${F.attributes()}` +
+    `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+    `<notations>${extraNotations}</notations></note></measure>`
+  return F.scoreWrap(`<part id="P1">${xml}</part>`)
+}
+
+describe('parsed guitar technique paths (parse → perform)', () => {
+  it('parses harmonic markings and keeps them recognized-only (never faked)', () => {
+    const timing = parseMusicXml(techniqueNote(`<technical><harmonic/></technical>`))
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.techniques).toContain('harmonic')
+    expect(event.recognizedOnlyTechniques).toContain('harmonic')
+    expect(event.performedTechniques).not.toContain('harmonic')
+  })
+
+  it('parses palm-mute text into performed muted events', () => {
+    const timing = parseMusicXml(
+      techniqueNote(`<technical><other-technical>palm mute</other-technical></technical>`),
+    )
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.techniques).toContain('muted')
+    expect(event.muted).toBe(true)
+    expect(event.performedTechniques).toContain('muted')
+    expect(event.performedDurationSeconds).toBeLessThan(event.writtenDurationSeconds)
+  })
+
+  it('does not mute on unrelated technical text', () => {
+    const timing = parseMusicXml(
+      techniqueNote(`<technical><other-technical>dolce</other-technical></technical>`),
+    )
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.muted).toBe(false)
+  })
+
+  it('parses let-ring text into extended ringing events', () => {
+    const timing = parseMusicXml(
+      techniqueNote(`<technical><other-technical>let ring</other-technical></technical>`),
+    )
+    const [event] = buildScoreNoteSchedule(timing, { instrumentId: 'guitar' })
+    expect(event.performedTechniques).toContain('let-ring')
+    expect(event.performedDurationSeconds).toBeGreaterThan(event.writtenDurationSeconds)
+  })
+
+  it('gives written-slur notes legato overlap on any instrument', () => {
+    const xml =
+      `<measure number="1">${F.attributes()}` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><slur type="start" number="1"/></notations></note>` +
+      `<note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type>` +
+      `<notations><slur type="stop" number="1"/></notations></note></measure>`
+    const timing = parseMusicXml(F.scoreWrap(`<part id="P1">${xml}</part>`))
+    const events = buildScoreNoteSchedule(timing, { instrumentId: 'piano' })
+    expect(events[0].legato).toBe(true)
+    expect(events[0].performedTechniques).toContain('legato')
+    expect(events[0].performedDurationSeconds).toBeGreaterThan(events[0].writtenDurationSeconds)
+    expect(events[1].legato).toBe(false)
+  })
 })

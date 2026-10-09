@@ -42,7 +42,6 @@ const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
 const DEFAULT_SAMPLED_RELEASE = 1.55
 const DEFAULT_SAMPLE_ATTACK = 0.004
 const RELEASE_FADE_SECONDS = 0.055
-const BRIGHTNESS_SMOOTHING_SECONDS = 0.015
 /**
  * Palm-mute damping at the voice level (short damped tone). Mirrors the
  * schedule-level MUTED_* ratios; kept here (not imported) so the voice
@@ -685,14 +684,18 @@ export function createSampledInstrumentVoice(options = {}) {
       nextVoiceSerial += 1
       const assignedVoiceId = `${voiceId}-${nextVoiceSerial}`
       if (usingSampler && sampler) {
-        // Velocity brightness: steer the shared tone filter at this
-        // note's own attack time (smoothed, non-fatal on failure).
+        // Velocity brightness: the shared tone filter must already sit at
+        // this note's target WHEN its hammer transient arrives — ramping
+        // from the default during the attack measured ~zero in rendered
+        // audio. An instant cutoff move at note onset is click-free in
+        // practice (frequency-only, no gain jump) and gives every note,
+        // including the first, its own brightness.
         try {
           const atTime = typeof time === 'number' ? time : tone.now()
-          samplerToneFilter.frequency.setTargetAtTime(
+          samplerToneFilter.frequency.cancelScheduledValues(atTime)
+          samplerToneFilter.frequency.setValueAtTime(
             brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
             atTime,
-            BRIGHTNESS_SMOOTHING_SECONDS,
           )
         } catch {
           // A filter failure must never silence a note.
@@ -747,10 +750,10 @@ export function createSampledInstrumentVoice(options = {}) {
       if (usingSampler && sampler) {
         try {
           const atTime = typeof time === 'number' ? time : tone.now()
-          samplerToneFilter.frequency.setTargetAtTime(
+          samplerToneFilter.frequency.cancelScheduledValues(atTime)
+          samplerToneFilter.frequency.setValueAtTime(
             brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
             atTime,
-            BRIGHTNESS_SMOOTHING_SECONDS,
           )
         } catch {
           // A filter failure must never silence a note.

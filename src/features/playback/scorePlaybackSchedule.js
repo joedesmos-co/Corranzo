@@ -38,6 +38,13 @@ export const SLUR_OVERLAP_SECONDS = 0.04
 export const MUTED_DURATION_RATIO = 0.35
 export const MUTED_VELOCITY_RATIO = 0.8
 
+/** Let-ring: the chord/note rings well past its written value (no re-attack). */
+export const LET_RING_DURATION_RATIO = 2.0
+
+/** Slur legato (any instrument): connected phrasing, no silence gap. */
+export const LEGATO_OVERLAP_SECONDS = 0.04
+export const LEGATO_TECHNIQUE_KIND = 'legato'
+
 /** Techniques the runtime actually renders (vs recognizes-only). */
 export const PERFORMED_TECHNIQUE_KINDS = Object.freeze(['hammer-on', 'pull-off', 'strum', 'muted', 'let-ring'])
 
@@ -113,6 +120,28 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1, sustainPedal = fal
         performedDurationSeconds = Math.max(0.03, performedDurationSeconds * MUTED_DURATION_RATIO)
         velocity = Math.max(0.05, velocity * MUTED_VELOCITY_RATIO)
       }
+      if (!muted && performed.includes('let-ring')) {
+        // Let-ring: sustain without re-attack. A fixed multiple of the
+        // written value — conservative, deterministic, and flagged.
+        performedDurationSeconds = Math.max(
+          performedDurationSeconds,
+          sanitizePlaybackDurationSeconds(note.durationSeconds) * LET_RING_DURATION_RATIO,
+        )
+        performed.push('let-ring')
+      }
+      const slurredForward = (note.slurs ?? []).some(
+        (slur) => slur?.type === 'start' || slur?.type === 'continue',
+      )
+      let legato = false
+      if (!muted && slurredForward) {
+        // Written-slur legato for any instrument: bleed into the next
+        // attack (same physical approximation as hammer-on/pull-off).
+        performedDurationSeconds += SLUR_OVERLAP_SECONDS
+        legato = true
+        if (!performed.includes(LEGATO_TECHNIQUE_KIND)) {
+          performed.push(LEGATO_TECHNIQUE_KIND)
+        }
+      }
       if (pedalSpans.length) {
         performedDurationSeconds = sustainedDuration(
           note.performedSeconds,
@@ -136,6 +165,7 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1, sustainPedal = fal
         techniques: kinds,
         performedTechniques: performed,
         recognizedOnlyTechniques: recognizedOnly,
+        legato,
         muted,
         tieChainId: note.tieChainId ?? null,
         attackCount: 1,

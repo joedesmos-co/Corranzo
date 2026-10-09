@@ -77,6 +77,19 @@ function peakAbsolute(samples, fromSeconds = 0, toSeconds = Infinity, sampleRate
   return peak
 }
 
+  /** High-frequency energy ratio — what the velocity-brightness filter moves. */
+function hfEnergyRatio(samples, sampleRate, fromSeconds, toSeconds) {
+  const start = Math.max(1, Math.floor(fromSeconds * sampleRate))
+  const end = Math.min(samples.length, Math.floor(toSeconds * sampleRate))
+  let hf = 0
+  let total = 0
+  for (let index = start; index < end; index += 1) {
+    const delta = samples[index] - samples[index - 1]
+    hf += delta * delta
+    total += samples[index] * samples[index]
+  }
+  return total > 0 ? hf / total : 0
+}
 /** Total energy in a time window (release/tail comparisons). */
 function windowEnergy(samples, sampleRate, fromSeconds, toSeconds) {
   const start = Math.max(0, Math.floor(fromSeconds * sampleRate))
@@ -240,6 +253,60 @@ describe('rendered audio validation (real Tone.js render)', () => {
     return { samples: Float32Array.from(results.samples), sampleRate: results.sampleRate, engineType: results.engineType }
   }
 
+  async function renderScore(job) {
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/audio-render/render.html`, { waitUntil: 'load' })
+    const results = await page.evaluate(async (task) => window.__renderApi.renderSchedule(task), job)
+    await page.close()
+    return {
+      samples: Float32Array.from(results.samples),
+      sampleRate: results.sampleRate,
+      engineType: results.engineType,
+      schedule: results.schedule,
+    }
+  }
+
+  function scoreXml(measuresInner, partId = 'P1') {
+    return `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="3.1">` +
+      `<part-list><score-part id="${partId}"><part-name>Music</part-name></score-part></part-list>` +
+      `<part id="${partId}">${measuresInner}</part></score-partwise>`
+  }
+
+  function qNote(step, octave = 4, duration = 1, extra = '') {
+    return `<note><pitch><step>${step}</step><octave>${octave}</octave></pitch>` +
+      `<duration>${duration}</duration><voice>1</voice><type>quarter</type>${extra}</note>`
+  }
+
+  /** Attack-onset cluster starts via HF-flux peaks (percussive attacks). */
+  function onsetClusterStarts(samples, sampleRate, fromSeconds, toSeconds, clusterSeconds = 0.3) {
+    const hop = Math.floor(sampleRate * 0.002)
+    const rows = []
+    let previous = 0
+    for (let start = Math.floor(fromSeconds * sampleRate); start < Math.floor(toSeconds * sampleRate); start += hop) {
+      let sum = 0
+      const end = Math.min(start + hop, samples.length)
+      for (let index = Math.max(start + 1, 1); index < end; index += 1) {
+        const delta = samples[index] - samples[index - 1]
+        sum += delta * delta
+      }
+      const level = sum / (end - start)
+      rows.push([start / sampleRate, level - previous])
+      previous = level
+    }
+    const peak = Math.max(...rows.map((row) => row[1]))
+    const starts = []
+    let last = -Infinity
+    for (const [time, rise] of rows) {
+      if (rise > 0.25 * peak && time - last > 0.2) {
+        if (!starts.length || time - starts[starts.length - 1] > clusterSeconds) {
+          starts.push(time)
+        }
+        last = time
+      }
+    }
+    return starts
+  }
+
   it('renders correct piano pitches (C4/E4/G4 triad voices)', async () => {
     for (const [name, midi] of [['C4', 60], ['E4', 64], ['G4', 67]]) {
       const { samples, sampleRate, engineType } = await render({
@@ -273,9 +340,12 @@ describe('rendered audio validation (real Tone.js render)', () => {
     const softRms = rms(soft.samples, 0.25, 0.75, soft.sampleRate)
     const loudRms = rms(loud.samples, 0.25, 0.75, loud.sampleRate)
     expect(loudRms / softRms).toBeGreaterThan(1.5)
-    const softCentroid = spectralCentroid(soft.samples, soft.sampleRate, 0.3, 0.7)
-    const loudCentroid = spectralCentroid(loud.samples, loud.sampleRate, 0.3, 0.7)
-    expect(loudCentroid).toBeGreaterThan(softCentroid * 1.1)
+    // Brightness is a per-note filter move, so it is measured with the HF
+    // ratio the filter acts on (measured 1.29× — margin 1.15×). Spectral
+    // centroid proved too sample-dominated to pin (flaky across runs).
+    const softHf = hfEnergyRatio(soft.samples, soft.sampleRate, 0.2, 0.9)
+    const loudHf = hfEnergyRatio(loud.samples, loud.sampleRate, 0.2, 0.9)
+    expect(loudHf).toBeGreaterThan(softHf * 1.15)
   }, 120_000)
 
   it('shortens staccato notes and extends pedalled releases', async () => {
@@ -340,4 +410,201 @@ describe('rendered audio validation (real Tone.js render)', () => {
     const mutedEnd = lastAboveDb(muted.samples, muted.sampleRate, -20, 0.2)
     expect(mutedEnd).toBeLessThan(ringingEnd - 0.2)
   }, 120_000)
+
+  it('renders the full piano dynamic ladder pp→fff in order', async () => {
+    const ladder = [['pp', 0.36], ['p', 0.46], ['mp', 0.56], ['mf', 0.7], ['f', 0.82], ['ff', 0.91], ['fff', 0.98]]
+    const levels = []
+    for (const [mark, velocity] of ladder) {
+      const rendered = await render({ voice: 'piano', notes: [{ name: 'C4', time: 0.2, duration: 1.0, velocity }] })
+      expect(rendered.engineType).toBe('sampler')
+      levels.push([mark, rms(rendered.samples, 0.25, 0.75, rendered.sampleRate)])
+    }
+    // Strictly rising except the limiter ceiling: ff→fff saturates honestly
+    // (measured 0.99× — margin 0.95×), everything else rises ≥5% per step.
+    for (let index = 1; index < levels.length; index += 1) {
+      const floor = index === levels.length - 1 ? 0.95 : 1.05
+      expect(levels[index][1]).toBeGreaterThan(levels[index - 1][1] * floor)
+    }
+    expect(levels[5][1]).toBeGreaterThan(levels[0][1] * 1.5)
+  }, 240_000)
+
+  // Same pitch throughout: an ascending line would conflate the sample's
+  // own pitch brightness with the wedge ramp (that confound failed
+  // diminuendo once — higher pitches read louder despite falling velocity).
+  function hairpinScore(wedgeType, startDynamic) {
+    const notes = ['C', 'C', 'C', 'C'].map((step) => qNote(step)).join('')
+    return scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<direction><direction-type><dynamics><${startDynamic}/></dynamics></direction-type></direction>` +
+      `<direction><direction-type><wedge type="${wedgeType}"/></direction-type></direction>` +
+      `${notes}<direction><direction-type><wedge type="stop"/></direction-type></direction></measure>`,
+    )
+  }
+
+  /** Per-note attack energies at the four quarter onsets (0, 0.5, 1, 1.5). */
+  function quarterAttackEnergies(samples, sampleRate) {
+    return [0, 0.5, 1, 1.5].map((onset) =>
+      windowEnergy(samples, sampleRate, onset + 0.05, onset + 0.3),
+    )
+  }
+
+  it('performs a crescendo end to end: parsed wedge → rising velocities → rising attacks', async () => {
+    const rendered = await renderScore({ musicXml: hairpinScore('crescendo', 'pp'), voice: 'piano', instrumentId: 'piano' })
+    expect(rendered.engineType).toBe('sampler')
+    const velocities = rendered.schedule.map((event) => event.velocity)
+    expect(velocities.length).toBe(4)
+    for (let index = 1; index < velocities.length; index += 1) {
+      expect(velocities[index]).toBeGreaterThan(velocities[index - 1])
+    }
+    const attacks = quarterAttackEnergies(rendered.samples, rendered.sampleRate)
+    for (let index = 1; index < attacks.length; index += 1) {
+      expect(attacks[index]).toBeGreaterThan(attacks[index - 1] * 1.03)
+    }
+  }, 120_000)
+
+  it('performs a diminuendo end to end: falling velocities → falling attacks', async () => {
+    const rendered = await renderScore({ musicXml: hairpinScore('diminuendo', 'f'), voice: 'piano', instrumentId: 'piano' })
+    expect(rendered.engineType).toBe('sampler')
+    const velocities = rendered.schedule.map((event) => event.velocity)
+    expect(velocities.length).toBe(4)
+    for (let index = 1; index < velocities.length; index += 1) {
+      expect(velocities[index]).toBeLessThan(velocities[index - 1])
+    }
+    const attacks = quarterAttackEnergies(rendered.samples, rendered.sampleRate)
+    for (let index = 1; index < attacks.length; index += 1) {
+      expect(attacks[index]).toBeLessThan(attacks[index - 1] * 0.97)
+    }
+  }, 120_000)
+
+  it('performs a tempo change end to end: schedule times and rendered onsets halve the gap', async () => {
+    const xml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>${qNote('C', 4, 2)}</measure>` +
+      `<measure number="2"><direction><sound tempo="60"/></direction>${qNote('E')}${qNote('F')}</measure>`,
+    )
+    const rendered = await renderScore({ musicXml: xml, voice: 'piano', instrumentId: 'piano' })
+    expect(rendered.schedule.map((event) => event.time)).toEqual([0, 2, 3])
+    const starts = onsetClusterStarts(rendered.samples, rendered.sampleRate, 0, 3.5)
+    expect(starts.length).toBe(3)
+    const ratio = (starts[1] - starts[0]) / (starts[2] - starts[1])
+    expect(ratio).toBeGreaterThan(1.7)
+    expect(ratio).toBeLessThan(2.3)
+  }, 120_000)
+
+  it('renders bends, slides, vibrato and harmonics at written pitch (no faked glide)', async () => {
+    const markings = {
+      bend: `<technical><bend><bend-alter>2</bend-alter></bend></technical>`,
+      slide: `<slide type="start"/>`,
+      vibrato: `<ornaments><wavy-line type="start"/></ornaments>`,
+      harmonic: `<technical><harmonic/></technical>`,
+    }
+    for (const [kind, marking] of Object.entries(markings)) {
+      const xml = scoreXml(
+        `<measure number="1"><attributes><divisions>1</divisions>` +
+        `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+        `<direction><sound tempo="120"/></direction>` +
+        `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
+        `<type>quarter</type><notations>${marking}</notations></note></measure>`,
+      )
+      const rendered = await renderScore({ musicXml: xml, voice: 'guitar', instrumentId: 'guitar' })
+      expect(rendered.engineType).toBe('sampler')
+      expect(rendered.schedule[0].recognizedOnlyTechniques).toContain(kind)
+      const f0 = f0Autocorr(rendered.samples, rendered.sampleRate, 0.3)
+      expect(Math.abs(centsError(f0, 52))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+    }
+  }, 240_000)
+
+  it('renders hammer-on notes softer through the full score path', async () => {
+    const plainXml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>${qNote('E', 3)}</measure>`,
+    )
+    const hammerXml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><technical><hammer-on type="start"/></technical></notations></note></measure>`,
+    )
+    const plain = await renderScore({ musicXml: plainXml, voice: 'guitar', instrumentId: 'guitar' })
+    const hammered = await renderScore({ musicXml: hammerXml, voice: 'guitar', instrumentId: 'guitar' })
+    expect(hammered.schedule[0].performedTechniques).toContain('hammer-on')
+    expect(hammered.schedule[0].velocity).toBeLessThan(plain.schedule[0].velocity)
+    const plainRms = rms(plain.samples, 0.15, 0.45, plain.sampleRate)
+    const hammerRms = rms(hammered.samples, 0.15, 0.45, hammered.sampleRate)
+    expect(hammerRms).toBeLessThan(plainRms * 0.95)
+  }, 120_000)
+
+  it('renders palm mute end to end from notation text', async () => {
+    const xml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice>` +
+      `<type>half</type><notations><technical><other-technical>palm mute</other-technical></technical></notations></note></measure>`,
+    )
+    const rendered = await renderScore({ musicXml: xml, voice: 'guitar', instrumentId: 'guitar' })
+    expect(rendered.schedule[0].muted).toBe(true)
+    const ringing = await render({ voice: 'guitar', notes: [{ name: 'E3', time: 0, duration: 1.0, velocity: 0.8 }] })
+    const mutedTail = windowEnergy(rendered.samples, rendered.sampleRate, 0.5, 1.5)
+    const ringingTail = windowEnergy(ringing.samples, ringing.sampleRate, 0.5, 1.5)
+    expect(mutedTail).toBeLessThan(ringingTail / 5)
+  }, 120_000)
+
+  it('acoustic and electric guitars render the same pitch with clearly different sound', async () => {
+    const acoustic = await render({ voice: 'guitar', notes: [{ name: 'A3', time: 0.2, duration: 1.0, velocity: 0.8 }] })
+    const electric = await render({ voice: 'electric', notes: [{ name: 'A3', time: 0.2, duration: 1.0, velocity: 0.8 }] })
+    expect(acoustic.engineType).toBe('sampler')
+    expect(electric.engineType).toBe('sampler')
+    expect(Math.abs(centsError(f0Autocorr(acoustic.samples, acoustic.sampleRate, 0.3), 57))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+    expect(Math.abs(centsError(f0Autocorr(electric.samples, electric.sampleRate, 0.3), 57))).toBeLessThan(MODEL_TOLERANCE_CENTS)
+    let dot = 0
+    let normA = 0
+    let normE = 0
+    for (let index = 0; index < acoustic.samples.length; index += 2) {
+      dot += acoustic.samples[index] * electric.samples[index]
+      normA += acoustic.samples[index] * acoustic.samples[index]
+      normE += electric.samples[index] * electric.samples[index]
+    }
+    expect(dot / Math.sqrt(normA * normE)).toBeLessThan(0.9)
+  }, 120_000)
+
+  it('renders accents louder and fermatas longer through the score path', async () => {
+    const plainXml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>${qNote('C')}</measure>`,
+    )
+    const plain = await renderScore({ musicXml: plainXml, voice: 'piano', instrumentId: 'piano' })
+    const accentXml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><articulations><accent/></articulations></notations></note></measure>`,
+    )
+    const accented = await renderScore({ musicXml: accentXml, voice: 'piano', instrumentId: 'piano' })
+    expect(accented.schedule[0].velocity).toBeGreaterThan(plain.schedule[0].velocity)
+    const plainRms = rms(plain.samples, 0.1, 0.5, plain.sampleRate)
+    const accentRms = rms(accented.samples, 0.1, 0.5, accented.sampleRate)
+    expect(accentRms).toBeGreaterThan(plainRms * 1.05)
+    const fermataXml = scoreXml(
+      `<measure number="1"><attributes><divisions>1</divisions>` +
+      `<time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>` +
+      `<direction><sound tempo="120"/></direction>` +
+      `<note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice>` +
+      `<type>quarter</type><notations><fermata/></notations></note></measure>`,
+    )
+    const fermata = await renderScore({ musicXml: fermataXml, voice: 'piano', instrumentId: 'piano' })
+    expect(fermata.schedule[0].performedDurationSeconds).toBeCloseTo(
+      plain.schedule[0].performedDurationSeconds * 1.75, 6,
+    )
+    const plainLate = windowEnergy(plain.samples, plain.sampleRate, 0.6, 1.4)
+    const fermataLate = windowEnergy(fermata.samples, fermata.sampleRate, 0.6, 1.4)
+    expect(fermataLate).toBeGreaterThan(plainLate * 1.15)
+  }, 180_000)
 })
