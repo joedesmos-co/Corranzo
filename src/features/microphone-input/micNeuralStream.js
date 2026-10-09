@@ -242,3 +242,22 @@ export function drainNeuralStreamEvents(state) {
   state.emitted = []
   return events
 }
+
+/**
+ * Currently sustained tones (M1 fix): active tracks unheard just long
+ * enough to have left no fresh attack, but still ringing. Confirmation
+ * consults these alongside fresh attacks so a sustained chord can
+ * complete even when its attack windows were skipped, partial, or
+ * merged across loop seams. Emission identity still comes only from
+ * fresh attacks (takeNewlyConfirmed) — sustain never double-awards.
+ */
+export function getNeuralStreamSustained(state) {
+  if (!state) {
+    return []
+  }
+  const sustained = []
+  for (const [midi, active] of state.activeNotes) {
+    sustained.push({ midi, onsetMs: active.onsetMs, confidence: 0.85 })
+  }
+  return sustained.sort((left, right) => left.midi - right.midi)
+}

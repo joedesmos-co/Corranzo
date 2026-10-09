@@ -40,6 +40,7 @@ import {
   createNeuralStreamState,
   drainNeuralStreamEvents,
   emitNeuralStreamNotes,
+  getNeuralStreamSustained,
   setNeuralStreamSampleRate,
 } from '../microphone-input/micNeuralStream.js'
 import {
@@ -57,7 +58,17 @@ const PLAY_ALONG_LATE_INPUT_SECONDS = 0.28
 const CAPTURE_POLL_MS = 100
 const STREAM_HOP_MS = 250
 const STREAM_WINDOW_SECONDS = 0.5
-const CONFIRM_POOL_SECONDS = 1.5
+// Confirmation pool retention (M1 fix): attacks stay eligible for 4 s,
+// not 1.5 s. Sparse inference cadence (CPU runners, skipped hops) and
+// loop-merged sustains mean the tones of one musical event rarely share
+// a 1.5 s slice; widening to 4 s lets them accumulate like the spectral
+// path's 3.5 s chord collection already does. Manufacture safety is
+// unchanged (expected∩heard at 50¢ per tone); timing still uses each
+// attack's true onset, never the confirmation moment. Cross-checkpoint
+// leakage is blocked by the pool reset in the checkpoint effect.
+const CONFIRM_POOL_SECONDS = 4.0
+const CONFIRM_WINDOW_BEFORE_SECONDS = 4.0
+const CONFIRM_WINDOW_AFTER_SECONDS = 0.5
 
 /**
  * Map a capture-clock onset to score time (M5, pure + tested).
@@ -98,6 +109,23 @@ export function classifyPlayAlongTiming(scoreTime, expectedTime) {
     return RECOGNITION_TIMING.LATE
   }
   return RECOGNITION_TIMING.TARGET
+}
+
+/**
+ * Readiness-gated input routing (M1 fix, pure + tested). The dev flag
+ * alone must never park practice on a dead neural hook: spectral runs
+ * until the neural hook reports phase 'listening' (model loaded +
+ * hardware fast enough); only then does matching route to it. Model
+ * missing/slow/unavailable → spectral keeps working exactly as before
+ * the flag existed.
+ *
+ * @returns {'neural'|'spectral'}
+ */
+export function selectMicInputSource({ flagEnabled, neuralPhase }) {
+  if (flagEnabled && neuralPhase === 'listening') {
+    return 'neural'
+  }
+  return 'spectral'
 }
 
 /**
@@ -179,6 +207,22 @@ export default function useNeuralMicInput({
   const lastPollMsRef = useRef(null)
   const clockMapRef = useRef([])
   const checkpointIdRef = useRef(null)
+  const microphoneRef = useRef(null)
+  const wasListeningRef = useRef(false)
+  // M1 stage diagnostics: every pipeline stage counts itself here so the
+  // panel can show exactly where events disappear. Published to state
+  // (throttled) for the diagnostics UI.
+  const debugRef = useRef({
+    polls: 0,
+    hops: 0,
+    windowsRun: 0,
+    lastInferMs: null,
+    lastWindowNotes: 0,
+    lastPumpReason: 'idle',
+    ringSamples: 0,
+    lastError: null,
+  })
+  const [debugSnapshot, setDebugSnapshot] = useState(null)
   const phaseRef = useRef(phase)
   const callbacksRef = useRef(null)
   const livePropsRef = useRef(null)
@@ -188,6 +232,7 @@ export default function useNeuralMicInput({
   useEffect(() => {
     phaseRef.current = phase
     callbacksRef.current = { onPlayerInputMatched, onWrongNote, onRecognitionDecision, onPlayAlongNote }
+    microphoneRef.current = microphone
     livePropsRef.current = {
       currentCheckpoint,
       expectedMidis: liveExpected,
@@ -224,6 +269,14 @@ export default function useNeuralMicInput({
       return undefined
     }
     let cancelled = false
+    // Model URL is a same-origin static asset (public/neural-model/),
+    // identical in dev, build, and offline — no bundler URL magic that
+    // can 404 in one environment but not another (M1 fix: the ?url
+    // dynamic imports failed under vite dev with a doubled path, and a
+    // Blob-URL manifest broke TF.js shard resolution).
+    const urls = {
+      json: '/neural-model/model.json',
+    }
     // setState only from async continuations (never synchronously).
     Promise.resolve()
       .then(() => {
@@ -232,15 +285,10 @@ export default function useNeuralMicInput({
         }
         setPhase('loading')
         setPhaseError(null)
-        return Promise.all([
-          import('@spotify/basic-pitch/model/model.json?url'),
-          import('@spotify/basic-pitch/model/group1-shard1of1.bin?url'),
-        ])
+        return urls
       })
-      .then(([jsonModule, binModule]) => ({ json: jsonModule.default, bin: binModule.default }))
-      .catch(() => ({ json: null, bin: null }))
       .then(async (urls) => {
-        if (cancelled || !urls.json || !urls.bin) {
+        if (cancelled || !urls.json) {
           if (!cancelled) {
             setPhaseError('model assets missing')
             setPhase('unavailable')
@@ -249,14 +297,19 @@ export default function useNeuralMicInput({
         }
         setPhase('warming')
         try {
-          const capability = await checkNeuralCapability({ modelJsonUrl: urls.json, modelBinUrl: urls.bin })
+          const capability = await checkNeuralCapability({ modelJsonUrl: urls.json })
           if (cancelled) {
             return
           }
           runtimeRef.current = { capability, urls }
           setBackend(capability.backend)
           setWarmedMs(capability.warmedMs)
-          if (!capability.ok) {
+          // Test seam (mirrors resetNeuralRuntimeForTests): lets the
+          // automated browser tests exercise everything downstream of the
+          // hardware gate on CPU-only runners. Production has no such
+          // override; the gate stays strict there.
+          const forceListen = globalThis.__SCOREFLOW_NEURAL_FORCE_LISTEN === true
+          if (!capability.ok && !forceListen) {
             setPhaseError(`too slow on ${capability.backend} (${capability.warmedMs} ms)`)
             setPhase('unavailable')
             return
@@ -275,21 +328,64 @@ export default function useNeuralMicInput({
   }, [active])
 
   // Capture poll + streaming hop loop.
+  //
+  // M1 root-cause fix (the user's "level moves but nothing advances"):
+  // this effect used to depend on the microphone OBJECT (a fresh
+  // identity every session render, driven by the practice clock), so it
+  // tore down and recreated the interval constantly — and every restart
+  // wiped the ring buffer before 0.5 s of audio could accumulate, while
+  // the level meter (published from any single poll) still moved. Now
+  // the effect depends only on `active`; everything live comes through
+  // microphoneRef, the ring resets only on the false→true listening
+  // edge, and late capture init (analyser null at first) simply idles
+  // until the stream arrives instead of dying silently.
   useEffect(() => {
-    if (!active || !microphone?.isListening) {
+    if (!active) {
       lastPollMsRef.current = null
+      wasListeningRef.current = false
       return undefined
     }
-    const analyser = microphone.analyser?.current
-    const getBuffer = microphone.getTimeDomainBuffer
-    const sampleRate = microphone.sampleRate ?? 44100
-    if (!analyser || !getBuffer) {
-      return undefined
-    }
-    ringRef.current = { samples: [], startCaptureMs: null, inputRate: sampleRate }
-    rmsHistoryRef.current = []
-    const scratch = new Float32Array(analyser.fftSize)
-    setNeuralStreamSampleRate(streamRef.current, NEURAL_MODEL_RATE)
+    let scratch = null
+    let lastDebugPublishMs = 0
+    const poll = () => {
+      try {
+        const nowMs = performance.now()
+        debugRef.current.polls += 1
+        const microphoneSnapshot = microphoneRef.current
+        if (!microphoneSnapshot?.isListening) {
+          wasListeningRef.current = false
+          return
+        }
+        if (!wasListeningRef.current) {
+          // Activation edge: fresh ring + stream state for this take.
+          wasListeningRef.current = true
+          ringRef.current = { samples: [], startCaptureMs: null, inputRate: microphoneSnapshot.sampleRate ?? 44100 }
+          rmsHistoryRef.current = []
+          streamRef.current = createNeuralStreamState({ windowSeconds: STREAM_WINDOW_SECONDS, hopSeconds: STREAM_HOP_MS / 1000 })
+          setNeuralStreamSampleRate(streamRef.current, NEURAL_MODEL_RATE)
+        }
+        const analyser = microphoneSnapshot.analyser?.current
+        const getBuffer = microphoneSnapshot.getTimeDomainBuffer
+        const sampleRate = microphoneSnapshot.sampleRate ?? 44100
+        if (!analyser || !getBuffer) {
+          debugRef.current.lastPumpReason = 'no-analyser'
+          return
+        }
+        const timeBuffer = getBuffer()
+        if (!timeBuffer) {
+          debugRef.current.lastPumpReason = 'no-buffer'
+          return
+        }
+        if (!scratch || scratch.length !== analyser.fftSize) {
+          scratch = new Float32Array(analyser.fftSize)
+        }
+        analyser.getFloatTimeDomainData(scratch)
+        let sumSquares = 0
+        for (const value of scratch) {
+          sumSquares += value * value
+        }
+        const rms = Math.sqrt(sumSquares / scratch.length)
+        rmsHistoryRef.current.push(rms)
 
     const scoreTimeAtCaptureMs = (captureMs) => mapCaptureToScoreTime(
       clockMapRef.current,
@@ -301,6 +397,7 @@ export default function useNeuralMicInput({
       if (!outcome) {
         return
       }
+      debugRef.current.lastOutcome = `${midi}:${outcome.outcome}`
       if (outcome.outcome === MATCH_OUTCOME.COMPLETE) {
         setInputFeedback({
           outcome: outcome.outcome,
@@ -357,19 +454,43 @@ export default function useNeuralMicInput({
       if (!live.expectedMidis.length) {
         return
       }
-      const pool = poolRef.current.map((entry) => ({
-        midi: entry.midi,
-        midiFloat: entry.midi,
-        confidence: entry.confidence ?? 0.85,
-        detected: true,
-        neuralStart: entry.onsetMs / 1000,
-        neuralEnd: null,
-      }))
-      // Anchor = start of the confirmation pool on the capture clock.
-      const anchorSeconds = (lastHopRef.current - CONFIRM_POOL_SECONDS * 1000) / 1000
+      // confirmNeuralNotes takes BP-shaped notes { midi, start, end } on
+      // the SAME clock as the anchor (capture-clock seconds here).
+      // Pool = fresh attacks UNION sustained tones (M1 fix): fresh
+      // attacks drive UI + emission identity, while sustained tones let
+      // a chord complete when its attack windows were skipped, partial,
+      // or merged across loop seams. Sustain re-presents what the model
+      // still hears — it never manufactures. Emission stays one-shot
+      // per checkpoint via takeNewlyConfirmed below.
+      const byMidi = new Map()
+      for (const entry of poolRef.current) {
+        byMidi.set(entry.midi, { start: entry.onsetMs / 1000, end: entry.onsetMs / 1000 + 1.0, sustained: false })
+      }
+      for (const sustained of getNeuralStreamSustained(streamRef.current)) {
+        if (!byMidi.has(sustained.midi)) {
+          byMidi.set(sustained.midi, {
+            start: sustained.onsetMs / 1000,
+            end: sustained.onsetMs / 1000 + 1.0,
+            sustained: true,
+          })
+        }
+      }
+      const pool = [...byMidi].map(([midi, note]) => ({ midi, ...note }))
+      // Anchor = now on the capture clock; the window covers the whole
+      // retained pool ([now-4 s, now+0.5 s]).
+      const anchorSeconds = lastHopRef.current / 1000
       let verdict = null
       try {
-        verdict = confirmNeuralNotes(pool, live.expectedMidis, anchorSeconds)
+        verdict = confirmNeuralNotes(pool, live.expectedMidis, anchorSeconds, {
+          windowBeforeSeconds: CONFIRM_WINDOW_BEFORE_SECONDS,
+          windowAfterSeconds: CONFIRM_WINDOW_AFTER_SECONDS,
+        })
+        debugRef.current.lastVerdict = {
+          confirmed: verdict.confirmedMidis,
+          missing: verdict.missingMidis,
+          pool: pool.length,
+          anchor: Math.round(anchorSeconds * 100) / 100,
+        }
       } catch {
         return
       }
@@ -419,8 +540,11 @@ export default function useNeuralMicInput({
     }
 
     const pumpNeuralHop = async () => {
+      const debug = debugRef.current
+      debug.hops += 1
       const runtime = runtimeRef.current
       if (!runtime || phaseRef.current !== 'listening' || inferPendingRef.current) {
+        debug.lastPumpReason = !runtime ? 'no-runtime' : (phaseRef.current !== 'listening' ? `phase-${phaseRef.current}` : 'pending')
         return
       }
       // Silence skip (M3): no musical signal below the measured floor —
@@ -429,41 +553,41 @@ export default function useNeuralMicInput({
       // silence simply produces no candidates.
       if (shouldSkipSilence(rmsHistoryRef.current)) {
         setSilenceSkips((count) => count + 1)
+        debug.lastPumpReason = 'silence'
         return
       }
       const ring = ringRef.current
       const needSamples = Math.floor(STREAM_WINDOW_SECONDS * ring.inputRate)
       if (ring.samples.length < needSamples) {
+        debug.lastPumpReason = `starved-${ring.samples.length}/${needSamples}`
         return
       }
       const windowSamples = Float32Array.from(ring.samples.slice(ring.samples.length - needSamples))
       const windowStartCaptureMs = ring.startCaptureMs + ((ring.samples.length - needSamples) / ring.inputRate) * 1000
       inferPendingRef.current = true
+      const inferStartMs = performance.now()
       try {
         if (!modelNamespaceRef.current) {
           modelNamespaceRef.current = await import('@spotify/basic-pitch')
         }
-        const loaded = await loadNeuralRuntime({ modelJsonUrl: runtime.urls.json, modelBinUrl: runtime.urls.bin })
+        const loaded = await loadNeuralRuntime({ modelJsonUrl: runtime.urls.json })
         const resampled = resampleToModelRate(windowSamples, ring.inputRate, NEURAL_MODEL_RATE)
         const notes = await runNeuralWindow(loaded, modelNamespaceRef.current, resampled)
+        debug.windowsRun += 1
+        debug.lastInferMs = Math.round((performance.now() - inferStartMs) * 10) / 10
+        debug.lastWindowNotes = notes?.length ?? 0
+        debug.lastPumpReason = 'ok'
+        debug.lastError = null
         handleNeuralNotes(notes, windowStartCaptureMs)
-      } catch {
+      } catch (error) {
         // Single-window failures must not stall the stream.
+        debug.lastPumpReason = 'error'
+        debug.lastError = error instanceof Error ? error.message : String(error)
       } finally {
         inferPendingRef.current = false
       }
     }
 
-    const poll = () => {
-      try {
-        const nowMs = performance.now()
-        analyser.getFloatTimeDomainData(scratch)
-        let sumSquares = 0
-        for (const value of scratch) {
-          sumSquares += value * value
-        }
-        const rms = Math.sqrt(sumSquares / scratch.length)
-        rmsHistoryRef.current.push(rms)
         if (rmsHistoryRef.current.length > 8) {
           rmsHistoryRef.current.shift()
         }
@@ -504,6 +628,11 @@ export default function useNeuralMicInput({
           lastHopRef.current = nowMs
           void pumpNeuralHop().catch(() => {})
         }
+        debugRef.current.ringSamples = ringRef.current.samples.length
+        if (nowMs - lastDebugPublishMs > 1000) {
+          lastDebugPublishMs = nowMs
+          setDebugSnapshot({ ...debugRef.current })
+        }
       } catch {
         // A diagnostics-grade loop must never break capture.
       }
@@ -514,7 +643,7 @@ export default function useNeuralMicInput({
       clearInterval(timer)
       inferPendingRef.current = false
     }
-  }, [active, microphone])
+  }, [active])
 
   // Model teardown on unmount only (M4): repeated toggle cycles reuse
   // the cached runtime (no recompile); unmount releases GPU memory and
@@ -568,6 +697,7 @@ export default function useNeuralMicInput({
       detectedNotes,
       rejected,
       silenceSkips,
+      debug: debugSnapshot,
     },
   }
 }

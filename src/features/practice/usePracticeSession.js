@@ -8,7 +8,7 @@ import { isMicrophoneSupported } from '../microphone-input/micEnvironment.js'
 import { MIC_PERMISSION, MIC_SUPPORT, WFY_INPUT_SOURCE } from '../microphone-input/micInputConstants.js'
 import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import useWaitForYouMicInput from './useWaitForYouMicInput.js'
-import useNeuralMicInput from './useNeuralMicInput.js'
+import useNeuralMicInput, { selectMicInputSource } from './useNeuralMicInput.js'
 import useMicNeuralFlag from '../microphone-input/useMicNeuralFlag.js'
 import useScorePlayback from '../playback/useScorePlayback.js'
 import useMusicXmlTiming from '../musicxml/useMusicXmlTiming.js'
@@ -513,6 +513,11 @@ export default function usePracticeSession({
   // OFF. When on, the neural hook replaces the spectral mic hooks below
   // (same callbacks, same canonical contracts); when off, every active
   // flag below is byte-identical to before.
+  const playAlongFeedbackRef = useRef(playAlongFeedback)
+  playAlongFeedbackRef.current = playAlongFeedback
+  const playAlongGroupsRef = useRef(playAlongLaneGroups)
+  playAlongGroupsRef.current = playAlongLaneGroups
+
   const [neuralMicEnabled] = useMicNeuralFlag()
   const neuralMicWfyActive =
     neuralMicEnabled &&
@@ -526,67 +531,6 @@ export default function usePracticeSession({
     playAlongInputActive &&
     wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE
 
-  const waitForYouMidi = useWaitForYouMidiInput({
-    active:
-      isWaitForYou &&
-      wfyInputSourceReady &&
-      wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
-      !waitForYou.displayPhase,
-    checkpointMode,
-    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
-    checkpointIndex: waitForYou.checkpointIndex,
-    matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: handleWfyPlayerInputMatched,
-    onWrongNote: handleWfyWrongNote,
-    webMidi,
-  })
-
-  const waitForYouMic = useWaitForYouMicInput({
-    active:
-      isWaitForYou &&
-      practiceActive &&
-      wfyInputSourceReady &&
-      wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
-      !waitForYou.displayPhase &&
-      !neuralMicWfyActive,
-    checkpointMode,
-    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
-    checkpointIndex: waitForYou.checkpointIndex,
-    checkpoints: enrichedWfyCheckpoints,
-    performanceMode: PERFORMANCE_MODE.WAIT_FOR_YOU,
-    matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: handleWfyPlayerInputMatched,
-    onWrongNote: handleWfyWrongNote,
-    microphone,
-    instrumentId,
-  })
-
-  const playAlongMic = useWaitForYouMicInput({
-    active:
-      playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE && !neuralPlayAlongActive,
-    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
-    currentCheckpoint: playAlongTargetCheckpoint,
-    checkpointIndex: playAlongTargetIndex,
-    checkpoints: playAlongRecognitionCheckpoints,
-    performanceMode: PERFORMANCE_MODE.PLAY_ALONG,
-    performanceTimeMs: practiceTime * 1000,
-    matchSettings: matchSettingsState.settings,
-    onPlayerInputMatched: handlePlayAlongCorrect,
-    onWrongNote: handlePlayAlongWrong,
-    onRecognitionDecision: handlePlayAlongRecognition,
-    microphone,
-    instrumentId,
-  })
-
-  // Play Along MIDI — BOUNDED evaluator only (B03 fix). The old path reused
-  // useWaitForYouMidiInput (pitch-only, no score-time window) and accepted
-  // notes ~437 ms early. Live MIDI now enters the exact canonical contract
-  // as synthetic input: normalize → evaluatePlayAlongNoteInput with the
-  // AUTHORITATIVE score time → lane outcome. No direct success/advance path.
-  const playAlongFeedbackRef = useRef(playAlongFeedback)
-  playAlongFeedbackRef.current = playAlongFeedback
-  const playAlongGroupsRef = useRef(playAlongLaneGroups)
-  playAlongGroupsRef.current = playAlongLaneGroups
 
   // Neural Play Along notes enter the same bounded lane evaluator as MIDI
   // (handlePlayedMidi with the capture-clock score time — never early).
@@ -633,6 +577,73 @@ export default function usePracticeSession({
     microphone,
     instrumentId,
   })
+
+  // Readiness-gated routing (M1 fix): the flag alone must never park
+  // practice on a dead neural hook. Spectral runs until the neural hook
+  // reports phase 'listening' (model loaded + hardware fast enough);
+  // only then does matching route to it. Model missing/slow →
+  // spectral keeps working, exactly as before the flag existed.
+  // Readiness-gated routing (M1 fix): flag alone never parks practice
+  // on a dead neural hook — see selectMicInputSource.
+  const neuralMicLive = selectMicInputSource({ flagEnabled: neuralMicEnabled, neuralPhase: neuralMic.neural?.phase }) === 'neural'
+  const neuralPlayAlongLive = selectMicInputSource({ flagEnabled: neuralMicEnabled, neuralPhase: neuralPlayAlongMic.neural?.phase }) === 'neural'
+  const waitForYouMidi = useWaitForYouMidiInput({
+    active:
+      isWaitForYou &&
+      wfyInputSourceReady &&
+      wfyInputSource === WFY_INPUT_SOURCE.MIDI &&
+      !waitForYou.displayPhase,
+    checkpointMode,
+    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
+    checkpointIndex: waitForYou.checkpointIndex,
+    matchSettings: matchSettingsState.settings,
+    onPlayerInputMatched: handleWfyPlayerInputMatched,
+    onWrongNote: handleWfyWrongNote,
+    webMidi,
+  })
+
+  const waitForYouMic = useWaitForYouMicInput({
+    active:
+      isWaitForYou &&
+      practiceActive &&
+      wfyInputSourceReady &&
+      wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+      !waitForYou.displayPhase &&
+      !neuralMicLive,
+    checkpointMode,
+    currentCheckpoint: enrichedWfyCheckpoint ?? waitForYou.currentCheckpoint,
+    checkpointIndex: waitForYou.checkpointIndex,
+    checkpoints: enrichedWfyCheckpoints,
+    performanceMode: PERFORMANCE_MODE.WAIT_FOR_YOU,
+    matchSettings: matchSettingsState.settings,
+    onPlayerInputMatched: handleWfyPlayerInputMatched,
+    onWrongNote: handleWfyWrongNote,
+    microphone,
+    instrumentId,
+  })
+
+  const playAlongMic = useWaitForYouMicInput({
+    active:
+      playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE && !neuralPlayAlongLive,
+    checkpointMode: WFY_CHECKPOINT_MODE.NOTE,
+    currentCheckpoint: playAlongTargetCheckpoint,
+    checkpointIndex: playAlongTargetIndex,
+    checkpoints: playAlongRecognitionCheckpoints,
+    performanceMode: PERFORMANCE_MODE.PLAY_ALONG,
+    performanceTimeMs: practiceTime * 1000,
+    matchSettings: matchSettingsState.settings,
+    onPlayerInputMatched: handlePlayAlongCorrect,
+    onWrongNote: handlePlayAlongWrong,
+    onRecognitionDecision: handlePlayAlongRecognition,
+    microphone,
+    instrumentId,
+  })
+
+  // Play Along MIDI — BOUNDED evaluator only (B03 fix). The old path reused
+  // useWaitForYouMidiInput (pitch-only, no score-time window) and accepted
+  // notes ~437 ms early. Live MIDI now enters the exact canonical contract
+  // as synthetic input: normalize → evaluatePlayAlongNoteInput with the
+  // AUTHORITATIVE score time → lane outcome. No direct success/advance path.
   useEffect(() => {
     if (!(playAlongInputActive && wfyInputSource === WFY_INPUT_SOURCE.MIDI)) {
       return undefined
@@ -819,7 +830,7 @@ export default function usePracticeSession({
     if (wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE) {
       return {
         source: WFY_INPUT_SOURCE.MICROPHONE,
-        ...(neuralMicWfyActive ? neuralMic : waitForYouMic),
+        ...(neuralMicLive ? neuralMic : waitForYouMic),
       }
     }
     if (wfyInputSource === WFY_INPUT_SOURCE.MIDI) {
@@ -839,7 +850,7 @@ export default function usePracticeSession({
     wfyInputSource,
     wfyInputSourceReady,
     idleWfyInputFeedback,
-    neuralMicWfyActive,
+    neuralMicLive,
     neuralMic.inputFeedback,
     neuralMic.matchingEnabled,
     neuralMic.feedbackOutcome,
@@ -1205,7 +1216,7 @@ export default function usePracticeSession({
       waitForYouMic,
       neuralMic,
       neuralMicEnabled,
-      neuralPlayAlongMic: neuralPlayAlongActive ? neuralPlayAlongMic : null,
+      neuralPlayAlongMic: neuralPlayAlongLive ? neuralPlayAlongMic : null,
       waitForYouInput,
       wfyInputSource,
       wfyInputSourceReady,
@@ -1223,7 +1234,7 @@ export default function usePracticeSession({
       setCheckpointMode,
       webMidi,
       playAlongMidi,
-      playAlongMic: neuralPlayAlongActive ? neuralPlayAlongMic : playAlongMic,
+      playAlongMic: neuralPlayAlongLive ? neuralPlayAlongMic : playAlongMic,
       playAlongFeedback,
       playAlongLaneGroups,
       practiceAttempt,
@@ -1266,7 +1277,8 @@ export default function usePracticeSession({
       waitForYouMic,
       neuralMic,
       neuralMicEnabled,
-      neuralPlayAlongActive,
+      neuralMicLive,
+      neuralPlayAlongLive,
       neuralPlayAlongMic,
       waitForYouInput,
       wfyInputSource,
@@ -1285,7 +1297,7 @@ export default function usePracticeSession({
       setCheckpointMode,
       webMidi,
       playAlongMidi,
-      neuralPlayAlongActive,
+      neuralPlayAlongLive,
       neuralPlayAlongMic,
       playAlongMic,
       playAlongFeedback,

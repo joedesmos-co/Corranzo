@@ -42,10 +42,17 @@ function centsDistance(midiFloat, expectedMidi) {
 /**
  * Confirm expected tones against independent neural note candidates.
  *
- * @param {Array<{midi:number,start:number,end:number}>} neuralNotes
+ * @param {Array<{midi:number,start:number,end:number,sustained?:boolean}>} neuralNotes
  * @param {number[]} expectedMidis
  * @param {number|null} anchorOnset attack reference (null = whole take)
  * @returns confirmation verdict + per-tone neural onset evidence
+ *
+ * Sustained entries ({ sustained: true }) bypass the attack window:
+ * they prove persistence, not attack timing — a chord tone the model
+ * still hears re-confirms even when its attack fell outside the window
+ * (skipped hops, partial windows, loop seams). Fresh attacks still need
+ * window alignment. Both carry independent acoustic evidence; neither
+ * manufactures.
  */
 export function confirmNeuralNotes(neuralNotes = [], expectedMidis = [], anchorOnset = null, options = {}) {
   const config = { ...NEURAL_HYBRID_DEFAULTS, ...options }
@@ -56,7 +63,7 @@ export function confirmNeuralNotes(neuralNotes = [], expectedMidis = [], anchorO
     if (!Number.isFinite(note?.midi) || note.start == null) {
       continue
     }
-    if (note.start < lo || note.start > hi) {
+    if (!note.sustained && (note.start < lo || note.start > hi)) {
       continue
     }
     pool.push({

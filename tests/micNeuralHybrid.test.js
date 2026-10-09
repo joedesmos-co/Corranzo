@@ -75,4 +75,25 @@ describe.skipIf(!hasNotes)('mic neural hybrid (Basic Pitch candidates)', () => {
       expect(verdict.neuralOnsets[midi]).not.toBeNull()
     }
   })
+
+  it('confirms sustained tones outside the attack window without manufacturing', () => {
+    // A sustained tone heard now (bypass) + a fresh attack in-window.
+    const verdict = confirmNeuralNotes(
+      [
+        { midi: 60, start: 100.0, end: 101.0, sustained: true },
+        { midi: 64, start: 10.5, end: 11.0 },
+      ],
+      [60, 64],
+      10.5,
+    )
+    expect(verdict.confirmedMidis).toEqual([60, 64])
+    // Sustained ghosts with no expected match still never confirm.
+    const ghost = confirmNeuralNotes(
+      [{ midi: 61, start: 100.0, end: 101.0, sustained: true }],
+      [60],
+      10.5,
+    )
+    expect(ghost.confirmedMidis).toEqual([])
+    expect(ghost.complete).toBe(false)
+  })
 })

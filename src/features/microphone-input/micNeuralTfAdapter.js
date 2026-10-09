@@ -88,10 +88,20 @@ let cachedModel = null
  * Load TF.js + Basic Pitch lazily. Returns { BasicPitch, tf, modelUrl,
  * model } where model is a ready BasicPitch instance (constructed once
  * and shared — graph compile happens a single time per page load).
- * modelUrl is a Blob URL whose weights resolve to the bundled shard.
+ *
+ * Weights: Spotify Basic Pitch ICASSP-2022 (Apache-2.0), vendored from
+ * the @spotify/basic-pitch npm package into public/neural-model/ so dev,
+ * build, and offline serve identical bytes. The manifest URL is passed
+ * through untouched: TF.js resolves the shard relative to it, which is
+ * exactly right for co-located static assets. (An earlier Blob-URL
+ * rewrite broke this — TF.js resolved the absolute shard path against
+ * the blob: base into garbage. M1 fix, verified in-browser.)
  * Never called unless the dev flag enables neural listening.
  */
-export async function loadNeuralRuntime({ modelJsonUrl, modelBinUrl, onProgress = null } = {}) {
+export async function loadNeuralRuntime({ modelJsonUrl, onProgress = null } = {}) {
+  if (cachedRuntime) {
+    return cachedRuntime
+  }
   if (cachedRuntime) {
     return cachedRuntime
   }
@@ -107,18 +117,8 @@ export async function loadNeuralRuntime({ modelJsonUrl, modelBinUrl, onProgress 
     onProgress({ stage: 'framework', done: false })
   }
   await tf.ready()
-  const response = await fetch(modelJsonUrl)
-  if (!response.ok) {
-    throw new Error(`neural model manifest fetch failed (${response.status})`)
-  }
-  const manifest = await response.json()
-  const manifests = Array.isArray(manifest?.weightsManifest) ? manifest.weightsManifest : []
-  for (const entry of manifests) {
-    entry.paths = (entry.paths ?? []).map(() => modelBinUrl)
-  }
-  const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/json' }))
-  cachedModel = new BasicPitch(blobUrl)
-  cachedRuntime = { BasicPitch, tf, modelUrl: blobUrl, model: cachedModel }
+  cachedModel = new BasicPitch(modelJsonUrl)
+  cachedRuntime = { BasicPitch, tf, modelUrl: modelJsonUrl, model: cachedModel }
   if (onProgress) {
     onProgress({ stage: 'framework', done: true })
   }
@@ -159,9 +159,9 @@ export function disposeNeuralRuntime() {
  * 0.5 s streaming window infers inside NEURAL_UNAVAILABLE_MS. Callers
  * must fall back to spectral detection when ok is false.
  */
-export async function checkNeuralCapability({ modelJsonUrl, modelBinUrl, onProgress = null } = {}) {
+export async function checkNeuralCapability({ modelJsonUrl, onProgress = null } = {}) {
   const started = performance.now()
-  const { tf, model } = await loadNeuralRuntime({ modelJsonUrl, modelBinUrl, onProgress })
+  const { tf, model } = await loadNeuralRuntime({ modelJsonUrl, onProgress })
   const silent = new Float32Array(Math.floor(NEURAL_WARMUP_SECONDS * NEURAL_MODEL_RATE))
   const audioBuffer = await renderMonoBuffer(silent, NEURAL_MODEL_RATE)
   const frames = []

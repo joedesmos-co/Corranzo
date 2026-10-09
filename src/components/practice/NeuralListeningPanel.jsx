@@ -89,6 +89,10 @@ function NeuralListeningPanelDev({ session = null }) {
                 <dt>Silence skips</dt>
                 <dd>{neural?.silenceSkips ?? 0}</dd>
               </div>
+              <div>
+                <dt>Pipeline stages</dt>
+                <dd>{neural?.debug ? `polls ${neural.debug.polls ?? 0} · hops ${neural.debug.hops ?? 0} · windows ${neural.debug.windowsRun ?? 0} · last ${neural.debug.lastPumpReason ?? '—'}${neural.debug.lastInferMs != null ? ` · ${neural.debug.lastInferMs} ms` : ''}` : '—'}</dd>
+              </div>
             </dl>
             {phase === 'unavailable' && (
               <p className="practice-section__error">Neural mode unavailable on this hardware — spectral detection is running instead.</p>
