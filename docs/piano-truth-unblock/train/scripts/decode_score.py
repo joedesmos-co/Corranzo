@@ -69,54 +69,108 @@ def _clef_bottom_idx(shape, line):
     return _diatonic_idx(rp, ro) - (int(line or 2) - 1) * 2
 
 
-def _page_labelled(sid, page, staves):
-    """Cached SVG staff frames for (score, page), grouped by staff label."""
+def _struct_index(sid, pages):
+    """Cached structural note index: mei_id -> dict(canon_measure, rank,
+    pos, lines, gap). Pure SVG structure + box ids; no labels."""
     import sys as _sys
-    key = (sid, page)
+    key = (sid, tuple(sorted(pages)))
     if key not in _FRM_CACHE:
         if str(HERE) not in _sys.path:
             _sys.path.insert(0, str(HERE))
-        from staff_geometry import page_frames, frames_by_label
+        from staff_geometry import parse_page
         pilot = TRAIN.parent / "pilot"
-        _tx, _ty, frames = page_frames(
-            pilot / "data" / "render" / sid / f"page-{int(page):02d}.svg")
-        _FRM_CACHE[key] = frames_by_label(frames, staves) if frames else None
+        idx = {}
+        for pg in pages:
+            try:
+                svg = (pilot / "data" / "render" / sid
+                       / f"page-{int(pg):02d}.svg").read_text()
+            except OSError:
+                continue
+            for m in parse_page(svg):
+                for rk, s in enumerate(m["staves"]):
+                    s["rank"] = rk
+                for nid, nd in m["notes"].items():
+                    if nd["pos"] is None or nd["rank"] is None:
+                        continue
+                    fr = m["staves"][nd["rank"]] \
+                        if nd["rank"] < len(m["staves"]) else None
+                    if fr is None or len(fr["lines"]) != 5:
+                        continue
+                    gaps = [b - a for a, b in
+                            zip(fr["lines"], fr["lines"][1:])]
+                    idx[nid] = {"pos": nd["pos"], "rank": nd["rank"],
+                                "rank_label": str(nd["rank"] + 1),
+                                "lines": fr["lines"],
+                                "gap": sum(gaps) / len(gaps),
+                                "svg_measure": m["svg_id"]}
+        _FRM_CACHE[key] = idx
     return _FRM_CACHE[key]
 
 
-def clef_repair_note(e, it, p, structure, flags):
-    """Override a clef-contradicted argmax pitch with the top-ranked
-    probe candidate consistent with the notehead's geometric staff steps
-    in the oracle clef frame. All three inputs are independent evidence:
-    SVG notehead position (render geometry), clef per staff (oracle
-    structure, same class the serializer already consumes), and the
-    probe's own top-5 distribution (visual evidence). Never invents:
-    keeps argmax when geometry is missing, when argmax already agrees,
-    or when no top-5 candidate matches the geometric steps."""
-    if e.get("midi") is None or it.get("notehead_cy") is None:
-        return
-    staff = e.get("staff")
-    if staff is None:
+def _visual_clef_lookup(sid):
+    """Cached visual governing-clef map for a score (pixels + structure)."""
+    import sys as _sys
+    if "_TMPL" not in _FRM_CACHE:
+        if str(HERE) not in _sys.path:
+            _sys.path.insert(0, str(HERE))
+        from clef_map import load_templates
+        _FRM_CACHE["_TMPL"] = load_templates()
+    key = ("clefmap", sid)
+    if key not in _FRM_CACHE:
+        if str(HERE) not in _sys.path:
+            _sys.path.insert(0, str(HERE))
+        from clef_map import build_visual_clef_map
+        full, _det, _diag = build_visual_clef_map(sid, _FRM_CACHE["_TMPL"])
+        _FRM_CACHE[key] = full
+    return _FRM_CACHE[key]
+
+
+def _canon_measure_of(sid, svg_measure, by_mei_measure):
+    return by_mei_measure.get(svg_measure)
+
+
+def clef_repair_note(e, it, p, structure, flags, struct_idx, vclef_map,
+                     by_mei_measure, clef_source="visual"):
+    """Override a clef-contradicted argmax pitch with the top-ranked probe
+    candidate consistent with the notehead's structural staff steps in the
+    governing clef frame. Evidence: SVG notehead position + staff membership
+    (render structure), clef (visual pixels by default; oracle only when
+    clef_source='oracle' for A/B attribution), probe top-5 (visual).
+    Never invents: keeps argmax when structure/clef is missing, when argmax
+    already agrees, or when no top-5 candidate matches."""
+    if e.get("midi") is None:
         return
     acc = e.get("acc_cls")
     if acc is None:
         return
+    stinfo = struct_idx.get(it.get("mei_id") or "")
+    if stinfo is None:
+        return
+    if clef_source == "visual":
+        cm = by_mei_measure.get(stinfo["svg_measure"])
+        clef = (vclef_map or {}).get((cm, stinfo["rank_label"])) if cm else None
+        if clef is None:
+            flags["clef_unmapped"] = flags.get("clef_unmapped", 0) + 1
+            return
+        shape, line = clef["shape"], clef["line"]
+    else:
+        import sys as _sys
+        if str(HERE) not in _sys.path:
+            _sys.path.insert(0, str(HERE))
+        from to_musicxml import state_for
+        staff = e.get("staff")
+        if staff is None:
+            return
+        st = state_for(structure, e.get("measure"), staff)["clef"]
+        shape, line = st.get("shape", "G"), st.get("line", 2)
+    bottom = _clef_bottom_idx(shape, line)
+    if bottom is None:
+        return
     import sys as _sys
     if str(HERE) not in _sys.path:
         _sys.path.insert(0, str(HERE))
-    from staff_geometry import note_steps
-    from to_musicxml import state_for
-    st = state_for(structure, e.get("measure"), staff)["clef"]
-    bottom = _clef_bottom_idx(st.get("shape", "G"), st.get("line", 2))
-    if bottom is None:
-        return
-    labelled = _page_labelled(structure["sid"], it.get("page", 1),
-                              structure.get("staves") or [staff])
-    if not labelled:
-        return
-    steps, _gap = note_steps(it["notehead_cy"], labelled, staff)
-    if steps is None:
-        return
+    from staff_geometry import steps_in_frame
+    steps = steps_in_frame(stinfo["pos"][1], stinfo["lines"], stinfo["gap"])
     alter = ALTER_OF_ACC.get(acc, 0)
     arg_steps = _diatonic_idx(e["pname"], e["oct"]) - bottom
     if arg_steps == steps:
@@ -128,7 +182,6 @@ def clef_repair_note(e, it, p, structure, flags):
         nat = cm - alter
         if nat < 0 or nat > 127:
             continue
-        o, s = divmod(nat - 12, 12)
         _SEMI2STEP = {0: 0, 2: 1, 4: 2, 5: 3, 7: 4, 9: 5, 11: 6}
         if nat % 12 not in _SEMI2STEP:
             continue
@@ -144,6 +197,7 @@ def clef_repair_note(e, it, p, structure, flags):
                 flags["clef_repair"] = flags.get("clef_repair", 0) + 1
             return
     flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
+    flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
 
 
 def parse_sig(sig):
@@ -157,7 +211,8 @@ def parse_sig(sig):
     return int(m.group(1)) * (1 if m.group(2) == "s" else -1)
 
 
-def decode_score(sid, items, pred, structure, voice_source="context"):
+def decode_score(sid, items, pred, structure, voice_source="context",
+                 clef_source="visual"):
     """Assemble predicted PianoEvents. `structure` carries oracle geometry/
     measure/clef/key/meter/divisions constants. Returns (events, flags)."""
     flags = {"spelling_fallback": 0, "unpaired_tie_start": 0,
@@ -253,13 +308,26 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
                       "chord_tone": bool(p["chord_tone"]),
                       "notehead_x": it.get("notehead_x"), "page": it["page"],
                       "source_order": it.get("source_order", 0)})
-    # clef-consistent pitch repair (stage B only in effect: stage A oracle
-    # pitches never contradict geometry). Must precede onset accumulation
-    # and chord detection, which both consume midi.
+    # clef-consistent pitch repair (stage A oracle pitches never contradict
+    # geometry, so this is a no-op there). Must precede onset accumulation
+    # and chord detection, which both consume midi. clef_source='visual'
+    # (pixels + structure) is the production path; 'oracle' exists only for
+    # A/B attribution of the clef information itself.
+    _pages = sorted({it.get("page", 1) for it in items if it.get("page")})
+    _sidx = _struct_index(sid, _pages)
+    _vmap = _visual_clef_lookup(sid) if clef_source == "visual" else None
+    _svg_votes = {}
+    for _mei, _st in _sidx.items():
+        _ce = _evs.get(_mei, {})
+        if _ce.get("measure") is not None:
+            _svg_votes.setdefault(_st["svg_measure"], []).append(_ce["measure"])
+    from collections import Counter as _C
+    _svg2canon = {k: _C(v).most_common(1)[0][0] for k, v in _svg_votes.items() if v}
     for n in notes:
         _p = pred.get(n["item"], {})
         _it = items[n["item"]] if 0 <= n["item"] < len(items) else {}
-        clef_repair_note(n, _it, _p, structure, flags)
+        clef_repair_note(n, _it, _p, structure, flags, _sidx, _vmap,
+                         _svg2canon, clef_source=clef_source)
     # onset accumulation per (measure, staff, voice); grace = zero width.
     # Chord tones (same x, same dur, different pitch as the running note)
     # share the root onset and do not advance time. Grace notes attach at

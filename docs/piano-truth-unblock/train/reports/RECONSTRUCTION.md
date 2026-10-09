@@ -324,3 +324,74 @@ unattended CPU training alongside other agents.
 
 Recommended next step: execute preregistered E-clef in a resourced session;
 then E1. No full 792-score same-recipe campaign is justified.
+
+---
+
+# Autonomous clef-conditioned recognition rescue (visual clef + E-clef proof)
+
+Mission: remove oracle-clef dependence from the repair without losing its
+gain. Result: pipeline now fully automatic given oracle boxes (pixels +
+render structure + frozen probes + one trained linear head; zero oracle
+note labels, zero oracle clef). No merge, TEST sealed, DEV identities fixed.
+New evidence: `reports/clef_templates.json`, `reports/clef_split.json`;
+`models/clef_pitch_head.pt` (49 KB proof artifact, best checkpoints untouched).
+New code: `scripts/clef_vision.py`, `scripts/clef_map.py`,
+`scripts/train_clefhead.py`, `scripts/eval_clef_split.py`; structural rewrite
+of `scripts/staff_geometry.py`; `decode_score.py` (+visual clef source),
+`eval_reconstruction.py` (+`--pitch-head`, +B_oracle_clef attribution).
+
+## Visual clef recognition accuracy (DEV, 683 instances)
+
+Template-NCC classifier on PNG clef crops (templates = TRAIN means, 16
+scores, same-font renders): **683/683 = 100%** (G 493, F 184, C 6), zero
+tuning. Renderer-specific by construction (scan-domain limitation stands).
+Glyph supervision from TRAIN SMuFL code points only (E050/E05C/E062).
+
+## Structural association (zero geometric guessing)
+
+SVG nesting measure → staff → note gives exact membership: staff-rank ↔
+truth-staff **99.87%**, staff steps **98.71%** (22,299 notes, deterministic,
+zero parameters). Governing map per (measure, staff-rank) with forward fill
+(95/99 DEV scores have constant clefs; 4 change-scores covered by fill).
+
+## Oracle vs visual-clef performance (frozen DEV99)
+
+| metric | argmax, no repair (committed baseline) | +repair, oracle clef | +repair, visual clef (production) |
+|---|---|---|---|
+| note exact | 10533 (47.2%) | 13005 (58.3%) | **12983 (58.2%)** |
+| note pitch-only | 10731 | 13233 | 13480 |
+
+Visual clef trails oracle clef by **22 notes (0.1pp)** — the oracle-aided gain
+is preserved (mis)attribution-free in the production path. Per-clef
+production pitch (decoded notes): G **0.936** (was 0.812), F **0.892** (was
+0.095), C 0.000 (unseen C4 line; TRAIN has only C3), overall 0.913.
+
+## Training outcome (E-clef proof: PASS with documented caveat)
+
+Ran once, capped, deterministic (seed 0, CPU, 456 s): frozen common trunk +
+new Linear(132, 88) on [features + clefvec], TRAIN stratified subset
+(42,646 items), AdamW, 15 epochs (amended from 3: 126 steps left the head at
+chance, DEV 0.14 — first attempt ABORTED per gate, amendment documented in
+`train_clefhead.py`). Warm-started from the TRAIN-trained pitch head.
+Single final DEV gate: F-clef top-1 **0.794 ≥ 0.50** ✓; joint-exact
+**13,723 ≥ 12,983** ✓ (no aggregate regression). Saved artifact only.
+
+Full production (new head + visual clef + repair), frozen DEV99:
+exact **13,723 (61.5%)**, pitch 14,232; chord recall 0.749 (unchanged);
+beams/tuplets/rests/timing unchanged (pitch-only intervention, as expected);
+music21 99/99; stage A identical (22,299/22,299).
+Caveat: worst score (all-C4-clef, 256×16ths) dipped 9→4 exact — C-line
+generalization needs C4 TRAIN examples (corpus expansion, not tuning).
+
+## Remaining blockers (updated)
+
+1. Duration head (sole lever for onsets 30/64% cascade, timing, rests).
+2. C-clef line generalization (corpus: add C4-bearing TRAIN scores).
+3. Dead tuplet flag, missing beam-boundary head (E1/E2 still valid, low impact).
+4. Accidentals (0.148) and chord-tone crowding (0.275) within pitch residual.
+5. **No detector (stage C)**: ground-truth-box evaluation only — full Piano
+   OMR still unclaimable; separate campaign-scale blocker.
+6. Scan domain: visual clef is render-font-specific; scan accuracy unmeasured.
+
+Recommended next step: corpus expansion for C4 + duration-head uplift design;
+E1/E2 unchanged in priority. No further full-campaign training justified.

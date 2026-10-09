@@ -257,10 +257,18 @@ def main(args):
         cevents = cev["events"]
         meta = json.loads((RENDER / sid / "meta.json").read_text())
         items, pred_b, skipped_b = predict_score(models, sid, cevents, meta, img_cache)
+        if args.pitch_head == "clef":
+            from train_clefhead import apply_clef_pitch_head
+            pred_b = apply_clef_pitch_head(models, sid, cevents, meta, items,
+                                           pred_b, img_cache)
         structure = build_structure(sid)
         pred_a = preds_from_truth(sid, items, voc, cevents)
-        dec_b = decode_score(sid, items, pred_b, structure, voice_source=args.voice_source)
-        dec_a = decode_score(sid, items, pred_a, structure, voice_source="truth")
+        dec_b = decode_score(sid, items, pred_b, structure,
+                             voice_source=args.voice_source, clef_source="visual")
+        dec_b_oracle = decode_score(sid, items, pred_b, structure,
+                                    voice_source=args.voice_source, clef_source="oracle")
+        dec_a = decode_score(sid, items, pred_a, structure, voice_source="truth",
+                             clef_source="oracle")
         xml_b, _ = serialize(dec_b, structure)
         xml_a, _ = serialize(dec_a, structure)
         rec = {"n_items": len(items), "n_pred_notes": len(dec_b["notes"]),
@@ -375,6 +383,25 @@ def main(args):
                     agg["totals"][f"A_{k}"] += rec["stages"][stage][k]
                 agg["totals"]["A_truth_notes"] += len(truth_notes)
                 agg["totals"]["A_truth_rests"] += len(_tk)
+        # head-to-head: same model predictions decoded with oracle clef.
+        # Isolates the clef-information contribution (oracle-aided) from the
+        # fully visual path (production B). Never reported as automatic OMR.
+        pred_orc = [{"mei_id": e["mei_id"], "measure_index": e["measure_index"],
+                     "voice": str(e["voice"]), "staff": str(e["staff"]),
+                     "source_order": e.get("source_order", 0),
+                     "onset_q": e["onset_q"], "midi": e["midi"], "dur_q": e["dur_q"]}
+                    for e in dec_b_oracle["notes"]]
+        oe, op, ofp, ofn, _ = match_notes(
+            [{"measure_index": t["measure_index"], "onset_q": t["onset_q"],
+              "midi": t["midi"], "dur_q": t["dur_q"], "staff": t["staff"],
+              "source_order": t.get("source_order", 0),
+              "voice": t["voice"], "mei_id": t["mei_id"]} for t in truth_notes],
+            pred_orc)
+        rec["stages"]["B_oracle_clef"] = {
+            "tp_exact": oe, "tp_pitch": op, "fp": ofp, "fn": ofn,
+            "n_pred_notes": len(pred_orc), "flags": dec_b_oracle["flags"]}
+        for k, v in (("tp_exact", oe), ("tp_pitch", op), ("fp", ofp), ("fn", ofn)):
+            agg["totals"][f"B_oracle_{k}"] += v
         # pairwise grouping P/R (stage B vs truth)
         id2truth = {}
         for e in cevents:
@@ -466,6 +493,7 @@ def main(args):
                       "flags": rec["flags_b"]} for r, s, b in scored[:5]]
     Path(args.out).write_text(json.dumps(
         {"schema": "piano-reconstruction/1", "voice_source": args.voice_source,
+         "pitch_head": args.pitch_head,
          "n_scores": len(agg["scores"]),
          "totals": dict(agg["totals"]),
          "pairwise": {k: {"precision": v["tp"] / max(1, v["p"]),
@@ -482,6 +510,10 @@ if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice-source", default="context", choices=["context", "common", "truth"])
+    ap.add_argument("--pitch-head", default="argmax",
+                    choices=["argmax", "clef"],
+                    help="argmax: frozen common pitch head; clef: E-clef proof head "
+                         "(visual clef input, opt-in evaluation only)")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(TRAIN / "manifests" / "reconstruction.json"))
     main(ap.parse_args())
