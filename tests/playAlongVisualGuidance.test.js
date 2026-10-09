@@ -549,10 +549,15 @@ describe('Play Along visual runtime wiring', () => {
     const pageFollowHook = readSrc('features', 'practice', 'usePracticePageFollow.js')
 
     expect(context).toContain('session.sourceVisualMap?.anchorCount > 0')
-    expect(context.match(/preferredRepresentation:/g)).toHaveLength(1)
+    // Score highlight targets (WFY current, timeline current, play-along
+    // past trail) all resolve through the same representation plumbing.
+    expect(context.match(/preferredRepresentation:/g)).toHaveLength(3)
     expect(context).toContain('scoreFollow.guitarScoreTarget?.activeTarget')
-    expect(context).toContain('playAlongNoteTarget: null')
-    expect(context).toContain('target: null')
+    // Play Along exposes a real score target (timeline event + geometry),
+    // not null: the score overlay highlights the event under the playhead.
+    expect(context).toContain('playAlongNoteTarget: timelineHighlightActive ? timelineScoreTarget : null')
+    // Timeline modes feed the semantic page-follow target (not null).
+    expect(context).toContain('target: timelineHighlightActive ? timelineScoreTarget.target : null')
     expect(controls).toContain('session.sourceVisualMap?.anchorCount > 0')
     expect(pageFollow).toContain('noteFollowTarget?.active')
     expect(pageFollow).toContain('(scoreFollow.enabled && scoreFollow.canFollow)')

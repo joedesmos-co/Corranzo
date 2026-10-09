@@ -3635,6 +3635,143 @@
   animation: none;
 }
 
+/* Shared practice note states (Preview / Play Along / Wait For You).
+   Color is never the only signal: the required event also carries a
+   "now" tick above the box, completed events drop the pulse, and misses
+   use a dashed outline. */
+.score-follow-overlay__note-highlight--state-current {
+  border: 2px solid rgba(106, 168, 255, 0.95);
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow:
+    0 0 0 2px rgba(59, 130, 246, 0.12),
+    0 0 14px rgba(59, 130, 246, 0.35);
+}
+
+.score-follow-overlay__note-highlight--state-completed {
+  border: 1px solid rgba(87, 181, 126, 0.7);
+  border-radius: 7px;
+  background: rgba(76, 175, 80, 0.12);
+  box-shadow: none;
+  opacity: 0.8;
+  animation: none;
+}
+
+.score-follow-overlay__note-highlight--state-wrong {
+  border: 2px solid rgba(255, 107, 107, 0.95);
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow:
+    0 0 0 2px rgba(255, 107, 107, 0.15),
+    0 0 14px rgba(255, 107, 107, 0.4);
+  animation: score-note-wrong-flash 1.2s ease-out 1;
+}
+
+.score-follow-overlay__note-highlight--state-missed {
+  border: 1px dashed rgba(255, 107, 107, 0.55);
+  border-radius: 7px;
+  background: rgba(255, 107, 107, 0.07);
+  box-shadow: none;
+  opacity: 0.7;
+  animation: none;
+}
+
+/* Chord partial tones (only rendered from owned source noteheads). */
+.score-follow-overlay__note-highlight--tone-done {
+  border-color: rgba(87, 181, 126, 0.9);
+  background: rgba(76, 175, 80, 0.18);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+.score-follow-overlay__note-highlight--tone-needed {
+  border-color: rgba(106, 168, 255, 0.95);
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Non-color "play this now" marker above the required event. */
+.score-follow-overlay__now-tick {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 20px;
+  height: 4px;
+  margin-left: -10px;
+  border-radius: 2px;
+  background: rgba(106, 168, 255, 0.95);
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+  pointer-events: none;
+}
+
+@keyframes score-note-wrong-flash {
+  0% {
+    border-color: rgba(255, 107, 107, 1);
+    background: rgba(255, 107, 107, 0.3);
+    box-shadow: 0 0 16px rgba(255, 107, 107, 0.55);
+  }
+  60% {
+    border-color: rgba(255, 107, 107, 0.9);
+    background: rgba(255, 107, 107, 0.18);
+  }
+  100% {
+    border-color: rgba(106, 168, 255, 0.95);
+    background: rgba(59, 130, 246, 0.2);
+    box-shadow:
+      0 0 0 2px rgba(59, 130, 246, 0.12),
+      0 0 14px rgba(59, 130, 246, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .score-follow-overlay__note-highlight--state-current,
+  .score-follow-overlay__note-highlight--state-wrong {
+    animation: none;
+  }
+}
+
+/* Approximate dot markers tinted by practice state (same language as boxes). */
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-current
+  .score-follow-overlay__note-target-ring {
+  border-color: rgba(106, 168, 255, 0.9);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-current
+  .score-follow-overlay__note-target-dot {
+  background: #6aa8ff;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-completed
+  .score-follow-overlay__note-target-ring {
+  border-color: rgba(87, 181, 126, 0.8);
+  box-shadow: none;
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-completed
+  .score-follow-overlay__note-target-dot {
+  background: #57b57e;
+  box-shadow: none;
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-wrong
+  .score-follow-overlay__note-target-ring {
+  border-color: rgba(255, 107, 107, 0.95);
+  box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-wrong
+  .score-follow-overlay__note-target-dot {
+  background: #ff6b6b;
+  box-shadow: 0 0 6px rgba(255, 107, 107, 0.8);
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-missed
+  .score-follow-overlay__note-target-ring {
+  border-color: rgba(255, 107, 107, 0.5);
+  border-style: dashed;
+  box-shadow: none;
+}
+.score-follow-overlay__note-target.score-follow-overlay__note-highlight--state-missed
+  .score-follow-overlay__note-target-dot {
+  background: rgba(255, 107, 107, 0.6);
+  box-shadow: none;
+}
+
 .score-follow-overlay__note-target {
   position: absolute;
   transform: translate(-50%, -50%);

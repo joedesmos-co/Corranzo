@@ -10,6 +10,31 @@ import usePracticeSession from '../features/practice/usePracticeSession.js'
 import useWaitForYouNoteTarget from '../features/practice/useWaitForYouNoteTarget.js'
 import useScoreFollow from '../features/score-follow/useScoreFollow.js'
 import { PRACTICE_MODE } from '../features/practice/practiceMode.js'
+import {
+  useScoreEventCheckpoints,
+  useTimelineScoreTarget,
+  useWfyScoreTrail,
+} from '../features/practice/useScoreNoteTargets.js'
+import {
+  SCORE_NOTE_STATE,
+  mapPlayAlongOutcomeToScoreState,
+  resolveChordToneStates,
+} from '../features/practice/scoreNoteStates.js'
+import { resolveNoteTargetPosition } from '../features/practice/noteTargetPosition.js'
+
+/** Nearest lane group to a score onset (±11 ms): links lane outcomes to score events. */
+function groupAtOnset(groups, timeSeconds) {
+  let best = null
+  let bestDelta = 0.011
+  for (const group of groups ?? []) {
+    const delta = Math.abs(Number(group.timeSeconds) - Number(timeSeconds))
+    if (delta < bestDelta) {
+      best = group
+      bestDelta = delta
+    }
+  }
+  return best
+}
 import { WFY_CHECKPOINT_MODE } from '../features/practice/waitForYouCheckpointMode.js'
 import { WFY_STATUS } from '../features/practice/waitForYouEngine.js'
 import { useProfileStats } from './ProfileStatsContext.jsx'
@@ -164,6 +189,194 @@ export function PracticeSessionProvider({
   const wfyNoteTargetVisible =
     wfyNoteMode && (waitForYouNoteTarget?.showOnPage ?? false)
 
+  // Timeline-following score highlight (Preview + Play Along): the note event
+  // under the playhead, resolved through the same note-target geometry as
+  // Wait For You so all three modes share one score language. Read-only —
+  // it follows the timeline and never advances it.
+  const isPlayAlong = session.practiceMode === PRACTICE_MODE.PLAY_ALONG
+  const isPreview = session.practiceMode === PRACTICE_MODE.PREVIEW
+  const timelineHighlightActive = isPlayAlong || isPreview
+  const scoreEventCheckpoints = useScoreEventCheckpoints({
+    timingMap: session.timing.timingMap,
+    loopRegion: session.loop.enabled ? session.loop.region : null,
+    practiceScope: session.practiceScope,
+  })
+  const timelineScoreTarget = useTimelineScoreTarget({
+    checkpoints: scoreEventCheckpoints,
+    practiceTime: session.clock.practiceTime,
+    timingMap: session.timing.timingMap,
+    anchors: scoreFollow.anchors,
+    sourceVisualMap: session.sourceVisualMap,
+    preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
+    mode: isPlayAlong ? 'play-along' : 'preview',
+    enabled: timelineHighlightActive,
+  })
+
+  // Play Along accuracy on the score: lane outcomes (canonical bounded
+  // evaluator, 150 ms early / 280 ms late) mapped onto score events by onset
+  // proximity. Current event + a bounded trail of decided past events.
+  // Keyed on the event index (not the clock), so geometry resolves once per
+  // event while the playhead moves.
+  const playAlongScoreStates = useMemo(() => {
+    if (!isPlayAlong || timelineScoreTarget.index < 0) {
+      return []
+    }
+    const timingMap = session.timing.timingMap
+    const anchors = scoreFollow.anchors
+    const sourceVisualMap = session.sourceVisualMap
+    const preferredRepresentation = scoreFollow.guitarScoreTarget?.activeTarget
+    const resolvePastTarget = (checkpoint) =>
+      resolveNoteTargetPosition({
+        checkpoint,
+        timingMap,
+        anchors,
+        sourceVisualMap,
+        preferredRepresentation,
+        mode: 'play-along',
+      })
+    const groups = session.playAlongLaneGroups ?? []
+    const outcomes = session.playAlongFeedback?.outcomes ?? new Map()
+    const entries = []
+    const currentCheckpoint = scoreEventCheckpoints[timelineScoreTarget.index] ?? null
+    if (currentCheckpoint && timelineScoreTarget.target?.visible) {
+      let state = SCORE_NOTE_STATE.CURRENT
+      if (groups.length > 0) {
+        const group = groupAtOnset(groups, currentCheckpoint.timeSeconds)
+        const outcome = group ? outcomes.get(group.id) ?? null : null
+        if (outcome) {
+          state = mapPlayAlongOutcomeToScoreState(outcome)
+        }
+      }
+      entries.push({
+        key: `play-along-current:${currentCheckpoint.id ?? timelineScoreTarget.index}`,
+        checkpoint: currentCheckpoint,
+        target: timelineScoreTarget.target,
+        state,
+        toneStates: null,
+      })
+    }
+    if (groups.length > 0) {
+      // Decided past events: most recent first, bounded so seeking through a
+      // long piece cannot queue hundreds of geometry resolutions per event.
+      let resolved = 0
+      for (let index = timelineScoreTarget.index - 1; index >= 0; index -= 1) {
+        const checkpoint = scoreEventCheckpoints[index] ?? null
+        if (!checkpoint) {
+          continue
+        }
+        const group = groupAtOnset(groups, checkpoint.timeSeconds)
+        const outcome = group ? outcomes.get(group.id) ?? null : null
+        if (!outcome) {
+          continue
+        }
+        const target = resolvePastTarget(checkpoint)
+        if (!target?.visible) {
+          continue
+        }
+        let state = mapPlayAlongOutcomeToScoreState(outcome)
+        // Past misses stay visible but muted — the current event owns the
+        // strong red flash.
+        if (state === SCORE_NOTE_STATE.WRONG) {
+          state = SCORE_NOTE_STATE.MISSED
+        }
+        entries.push({
+          key: `play-along-past:${checkpoint.id ?? index}`,
+          checkpoint,
+          target,
+          state,
+          toneStates: null,
+        })
+        resolved += 1
+        if (resolved >= 64) {
+          break
+        }
+      }
+    }
+    return entries
+  }, [
+    isPlayAlong,
+    timelineScoreTarget.index,
+    timelineScoreTarget.target,
+    scoreEventCheckpoints,
+    session.timing.timingMap,
+    scoreFollow.anchors,
+    session.sourceVisualMap,
+    scoreFollow.guitarScoreTarget,
+    session.playAlongLaneGroups,
+    session.playAlongFeedback,
+  ])
+
+  // Wait For You score states: current required checkpoint + completed trail.
+  const wfyScoreTrail = useWfyScoreTrail({
+    active: session.isWaitForYou,
+    checkpoints: session.waitForYou.checkpoints,
+    checkpointIndex: session.waitForYou.checkpointIndex,
+    status: session.waitForYou.status,
+    inputFeedback: session.waitForYouInput?.inputFeedback ?? null,
+    timingMap: session.timing.timingMap,
+    anchors: scoreFollow.anchors,
+    sourceVisualMap: session.sourceVisualMap,
+    preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
+    enabled: wfyNoteMode,
+  })
+
+  // Per-tone completion for the current WFY chord (blue → green per tone).
+  const wfyCurrentToneStates = useMemo(() => {
+    if (!wfyNoteMode) {
+      return null
+    }
+    const checkpoint = session.waitForYou.currentCheckpoint
+    if (!checkpoint?.isChord) {
+      return null
+    }
+    const matched = session.waitForYouInput?.inputFeedback?.matchedIndices
+    if (matched == null) {
+      return null
+    }
+    return resolveChordToneStates(checkpoint, matched)
+  }, [
+    wfyNoteMode,
+    session.waitForYou.currentCheckpoint,
+    session.waitForYouInput,
+  ])
+
+  const scoreNoteStates = useMemo(() => {
+    if (wfyNoteMode) {
+      return wfyScoreTrail.map((entry) => ({
+        key: `wfy:${entry.checkpoint?.id ?? entry.index}`,
+        checkpoint: entry.checkpoint,
+        target: entry.target,
+        state: entry.state,
+        toneStates:
+          entry.index === session.waitForYou.checkpointIndex ? wfyCurrentToneStates : null,
+      }))
+    }
+    if (isPlayAlong) {
+      return playAlongScoreStates
+    }
+    if (isPreview && timelineScoreTarget.target?.visible && timelineScoreTarget.checkpoint) {
+      return [{
+        key: `preview:${timelineScoreTarget.checkpoint.id ?? timelineScoreTarget.index}`,
+        checkpoint: timelineScoreTarget.checkpoint,
+        target: timelineScoreTarget.target,
+        state: SCORE_NOTE_STATE.CURRENT,
+        toneStates: null,
+      }]
+    }
+    return []
+  }, [
+    wfyNoteMode,
+    wfyScoreTrail,
+    wfyCurrentToneStates,
+    session.waitForYou.checkpointIndex,
+    isPlayAlong,
+    playAlongScoreStates,
+    isPreview,
+    timelineScoreTarget.target,
+    timelineScoreTarget.checkpoint,
+    timelineScoreTarget.index,
+  ])
+
   const practiceNoteTarget = session.isWaitForYou
     ? {
         ...waitForYouNoteTarget,
@@ -174,15 +387,19 @@ export function PracticeSessionProvider({
         mode: 'wait-for-you',
       }
     : {
-        target: null,
-        showOnPage: false,
-        active: false,
-        mode: 'play-along',
+        target: timelineHighlightActive ? timelineScoreTarget.target : null,
+        showOnPage: Boolean(
+          timelineHighlightActive &&
+            timelineScoreTarget.target?.visible &&
+            timelineScoreTarget.target.page === visiblePageNumber,
+        ),
+        active: Boolean(
+          timelineHighlightActive && timelineScoreTarget.target?.visible,
+        ),
+        mode: isPlayAlong ? 'play-along' : 'preview',
       }
 
-  const practiceNoteTargetVisible = wfyNoteTargetVisible
-
-  const hidePlaybackScoreFollowCursor = wfyNoteTargetVisible
+  const practiceNoteTargetVisible = wfyNoteTargetVisible || practiceNoteTarget.showOnPage
 
   const previousViewRef = useRef(activeView)
 
@@ -268,31 +485,28 @@ export function PracticeSessionProvider({
     ],
   )
 
+  // One shared score cursor across Preview / Play Along / Wait For You.
+  // Advancement behavior differs per mode, but the cursor always marks the
+  // same musical position on the same score — WFY no longer hides it in
+  // favor of a separate highlight-only language.
   const cursorValue = useMemo(
     () => ({
-      displayCursor: hidePlaybackScoreFollowCursor
-        ? { visible: false }
-        : {
-            visible: Boolean(scoreFollow.displayCursor?.visible ?? scoreFollow.cursor?.visible),
-            page: scoreFollow.displayCursor?.page ?? scoreFollow.cursor?.page ?? 1,
-            measureNumber:
-              scoreFollow.displayCursor?.measureNumber ??
-              scoreFollow.cursor?.measureNumber ??
-              null,
-            x: scoreFollow.displayCursor?.x ?? scoreFollow.cursor?.x ?? null,
-            y: scoreFollow.displayCursor?.y ?? scoreFollow.cursor?.y ?? null,
-            smoothed: Boolean(scoreFollow.displayCursor?.smoothed),
-          },
-      cursorVisibility: hidePlaybackScoreFollowCursor
-        ? {
-            show: false,
-            reason: 'wait-for-you-note',
-            cursorPage: scoreFollow.cursorVisibility?.cursorPage ?? null,
-          }
-        : scoreFollow.cursorVisibility,
+      displayCursor: {
+        visible: Boolean(scoreFollow.displayCursor?.visible ?? scoreFollow.cursor?.visible),
+        page: scoreFollow.displayCursor?.page ?? scoreFollow.cursor?.page ?? 1,
+        measureNumber:
+          scoreFollow.displayCursor?.measureNumber ??
+          scoreFollow.cursor?.measureNumber ??
+          null,
+        x: scoreFollow.displayCursor?.x ?? scoreFollow.cursor?.x ?? null,
+        y: scoreFollow.displayCursor?.y ?? scoreFollow.cursor?.y ?? null,
+        smoothed: Boolean(scoreFollow.displayCursor?.smoothed),
+      },
+      cursorVisibility: scoreFollow.cursorVisibility,
       noteTarget: practiceNoteTarget?.target ?? null,
       showNoteTarget: practiceNoteTargetVisible,
-      hidePlaybackScoreFollowCursor,
+      scoreNoteStates,
+      showScoreNoteStates: scoreNoteStates.length > 0,
     }),
     [
       scoreFollow.displayCursor?.visible,
@@ -303,9 +517,9 @@ export function PracticeSessionProvider({
       scoreFollow.cursor?.page,
       scoreFollow.cursor?.measureNumber,
       scoreFollow.cursorVisibility,
-      hidePlaybackScoreFollowCursor,
       practiceNoteTarget?.target,
       practiceNoteTargetVisible,
+      scoreNoteStates,
     ],
   )
 
@@ -314,9 +528,8 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
-      playAlongNoteTarget: null,
+      playAlongNoteTarget: timelineHighlightActive ? timelineScoreTarget : null,
       practiceNoteTarget,
-      hidePlaybackScoreFollowCursor,
       sessionReady,
       practicePiece,
       practiceStats: practiceStatsTracker,
@@ -325,8 +538,9 @@ export function PracticeSessionProvider({
       session,
       scoreFollow,
       waitForYouNoteTarget,
+      timelineHighlightActive,
+      timelineScoreTarget,
       practiceNoteTarget,
-      hidePlaybackScoreFollowCursor,
       sessionReady,
       practicePiece,
       practiceStatsTracker,

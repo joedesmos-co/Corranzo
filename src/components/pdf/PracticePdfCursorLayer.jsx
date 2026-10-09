@@ -30,6 +30,8 @@ export function usePracticeScoreFollowOverlayProps() {
     cursorVisibility: cursorState.cursorVisibility,
     noteTarget: cursorState.noteTarget,
     showNoteTarget: cursorState.showNoteTarget,
+    scoreNoteStates: cursorState.scoreNoteStates ?? [],
+    showScoreNoteStates: cursorState.showScoreNoteStates ?? false,
     anchors: scoreFollow.anchors,
     placeAnchorAt: scoreFollow.placeAnchorAt,
     // System-start fallback mode

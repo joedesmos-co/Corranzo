@@ -2,7 +2,9 @@ import { memo, useCallback, useRef } from 'react'
 import {
   mapPracticeTargetPointToOverlay,
   resolvePracticeTargetHighlightRects,
+  resolvePracticeTargetToneRects,
 } from '../../features/practice/practiceNoteTargetOverlay.js'
+import { SCORE_NOTE_STATE } from '../../features/practice/scoreNoteStates.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import {
   ANCHOR_SOURCE,
@@ -53,7 +55,188 @@ function scoreFollowOverlayPropsEqual(prev, next) {
   if (pt?.highlight?.coordinateSpace !== nt?.highlight?.coordinateSpace) return false
   if (pt?.highlight?.renderMode !== nt?.highlight?.renderMode) return false
   if (pt?.highlight?.noteBoxes !== nt?.highlight?.noteBoxes) return false
+  if (prev.showScoreNoteStates !== next.showScoreNoteStates) return false
+  if (prev.scoreNoteStates !== next.scoreNoteStates) return false
   return true
+}
+
+function stateClassNameForScoreNote(state) {
+  switch (state) {
+    case SCORE_NOTE_STATE.COMPLETED:
+      return 'score-follow-overlay__note-highlight--state-completed'
+    case SCORE_NOTE_STATE.CURRENT:
+    case SCORE_NOTE_STATE.CURRENT_PARTIAL:
+      return 'score-follow-overlay__note-highlight--state-current'
+    case SCORE_NOTE_STATE.WRONG:
+      return 'score-follow-overlay__note-highlight--state-wrong'
+    case SCORE_NOTE_STATE.MISSED:
+      return 'score-follow-overlay__note-highlight--state-missed'
+    default:
+      return 'score-follow-overlay__note-highlight--state-current'
+  }
+}
+
+function toneCompletedForMidi(toneStates, midi) {
+  if (!Array.isArray(toneStates) || !Number.isFinite(midi)) {
+    return null
+  }
+  const match = toneStates.find((tone) => tone.midi === midi)
+  return match ? Boolean(match.completed) : null
+}
+
+function describeScoreNoteEntry(entry) {
+  const checkpoint = entry?.checkpoint
+  const measure = checkpoint?.measureNumber ?? entry?.target?.measureNumber ?? ''
+  const label = checkpoint?.displayLabel ?? checkpoint?.detailsLabel ?? checkpoint?.label ?? ''
+  switch (entry?.state) {
+    case SCORE_NOTE_STATE.COMPLETED:
+      return `Played${label ? ` ${label}` : ''} at measure ${measure}`
+    case SCORE_NOTE_STATE.CURRENT_PARTIAL: {
+      const tones = Array.isArray(entry?.toneStates) ? entry.toneStates : []
+      const done = tones.filter((tone) => tone.completed).length
+      return `Chord at measure ${measure}: ${done} of ${tones.length} tones played`
+    }
+    case SCORE_NOTE_STATE.WRONG:
+      return `Try again${label ? `: ${label}` : ''} at measure ${measure}`
+    case SCORE_NOTE_STATE.MISSED:
+      return `Missed${label ? ` ${label}` : ''} at measure ${measure}`
+    case SCORE_NOTE_STATE.CURRENT:
+    default:
+      return `Play${label ? ` ${label}` : ''} at measure ${measure}`
+  }
+}
+
+/**
+ * One score event rendered in its practice state (blue required, green
+ * played, red flash on error, muted missed). Chord partials split into
+ * per-tone boxes only when the highlight owns individual source noteheads;
+ * approximate highlights never invent per-tone coordinates.
+ */
+function ScoreNoteStateHighlight({ entry, viewerRotation }) {
+  const target = entry?.target
+  if (!target?.visible) {
+    return null
+  }
+  const state = entry?.state ?? SCORE_NOTE_STATE.CURRENT
+  const stateClass = stateClassNameForScoreNote(state)
+  // Timeline modes hold steady instead of pulsing: the cursor already moves.
+  const steady = target.mode !== 'wait-for-you'
+  const modifiers = `${target.highlight?.isChord ? ' score-follow-overlay__note-highlight--chord' : ''}${
+    target.highlight?.approximate ? ' score-follow-overlay__note-highlight--approximate' : ''
+  }${
+    target.highlight?.renderMode === 'individual-source-boxes'
+      ? ' score-follow-overlay__note-highlight--source'
+      : ''
+  }${steady ? ' score-follow-overlay__note-highlight--play-along' : ''}`
+  const description = describeScoreNoteEntry(entry)
+  const showNowTick = state === SCORE_NOTE_STATE.CURRENT || state === SCORE_NOTE_STATE.CURRENT_PARTIAL
+
+  const toneRects =
+    Array.isArray(entry?.toneStates) && entry.toneStates.length > 0
+      ? resolvePracticeTargetToneRects(target, viewerRotation)
+      : null
+  if (toneRects) {
+    return (
+      <>
+        {toneRects.map((tone, index) => {
+          const completed = toneCompletedForMidi(entry.toneStates, tone.midi)
+          const toneClass =
+            completed == null
+              ? ''
+              : completed
+                ? ' score-follow-overlay__note-highlight--tone-done'
+                : ' score-follow-overlay__note-highlight--tone-needed'
+          return (
+            <div
+              key={`${target.targetKey ?? 'score-note'}-tone-${tone.sourceNoteheadId ?? tone.midi ?? index}`}
+              className={`score-follow-overlay__note-highlight${modifiers} ${stateClass}${toneClass}`}
+              style={{
+                left: `${tone.rect.x0 * 100}%`,
+                top: `${tone.rect.y0 * 100}%`,
+                width: `${(tone.rect.x1 - tone.rect.x0) * 100}%`,
+                height: `${(tone.rect.y1 - tone.rect.y0) * 100}%`,
+              }}
+              data-practice-note-target="true"
+              data-practice-note-target-key={target.targetKey ?? undefined}
+              data-practice-note-mode={target.mode ?? undefined}
+              data-score-note-state={state}
+              data-score-tone-midi={tone.midi ?? undefined}
+              role={index === 0 ? 'img' : undefined}
+              aria-hidden={index === 0 ? undefined : true}
+              aria-label={index === 0 ? description : undefined}
+            >
+              {index === 0 && showNowTick && (
+                <span className="score-follow-overlay__now-tick" aria-hidden="true" />
+              )}
+            </div>
+          )
+        })}
+      </>
+    )
+  }
+
+  const rects = resolvePracticeTargetHighlightRects(target, viewerRotation)
+  if (rects.length === 0) {
+    // Approximate position without a highlight box: keep the legacy dot
+    // marker so the state is still visible (and announced), tinted by state.
+    const point = mapPracticeTargetPointToOverlay(
+      target.x,
+      target.y,
+      target.coordinateSpace,
+      viewerRotation,
+    )
+    if (!point) {
+      return null
+    }
+    return (
+      <div
+        className={`score-follow-overlay__note-target score-follow-overlay__note-target--compact ${stateClass}`}
+        style={{
+          left: `${point.x * 100}%`,
+          top: `${point.y * 100}%`,
+        }}
+        data-practice-note-target="true"
+        data-practice-note-target-key={target.targetKey ?? undefined}
+        data-practice-note-mode={target.mode ?? undefined}
+        data-score-note-state={state}
+        role="img"
+        aria-label={description}
+      >
+        <span className="score-follow-overlay__note-target-ring" />
+        <span className="score-follow-overlay__note-target-dot" />
+        {showNowTick && (
+          <span className="score-follow-overlay__now-tick" aria-hidden="true" />
+        )}
+      </div>
+    )
+  }
+  return (
+    <>
+      {rects.map((rect, index) => (
+        <div
+          key={`${target.targetKey ?? 'score-note'}-box-${index}`}
+          className={`score-follow-overlay__note-highlight${modifiers} ${stateClass}`}
+          style={{
+            left: `${rect.x0 * 100}%`,
+            top: `${rect.y0 * 100}%`,
+            width: `${(rect.x1 - rect.x0) * 100}%`,
+            height: `${(rect.y1 - rect.y0) * 100}%`,
+          }}
+          data-practice-note-target="true"
+          data-practice-note-target-key={target.targetKey ?? undefined}
+          data-practice-note-mode={target.mode ?? undefined}
+          data-score-note-state={state}
+          role={index === 0 ? 'img' : undefined}
+          aria-hidden={index === 0 ? undefined : true}
+          aria-label={index === 0 ? description : undefined}
+        >
+          {index === 0 && showNowTick && (
+            <span className="score-follow-overlay__now-tick" aria-hidden="true" />
+          )}
+        </div>
+      ))}
+    </>
+  )
 }
 
 function ScoreFollowOverlay({
@@ -77,6 +260,8 @@ function ScoreFollowOverlay({
   // drive the cursor — they are a diagnostic overlay shown only when opted in.
   candidateAnchors = null,
   showCandidateAnchors = false,
+  scoreNoteStates = [],
+  showScoreNoteStates = false,
   getPageViewRotation,
   viewerRotation = 0,
 }) {
@@ -109,8 +294,25 @@ function ScoreFollowOverlay({
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorSmoothed = cursor?.smoothed ?? false
 
+  const stateEntriesOnPage =
+    showScoreNoteStates && Array.isArray(scoreNoteStates)
+      ? scoreNoteStates.filter(
+          (entry) => entry?.target?.visible && entry.target.page === pageNumber,
+        )
+      : []
+  const stateTargetKeys = new Set(
+    stateEntriesOnPage.map((entry) => entry?.target?.targetKey).filter((key) => key != null),
+  )
+  // The shared state list owns the current event when present: suppress the
+  // legacy single-target boxes for duplicates so the event renders once,
+  // with per-tone states when available.
+  const suppressLegacyTarget =
+    noteTarget?.targetKey != null && stateTargetKeys.has(noteTarget.targetKey)
   const noteTargetOnPage =
-    showNoteTarget && noteTarget?.visible && noteTarget.page === pageNumber
+    showNoteTarget &&
+    noteTarget?.visible &&
+    noteTarget.page === pageNumber &&
+    !suppressLegacyTarget
   const noteHighlightOverlays = noteTargetOnPage
     ? resolvePracticeTargetHighlightRects(noteTarget, viewerRotation)
     : []
@@ -155,6 +357,7 @@ function ScoreFollowOverlay({
     !systemStartMode &&
     !showCursor &&
     !noteTargetOnPage &&
+    stateEntriesOnPage.length === 0 &&
     !hasBands &&
     !hasMarkers &&
     !hasCandidates
@@ -276,6 +479,14 @@ function ScoreFollowOverlay({
               ? `Target note${noteTarget.isChord ? ' chord' : ''} highlight at measure ${noteTarget.measureNumber ?? ''}`
               : undefined
           }
+        />
+      ))}
+
+      {stateEntriesOnPage.map((entry) => (
+        <ScoreNoteStateHighlight
+          key={entry.key ?? entry.target.targetKey}
+          entry={entry}
+          viewerRotation={viewerRotation}
         />
       ))}
 

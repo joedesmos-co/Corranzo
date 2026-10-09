@@ -38,17 +38,38 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
       {s.practiceMode !== PRACTICE_MODE.PREVIEW && <ToolButton tool={tool} onTool={onTool} id="input" icon={s.wfyInputSource === 'microphone' && s.wfyInputSourceReady ? 'mic' : 'keyboard'} label="Practice input">{s.wfyInputSourceReady && s.wfyInputSource !== 'manual' ? (s.wfyInputSource === 'microphone' ? 'Microphone' : 'MIDI keyboard') : 'Connect instrument'}</ToolButton>}
     </div>
     {s.isWaitForYou && <div className="workspace-your-turn">
-      <div><span className="workspace-eyebrow">{s.waitForYou.isComplete ? 'Well played' : 'Your next notes'}</span><strong title={checkpoint?.detailsLabel}>{s.waitForYou.isComplete && <Icon name="check" size={20} />}{s.waitForYou.isComplete ? 'Passage complete' : label}</strong><span className="workspace-target-detail">{targetNotes}{checkpoint?.measureNumber ? ' · ' : ''}{checkpoint?.measureNumber ? `Bar ${checkpoint.measureNumber}` : ''}{s.waitForYou.guidance?.secondary ? ` · ${s.waitForYou.guidance.secondary}` : ''}</span></div>
+      <div>
+        <span className="workspace-eyebrow">
+          {s.waitForYou.isComplete
+            ? 'Well played'
+            : `Your turn${s.waitForYou.totalCheckpoints > 0 ? ` · ${Math.min(s.waitForYou.checkpointIndex + 1, s.waitForYou.totalCheckpoints)} of ${s.waitForYou.totalCheckpoints}` : ''}`}
+        </span>
+        <strong title={checkpoint?.detailsLabel}>
+          {s.waitForYou.isComplete && <Icon name="check" size={16} />}
+          {s.waitForYou.isComplete ? 'Passage complete' : label}
+        </strong>
+        <span className="workspace-target-detail">
+          {targetNotes}
+          {checkpoint?.measureNumber ? ' · ' : ''}
+          {checkpoint?.measureNumber ? `Bar ${checkpoint.measureNumber}` : ''}
+        </span>
+      </div>
+      {(s.waitForYouInput?.inputFeedback?.outcome === 'chord-partial' ||
+        s.waitForYouInput?.inputFeedback?.outcome === 'wrong') &&
+        s.waitForYouInput.inputFeedback.message && (
+        <span className="workspace-wfy-feedback" role="status">
+          {s.waitForYouInput.inputFeedback.message}
+        </span>
+      )}
       <button onClick={() => s.referencePlayback.playCheckpointReference(checkpoint)} disabled={!checkpoint || s.referencePlayback.isPlaying}><Icon name="tracks" size={16} />{s.referencePlayback.isPlaying ? 'Playing…' : 'Hear it'}</button>
       <button onClick={s.waitForYou.showHint} disabled={s.waitForYou.isComplete}>Hint</button>
       <button onClick={s.waitForYou.skipCheckpoint} disabled={s.waitForYou.isComplete}>Skip</button>
       {(s.waitForYou.guidance?.state === 'hint' || s.waitForYou.guidance?.hint) && <span className="workspace-wfy-guidance">{s.waitForYou.guidance.hint || s.waitForYou.guidance.primary}</span>}
-      {s.waitForYouInput?.inputFeedback?.outcome === 'chord-partial' && <span role="status">{s.waitForYouInput.inputFeedback.message}</span>}
       {s.referencePlayback.error && <span role="alert">Reference sound unavailable.</span>}
     </div>}
     <div className="workspace-transport-row" data-tour-id="practice-playback">
       <button className="workspace-icon workspace-restart" aria-label="Restart passage" title="Restart passage" disabled={s.timingDisabled} onClick={s.isWaitForYou ? s.waitForYou.restart : s.handleMidiStop}><Icon name="prev" size={20} /></button>
-      <button className={`workspace-play${isPlaying ? ' workspace-play--playing' : ''}`} aria-label={s.isWaitForYou ? (s.waitForYou.isComplete ? 'Start again' : 'Continue (Enter)') : isPlaying ? 'Pause (Space)' : 'Play (Space)'} disabled={s.isWaitForYou ? s.timingDisabled : p.controlsDisabled} onClick={s.isWaitForYou ? (s.waitForYou.isComplete ? s.waitForYou.restart : s.waitForYou.markCorrectAndContinue) : isPlaying ? p.pause : s.handlePlay}>
+      <button className={`workspace-play${isPlaying ? ' workspace-play--playing' : ''}${s.isWaitForYou ? ' workspace-play--continue' : ''}`} aria-label={s.isWaitForYou ? (s.waitForYou.isComplete ? 'Start again' : 'Continue (Enter)') : isPlaying ? 'Pause (Space)' : 'Play (Space)'} title={s.isWaitForYou && !s.waitForYou.isComplete ? 'Continue without playing (Enter)' : undefined} disabled={s.isWaitForYou ? s.timingDisabled : p.controlsDisabled} onClick={s.isWaitForYou ? (s.waitForYou.isComplete ? s.waitForYou.restart : s.waitForYou.markCorrectAndContinue) : isPlaying ? p.pause : s.handlePlay}>
         <Icon name={s.isWaitForYou ? 'next' : isPlaying ? 'pause' : 'play'} size={24} className={!s.isWaitForYou && !isPlaying ? 'workspace-play-symbol' : ''} /><span>{s.isWaitForYou ? (s.waitForYou.isComplete ? 'Again' : 'Continue') : isPlaying ? 'Pause' : 'Play'}</span>
       </button>
       <div className="workspace-position">

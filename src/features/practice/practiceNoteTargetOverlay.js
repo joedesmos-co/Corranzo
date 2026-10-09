@@ -68,3 +68,40 @@ export function resolvePracticeTargetHighlightRects(noteTarget, viewerRotation =
     .map((rect) => mapPracticeTargetRectToOverlay(rect, coordinateSpace, viewerRotation))
     .filter(Boolean)
 }
+
+/**
+ * Per-tone boxes for chord partial-completion coloring. Only meaningful when
+ * the highlight was built from individual source noteheads
+ * (renderMode 'individual-source-boxes'); otherwise returns null so the
+ * overlay falls back to the whole-event highlight instead of inventing
+ * per-tone coordinates. Each entry carries the tone's MIDI for mapping to
+ * the checkpoint's expected tones.
+ */
+export function resolvePracticeTargetToneRects(noteTarget, viewerRotation = 0) {
+  const highlight = noteTarget?.highlight
+  if (
+    !highlight ||
+    highlight.renderMode !== 'individual-source-boxes' ||
+    !Array.isArray(highlight.noteBoxes) ||
+    highlight.noteBoxes.length === 0
+  ) {
+    return null
+  }
+
+  const coordinateSpace =
+    highlight.coordinateSpace ??
+    noteTarget.coordinateSpace
+  const tones = []
+  for (const box of highlight.noteBoxes) {
+    const rect = mapPracticeTargetRectToOverlay(box, coordinateSpace, viewerRotation)
+    if (!rect) {
+      continue
+    }
+    tones.push({
+      rect,
+      midi: Number.isFinite(box.midi) ? box.midi : null,
+      sourceNoteheadId: box.sourceNoteheadId ?? null,
+    })
+  }
+  return tones.length > 0 ? tones : null
+}

@@ -50,6 +50,10 @@
 .workspace-play:hover { background: #fffbed; }
 .workspace-play:active { transform: translateY(1px); }
 .workspace-play--playing { background: #f1ecdd; border-color: #f1ecdd; color: #1c251d; }
+/* Wait For You: Continue stays available (including no-instrument practice)
+   but no longer dominates the transport — the score is the interface. */
+.workspace-play--continue { height: 44px; min-width: 0; padding: 0 16px; border-color: #596251; background: transparent; color: #e9d7c7; font-size: 13px; font-weight: 500; }
+.workspace-play--continue:hover { background: #30382e; }
 .workspace-play-symbol path { fill: currentColor; stroke-width: 1.5; }
 .workspace-position { flex: 1; min-width: 110px; padding: 0 12px; }
 .workspace-position > div:first-child { display: flex; justify-content: space-between; gap: 4px; white-space: nowrap; color: #c1c7b9; font-size: 12px; font-variant-numeric: tabular-nums; }
@@ -62,12 +66,14 @@
 .workspace-tool-button small { font-size: 11px; color: #b5bfa9; }
 .workspace-tool-button:hover, .workspace-tool-button[aria-expanded='true'], .workspace-tool-button[aria-pressed='true'] { color: var(--cz-vermilion-light); background: #30382e; }
 .workspace-settings-label { display: none; }
-.workspace-your-turn { display: flex; align-items: center; gap: 15px; min-height: 60px; border-top: 1px solid #3b4439; margin-bottom: 8px; animation: workspace-enter 160ms ease-out; }
-.workspace-your-turn > div { display: flex; align-items: baseline; gap: 18px; flex: 1; min-width: 0; }
-.workspace-eyebrow { color: #c2aa93; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
-.workspace-your-turn strong { font: 400 27px var(--cz-font-edition); color: #f3eddf; }
-.workspace-your-turn span:not(.workspace-eyebrow) { font-size: 13px; color: #c0c7b5; }
+.workspace-your-turn { display: flex; align-items: center; gap: 12px; min-height: 48px; border-top: 1px solid #3b4439; margin-bottom: 8px; animation: workspace-enter 160ms ease-out; }
+.workspace-your-turn > div { display: flex; align-items: baseline; gap: 12px; flex: 1; min-width: 0; }
+.workspace-eyebrow { color: #c2aa93; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.workspace-your-turn strong { font: 400 19px var(--cz-font-edition); color: #f3eddf; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.workspace-your-turn span:not(.workspace-eyebrow) { font-size: 12px; color: #c0c7b5; }
 .workspace-your-turn button { display: flex; gap: 7px; align-items: center; min-height: 44px; min-width: 44px; padding: 0 10px; border: 0; background: transparent; color: #e9d7c7; font-size: 13px; }
+.workspace-wfy-feedback { font-size: 12px; color: #e8c47a; white-space: nowrap; }
+.workspace-wfy-guidance { font-size: 12px; color: #a9b6c8; }
 .workspace-tool-scrim { position: absolute; inset: 0; border: 0; border-radius: 0; background: #10171055; z-index: 60; cursor: default !important; }
 .workspace-tool-panel { position: absolute; bottom: 130px; right: 28px; z-index: 61; width: 360px; max-width: calc(100% - 24px); max-height: calc(100% - 150px); overflow: auto; padding: 22px; background: #272e28; border: 1px solid #515a4f; border-radius: 5px; box-shadow: 0 18px 64px #0006; color: #e6e6da; animation: tool-enter 150ms ease-out; }
 .workspace-tool-panel--settings { width: 440px; }
@@ -142,7 +148,7 @@
  .workspace-your-turn { gap: 3px; padding-block: 8px; }
  .workspace-your-turn > div { flex-wrap: wrap; gap: 6px 12px; }
  .workspace-your-turn .workspace-eyebrow { display: none; }
- .workspace-your-turn strong { font-size: 22px; }
+ .workspace-your-turn strong { font-size: 17px; }
  .score-workspace .pdf-viewer-section--practice { padding-inline: 4px; }
  .score-workspace .viewer-float-toolbar__hint { display: none; }
  .workspace-guide { padding: 12px; }

@@ -101,6 +101,7 @@ function PdfPageFrame({
       scoreFollow.enabled ||
       semiAutoPreview ||
       scoreFollow.showNoteTarget ||
+      scoreFollow.showScoreNoteStates ||
       scoreFollow.showCandidateAnchors)
 
   const showCalibrationDebugLayer =
@@ -175,6 +176,8 @@ function PdfPageFrame({
                 cursor={scoreFollow.cursor}
                 noteTarget={scoreFollow.noteTarget}
                 showNoteTarget={scoreFollow.showNoteTarget}
+                scoreNoteStates={scoreFollow.scoreNoteStates ?? []}
+                showScoreNoteStates={scoreFollow.showScoreNoteStates ?? false}
                 anchors={scoreFollow.displayAnchors ?? scoreFollow.anchors}
                 onPlaceAnchor={scoreFollow.placeAnchorAt}
                 systemStartMode={systemStartMode}

@@ -178,6 +178,7 @@ function resolveOwnedSourcePlacement(note, sourceAnchorIndex, preferredRepresent
       x: ownedSourceAnchor.sourceCenter.x,
       y: ownedSourceAnchor.sourceCenter.y,
       page: ownedSourceAnchor.page,
+      midi: note.midi ?? ownedSourceAnchor.midi ?? null,
       source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
       confidence: ownedSourceAnchor.confidence,
       coordinateSpace: SOURCE_VISUAL_COORDINATE_SPACE,
@@ -216,6 +217,7 @@ function resolveSingleNotePosition({
     return {
       x: clamp(note.xNorm, 0.03, 0.97),
       y: clamp(note.yNorm, 0.06, 0.94),
+      midi: note.midi ?? null,
       source: NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
       confidence: CONFIDENCE_BY_SOURCE[NOTE_TARGET_SOURCE.DIRECT_GEOMETRY],
       coordinateSpace: 'pdf-analysis-normalized',
@@ -242,6 +244,7 @@ function resolveSingleNotePosition({
   return {
     x: clamp(x, 0.03, 0.97),
     y,
+    midi: note.midi ?? null,
     source: classifySource(note, layoutExtents, timingWindow, geometry),
     coordinateSpace: 'pdf-analysis-normalized',
   }
@@ -264,7 +267,11 @@ function pickStrongestSource(sources) {
 
 function noteBoxForPlacement(placement, geometry) {
   if (placement.sourceBBox) {
-    return placement.sourceBBox
+    return {
+      ...placement.sourceBBox,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+    }
   }
   const measureWidth = Math.max(0.03, geometry.xMeasureEnd - geometry.xMeasureStart)
   const corridorHeight = Math.max(0.055, geometry.yBottom - geometry.yTop)
@@ -276,6 +283,8 @@ function noteBoxForPlacement(placement, geometry) {
     y0: clamp(placement.y - halfHeight, 0, 1),
     x1: clamp(placement.x + halfWidth, 0, 1),
     y1: clamp(placement.y + halfHeight, 0, 1),
+    midi: placement.midi ?? null,
+    sourceNoteheadId: placement.sourceNoteheadId ?? null,
   }
 }
 

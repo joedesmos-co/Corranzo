@@ -56,6 +56,8 @@ export function buildInputFeedback({
       tone: 'success',
       playedMidi,
       playedLabel,
+      // Per-tone completion for score highlighting (array: render-stable).
+      matchedIndices: matchedIndices ? [...matchedIndices] : [],
     }
   }
 
@@ -74,6 +76,8 @@ export function buildInputFeedback({
       matchedCount,
       total,
       remainingLabels: remaining,
+      // Per-tone completion for score highlighting (array: render-stable).
+      matchedIndices: matchedIndices ? [...matchedIndices] : [],
     }
   }
 
