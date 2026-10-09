@@ -1,5 +1,6 @@
 import { getMeasureByNumber } from '../musicxml/measureNavigation.js'
 import { sortAnchorsByMeasure } from '../score-follow/anchorSort.js'
+import { dedupeTrustedAnchorsByMeasure } from '../score-follow/trustedAnchors.js'
 import { getMeasurePlaybackWindow, usesPerformedTimeline } from '../musicxml/performedTimeline.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
 
@@ -156,7 +157,18 @@ export function buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, pr
   }
 
   const sorted = sortAnchorsByMeasure(anchors, timingMap, practiceTime)
-  const exact = sorted.find((anchor) => anchor.measureNumber === measureNumber)
+  // The exact anchor is the SAME priority-deduped anchor the cursor uses —
+  // otherwise bar and highlight follow different anchors for one measure.
+  // A system-start/end SPAN anchor shares its first measure's number but is
+  // not that measure's position, so span roles never count as exact; they
+  // still inform the bracket/system-span fallbacks below.
+  const deduped = dedupeTrustedAnchorsByMeasure(sorted)
+  const exact = deduped.find(
+    (anchor) =>
+      anchor.measureNumber === measureNumber &&
+      anchor.meta?.role !== 'system-start' &&
+      anchor.meta?.role !== 'system-end',
+  )
   const systemSpan = findSystemSpanAnchors(sorted, measureNumber)
   const neighbors = findNeighborAnchors(sorted, measureNumber)
   const neighborBounds = measureXBoundsFromNeighbors(

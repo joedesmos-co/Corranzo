@@ -85,14 +85,15 @@ function enumeratePerformedMeasures(timingMap) {
  * time-proportional x via the monotonic check below.
  */
 function getMeasureOnsets(timingMap, measureNumber, window) {
+  const inWindow = (t) =>
+    t >= window.startTimeSeconds - 0.001 && t <= window.endTimeSeconds + 0.001
   const notes = getTimeline(timingMap)
     .performedNotes()
     .filter(
       (n) =>
         !n.isRest &&
         !n.isTabMirror &&
-        n.performedSeconds >= window.startTimeSeconds - 0.001 &&
-        n.performedSeconds <= window.endTimeSeconds + 0.001 &&
+        inWindow(n.performedSeconds) &&
         onsetOwnedByWindow(timingMap, n, measureNumber, window),
     )
   const groups = new Map()
@@ -108,7 +109,30 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
       }
     }
   }
-  return [...groups.values()].sort((a, b) => a.time - b.time)
+  const onsets = [...groups.values()].sort((a, b) => a.time - b.time)
+  // Leading rests set the engraved origin: a measure opening with a rest
+  // engraves its first sounding note right of the barline, not at it. Only
+  // rests strictly before the first onset count (a mid-measure second-voice
+  // rest must not drag the origin left). Mirrors layoutExtents, which the
+  // legacy resolver already includes.
+  let leadingRestDX = null
+  if (onsets.length > 0) {
+    const firstTime = onsets[0].time
+    for (const n of getTimeline(timingMap).performedNotes()) {
+      if (
+        !n.isRest ||
+        n.defaultX == null ||
+        !inWindow(n.performedSeconds) ||
+        n.performedSeconds >= firstTime - 0.004
+      ) {
+        continue
+      }
+      if (leadingRestDX == null || n.defaultX < leadingRestDX) {
+        leadingRestDX = n.defaultX
+      }
+    }
+  }
+  return { onsets, leadingRestDX }
 }
 
 /**
@@ -117,7 +141,7 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
  * the last note is NOT crammed to the edge; falls back to time spacing for
  * missing/non-monotonic geometry.
  */
-function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber) {
+function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber, leadingRestDX = null) {
   const span = Math.max(endX - startX, 0)
   if (onsets.length === 0) {
     return {
@@ -136,7 +160,12 @@ function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber) {
 
   let xs
   if (monotonic) {
-    const d0 = onsets[0].defaultX
+    // A leading rest's engraved position is the mapping origin, so the
+    // first sounding note lands right of the barline instead of on it.
+    const d0 =
+      leadingRestDX != null && leadingRestDX < onsets[0].defaultX
+        ? leadingRestDX
+        : onsets[0].defaultX
     const dLast = onsets[onsets.length - 1].defaultX
     let width
     if (onsets.length >= 2 && onsets[onsets.length - 1].time - onsets[0].time > 1e-6) {
@@ -360,8 +389,8 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
     }
 
     const window = { startTimeSeconds: pm.startTime, endTimeSeconds: pm.endTime }
-    const onsets = getMeasureOnsets(timingMap, pm.measureNumber, window)
-    const built = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber)
+    const { onsets, leadingRestDX } = getMeasureOnsets(timingMap, pm.measureNumber, window)
+    const built = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber, leadingRestDX)
     current.knots.push(...built.knots)
     if (built.geometry === 'time') {
       current.geometryMode = current.geometryMode === 'engraved' ? 'mixed' : 'time'

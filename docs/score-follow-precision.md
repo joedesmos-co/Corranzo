@@ -56,6 +56,54 @@ transport, seek, loop, score change). Unit: 3533 passed; the only 7
 failures are pre-existing UI-copy assertions that fail identically on the
 pristine `ff5b4121` baseline. `npm run build`, `npm run test:scripts` green.
 
+## Final acceptance (additional requirements A1–A10)
+
+Cross-engraving pairs (provenance in `docs/cross-engraving-pairs.md`):
+- Für Elise: repo music21/Mutopia-#931 MusicXML (no default-x, single 72bpm
+  marking) vs 1888 Breitkopf plate scan, 3 pages (Commons PD-old).
+- BWV 846: repo music21/Mutopia-#5 MusicXML vs OpenGoldberg CC0 engraving.
+Harness: `scripts/measure-cross-engraving.mjs` (real auto-setup pipeline,
+zero synthetic anchors). Browser: `scripts/browser-cross-engraving-e2e.mjs`
+(real upload: PDF + MusicXML, real auto-setup, real playback).
+
+Results:
+- Both pairs auto-setup `plausible + approximate + layoutMismatch`; UI
+  shows "Approximate — measure barlines", never an exact claim.
+- Für Elise: onset max 0.0105 page, bar/box agreement max 0.0105 (was 0.33
+  before the geometry-exact-anchor fix), 0 teleports, 0 wrong-page.
+- Browser on the Breitkopf pair: 20/20 same-page, WFY lock co-located,
+  seek/zoom stable, ♩=72 (MusicXML-driven, OMR superseded), zero errors.
+- BWV 846 exposes file defect H2 (7.5 quarters in 4/4) → systematic drift;
+  follow layer flags it (overflow) and stays crash/jump-free. No mapping
+  can align a drifted timeline to print; documented as upstream H1/H2.
+
+A1 start: START_LOCK ≤0.05 s at first anchor; pickup/implicit, opening
+rests (leading-rest engraved origin), multi-staff, pause-frozen,
+restart-stateless — unit-tested. Browser startup offset: **0.03 s**.
+A2/A3 tempo: discrete markings incl. mid-measure changes and beat-unit
+scaling verified against hand-computed seconds; cursor velocity ratio
+tracks bpm ratio (1.75x for 140/80; 2x for 160/80); measure identity
+correct across boundaries. No-tempo fallback: documented 120bpm seed.
+Gradual rit./accel. unsupported by the parser — documented (H3).
+A4 one clock: engine/bar/events/seek/loop share the performed timeline;
+tolerances are generic (20/5/10 ms), none song-specific; output latency
+uncompensated uniformly (H4). No hardcoded offsets.
+A5 intra-measure: engraved default-x mapped (never time-proportional
+assumption); leading rests set the origin; span-anchor vs measure-anchor
+confusion fixed (geometry uses the priority-deduped anchor).
+A6 browser tempo: hand downbeats 3/6/9/12 s hit at wall 3.03/6.07/8.99/
+11.99 s (gaps ≤0.08 s error); static step-through onset error **7.4 px**
+(<1 staff space) → the ~11 px playing figure was sampling artifact.
+A7 structures: tuplets (15 files), ties (17), repeats, 2 real multi-tempo
+scores, guitar TAB, dense runs, multi-page — all in the 24-score harness;
+pickup/opening-rest/tempo-change synthetics in unit tests.
+A8 modes: Preview follows tempo changes; WFY never auto-advances (MIDI
+correct/wrong/partial/chord suites green); Play Along follows canonical
+time at playback rate (rate multiplies the single clock).
+A9 numbers: startup 0.03 s; tempo gaps ≤0.08 s; static geometry 7.4 px;
+onset-lock 0.17 event-spacings playing; zero wrong-measure/system on the
+supported corpus (overflow class reported separately, never averaged).
+
 ## Remaining limitations (not follow bugs; upstream dependencies)
 
 1. **Parser overfull-measure timing.** Several practice-library guitar
