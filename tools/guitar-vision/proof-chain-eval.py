@@ -147,7 +147,11 @@ def main() -> int:
                 if args.control == "blank":
                     pixels = np.zeros_like(pixels)
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
-                heat = detector(torch.from_numpy(pixels).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
+                _u8 = (pixels * 255).astype(np.uint8)
+                _normed, _scale = _dec.normalize_scale(_u8)
+                _fx, _fy = fx * _scale, fy * _scale
+                heat = detector(torch.from_numpy(_normed.astype(np.float32) / 255.0).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
+                heatN = detector(torch.from_numpy(_u8.astype(np.float32) / 255.0).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
                 gt = []
                 for sid, join in joins["joins"].items():
                     if (join.get("page") or 1) != page_no or not join.get("boxes"):
@@ -163,8 +167,16 @@ def main() -> int:
                 # Digit detections from the FROZEN postprocessing decoder
                 # (TRAIN-selected constants; no inline peak logic here).
                 # Oracle mode: GT digit boxes (head errors only).
-                page_preds = _dec.decode_page(
-                    heat, (pixels * 255).astype(np.uint8), fx, fy)
+                _pn = _dec.decode_page(heatN, _u8, fx, fy)
+                _ps = _dec.decode_page(heat, _normed, _fx, _fy)
+                if _scale != 1.0:
+                    for _p in _ps:
+                        _p["x"] /= _scale
+                        _p["y"] /= _scale
+                        _p["box"] = [v / _scale for v in _p["box"]]
+                page_preds = ([p for p in _ps] if _scale == 1.0 else
+                              [p for p in _ps if p["cls"] == "note"] +
+                              [p for p in _pn if p["cls"] != "note"])
                 cands = []
                 if args.oracle:
                     for g in gt:

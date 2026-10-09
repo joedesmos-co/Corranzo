@@ -36,6 +36,7 @@ def _load(name, path):
 
 
 tr4 = _load("proof_ignore_train_mod", "proof-ignore-train.py")
+dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 
 import os as _os
 
@@ -43,8 +44,8 @@ COVER = float(_os.environ.get("BAR_COVER", "0.9"))  # TRAIN-selected: median bar
 REJECT = float(_os.environ.get("BAR_REJECT", "0"))  # note-rejection destroys recall (dense scores); off
 
 
-def detect_barlines(u8: np.ndarray, note_xs: list[float] | None = None) -> int:
-    """Barlines = columns with ink spanning a full staff system.
+def detect_barline_cols(u8: np.ndarray, note_xs: list[float] | None = None) -> list[int]:
+    """Barline columns with ink spanning a full staff system.
 
     Systems found from the full-width row profile (long horizontal runs);
     a column is a barline if its ink covers >=70% of some system's span.
@@ -92,17 +93,27 @@ def detect_barlines(u8: np.ndarray, note_xs: list[float] | None = None) -> int:
         cover = band.mean(axis=0)
         for x in np.nonzero(cover >= COVER)[0]:
             found.add(int(x + x0))
-    # Merge adjacent columns; reject note-adjacent (stems).
+    # Merge adjacent columns; reject note-adjacent (stems, REJECT=0 off).
     xs = sorted(found)
-    count, prev = 0, -99
+    cols, prev = [], -99
     for x in xs:
         if x - prev <= 4:
             continue
         prev = x
         if REJECT > 0 and note_xs and min([abs(x - nx) for nx in note_xs] or [1e9]) < REJECT:
             continue
-        count += 1
-    return count
+        cols.append(x)
+    return cols
+
+
+def detect_barlines(u8: np.ndarray, note_xs: list[float] | None = None) -> int:
+    """Count wrapper."""
+    return len(detect_barline_cols(u8, note_xs))
+
+
+def detect_barline_xs(u8: np.ndarray) -> list[int]:
+    """Barline x positions without note peaks (for measure ownership)."""
+    return detect_barline_cols(u8, None)
 
 
 SEED = 20261009
@@ -169,12 +180,13 @@ def main() -> int:
                     continue
                 img = Image.open(meta["file"]).convert("L")
                 u8 = np.asarray(img)
-                px = u8.astype(np.float32) / 255.0
+                u8n, _ns = dec.normalize_scale(u8)
+                px = u8n.astype(np.float32) / 255.0
                 heat = model(torch.from_numpy(px).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
                 chan = heat[0]
                 pooled = torch.nn.functional.max_pool2d(chan.unsqueeze(0), 3, stride=1, padding=1)[0]
                 ys, xs = torch.nonzero((chan == pooled) & (chan >= 0.4), as_tuple=True)
-                note_xs = [(int(x) + 0.5) * 8 for x in xs.tolist()]
+                note_xs = [((int(x) + 0.5) * 8) / _ns for x in xs.tolist()]
                 count = detect_barlines(u8, note_xs)
                 bar_rows.append({"sample": sample, "page": tag, "bars": count,
                                  "measures": measures})

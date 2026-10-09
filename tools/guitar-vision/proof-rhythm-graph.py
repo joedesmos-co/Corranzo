@@ -46,6 +46,7 @@ def _load(name, path):
 TinyFCN = _load("proof_heatmap_train_mod", "proof-heatmap-train.py").TinyFCN
 dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 evlink = _load("proof_event_link_mod", "proof-event-link.py")
+mbars = _load("proof_measure_bars_mod", "proof-measure-bars.py")
 
 SEED = 20261009
 # Note-anchored stem search (hires px). Stems attach at the notehead's
@@ -115,40 +116,46 @@ def anchored_stem(ink: np.ndarray, beam_mask: np.ndarray, box, img_h: int) -> di
         down = _bridged_run(strip, bot_idx, 1)
         if up >= down:
             run, tip_y, direction = up, sy0 + top_idx - up, -1
+            run_span = (sy0 + top_idx - up, ny0)
         else:
             run, tip_y, direction = down, sy0 + bot_idx + down, 1
+            run_span = (ny1, sy0 + bot_idx + down)
         if best is None or run > best["run"]:
             best = {"side": side, "run": run, "tip": (edge, tip_y),
-                    "dir": direction, "edge": edge}
+                    "dir": direction, "edge": edge, "span": run_span,
+                    "strip_x": edge}
     out = {"stem": best["run"] >= MIN_STEM_RUN, "run": best["run"], "tip": best["tip"],
-           "beams": 0, "flag": False, "dots": 0}
+           "beams": 0, "flag": False, "dots": 0, "dot_xy": []}
     if not out["stem"]:
         return out
     tx, ty = best["tip"]
-    # Beam count: distinct beam-mask rows crossing the stem near the tip.
-    y_lo, y_hi = max(ty - BEAM_TOUCH, 0), min(ty + BEAM_TOUCH, ink.shape[0] - 1)
-    rows = np.nonzero(beam_mask[y_lo:y_hi + 1, max(tx - 6, 0):tx + 7].any(axis=1))[0]
+    # Beam count: distinct beam-mask row-groups intersecting the FULL stem
+    # run column (robust to tip overshoot/undershoot; tip windows miss).
+    y_lo, y_hi = max(min(best["span"]) - 4, 0), min(max(best["span"]) + 4, ink.shape[0] - 1)
+    col = beam_mask[y_lo:y_hi + 1, max(tx - 6, 0):tx + 7].any(axis=1)
+    rows = np.nonzero(col)[0]
     groups, prev = 0, -99
     for r in rows:
         if r - prev > 3:
             groups += 1
         prev = r
     out["beams"] = groups
-    # Flags: bounded attempt FAILED (tip-region components are staff lines
-    # and stem fragments on every page; no clean separator found). Flag
-    # stays False (abstinent); flagged durations will err toward quarter
-    # and are reported as such. Documented negative.
+    # Flags: touch-constrained retry measured (TRAIN: tp 177 / fp 7825 /
+    # fn 233 -> P 0.022 / R 0.43). Unusable precision (tip error admits all
+    # nearby ink); stays ABSTINENT. Flagged durations err to quarter.
     out["flag"] = False
-    # Dots: small components right of the notehead, vertically centered.
+    # Dots: candidates in global coords (caller dedups + attaches).
     mid = (ny0 + ny1) // 2
+    dx0 = min(x1 + 4, ink.shape[1] - 1)
     region = ink[max(mid - DOT_RADIUS, 0):min(mid + DOT_RADIUS + 1, ink.shape[0]),
-                 min(x1 + 4, ink.shape[1] - 1):min(x1 + 4 + DOT_RADIUS * 2, ink.shape[1])]
+                 dx0:min(dx0 + DOT_RADIUS * 2, ink.shape[1])]
     lab, n = ndi.label(region)
     for i in range(1, n + 1):
         ys, xs = np.nonzero(lab == i)
         h, w = ys.max() - ys.min() + 1, xs.max() - xs.min() + 1
         if len(ys) >= 6 and max(h, w) <= 16:
             out["dots"] += 1
+            out["dot_xy"].append((float(xs.mean() + dx0), float(ys.mean() + max(mid - DOT_RADIUS, 0))))
     return out
 
 
@@ -221,6 +228,8 @@ def main() -> int:
 
     stem_tp = stem_fp = stem_fn = 0
     beam_pair_tp = beam_pair_fp = beam_pair_fn = 0
+    flag_tp = flag_fp = flag_fn = 0
+    meas_pair_tp = meas_pair_fp = meas_pair_fn = 0
     dur_ok = dur_n = 0
     dur_conf: dict[str, dict[str, int]] = {}
     dot_ok = dot_n = 0
@@ -273,6 +282,10 @@ def main() -> int:
                 px = np.asarray(img, dtype=np.float32) / 255.0
                 u8 = (px * 255).astype(np.uint8)
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
+                # Native scale (frozen): rhythm primitives were TRAIN-tuned at
+                # native geometry; normed note boxes degrade anchored search
+                # (TRAIN stem R 0.52 native vs 0.35 normed). Detection uses
+                # norm; rhythm primitives stay native. Documented split.
                 heat = model(torch.from_numpy(px).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
                 preds = dec.decode_page(heat, u8, fx, fy)
                 notes = [p for p in preds if p["cls"] == "note"]
@@ -291,6 +304,36 @@ def main() -> int:
                     attr = anchored_stem(ink, beam_mask, [x0, y0, x1, y1], u8.shape[0])
                     for i in cl:
                         member_attr[i] = attr
+                # Global dot dedup: cluster all dot candidates (<10px),
+                # attach each to the nearest note box (dot right of box,
+                # within 80px). Per-box regions double-count chord dots.
+                all_dots = []
+                for i, p in enumerate(notes):
+                    for xy in member_attr.get(i, {}).get("dot_xy", []):
+                        all_dots.append(xy)
+                dot_clusters: list[list] = []
+                for xy in all_dots:
+                    placed = False
+                    for dc in dot_clusters:
+                        if abs(dc[0][0] - xy[0]) + abs(dc[0][1] - xy[1]) < 10:
+                            dc.append(xy)
+                            placed = True
+                            break
+                    if not placed:
+                        dot_clusters.append([xy])
+                member_dots = {i: 0 for i in range(len(notes))}
+                for dc in dot_clusters:
+                    mx, my = sum(p[0] for p in dc) / len(dc), sum(p[1] for p in dc) / len(dc)
+                    best_i, best_d = -1, 1e9
+                    for i, p in enumerate(notes):
+                        dx = mx - p["box"][2]
+                        dy = abs(my - (p["box"][1] + p["box"][3]) / 2)
+                        if -10 <= dx <= 80 and dy < 50:
+                            d = abs(dx) + dy
+                            if d < best_d:
+                                best_i, best_d = i, d
+                    if best_i >= 0:
+                        member_dots[best_i] += 1
                 # GT notes on this page with truth rhythm.
                 gt_notes = []
                 for sid, join in joins["joins"].items():
@@ -308,6 +351,7 @@ def main() -> int:
                                      "cy": (min(b[1] for b in boxes) + max(b[3] for b in boxes)) / 2 * fy,
                                      "stem": r.get("stem") is not None,
                                      "beam": r.get("beam"),
+                                     "flag": bool(r.get("flag")),
                                      "dots": r.get("dots") or 0})
                 # Anchored analysis per GT note (nearest detected box with
                 # IoU>=0.3 vs the GT core box; 40px-Manhattan over-matches
@@ -335,8 +379,17 @@ def main() -> int:
                         det_miss += 1
                         stem_fn += 1
                         continue
-                    a = member_attr[det_idx]
+                    a = dict(member_attr[det_idx])
+                    # Globally-deduped attached dots override per-box counts.
+                    a["dots"] = member_dots.get(det_idx, 0)
                     g["a"] = a
+                    if a["flag"]:
+                        if g["flag"]:
+                            flag_tp += 1
+                        else:
+                            flag_fp += 1
+                    elif g["flag"]:
+                        flag_fn += 1
                     if a["stem"]:
                         if g["stem"]:
                             stem_tp += 1
@@ -369,6 +422,26 @@ def main() -> int:
                             beam_pair_fp += 1
                         elif same_truth and not same_pred:
                             beam_pair_fn += 1
+                # Measure ownership: barline intervals vs event measures.
+                # (detect_barlines imported from the measure module.)
+                import bisect as _bisect
+                bar_xs = sorted(mbars.detect_barline_xs(u8))
+                for g in gt_notes:
+                    g["interval"] = _bisect.bisect_left(bar_xs, g["cx"])
+                    link = links.get(g["sid"], {})
+                    ev = link.get("event")
+                    g["measure"] = (ev.get("source") or {}).get("measure") if ev else None
+                owned = [g for g in gt_notes if not g["detMiss"] and g["measure"] is not None]
+                for i in range(len(owned)):
+                    for j in range(i + 1, len(owned)):
+                        same_int = owned[i]["interval"] == owned[j]["interval"]
+                        same_meas = owned[i]["measure"] == owned[j]["measure"]
+                        if same_int and same_meas:
+                            meas_pair_tp += 1
+                        elif same_int and not same_meas:
+                            meas_pair_fp += 1
+                        elif same_meas and not same_int:
+                            meas_pair_fn += 1
                 # Exact duration validation via event links (joins sid <->
                 # canonical event, document-order counters). Rule: beamed ->
                 # 0.5/2^(n-1); flagged -> 0.5; else quarter; dots x1.5 each.
@@ -411,6 +484,10 @@ def main() -> int:
                        "precision": stem_p, "recall": stem_r},
               "detMiss": det_miss,
               "beamPairs": {"tp": beam_pair_tp, "fp": beam_pair_fp, "fn": beam_pair_fn},
+              "flag": {"tp": flag_tp, "fp": flag_fp, "fn": flag_fn,
+                       "precision": flag_tp / max(flag_tp + flag_fp, 1),
+                       "recall": flag_tp / max(flag_tp + flag_fn, 1)},
+              "measurePairs": {"tp": meas_pair_tp, "fp": meas_pair_fp, "fn": meas_pair_fn},
               "stemAgree": assoc_ok / max(assoc_n, 1), "stemAgreeN": assoc_n,
               "dotAgree": dot_ok / max(dot_n, 1), "dotN": dot_n,
               "durationAcc": dur_ok / max(dur_n, 1), "durationN": dur_n,

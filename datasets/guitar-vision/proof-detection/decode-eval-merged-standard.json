@@ -1,0 +1,303 @@
+{
+ "pages": 41,
+ "frozen": {
+  "thresholds": {
+   "note": 0.4,
+   "rest": 0.4,
+   "tabdigit": 0.4
+  },
+  "xclassRadius": 12.0,
+  "staffGate": true,
+  "coreBoxes": true,
+  "boxScale": {
+   "note": [
+    1.0,
+    1.0
+   ],
+   "rest": [
+    1.0,
+    1.25
+   ],
+   "tabdigit": [
+    1.0,
+    1.0
+   ]
+  },
+  "weights": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
+  "ignoreVeto": true,
+  "vetoCells": 2,
+  "iouMatch": 0.5,
+  "medians": {
+   "note": [
+    226.08,
+    191.52
+   ],
+   "rest": [
+    198.72,
+    311.76
+   ],
+   "tabdigit": [
+    187.92,
+    252.72
+   ]
+  }
+ },
+ "core": {
+  "tp": 6999,
+  "fp": 3357,
+  "fn": 2859,
+  "precision": 0.6758400926998841,
+  "recall": 0.7099817407181984
+ },
+ "union": {
+  "tp": 6027,
+  "fp": 4329,
+  "fn": 3831,
+  "precision": 0.581981460023175,
+  "recall": 0.611381618989653
+ },
+ "byClassCore": {
+  "note": {
+   "tp": 6438,
+   "fp": 2245,
+   "fn": 1926,
+   "precision": 0.7414488080156628,
+   "recall": 0.7697274031563845
+  },
+  "rest": {
+   "tp": 334,
+   "fp": 616,
+   "fn": 523,
+   "precision": 0.35157894736842105,
+   "recall": 0.3897316219369895
+  },
+  "tabdigit": {
+   "tp": 227,
+   "fp": 496,
+   "fn": 410,
+   "precision": 0.313969571230982,
+   "recall": 0.3563579277864992
+  }
+ },
+ "bySample": {
+  "etude-chord-diagrams": {
+   "tp": 0,
+   "fp": 7,
+   "fn": 8,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "etude-frames-sevenths": {
+   "tp": 0,
+   "fp": 7,
+   "fn": 8,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "etude-golpe-accent": {
+   "tp": 8,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-legato-hammer": {
+   "tp": 8,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-legato-mixed": {
+   "tp": 6,
+   "fp": 2,
+   "fn": 2,
+   "precision": 0.75,
+   "recall": 0.75
+  },
+  "etude-let-ring-arpeggio": {
+   "tp": 14,
+   "fp": 2,
+   "fn": 2,
+   "precision": 0.875,
+   "recall": 0.875
+  },
+  "etude-letring-fingerpicked": {
+   "tp": 7,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.875,
+   "recall": 0.875
+  },
+  "etude-segno-coda-roadmap": {
+   "tp": 3,
+   "fp": 5,
+   "fn": 1,
+   "precision": 0.375,
+   "recall": 0.75
+  },
+  "etude-tab-only-chords": {
+   "tp": 7,
+   "fp": 5,
+   "fn": 5,
+   "precision": 0.5833333333333334,
+   "recall": 0.5833333333333334
+  },
+  "etude-tab-only-rhythm": {
+   "tp": 9,
+   "fp": 11,
+   "fn": 5,
+   "precision": 0.45,
+   "recall": 0.6428571428571429
+  },
+  "etude-tapping-phrase": {
+   "tp": 6,
+   "fp": 2,
+   "fn": 2,
+   "precision": 0.75,
+   "recall": 0.75
+  },
+  "etude-tapping-tap-fret": {
+   "tp": 3,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.75,
+   "recall": 0.75
+  },
+  "etude-tuplet-figures": {
+   "tp": 9,
+   "fp": 2,
+   "fn": 1,
+   "precision": 0.8181818181818182,
+   "recall": 0.9
+  },
+  "guitar-aguado-allegro-g": {
+   "tp": 375,
+   "fp": 122,
+   "fn": 113,
+   "precision": 0.7545271629778671,
+   "recall": 0.7684426229508197
+  },
+  "guitar-bach-menuet-bwv1006a": {
+   "tp": 192,
+   "fp": 79,
+   "fn": 75,
+   "precision": 0.7084870848708487,
+   "recall": 0.7191011235955056
+  },
+  "guitar-bach-prelude-bwv997": {
+   "tp": 866,
+   "fp": 350,
+   "fn": 225,
+   "precision": 0.712171052631579,
+   "recall": 0.7937671860678277
+  },
+  "pdmx-QmPQSpyNYTfk": {
+   "tp": 541,
+   "fp": 196,
+   "fn": 143,
+   "precision": 0.7340569877883311,
+   "recall": 0.7909356725146199
+  },
+  "pdmx-QmPcXanBnKBz": {
+   "tp": 164,
+   "fp": 39,
+   "fn": 70,
+   "precision": 0.8078817733990148,
+   "recall": 0.7008547008547008
+  },
+  "pdmx-QmQHNvedtwuh": {
+   "tp": 236,
+   "fp": 154,
+   "fn": 81,
+   "precision": 0.6051282051282051,
+   "recall": 0.7444794952681388
+  },
+  "pdmx-QmTddaPpyvpq": {
+   "tp": 952,
+   "fp": 455,
+   "fn": 293,
+   "precision": 0.6766169154228856,
+   "recall": 0.7646586345381526
+  },
+  "pdmx-QmTtiJN97SLE": {
+   "tp": 261,
+   "fp": 396,
+   "fn": 397,
+   "precision": 0.3972602739726027,
+   "recall": 0.3966565349544073
+  },
+  "pdmx-QmWUU3iiqd6M": {
+   "tp": 100,
+   "fp": 140,
+   "fn": 132,
+   "precision": 0.4166666666666667,
+   "recall": 0.43103448275862066
+  },
+  "pdmx-QmWox2EnjyF2": {
+   "tp": 149,
+   "fp": 333,
+   "fn": 297,
+   "precision": 0.3091286307053942,
+   "recall": 0.33408071748878926
+  },
+  "pdmx-QmZpMVFCQAAm": {
+   "tp": 279,
+   "fp": 98,
+   "fn": 81,
+   "precision": 0.7400530503978779,
+   "recall": 0.775
+  },
+  "pdmx-QmZtV9sBwXzB": {
+   "tp": 250,
+   "fp": 75,
+   "fn": 58,
+   "precision": 0.7692307692307693,
+   "recall": 0.8116883116883117
+  },
+  "pdmx-QmbJQYNqLKKf": {
+   "tp": 105,
+   "fp": 28,
+   "fn": 26,
+   "precision": 0.7894736842105263,
+   "recall": 0.8015267175572519
+  },
+  "pdmx-QmbW1fqPrYqC": {
+   "tp": 385,
+   "fp": 137,
+   "fn": 296,
+   "precision": 0.7375478927203065,
+   "recall": 0.5653450807635829
+  },
+  "pdmx2-QmYY91puRp85": {
+   "tp": 215,
+   "fp": 51,
+   "fn": 40,
+   "precision": 0.8082706766917294,
+   "recall": 0.8431372549019608
+  },
+  "pdmx2-Qme6EwjyP1uq": {
+   "tp": 289,
+   "fp": 48,
+   "fn": 28,
+   "precision": 0.857566765578635,
+   "recall": 0.9116719242902208
+  },
+  "pdmx2-QmeNbCM8jt7T": {
+   "tp": 1115,
+   "fp": 509,
+   "fn": 410,
+   "precision": 0.6865763546798029,
+   "recall": 0.7311475409836066
+  },
+  "pdmx2-QmeYm4rEpodg": {
+   "tp": 445,
+   "fp": 102,
+   "fn": 58,
+   "precision": 0.8135283363802559,
+   "recall": 0.8846918489065606
+  }
+ },
+ "tabdigitGT": 637,
+ "weights": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"
+}

@@ -63,6 +63,114 @@ BOX_SCALE = {"note": (1.0, 1.0), "rest": (1.0, 1.25), "tabdigit": (1.0, 1.0)}
 WEIGHTS = "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"
 VETO_CELLS = 2
 IGNORE_VETO = True
+# Scale normalization (G2, TRAIN-fit selected): rescale pages so the staff
+# line gap matches TARGET_GAP px (standard TRAIN median) before inference;
+# map boxes back afterwards. Corrects engraving-scale drift with NO
+# retraining (large TRAIN-fit P/R 0.310/0.260 -> 0.525/0.470 at 1.32x).
+TARGET_GAP = 26.0  # TRAIN-fit standard-page median staff gap in px
+SCALE_CLAMP = (0.7, 1.6)
+import os as _os
+RESAMPLE = _os.environ.get("NORM_INTERP", "bilinear")  # bilinear|nearest (bilinear: notes robust; digits+rests come from the native pass)
+
+
+def estimate_staff_gap(pixels_u8: np.ndarray) -> float | None:
+    """Median in-system staff-line gap in px (image only).
+
+    Full-width row profile -> line bands -> gaps; in-system gaps are the
+    numerous small ones (<100px); inter-system gaps are 100px+. Needs >=4
+    samples or returns None (no rescale).
+    """
+    h, w = pixels_u8.shape
+    if w < 100 or h < 100:
+        return None
+    prof = (pixels_u8[:, int(w * 0.2):int(w * 0.8)] < 128).mean(axis=1)
+    rows = np.nonzero(prof > 0.3)[0]
+    if len(rows) < 5:
+        return None
+    bands = []
+    start, prev = rows[0], rows[0]
+    for r in rows[1:]:
+        if r - prev > 2:
+            bands.append((start + prev) / 2)
+            start = r
+        prev = r
+    bands.append((start + prev) / 2)
+    if len(bands) < 5:
+        return None
+    small = [g for g in np.diff(bands) if g < 100]
+    if len(small) < 4:
+        return None
+    return float(np.median(small))
+
+
+def normalize_scale(pixels_u8: np.ndarray) -> tuple[np.ndarray, float]:
+    """Rescale page to TARGET_GAP staff scale. Returns (pixels, scale)."""
+    from PIL import Image as _Image
+    gap = estimate_staff_gap(pixels_u8)
+    if gap is None or gap <= 0:
+        return pixels_u8, 1.0
+    scale = min(max(TARGET_GAP / gap, SCALE_CLAMP[0]), SCALE_CLAMP[1])
+    if abs(scale - 1.0) < 0.05:
+        return pixels_u8, 1.0
+    # Bilinear default (heldout: notes equal-or-better vs nearest at scale;
+    # thin/small glyphs bypass resampling via the native merged pass).
+    _filt = {"nearest": _Image.NEAREST, "bilinear": _Image.BILINEAR}[RESAMPLE]
+    img = _Image.fromarray(pixels_u8).resize(
+        (int(pixels_u8.shape[1] * scale), int(pixels_u8.shape[0] * scale)), _filt)
+    return np.asarray(img), scale
+
+
+def infer_page_merged(model, pixels_u8: np.ndarray, fx: float, fy: float,
+                      device) -> tuple[list, float]:
+    """Two-pass merged inference (TRAIN-heldout selected).
+
+    Notes come from the scale-normalized pass (large glyphs robust);
+    digits+rests come from the native pass (thin/small glyphs are
+    blur-fragile under resampling). No cross-pass suppression (xclass
+    dups measured negligible); gate native in both passes via infer_page.
+    Returns (merged preds, norm scale).
+    """
+    preds_on, scale = infer_page(model, pixels_u8, fx, fy, device, normalize=True)
+    if scale == 1.0:
+        return preds_on, scale
+    preds_off, _ = infer_page(model, pixels_u8, fx, fy, device, normalize=False)
+    merged = ([p for p in preds_on if p["cls"] == "note"] +
+              [p for p in preds_off if p["cls"] != "note"])
+    return merged, scale
+
+
+def infer_page(model, pixels_u8: np.ndarray, fx: float, fy: float,
+               device, normalize: bool = True) -> tuple[list, float]:
+    """Full inference path with optional scale normalization.
+
+    Rescales to TARGET_GAP staff scale, runs the model, decodes, and maps
+    boxes back to original px. The TAB staff-comb gate ALWAYS runs at
+    NATIVE scale (its strip constants were TRAIN-calibrated in native px;
+    gating on rescaled images kills real digits). Returns (preds, scale).
+    """
+    if normalize:
+        scaled, scale = normalize_scale(pixels_u8)
+    else:
+        scaled, scale = pixels_u8, 1.0
+    tensor = torch.from_numpy(scaled.astype(np.float32) / 255.0).unsqueeze(0).unsqueeze(0).to(device)
+    with torch.no_grad():
+        heat = model(tensor)[0].cpu()
+    preds = decode_page(heat, scaled, fx * scale, fy * scale, staff_gate=False)
+    if scale != 1.0:
+        for p in preds:
+            p["x"] /= scale
+            p["y"] /= scale
+            p["box"] = [v / scale for v in p["box"]]
+    # Native-scale staff gate for tabdigit (image evidence only).
+    img_h, img_w = pixels_u8.shape
+    gated = []
+    for p in preds:
+        if p["cls"] == "tabdigit":
+            _, tier = detect_tab_lines(pixels_u8, p["x"], p["y"], img_w, img_h)
+            if tier is None:
+                continue
+        gated.append(p)
+    return gated, scale
 # v4 layout-inclusive run (2026-10-11, GUITAR_MULTILAYOUT_PREREG.md G2)
 # regressed standard/large/bravura (veto-mined negatives self-reinforce on
 # unseen scales; 12ep/3 layouts underfit). Per-layout preservation (G3):

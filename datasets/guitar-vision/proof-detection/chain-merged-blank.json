@@ -1,0 +1,30 @@
+{
+ "digits": 0,
+ "stringCorrect": 0,
+ "fretCorrect": 0,
+ "bothCorrect": 0,
+ "pitchCorrect": 0,
+ "decoded": 0,
+ "abstained": 0,
+ "byTier": {},
+ "gtDigits": 637,
+ "oracle": false,
+ "truth": {
+  "string": 0,
+  "fret": 0,
+  "both": 0,
+  "pitch": 0,
+  "n": 0
+ },
+ "truthRates": {
+  "string": 0.0,
+  "fret": 0.0,
+  "both": 0.0,
+  "pitch": 0.0
+ },
+ "coverage": {
+  "decoded": 0.0,
+  "pitchCorrect": 0.0,
+  "mapped": 0.0
+ }
+}

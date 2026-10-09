@@ -108,6 +108,9 @@ def main() -> int:
                 px = np.asarray(img, dtype=np.float32) / 255.0
                 u8 = (px * 255).astype(np.uint8)
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
+                u8, _nscale = dec.normalize_scale(u8)
+                fx, fy = fx * _nscale, fy * _nscale
+                px = u8.astype(np.float32) / 255.0
                 heat = model(torch.from_numpy(px).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
                 obj = heat[:3]
                 preds = dec.decode_page(obj, u8, fx, fy)

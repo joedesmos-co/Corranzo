@@ -89,7 +89,8 @@ def main() -> int:
               "iouMatch": dec.IOU_MATCH, "medians": {k: list(v) for k, v in dec.MEDIANS.items()}}
     totals = {"core": {"tp": 0, "fp": 0, "fn": 0}, "union": {"tp": 0, "fp": 0, "fn": 0}}
     by_cls = {c: {"tp": 0, "fp": 0, "fn": 0} for c in dec.CLASSES}
-    n_digits = {"matched": 0, "total": 0}
+    by_sample: dict[str, dict] = {}
+    n_digits = {"total": 0}
     n_pages = 0
     with torch.no_grad():
         for manifest_path in sorted(hires_dir.glob("*-manifest.json")):
@@ -116,8 +117,8 @@ def main() -> int:
                 image = Image.open(meta["file"]).convert("L")
                 pixels = np.asarray(image, dtype=np.float32) / 255.0
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
-                heat = model(torch.from_numpy(pixels).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
-                preds = dec.decode_page(heat, (pixels * 255).astype(np.uint8), fx, fy)
+                u8 = (pixels * 255).astype(np.uint8)
+                preds, _ = dec.infer_page_merged(model, u8, fx, fy, device)
                 for core_flag, key in [(True, "core"), (False, "union")]:
                     gt = dec.build_gt(joins, page_no, fx, fy, core=core_flag)
                     a, b, c = dec.match(preds, gt)
@@ -134,6 +135,13 @@ def main() -> int:
                     by_cls[cls]["fn"] += c
                 n_digits["total"] += sum(1 for g in gt_core if g["cls"] == "tabdigit")
                 n_pages += 1
+                # Per-sample core stats (collection slicing in analysis).
+                sd = by_sample.setdefault(sample, {"tp": 0, "fp": 0, "fn": 0, "pages": 0})
+                a0, b0, c0 = dec.match(preds, [dict(g) for g in gt_core])
+                sd["tp"] += a0
+                sd["fp"] += b0
+                sd["fn"] += c0
+                sd["pages"] += 1
 
     def pr(d):
         tp, fp, fn = d["tp"], d["fp"], d["fn"]
@@ -143,6 +151,7 @@ def main() -> int:
     report = {"pages": n_pages, "frozen": frozen, "core": pr(totals["core"]),
               "union": pr(totals["union"]),
               "byClassCore": {c: pr(by_cls[c]) for c in dec.CLASSES},
+              "bySample": {s: pr({k: v for k, v in d.items() if k in ("tp", "fp", "fn")}) for s, d in by_sample.items()},
               "tabdigitGT": n_digits["total"], "weights": args.weights}
     (out_dir / "decode-eval.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report, indent=1))

@@ -1,0 +1,198 @@
+{
+ "pages": 17,
+ "frozen": {
+  "thresholds": {
+   "note": 0.4,
+   "rest": 0.4,
+   "tabdigit": 0.4
+  },
+  "xclassRadius": 12.0,
+  "staffGate": true,
+  "coreBoxes": true,
+  "boxScale": {
+   "note": [
+    1.0,
+    1.0
+   ],
+   "rest": [
+    1.0,
+    1.25
+   ],
+   "tabdigit": [
+    1.0,
+    1.0
+   ]
+  },
+  "weights": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
+  "ignoreVeto": true,
+  "vetoCells": 2,
+  "iouMatch": 0.5,
+  "medians": {
+   "note": [
+    226.08,
+    191.52
+   ],
+   "rest": [
+    198.72,
+    311.76
+   ],
+   "tabdigit": [
+    187.92,
+    252.72
+   ]
+  }
+ },
+ "core": {
+  "tp": 1374,
+  "fp": 547,
+  "fn": 588,
+  "precision": 0.7152524726704841,
+  "recall": 0.7003058103975535
+ },
+ "union": {
+  "tp": 1012,
+  "fp": 909,
+  "fn": 950,
+  "precision": 0.5268089536699636,
+  "recall": 0.5158002038735984
+ },
+ "byClassCore": {
+  "note": {
+   "tp": 1279,
+   "fp": 501,
+   "fn": 417,
+   "precision": 0.7185393258426966,
+   "recall": 0.754127358490566
+  },
+  "rest": {
+   "tp": 76,
+   "fp": 33,
+   "fn": 164,
+   "precision": 0.6972477064220184,
+   "recall": 0.31666666666666665
+  },
+  "tabdigit": {
+   "tp": 19,
+   "fp": 13,
+   "fn": 7,
+   "precision": 0.59375,
+   "recall": 0.7307692307692307
+  }
+ },
+ "bySample": {
+  "etude-chord-diagrams": {
+   "tp": 0,
+   "fp": 4,
+   "fn": 8,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "etude-frames-sevenths": {
+   "tp": 0,
+   "fp": 5,
+   "fn": 8,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "etude-golpe-accent": {
+   "tp": 7,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.875,
+   "recall": 0.875
+  },
+  "etude-legato-hammer": {
+   "tp": 8,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-legato-mixed": {
+   "tp": 7,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.875,
+   "recall": 0.875
+  },
+  "etude-let-ring-arpeggio": {
+   "tp": 16,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-letring-fingerpicked": {
+   "tp": 7,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.875,
+   "recall": 0.875
+  },
+  "etude-segno-coda-roadmap": {
+   "tp": 1,
+   "fp": 2,
+   "fn": 3,
+   "precision": 0.3333333333333333,
+   "recall": 0.25
+  },
+  "etude-tab-only-chords": {
+   "tp": 6,
+   "fp": 5,
+   "fn": 6,
+   "precision": 0.5454545454545454,
+   "recall": 0.5
+  },
+  "etude-tab-only-rhythm": {
+   "tp": 13,
+   "fp": 0,
+   "fn": 1,
+   "precision": 1.0,
+   "recall": 0.9285714285714286
+  },
+  "etude-tapping-phrase": {
+   "tp": 8,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-tapping-tap-fret": {
+   "tp": 4,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "etude-tuplet-figures": {
+   "tp": 9,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.9,
+   "recall": 0.9
+  },
+  "guitar-aguado-allegro-g": {
+   "tp": 324,
+   "fp": 129,
+   "fn": 164,
+   "precision": 0.7152317880794702,
+   "recall": 0.6639344262295082
+  },
+  "guitar-bach-menuet-bwv1006a": {
+   "tp": 177,
+   "fp": 72,
+   "fn": 90,
+   "precision": 0.7108433734939759,
+   "recall": 0.6629213483146067
+  },
+  "guitar-bach-prelude-bwv997": {
+   "tp": 787,
+   "fp": 326,
+   "fn": 304,
+   "precision": 0.7070979335130279,
+   "recall": 0.7213565536205316
+  }
+ },
+ "tabdigitGT": 26,
+ "weights": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"
+}
