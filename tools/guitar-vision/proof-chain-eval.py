@@ -36,6 +36,7 @@ def _load(name, filename):
 _pt = _load("proof_train_mod", "proof_train.py")
 _pct = _load("proof_context_train_mod", "proof_context_train.py")
 _phm = _load("proof_heatmap_train_mod", "proof-heatmap-train.py")
+_dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 
 SEED = 20261009
 TAU = 0.6
@@ -113,9 +114,12 @@ def main() -> int:
             manifest = json.loads(manifest_path.read_text())
             joins = None
             for root in work_dirs:
-                path = root / sample / joins_name
-                if path.exists():
-                    joins = json.loads(path.read_text())
+                for path in (root / sample / joins_name,
+                             root / joins_name if root.name == sample else None):
+                    if path is not None and path.exists():
+                        joins = json.loads(path.read_text())
+                        break
+                if joins is not None:
                     break
             if joins is None:
                 continue
@@ -142,17 +146,19 @@ def main() -> int:
                     gt.append({"box": [min(b[0] for b in boxes) * fx, min(b[1] for b in boxes) * fy,
                                        max(b[2] for b in boxes) * fx, max(b[3] for b in boxes) * fy],
                                "sid": sid})
-                digit_channel = heat[2]
-                pooled = F.max_pool2d(digit_channel.unsqueeze(0), 3, stride=1, padding=1)[0]
-                peaks = (digit_channel == pooled) & (digit_channel >= 0.3)
-                ys, xs = torch.nonzero(peaks, as_tuple=True)
-                for x, y in zip(xs.tolist(), ys.tolist()):
-                    cx, cy = (x + 0.5) * 8, (y + 0.5) * 8
+                # Digit detections from the FROZEN postprocessing decoder
+                # (TRAIN-selected constants; no inline peak logic here).
+                page_preds = _dec.decode_page(
+                    heat, (pixels * 255).astype(np.uint8), fx, fy)
+                for det in page_preds:
+                    if det["cls"] != "tabdigit":
+                        continue
+                    cx, cy = det["x"], det["y"]
                     if args.control == "shifted":
                         cx, cy = cx + 30, cy
-                    # Fixed digit box (TRAIN median, canonical 188x253 -> px).
-                    w, h = 188 * fx, 253 * fy
-                    pred = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
+                    w, h = det["box"][2] - det["box"][0], det["box"][3] - det["box"][1]
+                    pred = det["box"] if args.control != "shifted" else [
+                        cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
                     best, best_iou = None, 0.0
                     for index, g in enumerate(gt):
                         value = iou(pred, g["box"])
@@ -210,8 +216,13 @@ def main() -> int:
     for pair in pairs:
         score = pair["score"]
         for root in work_dirs:
-            path = root / score / "canonical.json"
-            if path.exists():
+            path = None
+            for cand in (root / score / "canonical.json",
+                         root / "canonical.json" if root.name == score else None):
+                if cand is not None and cand.exists():
+                    path = cand
+                    break
+            if path is not None:
                 canonical = json.loads(path.read_text())
                 break
         else:

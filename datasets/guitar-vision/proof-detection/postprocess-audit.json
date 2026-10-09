@@ -1,0 +1,454 @@
+{
+ "pages": 74,
+ "fp": {
+  "dup": 0,
+  "xclass": 125,
+  "text": 399,
+  "box": 13281,
+  "halo": 540,
+  "bg": 3565
+ },
+ "fn": {
+  "sub": 147,
+  "xclass": 11,
+  "box": 13145,
+  "none": 261
+ },
+ "fpByClass": {
+  "note": {
+   "dup": 0,
+   "xclass": 54,
+   "text": 0,
+   "box": 12133,
+   "halo": 539,
+   "bg": 2158
+  },
+  "rest": {
+   "dup": 0,
+   "xclass": 71,
+   "text": 0,
+   "box": 741,
+   "halo": 1,
+   "bg": 557
+  },
+  "tabdigit": {
+   "dup": 0,
+   "xclass": 0,
+   "text": 399,
+   "box": 407,
+   "halo": 0,
+   "bg": 850
+  }
+ },
+ "fnByClass": {
+  "note": {
+   "sub": 96,
+   "xclass": 0,
+   "box": 11929,
+   "none": 204
+  },
+  "rest": {
+   "sub": 36,
+   "xclass": 11,
+   "box": 805,
+   "none": 49
+  },
+  "tabdigit": {
+   "sub": 15,
+   "xclass": 0,
+   "box": 411,
+   "none": 8
+  }
+ },
+ "gateTP": {
+  "exact": 182,
+  "anchored": 292,
+  "none": 2
+ },
+ "gateFP": {
+  "exact": 265,
+  "anchored": 992,
+  "none": 399
+ },
+ "fpSamples": {
+  "dup": [],
+  "xclass": [
+   {
+    "page": "etude-paired-mirrors:page1",
+    "x": 948.0,
+    "y": 820.0,
+    "v": 0.358,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 828.0,
+    "y": 1044.0,
+    "v": 0.436,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-2:page1",
+    "x": 284.0,
+    "y": 2028.0,
+    "v": 0.506,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-3:page1",
+    "x": 1340.0,
+    "y": 724.0,
+    "v": 0.352,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-4:page1",
+    "x": 700.0,
+    "y": 2076.0,
+    "v": 0.429,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-4:page1",
+    "x": 1756.0,
+    "y": 756.0,
+    "v": 0.384,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-4:page1",
+    "x": 1412.0,
+    "y": 2076.0,
+    "v": 0.361,
+    "cls": "note"
+   },
+   {
+    "page": "guitar-aguado-op03-5:page2",
+    "x": 372.0,
+    "y": 148.0,
+    "v": 0.443,
+    "cls": "note"
+   }
+  ],
+  "text": [
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 204.0,
+    "y": 1500.0,
+    "v": 0.418,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 108.0,
+    "y": 1564.0,
+    "v": 0.415,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 108.0,
+    "y": 772.0,
+    "v": 0.4,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 164.0,
+    "y": 212.0,
+    "v": 0.391,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 84.0,
+    "y": 1052.0,
+    "v": 0.379,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 188.0,
+    "y": 980.0,
+    "v": 0.378,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 108.0,
+    "y": 1316.0,
+    "v": 0.377,
+    "cls": "tabdigit"
+   },
+   {
+    "page": "guitar-aguado-op03-1:page1",
+    "x": 108.0,
+    "y": 460.0,
+    "v": 0.371,
+    "cls": "tabdigit"
+   }
+  ],
+  "box": [
+   {
+    "page": "etude-dead-ghost-strum:page1",
+    "x": 1556.0,
+    "y": 420.0,
+    "v": 0.647,
+    "cls": "note"
+   },
+   {
+    "page": "etude-dead-ghost-strum:page1",
+    "x": 892.0,
+    "y": 420.0,
+    "v": 0.61,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1052.0,
+    "y": 204.0,
+    "v": 0.351,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1708.0,
+    "y": 164.0,
+    "v": 0.344,
+    "cls": "note"
+   },
+   {
+    "page": "etude-ornament-trills:page1",
+    "x": 1508.0,
+    "y": 412.0,
+    "v": 0.572,
+    "cls": "note"
+   },
+   {
+    "page": "etude-repeats-endings:page1",
+    "x": 716.0,
+    "y": 308.0,
+    "v": 0.603,
+    "cls": "note"
+   },
+   {
+    "page": "etude-slide-legato-gliss:page1",
+    "x": 1132.0,
+    "y": 516.0,
+    "v": 0.459,
+    "cls": "note"
+   },
+   {
+    "page": "etude-slide-legato-gliss:page1",
+    "x": 1732.0,
+    "y": 468.0,
+    "v": 0.398,
+    "cls": "note"
+   }
+  ],
+  "halo": [
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1204.0,
+    "y": 180.0,
+    "v": 0.458,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1396.0,
+    "y": 332.0,
+    "v": 0.454,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 740.0,
+    "y": 324.0,
+    "v": 0.451,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1708.0,
+    "y": 180.0,
+    "v": 0.441,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1860.0,
+    "y": 324.0,
+    "v": 0.433,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 892.0,
+    "y": 324.0,
+    "v": 0.433,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1044.0,
+    "y": 244.0,
+    "v": 0.422,
+    "cls": "note"
+   },
+   {
+    "page": "etude-harmonic-natural:page1",
+    "x": 1548.0,
+    "y": 244.0,
+    "v": 0.409,
+    "cls": "note"
+   }
+  ],
+  "bg": [
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 484.0,
+    "y": 444.0,
+    "v": 0.556,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 484.0,
+    "y": 284.0,
+    "v": 0.493,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 500.0,
+    "y": 276.0,
+    "v": 0.46,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 532.0,
+    "y": 332.0,
+    "v": 0.388,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 332.0,
+    "y": 324.0,
+    "v": 0.36,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 516.0,
+    "y": 188.0,
+    "v": 0.323,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-chain:page1",
+    "x": 204.0,
+    "y": 332.0,
+    "v": 0.31,
+    "cls": "note"
+   },
+   {
+    "page": "etude-bend-full:page1",
+    "x": 484.0,
+    "y": 444.0,
+    "v": 0.556,
+    "cls": "note"
+   }
+  ]
+ },
+ "sweep": {
+  "0.1": {
+   "tp": 7803,
+   "fp": 49597,
+   "fn": 13530,
+   "precision": 0.13594076655052265,
+   "recall": 0.36577134017719026
+  },
+  "0.15": {
+   "tp": 7790,
+   "fp": 30665,
+   "fn": 13543,
+   "precision": 0.20257443765440125,
+   "recall": 0.3651619556555571
+  },
+  "0.2": {
+   "tp": 7781,
+   "fp": 23400,
+   "fn": 13552,
+   "precision": 0.2495429909239601,
+   "recall": 0.36474007406365727
+  },
+  "0.25": {
+   "tp": 7777,
+   "fp": 19983,
+   "fn": 13556,
+   "precision": 0.2801512968299712,
+   "recall": 0.364552571133924
+  },
+  "0.3": {
+   "tp": 7769,
+   "fp": 17910,
+   "fn": 13564,
+   "precision": 0.3025429339148721,
+   "recall": 0.36417756527445744
+  },
+  "0.4": {
+   "tp": 7753,
+   "fp": 15804,
+   "fn": 13580,
+   "precision": 0.3291166107738676,
+   "recall": 0.3634275535555243
+  },
+  "0.5": {
+   "tp": 7734,
+   "fp": 14636,
+   "fn": 13599,
+   "precision": 0.3457308895842646,
+   "recall": 0.3625369146392912
+  }
+ },
+ "centerHitIoU": {
+  "note": {
+   "n": 12025,
+   "mean": 0.8291804880368048,
+   "p50": 0.9999999999999862,
+   "fracGe05": 0.8115592515592516
+  },
+  "rest": {
+   "n": 841,
+   "mean": 0.7023013444948367,
+   "p50": 0.5538316093871644,
+   "fracGe05": 0.9809750297265161
+  },
+  "tabdigit": {
+   "n": 426,
+   "mean": 0.9999999999999875,
+   "p50": 0.9999999999999881,
+   "fracGe05": 1.0
+  }
+ },
+ "scaleBias": {
+  "note": {
+   "n": 12025,
+   "wMed": 1.000000000000001,
+   "hMed": 1.0000000000000013
+  },
+  "rest": {
+   "n": 841,
+   "wMed": 1.1050724637681146,
+   "hMed": 1.5381062355658202
+  },
+  "tabdigit": {
+   "n": 426,
+   "wMed": 0.999999999999994,
+   "hMed": 1.0000000000000033
+  }
+ }
+}

@@ -1,0 +1,67 @@
+{
+ "pages": 33,
+ "frozen": {
+  "thresholds": {
+   "note": 0.4,
+   "rest": 0.4,
+   "tabdigit": 0.4
+  },
+  "xclassRadius": 12.0,
+  "staffGate": true,
+  "coreBoxes": true,
+  "iouMatch": 0.5,
+  "medians": {
+   "note": [
+    226.08,
+    191.52
+   ],
+   "rest": [
+    198.72,
+    311.76
+   ],
+   "tabdigit": [
+    187.92,
+    252.72
+   ]
+  }
+ },
+ "core": {
+  "tp": 3187,
+  "fp": 7108,
+  "fn": 6671,
+  "precision": 0.30956775133559983,
+  "recall": 0.323290728342463
+ },
+ "union": {
+  "tp": 2670,
+  "fp": 7625,
+  "fn": 7188,
+  "precision": 0.2593491986401166,
+  "recall": 0.27084601339014
+ },
+ "byClassCore": {
+  "note": {
+   "tp": 2900,
+   "fp": 5778,
+   "fn": 5464,
+   "precision": 0.33417838211569484,
+   "recall": 0.3467240554758489
+  },
+  "rest": {
+   "tp": 160,
+   "fp": 666,
+   "fn": 697,
+   "precision": 0.1937046004842615,
+   "recall": 0.1866977829638273
+  },
+  "tabdigit": {
+   "tp": 127,
+   "fp": 664,
+   "fn": 510,
+   "precision": 0.16055625790139064,
+   "recall": 0.19937205651491366
+  }
+ },
+ "tabdigitGT": 637,
+ "weights": "datasets/guitar-vision/proof-detection/heatmap16ep.pt"
+}
