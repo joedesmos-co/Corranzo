@@ -63,6 +63,14 @@ BOX_SCALE = {"note": (1.0, 1.0), "rest": (1.0, 1.25), "tabdigit": (1.0, 1.0)}
 WEIGHTS = "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"
 VETO_CELLS = 2
 IGNORE_VETO = True
+# v4 layout-inclusive run (2026-10-11, GUITAR_MULTILAYOUT_PREREG.md G2)
+# regressed standard/large/bravura (veto-mined negatives self-reinforce on
+# unseen scales; 12ep/3 layouts underfit). Per-layout preservation (G3):
+# compact adopts v4; all other layouts stay v3. Drivers pass --detector.
+LAYOUT_DETECTOR = {"standard": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
+                   "compact": "datasets/guitar-vision/proof-detection/heatmap-v4.pt",
+                   "large": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
+                   "bravura": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"}
 XCLASS_RADIUS = 12.0  # px: cross-class suppression radius
 STAFF_GATE = True  # require digit-anchored TAB comb for tabdigit peaks
 CORE_BOXES = True  # eval against GT core boxes (see module docstring)

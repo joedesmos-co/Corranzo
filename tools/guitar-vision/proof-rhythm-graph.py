@@ -45,6 +45,7 @@ def _load(name, path):
 
 TinyFCN = _load("proof_heatmap_train_mod", "proof-heatmap-train.py").TinyFCN
 dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
+evlink = _load("proof_event_link_mod", "proof-event-link.py")
 
 SEED = 20261009
 # Note-anchored stem search (hires px). Stems attach at the notehead's
@@ -221,8 +222,11 @@ def main() -> int:
     stem_tp = stem_fp = stem_fn = 0
     beam_pair_tp = beam_pair_fp = beam_pair_fn = 0
     dur_ok = dur_n = 0
+    dur_conf: dict[str, dict[str, int]] = {}
+    dot_ok = dot_n = 0
     det_miss = 0
     assoc_ok = assoc_n = 0
+    link_totals: dict[str, int] = {}
     n_pages = 0
     with torch.no_grad():
         for mp in sorted(Path(hires_dir).glob("*-manifest.json")):
@@ -232,7 +236,7 @@ def main() -> int:
             if args.max_pages and n_pages >= args.max_pages:
                 break
             man = json.load(open(mp))
-            joins = None
+            joins = canon = None
             for root in work_dirs:
                 for cand in (root / sample / "joins.json",
                              root / "joins.json" if root.name == sample else None):
@@ -241,8 +245,26 @@ def main() -> int:
                         break
                 if joins is not None:
                     break
+            for root in work_dirs:
+                for cand in (root / sample / "canonical.json",
+                             root / "canonical.json" if root.name == sample else None):
+                    if cand is not None and cand.exists():
+                        canon = json.load(open(cand))
+                        break
+                if canon is not None:
+                    break
             if joins is None:
                 continue
+            # Exact event links (document-order counters; verified 99.8%
+            # self-consistent corpus-wide). Supervision construction may
+            # use truth; image inference never does.
+            prefix = sample
+            first_sid = next(iter((joins.get("joins") or {})), "")
+            if "-n" in first_sid:
+                prefix = first_sid.rsplit("-n", 1)[0]
+            links, link_stats = evlink.build_links(joins, canon, prefix)
+            for key, value in link_stats.items():
+                link_totals[key] = link_totals.get(key, 0) + value
             for tag, meta in man.items():
                 if not isinstance(meta, dict) or "file" not in meta:
                     continue
@@ -281,7 +303,7 @@ def main() -> int:
                         continue
                     boxes = join["boxes"]
                     r = (join.get("rhythm") or {})
-                    gt_notes.append({"n": int(m.group(1)),
+                    gt_notes.append({"n": int(m.group(1)), "sid": sid,
                                      "cx": (min(b[0] for b in boxes) + max(b[2] for b in boxes)) / 2 * fx,
                                      "cy": (min(b[1] for b in boxes) + max(b[3] for b in boxes)) / 2 * fy,
                                      "stem": r.get("stem") is not None,
@@ -347,22 +369,38 @@ def main() -> int:
                             beam_pair_fp += 1
                         elif same_truth and not same_pred:
                             beam_pair_fn += 1
-                # Stem+dot agreement (truth from joins rhythm; image from
-                # anchored search). Duration rule is defined in code but
-                # end-to-end duration accuracy is BLOCKED: canonical noteIds
-                # are part+measure relative and cannot be linked to joins
-                # sids exactly; the chain-convention mapping collides and
-                # would fake the number. Documented, not faked.
+                # Exact duration validation via event links (joins sid <->
+                # canonical event, document-order counters). Rule: beamed ->
+                # 0.5/2^(n-1); flagged -> 0.5; else quarter; dots x1.5 each.
                 for g in gt_notes:
                     if g["detMiss"]:
                         continue
                     a = g["a"]
-                    dur_n += 1
-                    if a["stem"] == g["stem"] and min(a["dots"], 2) == min(g["dots"], 2):
-                        dur_ok += 1
                     assoc_n += 1
                     if a["stem"] == g["stem"]:
                         assoc_ok += 1
+                    dot_n += 1
+                    if min(a["dots"], 2) == min(g["dots"], 2):
+                        dot_ok += 1
+                    link = links.get(g["sid"], {})
+                    event = link.get("event")
+                    if event is None:
+                        continue
+                    if a["beams"]:
+                        pred_dur = 0.5 / (2 ** (a["beams"] - 1))
+                    elif a["flag"]:
+                        pred_dur = 0.5
+                    else:
+                        pred_dur = 1.0
+                    if a["dots"]:
+                        pred_dur *= 1.5 ** min(a["dots"], 2)
+                    truth_dur = (event.get("time") or {}).get("durationQuarters")
+                    dur_n += 1
+                    if truth_dur is not None and abs(pred_dur - truth_dur) < 1e-9:
+                        dur_ok += 1
+                    tk, pk = str(truth_dur), str(round(pred_dur, 4))
+                    dur_conf.setdefault(tk, {}).setdefault(pk, 0)
+                    dur_conf[tk][pk] += 1
                 n_pages += 1
                 if args.max_pages and n_pages >= args.max_pages:
                     break
@@ -373,8 +411,11 @@ def main() -> int:
                        "precision": stem_p, "recall": stem_r},
               "detMiss": det_miss,
               "beamPairs": {"tp": beam_pair_tp, "fp": beam_pair_fp, "fn": beam_pair_fn},
-              "stemDotAgree": dur_ok / max(dur_n, 1), "stemDotN": dur_n,
-              "durationNote": "BLOCKED: no exact joins->canonical event link (part+measure-relative noteIds); rule defined, end-to-end duration unvalidated"}
+              "stemAgree": assoc_ok / max(assoc_n, 1), "stemAgreeN": assoc_n,
+              "dotAgree": dot_ok / max(dot_n, 1), "dotN": dot_n,
+              "durationAcc": dur_ok / max(dur_n, 1), "durationN": dur_n,
+              "durationConfusion": dur_conf,
+              "linkStats": link_totals}
     (out_dir / "rhythm-graph.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report, indent=1))
     return 0

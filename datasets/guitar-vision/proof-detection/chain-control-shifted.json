@@ -1,0 +1,35 @@
+{
+ "digits": 7,
+ "stringCorrect": 0,
+ "fretCorrect": 0,
+ "bothCorrect": 0,
+ "pitchCorrect": 0,
+ "decoded": 2,
+ "abstained": 5,
+ "byTier": {
+  "real": {
+   "decoded": 2,
+   "pitchCorrect": 0
+  }
+ },
+ "gtDigits": 637,
+ "oracle": false,
+ "truth": {
+  "string": 2,
+  "fret": 2,
+  "both": 2,
+  "pitch": 2,
+  "n": 2
+ },
+ "truthRates": {
+  "string": 1.0,
+  "fret": 1.0,
+  "both": 1.0,
+  "pitch": 1.0
+ },
+ "coverage": {
+  "decoded": 0.0031397174254317113,
+  "pitchCorrect": 0.0031397174254317113,
+  "mapped": 0.0031397174254317113
+ }
+}

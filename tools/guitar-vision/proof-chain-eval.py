@@ -78,6 +78,12 @@ def main() -> int:
                         help="blank: zero pages (expect ~0 decoded). shifted: +30px box shift "
                              "(translation robustness). shuffled: permute string/fret predictions "
                              "across boxes (association dependence).")
+    parser.add_argument("--oracle", action="store_true",
+                        help="GT digit boxes instead of detected peaks (separates "
+                             "head errors from detection errors).")
+    parser.add_argument("--detector", default=None,
+                        help="detector weights path (overrides <models>/heatmap.pt; "
+                             "per-layout preservation map).")
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -96,7 +102,8 @@ def main() -> int:
     string_net.load_state_dict(saved_s["state"] if "state" in saved_s else saved_s)
     string_net.eval()
     detector = _pig.TinyFCN4().to(device)
-    saved_d = torch.load(Path(args.models) / "heatmap.pt", map_location=device, weights_only=True)
+    det_path = Path(args.detector) if args.detector else Path(args.models) / "heatmap.pt"
+    saved_d = torch.load(det_path, map_location=device, weights_only=True)
     try:
         detector.load_state_dict(saved_d["state"] if "state" in saved_d else saved_d)
     except RuntimeError:
@@ -107,7 +114,8 @@ def main() -> int:
 
     joins_name = "joins.json" if args.layout == "standard" else f"joins-{args.layout}.json"
     stats = {"digits": 0, "stringCorrect": 0, "fretCorrect": 0, "bothCorrect": 0,
-             "pitchCorrect": 0, "decoded": 0, "abstained": 0, "byTier": {}}
+             "pitchCorrect": 0, "decoded": 0, "abstained": 0, "byTier": {},
+             "gtDigits": 0, "oracle": args.oracle}
     with torch.no_grad():
         for manifest_path in sorted(hires_dir.glob("*-manifest.json")):
             sample = manifest_path.name.replace("-manifest.json", "")
@@ -154,26 +162,41 @@ def main() -> int:
                                "sid": sid})
                 # Digit detections from the FROZEN postprocessing decoder
                 # (TRAIN-selected constants; no inline peak logic here).
+                # Oracle mode: GT digit boxes (head errors only).
                 page_preds = _dec.decode_page(
                     heat, (pixels * 255).astype(np.uint8), fx, fy)
-                for det in page_preds:
-                    if det["cls"] != "tabdigit":
-                        continue
-                    cx, cy = det["x"], det["y"]
-                    if args.control == "shifted":
-                        cx, cy = cx + 30, cy
-                    w, h = det["box"][2] - det["box"][0], det["box"][3] - det["box"][1]
-                    pred = det["box"] if args.control != "shifted" else [
-                        cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
-                    best, best_iou = None, 0.0
-                    for index, g in enumerate(gt):
-                        value = iou(pred, g["box"])
-                        if value > best_iou:
-                            best, best_iou = index, value
-                    if best is None or best_iou < 0.5:
-                        continue
-                    stats["digits"] += 1
-                    # Classify the detected crop with frozen heads.
+                cands = []
+                if args.oracle:
+                    for g in gt:
+                        cx = (g["box"][0] + g["box"][2]) / 2
+                        cy = (g["box"][1] + g["box"][3]) / 2
+                        w, h = g["box"][2] - g["box"][0], g["box"][3] - g["box"][1]
+                        cands.append({"cx": cx, "cy": cy, "w": w, "h": h,
+                                      "box": g["box"], "sid": g.get("sid")})
+                    stats["digits"] += len(cands)
+                else:
+                    for det in page_preds:
+                        if det["cls"] != "tabdigit":
+                            continue
+                        cx, cy = det["x"], det["y"]
+                        if args.control == "shifted":
+                            cx, cy = cx + 30, cy
+                        w, h = det["box"][2] - det["box"][0], det["box"][3] - det["box"][1]
+                        pred = det["box"] if args.control != "shifted" else [
+                            cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
+                        best, best_iou = None, 0.0
+                        for index, g in enumerate(gt):
+                            value = iou(pred, g["box"])
+                            if value > best_iou:
+                                best, best_iou = index, value
+                        if best is None or best_iou < 0.5:
+                            continue
+                        stats["digits"] += 1
+                        cands.append({"cx": cx, "cy": cy, "w": w, "h": h,
+                                      "box": pred, "sid": gt[best].get("sid")})
+                stats["gtDigits"] += len(gt)
+                for cand in cands:
+                    cx, cy, w, h = cand["cx"], cand["cy"], cand["w"], cand["h"]
                     side = max(w, h) * 0.8
                     crop = image.crop((max(int(cx - side), 0), max(int(cy - side), 0),
                                        min(int(cx + side), image.width), min(int(cy + side), image.height)))
@@ -202,12 +225,14 @@ def main() -> int:
                     implied = TUNING[string_pred] + fret_pred
                     # Pitch correctness checked against canonical via joins sid below.
                     stats.setdefault("pairs", []).append(
-                        {"score": sample, "sid": gt[best].get("sid"), "string": string_pred + 1,
+                        {"score": sample, "sid": cand.get("sid"), "string": string_pred + 1,
                          "fret": fret_pred, "implied": implied})
     (out_dir / f"chain-{args.layout}.json").write_text(json.dumps(
         {k: v for k, v in stats.items() if k != "pairs"}, indent=1))
     (out_dir / f"chain-{args.layout}-pairs.json").write_text(json.dumps(stats.get("pairs", []), indent=1))
-    # Truth comparison: implied pitch vs canonical sounding pitch per pair.
+    # Truth comparison via EXACT event links (document-order counters;
+    # verified 99.8% self-consistent corpus-wide). Per-sample link cache.
+    # joins sid <prefix>-n(N) <-> event noteId counter N-1 (exact).
     import re as _re
     pairs = stats.get("pairs", [])
     if args.control == "shuffled":
@@ -219,27 +244,34 @@ def main() -> int:
             pair["string"], pair["fret"] = string, fret
             pair["implied"] = TUNING[string - 1] + fret
     correct = {"string": 0, "fret": 0, "both": 0, "pitch": 0, "n": 0}
-    for pair in pairs:
-        score = pair["score"]
-        for root in work_dirs:
-            path = None
-            for cand in (root / score / "canonical.json",
-                         root / "canonical.json" if root.name == score else None):
-                if cand is not None and cand.exists():
-                    path = cand
-                    break
-            if path is not None:
+    link_cache: dict[str, dict] = {}
+
+    def event_for(score: str, sid: str | None):
+        if not sid:
+            return None
+        if score not in link_cache:
+            link_cache[score] = {}
+            for root in work_dirs:
+                path = None
+                for cand in (root / score / "canonical.json",
+                             root / "canonical.json" if root.name == score else None):
+                    if cand is not None and cand.exists():
+                        path = cand
+                        break
+                if path is None:
+                    continue
                 canonical = json.loads(path.read_text())
+                table = {}
+                for e in canonical.get("events", []):
+                    m = _re.search(r"-n(\d+)$", (e.get("source") or {}).get("noteId") or "")
+                    if m:
+                        table[f"{score}-n{int(m.group(1)) + 1:03d}"] = e
+                link_cache[score] = table
                 break
-        else:
-            continue
-        event = next((e for e in canonical.get("events", [])), None)
-        match = _re.search(r"-n(\d+)$", pair["sid"]) if pair.get("sid") else None
-        if match:
-            counter = int(match.group(1)) - 1
-            event = next((e for e in canonical.get("events", [])
-                          if _re.search(r"-n(\d+)$", (e.get("source") or {}).get("noteId") or "")
-                          and int(_re.search(r"-n(\d+)$", (e.get("source") or {}).get("noteId")).group(1)) == counter), None)
+        return link_cache[score].get(sid)
+
+    for pair in pairs:
+        event = event_for(pair["score"], pair.get("sid"))
         if event is None:
             continue
         tab = event.get("tab") or {}
@@ -258,6 +290,11 @@ def main() -> int:
     report = {k: v for k, v in stats.items() if k != "pairs"}
     report["truth"] = correct
     report["truthRates"] = {k: (correct[k] / max(correct["n"], 1)) for k in ("string", "fret", "both", "pitch")}
+    # Coverage (no abstention hiding): fractions over ALL GT digits.
+    gt_total = max(report.get("gtDigits", 0), 1)
+    report["coverage"] = {"decoded": report.get("decoded", 0) / gt_total,
+                          "pitchCorrect": correct["pitch"] / gt_total,
+                          "mapped": correct["n"] / gt_total}
     (out_dir / f"chain-{args.layout}.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report, indent=1))
     return 0

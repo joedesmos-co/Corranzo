@@ -1,0 +1,66 @@
+{
+ "standard": {
+  "pages": 74,
+  "noVeto": {
+   "tp": 9587,
+   "fp": 12809,
+   "fn": 11746,
+   "precision": 0.42806751205572424,
+   "recall": 0.44939764683823186
+  },
+  "veto": {
+   "tp": 9482,
+   "fp": 12068,
+   "fn": 11851,
+   "vetoed": 846,
+   "precision": 0.44,
+   "recall": 0.4444756949327333
+  },
+  "tpValueMed": {
+   "note": 0.819,
+   "rest": 0.788,
+   "tabdigit": 0.733
+  },
+  "tpValueP10": {
+   "note": 0.701,
+   "rest": 0.648,
+   "tabdigit": 0.61
+  },
+  "pageShapeMed": [
+   2111,
+   2100
+  ]
+ },
+ "large": {
+  "pages": 57,
+  "noVeto": {
+   "tp": 5696,
+   "fp": 13986,
+   "fn": 15637,
+   "precision": 0.28940148358906614,
+   "recall": 0.26700417194018655
+  },
+  "veto": {
+   "tp": 5480,
+   "fp": 12401,
+   "fn": 15853,
+   "vetoed": 1801,
+   "precision": 0.30647055533806833,
+   "recall": 0.2568790137345896
+  },
+  "tpValueMed": {
+   "note": 0.672,
+   "rest": 0.551,
+   "tabdigit": 0.539
+  },
+  "tpValueP10": {
+   "note": 0.567,
+   "rest": 0.443,
+   "tabdigit": 0.433
+  },
+  "pageShapeMed": [
+   1150,
+   2100
+  ]
+ }
+}

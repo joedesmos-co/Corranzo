@@ -31,7 +31,8 @@ def _load(name, path):
     return module
 
 
-TinyFCN = _load("proof_heatmap_train_mod", "proof-heatmap-train.py").TinyFCN
+TinyFCN4 = _load("proof_ignore_train_mod", "proof-ignore-train.py").TinyFCN4
+TinyFCN3 = _load("proof_heatmap_train_mod", "proof-heatmap-train.py").TinyFCN
 dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 
 SEED = 20261009
@@ -70,9 +71,14 @@ def main() -> int:
             layout_suffix = f"-{name}"
             break
 
-    model = TinyFCN().to(device)
     saved = torch.load(args.weights, map_location=device, weights_only=True)
-    model.load_state_dict(saved["state"] if "state" in saved else saved)
+    state = saved["state"] if "state" in saved else saved
+    try:
+        model = TinyFCN4().to(device)
+        model.load_state_dict(state)
+    except RuntimeError:
+        model = TinyFCN3().to(device)
+        model.load_state_dict(state)
     model.eval()
 
     frozen = {"thresholds": dict(dec.THRESHOLDS), "xclassRadius": dec.XCLASS_RADIUS,

@@ -32,7 +32,8 @@ STRIDE = 8
 SIGMA = 6.0
 CLASSES = ["note", "rest", "tabdigit"]  # channel 3 = ignore
 LAYOUTS = {"standard": ("/tmp/proof/hires", "joins.json", ""),
-           "compact": ("/tmp/proof/hires-compact", "joins-compact.json", "-compact")}
+           "compact": ("/tmp/proof/hires-compact", "joins-compact.json", "-compact"),
+           "large": ("/tmp/proof/hires-large", "joins-large.json", "-large")}
 
 
 def load_train_ids():
@@ -201,18 +202,19 @@ def main() -> int:
     saved = torch.load(args.warm, map_location=device, weights_only=True)
     v1 = saved["state"] if "state" in saved else saved
     own = model.state_dict()
+    warm_out = int(v1["net.15.weight"].shape[0])  # 3 (v1/v2) or 4 (v3)
     for key, value in v1.items():
-        if key == "net.15.weight":
-            own[key][:3].copy_(value)
-        elif key == "net.15.bias":
+        if key in ("net.15.weight", "net.15.bias") and warm_out == 3:
             own[key][:3].copy_(value)
         else:
             own[key].copy_(value)
-    # Fresh ignore row: small random weights, negative bias (ignore off
-    # unless evidence).
-    nn.init.normal_(own["net.15.weight"][3], std=0.01)
-    own["net.15.bias"][3].fill_(-1.0)
+    if warm_out == 3:
+        # Fresh ignore row: small random weights, negative bias (ignore
+        # off unless evidence).
+        nn.init.normal_(own["net.15.weight"][3], std=0.01)
+        own["net.15.bias"][3].fill_(-1.0)
     model.load_state_dict(own)
+    print(f"warm start: {args.warm} ({warm_out}ch output)", flush=True)
 
     loader = DataLoader(IgnoreDataset(work_dirs, train_ids, labels),
                         batch_size=BATCH, shuffle=True, num_workers=0)
