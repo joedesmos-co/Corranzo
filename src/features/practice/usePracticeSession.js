@@ -499,6 +499,28 @@ export default function usePracticeSession({
 
   const microphone = useMicrophoneCapture({ active: micCaptureActive })
 
+  // Practice/UI-state recovery for the WFY -> Play Along handoff: the mode
+  // switch briefly deactivates capture, and no Start button exists in the
+  // Play Along UI to re-acquire it — without this the Play Along detector
+  // stays silently dead. Fires only when the user selected microphone and
+  // permission is already granted (no prompt, gesture-safe); denial or
+  // error flips the gate off. Mic lifecycle internals stay untouched.
+  const micCaptureRecoverable =
+    practiceActive &&
+    wfyInputSourceReady &&
+    wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    microphone.permission === MIC_PERMISSION.GRANTED &&
+    !microphone.isListening
+  useEffect(() => {
+    if (!micCaptureRecoverable) {
+      return undefined
+    }
+    const recoverTimer = globalThis.setTimeout(() => {
+      microphone.requestAccess?.()
+    }, 0)
+    return () => globalThis.clearTimeout(recoverTimer)
+  }, [micCaptureRecoverable, microphone])
+
   const webMidi = useWebMidiInput({
     listen:
       practiceActive &&

@@ -720,13 +720,13 @@ async function main() {
   }
 
   // ---- Run 6: Play Along receives timed mic events ----
-  // Go straight to Play Along (a WFY->PlayAlong mic transition within one
-  // session currently starves the Play Along detector — documented finding,
-  // pre-existing engine lifecycle; direct entry matches the primary flow).
-  // Playback runs while the melody loop plays. Timing alignment between a
-  // looped file and the transport is not deterministic, so this asserts
-  // the pipeline (capture-clock events evaluated against the timeline:
-  // decided past events appear as score states), not accuracy counts.
+  // Regression path for the WFY->PlayAlong capture starvation: enter via
+  // WFY (mic selected there), then switch to Play Along + Play. Capture
+  // must auto-recover on reactivation (no Start button exists in the
+  // Play Along UI). Timing alignment between a looped file and the
+  // transport is not deterministic, so this asserts the pipeline
+  // (capture-clock events evaluated against the timeline: decided past
+  // events appear as score states), not accuracy counts.
   {
     const { viteServer, browser, page } = await launchApp({
       clipFile: join(clipDir, 'mic-melody8.wav'), port: PORT + 5,
@@ -734,35 +734,14 @@ async function main() {
     watch(page, 'playalong')
     try {
       await freshSession(page, `http://127.0.0.1:${PORT + 5}/`)
-      await page.getByRole('button', { name: 'Library', exact: true }).click().catch(() => {})
-      await sleep(800)
-      const opened = await page.evaluate(() => {
-        const target = [...document.querySelectorAll('button')].find((button) => {
-          if (!/open score|start practice/i.test(button.textContent)) {
-            return false
-          }
-          const row = button.closest('.cz-piece-row, [class*="card" i]')
-          const scope = row ? row.textContent : button.parentElement?.textContent ?? ''
-          return scope.includes('Prelude')
-        })
-        if (target) {
-          target.click()
-          return true
-        }
-        return false
-      })
-      if (!opened) {
-        fail('playalong run opens Prelude', 'piece setup failed')
-      } else {
-        await sleep(8000)
+      if (!(await openPreludeWfyMic(page))) {
+        fail('playalong run opens Prelude', 'piece or mic setup failed')
+      } else if (await requireMic(page, report, 'playalong run')) {
         await page.getByRole('radiogroup', { name: 'Practice mode' })
           .getByRole('radio', { name: 'Play Along', exact: true })
           .click()
         await sleep(1200)
         await dismissOverlays(page)
-        if (!(await requireMic(page, report, 'playalong run'))) {
-          fail('playalong run opens Prelude', 'mic setup failed')
-        } else {
           const playButton = page.locator('.workspace-play').first()
           await playButton.click()
           await sleep(2000)
@@ -791,8 +770,7 @@ async function main() {
             }
           }
         }
-      }
-    } catch (error) {
+      } catch (error) {
       fail('playalong run completed without exception', error?.message ?? String(error))
     } finally {
       await browser.close().catch(() => {})
