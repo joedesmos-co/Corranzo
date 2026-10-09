@@ -1,0 +1,20 @@
+[train] labeling TRAIN (frozen identities)...
+[train] labeled=130240 quarantined={}
+[train] subset: 44103 (relevant 34103, 8ths 9283, 4ths 2522)
+[train] labeling DEV (frozen, eval only)...
+[train] DEV rows=22299 quarantined={}
+[mat] rows 44103 -> kept 43905 (missing 198)
+[mat] rows 22299 -> kept 21756 (missing 543)
+[train] matrices: train (43905, 192, 48) uint8, dev (21756, 192, 48) uint8
+/Users/ryland/Documents/scoreflow-piano-unblock/docs/piano-truth-unblock/train/scripts/train_tallcnn.py:416: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss) * len(idx)
+[train] epoch 1/12 loss=0.7146 dev={'dur': 0.4001195072623644, 'c16to8': 156, 'beams': 0.6032, 'start': {'f1': 0.0, 'n_pos': 4129}, 'end': {'f1': 0.5522, 'n_pos': 4142}, 'tup': {'f1': 0.0, 'n_pos': 413}} t=591s
+[train] epoch 2/12 loss=0.4716 dev={'dur': 0.7556076484647913, 'c16to8': 1455, 'beams': 0.7934, 'start': {'f1': 0.5795, 'n_pos': 4129}, 'end': {'f1': 0.7433, 'n_pos': 4142}, 'tup': {'f1': 0.0814, 'n_pos': 413}} t=1181s
+[train] epoch 3/12 loss=0.3571 dev={'dur': 0.7231568302996875, 'c16to8': 102, 'beams': 0.7953, 'start': {'f1': 0.7076, 'n_pos': 4129}, 'end': {'f1': 0.6692, 'n_pos': 4142}, 'tup': {'f1': 0.1205, 'n_pos': 413}} t=1940s
+[train] epoch 4/12 loss=0.3029 dev={'dur': 0.7732579518293804, 'c16to8': 423, 'beams': 0.8102, 'start': {'f1': 0.7582, 'n_pos': 4129}, 'end': {'f1': 0.7495, 'n_pos': 4142}, 'tup': {'f1': 0.1469, 'n_pos': 413}} t=2846s
+[train] epoch 5/12 loss=0.2694 dev={'dur': 0.7095973524544953, 'c16to8': 65, 'beams': 0.7665, 'start': {'f1': 0.7756, 'n_pos': 4129}, 'end': {'f1': 0.7812, 'n_pos': 4142}, 'tup': {'f1': 0.1755, 'n_pos': 413}} t=3847s
+[train] epoch 6/12 loss=0.2483 dev={'dur': 0.8041000183857326, 'c16to8': 389, 'beams': 0.8393, 'start': {'f1': 0.788, 'n_pos': 4129}, 'end': {'f1': 0.8002, 'n_pos': 4142}, 'tup': {'f1': 0.2131, 'n_pos': 413}} t=5158s
+[train] epoch 7/12 loss=0.2347 dev={'dur': 0.7330851259422688, 'c16to8': 62, 'beams': 0.7577, 'start': {'f1': 0.7845, 'n_pos': 4129}, 'end': {'f1': 0.8015, 'n_pos': 4142}, 'tup': {'f1': 0.2472, 'n_pos': 413}} t=5886s
+[train] epoch 8/12 loss=0.2226 dev={'dur': 0.7969295826438684, 'c16to8': 245, 'beams': 0.8281, 'start': {'f1': 0.7986, 'n_pos': 4129}, 'end': {'f1': 0.8218, 'n_pos': 4142}, 'tup': {'f1': 0.2925, 'n_pos': 413}} t=6622s
+[train] epoch 9/12 loss=0.2121 dev={'dur': 0.7329931972789115, 'c16to8': 57, 'beams': 0.8115, 'start': {'f1': 0.8116, 'n_pos': 4129}, 'end': {'f1': 0.8349, 'n_pos': 4142}, 'tup': {'f1': 0.2599, 'n_pos': 413}} t=7073s

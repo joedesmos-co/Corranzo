@@ -658,3 +658,77 @@ regressions and music21 99/99 stand).
   24-row resolution to the decision) or stem-centered tall crops containing
   stem+beams. That is the exact next step (fresh preregistration, same
   caps: TRAIN-only, frozen identities, TEST sealed).
+
+---
+
+# T1 vertical-preserving rhythm CNN: representation CONFIRMED, dur gate FAIL
+
+From `dae2ebd44d`. No merge, TEST sealed, DEV identities fixed, no
+competing training. One capped experiment (T1), wall-clock-killed at 9/12
+epochs (118 min; as-registered 1.9M config benchmarked 14.6 s/iter = 14 hr,
+infeasible — documented P4 amendment to a ~0.15M same-family config before
+any amended run). No artifact saved; NO production change (A1 stands:
+dur 0.858, exact 15,005, timing 1,368, rests 2/578). Only addition is the
+untracked experiment script — zero tracked-file modifications, so zero
+regression surface (no re-eval needed; prior music21 99/99 stands).
+
+## 1. Architecture (P2)
+
+TallCNN-S: 1×192×48 → C3(1,8)/BN/R → C3(8,16)/BN/R → MaxPool(1,2)
+→ C3(16,32)/BN/R → C3(32,32)/BN/R → MaxPool(1,2) → C3(32,32)/BN/R
+[32×192×12, full height, NO vertical pooling anywhere] →
+AdaptiveAvgPool((48,1)) → 1536 → FC+ReLU 96 → {dur16, beams5, start2,
+end2, tup2}. ~0.15M params. Input: 3-gap × 12-gap stem-centered tall crops
+(48×192), P1-verified on TRAIN-only panels to contain countable 1/2/3
+beams, boundary stubs (start = beam right-only), flags, open/filled heads,
+stems, and tuplet numbers at the ±6 edge. 64-crops cut beams off; strips
+alias count away.
+
+## 2–3. Population, time, supervision (P3–P5)
+
+TRAIN subset 44,103 rows (relevant 34,103: all 16/32/64/dotted/tuplet/
+beamed-non-8 + seeded 7k plain-8th + 3k long sample; SUBSEED 0) with MEI
+chord inheritance; labels: dur16, beamcount {8:1,16:2,32:3,64:4,unbeamed:0}
+(all TRAIN beamed durs verified in {8,16,32,64} except MEI-inherited chord
+members), boundaries from truth beam groups, tuplet from tuplet_id.
+Quarantine: dur-OOV/None rows dropped (0 TRAIN, 0 DEV — MEI covered all);
+306 TRAIN + 543 DEV rows missing tall crops (no-bbox/blank, input-quality
+rule). AdamW 3e-4, batch 256, seed 0, CPU 8 threads. 118 min for 9 epochs
+(~13 min/epoch: ~9 train + ~4 DEV-eval); killed by wall clock, best-state
+lost with the process (in-memory rule). Full partial log committed:
+`reports/train_tallcnn.log`.
+
+## 4–5. Beam/duration results (P6)
+
+Frozen DEV after each epoch (dur / 16→8 / beams / start-F1 / end-F1 /
+tup-F1): ep1 .40/156/.60/0/.55/0 → ep6 .804/389/.839/.788/.800/.213 →
+ep9 .733/57/.812/.812/.835/.260. Findings:
+- REPRESENTATION CONFIRMED: beams 0.60→0.84, start 0→0.81, end 0.55→0.83,
+  tuplet 0→0.29 — tall crops carry beam/boundary/tuplet signal an unfrozen
+  vertical-preserving CNN can read. S1's failure was the encoder, not the
+  pixels.
+- DUR GATE FAIL: best 0.804 (ep6/8) vs 0.858 gate; dur oscillates
+  0.71–0.80 seesaw against boundary learning (uniform multitask loss makes
+  the small shared trunk thrash between heads). 16→8 sub-gate met at some
+  epochs (57–156) but only when dur collapses elsewhere — no durable win.
+- Production joint-exact gate untestable (no artifact per fail rule).
+
+## 6–10. Timing/tuplet/rest/acceptance (P6–P8)
+
+No production integration (P7: REJECT for dur; boundary/tuplet heads are
+classification evidence, decoder integration was preregistered as
+deferred). Timing/rests/exact/ties/beams/chords/music21: unchanged by
+construction. Provenance: oracle boxes in, no meter guessing, visual
+sources only; scan rejection and clef/pitch/decoder/serializer untouched.
+
+## 11–12. V1 blockers + next step
+
+Unchanged list (rest voice, beam integration, tuplet reader, accidentals,
+chord crowding, detector, scans) plus a NEW precise item: dur-head
+multitask interference. EXACT NEXT STEP: decoupled T2 — dur-only TallCNN-S
+(single head, no boundary competition) plus SEPARATE boundary/tuplet heads
+off the frozen T1-style trunk or a second tiny trunk; preregister per-head
+gates (dur ≥ 0.858, start/end F1 ≥ 0.80 sustained over final 3 epochs, tup
+F1 ≥ 0.40); save per-head best states to disk each epoch (no in-memory
+rule); budget wall clock explicitly (13 min/epoch measured) — e.g. 8-epoch
+cap ≈ 105 min. TEST stays sealed.
