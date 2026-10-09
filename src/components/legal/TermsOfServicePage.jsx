@@ -43,6 +43,27 @@ export default function TermsOfServicePage() {
         </p>
       </section>
 
+      <section>
+        <h2>Sound credits</h2>
+        <p>
+          Corranzo&apos;s instrument playback uses the following third-party sample
+          libraries, each under a Creative Commons Attribution 3.0 Unported
+          (CC&nbsp;BY&nbsp;3.0) license. We thank their creators; the samples may
+          have been trimmed, level-matched, or transcoded for playback, which
+          does not change their license.
+        </p>
+        <ul>
+          <li>
+            Salamander Grand Piano by Alexander Holm (Yamaha C5 recordings) —
+            CC&nbsp;BY&nbsp;3.0.
+          </li>
+          <li>
+            Acoustic and clean electric guitar samples by Nicholaus P. Brosowsky,
+            from the tonejs-instruments project — CC&nbsp;BY&nbsp;3.0 (code MIT).
+          </li>
+        </ul>
+      </section>
+
       <p className="legal-page__updated">Last updated: June 24, 2026</p>
     </LegalPage>
   )

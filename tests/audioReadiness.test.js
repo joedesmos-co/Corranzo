@@ -19,6 +19,7 @@ import {
   __resetReferenceVoiceCacheForTests,
 } from '../src/features/practice/referenceNotePlayer.js'
 import { INSTRUMENT_STATUS } from '../src/features/playback/instrumentVoiceStatus.js'
+import { listInstruments } from '../src/features/instruments/instruments.js'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
@@ -49,7 +50,7 @@ describe('instrument sample warmup', () => {
     warmupAllInstrumentSamplesOnIdle()
     warmupAllInstrumentSamplesOnIdle()
 
-    expect(idle).toHaveBeenCalledTimes(2)
+    expect(idle).toHaveBeenCalledTimes(listInstruments().length)
   })
 
   it('still warms a single instrument on demand', () => {

@@ -282,6 +282,11 @@ export class ScorePlaybackEngine {
     const schedule = await buildCombinedPlaybackSchedule(timingMap, midiArrayBuffer, {
       rate: this.playbackRate,
       alignmentDiagnostics,
+      // Piano damper only: guitars have no sustain pedal, and strumming
+      // only makes sense for fretted strings. The resolver id is the
+      // single source of truth for which voice is playing.
+      sustainPedal: this.voiceResolver.instrumentId === 'piano',
+      instrumentId: this.voiceResolver.instrumentId,
     })
     if (loadToken !== this.loadToken) {
       return null

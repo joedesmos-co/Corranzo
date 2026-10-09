@@ -13,6 +13,7 @@ import {
   applySustainToNotes,
   collectSustainEvents,
   extractSustainSpans,
+  sustainedDuration,
 } from './sustainPedal.js'
 import { buildMetronomeSchedule } from './metronomeSchedule.js'
 import {
@@ -21,25 +22,104 @@ import {
   articulationSourceForNote,
 } from './staccatoPlayback.js'
 
+/** Chords whose onsets fall inside this window strum as one gesture. */
+export const STRUM_ONSET_WINDOW_SECONDS = 0.03
+/** Downstroke string spacing (low→high pitch order). */
+export const STRUM_STRING_GAP_SECONDS = 0.009
+/** Per-string velocity slope across a strum (first string loudest). */
+export const STRUM_VELOCITY_SLOPE = 0.03
+export const STRUM_VELOCITY_FLOOR = 0.85
+
+/** Hammer-on/pull-off: softer pick + bleed into the next attack (legato blur). */
+export const SLUR_VELOCITY_RATIO = 0.8
+export const SLUR_OVERLAP_SECONDS = 0.04
+
+/** Palm-mute (muted event): short damped tone. */
+export const MUTED_DURATION_RATIO = 0.35
+export const MUTED_VELOCITY_RATIO = 0.8
+
+/** Techniques the runtime actually renders (vs recognizes-only). */
+export const PERFORMED_TECHNIQUE_KINDS = Object.freeze(['hammer-on', 'pull-off', 'strum', 'muted', 'let-ring'])
+
+/**
+ * Split parsed techniques into performed vs recognized-only. Bends,
+ * slides, vibrato and harmonics are recognized (preserved as evidence)
+ * but NOT performed — Tone.Sampler cannot glide pitch per voice, so
+ * claiming them would be dishonest. See the module docs for the recipe.
+ */
+export function splitPerformedTechniques(techniques = []) {
+  const performed = []
+  const recognizedOnly = []
+  for (const technique of techniques ?? []) {
+    const kind = technique?.kind ?? technique
+    if (PERFORMED_TECHNIQUE_KINDS.includes(kind)) {
+      performed.push(kind)
+    } else if (kind != null) {
+      recognizedOnly.push(kind)
+    }
+  }
+  return { performed, recognizedOnly }
+}
+
+function techniqueKinds(note) {
+  const list = []
+  for (const technique of note?.guitarTechniques ?? []) {
+    const kind = technique?.kind ?? technique
+    if (kind != null && !list.includes(kind)) {
+      list.push(kind)
+    }
+  }
+  return list
+}
+
 /**
  * Pure performed-timeline note schedule for tests and the playback engine.
  * `scoreTimeSeconds` is performed score time; `wallTimeSeconds` accounts for rate.
+ *
+ * This is the canonical written→performed layer: written onsets/pitches are
+ * never rewritten (except strum staggering, which offsets onsets by
+ * milliseconds as a performance gesture and is flagged per event).
  */
-export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
+export function buildScoreNoteSchedule(timingMap, { rate = 1, sustainPedal = false, instrumentId = null } = {}) {
   if (!timingMap || rate <= 0) {
     return []
   }
 
-  return getTimeline(timingMap)
+  const isGuitarFamily = instrumentId === 'guitar' || instrumentId === 'electric-guitar'
+  const pedalSpans = sustainPedal && Array.isArray(timingMap.pedalSpans) ? timingMap.pedalSpans : []
+
+  const events = getTimeline(timingMap)
     .performedNotes()
     .filter(isPlayableTimingNote)
     .map((note) => {
       const writtenDurationSeconds = sanitizePlaybackDurationSeconds(note.durationSeconds)
-      const performedDurationSeconds = playbackDurationSecondsForNote({
+      let performedDurationSeconds = playbackDurationSecondsForNote({
         ...note,
         durationSeconds: writtenDurationSeconds,
       })
-      const velocity = playbackVelocityForNote(note)
+      let velocity = playbackVelocityForNote(note)
+      const kinds = techniqueKinds(note)
+      const { performed, recognizedOnly } = splitPerformedTechniques(kinds)
+      const isSlurred = performed.includes('hammer-on') || performed.includes('pull-off')
+      if (isSlurred) {
+        // Legato approximation: softer pick + bleed into the next attack
+        // (no silence gap). True pitch glide needs a mono technique
+        // voice — documented, not claimed.
+        velocity = Math.max(0.05, velocity * SLUR_VELOCITY_RATIO)
+        performedDurationSeconds += SLUR_OVERLAP_SECONDS
+      }
+      const muted = note.muted === true || performed.includes('muted')
+      if (muted) {
+        performedDurationSeconds = Math.max(0.03, performedDurationSeconds * MUTED_DURATION_RATIO)
+        velocity = Math.max(0.05, velocity * MUTED_VELOCITY_RATIO)
+      }
+      if (pedalSpans.length) {
+        performedDurationSeconds = sustainedDuration(
+          note.performedSeconds,
+          performedDurationSeconds,
+          pedalSpans.map((span) => ({ start: span.startSeconds, end: span.endSeconds })),
+        )
+      }
       return {
         type: 'note',
         scoreTimeSeconds: note.performedSeconds,
@@ -53,6 +133,10 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
         marcato: Boolean(note.marcato),
         fermata: Boolean(note.fermata),
         articulationSource: articulationSourceForNote(note),
+        techniques: kinds,
+        performedTechniques: performed,
+        recognizedOnlyTechniques: recognizedOnly,
+        muted,
         tieChainId: note.tieChainId ?? null,
         attackCount: 1,
         midi: note.midi,
@@ -68,6 +152,52 @@ export function buildScoreNoteSchedule(timingMap, { rate = 1 } = {}) {
       }
     })
     .sort((a, b) => a.scoreTimeSeconds - b.scoreTimeSeconds)
+
+  if (isGuitarFamily) {
+    applyGuitarStrum(events)
+  }
+  return events
+}
+
+/**
+ * Guitar strums: simultaneously written chord tones become a downstroke —
+ * low→high pitch order, ~9 ms string spacing, slight velocity slope.
+ * Piano chords (and arpeggios, which are never simultaneous) are untouched.
+ * Mutates onset/velocity in place; flags every touched event.
+ */
+export function applyGuitarStrum(events) {
+  let index = 0
+  while (index < events.length) {
+    let end = index + 1
+    while (
+      end < events.length &&
+      Math.abs(events[end].scoreTimeSeconds - events[index].scoreTimeSeconds) <= STRUM_ONSET_WINDOW_SECONDS
+    ) {
+      end += 1
+    }
+    const chord = events.slice(index, end)
+    if (chord.length > 1) {
+      chord.sort((left, right) => (left.midi ?? 0) - (right.midi ?? 0))
+      chord.forEach((event, stringIndex) => {
+        event.scoreTimeSeconds = Math.round(
+          (event.scoreTimeSeconds + stringIndex * STRUM_STRING_GAP_SECONDS) * 1000000,
+        ) / 1000000
+        event.velocity = Math.max(
+          0.05,
+          event.velocity * Math.max(STRUM_VELOCITY_FLOOR, 1 - stringIndex * STRUM_VELOCITY_SLOPE),
+        )
+        event.strummed = true
+        event.strumIndex = stringIndex
+        if (!event.performedTechniques.includes('strum')) {
+          event.performedTechniques = [...event.performedTechniques, 'strum']
+        }
+      })
+      chord.sort((left, right) => left.scoreTimeSeconds - right.scoreTimeSeconds)
+      events.splice(index, chord.length, ...chord)
+    }
+    index = end
+  }
+  return events
 }
 
 /** Metronome click times on performed beats. */
@@ -90,9 +220,9 @@ export function applyPlaybackRate(events, rate) {
 export async function buildCombinedPlaybackSchedule(
   timingMap,
   midiArrayBuffer,
-  { rate = 1, alignmentDiagnostics = null } = {},
+  { rate = 1, alignmentDiagnostics = null, sustainPedal = false, instrumentId = null } = {},
 ) {
-  const scoreEvents = buildScoreNoteSchedule(timingMap, { rate })
+  const scoreEvents = buildScoreNoteSchedule(timingMap, { rate, sustainPedal, instrumentId })
   const performedDuration = getTimeline(timingMap).performedDurationSeconds
 
   if (!midiArrayBuffer) {

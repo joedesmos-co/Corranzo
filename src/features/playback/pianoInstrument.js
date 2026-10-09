@@ -215,7 +215,9 @@ export function createPianoInstrument(options = {}) {
     synthVolume,
     sampledRelease: SAMPLED_RELEASE,
     sampleAttack: SAMPLE_ATTACK,
-    velocityLayers: 1,
+    velocityLayers: 2,
+    brightnessMinHz: 1200,
+    brightnessMaxHz: 6500,
     effects: { ...PIANO_EFFECTS, ...effects },
     createFallbackVoice: createSynthVoice,
   })

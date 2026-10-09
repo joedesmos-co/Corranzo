@@ -707,6 +707,7 @@ function walkPart({
   harmonyEvents,
   partNotation = null,
   wedgeSpans = null,
+  pedalSpans = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -795,8 +796,7 @@ function walkPart({
           }
 
           const wedge = wedgeFromDirection(child, helpers)
-          if (wedge && Array.isArray(wedgeSpans)) {
-            if (wedge.stage === 'start' && wedge.type) {
+          if (wedge && Array.isArray(wedgeSpans)) {            if (wedge.stage === 'start' && wedge.type) {
               const startVelocity = resolveNoteVelocity(
                 activeVelocity,
                 velocityByStaff,
@@ -832,6 +832,27 @@ function walkPart({
                 staff: open.staff,
                 partId: open.partId,
               })
+            }
+          }
+
+          // Sustain pedal marks (<direction-type><pedal type="start|stop">):
+          // collected per part in quarter time; converted to seconds with
+          // the assembled tempo map and applied to score-note durations in
+          // buildScoreNoteSchedule (piano only — guitars have no damper).
+          if (Array.isArray(pedalSpans)) {
+            for (const directionType of findChildren(child, 'direction-type')) {
+              for (const pedal of findChildren(directionType, 'pedal')) {
+                const pedalType = String(attr(pedal, 'type') ?? '').toLowerCase()
+                if (pedalType === 'start' || pedalType === 'stop') {
+                  pedalSpans.push({
+                    type: pedalType,
+                    quarterTime,
+                    measureNumber,
+                    staff: directionStaff,
+                    partId,
+                  })
+                }
+              }
             }
           }
 
@@ -1103,6 +1124,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const rawTimingEvents = []
   const harmonyEvents = []
   const wedgeSpans = []
+  const pedalMarks = []
   const partNotationById = new Map()
 
   const notationForPart = (partId) => {
@@ -1130,6 +1152,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
+    pedalSpans: pedalMarks,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -1147,6 +1170,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       harmonyEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
+      pedalSpans: pedalMarks,
     })
   })
 
@@ -1189,6 +1213,45 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   }
 
   const toSeconds = (quarterTime) => quartersToSeconds(quarterTime, tempoChanges)
+
+  // Sustain pedal marks → second-spans (start/stop pairing per part+staff;
+  // a dangling start rings to the score end, like a held damper).
+  const pedalSpans = []
+  {
+    const openByKey = new Map()
+    const ordered = [...pedalMarks].sort((left, right) => left.quarterTime - right.quarterTime)
+    for (const mark of ordered) {
+      const key = `${mark.partId ?? ''}:${mark.staff ?? ''}`
+      if (mark.type === 'start') {
+        if (!openByKey.has(key)) {
+          openByKey.set(key, mark)
+        }
+      } else if (openByKey.has(key)) {
+        const start = openByKey.get(key)
+        openByKey.delete(key)
+        if (mark.quarterTime > start.quarterTime) {
+          pedalSpans.push({
+            startSeconds: toSeconds(start.quarterTime),
+            endSeconds: toSeconds(mark.quarterTime),
+            partId: start.partId,
+            staff: start.staff,
+          })
+        }
+      }
+    }
+    const scoreEndQuarters = Math.max(
+      0,
+      ...notes.filter((note) => Number.isFinite(note.quarterTime)).map((note) => note.quarterTime),
+    )
+    for (const start of openByKey.values()) {
+      pedalSpans.push({
+        startSeconds: toSeconds(start.quarterTime),
+        endSeconds: toSeconds(scoreEndQuarters),
+        partId: start.partId,
+        staff: start.staff,
+      })
+    }
+  }
 
   const keySignatures = []
   for (const event of keySignatureEvents.sort(
@@ -1399,6 +1462,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timingEvents,
     harmonyEvents,
     wedgeSpans,
+    pedalSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {
           isChordSheet: true,

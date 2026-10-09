@@ -42,6 +42,30 @@ const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
 const DEFAULT_SAMPLED_RELEASE = 1.55
 const DEFAULT_SAMPLE_ATTACK = 0.004
 const RELEASE_FADE_SECONDS = 0.055
+const BRIGHTNESS_SMOOTHING_SECONDS = 0.015
+/**
+ * Palm-mute damping at the voice level (short damped tone). Mirrors the
+ * schedule-level MUTED_* ratios; kept here (not imported) so the voice
+ * never depends on the schedule builder — both document the same
+ * physical target (a ~120 ms damped thump).
+ */
+const MUTED_VOICE_DURATION_SECONDS = 0.12
+const MUTED_VOICE_VELOCITY_RATIO = 0.8
+
+/**
+ * Velocity → lowpass brightness (Hz), exponential (perceptual).
+ *
+ * One shared filter serves the whole polyphonic sampler, so this cannot
+ * voice individual notes — but steering it at each note's own attack
+ * time makes the tone stack follow playing dynamics the way a real
+ * instrument's body does (soft = dark felt, loud = brilliant). The ramp
+ * is scheduled AT the note time, so scheduled-future notes each get
+ * their own brightness without clicks. Pure + tested.
+ */
+export function brightnessHzForVelocity(velocity, { minHz = 1400, maxHz = 6800 } = {}) {
+  const clamped = Math.min(1, Math.max(0, Number.isFinite(velocity) ? velocity : 0.72))
+  return minHz * Math.pow(maxHz / minHz, clamped)
+}
 
 /** Master FX defaults — see playbackAudioConfig.js for the canonical values. */
 const DEFAULT_EFFECTS = { ...PLAYBACK_MASTER_FX }
@@ -353,7 +377,9 @@ export function createCachedSamplerSync({ tone, baseUrl, urls, volume, release, 
  * @param {number} [options.sampledVolume] dB for the sampled voice.
  * @param {number} [options.synthVolume]   dB for the synth fallback.
  * @param {number} [options.sampledRelease] Sampler release seconds.
- * @param {number} [options.sampleAttack]  Sampler attack seconds.
+ * @param {number} [options.sampleAttack] Sampler attack seconds.
+ * @param {number} [options.brightnessMinHz] Dark end of velocity brightness.
+ * @param {number} [options.brightnessMaxHz] Brilliant end of velocity brightness.
  * @param {object} [options.effects]       FX-chain overrides (see DEFAULT_EFFECTS).
  * @param {function} [options.logDiagnostics] Dev diagnostics logger.
  * @param {function} [options.warnDense]   Dev dense-passage warner.
@@ -376,6 +402,8 @@ export function createSampledInstrumentVoice(options = {}) {
     synthVolume,
     sampledRelease,
     sampleAttack,
+    brightnessMinHz = 1400,
+    brightnessMaxHz = 6800,
     sampleLoadTimeoutMs,
     effects: effectsOverride = {},
     logDiagnostics = logPianoDiagnostics,
@@ -631,11 +659,19 @@ export function createSampledInstrumentVoice(options = {}) {
       if (disposed) {
         return
       }
-      const safeDuration = Math.max(duration, 0.03)
+      let safeDuration = Math.max(duration, 0.03)
+      let performedVelocity = velocity
+      if (meta.muted === true) {
+        // Palm mute: choke to a short damped thump regardless of the
+        // written duration. The schedule layer applies the same shaping;
+        // this is the last line of defense for direct engine callers.
+        safeDuration = Math.max(0.03, Math.min(safeDuration, MUTED_VOICE_DURATION_SECONDS))
+        performedVelocity = Math.max(0.05, velocity * MUTED_VOICE_VELOCITY_RATIO)
+      }
       pruneVoices(voiceMix, time)
       const plan = planNoteTrigger(voiceMix, {
         time,
-        velocity,
+        velocity: performedVelocity,
         duration: safeDuration,
         note,
       })
@@ -648,6 +684,20 @@ export function createSampledInstrumentVoice(options = {}) {
       }
       nextVoiceSerial += 1
       const assignedVoiceId = `${voiceId}-${nextVoiceSerial}`
+      if (usingSampler && sampler) {
+        // Velocity brightness: steer the shared tone filter at this
+        // note's own attack time (smoothed, non-fatal on failure).
+        try {
+          const atTime = typeof time === 'number' ? time : tone.now()
+          samplerToneFilter.frequency.setTargetAtTime(
+            brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
+            atTime,
+            BRIGHTNESS_SMOOTHING_SECONDS,
+          )
+        } catch {
+          // A filter failure must never silence a note.
+        }
+      }
       target.triggerAttackRelease(note, safeDuration, time, plan.velocity)
       logPianoTrigger({
         midi: meta.midi ?? null,
@@ -655,7 +705,7 @@ export function createSampledInstrumentVoice(options = {}) {
         performedOnset: time,
         performedDuration: safeDuration,
         sampleSelected: usingSampler ? note : 'synth',
-        velocityLayer: 0,
+        velocityLayer: plan.velocity < 0.55 ? 0 : 1,
         gain: plan.velocity,
         attack: sampleAttack,
         release: sampledRelease,
@@ -693,6 +743,18 @@ export function createSampledInstrumentVoice(options = {}) {
       const target = usingSampler && sampler ? sampler : synthVoice
       for (const release of plan.release ?? []) {
         target.triggerRelease?.(release.note, release.time)
+      }
+      if (usingSampler && sampler) {
+        try {
+          const atTime = typeof time === 'number' ? time : tone.now()
+          samplerToneFilter.frequency.setTargetAtTime(
+            brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
+            atTime,
+            BRIGHTNESS_SMOOTHING_SECONDS,
+          )
+        } catch {
+          // A filter failure must never silence a note.
+        }
       }
       target.triggerAttack?.(note, time, plan.velocity)
     },
