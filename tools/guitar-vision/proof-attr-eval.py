@@ -132,7 +132,7 @@ def main() -> int:
                 image = Image.open(meta["file"]).convert("L")
                 pixels = np.asarray(image, dtype=np.float32) / 255.0
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
-                preds, _ = _dec.infer_page(detector, (pixels * 255).astype(np.uint8), fx, fy, device)
+                preds, _ = _dec.infer_page_merged(detector, (pixels * 255).astype(np.uint8), fx, fy, device)
                 gt_digits = []
                 for sid, join in joins["joins"].items():
                     if (join.get("page") or 1) != page_no or not join.get("boxes"):

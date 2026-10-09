@@ -1,0 +1,43 @@
+{
+ "pages": 24,
+ "detector": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
+ "tauGrid": {
+  "0.4": {
+   "decoded": 155,
+   "abstained": 25,
+   "bothCorrect": 39,
+   "pitchCorrect": 39
+  },
+  "0.5": {
+   "decoded": 130,
+   "abstained": 50,
+   "bothCorrect": 32,
+   "pitchCorrect": 32
+  },
+  "0.6": {
+   "decoded": 101,
+   "abstained": 79,
+   "bothCorrect": 23,
+   "pitchCorrect": 23
+  },
+  "0.7": {
+   "decoded": 64,
+   "abstained": 116,
+   "bothCorrect": 16,
+   "pitchCorrect": 16
+  }
+ },
+ "gt": 362,
+ "missedDetection": 14,
+ "wrongFamily": 0,
+ "badBox": 168,
+ "matched": 180,
+ "abstained": 79,
+ "fretWrong": 6,
+ "stringWrong": 133,
+ "bothCorrect": 44,
+ "pitchCorrect": 44,
+ "paired": 0,
+ "pairedAgree": 0,
+ "rhythmKnown": 180
+}

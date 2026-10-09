@@ -49,6 +49,8 @@ def main() -> int:
     parser.add_argument("--tabdigit-veto", action="store_true")
     parser.add_argument("--no-veto", action="store_true", help="v2-equivalent decode (control)")
     parser.add_argument("--weights", default="/tmp/proof/ignore-train/heatmap-ignore.pt")
+    parser.add_argument("--samples", default=None)
+    parser.add_argument("--no-norm", action="store_true")
     parser.add_argument("--hires", default="/tmp/proof/hires")
     parser.add_argument("--joins", default="joins.json")
     parser.add_argument("--work", required=False, action="append", default=[],
@@ -64,6 +66,7 @@ def main() -> int:
         if args.joins == f"joins-{name}.json":
             layout_suffix = f"-{name}"
             break
+    only = set(args.samples.split(',')) if args.samples else None
     want = args.split
     ids = set()
     for mp in ["datasets/guitar-vision/pdmx/dataset-manifest.json",
@@ -88,6 +91,8 @@ def main() -> int:
                 sample = sample[: -len(layout_suffix)]
             if sample not in ids:
                 continue
+            if only is not None and sample not in only:
+                continue
             man = json.load(open(mp))
             joins = None
             for root in ws:
@@ -108,8 +113,10 @@ def main() -> int:
                 px = np.asarray(img, dtype=np.float32) / 255.0
                 u8 = (px * 255).astype(np.uint8)
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
-                u8, _nscale = dec.normalize_scale(u8)
-                fx, fy = fx * _nscale, fy * _nscale
+                _nscale = 1.0
+                if not args.no_norm:
+                    u8, _nscale = dec.normalize_scale(u8)
+                    fx, fy = fx * _nscale, fy * _nscale
                 px = u8.astype(np.float32) / 255.0
                 heat = model(torch.from_numpy(px).unsqueeze(0).unsqueeze(0).to(device))[0].cpu()
                 obj = heat[:3]

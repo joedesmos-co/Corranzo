@@ -1,0 +1,92 @@
+{
+ "sl": {
+  "eceBefore": 0.0722,
+  "nllBefore": 1.0537,
+  "temp": 0.7,
+  "eceAfter": 0.0434,
+  "nllAfter": 1.0338
+ },
+ "fl": {
+  "eceBefore": 0.05,
+  "nllBefore": 0.0008,
+  "temp": 0.3,
+  "eceAfter": 0.05,
+  "nllAfter": 0.0
+ },
+ "beforeCurve": [
+  {
+   "tau": 0.3,
+   "decoded": 461,
+   "correct": 276,
+   "precision": 0.599
+  },
+  {
+   "tau": 0.4,
+   "decoded": 282,
+   "correct": 201,
+   "precision": 0.713
+  },
+  {
+   "tau": 0.5,
+   "decoded": 172,
+   "correct": 144,
+   "precision": 0.837
+  },
+  {
+   "tau": 0.6,
+   "decoded": 110,
+   "correct": 103,
+   "precision": 0.936
+  },
+  {
+   "tau": 0.7,
+   "decoded": 95,
+   "correct": 93,
+   "precision": 0.979
+  },
+  {
+   "tau": 0.8,
+   "decoded": 85,
+   "correct": 84,
+   "precision": 0.988
+  }
+ ],
+ "afterCurve": [
+  {
+   "tau": 0.3,
+   "decoded": 497,
+   "correct": 285,
+   "precision": 0.573
+  },
+  {
+   "tau": 0.4,
+   "decoded": 380,
+   "correct": 247,
+   "precision": 0.65
+  },
+  {
+   "tau": 0.5,
+   "decoded": 244,
+   "correct": 189,
+   "precision": 0.775
+  },
+  {
+   "tau": 0.6,
+   "decoded": 172,
+   "correct": 144,
+   "precision": 0.837
+  },
+  {
+   "tau": 0.7,
+   "decoded": 120,
+   "correct": 112,
+   "precision": 0.933
+  },
+  {
+   "tau": 0.8,
+   "decoded": 101,
+   "correct": 97,
+   "precision": 0.96
+  }
+ ]
+}

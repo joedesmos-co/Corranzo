@@ -40,6 +40,7 @@ _dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 _pig = _load("proof_ignore_train_mod", "proof-ignore-train.py")
 
 SEED = 20261009
+STRING_TEMP = 0.7  # TRAIN-fit calibrated (ECE 0.072->0.043); fret temp 1.0 (NLL ~0)
 TAU = 0.6
 TUNING = [64, 59, 55, 50, 45, 40]
 CLASSES = ["note", "rest", "tabdigit"]
@@ -222,7 +223,7 @@ def main() -> int:
                                        min(int(cx + w), image.width), min(int(cy + half_h), image.height)))
                     tall = tall.resize((64, 256), Image.BILINEAR)
                     tall_tensor = torch.from_numpy(np.asarray(tall, dtype=np.float32) / 255.0).unsqueeze(0).unsqueeze(0).to(device)
-                    string_posterior = F.softmax(string_net(tall_tensor)["string"], dim=1)[0]
+                    string_posterior = F.softmax(string_net(tall_tensor)["string"] / STRING_TEMP, dim=1)[0]
                     fret_posterior = F.softmax(rec_out["fret"], dim=1)[0]
                     string_pred, string_conf = int(string_posterior.argmax()), float(string_posterior.max())
                     fret_pred, fret_conf = int(fret_posterior.argmax()), float(fret_posterior.max())
