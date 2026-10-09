@@ -175,6 +175,8 @@ def main() -> int:
                     ys, xs = torch.nonzero(peaks, as_tuple=True)
                     median_w, median_h = medians[cls]
                     # Median box is canonical units -> px scale of THIS page.
+                    # (Adaptive per-peak boxes were tried and failed: dense
+                    # heat merges chords into giants; medians win. Documented.)
                     mw, mh = median_w * fx, median_h * fy
                     for x, y in zip(xs.tolist(), ys.tolist()):
                         cx, cy = (x + 0.5) * 8, (y + 0.5) * 8
