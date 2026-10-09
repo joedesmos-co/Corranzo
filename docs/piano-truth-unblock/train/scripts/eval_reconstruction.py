@@ -264,9 +264,11 @@ def main(args):
         structure = build_structure(sid)
         pred_a = preds_from_truth(sid, items, voc, cevents)
         dec_b = decode_score(sid, items, pred_b, structure,
-                             voice_source=args.voice_source, clef_source="visual")
+                             voice_source=args.voice_source, clef_source="visual",
+                             dur_source=args.dur_source)
         dec_b_oracle = decode_score(sid, items, pred_b, structure,
-                                    voice_source=args.voice_source, clef_source="oracle")
+                                    voice_source=args.voice_source, clef_source="oracle",
+                                    dur_source=args.dur_source)
         dec_a = decode_score(sid, items, pred_a, structure, voice_source="truth",
                              clef_source="oracle")
         xml_b, _ = serialize(dec_b, structure)
@@ -493,7 +495,7 @@ def main(args):
                       "flags": rec["flags_b"]} for r, s, b in scored[:5]]
     Path(args.out).write_text(json.dumps(
         {"schema": "piano-reconstruction/1", "voice_source": args.voice_source,
-         "pitch_head": args.pitch_head,
+         "pitch_head": args.pitch_head, "dur_source": args.dur_source,
          "n_scores": len(agg["scores"]),
          "totals": dict(agg["totals"]),
          "pairwise": {k: {"precision": v["tp"] / max(1, v["p"]),
@@ -514,6 +516,9 @@ if __name__ == "__main__":
                     choices=["argmax", "clef"],
                     help="argmax: frozen common pitch head; clef: E-clef proof head "
                          "(visual clef input, opt-in evaluation only)")
+    ap.add_argument("--dur-source", default="pred", choices=["pred", "oracle"],
+                    help="oracle: inject truth (dur,dots) per id (ATTRIBUTION ONLY, "
+                         "quantifies duration headroom; never production)")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(TRAIN / "manifests" / "reconstruction.json"))
     main(ap.parse_args())

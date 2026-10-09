@@ -87,7 +87,9 @@ def build_visual_clef_map(sid, templates, cache=None):
                         lo, hi = fr["lines"][0], fr["lines"][-1]
                         gap = (hi - lo) / 4
                         cy = c["bbox"]["y"] + c["bbox"]["h"] / 2
-                        line = max(1, min(5, int(round((hi - cy) / (gap / 2))) + 1))
+                        # line 1 = bottom: line = halfsteps-above-bottom / 2 + 1
+                        # (C glyph is vertically symmetric about its C line).
+                        line = max(1, min(5, int(round((hi - cy) / gap)) + 1))
                         diag["c_line_est"] += 1
                     else:
                         line = 3

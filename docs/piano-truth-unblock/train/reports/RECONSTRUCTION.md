@@ -395,3 +395,101 @@ generalization needs C4 TRAIN examples (corpus expansion, not tuning).
 
 Recommended next step: corpus expansion for C4 + duration-head uplift design;
 E1/E2 unchanged in priority. No further full-campaign training justified.
+
+---
+
+# Overnight continuation: C-clef resolution + duration/rest diagnosis
+
+From `845a897f68`. No merge, TEST sealed, DEV identities fixed, no full
+retraining. One preregistered training experiment run (v2, FAILED gate,
+artifact unchanged). All decoder changes gated on DEV joint-exact.
+
+## Before/after DEV99 (production: visual clef + v1 head, `--pitch-head clef`)
+
+| metric | before (845a897f68) | after | delta |
+|---|---|---|---|
+| note exact | 13,723 (61.5%) | **13,874 (62.2%)** | +151 |
+| note pitch-only | 14,232 | 14,403 | +171 |
+| per-clef pitch G/F/C | 0.936 / 0.892 / 0.000 | 0.936 / 0.892 / **0.973** | C fixed |
+| C4 score exact/pitch | 4 / 4 | 48 / 249-of-256 capability | pitch solved |
+| rest exact | 2/578 | 2/578 | 0 (diagnosed) |
+| timing valid | 948/3334 | 977/3334 | +29 |
+| chord P/R | 0.989 / 0.749 | 0.989 / 0.749 | = |
+| beam P/R, tuplet | 0.276 / 0.759, 0 | unchanged | = (E1 scoped) |
+| music21 parsed | 99/99 | 99/99 | = |
+| B_oracle_clef exact | 13,741 | 13,890 | visual trails oracle by 16 |
+| argmax path exact | 12,983 | 13,132 | +149, no regression |
+
+## 1. C-clef line-4: root-caused and fixed (pitch recognition)
+
+- Census (TRAIN-only + DEV, TEST untouched): TRAIN 116 C notes, all line-3,
+  one score; DEV 256 C notes, all line-4, another score. Zero C4 supervision.
+- Cascade of two bugs, both fixed: (a) `clef_map.py` C-line formula computed
+  `round((hi-cy)/(gap/2))+1` (half-steps, not lines) → every C4 read as C5;
+  fixed to `round((hi-cy)/gap)+1` (glyph cy 2183 = line 4 exactly). (b) Even
+  with the right frame, frozen probe top-5 holds truth for 4/256 C4 notes, so
+  candidate-selection repair is upper-bounded at 4: for visual-C items the
+  pipeline now emits pitch structurally (steps + frame + probe accidental)
+  WITHOUT consulting OOD probe candidates (`clef_structural`, 256/256 on the
+  C4 score; G/F paths byte-identical).
+- Production C pitch 0.000 → 0.973 (249/256; 7 residuals are probe
+  accidental-class errors on the score's 7 accid events). Playable exact on
+  the C4 score is now duration-limited (151/256 durs wrong, all-beamed
+  16ths), same lever as the rest of DEV.
+
+## 2. TRAIN-only expansion experiment (v2): FAIL, logged, artifact kept
+
+`scripts/train_clefhead_v2.py` + `reports/train_clefhead_v2.log` (reproduced
+bit-identical). Design: v1 warm-start, same Linear(132,88), v1 real TRAIN
+rows (42,646) + 125,990 synthetic C4 rows (frozen trunk features of TRAIN
+G2/F4 items re-paired with clefvec(C,4); targets by deterministic diatonic
+transposition). 15 ep @3e-3, CPU, seed 0, ~6 min. Result: C 0.0 → 0.848
+(synthesis teaches the frame) BUT F 0.794 → 0.242 (catastrophic forgetting:
+3:1 synthetic rows reuse identical trunk features with conflicting targets
+and the shared linear weights resolve against F) and G 0.868 → 0.816.
+Gate (F≥.50, C≥.50, G≥.85) FAIL → ABORT, `models/clef_pitch_head.pt`
+untouched (v1, verified). Negative result with a mechanism; next attempt, if
+any, must decouple per-clef adapters rather than joint linear training.
+
+## 3. Bounded duration improvement (decoder-only, tie-safe)
+
+- Dots arbitration: `dur_sym` dots bit OR-ed with membership `dotted`
+  (measured DEV: common-silent/member-firing is truth-dotted 191/192; reverse
+  disagreement stays common 87/161). +107 exact, +29 timing, 196 flips;
+  flipped notes never carry tie flags and serialized tie elements are
+  identical with/without (412 = 412). Both visual sources; flagged.
+- Duration diagnosis (frozen common head, DEV): dur agree 81.7%; 94% of onset
+  errors co-occur with lane duration errors (only 187 onset errors under
+  clean durs). Oracle-duration attribution (`--dur-source oracle`,
+  eval-only): exact 13,874 → **15,985 (+2,111, 71.7%)**, timing 977 → 1,612.
+  Duration-context learning is the quantified next lever (+2.1k headroom);
+  decoder-side options are exhausted (beam-group vote requires E1 grouping;
+  meter-rescaling would invent time).
+- Rest diagnosis: rest KIND/count healthy (e.g. 155 pred / 143 truth) but
+  exact still 2/578 even with oracle durations — residual is VOICE mismatch
+  (pred voice 5 vs truth 1 on rest-heavy scores; rest voice agree only
+  70% context / 65% common). Rest fix = voice lever, same next mission as
+  duration (voice-context modeling), not a separate decoder rule.
+
+## 4. E1 beam-boundary: targets sufficient, design recorded, not run
+
+TRAIN: 88,638 beamed notes (68%), 26,325 starts / 26,324 ends, group sizes
+2–12 dominated — ample verified targets. Design: two binary boundary heads
+(is_start/is_end) on frozen trunk + neighbor context; decoder cuts predicted
+in_beam runs at predicted boundaries (fixes 1,371 adjacent-merges); unlocks
+beam-group duration majority vote (2,820 uniform groups). Deferred: training
+budget spent on v2 per mission priority (C-clef first).
+
+## Remaining blockers (updated)
+
+1. Duration-context head (measured +2,111 headroom; design: context-aware
+   duration classifier, TRAIN-only, preregistered gates) — THE next step.
+2. Rest voice (70% agree; folds into voice-context modeling).
+3. C4 playable exact on beamed score (duration-limited; E1 unlocks it).
+4. Accidentals (0.148; 7 residual C4 pitch errors) and chord-tone crowding.
+5. Dead tuplet flag; beam grouping (E1 design ready).
+6. No detector (stage C); scan domain unmeasured — full OMR unclaimable.
+
+Exact next step: preregistered duration-context head experiment (TRAIN-only,
+frozen trunk + lane/meter context features, gates: dur agree ≥LIC,
+joint-exact no regression); E1 boundary heads as the follow-on.

@@ -1,0 +1,32 @@
+[v2] real rows: 42646
+[synth] 100 scores, 14263 synth rows
+[synth] 200 scores, 28410 synth rows
+[synth] 300 scores, 40716 synth rows
+[synth] 400 scores, 59431 synth rows
+[synth] 500 scores, 77124 synth rows
+[synth] 600 scores, 92124 synth rows
+[synth] 700 scores, 108229 synth rows
+[synth] items=126010 kept=125990 oor-skipped=20
+[v2] combined rows: 168636 (real 42646 + synth 125990)
+[v2] warm-started from v1 artifact
+/Users/ryland/Documents/scoreflow-piano-unblock/docs/piano-truth-unblock/train/scripts/train_clefhead_v2.py:177: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss) * len(idx)
+[v2] epoch 1/15 loss=1.9262 dev={'all': 0.4411, 'G': 0.5382, 'F': 0.1905, 'C': 0.6094} t=331s
+[v2] epoch 2/15 loss=1.0855 dev={'all': 0.4866, 'G': 0.6198, 'F': 0.1436, 'C': 0.6992} t=331s
+[v2] epoch 3/15 loss=1.0024 dev={'all': 0.5362, 'G': 0.6904, 'F': 0.1425, 'C': 0.7031} t=332s
+[v2] epoch 4/15 loss=0.9557 dev={'all': 0.5641, 'G': 0.7305, 'F': 0.1407, 'C': 0.7109} t=332s
+[v2] epoch 5/15 loss=0.9244 dev={'all': 0.5872, 'G': 0.7546, 'F': 0.1613, 'C': 0.7344} t=332s
+[v2] epoch 6/15 loss=0.8994 dev={'all': 0.6029, 'G': 0.7766, 'F': 0.1601, 'C': 0.7734} t=332s
+[v2] epoch 7/15 loss=0.8794 dev={'all': 0.6026, 'G': 0.7727, 'F': 0.1695, 'C': 0.7578} t=332s
+[v2] epoch 8/15 loss=0.8631 dev={'all': 0.6211, 'G': 0.7944, 'F': 0.1799, 'C': 0.7852} t=332s
+[v2] epoch 9/15 loss=0.8483 dev={'all': 0.6306, 'G': 0.7998, 'F': 0.2001, 'C': 0.7773} t=332s
+[v2] epoch 10/15 loss=0.8365 dev={'all': 0.6259, 'G': 0.7962, 'F': 0.1917, 'C': 0.8008} t=332s
+[v2] epoch 11/15 loss=0.8255 dev={'all': 0.6392, 'G': 0.8088, 'F': 0.2069, 'C': 0.8047} t=332s
+[v2] epoch 12/15 loss=0.8169 dev={'all': 0.6353, 'G': 0.8066, 'F': 0.1983, 'C': 0.8125} t=332s
+[v2] epoch 13/15 loss=0.8080 dev={'all': 0.6473, 'G': 0.8175, 'F': 0.2151, 'C': 0.7773} t=332s
+[v2] epoch 14/15 loss=0.8008 dev={'all': 0.6475, 'G': 0.812, 'F': 0.228, 'C': 0.8125} t=332s
+[v2] epoch 15/15 loss=0.7945 dev={'all': 0.6548, 'G': 0.8161, 'F': 0.2423, 'C': 0.8477} t=332s
+[v2] FINAL dev={'all': 0.6548, 'G': 0.8161, 'F': 0.2423, 'C': 0.8477}
+[v2] GATE FAIL (F>=.50, C>=.50, G>=.85)
+[v2] ABORT: artifact unchanged

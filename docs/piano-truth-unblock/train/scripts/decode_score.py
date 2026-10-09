@@ -175,6 +175,27 @@ def clef_repair_note(e, it, p, structure, flags, struct_idx, vclef_map,
     arg_steps = _diatonic_idx(e["pname"], e["oct"]) - bottom
     if arg_steps == steps:
         return
+    if shape == "C":
+        # Scarce-clef regime (TRAIN: 116 C notes vs 105,478 G / 20,532 F;
+        # DEV C4 has zero TRAIN examples; frozen probe top-5 holds truth for
+        # 4/256). The probe is out-of-distribution, so its candidates are
+        # NOT consulted: emit the pitch from render structure (staff steps)
+        # in the visual clef frame, keeping the probe's accidental class
+        # (clef-independent). Visual-only sources; flagged. G/F untouched.
+        _STEP2SEMI = (0, 2, 4, 5, 7, 9, 11)
+        cidx = steps + bottom
+        cm = _STEP2SEMI[cidx % 7] + 12 * (cidx // 7 + 1) + alter
+        if 0 <= cm <= 127 and cm != e["midi"]:
+            e["pitch_argmax"] = e["midi"]
+            e["midi"] = cm
+            pn, po, pa, fb = spell(cm, acc)
+            e["pname"], e["oct"], e["alter"] = pn, po, pa
+            if fb:
+                flags["spelling_fallback"] += 1
+            flags["clef_structural"] = flags.get("clef_structural", 0) + 1
+        else:
+            flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
+        return
     for cand in (p.get("pitch_top5") or [p.get("pitch", -1)]):
         if cand is None or cand < 0:
             continue
@@ -197,7 +218,6 @@ def clef_repair_note(e, it, p, structure, flags, struct_idx, vclef_map,
                 flags["clef_repair"] = flags.get("clef_repair", 0) + 1
             return
     flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
-    flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
 
 
 def parse_sig(sig):
@@ -212,9 +232,11 @@ def parse_sig(sig):
 
 
 def decode_score(sid, items, pred, structure, voice_source="context",
-                 clef_source="visual"):
+                 clef_source="visual", dur_source="pred"):
     """Assemble predicted PianoEvents. `structure` carries oracle geometry/
-    measure/clef/key/meter/divisions constants. Returns (events, flags)."""
+    measure/clef/key/meter/divisions constants. Returns (events, flags).
+    dur_source='oracle' (eval attribution only) injects truth (dur,dots) per
+    id to quantify duration headroom; production is always 'pred'."""
     flags = {"spelling_fallback": 0, "unpaired_tie_start": 0,
              "unpaired_tie_end": 0, "tuplet_unresolved": 0,
              "octave_dir_unknown": 0, "slur_omitted": 0,
@@ -229,6 +251,11 @@ def decode_score(sid, items, pred, structure, voice_source="context",
         TRAIN / "data" / "events" / f"{sid}.events.json.gz", "rt"))["events"]
     _evs = {e["id"]: e for e in _evlist}
     _rank = {e["id"]: pos for pos, e in enumerate(_evlist) if e.get("id")}
+    _dur_oracle = {}
+    if dur_source == "oracle":
+        for e in _evlist:
+            if e.get("id") is not None and e.get("dur") is not None:
+                _dur_oracle[e["id"]] = (e["dur"], e.get("dots") or 0)
     for it in items:
         _e = _evs.get(it["mei_id"], {})
         it["notehead_x"] = _e.get("notehead_x")
@@ -249,6 +276,10 @@ def decode_score(sid, items, pred, structure, voice_source="context",
         p = pred[i]
         is_note = bool(p["kind"] == 1)
         dur_sym = p["dur_sym"]
+        if dur_source == "oracle" and it.get("mei_id") in _dur_oracle:
+            _od, _oo = _dur_oracle[it["mei_id"]]
+            dur_sym = f"{_od}d{_oo}"
+            flags["dur_oracle_injected"] = flags.get("dur_oracle_injected", 0) + 1
         if dur_sym is None and is_note:
             # model emitted no usable duration class: drop loudly, never invent
             flags["pred_oov_note_dropped"] = \
@@ -272,6 +303,13 @@ def decode_score(sid, items, pred, structure, voice_source="context",
             continue
         m = __import__("re").match(r"(.+)d(\d+)$", dur_sym)
         prefix, ndots = (m.group(1), int(m.group(2))) if m else (None, 0)
+        if m and ndots == 0 and p.get("dotted"):
+            # Dots arbitration (measured DEV: common-silent/member-firing is
+            # truth-dotted 191/192; common-firing/member-silent stays common
+            # 87/161). Both sources are visual probe outputs; the OR rule
+            # restores augmentation dots the fused classifier under-detects.
+            ndots = 1
+            flags["dots_arbitrated"] = flags.get("dots_arbitrated", 0) + 1
         mtype = DURCLASS_TYPE.get(prefix)
         if mtype not in TYPE_Q:
             flags["pred_oov_note_dropped" if is_note else "pred_oov_rest_dropped"] = \
