@@ -389,12 +389,28 @@ async function requireMic(page, report, runName) {
 }
 
 async function main() {
-  for (const file of ['mic-c4-loop.wav', 'mic-wrong-loop.wav', 'mic-melody8.wav', 'mic-quiet.wav']) {
+  // Pre-flight: every clip must exist AND contain audible signal. Chromium
+  // stays silent on a missing --use-file-for-fake-audio-capture file, which
+  // once produced a fully deaf (all-green-except-advance) suite.
+  const { readWavPcm } = await import('./lib/readWavPcm.mjs')
+  for (const file of ['mic-sustain-c4-loop.wav', 'mic-wrong-loop.wav', 'mic-melody8.wav', 'mic-quiet.wav']) {
+    const path = join(clipDir, file)
     try {
-      await access(join(clipDir, file))
+      await access(path)
     } catch {
       console.error(`Missing clip ${file} — run node scripts/render-unified-mic-clips.mjs first`)
       process.exit(2)
+    }
+    if (file !== 'mic-quiet.wav') {
+      const wav = readWavPcm(path)
+      let peak = 0
+      for (const value of wav.samples) {
+        peak = Math.max(peak, Math.abs(value))
+      }
+      if (!(peak > 0.05)) {
+        console.error(`Clip ${file} has no audible signal (peak ${peak}) — regenerate clips`)
+        process.exit(2)
+      }
     }
   }
   await mkdir(outDir, { recursive: true })

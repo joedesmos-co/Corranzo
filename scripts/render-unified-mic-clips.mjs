@@ -110,6 +110,47 @@ async function main() {
   }
   await writeFile(join(outDir, 'mic-melody8.wav'), encodeWav16PCM(concat(...melodyParts), SAMPLE_RATE))
 
+  // Sustained organ-like C4 (flat envelope): V3 acceptance needs stable
+  // frames, and holds mirror real wind/string playing (no decay tails).
+  const sustainTone = (seconds, level = 0.8) => {
+    const frequency = midiToFrequency(60)
+    const length = Math.max(1, Math.floor(SAMPLE_RATE * seconds))
+    const buffer = new Float32Array(length)
+    const harmonics = [
+      { multiple: 1, amplitude: 0.55 },
+      { multiple: 2, amplitude: 0.25 },
+      { multiple: 3, amplitude: 0.12 },
+      { multiple: 4, amplitude: 0.06 },
+    ]
+    const total = harmonics.reduce((sum, part) => sum + part.amplitude, 0)
+    const attack = Math.floor(SAMPLE_RATE * 0.02)
+    const release = Math.floor(SAMPLE_RATE * 0.1)
+    for (let index = 0; index < length; index += 1) {
+      let envelope = 1
+      if (index < attack) {
+        envelope = index / attack
+      } else if (index > length - release) {
+        envelope = Math.max(0, (length - index) / release)
+      }
+      let sample = 0
+      for (const { multiple, amplitude } of harmonics) {
+        sample += Math.sin((2 * Math.PI * frequency * multiple * index) / SAMPLE_RATE) * amplitude
+      }
+      buffer[index] = (envelope * level * sample) / total
+    }
+    return buffer
+  }
+  const sustainGap = silence(0.6)
+  const sustainLoop = concat(
+    roomTone(LEAD_SILENCE, 0.004, 5),
+    sustainTone(1.6),
+    sustainGap,
+    sustainTone(1.6),
+    sustainGap,
+    sustainTone(1.6),
+  )
+  await writeFile(join(outDir, 'mic-sustain-c4-loop.wav'), encodeWav16PCM(sustainLoop, SAMPLE_RATE))
+
   // Low room noise: well under speech/music level, exercises the silence gate.
   const quiet = new Float32Array(Math.floor(SAMPLE_RATE * 4))
   let state = 12345
