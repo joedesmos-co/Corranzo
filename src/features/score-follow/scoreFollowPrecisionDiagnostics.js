@@ -8,6 +8,7 @@ import { getTimeline } from '../musicxml/timeline.js'
 import { clamp, lerp } from './scoreFollowEasing.js'
 import { resolveMusicalXInMeasure } from './cursorMusicalProgress.js'
 import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
+import { resolveDisplayCursorAtTime } from './scoreFollowDisplayPosition.js'
 import { resolveTrustedAnchorForMeasure } from './trustedAnchors.js'
 
 const LEGACY_START_LOCK_SECONDS = 0.15
@@ -186,13 +187,17 @@ export function buildScoreFollowPrecisionReport({
 }
 
 /**
- * Sweep note onsets and compare resolver cursor X to the musical ideal at each onset.
+ * Sweep note onsets and compare the DISPLAYED cursor X (motion timeline when
+ * provided — i.e. what the user actually sees) to the musical ideal at each
+ * onset. resolveDisplayCursorAtTime is the same choke the painted bar uses,
+ * so this measures the shipped path, not a parallel estimate.
  */
 export function measureCursorOnsetAlignment({
   timingMap,
   trustedAnchors,
   trust = { showCursor: true, needsSetup: false },
   sampleEvery = 1,
+  motionTimeline = null,
 }) {
   const timeline = getTimeline(timingMap)
   const notes = timeline
@@ -203,22 +208,38 @@ export function measureCursorOnsetAlignment({
   let maxError = 0
   let sumError = 0
   let jumpCount = 0
+  let explainedJumps = 0
+  let teleportCount = 0
+  const teleportSamples = []
   let prevX = null
+  let prevPage = null
+  let prevSystem = null
+  let prevMeasure = null
+  let prevTime = null
+  let wrongSystemOrPage = 0
 
   for (let index = 0; index < notes.length; index += sampleEvery) {
     const note = notes[index]
     const t = note.performedSeconds
-    const { cursor } = resolveScoreFollowCursor({
+    const cursor = resolveDisplayCursorAtTime({
       timingMap,
       practiceTime: t,
       trustedAnchors,
       trust,
+      motionTimeline,
     })
     if (!cursor?.visible) {
       continue
     }
-
+    // Hard failure: the bar left the note's page, or moved to a *lower*
+    // measure number while playback moved forward (backward jump across a
+    // barline/system; repeats are handled by the performed timeline, so a
+    // backward written-measure step outside a jump window is a bug).
     const anchor = resolveTrustedAnchorForMeasure(trustedAnchors, note.measureNumber)
+    if (anchor && cursor.page !== anchor.page) {
+      wrongSystemOrPage += 1
+    }
+
     const xStart = anchor?.x ?? cursor.x
     const xEnd =
       typeof anchor?.meta?.playableEndX === 'number'
@@ -241,8 +262,44 @@ export function measureCursorOnsetAlignment({
 
     if (prevX != null && Math.abs(cursor.x - prevX) > 0.12) {
       jumpCount += 1
+      // Legitimate jumps: page turn, system/line change, or a repeat jump
+      // (performed time went backward or skipped forward). Fast runs cover
+      // ground quickly but continuously, so a mid-system step is a teleport
+      // only when its velocity is physically implausible for a follow bar.
+      const pageChanged = prevPage != null && cursor.page !== prevPage
+      const systemChanged =
+        prevSystem != null &&
+        cursor.systemIndex != null &&
+        cursor.systemIndex !== prevSystem
+      const timeSkipped =
+        prevTime != null &&
+        (t < prevTime - 0.02 || t > prevTime + 8)
+      const dt = prevTime != null ? Math.max(1e-6, t - prevTime) : null
+      const velocity = dt != null && dt > 0 ? Math.abs(cursor.x - prevX) / dt : 0
+      // Section jump (volta skip, D.C./D.S.): performed order skipped
+      // measures. Same-system volta skips are the classic false teleport.
+      const measureSkipped =
+        prevMeasure != null &&
+        Number.isFinite(Number(note.measureNumber)) &&
+        Math.abs(Number(note.measureNumber) - Number(prevMeasure)) > 1
+      if (pageChanged || systemChanged || timeSkipped || measureSkipped || velocity <= 3) {
+        explainedJumps += 1
+      } else {
+        teleportCount += 1
+        teleportSamples.push({
+          timeSeconds: t,
+          measureNumber: note.measureNumber,
+          fromX: prevX,
+          toX: cursor.x,
+          page: cursor.page,
+        })
+      }
     }
     prevX = cursor.x
+    prevPage = cursor.page
+    prevSystem = cursor.systemIndex ?? null
+    prevMeasure = note.measureNumber
+    prevTime = t
 
     const window = getMeasurePlaybackWindow(timingMap, note.measureNumber, t)
     const measureSpanSeconds =
@@ -260,16 +317,185 @@ export function measureCursorOnsetAlignment({
       errorX,
       errorMs,
       atOnset: Boolean(cursor.atOnset),
-      progressMode: cursor.progressMode ?? null,
+      progressMode: cursor.progressMode ?? cursor.segmentType ?? null,
+      precision: cursor.precision ?? null,
+      geometry: cursor.geometry ?? cursor.geometryMode ?? null,
     })
   }
 
   const count = errors.length
+  const precisionCounts = {}
+  for (const sample of errors) {
+    const key = sample.precision ?? 'unknown'
+    precisionCounts[key] = (precisionCounts[key] ?? 0) + 1
+  }
   return {
     sampleCount: count,
     averageErrorX: count > 0 ? sumError / count : 0,
     maxErrorX: maxError,
     visibleJumps: jumpCount,
+    explainedJumps,
+    midSystemTeleports: teleportCount,
+    teleportSamples: teleportSamples.slice(0, 20),
+    wrongPagePlacements: wrongSystemOrPage,
+    precisionCounts,
+    samples: errors,
+  }
+}
+
+/**
+ * Cursor-vs-highlight agreement: the two INDEPENDENT visual paths for one
+ * musical event must coincide on the page.
+ *
+ * - cursor: resolveDisplayCursorAtTime at the checkpoint onset (the painted bar)
+ * - highlight: resolveNoteTargetPosition highlight center (the blue box)
+ *
+ * Unlike measureCursorOnsetAlignment (which compares the resolver against its
+ * own musical ideal), these disagree exactly when the user sees the bar in
+ * one place and the required note box in another — the reported "follow is
+ * TERRIBLE" symptom. Errors normalize by staff spacing when the caller
+ * supplies it, else by raw page units.
+ *
+ * resolveTarget(checkpoint) is injected so this module stays free of the
+ * practice layer (no import cycle): tests and scripts pass
+ * resolveNoteTargetPosition bound to timing/anchors.
+ */
+export function measureCursorHighlightAgreement({
+  checkpoints = [],
+  resolveCursorAt,
+  resolveTarget,
+  staffSpacing = null,
+  sampleEvery = 1,
+}) {
+  const errors = []
+  let sumError = 0
+  let maxError = 0
+  let wrongPage = 0
+  let wrongSystem = 0
+  let skipped = 0
+
+  for (let index = 0; index < checkpoints.length; index += sampleEvery) {
+    const checkpoint = checkpoints[index]
+    const time = Number(checkpoint?.timeSeconds)
+    if (!Number.isFinite(time)) {
+      skipped += 1
+      continue
+    }
+    const cursor = resolveCursorAt?.(time)
+    const target = resolveTarget?.(checkpoint)
+    if (!cursor?.visible || !target?.visible) {
+      skipped += 1
+      continue
+    }
+    const box = target.highlight
+    // Multi-box highlights (per-tone source boxes, cross-measure events):
+    // the bar must sit on A required box, not on the centroid between them.
+    const boxes = Array.isArray(box?.noteBoxes) && box.noteBoxes.length > 1
+      ? box.noteBoxes
+      : box && Number.isFinite(box.x0) && Number.isFinite(box.x1)
+        ? [box]
+        : []
+    let errorX
+    let highlightX
+    if (boxes.length > 0) {
+      let best = Infinity
+      let bestCenter = null
+      for (const candidate of boxes) {
+        if (!Number.isFinite(candidate.x0) || !Number.isFinite(candidate.x1)) {
+          continue
+        }
+        const center = (candidate.x0 + candidate.x1) / 2
+        const distance =
+          cursor.x < candidate.x0
+            ? candidate.x0 - cursor.x
+            : cursor.x > candidate.x1
+              ? cursor.x - candidate.x1
+              : 0
+        if (distance < best) {
+          best = distance
+          bestCenter = center
+        }
+      }
+      if (bestCenter == null) {
+        skipped += 1
+        continue
+      }
+      errorX = best
+      highlightX = bestCenter
+    } else if (Number.isFinite(target.x)) {
+      highlightX = target.x
+      errorX = Math.abs(cursor.x - target.x)
+    } else {
+      skipped += 1
+      continue
+    }
+    if (!Number.isFinite(cursor.x)) {
+      skipped += 1
+      continue
+    }
+    if (cursor.page !== target.page) {
+      wrongPage += 1
+    }
+    if (
+      cursor.systemIndex != null &&
+      target.systemIndex != null &&
+      cursor.systemIndex !== target.systemIndex
+    ) {
+      wrongSystem += 1
+    }
+    // Split-brain overflow: the sounding notes are written in a different
+    // measure than the performed window they sound in (overfull measures).
+    // Cursor follows time, highlight follows notation — neither is a
+    // misplacement. Flagged, not averaged away. A measure label that
+    // differs only because ms-quantized checkpoint time landed within the
+    // boundary epsilon of the next phrase is dust, not overflow.
+    const boundaryDust =
+      Number.isFinite(Number(cursor.phraseStartTime)) &&
+      Math.abs(time - cursor.phraseStartTime) <= 0.011
+    const measureMismatch =
+      !boundaryDust &&
+      Number.isFinite(Number(checkpoint.measureNumber)) &&
+      Number.isFinite(Number(cursor.measureNumber)) &&
+      Number(checkpoint.measureNumber) !== Number(cursor.measureNumber)
+    sumError += errorX
+    maxError = Math.max(maxError, errorX)
+    errors.push({
+      timeSeconds: time,
+      measureNumber: checkpoint.measureNumber ?? cursor.measureNumber ?? null,
+      cursorMeasureNumber: cursor.measureNumber ?? null,
+      measureMismatch,
+      cursorX: cursor.x,
+      highlightX,
+      errorX,
+      errorStaffSpacings: staffSpacing ? errorX / staffSpacing : null,
+      cursorPage: cursor.page,
+      targetPage: target.page,
+      cursorPrecision: cursor.precision ?? null,
+      targetSource: target.source ?? null,
+      targetApproximate: Boolean(target.approximate),
+    })
+  }
+
+  const count = errors.length
+  const inMeasure = errors.filter((sample) => !sample.measureMismatch)
+  const overflow = errors.filter((sample) => sample.measureMismatch)
+  const inMeasureMax = inMeasure.reduce((max, sample) => Math.max(max, sample.errorX), 0)
+  const inMeasureSum = inMeasure.reduce((sum, sample) => sum + sample.errorX, 0)
+  return {
+    sampleCount: count,
+    skipped,
+    averageErrorX: count > 0 ? sumError / count : 0,
+    maxErrorX: maxError,
+    inMeasureSampleCount: inMeasure.length,
+    inMeasureAverageErrorX: inMeasure.length > 0 ? inMeasureSum / inMeasure.length : 0,
+    inMeasureMaxErrorX: inMeasureMax,
+    overflowSampleCount: overflow.length,
+    overflowMaxErrorX: overflow.reduce((max, sample) => Math.max(max, sample.errorX), 0),
+    averageErrorStaffSpacings:
+      staffSpacing && count > 0 ? sumError / count / staffSpacing : null,
+    maxErrorStaffSpacings: staffSpacing ? maxError / staffSpacing : null,
+    wrongPagePlacements: wrongPage,
+    wrongSystemPlacements: wrongSystem,
     samples: errors,
   }
 }

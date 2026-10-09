@@ -1,4 +1,5 @@
 import { clamp } from './scoreFollowEasing.js'
+import { onsetOwnedByWindow } from './cursorMusicalProgress.js'
 import { dedupeTrustedAnchorsByMeasure } from './trustedAnchors.js'
 import {
   getPlaybackDurationSeconds,
@@ -70,26 +71,41 @@ function enumeratePerformedMeasures(timingMap) {
   }))
 }
 
-/** Chord-grouped note onsets for a performed measure window: {time, defaultX}. */
+/**
+ * Chord-grouped note onsets sounding inside a performed measure window.
+ *
+ * Ownership is primarily by written measure (a downbeat exactly on the
+ * barline belongs to the next measure, never both — no double knots), with
+ * one exception: overfull measures (virtuoso runs, tremolo shorthand with
+ * more content than nominal duration) overflow past their window end and
+ * sound during the next measure's time. Those orphaned notes are adopted by
+ * the window they sound in, so the bar keeps moving through the fastest
+ * passage instead of stalling at the barline. Knots keep the performed
+ * measure's identity; mixed engraving origins fall back to
+ * time-proportional x via the monotonic check below.
+ */
 function getMeasureOnsets(timingMap, measureNumber, window) {
   const notes = getTimeline(timingMap)
     .performedNotes()
     .filter(
       (n) =>
-        n.measureNumber === measureNumber &&
         !n.isRest &&
         !n.isTabMirror &&
         n.performedSeconds >= window.startTimeSeconds - 0.001 &&
-        n.performedSeconds <= window.endTimeSeconds + 0.001,
+        n.performedSeconds <= window.endTimeSeconds + 0.001 &&
+        onsetOwnedByWindow(timingMap, n, measureNumber, window),
     )
   const groups = new Map()
   for (const n of notes) {
     const bucket = Math.round(n.performedSeconds / CHORD_GROUP_SECONDS)
     const existing = groups.get(bucket)
     if (!existing) {
-      groups.set(bucket, { time: n.performedSeconds, defaultX: n.defaultX ?? null })
-    } else if (n.defaultX != null && (existing.defaultX == null || n.defaultX < existing.defaultX)) {
-      existing.defaultX = n.defaultX
+      groups.set(bucket, { time: n.performedSeconds, defaultX: n.defaultX ?? null, count: 1 })
+    } else {
+      existing.count += 1
+      if (n.defaultX != null && (existing.defaultX == null || n.defaultX < existing.defaultX)) {
+        existing.defaultX = n.defaultX
+      }
     }
   }
   return [...groups.values()].sort((a, b) => a.time - b.time)
@@ -104,13 +120,19 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
 function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber) {
   const span = Math.max(endX - startX, 0)
   if (onsets.length === 0) {
-    return [{ t: mStart, x: startX, measureNumber, kind: 'measure-start' }]
+    return {
+      knots: [{ t: mStart, x: startX, measureNumber, kind: 'measure-start' }],
+      geometry: 'none',
+    }
   }
 
   let monotonic = onsets.every((o) => o.defaultX != null)
   for (let i = 1; monotonic && i < onsets.length; i += 1) {
     if (onsets[i].defaultX < onsets[i - 1].defaultX - 1e-6) monotonic = false
   }
+  // Honest geometry provenance for this measure: engraved default-x was
+  // strictly forward (mapped), or time-proportional fallback was used.
+  const geometry = monotonic ? 'engraved' : 'time'
 
   let xs
   if (monotonic) {
@@ -142,10 +164,10 @@ function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber) {
       t: onsets[i].time,
       x: clamp(xs[i], startX, Math.max(startX, endX)),
       measureNumber,
-      kind: onsets[i].chord ? 'chord' : 'note',
+      kind: (onsets[i].count ?? 1) > 1 ? 'chord' : 'note',
     })
   }
-  return knots
+  return { knots, geometry }
 }
 
 function sanitizeKnots(knots) {
@@ -237,6 +259,9 @@ function classifySegment(a, b) {
 function finalizePhrase(phrase) {
   const knots = sanitizeKnots(phrase.knots)
   phrase.knots = knots
+  if (phrase.geometryMode == null) {
+    phrase.geometryMode = 'time'
+  }
   phrase.spline = buildMonotoneSpline(knots.map((k) => k.t), knots.map((k) => k.x))
   phrase.startTime = knots[0]?.t ?? phrase.startTime
   phrase.startX = knots[0]?.x ?? 0
@@ -297,6 +322,7 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
         startTime: pm.startTime,
         endTime: pm.endTime,
         knots: [],
+        geometryMode: null,
       }
     }
 
@@ -335,8 +361,13 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
 
     const window = { startTimeSeconds: pm.startTime, endTimeSeconds: pm.endTime }
     const onsets = getMeasureOnsets(timingMap, pm.measureNumber, window)
-    const knots = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber)
-    current.knots.push(...knots)
+    const built = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber)
+    current.knots.push(...built.knots)
+    if (built.geometry === 'time') {
+      current.geometryMode = current.geometryMode === 'engraved' ? 'mixed' : 'time'
+    } else if (built.geometry === 'engraved' && current.geometryMode !== 'time' && current.geometryMode !== 'mixed') {
+      current.geometryMode = 'engraved'
+    }
     current.endTime = pm.endTime
 
     if (phraseEnds) {
@@ -362,21 +393,24 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
   }
 }
 
+/**
+ * Checkpoint times are ms-quantized (alignChordScoreTime) while onset knots
+ * keep float precision, and the audio clock rarely lands exactly on a knot.
+ * A query even 1ms before a phrase starts must resolve INSIDE that phrase
+ * (clamped to its first knot) — never at the previous line's settled end,
+ * which reads as a full-width backward jump. Epsilon stays far below human
+ * perception and below the 12ms chord-grouping window, so real repeat jumps
+ * still resolve as jumps.
+ */
+export const PHRASE_BOUNDARY_EPSILON_SECONDS = 0.01
+
 function findPhraseIndex(phrases, t) {
-  if (t <= phrases[0].startTime) return 0
-  let idx = 0
-  let lo = 0
-  let hi = phrases.length - 1
-  while (lo <= hi) {
-    const mid = (lo + hi) >> 1
-    if (phrases[mid].startTime <= t) {
-      idx = mid
-      lo = mid + 1
-    } else {
-      hi = mid - 1
+  for (let index = phrases.length - 1; index >= 0; index -= 1) {
+    if (t >= phrases[index].startTime - PHRASE_BOUNDARY_EPSILON_SECONDS) {
+      return index
     }
   }
-  return idx
+  return 0
 }
 
 function measureNumberAt(phrase, t) {
@@ -423,8 +457,17 @@ export function resolveCursorMotion(timeline, scoreTime) {
     page: phrase.page,
     measureNumber: measureNumberAt(phrase, scoreTime),
     systemIndex: phrase.systemIndex ?? phrase.index,
+    phraseIndex: phrase.index,
+    phraseStartTime: phrase.startTime,
+    phraseEndTime: phrase.endTime,
     segmentType: segmentTypeAt(phrase, scoreTime),
     confidence: 'exact',
+    // Honest provenance: intra-measure x used engraved MusicXML default-x
+    // mapped into the PDF span ('engraved'), time-proportional fallback
+    // ('time'), or a mix of measures ('mixed'). Never a printed notehead.
+    geometryMode: phrase.geometryMode ?? 'time',
+    precision:
+      (phrase.geometryMode ?? 'time') === 'engraved' ? 'engraved-mapped' : 'time-mapped',
   }
 }
 

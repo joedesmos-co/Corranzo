@@ -1,6 +1,6 @@
 import { noteHasLayout } from '../musicxml/readNoteLayout.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
-import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCursor.js'
+import { resolveDisplayCursorAtTime } from '../score-follow/scoreFollowDisplayPosition.js'
 import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { resolveNotePracticeHand } from './practiceScope.js'
 import {
@@ -399,7 +399,16 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
       placements.map((placement) => [placement.sourceNoteheadId, placement]),
     ).values(),
   ]
-  const xs = uniquePlacements.map((placement) => placement.x)
+  // Same cross-measure rule as the fallback path: the marker column sits
+  // with the checkpoint's own measure; every owned box still renders.
+  const measureNumber = checkpoint.measureNumber
+  const inMeasure =
+    notes.length === placements.length
+      ? uniquePlacements.filter((_, index) => notes[index]?.measureNumber === measureNumber)
+      : []
+  const xPlacements = inMeasure.length > 0 ? inMeasure : uniquePlacements
+  const crossMeasure = new Set(notes.map((note) => note.measureNumber)).size > 1
+  const xs = xPlacements.map((placement) => placement.x)
   const ys = uniquePlacements.map((placement) => placement.y)
   const x = xs.reduce((sum, value) => sum + value, 0) / xs.length
   const y = ys.reduce((sum, value) => sum + value, 0) / ys.length
@@ -415,7 +424,6 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
     source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
     confidence,
   })
-  const measureNumber = checkpoint.measureNumber
   const checkpointTime = checkpoint.timeSeconds
 
   return {
@@ -424,6 +432,7 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
       checkpoint.id ??
       `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
     page: uniquePlacements[0].page,
+    crossMeasure,
     x: clamp(x, 0, 1),
     y: clamp(y, 0, 1),
     noteAnchorY: clamp(y, 0, 1),
@@ -456,6 +465,7 @@ export function resolveNoteTargetPosition({
   sourceVisualMap = null,
   preferredRepresentation = null,
   mode = 'wait-for-you',
+  motionTimeline = null,
 }) {
   if (!checkpoint || !isPlayableCheckpointKind(checkpoint.kind)) {
     return { visible: false, reason: 'not-note-checkpoint' }
@@ -507,12 +517,19 @@ export function resolveNoteTargetPosition({
     }
   }
 
-  const sharedCursor = resolveScoreFollowCursor({
-    timingMap,
-    practiceTime: checkpointTime,
-    trustedAnchors: anchors,
-    trust: { showCursor: true, needsSetup: false },
-  })
+  // Same display resolver the painted bar uses (motion timeline when the
+  // caller threads it, legacy fallback otherwise) — page/y here must agree
+  // with the bar, never a parallel estimate.
+  const sharedCursor = {
+    cursor: resolveDisplayCursorAtTime({
+      timingMap,
+      practiceTime: checkpointTime,
+      trustedAnchors: anchors,
+      trust: { showCursor: true, needsSetup: false },
+      motionTimeline,
+    }),
+  }
+  sharedCursor.confidence = sharedCursor.cursor?.confidence ?? null
 
   const geometry = buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, checkpointTime)
   if (!geometry) {
@@ -550,9 +567,21 @@ export function resolveNoteTargetPosition({
     }),
   )
 
+  // Cross-measure checkpoints (simultaneous notes notated in two measures,
+  // e.g. tremolo across a barline): the marker column and the WFY bar lock
+  // must sit with the checkpoint's own measure — the one the timeline cursor
+  // is in — never at an average stranded between measures. All boxes still
+  // render (every required note stays visible).
+  const inMeasure = notes
+    .map((note, index) => ({ note, index }))
+    .filter(({ note }) => note.measureNumber === measureNumber)
+  const xPool = (inMeasure.length > 0 ? inMeasure : notes.map((note, index) => ({ note, index })))
+    .map(({ index }) => placements[index].x)
+  const crossMeasure =
+    new Set(notes.map((note) => note.measureNumber)).size > 1
   const xs = placements.map((placement) => placement.x)
   const ys = placements.map((placement) => placement.y)
-  const x = xs.reduce((sum, value) => sum + value, 0) / xs.length
+  const x = xPool.reduce((sum, value) => sum + value, 0) / xPool.length
   const yMin = Math.min(...ys)
   const yMax = Math.max(...ys)
   const y = checkpoint.isChord && yMax - yMin > 0.025 ? (yMin + yMax) / 2 : ys.reduce((a, b) => a + b, 0) / ys.length
@@ -610,6 +639,7 @@ export function resolveNoteTargetPosition({
     chordSpread,
     hasLayoutData,
     measureNumber,
+    crossMeasure,
     placement: geometry.placement,
   }
 }
