@@ -42,9 +42,118 @@ const DEFAULT_SAMPLE_LOAD_TIMEOUT_MS = 15000
 const DEFAULT_SAMPLED_RELEASE = 1.55
 const DEFAULT_SAMPLE_ATTACK = 0.004
 const RELEASE_FADE_SECONDS = 0.055
+/**
+ * Palm-mute damping at the voice level (short damped tone). Mirrors the
+ * schedule-level MUTED_* ratios; kept here (not imported) so the voice
+ * never depends on the schedule builder — both document the same
+ * physical target (a ~120 ms damped thump).
+ */
+const MUTED_VOICE_DURATION_SECONDS = 0.12
+const MUTED_VOICE_VELOCITY_RATIO = 0.8
+
+/**
+ * Velocity → lowpass brightness (Hz), exponential (perceptual).
+ *
+ * One shared filter serves the whole polyphonic sampler, so this cannot
+ * voice individual notes — but steering it at each note's own attack
+ * time makes the tone stack follow playing dynamics the way a real
+ * instrument's body does (soft = dark felt, loud = brilliant). The ramp
+ * is scheduled AT the note time, so scheduled-future notes each get
+ * their own brightness without clicks. Pure + tested.
+ */
+export function brightnessHzForVelocity(velocity, { minHz = 1400, maxHz = 6800 } = {}) {
+  const clamped = Math.min(1, Math.max(0, Number.isFinite(velocity) ? velocity : 0.72))
+  return minHz * Math.pow(maxHz / minHz, clamped)
+}
 
 /** Master FX defaults — see playbackAudioConfig.js for the canonical values. */
 const DEFAULT_EFFECTS = { ...PLAYBACK_MASTER_FX }
+
+/** Fixed seed so every voice (and every render) shares one room. */
+const AMBIENCE_IMPULSE_SEED = 0xc0ffee
+
+/** Pick-transient removal for slurred (hammer-on/pull-off) attacks. */
+const TECHNIQUE_TAIL_SECONDS = 0.35
+
+const SAMPLE_NAME_SEMITONES = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+
+function sampleNameToMidi(name) {
+  const match = /^([A-G])(#|b)?(-?\d+)$/.exec(String(name ?? ''))
+  if (!match) {
+    return null
+  }
+  const base = SAMPLE_NAME_SEMITONES[match[1]]
+  const accidental = match[2] === '#' ? 1 : match[2] === 'b' ? -1 : 0
+  return (Number(match[3]) + 1) * 12 + base + accidental
+}
+
+function mulberry32(seed) {
+  let state = seed >>> 0
+  return () => {
+    state = (state + 0x6d2b79f5) >>> 0
+    let mixed = Math.imul(state ^ (state >>> 15), 1 | state)
+    mixed = (mixed + Math.imul(mixed ^ (mixed >>> 7), 61 | mixed)) ^ mixed
+    return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+/**
+ * Deterministic room ambience: seeded exponential-decay stereo impulse
+ * through a convolver, with explicit dry/wet gains. Replaces Tone.Reverb
+ * (random impulse per instance). Returns { input, output, ready, dispose }.
+ * Falls back to a straight wire if convolution is unavailable — audio
+ * must never fail because the room did.
+ */
+function buildSeededAmbience(tone, { decaySeconds = 2, wet = 0.09 } = {}) {
+  const input = new tone.Gain(1)
+  const output = new tone.Gain(1)
+  const disposeNodes = [input, output]
+  try {
+    const rawContext = tone.getContext?.()?.rawContext ?? tone.context?.rawContext ?? null
+    const sampleRate = rawContext?.sampleRate ?? 48000
+    const length = Math.max(1, Math.floor(sampleRate * Math.max(0.2, decaySeconds)))
+    const impulse = rawContext.createBuffer(2, length, sampleRate)
+    const random = mulberry32(AMBIENCE_IMPULSE_SEED)
+    for (let channel = 0; channel < 2; channel += 1) {
+      const data = impulse.getChannelData(channel)
+      for (let index = 0; index < length; index += 1) {
+        const progress = index / length
+        data[index] = (random() * 2 - 1) * Math.pow(1 - progress, 2.4)
+      }
+    }
+    const holder = new tone.ToneAudioBuffer()
+    holder.set(impulse)
+    const convolver = new tone.Convolver()
+    convolver.buffer = holder
+    const wetGain = new tone.Gain(wet)
+    input.connect(output)
+    input.connect(convolver)
+    convolver.connect(wetGain)
+    wetGain.connect(output)
+    disposeNodes.push(convolver, wetGain)
+    return {
+      input,
+      output,
+      ready: Promise.resolve(),
+      dispose: () => {
+        for (const node of disposeNodes) {
+          try {
+            node.dispose?.()
+          } catch {
+            // Dispose must never throw.
+          }
+        }
+      },
+    }
+  } catch {
+    try {
+      input.connect(output)
+    } catch {
+      // Last resort: unconnected nodes still satisfy the interface.
+    }
+    return { input, output, ready: Promise.resolve(), dispose: () => {} }
+  }
+}
 
 // Decoded sample buffers are shared across every voice instance and across
 // re-creations, keyed by base URL (one entry per instrument sample set).
@@ -353,7 +462,9 @@ export function createCachedSamplerSync({ tone, baseUrl, urls, volume, release, 
  * @param {number} [options.sampledVolume] dB for the sampled voice.
  * @param {number} [options.synthVolume]   dB for the synth fallback.
  * @param {number} [options.sampledRelease] Sampler release seconds.
- * @param {number} [options.sampleAttack]  Sampler attack seconds.
+ * @param {number} [options.sampleAttack] Sampler attack seconds.
+ * @param {number} [options.brightnessMinHz] Dark end of velocity brightness.
+ * @param {number} [options.brightnessMaxHz] Brilliant end of velocity brightness.
  * @param {object} [options.effects]       FX-chain overrides (see DEFAULT_EFFECTS).
  * @param {function} [options.logDiagnostics] Dev diagnostics logger.
  * @param {function} [options.warnDense]   Dev dense-passage warner.
@@ -376,6 +487,8 @@ export function createSampledInstrumentVoice(options = {}) {
     synthVolume,
     sampledRelease,
     sampleAttack,
+    brightnessMinHz = 1400,
+    brightnessMaxHz = 6800,
     sampleLoadTimeoutMs,
     effects: effectsOverride = {},
     logDiagnostics = logPianoDiagnostics,
@@ -407,24 +520,26 @@ export function createSampledInstrumentVoice(options = {}) {
   const limiter = new tone.Limiter(effects.limiterDb)
 
   // Gentle shared ambience. Low wet so dense chords stay clear.
-  const reverb = new tone.Reverb({ decay: effects.reverbDecay, wet: effects.reverbWet })
+  //
+  // Deterministic impulse: Tone.Reverb generates a RANDOM impulse per
+  // voice, which made rendered levels wander ±2% run to run (audibly
+  // irrelevant, but it flipped ff/fff ordering in measurements and made
+  // every audio test carry noise). A seeded exponential-decay stereo
+  // impulse through Tone.Convolver sounds the same role and renders
+  // bit-identically every run.
+  const ambience = buildSeededAmbience(tone, {
+    decaySeconds: effects.reverbDecay,
+    wet: effects.reverbWet,
+  })
+  const reverbReady = ambience.ready
   const masterTrim = new tone.Gain(effects.trimGain)
-  let reverbReady = Promise.resolve()
-  try {
-    const generated = reverb.generate?.()
-    if (generated && typeof generated.then === 'function') {
-      reverbReady = generated
-    }
-  } catch {
-    // Impulse generation is optional; dry path still works.
-  }
   const samplerToneFilter = new tone.Filter({
     type: 'lowpass',
     frequency: effects.samplerWarmthHz ?? SAMPLER_WARMTH_FILTER_HZ,
     rolloff: -12,
   })
-  samplerToneFilter.connect(reverb)
-  reverb.connect(masterTrim)
+  samplerToneFilter.connect(ambience.input)
+  ambience.output.connect(masterTrim)
   masterTrim.connect(compressor)
   compressor.connect(limiter)
   limiter.connect(output)
@@ -447,6 +562,157 @@ export function createSampledInstrumentVoice(options = {}) {
   let loadedSampleCount = 0
   let missingSampleCount = Object.keys(sampleUrls ?? {}).length
   let nextVoiceSerial = 0
+  let lastTechniqueError = null
+  const techniqueNodes = []
+
+  function stopTechniqueNodes(now) {
+    while (techniqueNodes.length) {
+      const nodes = techniqueNodes.pop()
+      for (const node of nodes ?? []) {
+        try {
+          node?.stop?.(now)
+        } catch {
+          // Already stopped — harmless.
+        }
+      }
+    }
+  }
+
+  function disposeTechniqueNodes() {
+    while (techniqueNodes.length) {
+      const nodes = techniqueNodes.pop()
+      for (const node of nodes ?? []) {
+        try {
+          node?.stop?.()
+        } catch {
+          // Already stopped — harmless.
+        }
+        try {
+          node?.dispose?.()
+        } catch {
+          // Dispose must never throw.
+        }
+      }
+    }
+  }
+
+  function nearestSampleKey(midi) {
+    let bestKey = null
+    let bestDistance = Infinity
+    let bestMidi = 0
+    for (const key of Object.keys(sampleUrls ?? {})) {
+      const keyMidi = sampleNameToMidi(key)
+      if (keyMidi == null) {
+        continue
+      }
+      const distance = Math.abs(keyMidi - midi)
+      if (distance < bestDistance) {
+        bestDistance = distance
+        bestKey = key
+        bestMidi = keyMidi
+      }
+    }
+    return bestKey == null ? null : { key: bestKey, keyMidi: bestMidi }
+  }
+
+  /**
+   * Per-note technique voice: plays the nearest decoded sample through a
+   * dedicated buffer source so pitch can move for THIS note only (bend,
+   * release, slide, vibrato) or the pick transient can be faded for
+   * slurs. Chords never bend together — each bending note gets its own
+   * source. It feeds the shared tone filter, so brightness and ambience
+   * match sampler notes.
+   *
+   * Tone.Player exposes playbackRate as a plain number (no automation),
+   * so this uses ToneBufferSource, whose playbackRate is a real Param.
+   * Resampling shifts formants with pitch (documented approximation, not
+   * a physical string model). Returns false when buffers are unavailable
+   * so the caller falls back to the plain sampler trigger.
+   */
+  function playTechniqueNote({ midi, time, duration, velocity, pitchCurve, slurAttack }) {
+    try {
+      const loaded = sharedBuffersResolved.get(sampleBaseUrl)
+      const found = Number.isFinite(midi) ? nearestSampleKey(midi) : null
+      const holder = found ? loaded?.get?.(found.key) : null
+      const rawBuffer = holder?.get?.() ?? null
+      if (!loaded) {
+        lastTechniqueError = `no decoded buffers for ${sampleBaseUrl}`
+        return false
+      }
+      if (!rawBuffer || !found) {
+        lastTechniqueError = `no buffer for midi ${midi}`
+        return false
+      }
+      const atTime = typeof time === 'number' ? time : tone.now()
+      const safeDuration = Math.max(0.08, duration)
+      const endTime = atTime + safeDuration
+      const source = new tone.ToneBufferSource()
+      source.buffer.set(rawBuffer)
+      const attackSeconds = Math.max(
+        0.004,
+        Math.min(slurAttack?.attackSeconds ?? 0.005, safeDuration * 0.4),
+      )
+      // Slurred notes skip the sample's pick transient (measured ~55 ms of
+      // preamble+click in these sets) so the tone starts connected, with a
+      // short fade hiding the slice point. Documented approximation: the
+      // skip point is fixed, not per-sample onset-detected.
+      const skipSeconds = slurAttack ? Math.max(0, Math.min(slurAttack?.skipSeconds ?? 0.06, 0.12)) : 0
+      // Gain parity with the sampler path: the Sampler applies
+      // `sampledVolume` (dB) to every note, so the technique envelope
+      // must scale identically or technique notes jump out of the mix.
+      const sampledGain = 10 ** ((Number.isFinite(sampledVolume) ? sampledVolume : 0) / 20)
+      const gainValue = Math.max(0.005, Math.min(1, velocity) * sampledGain)
+      const envelope = new tone.Gain(0)
+      envelope.gain.setValueAtTime(0, atTime)
+      envelope.gain.linearRampToValueAtTime(gainValue, atTime + attackSeconds)
+      envelope.gain.setValueAtTime(gainValue, endTime)
+      envelope.gain.linearRampToValueAtTime(0.0001, endTime + TECHNIQUE_TAIL_SECONDS)
+      source.connect(envelope)
+      envelope.connect(samplerToneFilter)
+      const nodes = [source, envelope]
+      const rateFor = (targetMidi) => 2 ** ((targetMidi - found.keyMidi) / 12)
+      source.playbackRate.setValueAtTime(rateFor(midi), atTime)
+      const curve = pitchCurve ?? null
+      if (curve?.type === 'bend' || curve?.type === 'bend-release' || curve?.type === 'prebend-release') {
+        const semitones = Number.isFinite(curve.semitones) ? curve.semitones : 2
+        const ramp = Math.max(0.05, Math.min(curve.rampSeconds ?? 0.3, safeDuration * 0.8))
+        if (curve.type === 'bend') {
+          source.playbackRate.linearRampToValueAtTime(rateFor(midi + semitones), atTime + ramp)
+        } else if (curve.type === 'prebend-release') {
+          source.playbackRate.setValueAtTime(rateFor(midi + semitones), atTime)
+          source.playbackRate.linearRampToValueAtTime(rateFor(midi), atTime + ramp)
+        } else {
+          const downAt = Math.min(endTime, atTime + ramp * 2)
+          source.playbackRate.linearRampToValueAtTime(rateFor(midi + semitones), atTime + ramp)
+          source.playbackRate.linearRampToValueAtTime(rateFor(midi), downAt)
+        }
+      } else if (curve?.type === 'slide' && Number.isFinite(curve.targetMidi)) {
+        const glide = Math.max(0.05, Math.min(curve.glideSeconds ?? 0.3, safeDuration * 0.9))
+        source.playbackRate.linearRampToValueAtTime(rateFor(curve.targetMidi), atTime + glide)
+      }
+      if (curve?.type === 'vibrato') {
+        const rateHz = curve.rateHz ?? 5.5
+        const depthSt = curve.depthSemitones ?? 0.35
+        const delay = Math.max(0, Math.min(curve.delaySeconds ?? 0.15, safeDuration * 0.5))
+        const lfo = new tone.Oscillator(rateHz, 'sine')
+        const lfoGain = new tone.Gain(rateFor(midi) * (2 ** (depthSt / 12) - 1))
+        lfo.connect(lfoGain)
+        lfoGain.connect(source.playbackRate)
+        lfo.start(atTime + delay)
+        lfo.stop(endTime + TECHNIQUE_TAIL_SECONDS)
+        nodes.push(lfo, lfoGain)
+      }
+      source.start(atTime, skipSeconds, safeDuration + TECHNIQUE_TAIL_SECONDS)
+      techniqueNodes.push(nodes)
+      nextVoiceSerial += 1
+      lastTechniqueError = null
+      return true
+    } catch (error) {
+      const stack = String(error?.stack ?? '').split('\n').slice(0, 4).join(' | ')
+      lastTechniqueError = `${String(error?.message ?? error ?? 'technique voice failed')} || ${stack}`
+      return false
+    }
+  }
 
   function audioContextState() {
     try {
@@ -614,6 +880,7 @@ export function createSampledInstrumentVoice(options = {}) {
     },
     isUsingSampler: () => usingSampler,
     getLastLoadError: () => lastLoadError,
+    getLastTechniqueError: () => lastTechniqueError,
     getSampleCoverage: () => ({
       loadedSampleCount,
       missingSampleCount,
@@ -631,11 +898,36 @@ export function createSampledInstrumentVoice(options = {}) {
       if (disposed) {
         return
       }
-      const safeDuration = Math.max(duration, 0.03)
+      let safeDuration = Math.max(duration, 0.03)
+      let performedVelocity = velocity
+      if (meta.muted === true) {
+        // Palm mute: choke to a short damped thump regardless of the
+        // written duration. The schedule layer applies the same shaping;
+        // this is the last line of defense for direct engine callers.
+        safeDuration = Math.max(0.03, Math.min(safeDuration, MUTED_VOICE_DURATION_SECONDS))
+        performedVelocity = Math.max(0.05, velocity * MUTED_VOICE_VELOCITY_RATIO)
+      }
       pruneVoices(voiceMix, time)
+      if (meta.muted !== true && (meta.pitchCurve || meta.slurAttack)) {
+        // Pitch/slur techniques bypass the shared sampler (which cannot
+        // move pitch per note) for a dedicated per-note player. Falls
+        // back to the plain trigger when buffers are unavailable.
+        const techniqueMidi = Number.isFinite(meta.midi) ? meta.midi : sampleNameToMidi(note)
+        const played = playTechniqueNote({
+          midi: techniqueMidi,
+          time,
+          duration: safeDuration,
+          velocity: performedVelocity,
+          pitchCurve: meta.pitchCurve ?? null,
+          slurAttack: meta.slurAttack ?? null,
+        })
+        if (played) {
+          return
+        }
+      }
       const plan = planNoteTrigger(voiceMix, {
         time,
-        velocity,
+        velocity: performedVelocity,
         duration: safeDuration,
         note,
       })
@@ -648,6 +940,24 @@ export function createSampledInstrumentVoice(options = {}) {
       }
       nextVoiceSerial += 1
       const assignedVoiceId = `${voiceId}-${nextVoiceSerial}`
+      if (usingSampler && sampler) {
+        // Velocity brightness: the shared tone filter must already sit at
+        // this note's target WHEN its hammer transient arrives — ramping
+        // from the default during the attack measured ~zero in rendered
+        // audio. An instant cutoff move at note onset is click-free in
+        // practice (frequency-only, no gain jump) and gives every note,
+        // including the first, its own brightness.
+        try {
+          const atTime = typeof time === 'number' ? time : tone.now()
+          samplerToneFilter.frequency.cancelScheduledValues(atTime)
+          samplerToneFilter.frequency.setValueAtTime(
+            brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
+            atTime,
+          )
+        } catch {
+          // A filter failure must never silence a note.
+        }
+      }
       target.triggerAttackRelease(note, safeDuration, time, plan.velocity)
       logPianoTrigger({
         midi: meta.midi ?? null,
@@ -655,7 +965,7 @@ export function createSampledInstrumentVoice(options = {}) {
         performedOnset: time,
         performedDuration: safeDuration,
         sampleSelected: usingSampler ? note : 'synth',
-        velocityLayer: 0,
+        velocityLayer: plan.velocity < 0.55 ? 0 : 1,
         gain: plan.velocity,
         attack: sampleAttack,
         release: sampledRelease,
@@ -694,6 +1004,18 @@ export function createSampledInstrumentVoice(options = {}) {
       for (const release of plan.release ?? []) {
         target.triggerRelease?.(release.note, release.time)
       }
+      if (usingSampler && sampler) {
+        try {
+          const atTime = typeof time === 'number' ? time : tone.now()
+          samplerToneFilter.frequency.cancelScheduledValues(atTime)
+          samplerToneFilter.frequency.setValueAtTime(
+            brightnessHzForVelocity(plan.velocity, { minHz: brightnessMinHz, maxHz: brightnessMaxHz }),
+            atTime,
+          )
+        } catch {
+          // A filter failure must never silence a note.
+        }
+      }
       target.triggerAttack?.(note, time, plan.velocity)
     },
     triggerRelease(note, time) {
@@ -717,6 +1039,7 @@ export function createSampledInstrumentVoice(options = {}) {
       }
       synthVoice.releaseAll(now)
       sampler?.releaseAll?.(now)
+      stopTechniqueNodes(now)
     },
     getVoiceDiagnostics() {
       return {
@@ -736,10 +1059,11 @@ export function createSampledInstrumentVoice(options = {}) {
     },
     dispose() {
       disposed = true
+      disposeTechniqueNodes()
       synthVoice.dispose()
       sampler?.dispose?.()
       samplerToneFilter.dispose?.()
-      reverb.dispose?.()
+      ambience.dispose?.()
       masterTrim.dispose?.()
       compressor.dispose?.()
       limiter.dispose?.()

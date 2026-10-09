@@ -46,7 +46,7 @@ export function warmupInstrumentSamplesOnIdle(instrumentId) {
   warmupInstrumentBuffers(instrumentId)
 }
 
-/** Warm every supported instrument so switching Piano ↔ Guitar stays sampled. */
+/** Warm every supported instrument so switching instruments stays sampled. */
 export function warmupAllInstrumentSamplesOnIdle() {
   for (const instrument of listInstruments()) {
     warmupInstrumentBuffers(instrument.id)

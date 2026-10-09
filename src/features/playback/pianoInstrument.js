@@ -215,7 +215,13 @@ export function createPianoInstrument(options = {}) {
     synthVolume,
     sampledRelease: SAMPLED_RELEASE,
     sampleAttack: SAMPLE_ATTACK,
-    velocityLayers: 1,
+    velocityLayers: 2,
+    // Calibrated against rendered audio (one-pole sweep of the real C4
+    // sample): pp velocity must land near ~1.4 kHz to darken audibly,
+    // ff near ~9 kHz (transparent). The exponential map needs a wide
+    // min/max ratio to span that over the 0.36…0.98 velocity range.
+    brightnessMinHz: 500,
+    brightnessMaxHz: 9500,
     effects: { ...PIANO_EFFECTS, ...effects },
     createFallbackVoice: createSynthVoice,
   })

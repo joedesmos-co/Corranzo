@@ -474,12 +474,25 @@ function techniqueMarking(kind, node, index) {
 }
 
 function readGuitarTechniques(noteNode) {
+  const techniques = []
+  // <arpeggiate> is a direct child of <note>, not of <notations>.
+  const arpeggiateNode = findChild(noteNode, 'arpeggiate')
+  if (arpeggiateNode) {
+    const direction = String(attr(arpeggiateNode, 'direction') ?? 'up').toLowerCase()
+    techniques.push({
+      kind: 'arpeggio',
+      type: null,
+      number: '1',
+      text: null,
+      index: 0,
+      direction: direction === 'down' ? 'down' : 'up',
+    })
+  }
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
-    return []
+    return techniques
   }
   const technical = findChild(notations, 'technical')
-  const techniques = []
 
   if (technical) {
     findChildren(technical, 'hammer-on').forEach((node, index) => {
@@ -488,13 +501,43 @@ function readGuitarTechniques(noteNode) {
     findChildren(technical, 'pull-off').forEach((node, index) => {
       techniques.push(techniqueMarking('pull-off', node, index))
     })
-    if (findChild(technical, 'bend')) {
-      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
+    const bendNode = findChild(technical, 'bend')
+    if (bendNode) {
+      // Preserve bend shape: semitone amount, release, pre-bend. The
+      // schedule turns this into a pitch curve; without details a bend
+      // would stay a metadata flag forever.
+      const alterText = textOf(findChild(bendNode, 'bend-alter'))
+      const alter = Number(alterText)
+      techniques.push({
+        kind: 'bend',
+        type: null,
+        number: '1',
+        text: null,
+        index: 0,
+        semitones: Number.isFinite(alter) && alter !== 0 ? Math.max(-12, Math.min(12, alter)) : 2,
+        release: findChild(bendNode, 'release') != null,
+        preBend: findChild(bendNode, 'pre-bend') != null,
+      })
+    }
+    if (findChild(technical, 'harmonic')) {
+      // Natural/artificial alike: the sampler cannot voice a true harmonic
+      // partial stack, so this stays recognized-only downstream. Parsed
+      // here so the technique is never silently dropped from the score.
+      techniques.push({ kind: 'harmonic', type: null, number: '1', text: null, index: 0 })
     }
     findChildren(technical, 'other-technical').forEach((node, index) => {
       const text = textOf(node)
       if (text && /vib(?:rato)?/i.test(text)) {
         techniques.push({ kind: 'vibrato', type: null, number: '1', text, index })
+      }
+      // MusicXML has no dedicated palm-mute / let-ring elements; scores
+      // notate them as free text. Match conservatively so unrelated text
+      // never mutes a note by accident.
+      if (text && /palm[\s-]?mutes?|p\.?\s*m\.?(?![a-z])/i.test(text)) {
+        techniques.push({ kind: 'muted', type: null, number: '1', text, index })
+      }
+      if (text && /let[\s-]?ring|laissez[\s-]?vibrer/i.test(text)) {
+        techniques.push({ kind: 'let-ring', type: null, number: '1', text, index })
       }
     })
   }
@@ -504,7 +547,26 @@ function readGuitarTechniques(noteNode) {
   })
 
   const ornaments = findChild(notations, 'ornaments')
-  if (ornaments && findChild(ornaments, 'wavy-line')) {
+  const hasTrill = ornaments != null && findChild(ornaments, 'trill-mark') != null
+  if (hasTrill) {
+    techniques.push({ kind: 'trill', type: null, number: '1', text: null, index: 0 })
+  }
+  if (ornaments != null) {
+    if (findChild(ornaments, 'mordent') != null) {
+      techniques.push({ kind: 'mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'inverted-mordent') != null) {
+      techniques.push({ kind: 'inverted-mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'turn') != null) {
+      const turnNode = findChild(ornaments, 'turn')
+      const inverted = String(attr(turnNode, 'inverted') ?? '').toLowerCase() === 'yes'
+      techniques.push({ kind: inverted ? 'inverted-turn' : 'turn', type: null, number: '1', text: null, index: 0 })
+    }
+  }
+  // A wavy line after a trill-mark extends the trill — it is NOT vibrato.
+  // A standalone wavy line is the conventional vibrato marking.
+  if (ornaments && findChild(ornaments, 'wavy-line') && !hasTrill) {
     techniques.push({ kind: 'vibrato', type: null, number: '1', text: null, index: 0 })
   }
 
@@ -707,6 +769,7 @@ function walkPart({
   harmonyEvents,
   partNotation = null,
   wedgeSpans = null,
+  pedalSpans = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -795,8 +858,7 @@ function walkPart({
           }
 
           const wedge = wedgeFromDirection(child, helpers)
-          if (wedge && Array.isArray(wedgeSpans)) {
-            if (wedge.stage === 'start' && wedge.type) {
+          if (wedge && Array.isArray(wedgeSpans)) {            if (wedge.stage === 'start' && wedge.type) {
               const startVelocity = resolveNoteVelocity(
                 activeVelocity,
                 velocityByStaff,
@@ -832,6 +894,27 @@ function walkPart({
                 staff: open.staff,
                 partId: open.partId,
               })
+            }
+          }
+
+          // Sustain pedal marks (<direction-type><pedal type="start|stop">):
+          // collected per part in quarter time; converted to seconds with
+          // the assembled tempo map and applied to score-note durations in
+          // buildScoreNoteSchedule (piano only — guitars have no damper).
+          if (Array.isArray(pedalSpans)) {
+            for (const directionType of findChildren(child, 'direction-type')) {
+              for (const pedal of findChildren(directionType, 'pedal')) {
+                const pedalType = String(attr(pedal, 'type') ?? '').toLowerCase()
+                if (pedalType === 'start' || pedalType === 'stop') {
+                  pedalSpans.push({
+                    type: pedalType,
+                    quarterTime,
+                    measureNumber,
+                    staff: directionStaff,
+                    partId,
+                  })
+                }
+              }
             }
           }
 
@@ -1103,6 +1186,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const rawTimingEvents = []
   const harmonyEvents = []
   const wedgeSpans = []
+  const pedalMarks = []
   const partNotationById = new Map()
 
   const notationForPart = (partId) => {
@@ -1130,6 +1214,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
+    pedalSpans: pedalMarks,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -1147,6 +1232,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       harmonyEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
+      pedalSpans: pedalMarks,
     })
   })
 
@@ -1189,6 +1275,45 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   }
 
   const toSeconds = (quarterTime) => quartersToSeconds(quarterTime, tempoChanges)
+
+  // Sustain pedal marks → second-spans (start/stop pairing per part+staff;
+  // a dangling start rings to the score end, like a held damper).
+  const pedalSpans = []
+  {
+    const openByKey = new Map()
+    const ordered = [...pedalMarks].sort((left, right) => left.quarterTime - right.quarterTime)
+    for (const mark of ordered) {
+      const key = `${mark.partId ?? ''}:${mark.staff ?? ''}`
+      if (mark.type === 'start') {
+        if (!openByKey.has(key)) {
+          openByKey.set(key, mark)
+        }
+      } else if (openByKey.has(key)) {
+        const start = openByKey.get(key)
+        openByKey.delete(key)
+        if (mark.quarterTime > start.quarterTime) {
+          pedalSpans.push({
+            startSeconds: toSeconds(start.quarterTime),
+            endSeconds: toSeconds(mark.quarterTime),
+            partId: start.partId,
+            staff: start.staff,
+          })
+        }
+      }
+    }
+    const scoreEndQuarters = Math.max(
+      0,
+      ...notes.filter((note) => Number.isFinite(note.quarterTime)).map((note) => note.quarterTime),
+    )
+    for (const start of openByKey.values()) {
+      pedalSpans.push({
+        startSeconds: toSeconds(start.quarterTime),
+        endSeconds: toSeconds(scoreEndQuarters),
+        partId: start.partId,
+        staff: start.staff,
+      })
+    }
+  }
 
   const keySignatures = []
   for (const event of keySignatureEvents.sort(
@@ -1399,6 +1524,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timingEvents,
     harmonyEvents,
     wedgeSpans,
+    pedalSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {
           isChordSheet: true,

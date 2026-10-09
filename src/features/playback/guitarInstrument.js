@@ -26,31 +26,58 @@ export const VOICE_ID = 'guitar'
 
 /**
  * Public, CORS-enabled acoustic guitar samples (nbrosowsky/tonejs-instruments,
- * GitHub Pages). Keys are the samples' true pitches — Tone.Sampler pitch-shifts
- * every played note from its nearest key, exactly like the piano set.
+ * GitHub Pages, CC-BY-3.0 — see app credits). Keys are the samples' TRUE
+ * pitches — Tone.Sampler pitch-shifts every played note from its nearest
+ * key, exactly like the piano set.
+ *
+ * Verified 2026-10-09 by spectral analysis of every file: B4/F4/Fs4/G4
+ * filenames contain 3rd-octave audio (an octave below their names) and
+ * are EXCLUDED — callers must never key them. E5+ shifts from D5.
  */
 export const DEFAULT_GUITAR_SAMPLE_BASE_URL =
   'https://nbrosowsky.github.io/tonejs-instruments/samples/guitar-acoustic/'
 
+/** Same-origin mirror under `public/audio/guitar-acoustic/` (preferred when present). */
+export const LOCAL_GUITAR_SAMPLE_BASE_URL = '/audio/guitar-acoustic/'
+
+/** @deprecated Prefer LOCAL then CDN — kept for existing imports/tests. */
+export const DEFAULT_GUITAR_SAMPLE_FALLBACK_URL = DEFAULT_GUITAR_SAMPLE_BASE_URL
+
 /**
- * Whole/minor-third spacing across the guitar's sounding range (E2–E6 via
- * pitch shift). Every entry exists in the published sample set.
+ * Verified true-pitch keys across the guitar's sounding range. Sharps use
+ * their own recordings (≤1 semitone shift anywhere below D5).
  */
 export const GUITAR_SAMPLE_URLS = {
   E2: 'E2.mp3',
+  F2: 'F2.mp3',
+  'F#2': 'Fs2.mp3',
   G2: 'G2.mp3',
+  'G#2': 'Gs2.mp3',
   A2: 'A2.mp3',
+  'A#2': 'As2.mp3',
+  B2: 'B2.mp3',
   C3: 'C3.mp3',
+  'C#3': 'Cs3.mp3',
+  D2: 'D2.mp3',
+  'D#2': 'Ds2.mp3',
   D3: 'D3.mp3',
   E3: 'E3.mp3',
+  F3: 'F3.mp3',
   G3: 'G3.mp3',
+  'G#3': 'Gs3.mp3',
   A3: 'A3.mp3',
+  'A#3': 'As3.mp3',
+  B3: 'B3.mp3',
   C4: 'C4.mp3',
+  'C#4': 'Cs4.mp3',
   D4: 'D4.mp3',
+  'D#4': 'Ds4.mp3',
   E4: 'E4.mp3',
-  G4: 'G4.mp3',
+  'G#4': 'Gs4.mp3',
   A4: 'A4.mp3',
+  'A#4': 'As4.mp3',
   C5: 'C5.mp3',
+  'C#5': 'Cs5.mp3',
   D5: 'D5.mp3',
 }
 
@@ -75,6 +102,14 @@ function resolveSampleBaseUrl(explicit) {
   } catch {
     // import.meta.env is unavailable outside a bundler context; ignore.
   }
+  return LOCAL_GUITAR_SAMPLE_BASE_URL
+}
+
+export function resolveGuitarSampleBaseUrl(explicit) {
+  return resolveSampleBaseUrl(explicit)
+}
+
+export function getGuitarSampleFallbackBaseUrl() {
   return DEFAULT_GUITAR_SAMPLE_BASE_URL
 }
 
@@ -169,6 +204,7 @@ export const preloadSampleBuffers = preloadGuitarSampleBuffers
 export function createGuitarInstrument(options = {}) {
   const {
     sampleBaseUrl,
+    sampleFallbackBaseUrl = getGuitarSampleFallbackBaseUrl(),
     sampleUrls = GUITAR_SAMPLE_URLS,
     sampledVolume = SAMPLED_VOLUME_DB,
     synthVolume = SYNTH_VOLUME_DB,
@@ -178,11 +214,19 @@ export function createGuitarInstrument(options = {}) {
   return createSampledInstrumentVoice({
     ...rest,
     sampleBaseUrl: resolveSampleBaseUrl(sampleBaseUrl),
+    sampleFallbackBaseUrl,
     sampleUrls,
+    sampleSetName: 'guitar-acoustic-verified',
+    voiceId: VOICE_ID,
     sampledVolume,
     synthVolume,
     sampledRelease: SAMPLED_RELEASE,
     sampleAttack: SAMPLE_ATTACK,
+    velocityLayers: 2,
+    // Same calibration reasoning as piano (see pianoInstrument.js):
+    // soft velocities must reach ~1 kHz to darken audibly, ff stays open.
+    brightnessMinHz: 500,
+    brightnessMaxHz: 9500,
     effects: {
       reverbDecay: 1.55,
       reverbWet: 0.085,
