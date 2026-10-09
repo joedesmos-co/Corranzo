@@ -34,10 +34,19 @@ export function useTimelineScoreTarget({
   preferredRepresentation = null,
   mode = 'play-along',
   enabled = true,
+  indexOverride = null,
 }) {
+  // indexOverride (audio-clock driven, changes only on event boundaries)
+  // keeps the box switch exactly on the sounding event while playback runs;
+  // without it the box lags the 60fps bar by the React state rate. Falls
+  // back to practiceTime whenever the override is null (paused, seeking,
+  // audio unavailable).
   const index = useMemo(
-    () => (enabled ? findScoreEventIndexAtTime(checkpoints, practiceTime) : -1),
-    [enabled, checkpoints, practiceTime],
+    () =>
+      enabled
+        ? (indexOverride ?? findScoreEventIndexAtTime(checkpoints, practiceTime))
+        : -1,
+    [enabled, checkpoints, practiceTime, indexOverride],
   )
   const checkpoint = index >= 0 ? (checkpoints?.[index] ?? null) : null
   const target = useMemo(

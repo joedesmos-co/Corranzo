@@ -17,6 +17,7 @@ import {
 } from '../features/practice/useScoreNoteTargets.js'
 import {
   SCORE_NOTE_STATE,
+  findScoreEventIndexAtTime,
   mapPlayAlongOutcomeToScoreState,
   resolveChordToneStates,
 } from '../features/practice/scoreNoteStates.js'
@@ -203,6 +204,43 @@ export function PracticeSessionProvider({
     loopRegion: session.loop.enabled ? session.loop.region : null,
     practiceScope: session.practiceScope,
   })
+  // Audio-clock highlight index: the painted bar reads getScoreTime() at
+  // 60fps while React state ticks at ~10Hz, so a state-driven highlight
+  // lags the bar by whole events. This loop re-renders ONLY when the event
+  // index itself changes (a few times per second, like before) but timed
+  // by the same canonical clock as the bar — one clock for cursor and box.
+  const playbackGetScoreTime = session.playback.getScoreTime
+  const playbackIsPlaying = session.playback.isPlaying
+  const [audioTimelineIndex, setAudioTimelineIndex] = useState(null)
+  useEffect(() => {
+    if (
+      !timelineHighlightActive ||
+      !playbackIsPlaying ||
+      typeof playbackGetScoreTime !== 'function'
+    ) {
+      setAudioTimelineIndex(null)
+      return undefined
+    }
+    let frameId = 0
+    let lastIndex = -2
+    let alive = true
+    const tick = () => {
+      if (!alive) {
+        return
+      }
+      const index = findScoreEventIndexAtTime(scoreEventCheckpoints, playbackGetScoreTime())
+      if (index !== lastIndex) {
+        lastIndex = index
+        setAudioTimelineIndex(index)
+      }
+      frameId = requestAnimationFrame(tick)
+    }
+    frameId = requestAnimationFrame(tick)
+    return () => {
+      alive = false
+      cancelAnimationFrame(frameId)
+    }
+  }, [timelineHighlightActive, playbackIsPlaying, playbackGetScoreTime, scoreEventCheckpoints])
   const timelineScoreTarget = useTimelineScoreTarget({
     checkpoints: scoreEventCheckpoints,
     practiceTime: session.clock.practiceTime,
@@ -212,6 +250,7 @@ export function PracticeSessionProvider({
     preferredRepresentation: scoreFollow.guitarScoreTarget?.activeTarget,
     mode: isPlayAlong ? 'play-along' : 'preview',
     enabled: timelineHighlightActive,
+    indexOverride: audioTimelineIndex,
   })
 
   // Play Along accuracy on the score: lane outcomes (canonical bounded
@@ -504,6 +543,9 @@ export function PracticeSessionProvider({
         currentCheckpoint: session.waitForYou.currentCheckpoint,
         noteTarget: wfyCheckpointCursorTarget,
         scoreFollowCursor: scoreFollow.displayCursor ?? scoreFollow.cursor ?? null,
+        // Source-normalized (exact OMR notehead) checkpoint columns must be
+        // converted into the analysis space the bar paints in.
+        pageViewRotations: scoreFollow.pageViewRotations ?? null,
       }),
     [
       session.practiceMode,
@@ -513,6 +555,7 @@ export function PracticeSessionProvider({
       wfyCheckpointCursorTarget,
       scoreFollow.displayCursor,
       scoreFollow.cursor,
+      scoreFollow.pageViewRotations,
     ],
   )
   // I2: publish the checkpoint-locked cursor to the cursor runtime so the
