@@ -130,6 +130,12 @@ function ScoreNoteStateHighlight({ entry, viewerRotation }) {
   }${steady ? ' score-follow-overlay__note-highlight--play-along' : ''}`
   const description = describeScoreNoteEntry(entry)
   const showNowTick = state === SCORE_NOTE_STATE.CURRENT || state === SCORE_NOTE_STATE.CURRENT_PARTIAL
+  // Machine-readable expected pitches for tests and assistive tooling.
+  const expectedMidis = Array.isArray(entry?.checkpoint?.expectedMidis)
+    ? entry.checkpoint.expectedMidis.filter((midi) => Number.isFinite(midi)).join(',')
+    : entry?.checkpoint?.expectedMidi != null
+      ? String(entry.checkpoint.expectedMidi)
+      : undefined
 
   const toneRects =
     Array.isArray(entry?.toneStates) && entry.toneStates.length > 0
@@ -160,6 +166,7 @@ function ScoreNoteStateHighlight({ entry, viewerRotation }) {
               data-practice-note-target-key={target.targetKey ?? undefined}
               data-practice-note-mode={target.mode ?? undefined}
               data-score-note-state={state}
+              data-score-expected={expectedMidis}
               data-score-tone-midi={tone.midi ?? undefined}
               role={index === 0 ? 'img' : undefined}
               aria-hidden={index === 0 ? undefined : true}
@@ -199,6 +206,7 @@ function ScoreNoteStateHighlight({ entry, viewerRotation }) {
         data-practice-note-target-key={target.targetKey ?? undefined}
         data-practice-note-mode={target.mode ?? undefined}
         data-score-note-state={state}
+        data-score-expected={expectedMidis}
         role="img"
         aria-label={description}
       >
@@ -226,6 +234,7 @@ function ScoreNoteStateHighlight({ entry, viewerRotation }) {
           data-practice-note-target-key={target.targetKey ?? undefined}
           data-practice-note-mode={target.mode ?? undefined}
           data-score-note-state={state}
+          data-score-expected={expectedMidis}
           role={index === 0 ? 'img' : undefined}
           aria-hidden={index === 0 ? undefined : true}
           aria-label={index === 0 ? description : undefined}

@@ -209,6 +209,56 @@ export default function useWebMidiInput({ listen = false }) {
     }
   }, [])
 
+  // Dev-only synthetic note injection for browser acceptance tests
+  // (?e2e-midi=1). Fans out through the IDENTICAL listener set as hardware
+  // note-ons, so the full evaluator path (gating, chord state, advance) is
+  // exercised — never a shortcut around matching. Unavailable in production
+  // builds: import.meta.env.DEV is false there and the hook stays hidden.
+  const injectTestNoteOn = useCallback((midi) => {
+    if (!import.meta.env?.DEV) {
+      return false
+    }
+    const value = Number(midi)
+    if (!Number.isFinite(value)) {
+      return false
+    }
+    for (const listener of noteOnListenersRef.current) {
+      try {
+        listener(value)
+      } catch {
+        // One listener's error must not break fan-out to the rest.
+      }
+    }
+    return noteOnListenersRef.current.size > 0
+  }, [])
+
+  useEffect(() => {
+    if (!import.meta.env?.DEV || typeof window === 'undefined') {
+      return undefined
+    }
+    window.__SCOREFLOW_MIDI_INJECT__ = injectTestNoteOn
+    return () => {
+      if (window.__SCOREFLOW_MIDI_INJECT__ === injectTestNoteOn) {
+        delete window.__SCOREFLOW_MIDI_INJECT__
+      }
+    }
+  }, [injectTestNoteOn])
+
+  // Dev-only e2e override: with ?e2e-midi=1 the matching gate treats MIDI as
+  // listening even without a hardware device/permission grant, so injected
+  // notes reach the real matcher in headless Chromium (which has no MIDI
+  // hardware). Hardware behavior is unchanged.
+  const e2eMidiListening =
+    import.meta.env?.DEV &&
+    typeof window !== 'undefined' &&
+    (() => {
+      try {
+        return new URLSearchParams(window.location.search).has('e2e-midi')
+      } catch {
+        return false
+      }
+    })()
+
   const activeDevice = useMemo(
     () => devices.find((d) => d.id === activeDeviceId) ?? null,
     [devices, activeDeviceId],
@@ -231,7 +281,7 @@ export default function useWebMidiInput({ listen = false }) {
     lastNote,
     errorMessage,
     isGranted: permission === WEB_MIDI_PERMISSION.GRANTED,
-    isListening: listen && permission === WEB_MIDI_PERMISSION.GRANTED,
+    isListening: (listen && permission === WEB_MIDI_PERMISSION.GRANTED) || e2eMidiListening,
     sustain,
     activeNotes,
     noteCount,
@@ -240,5 +290,6 @@ export default function useWebMidiInput({ listen = false }) {
     refreshDevices: syncDevicesAndActive,
     selectDevice,
     subscribeNoteOn,
+    injectTestNoteOn,
   }
 }
