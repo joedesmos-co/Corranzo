@@ -30,6 +30,8 @@ DURCLASS_TYPE = {"64": "64th", "32": "32nd", "16": "16th", "8": "eighth",
                  "breve": "breve", "long": "long"}
 STEP_BASE = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 STEP_NAMES = ["C", "D", "E", "F", "G", "A", "B"]
+CLEF_REF = {"G": ("G", 4), "F": ("F", 3), "C": ("C", 4)}
+_FRM_CACHE = {}
 ALTER_OF_ACC = {"none": 0, "n": 0, "s": 1, "f": -1, "ss": 2, "ff": -2}
 CLEF_SIGN = {"G": "G", "F": "F", "C": "C"}
 
@@ -53,6 +55,95 @@ def spell(midi, acc_cls):
         if d < bd:
             bn, bo, bd = s, o, d
     return bn, bo, midi - (12 * (bo + 1) + STEP_BASE[bn]), True
+
+
+def _diatonic_idx(pname, octv):
+    return STEP_NAMES.index(pname) + 7 * octv
+
+
+def _clef_bottom_idx(shape, line):
+    """Diatonic index of a staff's bottom line in the oracle clef frame."""
+    if shape not in CLEF_REF:
+        return None
+    rp, ro = CLEF_REF[shape]
+    return _diatonic_idx(rp, ro) - (int(line or 2) - 1) * 2
+
+
+def _page_labelled(sid, page, staves):
+    """Cached SVG staff frames for (score, page), grouped by staff label."""
+    import sys as _sys
+    key = (sid, page)
+    if key not in _FRM_CACHE:
+        if str(HERE) not in _sys.path:
+            _sys.path.insert(0, str(HERE))
+        from staff_geometry import page_frames, frames_by_label
+        pilot = TRAIN.parent / "pilot"
+        _tx, _ty, frames = page_frames(
+            pilot / "data" / "render" / sid / f"page-{int(page):02d}.svg")
+        _FRM_CACHE[key] = frames_by_label(frames, staves) if frames else None
+    return _FRM_CACHE[key]
+
+
+def clef_repair_note(e, it, p, structure, flags):
+    """Override a clef-contradicted argmax pitch with the top-ranked
+    probe candidate consistent with the notehead's geometric staff steps
+    in the oracle clef frame. All three inputs are independent evidence:
+    SVG notehead position (render geometry), clef per staff (oracle
+    structure, same class the serializer already consumes), and the
+    probe's own top-5 distribution (visual evidence). Never invents:
+    keeps argmax when geometry is missing, when argmax already agrees,
+    or when no top-5 candidate matches the geometric steps."""
+    if e.get("midi") is None or it.get("notehead_cy") is None:
+        return
+    staff = e.get("staff")
+    if staff is None:
+        return
+    acc = e.get("acc_cls")
+    if acc is None:
+        return
+    import sys as _sys
+    if str(HERE) not in _sys.path:
+        _sys.path.insert(0, str(HERE))
+    from staff_geometry import note_steps
+    from to_musicxml import state_for
+    st = state_for(structure, e.get("measure"), staff)["clef"]
+    bottom = _clef_bottom_idx(st.get("shape", "G"), st.get("line", 2))
+    if bottom is None:
+        return
+    labelled = _page_labelled(structure["sid"], it.get("page", 1),
+                              structure.get("staves") or [staff])
+    if not labelled:
+        return
+    steps, _gap = note_steps(it["notehead_cy"], labelled, staff)
+    if steps is None:
+        return
+    alter = ALTER_OF_ACC.get(acc, 0)
+    arg_steps = _diatonic_idx(e["pname"], e["oct"]) - bottom
+    if arg_steps == steps:
+        return
+    for cand in (p.get("pitch_top5") or [p.get("pitch", -1)]):
+        if cand is None or cand < 0:
+            continue
+        cm = 21 + int(cand)
+        nat = cm - alter
+        if nat < 0 or nat > 127:
+            continue
+        o, s = divmod(nat - 12, 12)
+        _SEMI2STEP = {0: 0, 2: 1, 4: 2, 5: 3, 7: 4, 9: 5, 11: 6}
+        if nat % 12 not in _SEMI2STEP:
+            continue
+        cidx = _SEMI2STEP[nat % 12] + 7 * (nat // 12 - 1)
+        if cidx - bottom == steps:
+            if cm != e["midi"]:
+                e["pitch_argmax"] = e["midi"]
+                e["midi"] = cm
+                pn, po, pa, fb = spell(cm, acc)
+                e["pname"], e["oct"], e["alter"] = pn, po, pa
+                if fb:
+                    flags["spelling_fallback"] += 1
+                flags["clef_repair"] = flags.get("clef_repair", 0) + 1
+            return
+    flags["clef_repair_missed"] = flags.get("clef_repair_missed", 0) + 1
 
 
 def parse_sig(sig):
@@ -162,6 +253,13 @@ def decode_score(sid, items, pred, structure, voice_source="context"):
                       "chord_tone": bool(p["chord_tone"]),
                       "notehead_x": it.get("notehead_x"), "page": it["page"],
                       "source_order": it.get("source_order", 0)})
+    # clef-consistent pitch repair (stage B only in effect: stage A oracle
+    # pitches never contradict geometry). Must precede onset accumulation
+    # and chord detection, which both consume midi.
+    for n in notes:
+        _p = pred.get(n["item"], {})
+        _it = items[n["item"]] if 0 <= n["item"] < len(items) else {}
+        clef_repair_note(n, _it, _p, structure, flags)
     # onset accumulation per (measure, staff, voice); grace = zero width.
     # Chord tones (same x, same dur, different pitch as the running note)
     # share the root onset and do not advance time. Grace notes attach at

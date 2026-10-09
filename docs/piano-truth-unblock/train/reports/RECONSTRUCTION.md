@@ -229,3 +229,98 @@ recipe is NOT justified by these results.**
 Recommended next step: run preregistered E1 (beam-boundary head) as a small
 TRAIN-only head-addition experiment with DEV pairwise-beam-precision gate;
 if it fails, E2 (tuplet uplift). Both are bounded and falsifiable.
+
+---
+
+# Targeted visual recognition rescue (no retraining)
+
+Priorities were pitch failures, duration/onset cascades, rest collapse, and
+E1/E2 ranking. One bounded decoder-side intervention resulted. No training
+launched; TEST sealed; DEV identities fixed.
+New evidence: `reports/pitch_analysis.json`, `reports/pitch_topk_summary.json`,
+`reports/staffmap_check.json`, `reports/cascade.json`,
+`reports/audit_clefrepair.json`, `reports/recon_dev99_clefrepair.json`.
+New code: `scripts/analyze_pitch.py`, `scripts/analyze_clef.py`,
+`scripts/probe_topk.py`, `scripts/staff_geometry.py`,
+`scripts/verify_staffmap.py`, `scripts/measure_cascade.py`;
+`scripts/infer.py` (+top-5 pitch, +notehead_cy, +skipped),
+`scripts/decode_score.py` (+clef repair).
+
+## Root-cause findings
+
+1. **Pitch collapse is a clef-frame failure, not generic visual noise.**
+   DEV pitch accuracy by clef: G 0.812, F **0.095**, C **0.000**; by octave:
+   4/5 → 0.79/0.88, octaves 0–2 → **0.000**, octave 3 → 0.129.
+   F-clef error diffs cluster at +20/+21 semitones — the exact F→G staff
+   transposition (bottom lines G2=43 vs E4=64). The 64×64 crop contains no
+   clef and the context tower fails to supply it: architecture gap, not
+   training diversity (28% of notes are F-clef).
+2. **Top-k contains the answer in 43% of bass errors** (F top-3 0.487 vs
+   top-1 0.095; 2460/5685 errors recoverable without training). 57% miss
+   top-3 entirely → visual encoding insufficient → retraining territory.
+3. **Duration→onset cascade measured** (1,984 analyzable lanes): clean 49%,
+   single-dur-error lanes 27% (987 onset errors, 30%), multi-dur lanes 21%
+   (2,079 errors, 64%), correct-durs-but-wrong-onset 3% (187, voice
+   interleave). Onset accuracy has no independent lever; it follows dur.
+4. **Rests confirmed unfixable in decoder**: kind recognition good
+   (631/698), failure = onset cascade (395) + weak rest-dur (181); rest
+   exact stays 2/578.
+5. **E1/E2 ranked below pitch by two orders of magnitude**: E2 ceiling = 615
+   grouping pairs with zero joint-exact effect; E1 = beam-precision only,
+   zero joint-exact effect. Clef repair: +1,974 joint-exact notes.
+
+## Experiment implemented (decoder-side, zero training)
+
+Clef-consistent pitch repair: exact SVG notehead centers
+(`staff_geometry.notehead_map`) → staff steps in the note's own staff frame
+(ledger-extrapolated, cross-staff correct) → expected pitch in the oracle
+clef frame (same oracle class the serializer already consumes) → override
+argmax only with the top-ranked probe top-5 candidate matching those steps;
+otherwise keep argmax (uncertainty preserved, never invented).
+Mapping validated deterministically: 19,033/22,299 steps exact (85.4%),
+0 missing noteheads. Stage A provably untouched (oracle pitches never
+contradict geometry; verified identical totals).
+
+## Before → after, commit 5620f20cf6 → now (frozen DEV99)
+
+| metric | before | after |
+|---|---|---|
+| note exact | 10533 (47.2%) | **12507 (56.1%)**, +1,974 |
+| note pitch-only | 10731 | 12697 |
+| fp / fn | 11635 / 11568 | 9669 / 9602 (symmetric substitution fixes) |
+| chord P / R | 0.988 / 0.611 | 0.988 / **0.652** |
+| beam / tuplet | unchanged | unchanged (flag gaps persist) |
+| rest exact | 2/578 | unchanged (expected) |
+| timing-valid | 948/3334 | 948/3334 |
+| music21 | 99/99, ties 52+48 | 99/99, ties 51+47 |
+| stage A oracle | 22299/22299 | identical |
+
+F-clef pitch accuracy included in the +1,974; repair fired 3,317 times with
+zero headline regressions.
+
+## Preregistered training experiment (NOT launched)
+
+**E-clef**: clef-conditioned pitch-head fine-tune. Recipe: freeze probe
+trunks; add 8-dim (clef shape, line) embedding to common-probe pitch-head
+input; fine-tune pitch head only on TRAIN note items with oracle clef
+(3 epochs max, AdamW 1e-4, batch 1024, CPU); single DEV gate — F-clef top-1
+≥ 0.50 AND joint-exact no regression, else abort, one attempt only.
+Justification: 57% of bass errors miss top-3 (encoding gap, not selectable).
+Deferred (not launched) because: the no-training gain is banked, the recipe
+needs training-pipeline surgery (clef joins into `v1_trainFull` items) plus
+validation budget beyond this session, and 16 GB shared RAM is unsafe for
+unattended CPU training alongside other agents.
+
+## Remaining V1 blockers (updated)
+
+1. Pitch residual (9,602 fn): bass/alto frames beyond top-3 + accidentals
+   (0.148) + chord-tone crowding (0.275) → E-clef or broader head uplift.
+2. Duration head (0.804): sole lever for onset cascade + timing + rests.
+3. Dead tuplet flag, missing beam-boundary head (E1/E2 still valid, low impact).
+4. **No automatic object detection (stage C)**: all results remain
+   ground-truth-box evaluation; pixel-level OMR is unmeasured — separate,
+   campaign-scale blocker. Full Piano OMR may not be claimed from these numbers.
+5. Scan-domain gap unchanged; rare-notation classification unchanged.
+
+Recommended next step: execute preregistered E-clef in a resourced session;
+then E1. No full 792-score same-recipe campaign is justified.

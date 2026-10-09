@@ -206,6 +206,7 @@ def preds_from_truth(sid, items, voc, cevents):
             "kind": 1 if is_note else 0,
             "pitch": (e["midi_printed"] - 21) if is_note else -1,
             "pitch_midi": e.get("midi_printed"),
+            "pitch_top5": [(e["midi_printed"] - 21)] if is_note else [],
             "dur": voc["dur"].index(dur_sym) if dur_sym else -1,
             "dur_sym": dur_sym,
             "dots": dots,

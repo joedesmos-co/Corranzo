@@ -85,6 +85,8 @@ def build_inputs(sid, evs, meta, img_cache):
     contain staff lines within the 3-gap margin, so this has no effect on
     readable renders (verified: zero occurrences on DEV)."""
     items, crops, strips, geos, skipped = [], [], [], [], []
+    from staff_geometry import notehead_map as _nhmap
+    nh_cache = {}
     for j, e in enumerate(evs):
         if e["kind"] not in ("note", "rest", "mRest", "multiRest"):
             continue
@@ -102,6 +104,8 @@ def build_inputs(sid, evs, meta, img_cache):
         ph = next(p["height"] for p in meta["page_geometry"] if p["page"] == pg)
         sx = img.shape[1] / pw
         svg_t = (RENDER / sid / f"page-{pg:02d}.svg").read_text()
+        if pg not in nh_cache:
+            nh_cache[pg] = _nhmap(svg_t)
         tm = re.search(r'<g class="page-margin" transform="translate\(([-0-9.]+),\s*([-0-9.]+)\)', svg_t)
         tx, ty = (float(tm.group(1)), float(tm.group(2))) if tm else (0.0, 0.0)
         b = e["bbox"]
@@ -141,6 +145,9 @@ def build_inputs(sid, evs, meta, img_cache):
         items.append({"event": j, "kind": e["kind"], "mei_id": e["id"],
                       "page": pg, "measure": e.get("measure"),
                       "measure_index": e.get("measure_index"),
+                      "notehead_cy": (lambda _v: _v[1] if _v else None)(
+                          nh_cache[pg].get(e.get("id") or "") or
+                          nh_cache[pg].get(e.get("svg_id") or "")),
                       "staff_truth": e.get("staff"), "voice_truth": e.get("voice")})
     if not items:
         return items, None, None, None, skipped
@@ -159,6 +166,7 @@ def predict_score(models, sid, evs, meta, img_cache, batch=1024):
     St = torch.from_numpy(S[:, None]).float() / 255
     Gt = torch.from_numpy(G)
     raw = {}
+    top5_pitch = []
     with torch.no_grad():
         for probe, (model, ckpt) in models.items():
             outs = {}
@@ -167,7 +175,10 @@ def predict_score(models, sid, evs, meta, img_cache, batch=1024):
                 lg = model(Xt[sl], St[sl], Gt[sl])
                 for h, t in lg.items():
                     outs.setdefault(h, []).append(t.argmax(-1).numpy())
+                    if probe == "common" and h == "pitch":
+                        top5_pitch.append(np.argsort(-t.numpy(), axis=1)[:, :5])
             raw[probe] = {h: np.concatenate(v) for h, v in outs.items()}
+    top5_pitch = np.concatenate(top5_pitch) if top5_pitch else None
     voc = json.loads((TRAIN / "manifests" / "v1_items.json").read_text())["vocab"]
     pred = {}
     for i in range(len(items)):
@@ -181,6 +192,7 @@ def predict_score(models, sid, evs, meta, img_cache, batch=1024):
         p["voice_common"] = int(raw["common"]["voice"][i])
         # decode categorical heads to values for convenience
         p["pitch_midi"] = 21 + p["pitch"]
+        p["pitch_top5"] = [int(v) for v in top5_pitch[i]] if top5_pitch is not None else [p["pitch"]]
         p["dur_sym"] = voc["dur"][p["dur"]] if 0 <= p["dur"] < len(voc["dur"]) else None
         p["staff_id"] = voc["staff"][p["staff"]] if 0 <= p["staff"] < len(voc["staff"]) else None
         p["voice_id"] = voc["voice"][p["voice_context"]] if 0 <= p["voice_context"] < len(voc["voice"]) else None

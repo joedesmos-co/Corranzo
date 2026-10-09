@@ -1,0 +1,17 @@
+{
+ "lanes": {
+  "count_mismatch": 996,
+  "truth_dur_incomplete": 247,
+  "lanes_equal_complete": 1984,
+  "single_dur": 543,
+  "multi_dur": 417,
+  "clean": 972,
+  "onset_only": 52
+ },
+ "err_notes": {
+  "onset_err_in_single_dur_lane": 987,
+  "onset_err": 3253,
+  "onset_err_in_multi_dur_lane": 2079,
+  "onset_err_despite_clean_durs": 187
+ }
+}
