@@ -28,13 +28,21 @@ function sleep(ms) {
 }
 
 function isBenignConsoleMessage(text) {
-  return (
+  if (
     /favicon/i.test(text) ||
     /DevTools/i.test(text) ||
     /<g> attribute transform/i.test(text) ||
     /AudioContext was not allowed to start/i.test(text) ||
-    /The AudioContext/i.test(text)
-  )
+    /The AudioContext/i.test(text) ||
+    /google-analytics|googletagmanager|gstatic|fonts\.googleapis/i.test(text)
+  ) {
+    return true
+  }
+  // Sandbox has no internet: external request failures are environmental.
+  if (/net::ERR_/.test(text) && !/127\.0\.0\.1|localhost/.test(text)) {
+    return true
+  }
+  return false
 }
 
 async function dismissOverlays(page) {
