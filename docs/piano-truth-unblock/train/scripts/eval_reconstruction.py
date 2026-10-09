@@ -261,6 +261,10 @@ def main(args):
             from train_clefhead import apply_clef_pitch_head
             pred_b = apply_clef_pitch_head(models, sid, cevents, meta, items,
                                            pred_b, img_cache)
+        if args.dur_head == "ctx":
+            from train_ctxdur import apply_ctx_dur_head
+            pred_b = apply_ctx_dur_head(models, sid, cevents, meta, items,
+                                        pred_b, img_cache)
         structure = build_structure(sid)
         pred_a = preds_from_truth(sid, items, voc, cevents)
         dec_b = decode_score(sid, items, pred_b, structure,
@@ -496,6 +500,7 @@ def main(args):
     Path(args.out).write_text(json.dumps(
         {"schema": "piano-reconstruction/1", "voice_source": args.voice_source,
          "pitch_head": args.pitch_head, "dur_source": args.dur_source,
+         "dur_head": args.dur_head,
          "n_scores": len(agg["scores"]),
          "totals": dict(agg["totals"]),
          "pairwise": {k: {"precision": v["tp"] / max(1, v["p"]),
@@ -519,6 +524,9 @@ if __name__ == "__main__":
     ap.add_argument("--dur-source", default="pred", choices=["pred", "oracle"],
                     help="oracle: inject truth (dur,dots) per id (ATTRIBUTION ONLY, "
                          "quantifies duration headroom; never production)")
+    ap.add_argument("--dur-head", default="common", choices=["common", "ctx"],
+                    help="ctx: A1 tri-crop duration head for notes (opt-in "
+                         "evaluation only; rests keep common head)")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--out", default=str(TRAIN / "manifests" / "reconstruction.json"))
     main(ap.parse_args())

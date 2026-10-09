@@ -493,3 +493,102 @@ budget spent on v2 per mission priority (C-clef first).
 Exact next step: preregistered duration-context head experiment (TRAIN-only,
 frozen trunk + lane/meter context features, gates: dur agree ≥LIC,
 joint-exact no regression); E1 boundary heads as the follow-on.
+
+---
+
+# Duration and rhythm rescue (P1–P8)
+
+From `3923560ef8`. No merge, TEST sealed (891/891 events files are
+train+dev; splits test never read), DEV identities fixed, no competing
+training observed (load ~1.9, no torch processes in guitar/mic trees).
+One preregistered capped experiment (A1): PASS, artifact saved.
+
+## 1. Duration error root causes (P1; `reports/audit_duration.json`)
+
+DEV 22,299 notes, 4,652 dur errors (frozen common head, agree 0.791):
+- Isolated value errors 84% base / 16% dots. Adjacent {4,8,16} confusions =
+  69% (16→8: 963, 4→8: 952, 8→4: 775, 8→16: 530): open-vs-filled noteheads
+  and beam counts — purely visual ambiguities in notehead crops.
+- Beam grouping: beamed 62% of errors; 70% of beamed errors sit in
+  uniform-truth groups (beam-vote addressable in principle).
+- Flags: unbeamed 8ths near-perfect (3.7% err); unbeamed 16ths 31.6%
+  (double-flag reading is the hard visual case).
+- Dots residual post-arbitration: 741 (16%).
+- Tuplets: 212/433 notes wrong (49%); tuplet flag dead (0/615 pairs).
+- Voice context: modest rates (v1 19%, v5 25%, v2 25%) — not the lever.
+- Meter context: spread across meters by volume, no outlier meter.
+- Chord tones worse (26%) than singles (19%): crowding/overlap.
+- Onset propagation: 55% of measures (1,354/2,483) contain ≥1 dur error,
+  3.44 errors each; lane clock poisoned from first error to lane end.
+- Decoder voting REJECTED by measurement: chord-dur majority and
+  root-fallback both score ~53% (coin flip — errors correlate across shared
+  stems/beams, so votes carry no signal). Attempt implemented, gated,
+  reverted; rationale kept as a code comment, not a behavior.
+
+## 2. Model changes (P2/P3: A1 tri-crop duration head)
+
+`scripts/train_ctxdur.py`: Linear(384,16) on [Z_prev,Z_self,Z_self+1] frozen
+trunk features (file-order neighbors, zero-padded; NO predicted-label
+inputs → zero exposure bias), warm-started center block from the
+TRAIN-trained dur head, TRAIN note rows only (~122k, MEI chord inheritance),
+rests keep the common head. AdamW 3e-3, 10 epochs, CPU seed 0 (~14 min).
+Opt-in `--dur-head ctx` (`scripts/eval_reconstruction.py`); production
+default unchanged (reproduces 13,874 exactly). No musical guessing anywhere:
+neighbor crops are visual evidence; meter/measure inference was NOT built.
+
+## 3. Training result (P3): PASS all preregistered gates
+
+DEV dur agree 0.791 → **0.858** (gate ≥0.82) ✓; production joint-exact
+13,874 → **15,005** ✓ (gate: no regression); music21 99/99 ✓; ties 52/49.
+`models/ctx_dur_head.pt` saved; full log `reports/train_ctxdur.log`.
+Captured 54% of the +2,111 oracle-duration headroom. Dots agree 0.967 →
+0.996 (neighbor context nearly solves dots; arbitration retained on top).
+
+## 4–8. Reconstruction deltas, 3923560ef8 → this mission (P4/P8)
+
+| metric | before | after | delta |
+|---|---|---|---|
+| duration accuracy (full-pop) | 0.791 | **0.858** | +0.067 |
+| note exact (visual path) | 13,874 (62.2%) | **15,005 (67.3%)** | +1,131 |
+| note pitch-only | 14,403 | 15,582 | +1,179 |
+| timing-valid measures | 977/3,334 | **1,368/3,334** | +391 |
+| rest exact | 2/578 | 2/578 | 0 (voice lever, §P1) |
+| chord P/R | 0.989/0.749 | 0.989/0.749 | = |
+| ties (starts/stops) | 52/49 | 52/49 | = |
+| beams P/R | 0.276/0.759 | 0.276/0.759 | = (P5 below) |
+| tuplets | 0/615 | 0/615 | = (flag dead) |
+| music21 parsed | 99/99 | 99/99 | = |
+| B_oracle_clef exact | 13,890 | 15,026 | visual trails oracle by 21 |
+| argmax+common default path | 13,132 | 13,132 | = (no regression) |
+| error profile shift | — | 4→8 fixed (−596), 8→4 worse (+278) | net strongly positive |
+
+## 9. Beam/tuplet results + representation gap (P5)
+
+Oracle-group majority vote on ctx durs: +222 DEV-wide (0.858→0.868) — but
+the all-beamed-16ths C4 score moves only 76/256: its crops systematically
+read as 8ths (ctx: 137×8th vs 109×16th), so even perfect grouping + voting
+fails. Root cause: 64×64 crops span ±3 staff-gaps around the notehead while
+beams live at stem ends outside the crop — beam COUNT evidence is
+out-of-frame by construction. Full-width strips (128×24, already built in
+`infer.py`) DO contain all beams and feed no count classifier today.
+P5 conclusion: boundary grouping is necessary but INSUFFICIENT; the precise
+next architecture is a strip-based beam-count head (visual evidence, no
+training performed — budget spent on A1 per priority). Tuplet flag still
+dead: needs a tuplet-mark reader, same strip family.
+
+## 10–11. Detection blockers (P6) and V1 blockers (P7)
+
+- Stage C (automatic object detection) unproven: all numbers oracle-box;
+  no detector trained; nothing claimed beyond oracle-box evaluation.
+- Scan domain unmeasured (render-font-specific visual clef; crop statistics
+  render-only). Full Piano OMR unclaimable — stated, not closed.
+- Preserved intact: visual clef 683/683, C-structural pitch 0.973,
+  dots arbitration, chord x-snap, ties, MusicXML serialization (99/99),
+  input-quality rejection (skipped-item paths untouched), notation warnings.
+- V1 blockers remaining: rest voice (70% agree → voice-context modeling),
+  beam-count representation (strips), tuplet-mark reader, accidentals 0.148,
+  chord-tone crowding, detector, scans.
+
+Exact next step: strip-based beam-count head experiment (TRAIN-only, frozen
+backbone, preregistered gates on 16→8/32→16 confusions + joint-exact);
+tuplet-mark reader follows in the same strip family.

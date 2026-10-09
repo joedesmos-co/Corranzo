@@ -1,0 +1,26 @@
+[train] collecting TRAIN...
+[collect] 100 scores, 15209 rows
+[collect] 200 scores, 29621 rows
+[collect] 300 scores, 42232 rows
+[collect] 400 scores, 61054 rows
+[collect] 500 scores, 79772 rows
+[collect] 600 scores, 95891 rows
+[collect] 700 scores, 112402 rows
+[train] TRAIN rows: 130240
+[train] collecting DEV (frozen, eval only)...
+[train] DEV rows: 22299
+/Users/ryland/Documents/scoreflow-piano-unblock/docs/piano-truth-unblock/train/scripts/train_ctxdur.py:225: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss) * len(idx)
+[train] epoch 1/10 loss=0.5013 dev_dur=0.8342 t=808s
+[train] epoch 2/10 loss=0.4268 dev_dur=0.8398 t=808s
+[train] epoch 3/10 loss=0.4032 dev_dur=0.8470 t=808s
+[train] epoch 4/10 loss=0.3910 dev_dur=0.8485 t=808s
+[train] epoch 5/10 loss=0.3827 dev_dur=0.8473 t=809s
+[train] epoch 6/10 loss=0.3773 dev_dur=0.8552 t=809s
+[train] epoch 7/10 loss=0.3720 dev_dur=0.8464 t=809s
+[train] epoch 8/10 loss=0.3682 dev_dur=0.8572 t=809s
+[train] epoch 9/10 loss=0.3659 dev_dur=0.8553 t=809s
+[train] epoch 10/10 loss=0.3630 dev_dur=0.8579 t=809s
+[train] FINAL dev_dur=0.8579
+[train] GATE PASS: saved models/ctx_dur_head.pt

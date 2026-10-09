@@ -402,10 +402,11 @@ def decode_score(sid, items, pred, structure, voice_source="context",
                     and e.get("notehead_x") is not None and prev.get("notehead_x") is not None
                     and abs(e["notehead_x"] - prev["notehead_x"]) <= 0.5 * structure["gap_svg"]):
                 # Chord by visual x-coincidence. Members share the root onset
-                # even when predicted durations differ (dur-split chords: the
-                # audit shows 2042 missed truth pairs split by dur/onset with
-                # coincident heads). Each member keeps its own duration for
-                # advancement of subsequent onsets; only the onset is snapped.
+                # even when predicted durations differ (dur-split chords are
+                # correlated predictor noise, NOT votable: DEV majority-vote
+                # and root-fallback both score ~53%, coin flip — see audit).
+                # Each member keeps its own duration for advancement of
+                # subsequent onsets; only the onset is snapped.
                 # Same-duration fast path is subsumed (no separate condition).
                 e["onset_q"] = prev["onset_q"]
                 if e["dur_q"] != prev["dur_q"]:
