@@ -8,6 +8,24 @@
 export const MIC_ENGINE_V2_FLAG = 'micEngineV2'
 export const MIC_ENGINE_V3_FLAG = 'micEngineV3'
 
+/**
+ * Blind polyphonic prototype (Stage 2, S3) — EXPERIMENTAL, default OFF.
+ * Explicit opt-in only (override, global flag, or localStorage). The live
+ * listening path never consults this flag yet; the prototype runs offline
+ * in benchmarks and the dev recording harness until real-recording
+ * validation justifies a gated rollout.
+ */
+export const MIC_BLIND_POLY_FLAG = 'micBlindPoly'
+
+/**
+ * Neural microphone (Stage 6, N9) — EXPERIMENTAL, default OFF.
+ * Development-only toggle for the pretrained-neural listening prototype.
+ * Explicit opt-in only (override, global flag, or localStorage). No live
+ * listening path consults this flag yet; it gates future integration
+ * work behind acceptance, never production behavior.
+ */
+export const MIC_NEURAL_FLAG = 'micNeural'
+
 export const MIC_ENGINE_MODE = {
   V2: 'v2-score-informed',
   V3: 'v3-performance-expectation',
@@ -15,6 +33,8 @@ export const MIC_ENGINE_MODE = {
 
 export const MIC_ENGINE_V2_STORAGE_KEY = 'scoreflow.flags.micEngineV2'
 export const MIC_ENGINE_V3_STORAGE_KEY = 'scoreflow.flags.micEngineV3'
+export const MIC_BLIND_POLY_STORAGE_KEY = 'scoreflow.flags.micBlindPoly'
+export const MIC_NEURAL_STORAGE_KEY = 'scoreflow.flags.micNeural'
 
 export function resolveFlagOverride(rawValue) {
   if (rawValue === true || rawValue === 1) {
@@ -123,4 +143,92 @@ export function isMicEngineV3Enabled(override = null) {
 
 export function resolveMicEngineMode(override = null) {
   return isMicEngineV3Enabled(override) ? MIC_ENGINE_MODE.V3 : MIC_ENGINE_MODE.V2
+}
+
+/**
+ * Blind polyphonic prototype gate. Default OFF in every environment —
+ * production, dev, and tests — until real-recording validation (Stage 2
+ * S10/S12) justifies a rollout. Unlike V2/V3, explicit false values are
+ * honored here: this flag must never turn itself on.
+ */
+export function decideMicBlindPolyEnabled({
+  override = null,
+  globalValue = null,
+  storageValue = null,
+  defaultEnabled = false,
+} = {}) {
+  for (const value of [override, globalValue, storageValue]) {
+    const resolved = resolveFlagOverride(value)
+    if (resolved != null) return resolved
+  }
+  return Boolean(defaultEnabled)
+}
+
+function readGlobalBlindPolyFlag() {
+  try {
+    return globalThis.__SCOREFLOW_FLAGS__?.[MIC_BLIND_POLY_FLAG] ?? null
+  } catch {
+    return null
+  }
+}
+
+function readStoredBlindPolyFlag() {
+  try {
+    return globalThis.localStorage?.getItem(MIC_BLIND_POLY_STORAGE_KEY) ?? null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Neural microphone gate. Default OFF in every environment — production,
+ * dev, and tests — until real browser/device acceptance (Stage 6 N9).
+ * Unlike V2/V3, explicit false values are honored here: this flag must
+ * never turn itself on.
+ */
+export function decideMicNeuralEnabled({
+  override = null,
+  globalValue = null,
+  storageValue = null,
+  defaultEnabled = false,
+} = {}) {
+  for (const value of [override, globalValue, storageValue]) {
+    const resolved = resolveFlagOverride(value)
+    if (resolved != null) return resolved
+  }
+  return Boolean(defaultEnabled)
+}
+
+function readGlobalNeuralFlag() {
+  try {
+    return globalThis.__SCOREFLOW_FLAGS__?.[MIC_NEURAL_FLAG] ?? null
+  } catch {
+    return null
+  }
+}
+
+function readStoredNeuralFlag() {
+  try {
+    return globalThis.localStorage?.getItem(MIC_NEURAL_STORAGE_KEY) ?? null
+  } catch {
+    return null
+  }
+}
+
+export function isMicNeuralEnabled(override = null) {
+  return decideMicNeuralEnabled({
+    override,
+    globalValue: readGlobalNeuralFlag(),
+    storageValue: readStoredNeuralFlag(),
+    defaultEnabled: false,
+  })
+}
+
+export function isMicBlindPolyEnabled(override = null) {
+  return decideMicBlindPolyEnabled({
+    override,
+    globalValue: readGlobalBlindPolyFlag(),
+    storageValue: readStoredBlindPolyFlag(),
+    defaultEnabled: false,
+  })
 }

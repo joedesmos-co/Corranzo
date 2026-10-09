@@ -103,11 +103,21 @@ export const INSTRUMENT_AUDIO_CONSTRAINTS = {
  * Acquire a raw-input instrument stream, falling back to default constraints if
  * (and only if) the browser rejects the raw-input hint. Permission / device
  * errors propagate unchanged so the caller can surface the right message.
+ *
+ * `deviceId` is optional and dev-harness-only: when provided it is added as an
+ * exact constraint (recording harness device selection, incl. direct audio
+ * interfaces). A rejection caused by the device constraint retries WITHOUT
+ * it before falling back to plain defaults, so a stale device id can never
+ * hard-fail capture. With no deviceId the request is byte-identical to before.
  */
-export async function acquireInstrumentStream(mediaDevices) {
+export async function acquireInstrumentStream(mediaDevices, { deviceId = null } = {}) {
+  const wantDevice = typeof deviceId === 'string' && deviceId.length > 0
+  const audioConstraints = wantDevice
+    ? { ...INSTRUMENT_AUDIO_CONSTRAINTS, deviceId: { exact: deviceId } }
+    : { ...INSTRUMENT_AUDIO_CONSTRAINTS }
   try {
     return await mediaDevices.getUserMedia({
-      audio: { ...INSTRUMENT_AUDIO_CONSTRAINTS },
+      audio: audioConstraints,
       video: false,
     })
   } catch (error) {
@@ -119,6 +129,26 @@ export async function acquireInstrumentStream(mediaDevices) {
       name === 'NotReadableError'
     ) {
       throw error
+    }
+    if (wantDevice) {
+      // The selected device may be gone (unplugged interface). Retry with the
+      // standard raw-input constraints before giving up on raw input.
+      try {
+        return await mediaDevices.getUserMedia({
+          audio: { ...INSTRUMENT_AUDIO_CONSTRAINTS },
+          video: false,
+        })
+      } catch (retryError) {
+        const retryName = retryError?.name
+        if (
+          retryName === 'NotAllowedError' ||
+          retryName === 'NotFoundError' ||
+          retryName === 'SecurityError' ||
+          retryName === 'NotReadableError'
+        ) {
+          throw retryError
+        }
+      }
     }
     // OverconstrainedError / TypeError from an unsupported constraint shape:
     // retry with plain defaults so the user still gets a working microphone.
@@ -140,12 +170,19 @@ export function readCaptureSettings(stream) {
   }
 }
 
-export default function useMicrophoneCapture({ active = false } = {}) {
+export default function useMicrophoneCapture({ active = false, deviceId = null } = {}) {
   const streamRef = useRef(null)
   const contextRef = useRef(null)
   const analyserRef = useRef(null)
   const bufferRef = useRef(null)
   const activeRef = useRef(active)
+  // Dev-harness device selection (S1): undefined/null keeps the exact
+  // production request; a device id routes through the exact-constraint
+  // path in acquireInstrumentStream with staged fallbacks.
+  const deviceIdRef = useRef(null)
+  useEffect(() => {
+    deviceIdRef.current = deviceId ?? null
+  }, [deviceId])
   const requestTokenRef = useRef(0)
   const recoveryCleanupRef = useRef(null)
   const recoveryHandlerRef = useRef(null)
@@ -226,7 +263,9 @@ export default function useMicrophoneCapture({ active = false } = {}) {
     let context = null
 
     try {
-      stream = await acquireInstrumentStream(navigator.mediaDevices)
+      stream = await acquireInstrumentStream(navigator.mediaDevices, {
+        deviceId: deviceIdRef.current,
+      })
 
       if (requestTokenRef.current !== requestToken || !activeRef.current) {
         stopStream(stream)

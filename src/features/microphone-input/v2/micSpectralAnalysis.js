@@ -78,7 +78,16 @@ export function goertzelMagnitude(samples, sampleRate, targetHz) {
 /**
  * Median probe energy at off-chord MIDI anchors — noise-floor estimate.
  * Probes avoid expected fundamentals and their low harmonics.
+ *
+ * Absolute minimum 2.5e-5 (≈0.8 LSB of 16-bit full scale): Goertzel
+ * magnitudes below the converter's own quantization step are numerical
+ * residue, not room tone. Measured 2026-10-07: real DAT silence
+ * (rms 0.00013) collapsed the old 1e-7 floor to 9.8e-6 and the blind-range
+ * scorer hallucinated 16 phantom notes at ratios 1.6–3.2. The quietest
+ * verified real note sits 50× above this floor, so genuine quiet playing
+ * is unaffected — only sub-LSB belief is removed.
  */
+export const SPECTRAL_NOISE_FLOOR_ABSOLUTE_MIN = 2.5e-5
 export function estimateNoiseFloor(samples, sampleRate, { expectedMidis = [], probeMidis = null } = {}) {
   const expectedSet = new Set(expectedMidis ?? [])
   const blockedHz = new Set()
@@ -107,7 +116,7 @@ export function estimateNoiseFloor(samples, sampleRate, { expectedMidis = [], pr
   energies.sort((left, right) => left - right)
   const p25 = energies.length ? energies[Math.floor(energies.length * 0.25)] : 0
   const rms = windowRms(samples)
-  return Math.max(p25, rms * 0.12, 1e-7)
+  return Math.max(p25, rms * 0.12, SPECTRAL_NOISE_FLOOR_ABSOLUTE_MIN)
 }
 
 /**

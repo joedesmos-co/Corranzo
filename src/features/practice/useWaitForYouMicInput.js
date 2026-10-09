@@ -27,6 +27,7 @@ import { MIC_CHORD_MODES } from './waitForYouMatchSettings.js'
 import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import { resolveMicDiagnostic, micDiagnosticLabel } from '../microphone-input/micDiagnosticState.js'
+import { classifyMicInputFailure } from '../microphone-input/micInputFailure.js'
 import {
   createMicDebugFrameRecord,
   createMicTraceFrameRecord,
@@ -927,6 +928,12 @@ export default function useWaitForYouMicInput({
           harmonicProfile: debugFrame.harmonicProfile,
           electricGuitarSignal: debugFrame.electricGuitarSignal,
           rejectReason: debugRejectReason,
+          inputFailure: classifyMicInputFailure({
+            frame,
+            rejectReason: debugRejectReason,
+            matchingEnabled,
+            expectedMidis,
+          }),
         },
         lastFrames: [...debugFramesRef.current],
         exportLastFrames: exportDebugFrames,

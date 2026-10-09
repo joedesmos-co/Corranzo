@@ -33,6 +33,10 @@
     "mic:generate-clips": "node scripts/generate-mic-accuracy-clips.mjs",
     "mic:browser-qa": "node scripts/browser-mic-wfy-qa.mjs",
     "mic:polyphony-replay": "node scripts/mic-polyphony-replay.mjs",
+    "mic:stage2-compare": "node scripts/mic-stage2-comparison.mjs",
+    "mic:realbench-excerpts": "node scripts/mic-realbench-excerpts.mjs",
+    "mic:realbench": "node scripts/mic-realbench-run.mjs",
+    "mic:neural-compare": "node scripts/mic-neural-compare.mjs",
     "mic:v3-replay": "node scripts/mic-v3-performance-replay.mjs",
     "mic:manual-validate": "node scripts/mic-v3-manual-validation.mjs",
     "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
@@ -41,6 +45,7 @@
     "mic:final-release": "node scripts/final-mic-release-corpus.mjs"
   },
   "dependencies": {
+    "@spotify/basic-pitch": "^1.0.1",
     "@tonejs/midi": "^2.0.28",
     "fast-xml-parser": "^5.8.0",
     "jszip": "^3.10.1",
@@ -59,6 +64,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "happy-dom": "^20.14.6",
     "playwright": "^1.61.1",
     "vite": "^8.0.12",
     "vitest": "^3.2.6",

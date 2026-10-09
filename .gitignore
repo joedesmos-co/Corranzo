@@ -31,4 +31,18 @@ datasets/barline-training/manifest.json
 datasets/barline-training/labels.json
 datasets/barline-training/*.partial.json
 tmp/uiowa-mic-sources/
+# Regenerable neural-harness artifacts (never commit: derived vendor copies,
+# benchmark reports, downloaded transcriptions).
+tmp/neural-vendor/
+tmp/neural-browser.json
+tmp/neural-browser-full.json
+tmp/neural-compare.json
+tmp/neural-window-sweep.json
+tmp/neural-stream-e2e.json
+tmp/stage4-full.json
+tmp/stage8-full.json
+tmp/mic-realbench/
+tmp/mic-stage2-comparison/
+tmp/basicpitch/
+tmp/dev*.json
 .local/

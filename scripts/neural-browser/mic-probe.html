@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>fake mic capture probe</title>
+</head>
+<body>
+  <main>fake mic probe</main>
+  <script type="module">
+    // Exercises the REAL browser capture path (getUserMedia ->
+    // MediaStreamSource -> AnalyserNode polling) plus the committed
+    // silence-skip gate on live meter frames. Works with Chromium's
+    // built-in fake device (no audio file needed); the file-backed
+    // capture flag hangs this headless build (documented Stage 6/8).
+    import { shouldSkipSilence } from '/src/features/microphone-input/micNeuralTfAdapter.js'
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      const track = stream.getAudioTracks()[0]
+      const settings = track.getSettings()
+      const context = new AudioContext({ sampleRate: 44100 })
+      const source = context.createMediaStreamSource(stream)
+      const analyser = context.createAnalyser()
+      analyser.fftSize = 2048
+      source.connect(analyser)
+      const buffer = new Float32Array(analyser.fftSize)
+      const frames = []
+      const started = performance.now()
+      while (performance.now() - started < 2000) {
+        analyser.getFloatTimeDomainData(buffer)
+        let sum = 0
+        for (const value of buffer) {
+          sum += value * value
+        }
+        frames.push(Math.sqrt(sum / buffer.length))
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+      const meanRms = frames.reduce((a, b) => a + b, 0) / frames.length
+      window.__micResults = {
+        status: 'done',
+        deviceLabel: track.label,
+        sampleRate: context.sampleRate,
+        echoCancellation: settings.echoCancellation ?? null,
+        noiseSuppression: settings.noiseSuppression ?? null,
+        autoGainControl: settings.autoGainControl ?? null,
+        frames: frames.length,
+        meanRms,
+        skipDecision: shouldSkipSilence(frames),
+      }
+      stream.getTracks().forEach((candidate) => candidate.stop())
+      await context.close()
+    } catch (error) {
+      window.__micResults = { status: 'error', message: String(error?.message ?? error) }
+    }
+    document.title = 'DONE'
+  </script>
+</body>
+</html>

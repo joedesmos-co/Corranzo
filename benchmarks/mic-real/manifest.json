@@ -1,0 +1,5883 @@
+{
+  "version": 1,
+  "excerptSeconds": 3,
+  "preRollSeconds": 0.5,
+  "provenance": "Independent dataset annotations (JAMS per-string / MIDI). Detector output never used as truth.",
+  "naturalRecordings": 50,
+  "excluded": [
+    {
+      "id": "piano-mozart2-dense",
+      "reason": "Annotation error, independently verified 2026-10-08: forte MIDI chord at 23.04 falls in near-silent audio (rms ~0.0005); music resumes at 23.3. Clip removed, never retuned."
+    }
+  ],
+  "clips": [
+    {
+      "id": "piano-mozart-single",
+      "instrument": "piano",
+      "category": "single",
+      "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 11.82,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          74
+        ],
+        "notes": [
+          {
+            "midi": 76,
+            "onset": 0.279,
+            "offset": 0.578
+          },
+          {
+            "midi": 71,
+            "onset": 0.299,
+            "offset": 0.804
+          },
+          {
+            "midi": 50,
+            "onset": 0.311,
+            "offset": 0.859
+          },
+          {
+            "midi": 74,
+            "onset": 0.504,
+            "offset": 0.806
+          },
+          {
+            "midi": 73,
+            "onset": 0.794,
+            "offset": 1.791
+          },
+          {
+            "midi": 52,
+            "onset": 0.825,
+            "offset": 0.954
+          },
+          {
+            "midi": 69,
+            "onset": 0.849,
+            "offset": 1.293
+          },
+          {
+            "midi": 52,
+            "onset": 0.954,
+            "offset": 1.965
+          },
+          {
+            "midi": 71,
+            "onset": 1.809,
+            "offset": 1.935
+          },
+          {
+            "midi": 68,
+            "onset": 1.852,
+            "offset": 1.963
+          },
+          {
+            "midi": 73,
+            "onset": 2.491,
+            "offset": 3.14
+          },
+          {
+            "midi": 64,
+            "onset": 2.499,
+            "offset": 3.096
+          },
+          {
+            "midi": 57,
+            "onset": 2.508,
+            "offset": 3.07
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-mozart-dyad",
+      "instrument": "piano",
+      "category": "dyad",
+      "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.07,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          59,
+          74
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": -0.156,
+            "offset": 0.358
+          },
+          {
+            "midi": 64,
+            "onset": -0.141,
+            "offset": 0.466
+          },
+          {
+            "midi": 57,
+            "onset": -0.13,
+            "offset": 0.401
+          },
+          {
+            "midi": 74,
+            "onset": 0.504,
+            "offset": 0.699
+          },
+          {
+            "midi": 59,
+            "onset": 0.523,
+            "offset": 0.715
+          },
+          {
+            "midi": 73,
+            "onset": 0.715,
+            "offset": 1.023
+          },
+          {
+            "midi": 64,
+            "onset": 0.745,
+            "offset": 1
+          },
+          {
+            "midi": 57,
+            "onset": 0.754,
+            "offset": 1.029
+          },
+          {
+            "midi": 76,
+            "onset": 1.199,
+            "offset": 1.651
+          },
+          {
+            "midi": 64,
+            "onset": 1.233,
+            "offset": 1.686
+          },
+          {
+            "midi": 61,
+            "onset": 1.236,
+            "offset": 1.729
+          },
+          {
+            "midi": 76,
+            "onset": 2.056,
+            "offset": 2.264
+          },
+          {
+            "midi": 61,
+            "onset": 2.096,
+            "offset": 2.179
+          },
+          {
+            "midi": 64,
+            "onset": 2.099,
+            "offset": 2.185
+          },
+          {
+            "midi": 71,
+            "onset": 2.604,
+            "offset": 3.126
+          },
+          {
+            "midi": 64,
+            "onset": 2.636,
+            "offset": 3.219
+          },
+          {
+            "midi": 56,
+            "onset": 2.641,
+            "offset": 3.135
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-mozart-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.41,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57,
+          64,
+          73
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": 0.504,
+            "offset": 1.018
+          },
+          {
+            "midi": 64,
+            "onset": 0.519,
+            "offset": 1.126
+          },
+          {
+            "midi": 57,
+            "onset": 0.53,
+            "offset": 1.061
+          },
+          {
+            "midi": 74,
+            "onset": 1.164,
+            "offset": 1.359
+          },
+          {
+            "midi": 59,
+            "onset": 1.182,
+            "offset": 1.375
+          },
+          {
+            "midi": 73,
+            "onset": 1.375,
+            "offset": 1.683
+          },
+          {
+            "midi": 64,
+            "onset": 1.405,
+            "offset": 1.66
+          },
+          {
+            "midi": 57,
+            "onset": 1.414,
+            "offset": 1.689
+          },
+          {
+            "midi": 76,
+            "onset": 1.859,
+            "offset": 2.311
+          },
+          {
+            "midi": 64,
+            "onset": 1.893,
+            "offset": 2.346
+          },
+          {
+            "midi": 61,
+            "onset": 1.896,
+            "offset": 2.389
+          },
+          {
+            "midi": 76,
+            "onset": 2.716,
+            "offset": 2.924
+          },
+          {
+            "midi": 61,
+            "onset": 2.756,
+            "offset": 2.839
+          },
+          {
+            "midi": 64,
+            "onset": 2.759,
+            "offset": 2.845
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-mozart-dense",
+      "instrument": "piano",
+      "category": "dense",
+      "dataset": "vienna-4x22",
+      "split": "dev",
+      "performance": "vienna-mozart-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 21.52,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          66,
+          71,
+          74
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": -0.384,
+            "offset": 0.05
+          },
+          {
+            "midi": 74,
+            "onset": 0.497,
+            "offset": 1.004
+          },
+          {
+            "midi": 66,
+            "onset": 0.506,
+            "offset": 0.753
+          },
+          {
+            "midi": 71,
+            "onset": 0.512,
+            "offset": 0.83
+          },
+          {
+            "midi": 50,
+            "onset": 0.516,
+            "offset": 1.073
+          },
+          {
+            "midi": 73,
+            "onset": 1.074,
+            "offset": 1.617
+          },
+          {
+            "midi": 64,
+            "onset": 1.082,
+            "offset": 1.567
+          },
+          {
+            "midi": 52,
+            "onset": 1.084,
+            "offset": 1.779
+          },
+          {
+            "midi": 69,
+            "onset": 1.09,
+            "offset": 1.545
+          },
+          {
+            "midi": 71,
+            "onset": 1.964,
+            "offset": 2.285
+          },
+          {
+            "midi": 40,
+            "onset": 1.966,
+            "offset": 2.304
+          },
+          {
+            "midi": 68,
+            "onset": 1.968,
+            "offset": 2.245
+          },
+          {
+            "midi": 62,
+            "onset": 1.976,
+            "offset": 2.131
+          },
+          {
+            "midi": 69,
+            "onset": 2.515,
+            "offset": 3.07
+          },
+          {
+            "midi": 45,
+            "onset": 2.531,
+            "offset": 3.008
+          },
+          {
+            "midi": 64,
+            "onset": 2.532,
+            "offset": 2.99
+          },
+          {
+            "midi": 61,
+            "onset": 2.536,
+            "offset": 2.989
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "instrument": "piano",
+      "category": "single",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.45,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          48
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.021,
+            "offset": 0.67
+          },
+          {
+            "midi": 48,
+            "onset": 0.501,
+            "offset": 0.579
+          },
+          {
+            "midi": 64,
+            "onset": 1.045,
+            "offset": 1.166
+          },
+          {
+            "midi": 55,
+            "onset": 1.049,
+            "offset": 1.171
+          },
+          {
+            "midi": 73,
+            "onset": 1.224,
+            "offset": 1.483
+          },
+          {
+            "midi": 72,
+            "onset": 1.396,
+            "offset": 2.032
+          },
+          {
+            "midi": 64,
+            "onset": 1.399,
+            "offset": 1.435
+          },
+          {
+            "midi": 55,
+            "onset": 1.425,
+            "offset": 1.475
+          },
+          {
+            "midi": 58,
+            "onset": 1.425,
+            "offset": 1.485
+          },
+          {
+            "midi": 48,
+            "onset": 1.764,
+            "offset": 1.853
+          },
+          {
+            "midi": 65,
+            "onset": 2.101,
+            "offset": 2.154
+          },
+          {
+            "midi": 56,
+            "onset": 2.108,
+            "offset": 2.154
+          },
+          {
+            "midi": 60,
+            "onset": 2.125,
+            "offset": 2.164
+          },
+          {
+            "midi": 73,
+            "onset": 2.224,
+            "offset": 2.411
+          },
+          {
+            "midi": 72,
+            "onset": 2.379,
+            "offset": 3.018
+          },
+          {
+            "midi": 60,
+            "onset": 2.404,
+            "offset": 2.445
+          },
+          {
+            "midi": 56,
+            "onset": 2.416,
+            "offset": 2.45
+          },
+          {
+            "midi": 65,
+            "onset": 2.435,
+            "offset": 2.484
+          },
+          {
+            "midi": 48,
+            "onset": 2.74,
+            "offset": 2.819
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.05,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          60,
+          65
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.204,
+            "offset": 0.433
+          },
+          {
+            "midi": 48,
+            "onset": 0.164,
+            "offset": 0.253
+          },
+          {
+            "midi": 65,
+            "onset": 0.501,
+            "offset": 0.554
+          },
+          {
+            "midi": 56,
+            "onset": 0.508,
+            "offset": 0.554
+          },
+          {
+            "midi": 60,
+            "onset": 0.525,
+            "offset": 0.564
+          },
+          {
+            "midi": 73,
+            "onset": 0.624,
+            "offset": 0.811
+          },
+          {
+            "midi": 72,
+            "onset": 0.779,
+            "offset": 1.418
+          },
+          {
+            "midi": 60,
+            "onset": 0.804,
+            "offset": 0.845
+          },
+          {
+            "midi": 56,
+            "onset": 0.816,
+            "offset": 0.85
+          },
+          {
+            "midi": 65,
+            "onset": 0.835,
+            "offset": 0.884
+          },
+          {
+            "midi": 48,
+            "onset": 1.14,
+            "offset": 1.219
+          },
+          {
+            "midi": 64,
+            "onset": 1.501,
+            "offset": 1.574
+          },
+          {
+            "midi": 55,
+            "onset": 1.503,
+            "offset": 1.583
+          },
+          {
+            "midi": 58,
+            "onset": 1.527,
+            "offset": 1.585
+          },
+          {
+            "midi": 73,
+            "onset": 1.644,
+            "offset": 1.81
+          },
+          {
+            "midi": 72,
+            "onset": 1.79,
+            "offset": 1.856
+          },
+          {
+            "midi": 58,
+            "onset": 1.824,
+            "offset": 1.88
+          },
+          {
+            "midi": 55,
+            "onset": 1.826,
+            "offset": 1.866
+          },
+          {
+            "midi": 64,
+            "onset": 1.83,
+            "offset": 1.87
+          },
+          {
+            "midi": 72,
+            "onset": 2.02,
+            "offset": 2.131
+          },
+          {
+            "midi": 73,
+            "onset": 2.108,
+            "offset": 2.179
+          },
+          {
+            "midi": 75,
+            "onset": 2.169,
+            "offset": 2.328
+          },
+          {
+            "midi": 48,
+            "onset": 2.215,
+            "offset": 2.378
+          },
+          {
+            "midi": 73,
+            "onset": 2.266,
+            "offset": 3.145
+          },
+          {
+            "midi": 65,
+            "onset": 2.731,
+            "offset": 2.818
+          },
+          {
+            "midi": 56,
+            "onset": 2.74,
+            "offset": 2.805
+          },
+          {
+            "midi": 60,
+            "onset": 2.745,
+            "offset": 2.801
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "instrument": "piano",
+      "category": "dense",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p01",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.35,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          58,
+          64,
+          72
+        ],
+        "notes": [
+          {
+            "midi": 64,
+            "onset": 0.145,
+            "offset": 0.266
+          },
+          {
+            "midi": 55,
+            "onset": 0.149,
+            "offset": 0.271
+          },
+          {
+            "midi": 73,
+            "onset": 0.324,
+            "offset": 0.583
+          },
+          {
+            "midi": 72,
+            "onset": 0.496,
+            "offset": 1.133
+          },
+          {
+            "midi": 64,
+            "onset": 0.499,
+            "offset": 0.535
+          },
+          {
+            "midi": 55,
+            "onset": 0.525,
+            "offset": 0.575
+          },
+          {
+            "midi": 58,
+            "onset": 0.525,
+            "offset": 0.585
+          },
+          {
+            "midi": 48,
+            "onset": 0.864,
+            "offset": 0.953
+          },
+          {
+            "midi": 65,
+            "onset": 1.201,
+            "offset": 1.254
+          },
+          {
+            "midi": 56,
+            "onset": 1.208,
+            "offset": 1.254
+          },
+          {
+            "midi": 60,
+            "onset": 1.225,
+            "offset": 1.264
+          },
+          {
+            "midi": 73,
+            "onset": 1.324,
+            "offset": 1.511
+          },
+          {
+            "midi": 72,
+            "onset": 1.479,
+            "offset": 2.118
+          },
+          {
+            "midi": 60,
+            "onset": 1.504,
+            "offset": 1.545
+          },
+          {
+            "midi": 56,
+            "onset": 1.516,
+            "offset": 1.55
+          },
+          {
+            "midi": 65,
+            "onset": 1.535,
+            "offset": 1.584
+          },
+          {
+            "midi": 48,
+            "onset": 1.84,
+            "offset": 1.919
+          },
+          {
+            "midi": 64,
+            "onset": 2.201,
+            "offset": 2.274
+          },
+          {
+            "midi": 55,
+            "onset": 2.203,
+            "offset": 2.283
+          },
+          {
+            "midi": 58,
+            "onset": 2.228,
+            "offset": 2.285
+          },
+          {
+            "midi": 73,
+            "onset": 2.344,
+            "offset": 2.51
+          },
+          {
+            "midi": 72,
+            "onset": 2.49,
+            "offset": 2.556
+          },
+          {
+            "midi": 58,
+            "onset": 2.524,
+            "offset": 2.58
+          },
+          {
+            "midi": 55,
+            "onset": 2.526,
+            "offset": 2.566
+          },
+          {
+            "midi": 64,
+            "onset": 2.53,
+            "offset": 2.57
+          },
+          {
+            "midi": 72,
+            "onset": 2.72,
+            "offset": 2.831
+          },
+          {
+            "midi": 73,
+            "onset": 2.808,
+            "offset": 2.879
+          },
+          {
+            "midi": 75,
+            "onset": 2.869,
+            "offset": 3.028
+          },
+          {
+            "midi": 48,
+            "onset": 2.915,
+            "offset": 3.078
+          },
+          {
+            "midi": 73,
+            "onset": 2.966,
+            "offset": 3.845
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-mozart-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_mozart_p02.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p02.mid",
+      "audio": {
+        "file": "clips/piano-mozart2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.23,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57,
+          64,
+          73
+        ],
+        "notes": [
+          {
+            "midi": 73,
+            "onset": 0.504,
+            "offset": 1.217
+          },
+          {
+            "midi": 64,
+            "onset": 0.506,
+            "offset": 1.085
+          },
+          {
+            "midi": 57,
+            "onset": 0.521,
+            "offset": 1.08
+          },
+          {
+            "midi": 74,
+            "onset": 1.245,
+            "offset": 1.342
+          },
+          {
+            "midi": 61,
+            "onset": 1.273,
+            "offset": 1.358
+          },
+          {
+            "midi": 64,
+            "onset": 1.311,
+            "offset": 1.361
+          },
+          {
+            "midi": 73,
+            "onset": 1.485,
+            "offset": 1.775
+          },
+          {
+            "midi": 57,
+            "onset": 1.5,
+            "offset": 1.785
+          },
+          {
+            "midi": 64,
+            "onset": 1.506,
+            "offset": 1.77
+          },
+          {
+            "midi": 64,
+            "onset": 1.984,
+            "offset": 2.523
+          },
+          {
+            "midi": 76,
+            "onset": 1.989,
+            "offset": 2.425
+          },
+          {
+            "midi": 61,
+            "onset": 2.001,
+            "offset": 2.526
+          },
+          {
+            "midi": 76,
+            "onset": 2.845,
+            "offset": 3.087
+          },
+          {
+            "midi": 64,
+            "onset": 2.865,
+            "offset": 3.104
+          },
+          {
+            "midi": 61,
+            "onset": 2.874,
+            "offset": 3.109
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "instrument": "piano",
+      "category": "single",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.01,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          48
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.007,
+            "offset": 1.244
+          },
+          {
+            "midi": 48,
+            "onset": 0.504,
+            "offset": 0.65
+          },
+          {
+            "midi": 58,
+            "onset": 1.059,
+            "offset": 1.311
+          },
+          {
+            "midi": 64,
+            "onset": 1.068,
+            "offset": 1.279
+          },
+          {
+            "midi": 55,
+            "onset": 1.086,
+            "offset": 1.416
+          },
+          {
+            "midi": 73,
+            "onset": 1.283,
+            "offset": 1.475
+          },
+          {
+            "midi": 64,
+            "onset": 1.411,
+            "offset": 1.451
+          },
+          {
+            "midi": 55,
+            "onset": 1.416,
+            "offset": 1.504
+          },
+          {
+            "midi": 72,
+            "onset": 1.425,
+            "offset": 2.39
+          },
+          {
+            "midi": 58,
+            "onset": 1.429,
+            "offset": 1.551
+          },
+          {
+            "midi": 48,
+            "onset": 1.84,
+            "offset": 1.951
+          },
+          {
+            "midi": 60,
+            "onset": 2.235,
+            "offset": 2.465
+          },
+          {
+            "midi": 65,
+            "onset": 2.236,
+            "offset": 2.396
+          },
+          {
+            "midi": 56,
+            "onset": 2.258,
+            "offset": 2.435
+          },
+          {
+            "midi": 73,
+            "onset": 2.414,
+            "offset": 2.64
+          },
+          {
+            "midi": 65,
+            "onset": 2.556,
+            "offset": 2.596
+          },
+          {
+            "midi": 72,
+            "onset": 2.56,
+            "offset": 3.486
+          },
+          {
+            "midi": 60,
+            "onset": 2.563,
+            "offset": 2.658
+          },
+          {
+            "midi": 56,
+            "onset": 2.593,
+            "offset": 2.695
+          },
+          {
+            "midi": 48,
+            "onset": 2.96,
+            "offset": 3.078
+          }
+        ]
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "performance": "vienna-schubert-p02",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.75,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          60,
+          65
+        ],
+        "notes": [
+          {
+            "midi": 72,
+            "onset": -0.315,
+            "offset": 0.65
+          },
+          {
+            "midi": 48,
+            "onset": 0.1,
+            "offset": 0.211
+          },
+          {
+            "midi": 60,
+            "onset": 0.495,
+            "offset": 0.725
+          },
+          {
+            "midi": 65,
+            "onset": 0.496,
+            "offset": 0.656
+          },
+          {
+            "midi": 56,
+            "onset": 0.518,
+            "offset": 0.695
+          },
+          {
+            "midi": 73,
+            "onset": 0.674,
+            "offset": 0.9
+          },
+          {
+            "midi": 65,
+            "onset": 0.816,
+            "offset": 0.856
+          },
+          {
+            "midi": 72,
+            "onset": 0.82,
+            "offset": 1.746
+          },
+          {
+            "midi": 60,
+            "onset": 0.822,
+            "offset": 0.918
+          },
+          {
+            "midi": 56,
+            "onset": 0.853,
+            "offset": 0.955
+          },
+          {
+            "midi": 48,
+            "onset": 1.22,
+            "offset": 1.338
+          },
+          {
+            "midi": 64,
+            "onset": 1.59,
+            "offset": 1.809
+          },
+          {
+            "midi": 58,
+            "onset": 1.593,
+            "offset": 1.926
+          },
+          {
+            "midi": 55,
+            "onset": 1.606,
+            "offset": 1.831
+          },
+          {
+            "midi": 73,
+            "onset": 1.765,
+            "offset": 1.987
+          },
+          {
+            "midi": 72,
+            "onset": 1.902,
+            "offset": 2.01
+          },
+          {
+            "midi": 64,
+            "onset": 1.912,
+            "offset": 1.989
+          },
+          {
+            "midi": 58,
+            "onset": 1.926,
+            "offset": 2.09
+          },
+          {
+            "midi": 55,
+            "onset": 1.949,
+            "offset": 2.045
+          },
+          {
+            "midi": 72,
+            "onset": 2.104,
+            "offset": 2.207
+          },
+          {
+            "midi": 73,
+            "onset": 2.221,
+            "offset": 2.308
+          },
+          {
+            "midi": 75,
+            "onset": 2.321,
+            "offset": 2.416
+          },
+          {
+            "midi": 73,
+            "onset": 2.398,
+            "offset": 3.329
+          },
+          {
+            "midi": 48,
+            "onset": 2.426,
+            "offset": 2.609
+          },
+          {
+            "midi": 60,
+            "onset": 2.901,
+            "offset": 3.29
+          },
+          {
+            "midi": 65,
+            "onset": 2.918,
+            "offset": 3.141
+          },
+          {
+            "midi": 56,
+            "onset": 2.918,
+            "offset": 3.13
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-jazz-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs04-jazz",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/04_Jazz2-110-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-jazz-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.34,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          53
+        ],
+        "notes": [
+          {
+            "midi": 61,
+            "onset": -1.114,
+            "offset": 0.46
+          },
+          {
+            "midi": 53,
+            "onset": 0.501,
+            "offset": 0.635
+          },
+          {
+            "midi": 58,
+            "onset": 0.695,
+            "offset": 0.869
+          },
+          {
+            "midi": 60,
+            "onset": 1.012,
+            "offset": 2.568
+          },
+          {
+            "midi": 53,
+            "onset": 2.648,
+            "offset": 2.811
+          },
+          {
+            "midi": 55,
+            "onset": 2.819,
+            "offset": 2.993
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs04-jazz",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/04_Jazz2-110-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-jazz-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.16,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          60
+        ],
+        "notes": [
+          {
+            "midi": 55,
+            "onset": -0.001,
+            "offset": 0.173
+          },
+          {
+            "midi": 58,
+            "onset": 0.324,
+            "offset": 0.493
+          },
+          {
+            "midi": 50,
+            "onset": 0.495,
+            "offset": 0.704
+          },
+          {
+            "midi": 60,
+            "onset": 0.554,
+            "offset": 1.982
+          },
+          {
+            "midi": 60,
+            "onset": 2.025,
+            "offset": 2.118
+          },
+          {
+            "midi": 61,
+            "onset": 2.121,
+            "offset": 2.213
+          },
+          {
+            "midi": 60,
+            "onset": 2.235,
+            "offset": 2.38
+          },
+          {
+            "midi": 59,
+            "onset": 2.385,
+            "offset": 2.454
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-bossa-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs00-bossa",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/00_BN3-119-G_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-bossa-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.25,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57
+        ],
+        "notes": [
+          {
+            "midi": 54,
+            "onset": 0.072,
+            "offset": 2
+          },
+          {
+            "midi": 57,
+            "onset": 0.498,
+            "offset": 2.449
+          },
+          {
+            "midi": 62,
+            "onset": 1.005,
+            "offset": 3.043
+          },
+          {
+            "midi": 66,
+            "onset": 1.501,
+            "offset": 3.486
+          },
+          {
+            "midi": 54,
+            "onset": 2.043,
+            "offset": 3.97
+          },
+          {
+            "midi": 57,
+            "onset": 2.54,
+            "offset": 4.479
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-bossa-chord",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs00-bossa",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/00_BN3-119-G_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-bossa-chord.wav",
+        "sampleRate": 44100,
+        "startSeconds": 14.12,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          59,
+          62,
+          67
+        ],
+        "notes": [
+          {
+            "midi": 55,
+            "onset": -1.744,
+            "offset": 0.497
+          },
+          {
+            "midi": 59,
+            "onset": -1.207,
+            "offset": 0.023
+          },
+          {
+            "midi": 69,
+            "onset": -0.278,
+            "offset": 0.389
+          },
+          {
+            "midi": 62,
+            "onset": -0.262,
+            "offset": 0.539
+          },
+          {
+            "midi": 59,
+            "onset": 0.043,
+            "offset": 0.554
+          },
+          {
+            "midi": 55,
+            "onset": 0.502,
+            "offset": 1.756
+          },
+          {
+            "midi": 59,
+            "onset": 0.559,
+            "offset": 1.813
+          },
+          {
+            "midi": 62,
+            "onset": 0.565,
+            "offset": 1.761
+          },
+          {
+            "midi": 67,
+            "onset": 0.575,
+            "offset": 1.69
+          },
+          {
+            "midi": 69,
+            "onset": 2.291,
+            "offset": 2.547
+          },
+          {
+            "midi": 67,
+            "onset": 2.553,
+            "offset": 2.715
+          },
+          {
+            "midi": 66,
+            "onset": 2.775,
+            "offset": 3.025
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-rock-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03solo-rock",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock2-142-D_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-rock-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.36,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          69
+        ],
+        "notes": [
+          {
+            "midi": 65,
+            "onset": 0.314,
+            "offset": 0.459
+          },
+          {
+            "midi": 69,
+            "onset": 0.502,
+            "offset": 0.624
+          },
+          {
+            "midi": 70,
+            "onset": 0.808,
+            "offset": 1.028
+          },
+          {
+            "midi": 74,
+            "onset": 1.043,
+            "offset": 1.293
+          },
+          {
+            "midi": 75,
+            "onset": 1.337,
+            "offset": 1.419
+          },
+          {
+            "midi": 76,
+            "onset": 1.763,
+            "offset": 2.326
+          },
+          {
+            "midi": 75,
+            "onset": 2.81,
+            "offset": 3.013
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-rock-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03solo-rock",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock2-142-D_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-rock-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 15.36,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          69,
+          70
+        ],
+        "notes": [
+          {
+            "midi": 67,
+            "onset": 0.078,
+            "offset": 0.205
+          },
+          {
+            "midi": 69,
+            "onset": 0.286,
+            "offset": 0.489
+          },
+          {
+            "midi": 70,
+            "onset": 0.502,
+            "offset": 0.594
+          },
+          {
+            "midi": 69,
+            "onset": 0.598,
+            "offset": 0.702
+          },
+          {
+            "midi": 67,
+            "onset": 0.707,
+            "offset": 0.962
+          },
+          {
+            "midi": 64,
+            "onset": 0.924,
+            "offset": 1.029
+          },
+          {
+            "midi": 67,
+            "onset": 1.11,
+            "offset": 1.319
+          },
+          {
+            "midi": 63,
+            "onset": 1.328,
+            "offset": 1.525
+          },
+          {
+            "midi": 64,
+            "onset": 1.563,
+            "offset": 1.755
+          },
+          {
+            "midi": 65,
+            "onset": 1.756,
+            "offset": 1.965
+          },
+          {
+            "midi": 69,
+            "onset": 1.985,
+            "offset": 2.264
+          },
+          {
+            "midi": 65,
+            "onset": 2.197,
+            "offset": 2.383
+          },
+          {
+            "midi": 72,
+            "onset": 2.396,
+            "offset": 2.617
+          },
+          {
+            "midi": 69,
+            "onset": 2.619,
+            "offset": 2.898
+          },
+          {
+            "midi": 65,
+            "onset": 2.789,
+            "offset": 2.986
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-power-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03-rockcomp",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock1-90-C#_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-power-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.35,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          49,
+          56
+        ],
+        "notes": [
+          {
+            "midi": 49,
+            "onset": -0.028,
+            "offset": 0.239
+          },
+          {
+            "midi": 49,
+            "onset": 0.24,
+            "offset": 0.583
+          },
+          {
+            "midi": 56,
+            "onset": 0.26,
+            "offset": 0.503
+          },
+          {
+            "midi": 61,
+            "onset": 0.297,
+            "offset": 0.68
+          },
+          {
+            "midi": 56,
+            "onset": 0.505,
+            "offset": 0.615
+          },
+          {
+            "midi": 49,
+            "onset": 0.586,
+            "offset": 0.754
+          },
+          {
+            "midi": 49,
+            "onset": 0.951,
+            "offset": 1.247
+          },
+          {
+            "midi": 56,
+            "onset": 0.955,
+            "offset": 1.257
+          },
+          {
+            "midi": 59,
+            "onset": 0.959,
+            "offset": 1.18
+          },
+          {
+            "midi": 49,
+            "onset": 1.25,
+            "offset": 1.628
+          },
+          {
+            "midi": 56,
+            "onset": 1.259,
+            "offset": 1.642
+          },
+          {
+            "midi": 61,
+            "onset": 1.297,
+            "offset": 1.686
+          },
+          {
+            "midi": 49,
+            "onset": 1.946,
+            "offset": 2.213
+          },
+          {
+            "midi": 56,
+            "onset": 1.956,
+            "offset": 2.037
+          },
+          {
+            "midi": 61,
+            "onset": 1.971,
+            "offset": 2.261
+          },
+          {
+            "midi": 49,
+            "onset": 2.266,
+            "offset": 2.545
+          },
+          {
+            "midi": 56,
+            "onset": 2.272,
+            "offset": 2.591
+          },
+          {
+            "midi": 61,
+            "onset": 2.308,
+            "offset": 2.953
+          },
+          {
+            "midi": 49,
+            "onset": 2.986,
+            "offset": 3.306
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-power-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs03-rockcomp",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock1-90-C#_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-power-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 10.84,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          42,
+          49,
+          52,
+          58
+        ],
+        "notes": [
+          {
+            "midi": 42,
+            "onset": -0.163,
+            "offset": 0.133
+          },
+          {
+            "midi": 49,
+            "onset": -0.143,
+            "offset": 0.141
+          },
+          {
+            "midi": 42,
+            "onset": 0.136,
+            "offset": 0.496
+          },
+          {
+            "midi": 49,
+            "onset": 0.144,
+            "offset": 0.504
+          },
+          {
+            "midi": 52,
+            "onset": 0.178,
+            "offset": 0.288
+          },
+          {
+            "midi": 42,
+            "onset": 0.5,
+            "offset": 0.825
+          },
+          {
+            "midi": 49,
+            "onset": 0.524,
+            "offset": 0.838
+          },
+          {
+            "midi": 52,
+            "onset": 0.531,
+            "offset": 0.879
+          },
+          {
+            "midi": 58,
+            "onset": 0.549,
+            "offset": 1.176
+          },
+          {
+            "midi": 42,
+            "onset": 0.826,
+            "offset": 1.889
+          },
+          {
+            "midi": 49,
+            "onset": 0.839,
+            "offset": 1.135
+          },
+          {
+            "midi": 49,
+            "onset": 1.137,
+            "offset": 1.52
+          },
+          {
+            "midi": 54,
+            "onset": 1.164,
+            "offset": 1.518
+          },
+          {
+            "midi": 58,
+            "onset": 1.178,
+            "offset": 1.584
+          },
+          {
+            "midi": 61,
+            "onset": 1.189,
+            "offset": 1.914
+          },
+          {
+            "midi": 52,
+            "onset": 1.519,
+            "offset": 2.18
+          },
+          {
+            "midi": 49,
+            "onset": 1.524,
+            "offset": 1.983
+          },
+          {
+            "midi": 58,
+            "onset": 1.589,
+            "offset": 2.071
+          },
+          {
+            "midi": 42,
+            "onset": 2.163,
+            "offset": 2.483
+          },
+          {
+            "midi": 49,
+            "onset": 2.184,
+            "offset": 2.811
+          },
+          {
+            "midi": 52,
+            "onset": 2.202,
+            "offset": 3.125
+          },
+          {
+            "midi": 42,
+            "onset": 2.484,
+            "offset": 2.774
+          },
+          {
+            "midi": 49,
+            "onset": 2.814,
+            "offset": 3.081
+          },
+          {
+            "midi": 42,
+            "onset": 2.825,
+            "offset": 4.108
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-funk-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs02-funk",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/02_Funk1-114-Ab_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-funk-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.38,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          43,
+          51,
+          56
+        ],
+        "notes": [
+          {
+            "midi": 44,
+            "onset": -0.032,
+            "offset": 0.061
+          },
+          {
+            "midi": 56,
+            "onset": -0.026,
+            "offset": 0.247
+          },
+          {
+            "midi": 51,
+            "onset": -0.025,
+            "offset": 0.225
+          },
+          {
+            "midi": 60,
+            "onset": -0.012,
+            "offset": 0.226
+          },
+          {
+            "midi": 44,
+            "onset": 0.064,
+            "offset": 0.227
+          },
+          {
+            "midi": 43,
+            "onset": 0.227,
+            "offset": 0.343
+          },
+          {
+            "midi": 50,
+            "onset": 0.228,
+            "offset": 0.327
+          },
+          {
+            "midi": 51,
+            "onset": 0.35,
+            "offset": 0.501
+          },
+          {
+            "midi": 43,
+            "onset": 0.388,
+            "offset": 0.493
+          },
+          {
+            "midi": 43,
+            "onset": 0.499,
+            "offset": 0.603
+          },
+          {
+            "midi": 51,
+            "onset": 0.51,
+            "offset": 0.615
+          },
+          {
+            "midi": 56,
+            "onset": 0.599,
+            "offset": 0.709
+          },
+          {
+            "midi": 51,
+            "onset": 0.617,
+            "offset": 0.756
+          },
+          {
+            "midi": 44,
+            "onset": 0.652,
+            "offset": 0.75
+          },
+          {
+            "midi": 44,
+            "onset": 0.768,
+            "offset": 1.023
+          },
+          {
+            "midi": 56,
+            "onset": 0.773,
+            "offset": 0.872
+          },
+          {
+            "midi": 51,
+            "onset": 0.776,
+            "offset": 1.019
+          },
+          {
+            "midi": 43,
+            "onset": 1.024,
+            "offset": 1.111
+          },
+          {
+            "midi": 44,
+            "onset": 1.286,
+            "offset": 1.39
+          },
+          {
+            "midi": 56,
+            "onset": 1.292,
+            "offset": 1.419
+          },
+          {
+            "midi": 51,
+            "onset": 1.294,
+            "offset": 1.532
+          },
+          {
+            "midi": 44,
+            "onset": 1.394,
+            "offset": 1.539
+          },
+          {
+            "midi": 51,
+            "onset": 1.535,
+            "offset": 1.663
+          },
+          {
+            "midi": 44,
+            "onset": 1.542,
+            "offset": 1.693
+          },
+          {
+            "midi": 56,
+            "onset": 1.662,
+            "offset": 1.755
+          },
+          {
+            "midi": 51,
+            "onset": 1.667,
+            "offset": 1.824
+          },
+          {
+            "midi": 44,
+            "onset": 1.694,
+            "offset": 1.81
+          },
+          {
+            "midi": 44,
+            "onset": 1.813,
+            "offset": 2.04
+          },
+          {
+            "midi": 51,
+            "onset": 1.825,
+            "offset": 1.924
+          },
+          {
+            "midi": 51,
+            "onset": 1.968,
+            "offset": 2.085
+          },
+          {
+            "midi": 44,
+            "onset": 2.072,
+            "offset": 2.17
+          },
+          {
+            "midi": 56,
+            "onset": 2.08,
+            "offset": 2.341
+          },
+          {
+            "midi": 51,
+            "onset": 2.087,
+            "offset": 2.359
+          },
+          {
+            "midi": 44,
+            "onset": 2.175,
+            "offset": 2.413
+          },
+          {
+            "midi": 56,
+            "onset": 2.731,
+            "offset": 2.882
+          },
+          {
+            "midi": 51,
+            "onset": 2.76,
+            "offset": 2.864
+          },
+          {
+            "midi": 44,
+            "onset": 2.868,
+            "offset": 3.117
+          },
+          {
+            "midi": 51,
+            "onset": 2.869,
+            "offset": 3.107
+          },
+          {
+            "midi": 56,
+            "onset": 2.883,
+            "offset": 3.127
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-funk-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "dataset": "guitarset",
+      "split": "dev",
+      "performance": "gs02-funk",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/02_Funk1-114-Ab_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-funk-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.62,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          44,
+          51,
+          54,
+          59
+        ],
+        "notes": [
+          {
+            "midi": 44,
+            "onset": 0.132,
+            "offset": 0.225
+          },
+          {
+            "midi": 56,
+            "onset": 0.141,
+            "offset": 0.379
+          },
+          {
+            "midi": 51,
+            "onset": 0.144,
+            "offset": 0.37
+          },
+          {
+            "midi": 44,
+            "onset": 0.227,
+            "offset": 0.384
+          },
+          {
+            "midi": 51,
+            "onset": 0.372,
+            "offset": 0.552
+          },
+          {
+            "midi": 44,
+            "onset": 0.384,
+            "offset": 0.553
+          },
+          {
+            "midi": 54,
+            "onset": 0.401,
+            "offset": 0.529
+          },
+          {
+            "midi": 59,
+            "onset": 0.502,
+            "offset": 0.757
+          },
+          {
+            "midi": 54,
+            "onset": 0.534,
+            "offset": 0.662
+          },
+          {
+            "midi": 44,
+            "onset": 0.553,
+            "offset": 0.646
+          },
+          {
+            "midi": 51,
+            "onset": 0.555,
+            "offset": 0.665
+          },
+          {
+            "midi": 44,
+            "onset": 0.647,
+            "offset": 0.769
+          },
+          {
+            "midi": 54,
+            "onset": 0.664,
+            "offset": 0.756
+          },
+          {
+            "midi": 51,
+            "onset": 0.665,
+            "offset": 0.805
+          },
+          {
+            "midi": 59,
+            "onset": 0.769,
+            "offset": 0.879
+          },
+          {
+            "midi": 56,
+            "onset": 0.787,
+            "offset": 0.926
+          },
+          {
+            "midi": 51,
+            "onset": 0.81,
+            "offset": 0.932
+          },
+          {
+            "midi": 44,
+            "onset": 0.918,
+            "offset": 0.993
+          },
+          {
+            "midi": 56,
+            "onset": 0.93,
+            "offset": 1.186
+          },
+          {
+            "midi": 51,
+            "onset": 0.937,
+            "offset": 1.186
+          },
+          {
+            "midi": 57,
+            "onset": 0.943,
+            "offset": 1.111
+          },
+          {
+            "midi": 44,
+            "onset": 0.997,
+            "offset": 1.165
+          },
+          {
+            "midi": 43,
+            "onset": 1.168,
+            "offset": 1.26
+          },
+          {
+            "midi": 43,
+            "onset": 1.332,
+            "offset": 1.402
+          },
+          {
+            "midi": 43,
+            "onset": 1.456,
+            "offset": 1.613
+          },
+          {
+            "midi": 56,
+            "onset": 1.581,
+            "offset": 1.697
+          },
+          {
+            "midi": 45,
+            "onset": 1.617,
+            "offset": 1.716
+          },
+          {
+            "midi": 51,
+            "onset": 1.707,
+            "offset": 1.979
+          },
+          {
+            "midi": 44,
+            "onset": 1.719,
+            "offset": 1.974
+          },
+          {
+            "midi": 56,
+            "onset": 1.727,
+            "offset": 1.959
+          },
+          {
+            "midi": 44,
+            "onset": 1.979,
+            "offset": 2.211
+          },
+          {
+            "midi": 51,
+            "onset": 1.981,
+            "offset": 2.248
+          },
+          {
+            "midi": 56,
+            "onset": 1.984,
+            "offset": 2.1
+          },
+          {
+            "midi": 56,
+            "onset": 2.11,
+            "offset": 2.215
+          },
+          {
+            "midi": 44,
+            "onset": 2.231,
+            "offset": 2.463
+          },
+          {
+            "midi": 56,
+            "onset": 2.24,
+            "offset": 2.42
+          },
+          {
+            "midi": 51,
+            "onset": 2.248,
+            "offset": 2.452
+          },
+          {
+            "midi": 44,
+            "onset": 2.466,
+            "offset": 2.646
+          },
+          {
+            "midi": 51,
+            "onset": 2.469,
+            "offset": 2.632
+          },
+          {
+            "midi": 54,
+            "onset": 2.62,
+            "offset": 2.777
+          },
+          {
+            "midi": 51,
+            "onset": 2.633,
+            "offset": 3.01
+          },
+          {
+            "midi": 44,
+            "onset": 2.652,
+            "offset": 2.919
+          },
+          {
+            "midi": 44,
+            "onset": 2.92,
+            "offset": 3.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-strum-triad",
+      "instrument": "acoustic-guitar",
+      "category": "strum",
+      "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs01-strum",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/01_SS3-98-C_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-strum-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.84,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          55,
+          59
+        ],
+        "notes": [
+          {
+            "midi": 48,
+            "onset": -0.598,
+            "offset": 0.418
+          },
+          {
+            "midi": 52,
+            "onset": -0.239,
+            "offset": 0.039
+          },
+          {
+            "midi": 55,
+            "onset": -0.235,
+            "offset": 0.224
+          },
+          {
+            "midi": 64,
+            "onset": -0.094,
+            "offset": 0.62
+          },
+          {
+            "midi": 60,
+            "onset": -0.083,
+            "offset": 0.219
+          },
+          {
+            "midi": 52,
+            "onset": 0.042,
+            "offset": 0.373
+          },
+          {
+            "midi": 60,
+            "onset": 0.222,
+            "offset": 0.402
+          },
+          {
+            "midi": 55,
+            "onset": 0.225,
+            "offset": 0.503
+          },
+          {
+            "midi": 50,
+            "onset": 0.377,
+            "offset": 0.487
+          },
+          {
+            "midi": 59,
+            "onset": 0.497,
+            "offset": 0.956
+          },
+          {
+            "midi": 50,
+            "onset": 0.504,
+            "offset": 0.661
+          },
+          {
+            "midi": 55,
+            "onset": 0.506,
+            "offset": 0.947
+          },
+          {
+            "midi": 43,
+            "onset": 0.661,
+            "offset": 1.833
+          },
+          {
+            "midi": 50,
+            "onset": 0.796,
+            "offset": 1.237
+          },
+          {
+            "midi": 55,
+            "onset": 0.947,
+            "offset": 1.411
+          },
+          {
+            "midi": 59,
+            "onset": 0.958,
+            "offset": 1.121
+          },
+          {
+            "midi": 67,
+            "onset": 1.116,
+            "offset": 2.323
+          },
+          {
+            "midi": 59,
+            "onset": 1.124,
+            "offset": 1.38
+          },
+          {
+            "midi": 50,
+            "onset": 1.257,
+            "offset": 1.71
+          },
+          {
+            "midi": 59,
+            "onset": 1.408,
+            "offset": 2.023
+          },
+          {
+            "midi": 55,
+            "onset": 1.413,
+            "offset": 1.703
+          },
+          {
+            "midi": 55,
+            "onset": 1.708,
+            "offset": 2.027
+          },
+          {
+            "midi": 50,
+            "onset": 1.711,
+            "offset": 1.868
+          },
+          {
+            "midi": 43,
+            "onset": 1.834,
+            "offset": 2.798
+          },
+          {
+            "midi": 50,
+            "onset": 1.87,
+            "offset": 2.463
+          },
+          {
+            "midi": 59,
+            "onset": 2.024,
+            "offset": 2.175
+          },
+          {
+            "midi": 55,
+            "onset": 2.029,
+            "offset": 2.168
+          },
+          {
+            "midi": 55,
+            "onset": 2.174,
+            "offset": 2.638
+          },
+          {
+            "midi": 59,
+            "onset": 2.179,
+            "offset": 2.342
+          },
+          {
+            "midi": 67,
+            "onset": 2.333,
+            "offset": 2.843
+          },
+          {
+            "midi": 59,
+            "onset": 2.345,
+            "offset": 2.658
+          },
+          {
+            "midi": 50,
+            "onset": 2.497,
+            "offset": 3.066
+          },
+          {
+            "midi": 59,
+            "onset": 2.658,
+            "offset": 2.948
+          },
+          {
+            "midi": 55,
+            "onset": 2.665,
+            "offset": 3.037
+          },
+          {
+            "midi": 45,
+            "onset": 2.782,
+            "offset": 3.107
+          },
+          {
+            "midi": 59,
+            "onset": 2.949,
+            "offset": 3.077
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-strum-dense",
+      "instrument": "acoustic-guitar",
+      "category": "strum",
+      "dataset": "guitarset",
+      "split": "eval",
+      "performance": "gs01-strum",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/01_SS3-98-C_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-strum-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.2,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          45,
+          52,
+          57,
+          60
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": -0.232,
+            "offset": 0.61
+          },
+          {
+            "midi": 52,
+            "onset": -0.226,
+            "offset": 0.366
+          },
+          {
+            "midi": 57,
+            "onset": -0.089,
+            "offset": 0.027
+          },
+          {
+            "midi": 57,
+            "onset": 0.051,
+            "offset": 0.493
+          },
+          {
+            "midi": 60,
+            "onset": 0.067,
+            "offset": 0.218
+          },
+          {
+            "midi": 64,
+            "onset": 0.208,
+            "offset": 1.415
+          },
+          {
+            "midi": 60,
+            "onset": 0.22,
+            "offset": 0.475
+          },
+          {
+            "midi": 52,
+            "onset": 0.371,
+            "offset": 0.615
+          },
+          {
+            "midi": 60,
+            "onset": 0.498,
+            "offset": 1.252
+          },
+          {
+            "midi": 57,
+            "onset": 0.512,
+            "offset": 0.808
+          },
+          {
+            "midi": 45,
+            "onset": 0.614,
+            "offset": 0.945
+          },
+          {
+            "midi": 52,
+            "onset": 0.618,
+            "offset": 0.809
+          },
+          {
+            "midi": 57,
+            "onset": 0.81,
+            "offset": 1.101
+          },
+          {
+            "midi": 52,
+            "onset": 0.814,
+            "offset": 0.93
+          },
+          {
+            "midi": 52,
+            "onset": 0.935,
+            "offset": 1.574
+          },
+          {
+            "midi": 45,
+            "onset": 0.97,
+            "offset": 2.033
+          },
+          {
+            "midi": 57,
+            "onset": 1.121,
+            "offset": 1.573
+          },
+          {
+            "midi": 60,
+            "onset": 1.267,
+            "offset": 1.424
+          },
+          {
+            "midi": 64,
+            "onset": 1.417,
+            "offset": 2.636
+          },
+          {
+            "midi": 60,
+            "onset": 1.428,
+            "offset": 1.718
+          },
+          {
+            "midi": 52,
+            "onset": 1.575,
+            "offset": 1.895
+          },
+          {
+            "midi": 57,
+            "onset": 1.579,
+            "offset": 1.684
+          },
+          {
+            "midi": 60,
+            "onset": 1.729,
+            "offset": 1.961
+          },
+          {
+            "midi": 57,
+            "onset": 1.739,
+            "offset": 1.966
+          },
+          {
+            "midi": 52,
+            "onset": 1.898,
+            "offset": 1.968
+          },
+          {
+            "midi": 59,
+            "onset": 2.011,
+            "offset": 2.476
+          },
+          {
+            "midi": 55,
+            "onset": 2.02,
+            "offset": 4.574
+          },
+          {
+            "midi": 50,
+            "onset": 2.047,
+            "offset": 2.192
+          },
+          {
+            "midi": 45,
+            "onset": 2.05,
+            "offset": 2.184
+          },
+          {
+            "midi": 40,
+            "onset": 2.186,
+            "offset": 3.388
+          },
+          {
+            "midi": 47,
+            "onset": 2.195,
+            "offset": 3.066
+          },
+          {
+            "midi": 52,
+            "onset": 2.336,
+            "offset": 2.76
+          },
+          {
+            "midi": 59,
+            "onset": 2.477,
+            "offset": 2.628
+          },
+          {
+            "midi": 64,
+            "onset": 2.637,
+            "offset": 3.845
+          },
+          {
+            "midi": 59,
+            "onset": 2.649,
+            "offset": 3.229
+          },
+          {
+            "midi": 52,
+            "onset": 2.766,
+            "offset": 3.567
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg07-single",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg07",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_07.wav",
+      "sourceTruthFile": "egset12/07.jams",
+      "audio": {
+        "file": "clips/electric-eg07-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.36,
+        "anchorTones": [
+          55
+        ],
+        "notes": [
+          {
+            "midi": 58,
+            "onset": 0,
+            "offset": 0.356
+          },
+          {
+            "midi": 55,
+            "onset": 0.356,
+            "offset": 0.54
+          },
+          {
+            "midi": 46,
+            "onset": 0.552,
+            "offset": 0.744
+          },
+          {
+            "midi": 48,
+            "onset": 0.788,
+            "offset": 0.948
+          },
+          {
+            "midi": 50,
+            "onset": 0.972,
+            "offset": 1.12
+          },
+          {
+            "midi": 55,
+            "onset": 1.18,
+            "offset": 1.344
+          },
+          {
+            "midi": 58,
+            "onset": 1.58,
+            "offset": 1.972
+          },
+          {
+            "midi": 55,
+            "onset": 1.992,
+            "offset": 2.168
+          },
+          {
+            "midi": 46,
+            "onset": 2.204,
+            "offset": 2.368
+          },
+          {
+            "midi": 48,
+            "onset": 2.396,
+            "offset": 2.576
+          },
+          {
+            "midi": 50,
+            "onset": 2.596,
+            "offset": 2.764
+          },
+          {
+            "midi": 55,
+            "onset": 2.796,
+            "offset": 2.98
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg07-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg07",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_07.wav",
+      "sourceTruthFile": "egset12/07.jams",
+      "audio": {
+        "file": "clips/electric-eg07-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 15.52,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          63
+        ],
+        "notes": [
+          {
+            "midi": 67,
+            "onset": -0.328,
+            "offset": 0.304
+          },
+          {
+            "midi": 55,
+            "onset": 0.5,
+            "offset": 0.98
+          },
+          {
+            "midi": 63,
+            "onset": 0.5,
+            "offset": 0.98
+          },
+          {
+            "midi": 53,
+            "onset": 1.076,
+            "offset": 1.436
+          },
+          {
+            "midi": 62,
+            "onset": 1.076,
+            "offset": 1.436
+          },
+          {
+            "midi": 51,
+            "onset": 1.496,
+            "offset": 1.984
+          },
+          {
+            "midi": 60,
+            "onset": 1.496,
+            "offset": 1.984
+          },
+          {
+            "midi": 51,
+            "onset": 2.084,
+            "offset": 3.116
+          },
+          {
+            "midi": 60,
+            "onset": 2.084,
+            "offset": 3.116
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg01-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg01",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_01.wav",
+      "sourceTruthFile": "egset12/01.jams",
+      "audio": {
+        "file": "clips/electric-eg01-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.37,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          54,
+          57,
+          62
+        ],
+        "notes": [
+          {
+            "midi": 48,
+            "onset": -0.242,
+            "offset": 0.097
+          },
+          {
+            "midi": 47,
+            "onset": 0.137,
+            "offset": 0.494
+          },
+          {
+            "midi": 54,
+            "onset": 0.505,
+            "offset": 1.174
+          },
+          {
+            "midi": 57,
+            "onset": 0.505,
+            "offset": 1.174
+          },
+          {
+            "midi": 62,
+            "onset": 0.505,
+            "offset": 1.174
+          },
+          {
+            "midi": 50,
+            "onset": 1.265,
+            "offset": 1.569
+          },
+          {
+            "midi": 53,
+            "onset": 1.63,
+            "offset": 1.974
+          },
+          {
+            "midi": 51,
+            "onset": 2.006,
+            "offset": 2.361
+          },
+          {
+            "midi": 50,
+            "onset": 2.382,
+            "offset": 2.729
+          },
+          {
+            "midi": 48,
+            "onset": 2.755,
+            "offset": 3.113
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg01-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg01",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_01.wav",
+      "sourceTruthFile": "egset12/01.jams",
+      "audio": {
+        "file": "clips/electric-eg01-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 10,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          56,
+          60,
+          65
+        ],
+        "notes": [
+          {
+            "midi": 49,
+            "onset": -0.245,
+            "offset": 0.051
+          },
+          {
+            "midi": 48,
+            "onset": 0.128,
+            "offset": 0.349
+          },
+          {
+            "midi": 50,
+            "onset": 0.501,
+            "offset": 1.493
+          },
+          {
+            "midi": 56,
+            "onset": 0.501,
+            "offset": 1.493
+          },
+          {
+            "midi": 60,
+            "onset": 0.501,
+            "offset": 1.493
+          },
+          {
+            "midi": 65,
+            "onset": 0.501,
+            "offset": 1.493
+          },
+          {
+            "midi": 57,
+            "onset": 1.635,
+            "offset": 1.909
+          },
+          {
+            "midi": 62,
+            "onset": 1.979,
+            "offset": 2.216
+          },
+          {
+            "midi": 63,
+            "onset": 2.256,
+            "offset": 2.483
+          },
+          {
+            "midi": 64,
+            "onset": 2.509,
+            "offset": 2.717
+          },
+          {
+            "midi": 67,
+            "onset": 2.755,
+            "offset": 2.979
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg02-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg02",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_02.wav",
+      "sourceTruthFile": "egset12/02.jams",
+      "audio": {
+        "file": "clips/electric-eg02-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.21,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          52,
+          59,
+          64,
+          66,
+          71
+        ],
+        "notes": [
+          {
+            "midi": 51,
+            "onset": 0.065,
+            "offset": 0.47
+          },
+          {
+            "midi": 58,
+            "onset": 0.065,
+            "offset": 0.47
+          },
+          {
+            "midi": 63,
+            "onset": 0.065,
+            "offset": 0.47
+          },
+          {
+            "midi": 40,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 52,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 59,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 64,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 66,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 71,
+            "onset": 0.497,
+            "offset": 0.896
+          },
+          {
+            "midi": 40,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 52,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 59,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 64,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 66,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 71,
+            "onset": 0.92,
+            "offset": 1.16
+          },
+          {
+            "midi": 40,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 52,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 59,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 64,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 66,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 71,
+            "onset": 1.187,
+            "offset": 1.598
+          },
+          {
+            "midi": 40,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 52,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 59,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 64,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 66,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 71,
+            "onset": 1.61,
+            "offset": 1.844
+          },
+          {
+            "midi": 40,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 52,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 59,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 64,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 66,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 71,
+            "onset": 2.237,
+            "offset": 2.426
+          },
+          {
+            "midi": 40,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 52,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 59,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 64,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 66,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 71,
+            "onset": 2.438,
+            "offset": 2.597
+          },
+          {
+            "midi": 40,
+            "onset": 2.696,
+            "offset": 3.041
+          },
+          {
+            "midi": 49,
+            "onset": 2.696,
+            "offset": 3.041
+          },
+          {
+            "midi": 56,
+            "onset": 2.696,
+            "offset": 3.041
+          },
+          {
+            "midi": 61,
+            "onset": 2.696,
+            "offset": 3.041
+          },
+          {
+            "midi": 63,
+            "onset": 2.696,
+            "offset": 3.041
+          },
+          {
+            "midi": 68,
+            "onset": 2.696,
+            "offset": 3.041
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg05-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "dev",
+      "performance": "eg05",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_05.wav",
+      "sourceTruthFile": "egset12/05.jams",
+      "audio": {
+        "file": "clips/electric-eg05-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.54,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          71,
+          76
+        ],
+        "notes": [
+          {
+            "midi": 54,
+            "onset": 0.075,
+            "offset": 0.345
+          },
+          {
+            "midi": 71,
+            "onset": 0.498,
+            "offset": 0.834
+          },
+          {
+            "midi": 76,
+            "onset": 0.498,
+            "offset": 0.834
+          },
+          {
+            "midi": 70,
+            "onset": 0.9,
+            "offset": 1.25
+          },
+          {
+            "midi": 75,
+            "onset": 0.9,
+            "offset": 1.25
+          },
+          {
+            "midi": 69,
+            "onset": 1.323,
+            "offset": 1.641
+          },
+          {
+            "midi": 74,
+            "onset": 1.323,
+            "offset": 1.641
+          },
+          {
+            "midi": 64,
+            "onset": 2.142,
+            "offset": 2.486
+          },
+          {
+            "midi": 68,
+            "onset": 2.142,
+            "offset": 2.486
+          },
+          {
+            "midi": 63,
+            "onset": 2.534,
+            "offset": 2.921
+          },
+          {
+            "midi": 67,
+            "onset": 2.534,
+            "offset": 2.921
+          },
+          {
+            "midi": 62,
+            "onset": 2.985,
+            "offset": 3.332
+          },
+          {
+            "midi": 66,
+            "onset": 2.985,
+            "offset": 3.332
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg10-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg10",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_10.wav",
+      "sourceTruthFile": "egset12/10.jams",
+      "audio": {
+        "file": "clips/electric-eg10-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.47,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          47,
+          52,
+          55,
+          59,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 50,
+            "onset": -0.043,
+            "offset": 0.19
+          },
+          {
+            "midi": 40,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 47,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 52,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 55,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 59,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 64,
+            "onset": 0.503,
+            "offset": 2.223
+          },
+          {
+            "midi": 55,
+            "onset": 2.523,
+            "offset": 4.663
+          },
+          {
+            "midi": 59,
+            "onset": 2.523,
+            "offset": 4.663
+          },
+          {
+            "midi": 64,
+            "onset": 2.523,
+            "offset": 4.663
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg03-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg03",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_03.wav",
+      "sourceTruthFile": "egset12/03.jams",
+      "audio": {
+        "file": "clips/electric-eg03-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.54,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          60,
+          64,
+          69
+        ],
+        "notes": [
+          {
+            "midi": 70,
+            "onset": 0.013,
+            "offset": 0.322
+          },
+          {
+            "midi": 55,
+            "onset": 0.502,
+            "offset": 1.952
+          },
+          {
+            "midi": 60,
+            "onset": 0.502,
+            "offset": 1.952
+          },
+          {
+            "midi": 64,
+            "onset": 0.502,
+            "offset": 1.952
+          },
+          {
+            "midi": 69,
+            "onset": 0.502,
+            "offset": 1.952
+          },
+          {
+            "midi": 72,
+            "onset": 1.977,
+            "offset": 2.315
+          },
+          {
+            "midi": 55,
+            "onset": 2.48,
+            "offset": 4.436
+          },
+          {
+            "midi": 62,
+            "onset": 2.48,
+            "offset": 4.436
+          },
+          {
+            "midi": 66,
+            "onset": 2.48,
+            "offset": 4.436
+          },
+          {
+            "midi": 71,
+            "onset": 2.48,
+            "offset": 4.436
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg04-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg04",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_04.wav",
+      "sourceTruthFile": "egset12/04.jams",
+      "audio": {
+        "file": "clips/electric-eg04-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 8.91,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          53,
+          54
+        ],
+        "notes": [
+          {
+            "midi": 51,
+            "onset": -0.054,
+            "offset": 0.09
+          },
+          {
+            "midi": 55,
+            "onset": 0.09,
+            "offset": 0.214
+          },
+          {
+            "midi": 56,
+            "onset": 0.226,
+            "offset": 0.362
+          },
+          {
+            "midi": 53,
+            "onset": 0.502,
+            "offset": 0.59
+          },
+          {
+            "midi": 54,
+            "onset": 0.61,
+            "offset": 0.734
+          },
+          {
+            "midi": 55,
+            "onset": 0.77,
+            "offset": 0.914
+          },
+          {
+            "midi": 55,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 59,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 65,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 70,
+            "onset": 1.454,
+            "offset": 1.702
+          },
+          {
+            "midi": 48,
+            "onset": 1.998,
+            "offset": 2.138
+          },
+          {
+            "midi": 51,
+            "onset": 2.138,
+            "offset": 2.274
+          },
+          {
+            "midi": 55,
+            "onset": 2.274,
+            "offset": 2.378
+          },
+          {
+            "midi": 56,
+            "onset": 2.406,
+            "offset": 2.53
+          },
+          {
+            "midi": 53,
+            "onset": 2.678,
+            "offset": 2.774
+          },
+          {
+            "midi": 54,
+            "onset": 2.806,
+            "offset": 2.922
+          },
+          {
+            "midi": 55,
+            "onset": 2.958,
+            "offset": 3.102
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg06-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg06",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_06.wav",
+      "sourceTruthFile": "egset12/06.jams",
+      "audio": {
+        "file": "clips/electric-eg06-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 7.92,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          48,
+          53,
+          55,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 40,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 48,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 53,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 55,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 64,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 64,
+            "onset": -0.114,
+            "offset": 0.498
+          },
+          {
+            "midi": 40,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 48,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 53,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 55,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 64,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 64,
+            "onset": 0.498,
+            "offset": 0.798
+          },
+          {
+            "midi": 40,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 48,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 53,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 55,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 64,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 64,
+            "onset": 0.798,
+            "offset": 1.086
+          },
+          {
+            "midi": 40,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 48,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 53,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 55,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 64,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 64,
+            "onset": 1.086,
+            "offset": 1.41
+          },
+          {
+            "midi": 40,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 48,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 52,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 55,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 59,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 64,
+            "onset": 1.41,
+            "offset": 1.968
+          },
+          {
+            "midi": 40,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 48,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 52,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 55,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 59,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 64,
+            "onset": 1.968,
+            "offset": 2.268
+          },
+          {
+            "midi": 40,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 48,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 52,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 55,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 59,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 64,
+            "onset": 2.28,
+            "offset": 2.82
+          },
+          {
+            "midi": 40,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 48,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 52,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 55,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 59,
+            "onset": 2.82,
+            "offset": 3.144
+          },
+          {
+            "midi": 64,
+            "onset": 2.82,
+            "offset": 3.144
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg08-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg08",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_08.wav",
+      "sourceTruthFile": "egset12/08.jams",
+      "audio": {
+        "file": "clips/electric-eg08-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.95,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          47,
+          58,
+          72
+        ],
+        "notes": [
+          {
+            "midi": 71,
+            "onset": -0.094,
+            "offset": 0.162
+          },
+          {
+            "midi": 47,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 58,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 72,
+            "onset": 0.503,
+            "offset": 2.861
+          },
+          {
+            "midi": 47,
+            "onset": 2.978,
+            "offset": 4.109
+          },
+          {
+            "midi": 58,
+            "onset": 2.978,
+            "offset": 4.109
+          },
+          {
+            "midi": 72,
+            "onset": 2.978,
+            "offset": 4.109
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg09-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg09",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_09.wav",
+      "sourceTruthFile": "egset12/09.jams",
+      "audio": {
+        "file": "clips/electric-eg09-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.6,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          70
+        ],
+        "notes": [
+          {
+            "midi": 52,
+            "onset": -1.074,
+            "offset": 0.186
+          },
+          {
+            "midi": 56,
+            "onset": 0.498,
+            "offset": 0.804
+          },
+          {
+            "midi": 70,
+            "onset": 0.498,
+            "offset": 0.804
+          },
+          {
+            "midi": 62,
+            "onset": 1.128,
+            "offset": 1.434
+          },
+          {
+            "midi": 71,
+            "onset": 1.128,
+            "offset": 1.434
+          },
+          {
+            "midi": 56,
+            "onset": 2.082,
+            "offset": 2.352
+          },
+          {
+            "midi": 70,
+            "onset": 2.082,
+            "offset": 2.352
+          },
+          {
+            "midi": 62,
+            "onset": 2.724,
+            "offset": 3.024
+          },
+          {
+            "midi": 71,
+            "onset": 2.724,
+            "offset": 3.024
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg11-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg11",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_11.wav",
+      "sourceTruthFile": "egset12/11.jams",
+      "audio": {
+        "file": "clips/electric-eg11-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.17,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          50,
+          56,
+          57,
+          59,
+          66
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": -0.925,
+            "offset": 0.142
+          },
+          {
+            "midi": 68,
+            "onset": -0.925,
+            "offset": 0.142
+          },
+          {
+            "midi": 40,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 57,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 50,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 56,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 59,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 66,
+            "onset": 0.505,
+            "offset": 1.657
+          },
+          {
+            "midi": 67,
+            "onset": 1.794,
+            "offset": 1.966
+          },
+          {
+            "midi": 65,
+            "onset": 1.994,
+            "offset": 2.142
+          },
+          {
+            "midi": 63,
+            "onset": 2.17,
+            "offset": 2.338
+          },
+          {
+            "midi": 57,
+            "onset": 2.338,
+            "offset": 2.638
+          },
+          {
+            "midi": 63,
+            "onset": 2.682,
+            "offset": 2.81
+          },
+          {
+            "midi": 65,
+            "onset": 2.854,
+            "offset": 2.99
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-eg12-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "dataset": "egset12",
+      "split": "eval",
+      "performance": "eg12",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "eg_12.wav",
+      "sourceTruthFile": "egset12/12.jams",
+      "audio": {
+        "file": "clips/electric-eg12-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 11.69,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          45,
+          62,
+          67
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 62,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 67,
+            "onset": 0.499,
+            "offset": 0.714
+          },
+          {
+            "midi": 48,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 54,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 64,
+            "onset": 1.036,
+            "offset": 1.307
+          },
+          {
+            "midi": 45,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 62,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 67,
+            "onset": 1.937,
+            "offset": 2.137
+          },
+          {
+            "midi": 50,
+            "onset": 2.473,
+            "offset": 2.856
+          },
+          {
+            "midi": 56,
+            "onset": 2.473,
+            "offset": 2.856
+          },
+          {
+            "midi": 66,
+            "onset": 2.473,
+            "offset": 2.856
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs00-jazz187",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_00_Jazz2-187-F#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-jazz-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.1,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          54,
+          66
+        ],
+        "notes": [
+          {
+            "midi": 54,
+            "onset": 0.038,
+            "offset": 0.357
+          },
+          {
+            "midi": 66,
+            "onset": 0.207,
+            "offset": 0.509
+          },
+          {
+            "midi": 54,
+            "onset": 0.382,
+            "offset": 0.696
+          },
+          {
+            "midi": 66,
+            "onset": 0.549,
+            "offset": 0.839
+          },
+          {
+            "midi": 54,
+            "onset": 0.724,
+            "offset": 0.875
+          },
+          {
+            "midi": 66,
+            "onset": 0.876,
+            "offset": 1.479
+          },
+          {
+            "midi": 54,
+            "onset": 1.024,
+            "offset": 1.332
+          },
+          {
+            "midi": 54,
+            "onset": 1.349,
+            "offset": 1.674
+          },
+          {
+            "midi": 66,
+            "onset": 1.505,
+            "offset": 1.819
+          },
+          {
+            "midi": 54,
+            "onset": 1.695,
+            "offset": 1.962
+          },
+          {
+            "midi": 66,
+            "onset": 1.844,
+            "offset": 2.14
+          },
+          {
+            "midi": 54,
+            "onset": 2.009,
+            "offset": 2.311
+          },
+          {
+            "midi": 66,
+            "onset": 2.164,
+            "offset": 2.495
+          },
+          {
+            "midi": 54,
+            "onset": 2.321,
+            "offset": 2.466
+          },
+          {
+            "midi": 56,
+            "onset": 2.483,
+            "offset": 2.559
+          },
+          {
+            "midi": 68,
+            "onset": 2.498,
+            "offset": 2.637
+          },
+          {
+            "midi": 57,
+            "onset": 2.609,
+            "offset": 2.911
+          },
+          {
+            "midi": 69,
+            "onset": 2.782,
+            "offset": 3.061
+          },
+          {
+            "midi": 57,
+            "onset": 2.947,
+            "offset": 3.237
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs00-jazz187",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_00_Jazz2-187-F#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-jazz-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.08,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          68
+        ],
+        "notes": [
+          {
+            "midi": 66,
+            "onset": -0.136,
+            "offset": 0.16
+          },
+          {
+            "midi": 54,
+            "onset": 0.029,
+            "offset": 0.331
+          },
+          {
+            "midi": 66,
+            "onset": 0.184,
+            "offset": 0.515
+          },
+          {
+            "midi": 54,
+            "onset": 0.341,
+            "offset": 0.486
+          },
+          {
+            "midi": 56,
+            "onset": 0.503,
+            "offset": 0.579
+          },
+          {
+            "midi": 68,
+            "onset": 0.518,
+            "offset": 0.657
+          },
+          {
+            "midi": 57,
+            "onset": 0.629,
+            "offset": 0.931
+          },
+          {
+            "midi": 69,
+            "onset": 0.802,
+            "offset": 1.081
+          },
+          {
+            "midi": 57,
+            "onset": 0.967,
+            "offset": 1.257
+          },
+          {
+            "midi": 69,
+            "onset": 1.118,
+            "offset": 1.495
+          },
+          {
+            "midi": 57,
+            "onset": 1.277,
+            "offset": 1.347
+          },
+          {
+            "midi": 56,
+            "onset": 1.369,
+            "offset": 1.648
+          },
+          {
+            "midi": 68,
+            "onset": 1.496,
+            "offset": 1.734
+          },
+          {
+            "midi": 56,
+            "onset": 1.67,
+            "offset": 1.769
+          },
+          {
+            "midi": 66,
+            "onset": 1.735,
+            "offset": 2.17
+          },
+          {
+            "midi": 54,
+            "onset": 1.791,
+            "offset": 2.243
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad-b",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs01-rock3",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_01_Rock3-117-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/01_Rock3-117-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-triad-b.wav",
+        "sampleRate": 44100,
+        "startSeconds": 23.52,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          58,
+          60,
+          62
+        ],
+        "notes": [
+          {
+            "midi": 63,
+            "onset": -0.035,
+            "offset": 0.087
+          },
+          {
+            "midi": 62,
+            "onset": 0.115,
+            "offset": 0.277
+          },
+          {
+            "midi": 60,
+            "onset": 0.262,
+            "offset": 0.407
+          },
+          {
+            "midi": 62,
+            "onset": 0.39,
+            "offset": 0.535
+          },
+          {
+            "midi": 60,
+            "onset": 0.495,
+            "offset": 0.594
+          },
+          {
+            "midi": 58,
+            "onset": 0.597,
+            "offset": 0.748
+          },
+          {
+            "midi": 60,
+            "onset": 0.75,
+            "offset": 0.849
+          },
+          {
+            "midi": 60,
+            "onset": 0.872,
+            "offset": 0.983
+          },
+          {
+            "midi": 60,
+            "onset": 0.986,
+            "offset": 1.102
+          },
+          {
+            "midi": 61,
+            "onset": 1.122,
+            "offset": 1.29
+          },
+          {
+            "midi": 58,
+            "onset": 1.345,
+            "offset": 1.461
+          },
+          {
+            "midi": 60,
+            "onset": 1.482,
+            "offset": 1.819
+          },
+          {
+            "midi": 59,
+            "onset": 2.379,
+            "offset": 2.518
+          },
+          {
+            "midi": 62,
+            "onset": 2.52,
+            "offset": 2.602
+          },
+          {
+            "midi": 62,
+            "onset": 2.616,
+            "offset": 2.767
+          },
+          {
+            "midi": 69,
+            "onset": 2.623,
+            "offset": 2.844
+          },
+          {
+            "midi": 62,
+            "onset": 2.771,
+            "offset": 2.916
+          },
+          {
+            "midi": 69,
+            "onset": 2.931,
+            "offset": 3.059
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs02-bn1",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_02_BN1-129-Eb_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/02_BN1-129-Eb_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-bossa-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 7.66,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          44,
+          51,
+          55
+        ],
+        "notes": [
+          {
+            "midi": 44,
+            "onset": -0.171,
+            "offset": 0.009
+          },
+          {
+            "midi": 40,
+            "onset": 0.026,
+            "offset": 0.148
+          },
+          {
+            "midi": 44,
+            "onset": 0.259,
+            "offset": 0.497
+          },
+          {
+            "midi": 51,
+            "onset": 0.303,
+            "offset": 0.518
+          },
+          {
+            "midi": 44,
+            "onset": 0.5,
+            "offset": 0.947
+          },
+          {
+            "midi": 55,
+            "onset": 0.517,
+            "offset": 1.435
+          },
+          {
+            "midi": 51,
+            "onset": 0.519,
+            "offset": 0.925
+          },
+          {
+            "midi": 51,
+            "onset": 0.952,
+            "offset": 1.178
+          },
+          {
+            "midi": 44,
+            "onset": 0.961,
+            "offset": 1.164
+          },
+          {
+            "midi": 44,
+            "onset": 1.181,
+            "offset": 1.912
+          },
+          {
+            "midi": 51,
+            "onset": 1.182,
+            "offset": 1.438
+          },
+          {
+            "midi": 55,
+            "onset": 1.435,
+            "offset": 2.346
+          },
+          {
+            "midi": 51,
+            "onset": 1.439,
+            "offset": 1.904
+          },
+          {
+            "midi": 51,
+            "onset": 1.908,
+            "offset": 2.117
+          },
+          {
+            "midi": 44,
+            "onset": 1.914,
+            "offset": 2.111
+          },
+          {
+            "midi": 44,
+            "onset": 2.114,
+            "offset": 2.59
+          },
+          {
+            "midi": 51,
+            "onset": 2.117,
+            "offset": 2.373
+          },
+          {
+            "midi": 55,
+            "onset": 2.372,
+            "offset": 2.686
+          },
+          {
+            "midi": 51,
+            "onset": 2.378,
+            "offset": 2.581
+          },
+          {
+            "midi": 55,
+            "onset": 2.789,
+            "offset": 3.114
+          },
+          {
+            "midi": 51,
+            "onset": 2.798,
+            "offset": 3.135
+          },
+          {
+            "midi": 44,
+            "onset": 2.82,
+            "offset": 3.104
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs02-bn1",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_02_BN1-129-Eb_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/02_BN1-129-Eb_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-bossa-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.45,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          51,
+          55,
+          62
+        ],
+        "notes": [
+          {
+            "midi": 63,
+            "onset": -0.186,
+            "offset": 0.29
+          },
+          {
+            "midi": 51,
+            "onset": -0.163,
+            "offset": 0.29
+          },
+          {
+            "midi": 55,
+            "onset": -0.139,
+            "offset": 0.296
+          },
+          {
+            "midi": 51,
+            "onset": 0.299,
+            "offset": 0.49
+          },
+          {
+            "midi": 63,
+            "onset": 0.3,
+            "offset": 0.503
+          },
+          {
+            "midi": 55,
+            "onset": 0.308,
+            "offset": 0.499
+          },
+          {
+            "midi": 51,
+            "onset": 0.495,
+            "offset": 0.773
+          },
+          {
+            "midi": 40,
+            "onset": 0.495,
+            "offset": 0.605
+          },
+          {
+            "midi": 62,
+            "onset": 0.518,
+            "offset": 0.739
+          },
+          {
+            "midi": 55,
+            "onset": 0.522,
+            "offset": 0.772
+          },
+          {
+            "midi": 63,
+            "onset": 0.749,
+            "offset": 0.981
+          },
+          {
+            "midi": 51,
+            "onset": 0.774,
+            "offset": 0.977
+          },
+          {
+            "midi": 55,
+            "onset": 0.776,
+            "offset": 0.979
+          },
+          {
+            "midi": 51,
+            "onset": 0.981,
+            "offset": 1.202
+          },
+          {
+            "midi": 55,
+            "onset": 0.983,
+            "offset": 1.198
+          },
+          {
+            "midi": 62,
+            "onset": 1.007,
+            "offset": 1.245
+          },
+          {
+            "midi": 45,
+            "onset": 1.203,
+            "offset": 1.435
+          },
+          {
+            "midi": 50,
+            "onset": 1.208,
+            "offset": 1.8
+          },
+          {
+            "midi": 46,
+            "onset": 1.477,
+            "offset": 1.878
+          },
+          {
+            "midi": 46,
+            "onset": 1.882,
+            "offset": 2.451
+          },
+          {
+            "midi": 57,
+            "onset": 2.117,
+            "offset": 2.488
+          },
+          {
+            "midi": 53,
+            "onset": 2.156,
+            "offset": 2.499
+          },
+          {
+            "midi": 40,
+            "onset": 2.605,
+            "offset": 2.761
+          },
+          {
+            "midi": 44,
+            "onset": 2.814,
+            "offset": 3.296
+          },
+          {
+            "midi": 51,
+            "onset": 2.847,
+            "offset": 3.323
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-funk-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs05-funk2",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_05_Funk2-108-Eb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Funk2-108-Eb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-funk-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.5,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          70
+        ],
+        "notes": [
+          {
+            "midi": 65,
+            "onset": -0.044,
+            "offset": 0.119
+          },
+          {
+            "midi": 66,
+            "onset": 0.158,
+            "offset": 0.297
+          },
+          {
+            "midi": 68,
+            "onset": 0.335,
+            "offset": 0.462
+          },
+          {
+            "midi": 70,
+            "onset": 0.471,
+            "offset": 0.662
+          },
+          {
+            "midi": 71,
+            "onset": 0.699,
+            "offset": 2.284
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs05-rock1",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_05_Rock1-130-A_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Rock1-130-A_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 14.73,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          47,
+          52,
+          56,
+          59,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 40,
+            "onset": 0.004,
+            "offset": 0.498
+          },
+          {
+            "midi": 45,
+            "onset": 0.01,
+            "offset": 0.144
+          },
+          {
+            "midi": 40,
+            "onset": 0.503,
+            "offset": 0.898
+          },
+          {
+            "midi": 47,
+            "onset": 0.51,
+            "offset": 0.893
+          },
+          {
+            "midi": 52,
+            "onset": 0.513,
+            "offset": 0.873
+          },
+          {
+            "midi": 56,
+            "onset": 0.514,
+            "offset": 0.879
+          },
+          {
+            "midi": 59,
+            "onset": 0.518,
+            "offset": 0.844
+          },
+          {
+            "midi": 64,
+            "onset": 0.521,
+            "offset": 0.84
+          },
+          {
+            "midi": 59,
+            "onset": 0.848,
+            "offset": 1.208
+          },
+          {
+            "midi": 64,
+            "onset": 0.857,
+            "offset": 1.211
+          },
+          {
+            "midi": 52,
+            "onset": 0.878,
+            "offset": 0.971
+          },
+          {
+            "midi": 56,
+            "onset": 0.881,
+            "offset": 0.974
+          },
+          {
+            "midi": 47,
+            "onset": 0.893,
+            "offset": 0.975
+          },
+          {
+            "midi": 40,
+            "onset": 0.9,
+            "offset": 0.975
+          },
+          {
+            "midi": 52,
+            "onset": 0.976,
+            "offset": 1.086
+          },
+          {
+            "midi": 56,
+            "onset": 0.976,
+            "offset": 1.191
+          },
+          {
+            "midi": 47,
+            "onset": 0.978,
+            "offset": 1.175
+          },
+          {
+            "midi": 40,
+            "onset": 0.979,
+            "offset": 1.188
+          },
+          {
+            "midi": 40,
+            "onset": 1.188,
+            "offset": 2.059
+          },
+          {
+            "midi": 47,
+            "onset": 1.198,
+            "offset": 1.575
+          },
+          {
+            "midi": 52,
+            "onset": 1.199,
+            "offset": 1.332
+          },
+          {
+            "midi": 56,
+            "onset": 1.208,
+            "offset": 1.591
+          },
+          {
+            "midi": 59,
+            "onset": 1.212,
+            "offset": 1.392
+          },
+          {
+            "midi": 64,
+            "onset": 1.214,
+            "offset": 1.411
+          },
+          {
+            "midi": 59,
+            "onset": 1.393,
+            "offset": 1.928
+          },
+          {
+            "midi": 64,
+            "onset": 1.415,
+            "offset": 1.618
+          },
+          {
+            "midi": 45,
+            "onset": 1.581,
+            "offset": 1.697
+          },
+          {
+            "midi": 50,
+            "onset": 1.622,
+            "offset": 1.854
+          },
+          {
+            "midi": 55,
+            "onset": 1.633,
+            "offset": 1.924
+          },
+          {
+            "midi": 50,
+            "onset": 1.866,
+            "offset": 2.04
+          },
+          {
+            "midi": 57,
+            "onset": 2.1,
+            "offset": 2.332
+          },
+          {
+            "midi": 50,
+            "onset": 2.1,
+            "offset": 2.518
+          },
+          {
+            "midi": 62,
+            "onset": 2.107,
+            "offset": 2.339
+          },
+          {
+            "midi": 66,
+            "onset": 2.115,
+            "offset": 2.348
+          },
+          {
+            "midi": 57,
+            "onset": 2.336,
+            "offset": 2.557
+          },
+          {
+            "midi": 62,
+            "onset": 2.342,
+            "offset": 2.563
+          },
+          {
+            "midi": 66,
+            "onset": 2.348,
+            "offset": 2.568
+          },
+          {
+            "midi": 50,
+            "onset": 2.546,
+            "offset": 2.755
+          },
+          {
+            "midi": 57,
+            "onset": 2.559,
+            "offset": 2.786
+          },
+          {
+            "midi": 62,
+            "onset": 2.565,
+            "offset": 2.78
+          },
+          {
+            "midi": 66,
+            "onset": 2.576,
+            "offset": 2.791
+          },
+          {
+            "midi": 50,
+            "onset": 2.779,
+            "offset": 2.982
+          },
+          {
+            "midi": 62,
+            "onset": 2.785,
+            "offset": 3.028
+          },
+          {
+            "midi": 66,
+            "onset": 2.794,
+            "offset": 3.015
+          },
+          {
+            "midi": 57,
+            "onset": 2.796,
+            "offset": 3.016
+          },
+          {
+            "midi": 45,
+            "onset": 2.994,
+            "offset": 3.198
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs05-rock1",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_05_Rock1-130-A_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Rock1-130-A_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.26,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          52,
+          57,
+          61
+        ],
+        "notes": [
+          {
+            "midi": 45,
+            "onset": -0.197,
+            "offset": 0.035
+          },
+          {
+            "midi": 52,
+            "onset": -0.186,
+            "offset": 0.029
+          },
+          {
+            "midi": 61,
+            "onset": -0.179,
+            "offset": 0.036
+          },
+          {
+            "midi": 57,
+            "onset": -0.174,
+            "offset": 0.029
+          },
+          {
+            "midi": 52,
+            "onset": 0.03,
+            "offset": 0.25
+          },
+          {
+            "midi": 57,
+            "onset": 0.03,
+            "offset": 0.245
+          },
+          {
+            "midi": 45,
+            "onset": 0.035,
+            "offset": 0.162
+          },
+          {
+            "midi": 61,
+            "onset": 0.037,
+            "offset": 0.251
+          },
+          {
+            "midi": 45,
+            "onset": 0.26,
+            "offset": 0.69
+          },
+          {
+            "midi": 57,
+            "onset": 0.265,
+            "offset": 0.492
+          },
+          {
+            "midi": 61,
+            "onset": 0.276,
+            "offset": 0.508
+          },
+          {
+            "midi": 52,
+            "onset": 0.277,
+            "offset": 0.474
+          },
+          {
+            "midi": 52,
+            "onset": 0.496,
+            "offset": 0.711
+          },
+          {
+            "midi": 57,
+            "onset": 0.505,
+            "offset": 0.708
+          },
+          {
+            "midi": 61,
+            "onset": 0.512,
+            "offset": 0.721
+          },
+          {
+            "midi": 45,
+            "onset": 0.719,
+            "offset": 0.905
+          },
+          {
+            "midi": 52,
+            "onset": 0.724,
+            "offset": 0.933
+          },
+          {
+            "midi": 57,
+            "onset": 0.725,
+            "offset": 0.945
+          },
+          {
+            "midi": 61,
+            "onset": 0.734,
+            "offset": 0.955
+          },
+          {
+            "midi": 45,
+            "onset": 0.93,
+            "offset": 1.186
+          },
+          {
+            "midi": 52,
+            "onset": 0.955,
+            "offset": 1.187
+          },
+          {
+            "midi": 61,
+            "onset": 0.96,
+            "offset": 1.204
+          },
+          {
+            "midi": 57,
+            "onset": 0.965,
+            "offset": 1.18
+          },
+          {
+            "midi": 52,
+            "onset": 1.188,
+            "offset": 1.392
+          },
+          {
+            "midi": 45,
+            "onset": 1.188,
+            "offset": 1.392
+          },
+          {
+            "midi": 57,
+            "onset": 1.193,
+            "offset": 1.379
+          },
+          {
+            "midi": 61,
+            "onset": 1.205,
+            "offset": 1.414
+          },
+          {
+            "midi": 45,
+            "onset": 1.4,
+            "offset": 1.62
+          },
+          {
+            "midi": 57,
+            "onset": 1.404,
+            "offset": 1.636
+          },
+          {
+            "midi": 52,
+            "onset": 1.413,
+            "offset": 1.645
+          },
+          {
+            "midi": 61,
+            "onset": 1.415,
+            "offset": 1.619
+          },
+          {
+            "midi": 45,
+            "onset": 1.642,
+            "offset": 1.845
+          },
+          {
+            "midi": 57,
+            "onset": 1.648,
+            "offset": 1.823
+          },
+          {
+            "midi": 52,
+            "onset": 1.653,
+            "offset": 1.862
+          },
+          {
+            "midi": 61,
+            "onset": 1.672,
+            "offset": 1.829
+          },
+          {
+            "midi": 50,
+            "onset": 1.825,
+            "offset": 2.086
+          },
+          {
+            "midi": 55,
+            "onset": 1.83,
+            "offset": 2.086
+          },
+          {
+            "midi": 59,
+            "onset": 1.877,
+            "offset": 2.075
+          },
+          {
+            "midi": 57,
+            "onset": 2.101,
+            "offset": 2.595
+          },
+          {
+            "midi": 50,
+            "onset": 2.106,
+            "offset": 2.571
+          },
+          {
+            "midi": 62,
+            "onset": 2.111,
+            "offset": 2.337
+          },
+          {
+            "midi": 66,
+            "onset": 2.114,
+            "offset": 2.585
+          },
+          {
+            "midi": 62,
+            "onset": 2.342,
+            "offset": 2.58
+          },
+          {
+            "midi": 50,
+            "onset": 2.591,
+            "offset": 2.788
+          },
+          {
+            "midi": 57,
+            "onset": 2.597,
+            "offset": 2.806
+          },
+          {
+            "midi": 62,
+            "onset": 2.605,
+            "offset": 2.803
+          },
+          {
+            "midi": 66,
+            "onset": 2.609,
+            "offset": 2.836
+          },
+          {
+            "midi": 50,
+            "onset": 2.789,
+            "offset": 3.039
+          },
+          {
+            "midi": 62,
+            "onset": 2.807,
+            "offset": 3.028
+          },
+          {
+            "midi": 57,
+            "onset": 2.809,
+            "offset": 3.03
+          },
+          {
+            "midi": 66,
+            "onset": 2.837,
+            "offset": 3.029
+          }
+        ]
+      }
+    },
+    {
+      "id": "acoustic-fresh-ss-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "performance": "gs05-ss1",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gs_05_SS1-100-C#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_SS1-100-C#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-ss-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 19.58,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56
+        ],
+        "notes": [
+          {
+            "midi": 56,
+            "onset": 0.5,
+            "offset": 0.761
+          },
+          {
+            "midi": 56,
+            "onset": 0.502,
+            "offset": 0.734
+          },
+          {
+            "midi": 60,
+            "onset": 0.808,
+            "offset": 1.041
+          },
+          {
+            "midi": 63,
+            "onset": 1.078,
+            "offset": 1.328
+          },
+          {
+            "midi": 63,
+            "onset": 1.333,
+            "offset": 1.559
+          },
+          {
+            "midi": 68,
+            "onset": 1.39,
+            "offset": 1.558
+          },
+          {
+            "midi": 67,
+            "onset": 1.562,
+            "offset": 1.789
+          },
+          {
+            "midi": 62,
+            "onset": 1.577,
+            "offset": 1.728
+          },
+          {
+            "midi": 61,
+            "onset": 1.748,
+            "offset": 1.894
+          },
+          {
+            "midi": 66,
+            "onset": 1.833,
+            "offset": 2.971
+          },
+          {
+            "midi": 61,
+            "onset": 2.787,
+            "offset": 2.92
+          },
+          {
+            "midi": 58,
+            "onset": 2.964,
+            "offset": 3.138
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-gtechs-low",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-low.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.521,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          41
+        ],
+        "notes": [
+          {
+            "midi": 40,
+            "onset": -3.521,
+            "offset": 0.215
+          },
+          {
+            "midi": 41,
+            "onset": 0.5,
+            "offset": 4.279
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-gtechs-mid",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-mid.wav",
+        "sampleRate": 44100,
+        "startSeconds": 67.511,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57
+        ],
+        "notes": [
+          {
+            "midi": 57,
+            "onset": 0.5,
+            "offset": 2.668
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-gtechs-high",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-high.wav",
+        "sampleRate": 44100,
+        "startSeconds": 547.447,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          86
+        ],
+        "notes": [
+          {
+            "midi": 86,
+            "onset": 0.5,
+            "offset": 2.125
+          }
+        ]
+      }
+    },
+    {
+      "id": "electric-gtechs-quiet",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "performance": "gtechs-session",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "license": "CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-quiet.wav",
+        "sampleRate": 44100,
+        "startSeconds": 79.582,
+        "durationSeconds": 3
+      },
+      "truth": {
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          60
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.491,
+            "offset": 1.803
+          },
+          {
+            "midi": 60,
+            "onset": 0.5,
+            "offset": 0.728
+          }
+        ]
+      }
+    },
+    {
+      "id": "pause-mozart",
+      "instrument": "piano",
+      "category": "pause",
+      "dataset": "same-as-audio",
+      "split": "eval",
+      "performance": "vienna-mozart-p01",
+      "attribution": "see source file entry",
+      "license": "CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": null,
+      "audio": {
+        "file": "clips/pause-mozart.wav",
+        "sampleRate": 44100,
+        "startSeconds": 104,
+        "durationSeconds": 1.5
+      },
+      "truth": {
+        "anchorOnset": null,
+        "anchorTones": [],
+        "notes": []
+      },
+      "pauseRms": 0.00013
+    }
+  ]
+}
