@@ -592,3 +592,69 @@ dead: needs a tuplet-mark reader, same strip family.
 Exact next step: strip-based beam-count head experiment (TRAIN-only, frozen
 backbone, preregistered gates on 16→8/32→16 confusions + joint-exact);
 tuplet-mark reader follows in the same strip family.
+
+---
+
+# Strip-based rhythm recognition (S1): NEGATIVE result, mechanism found
+
+From `a26038845c`. No merge, TEST sealed, DEV identities fixed, no
+competing training (idle proxies only), ~3.4 GB free. One preregistered
+capped experiment (S1). No production change: duration 0.858, exact
+15,005 (67.3%), timing 1,368/3,334, rests 2/578 — all stand as measured.
+
+## Strip tower audit (priorities 1–3)
+
+- Construction (`infer.py`): full-page-width band ±4 staff-gaps around the
+  notehead cy, resized 128×24. Vertically covers stems (±3.5 gaps) and beam
+  rows; horizontally everything (own + neighboring notation).
+- Consumers (`v1_probe.py`): LocalModel (common AND membership probes)
+  accepts strips/geometry but forwards CROPS ONLY — the dur, in_beam, and
+  tuplet_member heads never see a beam pixel. Only ContextModel
+  (staff/voice) runs the strip tower (16→32 ch, global avgpool, +5-d geo).
+- Pixel verification (DEV, analysis only): strip edge-band ink scales with
+  beam count — 8th 0.102 vs 16th 0.151 vs 32nd 0.141. Beams ARE in the
+  pixels. Frozen context-dur reference head scores only 0.613 (strip tower
+  32-d global pool + multitask dilution waste the signal).
+- Tuplet census (P11): TRAIN 3,500 tuplet notes / 153 scores; DEV 433 / 23 —
+  sufficient supervision for a binary head; included in S1 multitask.
+
+## S1 experiment (priority 7): REJECTED on all heads
+
+`scripts/train_striphead.py` + `reports/train_striphead.log`. Multitask
+linear on frozen features [neighbor crops 384 (warm-started from A1) +
+strip-tower pre-pool rows 384 (32ch×12, width-pooled, vertical kept) + geo
+5] → {dur16, is_start, is_end, tuplet}. TRAIN note rows, AdamW 3e-3, 10
+epochs, CPU seed 0 (~10 min). Frozen DEV:
+
+| head | result | verdict |
+|---|---|---|
+| dur agree | 0.8589 vs A1 0.8580 (+21 notes) | noise, not signal |
+| beam start F1 | 0.22 (epoch curve 0.15→0.52→0.22, thrashing) | no learning |
+| beam end F1 | 0.35 (same instability) | no learning |
+| tuplet F1 | 0.0 all 10 epochs (3,500 TRAIN positives) | dead |
+| C4 beamed-16ths score | S1 0.418 vs A1 0.426 (more quarter-errors) | worse on motive case |
+
+Mechanism (artifact weights): strip-block norm 9.7 (optimizer used the
+features) yet DEV +0.0009 → memorizable texture that does not transfer.
+Causes: 12-row resolution ≈ 0.67 gaps/row vs ~0.5-gap beams, smeared further
+by 128×24 INTER_AREA resize and conv pooling — beam COUNT is aliased away
+before any linear head; multitask uniform loss cannot drive rare heads from
+uninformative features. Artifact `models/strip_dur_head.pt` retained as
+evidence; NOT wired into production (no `--dur-head strip`, no decoder
+change, no source-file modification — zero regression surface; prior
+regressions and music21 99/99 stand).
+
+## Return items (priorities 9–10, 13–15)
+
+- Beam recognition: unchanged (in_beam P/R from frozen membership head;
+  grouping untouched). Boundary/tuplet classification: infeasible at linear
+  level on current strip encodings (F1 0.22/0.35/0.0).
+- Duration 0.858, onsets/timing/rests/exact: unchanged (production = A1).
+- Remaining structural failures: beam COUNT aliased in strip encodings;
+  tuplet marks too small/far for 12-row features; rest voice; detector;
+  scans. Oracle-box vs automatic distinction preserved throughout.
+- Further training justified? YES but NOT linear-on-frozen: an unfrozen
+  small strip CNN with row-preserving architecture (pool width-only, keep
+  24-row resolution to the decision) or stem-centered tall crops containing
+  stem+beams. That is the exact next step (fresh preregistration, same
+  caps: TRAIN-only, frozen identities, TEST sealed).

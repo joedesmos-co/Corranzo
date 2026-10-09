@@ -1,0 +1,27 @@
+[train] collecting TRAIN...
+[collect] 100 scores, 15209 rows
+[collect] 200 scores, 29621 rows
+[collect] 300 scores, 42232 rows
+[collect] 400 scores, 61054 rows
+[collect] 500 scores, 79772 rows
+[collect] 600 scores, 95891 rows
+[collect] 700 scores, 112402 rows
+[train] TRAIN rows: 130240
+[train] collecting DEV (frozen, eval only)...
+[train] DEV rows: 22299
+[train] dur neighbor block warm-started from A1
+/Users/ryland/Documents/scoreflow-piano-unblock/docs/piano-truth-unblock/train/scripts/train_striphead.py:285: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss) * len(idx)
+[train] epoch 1/10 loss=0.3589 dev={'dur': 0.8615632988026369, 'start': {'f1': 0.1459, 'n_pos': 4267}, 'end': {'f1': 0.181, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=611s
+[train] epoch 2/10 loss=0.3158 dev={'dur': 0.8572133279519261, 'start': {'f1': 0.2881, 'n_pos': 4267}, 'end': {'f1': 0.2252, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=611s
+[train] epoch 3/10 loss=0.3072 dev={'dur': 0.8661374949549308, 'start': {'f1': 0.2967, 'n_pos': 4267}, 'end': {'f1': 0.3158, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=611s
+[train] epoch 4/10 loss=0.3010 dev={'dur': 0.8619220592851697, 'start': {'f1': 0.4363, 'n_pos': 4267}, 'end': {'f1': 0.291, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=612s
+[train] epoch 5/10 loss=0.2966 dev={'dur': 0.8549262298757792, 'start': {'f1': 0.3091, 'n_pos': 4267}, 'end': {'f1': 0.3971, 'n_pos': 4267}, 'tup': {'f1': 0.0044, 'n_pos': 433}} t=612s
+[train] epoch 6/10 loss=0.2959 dev={'dur': 0.8604870173550383, 'start': {'f1': 0.3743, 'n_pos': 4267}, 'end': {'f1': 0.4299, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=612s
+[train] epoch 7/10 loss=0.2892 dev={'dur': 0.858020539037625, 'start': {'f1': 0.4114, 'n_pos': 4267}, 'end': {'f1': 0.4641, 'n_pos': 4267}, 'tup': {'f1': 0.0386, 'n_pos': 433}} t=613s
+[train] epoch 8/10 loss=0.2865 dev={'dur': 0.8671689313422126, 'start': {'f1': 0.2731, 'n_pos': 4267}, 'end': {'f1': 0.4474, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=613s
+[train] epoch 9/10 loss=0.2854 dev={'dur': 0.8569891026503431, 'start': {'f1': 0.5226, 'n_pos': 4267}, 'end': {'f1': 0.3857, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=614s
+[train] epoch 10/10 loss=0.2840 dev={'dur': 0.8588725951836406, 'start': {'f1': 0.2229, 'n_pos': 4267}, 'end': {'f1': 0.3453, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}} t=614s
+[train] FINAL dev={'dur': 0.8588725951836406, 'start': {'f1': 0.2229, 'n_pos': 4267}, 'end': {'f1': 0.3453, 'n_pos': 4267}, 'tup': {'f1': 0.0, 'n_pos': 433}}
+[train] GATE PASS: saved models/strip_dur_head.pt
