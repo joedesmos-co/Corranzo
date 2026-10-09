@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readWavPcm } from '../scripts/lib/readWavPcm.mjs'
+import { synthSpeech } from '../src/features/microphone-input/micSyntheticClips.js'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -32,6 +33,11 @@ function loadClipSamples(id) {
     sampleRate: wav.sampleRate,
     anchorTones: clip.truth.anchorTones,
   }
+}
+
+function loadAccuracyClip(file, sampleRate = 44100) {
+  const wav = readWavPcm(join(projectRoot, 'benchmarks', 'mic-accuracy', 'clips', file))
+  return { samples: Array.from(wav.samples), sampleRate: wav.sampleRate }
 }
 
 describe('neural live injection (real browser, real model, real clips)', () => {
@@ -212,8 +218,7 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     expect(results.feedbackOutcome).not.toBe('wrong')
   }, 240_000)
 
-  it('hears a real piano triad end to end (all tones, no manufacture)', async () => {
-    // M1's weakest family through the live path: every triad tone must
+  it('hears a real piano triad end to end (all tones, no manufacture)', async () => {    // M1's weakest family through the live path: every triad tone must
     // be independently detected over the run (completion itself is
     // timing-luck on CPU runners; node scenarios pin the logic).
     const clip = loadClipSamples('piano-mozart-triad')
@@ -250,4 +255,168 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     }
     expect(results.feedbackOutcome).not.toBe('wrong')
   }, 240_000)
+
+  it('leaves a partial triad incomplete (one tone is not the chord)', async () => {
+    const clip = loadAccuracyClip('real-piano-c4.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60, 64, 67],
+        checkpointId: 'live-partial',
+        forceListen: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && window.__liveResults.phase === 'listening',
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    await page.waitForTimeout(45_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    // C4 is heard (detected) but the triad checkpoint must NOT complete:
+    // matched[] only records full completions.
+    expect(results.detectedNotes.map((note) => note.midi)).toContain(60)
+    expect(results.matched).toHaveLength(0)
+    expect(results.feedbackOutcome).not.toBe('complete')
+  }, 240_000)
+
+  it('never advances on room silence', async () => {
+    const clip = loadAccuracyClip('real-room-quiet.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-silence',
+        forceListen: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && window.__liveResults.phase === 'listening',
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    await page.waitForTimeout(30_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    expect(results.matched).toHaveLength(0)
+    expect(results.feedbackOutcome).not.toBe('complete')
+  }, 240_000)
+
+  it('does not advance on speech-like non-musical audio', async () => {
+    const speech = synthSpeech(44100, 3.0, { seed: 7 })
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-speech',
+        forceListen: true,
+      }),
+      { samples: Array.from(speech), sampleRate: 44100 },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && window.__liveResults.phase === 'listening',
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    await page.waitForTimeout(45_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    expect(results.matched).toHaveLength(0)
+    expect(results.feedbackOutcome).not.toBe('complete')
+  }, 240_000)
+
+  it('awards a repeated note exactly once per attack (no duplicates)', async () => {
+    const clip = loadAccuracyClip('real-piano-c4.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-once',
+        forceListen: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.phase === 'unavailable'),
+      null,
+      { timeout: 150_000, polling: 2000 },
+    )
+    // One attack keeps ringing through the looped clip: still one award.
+    await page.waitForTimeout(25_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.matched.filter((entry) => entry.midi === 60)).toHaveLength(1)
+  }, 240_000)
+
+  it('survives a WFY to Play Along switch on the shared ring (no starvation)', async () => {
+    const clip = loadAccuracyClip('real-piano-c4.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-switch-wfy',
+        forceListen: true,
+        keepAudio: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && window.__liveResults.matched.length >= 1,
+      null,
+      { timeout: 150_000, polling: 2000 },
+    )
+    // Switch modes: unmount WFY, remount Play Along on the same ring +
+    // the same looping audio (capture stream survives via grace).
+    await page.evaluate(() => {
+      window.__liveInject = { checkpoint: { id: 'live-switch-pa', expectedMidis: [60] } }
+      window.__liveApi.unmount()
+      window.__liveApi.mount({ performanceMode: 'play-along' })
+    })
+    await page.waitForFunction(
+      () => {
+        const results = window.__liveResults
+        return results && results.phase === 'listening' && results.debug && results.debug.lastRingAdopted === true
+      },
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    // Recognition continues on the adopted ring: Play Along events flow
+    // without waiting for a refill + renegotiation cycle.
+    await page.waitForFunction(
+      () => (window.__liveApi.playAlongEvents() ?? []).length >= 1,
+      null,
+      { timeout: 120_000, polling: 2000 },
+    )
+    const adopted = await page.evaluate(() => window.__liveResults.debug.lastRingAdopted)
+    const reasons = await page.evaluate(() => window.__liveResults.debug.lastPumpReason)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(adopted).toBe(true)
+    expect(reasons).not.toMatch(/^starved/)
+  }, 300_000)
 })

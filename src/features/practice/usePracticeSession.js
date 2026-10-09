@@ -569,6 +569,9 @@ export default function usePracticeSession({
 
   // Experimental neural mic hooks (Stage 8) — same props/callbacks as the
   // spectral hooks; active only behind the dev flag (computed above).
+  // One shared capture ring feeds both hook instances (M8): a mode switch
+  // adopts in-flight audio instead of refilling + renegotiating.
+  const neuralSharedRingRef = useRef(null)
   const neuralMic = useNeuralMicInput({
     active: neuralMicWfyActive,
     checkpointMode,
@@ -581,6 +584,7 @@ export default function usePracticeSession({
     onWrongNote: handleWfyWrongNote,
     microphone,
     instrumentId,
+    sharedRingRef: neuralSharedRingRef,
   })
 
   const neuralPlayAlongMic = useNeuralMicInput({
@@ -598,6 +602,7 @@ export default function usePracticeSession({
     onPlayAlongNote: handleNeuralPlayAlongNote,
     microphone,
     instrumentId,
+    sharedRingRef: neuralSharedRingRef,
   })
 
   // Readiness-gated routing (M1 fix): the flag alone must never park

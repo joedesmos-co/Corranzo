@@ -76,6 +76,61 @@ describe('micNeuralStream', () => {
     expect(doublings.map((event) => event.midi).sort()).toEqual([48, 60])
   })
 
+  it('drops late octave ring long after the fundamental expired (ghost memory)', () => {
+    const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80 })
+    // Fundamental C4 sounds and ends; its track expires once a full
+    // window passes with no re-detection.
+    expect(emitNeuralStreamNotes(state, [note(60, 0.2, 0.5)], 10_000).map((event) => event.midi)).toEqual([60])
+    expect(emitNeuralStreamNotes(state, [], 10_250)).toEqual([])
+    expect(emitNeuralStreamNotes(state, [], 10_500)).toEqual([])
+    expect(emitNeuralStreamNotes(state, [], 10_750)).toEqual([])
+    expect(state.activeNotes.has(60)).toBe(false)
+    // C5 harmonic still ringing 900 ms later: ghost, not a new note.
+    const late = emitNeuralStreamNotes(state, [note(72, 0.2, 0.4)], 10_900)
+    expect(late).toEqual([])
+    expect(state.stats.droppedOctave).toBe(1)
+  })
+
+  it('keeps strummed octave doublings inside the simultaneity gate', () => {
+    const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80 })
+    // Low E2 then E3 30 ms later (strum): real doubling, must survive.
+    const doubled = emitNeuralStreamNotes(state, [
+      note(40, 0.2, 0.6),
+      note(52, 0.23, 0.6),
+    ], 10_000)
+    expect(doubled.map((event) => event.midi).sort()).toEqual([40, 52])
+  })
+
+  it('live 0.5 s / 0.25 s / 80 ms config leaves no onset phase uncovered', () => {
+    // Mutual edge exclusion would blind ~16% of onset phases with 150 ms
+    // edges; 80 ms edges keep a 340 ms live band > 250 ms hop. Sweep every
+    // 10 ms of onset phase and require survival in at least one window.
+    const windowSeconds = 0.5
+    const hopSeconds = 0.25
+    const edgeMs = 80
+    for (let phaseMs = 0; phaseMs < 250; phaseMs += 10) {
+      const state = createNeuralStreamState({ windowSeconds, hopSeconds, edgeSuppressMs: edgeMs })
+      const onsetSeconds = 2 + phaseMs / 1000
+      let survived = false
+      for (let start = 1.5; start <= onsetSeconds; start += hopSeconds) {
+        const offset = onsetSeconds - start
+        if (offset < 0 || offset > windowSeconds) {
+          continue
+        }
+        const emitted = emitNeuralStreamNotes(
+          state,
+          [{ midi: 60, startOffsetSeconds: offset, endOffsetSeconds: offset + 0.3 }],
+          Math.round(start * 1000),
+        )
+        drainNeuralStreamEvents(state)
+        if (emitted.length === 1) {
+          survived = true
+        }
+      }
+      expect(survived).toBe(true)
+    }
+  })
+
   it('starts a new chord group after a strum gap', () => {
     const state = createNeuralStreamState()
     const first = emitNeuralStreamNotes(state, [note(60, 0.5, 0.9)], 10_000)

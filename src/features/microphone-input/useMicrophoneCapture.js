@@ -7,9 +7,13 @@ import { MIC_PERMISSION, MIC_SUPPORT } from './micInputConstants.js'
  * Keep enough recent time-domain history for deep-piano-bass scoring. The live
  * detector still derives level, attack, and high/middle pitch features from
  * the latest 2,048 samples, so this does not lengthen every register's window.
+ *
+ * 32768 samples (743 ms @44.1 kHz): a stalled poll loop (jank, throttled
+ * tab, CPU-bound inference) still finds the audio it owes instead of
+ * manufacturing a gap. Stalls beyond this stay honest gaps — see
+ * computeAppendCount — but never dilate or duplicate the clock.
  */
-export const MIC_CAPTURE_ANALYSER_FFT_SIZE = 8192
-
+export const MIC_CAPTURE_ANALYSER_FFT_SIZE = 32768
 function stopStream(stream) {
   if (!stream) {
     return
@@ -170,8 +174,21 @@ export function readCaptureSettings(stream) {
   }
 }
 
-export default function useMicrophoneCapture({ active = false, deviceId = null } = {}) {
-  const streamRef = useRef(null)
+/**
+ * Live-stream check (M8, pure + tested): true when the stream has at
+ * least one live track. requestAccess adopts such streams instead of
+ * re-acquiring (mode-switch gap rescue).
+ */
+export function hasLiveCaptureTracks(stream) {
+  try {
+    const tracks = stream?.getTracks?.() ?? []
+    return tracks.some((track) => track?.readyState === 'live')
+  } catch {
+    return false
+  }
+}
+
+export default function useMicrophoneCapture({ active = false, deviceId = null } = {}) {  const streamRef = useRef(null)
   const contextRef = useRef(null)
   const analyserRef = useRef(null)
   const bufferRef = useRef(null)
@@ -251,6 +268,22 @@ export default function useMicrophoneCapture({ active = false, deviceId = null }
   const requestAccess = useCallback(async () => {
     if (support !== MIC_SUPPORT.SUPPORTED) {
       return false
+    }
+
+    // Fast path (M8): a live stream (e.g. held through the teardown
+    // grace across a mode switch) is adopted, never re-acquired.
+    try {
+      if (hasLiveCaptureTracks(streamRef.current)) {
+        setErrorMessage(null)
+        setPermission(MIC_PERMISSION.GRANTED)
+        setIsListening(true)
+        if (contextRef.current?.state === 'suspended') {
+          await contextRef.current.resume().catch(() => {})
+        }
+        return true
+      }
+    } catch {
+      // Fall through to full acquisition.
     }
 
     const requestToken = requestTokenRef.current + 1
@@ -349,7 +382,18 @@ export default function useMicrophoneCapture({ active = false, deviceId = null }
   useEffect(() => {
     activeRef.current = active
     if (!active) {
-      const teardownTimer = globalThis.setTimeout(teardown, 0)
+      // Teardown grace (M8): mode switches (WFY→PlayAlong), pause
+      // dialogs, and preview hops all idle capture for a beat. Stopping
+      // device tracks immediately turns every hop into a full
+      // renegotiation (permission retained, but reopen + context rebuild
+      // costs hundreds of ms of starvation). Hold the stream 1.5 s; a
+      // reactivation inside the window adopts it with zero gap, and
+      // requestAccess short-circuits onto live tracks too.
+      const teardownTimer = globalThis.setTimeout(() => {
+        if (!activeRef.current) {
+          teardown()
+        }
+      }, 1500)
       return () => globalThis.clearTimeout(teardownTimer)
     }
     return undefined

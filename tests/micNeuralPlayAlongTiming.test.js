@@ -8,6 +8,8 @@ import {
   classifyPlayAlongTiming,
   mapCaptureToScoreTime,
   selectMicInputSource,
+  shouldAdoptRing,
+  trimAdoptedRing,
 } from '../src/features/practice/useNeuralMicInput.js'
 import { RECOGNITION_TIMING } from '../src/features/microphone-input/v3/micRecognitionIr.js'
 
@@ -61,5 +63,50 @@ describe('selectMicInputSource', () => {
     for (const neuralPhase of ['idle', 'loading', 'warming', 'unavailable', null, undefined]) {
       expect(selectMicInputSource({ flagEnabled: true, neuralPhase })).toBe('spectral')
     }
+  })
+})
+
+describe('shouldAdoptRing', () => {
+  const freshRing = (ageMs) => ({
+    samples: new Array(1000).fill(0),
+    startCaptureMs: 10_000,
+    lastAppendMs: 20_000 - ageMs,
+  })
+
+  it('adopts rings appended within the adoption window', () => {
+    expect(shouldAdoptRing(freshRing(200), 20_000)).toBe(true)
+    expect(shouldAdoptRing(freshRing(1500), 20_000)).toBe(true)
+    expect(shouldAdoptRing(freshRing(4000), 20_000)).toBe(true)
+  })
+
+  it('rejects stale, empty, or malformed rings (never smears old takes)', () => {
+    expect(shouldAdoptRing(freshRing(4001), 20_000)).toBe(false)
+    expect(shouldAdoptRing(freshRing(10_000), 20_000)).toBe(false)
+    expect(shouldAdoptRing(null, 20_000)).toBe(false)
+    expect(shouldAdoptRing({ samples: [] }, 20_000)).toBe(false)
+    expect(shouldAdoptRing({ samples: [1] }, 20_000)).toBe(false)
+  })
+})
+
+describe('trimAdoptedRing', () => {
+  it('keeps one trailing window and preserves sample-time mapping', () => {
+    const ring = {
+      samples: new Array(44100).fill(0.5),
+      startCaptureMs: 10_000,
+      lastAppendMs: 11_000,
+      totalAppended: 44100,
+    }
+    trimAdoptedRing(ring, 44100)
+    expect(ring.samples.length).toBe(Math.floor(0.75 * 44100))
+    // 0.25 s dropped -> start advances 250 ms; accounting untouched.
+    expect(ring.startCaptureMs).toBeCloseTo(10_250, 6)
+    expect(ring.totalAppended).toBe(44100)
+  })
+
+  it('leaves short rings alone', () => {
+    const ring = { samples: [1, 2, 3], startCaptureMs: 5 }
+    trimAdoptedRing(ring, 44100)
+    expect(ring.samples).toEqual([1, 2, 3])
+    expect(ring.startCaptureMs).toBe(5)
   })
 })
