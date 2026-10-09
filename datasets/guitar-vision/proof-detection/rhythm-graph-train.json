@@ -1,0 +1,19 @@
+{
+ "pages": 74,
+ "stem": {
+  "tp": 3850,
+  "fp": 8417,
+  "fn": 3570,
+  "precision": 0.31385016711502406,
+  "recall": 0.5188679245283019
+ },
+ "detMiss": 1702,
+ "beamPairs": {
+  "tp": 2452,
+  "fp": 11903,
+  "fn": 7589
+ },
+ "stemDotAgree": 0.3500232342007435,
+ "stemDotN": 17216,
+ "durationNote": "BLOCKED: no exact joins->canonical event link (part+measure-relative noteIds); rule defined, end-to-end duration unvalidated"
+}

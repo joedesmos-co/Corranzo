@@ -1,0 +1,81 @@
+{
+ "pages": 17,
+ "frozen": {
+  "thresholds": {
+   "note": 0.4,
+   "rest": 0.4,
+   "tabdigit": 0.4
+  },
+  "xclassRadius": 12.0,
+  "staffGate": true,
+  "coreBoxes": true,
+  "boxScale": {
+   "note": [
+    1.0,
+    1.0
+   ],
+   "rest": [
+    1.0,
+    1.25
+   ],
+   "tabdigit": [
+    1.0,
+    1.0
+   ]
+  },
+  "iouMatch": 0.5,
+  "medians": {
+   "note": [
+    226.08,
+    191.52
+   ],
+   "rest": [
+    198.72,
+    311.76
+   ],
+   "tabdigit": [
+    187.92,
+    252.72
+   ]
+  }
+ },
+ "core": {
+  "tp": 697,
+  "fp": 1268,
+  "fn": 1265,
+  "precision": 0.35470737913486006,
+  "recall": 0.35524974515800206
+ },
+ "union": {
+  "tp": 493,
+  "fp": 1472,
+  "fn": 1469,
+  "precision": 0.2508905852417303,
+  "recall": 0.2512742099898063
+ },
+ "byClassCore": {
+  "note": {
+   "tp": 690,
+   "fp": 1160,
+   "fn": 1006,
+   "precision": 0.372972972972973,
+   "recall": 0.4068396226415094
+  },
+  "rest": {
+   "tp": 1,
+   "fp": 49,
+   "fn": 239,
+   "precision": 0.02,
+   "recall": 0.004166666666666667
+  },
+  "tabdigit": {
+   "tp": 6,
+   "fp": 59,
+   "fn": 20,
+   "precision": 0.09230769230769231,
+   "recall": 0.23076923076923078
+  }
+ },
+ "tabdigitGT": 26,
+ "weights": "datasets/guitar-vision/proof-detection/heatmap16ep.pt"
+}

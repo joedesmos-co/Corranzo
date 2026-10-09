@@ -51,6 +51,18 @@ MEDIANS = {"note": (226.08, 191.52), "rest": (198.72, 311.76),
            "tabdigit": (187.92, 252.72)}  # TRAIN canonical medians
 GLYPH_AREA = {c: MEDIANS[c][0] * MEDIANS[c][1] for c in CLASSES}
 THRESHOLDS = {"note": 0.4, "rest": 0.4, "tabdigit": 0.4}  # TRAIN knee
+# Per-class box-size multipliers (TRAIN-verified 2026-10-10): rest GTs form
+# two height populations (whole/half vs quarter/flagged); x1.25 height is
+# the full-population optimum (REST P/R 0.396/0.397 -> 0.506/0.507, ALL F1
+# 0.387 -> 0.395). Width unbiased (1.0). v2 constants.
+BOX_SCALE = {"note": (1.0, 1.0), "rest": (1.0, 1.25), "tabdigit": (1.0, 1.0)}
+# v3 (2026-10-10): ignore-channel veto (ONE capped run, GUITAR_IGNORECLASS_
+# PREREG.md). Drop a peak when per-page-normalized ignore heat exceeds the
+# normalized class heat within VETO_CELLS. TRAIN-selected with tabdigit
+# veto (F1 0.4422 vs 0.4417). Heat may be 3ch (veto skipped) or 4ch.
+WEIGHTS = "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"
+VETO_CELLS = 2
+IGNORE_VETO = True
 XCLASS_RADIUS = 12.0  # px: cross-class suppression radius
 STAFF_GATE = True  # require digit-anchored TAB comb for tabdigit peaks
 CORE_BOXES = True  # eval against GT core boxes (see module docstring)
@@ -124,7 +136,8 @@ def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
         pooled = F.max_pool2d(channel.unsqueeze(0), 3, stride=1, padding=1)[0]
         mask = (channel == pooled) & (channel >= thresholds[cls])
         ys, xs = torch.nonzero(mask, as_tuple=True)
-        mw, mh = MEDIANS[cls][0] * fx, MEDIANS[cls][1] * fy
+        sx, sy = BOX_SCALE[cls]
+        mw, mh = MEDIANS[cls][0] * sx * fx, MEDIANS[cls][1] * sy * fy
         for x, y in zip(xs.tolist(), ys.tolist()):
             cx, cy = (x + 0.5) * 8, (y + 0.5) * 8
             preds.append({"cls": cls, "x": cx, "y": cy, "v": float(channel[y, x]),
@@ -146,6 +159,24 @@ def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
                     continue
             gated.append(p)
         kept = gated
+    # v3 ignore veto (4ch heat only): drop peaks where normalized ignore
+    # heat exceeds normalized class heat within VETO_CELLS.
+    if IGNORE_VETO and heat.shape[0] >= 4:
+        ign = heat[3]
+        ign_n = ign / max(float(ign.max()), 1e-9)
+        vetoed = []
+        R = VETO_CELLS
+        for p in kept:
+            gx, gy = int(p["x"] / 8), int(p["y"] / 8)
+            x0, x1 = max(gx - R, 0), min(gx + R + 1, ign.shape[1])
+            y0, y1 = max(gy - R, 0), min(gy + R + 1, ign.shape[0])
+            ci = CLASSES.index(p["cls"])
+            cls_h = heat[ci]
+            cls_n = cls_h / max(float(cls_h.max()), 1e-9)
+            if float(ign_n[y0:y1, x0:x1].max()) > float(cls_n[y0:y1, x0:x1].max()):
+                continue
+            vetoed.append(p)
+        kept = vetoed
     return kept
 
 

@@ -77,6 +77,9 @@ def main() -> int:
 
     frozen = {"thresholds": dict(dec.THRESHOLDS), "xclassRadius": dec.XCLASS_RADIUS,
               "staffGate": dec.STAFF_GATE, "coreBoxes": dec.CORE_BOXES,
+              "boxScale": {k: list(v) for k, v in dec.BOX_SCALE.items()},
+              "weights": dec.WEIGHTS, "ignoreVeto": dec.IGNORE_VETO,
+              "vetoCells": dec.VETO_CELLS,
               "iouMatch": dec.IOU_MATCH, "medians": {k: list(v) for k, v in dec.MEDIANS.items()}}
     totals = {"core": {"tp": 0, "fp": 0, "fn": 0}, "union": {"tp": 0, "fp": 0, "fn": 0}}
     by_cls = {c: {"tp": 0, "fp": 0, "fn": 0} for c in dec.CLASSES}

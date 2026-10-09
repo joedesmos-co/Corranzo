@@ -37,6 +37,7 @@ _pt = _load("proof_train_mod", "proof_train.py")
 _pct = _load("proof_context_train_mod", "proof_context_train.py")
 _phm = _load("proof_heatmap_train_mod", "proof-heatmap-train.py")
 _dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
+_pig = _load("proof_ignore_train_mod", "proof-ignore-train.py")
 
 SEED = 20261009
 TAU = 0.6
@@ -94,9 +95,14 @@ def main() -> int:
     saved_s = torch.load(Path(args.models) / "stringnet.pt", map_location=device, weights_only=True)
     string_net.load_state_dict(saved_s["state"] if "state" in saved_s else saved_s)
     string_net.eval()
-    detector = _phm.TinyFCN().to(device)
+    detector = _pig.TinyFCN4().to(device)
     saved_d = torch.load(Path(args.models) / "heatmap.pt", map_location=device, weights_only=True)
-    detector.load_state_dict(saved_d["state"] if "state" in saved_d else saved_d)
+    try:
+        detector.load_state_dict(saved_d["state"] if "state" in saved_d else saved_d)
+    except RuntimeError:
+        # 3ch fallback (pre-v3 staging): first three channels only.
+        detector = _phm.TinyFCN().to(device)
+        detector.load_state_dict(saved_d["state"] if "state" in saved_d else saved_d)
     detector.eval()
 
     joins_name = "joins.json" if args.layout == "standard" else f"joins-{args.layout}.json"
