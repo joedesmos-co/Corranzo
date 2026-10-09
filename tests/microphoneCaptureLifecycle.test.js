@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   acquireInstrumentStream,
   attachCaptureRecoveryListeners,
+  hasLiveCaptureTracks,
   INSTRUMENT_AUDIO_CONSTRAINTS,
 } from '../src/features/microphone-input/useMicrophoneCapture.js'
 
@@ -125,5 +126,13 @@ describe('microphone capture lifecycle', () => {
     resources.context.dispatchEvent(new Event('statechange'))
     resources.mediaDevices.dispatchEvent(new Event('devicechange'))
     expect(onInterrupted).not.toHaveBeenCalled()
+  })
+
+  it('detects live capture tracks for mode-switch adoption', () => {
+    expect(hasLiveCaptureTracks({ getTracks: () => [{ readyState: 'live' }] })).toBe(true)
+    expect(hasLiveCaptureTracks({ getTracks: () => [{ readyState: 'ended' }] })).toBe(false)
+    expect(hasLiveCaptureTracks({ getTracks: () => [] })).toBe(false)
+    expect(hasLiveCaptureTracks(null)).toBe(false)
+    expect(hasLiveCaptureTracks({})).toBe(false)
   })
 })

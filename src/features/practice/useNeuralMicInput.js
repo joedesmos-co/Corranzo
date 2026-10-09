@@ -53,11 +53,19 @@ import {
   shouldSkipSilence,
 } from '../microphone-input/micNeuralTfAdapter.js'
 
+let neuralMicInstanceSerial = 0
+
 /** Play Along late edge (280 ms) — same rule as the spectral path. */
 const PLAY_ALONG_LATE_INPUT_SECONDS = 0.28
 const CAPTURE_POLL_MS = 100
 const STREAM_HOP_MS = 250
 const STREAM_WINDOW_SECONDS = 0.5
+// Edge suppression MUST satisfy (window - 2*edge) > hop, or onset phases
+// fall in mutual edge exclusion in every window (measured: 150 ms edges
+// on 0.5 s / 0.25 s hop blind ~16% of onsets — level moves, nothing
+// advances). 80 ms keeps a 340 ms live band > 250 ms hop: every onset
+// survives in at least one window while edge-chunk artifacts stay cut.
+const STREAM_EDGE_SUPPRESS_MS = 80
 // Confirmation pool retention (M1 fix): attacks stay eligible for 4 s,
 // not 1.5 s. Sparse inference cadence (CPU runners, skipped hops) and
 // loop-merged sustains mean the tones of one musical event rarely share
@@ -69,6 +77,51 @@ const STREAM_WINDOW_SECONDS = 0.5
 const CONFIRM_POOL_SECONDS = 4.0
 const CONFIRM_WINDOW_BEFORE_SECONDS = 4.0
 const CONFIRM_WINDOW_AFTER_SECONDS = 0.5
+
+/**
+ * Ring adoption (M8, pure + tested): reuse shared capture audio when it
+ * was appended recently (mode switch inside the adoption window);
+ * otherwise start over. Stale audio would smear old takes into the new
+ * checkpoint's timing, so freshness is clock-measured, never assumed.
+ *
+ * The window (4 s = the ring's full retention) comfortably covers
+ * remount latency even on slow runners; safety comes from trimming the
+ * adopted ring to one trailing window (below), not from a tight gate —
+ * at most the most recent attack can re-present, never ancient history.
+ */
+export function shouldAdoptRing(ring, nowMs, maxAgeMs = 4000) {
+  if (!ring || !Array.isArray(ring.samples)) {
+    return false
+  }
+  if (ring.lastAppendMs == null || !Number.isFinite(nowMs)) {
+    return false
+  }
+  return nowMs - ring.lastAppendMs <= maxAgeMs
+}
+
+/** Trailing audio kept on adoption: one full inference window. */
+export const RING_ADOPT_KEEP_SECONDS = 0.75
+
+/**
+ * Trim an adopted ring to its trailing window (pure + tested): the point
+ * of adoption is continuity (no refill starvation), not history. Sample↔
+ * time mapping is preserved via startCaptureMs; totalAppended is left
+ * untouched so drift-free accounting absorbs the cut as a micro-gap.
+ */
+export function trimAdoptedRing(ring, sampleRate) {
+  if (!ring || !Array.isArray(ring.samples)) {
+    return ring
+  }
+  const keep = Math.floor(RING_ADOPT_KEEP_SECONDS * (sampleRate > 0 ? sampleRate : 44100))
+  if (ring.samples.length > keep) {
+    const drop = ring.samples.length - keep
+    ring.samples.splice(0, drop)
+    if (Number.isFinite(ring.startCaptureMs)) {
+      ring.startCaptureMs += (drop / (sampleRate > 0 ? sampleRate : 44100)) * 1000
+    }
+  }
+  return ring
+}
 
 /**
  * Map a capture-clock onset to score time (M5, pure + tested).
@@ -130,10 +183,20 @@ export function selectMicInputSource({ flagEnabled, neuralPhase }) {
 
 /**
  * Drift-free capture accounting (M4, pure + tested). Returns how many of
- * the analyser's newest samples to append so the ring tracks the wall
- * clock exactly: catch-up is capped at one analyser buffer (sustained
- * shortfall becomes a gap, never drift). Gaps lose milliseconds; drift
- * would lose whole beats — gaps are the right trade.
+ * the analyser's newest samples to append AND how far the wall clock has
+ * advanced, so the ring tracks the wall clock exactly:
+ *
+ * - Steady polls: owed <= analyser size → append everything, no gap.
+ * - Stalled polls (jank, throttled background tab, CPU-bound inference):
+ *   only the analyser's newest samples exist; the rest is an honest GAP.
+ *   totalAppended advances by the WALL-clock amount (not the appended
+ *   amount) so timestamps never dilate and audio is never duplicated.
+ *
+ * The old version advanced totalAppended by appended count, which made
+ * the ring clock run at (analyserSize/pollInterval) speed under load —
+ * duplicated audio with dilated timestamps (measured 0.17x on loaded
+ * CPU runners: PlayAlong timing garbage, onsets smeared). Gaps lose
+ * milliseconds; drift/duplication corrupt everything — gaps are right.
  */
 export function computeAppendCount({ scratchLength, nowMs, ring, sampleRate, pollMs = CAPTURE_POLL_MS }) {
   if (ring.streamStartWallMs == null) {
@@ -141,7 +204,8 @@ export function computeAppendCount({ scratchLength, nowMs, ring, sampleRate, pol
     ring.totalAppended = 0
   }
   const targetTotal = Math.floor(((nowMs - ring.streamStartWallMs) / 1000) * sampleRate)
-  return Math.min(scratchLength, Math.max(1, targetTotal - (ring.totalAppended ?? 0)))
+  const owed = Math.max(0, targetTotal - (ring.totalAppended ?? 0))
+  return { append: Math.min(scratchLength, Math.max(1, owed)), skip: Math.max(0, owed - scratchLength) }
 }
 
 function describePhase(phase) {
@@ -174,6 +238,12 @@ export default function useNeuralMicInput({
   onPlayAlongNote = null,
   microphone,
   instrumentId = null,
+  // Shared capture ring (M8): the session passes ONE ring object to both
+  // the WFY and Play Along hook instances so a mode switch adopts ~4 s
+  // of already-captured audio instead of refilling from zero. The ring
+  // is checkpoint-agnostic (raw audio + capture clock); per-checkpoint
+  // state (pool, tracker, stream dedup) stays per-hook and still resets.
+  sharedRingRef = null,
 }) {
   void checkpointMode
   void checkpointIndex
@@ -193,10 +263,16 @@ export default function useNeuralMicInput({
   const [silenceSkips, setSilenceSkips] = useState(0)
 
   // ---- ref mirrors (interval-loop discipline; never read stale props) ----
-  const runtimeRef = useRef(null)
+  const instanceKeyRef = useRef(0)
+  if (!instanceKeyRef.current) {
+    neuralMicInstanceSerial += 1
+    instanceKeyRef.current = neuralMicInstanceSerial
+  }
+    const runtimeRef = useRef(null)
   const modelNamespaceRef = useRef(null)
-  const streamRef = useRef(createNeuralStreamState({ windowSeconds: STREAM_WINDOW_SECONDS, hopSeconds: STREAM_HOP_MS / 1000 }))
-  const ringRef = useRef({ samples: [], startCaptureMs: null, inputRate: 44100 })
+  const streamRef = useRef(createNeuralStreamState({ windowSeconds: STREAM_WINDOW_SECONDS, hopSeconds: STREAM_HOP_MS / 1000, edgeSuppressMs: STREAM_EDGE_SUPPRESS_MS }))
+  const localRingRef = useRef(null)
+  const ringRef = sharedRingRef ?? localRingRef
   const trackerRef = useRef(createNeuralConfirmTracker())
   const chordStateRef = useRef(createChordMatchState())
   const poolRef = useRef([])
@@ -357,11 +433,28 @@ export default function useNeuralMicInput({
           return
         }
         if (!wasListeningRef.current) {
-          // Activation edge: fresh ring + stream state for this take.
+          // Activation edge: adopt the shared ring when it holds fresh
+          // audio (mode switch inside the capture grace window), else
+          // start a new one. See shouldAdoptRing.
           wasListeningRef.current = true
-          ringRef.current = { samples: [], startCaptureMs: null, inputRate: microphoneSnapshot.sampleRate ?? 44100 }
+          const existing = ringRef.current
+          debugRef.current.lastRingAgeMs = existing?.lastAppendMs != null ? Math.round(nowMs - existing.lastAppendMs) : null
+          debugRef.current.lastRingSamples = existing?.samples?.length ?? 0
+          debugRef.current.edgeEvals = [...(debugRef.current.edgeEvals ?? []).slice(-4), {
+            t: Math.round(nowMs),
+            age: debugRef.current.lastRingAgeMs,
+            adopt: shouldAdoptRing(existing, nowMs),
+          }]
+          if (!shouldAdoptRing(existing, nowMs)) {
+            ringRef.current = { samples: [], startCaptureMs: null, inputRate: microphoneSnapshot.sampleRate ?? 44100, lastAppendMs: null, totalAppended: 0, streamStartWallMs: null }
+            debugRef.current.lastRingAdopted = false
+          } else {
+            ringRef.current.inputRate = microphoneSnapshot.sampleRate ?? ringRef.current.inputRate ?? 44100
+            trimAdoptedRing(ringRef.current, ringRef.current.inputRate ?? 44100)
+            debugRef.current.lastRingAdopted = true
+          }
           rmsHistoryRef.current = []
-          streamRef.current = createNeuralStreamState({ windowSeconds: STREAM_WINDOW_SECONDS, hopSeconds: STREAM_HOP_MS / 1000 })
+          streamRef.current = createNeuralStreamState({ windowSeconds: STREAM_WINDOW_SECONDS, hopSeconds: STREAM_HOP_MS / 1000, edgeSuppressMs: STREAM_EDGE_SUPPRESS_MS })
           setNeuralStreamSampleRate(streamRef.current, NEURAL_MODEL_RATE)
         }
         const analyser = microphoneSnapshot.analyser?.current
@@ -451,7 +544,8 @@ export default function useNeuralMicInput({
 
     const confirmPool = () => {
       const live = livePropsRef.current
-      if (!live.expectedMidis.length) {
+      if (!live || !live.expectedMidis.length) {
+        debugRef.current.lastConfirmSkip = !live ? 'no-live-props' : `empty-expected:${JSON.stringify(live.currentCheckpoint ?? null).slice(0, 80)}`
         return
       }
       // confirmNeuralNotes takes BP-shaped notes { midi, start, end } on
@@ -476,8 +570,6 @@ export default function useNeuralMicInput({
         }
       }
       const pool = [...byMidi].map(([midi, note]) => ({ midi, ...note }))
-      // Anchor = now on the capture clock; the window covers the whole
-      // retained pool ([now-4 s, now+0.5 s]).
       const anchorSeconds = lastHopRef.current / 1000
       let verdict = null
       try {
@@ -485,12 +577,13 @@ export default function useNeuralMicInput({
           windowBeforeSeconds: CONFIRM_WINDOW_BEFORE_SECONDS,
           windowAfterSeconds: CONFIRM_WINDOW_AFTER_SECONDS,
         })
-        debugRef.current.lastVerdict = {
-          confirmed: verdict.confirmedMidis,
-          missing: verdict.missingMidis,
-          pool: pool.length,
-          anchor: Math.round(anchorSeconds * 100) / 100,
-        }
+      debugRef.current.lastVerdict = {
+        confirmed: verdict.confirmedMidis,
+        missing: verdict.missingMidis,
+        pool: pool.length,
+        anchor: Math.round(anchorSeconds * 100) / 100,
+      }
+      debugRef.current.poolSize = pool.length
       } catch {
         return
       }
@@ -519,24 +612,32 @@ export default function useNeuralMicInput({
         })),
         windowStartCaptureMs,
       )
+      debugRef.current.streamStats = { ...streamRef.current.stats }
       const emitted = drainNeuralStreamEvents(streamRef.current)
-      if (!emitted.length) {
-        return
-      }
-      for (const attack of emitted) {
-        poolRef.current.push({ midi: attack.midi, onsetMs: attack.onsetCaptureMs, confidence: attack.confidence })
-      }
       const cutoff = windowStartCaptureMs + STREAM_WINDOW_SECONDS * 1000 - CONFIRM_POOL_SECONDS * 1000
       poolRef.current = poolRef.current.filter((entry) => entry.onsetMs >= cutoff)
-      setDetectedNotes(
-        poolRef.current.slice(-6).map((entry) => ({
-          midi: entry.midi,
-          label: midiToNoteLabel(entry.midi),
-          onsetCaptureMs: Math.round(entry.onsetMs),
-        })),
-      )
-      setLastHeardMidi(poolRef.current[poolRef.current.length - 1]?.midi ?? null)
-      confirmPool()
+      if (emitted.length) {
+        for (const attack of emitted) {
+          poolRef.current.push({ midi: attack.midi, onsetMs: attack.onsetCaptureMs, confidence: attack.confidence })
+        }
+        setDetectedNotes(
+          poolRef.current.slice(-6).map((entry) => ({
+            midi: entry.midi,
+            label: midiToNoteLabel(entry.midi),
+            onsetCaptureMs: Math.round(entry.onsetMs),
+          })),
+        )
+        setLastHeardMidi(poolRef.current[poolRef.current.length - 1]?.midi ?? null)
+      }
+      // Confirm on EVERY hop with pool content, not just hops with fresh
+      // attacks: continuous legato audio merges into one eternal track
+      // (no fresh emissions), and the confirmation window slides — without
+      // re-confirmation, sustained tones stall the moment their attack
+      // ages out, even though the model still hears them. takeNewlyConfirmed
+      // keeps emission one-shot per checkpoint, so this cannot double-award.
+      if (poolRef.current.length) {
+        confirmPool()
+      }
     }
 
     const pumpNeuralHop = async () => {
@@ -602,16 +703,32 @@ export default function useNeuralMicInput({
         // this bounds drift to ±1 poll with micro-gaps instead, which
         // dedup/grouping absorb. Gaps lose milliseconds; drift loses
         // whole beats — gaps are the right trade.
-        const appendCount = computeAppendCount({ scratchLength: scratch.length, nowMs, ring, sampleRate })
+        const { append: appendCount, skip: skippedCount } = computeAppendCount({ scratchLength: scratch.length, nowMs, ring, sampleRate })
         lastPollMsRef.current = nowMs
         const fresh = scratch.subarray(scratch.length - appendCount)
+        if (skippedCount > 0) {
+          debugRef.current.lastGapMs = Math.round((skippedCount / sampleRate) * 1000)
+        }
         if (ring.startCaptureMs == null) {
           ring.startCaptureMs = nowMs - (fresh.length / sampleRate) * 1000
         }
         for (const value of fresh) {
           ring.samples.push(value)
         }
-        ring.totalAppended = (ring.totalAppended ?? 0) + fresh.length
+        if (skippedCount > 0) {
+          // Mark unrecoverable stalls as digital silence: the analyser
+          // only holds its newest buffer, so stalled audio is gone. Zeros
+          // keep the sample<->time mapping exact (array length always
+          // equals totalAppended) and read to the model as the gap they
+          // are — the note tracker correctly splits notes across them.
+          for (let index = 0; index < skippedCount; index += 1) {
+            ring.samples.push(0)
+          }
+        }
+        // Wall-truth accounting: array length always equals totalAppended,
+        // so timestamps never dilate or duplicate under any load.
+        ring.totalAppended = (ring.totalAppended ?? 0) + fresh.length + skippedCount
+        ring.lastAppendMs = nowMs
         // Clock map for capture→score-time mapping (Play Along timing).
         clockMapRef.current.push({ captureMs: nowMs, practiceTimeMs: livePropsRef.current.performanceTimeMs })
         if (clockMapRef.current.length > 40) {
@@ -629,6 +746,7 @@ export default function useNeuralMicInput({
           void pumpNeuralHop().catch(() => {})
         }
         debugRef.current.ringSamples = ringRef.current.samples.length
+        debugRef.current.instanceKey = instanceKeyRef.current
         if (nowMs - lastDebugPublishMs > 1000) {
           lastDebugPublishMs = nowMs
           setDebugSnapshot({ ...debugRef.current })
@@ -698,6 +816,9 @@ export default function useNeuralMicInput({
       rejected,
       silenceSkips,
       debug: debugSnapshot,
+      verdict: debugSnapshot?.lastVerdict ?? null,
+      decision: inputFeedback?.message ?? null,
+      outcome: inputFeedback?.outcome ?? null,
     },
   }
 }

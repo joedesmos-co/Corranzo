@@ -39,21 +39,26 @@ describe('streaming reliability (M4)', () => {
     let total = 0
     // Perfect 100 ms cadence for 10 s: exactly 100 samples per poll.
     for (let step = 0; step < 100; step += 1) {
-      const count = computeAppendCount({ scratchLength: 200, nowMs: step * 100, ring, sampleRate: 1000 })
-      expect(count).toBe(100)
-      total += count
+      const { append, skip } = computeAppendCount({ scratchLength: 200, nowMs: step * 100, ring, sampleRate: 1000 })
+      expect(append).toBe(100)
+      expect(skip).toBe(0)
+      total += append
       ring.totalAppended = total
     }
     expect(total).toBe(10_000)
   })
 
-  it('bounds catch-up after a stall (gap, never drift explosion)', () => {
+  it('marks stalls as skips so the clock never dilates or duplicates', () => {
     const ring = { samples: [], startCaptureMs: null, inputRate: 1000 }
     computeAppendCount({ scratchLength: 200, nowMs: 0, ring, sampleRate: 1000 })
     ring.totalAppended = 100
-    // 5 s stall: debt is 5000 samples but the analyser only holds 200.
-    const count = computeAppendCount({ scratchLength: 200, nowMs: 5100, ring, sampleRate: 1000 })
-    expect(count).toBe(200)
+    // 5 s stall: debt is 5100 samples but the analyser only holds 200.
+    const { append, skip } = computeAppendCount({ scratchLength: 200, nowMs: 5100, ring, sampleRate: 1000 })
+    expect(append).toBe(200)
+    expect(skip).toBe(4900)
+    // Honest accounting: appended + skipped == wall debt, so sample<->
+    // time mapping stays exact and audio is never duplicated.
+    expect(append + skip).toBe(5100)
   })
 
   it('tears down safely with nothing loaded', () => {

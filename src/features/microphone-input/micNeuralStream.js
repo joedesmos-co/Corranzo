@@ -37,7 +37,12 @@ export const NEURAL_STREAM_DEFAULTS = {
   windowSeconds: 2.0,
   /** Hop between window starts; 1 s hop = 2x overlap. */
   hopSeconds: 1.0,
-  /** Notes starting this close to a window edge are chunk artifacts. */
+  /**
+   * Notes starting this close to a window edge are chunk artifacts.
+   * Constraint: (windowSeconds*1000 - 2*edgeSuppressMs) must exceed
+   * hopSeconds*1000, or onset phases exist that die in EVERY window
+   * (mutual edge exclusion). The live 0.5 s / 0.25 s path uses 80 ms.
+   */
   edgeSuppressMs: 150,
   /** Same pitch re-heard within this gap continues the note (no double). */
   continuationGapMs: 120,
@@ -49,6 +54,18 @@ export const NEURAL_STREAM_DEFAULTS = {
    * Simultaneous piano octaves (same start) are preserved.
    */
   octaveOverlapRatio: 0.7,
+  /**
+   * Ghost memory: fundamentals stay eligible as ghost references this
+   * long after their track expires. Late octave ring (fundamental long
+   * decayed, harmonic still ringing) is the top false-award vector —
+   * without memory it escapes the octave filter entirely.
+   */
+  ghostMemoryMs: 2500,
+  /**
+   * Onset separation below which an octave doubling counts as
+   * simultaneous (real doublings, strummed octaves) rather than a ghost.
+   */
+  octaveSimultaneousMs: 100,
   /** Onsets inside this window share a chord group (strum-aware). */
   strumWindowMs: 200,
   /** Assumed confidence (Basic Pitch emits no posterior). */
@@ -188,15 +205,24 @@ export function emitNeuralStreamNotes(state, notes, windowStartCaptureMs) {
       state.activeNotes.delete(midi)
     }
   }
+  // Ghost memory: every SURVIVING onset refreshes a long-lived
+  // fundamental reference used ONLY for octave-ghost comparison (never
+  // emission). Dropped ghosts are never recorded, so ghost-of-ghost
+  // chains cannot bootstrap themselves.
+  if (!state.ghostMemory) {
+    state.ghostMemory = new Map()
+  }
 
   // Octave-ghost filter: drop an upper octave when the lower octave of
-  // the same pitch class started strictly first and overlaps the
-  // candidate by >= ratio. Simultaneous octave doublings (same start)
-  // survive — the filter targets tracking lag, not real doublings.
+  // the same pitch class overlaps it by >= ratio AND started more than
+  // octaveSimultaneousMs earlier. Near-simultaneous doublings (real piano
+  // octaves, strummed guitar octaves) survive; late harmonic ring dies —
+  // including long after the fundamental's own track expired (ghost
+  // memory), which is the top measured false-award vector.
   const kept = []
   for (const note of fresh) {
-    const lower = state.activeNotes.get(note.midi - 12)
-    if (lower && lower.onsetMs < note.startMs) {
+    const lower = state.activeNotes.get(note.midi - 12) ?? state.ghostMemory.get(note.midi - 12)
+    if (lower && note.startMs - lower.onsetMs > config.octaveSimultaneousMs) {
       const overlap = Math.min(note.endMs, windowStartCaptureMs + windowMs) - note.startMs
       const span = note.endMs - note.startMs
       if (span > 0 && overlap / span >= config.octaveOverlapRatio) {
@@ -206,6 +232,14 @@ export function emitNeuralStreamNotes(state, notes, windowStartCaptureMs) {
       }
     }
     kept.push(note)
+  }
+  for (const note of kept) {
+    state.ghostMemory.set(note.midi, { onsetMs: note.startMs, lastEndMs: note.endMs })
+  }
+  for (const [midi, reference] of state.ghostMemory) {
+    if (windowStartCaptureMs + windowMs - reference.lastEndMs > config.ghostMemoryMs) {
+      state.ghostMemory.delete(midi)
+    }
   }
 
   // Note-level chord grouping: attacks within strumWindowMs share a
