@@ -152,6 +152,9 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
           {Number.isFinite(totalDuration) && (
             <p className="audio-vision-hint" role="status">Recording length {formatClock(totalDuration)}.</p>
           )}
+          {flow.probe?.error && (
+            <p className="audio-vision-hint" role="note">Duration check didn&apos;t finish — arranging will validate the file.</p>
+          )}
           {needsExcerpt && (
             <fieldset className="audio-vision-excerpt">
               <legend>Arrange this part <span className="audio-vision-hint">(up to 3 minutes per arrangement)</span></legend>

@@ -71,6 +71,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
   // Phase 7: decode once on file select to learn the true duration (drives
   // the excerpt selector) and reuse the PCM at arrange time (no double decode).
   const probeFile = useCallback(async (file) => {
+    cancelledRef.current = false // new user-initiated operation, not a cancel
     setProbe(null)
     decodedRef.current = null
     bufferRef.current = null

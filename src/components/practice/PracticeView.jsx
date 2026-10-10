@@ -23,6 +23,7 @@ import OmrQualityWarningBanner from './OmrQualityWarningBanner.jsx'
 import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialog.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
+import ArrangementPracticeView from '../audio-vision/ArrangementPracticeView.jsx'
 import '../../styles/practice.css'
 import '../../styles/workspace.css'
 
@@ -192,12 +193,16 @@ export default function PracticeView({
   return (
     <main ref={workspaceRef} className={`practice-workspace score-workspace${focus ? ' score-workspace--focus' : ''}`} aria-label="Score workspace" data-mode={session.practiceMode}>
       {!pdfFile ? (
-        <div className="practice-workspace__empty">
-          <h2>Choose a piece first</h2>
-          <p className="practice-workspace__empty-lead">
-            Open a score from <strong>Library</strong> to begin.
-          </p>
-        </div>
+        musicXmlSource?.source === 'audio-arrangement' ? (
+          <ArrangementPracticeView musicXmlSource={musicXmlSource} onReturnToLibrary={onReturnToLibrary} />
+        ) : (
+          <div className="practice-workspace__empty">
+            <h2>Choose a piece first</h2>
+            <p className="practice-workspace__empty-lead">
+              Open a score from <strong>Library</strong> to begin.
+            </p>
+          </div>
+        )
       ) : (
         <div className="workspace-frame">
           <PracticeErrorBoundary
