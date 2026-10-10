@@ -1,0 +1,3741 @@
+{
+ "n": 532,
+ "abstained": 5,
+ "correct": 514,
+ "acc": 0.9753320683111955,
+ "coverage": 0.9906015037593985,
+ "perString": {
+  "2": 0.9810126582278481,
+  "3": 0.9831932773109243,
+  "1": 0.9111111111111111,
+  "5": 0.9538461538461539,
+  "4": 0.9615384615384616,
+  "6": 0.9512195121951219
+ },
+ "detail": [
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n005",
+   "truth": 2,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n006",
+   "truth": 3,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n007",
+   "truth": 2,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n008",
+   "truth": 2,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n001",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.674
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n002",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.674
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n003",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.745
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n004",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.783
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n005",
+   "truth": 5,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n006",
+   "truth": 4,
+   "pred": 2,
+   "conf": 0.767
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n007",
+   "truth": 4,
+   "pred": 2,
+   "conf": 0.703
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n008",
+   "truth": 4,
+   "pred": 2,
+   "conf": 0.703
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n727",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n728",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n729",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n732",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n733",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n734",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n735",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n736",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n737",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n738",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n739",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n741",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n742",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n743",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n744",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n746",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n747",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n748",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n750",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n751",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n752",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n753",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n754",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n755",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n756",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n757",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n758",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n759",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n760",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n761",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n762",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n763",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n764",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n765",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n766",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n767",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n768",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n769",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n770",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n771",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n772",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n773",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n774",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n775",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n776",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n777",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n778",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n779",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n780",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n781",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n782",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n783",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n784",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n785",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.94
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n786",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n787",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n788",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n790",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n791",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n792",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n793",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n794",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n795",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n796",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n797",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n798",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n799",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n800",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n801",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n802",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n803",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n804",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n805",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n806",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n807",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n808",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n810",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n811",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n812",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n813",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n814",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n815",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n816",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n817",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n818",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n819",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n820",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.957
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n821",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n822",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n823",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n824",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n825",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n826",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.984
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n827",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n828",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.952
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n829",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.944
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n830",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.948
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n831",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n832",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n833",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n834",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n835",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n836",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n837",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n838",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n839",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n840",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n841",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n842",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n843",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.921
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n844",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n845",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n846",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n847",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n848",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n849",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n850",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n851",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n852",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n853",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n854",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n855",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n856",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n857",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n858",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n859",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n860",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n861",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n862",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.921
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n863",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.921
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n864",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.921
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n865",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n866",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n867",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n868",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n869",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n870",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n871",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n872",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.921
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n873",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n874",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n875",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n876",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n877",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.938
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n879",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n880",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n881",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.929
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n882",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.925
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n883",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.914
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n884",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n885",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.914
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n886",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.914
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n887",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.914
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n888",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n889",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n890",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.901
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n891",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n892",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n893",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.906
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n894",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n895",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n896",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n897",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n898",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n899",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.914
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n900",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.919
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n901",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n902",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n903",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.942
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n904",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n905",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n906",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.942
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n907",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n908",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n909",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.942
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n910",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n911",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n912",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n913",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.901
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n914",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.933
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n915",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.942
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n916",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n917",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n918",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n919",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.95
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n920",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.937
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n921",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.901
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n922",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.942
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n923",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n924",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.919
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n925",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.919
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n926",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.919
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n927",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.946
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n928",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.937
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n929",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.91
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n930",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.937
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n931",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n932",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n933",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n934",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.98
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n935",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n936",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n937",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n938",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n939",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n940",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n941",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.998
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n942",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n943",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n944",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n945",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n946",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n947",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n948",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n949",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n950",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n951",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n952",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n953",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.967
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n954",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.967
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n955",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n956",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n957",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n958",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n959",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n960",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n961",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n962",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n963",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n964",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.967
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n965",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.967
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n966",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n967",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n968",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n969",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n970",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n971",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n972",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n973",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n974",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n975",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.978
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n976",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.967
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n977",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.961
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n978",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.972
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n979",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n980",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n981",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n982",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n983",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n984",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n985",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n986",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n987",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n988",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.969
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n989",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.969
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n990",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n991",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n992",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n993",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n994",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n995",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n996",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n997",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n998",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n999",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1000",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1001",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.98
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1002",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.969
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1003",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1004",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1005",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1006",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1007",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1008",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1009",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1010",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1011",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1012",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1013",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1014",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1015",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.98
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1016",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1017",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1019",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.98
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1020",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1021",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1022",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1023",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1024",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1025",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1026",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.98
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1027",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1028",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1029",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1030",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1031",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1032",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1033",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1034",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1035",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1036",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1037",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1038",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1039",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1040",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1041",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1042",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1043",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1044",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1045",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1046",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1047",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1048",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1049",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1050",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1051",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1052",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1053",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1054",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.999
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1055",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1056",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1058",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1059",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1060",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1061",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1062",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1063",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1064",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1065",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.982
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n1066",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n535",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n536",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n537",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n538",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n539",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n540",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n541",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n542",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n543",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n544",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n545",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.995
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n546",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n547",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n548",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n549",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n550",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n551",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n552",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n553",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n554",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n555",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.998
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n556",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.995
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n557",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n558",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n559",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n560",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.985
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n561",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n562",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n563",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n564",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n565",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.988
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n566",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.991
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n567",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.998
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n568",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.998
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n569",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.971
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n570",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.995
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n571",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n572",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n573",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n574",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n575",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n576",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n577",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.981
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n578",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.977
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n579",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.998
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n580",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.968
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n581",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.974
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n582",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n583",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n584",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n585",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n586",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n587",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n588",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n589",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n590",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n591",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.99
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n592",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n593",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n594",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n595",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n596",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n597",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n598",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n599",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n600",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n601",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n602",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n603",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n604",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n605",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n606",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n607",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n608",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n609",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n610",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n611",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n613",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n614",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n615",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n616",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n617",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n618",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n619",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n620",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n621",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n622",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n623",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n624",
+   "truth": 3,
+   "pred": 3,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n625",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n626",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n627",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.99
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n628",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n629",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n630",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n631",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n632",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n633",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n634",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n635",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n636",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n637",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n638",
+   "truth": 6,
+   "pred": 4,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n639",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n640",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n641",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n642",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n643",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n644",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n645",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n646",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n647",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n648",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n649",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n650",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n651",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n652",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n653",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n654",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n655",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n656",
+   "truth": 6,
+   "pred": 4,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n657",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n658",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n659",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n660",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n661",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n662",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n663",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n664",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n665",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n666",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n667",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.993
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n668",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n669",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n670",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n671",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n672",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n674",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n675",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n676",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n677",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.994
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n678",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.997
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n679",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n680",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.996
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n681",
+   "truth": 4,
+   "pred": 4,
+   "conf": 1.0
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n682",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n683",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n684",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n685",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n686",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n687",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n688",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.979
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n689",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.979
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n690",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.979
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n691",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n692",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n693",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n694",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n695",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n696",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n697",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.979
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n698",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n699",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n700",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n701",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n702",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n703",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n704",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n705",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n706",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n707",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n708",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n709",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.976
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n710",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.973
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n711",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.976
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n712",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n713",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.989
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n714",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n715",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n716",
+   "truth": 6,
+   "pred": 6,
+   "conf": 0.979
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n717",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n718",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n719",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n720",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n721",
+   "truth": 3,
+   "pred": 1,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n722",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.992
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n723",
+   "truth": 5,
+   "pred": 5,
+   "conf": 0.983
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n724",
+   "truth": 5,
+   "pred": 3,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n725",
+   "truth": 5,
+   "pred": 3,
+   "conf": 0.986
+  },
+  {
+   "sample": "pdmx2-QmekQbhC1yAP",
+   "sid": "pdmx2-QmekQbhC1yAP-n726",
+   "truth": 4,
+   "pred": 2,
+   "conf": 0.989
+  }
+ ]
+}

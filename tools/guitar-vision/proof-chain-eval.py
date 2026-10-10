@@ -38,6 +38,7 @@ _pct = _load("proof_context_train_mod", "proof_context_train.py")
 _phm = _load("proof_heatmap_train_mod", "proof-heatmap-train.py")
 _dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 _pig = _load("proof_ignore_train_mod", "proof-ignore-train.py")
+_psg = _load("proof_string_geometric_mod", "proof-string-geometric.py")
 
 SEED = 20261009
 STRING_TEMP = 0.7  # TRAIN-fit calibrated (ECE 0.072->0.043); fret temp 1.0 (NLL ~0)
@@ -85,6 +86,14 @@ def main() -> int:
     parser.add_argument("--detector", default=None,
                         help="detector weights path (overrides <models>/heatmap.pt; "
                              "per-layout preservation map).")
+    parser.add_argument("--samples-csv", default=None,
+                        help="optional CSV of sample ids to include (additive filter; "
+                             "default runs manifest-validation set).")
+    parser.add_argument("--string-mode", default="net",
+                        choices=["net", "geometric", "hybrid"],
+                        help="net: StringNet (frozen baseline). geometric: deterministic "
+                             "staff-line comb assigner only. hybrid: geometric primary, "
+                             "StringNet fallback on abstention.")
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -93,6 +102,9 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     work_dirs = [Path(w) for w in args.work]
     _, dev_ids = load_splits()
+    if args.samples_csv:
+        import re as _re2
+        dev_ids = set(t for t in _re2.split(r'[\s,]+', open(args.samples_csv).read()) if t.strip())
 
     recognizer = _pt.ProofNet().to(device)
     saved = torch.load(Path(args.models) / "proof-model.pt", map_location=device, weights_only=True)
@@ -208,6 +220,22 @@ def main() -> int:
                         cands.append({"cx": cx, "cy": cy, "w": w, "h": h,
                                       "box": pred, "sid": gt[best].get("sid")})
                 stats["gtDigits"] += len(gt)
+                # Geometric string support: page-global staff spacing from
+                # full-width projection (image-derived, no supervision).
+                _garr = np.asarray(image, dtype=np.float32)
+                _full = (_garr < 128).mean(axis=1)
+                _fthr = float(np.quantile(_full, 0.90))
+                _fpeaks = [y for y in range(1, _garr.shape[0] - 1)
+                           if _full[y] >= _full[y - 1] and _full[y] >= _full[y + 1] and _full[y] > _fthr]
+                _fdiffs = [_fpeaks[i + 1] - _fpeaks[i] for i in range(len(_fpeaks) - 1)
+                           if 8 <= _fpeaks[i + 1] - _fpeaks[i] <= 200]
+                _page_sp = None
+                if len(_fdiffs) >= 5:
+                    from collections import Counter as _C
+                    _bins = _C(int(d) for d in _fdiffs)
+                    _mode, _ = _bins.most_common(1)[0]
+                    _near = [d for d in _fdiffs if abs(d - _mode) <= 2]
+                    _page_sp = sum(_near) / len(_near)
                 for cand in cands:
                     cx, cy, w, h = cand["cx"], cand["cy"], cand["w"], cand["h"]
                     side = max(w, h) * 0.8
@@ -227,6 +255,20 @@ def main() -> int:
                     fret_posterior = F.softmax(rec_out["fret"], dim=1)[0]
                     string_pred, string_conf = int(string_posterior.argmax()), float(string_posterior.max())
                     fret_pred, fret_conf = int(fret_posterior.argmax()), float(fret_posterior.max())
+                    if args.string_mode in ("geometric", "hybrid"):
+                        _xb = int(900 * fx)
+                        _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))
+                        _geo, _geoconf = _psg.assign_string(_peaks, cy, sp_hint=_page_sp)
+                        stats.setdefault("geoAssigned", 0)
+                        stats.setdefault("geoAbstained", 0)
+                        if _geo is not None:
+                            string_pred, string_conf = _geo - 1, _geoconf
+                            stats["geoAssigned"] += 1
+                        else:
+                            stats["geoAbstained"] += 1
+                            if args.string_mode == "geometric":
+                                stats["abstained"] += 1
+                                continue
                     if min(string_conf, fret_conf) < TAU:
                         stats["abstained"] += 1
                         continue

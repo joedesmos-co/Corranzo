@@ -45,23 +45,31 @@ REJECT = float(_os.environ.get("BAR_REJECT", "0"))  # note-rejection destroys re
 
 
 def detect_barline_cols(u8: np.ndarray, note_xs: list[float] | None = None) -> list[int]:
-    """Barline columns with ink spanning a full staff system.
+    """Flat wrapper over per-system detection (legacy callers)."""
+    xs = set()
+    for s in detect_barline_systems(u8):
+        xs.update(s["xs"])
+    out, prev = [], -99
+    for x in sorted(xs):
+        if x - prev <= 12:
+            continue
+        prev = x
+        out.append(x)
+    return out
+def _systems_and_bands(u8):
+    """Returns (systems, bands, staff_rows, ink, x0, x1).
 
-    Systems found from the full-width row profile (long horizontal runs);
-    a column is a barline if its ink covers >=70% of some system's span.
-    Columns within 15px of a detected note box are rejected (stems touch
-    noteheads; barlines do not). No absolute height tuning.
+    systems: list of (top, bot, extended) with extended TAB spans pushed
+    upward 2.5x staff height to cover a paired notation staff.
     """
+    import os as _os2
     ink = u8 < 128
     h, w = ink.shape
     x0, x1 = int(w * 0.1), int(w * 0.9)
     row_frac = ink[:, x0:x1].mean(axis=1)
-    # Staff-line rows: high horizontal ink fraction.
     line_rows = np.nonzero(row_frac > 0.25)[0]
     if len(line_rows) < 5:
-        return 0
-    # Group consecutive line rows into line bands; systems = groups of
-    # bands with small inter-band gaps (staff spacing) separated by big gaps.
+        return [], [], set(), ink, x0, x1
     bands = []
     start, prev = line_rows[0], line_rows[0]
     for r in line_rows[1:]:
@@ -72,32 +80,107 @@ def detect_barline_cols(u8: np.ndarray, note_xs: list[float] | None = None) -> l
     bands.append((start, prev))
     mids = [(a + b) / 2 for a, b in bands]
     systems = []
+    prev_tab_bot = 0
     cur = [bands[0]]
+    groups = []
     for i in range(1, len(bands)):
         if mids[i] - mids[i - 1] < 60:
             cur.append(bands[i])
         else:
             if len(cur) >= 5:
-                systems.append((cur[0][0], cur[-1][1]))
+                groups.append((cur[0][0], cur[-1][1], len(cur) == 6))
             cur = [bands[i]]
     if len(cur) >= 5:
-        systems.append((cur[0][0], cur[-1][1]))
-    # Column coverage per system.
-    col_ink = ink.mean(axis=0)  # unused; per-system below
-    found = set()
-    for top, bot in systems:
+        groups.append((cur[0][0], cur[-1][1], len(cur) == 6))
+    for top, bot, ext in groups:
+        # Own-span detection per staff: paired engraving here does NOT
+        # join barlines across staves (verified visually), so extended
+        # spans dilute cover and break continuity runs. Notation (5) and
+        # TAB (6) staves are tested separately and unioned per system.
+        systems.append((top, bot, ext))
+    staff_rows = set()
+    for a, b in bands:
+        for r in range(max(0, a - 2), min(h, b + 3)):
+            staff_rows.add(r)
+    return systems, bands, staff_rows, ink, x0, x1
+
+
+def detect_barline_systems(u8: np.ndarray) -> list[dict]:
+    """Per-system barline lists: [{top, bot, xs}] sorted top-to-bottom.
+
+    Ownership must be per-system (2D): global-x bisect mixes systems.
+    Each system gets its cover+continuity-tested columns within its own
+    span plus its injected system-start edge.
+    """
+    import os as _os2
+    COVER_EXT = float(_os2.environ.get("BAR_COVER_EXT", "0.7"))
+    systems, bands, staff_rows, ink, x0, x1 = _systems_and_bands(u8)
+    h, w = ink.shape
+    out = []
+    for top, bot, ext in systems:
         span = bot - top + 1
         if span < 30:
             continue
-        band = ink[top:bot + 1, x0:x1]
-        cover = band.mean(axis=0)
-        for x in np.nonzero(cover >= COVER)[0]:
-            found.add(int(x + x0))
+        col = ink[top:bot + 1, x0:x1]
+        keep = np.array([r for r in range(top, bot + 1) if r not in staff_rows]) - top
+        thr = COVER
+        found = set()
+        if len(keep) >= 10:
+            sub = col[keep, :]
+            for x in range(sub.shape[1]):
+                v = sub[:, x]
+                if v.mean() < thr:
+                    continue
+                best, run = 0, 0
+                for val in v:
+                    run = run + 1 if val else 0
+                    best = max(best, run)
+                if best >= 0.6 * len(keep):
+                    found.add(int(x + x0))
+        if ext:
+            rows = [r for r in staff_rows if top <= r <= bot]
+            for x in range(0, w):
+                if any(ink[r, x] for r in rows):
+                    found.add(x)
+                    break
+        xs = sorted(found)
+        cols, prev = [], -99
+        for x in xs:
+            if x - prev <= 12:
+                continue
+            prev = x
+            cols.append(x)
+        out.append({"top": top, "bot": bot, "xs": cols})
+    return out
+    for top, bot, ext in systems:
+        span = bot - top + 1
+        if span < 30:
+            continue
+        col = ink[top:bot + 1, x0:x1]
+        keep = np.array([r for r in range(top, bot + 1) if r not in staff_rows]) - top
+        thr = COVER
+        if len(keep) < 10:
+            continue
+        sub = col[keep, :]
+        # Continuity: longest ink run over non-staff rows (barlines are
+        # one continuous stroke; chord-digit stacks have inter-digit gaps).
+        for x in range(sub.shape[1]):
+            v = sub[:, x]
+            if v.mean() < thr:
+                continue
+            best, run = 0, 0
+            for val in v:
+                run = run + 1 if val else 0
+                best = max(best, run)
+            if best >= 0.6 * len(keep):
+                found.add(int(x + x0))
     # Merge adjacent columns; reject note-adjacent (stems, REJECT=0 off).
     xs = sorted(found)
     cols, prev = [], -99
     for x in xs:
-        if x - prev <= 4:
+        # Merge duplicates within 12px (thick/double/repeat barlines are
+        # one boundary; true distinct barlines are 100s of px apart).
+        if x - prev <= 12:
             continue
         prev = x
         if REJECT > 0 and note_xs and min([abs(x - nx) for nx in note_xs] or [1e9]) < REJECT:

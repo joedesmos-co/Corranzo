@@ -44,6 +44,7 @@ _phm = _load("proof_heatmap_train_mod", "proof-heatmap-train.py")
 dec = _load("proof_heatmap_decode_mod", "proof-heatmap-decode.py")
 rhy = _load("proof_rhythm_graph_mod", "proof-rhythm-graph.py")
 mbars = _load("proof_measure_bars_mod", "proof-measure-bars.py")
+_psg = _load("proof_string_geometric_mod", "proof-string-geometric.py")
 
 SEED = 20261009
 STRING_TEMP = 0.7  # calibrated; see proof-calibrate.py
@@ -63,6 +64,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--string-mode", default="hybrid",
+                        choices=["net", "geometric", "hybrid"])
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -116,8 +119,25 @@ def main() -> int:
             note_boxes = [p for p in preds if p["cls"] == "note"]
             ink = u8 < 128
             _, beam_mask = rhy.detect_stems_beams(u8)
-            bar_xs = sorted(mbars.detect_barline_xs(u8))
+            # Per-system barlines (2D ownership): global-x bisect mixes
+            # stacked systems. Each note is owned by its system (by y),
+            # then bisected in that system's barline list.
+            sys_bars = mbars.detect_barline_systems(u8)
             import bisect as _bisect
+            _garr = np.asarray(image, dtype=np.float32)
+            _full = (_garr < 128).mean(axis=1)
+            _fthr = float(np.quantile(_full, 0.90))
+            _fpeaks = [yy for yy in range(1, _garr.shape[0] - 1)
+                       if _full[yy] >= _full[yy - 1] and _full[yy] >= _full[yy + 1] and _full[yy] > _fthr]
+            _fdiffs = [_fpeaks[ii + 1] - _fpeaks[ii] for ii in range(len(_fpeaks) - 1)
+                       if 8 <= _fpeaks[ii + 1] - _fpeaks[ii] <= 200]
+            _page_sp = None
+            if len(_fdiffs) >= 5:
+                from collections import Counter as _C
+                _bins = _C(int(dd) for dd in _fdiffs)
+                _mode, _ = _bins.most_common(1)[0]
+                _near = [dd for dd in _fdiffs if abs(dd - _mode) <= 2]
+                _page_sp = sum(_near) / len(_near)
             events = []
             for det in digits:
                 cx, cy = det["x"], det["y"]
@@ -137,9 +157,16 @@ def main() -> int:
                 fp = F.softmax(rec_out["fret"], dim=1)[0]
                 s_pred, s_conf = int(sp.argmax()), float(sp.max())
                 f_pred, f_conf = int(fp.argmax()), float(fp.max())
+                _xb = int(900 * fx)
+                _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))
+                _geo, _geoconf = _psg.assign_string(_peaks, cy, sp_hint=_page_sp)
+                if args.string_mode in ("geometric", "hybrid") and _geo is not None:
+                    s_pred, s_conf = _geo - 1, _geoconf
+                if args.string_mode == "geometric" and _geo is None:
+                    continue
                 if min(s_conf, f_conf) < TAU:
                     continue
-                events.append({"x": cx, "string": s_pred + 1, "fret": f_pred,
+                events.append({"x": cx, "y": cy, "string": s_pred + 1, "fret": f_pred,
                                "midi": TUNING[s_pred] + f_pred})
             # Onset columns (<30px) + durations from nearest note box.
             events.sort(key=lambda e: e["x"])
@@ -173,22 +200,25 @@ def main() -> int:
                         defaulted = False
                 if defaulted:
                     n_defaulted += 1
-                interval = _bisect.bisect_left(bar_xs, cx)
                 for e in col:
-                    notes_out.append({"page": pno, "x": e["x"], "interval": interval,
+                    # Per-system 2D ownership: system by y, interval by x.
+                    own = None
+                    for si, s in enumerate(sys_bars):
+                        if s["top"] <= e["y"] <= s["bot"]:
+                            own = si
+                            break
+                    if own is None and sys_bars:
+                        own = min(range(len(sys_bars)),
+                                  key=lambda si: abs(e["y"] - (sys_bars[si]["top"] + sys_bars[si]["bot"]) / 2))
+                    interval = _bisect.bisect_left(sys_bars[own]["xs"], e["x"]) if own is not None else 0
+                    notes_out.append({"page": pno, "sys": own, "x": e["x"], "y": e["y"], "interval": interval,
                                       "string": e["string"], "fret": e["fret"],
                                       "midi": e["midi"], "dur": dur, "defaulted": defaulted})
-    # Measures: per-page intervals -> running measure numbers.
-    pages = sorted(set(n["page"] for n in notes_out))
-    offset, per_page_max = 0, {}
-    for pg in pages:
-        ivs = sorted(set(n["interval"] for n in notes_out if n["page"] == pg))
-        mapping = {iv: offset + i + 1 for i, iv in enumerate(ivs)}
-        for n in notes_out:
-            if n["page"] == pg:
-                n["measure"] = mapping[n["interval"]]
-        per_page_max[pg] = offset + len(ivs)
-        offset = per_page_max[pg]
+    # Measures: per (page, system, interval) -> running measure numbers.
+    keys = sorted(set((n["page"], n["sys"], n["interval"]) for n in notes_out))
+    mapping = {k: i + 1 for i, k in enumerate(keys)}
+    for n in notes_out:
+        n["measure"] = mapping[(n["page"], n["sys"], n["interval"])]
     # MusicXML (single part, voice 1, chord tags).
     score = ET.Element("score-partwise", version="4.0")
     part_list = ET.SubElement(score, "part-list")
@@ -239,6 +269,7 @@ def main() -> int:
                "measures": len(by_measure),
                "xml": str(out_xml)}
     (out_dir / f"{sample}-summary.json").write_text(json.dumps(summary, indent=1))
+    json.dump(notes_out, open(out_dir / f"{sample}-notes.json", "w"))
     print(json.dumps(summary, indent=1))
     return 0
 
