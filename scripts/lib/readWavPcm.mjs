@@ -13,7 +13,7 @@ function readAscii(view, offset, length) {
   return value
 }
 
-export function readWavPcm(filePath) {
+export function readWavPcm(filePath, { discreteChannels = false } = {}) {
   const buffer = readFileSync(filePath)
   const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
 
@@ -55,15 +55,21 @@ export function readWavPcm(filePath) {
 
   const frameCount = Math.floor(dataSize / (bitsPerSample / 8) / numChannels)
   const samples = new Float32Array(frameCount)
+  const discrete = discreteChannels && numChannels > 1
+    ? Array.from({ length: numChannels }, () => new Float32Array(frameCount))
+    : null
 
   let writeIndex = 0
   for (let frame = 0; frame < frameCount; frame += 1) {
     const base = dataOffset + frame * numChannels * 2
     let sample = view.getInt16(base, true) / 32768
+    if (discrete) discrete[0][frame] = sample
     if (numChannels > 1) {
       let sum = sample
       for (let channel = 1; channel < numChannels; channel += 1) {
-        sum += view.getInt16(base + channel * 2, true) / 32768
+        const v = view.getInt16(base + channel * 2, true) / 32768
+        sum += v
+        if (discrete) discrete[channel][frame] = v
       }
       sample = sum / numChannels
     }
@@ -71,5 +77,5 @@ export function readWavPcm(filePath) {
     writeIndex += 1
   }
 
-  return { samples, sampleRate, channels: numChannels, frameCount }
+  return { samples, sampleRate, channels: numChannels, frameCount, discrete }
 }
