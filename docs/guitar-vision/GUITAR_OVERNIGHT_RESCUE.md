@@ -91,20 +91,17 @@ Root causes found and fixed in transcriber:
 
 | layout | string | fret | pitch | cov-pitch | vs net pitch |
 |---|---|---|---|---|---|
-| std | 0.831 | 0.948 | 0.792 | 0.096 | 0.689 -> 0.792 |
-| compact | 0.847 | 0.943 | 0.796 | 0.196 | 0.536 -> 0.796 |
-| large | 0.667 | 0.852 | 0.593 | 0.025 | 0.500 -> 0.593 |
-| bravura | 0.267 | 0.867 | 0.200 | 0.115 | 0.600 -> 0.200 REGRESS |
+| std | 0.954 | 0.943 | 0.897 | 0.122 | 0.689 -> 0.897 |
+| compact | 0.973 | 0.930 | 0.909 | 0.265 | 0.536 -> 0.909 |
+| large | 0.840 | 0.840 | 0.720 | 0.028 | 0.500 -> 0.720 |
+| bravura | 0.643 | 0.929 | 0.571 | 0.308 | 0.600 -> 0.571 ~tied |
 
-std/compact/large improve substantially. Bravura regresses (small-n:
-19 matched / 26 GT): geometric was never validated on bravura
-(fit bravura = 12 etude digits, 33% acc). Diagnosis: stem-up TAB
-fragments with digits larger than staff spacing break the comb phase
-guard (confident off-by-one, not abstention). No shipped behavior
-changes for bravura (transcriber is standard-only; chain default stays
-net). Bravura needs its own preregistered validation (12 fit digits
-insufficient for tuning — no fix attempted tonight to avoid
-overfitting).
+DEV re-run with final code (band spacing): every layout improved vs
+the quantile wave (std strings +12pts, compact +13, large +17,
+bravura +38). Bravura ~tied with net (small-n 19/26 GT; stem-up TAB
+fragments need their own prereg; no shipped behavior changes for
+bravura — transcriber layouts validated are standard/compact, chain
+default stays net).
 
 - G4: box precision (not recall: Txo finds 345/362) caps matching;
   large-digit recall 0.09 blocks large transcription (77 notes).
