@@ -12,11 +12,15 @@ W = os.path.expanduser('~/Documents/scoreflow-guitar')
 
 def main():
     notes_path, sample = sys.argv[1], sys.argv[2]
+    layout = sys.argv[3] if len(sys.argv) > 3 else 'standard'
+    suf = '' if layout == 'standard' else '-' + layout
+    jname = 'joins.json' if layout == 'standard' else 'joins-' + layout + '.json' 
     notes = json.load(open(notes_path))
     w = next(d for d in json.load(open('/tmp/proof/workdirs.json')) if d.endswith('/' + sample))
-    joins = json.load(open(os.path.join(W, w, 'joins.json')))
+    joins = json.load(open(os.path.join(W, w, jname)))
     canon = json.load(open(os.path.join(W, w, 'canonical.json')))
-    man = json.load(open(f'/tmp/proof/hires/{sample}-manifest.json'))
+    hdir = '/tmp/proof/hires' if layout == 'standard' else '/tmp/proof/hires-' + layout
+    man = json.load(open(f'{hdir}/{sample}{suf}-manifest.json'))
     links = {}
     for e in canon['events']:
         m = re.search(r"-n(\d+)$", (e.get('source') or {}).get('noteId') or '')

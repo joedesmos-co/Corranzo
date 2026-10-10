@@ -66,6 +66,10 @@ def main() -> int:
     parser.add_argument("--out", required=True)
     parser.add_argument("--string-mode", default="hybrid",
                         choices=["net", "geometric", "hybrid"])
+    parser.add_argument("--layout", default="standard",
+                        choices=["standard", "compact", "large", "bravura"])
+    parser.add_argument("--hires", default=None)
+    parser.add_argument("--detector", default=None)
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -84,18 +88,24 @@ def main() -> int:
                           map_location=device, weights_only=True)
     string_net.load_state_dict(saved_s["state"] if "state" in saved_s else saved_s)
     string_net.eval()
+    _det_path = args.detector or ("datasets/guitar-vision/proof-detection/heatmap-v4.pt"
+                 if args.layout == "compact"
+                 else "datasets/guitar-vision/proof-detection/heatmap-ignore.pt")
     detector = _pig.TinyFCN4().to(device)
-    saved_d = torch.load("datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
-                          map_location=device, weights_only=True)
+    saved_d = torch.load(_det_path, map_location=device, weights_only=True)
     detector.load_state_dict(saved_d["state"] if "state" in saved_d else saved_d)
     detector.eval()
 
     sample = args.sample
-    man = json.load(open(f"/tmp/proof/hires/{sample}-manifest.json"))
+    _hires = Path(args.hires or ("/tmp/proof/hires" if args.layout == "standard"
+                                 else f"/tmp/proof/hires-{args.layout}"))
+    _suf = "" if args.layout == "standard" else f"-{args.layout}"
+    _jname = "joins.json" if args.layout == "standard" else f"joins-{args.layout}.json"
+    man = json.load(open(_hires / f"{sample}{_suf}-manifest.json"))
     joins = None
     for root in ws:
-        for cand in (f"{root}/{sample}/joins.json",
-                     f"{root}/joins.json" if Path(root).name == sample else None):
+        for cand in (f"{root}/{sample}/{_jname}",
+                     f"{root}/{_jname}" if Path(root).name == sample else None):
             if cand and Path(cand).exists():
                 joins = json.load(open(cand))
                 break
@@ -126,19 +136,7 @@ def main() -> int:
             import bisect as _bisect
             _garr = np.asarray(image, dtype=np.float32)
             _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rules
-            _full = (_garr < 128).mean(axis=1)
-            _fthr = float(np.quantile(_full, 0.90))
-            _fpeaks = [yy for yy in range(1, _garr.shape[0] - 1)
-                       if _full[yy] >= _full[yy - 1] and _full[yy] >= _full[yy + 1] and _full[yy] > _fthr]
-            _fdiffs = [_fpeaks[ii + 1] - _fpeaks[ii] for ii in range(len(_fpeaks) - 1)
-                       if 8 <= _fpeaks[ii + 1] - _fpeaks[ii] <= 200]
-            _page_sp = None
-            if len(_fdiffs) >= 5:
-                from collections import Counter as _C
-                _bins = _C(int(dd) for dd in _fdiffs)
-                _mode, _ = _bins.most_common(1)[0]
-                _near = [dd for dd in _fdiffs if abs(dd - _mode) <= 2]
-                _page_sp = sum(_near) / len(_near)
+            _page_sp = _psg.page_spacing(_garr)
             events = []
             for det in digits:
                 cx, cy = det["x"], det["y"]
@@ -322,13 +320,13 @@ def main() -> int:
             ET.SubElement(tech, "fret").text = str(n["fret"])
     tree = ET.ElementTree(score)
     ET.indent(tree)
-    out_xml = out_dir / f"{sample}-transcribed.musicxml"
+    out_xml = out_dir / f"{sample}{_suf}-transcribed.musicxml"
     tree.write(out_xml, encoding="unicode", xml_declaration=True)
     summary = {"notes": len(notes_out), "defaultedDur": n_defaulted,
                "measures": len(by_measure),
                "xml": str(out_xml)}
-    (out_dir / f"{sample}-summary.json").write_text(json.dumps(summary, indent=1))
-    json.dump(notes_out, open(out_dir / f"{sample}-notes.json", "w"))
+    (out_dir / f"{sample}{_suf}-summary.json").write_text(json.dumps(summary, indent=1))
+    json.dump(notes_out, open(out_dir / f"{sample}{_suf}-notes.json", "w"))
     print(json.dumps(summary, indent=1))
     return 0
 

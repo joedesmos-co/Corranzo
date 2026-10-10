@@ -220,22 +220,11 @@ def main() -> int:
                         cands.append({"cx": cx, "cy": cy, "w": w, "h": h,
                                       "box": pred, "sid": gt[best].get("sid")})
                 stats["gtDigits"] += len(gt)
-                # Geometric string support: page-global staff spacing from
-                # full-width projection (image-derived, no supervision).
+                # Geometric string support: page-global staff spacing via
+                # robust band method (shared helper; quantile locks 2x on
+                # dense pages).
                 _garr = np.asarray(image, dtype=np.float32)
-                _full = (_garr < 128).mean(axis=1)
-                _fthr = float(np.quantile(_full, 0.90))
-                _fpeaks = [y for y in range(1, _garr.shape[0] - 1)
-                           if _full[y] >= _full[y - 1] and _full[y] >= _full[y + 1] and _full[y] > _fthr]
-                _fdiffs = [_fpeaks[i + 1] - _fpeaks[i] for i in range(len(_fpeaks) - 1)
-                           if 8 <= _fpeaks[i + 1] - _fpeaks[i] <= 200]
-                _page_sp = None
-                if len(_fdiffs) >= 5:
-                    from collections import Counter as _C
-                    _bins = _C(int(d) for d in _fdiffs)
-                    _mode, _ = _bins.most_common(1)[0]
-                    _near = [d for d in _fdiffs if abs(d - _mode) <= 2]
-                    _page_sp = sum(_near) / len(_near)
+                _page_sp = _psg.page_spacing(_garr)
                 for cand in cands:
                     cx, cy, w, h = cand["cx"], cand["cy"], cand["w"], cand["h"]
                     side = max(w, h) * 0.8

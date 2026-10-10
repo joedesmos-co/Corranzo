@@ -106,13 +106,27 @@ net). Bravura needs its own preregistered validation (12 fit digits
 insufficient for tuning — no fix attempted tonight to avoid
 overfitting).
 
-- G4: detector recall (50% heldout matched @iou0.5) is now the binding
-  string-coverage constraint; large-digit recall 0.09 unchanged.
-- G6: beam-tip skipped per condition (strings now solved — beam work
-  unblocked next); barlines substantially rescued (median 1.0
-  bars/measures train); durations still anchored-rule weak.
-- G7: real-score playable metric = note-score tool (string/fret/measure
-  vs GT digits); 21 real-data gaps preserved.
+- G4: box precision (not recall: Txo finds 345/362) caps matching;
+  large-digit recall 0.09 blocks large transcription (77 notes).
+- G6: durations 97% exact via column TAB-rhythm (beam-tip condition
+  now moot for TAB rhythm); barlines median 1.0 train.
+- G7: note-score (string/fret/measure) + semantic; compact Txo triple
+  90%; 21 real-data gaps preserved.
+
+## M7 — layout breadth: compact solved, large blocked on recall
+
+- Geometric GT-box validation (heldout 362): standard/compact/large
+  ALL 100%, 0 abstentions. Fit: 95.5%/96.1%/96.8%.
+- Compact Txo transcription: 340 notes, 33 measures (=33 truth);
+  strings 100%, frets 95.6%, measures 100% matched; TRIPLE 89.8% of
+  GT; semantic 41% (duplicate-part ceiling).
+- Large Txo: 77 notes only; matched strings/frets 100%, measures 0%.
+- Spacing robustness: quantile locked 2x on dense pages; band +
+  longest-run (staff = 6 consecutive bands) fixed compact. Reverted:
+  wider x-bands (neighbor pollution, 98.6->83.9%) and pooled unions
+  (wrong-phase wins, 97.5->66.5%). Evidence kept in report only.
+- Bravura still excepted (stem-up fragments; own prereg needed).
+- Transcriber/scorer take --layout (per-layout detector map + joins).
 
 ## Commit
 

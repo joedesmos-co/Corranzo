@@ -75,6 +75,63 @@ def detect_peaks(arr, x0, x1, q=0.90):
                 peaks[-1] = y
     return peaks, thr
 
+def page_spacing(arr):
+    """Page-global staff spacing from full-width line bands.
+
+    Staff lines span the page (high full-width ink fraction); relative
+    quantile thresholds fail when dense notation outranks staff lines
+    (compact pages locked 2x spacing). Absolute fraction + band grouping
+    (same approach as measure-bars) is robust.
+    """
+    from collections import Counter
+    ink = arr < 128
+    h, w = ink.shape
+    x0, x1 = int(w * 0.1), int(w * 0.9)
+    row_frac = ink[:, x0:x1].mean(axis=1)
+    rows = np.nonzero(row_frac > 0.25)[0]
+    if len(rows) < 5:
+        return None
+    bands, start, prev = [], rows[0], rows[0]
+    for r in rows[1:]:
+        if r - prev > 3:
+            bands.append((start, prev))
+            start = r
+        prev = r
+    bands.append((start, prev))
+    mids = [(a + b) / 2 for a, b in bands]
+    diffs = [mids[i + 1] - mids[i] for i in range(len(mids) - 1)
+             if 8 <= mids[i + 1] - mids[i] <= 200]
+    if len(diffs) < 5:
+        return None
+    bins = Counter(int(d) for d in diffs)
+    # Candidate spacings: top modes plus their halves (2x-ambiguity:
+    # faint alternate lines). Score each by longest run of consecutive
+    # bands at that spacing (a staff has 6 lines; 2x aliases explain
+    # only alternate bands -> shorter runs). Image-only, no supervision.
+    cands = set()
+    for mode, cnt in bins.most_common(4):
+        if cnt >= 3:
+            cands.add(float(mode))
+            if mode / 2 >= 8:
+                cands.add(mode / 2)
+    best, best_key = None, None
+    for sp in cands:
+        run, maxrun, total = 1, 1, 0
+        for d in diffs:
+            if abs(d - sp) <= 3:
+                run += 1
+                total += 1
+                maxrun = max(maxrun, run)
+            else:
+                run = 1
+        key = (maxrun, total, -sp)
+        if best_key is None or key > best_key:
+            best_key, best = key, sp
+    if best is None:
+        return None
+    near = [d for d in diffs if abs(d - best) <= 2]
+    return sum(near) / len(near)
+
 def estimate_spacing(peaks):
     """Robust staff spacing from peak-gap histogram (8..100px)."""
     P = sorted(peaks)
@@ -217,21 +274,8 @@ def main():
                 xb = int(900 * sx)
                 peaks, _ = detect_peaks(arr, int(cx - xb), int(cx + xb))
                 banded.append((sid, st, cy, peaks))
-            # pass 1: page-global spacing from FULL-WIDTH projection
-            # (staff lines span the page; local digit artifacts do not)
-            from collections import Counter as _C
-            full = (arr < 128).mean(axis=1)
-            fthr = float(np.quantile(full, 0.90))
-            fpeaks = [y for y in range(1, arr.shape[0] - 1)
-                      if full[y] >= full[y - 1] and full[y] >= full[y + 1] and full[y] > fthr]
-            fdiffs = [fpeaks[i + 1] - fpeaks[i] for i in range(len(fpeaks) - 1)
-                      if 8 <= fpeaks[i + 1] - fpeaks[i] <= 200]
-            page_sp = None
-            if len(fdiffs) >= 5:
-                bins = _C(int(d) for d in fdiffs)
-                mode, _ = bins.most_common(1)[0]
-                near = [d for d in fdiffs if abs(d - mode) <= 2]
-                page_sp = sum(near) / len(near)
+            # pass 1: page-global spacing via robust band method
+            page_sp = page_spacing(arr)
             print(f'  page {sample} p{page_no}: page_sp={page_sp and round(page_sp,2)} nitems={len(items)}',
                   file=sys.stderr)
             for sid, st, cy, peaks in banded:
