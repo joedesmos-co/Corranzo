@@ -147,12 +147,25 @@ export default function usePlayAlongLaneFeedback({
     return new Map(playAlongOutcomesMap(stateRef.current))
   }, [version])
 
-  return {
-    outcomes,
-    handlePlayedMidi,
-    setGroupOutcome,
-    pruneAfterSeek,
-    resetForLoopIteration,
-    resetForAttempt,
-  }
+  // Stabilize the return identity: without this, every session render
+  // hands downstream memos a fresh feedback object, churning session +
+  // provider identity at the Tone progress rate on top of real updates.
+  return useMemo(
+    () => ({
+      outcomes,
+      handlePlayedMidi,
+      setGroupOutcome,
+      pruneAfterSeek,
+      resetForLoopIteration,
+      resetForAttempt,
+    }),
+    [
+      outcomes,
+      handlePlayedMidi,
+      setGroupOutcome,
+      pruneAfterSeek,
+      resetForLoopIteration,
+      resetForAttempt,
+    ],
+  )
 }
