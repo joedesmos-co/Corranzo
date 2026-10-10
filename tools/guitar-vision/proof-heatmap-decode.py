@@ -121,7 +121,7 @@ def normalize_scale(pixels_u8: np.ndarray) -> tuple[np.ndarray, float]:
 
 
 def infer_page_merged(model, pixels_u8: np.ndarray, fx: float, fy: float,
-                      device) -> tuple[list, float]:
+                      device, gate_retry: bool = True) -> tuple[list, float]:
     """Two-pass merged inference (TRAIN-heldout selected).
 
     Notes come from the scale-normalized pass (large glyphs robust);
@@ -130,17 +130,19 @@ def infer_page_merged(model, pixels_u8: np.ndarray, fx: float, fy: float,
     dups measured negligible); gate native in both passes via infer_page.
     Returns (merged preds, norm scale).
     """
-    preds_on, scale = infer_page(model, pixels_u8, fx, fy, device, normalize=True)
+    preds_on, scale = infer_page(model, pixels_u8, fx, fy, device, normalize=True,
+                                 gate_retry=gate_retry)
     if scale == 1.0:
         return preds_on, scale
-    preds_off, _ = infer_page(model, pixels_u8, fx, fy, device, normalize=False)
+    preds_off, _ = infer_page(model, pixels_u8, fx, fy, device, normalize=False,
+                              gate_retry=gate_retry)
     merged = ([p for p in preds_on if p["cls"] == "note"] +
               [p for p in preds_off if p["cls"] != "note"])
     return merged, scale
 
 
 def infer_page(model, pixels_u8: np.ndarray, fx: float, fy: float,
-               device, normalize: bool = True) -> tuple[list, float]:
+               device, normalize: bool = True, gate_retry: bool = True) -> tuple[list, float]:
     """Full inference path with optional scale normalization.
 
     Rescales to TARGET_GAP staff scale, runs the model, decodes, and maps
@@ -162,11 +164,19 @@ def infer_page(model, pixels_u8: np.ndarray, fx: float, fy: float,
             p["y"] /= scale
             p["box"] = [v / scale for v in p["box"]]
     # Native-scale staff gate for tabdigit (image evidence only).
+    # Same +-8px quantization retry as decode_page (gate prereg).
     img_h, img_w = pixels_u8.shape
     gated = []
     for p in preds:
         if p["cls"] == "tabdigit":
             _, tier = detect_tab_lines(pixels_u8, p["x"], p["y"], img_w, img_h)
+            if tier is None and gate_retry and p.get("v", 0) >= GATE_RETRY_MIN_V:
+                for dx, dy in ((8, 0), (-8, 0), (0, 8), (0, -8)):
+                    qx = min(max(p["x"] + dx, 0), img_w - 1)
+                    qy = min(max(p["y"] + dy, 0), img_h - 1)
+                    _, tier = detect_tab_lines(pixels_u8, qx, qy, img_w, img_h)
+                    if tier is not None:
+                        break
             if tier is None:
                 continue
         gated.append(p)
@@ -180,6 +190,7 @@ LAYOUT_DETECTOR = {"standard": "datasets/guitar-vision/proof-detection/heatmap-i
                    "large": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
                    "bravura": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"}
 XCLASS_RADIUS = 12.0  # px: cross-class suppression radius
+GATE_RETRY_MIN_V = 0.8  # retry admits strong peaks only (amendment 1)
 STAFF_GATE = True  # require digit-anchored TAB comb for tabdigit peaks
 CORE_BOXES = True  # eval against GT core boxes (see module docstring)
 IOU_MATCH = 0.5
@@ -240,7 +251,7 @@ def build_gt(joins, page_no, fx, fy, core: bool = CORE_BOXES) -> list:
 
 def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
                 thresholds: dict | None = None, xclass_radius: float | None = None,
-                staff_gate: bool | None = None) -> list:
+                staff_gate: bool | None = None, gate_retry: bool = True) -> list:
     """Heat (3,H,W) + uint8 page -> kept predictions (cls/box/value)."""
     thresholds = thresholds or THRESHOLDS
     xclass_radius = XCLASS_RADIUS if xclass_radius is None else xclass_radius
@@ -265,12 +276,22 @@ def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
         if xclass_radius > 0 and any(abs(q["x"] - p["x"]) < xclass_radius and abs(q["y"] - p["y"]) < xclass_radius for q in kept):
             continue
         kept.append(p)
-    # Staff-comb gate for tabdigit (image evidence only).
+    # Staff-comb gate for tabdigit (image evidence only). Quantization
+    # robustness: retry 4-neighbors at +-8px when the peak center finds
+    # no tier (prereg GUITAR_GATE_PREREG.md; else single misses shift
+    # whole downstream measure numbering).
     if staff_gate:
         gated = []
         for p in kept:
             if p["cls"] == "tabdigit":
                 _, tier = detect_tab_lines(pixels_u8, p["x"], p["y"], img_w, img_h)
+                if tier is None and gate_retry and p.get("v", 0) >= GATE_RETRY_MIN_V:
+                    for dx, dy in ((8, 0), (-8, 0), (0, 8), (0, -8)):
+                        qx = min(max(p["x"] + dx, 0), img_w - 1)
+                        qy = min(max(p["y"] + dy, 0), img_h - 1)
+                        _, tier = detect_tab_lines(pixels_u8, qx, qy, img_w, img_h)
+                        if tier is not None:
+                            break
                 if tier is None:
                     continue
             gated.append(p)

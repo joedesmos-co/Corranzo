@@ -56,6 +56,9 @@ def main() -> int:
     parser.add_argument("--weights", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--joins", default="joins.json")
+    parser.add_argument("--samples-csv", default=None,
+                        help="optional CSV of sample ids (additive filter; overrides validation set)")
+    parser.add_argument("--gate-mode", default="retry", choices=["retry", "exact"])
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -64,6 +67,9 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     work_dirs = [Path(w) for w in args.work]
     dev_ids = load_dev_ids()
+    if args.samples_csv:
+        import re as _re2
+        dev_ids = set(x for x in _re2.split(r'[\s,]+', open(args.samples_csv).read()) if x.strip())
 
     layout_suffix = ""
     for name in ("compact", "large", "bravura"):
@@ -118,7 +124,8 @@ def main() -> int:
                 pixels = np.asarray(image, dtype=np.float32) / 255.0
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
                 u8 = (pixels * 255).astype(np.uint8)
-                preds, _ = dec.infer_page_merged(model, u8, fx, fy, device)
+                preds, _ = dec.infer_page_merged(model, u8, fx, fy, device,
+                                                  gate_retry=(args.gate_mode == "retry"))
                 for core_flag, key in [(True, "core"), (False, "union")]:
                     gt = dec.build_gt(joins, page_no, fx, fy, core=core_flag)
                     a, b, c = dec.match(preds, gt)

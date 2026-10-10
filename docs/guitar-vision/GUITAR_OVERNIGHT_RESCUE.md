@@ -86,8 +86,14 @@ Root causes found and fixed in transcriber:
   (no OCR class yet — documented next step).
 - FULL playable: 42% of GT (strings 100%, frets 95%, durations 97%
   matched, measures 46%).
-- Fit transcription pair re-verified: rhythm 79% (was 74%, 12 notes
-  now vs 3), chords 78% (was 79%). No regressions.
+- Fit transcription pair: rhythm 81% (12 notes), chords 73%.
+  (The 78% chords figure came from an intermediate uncommitted state;
+  committed baselines reproduce 73%. Delta = 1 note off-by-one from a
+  glyph-stroke comb: digit glyph's own horizontal strokes outscore the
+  staff with conf 0.8. Fix identified for next: weight comb peaks by
+  horizontal support (staff lines span the band; glyph strokes don't),
+  or page-level band assignment with comb fallback. Not attempted
+  tonight — needs its own prereg.)
 
 | layout | string | fret | pitch | cov-pitch | vs net pitch |
 |---|---|---|---|---|---|
@@ -137,3 +143,45 @@ hybrid chains + geo transcription + semantics. 384 tests green.
 G6 rhythm: per-note durations from beam counts owned by the paired
 notation staff (not nearest-box), then onset validation against time
 signatures; then DEV-once wave.
+
+## ROUND 2 (this session)
+
+### R2-M1 — G2 OCR census + verdict: DO NOT BUILD
+- Joins contain only notehead/rest/tab-text: ZERO supervision for
+  printed numerals. Fret-head zero-shot on 4 hand crops ("5","9","13",
+  "17" @system starts): all -> "0" (confidently wrong); multi-digit
+  numerals need segmentation; fingerings/frets/time-sigs/rehearsal
+  marks all confusable. Numerals are abundant (every system start on
+  real scores) but unrecognizable without labeled crops. Geometry-first
+  path resolves the observed drift without OCR. No OCR model built.
+
+### R2-M2 — G1 staff-gate rescue: ACCEPTED (heat-gated retry)
+- Prereg `GUITAR_GATE_PREREG.md` + amendments. Root cause: gate at
+  quantized peak centers is hypersensitive (GT digit heat 0.99 dropped
+  at decoded cell, passing 4px away). Txo m17's digit was the victim;
+  its absence erased the truth-17 interval, shifting 16 measures.
+- Blanket retry REJECTED (fit +0TP/+45FP; heldout +2TP/+22FP, F1 down).
+- Heat-gated retry (v>=0.8): heldout tp 180, fp 209->211 (F1 noise);
+  end-to-end Txo: measure_ok 46%->95%, triple 43%->90%,
+  FULL (+duration) 87.6% of GT, semantic 41%->48%. ACCEPTED on
+  end-to-end grounds (+46pts triple). Blanket stays rejected.
+- Truth-17 audit footnote: 2nd "digit" is the P1 duplicate part, not
+  a missing visual. Sys4 truth boundaries 487/1011/1433 all detected
+  (455/1004/1423); 352/367 = time-sig glyph FPs (empty, vanish).
+
+### R2-M3 — G3 large digits: heat-dead (no fix tonight)
+- Txo-large GT heat: median 0.18, only 21% >= 0.4 (native); normed
+  pass worse (3.6%; scale 1.13 upscales). Detector is scale-blind to
+  large glyphs (no FPN); postprocessing cannot recover absent heat.
+  Large viz: digits large vs spacing (bravura-like). Downscale-0.6
+  probe + per-layout digit-scale handling deferred (needs prereg;
+  detector work banned without new evidence beyond this audit).
+
+### R2 DEV re-wave (gated code): no regression (std 95.5/89.9,
+compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
+
+### R2 validation state
+- Txo std: 347 notes, triple 89.5%, FULL 87.6%, semantic 48%.
+- Txo compact: unchanged path (rerun pending if time).
+- Fit: rhythm 81%, chords 73% (1-note glyph-comb wobble, documented).
+- 384 guitar tests green (re-run at commit).

@@ -3,59 +3,59 @@
   "evaluatorVersion": "2.1.0",
   "kind": "semantic-musicxml-evaluation",
   "mode": "both",
-  "gitCommit": "d04b3c1902",
+  "gitCommit": "d38f3d09de",
   "scores": {
-    "pitch": 0.3768,
-    "rhythm": 0.8113,
+    "pitch": 0.3596,
+    "rhythm": 0.8285,
     "sustain": 0,
     "articulation": 1,
-    "measureStructure": 0.1689,
-    "interpretation": 0.5,
+    "measureStructure": 0.1558,
+    "interpretation": 1,
     "playback": 0
   },
   "scorePercents": {
-    "pitch": "38%",
-    "rhythm": "81%",
+    "pitch": "36%",
+    "rhythm": "83%",
     "sustain": "0%",
     "articulation": "100%",
-    "measureStructure": "17%",
-    "interpretation": "50%",
+    "measureStructure": "16%",
+    "interpretation": "100%",
     "playback": "0%"
   },
   "classes": {
     "pitch": {
-      "numerator": 283,
-      "denominator": 751,
-      "truePositives": 283,
-      "falsePositives": 27,
-      "falseNegatives": 441,
+      "numerator": 274,
+      "denominator": 762,
+      "truePositives": 274,
+      "falsePositives": 38,
+      "falseNegatives": 450,
       "ignored": 0,
       "unsupported": 0,
       "presentInTruth": 724,
-      "compared": 751,
+      "compared": 762,
       "coverage": 1,
       "coveragePercent": "100%",
-      "score": 0.3768,
-      "percent": "38%",
+      "score": 0.3596,
+      "percent": "36%",
       "reliable": true,
-      "displayPercent": "38%"
+      "displayPercent": "36%"
     },
     "rhythm": {
-      "numerator": 516,
-      "denominator": 636,
-      "truePositives": 516,
+      "numerator": 512,
+      "denominator": 618,
+      "truePositives": 512,
       "falsePositives": 0,
-      "falseNegatives": 120,
+      "falseNegatives": 106,
       "ignored": 0,
       "unsupported": 0,
-      "presentInTruth": 636,
-      "compared": 636,
+      "presentInTruth": 618,
+      "compared": 618,
       "coverage": 1,
       "coveragePercent": "100%",
-      "score": 0.8113,
-      "percent": "81%",
+      "score": 0.8285,
+      "percent": "83%",
       "reliable": true,
-      "displayPercent": "81%"
+      "displayPercent": "83%"
     },
     "sustain": {
       "numerator": 0,
@@ -92,38 +92,38 @@
       "displayPercent": "100%"
     },
     "measureStructure": {
-      "numerator": 75,
-      "denominator": 444,
-      "truePositives": 75,
+      "numerator": 69,
+      "denominator": 443,
+      "truePositives": 69,
       "falsePositives": 0,
-      "falseNegatives": 369,
+      "falseNegatives": 374,
       "ignored": 0,
       "unsupported": 0,
-      "presentInTruth": 444,
-      "compared": 444,
+      "presentInTruth": 443,
+      "compared": 443,
       "coverage": 1,
       "coveragePercent": "100%",
-      "score": 0.1689,
-      "percent": "17%",
+      "score": 0.1558,
+      "percent": "16%",
       "reliable": true,
-      "displayPercent": "17%"
+      "displayPercent": "16%"
     },
     "interpretation": {
       "numerator": 1,
-      "denominator": 2,
+      "denominator": 1,
       "truePositives": 1,
       "falsePositives": 0,
-      "falseNegatives": 1,
+      "falseNegatives": 0,
       "ignored": 0,
       "unsupported": 0,
-      "presentInTruth": 2,
-      "compared": 2,
+      "presentInTruth": 1,
+      "compared": 1,
       "coverage": 1,
       "coveragePercent": "100%",
-      "score": 0.5,
-      "percent": "50%",
+      "score": 1,
+      "percent": "100%",
       "reliable": true,
-      "displayPercent": "50%"
+      "displayPercent": "100%"
     },
     "playback": {
       "numerator": 0,
@@ -143,8 +143,8 @@
       "displayPercent": "0%"
     }
   },
-  "overall": 0.4081,
-  "overallPercent": "41%",
+  "overall": 0.4777,
+  "overallPercent": "48%",
   "labels": {
     "pitch": "Pitch",
     "rhythm": "Rhythm",
@@ -155,11 +155,11 @@
     "playback": "Playback"
   },
   "alignment": {
-    "confidence": 0.8557,
+    "confidence": 0.8519,
     "matchedCount": 31,
     "unmatchedTruthCount": 0,
     "unmatchedGeneratedCount": 0,
-    "totalCost": 63.8981,
+    "totalCost": 65.6039,
     "pairs": [
       {
         "kind": "merge",
@@ -304,25 +304,26 @@
         "cost": 1.7417
       },
       {
-        "kind": "match",
+        "kind": "merge",
         "truthMeasureNumbers": [
-          16
+          16,
+          17
         ],
         "generatedMeasureNumbers": [
           16
         ],
-        "cost": 1.8842
+        "cost": 2.4841
       },
       {
-        "kind": "merge",
+        "kind": "split",
         "truthMeasureNumbers": [
-          17,
           18
         ],
         "generatedMeasureNumbers": [
-          17
+          17,
+          18
         ],
-        "cost": 2.3308
+        "cost": 3.5667
       },
       {
         "kind": "match",
@@ -330,9 +331,9 @@
           19
         ],
         "generatedMeasureNumbers": [
-          18
+          19
         ],
-        "cost": 1.8933
+        "cost": 1.7633
       },
       {
         "kind": "match",
@@ -340,7 +341,7 @@
           20
         ],
         "generatedMeasureNumbers": [
-          19
+          20
         ],
         "cost": 1.6333
       },
@@ -350,7 +351,7 @@
           21
         ],
         "generatedMeasureNumbers": [
-          20
+          21
         ],
         "cost": 1.7173
       },
@@ -360,7 +361,7 @@
           22
         ],
         "generatedMeasureNumbers": [
-          21
+          22
         ],
         "cost": 1.8987
       },
@@ -370,7 +371,7 @@
           23
         ],
         "generatedMeasureNumbers": [
-          22
+          23
         ],
         "cost": 1.8242
       },
@@ -380,7 +381,7 @@
           24
         ],
         "generatedMeasureNumbers": [
-          23
+          24
         ],
         "cost": 1.7173
       },
@@ -390,7 +391,7 @@
           25
         ],
         "generatedMeasureNumbers": [
-          24
+          25
         ],
         "cost": 1.6333
       },
@@ -400,7 +401,7 @@
           26
         ],
         "generatedMeasureNumbers": [
-          25
+          26
         ],
         "cost": 1.7949
       },
@@ -410,7 +411,7 @@
           27
         ],
         "generatedMeasureNumbers": [
-          26
+          27
         ],
         "cost": 1.85
       },
@@ -420,7 +421,7 @@
           28
         ],
         "generatedMeasureNumbers": [
-          27
+          28
         ],
         "cost": 1.6333
       },
@@ -430,7 +431,7 @@
           29
         ],
         "generatedMeasureNumbers": [
-          28
+          29
         ],
         "cost": 1.6333
       },
@@ -440,8 +441,8 @@
           30
         ],
         "generatedMeasureNumbers": [
-          29,
-          30
+          30,
+          31
         ],
         "cost": 2.4821
       },
@@ -451,7 +452,7 @@
           31
         ],
         "generatedMeasureNumbers": [
-          31
+          32
         ],
         "cost": 1.7173
       },
@@ -461,8 +462,8 @@
           32
         ],
         "generatedMeasureNumbers": [
-          32,
-          33
+          33,
+          34
         ],
         "cost": 4.47
       },
@@ -472,8 +473,8 @@
           33
         ],
         "generatedMeasureNumbers": [
-          34,
-          35
+          35,
+          36
         ],
         "cost": 4.5778
       }
@@ -2904,91 +2905,55 @@
         {
           "code": "missing-note",
           "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
           "message": "Missing note E4",
-          "measureNumber": 11
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note F4",
-          "measureNumber": 11
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note F4",
-          "measureNumber": 11
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G4",
-          "measureNumber": 11
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G4",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "16th detected as quarter",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.75 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.75 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.75 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.75 quarters",
-          "measureNumber": 11
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.75 quarters",
           "measureNumber": 11
         },
         {
           "code": "incorrect-pitch",
           "class": "pitch",
           "message": "Incorrect pitch A#2 (expected C#3)",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
           "measureNumber": 11
         },
         {
@@ -3066,21 +3031,15 @@
         "Missing note C#4",
         "Missing note D4",
         "Missing note E4",
+        "Missing note F4",
+        "Missing note G4",
+        "Missing note F4",
+        "Missing note G4",
         "Missing note E4",
-        "Missing note F4",
-        "Missing note F4",
-        "Missing note G4",
-        "Missing note G4",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.5 quarters",
-        "16th detected as quarter",
-        "Onset off by 0.75 quarters",
-        "Onset off by 0.75 quarters",
-        "Onset off by 0.75 quarters",
-        "Onset off by 0.75 quarters",
-        "Onset off by 0.75 quarters",
         "Incorrect pitch A#2 (expected C#3)",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
@@ -3093,7 +3052,7 @@
         "Incorrect barline / measure length (4q; expected 3q)",
         "Measure 11 timing mismatch"
       ],
-      "severity": 106
+      "severity": 79
     },
     {
       "measureNumber": 12,
@@ -4041,16 +4000,23 @@
     {
       "measureNumber": 16,
       "truthMeasureNumbers": [
-        16
+        16,
+        17
       ],
       "generatedMeasureNumbers": [
         16
       ],
-      "alignment": "match",
+      "alignment": "merge",
       "unmatched": false,
-      "alignmentCost": 1.8842,
+      "alignmentCost": 2.4841,
       "defects": [
         {
+          "code": "merged-measure",
+          "class": "measure-structure",
+          "message": "Merged measures 16,17 → 16",
+          "measureNumber": 16
+        },
+        {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A3",
@@ -4108,6 +4074,18 @@
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A3",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
           "measureNumber": 16
         },
         {
@@ -4195,15 +4173,9 @@
           "measureNumber": 16
         },
         {
-          "code": "incorrect-barline",
+          "code": "incorrect-chord",
           "class": "measure-structure",
-          "message": "Incorrect barline / measure length (4q; expected 3q)",
-          "measureNumber": 16
-        },
-        {
-          "code": "repeat-mismatch",
-          "class": "interpretation",
-          "message": "Repeat mismatch",
+          "message": "Incorrect chord",
           "measureNumber": 16
         },
         {
@@ -4214,6 +4186,7 @@
         }
       ],
       "summary": [
+        "Merged measures 16,17 → 16",
         "Missing note A3",
         "Missing note E3",
         "Missing note C#3",
@@ -4224,6 +4197,8 @@
         "Missing note E3",
         "Missing note A3",
         "Missing note A3",
+        "Missing note E4",
+        "Missing note E4",
         "Onset off by 0.25 quarters",
         "Onset off by 0.25 quarters",
         "Incorrect pitch A3 (expected G#3)",
@@ -4238,274 +4213,349 @@
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
-        "Incorrect barline / measure length (4q; expected 3q)",
-        "Repeat mismatch",
+        "Incorrect chord",
         "Measure 16 timing mismatch"
       ],
-      "severity": 81
+      "severity": 88
     },
     {
-      "measureNumber": 17,
+      "measureNumber": 18,
       "truthMeasureNumbers": [
-        17,
         18
       ],
       "generatedMeasureNumbers": [
-        17
+        17,
+        18
       ],
-      "alignment": "merge",
+      "alignment": "split",
       "unmatched": false,
-      "alignmentCost": 2.3308,
+      "alignmentCost": 3.5667,
       "defects": [
         {
-          "code": "merged-measure",
+          "code": "split-measure",
           "class": "measure-structure",
-          "message": "Merged measures 17,18 → 17",
-          "measureNumber": 17
+          "message": "Split measure 18 → 17,18",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note E4",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
+          "message": "Missing note C#4",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
+          "message": "Missing note C#4",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note C#4",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note C#4",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note E3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note F3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A#3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note G3",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note C#4",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note G3",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note G3",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A#3",
+          "measureNumber": 18
         },
         {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
         },
         {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
         },
         {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
         },
         {
           "code": "measure-timing-mismatch",
           "class": "playback",
-          "message": "Measure 17 timing mismatch",
-          "measureNumber": 17
+          "message": "Measure 18 timing mismatch",
+          "measureNumber": 18
         }
       ],
       "summary": [
-        "Merged measures 17,18 → 17",
+        "Split measure 18 → 17,18",
         "Missing note E4",
-        "Missing note E4",
-        "Missing note E4",
-        "Missing note E4",
+        "Missing note C#4",
+        "Missing note C#4",
+        "Missing note A3",
         "Missing note A3",
         "Missing note C#4",
         "Missing note C#4",
         "Missing note E3",
+        "Missing note E3",
         "Missing note F3",
+        "Missing note F3",
+        "Missing note G3",
+        "Missing note G3",
+        "Missing note A3",
         "Missing note A3",
         "Missing note A#3",
+        "Missing note A#3",
         "Missing note G3",
+        "Missing note G3",
+        "Missing note C#4",
         "Missing note C#4",
         "Missing note G3",
         "Missing note G3",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
+        "Extra note C#4",
+        "Extra note A3",
+        "Extra note C#4",
+        "Extra note E3",
+        "Extra note F3",
+        "Extra note G3",
+        "Extra note A3",
+        "Extra note A#3",
+        "Extra note G3",
+        "Extra note C#4",
+        "Extra note G3",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
@@ -4517,9 +4567,10 @@
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
-        "Measure 17 timing mismatch"
+        "Incorrect chord",
+        "Measure 18 timing mismatch"
       ],
-      "severity": 118
+      "severity": 142
     },
     {
       "measureNumber": 19,
@@ -4527,11 +4578,11 @@
         19
       ],
       "generatedMeasureNumbers": [
-        18
+        19
       ],
       "alignment": "match",
       "unmatched": false,
-      "alignmentCost": 1.8933,
+      "alignmentCost": 1.7633,
       "defects": [
         {
           "code": "missing-note",
@@ -4554,12 +4605,6 @@
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 19
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
           "message": "Missing note F4",
           "measureNumber": 19
         },
@@ -4603,6 +4648,12 @@
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note C4",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
           "measureNumber": 19
         },
         {
@@ -4624,9 +4675,21 @@
           "measureNumber": 19
         },
         {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
           "code": "duration-mismatch",
           "class": "rhythm",
           "message": "Quarter detected as 16th",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
           "measureNumber": 19
         },
         {
@@ -4669,6 +4732,12 @@
           "code": "incorrect-pitch",
           "class": "pitch",
           "message": "Incorrect pitch C4 (expected D4)",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
           "measureNumber": 19
         },
         {
@@ -4730,7 +4799,6 @@
         "Missing note F3",
         "Missing note D4",
         "Missing note E4",
-        "Missing note E4",
         "Missing note F4",
         "Missing note F4",
         "Missing note D4",
@@ -4739,10 +4807,13 @@
         "Missing note A3",
         "Missing note C4",
         "Missing note C4",
+        "Onset off by 0.25 quarters",
         "Missing tie",
         "Onset off by 0.25 quarters",
         "Missing tie",
+        "Onset off by 0.25 quarters",
         "Quarter detected as 16th",
+        "Onset off by 0.75 quarters",
         "Onset off by 0.75 quarters",
         "1.25q detected as 16th",
         "Missing tie",
@@ -4750,6 +4821,7 @@
         "Onset off by 0.25 quarters",
         "Missing tie",
         "Incorrect pitch C4 (expected D4)",
+        "Onset off by 0.25 quarters",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
@@ -4760,7 +4832,7 @@
         "Incorrect barline / measure length (4q; expected 3q)",
         "Measure 19 timing mismatch"
       ],
-      "severity": 104
+      "severity": 117
     },
     {
       "measureNumber": 20,
@@ -4768,7 +4840,7 @@
         20
       ],
       "generatedMeasureNumbers": [
-        19
+        20
       ],
       "alignment": "match",
       "unmatched": false,
@@ -4967,7 +5039,7 @@
         21
       ],
       "generatedMeasureNumbers": [
-        20
+        21
       ],
       "alignment": "match",
       "unmatched": false,
@@ -5180,7 +5252,7 @@
         22
       ],
       "generatedMeasureNumbers": [
-        21
+        22
       ],
       "alignment": "match",
       "unmatched": false,
@@ -5421,7 +5493,7 @@
         23
       ],
       "generatedMeasureNumbers": [
-        22
+        23
       ],
       "alignment": "match",
       "unmatched": false,
@@ -5690,7 +5762,7 @@
         24
       ],
       "generatedMeasureNumbers": [
-        23
+        24
       ],
       "alignment": "match",
       "unmatched": false,
@@ -5896,7 +5968,7 @@
         25
       ],
       "generatedMeasureNumbers": [
-        24
+        25
       ],
       "alignment": "match",
       "unmatched": false,
@@ -6095,7 +6167,7 @@
         26
       ],
       "generatedMeasureNumbers": [
-        25
+        26
       ],
       "alignment": "match",
       "unmatched": false,
@@ -6322,7 +6394,7 @@
         27
       ],
       "generatedMeasureNumbers": [
-        26
+        27
       ],
       "alignment": "match",
       "unmatched": false,
@@ -6591,7 +6663,7 @@
         28
       ],
       "generatedMeasureNumbers": [
-        27
+        28
       ],
       "alignment": "match",
       "unmatched": false,
@@ -6790,7 +6862,7 @@
         29
       ],
       "generatedMeasureNumbers": [
-        28
+        29
       ],
       "alignment": "match",
       "unmatched": false,
@@ -6989,8 +7061,8 @@
         30
       ],
       "generatedMeasureNumbers": [
-        29,
-        30
+        30,
+        31
       ],
       "alignment": "split",
       "unmatched": false,
@@ -6999,7 +7071,7 @@
         {
           "code": "split-measure",
           "class": "measure-structure",
-          "message": "Split measure 30 → 29,30",
+          "message": "Split measure 30 → 30,31",
           "measureNumber": 30
         },
         {
@@ -7226,7 +7298,7 @@
         }
       ],
       "summary": [
-        "Split measure 30 → 29,30",
+        "Split measure 30 → 30,31",
         "Missing note F3",
         "Missing note D4",
         "Missing note E4",
@@ -7273,7 +7345,7 @@
         31
       ],
       "generatedMeasureNumbers": [
-        31
+        32
       ],
       "alignment": "match",
       "unmatched": false,
@@ -7486,8 +7558,8 @@
         32
       ],
       "generatedMeasureNumbers": [
-        32,
-        33
+        33,
+        34
       ],
       "alignment": "split",
       "unmatched": false,
@@ -7496,7 +7568,7 @@
         {
           "code": "split-measure",
           "class": "measure-structure",
-          "message": "Split measure 32 → 32,33",
+          "message": "Split measure 32 → 33,34",
           "measureNumber": 32
         },
         {
@@ -7753,7 +7825,7 @@
         }
       ],
       "summary": [
-        "Split measure 32 → 32,33",
+        "Split measure 32 → 33,34",
         "Missing note G#3",
         "Missing note D4",
         "Missing note E4",
@@ -7805,8 +7877,8 @@
         33
       ],
       "generatedMeasureNumbers": [
-        34,
-        35
+        35,
+        36
       ],
       "alignment": "split",
       "unmatched": false,
@@ -7815,7 +7887,7 @@
         {
           "code": "split-measure",
           "class": "measure-structure",
-          "message": "Split measure 33 → 34,35",
+          "message": "Split measure 33 → 35,36",
           "measureNumber": 33
         },
         {
@@ -8000,7 +8072,7 @@
         }
       ],
       "summary": [
-        "Split measure 33 → 34,35",
+        "Split measure 33 → 35,36",
         "Missing note E4",
         "Missing note E4",
         "Missing note B3",
@@ -8057,9 +8129,9 @@
       "severity": 1
     },
     {
-      "measureNumber": 18,
+      "measureNumber": 17,
       "truthMeasureNumbers": [
-        18
+        17
       ],
       "generatedMeasureNumbers": [],
       "alignment": "match",
@@ -8069,12 +8141,12 @@
         {
           "code": "measure-timing-mismatch",
           "class": "playback",
-          "message": "Measure 18 timing mismatch",
-          "measureNumber": 18
+          "message": "Measure 17 timing mismatch",
+          "measureNumber": 17
         }
       ],
       "summary": [
-        "Measure 18 timing mismatch"
+        "Measure 17 timing mismatch"
       ],
       "severity": 1
     }
@@ -8456,6 +8528,360 @@
       "severity": 157
     },
     {
+      "measureNumber": 18,
+      "truthMeasureNumbers": [
+        18
+      ],
+      "generatedMeasureNumbers": [
+        17,
+        18
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 3.5667,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 18 → 17,18",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A#3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note C#4",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 18
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 18 timing mismatch",
+          "measureNumber": 18
+        }
+      ],
+      "summary": [
+        "Split measure 18 → 17,18",
+        "Missing note E4",
+        "Missing note C#4",
+        "Missing note C#4",
+        "Missing note A3",
+        "Missing note A3",
+        "Missing note C#4",
+        "Missing note C#4",
+        "Missing note E3",
+        "Missing note E3",
+        "Missing note F3",
+        "Missing note F3",
+        "Missing note G3",
+        "Missing note G3",
+        "Missing note A3",
+        "Missing note A3",
+        "Missing note A#3",
+        "Missing note A#3",
+        "Missing note G3",
+        "Missing note G3",
+        "Missing note C#4",
+        "Missing note C#4",
+        "Missing note G3",
+        "Missing note G3",
+        "Extra note C#4",
+        "Extra note A3",
+        "Extra note C#4",
+        "Extra note E3",
+        "Extra note F3",
+        "Extra note G3",
+        "Extra note A3",
+        "Extra note A#3",
+        "Extra note G3",
+        "Extra note C#4",
+        "Extra note G3",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Measure 18 timing mismatch"
+      ],
+      "severity": 142
+    },
+    {
       "measureNumber": 7,
       "truthMeasureNumbers": [
         7
@@ -8772,8 +9198,8 @@
         32
       ],
       "generatedMeasureNumbers": [
-        32,
-        33
+        33,
+        34
       ],
       "alignment": "split",
       "unmatched": false,
@@ -8782,7 +9208,7 @@
         {
           "code": "split-measure",
           "class": "measure-structure",
-          "message": "Split measure 32 → 32,33",
+          "message": "Split measure 32 → 33,34",
           "measureNumber": 32
         },
         {
@@ -9039,7 +9465,7 @@
         }
       ],
       "summary": [
-        "Split measure 32 → 32,33",
+        "Split measure 32 → 33,34",
         "Missing note G#3",
         "Missing note D4",
         "Missing note E4",
@@ -9686,7 +10112,7 @@
         23
       ],
       "generatedMeasureNumbers": [
-        22
+        23
       ],
       "alignment": "match",
       "unmatched": false,
@@ -9950,267 +10376,255 @@
       "severity": 119
     },
     {
-      "measureNumber": 17,
+      "measureNumber": 19,
       "truthMeasureNumbers": [
-        17,
-        18
+        19
       ],
       "generatedMeasureNumbers": [
-        17
+        19
       ],
-      "alignment": "merge",
+      "alignment": "match",
       "unmatched": false,
-      "alignmentCost": 2.3308,
+      "alignmentCost": 1.7633,
       "defects": [
-        {
-          "code": "merged-measure",
-          "class": "measure-structure",
-          "message": "Merged measures 17,18 → 17",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note A3",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note C#4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note C#4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E3",
-          "measureNumber": 17
-        },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note F3",
-          "measureNumber": 17
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 19
         },
         {
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note A3",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note A#3",
-          "measureNumber": 17
+          "message": "Missing note A3",
+          "measureNumber": 19
         },
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note G3",
-          "measureNumber": 17
+          "message": "Missing note C4",
+          "measureNumber": 19
         },
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note C#4",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G3",
-          "measureNumber": 17
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G3",
-          "measureNumber": 17
+          "message": "Missing note C4",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
           "message": "Onset off by 0.25 quarters",
-          "measureNumber": 17
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Quarter detected as 16th",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as 16th",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as 16th",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch C4 (expected D4)",
+          "measureNumber": 19
         },
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
-          "measureNumber": 17
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
           "code": "incorrect-chord",
           "class": "measure-structure",
           "message": "Incorrect chord",
-          "measureNumber": 17
+          "measureNumber": 19
         },
         {
-          "code": "incorrect-chord",
+          "code": "incorrect-barline",
           "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 17
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 19
         },
         {
           "code": "measure-timing-mismatch",
           "class": "playback",
-          "message": "Measure 17 timing mismatch",
-          "measureNumber": 17
+          "message": "Measure 19 timing mismatch",
+          "measureNumber": 19
         }
       ],
       "summary": [
-        "Merged measures 17,18 → 17",
-        "Missing note E4",
-        "Missing note E4",
-        "Missing note E4",
-        "Missing note E4",
-        "Missing note A3",
-        "Missing note C#4",
-        "Missing note C#4",
-        "Missing note E3",
         "Missing note F3",
+        "Missing note D4",
+        "Missing note E4",
+        "Missing note F4",
+        "Missing note F4",
+        "Missing note D4",
+        "Missing note D4",
         "Missing note A3",
-        "Missing note A#3",
-        "Missing note G3",
-        "Missing note C#4",
-        "Missing note G3",
-        "Missing note G3",
+        "Missing note A3",
+        "Missing note C4",
+        "Missing note C4",
         "Onset off by 0.25 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
-        "Onset off by 0.5 quarters",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Quarter detected as 16th",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "1.25q detected as 16th",
+        "Missing tie",
+        "1.25q detected as 16th",
+        "Onset off by 0.25 quarters",
+        "Missing tie",
+        "Incorrect pitch C4 (expected D4)",
+        "Onset off by 0.25 quarters",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
@@ -10218,13 +10632,10 @@
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Measure 17 timing mismatch"
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 19 timing mismatch"
       ],
-      "severity": 118
+      "severity": 117
     },
     {
       "measureNumber": 27,
@@ -10232,7 +10643,7 @@
         27
       ],
       "generatedMeasureNumbers": [
-        26
+        27
       ],
       "alignment": "match",
       "unmatched": false,
@@ -10501,8 +10912,8 @@
         30
       ],
       "generatedMeasureNumbers": [
-        29,
-        30
+        30,
+        31
       ],
       "alignment": "split",
       "unmatched": false,
@@ -10511,7 +10922,7 @@
         {
           "code": "split-measure",
           "class": "measure-structure",
-          "message": "Split measure 30 → 29,30",
+          "message": "Split measure 30 → 30,31",
           "measureNumber": 30
         },
         {
@@ -10738,7 +11149,7 @@
         }
       ],
       "summary": [
-        "Split measure 30 → 29,30",
+        "Split measure 30 → 30,31",
         "Missing note F3",
         "Missing note D4",
         "Missing note E4",
@@ -10778,261 +11189,6 @@
         "Measure 30 timing mismatch"
       ],
       "severity": 112
-    },
-    {
-      "measureNumber": 5,
-      "truthMeasureNumbers": [
-        5
-      ],
-      "generatedMeasureNumbers": [
-        5
-      ],
-      "alignment": "match",
-      "unmatched": false,
-      "alignmentCost": 1.7417,
-      "defects": [
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note C#3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note A2",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note B2",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note C#3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note C#3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note D3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note F3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note A#3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note A3",
-          "measureNumber": 5
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note E3",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "onset-mismatch",
-          "class": "rhythm",
-          "message": "Onset off by 0.25 quarters",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-chord",
-          "class": "measure-structure",
-          "message": "Incorrect chord",
-          "measureNumber": 5
-        },
-        {
-          "code": "incorrect-barline",
-          "class": "measure-structure",
-          "message": "Incorrect barline / measure length (4q; expected 3q)",
-          "measureNumber": 5
-        },
-        {
-          "code": "measure-timing-mismatch",
-          "class": "playback",
-          "message": "Measure 5 timing mismatch",
-          "measureNumber": 5
-        }
-      ],
-      "summary": [
-        "Missing note C#3",
-        "Missing note E3",
-        "Missing note A2",
-        "Missing note B2",
-        "Missing note C#3",
-        "Missing note C#3",
-        "Missing note D3",
-        "Missing note E3",
-        "Missing note F3",
-        "Missing note G3",
-        "Missing note A#3",
-        "Missing note A3",
-        "Missing note E3",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Onset off by 0.25 quarters",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect chord",
-        "Incorrect barline / measure length (4q; expected 3q)",
-        "Measure 5 timing mismatch"
-      ],
-      "severity": 107
     }
   ],
   "firstDivergence": {
@@ -11053,19 +11209,25 @@
       "code": "missing-note",
       "class": "pitch",
       "label": "Missing note",
-      "count": 406
+      "count": 415
     },
     {
       "code": "incorrect-chord",
       "class": "measure-structure",
       "label": "Incorrect chord",
-      "count": 337
+      "count": 342
     },
     {
       "code": "onset-mismatch",
       "class": "rhythm",
       "label": "Onset timing difference",
-      "count": 110
+      "count": 97
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 38
     },
     {
       "code": "incorrect-pitch",
@@ -11080,16 +11242,10 @@
       "count": 33
     },
     {
-      "code": "extra-note",
-      "class": "pitch",
-      "label": "Extra note",
-      "count": 27
-    },
-    {
       "code": "incorrect-barline",
       "class": "measure-structure",
       "label": "Incorrect barline",
-      "count": 25
+      "count": 24
     },
     {
       "code": "missing-tie",
@@ -11101,13 +11257,13 @@
       "code": "duration-mismatch",
       "class": "rhythm",
       "label": "Duration mismatch",
-      "count": 10
+      "count": 9
     },
     {
       "code": "split-measure",
       "class": "measure-structure",
       "label": "Split measure",
-      "count": 4
+      "count": 5
     },
     {
       "code": "merged-measure",
@@ -11128,12 +11284,6 @@
       "count": 1
     },
     {
-      "code": "repeat-mismatch",
-      "class": "interpretation",
-      "label": "Repeat mismatch",
-      "count": 1
-    },
-    {
       "code": "timeline-mismatch",
       "class": "playback",
       "label": "Timeline mismatch",
@@ -11144,17 +11294,17 @@
     {
       "class": "pitch",
       "label": "Pitch",
-      "count": 468
+      "count": 488
     },
     {
       "class": "measure-structure",
       "label": "Measure structure",
-      "count": 369
+      "count": 374
     },
     {
       "class": "rhythm",
       "label": "Rhythm",
-      "count": 120
+      "count": 106
     },
     {
       "class": "playback",
@@ -11165,21 +11315,16 @@
       "class": "sustain",
       "label": "Sustain (ties)",
       "count": 14
-    },
-    {
-      "class": "interpretation",
-      "label": "Interpretation",
-      "count": 1
     }
   ],
   "totals": {
     "truthNoteCount": 724,
-    "generatedNoteCount": 345,
+    "generatedNoteCount": 347,
     "truthRestCount": 0,
     "generatedRestCount": 0,
     "truthMeasureCount": 33,
-    "generatedMeasureCount": 35,
-    "defectCount": 1007
+    "generatedMeasureCount": 36,
+    "defectCount": 1017
   },
   "tolerances": {
     "onsetToleranceQuarters": 0.125,
@@ -11211,9 +11356,9 @@
   ],
   "playback": {
     "truthDurationSeconds": 93.5,
-    "generatedDurationSeconds": 70,
+    "generatedDurationSeconds": 72,
     "truthWrittenDurationSeconds": 46.75,
-    "generatedWrittenDurationSeconds": 70
+    "generatedWrittenDurationSeconds": 72
   },
   "options": {
     "onsetToleranceQuarters": 0.125,
