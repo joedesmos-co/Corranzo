@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync, existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { confirmNeuralNotes } from '../src/features/practice/micNeuralHybrid.js'
+import { confirmNeuralNotes, harmonicGhostVetoes } from '../src/features/practice/micNeuralHybrid.js'
 import { toCanonicalMicrophoneEvent } from '../src/features/practice/micCanonicalBridge.js'
 import { evaluateCanonicalWaitForYouInput } from '../src/features/practice/canonicalInputEvent.js'
 import {
@@ -76,8 +76,7 @@ describe.skipIf(!hasNotes)('mic neural hybrid (Basic Pitch candidates)', () => {
     }
   })
 
-  it('confirms sustained tones outside the attack window without manufacturing', () => {
-    // A sustained tone heard now (bypass) + a fresh attack in-window.
+  it('confirms sustained tones outside the attack window without manufacturing', () => {    // A sustained tone heard now (bypass) + a fresh attack in-window.
     const verdict = confirmNeuralNotes(
       [
         { midi: 60, start: 100.0, end: 101.0, sustained: true },
@@ -95,5 +94,51 @@ describe.skipIf(!hasNotes)('mic neural hybrid (Basic Pitch candidates)', () => {
     )
     expect(ghost.confirmedMidis).toEqual([])
     expect(ghost.complete).toBe(false)
+  })
+})
+
+describe('harmonicGhostVetoes', () => {
+  // Measured ghost shape: C3@0.13+0.86 spawns C4@0.13+0.56 (same onset,
+  // same-quantized span, exact pitch). No timing/duration/pitch cue
+  // separates it — only the unexpected simultaneous fundamental does.
+  const ghostPool = [
+    { midi: 48, start: 1.13, end: 1.99 },
+    { midi: 64, start: 1.13, end: 1.46 },
+    { midi: 60, start: 1.13, end: 1.49 },
+  ]
+
+  it('vetoes a simultaneous unexpected-fundamental octave ghost (single-note checkpoint)', () => {
+    expect([...harmonicGhostVetoes(ghostPool, [60]).keys()]).toEqual([60])
+  })
+
+  it('stays silent for multi-pitch checkpoints (dense music must flow)', () => {
+    expect([...harmonicGhostVetoes(ghostPool, [60, 64]).keys()]).toEqual([])
+    expect([...harmonicGhostVetoes(ghostPool, [48, 60, 64]).keys()]).toEqual([])
+  })
+
+  it('never vetoes true doublings where both octaves are expected', () => {
+    const doubling = [
+      { midi: 48, start: 1.0, end: 2.0 },
+      { midi: 60, start: 1.0, end: 2.0 },
+    ]
+    expect([...harmonicGhostVetoes(doubling, [48]).keys()]).toEqual([])
+    expect([...harmonicGhostVetoes(doubling, [60]).keys()]).toEqual([60])
+  })
+
+  it('ignores pedal ring: earlier fundamentals do not veto', () => {
+    const pool = [
+      { midi: 48, start: 0.5, end: 2.5 },
+      { midi: 60, start: 1.5, end: 2.0 },
+    ]
+    expect([...harmonicGhostVetoes(pool, [60]).keys()]).toEqual([])
+  })
+
+  it('blocks the false award end to end without touching true singles', () => {
+    const blocked = confirmNeuralNotes(ghostPool, [60], 1.2, { windowBeforeSeconds: 4, windowAfterSeconds: 0.5 })
+    expect(blocked.complete).toBe(false)
+    expect(blocked.missingMidis).toEqual([60])
+    expect(blocked.vetoed.map((entry) => entry.midi)).toEqual([60])
+    const clean = confirmNeuralNotes([{ midi: 60, start: 1.0, end: 2.0 }], [60], 1.2)
+    expect(clean.complete).toBe(true)
   })
 })

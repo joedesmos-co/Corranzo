@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "description": "Composite clips of REAL single-note recordings with construction truth. Annotations are sample-exact by construction (never detector output). For repeated-note, alternating, and staccato/legato timing evaluation the natural corpus lacks.",
+  "provenance": {
+    "policy": "Every clip concatenates unmodified real recordings; onsets are measured from the source audio (-40 dBFS first energy); peak-normalized per note for level fairness.",
+    "fixtureClass": "composite-real-notes",
+    "naturalPerformance": false
+  },
+  "clips": [
+    {
+      "id": "repeat-piano-c4x3",
+      "instrument": "piano",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/repeat-piano-c4x3.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          60
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.083
+          },
+          {
+            "midi": 60,
+            "onset": 2.363
+          },
+          {
+            "midi": 60,
+            "onset": 4.643
+          }
+        ]
+      }
+    },
+    {
+      "id": "alternating-piano-c4-d4",
+      "instrument": "piano",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/alternating-piano-c4-d4.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          60,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.083
+          },
+          {
+            "midi": 64,
+            "onset": 2.312
+          },
+          {
+            "midi": 60,
+            "onset": 4.543
+          },
+          {
+            "midi": 64,
+            "onset": 6.772
+          }
+        ]
+      }
+    },
+    {
+      "id": "repeat-guitar-g3x3",
+      "instrument": "guitar",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/repeat-guitar-g3x3.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          55
+        ],
+        "notes": [
+          {
+            "midi": 55,
+            "onset": 0.08
+          },
+          {
+            "midi": 55,
+            "onset": 2.76
+          },
+          {
+            "midi": 55,
+            "onset": 5.44
+          }
+        ]
+      }
+    },
+    {
+      "id": "legato-piano-c4-e4",
+      "instrument": "piano",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/legato-piano-c4-e4.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          60,
+          64
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.083
+          },
+          {
+            "midi": 64,
+            "onset": 2.082
+          },
+          {
+            "midi": 60,
+            "onset": 4.083
+          }
+        ]
+      }
+    }
+  ]
+}
