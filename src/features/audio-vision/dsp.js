@@ -189,15 +189,26 @@ export function chromaOfSpectrum(spectrum, fftSize, sampleRate, { minHz = 55, ma
   return chroma
 }
 
+const CHORD_QUALITIES = [
+  { quality: 'major', intervals: [0, 4, 7], suffix: '' },
+  { quality: 'minor', intervals: [0, 3, 7], suffix: 'm' },
+  // Phase 3: extended templates — jazz/pop harmony is rarely triad-only.
+  // Measured against GuitarSet chord truth (maj7/min7/7/dim/sus present).
+  { quality: 'major7', intervals: [0, 4, 7, 11], suffix: 'maj7' },
+  { quality: 'minor7', intervals: [0, 3, 7, 10], suffix: 'm7' },
+  { quality: 'dominant7', intervals: [0, 4, 7, 10], suffix: '7' },
+  { quality: 'diminished', intervals: [0, 3, 6], suffix: 'dim' },
+  { quality: 'suspended4', intervals: [0, 5, 7], suffix: 'sus4' },
+]
+
 const CHORD_TEMPLATES = (() => {
   const templates = []
   for (let root = 0; root < 12; root += 1) {
-    const major = new Array(12).fill(0.08)
-    const minor = new Array(12).fill(0.08)
-    for (const iv of [0, 4, 7]) major[(root + iv) % 12] = 1
-    for (const iv of [0, 3, 7]) minor[(root + iv) % 12] = 1
-    templates.push({ root, quality: 'major', weights: major })
-    templates.push({ root, quality: 'minor', weights: minor })
+    for (const q of CHORD_QUALITIES) {
+      const weights = new Array(12).fill(0.08)
+      for (const iv of q.intervals) weights[(root + iv) % 12] = 1
+      templates.push({ root, quality: q.quality, weights, suffix: q.suffix })
+    }
   }
   return templates
 })()
@@ -206,7 +217,7 @@ const PITCH_CLASS_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A',
 
 /** Template-match chroma → { root, quality, score, label }. Score is cosine-ish 0..1. */
 export function recognizeChord(chroma) {
-  let best = { root: 0, quality: 'major', score: 0 }
+  let best = { root: 0, quality: 'major', score: 0, suffix: '' }
   for (const t of CHORD_TEMPLATES) {
     let dot = 0
     let norm = 0
@@ -214,10 +225,11 @@ export function recognizeChord(chroma) {
       dot += chroma[i] * t.weights[i]
       norm += t.weights[i] * t.weights[i]
     }
+    // Length-normalize so 4-note templates don't outscore triads for free.
     const score = dot / (Math.sqrt(norm) + 1e-9)
-    if (score > best.score) best = { root: t.root, quality: t.quality, score }
+    if (score > best.score) best = { root: t.root, quality: t.quality, score, suffix: t.suffix }
   }
-  return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.quality === 'minor' ? 'm' : ''}` }
+  return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
 }
 
 /** Autocorrelation tempo from onset envelope. Returns { bpm, confidence, octaveAlternative }. */

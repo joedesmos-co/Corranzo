@@ -111,9 +111,17 @@ function chordAt(chords, onsetBeat, beatsPerMeasure) {
   const idx = Math.floor(Math.max(0, onsetBeat) / beatsPerMeasure)
   const byMeasure = chords[Math.min(chords.length - 1, Math.max(0, idx * 1))]
   if (!byMeasure) return null
-  const tones = byMeasure.quality === 'minor'
-    ? [byMeasure.root, (byMeasure.root + 3) % 12, (byMeasure.root + 7) % 12]
-    : [byMeasure.root, (byMeasure.root + 4) % 12, (byMeasure.root + 7) % 12]
+  const intervalsByQuality = {
+    major: [0, 4, 7],
+    minor: [0, 3, 7],
+    major7: [0, 4, 7, 11],
+    minor7: [0, 3, 7, 10],
+    dominant7: [0, 4, 7, 10],
+    diminished: [0, 3, 6],
+    suspended4: [0, 5, 7],
+  }
+  const intervals = intervalsByQuality[byMeasure.quality] ?? [0, 4, 7]
+  const tones = intervals.map((iv) => (byMeasure.root + iv) % 12)
   return { ...byMeasure, tones }
 }
 

@@ -33,6 +33,7 @@ if (!manifestPath) {
   process.exit(2)
 }
 const modelDir = argValue('--model-dir', 'public/neural-model')
+const onlyFilter = argValue('--only', null)
 
 const GSTR = { count: 6, tuning: STANDARD_GUITAR_TUNING, fretCount: 19, preferredMaxFret: 12 }
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
@@ -130,6 +131,31 @@ function describeArrangement(out, entry) {
     desc.melodyAnchors = anchors.length
     desc.melodyRecallStrict = anchors.length ? Math.round((strict / anchors.length) * 1000) / 1000 : null
     desc.melodyRecallPc = anchors.length ? Math.round((pc / anchors.length) * 1000) / 1000 : null
+    // Region pitch-class F1: drift- and pre-roll-robust musical overlap.
+    // Splits the clip into 0.5 s regions; compares sounding pitch-class sets.
+    const offsets = entry.truthOffsets ?? null
+    if (offsets) {
+      const end = Math.max(...offsets.map((o) => o.offset), ...evSec.map((e) => e.sec))
+      let f1sum = 0
+      let regions = 0
+      for (let rs = 0; rs < end; rs += 0.5) {
+        const re = rs + 0.5
+        const tSet = new Set()
+        offsets.forEach((o, i) => {
+          const n = entry.truthNotes[i]
+          if (n.onset <= re && o.offset >= rs) tSet.add(((n.midi % 12) + 12) % 12)
+        })
+        const aSet = new Set(evSec.filter((e) => e.sec >= rs - 0.05 && e.sec < re + 0.3).map((e) => ((e.midi % 12) + 12) % 12))
+        if (!tSet.size && !aSet.size) continue
+        const inter = [...tSet].filter((p) => aSet.has(p)).length
+        const prec = aSet.size ? inter / aSet.size : 1
+        const rec = tSet.size ? inter / tSet.size : 1
+        f1sum += prec + rec > 0 ? (2 * prec * rec) / (prec + rec) : 0
+        regions += 1
+      }
+      desc.regionPcF1 = regions ? Math.round((f1sum / regions) * 1000) / 1000 : null
+      desc.regionCount = regions
+    }
   }
   if (Number.isFinite(entry.truthTempo)) {
     desc.tempoError = Math.abs(out.transcribed.tempo.bpm - entry.truthTempo)
@@ -205,11 +231,12 @@ void melodyRecall
 
 const report = { entries: [], generatedAt: new Date().toISOString() }
 for (const entry of manifest.entries ?? manifest) {
+  if (onlyFilter && !entry.id.includes(onlyFilter)) continue
   console.log(`--- ${entry.id} (${entry.license})`)
   for (const pitch of ['basic-pitch', 'spectral']) {
     const res = await runOne(entry, pitch)
     for (const [k, v] of Object.entries(res)) {
-      console.log(`  ${pitch} ${k}: ${v.ok ? `ok conf=${v.confidence} melStrict=${v.melodyRecallStrict ?? '—'} melPc=${v.melodyRecallPc ?? '—'} tempoErr=${v.tempoError ?? '—'} chordRoot=${v.chordRootAccuracy ?? '—'} xml=${v.xmlNotes}` : `FAIL(${v.code})`}`)
+      console.log(`  ${pitch} ${k}: ${v.ok ? `ok conf=${v.confidence} melStrict=${v.melodyRecallStrict ?? '—'} melPc=${v.melodyRecallPc ?? '—'} regionF1=${v.regionPcF1 ?? '—'} tempoErr=${v.tempoError ?? '—'} chordRoot=${v.chordRootAccuracy ?? '—'} xml=${v.xmlNotes}` : `FAIL(${v.code})`}`)
       report.entries.push({ id: entry.id, pitch, config: k, license: entry.license, ...v })
     }
   }

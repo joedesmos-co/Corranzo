@@ -76,6 +76,7 @@ const entries = []
       id: `mic-real-${id}`,
       audio: `benchmarks/mic-real/${clip.audio.file}`,
       truthNotes: clip.truth.notes.map((n) => ({ midi: n.midi, onset: n.onset })),
+      truthOffsets: clip.truth.notes.map((n) => ({ offset: Number.isFinite(n.offset) ? n.offset : n.onset + 0.5 })),
       license: clip.license,
       attribution: clip.attribution,
       difficulties: ['easy', 'advanced'],
@@ -113,11 +114,13 @@ for (const src of REAL_CORPUS.sources) {
     if (!existsSync(t.wav) || !existsSync(t.jams)) continue
     const jams = JSON.parse(readFileSync(t.jams, 'utf8'))
     const truthNotes = []
+    const truthOffsets = []
     for (const a of jams.annotations) {
       if (a.namespace !== 'note_midi' || !Array.isArray(a.data)) continue
       for (const n of a.data) {
         if (!Number.isFinite(n.time) || !Number.isFinite(n.value)) continue
         truthNotes.push({ midi: Math.round(n.value), onset: Math.round(n.time * 1000) / 1000 })
+        truthOffsets.push({ offset: Math.round((n.time + (n.duration ?? 0.3)) * 1000) / 1000 })
       }
     }
     const truthChords = []
@@ -148,6 +151,7 @@ for (const src of REAL_CORPUS.sources) {
       id: t.id,
       audio: t.wav,
       truthNotes,
+      truthOffsets,
       truthChords,
       truthTempo,
       license: 'CC-BY-4.0',

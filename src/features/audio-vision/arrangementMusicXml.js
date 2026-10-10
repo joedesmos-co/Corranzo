@@ -44,9 +44,12 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   const beats = Math.max(1, Math.round(beatsPerMeasure))
   const totalBeats = events.length ? Math.max(...events.map((e) => e.startBeat + e.durBeats)) : beats
   const measureCount = Math.max(1, Math.ceil(totalBeats / beats))
+  // Pre-split barline-crossing notes globally so remainders land in the
+  // correct following measure (per-measure splitting alone loses them).
+  const pieces = events.flatMap((e) => splitNoteAcrossBarlines(e, beats))
   const byMeasure = Array.from({ length: measureCount }, () => [])
-  for (const e of events) {
-    const m = Math.min(measureCount - 1, Math.max(0, Math.floor(e.startBeat / beats)))
+  for (const e of pieces) {
+    const m = Math.min(measureCount - 1, Math.max(0, measureIndexOf(e.startBeat, beats)))
     byMeasure[m].push(e)
   }
   const isPiano = targetPart === PART_INSTRUMENTS.SOLO_PIANO
@@ -93,6 +96,11 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   return xml
 }
 
+/** Measure owning an onset: exact barline hits belong to the NEW measure. */
+function measureIndexOf(startBeat, beats) {
+  return Math.floor((Math.max(0, startBeat) + 1e-9) / beats)
+}
+
 function beatsToDiv(beatsValue) {
   return Math.max(1, Math.round(beatsValue * ARR_DIVISIONS))
 }
@@ -126,6 +134,34 @@ function restXml(divisions, voice, staff = null) {
   return s
 }
 
+/** Split a note into per-measure pieces (ties across barlines preserved). */
+function splitNoteAcrossBarlines(event, beats) {
+  const pieces = []
+  let start = event.startBeat
+  let remaining = event.durBeats
+  let first = true
+  let guard = 0
+  while (remaining > 1e-9 && guard < 1024) {
+    guard += 1
+    const m = measureIndexOf(start, beats)
+    const measureEnd = (m + 1) * beats
+    const dur = Math.min(remaining, measureEnd - start)
+    const after = remaining - dur
+    pieces.push({
+      ...event,
+      startBeat: start,
+      durBeats: dur,
+      measureIndex: m,
+      tieStop: !first,
+      tieStart: after > 1e-9,
+    })
+    start = measureEnd
+    remaining = after
+    first = false
+  }
+  return pieces.length ? pieces : [{ ...event, tieStart: false, tieStop: false }]
+}
+
 /** Split overlong notes at barlines with ties (semantic correctness). */
 function splitAcrossMeasures(events, measureIndex, beats) {
   const out = []
@@ -156,7 +192,7 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
   for (const [staff, voice, hand] of [[1, 1, 'RH'], [2, 2, 'LH']]) {
     const handEvents = measureEvents.filter((e) => (e.hand ?? 'RH') === hand)
       .flatMap((e) => splitAcrossMeasures([e], m, beats))
-      .filter((e) => Math.floor(e.startBeat / beats) === m || e.carried)
+      .filter((e) => measureIndexOf(e.startBeat, beats) === m)
     if (hand === 'LH' && handEvents.length) s += `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
     let cursor = 0
     const sorted = [...handEvents].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
@@ -190,7 +226,7 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
 function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
   let s = ''
   const split = measureEvents.flatMap((e) => splitAcrossMeasures([e], m, beats))
-    .filter((e) => Math.floor(Math.max(0, e.startBeat - 1e-9) / beats) === m || Math.floor(e.startBeat / beats) === m)
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
   let cursor = 0
   const sorted = [...split].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
   let lastOnset = null

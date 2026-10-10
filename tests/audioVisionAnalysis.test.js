@@ -64,6 +64,16 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     const rec = recognizeChord(chroma)
     expect(rec.label).toBe('Am')
   })
+  it('recognizes extended harmony (Bmaj7) without breaking triads', () => {
+    const chroma = new Float64Array(12)
+    for (const pc of [11, 3, 6, 10]) chroma[pc] = 1 // B D# F# A#
+    const rec = recognizeChord(chroma)
+    expect(rec.root).toBe(11)
+    expect(rec.label).toBe('Bmaj7')
+    const tri = new Float64Array(12)
+    for (const pc of [0, 4, 7]) tri[pc] = 1 // C E G
+    expect(recognizeChord(tri).label).toBe('C')
+  })
   it('HPSS separates harmonic and percussive energy honestly', () => {
     const samples = synthBandFixture({ seconds: 4 })
     const { frames } = magnitudeSpectrogram(samples, { sampleRate: SR })
