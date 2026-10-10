@@ -1,0 +1,1729 @@
+{
+  "clips": 46,
+  "byInstrument": {
+    "piano": {
+      "basicPitch": {
+        "n": 7,
+        "precision": 0.082,
+        "recall": 0.119,
+        "f1": 0.096
+      },
+      "spectral": {
+        "n": 7,
+        "precision": 0.101,
+        "recall": 0.058,
+        "f1": 0.073
+      }
+    },
+    "acoustic-guitar": {
+      "basicPitch": {
+        "n": 21,
+        "precision": 0.675,
+        "recall": 0.802,
+        "f1": 0.719
+      },
+      "spectral": {
+        "n": 21,
+        "precision": 0.407,
+        "recall": 0.378,
+        "f1": 0.357
+      }
+    },
+    "electric-guitar": {
+      "basicPitch": {
+        "n": 18,
+        "precision": 0.59,
+        "recall": 0.811,
+        "f1": 0.654
+      },
+      "spectral": {
+        "n": 18,
+        "precision": 0.174,
+        "recall": 0.327,
+        "f1": 0.175
+      }
+    }
+  },
+  "bySplit": {
+    "dev": {
+      "basicPitch": {
+        "n": 15,
+        "precision": 0.623,
+        "recall": 0.759,
+        "f1": 0.664
+      },
+      "spectral": {
+        "n": 15,
+        "precision": 0.304,
+        "recall": 0.285,
+        "f1": 0.268
+      }
+    },
+    "eval": {
+      "basicPitch": {
+        "n": 22,
+        "precision": 0.441,
+        "recall": 0.608,
+        "f1": 0.491
+      },
+      "spectral": {
+        "n": 22,
+        "precision": 0.172,
+        "recall": 0.32,
+        "f1": 0.181
+      }
+    },
+    "eval-fresh": {
+      "basicPitch": {
+        "n": 9,
+        "precision": 0.7,
+        "recall": 0.833,
+        "f1": 0.753
+      },
+      "spectral": {
+        "n": 9,
+        "precision": 0.45,
+        "recall": 0.322,
+        "f1": 0.35
+      }
+    }
+  },
+  "overall": {
+    "basicPitch": {
+      "n": 46,
+      "precision": 0.551,
+      "recall": 0.701,
+      "f1": 0.599
+    },
+    "spectral": {
+      "n": 46,
+      "precision": 0.269,
+      "recall": 0.309,
+      "f1": 0.242
+    }
+  },
+  "rows": [
+    {
+      "id": "piano-mozart-dyad",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 28,
+        "truth": 17,
+        "precision": 0.036,
+        "recall": 0.059,
+        "f1": 0.044,
+        "onsetMaeMs": 11,
+        "invented": 27,
+        "missed": 16,
+        "ms": 3801,
+        "rtf": 1.27,
+        "heapMB": -2.9
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 13,
+        "truth": 17,
+        "precision": 0.077,
+        "recall": 0.059,
+        "f1": 0.067,
+        "onsetMaeMs": 61,
+        "invented": 12,
+        "missed": 16
+      },
+      "tempoBpm": 70,
+      "onsets": 11
+    },
+    {
+      "id": "piano-schubert-single",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 2,
+        "predicted": 33,
+        "truth": 19,
+        "precision": 0.061,
+        "recall": 0.105,
+        "f1": 0.077,
+        "onsetMaeMs": 48,
+        "invented": 31,
+        "missed": 17,
+        "ms": 2391,
+        "rtf": 0.8,
+        "heapMB": -18
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 13,
+        "truth": 19,
+        "precision": 0.154,
+        "recall": 0.105,
+        "f1": 0.125,
+        "onsetMaeMs": 63,
+        "invented": 11,
+        "missed": 17
+      },
+      "tempoBpm": 129,
+      "onsets": 13
+    },
+    {
+      "id": "piano-schubert-triad",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 4,
+        "predicted": 39,
+        "truth": 27,
+        "precision": 0.103,
+        "recall": 0.148,
+        "f1": 0.121,
+        "onsetMaeMs": 13,
+        "invented": 35,
+        "missed": 23,
+        "ms": 2343,
+        "rtf": 0.78,
+        "heapMB": -14.7
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 13,
+        "truth": 27,
+        "precision": 0.154,
+        "recall": 0.074,
+        "f1": 0.1,
+        "onsetMaeMs": 51,
+        "invented": 11,
+        "missed": 25
+      },
+      "tempoBpm": 62,
+      "onsets": 12
+    },
+    {
+      "id": "piano-schubert-dense",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 5,
+        "predicted": 33,
+        "truth": 30,
+        "precision": 0.152,
+        "recall": 0.167,
+        "f1": 0.159,
+        "onsetMaeMs": 34,
+        "invented": 28,
+        "missed": 25,
+        "ms": 2440,
+        "rtf": 0.81,
+        "heapMB": -15.7
+      },
+      "spectral": {
+        "matched": 3,
+        "predicted": 13,
+        "truth": 30,
+        "precision": 0.231,
+        "recall": 0.1,
+        "f1": 0.14,
+        "onsetMaeMs": 42,
+        "invented": 10,
+        "missed": 27
+      },
+      "tempoBpm": 74,
+      "onsets": 11
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 4,
+        "predicted": 24,
+        "truth": 15,
+        "precision": 0.167,
+        "recall": 0.267,
+        "f1": 0.205,
+        "onsetMaeMs": 38,
+        "invented": 20,
+        "missed": 11,
+        "ms": 2427,
+        "rtf": 0.81,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 11,
+        "truth": 15,
+        "precision": 0.091,
+        "recall": 0.067,
+        "f1": 0.077,
+        "onsetMaeMs": 53,
+        "invented": 10,
+        "missed": 14
+      },
+      "tempoBpm": 117,
+      "onsets": 10
+    },
+    {
+      "id": "piano-schubert2-single",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 39,
+        "truth": 20,
+        "precision": 0.026,
+        "recall": 0.05,
+        "f1": 0.034,
+        "onsetMaeMs": 75,
+        "invented": 38,
+        "missed": 19,
+        "ms": 2348,
+        "rtf": 0.78,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 0,
+        "predicted": 14,
+        "truth": 20,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "onsetMaeMs": null,
+        "invented": 14,
+        "missed": 20
+      },
+      "tempoBpm": 185,
+      "onsets": 12
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "instrument": "piano",
+      "dataset": "vienna-4x22",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 36,
+        "truth": 27,
+        "precision": 0.028,
+        "recall": 0.037,
+        "f1": 0.032,
+        "onsetMaeMs": 88,
+        "invented": 35,
+        "missed": 26,
+        "ms": 2437,
+        "rtf": 0.81,
+        "heapMB": -7.6
+      },
+      "spectral": {
+        "matched": 0,
+        "predicted": 15,
+        "truth": 27,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "onsetMaeMs": null,
+        "invented": 15,
+        "missed": 27
+      },
+      "tempoBpm": 185,
+      "onsets": 12
+    },
+    {
+      "id": "acoustic-jazz-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 5,
+        "predicted": 7,
+        "truth": 6,
+        "precision": 0.714,
+        "recall": 0.833,
+        "f1": 0.769,
+        "onsetMaeMs": 18,
+        "invented": 2,
+        "missed": 1,
+        "ms": 2401,
+        "rtf": 0.8,
+        "heapMB": -11.5
+      },
+      "spectral": {
+        "matched": 5,
+        "predicted": 15,
+        "truth": 6,
+        "precision": 0.333,
+        "recall": 0.833,
+        "f1": 0.476,
+        "onsetMaeMs": 50,
+        "invented": 10,
+        "missed": 1
+      },
+      "tempoBpm": 199,
+      "onsets": 15
+    },
+    {
+      "id": "acoustic-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 7,
+        "predicted": 8,
+        "truth": 8,
+        "precision": 0.875,
+        "recall": 0.875,
+        "f1": 0.875,
+        "onsetMaeMs": 24,
+        "invented": 1,
+        "missed": 1,
+        "ms": 2393,
+        "rtf": 0.8,
+        "heapMB": -7.1
+      },
+      "spectral": {
+        "matched": 5,
+        "predicted": 12,
+        "truth": 8,
+        "precision": 0.417,
+        "recall": 0.625,
+        "f1": 0.5,
+        "onsetMaeMs": 49,
+        "invented": 7,
+        "missed": 3
+      },
+      "tempoBpm": 172,
+      "onsets": 15
+    },
+    {
+      "id": "acoustic-bossa-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 6,
+        "predicted": 15,
+        "truth": 6,
+        "precision": 0.4,
+        "recall": 1,
+        "f1": 0.571,
+        "onsetMaeMs": 14,
+        "invented": 9,
+        "missed": 0,
+        "ms": 2404,
+        "rtf": 0.8,
+        "heapMB": -7.2
+      },
+      "spectral": {
+        "matched": 3,
+        "predicted": 12,
+        "truth": 6,
+        "precision": 0.25,
+        "recall": 0.5,
+        "f1": 0.333,
+        "onsetMaeMs": 43,
+        "invented": 9,
+        "missed": 3
+      },
+      "tempoBpm": 117,
+      "onsets": 14
+    },
+    {
+      "id": "acoustic-bossa-chord",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 8,
+        "predicted": 20,
+        "truth": 12,
+        "precision": 0.4,
+        "recall": 0.667,
+        "f1": 0.5,
+        "onsetMaeMs": 18,
+        "invented": 12,
+        "missed": 4,
+        "ms": 2504,
+        "rtf": 0.83,
+        "heapMB": -8.1
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 13,
+        "truth": 12,
+        "precision": 0.308,
+        "recall": 0.333,
+        "f1": 0.32,
+        "onsetMaeMs": 34,
+        "invented": 9,
+        "missed": 8
+      },
+      "tempoBpm": 123,
+      "onsets": 13
+    },
+    {
+      "id": "acoustic-rock-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 5,
+        "predicted": 8,
+        "truth": 7,
+        "precision": 0.625,
+        "recall": 0.714,
+        "f1": 0.667,
+        "onsetMaeMs": 11,
+        "invented": 3,
+        "missed": 2,
+        "ms": 2380,
+        "rtf": 0.79,
+        "heapMB": -11.2
+      },
+      "spectral": {
+        "matched": 6,
+        "predicted": 15,
+        "truth": 7,
+        "precision": 0.4,
+        "recall": 0.857,
+        "f1": 0.545,
+        "onsetMaeMs": 62,
+        "invented": 9,
+        "missed": 1
+      },
+      "tempoBpm": 199,
+      "onsets": 15
+    },
+    {
+      "id": "acoustic-rock-dyad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 14,
+        "predicted": 16,
+        "truth": 15,
+        "precision": 0.875,
+        "recall": 0.933,
+        "f1": 0.903,
+        "onsetMaeMs": 10,
+        "invented": 2,
+        "missed": 1,
+        "ms": 2403,
+        "rtf": 0.8,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 13,
+        "predicted": 17,
+        "truth": 15,
+        "precision": 0.765,
+        "recall": 0.867,
+        "f1": 0.813,
+        "onsetMaeMs": 43,
+        "invented": 4,
+        "missed": 2
+      },
+      "tempoBpm": 144,
+      "onsets": 16
+    },
+    {
+      "id": "acoustic-power-dyad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 15,
+        "predicted": 20,
+        "truth": 19,
+        "precision": 0.75,
+        "recall": 0.789,
+        "f1": 0.769,
+        "onsetMaeMs": 22,
+        "invented": 5,
+        "missed": 4,
+        "ms": 2443,
+        "rtf": 0.81,
+        "heapMB": -7.1
+      },
+      "spectral": {
+        "matched": 5,
+        "predicted": 13,
+        "truth": 19,
+        "precision": 0.385,
+        "recall": 0.263,
+        "f1": 0.313,
+        "onsetMaeMs": 47,
+        "invented": 8,
+        "missed": 14
+      },
+      "tempoBpm": 60,
+      "onsets": 14
+    },
+    {
+      "id": "acoustic-power-dense",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 18,
+        "predicted": 35,
+        "truth": 24,
+        "precision": 0.514,
+        "recall": 0.75,
+        "f1": 0.61,
+        "onsetMaeMs": 19,
+        "invented": 17,
+        "missed": 6,
+        "ms": 2471,
+        "rtf": 0.82,
+        "heapMB": -7.7
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 16,
+        "truth": 24,
+        "precision": 0.063,
+        "recall": 0.042,
+        "f1": 0.05,
+        "onsetMaeMs": 29,
+        "invented": 15,
+        "missed": 23
+      },
+      "tempoBpm": 92,
+      "onsets": 13
+    },
+    {
+      "id": "acoustic-funk-triad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 25,
+        "predicted": 30,
+        "truth": 39,
+        "precision": 0.833,
+        "recall": 0.641,
+        "f1": 0.725,
+        "onsetMaeMs": 14,
+        "invented": 5,
+        "missed": 14,
+        "ms": 2461,
+        "rtf": 0.82,
+        "heapMB": -11.9
+      },
+      "spectral": {
+        "matched": 7,
+        "predicted": 16,
+        "truth": 39,
+        "precision": 0.438,
+        "recall": 0.179,
+        "f1": 0.255,
+        "onsetMaeMs": 39,
+        "invented": 9,
+        "missed": 32
+      },
+      "tempoBpm": 76,
+      "onsets": 17
+    },
+    {
+      "id": "acoustic-funk-dense",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 25,
+        "predicted": 29,
+        "truth": 43,
+        "precision": 0.862,
+        "recall": 0.581,
+        "f1": 0.694,
+        "onsetMaeMs": 17,
+        "invented": 4,
+        "missed": 18,
+        "ms": 2604,
+        "rtf": 0.87,
+        "heapMB": -7.2
+      },
+      "spectral": {
+        "matched": 8,
+        "predicted": 18,
+        "truth": 43,
+        "precision": 0.444,
+        "recall": 0.186,
+        "f1": 0.262,
+        "onsetMaeMs": 62,
+        "invented": 10,
+        "missed": 35
+      },
+      "tempoBpm": 152,
+      "onsets": 16
+    },
+    {
+      "id": "acoustic-strum-triad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 30,
+        "predicted": 59,
+        "truth": 36,
+        "precision": 0.508,
+        "recall": 0.833,
+        "f1": 0.632,
+        "onsetMaeMs": 16,
+        "invented": 29,
+        "missed": 6,
+        "ms": 2428,
+        "rtf": 0.81,
+        "heapMB": -7.2
+      },
+      "spectral": {
+        "matched": 9,
+        "predicted": 19,
+        "truth": 36,
+        "precision": 0.474,
+        "recall": 0.25,
+        "f1": 0.327,
+        "onsetMaeMs": 63,
+        "invented": 10,
+        "missed": 27
+      },
+      "tempoBpm": 129,
+      "onsets": 17
+    },
+    {
+      "id": "acoustic-strum-dense",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 26,
+        "predicted": 51,
+        "truth": 36,
+        "precision": 0.51,
+        "recall": 0.722,
+        "f1": 0.598,
+        "onsetMaeMs": 19,
+        "invented": 25,
+        "missed": 10,
+        "ms": 2480,
+        "rtf": 0.83,
+        "heapMB": -8.2
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 18,
+        "truth": 36,
+        "precision": 0.222,
+        "recall": 0.111,
+        "f1": 0.148,
+        "onsetMaeMs": 77,
+        "invented": 14,
+        "missed": 32
+      },
+      "tempoBpm": 99,
+      "onsets": 20
+    },
+    {
+      "id": "electric-eg07-single",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 12,
+        "predicted": 25,
+        "truth": 12,
+        "precision": 0.48,
+        "recall": 1,
+        "f1": 0.649,
+        "onsetMaeMs": 6,
+        "invented": 13,
+        "missed": 0,
+        "ms": 2531,
+        "rtf": 0.84,
+        "heapMB": -11.1
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 16,
+        "truth": 12,
+        "precision": 0.125,
+        "recall": 0.167,
+        "f1": 0.143,
+        "onsetMaeMs": 35,
+        "invented": 14,
+        "missed": 10
+      },
+      "tempoBpm": 152,
+      "onsets": 19
+    },
+    {
+      "id": "electric-eg07-dyad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 8,
+        "predicted": 13,
+        "truth": 9,
+        "precision": 0.615,
+        "recall": 0.889,
+        "f1": 0.727,
+        "onsetMaeMs": 6,
+        "invented": 5,
+        "missed": 1,
+        "ms": 2541,
+        "rtf": 0.85,
+        "heapMB": -7
+      },
+      "spectral": {
+        "matched": 0,
+        "predicted": 8,
+        "truth": 9,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "onsetMaeMs": null,
+        "invented": 8,
+        "missed": 9
+      },
+      "tempoBpm": 60,
+      "onsets": 16
+    },
+    {
+      "id": "electric-eg01-triad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 9,
+        "predicted": 17,
+        "truth": 10,
+        "precision": 0.529,
+        "recall": 0.9,
+        "f1": 0.667,
+        "onsetMaeMs": 7,
+        "invented": 8,
+        "missed": 1,
+        "ms": 2569,
+        "rtf": 0.86,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 0,
+        "predicted": 13,
+        "truth": 10,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "onsetMaeMs": null,
+        "invented": 13,
+        "missed": 10
+      },
+      "tempoBpm": 161,
+      "onsets": 15
+    },
+    {
+      "id": "electric-eg01-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 10,
+        "predicted": 12,
+        "truth": 11,
+        "precision": 0.833,
+        "recall": 0.909,
+        "f1": 0.87,
+        "onsetMaeMs": 8,
+        "invented": 2,
+        "missed": 1,
+        "ms": 2524,
+        "rtf": 0.84,
+        "heapMB": -7.9
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 12,
+        "truth": 11,
+        "precision": 0.333,
+        "recall": 0.364,
+        "f1": 0.348,
+        "onsetMaeMs": 50,
+        "invented": 8,
+        "missed": 7
+      },
+      "tempoBpm": 161,
+      "onsets": 13
+    },
+    {
+      "id": "electric-eg02-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 32,
+        "predicted": 37,
+        "truth": 45,
+        "precision": 0.865,
+        "recall": 0.711,
+        "f1": 0.78,
+        "onsetMaeMs": 10,
+        "invented": 5,
+        "missed": 13,
+        "ms": 2623,
+        "rtf": 0.87,
+        "heapMB": -11.4
+      },
+      "spectral": {
+        "matched": 7,
+        "predicted": 11,
+        "truth": 45,
+        "precision": 0.636,
+        "recall": 0.156,
+        "f1": 0.25,
+        "onsetMaeMs": 35,
+        "invented": 4,
+        "missed": 38
+      },
+      "tempoBpm": 136,
+      "onsets": 11
+    },
+    {
+      "id": "electric-eg05-dyad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "dev",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 11,
+        "predicted": 15,
+        "truth": 13,
+        "precision": 0.733,
+        "recall": 0.846,
+        "f1": 0.786,
+        "onsetMaeMs": 6,
+        "invented": 4,
+        "missed": 2,
+        "ms": 2550,
+        "rtf": 0.85,
+        "heapMB": -7
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 12,
+        "truth": 13,
+        "precision": 0.333,
+        "recall": 0.308,
+        "f1": 0.32,
+        "onsetMaeMs": 60,
+        "invented": 8,
+        "missed": 9
+      },
+      "tempoBpm": 144,
+      "onsets": 14
+    },
+    {
+      "id": "electric-eg10-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 9,
+        "predicted": 15,
+        "truth": 10,
+        "precision": 0.6,
+        "recall": 0.9,
+        "f1": 0.72,
+        "onsetMaeMs": 35,
+        "invented": 6,
+        "missed": 1,
+        "ms": 2544,
+        "rtf": 0.85,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 15,
+        "truth": 10,
+        "precision": 0.133,
+        "recall": 0.2,
+        "f1": 0.16,
+        "onsetMaeMs": 23,
+        "invented": 13,
+        "missed": 8
+      },
+      "tempoBpm": 63,
+      "onsets": 14
+    },
+    {
+      "id": "electric-eg03-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 8,
+        "predicted": 20,
+        "truth": 10,
+        "precision": 0.4,
+        "recall": 0.8,
+        "f1": 0.533,
+        "onsetMaeMs": 34,
+        "invented": 12,
+        "missed": 2,
+        "ms": 2491,
+        "rtf": 0.83,
+        "heapMB": -7.7
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 12,
+        "truth": 10,
+        "precision": 0.333,
+        "recall": 0.4,
+        "f1": 0.364,
+        "onsetMaeMs": 42,
+        "invented": 8,
+        "missed": 6
+      },
+      "tempoBpm": 136,
+      "onsets": 12
+    },
+    {
+      "id": "electric-eg04-dyad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 15,
+        "predicted": 19,
+        "truth": 17,
+        "precision": 0.789,
+        "recall": 0.882,
+        "f1": 0.833,
+        "onsetMaeMs": 6,
+        "invented": 4,
+        "missed": 2,
+        "ms": 2450,
+        "rtf": 0.82,
+        "heapMB": -12
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 20,
+        "truth": 17,
+        "precision": 0.2,
+        "recall": 0.235,
+        "f1": 0.216,
+        "onsetMaeMs": 46,
+        "invented": 16,
+        "missed": 13
+      },
+      "tempoBpm": 63,
+      "onsets": 17
+    },
+    {
+      "id": "electric-eg06-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 28,
+        "predicted": 39,
+        "truth": 48,
+        "precision": 0.718,
+        "recall": 0.583,
+        "f1": 0.644,
+        "onsetMaeMs": 23,
+        "invented": 11,
+        "missed": 20,
+        "ms": 2472,
+        "rtf": 0.82,
+        "heapMB": -6.8
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 11,
+        "truth": 48,
+        "precision": 0.091,
+        "recall": 0.021,
+        "f1": 0.034,
+        "onsetMaeMs": 18,
+        "invented": 10,
+        "missed": 47
+      },
+      "tempoBpm": 68,
+      "onsets": 10
+    },
+    {
+      "id": "electric-eg08-triad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 4,
+        "predicted": 5,
+        "truth": 7,
+        "precision": 0.8,
+        "recall": 0.571,
+        "f1": 0.667,
+        "onsetMaeMs": 26,
+        "invented": 1,
+        "missed": 3,
+        "ms": 2552,
+        "rtf": 0.85,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 21,
+        "truth": 7,
+        "precision": 0.048,
+        "recall": 0.143,
+        "f1": 0.071,
+        "onsetMaeMs": 94,
+        "invented": 20,
+        "missed": 6
+      },
+      "tempoBpm": 161,
+      "onsets": 19
+    },
+    {
+      "id": "electric-eg09-dyad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 8,
+        "predicted": 11,
+        "truth": 9,
+        "precision": 0.727,
+        "recall": 0.889,
+        "f1": 0.8,
+        "onsetMaeMs": 10,
+        "invented": 3,
+        "missed": 1,
+        "ms": 2594,
+        "rtf": 0.86,
+        "heapMB": -7.9
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 18,
+        "truth": 9,
+        "precision": 0.222,
+        "recall": 0.444,
+        "f1": 0.296,
+        "onsetMaeMs": 35,
+        "invented": 14,
+        "missed": 5
+      },
+      "tempoBpm": 96,
+      "onsets": 13
+    },
+    {
+      "id": "electric-eg11-dense",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 10,
+        "predicted": 19,
+        "truth": 14,
+        "precision": 0.526,
+        "recall": 0.714,
+        "f1": 0.606,
+        "onsetMaeMs": 24,
+        "invented": 9,
+        "missed": 4,
+        "ms": 2631,
+        "rtf": 0.88,
+        "heapMB": -11.6
+      },
+      "spectral": {
+        "matched": 5,
+        "predicted": 15,
+        "truth": 14,
+        "precision": 0.333,
+        "recall": 0.357,
+        "f1": 0.345,
+        "onsetMaeMs": 48,
+        "invented": 10,
+        "missed": 9
+      },
+      "tempoBpm": 117,
+      "onsets": 13
+    },
+    {
+      "id": "electric-eg12-triad",
+      "instrument": "electric-guitar",
+      "dataset": "egset12",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 12,
+        "predicted": 13,
+        "truth": 12,
+        "precision": 0.923,
+        "recall": 1,
+        "f1": 0.96,
+        "onsetMaeMs": 6,
+        "invented": 1,
+        "missed": 0,
+        "ms": 2448,
+        "rtf": 0.82,
+        "heapMB": -6.8
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 18,
+        "truth": 12,
+        "precision": 0.056,
+        "recall": 0.083,
+        "f1": 0.067,
+        "onsetMaeMs": 79,
+        "invented": 17,
+        "missed": 11
+      },
+      "tempoBpm": 112,
+      "onsets": 11
+    },
+    {
+      "id": "acoustic-fresh-jazz-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 16,
+        "predicted": 28,
+        "truth": 19,
+        "precision": 0.571,
+        "recall": 0.842,
+        "f1": 0.681,
+        "onsetMaeMs": 8,
+        "invented": 12,
+        "missed": 3,
+        "ms": 2491,
+        "rtf": 0.83,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 10,
+        "predicted": 16,
+        "truth": 19,
+        "precision": 0.625,
+        "recall": 0.526,
+        "f1": 0.571,
+        "onsetMaeMs": 46,
+        "invented": 6,
+        "missed": 9
+      },
+      "tempoBpm": 123,
+      "onsets": 18
+    },
+    {
+      "id": "acoustic-fresh-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 13,
+        "predicted": 22,
+        "truth": 16,
+        "precision": 0.591,
+        "recall": 0.813,
+        "f1": 0.684,
+        "onsetMaeMs": 18,
+        "invented": 9,
+        "missed": 3,
+        "ms": 2440,
+        "rtf": 0.81,
+        "heapMB": -7.6
+      },
+      "spectral": {
+        "matched": 7,
+        "predicted": 13,
+        "truth": 16,
+        "precision": 0.538,
+        "recall": 0.438,
+        "f1": 0.483,
+        "onsetMaeMs": 38,
+        "invented": 6,
+        "missed": 9
+      },
+      "tempoBpm": 199,
+      "onsets": 12
+    },
+    {
+      "id": "acoustic-fresh-rock-triad-b",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 14,
+        "predicted": 21,
+        "truth": 18,
+        "precision": 0.667,
+        "recall": 0.778,
+        "f1": 0.718,
+        "onsetMaeMs": 15,
+        "invented": 7,
+        "missed": 4,
+        "ms": 2461,
+        "rtf": 0.82,
+        "heapMB": -11.5
+      },
+      "spectral": {
+        "matched": 9,
+        "predicted": 16,
+        "truth": 18,
+        "precision": 0.563,
+        "recall": 0.5,
+        "f1": 0.529,
+        "onsetMaeMs": 49,
+        "invented": 7,
+        "missed": 9
+      },
+      "tempoBpm": 161,
+      "onsets": 19
+    },
+    {
+      "id": "acoustic-fresh-bossa-triad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 19,
+        "predicted": 24,
+        "truth": 22,
+        "precision": 0.792,
+        "recall": 0.864,
+        "f1": 0.826,
+        "onsetMaeMs": 16,
+        "invented": 5,
+        "missed": 3,
+        "ms": 2507,
+        "rtf": 0.84,
+        "heapMB": -7
+      },
+      "spectral": {
+        "matched": 4,
+        "predicted": 15,
+        "truth": 22,
+        "precision": 0.267,
+        "recall": 0.182,
+        "f1": 0.216,
+        "onsetMaeMs": 54,
+        "invented": 11,
+        "missed": 18
+      },
+      "tempoBpm": 65,
+      "onsets": 12
+    },
+    {
+      "id": "acoustic-fresh-bossa-dense",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 20,
+        "predicted": 27,
+        "truth": 25,
+        "precision": 0.741,
+        "recall": 0.8,
+        "f1": 0.769,
+        "onsetMaeMs": 17,
+        "invented": 7,
+        "missed": 5,
+        "ms": 2523,
+        "rtf": 0.84,
+        "heapMB": -6.8
+      },
+      "spectral": {
+        "matched": 3,
+        "predicted": 12,
+        "truth": 25,
+        "precision": 0.25,
+        "recall": 0.12,
+        "f1": 0.162,
+        "onsetMaeMs": 61,
+        "invented": 9,
+        "missed": 22
+      },
+      "tempoBpm": 86,
+      "onsets": 12
+    },
+    {
+      "id": "acoustic-fresh-funk-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 5,
+        "predicted": 9,
+        "truth": 5,
+        "precision": 0.556,
+        "recall": 1,
+        "f1": 0.714,
+        "onsetMaeMs": 19,
+        "invented": 4,
+        "missed": 0,
+        "ms": 2518,
+        "rtf": 0.84,
+        "heapMB": -7.9
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 10,
+        "truth": 5,
+        "precision": 0.2,
+        "recall": 0.4,
+        "f1": 0.267,
+        "onsetMaeMs": 67,
+        "invented": 8,
+        "missed": 3
+      },
+      "tempoBpm": 112,
+      "onsets": 11
+    },
+    {
+      "id": "acoustic-fresh-rock-dense",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 40,
+        "predicted": 55,
+        "truth": 46,
+        "precision": 0.727,
+        "recall": 0.87,
+        "f1": 0.792,
+        "onsetMaeMs": 12,
+        "invented": 15,
+        "missed": 6,
+        "ms": 2514,
+        "rtf": 0.84,
+        "heapMB": -11.6
+      },
+      "spectral": {
+        "matched": 8,
+        "predicted": 13,
+        "truth": 46,
+        "precision": 0.615,
+        "recall": 0.174,
+        "f1": 0.271,
+        "onsetMaeMs": 41,
+        "invented": 5,
+        "missed": 38
+      },
+      "tempoBpm": 86,
+      "onsets": 12
+    },
+    {
+      "id": "acoustic-fresh-rock-triad",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 40,
+        "predicted": 44,
+        "truth": 51,
+        "precision": 0.909,
+        "recall": 0.784,
+        "f1": 0.842,
+        "onsetMaeMs": 13,
+        "invented": 4,
+        "missed": 11,
+        "ms": 2614,
+        "rtf": 0.87,
+        "heapMB": -6.8
+      },
+      "spectral": {
+        "matched": 7,
+        "predicted": 13,
+        "truth": 51,
+        "precision": 0.538,
+        "recall": 0.137,
+        "f1": 0.219,
+        "onsetMaeMs": 37,
+        "invented": 6,
+        "missed": 44
+      },
+      "tempoBpm": 129,
+      "onsets": 13
+    },
+    {
+      "id": "acoustic-fresh-ss-single",
+      "instrument": "acoustic-guitar",
+      "dataset": "guitarset",
+      "split": "eval-fresh",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 9,
+        "predicted": 12,
+        "truth": 12,
+        "precision": 0.75,
+        "recall": 0.75,
+        "f1": 0.75,
+        "onsetMaeMs": 15,
+        "invented": 3,
+        "missed": 3,
+        "ms": 2584,
+        "rtf": 0.86,
+        "heapMB": -7
+      },
+      "spectral": {
+        "matched": 5,
+        "predicted": 11,
+        "truth": 12,
+        "precision": 0.455,
+        "recall": 0.417,
+        "f1": 0.435,
+        "onsetMaeMs": 54,
+        "invented": 6,
+        "missed": 7
+      },
+      "tempoBpm": 68,
+      "onsets": 12
+    },
+    {
+      "id": "electric-gtechs-low",
+      "instrument": "electric-guitar",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 8,
+        "truth": 2,
+        "precision": 0.125,
+        "recall": 0.5,
+        "f1": 0.2,
+        "onsetMaeMs": 47,
+        "invented": 7,
+        "missed": 1,
+        "ms": 2506,
+        "rtf": 0.84,
+        "heapMB": -7.4
+      },
+      "spectral": {
+        "matched": 0,
+        "predicted": 13,
+        "truth": 2,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "onsetMaeMs": null,
+        "invented": 13,
+        "missed": 2
+      },
+      "tempoBpm": 60,
+      "onsets": 10
+    },
+    {
+      "id": "electric-gtechs-mid",
+      "instrument": "electric-guitar",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 2,
+        "truth": 1,
+        "precision": 0.5,
+        "recall": 1,
+        "f1": 0.667,
+        "onsetMaeMs": 24,
+        "invented": 1,
+        "missed": 0,
+        "ms": 2448,
+        "rtf": 0.82,
+        "heapMB": -11.8
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 12,
+        "truth": 1,
+        "precision": 0.083,
+        "recall": 1,
+        "f1": 0.154,
+        "onsetMaeMs": 11,
+        "invented": 11,
+        "missed": 0
+      },
+      "tempoBpm": 60,
+      "onsets": 10
+    },
+    {
+      "id": "electric-gtechs-high",
+      "instrument": "electric-guitar",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 5,
+        "truth": 1,
+        "precision": 0.2,
+        "recall": 1,
+        "f1": 0.333,
+        "onsetMaeMs": 36,
+        "invented": 4,
+        "missed": 0,
+        "ms": 2431,
+        "rtf": 0.81,
+        "heapMB": -6.8
+      },
+      "spectral": {
+        "matched": 1,
+        "predicted": 11,
+        "truth": 1,
+        "precision": 0.091,
+        "recall": 1,
+        "f1": 0.167,
+        "onsetMaeMs": 80,
+        "invented": 10,
+        "missed": 0
+      },
+      "tempoBpm": 112,
+      "onsets": 9
+    },
+    {
+      "id": "electric-gtechs-quiet",
+      "instrument": "electric-guitar",
+      "dataset": "guitar-techs",
+      "split": "eval",
+      "seconds": 3,
+      "basicPitch": {
+        "matched": 1,
+        "predicted": 4,
+        "truth": 2,
+        "precision": 0.25,
+        "recall": 0.5,
+        "f1": 0.333,
+        "onsetMaeMs": 27,
+        "invented": 3,
+        "missed": 1,
+        "ms": 2430,
+        "rtf": 0.81,
+        "heapMB": -6.9
+      },
+      "spectral": {
+        "matched": 2,
+        "predicted": 17,
+        "truth": 2,
+        "precision": 0.118,
+        "recall": 1,
+        "f1": 0.211,
+        "onsetMaeMs": 51,
+        "invented": 15,
+        "missed": 0
+      },
+      "tempoBpm": 123,
+      "onsets": 10
+    }
+  ],
+  "byDataset": {
+    "vienna-4x22": {
+      "basicPitch": {
+        "n": 7,
+        "precision": 0.082,
+        "recall": 0.119,
+        "f1": 0.096
+      },
+      "spectral": {
+        "n": 7,
+        "precision": 0.101,
+        "recall": 0.058,
+        "f1": 0.073
+      }
+    },
+    "guitarset": {
+      "basicPitch": {
+        "n": 21,
+        "precision": 0.675,
+        "recall": 0.802,
+        "f1": 0.719
+      },
+      "spectral": {
+        "n": 21,
+        "precision": 0.407,
+        "recall": 0.378,
+        "f1": 0.357
+      }
+    },
+    "egset12": {
+      "basicPitch": {
+        "n": 14,
+        "precision": 0.681,
+        "recall": 0.828,
+        "f1": 0.732
+      },
+      "spectral": {
+        "n": 14,
+        "precision": 0.203,
+        "recall": 0.206,
+        "f1": 0.187
+      }
+    },
+    "guitar-techs": {
+      "basicPitch": {
+        "n": 4,
+        "precision": 0.269,
+        "recall": 0.75,
+        "f1": 0.383
+      },
+      "spectral": {
+        "n": 4,
+        "precision": 0.073,
+        "recall": 0.75,
+        "f1": 0.133
+      }
+    }
+  }
+}
