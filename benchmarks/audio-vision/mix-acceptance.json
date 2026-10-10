@@ -1,0 +1,157 @@
+{
+  "entries": [
+    {
+      "id": "bag-of-motifs",
+      "license": "CC BY-NC (local eval only)",
+      "channels": 2,
+      "solo-guitar": {
+        "ok": true,
+        "code": "ok",
+        "confidence": 0.6,
+        "confidenceParts": {
+          "onsetEvidence": 1,
+          "tempoConfidence": 0.14,
+          "chordConfidence": 0.74,
+          "densityScore": 0.6,
+          "melodyPreservation": 0.66
+        },
+        "notes": 167,
+        "warnings": 30,
+        "stereo": {
+          "centerRatio": 0.902,
+          "spaciousness": 0.098
+        },
+        "analysisSignal": "mix",
+        "tempoBpm": 60,
+        "tempoVaries": false,
+        "metrics": {
+          "windows": 12,
+          "coverage": 1,
+          "melodyMaxGapSeconds": 2.25,
+          "melodyNotes": 111,
+          "notesPerBeat": 7.42,
+          "denseFlag": true,
+          "sections": 1,
+          "textures": [
+            "melody-only",
+            "melody-block"
+          ],
+          "bpSpectralAgreementF1": 0.308,
+          "bassDistinctPcs": 11,
+          "staticBassFlag": false
+        }
+      },
+      "solo-piano": {
+        "ok": true,
+        "code": "ok",
+        "confidence": 0.58,
+        "confidenceParts": {
+          "onsetEvidence": 1,
+          "tempoConfidence": 0.14,
+          "chordConfidence": 0.74,
+          "densityScore": 0.62,
+          "melodyPreservation": 0.55
+        },
+        "notes": 174,
+        "warnings": 17,
+        "stereo": {
+          "centerRatio": 0.902,
+          "spaciousness": 0.098
+        },
+        "analysisSignal": "mix",
+        "tempoBpm": 60,
+        "tempoVaries": false,
+        "metrics": {
+          "windows": 12,
+          "coverage": 1,
+          "melodyMaxGapSeconds": 2.25,
+          "melodyNotes": 96,
+          "notesPerBeat": 7.73,
+          "denseFlag": true,
+          "sections": 1,
+          "textures": [
+            "melody-only",
+            "melody-block"
+          ],
+          "bpSpectralAgreementF1": 0.308,
+          "bassDistinctPcs": 11,
+          "staticBassFlag": false
+        }
+      }
+    },
+    {
+      "id": "chopin-noct19-faulkner",
+      "license": "Public domain (recording)",
+      "channels": 1,
+      "solo-guitar": {
+        "ok": true,
+        "code": "ok",
+        "confidence": 0.66,
+        "confidenceParts": {
+          "onsetEvidence": 1,
+          "tempoConfidence": 0.21,
+          "chordConfidence": 0.73,
+          "densityScore": 1,
+          "melodyPreservation": 0.63
+        },
+        "notes": 287,
+        "warnings": 49,
+        "stereo": null,
+        "analysisSignal": "mix",
+        "tempoBpm": 172,
+        "tempoVaries": true,
+        "metrics": {
+          "windows": 12,
+          "coverage": 1,
+          "melodyMaxGapSeconds": 1.74,
+          "melodyNotes": 181,
+          "notesPerBeat": 4.45,
+          "denseFlag": false,
+          "sections": 1,
+          "textures": [
+            "melody-block",
+            "melody-only"
+          ],
+          "bpSpectralAgreementF1": 0.519,
+          "bassDistinctPcs": 8,
+          "staticBassFlag": false
+        }
+      },
+      "solo-piano": {
+        "ok": true,
+        "code": "ok",
+        "confidence": 0.67,
+        "confidenceParts": {
+          "onsetEvidence": 1,
+          "tempoConfidence": 0.21,
+          "chordConfidence": 0.73,
+          "densityScore": 1,
+          "melodyPreservation": 0.65
+        },
+        "notes": 296,
+        "warnings": 117,
+        "stereo": null,
+        "analysisSignal": "mix",
+        "tempoBpm": 172,
+        "tempoVaries": true,
+        "metrics": {
+          "windows": 12,
+          "coverage": 1,
+          "melodyMaxGapSeconds": 1.22,
+          "melodyNotes": 192,
+          "notesPerBeat": 4.59,
+          "denseFlag": false,
+          "sections": 1,
+          "textures": [
+            "melody-block",
+            "melody-only"
+          ],
+          "bpSpectralAgreementF1": 0.519,
+          "bassDistinctPcs": 8,
+          "staticBassFlag": false
+        }
+      }
+    }
+  ],
+  "generatedAt": "2026-10-10T10:42:27.804Z"
+}
