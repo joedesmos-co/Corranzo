@@ -148,7 +148,10 @@ async function main() {
       await dismissTools(page)
       const want = await expectedMidis(page)
       const idxBefore = await checkpointIndex(page)
-      if (want.length) { await inject(page, want[0]); await sleep(1000) }
+      if (want.length) {
+        for (const m of want) { await inject(page, m); await sleep(250) }
+        await sleep(1000)
+      }
       const idxAfter = await checkpointIndex(page)
       if (want.length && idxAfter !== idxBefore) pass(`round ${round + 1} WFY advances`, `${idxBefore} -> ${idxAfter}`)
       else fail(`round ${round + 1} WFY advances`, `want=${JSON.stringify(want)}`)
