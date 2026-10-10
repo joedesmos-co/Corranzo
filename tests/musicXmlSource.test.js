@@ -6,6 +6,7 @@ import {
   cloneMusicXmlSource,
   createMusicXmlSource,
   describeMusicXmlSource,
+  getMusicXmlWorkTitle,
   hasUploadedScoreTiming,
   isLibraryScoreTimingReady,
   isMusicXmlSourceReady,
@@ -239,5 +240,22 @@ describe('musicXmlSource', () => {
 
     expect(shouldShowLibraryOmrPanel({ hasPdf: true, musicXmlSource: null })).toBe(true)
     expect(shouldShowLibraryOmrPanel({ hasPdf: false, musicXmlSource: null })).toBe(false)
+  })
+
+  it('reads authored work titles for library display without a full parse', () => {
+    const withWork = createMusicXmlSource(
+      'scan001.musicxml',
+      '<?xml version="1.0"?><score-partwise><work><work-title>Prelude in C</work-title></work><movement-title>BWV 846</movement-title><part-list/></score-partwise>',
+    )
+    expect(getMusicXmlWorkTitle(withWork)).toBe('Prelude in C')
+    const movementOnly = createMusicXmlSource(
+      'scan002.musicxml',
+      '<?xml version="1.0"?><score-partwise><movement-title>Menuet in G</movement-title><part-list/></score-partwise>',
+    )
+    expect(getMusicXmlWorkTitle(movementOnly)).toBe('Menuet in G')
+    const untitled = createMusicXmlSource('scan003.musicxml', '<score-partwise><part-list/></score-partwise>')
+    expect(getMusicXmlWorkTitle(untitled)).toBeNull()
+    expect(getMusicXmlWorkTitle(null)).toBeNull()
+    expect(getMusicXmlWorkTitle({ fileName: 'ghost.musicxml' })).toBeNull()
   })
 })

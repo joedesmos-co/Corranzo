@@ -218,7 +218,10 @@ export default function MicrophoneInputStatusPanel({
               Enable microphone
             </button>
           )}
-          {isListening && calibrationFailed && onRetryCalibration && (
+          {/* Retry must be reachable in exactly the failed state — gating on
+              isListening hid it when calibration failure had already stopped
+              the stream. retryCalibration re-arms calibration regardless. */}
+          {calibrationFailed && onRetryCalibration && (
             <button
               type="button"
               className="mic-input-status__btn mic-input-status__btn--retry"

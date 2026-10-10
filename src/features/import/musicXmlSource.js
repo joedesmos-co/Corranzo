@@ -13,6 +13,55 @@ function isFinitePositive(value) {
   return Number.isFinite(Number(value)) && Number(value) > 0
 }
 
+const workTitleCache = new Map()
+
+function decodeXmlText(source) {
+  try {
+    if (!source?.data) return null
+    const bytes = new Uint8Array(source.data, 0, Math.min(source.data.byteLength, 1 << 20))
+    return new TextDecoder().decode(bytes)
+  } catch {
+    return null
+  }
+}
+
+function unescapeXmlEntities(text) {
+  return String(text)
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * Display title authored inside the MusicXML (<work><work-title>,
+ * else <movement-title>), cached by content key so library renders stay
+ * cheap and restored sessions re-derive it without schema changes.
+ * Returns null when the file carries no usable title.
+ */
+export function getMusicXmlWorkTitle(source) {
+  const key = musicXmlSourceKey(source)
+  if (!key) return null
+  if (workTitleCache.has(key)) return workTitleCache.get(key)
+  let title = null
+  const text = decodeXmlText(source)
+  if (text) {
+    const workBlock = /<work\b[^>]*>([\s\S]{0,2000}?)<\/work>/i.exec(text)
+    const workTitle = workBlock ? /<work-title\b[^>]*>([\s\S]+?)<\/work-title>/i.exec(workBlock[1]) : null
+    const movementTitle = /<movement-title\b[^>]*>([\s\S]+?)<\/movement-title>/i.exec(text)
+    const raw = workTitle?.[1] ?? movementTitle?.[1] ?? null
+    if (raw) {
+      const cleaned = unescapeXmlEntities(raw).slice(0, 120)
+      title = cleaned || null
+    }
+  }
+  workTitleCache.set(key, title)
+  return title
+}
+
 function isValidIsoDate(value) {
   return typeof value === 'string' && Number.isFinite(Date.parse(value))
 }

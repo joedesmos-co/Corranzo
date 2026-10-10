@@ -73,7 +73,7 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
         <Icon name={s.isWaitForYou ? 'next' : isPlaying ? 'pause' : 'play'} size={24} className={!s.isWaitForYou && !isPlaying ? 'workspace-play-symbol' : ''} /><span>{s.isWaitForYou ? (s.waitForYou.isComplete ? 'Again' : 'Continue') : isPlaying ? 'Pause' : 'Play'}</span>
       </button>
       <div className="workspace-position">
-        <div><span className="workspace-bar-reference"><span>Bar</span> <strong>{s.measure.currentMeasure?.number ?? '—'}</strong>{s.loop.enabled && loop?.isValid && <small className="workspace-passage-label">{loop.label.replace(/^Measures/, 'Bars').replace(/^Measure/, 'Bar')}</small>}</span><span>{formatTime(current)} <i>/</i> {formatTime(duration || 0)}</span></div>
+        <div><span className="workspace-bar-reference"><span>Bar</span> <strong>{s.measure.currentMeasure?.number ?? '—'}</strong>{s.loop.enabled && loop?.isValid && <small className="workspace-passage-label">{loop.label.replace(/^Measures/, 'Bars').replace(/^Measure/, 'Bar')}</small>}</span><span>{formatTime(current)} <i>/</i> {duration > 0 ? formatTime(duration) : '—'}</span></div>
         <div className="workspace-seek-wrap">
           {loop?.isValid && duration > 0 && <span className={`workspace-loop-range${s.loop.enabled ? ' workspace-loop-range--on' : ''}`} style={{ left: `${loop.startTimeSeconds / duration * 100}%`, width: `${Math.max(.5, loop.durationSeconds / duration * 100)}%` }} title={`Loop: ${loop.label}`} />}
           <input type="range" aria-label="Score position" min="0" max={duration || 1} step="0.1" value={Math.min(current, duration || 1)} disabled={s.timingDisabled} onChange={e => s.handleMidiSeek(Number(e.target.value))} />
