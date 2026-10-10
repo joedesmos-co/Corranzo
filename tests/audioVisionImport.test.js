@@ -6,6 +6,8 @@ import {
   resampleLinear,
   normalizePeak,
   importAudioFile,
+  sliceExcerpt,
+  EXCERPT_MAX_SECONDS,
 } from '../src/features/audio-vision/audioImport.js'
 
 function fakeFile(name, size, type = 'audio/mpeg') {
@@ -61,8 +63,7 @@ describe('A1 audio import validation', () => {
     const noDecoder = await importAudioFile(file, new ArrayBuffer(100), null)
     expect(noDecoder.code).toBe('decoder-unavailable')
   })
-  it('full import happy path normalizes to 22050 mono', async () => {
-    const sr = 44100
+  it('full import happy path normalizes to 22050 mono', async () => {    const sr = 44100
     const ch = new Float32Array(sr).map((_, i) => 0.5 * Math.sin((2 * Math.PI * 440 * i) / sr))
     const file = fakeFile('a.wav', 100, 'audio/wav')
     const ok = await importAudioFile(file, new ArrayBuffer(64), async () => ({
@@ -74,5 +75,24 @@ describe('A1 audio import validation', () => {
     expect(ok.ok).toBe(true)
     expect(ok.sampleRate).toBe(22050)
     expect(ok.samples.length).toBe(22050)
+  })
+  it('slices explicit excerpts and always reports coverage (Phase 7)', () => {
+    const sr = 22050
+    const samples = new Float32Array(sr * 600) // 10 minutes
+    const full = sliceExcerpt(samples, sr, {})
+    expect(full.durationSeconds).toBe(EXCERPT_MAX_SECONDS)
+    expect(full.truncated).toBe(true)
+    expect(full.totalSeconds).toBe(600)
+    const mid = sliceExcerpt(samples, sr, { startSeconds: 120, durationSeconds: 60 })
+    expect(mid.startSeconds).toBe(120)
+    expect(mid.durationSeconds).toBe(60)
+    expect(mid.samples.length).toBe(sr * 60)
+    expect(mid.truncated).toBe(true)
+    const short = sliceExcerpt(new Float32Array(sr * 30), sr, {})
+    expect(short.truncated).toBe(false)
+    expect(short.durationSeconds).toBe(30)
+    // Clamps beyond the end instead of failing.
+    const clamp = sliceExcerpt(samples, sr, { startSeconds: 590, durationSeconds: 120 })
+    expect(clamp.durationSeconds).toBeLessThanOrEqual(10)
   })
 })

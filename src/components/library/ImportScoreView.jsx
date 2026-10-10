@@ -112,6 +112,9 @@ export default function ImportScoreView({
             {arrangementMeta.targetPart === 'solo-guitar' ? 'Solo guitar with standard notation + TAB' : 'Solo piano, two hands'}
             {arrangementMeta.difficulty ? ` · ${arrangementMeta.difficulty}` : ''}
             {Number.isFinite(arrangementMeta.confidence) ? ` · confidence ${Math.round(arrangementMeta.confidence * 100)}%` : ''}.
+            {arrangementMeta.excerpt?.truncated
+              ? ` Covers ${Math.floor(arrangementMeta.excerpt.startSeconds / 60)}:${String(Math.floor(arrangementMeta.excerpt.startSeconds % 60)).padStart(2, '0')}–${Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) / 60)}:${String(Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) % 60)).padStart(2, '0')} of the recording.`
+              : ''}
             Page-follow visuals need a PDF — timing, playback and practice modes work from the notation.
             {arrangementMeta.partial ? ' Some passages were uncertain; listen through before you practice.' : ''}
           </p>

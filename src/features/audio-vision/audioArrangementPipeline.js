@@ -77,9 +77,12 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
 /**
  * Run the full pipeline.
  * stages: { decodeAudioDataImpl, predictNotes } injected (browser provides real ones).
+ * options.excerpt: { startSeconds, durationSeconds } — explicit user-chosen
+ * range (max 180 s). The result always reports the exact covered range so a
+ * long recording is never silently truncated (Phase 7).
  */
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
-  const { targetPart, difficulty, title } = options
+  const { targetPart, difficulty, title, excerpt = null } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
@@ -94,16 +97,25 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       message: 'That recording is essentially silent. Corranzo would rather refuse than invent sheet music — try a louder, clearer recording.',
       confidence: { overall: 0, provenance: PROVENANCE.INFERRED },
       warnings: [],
-      excerpted: false,
+      excerpt: null,
     }
   }
   const progress = stages.onProgress
-  // Cap DSP on very long files: analyze first 3 minutes for V1 (honest + RAM-safe), note it.
-  const MAX_ANALYZE_SECONDS = 180
-  const analyzeSamples = imported.samples.length > MAX_ANALYZE_SECONDS * imported.sampleRate
-    ? imported.samples.slice(0, MAX_ANALYZE_SECONDS * imported.sampleRate)
-    : imported.samples
-  const excerpted = analyzeSamples.length !== imported.samples.length
+  // Phase 7: explicit excerpt — never a silent truncation. Default covers
+  // the first EXCERPT_MAX_SECONDS and says so in the result.
+  const { sliceExcerpt, EXCERPT_MAX_SECONDS } = await import('./audioImport.js')
+  const cut = sliceExcerpt(imported.samples, imported.sampleRate, {
+    startSeconds: excerpt?.startSeconds ?? 0,
+    durationSeconds: excerpt?.durationSeconds ?? EXCERPT_MAX_SECONDS,
+  })
+  const analyzeSamples = cut.samples
+  const excerptReport = {
+    startSeconds: cut.startSeconds,
+    durationSeconds: cut.durationSeconds,
+    totalSeconds: cut.totalSeconds,
+    truncated: cut.truncated,
+    limitSeconds: EXCERPT_MAX_SECONDS,
+  }
   const views = buildAnalysisViews(analyzeSamples, imported.sampleRate)
   const analysis = await analyzeMusic(analyzeSamples, imported.sampleRate, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
@@ -143,7 +155,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       confidence,
       transcribed,
       warnings: model.parts[0].warnings,
-      excerpted,
+      excerpt: excerptReport,
     }
   }
   const musicXml = buildArrangementMusicXml({
@@ -172,7 +184,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     },
     confidence,
     partial: verdict.partial,
-    excerpted,
+    excerpt: excerptReport,
     durationSeconds: imported.durationSeconds,
   }
 }

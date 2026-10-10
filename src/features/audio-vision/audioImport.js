@@ -154,6 +154,28 @@ export function rmsLevel(samples) {
 }
 
 /**
+ * Phase 7 — explicit excerpt slicing. Never silent: callers must surface
+ * the returned { startSeconds, durationSeconds, totalSeconds } to the user.
+ */
+export const EXCERPT_MAX_SECONDS = 180
+
+export function sliceExcerpt(samples, sampleRate, { startSeconds = 0, durationSeconds = null } = {}) {
+  const totalSeconds = samples.length / sampleRate
+  const start = Math.max(0, Math.min(totalSeconds, Number(startSeconds) || 0))
+  const maxDur = Math.min(EXCERPT_MAX_SECONDS, totalSeconds - start)
+  const wanted = durationSeconds == null ? maxDur : Math.max(1, Math.min(maxDur, Number(durationSeconds)))
+  const s0 = Math.floor(start * sampleRate)
+  const s1 = Math.min(samples.length, s0 + Math.floor(wanted * sampleRate))
+  return {
+    samples: samples.slice(s0, s1),
+    startSeconds: Math.round(start * 100) / 100,
+    durationSeconds: Math.round(((s1 - s0) / sampleRate) * 100) / 100,
+    totalSeconds: Math.round(totalSeconds * 100) / 100,
+    truncated: s1 - s0 < samples.length,
+  }
+}
+
+/**
  * Full import: validate → decode (injected) → mono → resample → normalize.
  * decodeAudioDataImpl: async (arrayBuffer) => { channelData: Float32Array[], sampleRate, durationSeconds, channelCount }
  */

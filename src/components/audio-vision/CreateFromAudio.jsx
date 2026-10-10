@@ -20,6 +20,18 @@ const DIFFICULTY_HELP = {
   [DIFFICULTIES.INTERMEDIATE]: 'More harmony and rhythmic detail.',
   [DIFFICULTIES.ADVANCED]: 'Fullest detail that stays playable.',
 }
+function formatClock(seconds) {
+  if (!Number.isFinite(seconds)) return '–'
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${m}:${String(s).padStart(2, '0')}`
+}
+
+function excerptCoverage(excerpt) {
+  if (!excerpt) return null
+  const end = excerpt.startSeconds + excerpt.durationSeconds
+  return `${formatClock(excerpt.startSeconds)}–${formatClock(end)} of ${formatClock(excerpt.totalSeconds)}`
+}
 const STAGE_LABELS = {
   validate: 'Checking your file',
   spectrogram: 'Listening to the recording',
@@ -38,15 +50,27 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
   const [target, setTarget] = useState(PART_INSTRUMENTS.SOLO_PIANO)
   const [difficulty, setDifficulty] = useState(DIFFICULTIES.INTERMEDIATE)
   const [dragOver, setDragOver] = useState(false)
+  const [excerptStart, setExcerptStart] = useState(0)
+  const [excerptLength, setExcerptLength] = useState(180)
   const inputRef = useRef(null)
   const flow = useAudioArrangement({ onReady: onArrangementReady })
   const busy = ['validating', 'analyzing', 'arranging'].includes(flow.phase)
+  const totalDuration = flow.probe?.durationSeconds ?? null
+  // Phase 7: explicit excerpt selector for recordings over ~1 minute.
+  // Never silent: the review always states the covered range.
+  const needsExcerpt = Number.isFinite(totalDuration) && totalDuration > 65
+  const clampedStart = needsExcerpt
+    ? Math.max(0, Math.min(totalDuration - Math.min(excerptLength, totalDuration), excerptStart))
+    : 0
 
   function pickFile(next) {
     if (uploadsDisabled || flow.phase === 'analyzing') return
     if (next) {
       setFile(next)
       flow.reset()
+      setExcerptStart(0)
+      setExcerptLength(180)
+      flow.probeFile(next)
     }
   }
 
@@ -125,10 +149,46 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
             </div>
           )}
 
+          {Number.isFinite(totalDuration) && (
+            <p className="audio-vision-hint" role="status">Recording length {formatClock(totalDuration)}.</p>
+          )}
+          {needsExcerpt && (
+            <fieldset className="audio-vision-excerpt">
+              <legend>Arrange this part <span className="audio-vision-hint">(up to 3 minutes per arrangement)</span></legend>
+              <label>
+                Start at {formatClock(clampedStart)}
+                <input
+                  type="range"
+                  min={0}
+                  max={Math.max(0, totalDuration - 30)}
+                  step={5}
+                  value={clampedStart}
+                  onChange={(e) => setExcerptStart(Number(e.target.value))}
+                  aria-label="Excerpt start time"
+                />
+              </label>
+              <label>
+                Length
+                <select value={excerptLength} onChange={(e) => setExcerptLength(Number(e.target.value))} aria-label="Excerpt length">
+                  {[30, 60, 120, 180].map((s) => (
+                    <option key={s} value={s}>{s >= 60 ? `${s / 60} minute${s > 60 ? 's' : ''}` : `${s} seconds`}</option>
+                  ))}
+                </select>
+              </label>
+              <p className="audio-vision-hint">Will arrange {excerptCoverage({ startSeconds: clampedStart, durationSeconds: Math.min(excerptLength, totalDuration - clampedStart), totalSeconds: totalDuration })}.</p>
+            </fieldset>
+          )}
+
           <button
             className="cz-collection-button"
             disabled={!file || busy || uploadsDisabled}
-            onClick={() => flow.arrange(file, { targetPart: target, difficulty })}
+            onClick={() => flow.arrange(file, {
+              targetPart: target,
+              difficulty,
+              excerpt: needsExcerpt
+                ? { startSeconds: clampedStart, durationSeconds: Math.min(excerptLength, totalDuration - clampedStart) }
+                : null,
+            })}
           >
             {file ? `Arrange for ${TARGET_LABELS[target]}` : 'Choose a song first'}
           </button>
@@ -157,7 +217,12 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
             <li>Confidence <strong>{Math.round(result.confidence.overall * 100)}%</strong></li>
           </ul>
           {result.partial && <p className="audio-vision-error" role="note">{result.message}</p>}
-          {result.excerpted && <p className="audio-vision-hint" role="note">Long recording: arranged from the first 3 minutes for this preview.</p>}
+          {result.excerpt && (
+            <p className="audio-vision-hint" role="note">
+              Arranged {excerptCoverage(result.excerpt)}
+              {result.excerpt.truncated ? ' — only this part becomes sheet music.' : ' (whole recording).'}
+            </p>
+          )}
           {result.model.parts[0].warnings?.length > 0 && (
             <details>
               <summary>Arranger notes ({result.model.parts[0].warnings.length})</summary>

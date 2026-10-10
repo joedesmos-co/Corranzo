@@ -952,6 +952,7 @@ export default function App() {
           confidence: payload.confidence?.overall ?? null,
           partial: Boolean(payload.partial),
           warningCount: Array.isArray(payload.warnings) ? payload.warnings.length : 0,
+          excerpt: payload.excerpt ?? null,
         },
       },
     })

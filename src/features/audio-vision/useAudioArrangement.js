@@ -57,7 +57,10 @@ export function useAudioArrangement({ onReady = null } = {}) {
   const [progress, setProgress] = useState(null)
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
+  const [probe, setProbe] = useState(null) // { durationSeconds } after decode-on-select
   const cancelledRef = useRef(false)
+  const decodedRef = useRef(null) // cached Web Audio decode: { channelData, sampleRate, ... }
+  const bufferRef = useRef(null)
 
   const cancel = useCallback(() => {
     cancelledRef.current = true
@@ -65,22 +68,48 @@ export function useAudioArrangement({ onReady = null } = {}) {
     setProgress(null)
   }, [])
 
-  const arrange = useCallback(async (file, { targetPart, difficulty }) => {
+  // Phase 7: decode once on file select to learn the true duration (drives
+  // the excerpt selector) and reuse the PCM at arrange time (no double decode).
+  const probeFile = useCallback(async (file) => {
+    setProbe(null)
+    decodedRef.current = null
+    bufferRef.current = null
+    if (!file) return null
+    try {
+      const arrayBuffer = await file.arrayBuffer()
+      bufferRef.current = arrayBuffer
+      const decoded = await decodeWithWebAudio(arrayBuffer)
+      if (cancelledRef.current) return null
+      decodedRef.current = decoded
+      const durationSeconds = decoded.durationSeconds
+        ?? decoded.channelData?.[0]?.length / decoded.sampleRate
+      const info = { durationSeconds: Math.round(durationSeconds * 10) / 10 }
+      setProbe(info)
+      return info
+    } catch {
+      setProbe({ durationSeconds: null, error: true })
+      return null
+    }
+  }, [])
+
+  const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null }) => {
     cancelledRef.current = false
     setError(null)
     setResult(null)
     setPhase('validating')
     setProgress({ stage: 'validate', fraction: 0 })
     try {
-      const arrayBuffer = await file.arrayBuffer()
+      const arrayBuffer = bufferRef.current ?? await file.arrayBuffer()
+      bufferRef.current = arrayBuffer
+      const cachedDecode = decodedRef.current
       if (cancelledRef.current) return null
       setPhase('analyzing')
       const outcome = await runAudioArrangementPipeline(
         file,
         arrayBuffer,
-        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement' },
+        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt },
         {
-          decodeAudioDataImpl: decodeWithWebAudio,
+          decodeAudioDataImpl: cachedDecode ? (async () => cachedDecode) : decodeWithWebAudio,
           predictNotes: predictWithBasicPitch,
           onProgress: ({ stage, fraction }) => {
             if (!cancelledRef.current) setProgress({ stage, fraction })
@@ -121,6 +150,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
       confidence: result.confidence,
       warnings: result.model.parts[0]?.warnings ?? [],
       partial: result.partial,
+      excerpt: result.excerpt ?? null,
     }
     onReady?.(payload)
     return payload
@@ -131,6 +161,8 @@ export function useAudioArrangement({ onReady = null } = {}) {
     progress,
     result,
     error,
+    probe,
+    probeFile,
     arrange,
     cancel,
     openInPractice,
@@ -140,6 +172,9 @@ export function useAudioArrangement({ onReady = null } = {}) {
       setProgress(null)
       setResult(null)
       setError(null)
+      setProbe(null)
+      decodedRef.current = null
+      bufferRef.current = null
     },
     targets: [PART_INSTRUMENTS.SOLO_PIANO, PART_INSTRUMENTS.SOLO_GUITAR],
     difficulties: [DIFFICULTIES.EASY, DIFFICULTIES.INTERMEDIATE, DIFFICULTIES.ADVANCED],
