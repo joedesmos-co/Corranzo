@@ -17,7 +17,7 @@
  * Prerequisite: node scripts/render-unified-mic-clips.mjs
  * Usage: E2E_PORT=5597 node scripts/browser-update-depth-watch.mjs
  */
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, writeFile, access } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
@@ -34,6 +34,15 @@ function sleep(ms) {
 
 async function main() {
   await mkdir(outDir, { recursive: true })
+  // Fail fast without the melody fixture: a missing clip degrades to
+  // silence, which both deafens detection and skews warning evidence.
+  const clip = join(root, 'tmp/unified-practice-mic/mic-melody8.wav')
+  try {
+    await access(clip)
+  } catch {
+    console.error('FAIL  missing mic fixture — run node scripts/render-unified-mic-clips.mjs first')
+    process.exit(2)
+  }
   const report = { generatedAt: new Date().toISOString(), watchMs: WATCH_MS, depthWarnings: 0, heard: null, playing: false }
   const viteServer = await createServer({
     root,
@@ -43,7 +52,6 @@ async function main() {
   })
   await viteServer.listen()
   const { chromium } = await import('playwright')
-  const clip = join(root, 'tmp/unified-practice-mic/mic-melody8.wav')
   const browser = await chromium.launch({
     headless: true,
     args: [
