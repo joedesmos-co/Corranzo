@@ -87,6 +87,22 @@ describe('A5/A6/A7 solo arrangement + difficulty', () => {
     expect(Array.isArray(warnings)).toBe(true)
   })
 
+  it('guitar transposes out-of-range notes deliberately instead of dropping (A5)', () => {
+    const beats = [0, 0.5, 1.0, 1.5, 2.0]
+    const high = quantizeToBeats([{ midi: 95, startSeconds: 0, endSeconds: 0.4, strength: 0.9 }], beats)
+    const { events, warnings } = arrangeSoloGuitar({ quantizedNotes: high, chords: [], difficulty: 'intermediate' })
+    expect(events.length).toBe(1)
+    expect(events[0].midi).toBe(83) // octave down into real fretboard range
+    expect(events[0].octaveShifted).toBe(-12)
+    expect(events[0].string).toBeGreaterThanOrEqual(1)
+    expect(warnings.some((w) => w.kind === 'octave-transposed')).toBe(true)
+    // Beyond double-transposition reach (MIDI 20 cello C) still drops honestly.
+    const low = quantizeToBeats([{ midi: 20, startSeconds: 0, endSeconds: 0.4, strength: 0.9 }], beats)
+    const dropped = arrangeSoloGuitar({ quantizedNotes: low, chords: [], difficulty: 'intermediate' })
+    expect(dropped.events.length).toBe(0)
+    expect(dropped.warnings.some((w) => w.kind === 'unplayable-note-dropped')).toBe(true)
+  })
+
   it('difficulty levels differ measurably (easy < intermediate < advanced)', () => {
     const levels = [DIFFICULTIES.EASY, DIFFICULTIES.INTERMEDIATE, DIFFICULTIES.ADVANCED]
     const complexities = levels.map((difficulty) => {

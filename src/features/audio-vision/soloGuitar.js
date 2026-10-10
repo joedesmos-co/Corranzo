@@ -16,11 +16,9 @@ export const GUITAR_STRINGS = {
   preferredMaxFret: 12,
 }
 export const GUITAR_MIN = 40 // E2
-export const GUITAR_MAX = 88 // E6
-
-function clampGuitar(midi) {
-  return Math.max(GUITAR_MIN, Math.min(GUITAR_MAX, midi))
-}
+// Registry labels the top E6 (88), but the 19-fret board tops out at 83
+// (B5); the per-note position check below enforces the real board.
+export const GUITAR_MAX = 88 // nominal top; positions decide playability
 
 /**
  * Arrange into single guitar events with string/fret.
@@ -33,7 +31,9 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
   for (const n of quantizedNotes) {
     const key = Math.round((n.quantizedStartBeat ?? 0) * 4) / 4
     if (!byOnset.has(key)) byOnset.set(key, [])
-    byOnset.get(key).push({ ...n, midi: clampGuitar(Math.round(n.midi)) - 0 })
+    // A5: never pre-clamp out-of-range pitches — the per-onset range logic
+    // below transposes deliberately (marked) or drops honestly (warned).
+    byOnset.get(key).push({ ...n, midi: Math.round(n.midi) })
   }
   const events = []
   const warnings = []
@@ -58,8 +58,25 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
     const resolved = resolveSimultaneous(tagged, { maxVoices: Math.min(4, params.maxVoicesPerOnset + 1), melodyMidi })
       .filter((e) => e.kept)
     const texture = selectTexture({ noteDensity: group.length, chordConfidence: 0.5, difficulty })
-    if (resolved.length === 1) {
-      const n = resolved[0]
+    // A5: deliberate octave transposition before dropping. A note outside the
+    // guitar range is tried an octave down (high) or up (low) and marked
+    // octaveShifted — never silently clamped to a nearby pitch.
+    const ranged = []
+    for (const r of resolved) {
+      if (r.midi >= GUITAR_MIN && r.midi <= GUITAR_MAX) {
+        ranged.push(r)
+        continue
+      }
+      const shifted = r.midi > GUITAR_MAX ? r.midi - 12 : r.midi + 12
+      if (shifted >= GUITAR_MIN && shifted <= GUITAR_MAX && candidatePositionsForMidi(strings, shifted).length > 0) {
+        ranged.push({ ...r, midi: shifted, octaveShifted: shifted - r.midi })
+        warnings.push({ kind: 'octave-transposed', detail: `midi ${r.midi}→${shifted}`, measureIndex })
+      } else {
+        warnings.push({ kind: 'unplayable-note-dropped', detail: `midi ${r.midi}`, measureIndex })
+      }
+    }
+    if (ranged.length === 1) {
+      const n = ranged[0]
       const pos = stringFretForMidi(strings, n.midi, { handFret })
       if (!pos) {
         warnings.push({ kind: 'unplayable-note-dropped', detail: `midi ${n.midi}`, measureIndex })
@@ -80,13 +97,14 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
         role: n.isMelody ? 'melody' : 'harmony',
         texture,
         measureIndex,
+        ...(n.octaveShifted ? { octaveShifted: n.octaveShifted } : {}),
         provenance: PROVENANCE.ARRANGED,
       })
-    } else {
-      const midis = resolved.map((r) => r.midi)
+    } else if (ranged.length > 1) {
+      const midis = ranged.map((r) => r.midi)
       const assignment = assignChordPositions(strings, midis, { handFret })
       const frets = []
-      for (const r of resolved) {
+      for (const r of ranged) {
         const pos = assignment.get(r.midi)
         if (!pos) {
           // Keep melody at all costs; drop unassignable inner voice.
@@ -101,7 +119,9 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
               midi: r.midi, startBeat: onset,
               durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
               string: fallback.string, fret: fallback.fret,
-              role: 'melody', texture, measureIndex, provenance: PROVENANCE.ARRANGED,
+              role: 'melody', texture, measureIndex,
+              ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
+              provenance: PROVENANCE.ARRANGED,
             })
           } else {
             warnings.push({ kind: 'chord-voice-dropped', detail: `midi ${r.midi}`, measureIndex })
@@ -114,7 +134,9 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
           durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
           string: pos.string, fret: pos.fret,
           role: r.isMelody ? 'melody' : r.isBassRoot ? 'bass' : 'harmony',
-          texture, measureIndex, provenance: PROVENANCE.ARRANGED,
+          texture, measureIndex,
+          ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
+          provenance: PROVENANCE.ARRANGED,
         })
       }
       const fretted = frets.filter((f) => f > 0)

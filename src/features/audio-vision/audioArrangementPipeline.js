@@ -38,7 +38,18 @@ export function scoreArrangementConfidence({ analysis, arrangedEvents, separatio
   const densityScore = density <= 3 ? clamp01(density / 2) : Math.max(0, 1 - (density - 3) / 6)
   const sepBonus = separationQuality?.helpsTranscription ? 0.05 : 0
   const sourceBonus = analysis.pitchSource === 'basic-pitch' ? 0.05 : 0
-  const warningPenalty = Math.min(0.15, (warnings?.length ?? 0) * 0.01)
+  // Only severe playability failures count — benign musical notes
+  // (position shifts, expressive leaps) must not tank confidence.
+  const SEVERE_WARNING_KINDS = new Set([
+    'unplayable-note-dropped',
+    'chord-voice-dropped',
+    'wide-stretch',
+    'hand-span-enforced',
+    'dense-arrangement',
+    'range-audit',
+  ])
+  const severeCount = (warnings ?? []).filter((w) => SEVERE_WARNING_KINDS.has(w.kind ?? w)).length
+  const warningPenalty = Math.min(0.15, severeCount * 0.02)
   const melodyNotes = arrangedEvents.filter((e) => e.role === 'melody').length
   const melodyScore = arrangedEvents.length ? melodyNotes / arrangedEvents.length : 0
   const overall = clamp01(
@@ -167,6 +178,17 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   model.parts[0].events = simplified
   model.parts[0].warnings = arranged.warnings ?? []
   if (arranged.strings) model.parts[0].strings = arranged.strings
+  // A9: density plausibility BEFORE confidence — extreme notes/beat usually
+  // means invented detail in dense mixes, not virtuosity. The warning feeds
+  // the severe-warning penalty inside confidence (no silent inflation).
+  const beatCount = Math.max(1, analysis.beats.beats.length)
+  const notesPerBeat = simplified.length / beatCount
+  if (notesPerBeat > 6) {
+    model.parts[0].warnings.push({
+      kind: 'dense-arrangement',
+      detail: `${notesPerBeat.toFixed(1)} notes/beat — review for invented detail`,
+    })
+  }
   const confidence = scoreArrangementConfidence({
     analysis,
     arrangedEvents: simplified,
@@ -209,6 +231,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       chords: analysis.chords.length,
       pitchSource: analysis.pitchSource,
       totalSeconds: analysis.totalSeconds,
+      stereo: analysis.stereo ?? null,
     },
     confidence,
     partial: verdict.partial,
