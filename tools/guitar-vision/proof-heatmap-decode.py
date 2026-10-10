@@ -56,6 +56,11 @@ THRESHOLDS = {"note": 0.4, "rest": 0.4, "tabdigit": 0.4}  # TRAIN knee
 # the full-population optimum (REST P/R 0.396/0.397 -> 0.506/0.507, ALL F1
 # 0.387 -> 0.395). Width unbiased (1.0). v2 constants.
 BOX_SCALE = {"note": (1.0, 1.0), "rest": (1.0, 1.25), "tabdigit": (1.0, 1.0)}
+# '1' vs '4' glyph-width disambiguation (R2 fret audit: 16/19 Txo fret
+# errors are 1<->4 confusion). '1' strokes are ~0.28sp wide, '4' ~0.47sp
+# (Txo: 8-10px vs 14-22px at sp=32; staff rows excluded). '0' overlaps
+# '4' (~0.44sp), so the rule fires only when the head says 1 or 4.
+FRET_WIDTH_SPLIT = 0.375  # spacing units; narrow -> 1, wide -> 4
 # v3 (2026-10-10): ignore-channel veto (ONE capped run, GUITAR_IGNORECLASS_
 # PREREG.md). Drop a peak when per-page-normalized ignore heat exceeds the
 # normalized class heat within VETO_CELLS. TRAIN-selected with tabdigit

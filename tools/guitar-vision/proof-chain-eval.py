@@ -244,6 +244,20 @@ def main() -> int:
                     fret_posterior = F.softmax(rec_out["fret"], dim=1)[0]
                     string_pred, string_conf = int(string_posterior.argmax()), float(string_posterior.max())
                     fret_pred, fret_conf = int(fret_posterior.argmax()), float(fret_posterior.max())
+                    if fret_pred in (1, 4) and _page_sp is not None:
+                        # '1' vs '4' glyph-width override (R2 fret audit).
+                        _rule = (_garr < 128).mean(axis=1) > 0.5
+                        _wx0, _wx1 = max(0, int(cx - 15)), int(cx + 15)
+                        _wy0, _wy1 = max(0, int(cy - 15)), int(cy + 15)
+                        _keep = [r for r in range(_wy0, _wy1) if not _rule[r]]
+                        if _keep:
+                            _gw = ((_garr[_keep, :][:, _wx0:_wx1] < 128).mean(axis=0) > 0)
+                            _nz = np.nonzero(_gw)[0]
+                            if len(_nz):
+                                _wsp = (_nz[-1] - _nz[0] + 1) / _page_sp
+                                _wf = 1 if _wsp < _dec.FRET_WIDTH_SPLIT else 4
+                                if _wf != fret_pred:
+                                    fret_pred = _wf
                     if args.string_mode in ("geometric", "hybrid"):
                         _xb = int(900 * fx)
                         _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))

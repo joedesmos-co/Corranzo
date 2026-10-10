@@ -139,6 +139,7 @@ def main() -> int:
             # otherwise mint phantom measures). Margin scales with page_sp.
             _tabspans = [(s["top"], s["bot"]) for s in sys_bars if s.get("tab")]
             _garr = np.asarray(image, dtype=np.float32)
+            _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rows
             _page_sp = _psg.page_spacing(_garr)
             events = []
             for det in digits:
@@ -164,6 +165,20 @@ def main() -> int:
                 fp = F.softmax(rec_out["fret"], dim=1)[0]
                 s_pred, s_conf = int(sp.argmax()), float(sp.max())
                 f_pred, f_conf = int(fp.argmax()), float(fp.max())
+                if f_pred in (1, 4) and _page_sp:
+                    # '1' vs '4' width override (staff rows excluded, split
+                    # in spacing units so it generalizes across layouts).
+                    _wx0, _wx1 = max(0, int(cx - 15)), int(cx + 15)
+                    _wy0, _wy1 = max(0, int(cy - 15)), int(cy + 15)
+                    _keep = [r for r in range(_wy0, _wy1) if not _rule[r]]
+                    if _keep:
+                        _gw = (u8[_keep, :][:, _wx0:_wx1] < 128)
+                        _cols = np.nonzero(_gw.any(axis=0))[0]
+                        if len(_cols):
+                            _wsp = (_cols[-1] - _cols[0] + 1) / _page_sp
+                            _wf = 1 if _wsp < dec.FRET_WIDTH_SPLIT else 4
+                            if _wf != f_pred:
+                                f_pred = _wf
                 _xb = int(900 * fx)
                 _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))
                 _geo, _geoconf = _psg.assign_string(_peaks, cy, sp_hint=_page_sp)

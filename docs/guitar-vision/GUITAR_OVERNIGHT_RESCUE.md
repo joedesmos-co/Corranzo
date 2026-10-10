@@ -217,3 +217,16 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
   ~5-15% on dense/flagged/bare textures (Qmek). Flag class stays
   abstinent (P 0.022). Triple/FULL metrics exclude duration where
   noted; Txo FULL 87.6% includes 97% durations.
+
+### R2-M6 — Fret 1-vs-4 width override (no training)
+- Txo fret audit: 16/19 errors are 1<->4 confusion (11x 1->4, 5x 4->1).
+  Glyph ink widths (staff rows excluded): '1' 8-10px vs '4' 14-22px
+  (sp=32) — cleanly separable; '0' overlaps '4' so rule fires only on
+  head∈{1,4}. Sp-normalized split 0.375sp (layout-robust).
+- Wired into transcriber + chain-eval (shared const FRET_WIDTH_SPLIT).
+- Txo: fret 19->2 errors (!), triple 90.6%->95.3%, FULL ~95%.
+- Compact: fret +5, triple 89.8%->91.2% (generalizes).
+- Qmek: 37->22 fret errors; remaining (0,3)x9 needs hole-count rule
+  (documented next; '0' has hole, '3' doesn't).
+- Fit stable (81%/73%). DEV: std fret 95.5%/pitch 91.0%, compact
+  95.7%/93.5% (both up); large/bravura unchanged.
