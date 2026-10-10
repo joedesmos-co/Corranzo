@@ -40,6 +40,86 @@ function centsDistance(midiFloat, expectedMidi) {
 }
 
 /**
+ * Harmonic-ghost veto (pure + tested): a candidate exactly one octave
+ * above a SIMULTANEOUS, LONGER-OR-EQUAL, UNEXPECTED lower note is the
+ * lower note's harmonic, not an independent attack (measured: C3@0.13+0.86
+ * spawns C4@0.13+0.56; G3 spawns G4@+10 ms). Vetoing it blocks the top
+ * remaining false-award pattern (score expects the upper octave while
+ * the user plays the lower).
+ *
+ * Scope (measured, not assumed): applies to SINGLE-PITCH checkpoints
+ * only. In dense chord music, fellow piece notes constantly form
+ * simultaneous unexpected lower octaves under true anchors (measured:
+ * 5 true anchors vetoed across 18 dense clips) — vetoing there stalls
+ * real users to chase a rare ghost. Single-note checkpoints have no
+ * dense context: a simultaneous unexpected lower octave is either the
+ * ghost's fundamental or a genuinely co-attacked wrong note, and in
+ * both cases withholding the award is correct (strict assessment).
+ * Pedal-ring from earlier notes cannot trigger it (onset gate).
+ *
+ * Fires ONLY when all hold, so real music is untouched:
+ * - single expected pitch,
+ * - the lower octave is NOT itself expected (true doublings, where both
+ *   octaves are in the score, always confirm),
+ * - onsets coincide within 60 ms (pedal ring from earlier notes passes
+ *   through untouched),
+ * - the lower note rings LONGER-OR-EQUAL (a truly-played upper octave
+ *   outlives sympathetic resonance; the model quantizes simultaneous
+ *   chord tones to identical spans, so strict inequality would miss
+ *   exact-simultaneous ghosts).
+ *
+ * @returns midi values to exclude from confirmation with reasons.
+ */
+export function harmonicGhostVetoes(poolNotes = [], expectedMidis = []) {
+  const expected = new Set((expectedMidis ?? []).map(Number).filter(Number.isFinite))
+  // Single-pitch checkpoints only (see docstring: dense chord music
+  // must flow; fellow piece notes would veto true anchors).
+  if (expected.size !== 1) {
+    return new Map()
+  }
+  const vetoed = new Map()
+  for (const candidate of poolNotes ?? []) {
+    const midi = Math.round(candidate?.midi)
+    // NOTE: no expected-membership skip on the candidate itself — the
+    // veto exists precisely for ghosts the score expects (false-award
+    // scenarios). Real doublings are protected by the unexpected-lower
+    // requirement below, not by candidate membership.
+    if (!Number.isFinite(midi) || vetoed.has(midi)) {
+      continue
+    }
+    const candidateStart = candidate?.start
+    const candidateEnd = candidate?.end
+    if (!Number.isFinite(candidateStart) || !Number.isFinite(candidateEnd)) {
+      continue
+    }
+    for (const other of poolNotes ?? []) {
+      const lower = Math.round(other?.midi)
+      if (!Number.isFinite(lower) || lower !== midi - 12 || expected.has(lower)) {
+        continue
+      }
+      if (!Number.isFinite(other?.start) || !Number.isFinite(other?.end)) {
+        continue
+      }
+      const onsetGap = Math.abs(other.start - candidateStart)
+      // Longer-or-equal: the model quantizes chord tones to the same span,
+      // so strict inequality misses exact simultaneous ghosts. A truly
+      // played upper octave outlives sympathetic resonance; equal spans
+      // with a simultaneous unexpected fundamental read as harmonic.
+      const lowerLonger = (other.end - other.start) >= (candidateEnd - candidateStart)
+      if (onsetGap <= 0.06 && lowerLonger) {
+        vetoed.set(midi, {
+          reason: 'harmonic-ghost',
+          fundamental: lower,
+          onsetGapMs: Math.round(onsetGap * 1000),
+        })
+        break
+      }
+    }
+  }
+  return vetoed
+}
+
+/**
  * Confirm expected tones against independent neural note candidates.
  *
  * @param {Array<{midi:number,start:number,end:number,sustained?:boolean}>} neuralNotes
@@ -53,6 +133,9 @@ function centsDistance(midiFloat, expectedMidi) {
  * (skipped hops, partial windows, loop seams). Fresh attacks still need
  * window alignment. Both carry independent acoustic evidence; neither
  * manufactures.
+ *
+ * Harmonic ghosts (see harmonicGhostVetoes) are excluded before
+ * confirmation and reported as vetoed, never silently dropped.
  */
 export function confirmNeuralNotes(neuralNotes = [], expectedMidis = [], anchorOnset = null, options = {}) {
   const config = { ...NEURAL_HYBRID_DEFAULTS, ...options }
@@ -75,7 +158,14 @@ export function confirmNeuralNotes(neuralNotes = [], expectedMidis = [], anchorO
       neuralEnd: note.end ?? null,
     })
   }
-  const verdict = confirmBlindCandidates(pool, expectedMidis, {
+  const vetoes = harmonicGhostVetoes(
+    pool.map((entry) => ({ midi: entry.midi, start: entry.neuralStart, end: entry.neuralEnd })),
+    expectedMidis,
+  )
+  const eligible = vetoes.size
+    ? pool.filter((entry) => !vetoes.has(Math.round(entry.midi)))
+    : pool
+  const verdict = confirmBlindCandidates(eligible, expectedMidis, {
     centsTolerance: config.centsTolerance,
     minConfidence: 0,
   })
@@ -88,5 +178,5 @@ export function confirmNeuralNotes(neuralNotes = [], expectedMidis = [], anchorO
     )
     onsets[midi] = candidate?.neuralStart ?? null
   }
-  return { ...verdict, neuralOnsets: onsets, candidateCount: pool.length }
+  return { ...verdict, neuralOnsets: onsets, candidateCount: pool.length, vetoed: [...vetoes.entries()].map(([midi, veto]) => ({ midi, ...veto })) }
 }

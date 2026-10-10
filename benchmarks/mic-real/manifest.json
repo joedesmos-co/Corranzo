@@ -8,6 +8,18 @@
     {
       "id": "piano-mozart2-dense",
       "reason": "Annotation error, independently verified 2026-10-08: forte MIDI chord at 23.04 falls in near-silent audio (rms ~0.0005); music resumes at 23.3. Clip removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-single",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: truth attacks at 0.28-0.31 s sit in flat energy (no transient; audio loudest at clip start, decaying). Model reports the same pitches ~0.3 s early across 3 runs; guitar clips through the identical code path align at ~0.00 s. MIDI/audio take drift in Vienna Mozart p01. Removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-triad",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: first chord aligns (energy attack at 0.50 s) but later truth onsets drift up to ~0.6 s off model/energy evidence (median offset -0.115 s with wide scatter). Same Vienna Mozart p01 take drift. Removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-dense",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: truth contains a negative onset (-0.38 s), audio decays from clip start, model/truth median offset -0.540 s with scattered signs. Same Vienna Mozart p01 take drift. Removed, never retuned."
     }
   ],
   "clips": [

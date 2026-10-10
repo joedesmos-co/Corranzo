@@ -56,6 +56,10 @@ const SELECTIONS = [
   { id: 'piano-schubert-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 5.55, split: 'eval', performance: 'vienna-schubert-p01' },
   { id: 'piano-schubert-dense', instrument: 'piano', category: 'dense', dataset: 'vienna-4x22', audioFile: 'vn_Schubert_D783_no15_p01.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Schubert_D783_no15_p01.mid', kind: 'midi', onset: 4.85, split: 'eval', performance: 'vienna-schubert-p01' },
   { id: 'piano-mozart2-triad', instrument: 'piano', category: 'triad', dataset: 'vienna-4x22', audioFile: 'norm2_vn_mozart_p02.wav', truthFile: '/tmp/corranzo-realbench/vienna/midi/Mozart_K331_1st-mov_p02.mid', kind: 'midi', onset: 4.73, split: 'eval', performance: 'vienna-mozart-p02' },
+  // piano-mozart-single/triad/dense EXCLUDED 2026-10-09: independently
+  // verified MIDI/audio take drift in Vienna Mozart p01 (energy-flat
+  // truth attacks, negative onsets, model/truth offsets -0.1/-0.3/-0.5 s
+  // while guitar clips through identical code align at ~0.00 s).
   // piano-mozart2-dense EXCLUDED 2026-10-08: independently verified
   // annotation error (forte MIDI chord at 23.04 over near-silent audio;
   // see manifest.excluded). Do not re-add without re-verification.

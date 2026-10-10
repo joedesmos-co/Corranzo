@@ -199,7 +199,10 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     const deadline = Date.now() + 150_000
     let results = null
     while (Date.now() < deadline) {
-      await page.waitForTimeout(10_000)
+      // Poll faster than the 4 s pool retention: pool entries age out
+      // truthfully now (no more frozen slow-clock pool), so sparse
+      // polling would miss tones between retention windows.
+      await page.waitForTimeout(2_000)
       results = await page.evaluate(() => window.__liveResults)
       for (const note of results.detectedNotes ?? []) {
         heard.add(note.midi)
@@ -238,7 +241,8 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     const deadline = Date.now() + 150_000
     let results = null
     while (Date.now() < deadline) {
-      await page.waitForTimeout(10_000)
+      // Same 2 s polling as above: pool retention is 4 s by design.
+      await page.waitForTimeout(2_000)
       results = await page.evaluate(() => window.__liveResults)
       for (const note of results.detectedNotes ?? []) {
         heard.add(note.midi)

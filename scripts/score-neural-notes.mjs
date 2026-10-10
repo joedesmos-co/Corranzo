@@ -40,19 +40,28 @@ if (!NOTES_PATH) {
 
 const { clips } = JSON.parse(readFileSync(NOTES_PATH, 'utf8'))
 
-function wrongExpectations(expected) {
+function wrongExpectations(expected, truthMidis = null) {
+  const truth = truthMidis ? new Set(truthMidis) : null
+  // A scenario is only meaningful when its MUTATED pitches never sound
+  // in the clip: otherwise a "false" complete is just the piece's own
+  // true notes matching (dense performances contain dozens of pitches).
+  // Scenarios colliding with truth are skipped, never counted.
   const scenarios = []
+  const consider = (name, mutated) => {
+    if (truth && mutated.some((midi) => truth.has(midi))) {
+      return
+    }
+    scenarios.push({ name, expected: mutated })
+  }
   for (const midi of expected) {
-    scenarios.push({ name: `neighbor+1-of-${midi}`, expected: expected.map((value) => (value === midi ? value + 1 : value)) })
-    scenarios.push({ name: `neighbor-1-of-${midi}`, expected: expected.map((value) => (value === midi ? value - 1 : value)) })
-    scenarios.push({ name: `octave-up-of-${midi}`, expected: expected.map((value) => (value === midi ? value + 12 : value)) })
+    consider(`neighbor+1-of-${midi}`, expected.map((value) => (value === midi ? value + 1 : value)))
+    consider(`neighbor-1-of-${midi}`, expected.map((value) => (value === midi ? value - 1 : value)))
+    consider(`octave-up-of-${midi}`, expected.map((value) => (value === midi ? value + 12 : value)))
   }
   if (expected.length > 1) {
-    const rotated = [...expected.slice(1), expected[0] + 12 > 127 ? expected[0] : expected[0]]
-    scenarios.push({ name: 'wrong-chord-same-count', expected: expected.map((value) => value + 2) })
-    void rotated
+    consider('wrong-chord-same-count', expected.map((value) => value + 2))
   } else {
-    scenarios.push({ name: 'wrong-single-plus-2', expected: expected.map((value) => value + 2) })
+    consider('wrong-single-plus-2', expected.map((value) => value + 2))
   }
   return scenarios
 }
@@ -91,21 +100,45 @@ for (const clip of clips) {
     }
   }
   const poolNotes = [...pool.values()]
-  // Anchor = last heard attack + 0.1 s: models a checkpoint that is still
-  // open (Wait For You waits indefinitely). A fixed early anchor would
-  // understate live behavior for late-emerging fundamentals (weak bass
-  // detected on the ring, not the attack) — and it would HIDE late-ghost
-  // false confirmations. This anchor exposes both honestly.
-  const anchor = poolNotes.reduce((max, note) => Math.max(max, note.start), 0) + 0.1
+  // Anytime completion (live-faithful): Wait For You advances at the
+  // FIRST window-time the pool completes — never at end-of-clip. A fixed
+  // late anchor understates live behavior for early attacks (pool aging
+  // drops them) and mis-times false completions. Evaluate at every
+  // window time; report earliest completion (or never).
+  const windowTimes = [...new Set(windows.map((window) => window.windowStartMs / 1000))].sort((a, b) => a - b)
   // Live confirmation windows (useNeuralMicInput): 4 s pool retention.
   const CONFIRM_OPTS = { centsTolerance: TOLERANCE, windowBeforeSeconds: 4.0, windowAfterSeconds: 0.5 }
-  const trueVerdict = confirmNeuralNotes(poolNotes, clip.expected, anchor, CONFIRM_OPTS)
-  const falseCompletes = []
-  const scenarios = wrongExpectations(clip.expected)
-  for (const scenario of scenarios) {
-    const verdict = confirmNeuralNotes(poolNotes, scenario.expected, anchor, CONFIRM_OPTS)
+  let trueCompleteAt = null
+  let trueVerdict = null
+  for (const anchor of windowTimes) {
+    const verdict = confirmNeuralNotes(poolNotes, clip.expected, anchor, CONFIRM_OPTS)
     if (verdict.complete) {
-      falseCompletes.push(scenario.name)
+      trueCompleteAt = anchor
+      trueVerdict = verdict
+      break
+    }
+    trueVerdict = verdict
+  }
+  // For dense performances, "unexpected" means absent from the whole
+  // piece truth — not merely absent from the anchor set (other true
+  // notes are evidence, not hallucinations).
+  const truthSet = clip.truthMidis ? new Set(clip.truthMidis) : null
+  const unexpected = truthSet
+    ? [...new Set(trueVerdict.unexpectedMidis.filter((midi) => !truthSet.has(midi)))]
+    : trueVerdict.unexpectedMidis
+  const falseCompletes = []
+  const scenarios = wrongExpectations(clip.expected, clip.truthMidis ?? null)
+  for (const scenario of scenarios) {
+    let completedAt = null
+    for (const anchor of windowTimes) {
+      const verdict = confirmNeuralNotes(poolNotes, scenario.expected, anchor, CONFIRM_OPTS)
+      if (verdict.complete) {
+        completedAt = anchor
+        break
+      }
+    }
+    if (completedAt !== null) {
+      falseCompletes.push(`${scenario.name}@${completedAt.toFixed(2)}`)
     }
   }
   report.push({
@@ -113,15 +146,17 @@ for (const clip of clips) {
     instrument: clip.instrument,
     split: clip.split,
     trueComplete: trueVerdict.complete,
+    trueCompleteAt,
     trueConfirmed: trueVerdict.confirmedMidis,
     trueMissing: trueVerdict.missingMidis,
-    unexpected: trueVerdict.unexpectedMidis,
+    unexpected,
+    vetoed: trueVerdict.vetoed ?? [],
     falseCompletes,
     scenarioCount: scenarios.length,
   })
   console.log(
-    `${clip.id} true=${trueVerdict.complete ? 'COMPLETE' : `missing[${trueVerdict.missingMidis.join(',')}]`} ` +
-    `unexpected=[${trueVerdict.unexpectedMidis.join(',') || '—'}] falseCompletes=[${falseCompletes.join(',') || '—'}]`,
+    `${clip.id} true=${trueVerdict.complete ? `COMPLETE@${trueCompleteAt.toFixed(2)}` : `missing[${trueVerdict.missingMidis.join(',')}]`} ` +
+    `unexpected=[${unexpected.join(',') || '—'}] vetoed=[${(trueVerdict.vetoed ?? []).map((v) => v.midi).join(',') || '—'}] falseCompletes=[${falseCompletes.join(',') || '—'}]`,
   )
 }
 

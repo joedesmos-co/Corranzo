@@ -51,6 +51,9 @@ function collectClips() {
   if (CORPUS === 'mic-real') {
     return collectMicRealClips()
   }
+  if (CORPUS === 'composites') {
+    return collectCompositeClips()
+  }
   const clips = []
   for (const [manifestName, kind] of [['mic-accuracy', 'single'], ['mic-polyphony', 'chord']]) {
     const manifest = loadManifest(manifestName)
@@ -73,12 +76,33 @@ function collectClips() {
   return clips
 }
 
+// Composites: real single-note recordings concatenated with exact
+// construction truth (sample-measured onsets). For repeated-note and
+// legato timing the natural corpus lacks.
+function collectCompositeClips() {
+  const manifest = loadManifest('mic-composites')
+  return manifest.clips.map((clip) => ({
+    id: clip.id,
+    kind: 'composite',
+    file: join(root, 'benchmarks', 'mic-composites', clip.audio.file),
+    instrument: clip.instrument,
+    expected: clip.truth.anchorTones,
+    truthNotes: clip.truth.notes,
+    split: 'dev',
+  }))
+}
+// Clips in manifest.excluded are NEVER scored (annotation errors —
+// re-adding one without re-verification corrupts every metric).
 // mic-real: independent JAMS/MIDI annotations, dev/eval/eval-fresh splits.
 // expected[] = anchor tones (WFY-style); truthNotes = full note list (M14).
 function collectMicRealClips() {
   const manifest = loadManifest('mic-real')
+  const excluded = new Set((manifest.excluded ?? []).map((entry) => entry.id))
   const clips = []
   for (const clip of manifest.clips) {
+    if (excluded.has(clip.id)) {
+      continue
+    }
     if (SPLIT !== 'all' && clip.split !== SPLIT && !(SPLIT === 'heldout' && clip.split !== 'dev')) {
       continue
     }
@@ -98,8 +122,39 @@ function collectMicRealClips() {
   return clips
 }
 
-function scoreClip(expected, notes, onsetTolerance = 0.35) {
-  // Note-level: expected pitch counts if ANY emitted note rounds to it
+// Corpus self-check: median emitted-minus-truth onset offset over
+// greedy same-pitch matches. |median| > 0.1 s means the CLIP's labels
+// (not the recognizer) are suspect — misaligned truth silently depresses
+// every onset metric (measured: three Mozart excerpts at -0.1/-0.3/-0.5 s
+// from MIDI/audio take drift). Flagged, never silently absorbed.
+function alignmentAudit(truthNotes, emitted) {
+  const diffs = []
+  for (const truth of [...truthNotes].sort((a, b) => a.onset - b.onset)) {
+    if (truth.onset < 0) {
+      continue
+    }
+    let best = null
+    for (const note of emitted) {
+      if (Math.round(note.midi) !== truth.midi) {
+        continue
+      }
+      const delta = note.start - truth.onset
+      if (Math.abs(delta) < 1.0 && (best === null || Math.abs(delta) < Math.abs(best))) {
+        best = delta
+      }
+    }
+    if (best !== null) {
+      diffs.push(best)
+    }
+  }
+  diffs.sort((a, b) => a - b)
+  return {
+    pairs: diffs.length,
+    medianOffset: diffs.length ? diffs[Math.floor(diffs.length / 2)] : null,
+  }
+}
+
+function scoreClip(expected, notes, onsetTolerance = 0.35) {  // Note-level: expected pitch counts if ANY emitted note rounds to it
   // with onset inside the clip (clips are single events at ~120ms+).
   // Precision = emitted-in-expected / emitted; recall = expected found.
   const emitted = notes.map((note) => Math.round(note.midi))
@@ -121,12 +176,16 @@ function scoreClip(expected, notes, onsetTolerance = 0.35) {
 }
 
 // Onset-aware note match (M14): truth note counts iff an emitted note
-// rounds to it within ±tolerance (greedy, earliest first).
+// rounds to it within ±tolerance (greedy, earliest first). Truth notes
+// with onset < 0 predate the audio slice (pickup annotations) and are
+// unscorable by construction — counting them as misses would punish the
+// recognizer for notes that never sounded.
 function scoreNoteOnsets(truthNotes, emitted, tolerance = 0.35) {
+  const scorables = truthNotes.filter((note) => note.onset >= 0)
   const remaining = [...emitted].sort((a, b) => a.start - b.start)
   let matched = 0
   let onsetErrorSum = 0
-  for (const truth of [...truthNotes].sort((a, b) => a.onset - b.onset)) {
+  for (const truth of [...scorables].sort((a, b) => a.onset - b.onset)) {
     const index = remaining.findIndex(
       (note) => Math.round(note.midi) === truth.midi && Math.abs(note.start - truth.onset) <= tolerance,
     )
@@ -136,7 +195,7 @@ function scoreNoteOnsets(truthNotes, emitted, tolerance = 0.35) {
       matched += 1
     }
   }
-  return { truth: truthNotes.length, matched, onsetErrorMean: matched ? onsetErrorSum / matched : null }
+  return { truth: scorables.length, matched, onsetErrorMean: matched ? onsetErrorSum / matched : null }
 }
 
 const server = await createServer({
@@ -255,8 +314,14 @@ for (const clip of clips) {
     anchorRecall,
     onsetByTol: Object.keys(onsetByTol).length ? onsetByTol : null,
     onsetRecall: onsetByTol['0.35'] ? onsetByTol['0.35'].recall : null,
-    onsetCount: clip.truthNotes ? clip.truthNotes.length : null,
+    onsetCount: clip.truthNotes ? clip.truthNotes.filter((note) => note.onset >= 0).length : null,
     onsetErrorMean: onsetByTol['0.35'] ? onsetByTol['0.35'].errorMean : null,
+    alignment: clip.truthNotes
+      ? alignmentAudit(
+        clip.truthNotes.map((note) => ({ midi: note.midi, onset: note.onset })),
+        deduped.map((note) => ({ midi: note.midi, start: note.start })),
+      )
+      : null,
     inferP50: inferTimes[Math.floor(inferTimes.length / 2)] ?? null,
     inferP95: inferTimes[Math.floor(inferTimes.length * 0.95)] ?? null,
     windows: inferTimes.length,
@@ -324,6 +389,9 @@ function summarize(rows) {
     onsetRecallByTol: Object.fromEntries(
       Object.entries(tolRecalls).map(([tol, value]) => [tol, value.truth ? value.matched / value.truth : null]),
     ),
+    misalignedClips: rows
+      .filter((row) => row.alignment?.medianOffset != null && Math.abs(row.alignment.medianOffset) > 0.1)
+      .map((row) => ({ id: row.id, medianOffset: Math.round(row.alignment.medianOffset * 1000) / 1000, pairs: row.alignment.pairs })),
   }
 }
 
@@ -353,6 +421,7 @@ if (SAVE_NOTES) {
       instrument: result.instrument,
       split: result.split,
       expected: clips[index].expected,
+      truthMidis: clips[index].truthNotes ? [...new Set(clips[index].truthNotes.map((note) => note.midi))] : null,
       windows: allSavedWindows[index],
     })),
   }, null, 1))
