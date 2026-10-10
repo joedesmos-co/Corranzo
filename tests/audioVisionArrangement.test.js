@@ -103,6 +103,28 @@ describe('A5/A6/A7 solo arrangement + difficulty', () => {
     expect(dropped.warnings.some((w) => w.kind === 'unplayable-note-dropped')).toBe(true)
   })
 
+  it('suppresses harmonic-double inventions only with amplitude evidence', async () => {
+    const { suppressHarmonicDoubles } = await import('../src/features/audio-vision/arrangementModel.js')
+    const notes = [
+      { midi: 60, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.6 },
+      { midi: 72, startSeconds: 1.01, endSeconds: 1.4, amplitude: 0.3 }, // weak octave shadow
+      { midi: 67, startSeconds: 1.02, endSeconds: 1.4, amplitude: 0.35 }, // weak fifth shadow
+      { midi: 64, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.55 }, // strong third: kept
+      { midi: 60, startSeconds: 2.0, endSeconds: 2.4 }, // no amplitude: kept
+      { midi: 72, startSeconds: 2.01, endSeconds: 2.4 }, // no amplitude: kept
+    ]
+    const { notes: kept, suppressed } = suppressHarmonicDoubles(notes)
+    expect(suppressed).toBe(2)
+    expect(kept.map((n) => n.midi)).toEqual([60, 64, 60, 72])
+    // Strongest note never dropped even when it is the upper octave.
+    const inverted = suppressHarmonicDoubles([
+      { midi: 60, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.2 },
+      { midi: 72, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.8 },
+    ])
+    expect(inverted.notes.map((n) => n.midi)).toEqual([72])
+    expect(inverted.suppressed).toBe(1)
+  })
+
   it('difficulty levels differ measurably (easy < intermediate < advanced)', () => {
     const levels = [DIFFICULTIES.EASY, DIFFICULTIES.INTERMEDIATE, DIFFICULTIES.ADVANCED]
     const complexities = levels.map((difficulty) => {

@@ -10,6 +10,7 @@ import {
   createArrangementModel,
   quantizeToBeats,
   measureComplexity,
+  suppressHarmonicDoubles,
   PART_INSTRUMENTS,
 } from './arrangementModel.js'
 import { arrangeSoloPiano } from './soloPiano.js'
@@ -161,6 +162,15 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       }
     : null
   const transcribed = createTranscribedContent({ analysis, viewsQuality: views.quality })
+  // Harmonic-double suppression (BP path only: amplitude-gated). Count is
+  // reported, never silent; arrangement-grade effect measured on frozen eval.
+  let suppressedHarmonics = 0
+  if (analysis.pitchSource === 'basic-pitch' && analysis.predictedNotes.some((n) => n.amplitude != null)) {
+    const filtered = suppressHarmonicDoubles(analysis.predictedNotes)
+    suppressedHarmonics = filtered.suppressed
+    analysis.predictedNotes = filtered.notes
+  }
+  transcribed.suppressedHarmonics = suppressedHarmonics
   const quantized = quantizeToBeats(analysis.predictedNotes, analysis.beats.beats)
   // Melody anchors for piano phrasing: strongest melody frame per onset beat.
   const melodyByBeat = (analysis.melody ?? []).map((m) => ({ beat: (m.seconds - (analysis.beats.beats[0] ?? 0)) / analysis.beats.beatPeriodSeconds, midi: m.midi }))
@@ -236,6 +246,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     confidence,
     partial: verdict.partial,
     excerpt: excerptReport,
+    suppressedHarmonics,
     durationSeconds: imported.durationSeconds,
   }
 }

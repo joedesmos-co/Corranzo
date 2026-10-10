@@ -148,3 +148,40 @@ export function measureComplexity(events) {
     distinctPitchClasses: new Set(midis.map((m) => ((m % 12) + 12) % 12)).size,
   }
 }
+
+/**
+ * Suppress harmonic-double inventions in predicted notes (octave/fifth
+ * shadows of a simultaneously stronger note). Only notes carrying an
+ * amplitude/strength vote; notes without one are always kept. Returns
+ * { notes, suppressed } — the count keeps the decision auditable, never
+ * silent. The strongest note in a group is never dropped.
+ */
+export function suppressHarmonicDoubles(notes, { windowSeconds = 0.06, minRatio = 1.5 } = {}) {
+  const sorted = [...(notes ?? [])].sort((a, b) => a.startSeconds - b.startSeconds)
+  const drop = new Set()
+  for (let i = 0; i < sorted.length; i += 1) {
+    if (drop.has(i)) continue
+    const anchor = sorted[i]
+    const ampAnchor = anchor.amplitude ?? anchor.strength ?? null
+    for (let j = i + 1; j < sorted.length; j += 1) {
+      if (sorted[j].startSeconds - anchor.startSeconds > windowSeconds) break
+      if (drop.has(j)) continue
+      const other = sorted[j]
+      const ampOther = other.amplitude ?? other.strength ?? null
+      if (ampAnchor == null || ampOther == null) continue
+      if (anchor.midi === other.midi) continue
+      const interval = Math.abs(anchor.midi - other.midi) % 12
+      if (interval !== 0 && interval !== 7) continue
+      if (ampAnchor >= ampOther * minRatio) {
+        drop.add(j)
+      } else if (ampOther >= ampAnchor * minRatio) {
+        drop.add(i)
+        break
+      }
+    }
+  }
+  return {
+    notes: sorted.filter((_, index) => !drop.has(index)),
+    suppressed: drop.size,
+  }
+}

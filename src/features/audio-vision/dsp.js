@@ -215,9 +215,21 @@ const CHORD_TEMPLATES = (() => {
 
 const PITCH_CLASS_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
+const EXTENSION_PC = { major7: 11, minor7: 10, dominant7: 10, suspended4: 5 }
+
+/** Drop claimed extensions whose tone lacks real energy (passing tones). */
+function guardExtensions(chroma, candidates, best) {
+  const ext = EXTENSION_PC[best.quality]
+  if (ext == null) return best
+  const extEnergy = chroma[(best.root + ext) % 12] ?? 0
+  const rootEnergy = chroma[best.root] ?? 0
+  if (extEnergy >= rootEnergy * 0.45) return best
+  return candidates.find((s) => s.root === best.root && (s.quality === 'major' || s.quality === 'minor' || s.quality === 'diminished')) ?? best
+}
+
 /** Best-matching template constrained to a fixed root (bass prior). */
 export function recognizeChordWithRoot(chroma, root) {
-  let best = null
+  const candidates = []
   for (const t of CHORD_TEMPLATES) {
     if (t.root !== root) continue
     let dot = 0
@@ -226,16 +238,16 @@ export function recognizeChordWithRoot(chroma, root) {
       dot += chroma[i] * t.weights[i]
       norm += t.weights[i] * t.weights[i]
     }
-    const score = dot / (Math.sqrt(norm) + 1e-9)
-    if (!best || score > best.score) best = { root: t.root, quality: t.quality, score, suffix: t.suffix }
+    candidates.push({ root: t.root, quality: t.quality, score: dot / (Math.sqrt(norm) + 1e-9), suffix: t.suffix })
   }
-  if (!best) return null
+  if (!candidates.length) return null
+  candidates.sort((a, b) => b.score - a.score)
+  const best = guardExtensions(chroma, candidates, candidates[0])
   return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
 }
 /** Template-match chroma → { root, quality, score, label }. Score is cosine-ish 0..1. */
 export function recognizeChord(chroma) {
-  let best = { root: 0, quality: 'major', score: 0, suffix: '' }
-  for (const t of CHORD_TEMPLATES) {
+  const scored = CHORD_TEMPLATES.map((t) => {
     let dot = 0
     let norm = 0
     for (let i = 0; i < 12; i += 1) {
@@ -243,9 +255,10 @@ export function recognizeChord(chroma) {
       norm += t.weights[i] * t.weights[i]
     }
     // Length-normalize so 4-note templates don't outscore triads for free.
-    const score = dot / (Math.sqrt(norm) + 1e-9)
-    if (score > best.score) best = { root: t.root, quality: t.quality, score, suffix: t.suffix }
-  }
+    return { root: t.root, quality: t.quality, suffix: t.suffix, score: dot / (Math.sqrt(norm) + 1e-9) }
+  })
+  scored.sort((a, b) => b.score - a.score)
+  const best = guardExtensions(chroma, scored, scored[0] ?? { root: 0, quality: 'major', score: 0, suffix: '' })
   return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
 }
 
