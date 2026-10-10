@@ -266,24 +266,39 @@ def main() -> int:
                     continue
                 events.append({"x": cx, "y": cy, "string": s_pred + 1, "fret": f_pred,
                                "midi": TUNING[s_pred] + f_pred})
-            # Onset columns (<12px): dense 16ths sit 5-26px apart (GT
-            # x-gap p90=17px); 30px merged whole systems into mega-columns.
-            # Chord digits share x (gap ~0-8px incl. detection jitter).
-            events.sort(key=lambda e: e["x"])
-            columns, cur = [], []
-            for e in events:
-                if cur and e["x"] - cur[-1]["x"] > 12:
-                    columns.append(cur)
-                    cur = []
-                cur.append(e)
-            if cur:
-                columns.append(cur)
-            for col in columns:
+            # Onset columns (<12px) PER SYSTEM: x-only clustering merges
+            # same-x digits from different systems (different measures!)
+            # into phantom columns (wrong shared durations/chords).
+            # Onsets live within a system; cluster x inside y-systems.
+            columns = []
+            _sysidx = {}
+            for _si, _s in enumerate(sys_bars):
+                for _e in events:
+                    if _s["top"] <= _e["y"] <= _s["bot"]:
+                        _sysidx.setdefault(_si, []).append(_e)
+            _assigned = set(id(_e) for _v in _sysidx.values() for _e in _v)
+            _rest = [_e for _e in events if id(_e) not in _assigned]
+            if _rest:
+                _sysidx.setdefault(len(sys_bars), []).extend(_rest)
+            for _si in sorted(_sysidx):
+                _se = sorted(_sysidx[_si], key=lambda e: e["x"])
+                cur = []
+                for e in _se:
+                    if cur and e["x"] - cur[-1]["x"] > 12:
+                        columns.append((_si, cur))
+                        cur = []
+                    cur.append(e)
+                if cur:
+                    columns.append((_si, cur))
+            for _si, col in columns:
                 cx = sum(e["x"] for e in col) / len(col)
-                # Column rhythm (M7 validated: Txo 97% exact): per-digit x
-                # strips, median vote. Digit-anchored [topcy-100,topcy-16].
-                # (Stem-anchored / TAB-top variants tried and reverted:
-                # stem runs miss at digit-x too often; see report.)
+                # Column rhythm (validated end-to-end: Txo 96-97% exact):
+                # per-digit x strips, median vote. Digit-anchored
+                # [topcy-100,topcy-16]. Pair-bridge counting is cleaner on
+                # GT boxes (95%/87%) but collapses on detected boxes
+                # (x-jitter merges/splits onset units); median is robust
+                # to unit noise. See report (beam-object evidence kept for
+                # the onset-unit follow-up, not the counter).
                 _topcy = min(e["y"] for e in col)
                 _gt, _gb = int(_topcy - 100), int(_topcy - 16)
                 _colg = []

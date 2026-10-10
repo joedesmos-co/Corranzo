@@ -280,3 +280,19 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - Semantic 42% decomposes to: duplicate-part scoring (~halves pitch),
   missing attributes (~fixed cost), measure/duration residuals.
   Note-score triple 95.9% is the honest playable metric.
+
+### R3-M1 — Phase 1 beam association: evidence kept, counter reverted
+- Beam OBJECTS (staff-excluded (1,20) components) exist and are clean
+  (393/page, double pairs resolved). Cross-system column merging found
+  and FIXED (onsets cluster x WITHIN y-systems now; Txo FULL +4.4pts).
+- Pair-bridge counting (bridges between adjacent same-system onsets):
+  95%/87% on GT boxes, but collapses live (57%/8%): detection x-jitter
+  merges/splits onset units (201 digits -> 52 columns on Txo p1), so
+  pairs test wrong gaps. Median row-groups are robust to unit noise
+  (Txo 96%) and stay. Verdict: beam OBJECTS validated; the counter is
+  not the problem — ONSET UNITS are (need peak separation + sub-cell
+  boxes before attribution can work). Pair code reverted; debug
+  scaffolding removed.
+- Key visuals: flagged/isolated 16ths have NO beams at digit-x (29
+  Txo cols); beamed-pair beams are short (25px) and die in (5,60);
+  beams+stems form tall Pi components (height caps kill them).

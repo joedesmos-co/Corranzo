@@ -307,22 +307,6 @@
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
           <step>G</step>
           <octave>3</octave>
         </pitch>
@@ -332,6 +316,22 @@
         <notations>
           <technical>
             <string>3</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -754,9 +754,9 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -799,9 +799,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>2</string>
@@ -815,9 +815,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>4</string>
@@ -830,9 +830,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>2</string>
@@ -926,9 +926,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>2</string>
@@ -942,9 +942,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>5</string>
@@ -957,9 +957,9 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>1</string>
@@ -1049,9 +1049,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1065,9 +1065,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1095,9 +1095,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1223,9 +1223,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1253,9 +1253,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1320,9 +1320,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1335,9 +1335,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1411,9 +1411,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1427,9 +1427,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1442,9 +1442,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1623,9 +1623,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1640,9 +1640,9 @@
           <alter>1</alter>
           <octave>2</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -1656,9 +1656,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1672,9 +1672,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1687,9 +1687,9 @@
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -1702,9 +1702,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1719,9 +1719,9 @@
           <alter>1</alter>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -1735,9 +1735,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1751,9 +1751,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1800,22 +1800,6 @@
       <note>
         <chord />
         <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
           <step>G</step>
           <octave>3</octave>
         </pitch>
@@ -1830,14 +1814,30 @@
         </notations>
       </note>
       <note>
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
         <pitch>
           <step>F</step>
           <alter>1</alter>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -1850,9 +1850,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1866,9 +1866,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>3</string>
@@ -1882,9 +1882,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -1965,9 +1965,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -1980,9 +1980,9 @@
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -1997,9 +1997,9 @@
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2012,9 +2012,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2027,9 +2027,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2140,9 +2140,9 @@
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2155,9 +2155,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2201,9 +2201,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2216,9 +2216,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2232,22 +2232,6 @@
         <divisions>4</divisions>
       </attributes>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>3</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -2291,6 +2275,22 @@
           <technical>
             <string>4</string>
             <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
+            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -2315,9 +2315,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2331,9 +2331,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2344,15 +2344,15 @@
       <note>
         <chord />
         <pitch>
-          <step>E</step>
-          <octave>2</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
-            <string>6</string>
+            <string>3</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -2360,15 +2360,15 @@
       <note>
         <chord />
         <pitch>
-          <step>G</step>
-          <octave>3</octave>
+          <step>E</step>
+          <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
-            <string>3</string>
+            <string>6</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -2446,9 +2446,9 @@
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -2461,9 +2461,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2477,9 +2477,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2493,9 +2493,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2513,9 +2513,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2529,9 +2529,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -2544,9 +2544,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2574,9 +2574,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2590,9 +2590,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2605,9 +2605,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -2621,9 +2621,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2639,15 +2639,15 @@
       <note>
         <pitch>
           <step>G</step>
-          <octave>2</octave>
+          <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
-            <string>6</string>
-            <fret>3</fret>
+            <string>3</string>
+            <fret>0</fret>
           </technical>
         </notations>
       </note>
@@ -2655,15 +2655,15 @@
         <chord />
         <pitch>
           <step>G</step>
-          <octave>3</octave>
+          <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
-            <string>3</string>
-            <fret>0</fret>
+            <string>6</string>
+            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -2733,9 +2733,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2794,9 +2794,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2810,9 +2810,9 @@
           <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2830,9 +2830,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -2846,9 +2846,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -2862,9 +2862,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -2877,9 +2877,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -3342,9 +3342,9 @@
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -3357,9 +3357,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>4</string>
@@ -3373,9 +3373,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>2</string>
@@ -3613,9 +3613,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -3643,9 +3643,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -3818,9 +3818,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -3834,9 +3834,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -3850,9 +3850,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -3866,9 +3866,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -4061,9 +4061,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -4076,9 +4076,9 @@
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>1</string>
@@ -4159,9 +4159,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>3</string>
@@ -4175,9 +4175,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>4</string>
@@ -4191,9 +4191,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>eighth</type>
         <notations>
           <technical>
             <string>5</string>
@@ -4282,9 +4282,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -4298,9 +4298,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -4349,9 +4349,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -4365,9 +4365,9 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -4395,9 +4395,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -4456,9 +4456,9 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -4467,22 +4467,6 @@
         </notations>
       </note>
       <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>3</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -4494,6 +4478,22 @@
           <technical>
             <string>4</string>
             <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
+            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -4629,9 +4629,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -4837,9 +4837,9 @@
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -4920,9 +4920,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -4935,13 +4935,45 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
             <fret>2</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <technical>
+            <string>3</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <technical>
+            <string>2</string>
+            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -4958,38 +4990,6 @@
           <technical>
             <string>6</string>
             <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <notations>
-          <technical>
-            <string>3</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <notations>
-          <technical>
-            <string>2</string>
-            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -5034,9 +5034,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -5050,9 +5050,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>3</string>
@@ -5066,9 +5066,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -5082,9 +5082,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -5149,9 +5149,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -5179,9 +5179,9 @@
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -5196,9 +5196,9 @@
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -5226,9 +5226,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -5272,9 +5272,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -5287,9 +5287,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -5307,9 +5307,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -5323,9 +5323,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -5430,11 +5430,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>9</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <dot />
-        <dot />
         <notations>
           <technical>
             <string>2</string>
@@ -5515,9 +5513,9 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>6</string>
@@ -5531,9 +5529,9 @@
           <alter>1</alter>
           <octave>2</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -5594,9 +5592,9 @@
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
@@ -5744,9 +5742,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -5760,9 +5758,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -5805,9 +5803,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -5821,9 +5819,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -6294,9 +6292,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -6310,9 +6308,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6596,9 +6594,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6627,9 +6625,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -6642,9 +6640,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -6653,22 +6651,6 @@
         </notations>
       </note>
       <note>
-        <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -6679,6 +6661,22 @@
         <notations>
           <technical>
             <string>2</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -6703,9 +6701,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -6719,9 +6717,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6769,9 +6767,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6785,9 +6783,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -6831,9 +6829,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -6847,9 +6845,9 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>1</string>
@@ -6889,15 +6887,15 @@
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <octave>2</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
-            <string>6</string>
+            <string>3</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -6905,15 +6903,15 @@
       <note>
         <chord />
         <pitch>
-          <step>G</step>
-          <octave>3</octave>
+          <step>E</step>
+          <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
-            <string>3</string>
+            <string>6</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -6923,9 +6921,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -6938,9 +6936,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6958,9 +6956,9 @@
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -6974,9 +6972,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -6989,9 +6987,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7065,9 +7063,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7111,9 +7109,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7126,9 +7124,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7146,9 +7144,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -7162,9 +7160,9 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7253,9 +7251,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7269,9 +7267,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7316,6 +7314,22 @@
       </attributes>
       <note>
         <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <technical>
+            <string>2</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
           <step>G</step>
           <octave>2</octave>
         </pitch>
@@ -7330,29 +7344,13 @@
         </notations>
       </note>
       <note>
-        <chord />
         <pitch>
-          <step>B</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>16th</type>
-        <notations>
-          <technical>
-            <string>2</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7365,9 +7363,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7376,22 +7374,6 @@
         </notations>
       </note>
       <note>
-        <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>6</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -7402,6 +7384,22 @@
         <notations>
           <technical>
             <string>2</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <notations>
+          <technical>
+            <string>6</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -7441,9 +7439,9 @@
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -7457,9 +7455,9 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7507,9 +7505,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
@@ -7523,9 +7521,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7569,9 +7567,9 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7585,9 +7583,9 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>1</string>
@@ -7630,9 +7628,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7646,9 +7644,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7661,9 +7659,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7676,9 +7674,9 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7727,9 +7725,9 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>2</string>
@@ -7789,9 +7787,9 @@
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7850,9 +7848,9 @@
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7870,9 +7868,9 @@
           <step>B</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>5</string>
@@ -7886,9 +7884,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>4</string>
@@ -7902,9 +7900,9 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>3</string>
@@ -7918,9 +7916,9 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>1</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>16th</type>
         <notations>
           <technical>
             <string>6</string>
