@@ -1092,8 +1092,17 @@ function walkPart({
     if (isPrimary) {
       const lengthFromTimeSignature = measureLengthQuarters(measureBeats, measureBeatType)
       const notatedLengthQuarters = maxCursorDivisions / divisions
+      // Overfull measures (virtuoso runs, tremolo shorthand, unmeasured
+      // cadenzas) notate more content than the time signature allows. The
+      // window must contain the notated notes — otherwise overflow notes
+      // sound past the window end AND every downstream measure starts
+      // early, drifting the whole downstream clock. Extend with real
+      // notated durations only; underfull (pickup) measures keep nominal
+      // padding so pickup detection is unaffected.
       const lengthQuarters =
-        lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
+        lengthFromTimeSignature > 0
+          ? Math.max(lengthFromTimeSignature, notatedLengthQuarters)
+          : notatedLengthQuarters
       const { newSystem, newPage } = measurePrintFlags(measureNode)
       const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
       // MusicXML marks pickup/anacrusis (and some courtesy) measures with
