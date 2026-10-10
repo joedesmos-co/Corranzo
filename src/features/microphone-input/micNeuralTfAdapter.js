@@ -33,6 +33,33 @@ export const NEURAL_WARMUP_SECONDS = 0.5
  */
 export const NEURAL_SILENCE_SKIP_RMS = 0.003
 export const NEURAL_SILENCE_SKIP_FRAMES = 5
+/**
+ * Frozen pre-play ambient calibration (M3): the neural skip floor adapts
+ * to the room ONCE from the first polls, then never drifts (music must
+ * never be learned as background — sustained notes would drag any
+ * continuous estimator upward and mute quiet playing).
+ *
+ * ambient = minimum of the first NEURAL_AMBIENT_POLLS poll RMS values
+ * (music only raises RMS, so the minimum is closest to the room even if
+ * the user starts playing immediately). Frozen afterwards by the caller.
+ * floor = clamp(ambient * NEURAL_AMBIENT_RATIO, NEURAL_SILENCE_SKIP_RMS,
+ * NEURAL_AMBIENT_MAX): the fixed floor is the stable fallback (never
+ * below — quiet rooms keep the validated behavior), the cap keeps loud
+ * rooms from muting pp attacks (pp attack polls peak 0.024).
+ */
+export const NEURAL_AMBIENT_POLLS = 10
+export const NEURAL_AMBIENT_RATIO = 1.5
+export const NEURAL_AMBIENT_MAX = 0.006
+
+export function calibrateNeuralFloor(ambientRms) {
+  if (!Number.isFinite(ambientRms) || ambientRms < 0) {
+    return NEURAL_SILENCE_SKIP_RMS
+  }
+  return Math.min(
+    NEURAL_AMBIENT_MAX,
+    Math.max(NEURAL_SILENCE_SKIP_RMS, ambientRms * NEURAL_AMBIENT_RATIO),
+  )
+}
 
 /**
  * Silence-skip decision (pure + tested): skip inference only when the

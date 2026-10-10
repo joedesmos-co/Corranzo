@@ -3,6 +3,8 @@
  */
 import { describe, expect, it } from 'vitest'
 import {
+  calibrateNeuralFloor,
+  NEURAL_AMBIENT_MAX,
   NEURAL_SILENCE_SKIP_FRAMES,
   NEURAL_SILENCE_SKIP_RMS,
   shouldSkipSilence,
@@ -55,5 +57,40 @@ describe('shouldSkipSilence', () => {
       NEURAL_SILENCE_SKIP_RMS,
       NEURAL_SILENCE_SKIP_FRAMES,
     )).toBe(false)
+  })
+})
+
+describe('calibrateNeuralFloor', () => {
+  it('keeps the validated fixed floor for quiet rooms', () => {
+    expect(calibrateNeuralFloor(0.0023)).toBeGreaterThanOrEqual(NEURAL_SILENCE_SKIP_RMS)
+    expect(calibrateNeuralFloor(0.0023)).toBeLessThan(0.004)
+  })
+
+  it('raises the floor for louder rooms without muting pp attacks', () => {
+    // Hot room at 0.008 RMS: floor rises but stays far below pp attack
+    // polls (0.024), so attacks always infer.
+    const floor = calibrateNeuralFloor(0.008)
+    expect(floor).toBeGreaterThan(NEURAL_SILENCE_SKIP_RMS)
+    expect(floor).toBeLessThanOrEqual(NEURAL_AMBIENT_MAX)
+    expect(floor).toBeLessThan(0.024)
+  })
+
+  it('caps the floor so loud rooms cannot mute everything', () => {
+    expect(calibrateNeuralFloor(0.05)).toBe(NEURAL_AMBIENT_MAX)
+  })
+
+  it('falls back to the fixed floor on garbage input', () => {
+    expect(calibrateNeuralFloor(NaN)).toBe(NEURAL_SILENCE_SKIP_RMS)
+    expect(calibrateNeuralFloor(-1)).toBe(NEURAL_SILENCE_SKIP_RMS)
+    expect(calibrateNeuralFloor(null)).toBe(NEURAL_SILENCE_SKIP_RMS)
+  })
+
+  it('freezes: sustained music never becomes the ambient (min-of-first-polls)', () => {
+    // Caller discipline: ambient = min(first 10 polls), frozen after.
+    // Even starting mid-music, the minimum is closest to the room and
+    // the cap bounds the damage; afterwards nothing updates it.
+    const firstPolls = [0.05, 0.04, 0.03, 0.045, 0.035, 0.05, 0.028, 0.04, 0.033, 0.038]
+    const ambient = Math.min(...firstPolls)
+    expect(calibrateNeuralFloor(ambient)).toBeLessThanOrEqual(NEURAL_AMBIENT_MAX)
   })
 })
