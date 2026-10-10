@@ -129,23 +129,39 @@ def normalize_scale(pixels_u8: np.ndarray) -> tuple[np.ndarray, float]:
 
 
 def infer_page_merged(model, pixels_u8: np.ndarray, fx: float, fy: float,
-                      device, gate_retry: bool = True) -> tuple[list, float]:
+                      device, gate_retry: bool = True, upscale: float = 1.0) -> tuple[list, float]:
     """Two-pass merged inference (TRAIN-heldout selected).
 
     Notes come from the scale-normalized pass (large glyphs robust);
     digits+rests come from the native pass (thin/small glyphs are
     blur-fragile under resampling). No cross-pass suppression (xclass
     dups measured negligible); gate native in both passes via infer_page.
-    Returns (merged preds, norm scale).
+    upscale (Lanczos, layout-specific, e.g. large==1.3): sharp glyph
+    enlargement BEFORE both passes for small-glyph layouts; boxes mapped
+    back (/upscale) so callers see original px. Returns (merged preds,
+    norm scale).
     """
+    from PIL import Image as _Image
+    us = float(upscale or 1.0)
+    if abs(us - 1.0) > 1e-9:
+        img = _Image.fromarray(pixels_u8).resize(
+            (int(pixels_u8.shape[1] * us), int(pixels_u8.shape[0] * us)), _Image.LANCZOS)
+        pixels_u8 = np.asarray(img)
+        fx, fy = fx * us, fy * us
     preds_on, scale = infer_page(model, pixels_u8, fx, fy, device, normalize=True,
                                  gate_retry=gate_retry)
     if scale == 1.0:
-        return preds_on, scale
-    preds_off, _ = infer_page(model, pixels_u8, fx, fy, device, normalize=False,
-                              gate_retry=gate_retry)
-    merged = ([p for p in preds_on if p["cls"] == "note"] +
-              [p for p in preds_off if p["cls"] != "note"])
+        merged = preds_on
+    else:
+        preds_off, _ = infer_page(model, pixels_u8, fx, fy, device, normalize=False,
+                                  gate_retry=gate_retry)
+        merged = ([p for p in preds_on if p["cls"] == "note"] +
+                  [p for p in preds_off if p["cls"] != "note"])
+    if abs(us - 1.0) > 1e-9:
+        for p in merged:
+            p["x"] /= us
+            p["y"] /= us
+            p["box"] = [v / us for v in p["box"]]
     return merged, scale
 
 

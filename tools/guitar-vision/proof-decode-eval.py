@@ -59,6 +59,7 @@ def main() -> int:
     parser.add_argument("--samples-csv", default=None,
                         help="optional CSV of sample ids (additive filter; overrides validation set)")
     parser.add_argument("--gate-mode", default="retry", choices=["retry", "exact"])
+    parser.add_argument("--upscale", type=float, default=1.0)
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -125,7 +126,8 @@ def main() -> int:
                 fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
                 u8 = (pixels * 255).astype(np.uint8)
                 preds, _ = dec.infer_page_merged(model, u8, fx, fy, device,
-                                                  gate_retry=(args.gate_mode == "retry"))
+                                                  gate_retry=(args.gate_mode == "retry"),
+                                                  upscale=args.upscale)
                 for core_flag, key in [(True, "core"), (False, "union")]:
                     gt = dec.build_gt(joins, page_no, fx, fy, core=core_flag)
                     a, b, c = dec.match(preds, gt)

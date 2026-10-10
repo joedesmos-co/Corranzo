@@ -161,6 +161,56 @@ def _systems_and_bands(u8):
     return systems, bands, staff_rows, ink, x0, x1
 
 
+def bars_in_span(u8: np.ndarray, top: int, bot: int, staff_rows=None,
+                   add_start_edge: bool = False, min_cover: float = None) -> list[int]:
+    """Barline columns within one y-span (cover + continuity).
+
+    Shared core of detect_barline_systems; also used for digit-cluster
+    systems where band detection finds no TAB staff (dense small-scale
+    pages). staff_rows recomputed if omitted.
+    """
+    import os as _os2
+    ink = u8 < 128
+    h, w = ink.shape
+    x0, x1 = int(w * 0.1), int(w * 0.9)
+    if staff_rows is None:
+        row_frac = ink[:, x0:x1].mean(axis=1)
+        staff_rows = set(np.nonzero(row_frac > 0.25)[0].tolist())
+    top, bot = max(0, top), min(h - 1, bot)
+    span = bot - top + 1
+    if span < 30:
+        return []
+    col = ink[top:bot + 1, x0:x1]
+    keep = np.array([r for r in range(top, bot + 1) if r not in staff_rows]) - top
+    found = set()
+    if len(keep) >= 10:
+        sub = col[keep, :]
+        for x in range(sub.shape[1]):
+            v = sub[:, x]
+            if v.mean() < (COVER if min_cover is None else min_cover):
+                continue
+            best, run = 0, 0
+            for val in v:
+                run = run + 1 if val else 0
+                best = max(best, run)
+            if best >= 0.6 * len(keep):
+                found.add(int(x + x0))
+    if add_start_edge and staff_rows:
+        rows = [r for r in staff_rows if top <= r <= bot]
+        for x in range(0, w):
+            if any(ink[r, x] for r in rows):
+                found.add(x)
+                break
+    xs = sorted(found)
+    cols, prev = [], -99
+    for x in xs:
+        if x - prev <= 12:
+            continue
+        prev = x
+        cols.append(x)
+    return cols
+
+
 def detect_barline_systems(u8: np.ndarray) -> list[dict]:
     """Per-system barline lists: [{top, bot, xs}] sorted top-to-bottom.
 
@@ -171,41 +221,11 @@ def detect_barline_systems(u8: np.ndarray) -> list[dict]:
     import os as _os2
     COVER_EXT = float(_os2.environ.get("BAR_COVER_EXT", "0.7"))
     systems, bands, staff_rows, ink, x0, x1 = _systems_and_bands(u8)
-    h, w = ink.shape
     out = []
     for top, bot, ext in systems:
-        span = bot - top + 1
-        if span < 30:
+        cols = bars_in_span(u8, top, bot, staff_rows, add_start_edge=bool(ext))
+        if not cols and (bot - top + 1) < 30:
             continue
-        col = ink[top:bot + 1, x0:x1]
-        keep = np.array([r for r in range(top, bot + 1) if r not in staff_rows]) - top
-        thr = COVER
-        found = set()
-        if len(keep) >= 10:
-            sub = col[keep, :]
-            for x in range(sub.shape[1]):
-                v = sub[:, x]
-                if v.mean() < thr:
-                    continue
-                best, run = 0, 0
-                for val in v:
-                    run = run + 1 if val else 0
-                    best = max(best, run)
-                if best >= 0.6 * len(keep):
-                    found.add(int(x + x0))
-        if ext:
-            rows = [r for r in staff_rows if top <= r <= bot]
-            for x in range(0, w):
-                if any(ink[r, x] for r in rows):
-                    found.add(x)
-                    break
-        xs = sorted(found)
-        cols, prev = [], -99
-        for x in xs:
-            if x - prev <= 12:
-                continue
-            prev = x
-            cols.append(x)
         out.append({"top": top, "bot": bot, "xs": cols, "tab": bool(ext)})
     return out
 
@@ -213,41 +233,6 @@ def detect_barline_systems(u8: np.ndarray) -> list[dict]:
 def tab_systems(u8: np.ndarray) -> list[tuple]:
     """(top, bot) spans of TAB (6-band) staves only, top-to-bottom."""
     return [(s["top"], s["bot"]) for s in detect_barline_systems(u8) if s.get("tab")]
-    for top, bot, ext in systems:
-        span = bot - top + 1
-        if span < 30:
-            continue
-        col = ink[top:bot + 1, x0:x1]
-        keep = np.array([r for r in range(top, bot + 1) if r not in staff_rows]) - top
-        thr = COVER
-        if len(keep) < 10:
-            continue
-        sub = col[keep, :]
-        # Continuity: longest ink run over non-staff rows (barlines are
-        # one continuous stroke; chord-digit stacks have inter-digit gaps).
-        for x in range(sub.shape[1]):
-            v = sub[:, x]
-            if v.mean() < thr:
-                continue
-            best, run = 0, 0
-            for val in v:
-                run = run + 1 if val else 0
-                best = max(best, run)
-            if best >= 0.6 * len(keep):
-                found.add(int(x + x0))
-    # Merge adjacent columns; reject note-adjacent (stems, REJECT=0 off).
-    xs = sorted(found)
-    cols, prev = [], -99
-    for x in xs:
-        # Merge duplicates within 12px (thick/double/repeat barlines are
-        # one boundary; true distinct barlines are 100s of px apart).
-        if x - prev <= 12:
-            continue
-        prev = x
-        if REJECT > 0 and note_xs and min([abs(x - nx) for nx in note_xs] or [1e9]) < REJECT:
-            continue
-        cols.append(x)
-    return cols
 
 
 def detect_barlines(u8: np.ndarray, note_xs: list[float] | None = None) -> int:

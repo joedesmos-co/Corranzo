@@ -246,3 +246,16 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - DEV final: std 95.5/96.6/92.1, compact 97.3/98.9/96.2
   (string/fret/pitch), large 84/84/72, bravura 64/93/57.
 - Fit stable (81%/73%).
+
+### R2-M8 — G3 large digits: ACCEPTED (1.3x Lanczos, no training)
+- Large digits render SMALL (18.7px vs 24.2px); heat-dead natively.
+  Downscale/bilinear-upscale kill heat; sharp 1.3x Lanczos recovers
+  (21%->84% >=0.4). Wired as layout-default upscale (others unaffected
+  by construction: default 1.0).
+- Fit: R 0.124->0.310, P 0.156->0.324. Heldout: R 0.091->0.348,
+  P 0.226->0.390. Transcription: 77->296 notes, 33/33 measures,
+  triple 0%->81.2% (strings 100%, frets 99.3%, measures 100%).
+- Compact arm measured and REJECTED (R 0.80->0.53; native kept).
+- Digit-cluster fallback bar systems + tight spans + min_cover 0.5
+  (band path untouched when TAB exists; Txo/Qmek/fit verified
+  unchanged: 95.6%/87.5%/81%/73%).

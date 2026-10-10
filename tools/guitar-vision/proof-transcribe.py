@@ -71,6 +71,8 @@ def main() -> int:
                         choices=["standard", "compact", "large", "bravura"])
     parser.add_argument("--hires", default=None)
     parser.add_argument("--detector", default=None)
+    parser.add_argument("--upscale", type=float, default=None,
+                        help="input upscale (default 1.3 for large, else 1.0)")
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -125,7 +127,8 @@ def main() -> int:
             pixels = np.asarray(image, dtype=np.float32) / 255.0
             u8 = (pixels * 255).astype(np.uint8)
             fx, fy = meta["cssWidth"] / meta["viewBox"][0], meta["height"] / meta["viewBox"][1]
-            preds, _ = dec.infer_page_merged(detector, u8, fx, fy, device)
+            _us = args.upscale if args.upscale is not None else (1.3 if args.layout == "large" else 1.0)
+            preds, _ = dec.infer_page_merged(detector, u8, fx, fy, device, upscale=_us)
             digits = [p for p in preds if p["cls"] == "tabdigit"]
             note_boxes = [p for p in preds if p["cls"] == "note"]
             ink = u8 < 128
@@ -135,13 +138,43 @@ def main() -> int:
             # then bisected in that system's barline list.
             sys_bars = mbars.detect_barline_systems(u8)
             import bisect as _bisect
+            _garr = np.asarray(image, dtype=np.float32)
+            _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rows
+            _page_sp = _psg.page_spacing(_garr)
+            if not any(s.get("tab") for s in sys_bars) and digits:
+                # Digit-cluster fallback: band detection found no TAB
+                # staff (fragmented small-scale pages). Cluster digit
+                # rows into systems, detect barlines per cluster span.
+                # Band path untouched when TAB exists (zero regression).
+                _cys = sorted(d["y"] for d in digits)
+                _ggap = max(100.0, 3 * (_page_sp or 0))
+                _cl, _cur = [], [_cys[0]]
+                for _a, _b in zip(_cys, _cys[1:]):
+                    if _b - _a > _ggap:
+                        _cl.append(_cur)
+                        _cur = [_b]
+                    else:
+                        _cur.append(_b)
+                _cl.append(_cur)
+                _fb = []
+                for _cc in _cl:
+                    # Ownership/filter span: wide (all digits inside).
+                    # Bar detection span: tight around digit rows (a true
+                    # barline always spans MORE than the digit range, so
+                    # cover stays ~1.0; wide spans dilute cover).
+                    _sp = (_page_sp or 32)
+                    _t, _bo = int(min(_cc) - 3 * _sp), int(max(_cc) + 3 * _sp)
+                    _bt, _bb = int(min(_cc) - 0.5 * _sp), int(max(_cc) + 0.5 * _sp)
+                    _xs = mbars.bars_in_span(u8, _bt, _bb, min_cover=0.5)
+                    _dx = [d["x"] for d in digits if _t <= d["y"] <= _bo]
+                    _xs = sorted(set(_xs + ([min(_dx) - 30] if _dx else [])))
+                    _fb.append({"top": _t, "bot": _bo, "xs": _xs, "tab": True})
+                if _fb:
+                    sys_bars = _fb
             # TAB-span filter: drop digit detections far from every TAB
             # staff (fingering/rehearsal FPs live between/above staves and
             # otherwise mint phantom measures). Margin scales with page_sp.
             _tabspans = [(s["top"], s["bot"]) for s in sys_bars if s.get("tab")]
-            _garr = np.asarray(image, dtype=np.float32)
-            _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rows
-            _page_sp = _psg.page_spacing(_garr)
             events = []
             for det in digits:
                 cx, cy = det["x"], det["y"]
