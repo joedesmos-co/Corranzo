@@ -3,9 +3,9 @@
   "evaluatorVersion": "2.1.0",
   "kind": "semantic-musicxml-evaluation",
   "mode": "both",
-  "gitCommit": "2a95c2725b",
+  "gitCommit": "fe39962cad",
   "scores": {
-    "pitch": 0.4266,
+    "pitch": 0.4261,
     "rhythm": 0.8643,
     "sustain": 0,
     "articulation": 1,
@@ -25,17 +25,17 @@
   "classes": {
     "pitch": {
       "numerator": 317,
-      "denominator": 743,
+      "denominator": 744,
       "truePositives": 317,
-      "falsePositives": 19,
+      "falsePositives": 20,
       "falseNegatives": 407,
       "ignored": 0,
       "unsupported": 0,
       "presentInTruth": 724,
-      "compared": 743,
+      "compared": 744,
       "coverage": 1,
       "coveragePercent": "100%",
-      "score": 0.4266,
+      "score": 0.4261,
       "percent": "43%",
       "reliable": true,
       "displayPercent": "43%"
@@ -155,11 +155,11 @@
     "playback": "Playback"
   },
   "alignment": {
-    "confidence": 0.8696,
+    "confidence": 0.8698,
     "matchedCount": 31,
     "unmatchedTruthCount": 0,
     "unmatchedGeneratedCount": 0,
-    "totalCost": 57.7519,
+    "totalCost": 57.6435,
     "pairs": [
       {
         "kind": "merge",
@@ -323,7 +323,7 @@
           17,
           18
         ],
-        "cost": 3.5667
+        "cost": 3.4583
       },
       {
         "kind": "match",
@@ -4044,7 +4044,7 @@
       ],
       "alignment": "split",
       "unmatched": false,
-      "alignmentCost": 3.5667,
+      "alignmentCost": 3.4583,
       "defects": [
         {
           "code": "split-measure",
@@ -4188,6 +4188,12 @@
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
           "measureNumber": 18
         },
         {
@@ -4360,6 +4366,7 @@
         "Missing note C#4",
         "Missing note G3",
         "Missing note G3",
+        "Extra note E4",
         "Extra note C#4",
         "Extra note A3",
         "Extra note C#4",
@@ -4385,7 +4392,7 @@
         "Incorrect chord",
         "Measure 18 timing mismatch"
       ],
-      "severity": 142
+      "severity": 145
     },
     {
       "measureNumber": 19,
@@ -7958,7 +7965,7 @@
       ],
       "alignment": "split",
       "unmatched": false,
-      "alignmentCost": 3.5667,
+      "alignmentCost": 3.4583,
       "defects": [
         {
           "code": "split-measure",
@@ -8102,6 +8109,12 @@
           "code": "missing-note",
           "class": "pitch",
           "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note E4",
           "measureNumber": 18
         },
         {
@@ -8274,6 +8287,7 @@
         "Missing note C#4",
         "Missing note G3",
         "Missing note G3",
+        "Extra note E4",
         "Extra note C#4",
         "Extra note A3",
         "Extra note C#4",
@@ -8299,7 +8313,7 @@
         "Incorrect chord",
         "Measure 18 timing mismatch"
       ],
-      "severity": 142
+      "severity": 145
     },
     {
       "measureNumber": 7,
@@ -10496,7 +10510,7 @@
       "code": "extra-note",
       "class": "pitch",
       "label": "Extra note",
-      "count": 19
+      "count": 20
     },
     {
       "code": "missing-tie",
@@ -10557,7 +10571,7 @@
     {
       "class": "pitch",
       "label": "Pitch",
-      "count": 426
+      "count": 427
     },
     {
       "class": "measure-structure",
@@ -10587,12 +10601,12 @@
   ],
   "totals": {
     "truthNoteCount": 724,
-    "generatedNoteCount": 347,
+    "generatedNoteCount": 348,
     "truthRestCount": 0,
     "generatedRestCount": 0,
     "truthMeasureCount": 33,
     "generatedMeasureCount": 33,
-    "defectCount": 939
+    "defectCount": 940
   },
   "tolerances": {
     "onsetToleranceQuarters": 0.125,

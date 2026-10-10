@@ -259,3 +259,13 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - Digit-cluster fallback bar systems + tight spans + min_cover 0.5
   (band path untouched when TAB exists; Txo/Qmek/fit verified
   unchanged: 95.6%/87.5%/81%/73%).
+
+### R2-M9 — Gate v0.7 + miss audit (close)
+- v0.7 strictly dominates v0.8 (fit same, heldout +1TP/+0FP); Txo
+  347->348 notes, triple 95.6%->95.9%, all matched 100%/99.7%.
+- xclass-iou spare: implemented, measured no-op, fully reverted
+  (one botched edit corrupted decode-eval; recovered via git checkout,
+  keeper flags intact).
+- 15 Txo miss decomposition: 11 strong-heat iou-metric misses
+  (peaks ~8px off GT centers; captured @30px), 4 weak. Product recall
+  loss ≈1%. Resolution (peak separation), not thresholds, is next.

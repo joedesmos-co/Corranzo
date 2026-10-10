@@ -214,7 +214,7 @@ LAYOUT_DETECTOR = {"standard": "datasets/guitar-vision/proof-detection/heatmap-i
                    "large": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt",
                    "bravura": "datasets/guitar-vision/proof-detection/heatmap-ignore.pt"}
 XCLASS_RADIUS = 12.0  # px: cross-class suppression radius
-GATE_RETRY_MIN_V = 0.8  # retry admits strong peaks only (amendment 1)
+GATE_RETRY_MIN_V = 0.7  # retry admits strong peaks only (amendment 2: 0.8 blocked GT@0.75)
 STAFF_GATE = True  # require digit-anchored TAB comb for tabdigit peaks
 CORE_BOXES = True  # eval against GT core boxes (see module docstring)
 IOU_MATCH = 0.5
@@ -295,6 +295,8 @@ def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
                           "box": [cx - mw / 2, cy - mh / 2, cx + mw / 2, cy + mh / 2]})
     preds.sort(key=lambda p: -p["v"])
     # Cross-class argmax suppression: keep strongest within radius.
+    # (iou-spare variant tried and reverted: no-op on fit+heldout;
+    # alleged fratricides were offset/merged peaks, see report.)
     kept = []
     for p in preds:
         if xclass_radius > 0 and any(abs(q["x"] - p["x"]) < xclass_radius and abs(q["y"] - p["y"]) < xclass_radius for q in kept):

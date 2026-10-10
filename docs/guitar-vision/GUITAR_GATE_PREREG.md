@@ -37,3 +37,11 @@ END-TO-END accuracy): ACCEPTED. F1 cost negligible (+2FP); benefit
 +46pts triple. Blanket (ungated) variant stays REJECTED.
 
 **Constraints:** no training; no sealed TEST; technique abstinent.
+
+**Amendment 2 (v0.7 + xclass verdict):** v0.8 blocked a GT digit @0.75;
+0.7 strictly dominates (fit unchanged, heldout +1TP/+0FP). xclass-iou
+spare implemented, measured (fit+heldout: exact no-op), REVERTED and
+removed (alleged fratricides were offset/merged peaks: heat maxima sit
+~8px off GT centers; note-score @30px already captures them; true
+product recall loss ≈4 digits / 1%). 15 Txo "misses" decompose to
+11 strong-heat metric/iou misses + 4 weak.
