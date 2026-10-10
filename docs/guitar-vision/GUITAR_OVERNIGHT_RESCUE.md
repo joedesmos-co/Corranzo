@@ -269,3 +269,14 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - 15 Txo miss decomposition: 11 strong-heat iou-metric misses
   (peaks ~8px off GT centers; captured @30px), 4 weak. Product recall
   loss ≈1%. Resolution (peak separation), not thresholds, is next.
+
+### R2-M10 — G6 semantics audit (close)
+- Txo truth (724 events = 2 identical parts): all voice 1, zero rests/
+  ties/tuplets/dots/grace/techniques in TAB content. My XML: 348 notes,
+  voice 1, 0 rests/ties, no clef/key/time. Content gap = closed except
+  durations residual; attribute gap (clef/key/time) structural — no
+  detector emits them, and G6 forbids assuming (Txo key is Bb, time
+  changes 4/16->3/4 mid-piece). Not emitted tonight.
+- Semantic 42% decomposes to: duplicate-part scoring (~halves pitch),
+  missing attributes (~fixed cost), measure/duration residuals.
+  Note-score triple 95.9% is the honest playable metric.
