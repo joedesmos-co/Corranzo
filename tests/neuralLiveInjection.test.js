@@ -96,7 +96,7 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     await viteServer?.close()
   })
 
-  async function runInjection({ clipId, expectedMidis, checkpointId, waitMs = 90_000, dwellMs = null, trace = false }) {
+  async function runInjection({ clipId, expectedMidis, checkpointId, waitMs = 90_000, dwellMs = null, trace = false, leaveOpen = false }) {
     const clip = loadClipSamples(clipId)
     const page = await browser.newPage()
     await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
@@ -154,8 +154,10 @@ describe('neural live injection (real browser, real model, real clips)', () => {
       }
     }
     const results = await page.evaluate(() => window.__liveResults)
-    await page.evaluate(() => window.__liveTeardown?.())
-    await page.close()
+    if (!leaveOpen) {
+      await page.evaluate(() => window.__liveTeardown?.())
+      await page.close()
+    }
     if (results.phase !== 'listening') {
       console.log('LIVE FAILURE diagnostics:', JSON.stringify({
         phase: results.phase,
@@ -167,12 +169,13 @@ describe('neural live injection (real browser, real model, real clips)', () => {
         micError: results.micError,
       }))
     }
-    return { clip, results }
+    return { clip, results, page: leaveOpen ? page : null }
   }
 
   it('advances Wait For You on a correct injected C4 (no Continue)', async () => {
     const ctx = await runInjection({
       clipId: 'electric-gtechs-quiet',
+      leaveOpen: true,
       expectedMidis: [60],
       checkpointId: 'live-c4',
       trace: true,
@@ -183,6 +186,24 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     expect(results.matched.length).toBeGreaterThanOrEqual(1)
     expect(results.matched[0].midi).toBe(60)
     expect(results.feedbackOutcome).toBe('complete')
+    // P1 observation-only attack evidence: the C4 attack emission carries
+    // real capture-derived transient evidence (never used to reject
+    // notes). Diagnostics publish on a 1 s cadence, so wait for the
+    // post-attack publish rather than racing the match callback. The
+    // history (not just the latest emission) is asserted because flicker
+    // re-attacks are continuations with no transient of their own.
+    await ctx.page.waitForFunction(
+      () => (window.__liveResults?.debug?.evidenceHistory ?? []).some((entry) => entry.midi === 60 && entry.attackFlux > 0.5),
+      null,
+      { timeout: 60_000, polling: 500 },
+    )
+    const withEvidence = await ctx.page.evaluate(() => window.__liveResults)
+    await ctx.page.evaluate(() => window.__liveTeardown?.())
+    await ctx.page.close()
+    expect(withEvidence.debug.snapshotCount).toBeGreaterThan(0)
+    const c4evidence = (withEvidence.debug.evidenceHistory ?? []).find((entry) => entry.midi === 60 && entry.attackFlux > 0.5)
+    expect(c4evidence).toBeDefined()
+    expect(c4evidence.attackPresence).toBeGreaterThan(0.5)
   }, 180_000)
 
   it('refuses a wrong injected note without advancing', async () => {
@@ -340,6 +361,45 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     expect(results.phase).toBe('listening')
     expect(results.matched).toHaveLength(0)
     expect(results.feedbackOutcome).not.toBe('complete')
+  }, 240_000)
+
+  it('adapts the floor in loud room noise (calibration behavior)', async () => {
+    // P3 boundary (honest): real-room-noisy at 0.016 RMS exceeds any floor
+    // that preserves pp notes (pp median 0.0042), so this audio MUST reach
+    // the model — level-gating cannot hold it. The test asserts the
+    // calibration behavior (floor caps at 0.006, audio flows) and RECORDS
+    // the backend's response. Measured: WebGL hallucinates pitched notes
+    // (60/30/27) from unstructured noise and can complete a matching
+    // checkpoint — the noisy-room gap (see report + P6 handoff: surface
+    // neural ambient status, warn before WFY in loud rooms). No veto can
+    // fix this without muting quiet playing (established M2 negatives).
+    const clip = loadAccuracyClip('real-room-noisy.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-noisy',
+        forceListen: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && window.__liveResults.phase === 'listening',
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    await page.waitForTimeout(45_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    console.log('NOISY-RESULT', JSON.stringify({ matched: results.matched, detected: (results.detectedNotes ?? []).map((n) => n.midi), floor: results.debug?.neuralFloor ?? null, ambient: results.debug?.ambientRms ?? null, windows: results.debug?.windowsRun ?? null }))
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    // Calibration held the design boundary: capped floor, audio flowing.
+    expect(results.debug.neuralFloor).toBe(0.006)
+    expect(results.debug.windowsRun).toBeGreaterThan(0)
   }, 240_000)
 
   it('does not advance on speech-like non-musical audio', async () => {

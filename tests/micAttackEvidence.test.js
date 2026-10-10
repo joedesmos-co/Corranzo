@@ -10,6 +10,7 @@ import {
   attackCombPresence,
   captureAttackSnapshots,
   computeFluxEnvelope,
+  describeEmissionEvidence,
   fluxAtMs,
 } from '../src/features/microphone-input/micAttackEvidence.js'
 import { readWavPcm } from '../scripts/lib/readWavPcm.mjs'
@@ -95,5 +96,25 @@ describe('micAttackEvidence', () => {
       previous: snapshots,
     })
     expect(aged).toHaveLength(0)
+  })
+
+  it('bundles per-attack flux + presence from ring audio (observation)', () => {
+    const { samples, sampleRate, attackMs } = toneBurst({ midi: 60 })
+    const ring = { samples: Array.from(samples), startCaptureMs: 5000, inputRate: sampleRate }
+    const attacks = [{ midi: 60, onsetCaptureMs: 5000 + attackMs }]
+    const { byKey, summary, snapshots } = describeEmissionEvidence(ring, attacks, [])
+    expect(snapshots.length).toBeGreaterThan(0)
+    expect(summary).toHaveLength(1)
+    expect(summary[0].attackFlux).toBeGreaterThan(0.5)
+    expect(summary[0].attackPresence).toBeGreaterThan(1.0)
+    expect(byKey.get(`60@${5000 + attackMs}`)).toBeDefined()
+  })
+
+  it('returns empty evidence (never throws) on malformed ring audio', () => {
+    for (const ring of [null, {}, { samples: [], startCaptureMs: 0, inputRate: 44100 }, { samples: [0.1], startCaptureMs: 0, inputRate: 0 }]) {
+      const result = describeEmissionEvidence(ring, [{ midi: 60, onsetCaptureMs: 100 }], [])
+      expect(result.summary).toHaveLength(0)
+      expect(result.snapshots).toHaveLength(0)
+    }
   })
 })

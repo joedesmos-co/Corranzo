@@ -24,8 +24,18 @@ export const ATTACK_EVIDENCE = {
   fluxFrameSeconds: 0.005,
   /** HF emphasis gain inside the log flux. */
   fluxHfGain: 50,
-  /** Peak search radius around a candidate onset. */
-  fluxWindowMs: 60,
+  /**
+   * Peak search window around a candidate onset. ASYMMETRIC by measurement:
+   * construction-truth onsets (first energy) PRECEDE the HF-burst peak by
+   * 60-160 ms (soft beginning, then hammer/pick snap), so the window looks
+   * back 30 ms and forward 200 ms. A symmetric ±60 ms window scores true
+   * attacks near zero (measured: live C4 flux 0.043) — a measurement
+   * artifact, not missing transients. (Ghosts riding a parent attack
+   * still read high inside this window; flux alone cannot discriminate —
+   * see harmonicGhostVetoes negatives.)
+   */
+  fluxBackMs: 30,
+  fluxForwardMs: 200,
   /** Absolute raw-flux floor: below this no attack context exists
    * (measured: room tone peaks 0.026, pp attack peaks 0.059). */
   fluxContextFloor: 0.04,
@@ -129,16 +139,18 @@ export function fluxAtMs(envelope, timeMs, bufferStartMs = 0) {
   }
   const toFrame = (ms) => Math.round((((ms - bufferStartMs) / 1000) * sampleRate) / frameHop)
   const center = toFrame(timeMs)
-  const radius = Math.max(1, Math.round(ATTACK_EVIDENCE.fluxWindowMs / (ATTACK_EVIDENCE.fluxFrameSeconds * 1000)))
+  const frameMs = ATTACK_EVIDENCE.fluxFrameSeconds * 1000
+  const back = Math.max(1, Math.round(ATTACK_EVIDENCE.fluxBackMs / frameMs))
+  const forward = Math.max(1, Math.round(ATTACK_EVIDENCE.fluxForwardMs / frameMs))
   let peak = 0
-  for (let f = Math.max(1, center - radius); f <= Math.min(flux.length - 1, center + radius); f += 1) {
+  for (let f = Math.max(1, center - back); f <= Math.min(flux.length - 1, center + forward); f += 1) {
     if (flux[f] > peak) {
       peak = flux[f]
     }
   }
   const contextFrames = Math.floor(ATTACK_EVIDENCE.fluxContextSeconds / ATTACK_EVIDENCE.fluxFrameSeconds)
   let trailingMax = 0
-  for (let f = Math.max(1, center - contextFrames); f <= Math.min(flux.length - 1, center + radius); f += 1) {
+  for (let f = Math.max(1, center - contextFrames); f <= Math.min(flux.length - 1, center + forward); f += 1) {
     if (flux[f] > trailingMax) {
       trailingMax = flux[f]
     }
@@ -189,6 +201,55 @@ export function captureAttackSnapshots({
   return snapshots.filter((snapshot) => snapshot.timeMs >= cutoff)
 }
 
+/**
+ * Emission evidence bundle (observation only): given ring audio and fresh
+ * stream attacks, refresh attack snapshots and score per-attack flux +
+ * comb presence. Returns { byKey (midi@onsetMs -> { attackFlux,
+ * attackPresence }), summary ([{ midi, onsetMs, attackFlux,
+ * attackPresence }]), snapshots }. NEVER rejects notes — diagnostics and
+ * confirmation analysis only (no validated discriminator exists).
+ *
+ * @param ring { samples:Array|Float32Array, startCaptureMs:number, inputRate:number }
+ * @param attacks [{ midi:number, onsetCaptureMs:number }]
+ * @param previous snapshots from the last call (retention-continued)
+ */
+export function describeEmissionEvidence(ring, attacks = [], previous = []) {
+  const samples = ring?.samples
+  const inputRate = ring?.inputRate
+  const startCaptureMs = ring?.startCaptureMs
+  if (!samples?.length || !Number.isFinite(inputRate) || inputRate <= 0 || !Number.isFinite(startCaptureMs)) {
+    return { byKey: new Map(), summary: [], snapshots: [...previous] }
+  }
+  const keepSeconds = ATTACK_EVIDENCE.fluxContextSeconds
+  const keepSamples = Math.min(samples.length, Math.floor(keepSeconds * inputRate))
+  const tail = Float32Array.from(samples.slice(samples.length - keepSamples))
+  const bufferStartMs = startCaptureMs + ((samples.length - keepSamples) / inputRate) * 1000
+  const nowMs = startCaptureMs + (samples.length / inputRate) * 1000
+  const envelope = computeFluxEnvelope(tail, inputRate)
+  const snapshots = captureAttackSnapshots({
+    samples: tail,
+    sampleRate: inputRate,
+    envelope,
+    bufferStartMs,
+    nowMs,
+    previous,
+  })
+  const byKey = new Map()
+  const summary = []
+  for (const attack of attacks ?? []) {
+    const midi = Math.round(attack?.midi)
+    const onsetMs = attack?.onsetCaptureMs
+    if (!Number.isFinite(midi) || !Number.isFinite(onsetMs)) {
+      continue
+    }
+    const attackFlux = fluxAtMs(envelope, onsetMs, bufferStartMs)
+    const { presence } = attackCombPresence(snapshots, midi, onsetMs)
+    const entry = { midi, onsetMs: Math.round(onsetMs), attackFlux, attackPresence: presence }
+    byKey.set(`${midi}@${Math.round(onsetMs)}`, entry)
+    summary.push(entry)
+  }
+  return { byKey, summary, snapshots }
+}
 /**
  * Harmonic-comb attack presence: summed band energy across the pitch's
  * harmonic series (f0 x1..x4), each normalized by the snapshot's peak
