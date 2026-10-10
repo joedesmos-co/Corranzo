@@ -125,6 +125,7 @@ def main() -> int:
             sys_bars = mbars.detect_barline_systems(u8)
             import bisect as _bisect
             _garr = np.asarray(image, dtype=np.float32)
+            _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rules
             _full = (_garr < 128).mean(axis=1)
             _fthr = float(np.quantile(_full, 0.90))
             _fpeaks = [yy for yy in range(1, _garr.shape[0] - 1)
@@ -168,11 +169,13 @@ def main() -> int:
                     continue
                 events.append({"x": cx, "y": cy, "string": s_pred + 1, "fret": f_pred,
                                "midi": TUNING[s_pred] + f_pred})
-            # Onset columns (<30px) + durations from nearest note box.
+            # Onset columns (<12px): dense 16ths sit 5-26px apart (GT
+            # x-gap p90=17px); 30px merged whole systems into mega-columns.
+            # Chord digits share x (gap ~0-8px incl. detection jitter).
             events.sort(key=lambda e: e["x"])
             columns, cur = [], []
             for e in events:
-                if cur and e["x"] - cur[-1]["x"] > 30:
+                if cur and e["x"] - cur[-1]["x"] > 12:
                     columns.append(cur)
                     cur = []
                 cur.append(e)
@@ -180,7 +183,41 @@ def main() -> int:
                 columns.append(cur)
             for col in columns:
                 cx = sum(e["x"] for e in col) / len(col)
-                # Nearest detected note box -> anchored duration.
+                # Column rhythm: shared rhythm stem anchored at the column's
+                # topmost digit (low-string digits' own strips overshoot
+                # into the system above). Per-digit x strips, median vote.
+                _topcy = min(e["y"] for e in col)
+                _gt, _gb = int(_topcy - 100), int(_topcy - 16)
+                _colg, _colok = [], []
+                if _gt >= 0:
+                    for e in col:
+                        _ex = e["x"]
+                        _s = (u8[_gt:_gb, max(0, int(_ex - 8)):int(_ex + 8)] < 128)
+                        _rr = np.nonzero(_s.mean(axis=1) > 0.5)[0]
+                        _gl, _pv = [], -99
+                        for _r in _rr:
+                            if _r - _pv > 2:
+                                _gl.append([_r])
+                            else:
+                                _gl[-1].append(_r)
+                            _pv = _r
+                        _colg.append(len(_gl))
+                        if len(_gl) >= 2:
+                            _lo, _hi = _gl[0][0], _gl[-1][-1]
+                            _band = (u8[_gt + _lo:_gt + _hi + 1,
+                                        max(0, int(_ex - 3)):int(_ex + 3)] < 128)
+                            _rows = [r for r in range(_lo, _hi + 1)
+                                     if not _rule[_gt + r]]
+                            _colok.append((sum(_band[r - _lo, :].any() for r in _rows)
+                                           / max(1, len(_rows)) > 0.4) if _rows else True)
+                        else:
+                            _colok.append(True)
+                _gs = sorted(_colg) if _colg else [0]
+                _beams = min(_gs[len(_gs) // 2], 2)
+                if False and _beams >= 2 and not any(_colok):
+                    _beams = 0
+                # Nearest detected note box -> anchored duration (fallback
+                # for dots + unbeamed columns).
                 best_box, best_d = None, 1e9
                 for nb in note_boxes:
                     ncx = (nb["box"][0] + nb["box"][2]) / 2
@@ -188,16 +225,38 @@ def main() -> int:
                     if d < best_d:
                         best_box, best_d = nb["box"], d
                 dur, defaulted = 1.0, True
+                _ab = None
                 if best_box is not None and best_d < 80:
-                    a = rhy.anchored_stem(ink, beam_mask, best_box, u8.shape[0])
-                    if a["stem"]:
-                        if a["beams"]:
-                            dur = 0.5 / (2 ** (a["beams"] - 1))
+                    _ab = rhy.anchored_stem(ink, beam_mask, best_box, u8.shape[0])
+                if _beams >= 2:
+                    # 2+ beam rows = 16th (groups=3 is 2 beams + 1
+                    # contamination row; 32nds don't occur in TAB rhythm).
+                    dur = 0.25
+                    defaulted = False
+                elif _beams == 1:
+                    # Ambiguous: flagged-16th vs 8th vs quarter+neighbor
+                    # contamination. Disambiguate via anchored notation
+                    # stem beam count.
+                    _nb = (_ab or {}).get("beams") or 0
+                    if _nb >= 2:
+                        dur = 0.25
+                    elif _nb == 1:
+                        dur = 0.5
+                    else:
+                        dur = 1.0
+                    defaulted = False
+                if _ab and _ab.get("stem"):
+                    if not _beams:
+                        if _ab.get("beams"):
+                            dur = 0.5 / (2 ** (_ab["beams"] - 1))
                         else:
                             dur = 1.0
-                        if a["dots"]:
-                            dur *= 1.5 ** min(a["dots"], 2)
-                        defaulted = False
+                    # Dots only on anchored-owned (unbeamed) durations:
+                    # dot evidence on beamed columns is ~100% spurious
+                    # (wrong-notehead association in dense texture).
+                    if _ab.get("dots") and not _beams:
+                        dur *= 1.5 ** min(_ab["dots"], 2)
+                    defaulted = False
                 if defaulted:
                     n_defaulted += 1
                 for e in col:
@@ -235,7 +294,7 @@ def main() -> int:
         prev_x = None
         for n in sorted(by_measure[meas_no], key=lambda z: z["x"]):
             note = ET.SubElement(meas, "note")
-            if prev_x is not None and abs(n["x"] - prev_x) < 30:
+            if prev_x is not None and abs(n["x"] - prev_x) < 12:
                 ET.SubElement(note, "chord")
             prev_x = n["x"]
             pitch = ET.SubElement(note, "pitch")

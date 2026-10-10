@@ -50,7 +50,47 @@ Heldout Txo (345/362 digits transcribed, 0 defaulted):
   chord tags, attributes (clef/key/time undetected), duplicate-part
   scoring gap in semantic eval.
 
-## G4/G6/G7 status
+## M5 — G6 rhythm rescue: durations 23% -> 97% exact (heldout Txo)
+
+Root causes found and fixed in transcriber:
+- Column-mean measure ownership collapsed under dense correct
+  detections (mega-columns) -> per-NOTE ownership (fixed M4).
+- Onset gap 30px merged whole systems (GT x-gap p90=17px) -> 12px
+  columns + 12px chord tags.
+- Anchored notation stems missed TAB 16ths (226/345 defaulted to
+  quarter) -> column rhythm from TAB rhythm-row beam counts at column
+  x (median of per-digit strips anchored at column-top digit; low
+  strings' own strips overshoot into the system above).
+- groups>=2 clamped to 16th (groups=3 is 2 beams + contamination;
+  32nds absent); groups==1 disambiguated via anchored beams
+  (flagged-16th vs 8th vs contamination); dots gated to unbeamed
+  columns (beamed-column dots ~100% spurious).
+- Stem-continuity downgrade REJECTED (ANY-vote still broke 50 true
+  16ths, fixed 0 quarters — chords off stem-x lack continuity).
+- Duration exact: 80 -> 334/345 (97%). Semantic: 28% -> 41%
+  (pitch 38%, rhythm 81%).
+- FULL playable (string+fret+measure+duration): 42% of all GT digits.
+- Binding constraint now measures (46%) + detector recall;
+  residual: 10 quarters-as-16ths (contamination), 36 (fixed) dots.
+
+## DEV-once hybrid wave (this mission, detector mode, hybrid strings)
+
+| layout | string | fret | pitch | cov-pitch | vs net pitch |
+|---|---|---|---|---|---|
+| std | 0.831 | 0.948 | 0.792 | 0.096 | 0.689 -> 0.792 |
+| compact | 0.847 | 0.943 | 0.796 | 0.196 | 0.536 -> 0.796 |
+| large | 0.667 | 0.852 | 0.593 | 0.025 | 0.500 -> 0.593 |
+| bravura | 0.267 | 0.867 | 0.200 | 0.115 | 0.600 -> 0.200 REGRESS |
+
+std/compact/large improve substantially. Bravura regresses (small-n:
+19 matched / 26 GT): geometric was never validated on bravura
+(fit bravura = 12 etude digits, 33% acc). Diagnosis: stem-up TAB
+fragments with digits larger than staff spacing break the comb phase
+guard (confident off-by-one, not abstention). No shipped behavior
+changes for bravura (transcriber is standard-only; chain default stays
+net). Bravura needs its own preregistered validation (12 fit digits
+insufficient for tuning — no fix attempted tonight to avoid
+overfitting).
 
 - G4: detector recall (50% heldout matched @iou0.5) is now the binding
   string-coverage constraint; large-digit recall 0.09 unchanged.

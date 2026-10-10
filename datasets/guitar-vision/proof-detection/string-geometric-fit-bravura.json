@@ -1,0 +1,100 @@
+{
+ "n": 12,
+ "abstained": 5,
+ "correct": 4,
+ "acc": 0.5714285714285714,
+ "coverage": 0.5833333333333334,
+ "perString": {
+  "2": 0.0,
+  "3": 0.0,
+  "1": 0.25,
+  "5": 0.0,
+  "4": 1.0
+ },
+ "detail": [
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n005",
+   "truth": 2,
+   "pred": 1,
+   "conf": 0.746
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n006",
+   "truth": 3,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n007",
+   "truth": 2,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-cross-part-etude",
+   "sid": "etude-cross-part-etude-n008",
+   "truth": 2,
+   "pred": null,
+   "conf": 0.469
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n001",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n002",
+   "truth": 1,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n003",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.776
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n004",
+   "truth": 1,
+   "pred": 2,
+   "conf": 0.776
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n005",
+   "truth": 5,
+   "pred": null,
+   "conf": 0.0
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n006",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.721
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n007",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.721
+  },
+  {
+   "sample": "etude-tab-multivoice-2",
+   "sid": "etude-tab-multivoice-2-n008",
+   "truth": 4,
+   "pred": 4,
+   "conf": 0.721
+  }
+ ]
+}
