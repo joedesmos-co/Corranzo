@@ -98,4 +98,36 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     expect(views.quality.harmonicRatio).toBeGreaterThan(0)
     expect(typeof views.quality.helpsTranscription).toBe('boolean')
   })
+  it('stereo side evidence is measured honestly, never a stem claim (A4)', async () => {
+    const { splitMidSide, centerRatio } = await import('../src/features/audio-vision/audioImport.js')
+    const left = Float32Array.from([1, 2, 3, 4])
+    const right = Float32Array.from([1, 0, -1, -2])
+    const split = splitMidSide([left, right])
+    expect(Array.from(split.mid)).toEqual([1, 1, 1, 1])
+    expect(Array.from(split.side)).toEqual([0, 1, 2, 3])
+    expect(splitMidSide([left])).toBe(null)
+    expect(centerRatio(split.mid, split.side)).toBeGreaterThan(0)
+    // Wide mix (strong side ambience) -> high spaciousness; dual-mono -> ~0.
+    const seconds = 4
+    const center = new Float32Array(SR * seconds)
+    const amb = new Float32Array(SR * seconds)
+    for (let i = 0; i < center.length; i += 1) {
+      const t = i / SR
+      center[i] = 0.4 * Math.sin(2 * Math.PI * 440 * t)
+      amb[i] = 0.4 * Math.sin(2 * Math.PI * 110 * t)
+    }
+    const wideL = center.map((v, i) => v + amb[i])
+    const wideR = center.map((v, i) => v - amb[i])
+    const wide = splitMidSide([Float32Array.from(wideL), Float32Array.from(wideR)])
+    const monoOfWide = Float32Array.from(wideL.map((v, i) => (v + wideR[i]) / 2))
+    const wideViews = buildAnalysisViews(monoOfWide, SR, { stereoSide: wide.side })
+    expect(wideViews.stereo.spaciousness).toBeGreaterThan(0.3)
+    const dryViews = buildAnalysisViews(Float32Array.from(center), SR, {
+      stereoSide: splitMidSide([Float32Array.from(center), Float32Array.from(center)]).side,
+    })
+    expect(dryViews.stereo.spaciousness).toBeLessThan(0.05)
+    // Mono input -> no stereo claims at all.
+    const monoViews = buildAnalysisViews(Float32Array.from(center), SR)
+    expect(monoViews.stereo).toBe(null)
+  })
 })

@@ -109,6 +109,39 @@ export function mixToMono(channelData) {
   return out
 }
 
+/**
+ * A4 — Mid/side split for stereo recordings (no model, no download).
+ * Lead vocals are usually mixed center; ambience/reverb lives in the sides.
+ * Returns null for mono. Callers must NOT call these isolated stems —
+ * they are analysis views with a measured center ratio.
+ */
+export function splitMidSide(channelData) {
+  if (!Array.isArray(channelData) || channelData.length < 2) return null
+  const length = Math.min(channelData[0]?.length ?? 0, channelData[1]?.length ?? 0)
+  if (!length) return null
+  const mid = new Float32Array(length)
+  const side = new Float32Array(length)
+  const [left, right] = channelData
+  for (let i = 0; i < length; i += 1) {
+    mid[i] = (left[i] + right[i]) / 2
+    side[i] = (left[i] - right[i]) / 2
+  }
+  return { mid, side }
+}
+
+/** Center ratio 0..1: how much vocal-band energy sits in the middle. */
+export function centerRatio(mid, side) {
+  let m = 0
+  let s = 0
+  for (let i = 0; i < mid.length; i += 1) {
+    m += mid[i] * mid[i]
+    s += side[i] * side[i]
+  }
+  const total = m + s
+  if (total <= 1e-12) return 0.5
+  return Math.round((m / total) * 1000) / 1000
+}
+
 /** Linear resample (matches micNeuralTfAdapter semantics for 22050 parity). */
 export function resampleLinear(samples, inputRate, targetRate = AUDIO_VISION_MODEL_RATE) {
   if (!samples?.length) return new Float32Array(0)
@@ -215,6 +248,19 @@ export async function importAudioFile(file, arrayBuffer, decodeAudioDataImpl) {
   const mono = mixToMono(decoded.channelData)
   const atRate = resampleLinear(mono, decoded.sampleRate, AUDIO_VISION_MODEL_RATE)
   const { samples, peakBefore, gain } = normalizePeak(atRate)
+  // A4: preserve stereo mid/side (same gain keeps relative level honest).
+  let stereo = null
+  const split = splitMidSide(decoded.channelData)
+  if (split) {
+    const midRate = resampleLinear(split.mid, decoded.sampleRate, AUDIO_VISION_MODEL_RATE)
+    const sideRate = resampleLinear(split.side, decoded.sampleRate, AUDIO_VISION_MODEL_RATE)
+    const g = Math.min(10, gain)
+    for (let i = 0; i < midRate.length; i += 1) {
+      midRate[i] *= g
+      sideRate[i] *= g
+    }
+    stereo = { mid: midRate, side: sideRate, centerRatio: centerRatio(midRate, sideRate) }
+  }
   return {
     ok: true,
     code: 'ok',
@@ -226,6 +272,7 @@ export async function importAudioFile(file, arrayBuffer, decodeAudioDataImpl) {
     durationSeconds: samples.length / AUDIO_VISION_MODEL_RATE,
     sourceSampleRate: decoded.sampleRate,
     channels: decoded.channelCount ?? decoded.channelData?.length ?? 1,
+    stereo,
     peakBefore,
     gain,
     rms: rmsLevel(samples),

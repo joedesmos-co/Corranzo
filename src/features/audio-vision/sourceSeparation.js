@@ -6,13 +6,13 @@
 import { magnitudeSpectrogram, hpssMasks, binToHz } from './dsp.js'
 import { PROVENANCE } from './musicAnalysis.js'
 
-export function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 512 } = {}) {
+export function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 512, stereoSide = null } = {}) {
   const { frames, frameSeconds } = magnitudeSpectrogram(samples, { sampleRate, fftSize, hop })
   const { harmonic, percussive } = hpssMasks(frames)
   const bass = lowpassView(frames, fftSize, sampleRate, 300)
   const presence = bandView(frames, fftSize, sampleRate, 300, 3400)
   const quality = measureSeparationGain(frames, harmonic, percussive)
-  return {
+  const views = {
     fftSize,
     hop,
     frameSeconds,
@@ -23,7 +23,32 @@ export function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 
     bass,
     presence,
     quality,
+    stereo: null,
   }
+  // A4: stereo side-channel evidence. Mid IS the mono mix by construction, so
+  // there is no "center-extracted stem" to adopt — that claim would be false.
+  // What stereo honestly adds: side/mid energy (spaciousness: wide reverberant
+  // mixes vs dry centered recordings) and L/R balance, recorded as detected
+  // evidence for confidence calibration (adopted only if it predicts quality).
+  if (stereoSide?.length) {
+    const sideSpec = magnitudeSpectrogram(stereoSide, { sampleRate, fftSize, hop })
+    const n = Math.min(frames.length, sideSpec.frames.length)
+    let midE = 0
+    let sideE = 0
+    for (let f = 0; f < n; f += 1) {
+      const a = frames[f]
+      const b = sideSpec.frames[f]
+      for (let k = 0; k < a.length; k += 1) {
+        midE += a[k] * a[k]
+        sideE += b[k] * b[k]
+      }
+    }
+    const spaciousness = midE + sideE > 1e-12
+      ? Math.round((sideE / (midE + sideE)) * 1000) / 1000
+      : 0
+    views.stereo = { spaciousness, provenance: PROVENANCE.DETECTED }
+  }
+  return views
 }
 
 function lowpassView(frames, fftSize, sampleRate, cutoffHz) {

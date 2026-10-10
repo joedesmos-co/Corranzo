@@ -215,6 +215,23 @@ const CHORD_TEMPLATES = (() => {
 
 const PITCH_CLASS_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
+/** Best-matching template constrained to a fixed root (bass prior). */
+export function recognizeChordWithRoot(chroma, root) {
+  let best = null
+  for (const t of CHORD_TEMPLATES) {
+    if (t.root !== root) continue
+    let dot = 0
+    let norm = 0
+    for (let i = 0; i < 12; i += 1) {
+      dot += chroma[i] * t.weights[i]
+      norm += t.weights[i] * t.weights[i]
+    }
+    const score = dot / (Math.sqrt(norm) + 1e-9)
+    if (!best || score > best.score) best = { root: t.root, quality: t.quality, score, suffix: t.suffix }
+  }
+  if (!best) return null
+  return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
+}
 /** Template-match chroma → { root, quality, score, label }. Score is cosine-ish 0..1. */
 export function recognizeChord(chroma) {
   let best = { root: 0, quality: 'major', score: 0, suffix: '' }

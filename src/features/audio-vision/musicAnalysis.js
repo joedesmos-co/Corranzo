@@ -11,6 +11,7 @@ import {
   buildBeatGrid,
   chromaOfSpectrum,
   recognizeChord,
+  recognizeChordWithRoot,
   hzToMidi,
   binToHz,
 } from './dsp.js'
@@ -90,11 +91,21 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   report('beats', 0.45)
   const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: tempo.bpm, totalSeconds })
   report('harmony', 0.6)
-  // Chord per beat window from harmonic-view chroma.
+  // Chord per beat window from harmonic-view chroma. A3: windows span at
+  // least ~1.2 s (fast-tempo beats are melody-dominated alone) and a
+  // detected bass root re-picks the winner when close (bass/harmony cue).
+  const bassPcPerFrame = harmFrames.map((spectrum, f) => {
+    if (f % 2 !== 0) return null
+    const b = bassMidi(frames[f], fftSize, sampleRate)
+    if (!b || !(b.strength > 1e-7)) return null
+    return ((Math.round(b.midiFloat) % 12) + 12) % 12
+  })
+  const CHORD_WINDOW_SECONDS = 1.2
   const chords = []
   for (let i = 0; i < beats.length; i += 1) {
     const start = beats[i]
-    const end = i + 1 < beats.length ? beats[i + 1] : totalSeconds
+    const beatEnd = i + 1 < beats.length ? beats[i + 1] : totalSeconds
+    const end = Math.min(totalSeconds, Math.max(beatEnd, start + CHORD_WINDOW_SECONDS))
     const f0 = Math.max(0, Math.floor(start / frameSeconds))
     const f1 = Math.min(harmFrames.length - 1, Math.ceil(end / frameSeconds))
     const acc = new Float64Array(12)
@@ -105,7 +116,19 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
       count += 1
     }
     if (count > 0) for (let k = 0; k < 12; k += 1) acc[k] /= count
-    const rec = recognizeChord(acc)
+    let rec = recognizeChord(acc)
+    // Bass-root prior: the window's dominant bass pitch class re-picks the
+    // winner only when it already scores within 5% (evidence, not override).
+    const bassVotes = new Array(12).fill(0)
+    for (let f = f0; f <= f1; f += 1) {
+      const pc = bassPcPerFrame[f]
+      if (pc != null) bassVotes[pc] += 1
+    }
+    const bassPc = bassVotes.indexOf(Math.max(...bassVotes))
+    if (bassVotes[bassPc] >= 2 && bassPc !== rec.root) {
+      const alt = recognizeChordWithRoot(acc, bassPc)
+      if (alt && alt.score >= rec.score * 0.95) rec = alt
+    }
     chords.push({
       startSeconds: start,
       endSeconds: Math.round(end * 1000) / 1000,
