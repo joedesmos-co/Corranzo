@@ -1092,17 +1092,19 @@ function walkPart({
     if (isPrimary) {
       const lengthFromTimeSignature = measureLengthQuarters(measureBeats, measureBeatType)
       const notatedLengthQuarters = maxCursorDivisions / divisions
-      // Overfull measures (virtuoso runs, tremolo shorthand, unmeasured
-      // cadenzas) notate more content than the time signature allows. The
-      // window must contain the notated notes — otherwise overflow notes
-      // sound past the window end AND every downstream measure starts
-      // early, drifting the whole downstream clock. Extend with real
-      // notated durations only; underfull (pickup) measures keep nominal
-      // padding so pickup detection is unaffected.
+      // NOTE (overnight P7 investigation): overfull-measure window extension
+      // was tried here twice and reverted. (1) max(nominal, running-cursor)
+      // misfires on multi-voice measures: the running cursor accumulates
+      // across voices without backup (Prelude BWV846 fixture: 7.5 vs 4).
+      // (2) max over per-note end times (tie-aware) still perturbs validated
+      // checkpoint derivation (Prelude 479 -> 513) via performed-note
+      // reconciliation, breaking the MIDI acceptance suite. Overflow
+      // compensation stays at the cursor layer (onsetOwnedByWindow orphan
+      // adoption); playback uses true note times and is unaffected. A correct
+      // fix needs joint work with checkpoint derivation against
+      // musician-verified ground truth — see the final report handoff.
       const lengthQuarters =
-        lengthFromTimeSignature > 0
-          ? Math.max(lengthFromTimeSignature, notatedLengthQuarters)
-          : notatedLengthQuarters
+        lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
       const { newSystem, newPage } = measurePrintFlags(measureNode)
       const engravedWidth = numberOf(attr(measureNode, 'width'), NaN)
       // MusicXML marks pickup/anacrusis (and some courtesy) measures with

@@ -313,13 +313,10 @@ describe('overfull-measure orphan adoption', () => {
     const motionTimeline = buildCursorMotionTimeline({ timingMap, trustedAnchors: lineAnchors })
     const knotsM1 = motionTimeline.phrases.flatMap((p) => p.knots).filter((k) => k.measureNumber === 1)
     const knotsM2 = motionTimeline.phrases.flatMap((p) => p.knots).filter((k) => k.measureNumber === 2)
-    // Parser extends the overfull m1 window to its real content end (t=4),
-    // so m2's written downbeat sounds at t=4 — after the overflow, matching
-    // engraved order. m1's knots must end at its own real window end and
-    // must not claim m2's downbeat region; m2 owns its downbeat only.
-    expect(Math.max(...knotsM1.map((k) => k.t))).toBeLessThanOrEqual(4.001)
-    expect(knotsM2.some((k) => Math.abs(k.t - 4.0) < 0.01)).toBe(true)
-    expect(Math.min(...knotsM2.map((k) => k.t))).toBeGreaterThanOrEqual(4.0 - 0.01)
+    // m1's nominal end is t=2; its knots must not claim m2's downbeat region,
+    // and m2 owns exactly its written onsets plus adopted overflow.
+    expect(Math.max(...knotsM1.map((k) => k.t))).toBeLessThanOrEqual(2.001)
+    expect(knotsM2.some((k) => Math.abs(k.t - 2.0) < 0.01)).toBe(true)
   })
 })
 
