@@ -44,10 +44,13 @@ import {
   setNeuralStreamSampleRate,
 } from '../microphone-input/micNeuralStream.js'
 import {
+  calibrateNeuralFloor,
   checkNeuralCapability,
   disposeNeuralRuntime,
   loadNeuralRuntime,
+  NEURAL_AMBIENT_POLLS,
   NEURAL_MODEL_RATE,
+  NEURAL_SILENCE_SKIP_RMS,
   resampleToModelRate,
   runNeuralWindow,
   shouldSkipSilence,
@@ -278,6 +281,13 @@ export default function useNeuralMicInput({
   const poolRef = useRef([])
   const inferPendingRef = useRef(false)
   const rmsHistoryRef = useRef([])
+  // M3 frozen ambient: minimum of the first polls after listening starts
+  // (music only raises RMS, so the minimum is closest to the room even
+  // if the user plays immediately). Frozen once full — sustained notes
+  // can never drag it upward. Floor never drops below the validated
+  // fixed constant (stable fallback).
+  const ambientPollsRef = useRef([])
+  const neuralFloorRef = useRef(NEURAL_SILENCE_SKIP_RMS)
   const lastHopRef = useRef(0)
   const lastLevelPublishRef = useRef(0)
   const lastPollMsRef = useRef(null)
@@ -479,6 +489,15 @@ export default function useNeuralMicInput({
         }
         const rms = Math.sqrt(sumSquares / scratch.length)
         rmsHistoryRef.current.push(rms)
+        if (ambientPollsRef.current.length < NEURAL_AMBIENT_POLLS) {
+          ambientPollsRef.current.push(rms)
+          if (ambientPollsRef.current.length >= NEURAL_AMBIENT_POLLS) {
+            const ambient = Math.min(...ambientPollsRef.current.filter(Number.isFinite))
+            neuralFloorRef.current = calibrateNeuralFloor(ambient)
+            debugRef.current.ambientRms = ambient
+            debugRef.current.neuralFloor = neuralFloorRef.current
+          }
+        }
 
     const scoreTimeAtCaptureMs = (captureMs) => mapCaptureToScoreTime(
       clockMapRef.current,
@@ -648,11 +667,13 @@ export default function useNeuralMicInput({
         debug.lastPumpReason = !runtime ? 'no-runtime' : (phaseRef.current !== 'listening' ? `phase-${phaseRef.current}` : 'pending')
         return
       }
-      // Silence skip (M3): no musical signal below the measured floor —
-      // skip inference entirely (kills room-tone hallucinations at the
-      // source and saves the GPU for real audio). Not a rejection;
-      // silence simply produces no candidates.
-      if (shouldSkipSilence(rmsHistoryRef.current)) {
+      // Silence skip (M3): no musical signal below the ambient-adapted
+      // floor — skip inference entirely (kills room-tone hallucinations
+      // at the source and saves the GPU for real audio). Not a rejection;
+      // silence simply produces no candidates. The floor adapts once to
+      // the room (frozen pre-play ambient) and never below the fixed
+      // validated constant.
+      if (shouldSkipSilence(rmsHistoryRef.current, neuralFloorRef.current)) {
         setSilenceSkips((count) => count + 1)
         debug.lastPumpReason = 'silence'
         return

@@ -618,8 +618,66 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     expect(results.feedbackOutcome).not.toBe('wrong')
   }, 240_000)
 
-  it('reports sound-to-feedback latency on a single unlooped attack', async () => {
-    // M6 probe: one C4 attack, no loop, so the attack time is
+  it('soaks a multi-minute session: rotations, switch-back, no starvation', async () => {
+    // M6 long-run: two loops of three C4 attacks with rotating
+    // checkpoints, a WFY->PlayAlong->WFY round trip mid-run, then a
+    // continued-listening tail. Asserts sustained progress (no pool
+    // deadlock, no ring starvation) rather than wall-clock endurance.
+    const clip = loadCompositeClip('repeat-piano-c4x3')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60],
+        checkpointId: 'live-soak-1',
+        forceListen: true,
+        keepAudio: true,
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    let advances = 0
+    for (let round = 1; round <= 3; round += 1) {
+      await page.waitForFunction(
+        () => window.__liveResults && window.__liveResults.matched.length >= 1,
+        null,
+        { timeout: 150_000, polling: 2000 },
+      )
+      advances += 1
+      if (round === 2) {
+        // Mid-run round trip: WFY -> Play Along -> WFY on the live ring.
+        await page.evaluate(() => {
+          window.__liveInject = { checkpoint: { id: 'live-soak-pa', expectedMidis: [60] } }
+          window.__liveApi.unmount()
+          window.__liveApi.mount({ performanceMode: 'play-along' })
+        })
+        await page.waitForFunction(
+          () => (window.__liveApi.playAlongEvents() ?? []).length >= 1,
+          null,
+          { timeout: 120_000, polling: 2000 },
+        )
+      }
+      if (round < 3) {
+        await page.evaluate((next) => {
+          window.__liveInject = { checkpoint: { id: `live-soak-${next}`, expectedMidis: [60] } }
+          window.__liveApi.unmount()
+          window.__liveApi.mount({ performanceMode: 'wait-for-you' })
+        }, round + 1)
+      }
+    }
+    // Soak tail: keep listening a full minute; the pump must stay healthy.
+    await page.waitForTimeout(60_000)
+    const results = await page.evaluate(() => window.__liveResults)
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(advances).toBe(3)
+    expect(results.phase).toBe('listening')
+    expect(results.debug.lastPumpReason).not.toMatch(/^(starved|error)/)
+    expect(results.debug.hops).toBeGreaterThan(50)
+  }, 480_000)
+
+  it('reports sound-to-feedback latency on a single unlooped attack', async () => {    // M6 probe: one C4 attack, no loop, so the attack time is
     // unambiguous (inject time + construction onset 0.08 s).
     const clip = loadAccuracyClip('real-piano-c4.wav')
     const page = await browser.newPage()
