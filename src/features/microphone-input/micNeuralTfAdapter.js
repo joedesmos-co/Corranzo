@@ -17,11 +17,21 @@ export const NEURAL_WARMUP_SECONDS = 0.5
 /**
  * Silence-skip floor (measured 2026-10-08 on real clips): true DAT
  * silence sits at rms 0.00014 while the softest verified real note
- * (pp piano) is 0.00445 and quiet electric 0.01276. Below 0.001 there
- * is no musical signal — skipping inference kills room-tone
+ * (pp piano) is 0.00445 and quiet electric 0.01276. Below the floor
+ * there is no musical signal — skipping inference kills room-tone
  * hallucinations at the source and saves the GPU for real audio.
+ *
+ * Calibrated 0.001 -> 0.003 (overnight reliability mission): the WebGL
+ * backend HALLUCINATES C4 + friends on real room tone at 0.0023 RMS
+ * (per-100 ms polls max 0.00233, flat) and completed a [60] checkpoint
+ * end to end — the CPU backend stays silent on the same audio. pp piano
+ * attack polls peak 0.024 with median 0.0042, so 0.003 keeps every
+ * attack inferring while sustained room tone (all polls below) never
+ * reaches the model. pp sustain tails below the floor skip inference;
+ * completion is attack-driven and unaffected. A hot mic preamp can push
+ * room tone above any fixed floor — adaptive floor is follow-up work.
  */
-export const NEURAL_SILENCE_SKIP_RMS = 0.001
+export const NEURAL_SILENCE_SKIP_RMS = 0.003
 export const NEURAL_SILENCE_SKIP_FRAMES = 5
 
 /**

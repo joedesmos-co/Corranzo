@@ -22,6 +22,17 @@ describe('shouldSkipSilence', () => {
     )).toBe(true)
   })
 
+  it('skips the measured room-quiet ceiling (all polls <= 0.00233)', () => {
+    // Overnight mission: WebGL hallucinates C4 on real room tone at
+    // 0.0023 RMS and completed a [60] checkpoint; the CPU backend stays
+    // silent. The floor must sit above this clip's hottest poll.
+    expect(shouldSkipSilence(
+      [0.00231, 0.00233, 0.00229, 0.00233, 0.00230],
+      NEURAL_SILENCE_SKIP_RMS,
+      NEURAL_SILENCE_SKIP_FRAMES,
+    )).toBe(true)
+  })
+
   it('never skips the softest verified real note (pp piano 0.00445)', () => {
     expect(shouldSkipSilence(
       [0.0001, 0.0002, 0.00445, 0.0001, 0.0002],

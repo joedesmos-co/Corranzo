@@ -136,6 +136,62 @@
           }
         ]
       }
+    },
+    {
+      "id": "octave-piano-c4-c5",
+      "instrument": "piano",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/octave-piano-c4-c5.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          60,
+          72
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.113
+          },
+          {
+            "midi": 72,
+            "onset": 0.109
+          }
+        ]
+      }
+    },
+    {
+      "id": "rolled-octave-piano-c4-c5",
+      "instrument": "piano",
+      "category": "composite",
+      "split": "dev",
+      "license": "CC-BY-3.0 + UIowa-MIS-unrestricted (sources)",
+      "attribution": "Salamander Grand Piano (Alexander Holm, CC-BY-3.0) + University of Iowa MIS (unrestricted)",
+      "audio": {
+        "file": "clips/rolled-octave-piano-c4-c5.wav",
+        "sampleRate": 44100
+      },
+      "truth": {
+        "anchorTones": [
+          60,
+          72
+        ],
+        "notes": [
+          {
+            "midi": 60,
+            "onset": 0.113
+          },
+          {
+            "midi": 72,
+            "onset": 0.259
+          }
+        ]
+      }
     }
   ]
 }

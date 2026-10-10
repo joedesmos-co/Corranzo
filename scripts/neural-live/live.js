@@ -53,7 +53,7 @@ function LiveNeural({ performanceMode, playAlongEvents }) {
     matchSettings: settings,
     performanceMode: performanceMode ?? PERFORMANCE_MODE.WAIT_FOR_YOU,
     onPlayerInputMatched: (decision) => {
-      setOutcome((previous) => ({ ...previous, matched: [...previous.matched, decision] }))
+      setOutcome((previous) => ({ ...previous, matched: [...previous.matched, { ...decision, atMs: Date.now() }] }))
     },
     onWrongNote: () => {
       setOutcome((previous) => ({ ...previous, wrong: previous.wrong + 1 }))
@@ -68,6 +68,7 @@ function LiveNeural({ performanceMode, playAlongEvents }) {
     window.__liveResults = {
       matched: outcome.matched,
       wrong: outcome.wrong,
+      injectedAt: window.__liveInjectedAt ?? null,
       phase: neural.neural.phase,
       backend: neural.neural.backend,
       warmedMs: neural.neural.warmedMs,
@@ -140,12 +141,18 @@ window.__liveApi = {
     }
     window.__liveApi.__captureMount = null
   },
-  async inject({ samples, sampleRate, expectedMidis, checkpointId, forceListen = false, performanceMode = PERFORMANCE_MODE.WAIT_FOR_YOU, keepAudio = false }) {
+  async inject({ samples, sampleRate, expectedMidis, checkpointId, forceListen = false, performanceMode = PERFORMANCE_MODE.WAIT_FOR_YOU, keepAudio = false, loop = true, deferUntilListening = false }) {
     window.__liveInject = { checkpoint: { id: checkpointId, expectedMidis } }
     if (forceListen) {
       // Test-only hardware-gate bypass (see useNeuralMicInput): validates
       // everything downstream of the gate on CPU-only runners.
       window.__SCOREFLOW_NEURAL_FORCE_LISTEN = true
+    }
+    const startAudio = () => {
+      window.__liveApi.__audio.source.start(0)
+      // Attack-time anchor: set at actual audio start (not inject call),
+      // so deferred starts still give exact sound-to-feedback latency.
+      window.__liveInjectedAt = Date.now()
     }
     if (!keepAudio || !window.__liveApi.__audio) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext
@@ -154,9 +161,22 @@ window.__liveApi = {
       buffer.getChannelData(0).set(samples)
       const source = context.createBufferSource()
       source.buffer = buffer
-      // Loop the short clip: every repetition is a fresh attack for the
-      // repeat-detection path (and keeps audio flowing for long tests).
-      source.loop = true
+      // Loop the short clip by default: every repetition is a fresh attack
+      // for the repeat-detection path (and keeps audio flowing for long
+      // tests). loop:false plays once — for sound-to-feedback latency
+      // probes where the attack time must be unambiguous.
+      source.loop = loop !== false
+      if (source.loop) {
+        // Anti-phase-lock dither: clip durations are often exact
+        // multiples of the 250 ms hop (e.g. 3.000 s = 12 hops), so a
+        // verbatim loop re-presents identical window alignment every
+        // iteration — an onset hidden by edge suppression once is hidden
+        // forever (measured: F5@0.504 inaudible across 50 loops). A -8.7
+        // cent drift (far below the 50-cent confirm tolerance) precesses
+        // 15 ms per 3 s loop, covering the full hop grid over a run.
+        // Harness-only; the benchmark scores clips straight, unlooped.
+        source.playbackRate.value = 0.995
+      }
       const destination = context.createMediaStreamDestination()
       source.connect(destination)
       const stream = destination.stream
@@ -171,10 +191,39 @@ window.__liveApi = {
         },
         configurable: true,
       })
-      source.start(0)
-      window.__liveApi.__audio = { context, source, stream }
+      const holdForListening = deferUntilListening && loop === false
+      if (!holdForListening) {
+        source.start(0)
+        window.__liveInjectedAt = Date.now()
+      }
+      window.__liveApi.__audio = { context, source, stream, started: !holdForListening }
     }
     window.__liveApi.mount({ performanceMode })
+    if (deferUntilListening && loop === false && window.__liveApi.__audio && !window.__liveApi.__audio.started) {
+      // Single-shot latency probes: hold the one attack until the engine
+      // reports listening (model fetch + SwiftShader compile on headless
+      // runners is slower than the 80 ms attack offset). Poll here rather
+      // than in the test so injectedAt still anchors the true start.
+      const deadline = Date.now() + 120_000
+      for (;;) {
+        const phase = await new Promise((resolve) => {
+          setTimeout(() => {
+            try {
+              resolve(window.__liveResults?.phase ?? null)
+            } catch {
+              resolve(null)
+            }
+          }, 250)
+        })
+        if (phase === 'listening' || Date.now() >= deadline) {
+          break
+        }
+      }
+    }
+    if (!window.__liveApi.__audio.started) {
+      window.__liveApi.__audio.started = true
+      startAudio()
+    }
     window.__liveTeardown = () => {
       window.__liveApi.unmountAll()
       const audio = window.__liveApi.__audio
