@@ -54,5 +54,13 @@ export const REAL_CORPUS = {
       attribution: 'GuitarSet (Xi et al., ISMIR 2018): acoustic guitar performances + JAMS annotations',
       tracks: [],
     },
+    {
+      id: 'trios',
+      kind: 'zenodo',
+      record: 'https://zenodo.org/records/6797837',
+      license: 'CC BY-NC-SA 2.0 UK (local eval only, never redistribute)',
+      attribution: 'TRIOS score-aligned multitrack dataset (Fujihara & Goto): 5 trios (mix + stems + MIDI), energy-verified alignment (median onset error 0.02-0.04 s)',
+      materialize: 'download TRIOS Dataset.zip, unzip, run scripts/lib/extract-trios-truth.py "<dir>/TRIOS Dataset" /tmp/trios-truth.json',
+    },
   ],
 }

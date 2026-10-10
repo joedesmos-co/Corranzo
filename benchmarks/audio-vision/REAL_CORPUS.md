@@ -12,6 +12,8 @@ re-materialize the corpus with `node scripts/audio-vision-fetch-corpus.mjs`.
 | `chopin-noct19-faulkner` | Musopen/Luke Faulkner, Chopin Nocturne 19, 30–75 s excerpt | Public domain (recording) | none | ungraded acceptance |
 | `bag-of-motifs` | ccMixter "A Bag Of Motifs" (Radioontheshelf feat. Spinningmerkaba): vocals+guitar+drums+bass+piano, 20–65 s excerpt | CC BY-NC, **local eval only, never redistribute** | none | ungraded acceptance |
 | `guitarset-jazz-solo`, `guitarset-ss-comp` | GuitarSet full performances (jazz solo 14 s @200 BPM; singer-songwriter comping 46 s), Zenodo record 3371780 (md5-verified) | CC-BY-4.0 | JAMS: per-string notes, beats, tempo, chords, key | graded (melody recall, tempo error, chord accuracy) |
+| `trios-*-mix` (5) | TRIOS score-aligned chamber/jazz trios, 17–51 s mixes (clarinet/violin/sax lead + piano + bass-role strings, take_five adds real drums) | CC BY-NC-SA 2.0 UK, **local eval only** | score-aligned MIDI (energy-verified: median onset error 0.02–0.04 s; drums excluded from melody metrics) | graded (melody recall, region F1) |
+| `trios-*-piano` (5) | TRIOS piano stems, 14–51 s, 119–292 notes each | CC BY-NC-SA 2.0 UK, **local eval only** | drift-free MIDI (see above) | graded — the primary piano transcription evidence |
 
 ## What the numbers mean
 

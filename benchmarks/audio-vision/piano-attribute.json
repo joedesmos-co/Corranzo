@@ -1,0 +1,257 @@
+{
+  "tol": 0.1,
+  "rows": [
+    {
+      "id": "piano-mozart-dyad",
+      "delta": -0.525,
+      "bp": {
+        "miss": {
+          "clustered": 9,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 3,
+          "pedalRing": 7,
+          "other": 15
+        },
+        "matched": 3,
+        "nTruth": 12,
+        "nPred": 28
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 9,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 0,
+          "pedalRing": 3,
+          "other": 7
+        },
+        "matched": 3,
+        "nTruth": 12,
+        "nPred": 13
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "delta": -0.125,
+      "bp": {
+        "miss": {
+          "clustered": 10,
+          "harmonicShadow": 0,
+          "softShort": 3,
+          "absent": 1
+        },
+        "invent": {
+          "harmonicFp": 9,
+          "pedalRing": 6,
+          "other": 14
+        },
+        "matched": 4,
+        "nTruth": 18,
+        "nPred": 33
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 13,
+          "harmonicShadow": 0,
+          "softShort": 3,
+          "absent": 1
+        },
+        "invent": {
+          "harmonicFp": 5,
+          "pedalRing": 1,
+          "other": 6
+        },
+        "matched": 1,
+        "nTruth": 18,
+        "nPred": 13
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "delta": -0.175,
+      "bp": {
+        "miss": {
+          "clustered": 14,
+          "harmonicShadow": 0,
+          "softShort": 2,
+          "absent": 2
+        },
+        "invent": {
+          "harmonicFp": 13,
+          "pedalRing": 7,
+          "other": 12
+        },
+        "matched": 7,
+        "nTruth": 25,
+        "nPred": 39
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 20,
+          "harmonicShadow": 0,
+          "softShort": 2,
+          "absent": 1
+        },
+        "invent": {
+          "harmonicFp": 3,
+          "pedalRing": 3,
+          "other": 5
+        },
+        "matched": 2,
+        "nTruth": 25,
+        "nPred": 13
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "delta": -0.825,
+      "bp": {
+        "miss": {
+          "clustered": 13,
+          "harmonicShadow": 0,
+          "softShort": 2,
+          "absent": 2
+        },
+        "invent": {
+          "harmonicFp": 8,
+          "pedalRing": 10,
+          "other": 9
+        },
+        "matched": 6,
+        "nTruth": 23,
+        "nPred": 33
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 15,
+          "harmonicShadow": 0,
+          "softShort": 3,
+          "absent": 2
+        },
+        "invent": {
+          "harmonicFp": 4,
+          "pedalRing": 3,
+          "other": 3
+        },
+        "matched": 3,
+        "nTruth": 23,
+        "nPred": 13
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "delta": -0.75,
+      "bp": {
+        "miss": {
+          "clustered": 9,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 9,
+          "pedalRing": 3,
+          "other": 9
+        },
+        "matched": 3,
+        "nTruth": 12,
+        "nPred": 24
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 12,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 6,
+          "pedalRing": 0,
+          "other": 5
+        },
+        "matched": 0,
+        "nTruth": 12,
+        "nPred": 11
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "delta": -0.8,
+      "bp": {
+        "miss": {
+          "clustered": 2,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 8,
+          "pedalRing": 10,
+          "other": 5
+        },
+        "matched": 16,
+        "nTruth": 18,
+        "nPred": 39
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 12,
+          "harmonicShadow": 0,
+          "softShort": 2,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 3,
+          "pedalRing": 3,
+          "other": 4
+        },
+        "matched": 4,
+        "nTruth": 18,
+        "nPred": 14
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "delta": -0.85,
+      "bp": {
+        "miss": {
+          "clustered": 0,
+          "harmonicShadow": 0,
+          "softShort": 0,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 7,
+          "pedalRing": 2,
+          "other": 10
+        },
+        "matched": 17,
+        "nTruth": 17,
+        "nPred": 36
+      },
+      "spectral": {
+        "miss": {
+          "clustered": 10,
+          "harmonicShadow": 0,
+          "softShort": 3,
+          "absent": 0
+        },
+        "invent": {
+          "harmonicFp": 2,
+          "pedalRing": 3,
+          "other": 6
+        },
+        "matched": 4,
+        "nTruth": 17,
+        "nPred": 15
+      }
+    }
+  ]
+}
