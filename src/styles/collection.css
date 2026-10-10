@@ -151,3 +151,22 @@ competing with tab underlines. Pill boxes stay on the dark desk. */
   .cz-shell[data-view='library'] .practice-piece-card { align-items: start; flex-direction: column; gap: 16px; }
   .cz-shell[data-view='library'] .practice-piece-card__action { width: 100%; }
 }
+
+/* A9 — Audio Vision: Create From Audio (Corranzo visual language, cz-* primitives). */
+.audio-vision-card { margin-top: 24px; }
+.audio-vision-sub { margin-top: -8px; }
+.audio-vision-drop { border: 1px dashed var(--cz-ink); border-radius: 3px; padding: 20px; text-align: center; cursor: pointer; margin: 16px 0; }
+.audio-vision-drop--over { background: var(--cz-sheet-raised); }
+.audio-vision-hint { font-size: 12px; opacity: 0.75; }
+.audio-vision-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0 16px; }
+.audio-vision-options fieldset { border: 1px solid var(--cz-ink); border-radius: 3px; padding: 12px; }
+.audio-vision-options legend { font-size: 12px; font-weight: 600; padding: 0 6px; }
+.audio-vision-radio { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; cursor: pointer; }
+.audio-vision-radio span span { display: block; font-size: 12px; opacity: 0.75; }
+.audio-vision-error { border-left: 3px solid var(--cz-vermilion); padding: 8px 12px; margin: 12px 0; }
+.audio-vision-progress-bar { height: 6px; border: 1px solid var(--cz-ink); border-radius: 3px; overflow: hidden; margin: 8px 0; }
+.audio-vision-progress-bar > div { height: 100%; background: var(--cz-ink); transition: width 200ms; }
+.audio-vision-review { margin-top: 8px; }
+.audio-vision-facts { list-style: none; padding: 0; margin: 12px 0; }
+.audio-vision-facts li { padding: 4px 0; }
+@media (max-width: 640px) { .audio-vision-options { grid-template-columns: 1fr; } }

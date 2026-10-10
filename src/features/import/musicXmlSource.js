@@ -173,7 +173,14 @@ export function validateOmrSourceMeta(source) {
 }
 
 export function isPracticePlaybackReady({ restoreGateOpen, pdfFile, musicXmlSource }) {
-  if (!restoreGateOpen || !pdfFile || !isMusicXmlSourceReady(musicXmlSource)) {
+  if (!restoreGateOpen || !isMusicXmlSourceReady(musicXmlSource)) {
+    return false
+  }
+  // A9 — audio arrangements carry no PDF; timing-ready notation opens practice.
+  if (musicXmlSource?.source === 'audio-arrangement') {
+    return true
+  }
+  if (!pdfFile) {
     return false
   }
   if (isOmrGeneratedPlayback(musicXmlSource)) {

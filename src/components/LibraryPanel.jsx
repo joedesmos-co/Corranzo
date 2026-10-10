@@ -1,5 +1,6 @@
 import PieceRow from './collection/PieceRow.jsx'
 import ImportScoreView from './library/ImportScoreView.jsx'
+import CreateFromAudio from './audio-vision/CreateFromAudio.jsx'
 import { getInstrument } from '../features/instruments/instruments.js'
 import {
   DIFFICULTY_FILTERS,
@@ -46,6 +47,7 @@ export default function LibraryPanel({
   onOpenScore,
   initialMode,
   onBack,
+  onArrangementReady = null,
 }) {
   const [difficultyFilter, setDifficultyFilter] = useState('all')
   const [practiceSearch, setPracticeSearch] = useState('')
@@ -293,6 +295,9 @@ export default function LibraryPanel({
           </div>
 
           <p className="cz-collection-credit">Corranzo currently keeps one imported score per instrument on this device. Opening another score replaces it.</p>
+          {onArrangementReady && (
+            <CreateFromAudio onArrangementReady={onArrangementReady} uploadsDisabled={uploadsDisabled} />
+          )}
           {importFeedback?.type === 'error' && <p className="cz-collection-error" role="alert">{importFeedback.message}</p>}
           {uploadedPieces.length === 0 && (
             <p className="practice-library__empty">

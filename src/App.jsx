@@ -936,6 +936,40 @@ export default function App() {
     navigateToView('import')
   }, [clearDemoPiece, navigateToView])
 
+  // A9 — Audio Vision: an analyzed recording becomes a normal MusicXML score
+  // source (source 'audio-arrangement', no PDF) that flows through the same
+  // timing → playback → practice path as uploads and OMR output.
+  const handleAudioArrangementReady = useCallback((payload) => {
+    if (!payload?.musicXmlString) return
+    clearDemoPiece()
+    markDemoCardHidden()
+    const nextXml = createMusicXmlSource(payload.fileName ?? 'audio-arrangement.musicxml', payload.musicXmlString, {
+      source: 'audio-arrangement',
+      omrMeta: {
+        arrangement: {
+          targetPart: payload.targetPart ?? null,
+          difficulty: payload.difficulty ?? null,
+          confidence: payload.confidence?.overall ?? null,
+          partial: Boolean(payload.partial),
+          warningCount: Array.isArray(payload.warnings) ? payload.warnings.length : 0,
+        },
+      },
+    })
+    setMusicXmlSource(nextXml)
+    if (liveBundleRef.current) {
+      liveBundleRef.current.musicXmlSource = nextXml
+    }
+    resetPracticePrefsForNewScore()
+    setPracticeRemountKey((key) => key + 1)
+    setLibraryFeedback({
+      type: 'success',
+      message: payload.partial
+        ? 'Arrangement ready with some uncertain passages. Review the arranger notes, then open your score.'
+        : 'Arrangement ready. Open your score to preview and practice.',
+    })
+    navigateToView('import')
+  }, [clearDemoPiece, markDemoCardHidden, navigateToView, resetPracticePrefsForNewScore])
+
   const handleClearMidi = useCallback(() => {
     clearDemoPiece()
     setMidiSource(null)
@@ -2802,6 +2836,7 @@ export default function App() {
             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
             onClearMidi={handleClearMidi}
             onClearMusicXml={handleClearMusicXml}
+            onArrangementReady={handleAudioArrangementReady}
             onOmrGenerated={handleOmrGenerated}
             autoOmrRequest={autoOmrRequest}
             onAutoOmrRequestConsumed={handleAutoOmrRequestConsumed}
