@@ -62,10 +62,14 @@ export const NEURAL_STREAM_DEFAULTS = {
    */
   ghostMemoryMs: 2500,
   /**
-   * Onset separation below which an octave doubling counts as
-   * simultaneous (real doublings, strummed octaves) rather than a ghost.
+   * Onset separation below which an upper octave is exempt from ghost
+   * consideration (real doublings and strums, not tracking lag).
+   * calibrated to the 200 ms strum window: guitar downstrokes and rolled
+   * piano chords legitimately stagger octave pairs 100-200 ms apart
+   * (measured: a real C4+C5 150 ms strum was killed at 100 ms).
+   * Lag ghosts beyond this still die via overlap ratio + ghost memory.
    */
-  octaveSimultaneousMs: 100,
+  octaveSimultaneousMs: 200,
   /** Onsets inside this window share a chord group (strum-aware). */
   strumWindowMs: 200,
   /** Assumed confidence (Basic Pitch emits no posterior). */

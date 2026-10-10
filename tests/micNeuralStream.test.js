@@ -60,9 +60,10 @@ describe('micNeuralStream', () => {
   it('drops lagging octave ghosts but keeps simultaneous doublings', () => {
     const state = createNeuralStreamState()
     // Lower octave starts first and fully covers the upper: ghost.
+    // (2 s default window here; live 0.5 s path covered below.)
     const ghost = emitNeuralStreamNotes(state, [
       note(49, 0.5, 1.5),
-      note(61, 0.7, 1.5),
+      note(61, 0.9, 1.5),
     ], 10_000)
     expect(ghost.map((event) => event.midi)).toEqual([49])
     expect(state.stats.droppedOctave).toBe(1)
@@ -99,6 +100,27 @@ describe('micNeuralStream', () => {
       note(52, 0.23, 0.6),
     ], 10_000)
     expect(doubled.map((event) => event.midi).sort()).toEqual([40, 52])
+  })
+
+  it('keeps rolled octaves 150 ms apart (strum window, not tracking lag)', () => {
+    const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80 })
+    // C4 then C5 a strum apart: measured real case (Salamander C4+C5).
+    // The old 100 ms gate killed the upper octave as a ghost.
+    const rolled = emitNeuralStreamNotes(state, [
+      note(60, 0.2, 0.9),
+      note(72, 0.35, 0.9),
+    ], 10_000)
+    expect(rolled.map((event) => event.midi).sort()).toEqual([60, 72])
+  })
+
+  it('still drops octave ghosts lagging beyond the strum window', () => {
+    const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80 })
+    const ghost = emitNeuralStreamNotes(state, [
+      note(48, 0.1, 0.45),
+      note(60, 0.35, 0.5),
+    ], 10_000)
+    expect(ghost.map((event) => event.midi)).toEqual([48])
+    expect(state.stats.droppedOctave).toBe(1)
   })
 
   it('live 0.5 s / 0.25 s / 80 ms config leaves no onset phase uncovered', () => {

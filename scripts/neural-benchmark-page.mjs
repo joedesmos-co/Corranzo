@@ -52,6 +52,7 @@ window.__neuralBench = {
       midi: note.pitchMidi,
       start: note.startTimeSeconds,
       end: note.startTimeSeconds + note.durationSeconds,
+      amplitude: note.amplitude ?? null,
     }))
     return { notes, inferMs: Math.round(inferMs * 10) / 10, backend: tf.getBackend() }
   },
