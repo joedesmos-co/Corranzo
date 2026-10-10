@@ -185,3 +185,35 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - Txo compact: unchanged path (rerun pending if time).
 - Fit: rhythm 81%, chords 73% (1-note glyph-comb wobble, documented).
 - 384 guitar tests green (re-run at commit).
+
+### R2-M4 — G1 TAB validation + fragment merge (measure ownership)
+- Rhythm-row impostor (6 beam bands) defused via _is_tab thinness +
+  regularity (th<=4, gap-range<=0.3med). Faint-line 5-band TAB promoted
+  via double-gap signature + targeted fragment post-merge (3+2 bands,
+  63px gap; global 75px reverted — merged whole staves).
+- Transcribe TAB-span filter (0.75sp margin): fingering-FP strays in
+  notation systems/gaps dropped -> phantom measures gone.
+- Qmek: measures 0%->95.6% of GT (49/49!), triple 8.5%->87.5%.
+- Txo: bottom staff (m33, 9 digits) recovered; measures 100% matched;
+  triple 90.6%, FULL 87.6%, semantic 41%->48%.
+- Fit rhythm etude: 12->6 notes with FEWER string hallucinations
+  (GT has 2 lines; old s3/s4 assigns were hallucinations; 81% kept).
+
+### R2-M5 — G5 rhythm: audited, partially reverted (honest gap)
+- Column estimator does NOT generalize: Qmek durations 5-13% (single
+  beams misread 0/2+; dotted/long notes fail; bare-vs-rhythm-row
+  confusion). Txo 97% stands (validated).
+- Root causes measured: (a) beam rows can't attribute to onsets
+  (beams span beats); (b) 1px inter-beam gaps merged by morphology;
+  (c) 29/104 Txo columns are FLAG-less bare stems (isolated 16ths
+  engraved without beams at digit-x!); (d) page/stem-gate variants
+  thrashed (Txo 97->68) — reverted to M7 estimator.
+- Tried and reverted this session: staffless beam mask, gap>1
+  counting, per-column/page stem gates, TAB-top zones, stem-anchored
+  counting (dead code removed). Evidence + flagged-stem visuals kept
+  for the beam-object-association follow-up (associate onsets to beam
+  OBJECTS by x-overlap + stem intersection, not row counting).
+- G5 claim restated: 97% exact on beamed TAB-rhythm (Txo-like);
+  ~5-15% on dense/flagged/bare textures (Qmek). Flag class stays
+  abstinent (P 0.022). Triple/FULL metrics exclude duration where
+  noted; Txo FULL 87.6% includes 97% durations.

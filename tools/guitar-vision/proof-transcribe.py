@@ -134,12 +134,20 @@ def main() -> int:
             # then bisected in that system's barline list.
             sys_bars = mbars.detect_barline_systems(u8)
             import bisect as _bisect
+            # TAB-span filter: drop digit detections far from every TAB
+            # staff (fingering/rehearsal FPs live between/above staves and
+            # otherwise mint phantom measures). Margin scales with page_sp.
+            _tabspans = [(s["top"], s["bot"]) for s in sys_bars if s.get("tab")]
             _garr = np.asarray(image, dtype=np.float32)
-            _rule = (u8 < 128).mean(axis=1) > 0.5  # full-width staff rules
             _page_sp = _psg.page_spacing(_garr)
             events = []
             for det in digits:
                 cx, cy = det["x"], det["y"]
+                if _tabspans and _page_sp:
+                    _dtab = min([0 if top <= cy <= bot else min(abs(cy - top), abs(cy - bot))
+                                 for top, bot in _tabspans])
+                    if _dtab > 0.75 * _page_sp:
+                        continue
                 w, h = det["box"][2] - det["box"][0], det["box"][3] - det["box"][1]
                 side = max(w, h) * 0.8
                 crop = image.crop((max(int(cx - side), 0), max(int(cy - side), 0),
@@ -181,39 +189,26 @@ def main() -> int:
                 columns.append(cur)
             for col in columns:
                 cx = sum(e["x"] for e in col) / len(col)
-                # Column rhythm: shared rhythm stem anchored at the column's
-                # topmost digit (low-string digits' own strips overshoot
-                # into the system above). Per-digit x strips, median vote.
+                # Column rhythm (M7 validated: Txo 97% exact): per-digit x
+                # strips, median vote. Digit-anchored [topcy-100,topcy-16].
+                # (Stem-anchored / TAB-top variants tried and reverted:
+                # stem runs miss at digit-x too often; see report.)
                 _topcy = min(e["y"] for e in col)
                 _gt, _gb = int(_topcy - 100), int(_topcy - 16)
-                _colg, _colok = [], []
+                _colg = []
                 if _gt >= 0:
                     for e in col:
                         _ex = e["x"]
                         _s = (u8[_gt:_gb, max(0, int(_ex - 8)):int(_ex + 8)] < 128)
                         _rr = np.nonzero(_s.mean(axis=1) > 0.5)[0]
-                        _gl, _pv = [], -99
+                        _gl, _pv = 0, -99
                         for _r in _rr:
                             if _r - _pv > 2:
-                                _gl.append([_r])
-                            else:
-                                _gl[-1].append(_r)
+                                _gl += 1
                             _pv = _r
-                        _colg.append(len(_gl))
-                        if len(_gl) >= 2:
-                            _lo, _hi = _gl[0][0], _gl[-1][-1]
-                            _band = (u8[_gt + _lo:_gt + _hi + 1,
-                                        max(0, int(_ex - 3)):int(_ex + 3)] < 128)
-                            _rows = [r for r in range(_lo, _hi + 1)
-                                     if not _rule[_gt + r]]
-                            _colok.append((sum(_band[r - _lo, :].any() for r in _rows)
-                                           / max(1, len(_rows)) > 0.4) if _rows else True)
-                        else:
-                            _colok.append(True)
+                        _colg.append(_gl)
                 _gs = sorted(_colg) if _colg else [0]
                 _beams = min(_gs[len(_gs) // 2], 2)
-                if False and _beams >= 2 and not any(_colok):
-                    _beams = 0
                 # Nearest detected note box -> anchored duration (fallback
                 # for dots + unbeamed columns).
                 best_box, best_d = None, 1e9

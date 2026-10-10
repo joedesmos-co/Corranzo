@@ -56,6 +56,40 @@ def detect_barline_cols(u8: np.ndarray, note_xs: list[float] | None = None) -> l
         prev = x
         out.append(x)
     return out
+def _is_tab(group) -> bool:
+    """True TAB staff vs rhythm-row impostors (G1 measure work).
+
+    Both present 6 line-like bands, but TAB lines are thin (<=4px) and
+    regularly spaced (gap range <= 0.3 * median gap); rhythm rows start
+    with a thick beam band and irregular gaps. Verified: true TAB
+    th<=3/range~0.03, impostor th5/range~0.95 (Qmek p1).
+    """
+    if len(group) != 6:
+        # Faint-line TAB: 5 bands where exactly one gap is ~2x (the faint
+        # line's neighbors), rest regular and thin. Notation staves show
+        # 4 regular gaps (no double). Verified Txo p2 bottom staff.
+        if len(group) != 5:
+            return False
+        if max(b - a + 1 for a, b in group) > 4:
+            return False
+        mids = [(a + b) / 2 for a, b in group]
+        gaps = [mids[i + 1] - mids[i] for i in range(4)]
+        med = sorted(gaps)[1]
+        if med <= 0:
+            return False
+        norm = sum(1 for g in gaps if abs(g - med) <= 0.3 * med)
+        dbl = sum(1 for g in gaps if 1.7 * med <= g <= 2.3 * med)
+        return norm == 3 and dbl == 1
+    if max(b - a + 1 for a, b in group) > 4:
+        return False
+    mids = [(a + b) / 2 for a, b in group]
+    gaps = [mids[i + 1] - mids[i] for i in range(5)]
+    med = sorted(gaps)[2]
+    if med <= 0:
+        return False
+    return (max(gaps) - min(gaps)) <= 0.3 * med
+
+
 def _systems_and_bands(u8):
     """Returns (systems, bands, staff_rows, ink, x0, x1).
 
@@ -82,16 +116,38 @@ def _systems_and_bands(u8):
     systems = []
     prev_tab_bot = 0
     cur = [bands[0]]
-    groups = []
+    raw = []
     for i in range(1, len(bands)):
+        # Gap 60px: staves in this corpus sit >=100px apart.
         if mids[i] - mids[i - 1] < 60:
             cur.append(bands[i])
         else:
-            if len(cur) >= 5:
-                groups.append((cur[0][0], cur[-1][1], len(cur) == 6))
+            raw.append(cur)
             cur = [bands[i]]
-    if len(cur) >= 5:
-        groups.append((cur[0][0], cur[-1][1], len(cur) == 6))
+    raw.append(cur)
+    # Fragment post-merge: a faint staff line splits one staff into two
+    # small groups (Txo p2 bottom: 3+2 bands across a 63px gap). Merge
+    # adjacent groups when the union has 5-6 bands, spans <100px of gap,
+    # and matches the TAB signature (regular or one-double-gap). Larger
+    # unions (e.g. notation+TAB) never merge: counts exceed 6.
+    merged = []
+    i = 0
+    while i < len(raw):
+        if (i + 1 < len(raw) and len(raw[i]) < 5 and len(raw[i + 1]) < 5
+                and len(raw[i]) + len(raw[i + 1]) == 5):
+            u = raw[i] + raw[i + 1]
+            umids = [(a + b) / 2 for a, b in u]
+            gap = umids[len(raw[i])] - umids[len(raw[i]) - 1]
+            if gap < 100 and _is_tab(u):
+                merged.append(u)
+                i += 2
+                continue
+        merged.append(raw[i])
+        i += 1
+    groups = []
+    for cur in merged:
+        if len(cur) >= 5:
+            groups.append((cur[0][0], cur[-1][1], _is_tab(cur)))
     for top, bot, ext in groups:
         # Own-span detection per staff: paired engraving here does NOT
         # join barlines across staves (verified visually), so extended
@@ -150,8 +206,13 @@ def detect_barline_systems(u8: np.ndarray) -> list[dict]:
                 continue
             prev = x
             cols.append(x)
-        out.append({"top": top, "bot": bot, "xs": cols})
+        out.append({"top": top, "bot": bot, "xs": cols, "tab": bool(ext)})
     return out
+
+
+def tab_systems(u8: np.ndarray) -> list[tuple]:
+    """(top, bot) spans of TAB (6-band) staves only, top-to-bottom."""
+    return [(s["top"], s["bot"]) for s in detect_barline_systems(u8) if s.get("tab")]
     for top, bot, ext in systems:
         span = bot - top + 1
         if span < 30:
