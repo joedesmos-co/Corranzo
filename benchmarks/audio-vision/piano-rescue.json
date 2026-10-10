@@ -1,0 +1,298 @@
+{
+  "rows": [
+    {
+      "id": "piano-mozart-dyad",
+      "performance": "vienna-mozart-p01",
+      "delta": -0.525,
+      "nTruth": 17,
+      "bp": {
+        "raw": {
+          "precision": 0.036,
+          "recall": 0.059,
+          "f1": 0.044,
+          "matched": 1
+        },
+        "aligned": {
+          "precision": 0.107,
+          "recall": 0.25,
+          "f1": 0.15,
+          "matched": 3
+        },
+        "windowed": {
+          "f1": 0.136,
+          "windows": 11
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0.077,
+          "recall": 0.059,
+          "f1": 0.067,
+          "matched": 1
+        },
+        "aligned": {
+          "precision": 0.231,
+          "recall": 0.25,
+          "f1": 0.24,
+          "matched": 3
+        },
+        "windowed": {
+          "f1": 0.177,
+          "windows": 13
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "performance": "vienna-schubert-p01",
+      "delta": -0.125,
+      "nTruth": 19,
+      "bp": {
+        "raw": {
+          "precision": 0.061,
+          "recall": 0.105,
+          "f1": 0.077,
+          "matched": 2
+        },
+        "aligned": {
+          "precision": 0.121,
+          "recall": 0.222,
+          "f1": 0.157,
+          "matched": 4
+        },
+        "windowed": {
+          "f1": 0.075,
+          "windows": 14
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0.154,
+          "recall": 0.105,
+          "f1": 0.125,
+          "matched": 2
+        },
+        "aligned": {
+          "precision": 0.077,
+          "recall": 0.056,
+          "f1": 0.065,
+          "matched": 1
+        },
+        "windowed": {
+          "f1": 0.067,
+          "windows": 15
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "performance": "vienna-schubert-p01",
+      "delta": -0.175,
+      "nTruth": 27,
+      "bp": {
+        "raw": {
+          "precision": 0.103,
+          "recall": 0.148,
+          "f1": 0.121,
+          "matched": 4
+        },
+        "aligned": {
+          "precision": 0.179,
+          "recall": 0.28,
+          "f1": 0.219,
+          "matched": 7
+        },
+        "windowed": {
+          "f1": 0.132,
+          "windows": 16
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0.154,
+          "recall": 0.074,
+          "f1": 0.1,
+          "matched": 2
+        },
+        "aligned": {
+          "precision": 0.154,
+          "recall": 0.08,
+          "f1": 0.105,
+          "matched": 2
+        },
+        "windowed": {
+          "f1": 0.073,
+          "windows": 16
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "performance": "vienna-schubert-p01",
+      "delta": -0.825,
+      "nTruth": 30,
+      "bp": {
+        "raw": {
+          "precision": 0.152,
+          "recall": 0.167,
+          "f1": 0.159,
+          "matched": 5
+        },
+        "aligned": {
+          "precision": 0.182,
+          "recall": 0.261,
+          "f1": 0.214,
+          "matched": 6
+        },
+        "windowed": {
+          "f1": 0.13,
+          "windows": 17
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0.231,
+          "recall": 0.1,
+          "f1": 0.14,
+          "matched": 3
+        },
+        "aligned": {
+          "precision": 0.231,
+          "recall": 0.13,
+          "f1": 0.167,
+          "matched": 3
+        },
+        "windowed": {
+          "f1": 0.127,
+          "windows": 15
+        }
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "performance": "vienna-mozart-p02",
+      "delta": -0.75,
+      "nTruth": 15,
+      "bp": {
+        "raw": {
+          "precision": 0.167,
+          "recall": 0.267,
+          "f1": 0.205,
+          "matched": 4
+        },
+        "aligned": {
+          "precision": 0.125,
+          "recall": 0.25,
+          "f1": 0.167,
+          "matched": 3
+        },
+        "windowed": {
+          "f1": 0.03,
+          "windows": 11
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0.091,
+          "recall": 0.067,
+          "f1": 0.077,
+          "matched": 1
+        },
+        "aligned": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "matched": 0
+        },
+        "windowed": {
+          "f1": 0,
+          "windows": 10
+        }
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "performance": "vienna-schubert-p02",
+      "delta": -0.8,
+      "nTruth": 20,
+      "bp": {
+        "raw": {
+          "precision": 0.026,
+          "recall": 0.05,
+          "f1": 0.034,
+          "matched": 1
+        },
+        "aligned": {
+          "precision": 0.41,
+          "recall": 0.889,
+          "f1": 0.561,
+          "matched": 16
+        },
+        "windowed": {
+          "f1": 0.419,
+          "windows": 15
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "matched": 0
+        },
+        "aligned": {
+          "precision": 0.286,
+          "recall": 0.222,
+          "f1": 0.25,
+          "matched": 4
+        },
+        "windowed": {
+          "f1": 0.156,
+          "windows": 16
+        }
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "performance": "vienna-schubert-p02",
+      "delta": -0.85,
+      "nTruth": 27,
+      "bp": {
+        "raw": {
+          "precision": 0.028,
+          "recall": 0.037,
+          "f1": 0.032,
+          "matched": 1
+        },
+        "aligned": {
+          "precision": 0.472,
+          "recall": 1,
+          "f1": 0.642,
+          "matched": 17
+        },
+        "windowed": {
+          "f1": 0.353,
+          "windows": 15
+        }
+      },
+      "spectral": {
+        "raw": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "matched": 0
+        },
+        "aligned": {
+          "precision": 0.267,
+          "recall": 0.235,
+          "f1": 0.25,
+          "matched": 4
+        },
+        "windowed": {
+          "f1": 0.26,
+          "windows": 16
+        }
+      }
+    }
+  ]
+}

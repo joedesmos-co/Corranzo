@@ -26,10 +26,21 @@ re-materialize the corpus with `node scripts/audio-vision-fetch-corpus.mjs`.
 
 ## Known data caveats
 
-- Vienna piano clips: manifest documents MIDI/audio drift in Mozart p01
-  (4 clips excluded); Schubert clips score weakly on BOTH methods and likely
-  share milder drift. Piano note-level numbers are truth-limited, not just
-  model-limited.
+- Vienna piano clips: DSP-only alignment probe (`audio-vision-align-probe.mjs`,
+  no model involved) finds systematic truth offsets on EVERY piano clip
+  (δ −0.125 to −0.85 s; guitar clips sit at δ≈0 with rate≈1.0), plus ~50–60%
+  of piano truth onsets cluster within 75 ms. Raw note-level piano P/R is
+  therefore truth-limited, not just model-limited.
+- Piano rescue (`audio-vision-piano-rescue.mjs`, δ applied equally to both
+  methods, never used for tuning): schubert-p02 clips jump BP F1 0.03→0.56–0.64
+  from alignment alone (model was largely right; reference is wrong).
+  **Quarantine recommendation (energy evidence, awaiting mic-corpus owners):**
+  `piano-schubert2-single`, `piano-schubert2-triad` (δ≈−0.8 s, take-consistent).
+  `piano-mozart2-triad` δ=−0.75 did NOT transfer (aligned worse) — per-clip δ
+  must not be applied blindly; take-consistent groups only.
+- Even aligned, soft polyphonic piano F1 ≈ 0.15–0.64: genuinely weaker than
+  guitar. No piano accuracy claims beyond single notes (BP hits pp piano
+  singles exactly) until drift-free polyphonic truth exists.
 - 3 s mic-real clips probe detection, not arrangement; arrangement-grade
   evidence comes from the 14–46 s GuitarSet/Chopin/ccMixter entries.
 - Untruth-graded entries are marked "awaiting musician review" for subjective

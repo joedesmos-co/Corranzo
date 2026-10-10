@@ -1,0 +1,50 @@
+# Truth/audio alignment probe (DSP-only, no model)
+
+| clip | instr | sr | rms | truth | peaks | rate@0 | best δ | best rate |
+|---|---|---|---|---|---|---|---|---|
+| piano-mozart-dyad | piano | 44100 | 0.00868 | 17 | 13 | 0.786 | -0.525 | 1 |
+| piano-schubert-single | piano | 44100 | 0.01794 | 19 | 14 | 0.333 | -0.125 | 0.889 |
+| piano-schubert-triad | piano | 44100 | 0.01208 | 27 | 16 | 0.615 | -0.175 | 0.92 |
+| piano-schubert-dense | piano | 44100 | 0.01534 | 30 | 12 | 0.367 | -0.825 | 0.696 |
+| piano-mozart2-triad | piano | 44100 | 0.00905 | 15 | 13 | 0.6 | -0.75 | 1 |
+| piano-schubert2-single | piano | 44100 | 0.01527 | 20 | 12 | 0.632 | -0.8 | 1 |
+| piano-schubert2-triad | piano | 44100 | 0.01692 | 27 | 17 | 0.462 | -0.85 | 1 |
+| acoustic-jazz-single | acoustic-guitar | 44100 | 0.05112 | 6 | 10 | 1 | 0 | 1 |
+| acoustic-jazz-dyad | acoustic-guitar | 44100 | 0.0531 | 8 | 8 | 1 | 0 | 1 |
+| acoustic-bossa-single | acoustic-guitar | 44100 | 0.03449 | 6 | 6 | 0.833 | -0.075 | 1 |
+| acoustic-bossa-chord | acoustic-guitar | 44100 | 0.01943 | 12 | 6 | 0.875 | -0.025 | 1 |
+| acoustic-rock-single | acoustic-guitar | 44100 | 0.05284 | 7 | 10 | 1 | 0 | 1 |
+| acoustic-rock-dyad | acoustic-guitar | 44100 | 0.05062 | 15 | 16 | 1 | 0 | 1 |
+| acoustic-power-dyad | acoustic-guitar | 44100 | 0.03966 | 19 | 9 | 0.833 | -0.725 | 1 |
+| acoustic-power-dense | acoustic-guitar | 44100 | 0.05233 | 24 | 12 | 1 | 0 | 1 |
+| acoustic-funk-triad | acoustic-guitar | 44100 | 0.1149 | 39 | 17 | 0.886 | -0.225 | 0.969 |
+| acoustic-funk-dense | acoustic-guitar | 44100 | 0.11706 | 43 | 19 | 0.953 | -0.05 | 0.977 |
+| acoustic-strum-triad | acoustic-guitar | 44100 | 0.04484 | 36 | 19 | 0.903 | -0.225 | 1 |
+| acoustic-strum-dense | acoustic-guitar | 44100 | 0.04763 | 36 | 19 | 0.909 | -0.05 | 1 |
+| electric-eg07-single | electric-guitar | 44100 | 0.04467 | 12 | 25 | 1 | 0 | 1 |
+| electric-eg07-dyad | electric-guitar | 44100 | 0.04716 | 9 | 12 | 1 | 0 | 1 |
+| electric-eg01-triad | electric-guitar | 44100 | 0.08722 | 10 | 13 | 1 | 0 | 1 |
+| electric-eg01-dense | electric-guitar | 44100 | 0.10585 | 11 | 12 | 1 | 0 | 1 |
+| electric-eg02-dense | electric-guitar | 44100 | 0.1958 | 45 | 14 | 0.8 | -0.05 | 1 |
+| electric-eg05-dyad | electric-guitar | 44100 | 0.09818 | 13 | 11 | 0.769 | -0.1 | 1 |
+| electric-eg10-dense | electric-guitar | 44100 | 0.12901 | 10 | 12 | 1 | 0 | 1 |
+| electric-eg03-dense | electric-guitar | 44100 | 0.09801 | 10 | 7 | 0.556 | -0.05 | 1 |
+| electric-eg04-dyad | electric-guitar | 44100 | 0.05118 | 17 | 14 | 0.875 | -0.025 | 0.938 |
+| electric-eg06-dense | electric-guitar | 44100 | 0.0954 | 48 | 28 | 1 | 0 | 1 |
+| electric-eg08-triad | electric-guitar | 44100 | 0.08185 | 7 | 19 | 0.5 | 0.125 | 0.571 |
+| electric-eg09-dyad | electric-guitar | 44100 | 0.11424 | 9 | 7 | 1 | 0 | 1 |
+| electric-eg11-dense | electric-guitar | 44100 | 0.07912 | 14 | 20 | 1 | 0 | 1 |
+| electric-eg12-triad | electric-guitar | 44100 | 0.08055 | 12 | 8 | 1 | 0 | 1 |
+| acoustic-fresh-jazz-single | acoustic-guitar | 44100 | 0.01505 | 19 | 20 | 0.895 | -0.2 | 1 |
+| acoustic-fresh-jazz-dyad | acoustic-guitar | 44100 | 0.01219 | 16 | 15 | 0.933 | -0.025 | 1 |
+| acoustic-fresh-rock-triad-b | acoustic-guitar | 44100 | 0.01658 | 18 | 26 | 1 | 0 | 1 |
+| acoustic-fresh-bossa-triad | acoustic-guitar | 44100 | 0.18331 | 22 | 10 | 0.905 | -0.025 | 1 |
+| acoustic-fresh-bossa-dense | acoustic-guitar | 44100 | 0.15429 | 25 | 18 | 0.864 | -0.025 | 1 |
+| acoustic-fresh-funk-single | acoustic-guitar | 44100 | 0.03434 | 5 | 8 | 1 | 0 | 1 |
+| acoustic-fresh-rock-dense | acoustic-guitar | 44100 | 0.13771 | 46 | 9 | 0.841 | -0.075 | 0.864 |
+| acoustic-fresh-rock-triad | acoustic-guitar | 44100 | 0.13473 | 51 | 14 | 0.894 | -0.025 | 1 |
+| acoustic-fresh-ss-single | acoustic-guitar | 44100 | 0.06637 | 12 | 7 | 0.833 | 0 | 0.833 |
+| electric-gtechs-low | electric-guitar | 44100 | 0.00794 | 2 | 1 | 0 | -0.025 | 1 |
+| electric-gtechs-mid | electric-guitar | 44100 | 0.01199 | 1 | 1 | 0 | -0.025 | 1 |
+| electric-gtechs-high | electric-guitar | 44100 | 0.01396 | 1 | 1 | 0 | -0.025 | 1 |
+| electric-gtechs-quiet | electric-guitar | 44100 | 0.01042 | 2 | 1 | 0.5 | -0.025 | 1 |
