@@ -73,7 +73,21 @@ Root causes found and fixed in transcriber:
 - Binding constraint now measures (46%) + detector recall;
   residual: 10 quarters-as-16ths (contamination), 36 (fixed) dots.
 
-## DEV-once hybrid wave (this mission, detector mode, hybrid strings)
+## M6 — G5 measures: ownership solved, numbering drifts on empties
+
+- Per-system barline audit (Txo): boundaries ~95% (p2 perfect; p1
+  sys0-3 perfect; sys4 repeat/time-sig region: repeat pair + time-sig
+  glyph FPs create EMPTY intervals that vanish from numbering).
+- Root cause of numbering drift: truth m17 has only 2 TAB digits
+  (both undetected) -> no m17 interval -> all downstream off by one;
+  plus final-system tail oversplits (y-outlier system assignment).
+- measure_ok 46% with boundaries ~95%: numbering, not ownership.
+  Printed system-start numerals ("17","21",...) would anchor numbering
+  (no OCR class yet — documented next step).
+- FULL playable: 42% of GT (strings 100%, frets 95%, durations 97%
+  matched, measures 46%).
+- Fit transcription pair re-verified: rhythm 79% (was 74%, 12 notes
+  now vs 3), chords 78% (was 79%). No regressions.
 
 | layout | string | fret | pitch | cov-pitch | vs net pitch |
 |---|---|---|---|---|---|
