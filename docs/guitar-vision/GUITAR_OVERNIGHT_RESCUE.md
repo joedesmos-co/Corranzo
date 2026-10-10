@@ -230,3 +230,19 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
   (documented next; '0' has hole, '3' doesn't).
 - Fit stable (81%/73%). DEV: std fret 95.5%/pitch 91.0%, compact
   95.7%/93.5% (both up); large/bravura unchanged.
+
+### R2-M7 — Fret geometry overrides (no training)
+- Txo fret audit: 16/19 errors are 1<->4 confusion. Glyph widths
+  (staff-excluded): '1' 0.28sp vs '4' 0.47sp; split 0.375sp.
+- Minmax-column width cut wide '4's (false flips on Qmek): replaced
+  by center-component width (flood fill; neighbor-immune, offset
+  tolerant). Narrow-0->1 rule added (fixed Qmek (1,0)x3).
+- 0-vs-3 hole rule: perfect on GT boxes (297x1-hole '0', 218x0-hole
+  '3') butLive boxes ~9px off cut the glyph (hole opens to border):
+  widened +-15->+-20 with centroid guard. Fixed Qmek (0,3)x9.
+- Results: Txo fret 19->1 (99.7% matched), triple 95.6%; compact
+  fret 99.1%, triple 93.1%; Qmek fret 37->9 (~98% matched).
+  Remaining Qmek fret errors diffuse (no pattern >=3).
+- DEV final: std 95.5/96.6/92.1, compact 97.3/98.9/96.2
+  (string/fret/pitch), large 84/84/72, bravura 64/93/57.
+- Fit stable (81%/73%).

@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 import torch
+from scipy import ndimage as ndi
 import torch.nn.functional as F
 from PIL import Image
 
@@ -165,20 +166,62 @@ def main() -> int:
                 fp = F.softmax(rec_out["fret"], dim=1)[0]
                 s_pred, s_conf = int(sp.argmax()), float(sp.max())
                 f_pred, f_conf = int(fp.argmax()), float(fp.max())
-                if f_pred in (1, 4) and _page_sp:
-                    # '1' vs '4' width override (staff rows excluded, split
-                    # in spacing units so it generalizes across layouts).
-                    _wx0, _wx1 = max(0, int(cx - 15)), int(cx + 15)
-                    _wy0, _wy1 = max(0, int(cy - 15)), int(cy + 15)
+                if f_pred in (0, 1, 3, 4) and _page_sp:
+                    # Glyph geometry overrides (staff rows excluded; sizes
+                    # in spacing units). Width = center-connected ink
+                    # component (flood fill from crop center): immune to
+                    # neighbor glyphs (disconnected) and box offsets,
+                    # unlike minmax-column width. Window +-20px.
+                    _wx0, _wx1 = max(0, int(cx - 20)), int(cx + 20)
+                    _wy0, _wy1 = max(0, int(cy - 20)), int(cy + 20)
                     _keep = [r for r in range(_wy0, _wy1) if not _rule[r]]
+                    _wsp = None
                     if _keep:
                         _gw = (u8[_keep, :][:, _wx0:_wx1] < 128)
-                        _cols = np.nonzero(_gw.any(axis=0))[0]
-                        if len(_cols):
-                            _wsp = (_cols[-1] - _cols[0] + 1) / _page_sp
+                        _lab0, _nn0 = ndi.label(_gw)
+                        _mr, _mc = _gw.shape[0] // 2, _gw.shape[1] // 2
+                        _cid = _lab0[_mr, _mc]
+                        if _cid == 0:
+                            # center is background (e.g. '0' hole): nearest ink
+                            _ys0, _xs0 = np.nonzero(_gw)
+                            if len(_ys0):
+                                _d2 = (_ys0 - _mr) ** 2 + (_xs0 - _mc) ** 2
+                                _cid = _lab0[_ys0[_d2.argmin()], _xs0[_d2.argmin()]]
+                        if _cid:
+                            _ys, _xs = np.nonzero(_lab0 == _cid)
+                            _wsp = (_xs.max() - _xs.min() + 1) / _page_sp
+                    if _wsp is not None:
+                        if f_pred in (1, 4):
                             _wf = 1 if _wsp < dec.FRET_WIDTH_SPLIT else 4
                             if _wf != f_pred:
                                 f_pred = _wf
+                        elif f_pred == 0 and _wsp < dec.FRET_NARROW_ONE:
+                            f_pred = 1
+                        elif f_pred == 3:
+                            _hx0, _hx1 = max(0, int(cx - 20)), int(cx + 20)
+                            _hy0, _hy1 = max(0, int(cy - 20)), int(cy + 20)
+                            _hk = [r for r in range(_hy0, _hy1) if not _rule[r]]
+                            _bg = None
+                            if _hk:
+                                _gw = (u8[_hk, :][:, _hx0:_hx1] < 128)
+                                _bg = ~_gw
+                            _ok = False
+                            if _bg is not None:
+                                _lab, _nn = ndi.label(_bg)
+                                _bd = (set(_lab[0, :]) | set(_lab[-1, :]) | set(_lab[:, 0]) | set(_lab[:, -1]))
+                                for _i in range(1, _nn + 1):
+                                    if _i in _bd:
+                                        continue
+                                    _ys, _xs = np.nonzero(_lab == _i)
+                                    # hole centroid near crop center (offset-
+                                    # tolerant but rejects neighbor glyphs)
+                                    if abs(_xs.mean() - _gw.shape[1] / 2) > 12:
+                                        continue
+                                    if abs(_ys.mean() - _gw.shape[0] / 2) > 12:
+                                        continue
+                                    _ok = True
+                                if _ok:
+                                    f_pred = 0
                 _xb = int(900 * fx)
                 _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))
                 _geo, _geoconf = _psg.assign_string(_peaks, cy, sp_hint=_page_sp)

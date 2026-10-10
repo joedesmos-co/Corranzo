@@ -244,20 +244,54 @@ def main() -> int:
                     fret_posterior = F.softmax(rec_out["fret"], dim=1)[0]
                     string_pred, string_conf = int(string_posterior.argmax()), float(string_posterior.max())
                     fret_pred, fret_conf = int(fret_posterior.argmax()), float(fret_posterior.max())
-                    if fret_pred in (1, 4) and _page_sp is not None:
-                        # '1' vs '4' glyph-width override (R2 fret audit).
+                    if fret_pred in (0, 1, 3, 4) and _page_sp is not None:
+                        # Glyph geometry overrides: center-component width
+                        # (neighbor-immune) + hole rule; see transcriber.
+                        from scipy import ndimage as _ndi0
                         _rule = (_garr < 128).mean(axis=1) > 0.5
-                        _wx0, _wx1 = max(0, int(cx - 15)), int(cx + 15)
-                        _wy0, _wy1 = max(0, int(cy - 15)), int(cy + 15)
+                        _wx0, _wx1 = max(0, int(cx - 20)), int(cx + 20)
+                        _wy0, _wy1 = max(0, int(cy - 20)), int(cy + 20)
                         _keep = [r for r in range(_wy0, _wy1) if not _rule[r]]
+                        _wsp = None
                         if _keep:
-                            _gw = ((_garr[_keep, :][:, _wx0:_wx1] < 128).mean(axis=0) > 0)
-                            _nz = np.nonzero(_gw)[0]
-                            if len(_nz):
-                                _wsp = (_nz[-1] - _nz[0] + 1) / _page_sp
+                            _gw0 = (_garr[_keep, :][:, _wx0:_wx1] < 128)
+                            _lab0, _nn0 = _ndi0.label(_gw0)
+                            _mr, _mc = _gw0.shape[0] // 2, _gw0.shape[1] // 2
+                            _cid = _lab0[_mr, _mc]
+                            if _cid == 0:
+                                _ys0, _xs0 = np.nonzero(_gw0)
+                                if len(_ys0):
+                                    _d2 = (_ys0 - _mr) ** 2 + (_xs0 - _mc) ** 2
+                                    _cid = _lab0[_ys0[_d2.argmin()], _xs0[_d2.argmin()]]
+                            if _cid:
+                                _ys, _xs = np.nonzero(_lab0 == _cid)
+                                _wsp = (_xs.max() - _xs.min() + 1) / _page_sp
+                        if _wsp is not None:
+                            if fret_pred in (1, 4):
                                 _wf = 1 if _wsp < _dec.FRET_WIDTH_SPLIT else 4
                                 if _wf != fret_pred:
                                     fret_pred = _wf
+                            elif fret_pred == 0 and _wsp < _dec.FRET_NARROW_ONE:
+                                fret_pred = 1
+                            elif fret_pred == 3:
+                                from scipy import ndimage as _ndi
+                                _hx0, _hx1 = max(0, int(cx - 20)), int(cx + 20)
+                                _hy0, _hy1 = max(0, int(cy - 20)), int(cy + 20)
+                                _hk = [r for r in range(_hy0, _hy1) if not _rule[r]]
+                                if _hk:
+                                    _full = (_garr[_hk, :][:, _hx0:_hx1] < 128)
+                                    _lab, _nn = _ndi.label(~_full)
+                                    _bd = (set(_lab[0, :]) | set(_lab[-1, :]) | set(_lab[:, 0]) | set(_lab[:, -1]))
+                                    for _i in range(1, _nn + 1):
+                                        if _i in _bd:
+                                            continue
+                                        _ys, _xs = np.nonzero(_lab == _i)
+                                        if abs(_xs.mean() - _full.shape[1] / 2) > 12:
+                                            continue
+                                        if abs(_ys.mean() - _full.shape[0] / 2) > 12:
+                                            continue
+                                        fret_pred = 0
+                                        break
                     if args.string_mode in ("geometric", "hybrid"):
                         _xb = int(900 * fx)
                         _peaks, _ = _psg.detect_peaks(_garr, int(cx - _xb), int(cx + _xb))

@@ -3,7 +3,7 @@
   "evaluatorVersion": "2.1.0",
   "kind": "semantic-musicxml-evaluation",
   "mode": "both",
-  "gitCommit": "4fd935ace8",
+  "gitCommit": "ed401fb4b7",
   "scores": {
     "pitch": 0.4266,
     "rhythm": 0.8643,
@@ -1870,7 +1870,7 @@
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note D#3",
+          "message": "Missing note D3",
           "measureNumber": 7
         },
         {
@@ -1900,7 +1900,7 @@
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
+          "message": "Onset off by 0.25 quarters",
           "measureNumber": 7
         },
         {
@@ -2055,12 +2055,12 @@
         "Missing note G3",
         "Missing note F3",
         "Missing note F3",
-        "Missing note D#3",
+        "Missing note D3",
         "Missing note D#3",
         "Missing note D#3",
         "Onset off by 0.25 quarters",
         "Missing tie",
-        "Onset off by 0.5 quarters",
+        "Onset off by 0.25 quarters",
         "Onset off by 0.75 quarters",
         "Missing tie",
         "Onset off by 0.75 quarters",
@@ -8388,7 +8388,7 @@
         {
           "code": "missing-note",
           "class": "pitch",
-          "message": "Missing note D#3",
+          "message": "Missing note D3",
           "measureNumber": 7
         },
         {
@@ -8418,7 +8418,7 @@
         {
           "code": "onset-mismatch",
           "class": "rhythm",
-          "message": "Onset off by 0.5 quarters",
+          "message": "Onset off by 0.25 quarters",
           "measureNumber": 7
         },
         {
@@ -8573,12 +8573,12 @@
         "Missing note G3",
         "Missing note F3",
         "Missing note F3",
-        "Missing note D#3",
+        "Missing note D3",
         "Missing note D#3",
         "Missing note D#3",
         "Onset off by 0.25 quarters",
         "Missing tie",
-        "Onset off by 0.5 quarters",
+        "Onset off by 0.25 quarters",
         "Onset off by 0.75 quarters",
         "Missing tie",
         "Onset off by 0.75 quarters",

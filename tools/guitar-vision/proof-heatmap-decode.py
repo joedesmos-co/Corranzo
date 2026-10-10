@@ -61,6 +61,9 @@ BOX_SCALE = {"note": (1.0, 1.0), "rest": (1.0, 1.25), "tabdigit": (1.0, 1.0)}
 # (Txo: 8-10px vs 14-22px at sp=32; staff rows excluded). '0' overlaps
 # '4' (~0.44sp), so the rule fires only when the head says 1 or 4.
 FRET_WIDTH_SPLIT = 0.375  # spacing units; narrow -> 1, wide -> 4
+FRET_NARROW_ONE = 0.33  # below -> '1' regardless (truth-1 read as 0)
+# Hole rule (R2-M7): '0' has exactly 1 hole, '3' has 0 (545/545 Txo+Qmek).
+# Fire 3->0 on 1 hole only (never 0->3: broken-print '0's have 0 holes).
 # v3 (2026-10-10): ignore-channel veto (ONE capped run, GUITAR_IGNORECLASS_
 # PREREG.md). Drop a peak when per-page-normalized ignore heat exceeds the
 # normalized class heat within VETO_CELLS. TRAIN-selected with tabdigit
