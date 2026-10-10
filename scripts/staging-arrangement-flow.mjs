@@ -12,6 +12,7 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'audio-vision-staging')
 const PORT = Number(process.env.E2E_PORT ?? 5605)
+const TARGET = process.env.AV_TARGET ?? 'piano' // piano | guitar
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const results = []
 const pass = (n, d = '') => { results.push({ n, ok: true, d }); console.log(`PASS  ${n}${d ? ' — ' + d : ''}`) }
@@ -54,6 +55,10 @@ async function main() {
     const wavPath = join(root, 'tmp', 'audio-vision-staging', 'scale-input.wav')
     await page.locator('.audio-vision-drop input[type=file]').setInputFiles(wavPath)
     await sleep(2000)
+    if (TARGET === 'guitar') {
+      await page.locator('.audio-vision-radio input[type=radio][value=solo-guitar]').click({ force: true }).catch(() => {})
+      await sleep(600)
+    }
     await page.screenshot({ path: join(outDir, 'av-uploaded.png') })
     // Arrange (default target piano)
     const arrangeBtn = page.getByRole('button', { name: /arrange/i })
