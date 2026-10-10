@@ -12,6 +12,9 @@ import { useMemo } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import { buildNoteCheckpoints } from '../../features/practice/waitForYouCheckpoints.js'
+import WaitForYouInputSourceSelector from '../practice/WaitForYouInputSourceSelector.jsx'
+import { isWebMidiSupported } from '../../features/midi-input/parseMidiMessage.js'
+import { isMicrophoneSupported } from '../../features/microphone-input/micEnvironment.js'
 
 function formatClock(seconds) {
   if (!Number.isFinite(seconds)) return '–'
@@ -89,14 +92,20 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
 
       <div className="arrangement-practice__modes" role="radiogroup" aria-label="Practice mode">
         {Object.values(PRACTICE_MODE).map((value) => {
-          const disabled = value === PRACTICE_MODE.WAIT_FOR_YOU && !wfyReady
+          // Match the main workspace gating: WFY needs usable timing, not a
+          // pre-connected input (input is chosen contextually via the
+          // selector below). Gating on wfyReady here dead-ends Preview
+          // users: readiness requires WFY/PlayAlong mode, which the gate
+          // itself blocks.
+          const unavailable = session.timingDisabled || !checkpoints.length
+          const disabled = value === PRACTICE_MODE.WAIT_FOR_YOU && unavailable
           return (
             <button
               key={value}
               role="radio"
               aria-checked={session.practiceMode === value}
               disabled={disabled}
-              title={disabled ? 'Wait For You needs a connected microphone or MIDI instrument' : undefined}
+              title={disabled ? 'Wait For You needs generated timing first' : (!wfyReady && value === PRACTICE_MODE.WAIT_FOR_YOU ? 'Connect an input below to play along' : undefined)}
               onClick={() => session.setPracticeMode?.(value)}
             >
               <strong>{PRACTICE_MODE_LABELS[value]}</strong>
@@ -107,11 +116,20 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
       {!wfyReady && (
         <p className="audio-vision-hint" role="note">Wait For You needs a connected microphone or MIDI instrument. Preview and Play Along work now.</p>
       )}
+      <WaitForYouInputSourceSelector
+        inputSource={session.wfyInputSource}
+        onInputSourceChange={session.setWfyInputSource}
+        instrumentId={session.instrumentId}
+        midiAvailable={isWebMidiSupported()}
+        microphoneAvailable={isMicrophoneSupported()}
+      />
 
       <div className="arrangement-practice__transport">
+        <button className="cz-collection-button" onClick={() => session.handleMidiStop?.()} aria-label="Restart from the beginning">Restart</button>
         {isPlaying
           ? <button className="cz-collection-button" onClick={() => session.playback?.pause?.()}>Pause</button>
           : <button className="cz-collection-button" onClick={() => session.handlePlay?.()} disabled={playDisabled}>Play</button>}
+        {session.playback?.error && <span role="alert">Sound unavailable: {String(session.playback.error).slice(0, 160)}</span>}
         <span className="audio-vision-hint" role="status">
           Target {activeIndex + 1} of {checkpoints.length}
           {session.playback?.isLoading ? ' · loading sound…' : ''}
