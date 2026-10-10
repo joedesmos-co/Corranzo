@@ -69,6 +69,27 @@ function centsDistance(midiFloat, expectedMidi) {
  *   exact-simultaneous ghosts).
  *
  * @returns midi values to exclude from confirmation with reasons.
+ *
+ * MEASURED NEGATIVES (overnight forensics, do not retry without new
+ * evidence — scripts/analyze-pitch-trajectories.mjs,
+ * scripts/calibrate-attack-flux.mjs, scripts/probe-octave-pairs.mjs):
+ * - Static spectral-energy veto: ghost upper/lower ratios (+12.8/-11.0 dB)
+ *   sit inside true co-onset doublings (-27.7..+15.8 dB). No threshold.
+ * - Stream span-ratio veto (ghost span vs parent span): ghosts 1.0-2.2,
+ *   true/unexpected pairs 0.29-3.0 (stream fragments spans). No threshold.
+ * - Union-persistence veto (whole-clip spectral presence): transient
+ *   ghosts 4.2-6.2 BUT true short-uppers over ringing lowers reach
+ *   5.4-8.5 (eg02 E3/E2 5.82, rock-dyad 81/69 6.51, funk 63/51 6.84).
+ * - Attack-flux admission (transient-less + short + unattached = blip):
+ *   TRUE strum-interior/chord-top notes are transient-less + short too
+ *   (power-dyad 61 flux 0.118 span 0.12; cmaj7 71 flux 0.044 span 0.12).
+ *   Killing blips kills masked-but-real attacks. REJECTED.
+ * Residual octave ghosts (split-c3 60, adjacent-g3 67, low-high-e2 63)
+ * are genuine acoustic ambiguity: per-frame trajectories (transient,
+ * rise, decay correlation, sustain) of the steady ghost match true
+ * co-onset notes exactly. The single-pitch veto above stays the
+ * defense; multi-pitch octave ghosts need per-note attack-transient
+ * evidence (future: flux plumbed from capture audio, NOT thresholds).
  */
 export function harmonicGhostVetoes(poolNotes = [], expectedMidis = []) {
   const expected = new Set((expectedMidis ?? []).map(Number).filter(Number.isFinite))
