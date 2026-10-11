@@ -53,7 +53,12 @@ export const ATTACK_EVIDENCE = {
   bandDelaySeconds: 0.04,
   /** Flux peaks above this start a snapshot (measured: soft E2 pick
    * peaks ~0.03-0.05; room tone max 0.026 — snapshots in pure noise are
-   * harmless: flat bands anchor nothing). */
+   * harmless: flat bands anchor nothing). SENSOR LIMIT: felt piano
+   * hammers are HF-soft — mf piano attacks can peak BELOW this (UIowa
+   * C4 attack missed, first snapshot at a decay wobble), so true piano
+   * notes read presence ~0 at attack time. Presence evidence is
+   * guitar-valid (picks are HF-rich), piano-invalid. Never gate piano
+   * on it (Step 5 full-corpus analysis: legacy true presence med 0). */
   snapshotPeakThreshold: 0.025,
   /** Lowest/highest snapshot pitch. */
   bandLoMidi: 21,

@@ -363,16 +363,12 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     expect(results.feedbackOutcome).not.toBe('complete')
   }, 240_000)
 
-  it('adapts the floor in loud room noise (calibration behavior)', async () => {
-    // P3 boundary (honest): real-room-noisy at 0.016 RMS exceeds any floor
-    // that preserves pp notes (pp median 0.0042), so this audio MUST reach
-    // the model — level-gating cannot hold it. The test asserts the
-    // calibration behavior (floor caps at 0.006, audio flows) and RECORDS
-    // the backend's response. Measured: WebGL hallucinates pitched notes
-    // (60/30/27) from unstructured noise and can complete a matching
-    // checkpoint — the noisy-room gap (see report + P6 handoff: surface
-    // neural ambient status, warn before WFY in loud rooms). No veto can
-    // fix this without muting quiet playing (established M2 negatives).
+  it('blocks loud room-noise hallucinations with the flatness gate', async () => {
+    // Step 5 (was: 'adapts the floor in loud room noise' — which recorded
+    // WebGL hallucinating pitched notes from unstructured noise). The
+    // flatness gate (new SHAPE domain, not energy) now holds it: room
+    // tone measures 0.51-0.63 flatness vs <=0.024 for music, 20x
+    // separation, fail-open by construction.
     const clip = loadAccuracyClip('real-room-noisy.wav')
     const page = await browser.newPage()
     await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
@@ -393,13 +389,17 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     )
     await page.waitForTimeout(45_000)
     const results = await page.evaluate(() => window.__liveResults)
-    console.log('NOISY-RESULT', JSON.stringify({ matched: results.matched, detected: (results.detectedNotes ?? []).map((n) => n.midi), floor: results.debug?.neuralFloor ?? null, ambient: results.debug?.ambientRms ?? null, windows: results.debug?.windowsRun ?? null }))
+    console.log('NOISY-RESULT', JSON.stringify({ matched: results.matched, detected: (results.detectedNotes ?? []).map((n) => n.midi), floor: results.debug?.neuralFloor ?? null, ambient: results.debug?.ambientRms ?? null, windows: results.debug?.windowsRun ?? null, noiseFlatSkips: results.noiseFlatSkips ?? null, lastFlatness: results.debug?.lastFlatness ?? null }))
     await page.evaluate(() => window.__liveTeardown?.())
     await page.close()
     expect(results.phase).toBe('listening')
-    // Calibration held the design boundary: capped floor, audio flowing.
-    expect(results.debug.neuralFloor).toBe(0.006)
-    expect(results.debug.windowsRun).toBeGreaterThan(0)
+    // Unstructured noise is flat and loud: gated at the flatness probe,
+    // never reaches the model, nothing hallucinated, no completion.
+    expect(results.debug.lastFlatness).toBeGreaterThan(0.48)
+    expect(results.debug.windowsRun).toBe(0)
+    expect(results.detectedNotes).toHaveLength(0)
+    expect(results.matched).toHaveLength(0)
+    expect(results.feedbackOutcome).not.toBe('complete')
   }, 240_000)
 
   it('does not advance on speech-like non-musical audio', async () => {

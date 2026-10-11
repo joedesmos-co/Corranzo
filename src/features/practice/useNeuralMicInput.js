@@ -44,6 +44,11 @@ import {
   setNeuralStreamSampleRate,
 } from '../microphone-input/micNeuralStream.js'
 import {
+  FLATNESS_SKIP_FRAMES,
+  spectralFlatnessFromDb,
+  shouldSkipFlatNoise,
+} from '../microphone-input/micNoiseFlatness.js'
+import {
   describeEmissionEvidence,
 } from '../microphone-input/micAttackEvidence.js'
 import {
@@ -267,6 +272,7 @@ export default function useNeuralMicInput({
   const [detectedNotes, setDetectedNotes] = useState([])
   const [rejected, setRejected] = useState({ count: 0, reason: null })
   const [silenceSkips, setSilenceSkips] = useState(0)
+  const [noiseFlatSkips, setNoiseFlatSkips] = useState(0)
 
   // ---- ref mirrors (interval-loop discipline; never read stale props) ----
   const instanceKeyRef = useRef(0)
@@ -291,6 +297,7 @@ export default function useNeuralMicInput({
   // fixed constant (stable fallback).
   const ambientPollsRef = useRef([])
   const neuralFloorRef = useRef(NEURAL_SILENCE_SKIP_RMS)
+  const flatnessHistoryRef = useRef([])
   const attackSnapshotsRef = useRef([])
   // P1 evidence history (observation only, capped): the latest emission
   // overwrites lastEvidence, but flicker re-attacks (continuations with
@@ -443,6 +450,7 @@ export default function useNeuralMicInput({
       return undefined
     }
     let scratch = null
+    let freqScratch = null
     let lastDebugPublishMs = 0
     const poll = () => {
       try {
@@ -492,6 +500,9 @@ export default function useNeuralMicInput({
         }
         if (!scratch || scratch.length !== analyser.fftSize) {
           scratch = new Float32Array(analyser.fftSize)
+          freqScratch = typeof analyser.getFloatFrequencyData === 'function' && analyser.frequencyBinCount > 0
+            ? new Float32Array(analyser.frequencyBinCount)
+            : null
         }
         analyser.getFloatTimeDomainData(scratch)
         let sumSquares = 0
@@ -500,6 +511,19 @@ export default function useNeuralMicInput({
         }
         const rms = Math.sqrt(sumSquares / scratch.length)
         rmsHistoryRef.current.push(rms)
+        // Step 5 flatness probe: one FFT read per poll (already budgeted
+        // in the 100 ms poll loop); musically-silent broadband noise is
+        // spectrally flat and is the measured WebGL hallucination source.
+        if (freqScratch) {
+          analyser.getFloatFrequencyData(freqScratch)
+          const binWidthHz = (analyser.context?.sampleRate ?? 44100) / analyser.fftSize
+          const flatness = spectralFlatnessFromDb(freqScratch, binWidthHz)
+          flatnessHistoryRef.current.push(flatness)
+          if (flatnessHistoryRef.current.length > 8) {
+            flatnessHistoryRef.current.shift()
+          }
+          debugRef.current.lastFlatness = flatness
+        }
         if (ambientPollsRef.current.length < NEURAL_AMBIENT_POLLS) {
           ambientPollsRef.current.push(rms)
           if (ambientPollsRef.current.length >= NEURAL_AMBIENT_POLLS) {
@@ -716,6 +740,15 @@ export default function useNeuralMicInput({
         debug.lastPumpReason = 'silence'
         return
       }
+      // Flat-noise gate (Step 5): audio loud enough to infer but
+      // spectrally FLAT is room tone, not music — the measured WebGL
+      // hallucination source. Failing OPEN: when flatness dips below the
+      // threshold the previous behavior runs. Attacks re-arm instantly.
+      if (shouldSkipFlatNoise(flatnessHistoryRef.current)) {
+        setNoiseFlatSkips((count) => count + 1)
+        debug.lastPumpReason = 'noise-flat'
+        return
+      }
       const ring = ringRef.current
       const needSamples = Math.floor(STREAM_WINDOW_SECONDS * ring.inputRate)
       if (ring.samples.length < needSamples) {
@@ -874,6 +907,7 @@ export default function useNeuralMicInput({
       detectedNotes,
       rejected,
       silenceSkips,
+      noiseFlatSkips,
       debug: debugSnapshot,
       verdict: debugSnapshot?.lastVerdict ?? null,
       decision: inputFeedback?.message ?? null,
