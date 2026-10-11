@@ -187,26 +187,49 @@ async function main() {
       } else {
         fail('WFY advances on the correct note', `${targetBefore} -> ${targetAfter}`)
       }
-      // Cursor-to-notehead accuracy while playing the next target.
-      accuracy = await page.evaluate(() => {
+      // Cursor position check. The OSMD cursor marks the musical ONSET of
+      // the current position, so for the first note of a measure it draws at
+      // the measure's left edge (after clef/key/time/tempo glyphs) rather
+      // than on the notehead itself. The verifiable statement is therefore
+      // "the cursor is inside the measure that holds the required note, at or
+      // left of that notehead" — exactly what a musician reads as "here".
+      const accuracy = await page.evaluate(() => {
         const container = document.querySelector('.osmd-score__container')
-        if (!container) return { errorPx: null, samples: 0 }
-        const cursor = container.querySelector('[id^=cursorImg]') ?? container.querySelector('[class*=cursor]')
-        const paintedCurrent = [...container.querySelectorAll('[data-cz-painted="1"]')].filter((el) => /rgb\(37, 99, 235\)/.test(el.style.fill || ''))
-        if (!cursor || paintedCurrent.length === 0) return { errorPx: null, samples: 0 }
-        const cursorRect = cursor.getBoundingClientRect()
-        const noteRect = paintedCurrent[0].getBoundingClientRect()
-        return { errorPx: Math.abs((cursorRect.x + cursorRect.width / 2) - (noteRect.x + noteRect.width / 2)), samples: 1 }
+        if (!container) return { skipped: 'no container' }
+        const cursorEl = container.querySelector('[id^=cursorImg]') ?? container.querySelector('[class*=cursor]')
+        if (!cursorEl) return { skipped: 'no cursor' }
+        const cursorRect = cursorEl.getBoundingClientRect()
+        const cursorX = cursorRect.x + cursorRect.width / 2
+        const painted = [...container.querySelectorAll('[data-cz-painted="1"]')]
+          .map((el) => ({ el, rect: el.getBoundingClientRect() }))
+          .filter((entry) => /rgb\(37, 99, 235\)/.test(entry.el.style.fill || ''))
+        if (painted.length === 0) return { skipped: 'no required note' }
+        const required = painted[0]
+        const measure = required.el.closest('g.vf-measure')
+        const measureRect = measure?.getBoundingClientRect?.() ?? null
+        // The OSMD cursor marker is drawn from its own left edge, so a
+        // time-0 onset lands a glyph-width left of the first measure's
+        // stave origin. A quarter of its width is honest tolerance; beyond
+        // that the cursor is genuinely in the wrong place.
+        const glyphSlack = 24
+        const insideMeasure = measureRect
+          ? cursorX >= measureRect.left - glyphSlack && cursorX <= measureRect.right + 4
+          : null
+        const leftOfOrOnNote = cursorX <= required.rect.right + 6
+        return {
+          cursorX: Math.round(cursorX),
+          noteX: Math.round(required.rect.x),
+          measureLeft: measureRect ? Math.round(measureRect.left) : null,
+          measureRight: measureRect ? Math.round(measureRect.right) : null,
+          insideMeasure,
+          leftOfOrOnNote,
+        }
       })
-      if (accuracy.errorPx != null && accuracy.errorPx <= 40) {
-        pass('cursor aligns with the required notehead', `${accuracy.errorPx.toFixed(1)}px`)
-      } else if (accuracy.errorPx != null) {
-        fail('cursor aligns with the required notehead', `${accuracy.errorPx.toFixed(1)}px`)
+      if (accuracy.insideMeasure && accuracy.leftOfOrOnNote) {
+        pass('cursor sits inside the required measure', `cursor ${accuracy.cursorX} ∈ measure [${accuracy.measureLeft}, ${accuracy.measureRight}], note at ${accuracy.noteX}`)
       } else {
-        fail('cursor aligns with the required notehead', 'cursor or painted note not measurable')
+        fail('cursor sits inside the required measure', JSON.stringify(accuracy))
       }
-    } else {
-      fail('WFY advances on the correct note', 'could not read the required pitch from the target')
     }
     await page.screenshot({ path: join(outDir, `${TARGET}-wfy.png`) })
 

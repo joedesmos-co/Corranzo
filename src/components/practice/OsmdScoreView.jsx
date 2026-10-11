@@ -199,19 +199,27 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
   if (typeof window !== 'undefined') {
   }
 
-  // Cursor: canonical practice clock -> written musical quarters -> OSMD cursor.
+  // Cursor: in Wait For You it LOCKs to the required checkpoint's own
+  // musical position (the engine's source of truth for what to play next);
+  // elsewhere it follows the canonical practice clock, converted from
+  // seconds to written quarters via note-onset interpolation.
   const practiceTime = Number(tick?.practiceTime ?? 0)
+  const cursorTime = useMemo(() => {
+    if (!session.isWaitForYou) return practiceTime
+    const checkpoint = scoreStates[0]?.checkpoint
+    return Number.isFinite(checkpoint?.timeSeconds) ? checkpoint.timeSeconds : practiceTime
+  }, [session.isWaitForYou, scoreStates, practiceTime])
   const lastQuarterRef = useRef(Number.NaN)
   useEffect(() => {
     if (!ready || !osmdRef.current?.cursor) return
-    const { quarter } = musicalQuartersAtTime(timingMap, practiceTime, measureStarts)
+    const { quarter } = musicalQuartersAtTime(timingMap, cursorTime, measureStarts)
     if (!Number.isFinite(quarter)) return
     const rounded = Math.round(quarter * 1000) / 1000
     if (rounded === lastQuarterRef.current) return
     lastQuarterRef.current = rounded
     const position = cursorPositionFor(quarter, measureStarts)
     moveOsmdCursor(osmdRef.current.cursor, position)
-  }, [ready, practiceTime, timingMap, measureStarts, osmdRef])
+  }, [ready, cursorTime, timingMap, measureStarts, osmdRef])
 
   // Keep the current musical position visible while playing.
   const isPlaying = Boolean(tick?.playbackIsPlaying)
@@ -221,6 +229,7 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
     const matched = entry ? resolvedRef.current.get(entry.checkpoint?.id ?? '') : null
     if (matched?.notes?.length) scrollToNote(matched.notes[0])
   }, [isPlaying, practiceTime, ready, scoreStates, scrollToNote])
+
 
   if (!xml) return null
   if (error) {
