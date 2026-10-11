@@ -116,6 +116,9 @@ export default function ImportScoreView({
               ? ` Covers ${Math.floor(arrangementMeta.excerpt.startSeconds / 60)}:${String(Math.floor(arrangementMeta.excerpt.startSeconds % 60)).padStart(2, '0')}–${Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) / 60)}:${String(Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) % 60)).padStart(2, '0')} of the recording.`
               : ''}
             Page-follow visuals need a PDF — timing, playback and practice modes work from the notation.
+            {arrangementMeta.uncertainRegions > 0
+              ? ` ${arrangementMeta.uncertainRegions} passage${arrangementMeta.uncertainRegions === 1 ? '' : 's'} could not be corroborated by an independent check — review before you practice.`
+              : ''}
             {arrangementMeta.partial ? ' Some passages were uncertain; listen through before you practice.' : ''}
           </p>
         </div>}
