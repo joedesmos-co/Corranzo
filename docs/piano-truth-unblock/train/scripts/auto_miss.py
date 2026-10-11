@@ -61,44 +61,64 @@ def main():
                                "chord": e.get("chord_id") is not None,
                                "beam": bool(e.get("beam_id")),
                                "dur": e.get("dur"), "mei_id": e["id"]})
+            # truth = NOTEHEAD positions (structural), not bbox centers
+            from staff_geometry import notehead_map
+            nh = notehead_map(svg)
+            tp_ = []
+            for e in evs:
+                if e["kind"] != "note" or (e.get("bbox") or {}).get("page") != pg:
+                    continue
+                pos = nh.get(e.get("id") or "") or nh.get(e.get("svg_id") or "")
+                if pos is None:
+                    continue
+                tp_.append(((pos[0] + tx) / 10 * sx, (pos[1] + ty) / 10 * sx, e))
             used = set()
-            for d in det:
-                best, bi = 0.3, -1
-                for j, o in enumerate(ob):
+            for (px, py, e) in tp_:
+                hit = None
+                for j, d in enumerate(det):
                     if j in used:
                         continue
-                    v = iou(d, o)
-                    if v > best:
-                        best, bi = v, j
-                if bi >= 0:
-                    used.add(bi)
-                    o = ob[bi]
-                    if len(sizerr) < 400:
-                        sizerr.append((d["w"] / o["w"], d["h"] / o["h"]))
-            for j, o in enumerate(ob):
-                if j in used:
-                    continue
-                C["missed"] += 1
-                key = ("chord" if o["chord"] else "single",
-                       "beam" if o["beam"] else "nobeam")
-                C["miss_" + "_".join(key)] += 1
-                # locate which CC covers this truth box
-                cov = None
-                for c in comps:
-                    if (c["x"] <= o["x"] + o["w"] / 2 <= c["x"] + c["w"]
-                            and c["y"] <= o["y"] + o["h"] / 2 <= c["y"] + c["h"]):
-                        cov = c
+                    if d["x"] <= px <= d["x"] + d["w"] and d["y"] <= py <= d["y"] + d["h"]:
+                        hit = j
                         break
-                if cov is None:
-                    C["miss_no_cc"] += 1
-                elif cov["w"] > 3.0 * gap:
-                    C["miss_wide_beam_blob"] += 1
-                elif not (0.55 * gap <= cov["w"] <= 2.0 * gap):
-                    C["miss_size_window"] += 1
-                elif cov["fill"] <= 0.45:
-                    C["miss_low_fill"] += 1
+                if hit is None:
+                    best, bj = 10 ** 9, -1
+                    for j, d in enumerate(det):
+                        if j in used:
+                            continue
+                        v = (d["x"] + d["w"] / 2 - px) ** 2 + (d["y"] + d["h"] / 2 - py) ** 2
+                        if v < best:
+                            best, bj = v, j
+                    if bj >= 0 and best <= (1.2 * gap) ** 2:
+                        hit = bj
+                        C["hit_near"] += 1
+                if hit is None:
+                    C["missed"] += 1
+                    key = ("chord" if e.get("chord_id") else "single",
+                           "beam" if e.get("beam_id") else "nobeam")
+                    C["miss_" + "_".join(key)] += 1
+                    # what covers the notehead pixel?
+                    cov = None
+                    for c in comps:
+                        if c["x"] <= px <= c["x"] + c["w"] and c["y"] <= py <= c["y"] + c["h"]:
+                            cov = c
+                            break
+                    if cov is None:
+                        C["miss_no_cc_at_head"] += 1
+                    elif cov["w"] > 3.0 * gap:
+                        C["miss_in_wide_blob"] += 1
+                    elif cov["h"] > 3.2 * gap or cov["w"] < 0.3 * gap:
+                        C["miss_size_window"] += 1
+                    elif cov["fill"] <= 0.45:
+                        C["miss_low_fill"] += 1
+                    else:
+                        C["miss_other"] += 1
                 else:
-                    C["miss_other"] += 1
+                    used.add(hit)
+                    C["hit"] += 1
+            for j, d in enumerate(det):
+                if j not in used:
+                    C["fp"] += 1
     if sizerr:
         wr = [a for a, _ in sizerr]
         hr = [b for _, b in sizerr]

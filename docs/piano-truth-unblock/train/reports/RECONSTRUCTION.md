@@ -822,11 +822,17 @@ poor. No stage is claimed as production-ready.
    evaluation (events carry dur=None for chord members; inheriting the
    `<chord>` dur lifted auto dur accuracy 0.27 -> 0.70 and complete
    0.27 -> 0.49 in this measurement).
-5. **Chord/beam-merged noteheads** are the recall wall (0.574). Template
-   completion was tried and MEASURED: local-max-filtered it adds zero
-   recall; unfiltered it lifts recall to 0.85 but drops precision to 0.67
-   via shifted duplicate peaks — not integrated (a trained notehead
-   detector is the real fix; recorded as a negative result).
+5. **Chord/beam-merged noteheads** are the recall wall (0.574; 62% of
+   misses beamed, 42% chord tones; 363/385 misses have NO connected
+   component at the notehead pixel at all — staff-row removal splits
+   noteheads sitting on a line). THREE deterministic recall fixes tried
+   and MEASURED, all rejected: (a) mean-template completion — local-max
+   filtered +0 recall, unfiltered recall 0.85 but precision 0.84->0.67
+   from shifted duplicate peaks; (b) vertical-thickness profile beam
+   splitting — +73 detections, ALL false positives; (c) staff-line
+   "keep-tall" preservation — recall collapses to 0.407 (reconnects
+   noteheads into per-staff blobs). A trained notehead detector is the
+   real fix.
 6. **Rest recall 0.296**: CC candidates miss rests whose thin strokes are
    broken by staff-row removal/opening; precision is 1.0 with TRAIN
    templates (8/8 typed correctly).
