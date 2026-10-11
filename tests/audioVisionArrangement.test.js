@@ -103,6 +103,120 @@ describe('A5/A6/A7 solo arrangement + difficulty', () => {
     expect(dropped.warnings.some((w) => w.kind === 'unplayable-note-dropped')).toBe(true)
   })
 
+  it('suppresses harmonic-double inventions only with amplitude evidence', async () => {
+    const { suppressHarmonicDoubles } = await import('../src/features/audio-vision/arrangementModel.js')
+    const notes = [
+      { midi: 60, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.6 },
+      { midi: 72, startSeconds: 1.01, endSeconds: 1.4, amplitude: 0.3 }, // weak octave shadow
+      { midi: 67, startSeconds: 1.02, endSeconds: 1.4, amplitude: 0.35 }, // weak fifth shadow
+      { midi: 64, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.55 }, // strong third: kept
+      { midi: 60, startSeconds: 2.0, endSeconds: 2.4 }, // no amplitude: kept
+      { midi: 72, startSeconds: 2.01, endSeconds: 2.4 }, // no amplitude: kept
+    ]
+    const { notes: kept, suppressed } = suppressHarmonicDoubles(notes)
+    expect(suppressed).toBe(2)
+    expect(kept.map((n) => n.midi)).toEqual([60, 64, 60, 72])
+    // Strongest note never dropped even when it is the upper octave.
+    const inverted = suppressHarmonicDoubles([
+      { midi: 60, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.2 },
+      { midi: 72, startSeconds: 1.0, endSeconds: 1.4, amplitude: 0.8 },
+    ])
+    expect(inverted.notes.map((n) => n.midi)).toEqual([72])
+    expect(inverted.suppressed).toBe(1)
+  })
+
+  it('chooses the melody from the detected contour, not the highest pitch', async () => {
+    const { buildMelodyContour, chooseMelodyMidi } = await import('../src/features/audio-vision/arrangementModel.js')
+    const detected = [
+      { seconds: 1.0, midi: 60 }, { seconds: 1.05, midi: 60 },
+      { seconds: 1.5, midi: 64 }, { seconds: 1.55, midi: 64 },
+    ]
+    const contour = buildMelodyContour(detected, { beat0: 0, beatPeriod: 0.5 })
+    // Beat 2 (t=1.0s): the real melody 60 sits BELOW an invented octave 72.
+    const chosen = chooseMelodyMidi([72, 60], contour.get(2))
+    expect(chosen).toBe(60)
+    // With no contour evidence we fall back to highest pitch.
+    expect(chooseMelodyMidi([72, 60], null)).toBe(72)
+    // Octave displacement of the contour line still counts as the melody:
+    // detected midi 64 at beat 3 matches 52 (one octave below).
+    const contour3 = buildMelodyContour([{ seconds: 1.5, midi: 64 }], { beat0: 0, beatPeriod: 0.5 })
+    expect(chooseMelodyMidi([52, 55], contour3.get(3))).toBe(52)
+    // No contour evidence for this beat -> highest-pitch fallback.
+    expect(chooseMelodyMidi([52, 55], null)).toBe(55)
+  })
+
+  it('easy difficulty protects the detected melody line through thinning', () => {
+    const beats = Array.from({ length: 16 }, (_, i) => i * 0.5)
+    // Model output invents an octave ABOVE the real melody at every onset.
+    const notes = []
+    for (let i = 0; i < 8; i += 1) {
+      notes.push({ midi: 72, startSeconds: i * 0.5, endSeconds: i * 0.5 + 0.45, strength: 0.9 })
+      notes.push({ midi: 60 + (i % 3), startSeconds: i * 0.5, endSeconds: i * 0.5 + 0.45, strength: 0.5 })
+      notes.push({ midi: 55, startSeconds: i * 0.5, endSeconds: i * 0.5 + 0.45, strength: 0.4 })
+    }
+    const contour = new Map()
+    for (let i = 0; i < 8; i += 1) contour.set(i, new Set([60 + (i % 3)]))
+    for (const difficulty of ['easy', 'intermediate', 'advanced']) {
+      const { events } = arrangeSoloGuitar({ quantizedNotes: quantizeToBeats(notes, beats), chords: [], difficulty, melodyContour: contour })
+      // Every real melody note survives at EVERY difficulty.
+      for (let i = 0; i < 8; i += 1) {
+        const at = events.filter((e) => Math.abs(e.startBeat - i) < 1e-6)
+        expect(at.some((e) => e.midi === 60 + (i % 3))).toBe(true)
+      }
+    }
+  })
+
+  it('emits overlapping voices without drifting the parsed timeline', async () => {
+    const beatsPerMeasure = 4
+    const bpm = 108
+    const period = 60 / bpm
+    // RH has a sustained harmony note under a moving line (overlap), plus LH
+    // bass; without intra-voice clipping every later note's parsed time drifts.
+    const events = [
+      { midi: 71, startBeat: 1.75, durBeats: 0.5, hand: 'RH', role: 'melody' },
+      { midi: 77, startBeat: 2.5, durBeats: 1.0, hand: 'RH', role: 'melody' },
+      { midi: 69, startBeat: 2.75, durBeats: 1.25, hand: 'RH', role: 'melody' },
+      { midi: 57, startBeat: 2.5, durBeats: 1.5, hand: 'LH', role: 'bass' },
+    ]
+    const xml = buildArrangementMusicXml({ events, targetPart: 'solo-piano', bpm, title: 'Overlap' })
+    const parsed = parseMusicXml(xml, 'overlap.musicxml')
+    const got = parsed.notes.filter((n) => !n.isRest).map((n) => Math.round(n.timeSeconds / period))
+    expect(got).toEqual([2, 3, 3, 3]) // beats 1.75→2, 2.5→3 (x2 voices), 2.75→3
+    // No note may extend past the next barline after its own start.
+    const barline = beatsPerMeasure * period
+    const overflow = parsed.notes.filter((n) => {
+      if (n.isRest) return false
+      const next = Math.ceil(n.timeSeconds / barline - 1e-9) * barline
+      return n.timeSeconds + n.durationSeconds > next + 1e-6
+    })
+    expect(overflow).toEqual([])
+  })
+
+  it('difficulty thinning never deletes the melody (only harmony/bass)', () => {
+    const { simplifyForDifficulty } = require('../src/features/audio-vision/difficulty.js')
+    // Dense window: melody + bass + three harmony notes in one half-beat.
+    const events = [
+      { midi: 72, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: true, role: 'melody', strength: 0.9 },
+      { midi: 48, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: false, isBassRoot: true, role: 'bass', strength: 0.5 },
+      { midi: 60, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: false, role: 'harmony', strength: 0.45 },
+      { midi: 64, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: false, role: 'harmony', strength: 0.4 },
+      { midi: 67, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: false, role: 'harmony', strength: 0.35 },
+    ]
+    for (const difficulty of ['easy', 'intermediate', 'advanced']) {
+      const simplified = simplifyForDifficulty(events, difficulty)
+      expect(simplified.some((e) => e.midi === 72 && e.isMelody)).toBe(true)
+      // Bass root survives ahead of weak harmony when the budget bites.
+      expect(simplified.some((e) => e.midi === 48)).toBe(true)
+      expect(simplified.length).toBeLessThan(events.length)
+    }
+    // Duplicate melody at the same beat dedupes instead of stacking.
+    const dup = simplifyForDifficulty([
+      { midi: 72, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: true, role: 'melody' },
+      { midi: 72, quantizedStartBeat: 0, quantizedDurBeats: 1, isMelody: true, role: 'melody' },
+    ], 'easy')
+    expect(dup).toHaveLength(1)
+  })
+
   it('difficulty levels differ measurably (easy < intermediate < advanced)', () => {
     const levels = [DIFFICULTIES.EASY, DIFFICULTIES.INTERMEDIATE, DIFFICULTIES.ADVANCED]
     const complexities = levels.map((difficulty) => {

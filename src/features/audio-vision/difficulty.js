@@ -53,7 +53,11 @@ export function simplifyForDifficulty(events, difficulty) {
     const durBeats = Math.max(params.maxVoicesPerOnset ? params.minNoteBeats : 0.25, e.quantizedDurBeats ?? e.durBeats ?? 0.5)
     out.push({ ...e, quantizedDurBeats: Math.round(durBeats * 100) / 100, durBeats: Math.round(durBeats * 100) / 100 })
   }
-  // Density cap per beat window.
+  // Density cap per beat window. Melody is the musical identity of an
+  // arrangement: the cap may thin harmony/bass, never the melody (except
+  // exact same-pitch duplicates on the same beat). Dropping melody to meet a
+  // budget is what makes Easy feel like a damaged copy instead of a simple one.
+  const budgetBase = params.maxVoicesPerOnset
   const byBeat = new Map()
   for (const e of out) {
     const key = Math.round((e.quantizedStartBeat ?? 0) * 2) / 2
@@ -62,9 +66,22 @@ export function simplifyForDifficulty(events, difficulty) {
   }
   const thinned = []
   for (const [, group] of byBeat) {
-    const budget = Math.max(params.maxVoicesPerOnset, Math.ceil(params.maxNotesPerBeat / 2))
-    const sorted = [...group].sort((a, b) => Number(b.isMelody ?? 0) - Number(a.isMelody ?? 0))
-    thinned.push(...sorted.slice(0, Math.max(budget, 1)))
+    const seenMelody = new Set()
+    const melodies = group.filter((e) => e.isMelody && (() => {
+      const k = `${e.midi}:${Math.round((e.quantizedStartBeat ?? 0) * 4)}`
+      if (seenMelody.has(k)) return false
+      seenMelody.add(k)
+      return true
+    })())
+    const others = group.filter((e) => !e.isMelody)
+    // Harmony priority when over budget: bass root first, then strength.
+    const sortedOthers = others.sort((a, b) => {
+      const av = (a.isBassRoot ? 2 : 0) + Math.min(1.5, (a.strength ?? 0.5))
+      const bv = (b.isBassRoot ? 2 : 0) + Math.min(1.5, (b.strength ?? 0.5))
+      return bv - av
+    })
+    const othersBudget = Math.max(0, budgetBase - melodies.length)
+    thinned.push(...melodies, ...sortedOthers.slice(0, othersBudget))
   }
   thinned.sort((a, b) => (a.quantizedStartBeat ?? 0) - (b.quantizedStartBeat ?? 0))
   return thinned

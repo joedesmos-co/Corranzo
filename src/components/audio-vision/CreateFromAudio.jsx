@@ -218,7 +218,21 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
             <li>Notes <strong>{result.model.parts[0].events.length}</strong> · Measures <strong>{new Set(result.model.parts[0].events.map((e) => e.measureIndex)).size}</strong></li>
             <li>Recognized with <strong>{result.confidence.pitchSource === 'basic-pitch' ? 'neural pitch recognition' : 'on-device pitch analysis'}</strong></li>
             <li>Confidence <strong>{Math.round(result.confidence.overall * 100)}%</strong></li>
+            {Number.isFinite(result.transcriptionAgreement) && (
+              <li>Second check agreed {Math.round(result.transcriptionAgreement * 100)}% of the time</li>
+            )}
           </ul>
+          {result.uncertainRegions?.length > 0 && (
+            <div className="audio-vision-error" role="note">
+              <strong>{result.uncertainRegions.length} passage{result.uncertainRegions.length === 1 ? '' : 's'} could not be corroborated.</strong>
+              <p>An independent on-device check disagreed with the transcription here — treat these moments as approximate:</p>
+              <ul>
+                {result.uncertainRegions.slice(0, 5).map((r, i) => (
+                  <li key={i}>{formatClock(r.startSeconds)}–{formatClock(r.endSeconds)}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {result.partial && <p className="audio-vision-error" role="note">{result.message}</p>}
           {result.excerpt && (
             <p className="audio-vision-hint" role="note">

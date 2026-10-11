@@ -4,7 +4,7 @@
  * (<technical> string/fret) downstream.
  */
 import { PROVENANCE } from './musicAnalysis.js'
-import { resolveSimultaneous, selectTexture } from './arrangementModel.js'
+import { resolveSimultaneous, selectTexture, chooseMelodyMidi } from './arrangementModel.js'
 import { paramsForDifficulty } from './difficulty.js'
 import { STANDARD_GUITAR_TUNING } from '../instruments/instruments.js'
 import { assignChordPositions, candidatePositionsForMidi, stringFretForMidi } from '../instruments/fretboard.js'
@@ -24,7 +24,7 @@ export const GUITAR_MAX = 88 // nominal top; positions decide playability
  * Arrange into single guitar events with string/fret.
  * { midi, startBeat, durBeats, string, fret, role, positionShift }
  */
-export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPerMeasure = 4, capo = 0, tuning = null }) {
+export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPerMeasure = 4, capo = 0, tuning = null, melodyContour = null }) {
   const params = paramsForDifficulty(difficulty)
   const strings = tuning ? { ...GUITAR_STRINGS, tuning } : GUITAR_STRINGS
   const byOnset = new Map()
@@ -43,11 +43,12 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
     const group = byOnset.get(onset)
     const measureIndex = Math.floor(Math.max(0, onset) / beatsPerMeasure)
     const sorted = [...group].sort((a, b) => b.midi - a.midi)
-    const melodyMidi = sorted[0]?.midi ?? null
+    const contourBeat = melodyContour?.get?.(Math.round(onset * 2) / 2)
+    const melodyMidi = chooseMelodyMidi(sorted.map((n) => n.midi), contourBeat) ?? sorted[0]?.midi ?? null
     const tagged = sorted.map((n, i) => ({
       ...n,
-      isMelody: i === 0,
-      isBassRoot: i === sorted.length - 1 && sorted.length > 1,
+      isMelody: n.midi === melodyMidi,
+      isBassRoot: sorted.length > 1 && i === sorted.length - 1 && n.midi !== melodyMidi,
       isChordTone: true,
       isPassingTone: false,
       strength: n.strength ?? 0.5,
@@ -55,6 +56,8 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
       measureIndex,
     }))
     // Guitar: max 4 simultaneous in advanced, fewer below; melody always kept.
+    // Melody comes from the DETECTED contour (evidence) so an upper octave
+    // shadow cannot take the melody role and strand the real line.
     const resolved = resolveSimultaneous(tagged, { maxVoices: Math.min(4, params.maxVoicesPerOnset + 1), melodyMidi })
       .filter((e) => e.kept)
     const texture = selectTexture({ noteDensity: group.length, chordConfidence: 0.5, difficulty })
@@ -95,6 +98,7 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
         string: pos.string,
         fret: pos.fret + capo * 0,
         role: n.isMelody ? 'melody' : 'harmony',
+        isMelody: Boolean(n.isMelody),
         texture,
         measureIndex,
         ...(n.octaveShifted ? { octaveShifted: n.octaveShifted } : {}),
@@ -120,6 +124,7 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
               durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
               string: fallback.string, fret: fallback.fret,
               role: 'melody', texture, measureIndex,
+              isMelody: true,
               ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
               provenance: PROVENANCE.ARRANGED,
             })
@@ -134,6 +139,8 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
           durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
           string: pos.string, fret: pos.fret,
           role: r.isMelody ? 'melody' : r.isBassRoot ? 'bass' : 'harmony',
+          isMelody: Boolean(r.isMelody),
+          isBassRoot: Boolean(r.isBassRoot),
           texture, measureIndex,
           ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
           provenance: PROVENANCE.ARRANGED,

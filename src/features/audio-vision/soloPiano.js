@@ -4,7 +4,7 @@
  * Not a mechanical high/low split: melody continuity wins, then voice leading.
  */
 import { PROVENANCE } from './musicAnalysis.js'
-import { resolveSimultaneous, selectTexture } from './arrangementModel.js'
+import { resolveSimultaneous, selectTexture, chooseMelodyMidi } from './arrangementModel.js'
 import { paramsForDifficulty } from './difficulty.js'
 
 const PIANO_MIN = 21
@@ -21,7 +21,7 @@ function clampPiano(midi) {
  * Arrange quantized transcription events + chords + melody into two-hand piano events.
  * Each event: { midi, startBeat, durBeats, hand: 'RH'|'LH', role, kept }
  */
-export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficulty, beatsPerMeasure = 4 }) {
+export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficulty, beatsPerMeasure = 4, melodyContour = null }) {
   const params = paramsForDifficulty(difficulty)
   const maxSpan = params.maxHandSpanSemitones
   // Group by onset beat.
@@ -47,20 +47,30 @@ export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficu
       chordConfidence: chord?.confidence ?? 0,
       difficulty,
     })
-    // Tag roles.
+    // Melody is chosen from the DETECTED melodic contour (evidence), not
+    // merely the highest pitch — an upper octave shadow otherwise becomes
+    // "melody" while difficulty thinning deletes the real line.
     const sorted = [...group].sort((a, b) => b.midi - a.midi)
-    const melodyMidi = sorted[0]?.midi ?? null
-    const tagged = sorted.map((n, i) => ({
+    const contourBeat = melodyContour?.get?.(Math.round(onset * 2) / 2)
+    const melodyMidi = chooseMelodyMidi(sorted.map((n) => n.midi), contourBeat) ?? sorted[0]?.midi ?? null
+    const tagged = sorted.map((n) => ({
       ...n,
-      isMelody: i === 0,
-      isBassRoot: i === sorted.length - 1,
+      isMelody: n.midi === melodyMidi,
+      isBassRoot: false,
       isChordTone: chord ? chord.tones.includes(((n.midi % 12) + 12) % 12) : false,
-      isPassingTone: chord ? !chord.tones.includes(((n.midi % 12) + 12) % 12) && i > 0 : false,
+      isPassingTone: chord ? !chord.tones.includes(((n.midi % 12) + 12) % 12) && n.midi !== melodyMidi : false,
       strength: n.strength ?? 0.5,
       melodyMidi,
       texture,
       measureIndex,
     }))
+    // Bass root = lowest sounding note (for the LH lane), independent of melody choice.
+    if (tagged.length > 1) {
+      tagged[tagged.length - 1].isBassRoot = true
+      if (tagged[tagged.length - 1].midi === melodyMidi) {
+        tagged.length > 2 && (tagged[tagged.length - 2].isBassRoot = true)
+      }
+    }
     const resolved = resolveSimultaneous(tagged, {
       maxVoices: params.maxVoicesPerOnset + 1, // piano allows melody + accompaniment
       melodyMidi,
@@ -85,6 +95,8 @@ export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficu
         durBeats: Math.max(params.minNoteBeats, e.quantizedDurBeats ?? 0.5),
         hand,
         role: e.isMelody ? 'melody' : e.isBassRoot ? 'bass' : 'harmony',
+        isMelody: Boolean(e.isMelody),
+        isBassRoot: Boolean(e.isBassRoot),
         texture,
         measureIndex,
         provenance: PROVENANCE.ARRANGED,

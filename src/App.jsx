@@ -953,6 +953,8 @@ export default function App() {
           partial: Boolean(payload.partial),
           warningCount: Array.isArray(payload.warnings) ? payload.warnings.length : 0,
           excerpt: payload.excerpt ?? null,
+          uncertainRegions: Array.isArray(payload.uncertainRegions) ? payload.uncertainRegions.length : 0,
+          transcriptionAgreement: Number.isFinite(payload.transcriptionAgreement) ? payload.transcriptionAgreement : null,
         },
       },
     })

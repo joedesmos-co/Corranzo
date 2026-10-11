@@ -10,12 +10,15 @@ import {
   createArrangementModel,
   quantizeToBeats,
   measureComplexity,
+  suppressHarmonicDoubles,
+  buildMelodyContour,
   PART_INSTRUMENTS,
 } from './arrangementModel.js'
 import { arrangeSoloPiano } from './soloPiano.js'
 import { arrangeSoloGuitar } from './soloGuitar.js'
 import { simplifyForDifficulty } from './difficulty.js'
 import { buildArrangementMusicXml } from './arrangementMusicXml.js'
+import { spectralSecondOpinion, scoreAgreement, AGREEMENT_WINDOW_SECONDS } from './agreementScore.js'
 
 export const CONFIDENCE_THRESHOLD_ARRANGE = 0.35
 export const CONFIDENCE_THRESHOLD_PARTIAL = 0.2
@@ -36,6 +39,10 @@ export function scoreArrangementConfidence({ analysis, arrangedEvents, separatio
   // so yield saturates and then penalizes (A9: grounded, not gamed).
   const density = arrangedEvents.length / Math.max(1, analysis.onsets.length)
   const densityScore = density <= 3 ? clamp01(density / 2) : Math.max(0, 1 - (density - 3) / 6)
+  // §5 transcription agreement: an independent second transcriber corroborating
+  // the model. Unknown (null) keeps the score unchanged rather than guessing.
+  const agreementScore = Number.isFinite(analysis.transcriptionAgreement) ? analysis.transcriptionAgreement : null
+  const agreementComponent = agreementScore == null ? 0 : 0.15 * agreementScore
   const sepBonus = separationQuality?.helpsTranscription ? 0.05 : 0
   const sourceBonus = analysis.pitchSource === 'basic-pitch' ? 0.05 : 0
   // Only severe playability failures count — benign musical notes
@@ -50,20 +57,25 @@ export function scoreArrangementConfidence({ analysis, arrangedEvents, separatio
   ])
   const severeCount = (warnings ?? []).filter((w) => SEVERE_WARNING_KINDS.has(w.kind ?? w)).length
   const warningPenalty = Math.min(0.15, severeCount * 0.02)
+  // Uncertainty regions lower the score proportionally (capped): a mix with a
+  // third of its windows uncorroborated should not read as fully confident.
+  const regionPenalty = Math.min(0.2, (analysis.uncertainRegionRatio ?? 0) * 0.4)
   const melodyNotes = arrangedEvents.filter((e) => e.role === 'melody').length
   const melodyScore = arrangedEvents.length ? melodyNotes / arrangedEvents.length : 0
   const overall = clamp01(
-    0.25 * onsetScore + 0.2 * tempoScore + 0.2 * chordScore
-    + 0.15 * densityScore + 0.2 * melodyScore + sepBonus + sourceBonus - warningPenalty,
+    0.2 * onsetScore + 0.15 * tempoScore + 0.15 * chordScore
+    + 0.15 * densityScore + 0.2 * melodyScore + sepBonus + sourceBonus + agreementComponent
+    - warningPenalty - regionPenalty,
   )
   return {
-    overall: Math.round(overall * 100) / 100,
+    overall: Math.round(overall * 1000) / 1000,
     parts: {
       onsetEvidence: Math.round(onsetScore * 100) / 100,
       tempoConfidence: tempoScore,
       chordConfidence: Math.round(chordScore * 100) / 100,
       densityScore: Math.round(densityScore * 100) / 100,
       melodyPreservation: Math.round(melodyScore * 100) / 100,
+      transcriptionAgreement: agreementScore,
     },
     pitchSource: analysis.pitchSource,
     separationHelps: Boolean(separationQuality?.helpsTranscription),
@@ -160,15 +172,52 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
         spaciousness: views.stereo?.spaciousness ?? null,
       }
     : null
+  // §5 — independent second opinion (model-free spectral peaks on the
+  // harmonic view) and windowed agreement against the primary model.
+  // Agreement is evidence of transcription reliability at runtime; the
+  // second opinion is never used as the arrangement's source of notes.
+  let agreement = null
+  let uncertainRegions = []
+  if (analysis.pitchSource === 'basic-pitch') {
+    const secondOpinion = spectralSecondOpinion({
+      harmonicFrames: views.harmonic,
+      onsets: analysis.onsets,
+      totalSeconds: analysis.totalSeconds,
+      fftSize: views.fftSize,
+      sampleRate: imported.sampleRate,
+    })
+    const scored = scoreAgreement(analysis.predictedNotes, secondOpinion, { totalSeconds: analysis.totalSeconds })
+    agreement = scored.agreement
+    uncertainRegions = scored.uncertainRegions
+  }
+  analysis.transcriptionAgreement = agreement
+  const windowCount = Math.max(1, Math.ceil(analysis.totalSeconds / AGREEMENT_WINDOW_SECONDS))
+  analysis.uncertainRegionRatio = uncertainRegions.length / windowCount
   const transcribed = createTranscribedContent({ analysis, viewsQuality: views.quality })
+  // Harmonic-double suppression (BP path only: amplitude-gated). Count is
+  // reported, never silent; arrangement-grade effect measured on frozen eval.
+  let suppressedHarmonics = 0
+  if (analysis.pitchSource === 'basic-pitch' && analysis.predictedNotes.some((n) => n.amplitude != null)) {
+    const filtered = suppressHarmonicDoubles(analysis.predictedNotes)
+    suppressedHarmonics = filtered.suppressed
+    analysis.predictedNotes = filtered.notes
+  }
+  transcribed.suppressedHarmonics = suppressedHarmonics
+  // Melody contour from DETECTED salient frames — decides which simultaneous
+  // note is the melody (evidence), so thinning protects the real line.
+  const melodyContour = buildMelodyContour(analysis.melody, {
+    beat0: analysis.beats.beats[0] ?? 0,
+    beatPeriod: analysis.beats.beatPeriodSeconds,
+  })
+  transcribed.melodyContourBeats = melodyContour.size
   const quantized = quantizeToBeats(analysis.predictedNotes, analysis.beats.beats)
   // Melody anchors for piano phrasing: strongest melody frame per onset beat.
   const melodyByBeat = (analysis.melody ?? []).map((m) => ({ beat: (m.seconds - (analysis.beats.beats[0] ?? 0)) / analysis.beats.beatPeriodSeconds, midi: m.midi }))
   let arranged
   if (targetPart === PART_INSTRUMENTS.SOLO_PIANO) {
-    arranged = arrangeSoloPiano({ quantizedNotes: quantized, chords: analysis.chords, melodyByBeat, difficulty })
+    arranged = arrangeSoloPiano({ quantizedNotes: quantized, chords: analysis.chords, melodyByBeat, difficulty, melodyContour })
   } else {
-    arranged = arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty })
+    arranged = arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty, melodyContour })
   }
   const simplified = simplifyForDifficulty(
     arranged.events.map((e) => ({ ...e, quantizedStartBeat: e.startBeat, quantizedDurBeats: e.durBeats })),
@@ -177,6 +226,8 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   const model = createArrangementModel({ targetPart, difficulty })
   model.parts[0].events = simplified
   model.parts[0].warnings = arranged.warnings ?? []
+  model.uncertainRegions = uncertainRegions
+  model.transcriptionAgreement = agreement
   if (arranged.strings) model.parts[0].strings = arranged.strings
   // A9: density plausibility BEFORE confidence — extreme notes/beat usually
   // means invented detail in dense mixes, not virtuosity. The warning feeds
@@ -236,6 +287,9 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     confidence,
     partial: verdict.partial,
     excerpt: excerptReport,
+    suppressedHarmonics,
+    uncertainRegions,
+    transcriptionAgreement: agreement,
     durationSeconds: imported.durationSeconds,
   }
 }

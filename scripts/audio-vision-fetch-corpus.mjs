@@ -161,5 +161,47 @@ for (const src of REAL_CORPUS.sources) {
   }
 }
 
+// TRIOS score-aligned trios (CC BY-NC-SA 2.0 UK, local eval only).
+// Real multi-instrument mixes + drift-free piano parts with MIDI truth.
+// Materialized by scripts/lib/extract-trios-truth.py into /tmp/trios-truth.json.
+{
+  const TRIOS_LICENSE = 'CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)'
+  const TRIOS_ATTRIB = 'TRIOS score-aligned multitrack dataset (Fujihara & Goto)'
+  try {
+    const trios = JSON.parse(readFileSync('/tmp/trios-truth.json', 'utf8'))
+    for (const [take, data] of Object.entries(trios.takes)) {
+      const takeDir = `/tmp/trios/TRIOS Dataset/${take}`
+      const mixAudio = `${takeDir}/mix.wav`
+      if (existsSync(mixAudio) && Array.isArray(data.mix?.notes) && data.mix.notes.length) {
+        entries.push({
+          id: `trios-${take}-mix`,
+          audio: mixAudio,
+          truthNotes: data.mix.notes,
+          truthOffsets: data.mix.notes.map((n) => ({ offset: n.offset ?? n.onset + 0.5 })),
+          license: TRIOS_LICENSE,
+          attribution: TRIOS_ATTRIB,
+          difficulties: ['easy', 'advanced'],
+        })
+      }
+      for (const [part, pdata] of Object.entries(data.parts ?? {})) {
+        if (['kick', 'snare', 'ride'].includes(part)) continue
+        const partAudio = `${takeDir}/${part}.wav`
+        if (!existsSync(partAudio) || !Array.isArray(pdata.notes) || !pdata.notes.length) continue
+        entries.push({
+          id: `trios-${take}-${part}`,
+          audio: partAudio,
+          truthNotes: pdata.notes,
+          truthOffsets: pdata.notes.map((n) => ({ offset: n.offset ?? n.onset + 0.5 })),
+          license: TRIOS_LICENSE,
+          attribution: TRIOS_ATTRIB,
+          difficulties: part === 'piano' ? ['easy', 'intermediate', 'advanced'] : ['easy', 'advanced'],
+        })
+      }
+    }
+  } catch {
+    // TRIOS not materialized; entries skipped (see realCorpus.mjs).
+  }
+}
+
 writeFileSync(manifestOut, JSON.stringify({ version: 1, entries }, null, 2))
 console.log(`manifest: ${manifestOut} (${entries.length} entries)`)

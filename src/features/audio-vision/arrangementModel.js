@@ -148,3 +148,87 @@ export function measureComplexity(events) {
     distinctPitchClasses: new Set(midis.map((m) => ((m % 12) + 12) % 12)).size,
   }
 }
+
+/**
+ * Build a beat-keyed melodic contour from detected melody frames
+ * (analysis.melody: the dominant salient pitch per frame, provenance
+ * 'detected'). Used to decide WHICH simultaneous note is the melody —
+ * highest-pitch heuristics mislabel when an upper harmonic or octave
+ * shadow sits above the real line, and difficulty thinning then deletes
+ * the true melody. Returns Map<beat(number), Set<midi>>.
+ */
+export function buildMelodyContour(melodyFrames = [], { beat0 = 0, beatPeriod = 0.5, toleranceBeats = 0.5 } = {}) {
+  const contour = new Map()
+  if (!melodyFrames?.length || !(beatPeriod > 0)) return contour
+  for (const frame of melodyFrames) {
+    const beat = (frame.seconds - beat0) / beatPeriod
+    if (!Number.isFinite(beat)) continue
+    const key = Math.round(beat * 2) / 2
+    for (const b of [beat + toleranceBeats, beat, beat - toleranceBeats]) {
+      if (b < -toleranceBeats) continue
+      const k = Math.round(b * 2) / 2
+      if (!contour.has(k)) contour.set(k, new Set())
+      contour.get(k).add(frame.midi)
+    }
+    void key
+  }
+  return contour
+}
+
+/**
+ * Pick the melody note of a simultaneous group using the contour first
+ * (detected evidence), falling back to the highest pitch. Returns the
+ * chosen midi or null when the group is empty.
+ */
+export function chooseMelodyMidi(midis, contourForBeat, { fallbackHighest = true } = {}) {
+  if (!midis?.length) return null
+  if (contourForBeat?.size) {
+    for (const midi of midis) {
+      if (contourForBeat.has(midi)) return midi
+    }
+    // Pitch-class match catches octave displacement of the true line.
+    for (const midi of midis) {
+      for (const c of contourForBeat) {
+        if (Math.abs(c - midi) === 12) return midi
+      }
+    }
+  }
+  return fallbackHighest ? Math.max(...midis) : null
+}
+
+/**
+ * Suppress harmonic-double inventions in predicted notes (octave/fifth
+ * shadows of a simultaneously stronger note). Only notes carrying an
+ * amplitude/strength vote; notes without one are always kept. Returns
+ * { notes, suppressed } — the count keeps the decision auditable, never
+ * silent. The strongest note in a group is never dropped.
+ */
+export function suppressHarmonicDoubles(notes, { windowSeconds = 0.06, minRatio = 1.5 } = {}) {
+  const sorted = [...(notes ?? [])].sort((a, b) => a.startSeconds - b.startSeconds)
+  const drop = new Set()
+  for (let i = 0; i < sorted.length; i += 1) {
+    if (drop.has(i)) continue
+    const anchor = sorted[i]
+    const ampAnchor = anchor.amplitude ?? anchor.strength ?? null
+    for (let j = i + 1; j < sorted.length; j += 1) {
+      if (sorted[j].startSeconds - anchor.startSeconds > windowSeconds) break
+      if (drop.has(j)) continue
+      const other = sorted[j]
+      const ampOther = other.amplitude ?? other.strength ?? null
+      if (ampAnchor == null || ampOther == null) continue
+      if (anchor.midi === other.midi) continue
+      const interval = Math.abs(anchor.midi - other.midi) % 12
+      if (interval !== 0 && interval !== 7) continue
+      if (ampAnchor >= ampOther * minRatio) {
+        drop.add(j)
+      } else if (ampOther >= ampAnchor * minRatio) {
+        drop.add(i)
+        break
+      }
+    }
+  }
+  return {
+    notes: sorted.filter((_, index) => !drop.has(index)),
+    suppressed: drop.size,
+  }
+}

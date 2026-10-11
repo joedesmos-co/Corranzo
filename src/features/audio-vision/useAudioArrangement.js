@@ -152,6 +152,8 @@ export function useAudioArrangement({ onReady = null } = {}) {
       warnings: result.model.parts[0]?.warnings ?? [],
       partial: result.partial,
       excerpt: result.excerpt ?? null,
+      uncertainRegions: result.uncertainRegions ?? [],
+      transcriptionAgreement: result.transcriptionAgreement ?? null,
     }
     onReady?.(payload)
     return payload

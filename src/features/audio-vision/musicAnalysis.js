@@ -125,7 +125,9 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
       if (pc != null) bassVotes[pc] += 1
     }
     const bassPc = bassVotes.indexOf(Math.max(...bassVotes))
-    if (bassVotes[bassPc] >= 2 && bassPc !== rec.root) {
+    // Sustained bass only: transient passing bass (walking lines, strummed
+    // fifths) must not re-root the harmony toward the dominant.
+    if (bassVotes[bassPc] >= 4 && bassPc !== rec.root) {
       const alt = recognizeChordWithRoot(acc, bassPc)
       if (alt && alt.score >= rec.score * 0.95) rec = alt
     }
@@ -175,6 +177,7 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
           midi: Math.round(e.midi ?? e.pitchMidi ?? 0),
           startSeconds: Number(e.startSeconds ?? e.startTimeSeconds ?? 0),
           endSeconds: Number(e.endSeconds ?? (e.startTimeSeconds ?? 0) + (e.durationSeconds ?? 0)),
+          amplitude: Number.isFinite(e.amplitude) ? e.amplitude : null,
           provenance: PROVENANCE.PREDICTED,
         })).filter((e) => e.midi >= 21 && e.midi <= 108 && e.endSeconds > e.startSeconds)
         pitchSource = 'basic-pitch'
