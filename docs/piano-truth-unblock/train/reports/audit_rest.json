@@ -1,0 +1,114 @@
+{
+ "stages": {
+  "truth_rests": 698,
+  "kind_not_rest": 67,
+  "kind_rest": 631,
+  "decoded_rest": 591,
+  "staff_ok": 569,
+  "voice_ok": 418,
+  "dur_ok": 537,
+  "fields_ok": 373,
+  "exact_key": 195,
+  "voice_wrong": 173,
+  "onset_only_miss": 178,
+  "duplicate_collapsed": 33,
+  "dropped_by_decoder": 40,
+  "dur_wrong": 54,
+  "staff_wrong": 22
+ },
+ "first_fail": {
+  "kind_not_rest": 67,
+  "voice": 173,
+  "onset": 178,
+  "duplicate": 33,
+  "dropped": 40,
+  "dur": 54,
+  "staff": 22
+ },
+ "dur_examples": [
+  [
+   "QmPyTcVQ",
+   "a3f3m3y",
+   "onset",
+   "2",
+   "0"
+  ],
+  [
+   "QmPyTcVQ",
+   "o1t3892m",
+   "onset",
+   "2",
+   "1"
+  ],
+  [
+   "QmPyTcVQ",
+   "c139ql7y",
+   "onset",
+   "0",
+   "3"
+  ],
+  [
+   "QmPyTcVQ",
+   "jwb7g29",
+   "onset",
+   "0",
+   "3"
+  ],
+  [
+   "QmPyTcVQ",
+   "l1cstyqe",
+   "onset",
+   "2",
+   "3"
+  ],
+  [
+   "Qmd85Pui",
+   "wb2zlak",
+   "onset",
+   "3/2",
+   "3/4"
+  ],
+  [
+   "QmUM6Kmu",
+   "a11qpsa8",
+   "onset",
+   "0",
+   "4"
+  ],
+  [
+   "QmUM6Kmu",
+   "m3t4bo3",
+   "onset",
+   "0",
+   "4"
+  ],
+  [
+   "QmUM6Kmu",
+   "b74l81v",
+   "onset",
+   "0",
+   "9/4"
+  ],
+  [
+   "QmUM6Kmu",
+   "g1lq19kj",
+   "onset",
+   "0",
+   "1/2"
+  ],
+  [
+   "QmUM6Kmu",
+   "r5wdo0r",
+   "onset",
+   "0",
+   "2"
+  ],
+  [
+   "QmUM6Kmu",
+   "e1jqlys9",
+   "onset",
+   "0",
+   "4"
+  ]
+ ]
+}

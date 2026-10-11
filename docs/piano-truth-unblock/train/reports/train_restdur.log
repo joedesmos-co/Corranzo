@@ -1,0 +1,39 @@
+[train] collecting TRAIN rest rows...
+[collect] 200 scores, 510 rest rows
+[collect] 400 scores, 1537 rest rows
+[collect] 600 scores, 3193 rest rows
+[train] TRAIN rest rows: 4172
+[train] collecting DEV rest rows (frozen, eval only)...
+[train] DEV rest rows: 628
+[train] epoch 1/30 dev_rest_dur=0.6975 t=379s
+[train] epoch 2/30 dev_rest_dur=0.7070 t=379s
+[train] epoch 3/30 dev_rest_dur=0.8328 t=379s
+[train] epoch 4/30 dev_rest_dur=0.8519 t=379s
+[train] epoch 5/30 dev_rest_dur=0.8583 t=379s
+[train] epoch 6/30 dev_rest_dur=0.8710 t=379s
+[train] epoch 7/30 dev_rest_dur=0.8854 t=379s
+[train] epoch 8/30 dev_rest_dur=0.8997 t=379s
+[train] epoch 9/30 dev_rest_dur=0.9061 t=379s
+[train] epoch 10/30 dev_rest_dur=0.9108 t=379s
+[train] epoch 11/30 dev_rest_dur=0.9140 t=379s
+[train] epoch 12/30 dev_rest_dur=0.9236 t=379s
+[train] epoch 13/30 dev_rest_dur=0.9363 t=379s
+[train] epoch 14/30 dev_rest_dur=0.9331 t=379s
+[train] epoch 15/30 dev_rest_dur=0.9331 t=379s
+[train] epoch 16/30 dev_rest_dur=0.9459 t=379s
+[train] epoch 17/30 dev_rest_dur=0.9379 t=379s
+[train] epoch 18/30 dev_rest_dur=0.9490 t=379s
+[train] epoch 19/30 dev_rest_dur=0.9475 t=379s
+[train] epoch 20/30 dev_rest_dur=0.9522 t=379s
+[train] epoch 21/30 dev_rest_dur=0.9602 t=379s
+[train] epoch 22/30 dev_rest_dur=0.9586 t=379s
+[train] epoch 23/30 dev_rest_dur=0.9602 t=379s
+[train] epoch 24/30 dev_rest_dur=0.9522 t=379s
+[train] epoch 25/30 dev_rest_dur=0.9634 t=379s
+[train] epoch 26/30 dev_rest_dur=0.9618 t=379s
+[train] epoch 27/30 dev_rest_dur=0.9602 t=379s
+[train] epoch 28/30 dev_rest_dur=0.9634 t=379s
+[train] epoch 29/30 dev_rest_dur=0.9634 t=379s
+[train] epoch 30/30 dev_rest_dur=0.9634 t=379s
+[train] BEST dev_rest_dur=0.9634 @epoch 25
+[train] GATE (a) PASS: saved models/rest_dur_head.pt

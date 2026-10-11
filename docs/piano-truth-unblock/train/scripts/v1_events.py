@@ -337,9 +337,32 @@ def build_score(sid):
                 dur_ppq = int(o["dur_ppq"]) if o.get("dur_ppq") not in (None, "") else None
             except (TypeError, ValueError):
                 dur_ppq = None
+            # REST DURATION REPAIR (P1): the frozen object inventory carries
+            # no dur for rests, which used to (a) lose rest durations and
+            # (b) shift every later onset in the layer (acc never advanced).
+            # MEI keeps @dur.ppq/@dur/@dots on the rest itself; read from the
+            # MEI element as the authoritative fallback. A truly dur-less
+            # <rest> (full-measure rest) keeps None by MEI convention.
+            mei_el = by_id.get(o.get("mei_id")) if o.get("mei_id") is not None else None
+            _dur = o.get("dur")
+            _dots = o.get("dots")
+            if mei_el is not None:
+                if not _dur:
+                    _dur = mei_el.get("dur")
+                if not _dots:
+                    _dots = mei_el.get("dots")
+                if dur_ppq is None:
+                    for _k in ("dur.ppq", "dur_ppq"):
+                        _v = mei_el.get(_k)
+                        if _v not in (None, ""):
+                            try:
+                                dur_ppq = int(_v)
+                            except (TypeError, ValueError):
+                                pass
+                            break
             ev.update({"source_order": o.get("source_order"), "onset_ppq": acc[key],
-                       "dur_ppq": dur_ppq, "dur": o.get("dur"),
-                       "dots": int(o.get("dots") or 0),
+                       "dur_ppq": dur_ppq, "dur": _dur,
+                       "dots": int(_dots or 0),
                        "measure_span": dur_ppq is None,
                        "clef": governing("clef", o.get("staff"), o.get("measure")),
                        "key": governing("keySig", o.get("staff"), o.get("measure")),

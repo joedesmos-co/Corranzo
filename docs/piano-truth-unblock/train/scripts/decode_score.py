@@ -107,6 +107,48 @@ def _struct_index(sid, pages):
     return _FRM_CACHE[key]
 
 
+def _page_frames(sid, pages):
+    """Cached per-page staff frames: page -> [(rank, lines)]. Pure SVG
+    structure. Used for rest staff ownership (rests have no notehead entry
+    in the structural notemap; measured: nearest frame == truth staff on
+    98.6% TRAIN / 99.5% DEV rests vs 70% for the probe)."""
+    import sys as _sys
+    key = (sid, tuple(sorted(pages)))
+    if key not in _FRM_CACHE:
+        if str(HERE) not in _sys.path:
+            _sys.path.insert(0, str(HERE))
+        from staff_geometry import parse_page
+        pilot = TRAIN.parent / "pilot"
+        out = {}
+        for pg in pages:
+            try:
+                svg = (pilot / "data" / "render" / sid
+                       / f"page-{int(pg):02d}.svg").read_text()
+            except OSError:
+                continue
+            fr = []
+            for m in parse_page(svg):
+                for rk, s in enumerate(m["staves"]):
+                    if len(s["lines"]) == 5:
+                        fr.append((rk, s["lines"]))
+            out[pg] = fr
+        _FRM_CACHE[key] = out
+    return _FRM_CACHE[key]
+
+
+def _rest_staff_of(sid, page, bbox, margin_ty=0.0):
+    """Structural staff label for a rest: nearest staff frame to the rest's
+    bbox center (SVG units), rank+1. None when geometry is unavailable."""
+    if not bbox:
+        return None
+    frames = _page_frames(sid, [page]).get(page) or []
+    if not frames:
+        return None
+    cy = (bbox.get("y") or 0.0) + (bbox.get("h") or 0.0) / 2.0 + margin_ty
+    rk = min(frames, key=lambda t: min(abs(cy - l) for l in t[1]))[0]
+    return str(rk + 1)
+
+
 def _visual_clef_lookup(sid):
     """Cached visual governing-clef map for a score (pixels + structure)."""
     import sys as _sys
@@ -272,6 +314,31 @@ def decode_score(sid, items, pred, structure, voice_source="context",
         except (TypeError, ValueError, ZeroDivisionError):
             pass
     notes, rests = [], []
+    # rest staff ownership: structural frame nearest the rest bbox
+    # (measured 98.6% TRAIN / 99.5% DEV vs 70% probe; rest-only, notes
+    # keep the validated probe path). P1 deterministic fix.
+    _rest_pages = sorted({it.get("page") for it in items if it.get("page")})
+    _margins = {}
+    for _pg in _rest_pages:
+        try:
+            _svg = (TRAIN.parent / "pilot" / "data" / "render" / sid
+                    / f"page-{int(_pg):02d}.svg").read_text()
+            import re as _re2
+            _m = _re2.search(r'<g class="page-margin" transform="translate\('
+                             r'([-0-9.]+),\s*([-0-9.]+)\)', _svg)
+            _margins[_pg] = float(_m.group(2)) if _m else 0.0
+        except OSError:
+            _margins[_pg] = 0.0
+
+    def _rest_staff(it, probe_staff):
+        st = _rest_staff_of(sid, it.get("page"),
+                            (_evs.get(it.get("mei_id")) or {}).get("bbox"),
+                            _margins.get(it.get("page"), 0.0))
+        if st is not None and st != probe_staff:
+            flags["rest_staff_structural"] = \
+                flags.get("rest_staff_structural", 0) + 1
+            return st
+        return probe_staff
     for i, it in enumerate(items):
         p = pred[i]
         is_note = bool(p["kind"] == 1)
@@ -294,7 +361,8 @@ def decode_score(sid, items, pred, structure, voice_source="context",
                 flags["rest_dur_unknown"] = flags.get("rest_dur_unknown", 0) + 1
                 continue
             rests.append({"item": i, "mei_id": it["mei_id"], "measure": it["measure"],
-                          "measure_index": it["measure_index"], "staff": p["staff_id"],
+                          "measure_index": it["measure_index"],
+                          "staff": _rest_staff(it, p["staff_id"]),
                           "voice": p["voice_id"] if voice_source == "context"
                           else p["voice_id_common"],
                           "dur_q": _mq, "type": None, "dots": 0,
@@ -319,7 +387,8 @@ def decode_score(sid, items, pred, structure, voice_source="context",
         voice = p["voice_id"] if voice_source == "context" else p["voice_id_common"]
         if not is_note:
             rests.append({"item": i, "mei_id": it["mei_id"], "measure": it["measure"],
-                          "measure_index": it["measure_index"], "staff": p["staff_id"],
+                          "measure_index": it["measure_index"],
+                          "staff": _rest_staff(it, p["staff_id"]),
                           "voice": voice, "dur_q": q, "type": mtype, "dots": ndots,
                           "page": it["page"], "source_order": it.get("source_order", 0),
                           "measure_rest": q == _mlen.get(it["measure"])})
