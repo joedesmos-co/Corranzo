@@ -75,7 +75,9 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
       if (isPiano) {
         xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef>`
       } else {
-        xml += `<clef><sign>G</sign><line>2</line></clef>`
+        xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef>` +
+          `<clef number="2"><sign>TAB</sign><line>6</line></clef>` +
+          guitarStaffDetails()
       }
       xml += `</attributes>\n`
       if (Number.isFinite(bpm)) {
@@ -86,7 +88,7 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
     if (isPiano) {
       xml += emitGrandStaffMeasure(measureEvents, m, beats)
     } else {
-      xml += emitSingleStaffMeasure(measureEvents, m, beats, true)
+      xml += emitGuitarMeasure(measureEvents, m, beats)
     }
     xml += `    </measure>\n`
   }
@@ -132,6 +134,100 @@ function restXml(divisions, voice, staff = null) {
   if (staff != null) s += `<staff>${staff}</staff>`
   s += `</note>\n`
   return s
+}
+
+/**
+ * TAB staff declaration: six lines with standard tuning. String 1 is the
+ * highest string (E4) — the same convention Corranzo's fretboard uses, so
+ * generated `<technical>` string/fret numbers stay truthful on the TAB.
+ */
+function guitarStaffDetails() {
+  const tunings = [
+    { line: 1, step: 'E', octave: 4 },
+    { line: 2, step: 'B', octave: 3 },
+    { line: 3, step: 'G', octave: 3 },
+    { line: 4, step: 'D', octave: 3 },
+    { line: 5, step: 'A', octave: 2 },
+    { line: 6, step: 'E', octave: 2 },
+  ]
+  let s = `<staff-details number="1"><staff-lines>5</staff-lines></staff-details>`
+  s += `<staff-details number="2"><staff-lines>6</staff-lines>`
+  for (const t of tunings) {
+    s += `<staff-tuning line="${t.line}"><tuning-step>${t.step}</tuning-step><tuning-octave>${t.octave}</tuning-octave></staff-tuning>`
+  }
+  s += `</staff-details>`
+  return s
+}
+
+/**
+ * Guitar measure: standard notation staff (voice 1) then a matching TAB
+ * staff (voice 2 after backup). Both carry the same pitch/duration/ties so
+ * the canonical timing map (and every practice mode) reads ONE musical
+ * truth; the TAB copy is a placement mirror for the eyes.
+ */
+function emitGuitarMeasure(measureEvents, m, beats) {
+  // Events arrive already split at barlines (splitNoteAcrossBarlines) with
+  // tie flags intact — re-splitting here would reset those ties and
+  // duplicate a tied note's onset in the timing map.
+  const split = measureEvents
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
+    .sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
+  let staffOneDivisions = 0
+  const emit = (staff, track) => {
+    let s = ''
+    let cursor = 0
+    let emittedDivisions = 0
+    let lastOnset = null
+    for (const e of split) {
+      // Sequential voices must never place a note before the running cursor:
+      // MusicXML within a voice is strictly sequential, so a negative gap
+      // (arranger overlap) would otherwise swallow real time and
+      // desynchronize the TAB staff below. Order is always preserved.
+      const localStart = Math.max(cursor, Math.max(0, Math.min(beats, e.startBeat - m * beats)))
+      const gap = localStart - cursor
+      if (gap > 1e-6) {
+        const restDiv = beatsToDiv(gap)
+        s += restXml(restDiv, staff, staff)
+        cursor = localStart
+        emittedDivisions += restDiv
+      }
+      const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
+      const noteDiv = beatsToDiv(Math.min(e.durBeats, Math.max(1 / 4, beats - localStart)))
+      s += noteXml({
+        pitch: midiToPitch(e.midi),
+        divisions: noteDiv,
+        voice: staff,
+        staff,
+        stringFret: e.string != null ? { string: e.string, fret: e.fret } : null,
+        chord,
+        tieStart: e.tieStart,
+        tieStop: e.tieStop,
+      })
+      if (!chord) {
+        cursor = localStart + Math.min(e.durBeats, Math.max(1 / 4, beats - localStart))
+        emittedDivisions += noteDiv
+      }
+      lastOnset = e.startBeat
+    }
+    const tail = beats - cursor
+    if (tail > 1e-6) {
+      const restDiv = beatsToDiv(tail)
+      s += restXml(restDiv, staff, staff)
+      emittedDivisions += restDiv
+    }
+    if (track) staffOneDivisions = emittedDivisions
+    return s
+  }
+  const upper = emit(1, true)
+  // Restore exactly what staff 1 emitted: the sequential view (rests folded
+  // into duration) is what the parser reads back, so a nominal backup would
+  // leave the TAB staff offset and duplicate every note in the timing map.
+  const backupDivisions = Math.max(1, staffOneDivisions)
+  return (
+    upper +
+    `      <backup><duration>${backupDivisions}</duration></backup>\n` +
+    emit(2, false)
+  )
 }
 
 /** Split a note into per-measure pieces (ties across barlines preserved). */
@@ -191,7 +287,6 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
   let s = ''
   for (const [staff, voice, hand] of [[1, 1, 'RH'], [2, 2, 'LH']]) {
     const handEvents = measureEvents.filter((e) => (e.hand ?? 'RH') === hand)
-      .flatMap((e) => splitAcrossMeasures([e], m, beats))
       .filter((e) => measureIndexOf(e.startBeat, beats) === m)
     if (hand === 'LH' && handEvents.length) s += `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
     let cursor = 0
@@ -220,39 +315,6 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
     const tail = beats - cursor
     if (tail > 0.01) s += restXml(beatsToDiv(tail), voice, staff)
   }
-  return s
-}
-
-function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
-  let s = ''
-  const split = measureEvents.flatMap((e) => splitAcrossMeasures([e], m, beats))
-    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
-  let cursor = 0
-  const sorted = [...split].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
-  let lastOnset = null
-  for (const e of sorted) {
-    const localStart = Math.max(0, Math.min(beats, e.startBeat - m * beats))
-    const gap = localStart - cursor
-    if (gap > 0.01) {
-      s += restXml(beatsToDiv(gap), 1)
-      cursor = localStart
-    }
-    const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
-    s += noteXml({
-      pitch: midiToPitch(e.midi),
-      divisions: beatsToDiv(Math.min(e.durBeats, Math.max(1 / 4, beats - localStart))),
-      voice: 1,
-      staff: null,
-      stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
-      chord,
-      tieStart: e.tieStart,
-      tieStop: e.tieStop,
-    })
-    if (!chord) cursor = localStart + Math.min(e.durBeats, Math.max(1 / 4, beats - localStart))
-    lastOnset = e.startBeat
-  }
-  const tail = beats - cursor
-  if (tail > 0.01) s += restXml(beatsToDiv(tail), 1)
   return s
 }
 

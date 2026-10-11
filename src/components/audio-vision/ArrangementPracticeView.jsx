@@ -13,6 +13,8 @@ import { usePracticeSessionContext } from '../../context/PracticeSessionContext.
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import { buildNoteCheckpoints } from '../../features/practice/waitForYouCheckpoints.js'
 import WaitForYouInputSourceSelector from '../practice/WaitForYouInputSourceSelector.jsx'
+import OsmdScoreView from '../practice/OsmdScoreView.jsx'
+import { timingUsesRepeats } from '../../features/practice/osmdEngraving.js'
 import { isWebMidiSupported } from '../../features/midi-input/parseMidiMessage.js'
 import { isMicrophoneSupported } from '../../features/microphone-input/micEnvironment.js'
 
@@ -122,6 +124,11 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
         instrumentId={session.instrumentId}
         midiAvailable={isWebMidiSupported()}
         microphoneAvailable={isMicrophoneSupported()}
+      />
+
+      <OsmdScoreView
+        musicXmlSource={musicXmlSource}
+        approximate={timingUsesRepeats(timingMap)}
       />
 
       <div className="arrangement-practice__transport">
