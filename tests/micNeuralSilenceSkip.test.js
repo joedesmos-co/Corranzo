@@ -93,4 +93,31 @@ describe('calibrateNeuralFloor', () => {
     const ambient = Math.min(...firstPolls)
     expect(calibrateNeuralFloor(ambient)).toBeLessThanOrEqual(NEURAL_AMBIENT_MAX)
   })
+
+  it('validates the ambient matrix: rooms, hot mics, immediate music', () => {
+    // Quiet room (measured room-quiet polls): floor stays near the
+    // validated constant, room never infers.
+    const quietFloor = calibrateNeuralFloor(0.0023)
+    expect(shouldSkipSilence([0.0023, 0.0023, 0.0023, 0.0023, 0.0023], quietFloor, NEURAL_SILENCE_SKIP_FRAMES)).toBe(true)
+    // pp attack polls (0.024 peak, 0.004 median) always infer at any
+    // adapted floor: a single hot poll re-arms immediately.
+    for (const floor of [quietFloor, calibrateNeuralFloor(0.008), calibrateNeuralFloor(0.05)]) {
+      expect(shouldSkipSilence([0.001, 0.001, 0.024, 0.002, 0.002], floor, NEURAL_SILENCE_SKIP_FRAMES)).toBe(false)
+    }
+    // Noisy room (0.008): floor rises to 0.006 (capped); loud attacks
+    // (0.03+) still infer, sub-floor tails skip (documented trade).
+    const noisyFloor = calibrateNeuralFloor(0.008)
+    expect(noisyFloor).toBe(0.006)
+    expect(shouldSkipSilence([0.03, 0.02, 0.03, 0.02, 0.03], noisyFloor, NEURAL_SILENCE_SKIP_FRAMES)).toBe(false)
+    expect(shouldSkipSilence([0.004, 0.004, 0.004, 0.004, 0.004], noisyFloor, NEURAL_SILENCE_SKIP_FRAMES)).toBe(true)
+    // Hot mic preamp (room reads 0.01): capped, pp attacks still infer.
+    const hotFloor = calibrateNeuralFloor(0.01)
+    expect(hotFloor).toBe(NEURAL_AMBIENT_MAX)
+    expect(shouldSkipSilence([0.002, 0.002, 0.024, 0.002, 0.002], hotFloor, NEURAL_SILENCE_SKIP_FRAMES)).toBe(false)
+    // Immediate music start: min-of-first-polls bounds the ambient and
+    // the cap bounds the floor; frozen afterwards (no drift inputs).
+    const immediateFloor = calibrateNeuralFloor(Math.min(0.05, 0.04, 0.03, 0.045, 0.035, 0.05, 0.028, 0.04, 0.033, 0.038))
+    expect(immediateFloor).toBeLessThanOrEqual(NEURAL_AMBIENT_MAX)
+    expect(immediateFloor).toBeGreaterThanOrEqual(NEURAL_SILENCE_SKIP_RMS)
+  })
 })

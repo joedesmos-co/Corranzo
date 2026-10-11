@@ -44,6 +44,9 @@ import {
   setNeuralStreamSampleRate,
 } from '../microphone-input/micNeuralStream.js'
 import {
+  describeEmissionEvidence,
+} from '../microphone-input/micAttackEvidence.js'
+import {
   calibrateNeuralFloor,
   checkNeuralCapability,
   disposeNeuralRuntime,
@@ -288,6 +291,14 @@ export default function useNeuralMicInput({
   // fixed constant (stable fallback).
   const ambientPollsRef = useRef([])
   const neuralFloorRef = useRef(NEURAL_SILENCE_SKIP_RMS)
+  const attackSnapshotsRef = useRef([])
+  // P1 evidence history (observation only, capped): the latest emission
+  // overwrites lastEvidence, but flicker re-attacks (continuations with
+  // no transient of their own) would wipe the true attack's evidence.
+  // History preserves the attack's evidence for confirmation analysis.
+  // P1 attack-evidence snapshots (observation only): recent attack
+  // snapshots from ring audio for confirmation analysis. NEVER used to
+  // reject notes (no validated discriminator) — diagnostics only.
   const lastHopRef = useRef(0)
   const lastLevelPublishRef = useRef(0)
   const lastPollMsRef = useRef(null)
@@ -636,14 +647,41 @@ export default function useNeuralMicInput({
       const cutoff = windowStartCaptureMs + STREAM_WINDOW_SECONDS * 1000 - CONFIRM_POOL_SECONDS * 1000
       poolRef.current = poolRef.current.filter((entry) => entry.onsetMs >= cutoff)
       if (emitted.length) {
+        // P1 observation-only attack evidence: computed from ring audio
+        // for confirmation ANALYSIS (diagnostics). Never rejects notes.
+        let evidenceByOnset = null
+        try {
+          evidenceByOnset = describeEmissionEvidence(ringRef.current, emitted)
+          attackSnapshotsRef.current = evidenceByOnset.snapshots
+        } catch (error) {
+          debugRef.current.evidenceError = error instanceof Error ? error.message : String(error)
+          evidenceByOnset = null
+        }
         for (const attack of emitted) {
-          poolRef.current.push({ midi: attack.midi, onsetMs: attack.onsetCaptureMs, confidence: attack.confidence })
+          const key = `${attack.midi}@${Math.round(attack.onsetCaptureMs)}`
+          const evidence = evidenceByOnset?.byKey?.get(key)
+          poolRef.current.push({
+            midi: attack.midi,
+            onsetMs: attack.onsetCaptureMs,
+            confidence: attack.confidence,
+            attackFlux: evidence?.attackFlux ?? null,
+            attackPresence: evidence?.attackPresence ?? null,
+          })
+        }
+        if (evidenceByOnset) {
+          debugRef.current.lastEvidence = evidenceByOnset.summary
+          debugRef.current.snapshotCount = evidenceByOnset.snapshots.length
+          const history = debugRef.current.evidenceHistory ?? []
+          history.push(...evidenceByOnset.summary)
+          debugRef.current.evidenceHistory = history.slice(-10)
         }
         setDetectedNotes(
           poolRef.current.slice(-6).map((entry) => ({
             midi: entry.midi,
             label: midiToNoteLabel(entry.midi),
             onsetCaptureMs: Math.round(entry.onsetMs),
+            attackFlux: entry.attackFlux ?? null,
+            attackPresence: entry.attackPresence ?? null,
           })),
         )
         setLastHeardMidi(poolRef.current[poolRef.current.length - 1]?.midi ?? null)
