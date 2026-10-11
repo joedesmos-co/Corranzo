@@ -80,6 +80,8 @@ function LiveNeural({ performanceMode, playAlongEvents }) {
       debug: neural.neural.debug,
       micListening: window.__liveMicrophone?.isListening ?? microphone?.isListening,
       micError: window.__liveMicrophone?.errorMessage ?? microphone?.errorMessage,
+      noiseFlatSkips: neural.neural?.noiseFlatSkips ?? 0,
+      silenceSkips: neural.neural?.silenceSkips ?? 0,
     }
   })
   return null
