@@ -81,6 +81,11 @@ export function collectOsmdNotes(osmd) {
   const listed = osmd?.GraphicSheet?.MeasureList ?? []
   const lines = listed.length && !Array.isArray(listed[0]) ? [listed] : listed
   const notes = []
+  // Distinct-object indices: OSMD's music model exposes voice/staff identity
+  // through the VoiceEntry / StaffEntry objects themselves (no scalar ids),
+  // so identity means "same object", captured as first-appearance indices.
+  const voiceIndexes = new WeakMap()
+  const staffIndexes = new WeakMap()
   for (const line of lines) {
     for (const graphicalMeasure of line ?? []) {
       for (const staffEntry of graphicalMeasure?.staffEntries ?? []) {
@@ -105,6 +110,10 @@ export function collectOsmdNotes(osmd) {
             ].filter((value) => Number.isFinite(value))
             const midi = halfTones.length ? halfTones[0] : Number.NaN
             const lengthQuarters = Number(source?.length?.RealValue)
+            const voiceRef = source?.voiceEntry ?? null
+            const staffRef = source?.parentStaffEntry ?? staffEntry?.sourceStaffEntry ?? null
+            if (voiceRef && !voiceIndexes.has(voiceRef)) voiceIndexes.set(voiceRef, voiceIndexes.size)
+            if (staffRef && !staffIndexes.has(staffRef)) staffIndexes.set(staffRef, staffIndexes.size)
             if (!Number.isFinite(quarterInMeasure) || !Number.isFinite(measureNumber)) {
               continue
             }
@@ -122,6 +131,8 @@ export function collectOsmdNotes(osmd) {
               lengthQuarters,
               isRest: Boolean(source?.isRestFlag),
               isTab,
+              voiceIndex: voiceRef && voiceIndexes.has(voiceRef) ? voiceIndexes.get(voiceRef) : null,
+              staffIndex: staffRef && staffIndexes.has(staffRef) ? staffIndexes.get(staffRef) : null,
               string: Number.isFinite(Number(source?.stringNumberTab)) ? Number(source.stringNumberTab) : null,
               fret: Number.isFinite(Number(source?.fretNumber)) ? Number(source.fretNumber) : null,
               graphicalNote,
@@ -157,14 +168,58 @@ const MIDI_OCTAVE_OFFSET = 12
  * identical on both sides, so notes are paired per (measure, pitch) in
  * document order — robust to rests, rhythm folding and ties.
  */
+/**
+ * Ordered pairing of canonical notes and engraved notes.
+ *
+ * Exact quarter positions cannot be trusted: the timing map reads MusicXML
+ * sequentially (rests folded into the preceding note's duration) while the
+ * engraver keeps the engraved onsets. Pairing therefore claims, for each
+ * canonical note in time order, the still-unclaimed engraving of the same
+ * measure+pitch with the nearest onset (preferring the same voice/staff
+ * where both sides expose it). This is deterministic and survives repeated
+ * same-pitch notes, rests between them, tie continuations and multi-voice
+ * staves — and it never invents an anchor: an unclaimed canonical note is
+ * reported as missing and marks the pair set approximate.
+ */
 export function pairOsmdNotes(timingMap, osmdNotes) {
   const starts = measureStartsByNumber(timingMap)
+  const measureNumbers = [...starts.keys()].sort((a, b) => a - b)
+  const lengthAfter = new Map()
+  measureNumbers.forEach((number, index) => {
+    const next = measureNumbers[index + 1]
+    const start = starts.get(number)
+    const nextStart = Number.isFinite(next) ? starts.get(next) : Number.NaN
+    lengthAfter.set(number, Number.isFinite(nextStart) ? nextStart - start : null)
+  })
+  /** Barline-exact notes are attributed to the measure they start in. */
+  const normalizeMeasurePosition = (measureNumber, quarterInMeasure) => {
+    const length = lengthAfter.get(measureNumber)
+    if (Number.isFinite(length) && quarterInMeasure >= length - 1e-6) {
+      const nextStart = starts.get(measureNumber) + length
+      const nextNumber = measureNumbers.find((number) => Math.abs(starts.get(number) - nextStart) < 1e-6)
+      if (Number.isFinite(nextNumber)) {
+        return { measureNumber: nextNumber, quarterInMeasure: quarterInMeasure - length }
+      }
+    }
+    return { measureNumber, quarterInMeasure }
+  }
   const canonicalByKey = new Map()
   for (const note of timingMap?.notes ?? []) {
     if (note.isRest || !Number.isFinite(note.midi) || !Number.isFinite(note.quarterTime)) continue
-    const key = `${note.measureNumber}|${note.midi}`
+    const start = starts.get(note.measureNumber)
+    const rawQuarterInMeasure = Number.isFinite(start) ? note.quarterTime - start : note.quarterTime
+    const { measureNumber, quarterInMeasure } = normalizeMeasurePosition(note.measureNumber, rawQuarterInMeasure)
+    const key = `${measureNumber}|${note.midi}`
+    const entry = {
+      note,
+      quarterInMeasure,
+      quarterTime: note.quarterTime,
+      // Canonical voice/staff (MusicXML), when the score declares them.
+      voiceIndex: Number.isFinite(note.voice) ? Number(note.voice) : null,
+      staffIndex: Number.isFinite(note.staff) ? Number(note.staff) : null,
+    }
     if (!canonicalByKey.has(key)) canonicalByKey.set(key, [])
-    canonicalByKey.get(key).push(note)
+    canonicalByKey.get(key).push(entry)
   }
   const engravingByKey = new Map()
   for (const note of osmdNotes) {
@@ -173,31 +228,63 @@ export function pairOsmdNotes(timingMap, osmdNotes) {
     if (!engravingByKey.has(key)) engravingByKey.set(key, [])
     engravingByKey.get(key).push(note)
   }
+
   const pairs = new Map()
   let unmatched = 0
   let approximate = timingUsesRepeats(timingMap)
+  const voiceOffsets = new Map()
   for (const [key, canonicalNotes] of canonicalByKey) {
     const engravings = (engravingByKey.get(key) ?? []).sort(
       (a, b) => a.quarterInMeasure - b.quarterInMeasure,
     )
     canonicalNotes.sort((a, b) => a.quarterTime - b.quarterTime)
-    canonicalNotes.forEach((note, index) => {
-      const engraving = engravings[index]
-      if (!engraving) {
+    const claimed = new Set()
+    canonicalNotes.forEach((entry) => {
+      // Prefer the same voice, then the same staff, then the nearest onset.
+      let best = null
+      let bestCost = Number.POSITIVE_INFINITY
+      engravings.forEach((engraving, index) => {
+        if (claimed.has(index)) return
+        let cost = Math.abs(engraving.quarterInMeasure - entry.quarterInMeasure) * 10
+        if (entry.voiceIndex != null && engraving.voiceIndex != null) {
+          // Voice indices only line up after the first pass fixes the offset
+          // between MusicXML voice numbers and OSMD appearance order.
+          const mapped = voiceOffsets.has(key)
+            ? entry.voiceIndex + voiceOffsets.get(key)
+            : entry.voiceIndex
+          if (mapped !== engraving.voiceIndex) cost += 100
+        }
+        if (entry.staffIndex != null && engraving.staffIndex != null) {
+          const mapped = engraving.staffIndex
+          if (entry.staffIndex !== mapped) cost += 8
+        }
+        if (cost < bestCost - 1e-9) {
+          bestCost = cost
+          best = { engraving, index }
+        }
+      })
+      if (!best) {
         unmatched += 1
         approximate = true
-        pairs.set(note, [])
+        pairs.set(entry.note, [])
         return
       }
-      pairs.set(note, [engraving])
+      claimed.add(best.index)
+      if (entry.voiceIndex != null && best.engraving.voiceIndex != null && !voiceOffsets.has(key)) {
+        // Lock the voice numbering between the two models as soon as the
+        // first confident match establishes it.
+        const delta = best.engraving.voiceIndex - entry.voiceIndex
+        if (delta !== 0) voiceOffsets.set(key, delta)
+      }
+      pairs.set(entry.note, [best.engraving])
     })
+    // Extra engraved pieces (tie continuations of one canonical note) stay
+    // with their parent note instead of being dropped.
     if (engravings.length > canonicalNotes.length) {
-      // Tie continuations appear as extra engraved pieces for one canonical
-      // note: keep them with their parent instead of dropping them.
+      const extras = engravings.filter((_, index) => !claimed.has(index))
       const last = canonicalNotes[canonicalNotes.length - 1]
-      if (last) {
-        const existing = pairs.get(last) ?? []
-        pairs.set(last, existing.concat(engravings.slice(canonicalNotes.length)))
+      if (last && extras.length) {
+        pairs.set(last.note, [...(pairs.get(last.note) ?? []), ...extras])
       }
     }
   }

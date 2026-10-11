@@ -55,6 +55,8 @@ function fakeOsmd(notes) {
   return { GraphicSheet: { MeasureList: [measures] } }
 }
 
+const scaleTimingMap = parseMusicXml(scaleXml)
+
 describe('osmd engraving identity mapping', () => {
   const timingMap = parseMusicXml(scaleXml)
   const checkpoints = buildNoteCheckpoints(timingMap, null, {})
@@ -154,9 +156,98 @@ describe('osmd engraving identity mapping', () => {
     expect(resets).toBe(1)
   })
 
-  it('detects repeat-expanded timing as approximate', () => {
-    expect(timingUsesRepeats({ performedMeasureTimeline: { entries: [{ repeatPass: 2 }] } })).toBe(true)
-    expect(timingUsesRepeats({ performedMeasureTimeline: { entries: [{ repeatPass: 1 }] } })).toBe(false)
-    expect(timingUsesRepeats(null)).toBe(false)
+  it('pairs repeated same-pitch notes in order through rests', () => {
+    // Divisions = 16 per quarter: m1 = C4, D4, rest, C4; m2 = C4.
+    const xml = `<?xml version="1.0"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>P</part-name></score-part></part-list><part id="P1">
+<measure number="1"><attributes><divisions>16</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>D</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><rest/><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+</measure>
+<measure number="2"><note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note></measure>
+</part></score-partwise>`
+    const map = parseMusicXml(xml)
+    const engravings = [
+      { measureNumber: 1, quarterInMeasure: 0, midi: 60 },
+      { measureNumber: 1, quarterInMeasure: 1, midi: 62 },
+      { measureNumber: 1, quarterInMeasure: 3, midi: 60 },
+      { measureNumber: 2, quarterInMeasure: 0, midi: 60 },
+    ]
+    const pairs = pairOsmdNotes(map, engravings)
+    const ordered = [...pairs.pairs.keys()]
+      .sort((a, b) => a.quarterTime - b.quarterTime)
+      .map((note) => {
+        const engraving = pairs.pairs.get(note)[0]
+        return engraving ? `${engraving.measureNumber}:${engraving.quarterInMeasure}` : null
+      })
+    expect(ordered).toEqual(['1:0', '1:1', '1:3', '2:0'])
+    expect(pairs.unmatched).toBe(0)
+    expect(pairs.approximate).toBe(false)
+  })
+
+  it('normalizes barline-exact notes to the measure they sound in', () => {
+    // 5 quarters of content in a 4/4 measure (overfull run): the trailing
+    // note sits exactly on the barline and must pair with the engraved note
+    // that starts the next measure, not with measure 1.
+    const xml = `<?xml version="1.0"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>P</part-name></score-part></part-list><part id="P1">
+<measure number="1"><attributes><divisions>16</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>D</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+<note><pitch><step>D</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note>
+</measure>
+<measure number="2"><note><pitch><step>F</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note></measure>
+</part></score-partwise>`
+    const map = parseMusicXml(xml)
+    const engravings = [
+      { measureNumber: 1, quarterInMeasure: 0, midi: 60 },
+      { measureNumber: 1, quarterInMeasure: 1, midi: 62 },
+      { measureNumber: 1, quarterInMeasure: 2, midi: 64 },
+      { measureNumber: 1, quarterInMeasure: 3, midi: 60 },
+      { measureNumber: 2, quarterInMeasure: 0, midi: 62 },
+      { measureNumber: 2, quarterInMeasure: 1, midi: 65 },
+    ]
+    const pairs = pairOsmdNotes(map, engravings)
+    expect(pairs.unmatched).toBe(0)
+    expect(pairs.approximate).toBe(false)
+    // The barline D4 (written at the end of measure 1) pairs with the
+    // engraver's next-measure onset, not with measure 1.
+    const barlineD = [...pairs.pairs.keys()].find((note) => note.midi === 62 && note.quarterTime === 4)
+    expect(barlineD).toBeTruthy()
+    const engraving = pairs.pairs.get(barlineD)[0]
+    expect(`${engraving.measureNumber}:${engraving.quarterInMeasure}`).toBe('2:0')
+  })
+
+  it('keeps tie continuations with their parent note', () => {
+    // A note held across the barline is written as two pieces (3.75 + 1.0)
+    // and the parser keeps both; the engraving shows both too.
+    const xml = `<?xml version="1.0"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>P</part-name></score-part></part-list><part id="P1">
+<measure number="1"><attributes><divisions>16</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>64</duration><type>whole</type></note>
+</measure>
+<measure number="2"><note><pitch><step>E</step><octave>4</octave></pitch><duration>16</duration><type>quarter</type></note></measure>
+</part></score-partwise>`
+    const map = parseMusicXml(xml)
+    const engravings = [
+      { measureNumber: 1, quarterInMeasure: 3, midi: 60 },
+      { measureNumber: 2, quarterInMeasure: 0, midi: 64 },
+    ]
+    const pairs = pairOsmdNotes(map, engravings)
+    const cNotes = [...pairs.pairs.keys()].filter((note) => note.midi === 60)
+    expect(cNotes).toHaveLength(1) // one sounding C4 (both halves)
+    const eNotes = [...pairs.pairs.keys()].filter((note) => note.midi === 64)
+    expect(eNotes).toHaveLength(1)
+    expect(pairs.unmatched).toBe(0)
+    expect(pairs.approximate).toBe(false)
+  })
+
+  it('marks approximation when an engraving is missing', () => {
+    const pairs = pairOsmdNotes(scaleTimingMap, [
+      { measureNumber: 1, quarterInMeasure: 0, midi: 60 },
+    ])
+    expect(pairs.approximate).toBe(true)
+    expect(pairs.unmatched).toBeGreaterThan(0)
   })
 })
