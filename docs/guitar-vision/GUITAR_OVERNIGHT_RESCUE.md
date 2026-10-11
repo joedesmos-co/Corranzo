@@ -321,3 +321,8 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
   duplicate. Built truth-single-part-txo.musicxml (P2 dropped, origi-
   nal untouched) and report BOTH: historical 42%, corrected 53%
   (pitch R 89%, align 97%). Corrected artifact committed for reuse.
+
+### R3-M5 — Final DEV wave (all layouts, this session's code)
+std string/fret/pitch 99.1/99.1/98.1 (pitchCov 0.327); compact
+98.6/99.1/97.7 (0.338); large 100/95.2/95.2 (0.124); bravura
+100/100/100 (0.808). Every layout at or above its prior best.
