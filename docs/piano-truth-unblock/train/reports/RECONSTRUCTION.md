@@ -771,6 +771,83 @@ detector (P0), scans (unmeasured), raster quality gates.
 Next highest-impact milestone: stage-C integration (P2 next steps) —
 the product blocker; rests/voices remain the accuracy blockers.
 
+---
+
+# First honest end-to-end automatic transcription (stage C, DEV)
+
+From `c400e0c987`. No merge, TEST sealed, DEV identities frozen, no
+competing training. All new numbers below use ZERO oracle input at
+inference: page PNG only (no boxes, no SVG, no MEI).
+
+## What now works automatically (P1)
+
+`scripts/auto_e2e.py` runs the full path: binarize -> run-length staff
+frames -> per-frame clef classify (TRAIN template NCC) -> notehead CC
+detection -> rest CC + TRAIN rest templates -> barline columns -> measure
+segments -> structural pitch (frame steps + clef) -> duration (frozen
+common head + A1 tri-crop head on detected boxes) -> MusicXML, verified
+with music21 (5/5 files parse). Outputs: data/auto_out/<sid>.musicxml.
+
+## Metrics (5 DEV scores, 902 truth notes, 27 truth rests; position-
+matched to truth notehead/rest positions; chord dur inheritance applied)
+
+| metric | oracle-box production | automatic (this run) |
+|---|---|---|
+| note P / R | 1.00 / 1.00 (given boxes) | **0.844 / 0.574** |
+| pitch accuracy | 0.924 (clef head + repair) | 0.682 (structural only) |
+| duration accuracy | 0.858 (A1) | 0.699 (A1 on detected boxes) |
+| complete event (pitch+dur+dots) | 0.673 | **0.485** |
+| rest P / R | 1.00 / 1.00 (given boxes) | 1.000 / 0.296 |
+| MusicXML valid | 99/99 | 5/5 (music21 parses) |
+
+Full automatic transcription WORKS for the first time and is honestly
+poor. No stage is claimed as production-ready.
+
+## Root causes found this mission (P2/P4), each with evidence
+
+1. **Coordinate-space anchor error (the Guitar-Vision class of bug):**
+   training crops are anchored at the bbox TOP-LEFT corner
+   (`infer.build_inputs`), not the center. Center-anchored crops on
+   detected boxes cost 4x on duration (0.25 vs measured 0.39 corner on
+   oracle boxes). Fixed in the auto path (corner anchor on the raw glyph
+   box; detected center still used for geometry).
+2. **Truth-coordinate convention:** the structural notehead position is
+   the glyph ORIGIN (left-center), detections are visual centers; the
+   systematic offset is +0.673 gaps in x (std 0.013, n=517) — a clean
+   proof on Piano's own evidence, not a copy of Guitar's fix. Detection
+   boxes were correct all along.
+3. **Oracle bboxes are notehead-only** (h = 1.06 gaps, center = notehead
+   center) — so detection boxes and training boxes are the same object.
+4. **Chord-member dur inheritance** must be applied to truth for fair
+   evaluation (events carry dur=None for chord members; inheriting the
+   `<chord>` dur lifted auto dur accuracy 0.27 -> 0.70 and complete
+   0.27 -> 0.49 in this measurement).
+5. **Chord/beam-merged noteheads** are the recall wall (0.574). Template
+   completion was tried and MEASURED: local-max-filtered it adds zero
+   recall; unfiltered it lifts recall to 0.85 but drops precision to 0.67
+   via shifted duplicate peaks — not integrated (a trained notehead
+   detector is the real fix; recorded as a negative result).
+6. **Rest recall 0.296**: CC candidates miss rests whose thin strokes are
+   broken by staff-row removal/opening; precision is 1.0 with TRAIN
+   templates (8/8 typed correctly).
+7. **Pitch 0.682 structural-only**: auto-clef errors cost ~2pp (0.707 vs
+   0.730 with oracle clefs); the rest is frame/step precision on detected
+   centers (detected-cy 0.68 vs svg-cy 0.71).
+
+## Field boundaries (P6/P7, unchanged)
+
+Oracle-box evaluation measures the semantic stack only; automatic
+numbers above include detection error; no end-to-end claim on scans
+(renders only). Input-quality gates still cover unreadable crops only;
+PDF/skew/blur gating does not exist in this branch.
+
+Remaining V1 blockers: notehead detector (recall; trained head needed),
+rest recall, accidentals (natural pitches only), onset/measure accuracy
+(barline segments, voices), tuplet reader, scans. Exact next milestone:
+train a small notehead detector (frozen trunk + detected-box candidate
+generation, TRAIN-only, gates: P>=0.9 AND R>=0.75 on frozen DEV) — the
+single largest automatic-transcription error source (43% of notes).
+
 # T1 vertical-preserving rhythm CNN: representation CONFIRMED, dur gate FAIL
 
 From `dae2ebd44d`. No merge, TEST sealed, DEV identities fixed, no

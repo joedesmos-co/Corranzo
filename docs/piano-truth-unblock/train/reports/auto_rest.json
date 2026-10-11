@@ -1,0 +1,14 @@
+{
+ "tp": 8,
+ "fp": 0,
+ "fn": 19,
+ "p": 1.0,
+ "r": 0.2963,
+ "class_acc_on_tp": 1.0,
+ "fn_by_class": {
+  "8": 2,
+  "4": 13,
+  "2": 4
+ },
+ "scope": "5 DEV scores, TRAIN templates (32x32 mean NCC), NCC>=0.62"
+}
