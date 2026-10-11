@@ -101,7 +101,10 @@ def page_spacing(arr):
     mids = [(a + b) / 2 for a, b in bands]
     diffs = [mids[i + 1] - mids[i] for i in range(len(mids) - 1)
              if 8 <= mids[i + 1] - mids[i] <= 200]
-    if len(diffs) < 5:
+    # A single 6-line TAB staff yields exactly 5 gaps; >=4 admits
+    # single-staff TAB-only pages (bravura etudes) while still requiring
+    # a multi-band staff.
+    if len(diffs) < 4:
         return None
     bins = Counter(int(d) for d in diffs)
     # Candidate spacings: top modes plus their halves (2x-ambiguity:

@@ -1,23 +1,205 @@
 {
- "n": 12,
- "abstained": 5,
- "correct": 4,
- "acc": 0.5714285714285714,
- "coverage": 0.5833333333333334,
+ "n": 38,
+ "abstained": 3,
+ "correct": 34,
+ "acc": 0.9714285714285714,
+ "coverage": 0.9210526315789473,
  "perString": {
-  "2": 0.0,
-  "3": 0.0,
-  "1": 0.25,
-  "5": 0.0,
+  "1": 1.0,
+  "2": 0.7692307692307693,
+  "3": 0.8,
+  "5": 1.0,
   "4": 1.0
  },
  "detail": [
   {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n001",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.88
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n002",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.878
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n003",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.875
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n004",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.899
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n005",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.896
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n006",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.894
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n007",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.899
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n008",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.896
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n009",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.894
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n010",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.899
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n011",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.896
+  },
+  {
+   "sample": "etude-tab-only-chords",
+   "sid": "etude-tab-only-chords-n012",
+   "truth": 3,
+   "pred": 3,
+   "conf": 0.894
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n001",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n002",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.883
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n003",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n004",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n005",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n006",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n008",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.895
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n009",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.895
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n010",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.883
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n011",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.883
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n012",
+   "truth": 2,
+   "pred": 2,
+   "conf": 0.883
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n013",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n014",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.889
+  },
+  {
+   "sample": "etude-tab-only-rhythm",
+   "sid": "etude-tab-only-rhythm-n015",
+   "truth": 1,
+   "pred": 1,
+   "conf": 0.867
+  },
+  {
    "sample": "etude-cross-part-etude",
    "sid": "etude-cross-part-etude-n005",
    "truth": 2,
-   "pred": 1,
-   "conf": 0.746
+   "pred": 3,
+   "conf": 0.566
   },
   {
    "sample": "etude-cross-part-etude",
@@ -38,63 +220,63 @@
    "sid": "etude-cross-part-etude-n008",
    "truth": 2,
    "pred": null,
-   "conf": 0.469
+   "conf": 0.466
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n001",
    "truth": 1,
    "pred": 1,
-   "conf": 0.889
+   "conf": 0.896
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n002",
    "truth": 1,
-   "pred": null,
-   "conf": 0.0
+   "pred": 1,
+   "conf": 0.896
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n003",
    "truth": 1,
-   "pred": 2,
-   "conf": 0.776
+   "pred": 1,
+   "conf": 0.881
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n004",
    "truth": 1,
-   "pred": 2,
-   "conf": 0.776
+   "pred": 1,
+   "conf": 0.896
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n005",
    "truth": 5,
-   "pred": null,
-   "conf": 0.0
+   "pred": 5,
+   "conf": 0.893
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n006",
    "truth": 4,
    "pred": 4,
-   "conf": 0.721
+   "conf": 0.895
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n007",
    "truth": 4,
    "pred": 4,
-   "conf": 0.721
+   "conf": 0.882
   },
   {
    "sample": "etude-tab-multivoice-2",
    "sid": "etude-tab-multivoice-2-n008",
    "truth": 4,
    "pred": 4,
-   "conf": 0.721
+   "conf": 0.895
   }
  ]
 }

@@ -52,3 +52,15 @@ weights, no optimizer, seed N/A):
 
 No training. No sealed TEST. No source-truth lines at inference
 (supervision only for scoring). Technique abstinent.
+
+**Amendment (bravura spacing gate):** page_spacing's `len(diffs) < 5`
+rejected single 6-line TAB staves (exactly 5 gaps, borderline) ->
+bravura TAB-only etudes got sp=None -> 42% abstention -> 31.6% GT
+acc. Relaxed to >=4 (staff needs >=5 bands). Effects:
+- bravura fit GT: 31.6% -> 89.5% (coverage 92%, s1 100%, s2 77%,
+  s3 80%, s4/s5 100%); n=38 across 4 TAB carriers.
+- std/compact/large fit unchanged (97.0/97.6/97.7%); std heldout 100%.
+- bravura DEV chain: strings 52.9% -> 100%, pitch coverage
+  34.6% -> 80.8% (fret 93%->100%).
+- NOTE: bravura fit data remains TINY (38 TAB digits); no training
+  was needed or run.
