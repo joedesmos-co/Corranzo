@@ -296,3 +296,15 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - Key visuals: flagged/isolated 16ths have NO beams at digit-x (29
   Txo cols); beamed-pair beams are short (25px) and die in (5,60);
   beams+stems form tall Pi components (height caps kill them).
+
+### R3-M3 — Step 5: peak fix re-validated DEV-wide
+- DEV wave (final code): std digits 229->538 detected, pitch coverage
+  0.129->0.316, pitch 97.1%; compact 525/0.328/97.7%; large 119/
+  0.104/89.2%; bravura 17/0.346 (strings 52.9%: fit data still the
+  blocker). Detection doubling = the half-cell anchor fix, not a model
+  change (weights frozen).
+- Txo duration residuals now diffuse (6 x "16th->quarter", 1 dotted
+  misread): 97.7% duration accuracy, no dominant family failure.
+- Qmek durations ~10%: isolated beam groups (no right-neighbor group
+  to bridge to); stem-tip counting measured (muddled 0-5 for single
+  beams). Documented, not forced.

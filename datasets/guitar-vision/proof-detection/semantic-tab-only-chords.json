@@ -3,7 +3,7 @@
   "evaluatorVersion": "2.1.0",
   "kind": "semantic-musicxml-evaluation",
   "mode": "both",
-  "gitCommit": "2a95c2725b",
+  "gitCommit": "5964582fcf",
   "scores": {
     "pitch": 0.1333,
     "rhythm": 0.5,
@@ -41,15 +41,15 @@
       "displayPercent": "13%"
     },
     "rhythm": {
-      "numerator": 6,
-      "denominator": 12,
-      "truePositives": 6,
+      "numerator": 4,
+      "denominator": 8,
+      "truePositives": 4,
       "falsePositives": 0,
-      "falseNegatives": 6,
+      "falseNegatives": 4,
       "ignored": 0,
       "unsupported": 0,
-      "presentInTruth": 12,
-      "compared": 12,
+      "presentInTruth": 8,
+      "compared": 8,
       "coverage": 1,
       "coveragePercent": "100%",
       "score": 0.5,
@@ -155,11 +155,11 @@
     "playback": "Playback"
   },
   "alignment": {
-    "confidence": 0.8381,
+    "confidence": 0.8207,
     "matchedCount": 3,
     "unmatchedTruthCount": 0,
     "unmatchedGeneratedCount": 0,
-    "totalCost": 6.94,
+    "totalCost": 7.6833,
     "pairs": [
       {
         "kind": "split",
@@ -170,7 +170,7 @@
           1,
           2
         ],
-        "cost": 2.47
+        "cost": 2.8
       },
       {
         "kind": "merge",
@@ -181,7 +181,7 @@
         "generatedMeasureNumbers": [
           3
         ],
-        "cost": 3.1
+        "cost": 2.9
       },
       {
         "kind": "match",
@@ -191,7 +191,7 @@
         "generatedMeasureNumbers": [
           4
         ],
-        "cost": 1.37
+        "cost": 1.9833
       }
     ]
   },
@@ -207,12 +207,18 @@
       ],
       "alignment": "split",
       "unmatched": false,
-      "alignmentCost": 2.47,
+      "alignmentCost": 2.8,
       "defects": [
         {
           "code": "split-measure",
           "class": "measure-structure",
           "message": "Split measure 1 → 1,2",
+          "measureNumber": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
           "measureNumber": 1
         },
         {
@@ -230,19 +236,7 @@
         {
           "code": "duration-mismatch",
           "class": "rhythm",
-          "message": "Whole detected as 16th",
-          "measureNumber": 1
-        },
-        {
-          "code": "incorrect-pitch",
-          "class": "pitch",
-          "message": "Incorrect pitch G3 (expected B3)",
-          "measureNumber": 1
-        },
-        {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as 16th",
+          "message": "Whole detected as quarter",
           "measureNumber": 1
         },
         {
@@ -254,14 +248,13 @@
       ],
       "summary": [
         "Split measure 1 → 1,2",
+        "Missing note G3",
         "Missing note E4",
         "Extra note D3",
-        "Whole detected as 16th",
-        "Incorrect pitch G3 (expected B3)",
-        "Whole detected as 16th",
+        "Whole detected as quarter",
         "Incorrect chord"
       ],
-      "severity": 23
+      "severity": 19
     },
     {
       "measureNumber": 2,
@@ -274,18 +267,12 @@
       ],
       "alignment": "merge",
       "unmatched": false,
-      "alignmentCost": 3.1,
+      "alignmentCost": 2.9,
       "defects": [
         {
           "code": "merged-measure",
           "class": "measure-structure",
           "message": "Merged measures 2,3 → 3",
-          "measureNumber": 2
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G3",
           "measureNumber": 2
         },
         {
@@ -315,19 +302,31 @@
         {
           "code": "extra-note",
           "class": "pitch",
-          "message": "Extra note B2",
+          "message": "Extra note C3",
           "measureNumber": 2
         },
         {
           "code": "extra-note",
           "class": "pitch",
-          "message": "Extra note A#3",
+          "message": "Extra note B3",
           "measureNumber": 2
         },
         {
           "code": "incorrect-pitch",
           "class": "pitch",
           "message": "Incorrect pitch B3 (expected C4)",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Whole detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A2 (expected G3)",
           "measureNumber": 2
         },
         {
@@ -357,20 +356,21 @@
       ],
       "summary": [
         "Merged measures 2,3 → 3",
-        "Missing note G3",
         "Missing note F4",
         "Missing note G4",
         "Missing note B4",
         "Missing note E5",
-        "Extra note B2",
-        "Extra note A#3",
+        "Extra note C3",
+        "Extra note B3",
         "Incorrect pitch B3 (expected C4)",
+        "Whole detected as quarter",
+        "Incorrect pitch A2 (expected G3)",
         "Whole detected as quarter",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord"
       ],
-      "severity": 40
+      "severity": 44
     },
     {
       "measureNumber": 4,
@@ -382,30 +382,18 @@
       ],
       "alignment": "match",
       "unmatched": false,
-      "alignmentCost": 1.37,
+      "alignmentCost": 1.9833,
       "defects": [
         {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as quarter",
-          "measureNumber": 4
-        },
-        {
-          "code": "incorrect-pitch",
+          "code": "missing-note",
           "class": "pitch",
-          "message": "Incorrect pitch D4 (expected B3)",
+          "message": "Missing note B3",
           "measureNumber": 4
         },
         {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as quarter",
-          "measureNumber": 4
-        },
-        {
-          "code": "incorrect-pitch",
+          "code": "missing-note",
           "class": "pitch",
-          "message": "Incorrect pitch C#3 (expected G4)",
+          "message": "Missing note G4",
           "measureNumber": 4
         },
         {
@@ -422,14 +410,12 @@
         }
       ],
       "summary": [
-        "Whole detected as quarter",
-        "Incorrect pitch D4 (expected B3)",
-        "Whole detected as quarter",
-        "Incorrect pitch C#3 (expected G4)",
+        "Missing note B3",
+        "Missing note G4",
         "Whole detected as quarter",
         "Incorrect chord"
       ],
-      "severity": 21
+      "severity": 13
     }
   ],
   "worstMeasures": [
@@ -444,18 +430,12 @@
       ],
       "alignment": "merge",
       "unmatched": false,
-      "alignmentCost": 3.1,
+      "alignmentCost": 2.9,
       "defects": [
         {
           "code": "merged-measure",
           "class": "measure-structure",
           "message": "Merged measures 2,3 → 3",
-          "measureNumber": 2
-        },
-        {
-          "code": "missing-note",
-          "class": "pitch",
-          "message": "Missing note G3",
           "measureNumber": 2
         },
         {
@@ -485,19 +465,31 @@
         {
           "code": "extra-note",
           "class": "pitch",
-          "message": "Extra note B2",
+          "message": "Extra note C3",
           "measureNumber": 2
         },
         {
           "code": "extra-note",
           "class": "pitch",
-          "message": "Extra note A#3",
+          "message": "Extra note B3",
           "measureNumber": 2
         },
         {
           "code": "incorrect-pitch",
           "class": "pitch",
           "message": "Incorrect pitch B3 (expected C4)",
+          "measureNumber": 2
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "Whole detected as quarter",
+          "measureNumber": 2
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A2 (expected G3)",
           "measureNumber": 2
         },
         {
@@ -527,20 +519,21 @@
       ],
       "summary": [
         "Merged measures 2,3 → 3",
-        "Missing note G3",
         "Missing note F4",
         "Missing note G4",
         "Missing note B4",
         "Missing note E5",
-        "Extra note B2",
-        "Extra note A#3",
+        "Extra note C3",
+        "Extra note B3",
         "Incorrect pitch B3 (expected C4)",
+        "Whole detected as quarter",
+        "Incorrect pitch A2 (expected G3)",
         "Whole detected as quarter",
         "Incorrect chord",
         "Incorrect chord",
         "Incorrect chord"
       ],
-      "severity": 40
+      "severity": 44
     },
     {
       "measureNumber": 1,
@@ -553,12 +546,18 @@
       ],
       "alignment": "split",
       "unmatched": false,
-      "alignmentCost": 2.47,
+      "alignmentCost": 2.8,
       "defects": [
         {
           "code": "split-measure",
           "class": "measure-structure",
           "message": "Split measure 1 → 1,2",
+          "measureNumber": 1
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
           "measureNumber": 1
         },
         {
@@ -576,19 +575,7 @@
         {
           "code": "duration-mismatch",
           "class": "rhythm",
-          "message": "Whole detected as 16th",
-          "measureNumber": 1
-        },
-        {
-          "code": "incorrect-pitch",
-          "class": "pitch",
-          "message": "Incorrect pitch G3 (expected B3)",
-          "measureNumber": 1
-        },
-        {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as 16th",
+          "message": "Whole detected as quarter",
           "measureNumber": 1
         },
         {
@@ -600,14 +587,13 @@
       ],
       "summary": [
         "Split measure 1 → 1,2",
+        "Missing note G3",
         "Missing note E4",
         "Extra note D3",
-        "Whole detected as 16th",
-        "Incorrect pitch G3 (expected B3)",
-        "Whole detected as 16th",
+        "Whole detected as quarter",
         "Incorrect chord"
       ],
-      "severity": 23
+      "severity": 19
     },
     {
       "measureNumber": 4,
@@ -619,30 +605,18 @@
       ],
       "alignment": "match",
       "unmatched": false,
-      "alignmentCost": 1.37,
+      "alignmentCost": 1.9833,
       "defects": [
         {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as quarter",
-          "measureNumber": 4
-        },
-        {
-          "code": "incorrect-pitch",
+          "code": "missing-note",
           "class": "pitch",
-          "message": "Incorrect pitch D4 (expected B3)",
+          "message": "Missing note B3",
           "measureNumber": 4
         },
         {
-          "code": "duration-mismatch",
-          "class": "rhythm",
-          "message": "Whole detected as quarter",
-          "measureNumber": 4
-        },
-        {
-          "code": "incorrect-pitch",
+          "code": "missing-note",
           "class": "pitch",
-          "message": "Incorrect pitch C#3 (expected G4)",
+          "message": "Missing note G4",
           "measureNumber": 4
         },
         {
@@ -659,14 +633,12 @@
         }
       ],
       "summary": [
-        "Whole detected as quarter",
-        "Incorrect pitch D4 (expected B3)",
-        "Whole detected as quarter",
-        "Incorrect pitch C#3 (expected G4)",
+        "Missing note B3",
+        "Missing note G4",
         "Whole detected as quarter",
         "Incorrect chord"
       ],
-      "severity": 21
+      "severity": 13
     }
   ],
   "firstDivergence": {
@@ -680,20 +652,14 @@
     ],
     "alignment": "split",
     "unmatched": false,
-    "defectCount": 7
+    "defectCount": 6
   },
   "topDefects": [
-    {
-      "code": "duration-mismatch",
-      "class": "rhythm",
-      "label": "Duration mismatch",
-      "count": 6
-    },
     {
       "code": "missing-note",
       "class": "pitch",
       "label": "Missing note",
-      "count": 6
+      "count": 8
     },
     {
       "code": "incorrect-chord",
@@ -702,9 +668,9 @@
       "count": 5
     },
     {
-      "code": "incorrect-pitch",
-      "class": "pitch",
-      "label": "Incorrect pitch",
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
       "count": 4
     },
     {
@@ -712,6 +678,12 @@
       "class": "pitch",
       "label": "Extra note",
       "count": 3
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 2
     },
     {
       "code": "merged-measure",
@@ -740,17 +712,17 @@
     {
       "class": "rhythm",
       "label": "Rhythm",
-      "count": 6
+      "count": 4
     }
   ],
   "totals": {
     "truthNoteCount": 12,
-    "generatedNoteCount": 9,
+    "generatedNoteCount": 7,
     "truthRestCount": 0,
     "generatedRestCount": 0,
     "truthMeasureCount": 4,
     "generatedMeasureCount": 4,
-    "defectCount": 26
+    "defectCount": 24
   },
   "tolerances": {
     "onsetToleranceQuarters": 0.125,

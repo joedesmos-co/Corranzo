@@ -12,31 +12,15 @@
       </attributes>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
-            <string>3</string>
-            <fret>0</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <notations>
-          <technical>
-            <string>3</string>
+            <string>2</string>
             <fret>0</fret>
           </technical>
         </notations>
@@ -51,9 +35,9 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>4</string>
@@ -82,34 +66,49 @@
         </notations>
       </note>
       <note>
+        <chord />
         <pitch>
           <step>A</step>
-          <alter>1</alter>
+          <octave>2</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <technical>
+            <string>5</string>
+            <fret>0</fret>
+          </technical>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>3</string>
-            <fret>3</fret>
+            <fret>4</fret>
           </technical>
         </notations>
       </note>
       <note>
         <chord />
         <pitch>
-          <step>B</step>
-          <octave>2</octave>
+          <step>C</step>
+          <octave>3</octave>
         </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>quarter</type>
         <notations>
           <technical>
             <string>5</string>
-            <fret>2</fret>
+            <fret>3</fret>
           </technical>
         </notations>
       </note>
@@ -119,39 +118,6 @@
         <divisions>4</divisions>
       </attributes>
       <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>2</string>
-            <fret>3</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <technical>
-            <string>5</string>
-            <fret>4</fret>
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <chord />
         <pitch>
           <step>D</step>
           <octave>4</octave>

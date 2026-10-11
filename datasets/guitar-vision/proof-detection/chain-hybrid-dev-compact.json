@@ -1,37 +1,37 @@
 {
- "digits": 460,
+ "digits": 562,
  "stringCorrect": 0,
  "fretCorrect": 0,
  "bothCorrect": 0,
  "pitchCorrect": 0,
- "decoded": 435,
- "abstained": 25,
+ "decoded": 525,
+ "abstained": 37,
  "byTier": {
   "real": {
-   "decoded": 435,
+   "decoded": 525,
    "pitchCorrect": 0
   }
  },
  "gtDigits": 637,
  "oracle": false,
- "geoAssigned": 444,
- "geoAbstained": 16,
+ "geoAssigned": 544,
+ "geoAbstained": 18,
  "truth": {
-  "string": 181,
-  "fret": 184,
-  "both": 179,
-  "pitch": 179,
-  "n": 186
+  "string": 209,
+  "fret": 214,
+  "both": 209,
+  "pitch": 209,
+  "n": 214
  },
  "truthRates": {
-  "string": 0.9731182795698925,
-  "fret": 0.989247311827957,
-  "both": 0.9623655913978495,
-  "pitch": 0.9623655913978495
+  "string": 0.9766355140186916,
+  "fret": 1.0,
+  "both": 0.9766355140186916,
+  "pitch": 0.9766355140186916
  },
  "coverage": {
-  "decoded": 0.6828885400313972,
-  "pitchCorrect": 0.28100470957613816,
-  "mapped": 0.29199372056514916
+  "decoded": 0.8241758241758241,
+  "pitchCorrect": 0.3281004709576138,
+  "mapped": 0.3359497645211931
  }
 }
