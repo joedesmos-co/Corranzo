@@ -661,6 +661,116 @@ regressions and music21 99/99 stand).
 
 ---
 
+# Autonomous transcription rescue (rest repair + stage-C reality check)
+
+From `55f1d79eea` (two commits: `bb0f9a708a` rest rescue, this one for
+P2/P3). No merge, TEST sealed (891/891 event files are train+dev; TEST
+files do not exist on disk), DEV identities frozen, no competing training
+observed, ~3 GB free RAM at run time.
+
+## 1. P1 rest root cause (audit_rest.py -> reports/audit_rest.json)
+
+Rest truth was lost BEFORE any model ran: the frozen object inventory
+carried no `dur` for rests, so `data/events` stored dur=None for every
+rest. Consequences: (a) `m_dur` was masked to 0 in v1_adapter -> the dur
+head was NEVER SUPERVISED on rest types (wrong answers clustered on the
+majority class 8d0 — unsupervised behavior); (b) layer onset accumulation
+(`acc += dur_ppq`) never advanced across rests -> 8,472 NOTE onsets were
+wrong; (c) the eval's meter-length fallback turned every real rest into a
+full-measure rest on the truth side, which is why "rest accuracy" read
+2/578. Fixed in v1_events.py (MEI `@dur.ppq/@dur/@dots` fallback); events
+regenerated; 4,801 rest durs restored, 8,472 note onsets corrected; no
+identity changes, TEST never read.
+
+## 2. P1 fixes and rest before/after (frozen DEV, production path)
+
+- Structural rest staff: nearest staff frame to the rest bbox
+  (reports/rest_staff_check.json: 98.6% TRAIN / 99.5% DEV vs 70% probe
+  voice-agnostic staff head). Wired in decode_score for rests only.
+- R1 rest-duration head (train_restdur.py): Linear(128,16) on frozen
+  common-trunk features of rest crops, warm-started from the common dur
+  head, TRAIN rest rows only, AdamW 3e-3, 30 epochs, ~6 min CPU. DEV
+  rest-dur class accuracy 0.56 -> 0.9634.
+
+| metric | before (broken truth) | after truth repair | +R1+staff (production) |
+|---|---|---|---|
+| rest exact | 2/578 | 118/698 | **206/698** |
+| rest FP / FN | 459 / 580 | 459/580 | 385 / 492 |
+| timing-valid measures | 1368 | 1368 | 1397 |
+| notes exact | 15,005 | 15,005 | 15,005 |
+| music21 | 99/99 | 99/99 | 99/99 |
+
+Remaining rest losses (audit): kind detection 67 rests predicted as notes
+(9.6%); decoder duplicate-collapse 33; rest voice 173 wrong (probe never
+predicts rest voices 2/3/6/7/8 — needs voice-head retraining); onset
+residual 178 (dur-cascade: onset comes from the lane clock, whose drift
+is duration-error accumulation; x-fraction layout onsets REJECTED on
+measurement: 3.2%).
+
+## 3. P2 automatic detection reality check (auto_locate.py, auto_pitch.py)
+
+Deterministic CV prototype (no training, no oracle at inference):
+binarize -> run-length staff lines -> 5-line frames -> horizontal-opening
+CC -> geometry-classified noteheads + rest pass + stem-union boxes
+(matches the trained bbox convention). 5 DEV pages, clean vector renders:
+
+- staff frames: 6/6 per page (3 systems x 2 staves; pixel-verified)
+- notehead detection: P 0.889 / R 0.571 (IoU>=0.3)
+- rest detection: P 0.019 / R 0.148 (rests need shape templates; naive CC
+  picks up dots/articulations)
+- object-level probes on DETECTED boxes: raw common probe pitch 0.02 —
+  the trained probes assume oracle bbox anchoring (bbox center spans
+  notehead+stem); detected head-only boxes break that convention
+  (stem-union boxes fixed centers to ~1px but the raw probe is only ~0.6
+  on these scores even with oracle boxes — production pitch comes from
+  the clef head + structural repair, oracle-box measured 0.92).
+
+Honest conclusion: fully automatic transcription is NOT working and no
+number here may be quoted as OMR accuracy. Automatic stages: (1) staff
+geometry: works; (2) notehead localization: P~0.9/R~0.6 prototype; (3)
+rest localization: not working; (4) pitch: needs the production path
+(clef frames + repair) wired to detections — the clef auto-crop in the
+prototype is mislocated (returns C/G wrong on first attempt; the pixel
+staff lines themselves are correct); (5) duration/voices/measures: not
+attempted automatically. Stage C remains UNPROVEN. Exact P2 next steps:
+fix rest detection with glyph templates, fix the auto clef crop geometry,
+then wire detections into infer.build_inputs and re-run the production
+decode end-to-end.
+
+## 4. P3 rhythm decoupling ablation (ablate_decouple.py): CONFIRMED
+
+On the SAME cached strip+crop features: dur-only linear head 0.865-0.870
+(best 0.8695, stable) vs T1 multitask 0.804. Interference, not
+representation, hurt T1's dur. Per-head training with per-head gates is
+the justified design; strip features even edge out A1 on the raw task
+(+1.2pp) but joint-exact evidence is required before any integration.
+No training run beyond R1 (the ONE preregistered experiment of this
+mission); no artifact produced by the ablation.
+
+## 5. P4-P7 quick verification (no changes, documented)
+
+- Multi-voice/timing: timing_valid 1,368/3,334 measured on decoded sums
+  per (measure, staff, voice); simultaneous voices are kept as separate
+  lanes (no flattening); rests now land in structurally-correct staves.
+- Input quality: existing gates are crop-level (blank/degenerate crop
+  rejection, zero occurrences on DEV renders); PDF/skew/blur gates do not
+  exist in this branch — recorded as a gap (the main product tree has
+  raster-quality tests).
+- Notation completeness: grace/cue/slurs/articulations serialize where
+  typed; untyped flags preserved as warnings (flags_b); gaps: dynamics,
+  pedal, fingerings, ornaments, tempo remain unmodeled in this branch.
+- Evaluation integrity: oracle-box / detected / end-to-end kept separate
+  (P2 above reports detection P/R separately from probe scores); no TEST
+  access anywhere; identities frozen.
+
+Remaining V1 blockers: rest voice head, rest kind detection, onset
+cascade (needs duration gains), beam-boundary/beam-count integration
+(T2 design), tuplet reader, accidentals, chord crowding, stage-C
+detector (P0), scans (unmeasured), raster quality gates.
+
+Next highest-impact milestone: stage-C integration (P2 next steps) —
+the product blocker; rests/voices remain the accuracy blockers.
+
 # T1 vertical-preserving rhythm CNN: representation CONFIRMED, dur gate FAIL
 
 From `dae2ebd44d`. No merge, TEST sealed, DEV identities fixed, no

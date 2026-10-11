@@ -1,0 +1,26 @@
+{
+ "pages": 5,
+ "staves": 25,
+ "note": {
+  "tp": 515,
+  "fp": 64,
+  "fn": 387,
+  "p": 0.8895,
+  "r": 0.571
+ },
+ "rest": {
+  "tp": 4,
+  "fp": 212,
+  "fn": 23,
+  "p": 0.0185,
+  "r": 0.1481
+ },
+ "scope": "5 DEV scores, clean vector renders, IoU>=0.3 match",
+ "auto_probe": {
+  "matched_noteheads": 515,
+  "pitch_ok": 11,
+  "pitch_acc_on_detected": 0.0214,
+  "dur_ok": 135,
+  "dur_acc_on_detected": 0.2621
+ }
+}
