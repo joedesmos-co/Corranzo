@@ -58,3 +58,19 @@ the 8-100px pair window that solved Txo structurally cannot apply.
 8th-ness would need stem-tip or beam-overlap detection at the digit's
 own x (not pair bridges); stem-tip counting was measured earlier and
 is indiscriminate on this engraver (single beams read 1-3).
+
+
+**Addendum 2 (notation-side duration transfer, measured):** association
+solved (100% when the notehead is detected; Milestone 1). Duration
+cues at detected noteheads (Qmek p1, 152 detected):
+- anchorDots=True -> dotted in 54/68 cases (79% precision), dotted
+  recall 51/61 (84%). Good but not alone sufficient.
+- beams>=1 -> unbeamed 8th 14/16 (88%); but stem=True appears for BOTH
+  8ths (36) and quarters (36) because anchored_stem attaches to the
+  wrong notehead in dense chords.
+- Combined rule (beams/dots/stem): 48% accuracy. NOT SHIPPED (below the
+  already-shipped Txo path and too lossy for Qmek).
+Needed next: notehead->stem ownership (stem attaches at the notehead's
+own x, not nearest box), plus a hollow-vs-filled notehead read for
+half vs quarter. Both are local primitives; stem ownership is the
+binding one (fixes the 36/36 tie).
