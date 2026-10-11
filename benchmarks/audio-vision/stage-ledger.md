@@ -1,6 +1,6 @@
 # Stage-loss ledger (melody anchors, exact midi ±0.25 s)
 
-generated 2026-10-11T01:45:17.311Z
+generated 2026-10-11T02:43:27.383Z
 
 | recording | target | S1 model | S2 quant | S3 arrange/easy | S4 simpl/easy | S5 xml/easy | S3 adv | S4 adv | S5 adv | onsetMAE S1→S3 |
 |---|---|---|---|---|---|---|---|---|---|---|

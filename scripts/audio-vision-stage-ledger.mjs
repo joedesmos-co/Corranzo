@@ -44,6 +44,12 @@ const jsonOut = argValue('--json', 'benchmarks/audio-vision/stage-ledger.json')
 const mdOut = argValue('--md', 'benchmarks/audio-vision/stage-ledger.md')
 const onlyFilter = argValue('--only', null)
 const manifest = JSON.parse(readFileSync('/tmp/realcorpus/manifest.json', 'utf8'))
+// Part-tagged TRIOS truth (drives the bass/extraction metric). Optional.
+let TRIOS_PARTS = null
+try {
+  const trios = JSON.parse(readFileSync('/tmp/trios-truth.json', 'utf8'))
+  TRIOS_PARTS = trios.takes
+} catch { /* TRIOS not materialized */ }
 
 function melodyAnchors(truth) {
   const sorted = [...truth].sort((a, b) => a.onset - b.onset)
@@ -77,6 +83,17 @@ function recallAt(events, anchors, tol = 0.25) {
   }
 }
 
+/** Share of arrangement notes with NO truth support nearby (invented). */
+function inventedRate(eventsSec, truthNotes, tol = 0.3) {
+  if (!eventsSec.length) return null
+  let invented = 0
+  for (const e of eventsSec) {
+    const supported = truthNotes.some((t) => Math.abs(t.onset - e.sec) <= tol && (((t.midi - e.midi) % 12) + 12) % 12 === 0)
+    if (!supported) invented += 1
+  }
+  return Math.round((invented / eventsSec.length) * 1000) / 1000
+}
+
 const ENTRIES = manifest.entries.filter((e) => !onlyFilter || e.id.includes(onlyFilter))
 const report = { tol: 0.25, rows: [], generatedAt: new Date().toISOString() }
 
@@ -84,6 +101,22 @@ for (const entry of ENTRIES) {
   if (!entry.truthNotes?.length) continue
   console.log(`--- ${entry.id}`)
   const anchors = melodyAnchors(entry.truthNotes)
+  // Part-tagged truth for bass extraction + invented-note metrics.
+  let bassNotes = []
+  let partTruthNotes = entry.truthNotes
+  if (TRIOS_PARTS) {
+    const takeKey = entry.id.replace('trios-', '').replace('-mix', '')
+    const take = TRIOS_PARTS[takeKey]
+    if (take?.parts) {
+      const parts = Object.entries(take.parts).filter(([p]) => !['kick', 'snare', 'ride'].includes(p))
+      const byMedian = parts.map(([p, data]) => {
+        const mids = data.notes.map((n) => n.midi).sort((x, y) => x - y)
+        return { part: p, median: mids[Math.floor(mids.length / 2)], notes: data.notes }
+      }).sort((a, b) => a.median - b.median)
+      bassNotes = byMedian[0]?.notes ?? []
+      partTruthNotes = parts.flatMap(([, data]) => data.notes)
+    }
+  }
   const wav = readWavPcm(entry.audio)
   const mono = resampleLinear(Float32Array.from(wav.samples), wav.sampleRate, 22050)
   const bpOut = await predictBasicPitchNode(mono, { modelDir: join(root, 'public/neural-model') })
@@ -146,7 +179,15 @@ for (const entry of ENTRIES) {
         // Map parsed note times directly (seconds, tempo-aware already).
         s5 = recallAt((parsed?.notes ?? []).filter((n) => !n.isRest && Number.isFinite(n.midi)).map((n) => ({ midi: n.midi, sec: n.timeSeconds })), anchorsScore)
       } catch { /* stays null */ }
-      row.targets[targetPart][difficulty] = { s3, s4, s5, xmlNotes: simplified.length }
+      const bassRecall = bassNotes.length
+        ? recallAt(simplified.map((e) => ({ midi: e.midi, sec: toSec(e) })), melodyAnchors(bassNotes))
+        : null
+      row.targets[targetPart][difficulty] = {
+        s3, s4, s5,
+        xmlNotes: simplified.length,
+        bassRecall: bassRecall?.recall ?? null,
+        inventedRate: inventedRate(simplified.map((e) => ({ midi: e.midi, sec: toSec(e) })), partTruthNotes),
+      }
       console.log(`  ${targetPart}/${difficulty}: S1=${row.s1.recall} S2=${row.s2.recall} S3=${s3.recall} S4=${s4.recall} S5=${s5.recall}`)
     }
   }
