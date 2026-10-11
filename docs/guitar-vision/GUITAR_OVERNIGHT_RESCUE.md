@@ -326,3 +326,19 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 std string/fret/pitch 99.1/99.1/98.1 (pitchCov 0.327); compact
 98.6/99.1/97.7 (0.338); large 100/95.2/95.2 (0.124); bravura
 100/100/100 (0.808). Every layout at or above its prior best.
+
+### R4-M1 — Notation-to-TAB alignment: association is SOLVED (100%)
+- Join structure discovery: notehead- and tab-text-joins are SEPARATE
+  sid series (nh n002.., tab n535..) with same onsets; pairing only by
+  nearest-x (median offset 17px, p95 19px). Audited via new tool
+  proof-notation-audit.py (supervision for scoring only).
+- Qmek: 319 GT pairs, noteheads detected 242 (76%), association
+  CORRECT 242/242 (100% @45px). Txo: 350 pairs, 271 (77%),
+  association 271/271 (100%).
+- Conclusion: nearest-detected-tab-digit-x IS the correct partner
+  whenever the notehead is found. The binding constraint is NOTEHEAD
+  DETECTION (77%), not association. Qmek rhythm rescue therefore
+  reduces to: detect more noteheads -> transfer notation-side durations
+  -> the previously-missing dotted/isolated-8th/voice-2 durations.
+- Next: notation-side duration/voice extraction for detected noteheads
+  (Milestone 3), using detected boxes only.
