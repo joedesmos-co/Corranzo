@@ -161,6 +161,7 @@ import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
 import './styles/collection.css'
+import './styles/osmd.css'
 
 function resolveInitialView() {
   return getViewFromPathname(window.location.pathname) ?? 'home'

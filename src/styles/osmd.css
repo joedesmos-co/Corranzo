@@ -1,0 +1,55 @@
+/* Engraved score surface (OSMD). The score is a bounded, scrollable region:
+   practice needs the current measure on screen, not a document dump. */
+.arrangement-practice {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.osmd-score {
+  flex: 1 1 auto;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.osmd-score__container {
+  flex: 1 1 auto;
+  min-height: 220px;
+  max-height: min(58vh, 560px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.osmd-score__container svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.osmd-score__container--ready {
+  cursor: default;
+}
+
+/* Engraved note states mirror the PDF overlay palette (App.css). */
+.osmd-score__container [data-cz-score-note='1'] {
+  transition: fill 120ms ease-out, stroke 120ms ease-out;
+}
+
+.osmd-score--error {
+  padding: 16px;
+  border: 1px dashed rgba(148, 163, 184, 0.6);
+  border-radius: 10px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .osmd-score__container {
+    max-height: 46vh;
+  }
+}
