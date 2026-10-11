@@ -64,6 +64,32 @@ export default function TermsOfServicePage() {
         </ul>
       </section>
 
+      <section>
+        <h2>Notation rendering</h2>
+        <p>
+          Sheet music shown for generated arrangements is rendered in your
+          browser with OpenSheetMusicDisplay 2.2.0 by PhonicScore
+          (opensheetmusicdisplay.org), which bundles VexFlow, both distributed
+          under their own licenses:
+        </p>
+        <ul>
+          <li>
+            OpenSheetMusicDisplay — BSD 3-Clause. Copyright&nbsp;2019
+            PhonicScore. Redistribution and use in source and binary forms are
+            permitted provided the copyright notice, this list of conditions
+            and the disclaimer are reproduced; neither the name of the
+            copyright holder nor the names of its contributors may be used to
+            endorse or promote derived products without prior written
+            permission. Provided &ldquo;as is&rdquo;, without warranty of any
+            kind.
+          </li>
+          <li>
+            VexFlow — MIT. Copyright&nbsp;2010&ndash;present Mohit Muthanna
+            Cheppudira and other contributors.
+          </li>
+        </ul>
+      </section>
+
       <p className="legal-page__updated">Last updated: June 24, 2026</p>
     </LegalPage>
   )
