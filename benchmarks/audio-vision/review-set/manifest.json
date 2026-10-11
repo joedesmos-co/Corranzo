@@ -1,0 +1,6676 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-11T18:46:24.829Z",
+  "items": [
+    {
+      "id": "mozart-trio-mix",
+      "source": "TRIOS mix",
+      "license": "CC BY-NC-SA 2.0 UK (local eval only)",
+      "audioPath": "/tmp/trios/TRIOS Dataset/mozart/mix.wav",
+      "durationSeconds": 33.5,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-piano--easy.musicxml",
+          "tempoBpm": 117,
+          "notes": 242,
+          "measures": 16,
+          "confidence": 0.675,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→77"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→65"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "65→82"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "82→65"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "57→72"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→71"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "73→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "77→57"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→75"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "77→58"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→80"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "65→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "79→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→77"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "76→58"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "70→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→74"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→70"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "74→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "46→29"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@17 span 16→ dropped 41",
+              "measureIndex": 4
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@39.5 span 21→ dropped 79",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@40 span 18→ dropped 59",
+              "measureIndex": 10
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-piano--intermediate.musicxml",
+          "tempoBpm": 117,
+          "notes": 259,
+          "measures": 16,
+          "confidence": 0.654,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→77"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→65"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "65→82"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "82→65"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "57→72"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→71"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "73→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "77→57"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→75"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "77→58"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→80"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "65→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "79→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→77"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "76→58"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "70→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→74"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→70"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "74→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "46→29"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@17 span 16→ dropped 41",
+              "measureIndex": 4
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@39.5 span 21→ dropped 79",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@40 span 18→ dropped 59",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@46 span 15→ dropped 60",
+              "measureIndex": 11
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-piano--advanced.musicxml",
+          "tempoBpm": 117,
+          "notes": 276,
+          "measures": 16,
+          "confidence": 0.695,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→77"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→65"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "65→82"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "82→65"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "57→72"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→71"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "73→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→74"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "74→58"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "77→57"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→75"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "77→58"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "58→77"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→80"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "80→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "65→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "79→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "59→79"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→77"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "76→58"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "70→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→74"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→70"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "74→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "46→29"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@39.5 span 21→ dropped 79",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@40 span 18→ dropped 59",
+              "measureIndex": 10
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-guitar--easy.musicxml",
+          "tempoBpm": 117,
+          "notes": 244,
+          "measures": 16,
+          "confidence": 0.585,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "1→10",
+              "measureIndex": 0
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 3
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "1→11",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 5
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 5
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→13",
+              "measureIndex": 8
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→16",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→8",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 11
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 117,
+          "notes": 262,
+          "measures": 16,
+          "confidence": 0.614,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "1→10",
+              "measureIndex": 0
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "1→11",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 5
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 5
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→13",
+              "measureIndex": 8
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→16",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→8",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "mozart-trio-mix--solo-guitar--advanced.musicxml",
+          "tempoBpm": 117,
+          "notes": 278,
+          "measures": 16,
+          "confidence": 0.635,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.716,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 35,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "1→10",
+              "measureIndex": 0
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "1→11",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 4
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 5
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→13",
+              "measureIndex": 8
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→16",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→8",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        }
+      ]
+    },
+    {
+      "id": "take-five-trio-mix",
+      "source": "TRIOS mix",
+      "license": "CC BY-NC-SA 2.0 UK (local eval only)",
+      "audioPath": "/tmp/trios/TRIOS Dataset/take_five/mix.wav",
+      "durationSeconds": 43.5,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-piano--easy.musicxml",
+          "tempoBpm": 185,
+          "notes": 297,
+          "measures": 32,
+          "confidence": 0.703,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "29→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "38→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "39→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "68→39"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "39→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "66→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "46→61"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "54→39"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "39→63"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "49→75"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "63→78"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "72→53"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "53→73"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "77→49"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "49→73"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "75→59"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "49→66"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "68→53"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "70→42"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "42→69"
+            },
+            {
+              "measureIndex": 26,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 30,
+              "kind": "large-melody-leap",
+              "detail": "54→70"
+            },
+            {
+              "measureIndex": 32,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@71.25 span 16→ dropped 62",
+              "measureIndex": 17
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@101 span 15→ dropped 58",
+              "measureIndex": 25
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-piano--intermediate.musicxml",
+          "tempoBpm": 185,
+          "notes": 350,
+          "measures": 32,
+          "confidence": 0.701,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "29→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "38→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "39→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "68→39"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "39→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "66→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "46→61"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "54→39"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "39→63"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "49→75"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "63→78"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "72→53"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "53→73"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "77→49"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "49→73"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "75→59"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "49→66"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "68→53"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "70→42"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "42→69"
+            },
+            {
+              "measureIndex": 26,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 30,
+              "kind": "large-melody-leap",
+              "detail": "54→70"
+            },
+            {
+              "measureIndex": 32,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@71.25 span 16→ dropped 62",
+              "measureIndex": 17
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@101 span 15→ dropped 58",
+              "measureIndex": 25
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-piano--advanced.musicxml",
+          "tempoBpm": 185,
+          "notes": 366,
+          "measures": 32,
+          "confidence": 0.722,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "29→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "38→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "39→58"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "68→39"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "39→66"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "66→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "46→61"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "54→39"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "39→63"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "46→66"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "63→46"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "46→65"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "49→75"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "63→78"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "72→53"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "53→73"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "77→49"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "49→73"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "75→59"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "65→49"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "49→66"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "68→53"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "70→42"
+            },
+            {
+              "measureIndex": 24,
+              "kind": "large-melody-leap",
+              "detail": "42→69"
+            },
+            {
+              "measureIndex": 26,
+              "kind": "large-melody-leap",
+              "detail": "78→63"
+            },
+            {
+              "measureIndex": 30,
+              "kind": "large-melody-leap",
+              "detail": "54→70"
+            },
+            {
+              "measureIndex": 32,
+              "kind": "large-melody-leap",
+              "detail": "58→72"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@101 span 19→ dropped 42",
+              "measureIndex": 25
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-guitar--easy.musicxml",
+          "tempoBpm": 185,
+          "notes": 297,
+          "measures": 32,
+          "confidence": 0.593,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 20
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 20
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→14",
+              "measureIndex": 21
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→11",
+              "measureIndex": 23
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 25
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 25
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 25
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 26
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 27
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 28
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 29
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 30
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 30
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 31
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 32
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 6",
+              "measureIndex": 32
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 185,
+          "notes": 351,
+          "measures": 32,
+          "confidence": 0.681,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 20
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→14",
+              "measureIndex": 21
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→11",
+              "measureIndex": 23
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 25
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 25
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 31
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 32
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 6",
+              "measureIndex": 32
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "take-five-trio-mix--solo-guitar--advanced.musicxml",
+          "tempoBpm": 185,
+          "notes": 366,
+          "measures": 32,
+          "confidence": 0.702,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.639,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 52,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 38→50",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 20
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→14",
+              "measureIndex": 21
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→11",
+              "measureIndex": 23
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 25
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 31
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 32
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 6",
+              "measureIndex": 32
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 43.5,
+            "totalSeconds": 43.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        }
+      ]
+    },
+    {
+      "id": "mozart-piano-stem",
+      "source": "TRIOS piano stem",
+      "license": "CC BY-NC-SA 2.0 UK (local eval only)",
+      "audioPath": "/tmp/trios/TRIOS Dataset/mozart/piano.wav",
+      "durationSeconds": 33.5,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-piano--easy.musicxml",
+          "tempoBpm": 117,
+          "notes": 161,
+          "measures": 16,
+          "confidence": 0.773,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→43"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "43→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "71→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→70"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→50"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "77→50"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-piano--intermediate.musicxml",
+          "tempoBpm": 117,
+          "notes": 173,
+          "measures": 16,
+          "confidence": 0.769,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→43"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "43→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "71→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→70"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→50"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "77→50"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-piano--advanced.musicxml",
+          "tempoBpm": 117,
+          "notes": 176,
+          "measures": 16,
+          "confidence": 0.768,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "58→74"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "74→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→41"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "41→57"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "50→70"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "58→45"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "45→60"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "60→46"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "74→43"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "43→59"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "71→48"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "48→70"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "63→39"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→50"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "53→77"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "77→50"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-guitar--easy.musicxml",
+          "tempoBpm": 117,
+          "notes": 160,
+          "measures": 16,
+          "confidence": 0.773,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→1",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 117,
+          "notes": 172,
+          "measures": 16,
+          "confidence": 0.769,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→1",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "mozart-piano-stem--solo-guitar--advanced.musicxml",
+          "tempoBpm": 117,
+          "notes": 175,
+          "measures": 16,
+          "confidence": 0.768,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.686,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 44,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "3→10",
+              "measureIndex": 4
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→1",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 39→51",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 33.5,
+            "totalSeconds": 33.5,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC-SA 2.0 UK (local eval only)"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-jazz-solo",
+      "source": "GuitarSet solo",
+      "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)",
+      "audioPath": "/tmp/guitarset/tracks/04_Jazz1-200-B_solo_mic.wav",
+      "durationSeconds": 14.4,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-piano--easy.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-piano--intermediate.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-piano--advanced.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-guitar--easy.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "guitarset-jazz-solo--solo-guitar--advanced.musicxml",
+          "tempoBpm": 199,
+          "notes": 66,
+          "measures": 12,
+          "confidence": 0.711,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.595,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 1,
+          "warnings": [],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 14.4,
+            "totalSeconds": 14.4,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-comping",
+      "source": "GuitarSet comping",
+      "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)",
+      "audioPath": "/tmp/guitarset/tracks/00_SS3-84-Bb_comp_mic.wav",
+      "durationSeconds": 45.7,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "guitarset-comping--solo-piano--easy.musicxml",
+          "tempoBpm": 86,
+          "notes": 207,
+          "measures": 17,
+          "confidence": 0.718,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "62→82"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→69"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "62→46"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "46→62"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "67→51"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "41→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "55→74"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "50→65"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "51→70"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→34"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "34→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "58→34"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "34→65"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@51.25 span 14→ dropped 65",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "guitarset-comping--solo-piano--intermediate.musicxml",
+          "tempoBpm": 86,
+          "notes": 225,
+          "measures": 17,
+          "confidence": 0.733,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "62→82"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→69"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "62→46"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "46→62"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "67→51"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "41→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "55→74"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "50→65"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "51→70"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→34"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "34→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "58→34"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "34→65"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "guitarset-comping--solo-piano--advanced.musicxml",
+          "tempoBpm": 86,
+          "notes": 237,
+          "measures": 17,
+          "confidence": 0.73,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "53→69"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "62→82"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→69"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "62→46"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "46→62"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "67→51"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "41→65"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "55→74"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "50→65"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "65→51"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "51→70"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "53→34"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "34→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "58→34"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "34→65"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "70→51"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "53→72"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "guitarset-comping--solo-guitar--easy.musicxml",
+          "tempoBpm": 86,
+          "notes": 205,
+          "measures": 17,
+          "confidence": 0.659,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 1
+            },
+            {
+              "kind": "position-shift",
+              "detail": "6→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 7
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 9
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→1",
+              "measureIndex": 9
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "guitarset-comping--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 86,
+          "notes": 225,
+          "measures": 17,
+          "confidence": 0.733,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "6→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→1",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "guitarset-comping--solo-guitar--advanced.musicxml",
+          "tempoBpm": 86,
+          "notes": 237,
+          "measures": 17,
+          "confidence": 0.73,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.638,
+          "uncertainRegions": 0,
+          "suppressedHarmonics": 29,
+          "warnings": [
+            {
+              "kind": "position-shift",
+              "detail": "6→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "8→1",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 34→46",
+              "measureIndex": 13
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45.71,
+            "totalSeconds": 45.71,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC-BY-4.0 (Xi et al., ISMIR 2018)"
+        }
+      ]
+    },
+    {
+      "id": "chopin-nocturne",
+      "source": "Musopen excerpt (30-75s)",
+      "license": "Public domain recording (Luke Faulkner)",
+      "audioPath": "/tmp/realcorpus/chopin-noct19-faulkner-excerpt.wav",
+      "durationSeconds": 45,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "chopin-nocturne--solo-piano--easy.musicxml",
+          "tempoBpm": 86,
+          "notes": 235,
+          "measures": 16,
+          "confidence": 0.636,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "42→74"
+            },
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "74→54"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "59→74"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "67→42"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "42→78"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "73→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→61"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→54"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "70→49"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "49→78"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "71→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "54→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "35→63"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "78→59"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "66→79"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→47"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "60→40"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "52→78"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "78→55"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "60→76"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "76→59"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "55→75"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→47"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "59→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→76"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "64→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "47→79"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "79→55"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "55→81"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "43→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→54"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→83"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→67"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "52→71"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "69→91"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "91→78"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "76→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "47→76"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "78→35"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "35→54"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "59→35"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "47→74"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→47"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "54→78"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→55"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "59→77"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "77→64"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "77→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "71→55"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "55→71"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→62"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "62→79"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "79→64"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→48"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "64→79"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "67→49"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@2 span 13→ dropped 67",
+              "measureIndex": 0
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@8.75 span 24→ dropped 42",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@11 span 14→ dropped 80",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@14 span 24→ dropped 78",
+              "measureIndex": 3
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@31.5 span 14→ dropped 52",
+              "measureIndex": 7
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@37.5 span 21→ dropped 68",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@38.5 span 15→ dropped 52",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@42 span 18→ dropped 82",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@42.5 span 15→ dropped 91",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@43.25 span 15→ dropped 91",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@49.75 span 24→ dropped 91",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "chopin-nocturne--solo-piano--intermediate.musicxml",
+          "tempoBpm": 86,
+          "notes": 256,
+          "measures": 16,
+          "confidence": 0.632,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "42→74"
+            },
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "74→54"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "59→74"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "67→42"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "42→78"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "73→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→61"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→54"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "70→49"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "49→78"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "71→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "54→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "35→63"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "78→59"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "66→79"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→47"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "60→40"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "52→78"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "78→55"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "60→76"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "76→59"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "55→75"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→47"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "59→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→76"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "64→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "47→79"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "79→55"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "55→81"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "43→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→54"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→83"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→67"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "52→71"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "69→91"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "91→78"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "76→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "47→76"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "78→35"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "35→54"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "59→35"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "47→74"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→47"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "54→78"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→55"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "59→77"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "77→64"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "77→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "71→55"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "55→71"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→62"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "62→79"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "79→64"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→48"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "64→79"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "67→49"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@8.75 span 24→ dropped 42",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@9.25 span 16→ dropped 54",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@10.25 span 16→ dropped 45",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@14 span 24→ dropped 78",
+              "measureIndex": 3
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@20.75 span 24→ dropped 67",
+              "measureIndex": 5
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@37.5 span 21→ dropped 68",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@38.5 span 15→ dropped 52",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@42 span 18→ dropped 82",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@42.5 span 15→ dropped 91",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@43.25 span 24→ dropped 67",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@49.75 span 24→ dropped 91",
+              "measureIndex": 12
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@54.75 span 15→ dropped 62",
+              "measureIndex": 13
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "chopin-nocturne--solo-piano--advanced.musicxml",
+          "tempoBpm": 86,
+          "notes": 275,
+          "measures": 16,
+          "confidence": 0.641,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "42→74"
+            },
+            {
+              "measureIndex": 0,
+              "kind": "large-melody-leap",
+              "detail": "74→54"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "59→74"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "74→53"
+            },
+            {
+              "measureIndex": 1,
+              "kind": "large-melody-leap",
+              "detail": "60→73"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "67→42"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "42→78"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "73→45"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "45→61"
+            },
+            {
+              "measureIndex": 2,
+              "kind": "large-melody-leap",
+              "detail": "82→54"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "70→49"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "49→78"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "71→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "54→35"
+            },
+            {
+              "measureIndex": 3,
+              "kind": "large-melody-leap",
+              "detail": "35→63"
+            },
+            {
+              "measureIndex": 4,
+              "kind": "large-melody-leap",
+              "detail": "78→59"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "66→79"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "79→47"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 5,
+              "kind": "large-melody-leap",
+              "detail": "60→40"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "52→78"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "78→55"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "60→76"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "76→59"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "55→75"
+            },
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "75→47"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "59→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→76"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "64→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→43"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "43→78"
+            },
+            {
+              "measureIndex": 7,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "47→79"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "79→55"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "55→81"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "69→43"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "43→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→47"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "57→83"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "83→54"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→83"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "71→47"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "47→67"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "67→52"
+            },
+            {
+              "measureIndex": 9,
+              "kind": "large-melody-leap",
+              "detail": "52→71"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "69→91"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "91→78"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "78→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "76→47"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "47→76"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "78→35"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "35→54"
+            },
+            {
+              "measureIndex": 11,
+              "kind": "large-melody-leap",
+              "detail": "59→35"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "47→74"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→47"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "54→78"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "74→55"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "59→77"
+            },
+            {
+              "measureIndex": 12,
+              "kind": "large-melody-leap",
+              "detail": "77→64"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "60→77"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "77→62"
+            },
+            {
+              "measureIndex": 13,
+              "kind": "large-melody-leap",
+              "detail": "71→55"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "55→71"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→62"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "62→79"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "79→64"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "64→91"
+            },
+            {
+              "measureIndex": 14,
+              "kind": "large-melody-leap",
+              "detail": "91→48"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "64→79"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "67→49"
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "LH@8.75 span 24→ dropped 42",
+              "measureIndex": 2
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@14 span 24→ dropped 78",
+              "measureIndex": 3
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@20.75 span 24→ dropped 67",
+              "measureIndex": 5
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@37.5 span 21→ dropped 68",
+              "measureIndex": 9
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@42 span 18→ dropped 82",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@43.25 span 24→ dropped 67",
+              "measureIndex": 10
+            },
+            {
+              "kind": "hand-span-enforced",
+              "detail": "RH@49.75 span 24→ dropped 91",
+              "measureIndex": 12
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "chopin-nocturne--solo-guitar--easy.musicxml",
+          "tempoBpm": 86,
+          "notes": 238,
+          "measures": 16,
+          "confidence": 0.635,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 1
+            },
+            {
+              "kind": "position-shift",
+              "detail": "12→2",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "11→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "18→9",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 14",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 4
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 5
+            },
+            {
+              "kind": "position-shift",
+              "detail": "15→7",
+              "measureIndex": 5
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 6
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 7
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 7
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→3",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "2→17",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "19→9",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 4",
+              "measureIndex": 11
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→14",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→14",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 12
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "15→8",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "chopin-nocturne--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 86,
+          "notes": 257,
+          "measures": 16,
+          "confidence": 0.632,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 1
+            },
+            {
+              "kind": "position-shift",
+              "detail": "12→2",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "6→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "18→9",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 14",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 5
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 6
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 5",
+              "measureIndex": 7
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→3",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "2→17",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "19→9",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→14",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→14",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 12
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "15→8",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "chopin-nocturne--solo-guitar--advanced.musicxml",
+          "tempoBpm": 86,
+          "notes": 281,
+          "measures": 16,
+          "confidence": 0.64,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.752,
+          "uncertainRegions": 1,
+          "suppressedHarmonics": 31,
+          "warnings": [
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 1
+            },
+            {
+              "kind": "position-shift",
+              "detail": "12→2",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 12",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "6→18",
+              "measureIndex": 2
+            },
+            {
+              "kind": "position-shift",
+              "detail": "18→9",
+              "measureIndex": 2
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 14",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 3
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 5
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 9",
+              "measureIndex": 6
+            },
+            {
+              "kind": "position-shift",
+              "detail": "10→3",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "2→17",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "16→7",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "19→9",
+              "measureIndex": 8
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→19",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 10
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 10
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 10
+            },
+            {
+              "kind": "position-shift",
+              "detail": "7→14",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "position-shift",
+              "detail": "14→7",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 35→47",
+              "measureIndex": 11
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 7",
+              "measureIndex": 12
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→14",
+              "measureIndex": 12
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 12
+            },
+            {
+              "kind": "wide-stretch",
+              "detail": "span 10",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 91→79",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "15→8",
+              "measureIndex": 14
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→15",
+              "measureIndex": 15
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "Public domain recording (Luke Faulkner)"
+        }
+      ]
+    },
+    {
+      "id": "five-piece-mix",
+      "source": "ccMixter excerpt (20-65s)",
+      "license": "CC BY-NC (local eval only, do not redistribute)",
+      "audioPath": "/tmp/realcorpus/bag-of-motifs-excerpt.wav",
+      "durationSeconds": 45,
+      "variants": [
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "five-piece-mix--solo-piano--easy.musicxml",
+          "tempoBpm": 200,
+          "notes": 207,
+          "measures": 37,
+          "confidence": 0.589,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "29→53"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "31→62"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "60→29"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "29→60"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→31"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "55→41"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→28"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "28→60"
+            },
+            {
+              "measureIndex": 34,
+              "kind": "large-melody-leap",
+              "detail": "55→76"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "five-piece-mix--solo-piano--intermediate.musicxml",
+          "tempoBpm": 200,
+          "notes": 209,
+          "measures": 37,
+          "confidence": 0.588,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "29→53"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "31→62"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "60→29"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "29→60"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→31"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "55→41"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→28"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "28→60"
+            },
+            {
+              "measureIndex": 34,
+              "kind": "large-melody-leap",
+              "detail": "55→76"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        },
+        {
+          "targetPart": "solo-piano",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "five-piece-mix--solo-piano--advanced.musicxml",
+          "tempoBpm": 200,
+          "notes": 209,
+          "measures": 37,
+          "confidence": 0.588,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "measureIndex": 6,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 8,
+              "kind": "large-melody-leap",
+              "detail": "29→53"
+            },
+            {
+              "measureIndex": 10,
+              "kind": "large-melody-leap",
+              "detail": "31→46"
+            },
+            {
+              "measureIndex": 15,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 16,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "31→62"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "60→29"
+            },
+            {
+              "measureIndex": 17,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 18,
+              "kind": "large-melody-leap",
+              "detail": "29→60"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "60→31"
+            },
+            {
+              "measureIndex": 19,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "65→31"
+            },
+            {
+              "measureIndex": 20,
+              "kind": "large-melody-leap",
+              "detail": "31→64"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "62→31"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "31→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "55→41"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 21,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→60"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "60→41"
+            },
+            {
+              "measureIndex": 22,
+              "kind": "large-melody-leap",
+              "detail": "41→28"
+            },
+            {
+              "measureIndex": 23,
+              "kind": "large-melody-leap",
+              "detail": "28→60"
+            },
+            {
+              "measureIndex": 34,
+              "kind": "large-melody-leap",
+              "detail": "55→76"
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "easy",
+          "ok": true,
+          "file": "five-piece-mix--solo-guitar--easy.musicxml",
+          "tempoBpm": 200,
+          "notes": 201,
+          "measures": 37,
+          "confidence": 0.553,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 1
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 10
+            },
+            {
+              "kind": "chord-voice-dropped",
+              "detail": "midi 41",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 15
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 19
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 28→40",
+              "measureIndex": 22
+            },
+            {
+              "kind": "unplayable-note-dropped",
+              "detail": "midi 24",
+              "measureIndex": 27
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→12",
+              "measureIndex": 34
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→12",
+              "measureIndex": 36
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "intermediate",
+          "ok": true,
+          "file": "five-piece-mix--solo-guitar--intermediate.musicxml",
+          "tempoBpm": 200,
+          "notes": 203,
+          "measures": 37,
+          "confidence": 0.552,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 1
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 10
+            },
+            {
+              "kind": "chord-voice-dropped",
+              "detail": "midi 41",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 15
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 19
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 28→40",
+              "measureIndex": 22
+            },
+            {
+              "kind": "unplayable-note-dropped",
+              "detail": "midi 24",
+              "measureIndex": 27
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→12",
+              "measureIndex": 34
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→12",
+              "measureIndex": 36
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        },
+        {
+          "targetPart": "solo-guitar",
+          "difficulty": "advanced",
+          "ok": true,
+          "file": "five-piece-mix--solo-guitar--advanced.musicxml",
+          "tempoBpm": 200,
+          "notes": 203,
+          "measures": 37,
+          "confidence": 0.552,
+          "pitchSource": "basic-pitch",
+          "agreement": 0.393,
+          "uncertainRegions": 8,
+          "suppressedHarmonics": 7,
+          "warnings": [
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 0
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 1
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 2
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 3
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 5
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 6
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 7
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 30→42",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 8
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 9
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 10
+            },
+            {
+              "kind": "chord-voice-dropped",
+              "detail": "midi 41",
+              "measureIndex": 11
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 36→48",
+              "measureIndex": 13
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 15
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 16
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 17
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 18
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 19
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 20
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 31→43",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 29→41",
+              "measureIndex": 21
+            },
+            {
+              "kind": "octave-transposed",
+              "detail": "midi 28→40",
+              "measureIndex": 22
+            },
+            {
+              "kind": "unplayable-note-dropped",
+              "detail": "midi 24",
+              "measureIndex": 27
+            },
+            {
+              "kind": "position-shift",
+              "detail": "4→12",
+              "measureIndex": 34
+            },
+            {
+              "kind": "position-shift",
+              "detail": "5→12",
+              "measureIndex": 36
+            }
+          ],
+          "excerpt": {
+            "startSeconds": 0,
+            "durationSeconds": 45,
+            "totalSeconds": 45,
+            "truncated": false,
+            "limitSeconds": 180
+          },
+          "license": "CC BY-NC (local eval only, do not redistribute)"
+        }
+      ]
+    }
+  ]
+}
