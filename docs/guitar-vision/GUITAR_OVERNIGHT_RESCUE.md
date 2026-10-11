@@ -308,3 +308,16 @@ compact 97.3/90.9, large 84.0/72.0, bravura 64.3/57.1; +2 digits).
 - Qmek durations ~10%: isolated beam groups (no right-neighbor group
   to bridge to); stem-tip counting measured (muddled 0-5 for single
   beams). Documented, not forced.
+
+### R3-M4 — Mission 3/4: MusicXML attributes + honest scoring
+- Attributes (clef/key/time) NOT emittable: canonical.json carries no
+  score metadata at all (only tuning/capo/events); truth's key -1 /
+  time (1+3)/16 exist in stamped.musicxml but never reach the writer.
+  No detector emits them. Per mandate, nothing assumed - no fabrica-
+  tion. Real fix = attribute detectors (preregistered separately).
+- Duplicate-part scoring correction (Mission 4): truth Txo = 2 parts
+  (P1/P2, 362 notes each, 33 measures each = 66 measure elements).
+  Our single part is musically complete but the evaluator counts the
+  duplicate. Built truth-single-part-txo.musicxml (P2 dropped, origi-
+  nal untouched) and report BOTH: historical 42%, corrected 53%
+  (pitch R 89%, align 97%). Corrected artifact committed for reuse.
