@@ -21,7 +21,7 @@ function clampPiano(midi) {
  * Arrange quantized transcription events + chords + melody into two-hand piano events.
  * Each event: { midi, startBeat, durBeats, hand: 'RH'|'LH', role, kept }
  */
-export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficulty, beatsPerMeasure = 4, melodyContour = null }) {
+export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficulty, beatsPerMeasure = 4, melodyContour = null, beat0 = 0, beatPeriod = 0.5 }) {
   const params = paramsForDifficulty(difficulty)
   const maxSpan = params.maxHandSpanSemitones
   // Group by onset beat.
@@ -40,7 +40,7 @@ export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficu
   for (const onset of sortedOnsets) {
     const group = byOnset.get(onset)
     const measureIndex = Math.floor(Math.max(0, onset) / beatsPerMeasure)
-    const chord = chordAt(chords, onset, beatsPerMeasure)
+    const chord = chordAt(chords, onset, beatsPerMeasure, { beat0, beatPeriod })
     const density = group.length
     const texture = selectTexture({
       noteDensity: density,
@@ -117,11 +117,23 @@ export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficu
   return { events: finalEvents, warnings, textureSummary: summarizeTextures(finalEvents) }
 }
 
-function chordAt(chords, onsetBeat, beatsPerMeasure) {
+function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPeriod = 0.5 } = {}) {
   if (!chords?.length) return null
-  // chords carry startSeconds; map beat→seconds unknown here — match by index fallback:
-  const idx = Math.floor(Math.max(0, onsetBeat) / beatsPerMeasure)
-  const byMeasure = chords[Math.min(chords.length - 1, Math.max(0, idx * 1))]
+  // Chords are emitted PER BEAT (one per beat window), so indexing by measure
+  // read the wrong chord for most onsets. Resolve by time instead.
+  const seconds = beat0 + onsetBeat * beatPeriod
+  let byTime = chords.find((c) => c.startSeconds <= seconds + 1e-9 && c.endSeconds > seconds + 1e-9)
+  if (!byTime) {
+    let bestDist = Infinity
+    for (const c of chords) {
+      const dist = seconds < c.startSeconds ? c.startSeconds - seconds : seconds - c.endSeconds
+      if (dist < bestDist) {
+        bestDist = dist
+        byTime = c
+      }
+    }
+  }
+  const byMeasure = byTime
   if (!byMeasure) return null
   const intervalsByQuality = {
     major: [0, 4, 7],
@@ -132,9 +144,12 @@ function chordAt(chords, onsetBeat, beatsPerMeasure) {
     diminished: [0, 3, 6],
     suspended4: [0, 5, 7],
   }
+  // Voicing from the pitch classes the model actually heard (predicted
+  // evidence); the template is only a fallback when nothing was heard.
+  const heard = Array.isArray(byMeasure.heardPcs) && byMeasure.heardPcs.length ? byMeasure.heardPcs : null
   const intervals = intervalsByQuality[byMeasure.quality] ?? [0, 4, 7]
-  const tones = intervals.map((iv) => (byMeasure.root + iv) % 12)
-  return { ...byMeasure, tones }
+  const tones = heard ?? intervals.map((iv) => (byMeasure.root + iv) % 12)
+  return { ...byMeasure, tones, voicingSource: heard ? 'heard' : 'template' }
 }
 
 function enforceHandSpan(events, maxSpan, warnings) {

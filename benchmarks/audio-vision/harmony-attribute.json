@@ -1,0 +1,159 @@
+{
+  "rows": [
+    {
+      "take": "mozart",
+      "windows": 40,
+      "rootAndQualityAccuracy": 0.35,
+      "categories": {
+        "reference-underdetermined": 25,
+        "root-ok-quality-ok": 14,
+        "bass-disagree": 9,
+        "seventh-confusion": 10,
+        "invented-pc": 6,
+        "quality-other": 1
+      },
+      "withDrumAccuracy": null,
+      "withDrumWindows": 0,
+      "withoutDrumAccuracy": 0.35,
+      "withoutDrumWindows": 40,
+      "boundaryMaeSeconds": 0.078,
+      "boundaryChanges": 57,
+      "confidenceSeparation": 0.245,
+      "confBucketAccuracy": {
+        "mid": {
+          "accuracy": 0.227,
+          "n": 22
+        },
+        "high": {
+          "accuracy": 0.5,
+          "n": 18
+        }
+      }
+    },
+    {
+      "take": "schubert",
+      "windows": 59,
+      "rootAndQualityAccuracy": 0.237,
+      "categories": {
+        "reference-underdetermined": 26,
+        "bass-disagree": 23,
+        "melody-as-root": 5,
+        "seventh-confusion": 9,
+        "root-ok-quality-ok": 14,
+        "quality-major-minor": 2,
+        "invented-pc": 6
+      },
+      "withDrumAccuracy": null,
+      "withDrumWindows": 0,
+      "withoutDrumAccuracy": 0.237,
+      "withoutDrumWindows": 59,
+      "boundaryMaeSeconds": 0.142,
+      "boundaryChanges": 67,
+      "confidenceSeparation": -0.064,
+      "confBucketAccuracy": {
+        "mid": {
+          "accuracy": 0.233,
+          "n": 30
+        },
+        "high": {
+          "accuracy": 0.241,
+          "n": 29
+        }
+      }
+    },
+    {
+      "take": "brahms",
+      "windows": 90,
+      "rootAndQualityAccuracy": 0.222,
+      "categories": {
+        "reference-underdetermined": 25,
+        "melody-as-root": 15,
+        "root-ok-quality-ok": 20,
+        "bass-disagree": 30,
+        "seventh-confusion": 10,
+        "invented-pc": 13,
+        "quality-major-minor": 2
+      },
+      "withDrumAccuracy": null,
+      "withDrumWindows": 0,
+      "withoutDrumAccuracy": 0.222,
+      "withoutDrumWindows": 90,
+      "boundaryMaeSeconds": 0.064,
+      "boundaryChanges": 79,
+      "confidenceSeparation": 0.043,
+      "confBucketAccuracy": {
+        "mid": {
+          "accuracy": 0.227,
+          "n": 44
+        },
+        "high": {
+          "accuracy": 0.217,
+          "n": 46
+        }
+      }
+    },
+    {
+      "take": "lussier",
+      "windows": 20,
+      "rootAndQualityAccuracy": 0.4,
+      "categories": {
+        "reference-underdetermined": 12,
+        "root-ok-quality-ok": 8,
+        "invented-pc": 4,
+        "melody-as-root": 4,
+        "seventh-confusion": 2,
+        "quality-major-minor": 1,
+        "bass-disagree": 1
+      },
+      "withDrumAccuracy": null,
+      "withDrumWindows": 0,
+      "withoutDrumAccuracy": 0.4,
+      "withoutDrumWindows": 20,
+      "boundaryMaeSeconds": 0.103,
+      "boundaryChanges": 31,
+      "confidenceSeparation": -0.189,
+      "confBucketAccuracy": {
+        "mid": {
+          "accuracy": 0.455,
+          "n": 11
+        },
+        "high": {
+          "accuracy": 0.333,
+          "n": 9
+        }
+      }
+    },
+    {
+      "take": "take_five",
+      "windows": 60,
+      "rootAndQualityAccuracy": 0.217,
+      "categories": {
+        "reference-underdetermined": 74,
+        "bass-disagree": 22,
+        "quality-major-minor": 10,
+        "seventh-confusion": 4,
+        "invented-pc": 8,
+        "quality-other": 2,
+        "root-ok-quality-ok": 13,
+        "melody-as-root": 1
+      },
+      "withDrumAccuracy": 0.217,
+      "withDrumWindows": 60,
+      "withoutDrumAccuracy": null,
+      "withoutDrumWindows": 0,
+      "boundaryMaeSeconds": 0.047,
+      "boundaryChanges": 70,
+      "confidenceSeparation": -0.261,
+      "confBucketAccuracy": {
+        "mid": {
+          "accuracy": 0.271,
+          "n": 48
+        },
+        "high": {
+          "accuracy": 0,
+          "n": 12
+        }
+      }
+    }
+  ]
+}
