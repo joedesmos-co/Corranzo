@@ -342,3 +342,9 @@ std string/fret/pitch 99.1/99.1/98.1 (pitchCov 0.327); compact
   -> the previously-missing dotted/isolated-8th/voice-2 durations.
 - Next: notation-side duration/voice extraction for detected noteheads
   (Milestone 3), using detected boxes only.
+
+### R4-M2 — Final session re-validation (no regressions)
+Txo: 349 notes, strings 100% matched, frets 99.7%, measures 100%,
+triple 96.1%. Qmek: 496 notes, strings 99.6%, frets 99.8%, measures
+100%, triple 94.8%. 384 tests green. No code changes in R4 beyond the
+association audit (rhythm transfer not shipped by design).
