@@ -150,6 +150,53 @@ export function measureComplexity(events) {
 }
 
 /**
+ * Build a beat-keyed melodic contour from detected melody frames
+ * (analysis.melody: the dominant salient pitch per frame, provenance
+ * 'detected'). Used to decide WHICH simultaneous note is the melody —
+ * highest-pitch heuristics mislabel when an upper harmonic or octave
+ * shadow sits above the real line, and difficulty thinning then deletes
+ * the true melody. Returns Map<beat(number), Set<midi>>.
+ */
+export function buildMelodyContour(melodyFrames = [], { beat0 = 0, beatPeriod = 0.5, toleranceBeats = 0.5 } = {}) {
+  const contour = new Map()
+  if (!melodyFrames?.length || !(beatPeriod > 0)) return contour
+  for (const frame of melodyFrames) {
+    const beat = (frame.seconds - beat0) / beatPeriod
+    if (!Number.isFinite(beat)) continue
+    const key = Math.round(beat * 2) / 2
+    for (const b of [beat + toleranceBeats, beat, beat - toleranceBeats]) {
+      if (b < -toleranceBeats) continue
+      const k = Math.round(b * 2) / 2
+      if (!contour.has(k)) contour.set(k, new Set())
+      contour.get(k).add(frame.midi)
+    }
+    void key
+  }
+  return contour
+}
+
+/**
+ * Pick the melody note of a simultaneous group using the contour first
+ * (detected evidence), falling back to the highest pitch. Returns the
+ * chosen midi or null when the group is empty.
+ */
+export function chooseMelodyMidi(midis, contourForBeat, { fallbackHighest = true } = {}) {
+  if (!midis?.length) return null
+  if (contourForBeat?.size) {
+    for (const midi of midis) {
+      if (contourForBeat.has(midi)) return midi
+    }
+    // Pitch-class match catches octave displacement of the true line.
+    for (const midi of midis) {
+      for (const c of contourForBeat) {
+        if (Math.abs(c - midi) === 12) return midi
+      }
+    }
+  }
+  return fallbackHighest ? Math.max(...midis) : null
+}
+
+/**
  * Suppress harmonic-double inventions in predicted notes (octave/fifth
  * shadows of a simultaneously stronger note). Only notes carrying an
  * amplitude/strength vote; notes without one are always kept. Returns

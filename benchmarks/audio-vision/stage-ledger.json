@@ -1,0 +1,561 @@
+{
+  "tol": 0.25,
+  "rows": [
+    {
+      "id": "trios-mozart-mix",
+      "license": "CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)",
+      "anchors": 135,
+      "tempoBpm": 117,
+      "beat0": 0.46,
+      "bpRawNotes": 333,
+      "suppressed": 35,
+      "s1": {
+        "recall": 0.911,
+        "maeMs": 27,
+        "hit": 123,
+        "anchors": 135
+      },
+      "s2": {
+        "recall": 0.911,
+        "maeMs": 45,
+        "hit": 123,
+        "anchors": 135
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "s3": {
+              "recall": 0.896,
+              "maeMs": 46,
+              "hit": 121,
+              "anchors": 135
+            },
+            "s4": {
+              "recall": 0.741,
+              "maeMs": 49,
+              "hit": 100,
+              "anchors": 135
+            },
+            "s5": {
+              "recall": 0.741,
+              "maeMs": 49,
+              "hit": 100,
+              "anchors": 135
+            },
+            "xmlNotes": 199
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.904,
+              "maeMs": 46,
+              "hit": 122,
+              "anchors": 135
+            },
+            "s4": {
+              "recall": 0.896,
+              "maeMs": 48,
+              "hit": 121,
+              "anchors": 135
+            },
+            "s5": {
+              "recall": 0.896,
+              "maeMs": 47,
+              "hit": 121,
+              "anchors": 135
+            },
+            "xmlNotes": 276
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "s3": {
+              "recall": 0.904,
+              "maeMs": 45,
+              "hit": 122,
+              "anchors": 135
+            },
+            "s4": {
+              "recall": 0.748,
+              "maeMs": 49,
+              "hit": 101,
+              "anchors": 135
+            },
+            "s5": {
+              "recall": 0.748,
+              "maeMs": 48,
+              "hit": 101,
+              "anchors": 135
+            },
+            "xmlNotes": 200
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.911,
+              "maeMs": 45,
+              "hit": 123,
+              "anchors": 135
+            },
+            "s4": {
+              "recall": 0.904,
+              "maeMs": 47,
+              "hit": 122,
+              "anchors": 135
+            },
+            "s5": {
+              "recall": 0.904,
+              "maeMs": 46,
+              "hit": 122,
+              "anchors": 135
+            },
+            "xmlNotes": 278
+          }
+        }
+      }
+    },
+    {
+      "id": "trios-schubert-mix",
+      "license": "CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)",
+      "anchors": 148,
+      "tempoBpm": 96,
+      "beat0": 0.604,
+      "bpRawNotes": 418,
+      "suppressed": 45,
+      "s1": {
+        "recall": 0.655,
+        "maeMs": 29,
+        "hit": 97,
+        "anchors": 148
+      },
+      "s2": {
+        "recall": 0.655,
+        "maeMs": 45,
+        "hit": 97,
+        "anchors": 148
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "s3": {
+              "recall": 0.635,
+              "maeMs": 44,
+              "hit": 94,
+              "anchors": 148
+            },
+            "s4": {
+              "recall": 0.48,
+              "maeMs": 44,
+              "hit": 71,
+              "anchors": 148
+            },
+            "s5": {
+              "recall": 0.48,
+              "maeMs": 44,
+              "hit": 71,
+              "anchors": 148
+            },
+            "xmlNotes": 237
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.655,
+              "maeMs": 45,
+              "hit": 97,
+              "anchors": 148
+            },
+            "s4": {
+              "recall": 0.642,
+              "maeMs": 45,
+              "hit": 95,
+              "anchors": 148
+            },
+            "s5": {
+              "recall": 0.642,
+              "maeMs": 45,
+              "hit": 95,
+              "anchors": 148
+            },
+            "xmlNotes": 337
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "s3": {
+              "recall": 0.635,
+              "maeMs": 45,
+              "hit": 94,
+              "anchors": 148
+            },
+            "s4": {
+              "recall": 0.473,
+              "maeMs": 44,
+              "hit": 70,
+              "anchors": 148
+            },
+            "s5": {
+              "recall": 0.473,
+              "maeMs": 44,
+              "hit": 70,
+              "anchors": 148
+            },
+            "xmlNotes": 235
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.649,
+              "maeMs": 45,
+              "hit": 96,
+              "anchors": 148
+            },
+            "s4": {
+              "recall": 0.628,
+              "maeMs": 45,
+              "hit": 93,
+              "anchors": 148
+            },
+            "s5": {
+              "recall": 0.628,
+              "maeMs": 45,
+              "hit": 93,
+              "anchors": 148
+            },
+            "xmlNotes": 339
+          }
+        }
+      }
+    },
+    {
+      "id": "trios-brahms-mix",
+      "license": "CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)",
+      "anchors": 221,
+      "tempoBpm": 161,
+      "beat0": 0.347,
+      "bpRawNotes": 450,
+      "suppressed": 34,
+      "s1": {
+        "recall": 0.742,
+        "maeMs": 30,
+        "hit": 164,
+        "anchors": 221
+      },
+      "s2": {
+        "recall": 0.747,
+        "maeMs": 40,
+        "hit": 165,
+        "anchors": 221
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "s3": {
+              "recall": 0.733,
+              "maeMs": 40,
+              "hit": 162,
+              "anchors": 221
+            },
+            "s4": {
+              "recall": 0.633,
+              "maeMs": 41,
+              "hit": 140,
+              "anchors": 221
+            },
+            "s5": {
+              "recall": 0.633,
+              "maeMs": 40,
+              "hit": 140,
+              "anchors": 221
+            },
+            "xmlNotes": 301
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.742,
+              "maeMs": 40,
+              "hit": 164,
+              "anchors": 221
+            },
+            "s4": {
+              "recall": 0.733,
+              "maeMs": 41,
+              "hit": 162,
+              "anchors": 221
+            },
+            "s5": {
+              "recall": 0.733,
+              "maeMs": 39,
+              "hit": 162,
+              "anchors": 221
+            },
+            "xmlNotes": 394
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "s3": {
+              "recall": 0.715,
+              "maeMs": 40,
+              "hit": 158,
+              "anchors": 221
+            },
+            "s4": {
+              "recall": 0.615,
+              "maeMs": 41,
+              "hit": 136,
+              "anchors": 221
+            },
+            "s5": {
+              "recall": 0.615,
+              "maeMs": 39,
+              "hit": 136,
+              "anchors": 221
+            },
+            "xmlNotes": 298
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.719,
+              "maeMs": 40,
+              "hit": 159,
+              "anchors": 221
+            },
+            "s4": {
+              "recall": 0.715,
+              "maeMs": 41,
+              "hit": 158,
+              "anchors": 221
+            },
+            "s5": {
+              "recall": 0.715,
+              "maeMs": 39,
+              "hit": 158,
+              "anchors": 221
+            },
+            "xmlNotes": 390
+          }
+        }
+      }
+    },
+    {
+      "id": "trios-lussier-mix",
+      "license": "CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)",
+      "anchors": 87,
+      "tempoBpm": 108,
+      "beat0": 0.466,
+      "bpRawNotes": 191,
+      "suppressed": 22,
+      "s1": {
+        "recall": 0.747,
+        "maeMs": 32,
+        "hit": 65,
+        "anchors": 87
+      },
+      "s2": {
+        "recall": 0.736,
+        "maeMs": 44,
+        "hit": 64,
+        "anchors": 87
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "s3": {
+              "recall": 0.724,
+              "maeMs": 44,
+              "hit": 63,
+              "anchors": 87
+            },
+            "s4": {
+              "recall": 0.609,
+              "maeMs": 47,
+              "hit": 53,
+              "anchors": 87
+            },
+            "s5": {
+              "recall": 0.609,
+              "maeMs": 47,
+              "hit": 53,
+              "anchors": 87
+            },
+            "xmlNotes": 106
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.736,
+              "maeMs": 44,
+              "hit": 64,
+              "anchors": 87
+            },
+            "s4": {
+              "recall": 0.736,
+              "maeMs": 50,
+              "hit": 64,
+              "anchors": 87
+            },
+            "s5": {
+              "recall": 0.736,
+              "maeMs": 50,
+              "hit": 64,
+              "anchors": 87
+            },
+            "xmlNotes": 153
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "s3": {
+              "recall": 0.736,
+              "maeMs": 44,
+              "hit": 64,
+              "anchors": 87
+            },
+            "s4": {
+              "recall": 0.621,
+              "maeMs": 50,
+              "hit": 54,
+              "anchors": 87
+            },
+            "s5": {
+              "recall": 0.621,
+              "maeMs": 50,
+              "hit": 54,
+              "anchors": 87
+            },
+            "xmlNotes": 106
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.736,
+              "maeMs": 44,
+              "hit": 64,
+              "anchors": 87
+            },
+            "s4": {
+              "recall": 0.724,
+              "maeMs": 46,
+              "hit": 63,
+              "anchors": 87
+            },
+            "s5": {
+              "recall": 0.724,
+              "maeMs": 46,
+              "hit": 63,
+              "anchors": 87
+            },
+            "xmlNotes": 152
+          }
+        }
+      }
+    },
+    {
+      "id": "trios-take_five-mix",
+      "license": "CC BY-NC-SA 2.0 UK (TRIOS Dataset; local eval only, never redistribute)",
+      "anchors": 151,
+      "tempoBpm": 185,
+      "beat0": 0.303,
+      "bpRawNotes": 422,
+      "suppressed": 52,
+      "s1": {
+        "recall": 0.967,
+        "maeMs": 19,
+        "hit": 146,
+        "anchors": 151
+      },
+      "s2": {
+        "recall": 0.967,
+        "maeMs": 41,
+        "hit": 146,
+        "anchors": 151
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "s3": {
+              "recall": 0.967,
+              "maeMs": 41,
+              "hit": 146,
+              "anchors": 151
+            },
+            "s4": {
+              "recall": 0.901,
+              "maeMs": 40,
+              "hit": 136,
+              "anchors": 151
+            },
+            "s5": {
+              "recall": 0.901,
+              "maeMs": 39,
+              "hit": 136,
+              "anchors": 151
+            },
+            "xmlNotes": 285
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.967,
+              "maeMs": 41,
+              "hit": 146,
+              "anchors": 151
+            },
+            "s4": {
+              "recall": 0.96,
+              "maeMs": 40,
+              "hit": 145,
+              "anchors": 151
+            },
+            "s5": {
+              "recall": 0.96,
+              "maeMs": 40,
+              "hit": 145,
+              "anchors": 151
+            },
+            "xmlNotes": 366
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "s3": {
+              "recall": 0.868,
+              "maeMs": 42,
+              "hit": 131,
+              "anchors": 151
+            },
+            "s4": {
+              "recall": 0.808,
+              "maeMs": 42,
+              "hit": 122,
+              "anchors": 151
+            },
+            "s5": {
+              "recall": 0.808,
+              "maeMs": 41,
+              "hit": 122,
+              "anchors": 151
+            },
+            "xmlNotes": 285
+          },
+          "advanced": {
+            "s3": {
+              "recall": 0.874,
+              "maeMs": 42,
+              "hit": 132,
+              "anchors": 151
+            },
+            "s4": {
+              "recall": 0.868,
+              "maeMs": 42,
+              "hit": 131,
+              "anchors": 151
+            },
+            "s5": {
+              "recall": 0.868,
+              "maeMs": 41,
+              "hit": 131,
+              "anchors": 151
+            },
+            "xmlNotes": 366
+          }
+        }
+      }
+    }
+  ],
+  "generatedAt": "2026-10-11T01:45:17.311Z"
+}

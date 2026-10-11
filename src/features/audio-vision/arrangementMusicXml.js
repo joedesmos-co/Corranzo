@@ -48,14 +48,38 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   // correct following measure (per-measure splitting alone loses them).
   const pieces = events.flatMap((e) => splitNoteAcrossBarlines(e, beats))
   const byMeasure = Array.from({ length: measureCount }, () => [])
-  for (const e of pieces) {
-    const m = Math.min(measureCount - 1, Math.max(0, measureIndexOf(e.startBeat, beats)))
-    byMeasure[m].push(e)
-  }
   const isPiano = targetPart === PART_INSTRUMENTS.SOLO_PIANO
   const partId = isPiano ? 'P1' : 'G1'
   const partName = isPiano ? 'Solo Piano' : 'Solo Guitar'
   const instrumentName = isPiano ? 'piano' : 'acoustic-guitar'
+  // MusicXML voices are monophonic: a staff/voice must not contain overlapping
+  // notes. Overlaps (a held harmony note under a moving line) would otherwise
+  // be written back-to-back, overrun the barline, and shift the parsed time of
+  // every later note. Clip each note to the next onset in the same voice; the
+  // remaining sustain is expressed by ties across barlines, not by overlap.
+  const clipped = []
+  {
+    const byVoice = new Map()
+    for (const piece of pieces) {
+      const key = `${piece.measureIndex}:${isPiano ? (piece.hand ?? 'RH') : 'V1'}`
+      if (!byVoice.has(key)) byVoice.set(key, [])
+      byVoice.get(key).push(piece)
+    }
+    for (const group of byVoice.values()) {
+      const sorted = [...group].sort((a, b) => a.startBeat - b.startBeat)
+      for (let i = 0; i < sorted.length; i += 1) {
+        const e = sorted[i]
+        const next = sorted[i + 1]
+        const limit = next ? next.startBeat : (e.measureIndex + 1) * beats
+        clipped.push({ ...e, durBeats: Math.max(1 / 16, Math.min(e.durBeats, limit - e.startBeat)) })
+      }
+    }
+    clipped.sort((a, b) => a.measureIndex - b.measureIndex || a.startBeat - b.startBeat)
+  }
+  for (const e of clipped) {
+    const m = Math.min(measureCount - 1, Math.max(0, measureIndexOf(e.startBeat, beats)))
+    byMeasure[m].push(e)
+  }
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`
   xml += `<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n`
   xml += `<score-partwise version="4.0">\n`
