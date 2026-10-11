@@ -290,7 +290,11 @@ def decode_page(heat: torch.Tensor, pixels_u8: np.ndarray, fx: float, fy: float,
         sx, sy = BOX_SCALE[cls]
         mw, mh = MEDIANS[cls][0] * sx * fx, MEDIANS[cls][1] * sy * fy
         for x, y in zip(xs.tolist(), ys.tolist()):
-            cx, cy = (x + 0.5) * 8, (y + 0.5) * 8
+            # Peak-cell center (no +0.5): matched pairs sit +4.0/+3.1px
+            # (median) from the +0.5 center — a systematic half-cell
+            # anchor bias, not scatter. Anchoring on the cell corner
+            # removes it (prereg GUITAR_SUBCELL_PREREG.md, variant B).
+            cx, cy = x * 8, y * 8
             preds.append({"cls": cls, "x": cx, "y": cy, "v": float(channel[y, x]),
                           "box": [cx - mw / 2, cy - mh / 2, cx + mw / 2, cy + mh / 2]})
     preds.sort(key=lambda p: -p["v"])

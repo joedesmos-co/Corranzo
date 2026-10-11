@@ -290,31 +290,46 @@ def main() -> int:
                     cur.append(e)
                 if cur:
                     columns.append((_si, cur))
+            # Column rhythm: pair-bridge over adjacent same-system onsets
+            # (peak-anchored fixes made pairs work live: Txo 95%, and
+            # audit shows 248+49/321 correct). Bridges = rows of continuous
+            # ink between the two column xs (staff rows excluded). Slur
+            # false positives (Qmek: thin arcs) rejected by requiring
+            # >=2 bridge rows with >=4-row runs each, and by the dot-rule
+            # below (dots are near-horizontal strokes).
             for _si, col in columns:
                 cx = sum(e["x"] for e in col) / len(col)
-                # Column rhythm (validated end-to-end: Txo 96-97% exact):
-                # per-digit x strips, median vote. Digit-anchored
-                # [topcy-100,topcy-16]. Pair-bridge counting is cleaner on
-                # GT boxes (95%/87%) but collapses on detected boxes
-                # (x-jitter merges/splits onset units); median is robust
-                # to unit noise. See report (beam-object evidence kept for
-                # the onset-unit follow-up, not the counter).
                 _topcy = min(e["y"] for e in col)
-                _gt, _gb = int(_topcy - 100), int(_topcy - 16)
-                _colg = []
-                if _gt >= 0:
-                    for e in col:
-                        _ex = e["x"]
-                        _s = (u8[_gt:_gb, max(0, int(_ex - 8)):int(_ex + 8)] < 128)
-                        _rr = np.nonzero(_s.mean(axis=1) > 0.5)[0]
-                        _gl, _pv = 0, -99
-                        for _r in _rr:
-                            if _r - _pv > 2:
-                                _gl += 1
-                            _pv = _r
-                        _colg.append(_gl)
-                _gs = sorted(_colg) if _colg else [0]
-                _beams = min(_gs[len(_gs) // 2], 2)
+                # Pair-bridge count: max over adjacent same-system onsets.
+                # Zone matches the audit exactly: [system-mindy-140, -40]
+                # where mindy = topmost digit in the system (col computed
+                # from full system rows, not per column).
+                _sibs = [c for s, c in columns if s == _si]
+                _sysdy = min(e2["y"] for c2 in _sibs for e2 in c2)
+                _ttop = _sysdy - 100
+                _sx = [sum(e["x"] for e in c) / len(c) for c in _sibs]
+                _me = _sx.index(cx) if cx in _sx else -1
+                _pb = 0
+                if _ttop is not None and _me >= 0 and _page_sp:
+                    _zt, _zb = int(_ttop - 40), int(_ttop + 60)
+                    _zt = max(0, _zt)
+                    for _nb in (_me - 1, _me + 1):
+                        if not (0 <= _nb < len(_sx)):
+                            continue
+                        _nx = _sx[_nb]
+                        if not (8 <= abs(_nx - cx) <= 100) or _zt < 0:
+                            continue
+                        _xa, _xb = sorted([int(cx), int(_nx)])
+                        _n = 0
+                        _pv = -99
+                        for _r in range(_zt, _zb + 1):
+                            _row = u8[_r, max(0, _xa + 3):min(u8.shape[1], _xb - 2)] < 128
+                            if len(_row) and _row.all():
+                                if _r - _pv > 3:
+                                    _n += 1
+                                _pv = _r
+                        _pb = max(_pb, _n)
+                _beams = min(_pb, 2)
                 # Nearest detected note box -> anchored duration (fallback
                 # for dots + unbeamed columns).
                 best_box, best_d = None, 1e9

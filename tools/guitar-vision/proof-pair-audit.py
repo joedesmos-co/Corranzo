@@ -7,7 +7,36 @@ zone. Onset beams = max over adjacent pairs. Compares to truth beams.
 import json, re
 import numpy as np
 from PIL import Image
+import importlib.util, sys
 from collections import Counter, defaultdict
+import torch
+
+
+def _load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+_pigs = _load('pig', '/Users/ryland/Documents/scoreflow-guitar/tools/guitar-vision/proof-ignore-train.py')
+_decs = _load('dec', '/Users/ryland/Documents/scoreflow-guitar/tools/guitar-vision/proof-heatmap-decode.py')
+_mbs = _load('mb', '/Users/ryland/Documents/scoreflow-guitar/tools/guitar-vision/proof-measure-bars.py')
+_psg = _load('psg', '/Users/ryland/Documents/scoreflow-guitar/tools/guitar-vision/proof-string-geometric.py')
+DEV = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
+_DET = None
+
+
+def det_model():
+    global _DET
+    if _DET is None:
+        _DET = _pigs.TinyFCN4().to(DEV)
+        sd = torch.load('/Users/ryland/Documents/scoreflow-guitar/datasets/guitar-vision/proof-detection/heatmap-ignore.pt',
+                        map_location=DEV, weights_only=True)
+        _DET.load_state_dict(sd.get('state', sd))
+        _DET.eval()
+    return _DET
 
 W = '/Users/ryland/Documents/scoreflow-guitar'
 
@@ -30,7 +59,7 @@ def pair_bridges(u8, x1, x2, ztop, zbot):
     return n
 
 
-def run_sample(sample, work, hfile, joinsname='joins.json'):
+def run_sample(sample, work, hfile, joinsname='joins.json', detected=False):
     joins = json.load(open(f'{W}/{work}/{sample}/{joinsname}'))
     canon = json.load(open(f'{W}/{work}/{sample}/canonical.json'))
     man = json.load(open(hfile))
@@ -47,18 +76,33 @@ def run_sample(sample, work, hfile, joinsname='joins.json'):
         u8 = np.asarray(Image.open(m['file']).convert('L')).astype(np.uint8)
         fx = m['cssWidth'] / m['viewBox'][0]
         fy = m['height'] / m['viewBox'][1]
-        items = []
-        for sid, v in joins.get('joins', {}).items():
-            if 'tab-text' not in (v.get('children') or []):
-                continue
-            if (v.get('page') or 1) != pg:
-                continue
-            e = links.get(sid)
-            if not e:
-                continue
-            tb = len((e.get('time') or {}).get('beams') or [])
-            for b in v.get('boxes', []):
-                items.append(((b[0] + b[2]) / 2 * fx, (b[1] + b[3]) / 2 * fy, tb))
+        if detected:
+            with torch.no_grad():
+                heat = det_model()(torch.from_numpy(u8.astype(np.float32) / 255.0).unsqueeze(0).unsqueeze(0).to(DEV))[0]
+            preds, _ = _decs.infer_page_merged(det_model(), u8, fx, fy, DEV)
+            gtd = [(g['cx'], g['cy'], g['cls']) for g in _decs.build_gt(joins, pg, fx, fy) if g['cls'] == 'tabdigit']
+            items = []
+            for pp in preds:
+                if pp['cls'] != 'tabdigit':
+                    continue
+                tb = [len((links[k].get('time') or {}).get('beams') or [])
+                      for k, gg in zip(list(links), gtd)
+                      if abs(pp['x'] - gg[0]) < 15 and abs(pp['y'] - gg[1]) < 15
+                      for links_k in [k] if links[links_k]]
+                items.append((pp['x'], pp['y'], max(tb) if tb else 0))
+        else:
+            items = []
+            for sid, v in joins.get('joins', {}).items():
+                if 'tab-text' not in (v.get('children') or []):
+                    continue
+                if (v.get('page') or 1) != pg:
+                    continue
+                e = links.get(sid)
+                if not e:
+                    continue
+                tb = len((e.get('time') or {}).get('beams') or [])
+                for b in v.get('boxes', []):
+                    items.append(((b[0] + b[2]) / 2 * fx, (b[1] + b[3]) / 2 * fy, tb))
         # per-system columns
         bysys = defaultdict(list)
         for x, y, tb in sorted(items):
@@ -90,10 +134,12 @@ def run_sample(sample, work, hfile, joinsname='joins.json'):
 
 
 if __name__ == '__main__':
+    import sys as _s
+    _det = '--detected' in _s.argv
     for sample, work, hfile in [
             ('pdmx-QmTxoAbitsi9', 'datasets/guitar-vision/pdmx/work', '/tmp/proof/hires/pdmx-QmTxoAbitsi9-manifest.json'),
             ('pdmx2-QmekQbhC1yAP', 'datasets/guitar-vision/pdmx/work', '/tmp/proof/hires/pdmx2-QmekQbhC1yAP-manifest.json')]:
-        r = run_sample(sample, work, hfile)
+        r = run_sample(sample, work, hfile, detected=_det)
         print('===', sample, '(pairbridges, truthBeams)')
         for k in sorted(r, key=lambda k: (str(k[1]), str(k[0]))):
             print('  ', k, r[k])
