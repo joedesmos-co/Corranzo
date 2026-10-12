@@ -178,7 +178,7 @@ async function main() {
       await importBtn.click()
       await sleep(800)
     }
-    const pdfInput = page.locator('input[type="file"][aria-label="Choose score PDF"]')
+    const pdfInput = page.locator('input[type="file"][aria-label="Choose score file"]')
     const extraInput = page.locator('input[type="file"][aria-label="Choose optional files"]')
     if ((await pdfInput.count()) !== 1 || (await extraInput.count()) !== 1) {
       fail('upload: PDF + optional file pickers', 'pickers missing')
