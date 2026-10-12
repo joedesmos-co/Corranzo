@@ -160,15 +160,22 @@ function pickWrong(expected) {
   return 90
 }
 
-async function importScore(page, filePath) {
+/** Import a PDF with its matched MusicXML and MIDI, then open the score. */
+async function importScore(page, piece) {
   await page.getByRole('button', { name: /^Import$/i }).first().click()
   await sleep(900)
-  await page.locator('input[type="file"][aria-label="Choose score file"]').first().setInputFiles(filePath)
+  const pdfInput = page.locator('input[type="file"][aria-label="Choose score PDF"]').first()
+  const advancedInput = page.locator('input[type="file"][aria-label="Choose optional files"]').first()
+  await pdfInput.setInputFiles(piece.pdf)
   await sleep(2000)
+  if (existsSync(piece.musicxml)) await advancedInput.setInputFiles(piece.musicxml)
+  await sleep(2000)
+  if (existsSync(piece.midi)) await advancedInput.setInputFiles(piece.midi)
+  await sleep(3500)
   const open = page.getByRole('button', { name: /Open score/i }).first()
   if (!(await open.isVisible().catch(() => false))) return false
   await open.click()
-  await page.waitForSelector('.workspace-play', { timeout: 90000 }).catch(() => {})
+  await page.waitForSelector('.workspace-play', { timeout: 120000 }).catch(() => {})
   await sleep(1500)
   return true
 }
@@ -180,13 +187,30 @@ async function main() {
   const fail = (name, detail = null) => { report.failures.push({ name, detail }); console.error(`FAIL  ${name}${detail ? ` :: ${detail}` : ''}`) }
   const skip = (name, why) => { report.skipped.push({ name, why }); console.log(`SKIP  ${name} :: ${why}`) }
 
-  const pieceA = join(root, 'public', 'fixtures', 'practice-library', 'piano-brahms-lullaby', 'piano-brahms-lullaby.musicxml')
-  const pieceB = join(root, 'public', 'fixtures', 'practice-library', 'piano-bach-chorale-bwv259', 'piano-bach-chorale-bwv259.musicxml')
-  for (const path of [pieceA, pieceB]) {
+  // PDF-first: a PDF with its matched MusicXML attached under Advanced, and a
+  // MIDI for accompaniment, so the practice sequence below is the real one.
+  const musicDir = join(root, 'public', 'fixtures', 'practice-library')
+  const pieceA = {
+    pdf: join(musicDir, 'piano-brahms-lullaby', 'piano-brahms-lullaby.pdf'),
+    musicxml: join(musicDir, 'piano-brahms-lullaby', 'piano-brahms-lullaby.musicxml'),
+    midi: join(musicDir, 'piano-brahms-lullaby', 'piano-brahms-lullaby.mid'),
+  }
+  const pieceB = {
+    pdf: join(musicDir, 'piano-bach-chorale-bwv259', 'piano-bach-chorale-bwv259.pdf'),
+    musicxml: join(musicDir, 'piano-bach-chorale-bwv259', 'piano-bach-chorale-bwv259.musicxml'),
+    midi: join(musicDir, 'piano-bach-chorale-bwv259', 'piano-bach-chorale-bwv259.mid'),
+  }
+  for (const path of [...Object.values(pieceA), ...Object.values(pieceB)]) {
     if (!existsSync(path)) { console.error(`fixture missing: ${path}`); process.exit(1) }
   }
-  const a = join(outDir, 'lullaby.musicxml'); copyFileSync(pieceA, a)
-  const b = join(outDir, 'chorale.musicxml'); copyFileSync(pieceB, b)
+  const a = { ...pieceA, pdf: join(outDir, 'a.pdf'), musicxml: join(outDir, 'a.musicxml'), midi: join(outDir, 'a.mid') }
+  const b = { ...pieceB, pdf: join(outDir, 'b.pdf'), musicxml: join(outDir, 'b.musicxml'), midi: join(outDir, 'b.mid') }
+  for (const [from, to] of [
+    [pieceA.pdf, a.pdf], [pieceA.musicxml, a.musicxml], [pieceA.midi, a.midi],
+    [pieceB.pdf, b.pdf], [pieceB.musicxml, b.musicxml], [pieceB.midi, b.midi],
+  ]) {
+    copyFileSync(from, to)
+  }
 
   const viteServer = await createServer({
     root, configFile: join(root, 'vite.config.js'), logLevel: 'silent',
@@ -209,7 +233,7 @@ async function main() {
       fail('import piece A', 'score would not open')
       throw new Error('import failed')
     }
-    pass('import score A (MusicXML, no PDF)')
+    pass('import score A (PDF + matched MusicXML + MIDI)')
 
     // ---- Start Wait For You on real MIDI input ----
     await setMode(page, 'Wait For You')
@@ -347,11 +371,15 @@ async function main() {
       // ---- switch song ----
       await page.getByRole('button', { name: /^Import$/i }).first().click()
       await sleep(900)
-      await page.locator('input[type="file"][aria-label="Choose score file"]').first().setInputFiles(b)
+      await page.locator('input[type="file"][aria-label="Choose score PDF"]').first().setInputFiles(b.pdf)
+      await sleep(2000)
+      await page.locator('input[type="file"][aria-label="Choose optional files"]').first().setInputFiles(b.musicxml)
+      await sleep(2500)
+      await page.locator('input[type="file"][aria-label="Choose optional files"]').first().setInputFiles(b.midi)
       await sleep(2500)
       const openB = page.getByRole('button', { name: /Open score/i }).first()
       if (!(await openB.isVisible().catch(() => false))) {
-        fail('switch songs', 'second score would not open')
+        fail('switch songs', 'second score (PDF + companion) would not open')
       } else {
         await openB.click()
         await page.waitForSelector('.workspace-play', { timeout: 90000 }).catch(() => {})

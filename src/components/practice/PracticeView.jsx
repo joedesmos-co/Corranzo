@@ -53,8 +53,13 @@ export default function PracticeView({
 }) {
   const { session, scoreFollow, practiceStats, practicePiece } = usePracticeSessionContext()
   // Audio Vision arrangements have no PDF page, so they render their own
-  // engraved surface. Every other source is named by its PDF file name.
-  const scoreTitle = (fileName || 'Your score')
+  // engraved surface. Every other source is named by its score: prefer the
+  // title authored in the uploaded MusicXML companion (what the engraver prints
+  // and what the file names rarely say), and only then the PDF file name.
+  const notationTitle = musicXmlSource?.source === 'upload'
+    ? session.timing?.timingMap?.title ?? null
+    : null
+  const scoreTitle = (notationTitle || fileName || 'Your score')
     .replace(/\.[^.]+$/, '')
     .replace(/ - (Piano|Guitar)$/, '')
   const { setPdfPageSizes } = usePracticeVisualSession()
