@@ -2159,12 +2159,15 @@ export default function App() {
         type: 'info',
         message: `This saved session was a notation-only score. Choose the matching PDF to open it — the attached notation is still used for score following.`,
       })
+      // Land on Import: there is no PDF to practice from, and the Import view is
+      // the only place that renders the "add the matching PDF" guidance.
       setActiveView(
         normalizeAppView(
           resolveRestoredActiveView({
             pathname: window.location.pathname,
-            savedActiveView: payload.activeView,
-            // No PDF: never resume straight into the practice workspace.
+            // A saved legal route is always honoured; otherwise Import, never
+            // the practice workspace, and never a bare library.
+            savedActiveView: 'import',
             hasMusicXml: false,
           }),
         ),

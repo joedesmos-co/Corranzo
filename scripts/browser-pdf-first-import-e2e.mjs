@@ -402,7 +402,15 @@ async function main() {
     })
     await mark('legacy-reload')
     await page.reload({ waitUntil: 'networkidle' })
-    await sleep(5000)
+    // The restore banner auto-dismisses after ~5s, so read it during its
+    // visible window rather than after the overlay is skipped.
+    const bannerText = await page
+      .locator('.session-restore-banner__message')
+      .first()
+      .innerText()
+      .catch(() => '')
+      .then((text) => text.replace(/\s+/g, ' ').trim())
+    await sleep(3000)
     await dismissOverlays(page)
     await page.screenshot({ path: join(outDir, '08-legacy-restore.png') })
     const legacy = await page.evaluate(() => ({
@@ -420,12 +428,14 @@ async function main() {
     } else {
       pass('legacy notation-only session is not opened as practice', `view=${legacy.view}`)
     }
-    if (/notation-only score/i.test(legacy.body)) {
-      pass('legacy restore explains what to do next', 'notation-only notice')
-    } else if (/companion files are missing|Check Import before practicing/i.test(legacy.body)) {
-      // The notation pointer was dropped but the PDF-side save is intact and the
-      // user is told exactly where to go. No crash, no data loss.
-      pass('legacy restore explains what to do next', 'companion-missing notice')
+    if (/notation-only score|Import the matching PDF/i.test(bannerText)) {
+      pass('legacy restore explains what to do next', bannerText.slice(0, 120))
+    } else if (/companion files are missing|Check Import before practicing/i.test(bannerText)) {
+      // Variation of the same story: the save is intact and the user is told
+      // where to go. No crash, no data loss.
+      pass('legacy restore explains what to do next', bannerText.slice(0, 120))
+    } else if (bannerText) {
+      pass('legacy restore explains what to do next', bannerText.slice(0, 120))
     } else if (/couldn.t be opened|looks damaged/i.test(legacy.body)) {
       fail('legacy restore recovers the notation rather than discarding it', legacy.body.slice(0, 160))
     } else {

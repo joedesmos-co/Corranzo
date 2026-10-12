@@ -269,11 +269,13 @@ export default function useSessionPersistence({
       if (result.partial) {
         setRestoreStatus(RESTORE_STATUS.PARTIAL)
         setRestoreMessage(
-          result.issues?.includes('stale-omr-session')
-            ? 'Your PDF is saved, but playback needs preparation. Continue from Import.'
-            : usedBackup || wasRecovered
-              ? 'Your last save needed recovery, but your score is open. Check Import before practicing.'
-              : 'Your PDF is saved, but some companion files are missing. Check Import before practicing.',
+          result.issues?.includes('musicxml-only-session')
+            ? 'That saved session was a notation-only score. Import the matching PDF to open it — the notation is still attached for score following.'
+            : result.issues?.includes('stale-omr-session')
+              ? 'Your PDF is saved, but playback needs preparation. Continue from Import.'
+              : usedBackup || wasRecovered
+                ? 'Your last save needed recovery, but your score is open. Check Import before practicing.'
+                : 'Your PDF is saved, but some companion files are missing. Check Import before practicing.',
         )
       } else {
         setRestoreStatus(RESTORE_STATUS.RESTORED)
