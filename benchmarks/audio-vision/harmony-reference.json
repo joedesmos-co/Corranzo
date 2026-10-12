@@ -1,0 +1,167 @@
+{
+  "rows": [
+    {
+      "id": "guitarset-jazz-solo",
+      "license": "CC-BY-4.0",
+      "labelledWindows": 6,
+      "usableWindows": 2,
+      "ambiguousWindows": 4,
+      "rootAccuracy": 0.5,
+      "qualityAccuracy": 0,
+      "rootAndQualityAccuracy": 0,
+      "s1ChordTonesPresentRate": 0,
+      "s1MissingTones": 6,
+      "s3BassAccuracy": 0,
+      "s3BassWindows": 4,
+      "s4VoicingAccuracy": null,
+      "s4VoicingNotes": 0,
+      "timingMaeSeconds": 0.295,
+      "perChord": [
+        {
+          "seconds": 2.4,
+          "label": "B:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 6,
+          "label": "E:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 8.4,
+          "label": "B:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 10.2,
+          "label": "F#:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 11.4,
+          "label": "E:maj",
+          "analyzed": "Bm",
+          "pianoBass": 6
+        },
+        {
+          "seconds": 13.2,
+          "label": "B:maj",
+          "analyzed": "Bm",
+          "pianoBass": 10
+        }
+      ]
+    },
+    {
+      "id": "guitarset-ss-comp",
+      "license": "CC-BY-4.0",
+      "labelledWindows": 16,
+      "usableWindows": 13,
+      "ambiguousWindows": 3,
+      "rootAccuracy": 0.769,
+      "qualityAccuracy": 0.923,
+      "rootAndQualityAccuracy": 0.769,
+      "s1ChordTonesPresentRate": 0.846,
+      "s1MissingTones": 6,
+      "s3BassAccuracy": 0.769,
+      "s3BassWindows": 26,
+      "s4VoicingAccuracy": 1,
+      "s4VoicingNotes": 40,
+      "timingMaeSeconds": 0.645,
+      "perChord": [
+        {
+          "seconds": 1.4,
+          "label": "A#:maj",
+          "analyzed": "A#",
+          "pianoBass": 5
+        },
+        {
+          "seconds": 4.3,
+          "label": "F:maj",
+          "analyzed": "F",
+          "pianoBass": 9
+        },
+        {
+          "seconds": 7.1,
+          "label": "G:min",
+          "analyzed": "Dsus4",
+          "pianoBass": 2
+        },
+        {
+          "seconds": 10,
+          "label": "D:min",
+          "analyzed": "Dm",
+          "pianoBass": 2
+        },
+        {
+          "seconds": 12.9,
+          "label": "D#:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 15.7,
+          "label": "A#:maj",
+          "analyzed": "A#",
+          "pianoBass": 10
+        },
+        {
+          "seconds": 18.6,
+          "label": "D#:maj",
+          "analyzed": "A#",
+          "pianoBass": 3
+        },
+        {
+          "seconds": 21.4,
+          "label": "F:maj",
+          "analyzed": "F",
+          "pianoBass": 5
+        },
+        {
+          "seconds": 24.3,
+          "label": "A#:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 27.1,
+          "label": "F:maj",
+          "analyzed": "F",
+          "pianoBass": 5
+        },
+        {
+          "seconds": 30,
+          "label": "G:min",
+          "analyzed": "Gm",
+          "pianoBass": 7
+        },
+        {
+          "seconds": 32.9,
+          "label": "D:min",
+          "analyzed": "Dm",
+          "pianoBass": 2
+        },
+        {
+          "seconds": 35.7,
+          "label": "D#:maj",
+          "status": "ambiguous-reference"
+        },
+        {
+          "seconds": 38.6,
+          "label": "A#:maj",
+          "analyzed": "A#",
+          "pianoBass": 10
+        },
+        {
+          "seconds": 41.4,
+          "label": "D#:maj",
+          "analyzed": "A#",
+          "pianoBass": 3
+        },
+        {
+          "seconds": 44.3,
+          "label": "F:maj",
+          "analyzed": "F",
+          "pianoBass": 5
+        }
+      ]
+    }
+  ]
+}

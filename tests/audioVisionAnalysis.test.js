@@ -131,3 +131,27 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     expect(monoViews.stereo).toBe(null)
   })
 })
+
+describe('A3 chord extension corroboration (real-label evidence)', () => {
+  it('downgrades a claimed seventh the transcription did not hear', async () => {
+    const { downgradeUnheardExtension } = await import('../src/features/audio-vision/dsp.js')
+    // A# (pc 10) maj7 claimed, but the notes only heard A#-D-F (10, 2, 5):
+    // the 7th (pc 9) is absent -> fall back to the A# major triad.
+    const heard = [10, 2, 5]
+    const revised = downgradeUnheardExtension({ root: 10, quality: 'major7', suffix: 'maj7', label: 'A#maj7' }, heard)
+    expect(revised.quality).toBe('major')
+    expect(revised.label).toBe('A#')
+    expect(revised.downgradedFrom).toBe('major7')
+    // Minor seventh keeps its minor third.
+    const minorRevised = downgradeUnheardExtension({ root: 0, quality: 'minor7', suffix: 'm7', label: 'Cm7' }, [0, 3, 7])
+    expect(minorRevised.quality).toBe('minor')
+    expect(minorRevised.label).toBe('Cm')
+    // When the seventh IS heard, the extension stands.
+    const kept = downgradeUnheardExtension({ root: 0, quality: 'minor7', suffix: 'm7', label: 'Cm7' }, [0, 3, 7, 10])
+    expect(kept.quality).toBe('minor7')
+    expect(kept.downgradedFrom).toBeUndefined()
+    // No note evidence -> no decision (the arranger keeps template tones).
+    const untouched = downgradeUnheardExtension({ root: 0, quality: 'major7', suffix: 'maj7', label: 'Cmaj7' }, null)
+    expect(untouched.quality).toBe('major7')
+  })
+})

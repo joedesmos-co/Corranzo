@@ -227,6 +227,52 @@ function guardExtensions(chroma, candidates, best) {
   return candidates.find((s) => s.root === best.root && (s.quality === 'major' || s.quality === 'minor' || s.quality === 'diminished')) ?? best
 }
 
+/**
+ * Occam's razor for chord quality: when a 4-note extension beats a simple
+ * triad of the SAME root by a hair, prefer the triad. Measured on real chord
+ * labels (GuitarSet comping, CC-BY-4.0): plain-major chords were being read
+ * as maj7 (root right, quality wrong) whenever the guitarist's voicing
+* happened to ring a seventh strongly. A triad is the simpler explanation and
+ * the score gap is not evidence for the extension.
+ */
+function preferSimplerWhenClose(candidates, best, { margin = 0.02 } = {}) {
+  const isExtended = ['major7', 'minor7', 'dominant7', 'suspended4', 'diminished'].includes(best.quality)
+  if (!isExtended) return best
+  const simpler = candidates.find((s) => s.root === best.root && ['major', 'minor'].includes(s.quality))
+  if (!simpler) return best
+  return best.score - simpler.score <= margin ? simpler : best
+}
+
+/**
+ * Downgrade a claimed seventh when the transcription itself did not hear the
+ * seventh. Measured on real chord labels (GuitarSet comping, CC-BY-4.0): at
+ * windows where both the notes and the annotation agree the 7th is absent,
+ * chroma smearing still let 4-note templates outscore the true triad, so
+ * 'maj' became 'maj7'. Only notes the model actually transcribed corroborate
+ * an extension's existence.
+ */
+const SEVENTH_TO_TRIAD = {
+  major7: { quality: 'major', suffix: '' },
+  minor7: { quality: 'minor', suffix: 'm' },
+  dominant7: { quality: 'major', suffix: '' },
+}
+
+export function downgradeUnheardExtension(recognition, heardPcs) {
+  if (!recognition || !Array.isArray(heardPcs)) return recognition
+  const ext = EXTENSION_PC[recognition.quality]
+  const target = SEVENTH_TO_TRIAD[recognition.quality]
+  if (ext == null || !target) return recognition
+  const extPc = (recognition.root + ext) % 12
+  if (heardPcs.includes(extPc)) return recognition
+  return {
+    ...recognition,
+    quality: target.quality,
+    suffix: target.suffix,
+    label: `${PITCH_CLASS_NAMES[recognition.root]}${target.suffix}`,
+    downgradedFrom: recognition.quality,
+  }
+}
+
 /** Best-matching template constrained to a fixed root (bass prior). */
 export function recognizeChordWithRoot(chroma, root) {
   const candidates = []
@@ -242,7 +288,7 @@ export function recognizeChordWithRoot(chroma, root) {
   }
   if (!candidates.length) return null
   candidates.sort((a, b) => b.score - a.score)
-  const best = guardExtensions(chroma, candidates, candidates[0])
+  const best = preferSimplerWhenClose(candidates, guardExtensions(chroma, candidates, candidates[0]))
   return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
 }
 /** Template-match chroma → { root, quality, score, label }. Score is cosine-ish 0..1. */
@@ -258,7 +304,7 @@ export function recognizeChord(chroma) {
     return { root: t.root, quality: t.quality, suffix: t.suffix, score: dot / (Math.sqrt(norm) + 1e-9) }
   })
   scored.sort((a, b) => b.score - a.score)
-  const best = guardExtensions(chroma, scored, scored[0] ?? { root: 0, quality: 'major', score: 0, suffix: '' })
+  const best = preferSimplerWhenClose(scored, guardExtensions(chroma, scored, scored[0] ?? { root: 0, quality: 'major', score: 0, suffix: '' }))
   return { ...best, label: `${PITCH_CLASS_NAMES[best.root]}${best.suffix}` }
 }
 

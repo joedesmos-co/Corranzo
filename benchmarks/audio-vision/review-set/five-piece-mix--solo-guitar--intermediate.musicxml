@@ -35,7 +35,8 @@
       <note><rest/><duration>28</duration><voice>1</voice><type>quarter</type></note>
       <note><pitch><step>A</step><alter>1</alter><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>5</string><fret>1</fret></technical></notations></note>
       <note><rest/><duration>12</duration><voice>1</voice><type>eighth</type></note>
-      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
       <note><rest/><duration>4</duration><voice>1</voice><type>16th</type></note>
       <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
     </measure>
@@ -63,8 +64,7 @@
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>F</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
+      <note><pitch><step>F</step><octave>2</octave></pitch><duration>12</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
     </measure>
     <measure number="8">
@@ -111,21 +111,19 @@
       <note><rest/><duration>8</duration><voice>1</voice><type>eighth</type></note>
       <note><pitch><step>A</step><alter>1</alter><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>5</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
-      <note><rest/><duration>4</duration><voice>1</voice><type>16th</type></note>
-      <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
+      <note><pitch><step>F</step><octave>2</octave></pitch><duration>12</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><rest/><duration>16</duration><voice>1</voice><type>quarter</type></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>2</fret></technical></notations></note>
     </measure>
     <measure number="12">
       <note><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>2</fret></technical></notations></note>
-      <note><rest/><duration>20</duration><voice>1</voice><type>quarter</type></note>
+      <note><rest/><duration>16</duration><voice>1</voice><type>quarter</type></note>
       <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
+      <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><rest/><duration>4</duration><voice>1</voice><type>16th</type></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>E</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>0</fret></technical></notations></note>
-      <note><pitch><step>E</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>0</fret></technical></notations></note>
+      <note><pitch><step>F</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><rest/><duration>16</duration><voice>1</voice><type>quarter</type></note>
     </measure>
     <measure number="13">
@@ -220,8 +218,7 @@
       <note><rest/><duration>4</duration><voice>1</voice><type>16th</type></note>
       <note><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
       <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
-      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
       <note><pitch><step>C</step><octave>4</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
       <note><rest/><duration>8</duration><voice>1</voice><type>eighth</type></note>
       <note><pitch><step>G</step><octave>2</octave></pitch><duration>1</duration><voice>1</voice><type>32nd</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
@@ -235,8 +232,8 @@
       <note><chord/><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>2</string><fret>3</fret></technical></notations></note>
       <note><rest/><duration>3</duration><voice>1</voice><type>32nd</type></note>
       <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
-      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
-      <note><rest/><duration>8</duration><voice>1</voice><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
+      <note><rest/><duration>4</duration><voice>1</voice><type>16th</type></note>
       <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>3</fret></technical></notations></note>
       <note><pitch><step>F</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>6</string><fret>1</fret></technical></notations></note>
       <note><chord/><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>32nd</type><notations><technical><string>2</string><fret>1</fret></technical></notations></note>
@@ -324,9 +321,7 @@
       <note><rest/><duration>36</duration><voice>1</voice><type>half</type></note>
     </measure>
     <measure number="31">
-      <note><rest/><duration>40</duration><voice>1</voice><type>half</type></note>
-      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>16th</type><notations><technical><string>2</string><fret>0</fret></technical></notations></note>
-      <note><rest/><duration>20</duration><voice>1</voice><type>quarter</type></note>
+      <note><rest/><duration>64</duration><voice>1</voice><type>whole</type></note>
     </measure>
     <measure number="32">
       <note><pitch><step>D</step><alter>1</alter><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>eighth</type><notations><technical><string>4</string><fret>1</fret></technical></notations></note>

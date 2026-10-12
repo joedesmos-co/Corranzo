@@ -86,6 +86,7 @@ const entries = []
 
 for (const src of REAL_CORPUS.sources) {
   if (src.kind !== 'remote') continue
+  try {
   const ext = src.url.endsWith('.flac') ? 'flac' : 'mp3'
   const raw = join(outDir, `${src.id}-full.${ext}`)
   await download(src.url, raw, src.fetch?.referer ?? null)
@@ -100,6 +101,11 @@ for (const src of REAL_CORPUS.sources) {
     sha1: sha1Short(wav),
     difficulties: ['easy', 'intermediate', 'advanced'],
   })
+  } catch (error) {
+    // Remote sources are best-effort (rate limits/offline host). Local TRIOS
+    // and GuitarSet material carries all graded truth, so skip and continue.
+    console.warn(`skip remote ${src.id}: ${String(error?.message ?? error).slice(0, 120)}`)
+  }
 }
 
 // GuitarSet full performances (CC-BY-4.0): local tracks + JAMS truth.

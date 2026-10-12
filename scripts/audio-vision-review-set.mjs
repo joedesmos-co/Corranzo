@@ -15,6 +15,7 @@ import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readWavPcm } from './lib/readWavPcm.mjs'
+import { writeSmf } from './lib/writeSmf.mjs'
 import { predictBasicPitchNode, closeBasicPitchNode } from './lib/basicPitchNode.mjs'
 import { runAudioArrangementPipeline } from '../src/features/audio-vision/audioArrangementPipeline.js'
 import { resampleLinear } from '../src/features/audio-vision/audioImport.js'
@@ -81,11 +82,30 @@ for (const item of ITEMS) {
       }
       const file = `${item.id}--${targetPart}--${difficulty}.musicxml`
       writeFileSync(join(outDir, file), out.musicXml)
+      // Playable preview: a dependency-free format-0 SMF of the SAME events.
+      // Tempo comes from the analysis, notes from the arranged part, so a
+      // musician can audition without a notation program.
+      const midiFile = file.replace('.musicxml', '.mid')
+      try {
+        const beatPeriod = 60 / Math.max(1, out.transcribed.tempo.bpm)
+        const events = out.model.parts[0].events.map((e) => ({
+          timeSeconds: (out.transcribed.beats[0] ?? 0) + e.startBeat * beatPeriod,
+          midi: e.midi,
+          durationSeconds: Math.max(0.1, e.durBeats * beatPeriod),
+          velocity: e.role === 'melody' ? 84 : 64,
+        }))
+        if (events.length) {
+          writeFileSync(join(outDir, midiFile), writeSmf(events, { tempoBpm: out.transcribed.tempo.bpm }))
+        }
+      } catch {
+        // Previews are a convenience; never fail the score over one.
+      }
       entry.variants.push({
         targetPart,
         difficulty,
         ok: true,
         file,
+        midiFile: existsSync(join(outDir, midiFile)) ? midiFile : null,
         tempoBpm: out.transcribed.tempo.bpm,
         notes: out.model.parts[0].events.length,
         measures: new Set(out.model.parts[0].events.map((e) => e.measureIndex)).size,

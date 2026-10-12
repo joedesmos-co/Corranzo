@@ -12,6 +12,7 @@ import {
   chromaOfSpectrum,
   recognizeChord,
   recognizeChordWithRoot,
+  downgradeUnheardExtension,
   hzToMidi,
   binToHz,
 } from './dsp.js'
@@ -203,6 +204,18 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   // per chord window so arrangers voice accompaniment from evidence, and keep
   // the template label only for naming/bass-prior decisions.
   attachHeardVoicings(chords, predictedNotes)
+  // Downgrade claimed sevenths the transcription did not actually hear
+  // (chroma smearing alone must not invent extensions).
+  for (const chord of chords) {
+    if (!Array.isArray(chord.heardPcs) || !chord.heardPcs.length) continue
+    const revised = downgradeUnheardExtension(chord, chord.heardPcs)
+    if (revised !== chord) {
+      chord.root = revised.root
+      chord.quality = revised.quality
+      chord.label = revised.label
+      chord.downgradedFrom = revised.downgradedFrom
+    }
+  }
   report('done', 1)
   const hopSeconds = hop / sampleRate
   return {
