@@ -104,10 +104,11 @@ export default function ProfileView({ currentPieceId = null }) {
       <header className="profile-header">
         <span className="cz-edition-label">Time with your instrument</span>
         <h1 id="profile-heading" className="profile-header__title">
-          Practice journal
+          Progress
         </h1>
         <p className="profile-header__lede">
-          Keep a record of what you worked on. Time with an open score is saved automatically.
+          Corranzo tracks time automatically while a score is open. Sessions you start yourself
+          with the timer are kept alongside it, so both sources add up here.
         </p>
       </header>
 

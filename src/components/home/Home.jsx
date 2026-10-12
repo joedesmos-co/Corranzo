@@ -48,7 +48,7 @@ export default function Home({
       <section className="cz-home__collection" aria-labelledby="home-collection-heading">
         <div className="cz-home__section-heading"><h2 id="home-collection-heading">A little more repertoire</h2><button type="button" className="cz-text-link" onClick={() => onNavigate('library')}>Explore library <Icon name="next" size={16} /></button></div>
         <div className="cz-piece-list">{starters.map((piece, index) => <PieceRow key={piece.id} piece={piece} number={index + 1} onOpen={onLoadPiece} disabled={sampleLoading} />)}</div>
-        <p className="cz-home__collection-note">Public-domain editions, ready to play.</p>
+        <p className="cz-home__collection-note">Start with something small. Public-domain editions, ready to play.</p>
       </section>
     </main>
   )
