@@ -8,7 +8,7 @@ import {
   PART_INSTRUMENTS,
   DIFFICULTIES,
 } from '../src/features/audio-vision/arrangementModel.js'
-import { arrangeSoloPiano } from '../src/features/audio-vision/soloPiano.js'
+import { arrangeSoloPiano, chordAt } from '../src/features/audio-vision/soloPiano.js'
 import { arrangeSoloGuitar, GUITAR_MIN, GUITAR_MAX } from '../src/features/audio-vision/soloGuitar.js'
 import { simplifyForDifficulty } from '../src/features/audio-vision/difficulty.js'
 import { buildArrangementMusicXml } from '../src/features/audio-vision/arrangementMusicXml.js'
@@ -256,5 +256,107 @@ describe('A8 arrangement MusicXML validity + semantics', () => {
     expect(xml).toContain('<fret>')
     const parsed = parseMusicXml(xml)
     expect(parsed?.notes?.length ?? 0).toBeGreaterThan(0)
+  })
+})
+
+describe('chord-window lookup (Audio Vision 304242e8f7)', () => {
+  /**
+   * Harmony analysis emits one chord window PER BEAT. The piano arranger used
+   * to resolve them by measure index, so with 4 beats per measure every onset
+   * inside measure 0 read chords[0] — the wrong chord for beats 1, 2 and 3.
+   */
+  const perBeatChords = [
+    { root: 0, quality: 'major', confidence: 0.9, startSeconds: 0, endSeconds: 0.5 },
+    { root: 5, quality: 'minor', confidence: 0.9, startSeconds: 0.5, endSeconds: 1.0 },
+    { root: 7, quality: 'major', confidence: 0.9, startSeconds: 1.0, endSeconds: 1.5 },
+    { root: 2, quality: 'major', confidence: 0.9, startSeconds: 1.5, endSeconds: 2.0 },
+  ]
+
+  it('resolves the chord at an onset by time, not by measure index', () => {
+    const beatsPerMeasure = 4
+    const beatPeriod = 0.5
+    // Beat 1 is F minor; under the old index lookup it resolved to chords[0].
+    expect(chordAt(perBeatChords, 1, beatsPerMeasure, { beat0: 0, beatPeriod }).root).toBe(5)
+    // Beat 2 is G major.
+    expect(chordAt(perBeatChords, 2, beatsPerMeasure, { beat0: 0, beatPeriod }).root).toBe(7)
+    // Beat 3 is D major.
+    expect(chordAt(perBeatChords, 3, beatsPerMeasure, { beat0: 0, beatPeriod }).root).toBe(2)
+    // Beat 0 is C major, matching the index lookup's happy case.
+    expect(chordAt(perBeatChords, 0, beatsPerMeasure, { beat0: 0, beatPeriod }).root).toBe(0)
+  })
+
+  it('uses the widest per-beat window when the arranger has no beat grid', () => {
+    // beatPeriod 0.25 resolves beat 1 to the window at 0.25s, not 0.5s.
+    const chord = chordAt(perBeatChords, 1, 4, { beat0: 0, beatPeriod: 0.25 })
+    expect(chord.root).toBe(0)
+  })
+
+  it('falls back to the nearest window when an onset sits in a gap', () => {
+    const gapped = [
+      { root: 0, quality: 'major', confidence: 0.9, startSeconds: 0, endSeconds: 0.2 },
+      { root: 9, quality: 'minor', confidence: 0.9, startSeconds: 1.4, endSeconds: 2.0 },
+    ]
+    const chord = chordAt(gapped, 3, 4, { beat0: 0, beatPeriod: 0.5 }) // t = 1.5s, inside window 2
+    expect(chord.root).toBe(9)
+  })
+
+  it('voices from the pitch classes the model actually heard, evidenced not inferred', () => {
+    const heard = [
+      { root: 0, quality: 'major', confidence: 0.7, startSeconds: 0, endSeconds: 0.5, heardPcs: [7, 0, 5] },
+    ]
+    const chord = chordAt(heard, 0, 4, { beat0: 0, beatPeriod: 0.5 })
+    expect(chord.voicingSource).toBe('heard')
+    expect(chord.tones).toEqual([7, 0, 5])
+  })
+
+  it('falls back to the template voicing when nothing was heard', () => {
+    const chord = chordAt(perBeatChords, 0, 4, { beat0: 0, beatPeriod: 0.5 })
+    expect(chord.voicingSource).toBe('template')
+    expect(chord.tones).toEqual([0, 4, 7])
+  })
+
+  it('feeds the resolved chord into the arrangement so onsets voice locally', () => {
+    const beats = Array.from({ length: 40 }, (_, i) => i * 0.5)
+    const quantized = quantizeToBeats(
+      [
+        { midi: 60, startSeconds: 0.1, endSeconds: 0.4, strength: 0.9 },
+        { midi: 64, startSeconds: 0.6, endSeconds: 0.9, strength: 0.9 },
+      ],
+      beats,
+    )
+    const { events } = arrangeSoloPiano({
+      quantizedNotes: quantized,
+      chords: perBeatChords,
+      difficulty: DIFFICULTIES.INTERMEDIATE,
+      beatsPerMeasure: 4,
+      beat0: 0,
+      beatPeriod: 0.5,
+    })
+    // Two onsets survive and are voiced independently of measure 0.
+    expect(events.length).toBeGreaterThanOrEqual(2)
+    const midis = events.map((event) => event.midi).sort((a, b) => a - b)
+    expect(midis).toContain(60)
+    expect(midis).toContain(64)
+  })
+
+  it('attaches hearsay-free heard voicings in the analysis stage', async () => {
+    const { attachHeardVoicings } = await import('../src/features/audio-vision/musicAnalysis.js')
+    const chords = [
+      { root: 0, quality: 'major', confidence: 0.7, startSeconds: 0, endSeconds: 0.5 },
+      { root: 7, quality: 'major', confidence: 0.7, startSeconds: 0.5, endSeconds: 1.0 },
+    ]
+    const notes = [
+      { midi: 60, startSeconds: 0.0, endSeconds: 0.45 },
+      { midi: 64, startSeconds: 0.0, endSeconds: 0.45 },
+      { midi: 67, startSeconds: 0.05, endSeconds: 0.4 },
+    ]
+    const out = attachHeardVoicings(chords, notes)
+    expect(out[0].heardPcs).toContain(0)
+    expect(out[0].heardPcs).toContain(4)
+    expect(out[0].heardPcs).toContain(7)
+    expect(out[0].provenanceVoicing).toBe('predicted')
+    // A window with no sounding transcription is labelled inferred, not fabricated.
+    expect(out[1].heardPcs).toEqual([])
+    expect(out[1].provenanceVoicing).toBe('inferred')
   })
 })

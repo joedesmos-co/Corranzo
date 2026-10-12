@@ -124,9 +124,14 @@ async function main() {
   const fail = (name, detail = null) => { report.failures.push({ name, detail }); console.error(`FAIL  ${name}${detail ? ` :: ${detail}` : ''}`) }
   const skip = (name, why) => { report.skipped.push({ name, why }); console.log(`SKIP  ${name} :: ${why}`) }
 
-  const fixture = join(root, 'public', 'fixtures', 'practice-library', 'piano-brahms-lullaby', 'piano-brahms-lullaby.musicxml')
+  // PDF-first: the phone flow is a real PDF import (standalone MusicXML is no
+  // longer an entry point), with its matched companion attached under Advanced.
+  const fixture = join(root, 'public', 'fixtures', 'practice-library', 'piano-brahms-lullaby', 'piano-brahms-lullaby.pdf')
+  const companionFixture = join(root, 'public', 'fixtures', 'practice-library', 'piano-brahms-lullaby', 'piano-brahms-lullaby.musicxml')
   if (!existsSync(fixture)) { console.error(`fixture missing: ${fixture}`); process.exit(1) }
-  const staged = join(outDir, 'lullaby.musicxml'); copyFileSync(fixture, staged)
+  const staged = join(outDir, 'lullaby.pdf'); copyFileSync(fixture, staged)
+  const stagedCompanion = join(outDir, 'lullaby.musicxml')
+  if (existsSync(companionFixture)) copyFileSync(companionFixture, stagedCompanion)
 
   const viteServer = await createServer({
     root, configFile: join(root, 'vite.config.js'), logLevel: 'silent',
@@ -161,8 +166,14 @@ async function main() {
     if (importOpen) pass('import view opens at phone width')
     else fail('import view opens at phone width', 'score-import not visible')
 
-    await page.locator('input[type="file"][aria-label="Choose score file"]').first().setInputFiles(staged)
+    await page.locator('input[type="file"][aria-label="Choose score PDF"]').first().setInputFiles(staged)
     await sleep(2000)
+    // Attach the matched MusicXML so score following has notation to follow.
+    const advancedInput = page.locator('input[type="file"][aria-label="Choose optional files"]').first()
+    if (existsSync(stagedCompanion) && (await advancedInput.count())) {
+      await advancedInput.setInputFiles(stagedCompanion)
+      await sleep(3000)
+    }
 
     // ---- never hide an error message ----
     const importText = await page.locator('.score-import').innerText().catch(() => '')

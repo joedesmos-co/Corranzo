@@ -189,6 +189,12 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   if (!predictedNotes.length) {
     predictedNotes = contourToNotes(melody, onsets)
   }
+  // Harmony voicing from the TRANSCRIBED notes (predicted, never inferred): the
+  // chord LABEL is unreliable on mixtures, but the pitch classes the model
+  // actually heard are direct evidence. Attach the dominant heard pitch classes
+  // per chord window so arrangers voice accompaniment from evidence, and keep
+  // the template label only for naming/bass-prior decisions.
+  attachHeardVoicings(chords, predictedNotes)
   report('done', 1)
   const hopSeconds = hop / sampleRate
   return {
@@ -210,6 +216,40 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
 }
 
 /** Novelty-based section boundaries (self-similarity drop). Inferred, low-stakes. */
+/**
+ * Attach hearsay-free voicing evidence to each chord window: the pitch classes
+ * the pitch model actually transcribed there (weighted by sounding overlap),
+ * plus the lowest heard pitch class. Falls back to the template tones when the
+ * model heard almost nothing (spectral path), so arrangers keep a sane default.
+ */
+export function attachHeardVoicings(chords, notes) {
+  if (!chords?.length) return chords
+  for (const chord of chords) {
+    const window = { start: chord.startSeconds, end: chord.endSeconds }
+    const heard = notes.filter(
+      (note) => note.startSeconds <= window.end - 0.01 && note.endSeconds >= window.start + 0.01,
+    )
+    if (!heard.length) {
+      chord.heardPcs = []
+      chord.provenanceVoicing = PROVENANCE.INFERRED
+      continue
+    }
+    const weight = new Map()
+    for (const note of heard) {
+      const pitchClass = (((note.midi % 12) + 12) % 12)
+      const overlap = Math.min(note.endSeconds, window.end) - Math.max(note.startSeconds, window.start)
+      weight.set(pitchClass, (weight.get(pitchClass) ?? 0) + Math.max(0.05, overlap))
+    }
+    const ranked = [...weight.entries()].sort((a, b) => b[1] - a[1]).map(([pc]) => pc)
+    // Keep the strongest classes that still leave the top note (usually the
+    // melody) in place; at most 5 classes, at least 1.
+    chord.heardPcs = ranked.slice(0, 5)
+    chord.heardBassPc = ranked[ranked.length - 1]
+    chord.provenanceVoicing = PROVENANCE.PREDICTED
+  }
+  return chords
+}
+
 export function detectSections(frames, frameSeconds, totalSeconds) {
   if (frames.length < 16) {
     return [{ startSeconds: 0, endSeconds: Math.round(totalSeconds * 1000) / 1000, label: 'A', provenance: PROVENANCE.INFERRED }]

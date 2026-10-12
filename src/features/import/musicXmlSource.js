@@ -153,16 +153,18 @@ export function isOmrGeneratedPlayback(source) {
 }
 
 /**
- * MusicXML-only upload: the musician exported notation from MuseScore/Finale
- * and imports it without a PDF. Distinct from 'upload' so the PDF-owner
- * reconciliation never claims it for an unrelated PDF identity.
+ * Retained only so sessions saved while standalone MusicXML/MXL importing
+ * existed are still recognised on restore: the notation bytes are loaded, but
+ * the source is no longer treated as practice-ready without a PDF. New uploads
+ * never create this kind.
  */
 export const UPLOAD_MUSICXML_SOURCE = 'upload-musicxml'
 
-/** True for sources whose practice surface works with no PDF page at all. */
+/** True for sources whose practice surface legitimately has no PDF page of its own. */
 export function isPdflessNotationSource(source) {
-  const kind = source?.source ?? null
-  return kind === 'audio-arrangement' || kind === UPLOAD_MUSICXML_SOURCE
+  // A9 — audio arrangements carry no PDF (there is no page to read); every
+  // other source requires the PDF that the musician reads from.
+  return source?.source === 'audio-arrangement'
 }
 
 

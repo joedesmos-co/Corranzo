@@ -600,7 +600,7 @@ export async function clearSessionStorage() {
  * Verify stored blobs match saved metadata before restoring UI state.
  */
 
-/** Rebuild a PDF-less (MusicXML-only) session from persisted bytes. */
+/** Rebuild a legacy PDF-less notation session from persisted bytes. */
 function rebuildNotationOnlySession(meta, files, musicXmlBuffer) {
   if (meta.musicXmlSize != null && musicXmlBuffer.byteLength !== meta.musicXmlSize) {
     return null
@@ -632,25 +632,27 @@ export function validateRestoredSession(meta, files) {
 
   const musicXmlFileName = meta?.musicXmlFileName ?? null
   const musicXmlBuffer = files.musicXml
-  // Notation-only sessions (MusicXML/MXL imported with no PDF) are valid on
-  // their own: the PDF page is simply absent, and the engraved notation is
-  // drawn from the stored MusicXML bytes.
-  const notationOnly =
+  // Legacy compat: sessions saved while standalone MusicXML/MXL importing was
+  // available stored notation with no PDF. Those no longer open practice, but
+  // the notation must still restore (so nothing is lost) and the restore must
+  // report as partial so the UI asks for the PDF instead of pretending it is
+  // playable. Reported as an issue, not silently accepted.
+  const legacyNotationOnly =
     Boolean(musicXmlFileName && musicXmlBuffer) &&
     !meta?.pdfMeta?.fileName &&
     meta?.musicXmlSourceKind !== 'omr'
-  if (notationOnly) {
+  if (legacyNotationOnly) {
     const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
     if (restored) {
       return {
         ok: true,
-        issues: [],
+        issues: ['musicxml-only-session'],
         pdfFile: null,
         pdfMeta: null,
         midiSource: restored.midiSource,
         musicXmlSource: restored.musicXmlSource,
-        notationOnly: true,
-        partial: false,
+        legacyNotationOnly: true,
+        partial: true,
       }
     }
   }

@@ -4,10 +4,14 @@ import { ACCEPT_ATTRIBUTES, isMuseScoreSourceFile, MUSESCORE_PLANNED_MESSAGE } f
 import { applyClassifiedUploads, classifyUploadFiles } from '../features/import/classifyUploadFiles.js'
 import { importFileNotice } from '../features/import/importPresentation.js'
 
-/** A notation-only import (MusicXML/MXL with no PDF) is a complete score. */
-const PDF_AND_NOTATION_ACCEPT = [ACCEPT_ATTRIBUTES.sheetMusic, ACCEPT_ATTRIBUTES.scoreTiming].join(',')
-
-/** Classifies inputs and delegates to the existing owned import handlers. */
+/**
+ * Classifies inputs and delegates to the existing owned import handlers.
+ *
+ * The primary picker is PDF-first: a sheet-music file IS the score the musician
+ * reads. MusicXML/MXL/MIDI are still accepted, but only as companions to a PDF
+ * under "Advanced", so score following has a page to follow. Dropping notation
+ * or MIDI here alone is redirected to that panel rather than silently opened.
+ */
 export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidiSelect, onClassifiedUpload = null, disabled = false, advanced = false, hasPdf = false }) {
   const inputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
@@ -20,11 +24,8 @@ export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidi
     const unsupported = classified.unsupported.map(importFileNotice)
     if (classified.musicXml.some(isMuseScoreSourceFile)) unsupported.push(MUSESCORE_PLANNED_MESSAGE)
     classified.musicXml = classified.musicXml.filter(file => !isMuseScoreSourceFile(file))
-    // MusicXML/MXL alone is a whole score: the PDF is optional, so notation
-    // must never be bounced to "attach it under Advanced".
-    const notationOnly = !advanced && !classified.pdf.length && classified.musicXml.length > 0
-    if (!notationOnly && !advanced && !classified.pdf.length && (classified.musicXml.length || classified.midi.length)) {
-      setNotices(['Choose the score you want to read. A PDF or a MusicXML export both work, and optional accompaniment belongs under Advanced.'])
+    if (!advanced && !classified.pdf.length && (classified.musicXml.length || classified.midi.length)) {
+      setNotices(['Choose the PDF you want to read. Optional notation and accompaniment files belong under Advanced.'])
       return
     }
     setBusy(true)
@@ -48,11 +49,11 @@ export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidi
       onDrop={event => { event.preventDefault(); setDragOver(false); handleFiles(event.dataTransfer?.files) }}>
       <Icon name="import" size={advanced || hasPdf ? 20 : 30} />
       <span><strong>{busy ? 'Opening your file…' : advanced ? 'Add optional files' : hasPdf ? 'Choose another PDF' : 'Import a score'}</strong>
-      {!hasPdf && <span>{advanced ? 'MusicXML, MXL or MIDI · matching PDFs also accepted' : 'PDF or MusicXML, or drop it here.'}</span>}</span>
-      {!hasPdf && !advanced && <span className="score-import-drop__format">PDF or MusicXML · up to 80 MB</span>}
+      {!hasPdf && <span>{advanced ? 'MusicXML, MXL or MIDI · matching PDFs also accepted' : 'Choose a PDF, or drop it here.'}</span>}</span>
+      {!hasPdf && !advanced && <span className="score-import-drop__format">PDF · up to 80 MB</span>}
     </button>
-    <input ref={inputRef} type="file" multiple={advanced} accept={advanced ? [ACCEPT_ATTRIBUTES.sheetMusic, ACCEPT_ATTRIBUTES.scoreTiming].join(',') : PDF_AND_NOTATION_ACCEPT} hidden disabled={disabled || busy}
-      aria-label={advanced ? 'Choose optional files' : 'Choose score file'}
+    <input ref={inputRef} type="file" multiple={advanced} accept={advanced ? [ACCEPT_ATTRIBUTES.sheetMusic, ACCEPT_ATTRIBUTES.scoreTiming].join(',') : ACCEPT_ATTRIBUTES.sheetMusic} hidden disabled={disabled || busy}
+      aria-label={advanced ? 'Choose optional files' : 'Choose score PDF'}
       onChange={event => { handleFiles(event.target.files); event.target.value = '' }} />
     {/* role="alert" is not a permitted role on a list, which hides the list
         semantics and breaks its children. Announce on a wrapper instead. */}

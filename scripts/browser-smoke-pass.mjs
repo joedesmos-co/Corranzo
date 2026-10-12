@@ -294,7 +294,7 @@ async function main() {
       btn?.click()
     })
     await sleep(600)
-    const multiFileInput = page.locator('input[type="file"][aria-label="Choose score file"]')
+    const multiFileInput = page.locator('input[type="file"][aria-label="Choose score PDF"]')
     if ((await multiFileInput.count()) !== 1) {
       await fail('PDF-only import exposes one primary picker', 'Primary file input missing or ambiguous')
     } else {

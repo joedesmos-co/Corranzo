@@ -132,9 +132,7 @@ import {
   isMusicXmlSourceReady,
   musicXmlSourceKey,
   isOmrGeneratedPlayback,
-  isPdflessNotationSource,
   isPracticePlaybackReady,
-  UPLOAD_MUSICXML_SOURCE,
   validateRestoredOmrPlayback,
 } from './features/import/musicXmlSource.js'
 import {
@@ -188,12 +186,9 @@ async function readScoreTimingBytes(file) {
   return readFileArrayBuffer(file, 'musicXml')
 }
 
-/** Practice needs timing; MIDI is optional sound. A PDF is optional when the
- *  notation itself was imported (MusicXML-only practice). */
+/** Practice needs PDF + timing; MIDI is optional sound. */
 function isPracticeNavigableSet(pdfLoaded, musicXmlSource) {
-  return isPdflessNotationSource(musicXmlSource)
-    ? Boolean(musicXmlSource?.data)
-    : Boolean(pdfLoaded && musicXmlSource?.data)
+  return Boolean(pdfLoaded && musicXmlSource?.data)
 }
 
 function buildAutoOmrRequest(file, instrumentId) {
@@ -888,17 +883,12 @@ export default function App() {
         reason: 'uploaded-musicxml',
       })
       const ownerPdfIdentity = buildPdfSourceIdentity(pdfMeta)
-      // No PDF loaded: this notation is the whole score (MusicXML-only import).
-      const nextXml = ownerPdfIdentity
-        ? withOwnerPdfIdentity(
-            { fileName: file.name, data, source: 'upload' },
-            ownerPdfIdentity,
-          )
-        : { fileName: file.name, data, source: UPLOAD_MUSICXML_SOURCE }
-      if (!ownerPdfIdentity) {
-        // Name the surface after the imported file (no PDF name exists).
-        setFileName(file.name)
-      }
+      // Notation is a companion to the loaded PDF: it belongs to that PDF
+      // identity, and a PDF is required for the score to be openable.
+      const nextXml = withOwnerPdfIdentity(
+        { fileName: file.name, data, source: 'upload' },
+        ownerPdfIdentity,
+      )
       setMusicXmlSource(nextXml)
       if (liveBundleRef.current) {
         liveBundleRef.current.musicXmlSource = nextXml
@@ -1914,15 +1904,13 @@ export default function App() {
                   lastModified: classified.pdf[0].lastModified,
                 }
               : pdfMeta
-            const nextXml = buildPdfSourceIdentity(ownerMeta)
-              ? withOwnerPdfIdentity(
-                  { fileName: file.name, data, source: 'upload' },
-                  buildPdfSourceIdentity(ownerMeta),
-                )
-              : { fileName: file.name, data, source: UPLOAD_MUSICXML_SOURCE }
-            if (!classified.pdf[0] && !pdfMeta?.fileName) {
-              setFileName(file.name)
-            }
+            const ownerIdentity = buildPdfSourceIdentity(ownerMeta)
+            // Notation is a companion to the PDF it belongs to; without a PDF
+            // there is nothing to open a score from.
+            const nextXml = withOwnerPdfIdentity(
+              { fileName: file.name, data, source: 'upload' },
+              ownerIdentity,
+            )
             // Uploaded timing wins — cancel any preparation started for this PDF.
             cancelInFlightOmrGeneration(setAutoOmrRequest)
             setMusicXmlSource(nextXml)
@@ -2056,7 +2044,8 @@ export default function App() {
               : classified.musicXml[0]
                 ? `Loaded ${classified.musicXml[0].name}. Choose the matching PDF to begin.`
                 : `Loaded ${classified.midi[0].name}. Add sheet music; score preparation continues if needed.`,
-          })        }
+          })
+        }
 
         if (classified.pdf[0] || classified.musicXml[0] || classified.midi[0]) {
           navigateToView('import')
@@ -2111,8 +2100,10 @@ export default function App() {
   }
 
   const handleSessionRestore = useCallback(async (payload, shouldApply = () => true) => {
-    // Notation-only restore: the saved session was a MusicXML/MXL import with
-    // no PDF. There is no page to rebuild, so restore notation + MIDI directly.
+    // Legacy session restore: standalone MusicXML/MXL imports no longer open
+    // practice (there is no page to follow), but a session saved while they did
+    // must not crash or lose the notation. Restore the bytes, land on Import,
+    // and tell the musician what to add.
     if (!payload.pdfMeta?.fileName && payload.musicXmlSource?.data) {
       if (!shouldApply()) return
       const nextEpoch = practiceSessionEpochRef.current + 1
@@ -2159,17 +2150,22 @@ export default function App() {
       activatePdfScoreSource({
         pdfIdentity: null,
         epoch: nextEpoch,
-        reason: 'session-restore-notation-only',
+        reason: 'session-restore-legacy-notation',
         scoreId: restoredScoreId,
       })
       practicePrefsRef.current = payload.practicePrefs ?? null
       setInitialPracticePrefs(payload.practicePrefs)
+      setLibraryFeedback({
+        type: 'info',
+        message: `This saved session was a notation-only score. Choose the matching PDF to open it — the attached notation is still used for score following.`,
+      })
       setActiveView(
         normalizeAppView(
           resolveRestoredActiveView({
             pathname: window.location.pathname,
             savedActiveView: payload.activeView,
-            hasMusicXml: Boolean(nextMusicXml),
+            // No PDF: never resume straight into the practice workspace.
+            hasMusicXml: false,
           }),
         ),
       )
@@ -2196,7 +2192,7 @@ export default function App() {
           at: Date.now(),
         }
         logScoreSourceLifecycle('authoritative-musicxml-changed', {
-          reason: 'session-restore-notation-only',
+          reason: 'session-restore-legacy-notation',
           authoritativeMusicXmlHash: musicXml.contentHash,
           ownerPdfIdentity: null,
           ownerScoreId: restoredScoreId,
@@ -2212,7 +2208,7 @@ export default function App() {
           generation: nextEpoch,
         })
         activeScoreRef.current = restoredActive
-        publishActiveScore(restoredActive, { reason: 'session-restore-notation-only' })
+        publishActiveScore(restoredActive, { reason: 'session-restore-legacy-notation' })
       }
       return
     }

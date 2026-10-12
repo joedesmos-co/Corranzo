@@ -139,7 +139,7 @@ async function uploadPdf(page, pdfPath) {
   await page.waitForTimeout(900)
   // The upload picker's accessible name is "Choose score file" (it accepts
   // PDF or MusicXML); the old "Upload score files" region no longer exists.
-  const input = page.locator('input[type="file"][aria-label="Choose score file"]').first()
+  const input = page.locator('input[type="file"][aria-label="Choose score PDF"]').first()
   await input.waitFor({ state: 'attached', timeout: 8000 })
   await input.setInputFiles(pdfPath)
   await page.waitForTimeout(1000)

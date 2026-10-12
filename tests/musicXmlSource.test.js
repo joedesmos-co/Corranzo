@@ -261,29 +261,43 @@ describe('musicXmlSource', () => {
     expect(getMusicXmlWorkTitle({ fileName: 'ghost.musicxml' })).toBeNull()
   })
 
-  it('opens practice for a MusicXML-only import without any PDF', () => {
-    const notationOnly = createMusicXmlSource(
+  it('requires a PDF to open practice, with Audio Vision as the only exception', () => {
+    // Standalone MusicXML/MXL uploading is retired from the product: the PDF is
+    // the score the musician reads from. Uploaded notation still works, but
+    // only as a companion to that PDF.
+    const upload = createMusicXmlSource(
       'grand-staff.musicxml',
       '<score-partwise><work><work-title>Grand Staff Study</work-title></work><part-list/></score-partwise>',
+    )
+    expect(isPracticePlaybackReady({ restoreGateOpen: true, pdfFile: null, musicXmlSource: upload })).toBe(false)
+    expect(isPracticePlaybackReady({
+      restoreGateOpen: true,
+      pdfFile: 'blob:pdf',
+      musicXmlSource: upload,
+    })).toBe(true)
+    expect(isLibraryScoreTimingReady(upload)).toBe(true)
+    expect(hasUploadedScoreTiming(upload)).toBe(true)
+    // Uploaded notation is not experimental OMR, so restore validation is clean.
+    expect(validateRestoredOmrPlayback(upload)).toEqual({ ok: true })
+    expect(isPdflessNotationSource(upload)).toBe(false)
+
+    // A legacy standalone-notation source must NOT become practice-ready.
+    const legacy = createMusicXmlSource(
+      'legacy.musicxml',
+      '<score-partwise><part-list/></score-partwise>',
       { source: UPLOAD_MUSICXML_SOURCE },
     )
-    expect(isPracticePlaybackReady({ restoreGateOpen: true, pdfFile: null, musicXmlSource: notationOnly })).toBe(true)
-    expect(isLibraryScoreTimingReady(notationOnly)).toBe(true)
-    expect(hasUploadedScoreTiming(notationOnly)).toBe(true)
-    expect(isPdflessNotationSource(notationOnly)).toBe(true)
-    // Notation-only is not experimental OMR, so restore validation stays clean.
-    expect(validateRestoredOmrPlayback(notationOnly)).toEqual({ ok: true })
-    // A plain upload still needs its PDF.
-    const withPdf = createMusicXmlSource('same.musicxml', '<score-partwise/>')
-    expect(isPracticePlaybackReady({ restoreGateOpen: true, pdfFile: null, musicXmlSource: withPdf })).toBe(false)
-    expect(isPdflessNotationSource(withPdf)).toBe(false)
-    // Audio arrangements keep the PDF-less path that already worked.
+    expect(isPracticePlaybackReady({ restoreGateOpen: true, pdfFile: null, musicXmlSource: legacy })).toBe(false)
+    expect(isPdflessNotationSource(legacy)).toBe(false)
+
+    // Audio Vision arrangements keep the PDF-less path that always worked.
     const arrangement = createMusicXmlSource('arr.musicxml', '<score-partwise/>', { source: 'audio-arrangement' })
+    expect(isPracticePlaybackReady({ restoreGateOpen: true, pdfFile: null, musicXmlSource: arrangement })).toBe(true)
     expect(isPdflessNotationSource(arrangement)).toBe(true)
   })
 
-  it('saves and restores a MusicXML-only session with no PDF identity', () => {
-    const notationOnly = createMusicXmlSource(
+  it('restores a legacy standalone-notation session partially, without losing it', () => {
+    const legacy = createMusicXmlSource(
       'grand-staff.musicxml',
       '<score-partwise><work><work-title>Grand Staff Study</work-title></work><part-list/></score-partwise>',
       { source: UPLOAD_MUSICXML_SOURCE },
@@ -291,7 +305,7 @@ describe('musicXmlSource', () => {
     const meta = buildSessionMeta({
       pdfMeta: null,
       midiSource: null,
-      musicXmlSource: notationOnly,
+      musicXmlSource: legacy,
       activeView: 'practice',
       pageNumber: 1,
       practicePrefs: null,
@@ -300,18 +314,38 @@ describe('musicXmlSource', () => {
     expect(meta.pdfIdentity).toBeNull()
     expect(meta.musicXmlSourceKind).toBe(UPLOAD_MUSICXML_SOURCE)
 
-    const restored = validateRestoredSession(meta, { musicXml: notationOnly.data.slice(0) })
-    expect(restored.notationOnly).toBe(true)
+    const restored = validateRestoredSession(meta, { musicXml: legacy.data.slice(0) })
     expect(restored.ok).toBe(true)
-    expect(restored.partial).toBe(false)
-    expect(restored.issues).toEqual([])
+    // Partial + an explicit issue: the notation keeps but needs its PDF, and the
+    // restore must not pretend this session is playable.
+    expect(restored.partial).toBe(true)
+    expect(restored.issues).toContain('musicxml-only-session')
+    expect(restored.legacyNotationOnly).toBe(true)
     expect(restored.pdfFile).toBeNull()
     expect(restored.pdfMeta).toBeNull()
-    expect(restored.musicXmlSource.source).toBe(UPLOAD_MUSICXML_SOURCE)
-    expect(restored.musicXmlSource.fileName).toBe('grand-staff.musicxml')
-    // A restored notation-only source must never carry a PDF owner identity.
-    expect(restored.musicXmlSource.ownerPdfIdentity).toBeUndefined()
-    expect(restored.musicXmlSource.data.byteLength).toBe(notationOnly.data.byteLength)
+    expect(restored.musicXmlSource?.fileName).toBe('grand-staff.musicxml')
+    // A restored notation-only source never carries a PDF owner identity.
+    expect(restored.musicXmlSource?.ownerPdfIdentity).toBeUndefined()
+    expect(restored.musicXmlSource?.data.byteLength).toBe(legacy.data.byteLength)
+  })
+
+  it('never marks a notation-only source as having its own PDF identity', () => {
+    const legacy = createMusicXmlSource('legacy.musicxml', '<score-partwise/>', {
+      source: UPLOAD_MUSICXML_SOURCE,
+    })
+    const meta = buildSessionMeta({
+      pdfMeta: null,
+      midiSource: null,
+      musicXmlSource: legacy,
+      activeView: 'practice',
+      pageNumber: 1,
+      practicePrefs: null,
+    })
+    expect(meta.pdfMeta).toBeNull()
+    expect(meta.pdfIdentity).toBeNull()
+    // The companion is still recorded so a restore can hand the bytes back.
+    expect(meta.musicXmlFileName).toBe('legacy.musicxml')
+    expect(meta.musicXmlSourceKind).toBe(UPLOAD_MUSICXML_SOURCE)
   })
 
   it('still rejects a session whose only companion bytes are missing', () => {
