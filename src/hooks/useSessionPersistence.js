@@ -13,6 +13,7 @@ import {
   validateRestoredSession,
 } from '../features/session/sessionPersistence.js'
 import { shouldDeferSessionRestore } from '../features/session/sessionRestoreRouting.js'
+import { isPdflessNotationSource } from '../features/import/musicXmlSource.js'
 import { withTimeout } from '../utils/asyncWithTimeout.js'
 import {
   describeScoreSourceIdentities,
@@ -180,7 +181,9 @@ export default function useSessionPersistence({
       let restoredMeta = loaded.meta
       let usedBackup = false
 
-      const bundleOnlyRestore = !result.ok || !result.pdfMeta
+      // A restored notation-only session has no PDF of its own — that is not
+      // a failure, the bundle fallback is only for lost PDF sessions.
+      const bundleOnlyRestore = !result.ok || (!result.pdfMeta && !result.notationOnly)
       // Last-known-good fallback: when the current generation fails
       // validation, retry the backup manifest + its generation blobs.
       if (bundleOnlyRestore && Object.keys(instrumentBundles).length === 0) {
@@ -212,7 +215,7 @@ export default function useSessionPersistence({
         }
       }
       if (!mountedRef.current || controller.signal.aborted) return
-      const stillBundleOnly = !result.ok || !result.pdfMeta
+      const stillBundleOnly = !result.ok || (!result.pdfMeta && !result.notationOnly)
       const fallbackBundleEntry = stillBundleOnly
         ? Object.entries(instrumentBundles)[0] ?? null
         : null
@@ -328,7 +331,10 @@ export default function useSessionPersistence({
       if (readSaveGeneration() !== generationAtSchedule) {
         return
       }
-      if (!pdfMeta?.fileName || !pdfBuffer) {
+      // A PDF-less session is saved from its notation bytes alone.
+      const notationOnlySave =
+        Boolean(musicXmlSource?.data && isPdflessNotationSource(musicXmlSource))
+      if ((!pdfMeta?.fileName || !pdfBuffer) && !notationOnlySave) {
         return
       }
 
@@ -385,7 +391,7 @@ export default function useSessionPersistence({
 
       try {
         await saveSessionFiles({
-          pdf: { data: pdfBuffer.slice(0) },
+          pdf: pdfBuffer ? { data: pdfBuffer.slice(0) } : null,
           midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
           musicXml: musicXmlSource?.data ? { data: musicXmlSource.data.slice(0) } : null,
           sourceVisualMap: musicXmlSource?.omrMeta?.sourceVisualMap ?? null,
@@ -438,7 +444,8 @@ export default function useSessionPersistence({
   ])
 
   useEffect(() => {
-    if (!pdfMeta?.fileName || !restoreGateOpen) {
+    const notationOnly = Boolean(musicXmlSource?.data && isPdflessNotationSource(musicXmlSource))
+    if ((!pdfMeta?.fileName || !restoreGateOpen) && !notationOnly) {
       return undefined
     }
     scheduleSave()
@@ -447,7 +454,7 @@ export default function useSessionPersistence({
         clearTimeout(saveTimerRef.current)
       }
     }
-  }, [pdfMeta, scheduleSave, restoreGateOpen])
+  }, [pdfMeta, musicXmlSource, scheduleSave, restoreGateOpen])
 
   const clearSavedSession = useCallback(async () => {
     restoreControllerRef.current?.abort()

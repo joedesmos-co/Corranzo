@@ -131,7 +131,9 @@ import {
   isMusicXmlSourceReady,
   musicXmlSourceKey,
   isOmrGeneratedPlayback,
+  isPdflessNotationSource,
   isPracticePlaybackReady,
+  UPLOAD_MUSICXML_SOURCE,
   validateRestoredOmrPlayback,
 } from './features/import/musicXmlSource.js'
 import {
@@ -171,9 +173,12 @@ function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
   return Boolean(pdfLoaded && midiSource?.data && musicXmlSource?.data)
 }
 
-/** Practice needs PDF + timing; MIDI is optional sound. */
+/** Practice needs timing; MIDI is optional sound. A PDF is optional when the
+ *  notation itself was imported (MusicXML-only practice). */
 function isPracticeNavigableSet(pdfLoaded, musicXmlSource) {
-  return Boolean(pdfLoaded && musicXmlSource?.data)
+  return isPdflessNotationSource(musicXmlSource)
+    ? Boolean(musicXmlSource?.data)
+    : Boolean(pdfLoaded && musicXmlSource?.data)
 }
 
 function buildAutoOmrRequest(file, instrumentId) {
@@ -868,10 +873,17 @@ export default function App() {
         reason: 'uploaded-musicxml',
       })
       const ownerPdfIdentity = buildPdfSourceIdentity(pdfMeta)
-      const nextXml = withOwnerPdfIdentity(
-        { fileName: file.name, data, source: 'upload' },
-        ownerPdfIdentity,
-      )
+      // No PDF loaded: this notation is the whole score (MusicXML-only import).
+      const nextXml = ownerPdfIdentity
+        ? withOwnerPdfIdentity(
+            { fileName: file.name, data, source: 'upload' },
+            ownerPdfIdentity,
+          )
+        : { fileName: file.name, data, source: UPLOAD_MUSICXML_SOURCE }
+      if (!ownerPdfIdentity) {
+        // Name the surface after the imported file (no PDF name exists).
+        setFileName(file.name)
+      }
       setMusicXmlSource(nextXml)
       if (liveBundleRef.current) {
         liveBundleRef.current.musicXmlSource = nextXml
@@ -896,7 +908,9 @@ export default function App() {
       setLibraryFeedback({
         type: 'success',
         message: canPractice
-          ? `Loaded ${file.name}. Checking your score.`
+          ? ownerPdfIdentity
+            ? `Loaded ${file.name}. Checking your score.`
+            : `Loaded ${file.name}. Checking your score — the page will be engraved from your notation.`
           : `Loaded ${file.name}. Choose the matching PDF to begin.`,
       })
       if (canPractice) {
@@ -1885,10 +1899,15 @@ export default function App() {
                   lastModified: classified.pdf[0].lastModified,
                 }
               : pdfMeta
-            const nextXml = withOwnerPdfIdentity(
-              { fileName: file.name, data, source: 'upload' },
-              buildPdfSourceIdentity(ownerMeta),
-            )
+            const nextXml = buildPdfSourceIdentity(ownerMeta)
+              ? withOwnerPdfIdentity(
+                  { fileName: file.name, data, source: 'upload' },
+                  buildPdfSourceIdentity(ownerMeta),
+                )
+              : { fileName: file.name, data, source: UPLOAD_MUSICXML_SOURCE }
+            if (!classified.pdf[0] && !pdfMeta?.fileName) {
+              setFileName(file.name)
+            }
             // Uploaded timing wins — cancel any preparation started for this PDF.
             cancelInFlightOmrGeneration(setAutoOmrRequest)
             setMusicXmlSource(nextXml)
@@ -2022,8 +2041,7 @@ export default function App() {
               : classified.musicXml[0]
                 ? `Loaded ${classified.musicXml[0].name}. Choose the matching PDF to begin.`
                 : `Loaded ${classified.midi[0].name}. Add sheet music; score preparation continues if needed.`,
-          })
-        }
+          })        }
 
         if (classified.pdf[0] || classified.musicXml[0] || classified.midi[0]) {
           navigateToView('import')
@@ -2078,6 +2096,111 @@ export default function App() {
   }
 
   const handleSessionRestore = useCallback(async (payload, shouldApply = () => true) => {
+    // Notation-only restore: the saved session was a MusicXML/MXL import with
+    // no PDF. There is no page to rebuild, so restore notation + MIDI directly.
+    if (!payload.pdfMeta?.fileName && payload.musicXmlSource?.data) {
+      if (!shouldApply()) return
+      const nextEpoch = practiceSessionEpochRef.current + 1
+      practiceSessionEpochRef.current = nextEpoch
+      const restoredNotation = cloneMusicXmlSource(payload.musicXmlSource)
+      const restoredNotationValidation = restoredNotation && isOmrGeneratedPlayback(restoredNotation)
+        ? validateRestoredOmrPlayback(restoredNotation)
+        : { ok: true }
+      const nextMusicXml = restoredNotationValidation.ok ? restoredNotation : null
+      if (!restoredNotationValidation.ok) {
+        setLibraryFeedback({ type: 'info', message: restoredNotationValidation.message })
+      }
+      const nextMidi = payload.midiSource?.data
+        ? {
+            fileName: payload.midiSource.fileName,
+            data: payload.midiSource.data.slice(0),
+            ...(payload.midiSource.ownerPdfIdentity ? { ownerPdfIdentity: payload.midiSource.ownerPdfIdentity } : {}),
+          }
+        : null
+      setPdfFile(null)
+      setPdfBuffer(null)
+      setPdfMeta(null)
+      setFileName(nextMusicXml?.fileName ?? null)
+      setMidiSource(nextMidi)
+      if (liveBundleRef.current) {
+        liveBundleRef.current.musicXmlSource = nextMusicXml ?? null
+        liveBundleRef.current.midiSource = nextMidi ?? null
+      }
+      setMusicXmlSource(nextMusicXml)
+      const restoredShell = syncActiveScoreFromLegacy(null, {
+        pdfFile: null,
+        pdfBuffer: null,
+        pdfMeta: null,
+        fileName: nextMusicXml?.fileName ?? null,
+        generation: nextEpoch,
+      })
+      const restoredScoreId = payload.scoreId ?? restoredShell.scoreId
+      activeScoreRef.current = { ...restoredShell, scoreId: restoredScoreId }
+      setActiveScoreIdOnGate(restoredScoreId)
+      setAutoOmrRequest(null)
+      setPageNumber(1)
+      setPracticeSessionEpoch(nextEpoch)
+      setPracticeRemountKey((key) => key + 1)
+      activatePdfScoreSource({
+        pdfIdentity: null,
+        epoch: nextEpoch,
+        reason: 'session-restore-notation-only',
+        scoreId: restoredScoreId,
+      })
+      practicePrefsRef.current = payload.practicePrefs ?? null
+      setInitialPracticePrefs(payload.practicePrefs)
+      setActiveView(
+        normalizeAppView(
+          resolveRestoredActiveView({
+            pathname: window.location.pathname,
+            savedActiveView: payload.activeView,
+            hasMusicXml: Boolean(nextMusicXml),
+          }),
+        ),
+      )
+      setPdfSoftWarning(null)
+      setDemoPieceActive(false)
+      markDemoCardHidden()
+      activeInstrumentRef.current = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
+      instrumentBundleStoreRef.current.clear(activeInstrumentRef.current)
+      setInstrumentId(activeInstrumentRef.current)
+      if (typeof window !== 'undefined' && nextMusicXml?.data) {
+        const musicXml = describeMusicXmlContent(nextMusicXml)
+        window.__SCOREFLOW_AUTHORITATIVE_SOURCE__ = {
+          scoreId: restoredScoreId,
+          ownerScoreId: restoredScoreId,
+          pdfMetaIdentity: null,
+          pdfContentHash: null,
+          musicXmlHash: musicXml.contentHash,
+          musicXmlByteLength: musicXml.byteLength,
+          measureCount: musicXml.measureCount,
+          durationSeconds: musicXml.durationSeconds,
+          ownerPdfIdentity: null,
+          practiceSessionEpoch: nextEpoch,
+          sourceType: nextMusicXml.source ?? 'restore',
+          at: Date.now(),
+        }
+        logScoreSourceLifecycle('authoritative-musicxml-changed', {
+          reason: 'session-restore-notation-only',
+          authoritativeMusicXmlHash: musicXml.contentHash,
+          ownerPdfIdentity: null,
+          ownerScoreId: restoredScoreId,
+          practiceSessionEpoch: nextEpoch,
+        })
+        const restoredActive = syncActiveScoreFromLegacy(activeScoreRef.current, {
+          pdfFile: null,
+          pdfBuffer: null,
+          pdfMeta: null,
+          fileName: nextMusicXml.fileName,
+          musicXmlSource: nextMusicXml,
+          midiSource: nextMidi,
+          generation: nextEpoch,
+        })
+        activeScoreRef.current = restoredActive
+        publishActiveScore(restoredActive, { reason: 'session-restore-notation-only' })
+      }
+      return
+    }
     const restoredInstrument = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
     const otherBundles = Object.entries(payload.instrumentBundles ?? {}).filter(([id, bundle]) => normalizeInstrumentId(id) !== restoredInstrument && bundle?.pdfFile)
     const [restoredBuffer, otherBuffers] = await Promise.all([

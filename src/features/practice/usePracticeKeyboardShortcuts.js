@@ -85,7 +85,14 @@ export default function usePracticeKeyboardShortcuts({
 
       if (alignmentMode) return
       const key = event.key
-      if (event.target?.closest?.('button, a, summary, [role="radio"]') && [' ', 'Spacebar', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) return
+      if (event.target?.closest?.('button, a, summary, [role="radio"]') && [' ', 'Spacebar', 'Enter'].includes(key)) return
+      // Modified arrows are never button/radio activations — they must keep the
+      // Shift+Arrow measure navigation reachable while a control has focus.
+      if (
+        event.target?.closest?.('button, a, summary, [role="radio"]') &&
+        !event.shiftKey &&
+        ['ArrowLeft', 'ArrowRight'].includes(key)
+      ) return
       if (['1', '2', '3'].includes(key)) { event.preventDefault(); handlersRef.current.onModeChange?.(Object.values(PRACTICE_MODE)[Number(key) - 1]); return }
       if (['-', '+', '='].includes(key) && hasMusicXml && !playbackLoading) { event.preventDefault(); handlersRef.current.onAdjustTempo?.(key === '-' ? -.05 : .05); return }
       if (key.toLowerCase() === 'l') { event.preventDefault(); handlersRef.current.onLoop?.(); return }

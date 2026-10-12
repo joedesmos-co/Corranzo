@@ -169,6 +169,8 @@
 .workspace-guide .visual-practice__key--black::after { background: #ba7862; }
 .score-workspace .pdf-viewer-section--practice .viewer-float-toolbar__hint { border: 0; background: none; opacity: 1; }
 .workspace-placement { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 8px; font-size: 12px; background: #374132; }
+.workspace-notation-note { margin: 0; padding: 8px 14px; font-size: 12px; color: #cfc6b4; }
+.workspace-notation-note strong { color: #f2eadb; font-weight: 600; }
 .workspace-placement button { padding: 5px 12px; color: #f2eadb; border: 1px solid #77846c; background: transparent; }
 .workspace-your-turn { flex-wrap: wrap; }
 .workspace-your-turn > div { flex-wrap: wrap; gap: 7px 18px; }

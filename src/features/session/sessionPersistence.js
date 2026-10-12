@@ -599,8 +599,61 @@ export async function clearSessionStorage() {
 /**
  * Verify stored blobs match saved metadata before restoring UI state.
  */
+
+/** Rebuild a PDF-less (MusicXML-only) session from persisted bytes. */
+function rebuildNotationOnlySession(meta, files, musicXmlBuffer) {
+  if (meta.musicXmlSize != null && musicXmlBuffer.byteLength !== meta.musicXmlSize) {
+    return null
+  }
+  const musicXmlSource = rebuildMusicXmlSourceFromSessionMeta(
+    meta.musicXmlFileName,
+    musicXmlBuffer.slice(0),
+    meta,
+  )
+  if (!musicXmlSource?.data) {
+    return null
+  }
+  // A PDF-less source must never carry a foreign PDF owner identity: the
+  // invariant that ties companions to a PDF cannot apply without one.
+  const ownedNotation = { ...musicXmlSource }
+  delete ownedNotation.ownerPdfIdentity
+  let midiSource = null
+  if (meta.midiFileName && files.midi) {
+    midiSource = {
+      fileName: meta.midiFileName,
+      data: files.midi.slice(0),
+      ...(meta.midiOwnerPdfIdentity ? { ownerPdfIdentity: meta.midiOwnerPdfIdentity } : {}),
+    }
+  }
+  return { musicXmlSource: ownedNotation, midiSource }
+}
 export function validateRestoredSession(meta, files) {
   const issues = []
+
+  const musicXmlFileName = meta?.musicXmlFileName ?? null
+  const musicXmlBuffer = files.musicXml
+  // Notation-only sessions (MusicXML/MXL imported with no PDF) are valid on
+  // their own: the PDF page is simply absent, and the engraved notation is
+  // drawn from the stored MusicXML bytes.
+  const notationOnly =
+    Boolean(musicXmlFileName && musicXmlBuffer) &&
+    !meta?.pdfMeta?.fileName &&
+    meta?.musicXmlSourceKind !== 'omr'
+  if (notationOnly) {
+    const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
+    if (restored) {
+      return {
+        ok: true,
+        issues: [],
+        pdfFile: null,
+        pdfMeta: null,
+        midiSource: restored.midiSource,
+        musicXmlSource: restored.musicXmlSource,
+        notationOnly: true,
+        partial: false,
+      }
+    }
+  }
 
   if (!meta?.pdfMeta?.fileName) {
     issues.push('missing-pdf-meta')

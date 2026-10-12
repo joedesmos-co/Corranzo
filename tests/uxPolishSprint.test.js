@@ -43,7 +43,9 @@ describe('Corranzo UX polish sprint', () => {
     expect(library).toContain('Import a score')
     expect(library).toContain('Public-domain scores')
     expect(upload).toContain('Import a score')
-    expect(upload).toContain('Choose a PDF, or drop it here.')
+    // A notation export on its own is a complete score — the PDF is optional.
+    expect(upload).toContain('PDF or MusicXML, or drop it here.')
+    expect(upload).not.toContain('Choose a PDF, or drop it here.')
     // The old "one file at a time" restriction no longer applies.
     expect(upload).not.toContain('Upload one file at a time')
   })

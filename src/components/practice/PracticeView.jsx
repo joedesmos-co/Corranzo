@@ -24,8 +24,16 @@ import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialo
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
 import ArrangementPracticeView from '../audio-vision/ArrangementPracticeView.jsx'
+import OsmdScoreView from './OsmdScoreView.jsx'
+import { getMusicXmlWorkTitle, isPdflessNotationSource } from '../../features/import/musicXmlSource.js'
 import '../../styles/practice.css'
 import '../../styles/workspace.css'
+
+function notationFileTitle(musicXmlSource) {
+  const name = musicXmlSource?.fileName
+  if (!name || typeof name !== 'string') return null
+  return name.replace(/\.[^.]+$/, '') || null
+}
 
 export default function PracticeView({
   pdfFile,
@@ -51,6 +59,19 @@ export default function PracticeView({
   activeScoreSnapshot = null,
 }) {
   const { session, scoreFollow, practiceStats, practicePiece } = usePracticeSessionContext()
+  // Notation-only practice: MusicXML/MXL imported without a PDF. The page is
+  // engraved by OSMD and the practice engine runs unchanged (there is no
+  // second practice engine here — only a different notation surface).
+  const notationOnly = !pdfFile && isPdflessNotationSource(musicXmlSource)
+  const arrangementOnly = notationOnly && musicXmlSource?.source === 'audio-arrangement'
+  // A notation-only score has no PDF filename to name it after: prefer the
+  // title authored in the MusicXML (what the engraver itself prints), then
+  // the file name, then a neutral placeholder.
+  const notationTitle = notationOnly && !arrangementOnly
+    ? getMusicXmlWorkTitle(musicXmlSource) ?? notationFileTitle(musicXmlSource)
+    : null
+  const scoreTitle = notationTitle
+    ?? (fileName || 'Your score').replace(/\.[^.]+$/, '').replace(/ - (Piano|Guitar)$/, '')
   const { setPdfPageSizes } = usePracticeVisualSession()
   const { instrumentId } = useInstrument()
   const practiceErrorResetKey = [
@@ -158,7 +179,7 @@ export default function PracticeView({
   const canNextPage = numPages != null && pageNumber < numPages
 
   usePracticeKeyboardShortcuts({
-    enabled: Boolean(pdfFile),
+    enabled: Boolean(pdfFile || notationOnly),
     isPlaying: session.playback.isPlaying,
     hasMidi: session.hasMidi,
     hasMusicXml: session.hasMusicXml,
@@ -193,16 +214,42 @@ export default function PracticeView({
   return (
     <main ref={workspaceRef} className={`practice-workspace score-workspace${focus ? ' score-workspace--focus' : ''}`} aria-label="Score workspace" data-mode={session.practiceMode}>
       {!pdfFile ? (
-        musicXmlSource?.source === 'audio-arrangement' ? (
-          <ArrangementPracticeView musicXmlSource={musicXmlSource} onReturnToLibrary={onReturnToLibrary} />
-        ) : (
-          <div className="practice-workspace__empty">
-            <h2>Choose a piece first</h2>
-            <p className="practice-workspace__empty-lead">
-              Open a score from <strong>Library</strong> to begin.
-            </p>
-          </div>
-        )
+        notationOnly
+          ? (arrangementOnly ? (
+            <ArrangementPracticeView musicXmlSource={musicXmlSource} onReturnToLibrary={onReturnToLibrary} />
+          ) : (
+            <div className="workspace-frame">
+              <PracticeErrorBoundary
+                resetKey={practiceErrorResetKey}
+                onReloadPractice={onReloadPractice}
+                onReturnToLibrary={onReturnToLibrary}
+              >
+                <header className="workspace-header" inert={tool ? true : undefined}>
+                  <button className="workspace-back" aria-label="Back to Library" onClick={onReturnToLibrary}><Icon name="prev" size={16} /><span>Library</span></button>
+                  <h1>{scoreTitle}</h1>
+                  <button ref={focusButtonRef} className="workspace-focus" aria-label={focus ? 'Exit focus (F)' : 'Focus score (F)'} aria-pressed={focus} onClick={toggleFocus}><Icon name={focus ? 'close' : 'fullscreen'} size={18} /><span>{focus ? 'Exit focus' : 'Focus'}</span></button>
+                </header>
+                <p className="workspace-notation-note" role="note">Engraved from {musicXmlSource?.fileName ?? 'your notation file'}. Page-follow visuals need a PDF — timing, playback and practice modes run from the notation.</p>
+                <div className="practice-workspace__main" inert={tool ? true : undefined}>
+                  <div className="practice-workspace__score">
+                    <OsmdScoreView musicXmlSource={musicXmlSource} />
+                  </div>
+                </div>
+                <div className="workspace-dock-wrap" inert={tool ? true : undefined}>
+                  <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} />
+                </div>
+                {tool && <WorkspaceTools tool={tool} onClose={closeTool} returnFocusTo={toolOriginRef} session={session} scoreFollow={scoreFollow} fileName={fileName} pageNumber={1} practiceStats={practiceStats} pieceId={practicePiece?.id} onReport={() => { closeTool(); openReportDialog() }} />}
+              </PracticeErrorBoundary>
+            </div>
+          ))
+          : (
+            <div className="practice-workspace__empty">
+              <h2>Choose a piece first</h2>
+              <p className="practice-workspace__empty-lead">
+                Open a score from <strong>Library</strong> to begin.
+              </p>
+            </div>
+          )
       ) : (
         <div className="workspace-frame">
           <PracticeErrorBoundary
@@ -210,7 +257,7 @@ export default function PracticeView({
             onReloadPractice={onReloadPractice}
             onReturnToLibrary={onReturnToLibrary}
           >
-            {!isVisualView && (
+            {!isVisualView && pdfFile && (
               <PracticePageFollowController
                 scrollContainerRef={pdfScrollRef}
                 pageNumber={pageNumber}
@@ -222,7 +269,7 @@ export default function PracticeView({
             )}
             <header className="workspace-header" inert={tool ? true : undefined}>
               <button className="workspace-back" aria-label="Back to Library" onClick={onReturnToLibrary}><Icon name="prev" size={16} /><span>Library</span></button>
-              <h1>{(fileName || 'Your score').replace(/\.[^.]+$/, '').replace(/ - (Piano|Guitar)$/, '')}</h1>
+              <h1>{scoreTitle}</h1>
               <div className="workspace-representation" role="group" aria-label="Score presentation">
                 <button aria-pressed={!isVisualView} onClick={() => handleViewModeChange(PRACTICE_VIEW_MODE.SCORE)}>{PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.SCORE]}</button>
                 <NoteGuideButton active={isVisualView} onSelect={() => handleViewModeChange(PRACTICE_VIEW_MODE.VISUAL)} />
