@@ -982,10 +982,17 @@ kernel destroys rest glyphs) and thin-vertical-run stem stripping
 (304 FP, P 0.026). Rest recall stands at 0.296 with P 1.000 on a small
 sample; a shape-classifier or trained rest head is needed.
 
-Remaining V1 blockers, in measured order: note recall 167 FN (chord/beam
-fusions again, now at the CC level), pitch 0.796 (auto-clef ~2pp +
-frame/step precision), duration 0.773 (probe on detected boxes), rest
-recall, accidentals, voices/onsets, tuplets, scans.
+Remaining V1 blockers, in measured order. Note recall 167 FN is now a
+FUSION problem, not a preprocessing one: 151/167 (90%) are chord tones,
+117/167 sit inside a wide CC (beam/chord fused blob), 88 are not dark in
+the healed mask, 46 have no CC at all. Two post-fix attempts measured and
+rejected: frozen kind-head sliding-window assist (P 0.44-0.53 at R 0.98 —
+the kind head is miscalibrated off oracle-box positions) and beam-kernel
+sweeps (no effect: beams are shorter than the 6-gap kernel; the erosion
+comes from stem removal). Next: trained notehead detector or chord-aware
+blob splitting. Then pitch 0.796 (auto-clef ~2pp + frame/step
+precision), duration 0.773, rest recall 0.296, accidentals,
+voices/onsets, tuplets, scans.
 
 Exact next milestone: a TRAIN-only notehead detector on the new mask's
 candidate boxes (frozen trunk classifier over candidate crops, gates:
