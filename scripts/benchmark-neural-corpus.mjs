@@ -22,6 +22,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readWavPcm } from './lib/readWavPcm.mjs'
 import { resampleToModelRate, NEURAL_MODEL_RATE } from '../src/features/microphone-input/micNeuralTfAdapter.js'
+import { computeFluxEnvelope, fluxAtMs } from '../src/features/microphone-input/micAttackEvidence.js'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
@@ -235,6 +236,11 @@ for (const clip of clips) {
   const windowLength = Math.floor(WINDOW * NEURAL_MODEL_RATE)
   const hopLength = Math.floor(HOP * NEURAL_MODEL_RATE)
   const edgeSeconds = EDGE_MS / 1000
+  // Attack evidence (same capture-derived signal the live hook uses):
+  // flux envelope of the ORIGINAL clip audio; each saved window note
+  // carries its own onset flux so the scorer's stream can apply the
+  // attack-conditioned octave gate exactly as production does.
+  const clipFluxEnvelope = computeFluxEnvelope(Float32Array.from(samples), sampleRate)
   const allNotes = []
   const inferTimes = []
   const savedWindows = []
@@ -255,7 +261,14 @@ for (const clip of clips) {
     inferTimes.push(inferMs)
     savedWindows.push({
       windowStartMs: (start / NEURAL_MODEL_RATE) * 1000,
-      notes: notes.map((note) => ({ midi: note.midi, start: note.start, end: note.end })),
+      notes: notes.map((note) => ({
+        midi: note.midi,
+        start: note.start,
+        end: note.end,
+        // Flux at the note's CLIP-relative onset (window start minus the
+        // 1 s harness lead). Same formula as the live hook's evidence.
+        attackFlux: fluxAtMs(clipFluxEnvelope, (windowStartSeconds - LEAD_SILENCE_SECONDS + note.start) * 1000, 0),
+      })),
     })
     for (const note of notes) {
       // Same edge rule as the live stream (configurable, default 80 ms).

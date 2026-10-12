@@ -10,6 +10,7 @@ import {
   attackCombPresence,
   captureAttackSnapshots,
   computeFluxEnvelope,
+  attackFluxForNotes,
   describeEmissionEvidence,
   fluxAtMs,
 } from '../src/features/microphone-input/micAttackEvidence.js'
@@ -116,5 +117,23 @@ describe('micAttackEvidence', () => {
       expect(result.summary).toHaveLength(0)
       expect(result.snapshots).toHaveLength(0)
     }
+  })
+})
+
+describe('attackFluxForNotes (live-path parity)', () => {
+  it('maps model notes to flux by onset key (missing → absent)', () => {
+    const { samples, sampleRate, attackMs } = toneBurst({ midi: 60 })
+    const ring = { samples: Array.from(samples), startCaptureMs: 5000, inputRate: sampleRate }
+    const map = attackFluxForNotes(ring, [
+      { midi: 60, startOffsetSeconds: 0.1 },
+      { midi: 72, startOffsetSeconds: 0.12 },
+    ], 5000)
+    expect(map.get('60@5100')).toBeGreaterThan(0.5)
+    expect(map.has('72@5120')).toBe(true)
+  })
+
+  it('returns an empty map on malformed ring audio (never throws)', () => {
+    expect(attackFluxForNotes(null, [{ midi: 60, startOffsetSeconds: 0.1 }], 100).size).toBe(0)
+    expect(attackFluxForNotes({ samples: [], startCaptureMs: 0, inputRate: 44100 }, [], 100).size).toBe(0)
   })
 })
