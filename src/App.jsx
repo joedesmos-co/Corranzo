@@ -123,6 +123,7 @@ import {
   snapshotInstrumentBundle,
   bundleHasActiveFile,
 } from './features/instruments/instrumentPracticeBundle.js'
+import { isCompressedScoreFile, loadMusicXmlFile } from './features/musicxml/loadMusicXmlFile.js'
 import {
   createMusicXmlSource,
   cloneMusicXmlSource,
@@ -171,6 +172,20 @@ function resolveInitialView() {
 
 function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
   return Boolean(pdfLoaded && midiSource?.data && musicXmlSource?.data)
+}
+
+/**
+ * Notation bytes to store. A compressed .mxl is unpacked here so every
+ * downstream consumer (timing parse, OSMD engraving, session restore) works
+ * from plain XML and no surface has to understand zip archives.
+ */
+async function readScoreTimingBytes(file) {
+  if (await isCompressedScoreFile(file)) {
+    const xml = await loadMusicXmlFile(file)
+    const encoded = new TextEncoder().encode(xml)
+    return encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.byteLength)
+  }
+  return readFileArrayBuffer(file, 'musicXml')
 }
 
 /** Practice needs timing; MIDI is optional sound. A PDF is optional when the
@@ -865,7 +880,7 @@ export default function App() {
     }
 
     try {
-      const data = await readFileArrayBuffer(file, 'musicXml')
+      const data = await readScoreTimingBytes(file)
       const replacingOmr = isOmrGeneratedPlayback(musicXmlSource)
       // User-supplied timing owns the session — cancel any in-flight preparation.
       cancelInFlightOmrGeneration(setAutoOmrRequest, {
@@ -1891,7 +1906,7 @@ export default function App() {
           if (isMuseScoreSourceFile(file)) {
             setLibraryFeedback({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
           } else {
-            const data = await readFileArrayBuffer(file, 'musicXml')
+            const data = await readScoreTimingBytes(file)
             const ownerMeta = classified.pdf[0]
               ? {
                   fileName: classified.pdf[0].name,

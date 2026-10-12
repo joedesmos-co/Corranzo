@@ -20,7 +20,6 @@ import {
   moveOsmdCursor,
   musicalQuartersAtTime,
   pairOsmdNotes,
-  timingUsesRepeats,
 } from '../../features/practice/osmdEngraving.js'
 import { buildNoteCheckpoints } from '../../features/practice/waitForYouCheckpoints.js'
 import {
@@ -61,6 +60,9 @@ function groupAtOnset(groups, timeSeconds) {
 }
 
 export default function OsmdScoreView({ musicXmlSource = null }) {
+  // Notation bytes are stored decompressed (readScoreTimingBytes in App), so
+  // any source kind — upload, .mxl archive, or audio arrangement — engraves
+  // from the same plain-XML payload.
   const xml = musicXmlSource?.data ? new TextDecoder().decode(musicXmlSource.data) : null
   const targetPart = musicXmlSource?.omrMeta?.arrangement?.targetPart ?? null
   const { session } = usePracticeSessionContext()

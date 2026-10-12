@@ -68,7 +68,9 @@ export default function PracticeView({
   // title authored in the MusicXML (what the engraver itself prints), then
   // the file name, then a neutral placeholder.
   const notationTitle = notationOnly && !arrangementOnly
-    ? getMusicXmlWorkTitle(musicXmlSource) ?? notationFileTitle(musicXmlSource)
+    // The timing map is parsed from the (possibly compressed) notation, so it
+    // carries the authored title even for an MXL import.
+    ? session.timing?.timingMap?.title ?? getMusicXmlWorkTitle(musicXmlSource) ?? notationFileTitle(musicXmlSource)
     : null
   const scoreTitle = notationTitle
     ?? (fileName || 'Your score').replace(/\.[^.]+$/, '').replace(/ - (Piano|Guitar)$/, '')

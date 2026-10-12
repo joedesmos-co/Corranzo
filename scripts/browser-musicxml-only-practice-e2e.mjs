@@ -16,7 +16,9 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { copyFileSync, existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
+import JSZip from 'jszip'
 import { createServer } from 'vite'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
@@ -182,6 +184,11 @@ async function main() {
     if (msg.type() === 'error' && !isBenignConsoleMessage(msg.text())) report.consoleErrors.push(msg.text())
   })
   page.on('pageerror', (error) => report.pageErrors.push(error.message))
+  // Make import failures diagnosable instead of a bare locator timeout.
+  const dump = async (label) => JSON.stringify(await page.evaluate(() => ({
+    view: document.querySelector('.cz-shell')?.getAttribute('data-view') ?? null,
+    body: document.body.innerText.replace(/\s+/g, ' ').slice(0, 200),
+  })))
 
   try {
     await page.goto(baseUrl, { waitUntil: 'domcontentloaded' })
@@ -190,7 +197,9 @@ async function main() {
     await dismissOverlays(page)
 
     // ============ IMPORT (no PDF) ============
-    await page.getByRole('button', { name: /^Import$/i }).first().click()
+    await page.getByRole('button', { name: /^Import$/i }).first().click().catch(async () => {
+      throw new Error(`Import nav not clickable: ${await dump('import')}`)
+    })
     await sleep(900)
     const importButton = page.getByRole('button', { name: /Import a score/i }).first()
     if (!(await importButton.isVisible().catch(() => false))) {
@@ -207,11 +216,78 @@ async function main() {
       throw new Error('not ready')
     }
     pass('score ready to open without a PDF')
-    await openScore.click()
+
+    // ============ Compressed .mxl must engrave too ============
+    // A real MuseScore-style archive: container.xml points at score.musicxml.
+    {
+      const xmlText = await readFile(staged, 'utf8')
+      const zip = new JSZip()
+      zip.file('META-INF/container.xml', '<?xml version="1.0" encoding="UTF-8"?><container><rootfiles>'
+        + '<rootfile full-path="score.musicxml" media-type="application/vnd.recordare.musicxml+xml"/>'
+        + '</rootfiles></container>')
+      zip.file('score.musicxml', xmlText)
+      const mxlPath = join(outDir, 'compressed.mxl')
+      await writeFile(mxlPath, await zip.generateAsync({ type: 'nodebuffer' }))
+
+      await page.locator('button[aria-label="Back to Library"]').click().catch(() => {})
+      await sleep(1200)
+      await page.getByRole('button', { name: /^Import$/i }).first().click().catch(() => {})
+      await sleep(900)
+      await page.locator('input[type="file"][aria-label="Choose score file"]').first().setInputFiles(mxlPath)
+      await sleep(3000)
+      const mxlOpen = page.getByRole('button', { name: /Open score/i }).first()
+      if (!(await mxlOpen.isVisible().catch(() => false))) {
+        fail('compressed .mxl opens without a PDF', (await page.locator('body').innerText()).slice(0, 300))
+      } else {
+        pass('compressed .mxl opens without a PDF')
+        await mxlOpen.click()
+        await page.waitForSelector('.workspace-play', { timeout: 150000 }).catch(() => {})
+        await sleep(4000)
+        const mxlState = await workspaceState(page)
+        const mxlTitle = await page.evaluate(() => document.querySelector('.workspace-header h1')?.textContent?.trim() ?? null)
+        await page.screenshot({ path: join(outDir, '02b-mxl-engraved.png'), fullPage: true })
+        if (mxlState.engravedNotes > 0 && mxlTitle && /Grand Staff/i.test(mxlTitle)) {
+          pass('compressed .mxl engraves with the authored title', `${mxlTitle} · ${mxlState.engravedNotes} noteheads`)
+        } else {
+          fail('compressed .mxl engraves with the authored title', JSON.stringify({ mxlTitle, ...mxlState }))
+        }
+        await page.locator('.workspace-play').first().click().catch(() => {})
+        await sleep(3000)
+        const mxlPlaying = await workspaceState(page)
+        if (mxlPlaying.isPlaying) pass('compressed .mxl plays back')
+        else fail('compressed .mxl plays back', JSON.stringify(mxlPlaying))
+        // Back to the uncompressed fixture for the rest of the workflow.
+        await page.locator('button[aria-label="Back to Library"]').click().catch(() => {})
+        await sleep(1200)
+        await page.getByRole('button', { name: /^Import$/i }).first().click().catch(() => {})
+        await sleep(900)
+        await page.locator('input[type="file"][aria-label="Choose score file"]').first().setInputFiles(staged)
+        await sleep(2500)
+        const reopen = page.getByRole('button', { name: /Open score/i }).first()
+        if (!(await reopen.isVisible().catch(() => false))) {
+          const why = await page.evaluate(() => ({
+            view: document.querySelector('.cz-shell')?.getAttribute('data-view') ?? null,
+            body: document.body.innerText.replace(/\s+/g, ' ').slice(0, 260),
+          }))
+          fail('uncompressed score reopens after the compressed check', JSON.stringify(why))
+          throw new Error(`reopen failed: ${JSON.stringify(why)}`)
+        }
+        await reopen.click()
+        await page.waitForSelector('.workspace-play', { timeout: 150000 }).catch(() => {})
+        await sleep(3000)
+      }
+    }
+
     await sleep(6000)
     await dismissOverlays(page)
 
     // ============ ENGRAVING ============
+    // The MXL block already reopened the uncompressed score; settle it back to
+    // the top of the piece before the remaining workflow checks.
+    await page.locator('.workspace-play').first().click().catch(() => {})
+    await sleep(800)
+    await page.locator('.workspace-restart').first().click().catch(() => {})
+    await sleep(1500)
     let state = await workspaceState(page)
     await page.screenshot({ path: join(outDir, '02-workspace.png') })
     if (/Choose a piece first/.test(await page.locator('body').innerText())) {
