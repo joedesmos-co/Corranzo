@@ -125,7 +125,7 @@ def anchored_stem(ink: np.ndarray, beam_mask: np.ndarray, box, img_h: int) -> di
                     "dir": direction, "edge": edge, "span": run_span,
                     "strip_x": edge}
     out = {"stem": best["run"] >= MIN_STEM_RUN, "run": best["run"], "tip": best["tip"],
-           "beams": 0, "flag": False, "dots": 0, "dot_xy": []}
+           "side": best["side"], "beams": 0, "flag": False, "dots": 0, "dot_xy": []}
     if not out["stem"]:
         return out
     tx, ty = best["tip"]
