@@ -371,3 +371,20 @@ Fix (proof-page-source.render_at_gap):
 Verified on Txo p1: width 1822, measured gap 26.00, fx 0.08308,
 ink@GT notehead = 0.794. Deterministic + cached under
 /tmp/proof/gv-render (regenerable; nothing committed).
+
+### R5-M3/M4 — Detection quality on the fixed pipeline (real inference)
+No oracle boxes; GT from joins core boxes; both layouts rendered at gap 26.
+
+- Txo (2 pages): P=0.858 R=0.610 F1=0.725. p1: preds 304, tp 263, fp 41,
+  fn 159. Notes ~100% (212/211 detected); recall loss is tabdigit+rest.
+- Qmek (3 pages): P=0.775 R=0.622 F1=0.690.
+- Gate ablation (decode_page staff_gate on/off, same heat): Txo
+  tp 263/264 fp 41/41; Qmek tp 663/666 fp 193/209. The TAB staff-comb
+  gate is now ~NEUTRAL (costs 3 tp, saves 16 fp) - i.e. at the correct
+  staff gap its fixed +-130px window (= 5*gap at gap=26) is calibrated by
+  construction. Before the fix it was rejecting ~80% of real digits.
+- tabdigit recall remains ~44% at peak level (92/211 on Txo p1) and the
+  tab heat inside GT boxes only reaches p50 0.408 (vs notehead 0.800).
+  Geometry is now ruled out: the residual is GLYPH APPEARANCE at the
+  trained scale (this engraver punctuates TAB digits with dashes and
+  prints the digit over the staff line), not scale or mapping.
