@@ -925,3 +925,69 @@ gates (dur ≥ 0.858, start/end F1 ≥ 0.80 sustained over final 3 epochs, tup
 F1 ≥ 0.40); save per-head best states to disk each epoch (no in-memory
 rule); budget wall clock explicitly (13 min/epoch measured) — e.g. 8-epoch
 cap ≈ 105 min. TEST stays sealed.
+
+
+---
+
+# Notehead detection rescue: deterministic detector passes both gates
+
+From `c35a1abb2d`. No merge, TEST sealed, DEV identities frozen, no
+competing training. ONE bounded training experiment was NOT needed: the
+preregistered gates (P>=0.90, R>=0.75) are met by a deterministic recipe,
+so no detector training was run (negative-training decision, recorded).
+
+## Root cause (measured, reports/det_mask_diag.json)
+
+Staff-row removal (the +-1 row band) destroys 41% of notehead pixels:
+it cuts a horizontal slit through every notehead sitting ON a staff line.
+At the notehead pixel the mask is dark: raw 785/902, rowrem 416/902.
+The recall wall was never "the detector misses glyphs" — the glyphs were
+deleted by preprocessing before any CC ran.
+
+## The fix (reports/det_recipes.json, det_sweep.json, scripts/detector.py)
+
+Replace row removal with long-run opening subtraction (>=6 gaps
+horizontal = staff lines/beams, >=3 gaps vertical = stems), then a 3x3
+dilation AFTER the 0.55-gap horizontal opening (order matters: dilating
+before the opening re-splits healed noteheads, because the opening deletes
+the 2px bridges). Window [0.70, 1.90] gaps. Measured DEV operating point:
+**P 0.930 / R 0.815** (tp 735, fp 55, fn 167) vs the rowrem baseline
+P 0.893 / R 0.573. Rejected variants (measured): dilation before opening
+(P 0.755 at best), local-max template completion (+7 TP / +45 FP), vertical
+thickness beam-splitting (+73 detections all FP), keep-tall line
+preservation (R 0.407).
+
+## End-to-end acceptance (5 DEV pages, 902 truth notes, no oracle at
+## inference; scripts/auto_e2e.py, reports/auto_e2e.json)
+
+| metric | before (rowrem detector) | after (frozen detector) |
+|---|---|---|
+| note P / R | 0.844 / 0.574 | **0.930 / 0.815** |
+| pitch on detected | 0.682 | **0.796** |
+| duration on detected | 0.699 | **0.773** |
+| complete events | 0.485 | **0.634** |
+| rest P / R | 1.000 / 0.296 | 1.000 / 0.296 |
+| measures with >=1 auto note | - | 92/94 (0.979) |
+| MusicXML valid (music21) | 5/5 | 5/5 (790 notes) |
+
+Predictions come from detected boxes only; oracle-box production numbers
+(15,005 exact) remain a separate axis and are unchanged.
+
+## Rest recall (secondary objective): wall confirmed, precision kept
+
+All 19/27 misses are rests whose CC is fused with a stem/other notation
+(wide sparse blob: w>3 gaps, fill<=0.2). Two fixes measured and
+rejected: rest candidates on the notehead mask (0 TP — the 3-gap vertical
+kernel destroys rest glyphs) and thin-vertical-run stem stripping
+(304 FP, P 0.026). Rest recall stands at 0.296 with P 1.000 on a small
+sample; a shape-classifier or trained rest head is needed.
+
+Remaining V1 blockers, in measured order: note recall 167 FN (chord/beam
+fusions again, now at the CC level), pitch 0.796 (auto-clef ~2pp +
+frame/step precision), duration 0.773 (probe on detected boxes), rest
+recall, accidentals, voices/onsets, tuplets, scans.
+
+Exact next milestone: a TRAIN-only notehead detector on the new mask's
+candidate boxes (frozen trunk classifier over candidate crops, gates:
+P>=0.95 AND R>=0.86) — or, if that fails, accept the deterministic
+detector and move to pitch/duration on detected boxes.

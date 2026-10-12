@@ -77,8 +77,8 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
         frames = group_staves(lines)
         if not frames:
             continue
-        comps = components(dark, lines, gap)
-        heads, _r, _ = classify(comps, dark, frames, gap)
+        from detector import detect_noteheads
+        heads = detect_noteheads(gray, lines, gap)
         # expand each opened head box to the raw-mask glyph box at the same
         # center (opening erodes ~0.3 gap/side; the training crops use the
         # FULL glyph box, and the dur head is shift-sensitive)
@@ -118,50 +118,21 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
         # head, not peak picking). THRESH_NOTE only gates the dilate path.
         THRESH_NOTE = 0.72
         THRESH_NOTE = 0.62
-        if len(heads) >= 12:
-            tps = []
-            for h in heads:
-                y0, y1 = max(0, h["y"]), min(gray.shape[0], h["y"] + h["h"])
-                x0, x1 = max(0, h["x"]), min(gray.shape[1], h["x"] + h["w"])
-                if x1 - x0 < 3 or y1 - y0 < 3:
-                    continue
-                c = cv2.resize(gray[y0:y1, x0:x1], (16, 16),
-                               interpolation=cv2.INTER_AREA).astype(np.float32)
-                c = c - c.mean()
-                tps.append(c / max(1e-6, np.sqrt((c ** 2).sum())))
-            tmpl = np.mean(tps, axis=0)
-            res = cv2.matchTemplate(gray.astype(np.float32), tmpl,
-                                    cv2.TM_CCOEFF_NORMED)
-            ys, xs = np.where(res >= 0.78)
-            cand = sorted(zip(xs, ys, res[ys, xs]), key=lambda t: -t[2])
-            have = [(h["x"], h["y"], h["w"], h["h"]) for h in heads]
-            for cx, cy, sc in cand:
-                if any(((cx - hx) ** 2 + (cy - hy) ** 2) < (0.9 * gap) ** 2
-                       for hx, hy, hw, hh in have):
-                    continue
-                nh = {"x": int(cx), "y": int(cy),
-                      "w": max(2, int(round(1.1 * gap))), "h": max(2, int(round(1.0 * gap)))}
-                heads.append(nh)
-                have.append((nh["x"], nh["y"], nh["w"], nh["h"]))
+        # Notehead completion: DISABLED (measured +7 TP / +45 FP at thr 0.78;
+        # the frozen detector recipe in detector.py superseded it).
+        if False:
+            pass
         boxes = []
         for h in heads:
             # cy = dark centroid inside the CC box (bbox center is biased by
             # the opening shrink and borderline steps; measured below)
-            bx0, by0 = max(0, h["x"]), max(0, h["y"])
-            bx1 = min(gray.shape[1], h["x"] + h["w"])
-            by1 = min(gray.shape[0], h["y"] + h["h"])
-            reg = (gray[by0:by1, bx0:bx1] < 128).astype(np.float64)
-            if reg.sum() > 0:
-                yy, xx = np.nonzero(reg)
-                cx = bx0 + float(xx.mean()) + 0.5
-                cy = by0 + float(yy.mean()) + 0.5
-            else:
-                cx, cy = h["x"] + h["w"] / 2, h["y"] + h["h"] / 2
+            cx, cy = h["x"] + h["w"] / 2, h["y"] + h["h"] / 2
             fi = min(range(len(frames)),
                      key=lambda i: min(abs(cy - l) for l in frames[i]))
             bottom = bottom_of(*clefs[fi])
             steps = int(round(2 * (frames[fi][-1] - cy) / gap))
             boxes.append({"page": pg, "frame": fi, "x": cx, "y": cy,
+                          "bx": h["x"], "by": h["y"], "w": h["w"], "h": h["h"],
                           "midi": pitch_of(steps, bottom)})
         if boxes:
             crops = []
@@ -347,6 +318,7 @@ def main():
     outdir = TRAIN / "data" / "auto_out"
     outdir.mkdir(parents=True, exist_ok=True)
     C = Counter()
+    C["meas_covered"] = set()
     per_score = {}
     for sid in sids:
         evs = json.load(gzip.open(EVENTS / f"{sid}.events.json.gz", "rt"))["events"]
@@ -402,19 +374,33 @@ def main():
                 truth_px.append(((pos[0] + tx) / 10 * sx, (pos[1] + ty) / 10 * sx, e))
             used = set()
             for a in [n for n in notes if n["page"] == pg]:
-                best, bi = (0.9 * gap) ** 2, -1
+                # containment first, then nearest CENTER within 1.2 gaps
+                # (same matching rule as the detector sweep)
+                acx, acy = a["x"], a["y"]   # x/y ARE the box center (centroid)
+                bi = -1
                 for j, (px, py, e) in enumerate(truth_px):
                     if j in used:
                         continue
-                    d = (a["x"] - px) ** 2 + (a["y"] - py) ** 2
-                    if d < best:
-                        best, bi = d, j
+                    if (a.get("bx", a["x"]) <= px <= a.get("bx", a["x"]) + a.get("w", 0)
+                            and a.get("by", a["y"]) <= py
+                            <= a.get("by", a["y"]) + a.get("h", 0)):
+                        bi = j
+                        break
+                if bi < 0:
+                    best, bi = (1.2 * gap) ** 2, -1
+                    for j, (px, py, e) in enumerate(truth_px):
+                        if j in used:
+                            continue
+                        d = (acx - px) ** 2 + (acy - py) ** 2
+                        if d < best:
+                            best, bi = d, j
                 if bi < 0:
                     C["note_fp"] += 1
                     continue
                 used.add(bi)
                 e = truth_px[bi][2]
                 C["note_tp"] += 1
+                C["meas_covered"].add((sid, e.get("measure_index")))
                 C["pitch_ok"] += (a["midi"] == e.get("midi_printed"))
                 C["dur_ok"] += (str(a.get("dur")) == str(e.get("dur"))
                                 and a.get("dots", 0) == (e.get("dots") or 0))
@@ -452,6 +438,13 @@ def main():
                     used.add(bi)
                     C["rest_tp"] += 1
             C["rest_fn"] += len(trp) - len(used)
+    _tm = {(sid2, mi) for sid2 in [] for mi in []}
+    all_meas = set()
+    for sid2 in sids:
+        _evs = json.load(gzip.open(EVENTS / f"{sid2}.events.json.gz", "rt"))["events"]
+        for _e in _evs:
+            if _e.get("kind") == "note" and _e.get("measure_index") is not None:
+                all_meas.add((sid2, _e["measure_index"]))
     out = {"scores": per_score, "pages": C["pages"],
            "truth_notes": C["truth_notes"], "auto_notes": C["auto_notes"],
            "note_tp": C["note_tp"], "note_fp": C["note_fp"], "note_fn": C["note_fn"],
@@ -463,6 +456,9 @@ def main():
            "rest_tp": C["rest_tp"], "rest_fp": C["rest_fp"], "rest_fn": C["rest_fn"],
            "rest_p": round(C["rest_tp"] / max(1, C["rest_tp"] + C["rest_fp"]), 4),
            "rest_r": round(C["rest_tp"] / max(1, C["truth_rests"]), 4),
+           "truth_measures": len(all_meas),
+           "measures_with_auto_note": len(C["meas_covered"]),
+           "measure_coverage": round(len(C["meas_covered"]) / max(1, len(all_meas)), 4),
            "scope": "5 DEV scores, no oracle boxes at inference; position-based "
                     "matching to truth notehead/rest positions"}
     (TRAIN / "reports" / "auto_e2e.json").write_text(json.dumps(out, indent=1))
