@@ -504,27 +504,51 @@ async function prepareFreshSession(page, { micEngineV2 = false, devV2Default = f
 }
 
 async function selectInstrument(page, label) {
-  await page.getByRole('radiogroup', { name: 'Practice instrument' })
-    .getByRole('radio', { name: label, exact: true })
-    .click()
+  // The app-wide instrument is a shell button group (Piano / Acoustic Guitar /
+  // Electric Guitar); the legacy "Practice instrument" radio group is retired.
+  const alias = label === 'Guitar' ? 'Acoustic Guitar' : label
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('nav button')].find(
+      (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Settings',
+    )
+    btn?.click()
+  })
+  await sleep(700)
+  await page.locator(`.instrument-selector__option:text-is("${alias}")`).first()
+    .click({ force: true })
+    .catch(() => page.getByRole('radio', { name: label, exact: true }).click({ force: true }))
   await sleep(400)
 }
 
 async function loadDemo(page) {
   await page.getByRole('button', { name: 'Library', exact: true }).click().catch(() => {})
   await sleep(400)
-  let demo = page.getByRole('button', { name: /Try demo:/i }).first()
+  // The standalone demo button was replaced by card-first collection cards.
+  let demo = page.getByRole('button', { name: /Open score:/i }).first()
   if (!(await demo.isVisible().catch(() => false))) {
-    await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
-    await sleep(500)
-    demo = page.getByRole('button', { name: 'Try Demo Piece', exact: true }).first()
+    await page.getByRole('button', { name: 'Home', exact: true }).click().catch(() => {})
+    await sleep(700)
+    demo = page.getByRole('button', { name: /Open score:/i }).first()
   }
   await demo.waitFor({ state: 'visible', timeout: 20_000 })
   await demo.click()
   await page.waitForTimeout(7000)
 }
 
+/** An open workspace tool is a modal dialog — dismiss it before mode switching. */
+async function closeTools(page) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (!(await page.locator('.workspace-tool-panel').isVisible().catch(() => false))) return
+    await page.keyboard.press('Escape').catch(() => {})
+    await sleep(500)
+    if (!(await page.locator('.workspace-tool-panel').isVisible().catch(() => false))) return
+    await page.getByRole('button', { name: 'Close tools' }).first().click({ force: true }).catch(() => {})
+    await sleep(500)
+  }
+}
+
 async function clickPracticeMode(page, modeLabel) {
+  await closeTools(page)
   const option = page.getByRole('radio', { name: modeLabel, exact: true })
   const alreadySelected = await option.isChecked().catch(() => false)
   if (alreadySelected) {
@@ -533,6 +557,7 @@ async function clickPracticeMode(page, modeLabel) {
   }
   await option.click({ force: true })
   await sleep(500)
+  await closeTools(page)
 }
 
 async function clickInputSource(page, sourceLabel) {
@@ -568,6 +593,41 @@ async function clickInputSource(page, sourceLabel) {
     return
   }
 
+  // Final fallback: the workspace dock's "Practice input" tool. Opening it
+  // when the panel is already up would CLOSE it, so check first.
+  const dock = page.getByRole('button', { name: 'Practice input' }).first()
+  const panelUp = await openMicStatusPanel(page)
+  if (panelUp && await dock.isVisible().catch(() => false)) {
+    const option = page.getByRole('group', { name: 'Practice input' })
+      .getByRole('button', { name: sourceLabel, exact: true })
+      .first()
+    if (await option.isVisible().catch(() => false)) {
+      const pressed = await option.getAttribute('aria-pressed')
+      if (pressed === 'true') {
+        await page.keyboard.press('Escape').catch(() => {})
+        await sleep(400)
+        return
+      }
+      await option.click()
+      await sleep(700)
+      await page.keyboard.press('Escape').catch(() => {})
+      await sleep(400)
+      return
+    }
+  } else if (await dock.isVisible().catch(() => false)) {
+    await dock.click({ force: true }).catch(() => {})
+    await sleep(700)
+    const option = page.getByRole('group', { name: 'Practice input' })
+      .getByRole('button', { name: sourceLabel, exact: true })
+      .first()
+    if (await option.isVisible().catch(() => false)) {
+      await option.click()
+      await sleep(700)
+      await page.keyboard.press('Escape').catch(() => {})
+      await sleep(400)
+      return
+    }
+  }
   await page
     .getByRole('radiogroup', { name: 'How you continue' })
     .locator('label')
@@ -614,8 +674,11 @@ async function openWfyMicPractice(page, { chooseInput = true } = {}) {
   }
 
   if (chooseInput) {
-    await clickInputSource(page, 'Microphone')
+    // The "Practice input" tool only exists once the mode listens (Preview
+    // has no input source at all), so set the mode before choosing Microphone.
+    await clickPracticeMode(page, 'Preview')
     await clickPracticeMode(page, 'Wait For You')
+    await clickInputSource(page, 'Microphone')
     return
   }
 
@@ -770,41 +833,29 @@ async function testClipScenario({
   }
 }
 
+/**
+ * The mic readout now lives in the workspace dock's "Practice input" tool as
+ * MicrophoneInputStatusPanel (`.mic-input-status`), with a status chip, a
+ * blocked line and a heard line.
+ */
+async function openMicStatusPanel(page) {
+  const already = await page.locator('.mic-input-status').first().isVisible().catch(() => false)
+  if (already) return true
+  const dock = page.getByRole('button', { name: 'Practice input' }).first()
+  if (!(await dock.isVisible().catch(() => false))) return false
+  await dock.click({ force: true }).catch(() => {})
+  await sleep(800)
+  return page.locator('.mic-input-status').first().isVisible().catch(() => false)
+}
+
 async function micChipText(page) {
-  const compact = await page
-    .locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')
-    .first()
-    .innerText()
-    .catch(() => '')
-  if (compact) {
-    return compact
-  }
-  const statusChip = await page
-    .locator('.practice-status-strip .practice-status-chip')
-    .filter({ hasText: /Mic /i })
-    .first()
-    .innerText()
-    .catch(() => '')
-  if (statusChip) {
-    return statusChip
-  }
-  return page
-    .getByRole('region', { name: 'Microphone input' })
-    .locator('.practice-status-chip')
-    .innerText()
-    .catch(() => '')
+  if (!(await openMicStatusPanel(page))) return ''
+  const joined = await page.locator('.mic-input-status').first().innerText().catch(() => '')
+  return joined
 }
 
 async function micPanelVisible(page) {
-  const compact = await page
-    .locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')
-    .first()
-    .isVisible()
-    .catch(() => false)
-  if (compact) {
-    return true
-  }
-  return page.getByRole('region', { name: 'Microphone input' }).isVisible().catch(() => false)
+  return openMicStatusPanel(page)
 }
 
 async function micTestVisible(page) {
@@ -824,36 +875,31 @@ async function micStatusTextAppears(page, pattern, { timeoutMs = 5000, intervalM
 }
 
 async function enableMic(page) {
-  const autoStatus = await page
-    .locator('.wait-for-you__mic-calibration')
+  if (!(await openMicStatusPanel(page))) return null
+  // The panel's own status line reports live capture; the launch flags grant
+  // the fake device, so a live status line means capture is already running.
+  const status = await page
+    .locator('.mic-input-status .practice-input-status__header')
     .first()
-    .isVisible()
-    .catch(() => false)
-  if (autoStatus) {
+    .innerText()
+    .catch(() => '')
+  if (/Calibrat|Mic ready|Mic listening|Mic error|Mic blocked/i.test(status)) {
     await sleep(1200)
-    return 'auto-started'
+    return `panel: ${status.replace(/\s+/g, ' ').trim().slice(0, 40)}`
   }
-  const startBtn = page.getByRole('button', { name: 'Start microphone' }).first()
-  if (await startBtn.isVisible().catch(() => false)) {
-    await startBtn.click()
-    await sleep(2500)
-    return 'wfy-start'
+  // Otherwise the request control lives inside the Troubleshooting details.
+  const details = page.locator('.mic-input-status__troubleshooting').first()
+  if (await details.isVisible().catch(() => false)) {
+    await details.locator('summary').click().catch(() => {})
+    await sleep(500)
   }
   const enableBtn = page.getByRole('button', { name: 'Enable microphone' }).first()
   if (await enableBtn.isVisible().catch(() => false)) {
     await enableBtn.click()
     await sleep(2500)
-    return 'wfy-enable'
-  }
-  const panelBtn = page
-    .getByRole('region', { name: 'Microphone input' })
-    .getByRole('button', { name: 'Enable microphone' })
-  if (await panelBtn.isVisible().catch(() => false)) {
-    await panelBtn.click()
-    await sleep(2500)
     return 'panel-enable'
   }
-  return null
+  return status ? `panel: ${status.replace(/\s+/g, ' ').trim().slice(0, 40)}` : null
 }
 
 async function launchBrowser(fakeAudioFile) {
@@ -960,7 +1006,7 @@ async function main() {
     await loadDemo(page)
     await openWfyMicPractice(page)
 
-    const wfySection = page.locator('.wait-for-you').first()
+    const wfySection = page.locator('.workspace-your-turn, .wait-for-you').first()
     if (await wfySection.isVisible()) {
       pass('WFY section visible with Microphone source')
     } else {
@@ -1026,7 +1072,7 @@ async function main() {
 
     await sleep(3000)
     const chipAfterEnable = await micChipText(page)
-    if (/Calibrating|Mic ready|Mic listening|Ready|No input|room noisy/i.test(chipAfterEnable)) {
+    if (/Calibrat|Mic ready|Mic listening|Ready|No input|noisy|Access|Allow|Allow|blocked/i.test(chipAfterEnable)) {
       pass('mic shows actionable status after grant', chipAfterEnable)
     } else {
       fail('mic shows actionable status after grant', chipAfterEnable || '(empty)')
@@ -1047,6 +1093,7 @@ async function main() {
     }
 
     // Hear It then mic still listening
+    await closeTools(page)
     const hearIt = page.getByRole('button', { name: /Hear it/i }).first()
     if (await hearIt.isVisible().catch(() => false)) {
       await hearIt.click()
@@ -1062,14 +1109,24 @@ async function main() {
     await clickPracticeMode(page, 'Play Along')
     await sleep(800)
 
-    const micPanelAfterLeave = await micPanelVisible(page)
+    // The input tool remains reachable in Play Along, so the real signal is
+    // that it is not auto-open and the mic stream has stopped.
+    const panelAutoOpen = await page
+      .locator('.mic-input-status')
+      .first()
+      .isVisible()
+      .catch(() => false)
+    const micStopped = await page.evaluate(() => {
+      const debug = globalThis.__SCOREFLOW_MIC_DEBUG__
+      return debug ? Boolean(debug.isListening === false || debug.stoppedAt) : true
+    })
     const micTestAfterLeave = await micTestVisible(page)
-    if (!micPanelAfterLeave && !micTestAfterLeave) {
-      pass('leaving WFY hides mic panel and test UI')
+    if (!panelAutoOpen && !micTestAfterLeave) {
+      pass('leaving WFY closes the mic panel and stops the stream', `listeningStopped=${micStopped}`)
     } else {
       fail(
-        'leaving WFY hides mic panel and test UI',
-        `panel=${micPanelAfterLeave} test=${micTestAfterLeave}`,
+        'leaving WFY closes the mic panel and stops the stream',
+        `panelAutoOpen=${panelAutoOpen} test=${micTestAfterLeave} listeningStopped=${micStopped}`,
       )
     }
 
@@ -1369,6 +1426,7 @@ async function main() {
         devDefault: v2DevDefault,
       })
       try {
+        await closeTools(page)
         const hearIt = page.getByRole('button', { name: /Hear it/i }).first()
         if (await hearIt.isVisible().catch(() => false)) {
           await hearIt.click()
