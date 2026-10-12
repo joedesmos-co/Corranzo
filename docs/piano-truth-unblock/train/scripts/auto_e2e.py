@@ -77,8 +77,8 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
         frames = group_staves(lines)
         if not frames:
             continue
-        from detector import detect_noteheads
-        heads = detect_noteheads(gray, lines, gap)
+        from detector import detect_noteheads_full
+        heads = detect_noteheads_full(gray, lines, frames, gap)
         # expand each opened head box to the raw-mask glyph box at the same
         # center (opening erodes ~0.3 gap/side; the training crops use the
         # FULL glyph box, and the dur head is shift-sensitive)
@@ -459,8 +459,14 @@ def main():
            "truth_measures": len(all_meas),
            "measures_with_auto_note": len(C["meas_covered"]),
            "measure_coverage": round(len(C["meas_covered"]) / max(1, len(all_meas)), 4),
+           "page_pitch": round(C["pitch_ok"] / max(1, C["truth_notes"]), 4),
+           "page_dur": round(C["dur_ok"] / max(1, C["truth_notes"]), 4),
+           "page_complete": round(C["complete"] / max(1, C["truth_notes"]), 4),
+           "complete_correct_count": C["complete"],
            "scope": "5 DEV scores, no oracle boxes at inference; position-based "
-                    "matching to truth notehead/rest positions"}
+                    "matching to truth notehead/rest positions. page_* = over ALL "
+                    "902 truth notes (not only detected ones); *_acc = over "
+                    "detected notes only"}
     (TRAIN / "reports" / "auto_e2e.json").write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))
 

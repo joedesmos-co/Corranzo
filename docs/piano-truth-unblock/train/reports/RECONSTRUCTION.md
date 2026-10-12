@@ -998,3 +998,80 @@ Exact next milestone: a TRAIN-only notehead detector on the new mask's
 candidate boxes (frozen trunk classifier over candidate crops, gates:
 P>=0.95 AND R>=0.86) — or, if that fails, accept the deterministic
 detector and move to pitch/duration on detected boxes.
+
+
+---
+
+# Chord-tone recovery inside fused components (M1-M4)
+
+From `7243212564`. No merge, TEST sealed, DEV identities frozen, no
+competing training. No training run this mission (deterministic fix met
+the gates). Oracle-box production path verified unchanged (B exact, rests
+via --rest-dur-head r1).
+
+## M1 fused-chord root cause (reports/fusion_diag.json)
+
+Of 151 missed chord tones: 146/151 dark in the RAW ink, 145/151 survive
+preprocessing, 141/151 sit inside a WIDE connected component (fused by
+shared stems, beams, or second-clusters) that the notehead size window
+rejects, and 123/151 belong to chords that were PARTIALLY detected. The
+ink exists; only the component-level grouping hid it. (The first
+diagnostic pass was wrong because it sampled the glyph ORIGIN instead of
+the bbox center — the notehead-map position convention; corrected before
+conclusions, like the earlier anchor findings.)
+
+## M2/M3 chord-aware recovery (detector.detect_chord_tones, measured)
+
+Deterministic legal-position scan inside rejected CCs: chord tones share
+the stem x (blob center) and sit on staff-legal half-gap y positions; a
+position is a notehead iff the notehead-wide dark run holds at the center
+row AND +-0.35 gaps (beams are ~0.3 gaps tall and fail; stems are far
+narrower than the run requirement) with box ink density >= 0.45.
+Hyperparameters measured on DEV 5 pages (delta 0.35 is the knee of the
+P/R curve: 0.30 P 0.929/R 0.965, 0.35 P 0.932/R 0.965, 0.45 P 0.912/R 0.860).
+No candidate x-peak search, multi-frame grids, or ink centroids added
+anything (all measured and rejected).
+
+| metric | before | after |
+|---|---|---|
+| detector P / R | 0.930 / 0.815 | **0.932 / 0.965** |
+| chord-tone recall | 313/464 (0.674) | **448/464 (0.966)** (fn 151 -> 16) |
+| isolated-note recall | 422/438 (0.964) | 422/438 (0.964) |
+| false positives | 55 | 64 (scan candidates on stem/adjacent ink) |
+| note fn | 167 | 32 |
+
+Gates from the previous mission (P >= 0.90, R >= 0.75): still PASSED,
+with recall +15pp.
+
+## M4 full automatic reconstruction (5 DEV pages, 902 notes, no oracle at
+## inference; reports/auto_e2e.json)
+
+| metric | before | after |
+|---|---|---|
+| note P / R | 0.930 / 0.815 | 0.932 / 0.965 |
+| pitch on detected | 0.796 | 0.782 (recovered notes: 0.704) |
+| duration on detected | 0.773 | 0.760 (recovered notes dilute) |
+| complete on detected | 0.634 | 0.613 (dilution) |
+| PAGE-level complete (all 902) | 0.517 (466) | **0.591 (533)** |
+| PAGE-level pitch / dur | - | 0.754 / 0.733 |
+| rest P / R | 1.000 / 0.296 | 1.000 / 0.296 |
+| measure coverage | 0.979 | 0.979 |
+| MusicXML parse (music21) | 5/5 | 5/5 (934 notes) |
+
+Page-level complete events (the honest whole-page metric the mission
+requires) improved 0.517 -> 0.591: 533/902 truth notes fully correct
+(pitch+dur+dots), up from 466. Per-detected-note rates dilute downward
+because recovered chord tones are harder (pitch 0.704 vs 0.796); the
+absolute count of correctly reconstructed events rose 14%.
+
+## M5 next bottleneck (measured)
+
+By page-level loss: pitch (146 wrong of 902), duration (241 wrong),
+rests (26 wrong incl. 19 FN of 27), 32 undetected notes. Pitch is the
+largest single-lever item: auto-clef errors ~2pp plus frame/step
+precision on detected centers (no octave errors observed — errors are
+diatonic steps, i.e. half-gap rounding and multi-staff assignment).
+
+Exact next milestone: pitch accuracy on detected noteheads (frame
+assignment + half-gap rounding), then rest recall (precision-preserving),
+then duration on detected boxes.
