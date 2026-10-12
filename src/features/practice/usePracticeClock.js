@@ -50,15 +50,32 @@ export default function usePracticeClock({
     setManualTime(seconds)
   }, [])
 
-  return {
-    practiceTime,
-    manualTime,
-    setManualTime: setManualTimeStable,
-    syncManualTimeToMidi: syncManualTimeToPlayback,
-    syncManualTimeToPlayback,
-    syncStatus,
-    isFollowingMidi: syncStatus === 'following-midi' || isFollowingPlayback,
-    isFollowingPlayback,
-    canManualScrub,
-  }
+  // Stabilize the return identity. The clock is re-rendered on every audio
+  // progress tick, so a fresh object literal here rebuilds the practice session
+  // memo, the provider value and therefore every practice subscriber at the
+  // tick rate — the same churn that produced the intermittent
+  // "Maximum update depth exceeded" warning. Memoize on the real inputs so the
+  // identity only moves when a value actually changes.
+  return useMemo(
+    () => ({
+      practiceTime,
+      manualTime,
+      setManualTime: setManualTimeStable,
+      syncManualTimeToMidi: syncManualTimeToPlayback,
+      syncManualTimeToPlayback,
+      syncStatus,
+      isFollowingMidi: syncStatus === 'following-midi' || isFollowingPlayback,
+      isFollowingPlayback,
+      canManualScrub,
+    }),
+    [
+      practiceTime,
+      manualTime,
+      setManualTimeStable,
+      syncManualTimeToPlayback,
+      syncStatus,
+      isFollowingPlayback,
+      canManualScrub,
+    ],
+  )
 }
