@@ -83,8 +83,11 @@ async function clearSession(page) {
 async function goLibraryWorkspace(page) {
   await dismissOverlays(page)
   await page.evaluate(() => {
-    const btn = [...document.querySelectorAll('nav[aria-label="Main"] button')].find(
-      (el) => el.textContent?.trim() === 'Library',
+    // The shell renders a leading step number inside the same button
+    // ("02Library"), and names its nav "Primary", so match on the label text
+    // after the step number is stripped.
+    const btn = [...document.querySelectorAll('nav button, [role="navigation"] button')].find(
+      (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Library',
     )
     if (!btn) throw new Error('Library nav button not found')
     btn.click()
@@ -98,34 +101,52 @@ async function selectInstrument(page, label) {
   await dismissOverlays(page)
   await page.keyboard.press('Escape').catch(() => {})
   await page.waitForTimeout(200)
-  const radio = page.getByRole('radio', { name: label, exact: true })
-  await radio.waitFor({ state: 'visible', timeout: 15_000 }).catch(async () => {
+  // The practice workspace hides the shell header entirely, so switch the
+  // app-wide instrument from Settings, where the same control lives.
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('nav button')].find(
+      (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Settings',
+    )
+    btn?.click()
+  })
+  await page.waitForTimeout(900)
+  // The instrument set is Piano / Acoustic Guitar / Electric Guitar, so the
+  // legacy "Guitar" label maps to "Acoustic Guitar". Match exactly so
+  // "Acoustic Guitar" is never chosen by a prefix match.
+  const alias = label === 'Guitar' ? 'Acoustic Guitar' : label
+  const option = page.locator(`.instrument-selector__option:text-is("${alias}")`).first()
+  await option.waitFor({ state: 'visible', timeout: 15_000 }).catch(async () => {
     await page.screenshot({
-      path: path.join(OUT_DIR, `debug-missing-radio-${label}.png`),
+      path: path.join(OUT_DIR, `debug-missing-option-${label}.png`),
       fullPage: true,
     })
   })
-  await radio.click({ force: true })
+  await option.click({ force: true })
   await page.waitForTimeout(900)
   await dismissOverlays(page)
 }
 
 async function uploadPdf(page, pdfPath) {
   await goLibraryWorkspace(page)
-  const uploadsTab = page.getByRole('tab', { name: /My Uploads/i })
-  await uploadsTab.waitFor({ state: 'visible', timeout: 8000 })
-  await uploadsTab.click({ force: true })
-  await page.waitForTimeout(300)
-  const input = page
-    .getByRole('region', { name: 'Upload score files' })
-    .locator('input[type="file"]')
+  // The upload picker lives on the Import view (the My Uploads tab lists
+  // saved pieces), so land there before addressing the file input.
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('nav button')].find(
+      (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Import',
+    )
+    btn?.click()
+  })
+  await page.waitForTimeout(900)
+  // The upload picker's accessible name is "Choose score file" (it accepts
+  // PDF or MusicXML); the old "Upload score files" region no longer exists.
+  const input = page.locator('input[type="file"][aria-label="Choose score file"]').first()
   await input.waitFor({ state: 'attached', timeout: 8000 })
   await input.setInputFiles(pdfPath)
   await page.waitForTimeout(1000)
   await dismissOverlays(page)
 }
 
-async function waitForPracticeReady(page, timeoutMs = 60_000) {
+async function waitForPracticeReady(page, timeoutMs = 120_000) {
   const started = Date.now()
   while (Date.now() - started < timeoutMs) {
     const state = await readState(page)
@@ -134,6 +155,21 @@ async function waitForPracticeReady(page, timeoutMs = 60_000) {
     }
     if (state.active?.musicXmlHash && state.snap?.timingContentHash) {
       return state
+    }
+    // A freshly imported PDF is prepared in the background; the timeline only
+    // publishes once the practice view has actually opened it.
+    if (!state.snap) {
+      const opened = await page.evaluate(() => {
+        const btn = [...document.querySelectorAll('nav button')].find(
+          (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Practice',
+        )
+        if (btn && !document.querySelector('.workspace-play')) {
+          btn.click()
+          return true
+        }
+        return Boolean(document.querySelector('.workspace-play'))
+      })
+      if (opened) await page.waitForTimeout(2500)
     }
     await page.waitForTimeout(1000)
   }
