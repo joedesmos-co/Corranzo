@@ -348,3 +348,26 @@ Txo: 349 notes, strings 100% matched, frets 99.7%, measures 100%,
 triple 96.1%. Qmek: 496 notes, strings 99.6%, frets 99.8%, measures
 100%, triple 94.8%. 384 tests green. No code changes in R4 beyond the
 association audit (rhythm transfer not shipped by design).
+
+### R5-M1/M2 — Reproducible rendering + staff-gap normalization (M1/M2 FIXED)
+Root cause chain established and fixed:
+1. The committed page PNGs are LETTERBOXED (verovio renders at its natural
+   `width="878px"` inside a 2100px canvas) -> content fills ~40% of the
+   frame -> staff gap ~12px instead of the detector's trained 26px.
+2. staff gap in the raster is therefore 2.2x off the trained geometry, and
+   `normalize_scale`'s bilinear resample blurs the thin TAB glyphs, so the
+   tab channel collapses (heat p50 0.006 at GT positions; 0 tab peaks).
+
+Fix (proof-page-source.render_at_gap):
+- Measure the staff gap from the re-framed raster (content fills the frame
+  there, so the row profile is reliable; it drifts on the letterbox).
+- Solve the RENDER WIDTH for a target gap: W = target_gap * viewBoxW / gap_units.
+- Render the committed SVG with only the OUTER <svg width/height> overridden
+  (the nested definition-scale svg has no width of its own, so it inherits
+  and its viewBox scales the units to W). No content is rewritten.
+- Crop to the ink bbox (gap-preserving) and return the affine
+  x_px = x*fx - ox so layout units map exactly.
+
+Verified on Txo p1: width 1822, measured gap 26.00, fx 0.08308,
+ink@GT notehead = 0.794. Deterministic + cached under
+/tmp/proof/gv-render (regenerable; nothing committed).
