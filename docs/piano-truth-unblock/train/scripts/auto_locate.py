@@ -36,7 +36,15 @@ def binarize(gray):
     if gray.dtype != np.uint8:
         gray = gray.astype(np.uint8)
     t, _ = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    return (gray < t).astype(np.uint8)
+    dark = (gray < t).astype(np.uint8)
+    if t <= 1 or dark.mean() < 5e-4:
+        # Otsu is degenerate when the image is already binary (histogram has
+        # nothing between the two modes -> threshold 0). Fall back to the
+        # midpoint of the observed range.
+        lo, hi = int(gray.min()), int(gray.max())
+        mid = max(1, (lo + hi) // 2)
+        dark = (gray < mid).astype(np.uint8)
+    return dark
 
 
 def staff_lines(gray, min_frac=0.22):
