@@ -10,6 +10,31 @@
     import * as Tone from 'tone'
     window.__Tone = Tone
 
+    /**
+     * Raw PCM for one sample, for pitch verification. Returns a plain
+     * array so the Node side can measure it with the same f0 routine the
+     * render suite uses.
+     */
+    window.__samplePcm = async function (set, note) {
+      const dir = set === 'piano' ? 'salamander' : set
+      const holder = await new Promise((resolve, reject) => {
+        const b = new Tone.ToneAudioBuffers({
+          urls: { [note]: `${note}.mp3` },
+          baseUrl: `/audio/${dir}/`,
+          onload: () => resolve(b),
+          onerror: reject,
+        })
+        setTimeout(() => reject(new Error('timeout')), 20000)
+      })
+      const buffer = holder.get(note).get()
+      const channel = buffer.getChannelData(0)
+      return {
+        sampleRate: buffer.sampleRate,
+        durationSeconds: buffer.duration,
+        samples: Array.from(channel),
+      }
+    }
+
     window.__sampleProbe = async function (sets) {
       const out = {}
       for (const [set, notes] of Object.entries(sets)) {

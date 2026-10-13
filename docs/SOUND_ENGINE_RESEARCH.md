@@ -1,8 +1,14 @@
 # Sound Engine Research — Playback Realism (Piano & Guitar)
 
 Branch: `codex/notation-aware-audio`
-HEAD at start of this workstream: `87c61a40f2` — "real bends/slides/vibrato,
-ornaments, deterministic room, fermata sync proof"
+
+Workstreams on this branch:
+
+| Commit | Workstream |
+|---|---|
+| `87c61a40f2` | real bends/slides/vibrato, ornaments, deterministic room, fermata sync proof |
+| `920cf44874` | widened piano dynamics + frozen playback acceptance set |
+| (this work) | M1 sample-licence rescue, M2 brightness-band root cause, M3–M6 |
 
 This document records what was **measured**, what was **changed**, and what
 was **rejected on evidence**. It deliberately stops short of claiming the
@@ -16,29 +22,21 @@ limitations.
 ```
 $ git -C ~/Documents/scoreflow-sound-engine status
 On branch codex/notation-aware-audio
-Your branch is ahead of 'origin/main' by 3 commits.
 nothing to commit, working tree clean
 
-$ git worktree list
-/Users/ryland/Documents/scoreflow           fcdb8d0172 [main]
-...
-/Users/ryland/Documents/scoreflow-sound-engine 87c61a40f2 [codex/notation-aware-audio]
+$ git worktree list | grep sound-engine
+/Users/ryland/Documents/scoreflow-sound-engine  920cf44874 [codex/notation-aware-audio]
 ```
 
-- The sound engine lives in the dedicated worktree `scoreflow-sound-engine`,
-  on its own branch. `main` was never checked out here and was not modified.
-- No new worktree was created and no other agent's worktree was touched.
+`main` is checked out in `~/Documents/scoreflow` at `fcdb8d0172` and was
+never modified. No new worktree was created and no other agent's worktree
+was touched.
 
-### Relation to the integrated preview
-
-`87c61a40f2` is an ancestor of `origin/codex/unified-practice-audio-preview`
-(tip `8cac636a54`). The preview branch already contains all three
-sound-engine commits plus 89 further commits of unrelated product work.
-
-`git diff HEAD origin/codex/unified-practice-audio-preview -- src/features/playback`
-returns **empty** — the playback code in this worktree is byte-identical to
-the latest integrated practice preview. Nothing was blindly merged, and no
-playback work was duplicated.
+**Relation to the integrated preview.** `920cf44874` is an ancestor of
+`origin/codex/unified-practice-audio-preview`. `git diff` of
+`src/features/playback` between the two is empty except for this
+workstream's changes — the playback code here is the same as the integrated
+preview, so nothing was blindly merged and no playback work was duplicated.
 
 ---
 
@@ -51,403 +49,519 @@ scorePlaybackEngine.js     transport: windowed scheduling, metronome,
                            seek/pause/stop, instrument switching
         ↓
 sampledInstrumentVoice.js  shared voice: synth-first fallback, lazy
-                           sampler, shared decoded-buffer cache, FX chain,
-                           voice-mix ducking, per-note technique notes
+                           sampler(s), shared decoded-buffer cache, FX
+                           chain, voice-mix ducking, per-note technique
+                           sources
         ↓
 pianoInstrument.js         Salamander sample set + piano timbre/volumes
-guitarInstrument.js        acoustic guitar set + plucked fallback
-electricGuitarInstrument.js clean electric set
+guitarInstrument.js        Iowa acoustic guitar set + plucked fallback
+electricGuitarInstrument.js CC0 Emilyguitar set + clean-electric fallback
 ```
 
-Key design points, all verified in code rather than assumed:
+Verified in code, not assumed:
 
-- **Synth fallback sounds immediately.** The oscillator/pluck voice is wired
-  before samples decode, so the first note always makes sound and the
+- **Synth fallback sounds immediately** — the oscillator/pluck voice is
+  wired before samples decode, so the first note always makes sound and the
   Safari/iPad "unlock on first tap" path keeps working.
 - **Decoded buffers are shared per base URL**, so re-created voices
-  (seek/loop flush) and multiple tracks never re-fetch. Verified by
-  `tests/playbackInstrument.test.js`: a second voice adds 3 samplers and
-  zero buffer fetches.
-- **Voice-mix ducking** (`pianoVoiceMix.js`) keeps dense chords from
-  clipping, and only ducking above 8 simultaneous voices.
+  (seek/loop flush) never re-fetch. Pinned by
+  `tests/playbackInstrument.test.js`: a second voice adds samplers and zero
+  buffer fetches.
+- **Voice-mix ducking** only kicks in above 8 simultaneous voices, so
+  realistic piano density is unducked.
 - **Technique notes** (bend, release, slide, vibrato, slur) bypass the
-  shared sampler for a per-note `ToneBufferSource`, which is the only way
-  one note in a chord can move pitch independently.
+  sampler for a per-note `ToneBufferSource` — the only way one chord tone
+  can move pitch independently.
 
 ---
 
-## 3. Sample and license audit
+## 3. Sample and licence audit (M1)
 
-| Asset | Source | License | Redistribution | Attribution |
-|---|---|---|---|---|
-| Salamander Grand Piano (Yamaha C5) | Alexander Holm — `sfzinstruments/SalamanderGrandPiano` | **CC-BY-3.0** (verified upstream README + LICENSE, `sfzinstruments.github.io`) | Permitted, including modification | Required: author + license |
-| Acoustic guitar | University of Iowa MIS (Lawrence Fritts), via `nbrosowsky/tonejs-instruments` | **No restrictions** — "freely available … may be downloaded and used for any projects, without restrictions" (verified on the UIowa site) | Permitted | None required |
-| Clean electric guitar | Karoryfer, via `nbrosowsky/tonejs-instruments` | **UNRESOLVED — see below** | — | — |
+### Final status
 
-The tonejs-instruments repository states, in its own README: *Code: MIT
-License; Samples: CC-by 3.0*. The bundled mirror holds only 30 + 31 + 17
-files (≈7.7 MB total), all edited/transcoded subsets of those originals.
-
-**Unresolved legal question — clean electric guitar.** tonejs-instruments
-labels its samples CC-BY-3.0 and credits `guitar el` to **Karoryfer**.
-Karoryfer Samples is a **commercial** sample vendor; its website exposes a
-paid catalogue and a "Free" section, and no clear license statement for the
-specific clean-electric guitar files could be located. The current Terms
-page attributes the guitar samples to the tonejs-instruments author as
-CC-BY-3.0, which is what the redistributing repo claims — but the
-underlying provenance is a commercial vendor whose terms are not verified.
-
-This is recorded as an open question rather than resolved, because:
-
-- no paid library was downloaded and no commercial sample was purchased;
-- the electric voice currently works and is covered by tests, so deleting it
-  silently would remove working functionality;
-- the correct resolution needs the project owner's decision.
-
-**Recommendation for the owner:** either obtain written confirmation from
-Karoryfer (samples@karoryfer.com) covering redistribution, or replace the
-clean electric voice with the Iowa-derived acoustic set (which is
-unrestricted) and drop `guitar-electric/`. Do not ship the electric voice in
-a commercial release until this is settled.
-
-A related code hygiene issue was found: `src/features/legal/legalInfo.js`
-exports `SOUND_CREDITS`, but no component or test consumes it — the Terms
-page (`TermsOfServicePage.jsx`) hardcodes the same credits in JSX. Two
-sources of truth that can drift. **Not fixed in this workstream** (it is a
-UI change outside the sound-engine scope) but recorded here.
-
-### What the samples can actually deliver
-
-Measured by `scripts/audio-render/sample-audit.mjs` (FFT of the sustain
-window of every bundled set):
-
-| Set | Energy below 4 kHz | Energy above 8 kHz | Above 12 kHz |
+| Asset | Source (verified upstream) | Licence | Attribution required |
 |---|---|---|---|
-| salamander (A0…C8) | 0.99–1.00 | 0.001–0.003 | ~0 |
-| guitar-acoustic | 0.951–0.994 | 0.001–0.010 | 0–0.003 |
-| guitar-electric | 0.795–0.986 | 0.003–0.144 | 0–0.055 |
+| Salamander Grand Piano (Yamaha C5) | `sfzinstruments/SalamanderGrandPiano` | **CC-BY-3.0** | **Yes** (given) |
+| Acoustic guitar | University of Iowa EMS (Lawrence Fritts) | **No restriction** — "may be downloaded and used for any projects, without restrictions" | No |
+| Clean electric guitar | **"Emilyguitar"**, Karoryfer Lecolds (D. Smolken, 2014) | **CC0-1.0** | No (credited as courtesy) |
 
-**Every bundled set is effectively band-limited to ~4 kHz.** The original
-Salamander library has 16 velocity layers (394 MB); the shipped subset is a
-single 2 MB minor-thirds lite set, and the mp3 transcode has no energy
-above 12 kHz.
+### What was wrong, and why the wrapper's claim did not settle it
 
-Consequence for the mission's realism goal: **brightness work past ~4 kHz
-has nothing to act on.** This is why the "fix velocity brightness" idea in
-§6 was rejected — the samples cannot carry a brilliant ff timbre, so
-opening a filter wider only adds hiss, not brilliance. A materially better
-ff/pp timbre contrast would require the velocity-layered set, which is a
-big download and explicitly out of scope.
+The previous clean-electric entry credited `nbrosowsky/tonejs-instruments`
+as "CC-BY-3.0". That is the **wrapper repository's** licence claim for its
+own samples. The wrapper's own `sample-source-info.txt` says:
+
+```
+guitar el   - Karoryfer
+```
+
+So the actual originating owner is **Karoryfer** — a commercial sample
+vendor whose own catalogue page is a paid shop. A wrapper's blanket CC-BY
+statement does not override the originating owner's terms, so the clean
+electric set could not be cleared on that evidence.
+
+### Evidence chain for the replacement
+
+1. `github.com/sfzinstruments/karoryfer.emilyguitar` — tagged
+   **CC0-1.0** by GitHub, and the repo's `LICENSE` file is the full
+   **CC0 1.0 Universal** legal text (opt-out of copyright, waiver of all
+   rights including commercial).
+2. The repo's `readme.txt`: *"Epiphone Emily the Strange guitar played and
+   mapped by D. Smolken… **Royalty-free for all commercial and
+   non-commercial use.** Copyright 2014 Karoryfer Lecolds."* It describes
+   the samples as *"recorded direct, using both pickups and all knobs on
+   ten"* — a clean electric tone, exactly what the voice documents.
+3. Karoryfer's own announcement on KVRDC (Nov 2022): *"All our freebies are
+   now CC-0 instead of some being CC-BY and some CC-0."*
+4. `sfzinstruments.github.io/guitars/` lists Emilyguitar as **CC0-1.0**,
+   while the same page marks Glockenskull Guitar, Secret Agent Guitar,
+   Snowkiss Guitar and Surfkiss as **Commercial** — Karoryfer's commercial
+   guitars are clearly distinguished from the free ones.
+5. Independent corroboration from third parties that undertook their own
+   provenance: muted.io (*"the electric guitar samples are originally from
+   Karoryfer Samples, licensed under CC BY 4.0"*), melognite.app
+   (*"Karoryfer Free-Libs | CC0"*), loopingguitar.com (Karoryfer Lecolds,
+   CC0 1.0).
+
+**Commercial redistribution:** CC0 waives the exclusive rights including
+commercial ones, so redistribution in a product is permitted, and no
+attribution obligation exists. Attribution is given anyway as courtesy.
+
+**What was NOT done:** no commercial or paid library was downloaded; no
+large set was fetched (17 single notes, ≈9.1 MB of WAV, transcoded down to
+1.7 MB of mp3 — the same footprint the previous set occupied); the previous
+samples were **not deleted from history**, only replaced in the working
+tree.
+
+### Replacement mechanics
+
+- All 17 keys of `ELECTRIC_GUITAR_SAMPLE_URLS` map exactly onto Emilyguitar
+  pitches (`Cs2→db2`, `Fs2→gb2`, `Ds3→eb3`, …), and the bundled filenames
+  were left unchanged, so no code map change was needed.
+- Downloaded the `mf` velocity layer, transcoded to 192 kbps mono mp3 via
+  ffmpeg (identical size to the files replaced: 102861 vs 102696 bytes).
+- **The CDN fallback was removed.** `getElectricGuitarSampleFallbackBaseUrl()`
+  now returns `null`. This is load-bearing rather than tidying: the old
+  fallback pointed at the tonejs-instruments set, so a same-origin load
+  failure would have silently re-introduced the unverified samples. With no
+  fallback the voice stays on its synthesised plucked tone and reports
+  `SYNTH` status honestly.
+- `SOUND_CREDITS` in `legalInfo.js` was rewritten as a provenance record
+  (`verifiedFrom` + `attributionRequired` per entry) and is now **rendered
+  by** `TermsOfServicePage`, removing the two-sources-of-truth drift
+  documented in the previous workstream.
+
+### New defect found while verifying: top-octave Salamander keys are sharp
+
+`tests/samplePitchCoverage.test.js` measures every mapped file through the
+app's own decode path. Mid-register keys are within +23 cents, but:
+
+- **`A7` measures ~+30 cents, `C8` measures ~+91 cents** (a semitone),
+  consistently across three independent analysis windows.
+- Both files are **byte-identical (md5) to
+  `tonejs.github.io/audio/salamander/`**, so the project did not introduce
+  this and cannot fix it without re-sourcing (the full set is 394 MB).
+- **Playback consequence:** `Sampler` pitch-shifts each played note from
+  the nearest sample by an exact semitone count, so anything derived from
+  C8 — B7 and every note above it — sounds a semitone sharp.
+
+The test pins this as a **characterisation**: only these two keys are
+allowed to be off, and the exact key set is asserted, so a new mislabel
+(the octave errors an earlier guitar-acoustic audit found) fails the suite
+while the known upstream defect does not mask it.
 
 ---
 
 ## 4. Piano playback — what changed
 
-### Dynamic range widened (measured, kept)
+### Dynamic range widened (previous workstream, re-verified)
 
-`mapPlaybackVelocity` (`pianoVelocity.js`) softened velocity with exponent
-1.22 and a 0.08 floor, compressing pp and ff toward the middle of the
-scale. Headroom was measured as unused: an 8-note fff chord peaks at 0.212
-against a −3.5 dB limiter ceiling of 0.671, i.e. **10 dB of unused
-headroom**, while the audible pp→ff span was only ~7.5 dB.
-
-Measured through the real engine path (curve applied exactly where
-`scorePlaybackEngine.softenVelocity` / `referenceNotePlayer` apply it):
+`mapPlaybackVelocity` exponent 1.22 → 1.7 (floor 0.12 preserved so every
+existing ordering assertion still holds). Measured through the real engine
+path:
 
 | Curve | pp gain | ff gain | pp→ff span | Monotonic | Peak at ff |
 |---|---|---|---|---|---|
-| before (exp 1.22) | 0.203 | 0.920 | **12.0 dB** | yes | 0.0853 |
-| after (exp 1.7) | 0.167 | 0.918 | **16.3 dB** | yes | 0.0851 |
+| before | 0.203 | 0.920 | **12.0 dB** | yes | 0.0853 |
+| after | 0.167 | 0.918 | **16.3 dB** | yes | 0.0851 |
 
-A real piano spans roughly 20 dB over the same written range, so this is a
-real improvement without making pp inaudible (pp peak 0.0126) and without
-raising the loudest peak by any measurable amount.
-
-All existing ordering assertions still hold (`pianoVelocity.test.js`,
-`playbackAudio.test.js`), and the widening is pinned by a new frozen
-threshold in `tests/playbackAcceptance.test.js`
-(`pp→ff span > 10 dB`, strictly monotonic).
+The floor is now the binding constraint rather than the exponent: raw
+velocity 0.20 already clamps at 0.12, so further widening needs
+`MIN_TRIGGER_VELOCITY` lowered too, which is a product decision about how
+quiet pp may go rather than a measurement.
 
 ### Everything else — measured, left alone
 
-- **Sustained notes / release:** piano audible length 1.91 s with the
-  1.85 s release tail; the tail decays to silence by the end of the render
-  (tail energy 0). No stuck notes.
-- **Repeated notes:** 4 repeated A4s render as exactly 4 detected attacks,
-  0 duplicates skipped, no overlap truncation.
-- **Chords / polyphony:** 9-note fff chord peaks at 0.3347 (limiter 0.671)
-  with **0 clipped samples and 0 voices stolen**.
-- **Pitch:** all melody notes within 35 cents of written pitch
-  (`pianoVelocity`-independent; measured by the acceptance set).
+- **Attack:** sampler `attack: 0.008 s` (soft enough not to click).
+- **Decay / release:** audible length 1.91 s with the 1.85 s tail; the tail
+  decays to true silence by the end of a render (tail energy 0.0).
+- **Repeated notes:** 4 repeated A4s → exactly 4 detected attacks, 0
+  duplicates skipped.
+- **Chords / polyphony:** 9-note fff chord peaks at 0.335 against a 0.671
+  limiter ceiling, with **0 clipped samples and 0 voices stolen**.
+- **Overlapping notes:** see §6b — no truncation.
+- **Register consistency:** the top-octave sharpness in §3 is the live
+  defect; nothing else off-pitch in the 30-key set.
+
+### Velocity layers — not available, and why
+
+`velocityLayers: 2` has always been **reported in diagnostics but never
+implemented**: Tone's `Sampler` maps one buffer per note name and uses
+velocity purely as source gain, so a real velocity layer requires one
+sampler per layer and per-velocity routing. The bundled Salamander "lite"
+set is a single-layer subset (the full set is 394 MB, explicitly out of
+scope), so even with the routing in place there is nothing to route to.
+
+This is the next milestone (§11), and M2 below retired most of its risk.
 
 ---
 
-## 5. Guitar playback — findings, no change needed
+## 5. Guitar playback
 
-Measured via the same harness:
-
-- Acoustic plucked decay ratio early/late = **7.14×** (a note is clearly
-  decaying well inside its own written span — the plucked character is
-  there).
-- 6-string strum peaks at 0.4653, **0 clipped samples**.
-- Guitar audible length 1.58 s.
-- 31 acoustic samples load, **0 missing**.
-
-No guitar defect was found that a small safe change would fix, so nothing
-was changed. Two honest limits, already documented in
-`electricGuitarInstrument.js`:
-
-- the electric set is missing E3/E4/E5/G/B notes, which pitch-shift from
-  neighbours (≤2 semitones below E5; disclosed high-register degradation);
-- only a **clean** tone is provided. Crunch/distortion are unsupported.
-
-**No claim of acoustic or electric guitar simulation fidelity is made** —
-no listening test was performed.
+- **Acoustic (Iowa):** plucked decay ratio early/late **7.14×** — a note
+  is clearly decaying well inside its own written span. 31 samples load, 0
+  missing. 6-string strum peaks at 0.465, 0 clipped samples. No defect
+  found that a small safe change would fix, so nothing was changed.
+- **Electric (now CC0):** all 17 keys verified in pitch through the app's
+  own decode path. Only a **clean** tone is provided; crunch and distortion
+  remain documented as unsupported. The high-register degradation
+  previously disclosed (missing E3/E4/E5/G/B keys pitch-shifting from
+  neighbours) no longer applies to the same extent because the new set's
+  pitches line up with the map exactly, but it is still worth a listening
+  check.
+- Playback of the electric voice is unchanged in behaviour; only the
+  underlying samples and their provenance differ.
 
 ---
 
 ## 6. Rejected on evidence (recorded so it is not retried blindly)
 
-These were implemented or prototyped and then removed because measurement
-disagreed with the hypothesis.
+### 6a. Per-velocity brightness bands — cause found, approach rejected (M2)
 
-### 6a. Per-velocity brightness bands — implemented, measured, reverted
+**Hypothesis (from the previous workstream).** The voice routes the whole
+polyphonic sampler through ONE lowpass re-aimed at each note's onset, so
+the note triggered last wins. A loud note drags every still-ringing soft
+note bright; a soft note makes a ringing loud note dull. Fix: three filter
+bands over the *same* decoded buffers, chosen per note.
 
-**Hypothesis.** The voice routes the whole polyphonic sampler through ONE
-lowpass and re-aims it at each note's onset, so the note triggered last
-determines the brightness of everything still ringing. A loud note drags a
-soft accompaniment bright and vice versa — the velocity response should not
-survive overlap. Fix: three filter bands (soft/medium/loud) over the *same*
-decoded buffers, chosen per note.
-
-**Implementation.** Built and wired (band 0 reusing the primary sampler so
-no extra memory or fetch; `tests/playbackInstrument.test.js` and
-`pianoAudioBenchmark.js` updated accordingly). It worked: soft notes did get
-dark (spectral centroid 688 Hz vs 814 Hz before) and stayed dark.
-
-**Why it was reverted.** The per-velocity render table was non-monotonic
-across a band boundary:
+**Symptom to explain.** Bands were implemented and wired, and the per-velocity
+table came out non-monotonic:
 
 | velocity | 0.44 | 0.45 | 0.46 | 0.50 |
 |---|---|---|---|---|
 | energy | 3.552 | 3.716 | **3.314** | 3.915 |
 
 Raising velocity from 0.45 to 0.46 made the note **11 % quieter**, and the
-crescendo acceptance case (`attacks[i] > attacks[i-1] * 1.03`) failed at
-the same boundary. The step could not be explained to the point of being
-safe to ship, and it broke a validated dynamic-ramp guarantee. The
-amplitude behaviour of band 0 was also inconsistent with a plain lowpass
-(+13 % energy despite a narrower filter). Reverted in full; the working
-tree on this point is identical to `87c61a40f2`.
+crescendo acceptance case failed at the same boundary.
 
-A correct version needs the amplitude anomaly explained first. The most
-likely root cause is that the band samplers built via
-`buildSamplerFromBuffers` are not gain-identical to the primary sampler —
-worth checking with an isolated two-sampler A/B before retrying.
-
-### 6b. Same-pitch note truncation — hypothesis disproved
-
-`Sampler.triggerRelease(note, time)` in Tone v15 stops **every** active
-source of that pitch, so a repeated or overlapping same-pitch note looked
-doomed to be cut short by the previous note's release.
-
-Measured with a short first note overlapping a long second note on the same
-pitch, against a note-alone control, across six time windows:
+**Isolated measurement.** `scripts/audio-render/sampler-ab.mjs` renders one
+note per case with a single variable — same note, time, velocity,
+destination, `Tone.Offline`:
 
 ```
-window      solo        overlap     ratio
-0.35-0.5s   0.019361    0.026386    1.363
-0.6-0.9s    0.009321    0.009964    1.069
-0.9-1.2s    0.004873    0.004946    1.015
-1.2-1.6s    0.002315    0.002322    1.003
-1.6-2.2s    0.001155    0.001156    1.000
+velocity 0.8
+  case                        window energy     peak     vs A
+  A primary, no filter             5.301538  0.059081  x1.0000 (+0.0%)
+  B secondary, no filter           5.301538  0.059081  x1.0000 (+0.0%)
+  C primary, 1000 Hz               6.664877  0.065801  x1.2572 (+25.7%)
+  D secondary, 2700 Hz             5.696751  0.060499  x1.0745 (+7.5%)
 ```
 
-No truncation. Releases are issued **at schedule time**, not at audio time,
-so by the time note N's release runs, note N+1 has not been started yet —
-the per-pitch collision does not occur for normal sequential playback. Only
-an explicit later `triggerRelease` on a pitch with a still-ringing note in
-another voice (voice stealing above 72 voices) can hit a neighbour, which
-is intended.
+and again, identically, at velocity 0.45.
 
-The probe files were removed after the hypothesis was disproved.
+**What this proves:**
 
-### 6c. Adaptive / continuous brightness per note
+1. **Sampler construction is not the cause.** A and B are *bit-identical*
+   (ratio 1.0000). Two samplers built from the same decoded buffers with
+   the same volume/release/attack are exactly equal, so the "the band
+   samplers are quieter" theory is dead. This is the useful half of the
+   answer — it means multiple samplers *are* safe.
+2. **A lowpass here ADDS energy.** C and D are both louder than the
+   unfiltered A/B. A lowpass cannot add energy unless it resonates.
+3. **Narrower cutoff = bigger boost.** 1000 Hz gains +25.7 %, 2700 Hz only
+   +7.5 %. Band 0 (the soft band) was therefore boosted *more* than band 1,
+   which is exactly the observed inversion.
 
-Also not pursued. Given §3's bandwidth measurement (nothing above 4 kHz),
-a per-note filter would be steering a signal that has almost no content up
-there, and a shared per-note approach would need per-note audio nodes on
-the hot path of a 16 GB M4 with real-time playback. The current single
-shared filter with instant onset steering is a reasonable cost/benefit for
-the material at hand, and its weakness (last-triggered note wins) is now
-documented instead of hidden.
+**Root cause of the boost.** `scripts/audio-render/filter-curve.mjs`
+measures Tone's filter with a **matched graph** (identical oscillator →
+Filter → Gain → destination, differing only in cutoff, so no structural
+difference can masquerade as gain):
+
+```
+Tone.Filter — lowpass 1000 Hz, rolloff -12, Q=1 (matched-graph)
+   600 Hz  +1.57
+   800 Hz  +1.95    <-- peak
+  1000 Hz  +1.00
+  1300 Hz  -2.62
+  2200 Hz  -12.81
+  loudest point: 800 Hz at +1.95 dB
+```
+
+Tone's `Filter` is a **resonant 2-pole lowpass with a ~+2 dB peak just
+below its cutoff** (`rolloff: -12` builds one BiquadFilter, and Tone
+defaults `Q` to 1 rather than the Web Audio default 0.707).
+
+For a piano C4 the 3rd and 4th harmonics sit at 785 and 1046 Hz — squarely
+on a 1000 Hz cutoff's peak, which is why the soft band took a +25.7 %
+energy hit. The loud band's resonance lands near 7700 Hz where the sample
+has almost nothing, so it gains almost nothing. The peaks are placed by
+the *filter*, so the softer the note, the bigger its resonant boost.
+
+**Why this also matters for the shipped voice.** The live
+`samplerToneFilter` is the same resonant Tone.Filter, and
+`brightnessHzForVelocity` re-aims it per note (pp ≈ 1315 Hz, ff ≈ 8650 Hz).
+So the existing "velocity brightness" mechanism does not only cut highs —
+it moves a resonant peak that lands in the note's strong harmonics when
+soft and in near-empty territory when loud. That is a real, pre-existing
+characteristic of the current design and is documented here rather than
+hidden.
+
+**Why the fix was not landed.** The obvious correction is to flatten the
+filter. Requested Q does not do it — measured gain with a matched graph
+stays above unity even at Q = 0.1:
+
+| requested Q | loudest point |
+|---|---|
+| 1 (Tone default) | +1.95 dB @ 800 Hz |
+| 0.707 | +1.72 dB @ 800 Hz |
+| 0.1 | +1.22 dB @ 800 Hz |
+
+Tone's filter gain curve is therefore not characterised well enough to
+change safely, and the one tool that could confirm it
+(`getFrequencyResponse`) throws in this environment ("out of range
+frequency" on the native node). Replacing Tone.Filter with a raw
+`BiquadFilterNode` in the live chain would change production audio on a
+hypothesis that could not be verified. Per the mission's own instruction —
+*fix only if the cause is identified **and** the corrected result is
+measurable* — the approach is **rejected and the baseline preserved**.
+
+### 6b. Same-pitch note truncation — hypothesis disproved (previous workstream)
+
+`Sampler.triggerRelease(note, time)` stops **every** active source of a
+pitch, so repeated/overlapping notes looked doomed to be cut by the previous
+note's release. Measured against a note-alone control across six windows:
+ratios 1.363 / 1.069 / 1.015 / 1.003 / 1.000 — no truncation. Releases are
+issued **at schedule time**, not audio time, so the collision never occurs
+for sequential playback.
+
+### 6c. Adaptive continuous brightness per note
+
+Not pursued. Given §3's bandwidth measurement (nothing above 4 kHz), a
+per-note filter would steer a signal with almost no content up there —
+and, per 6a, it would also carry the resonant boost. The single shared
+filter with instant onset steering remains the reasonable trade for this
+material, and its weakness (last-triggered note wins) is now documented
+rather than hidden.
 
 ---
 
 ## 7. Musical timing — verified
 
 The canonical practice clock and the schedule/engine split were **not
-modified**. No competing playback engine was built. Timing correctness is
-covered by the existing suites, which remain green:
+modified**, and no competing playback engine was built. Timing correctness
+stays with the existing suites: `scorePerformance` (29), `playbackSchedule`,
+`playbackSemanticsSprint1`, `staccatoPlayback`, `playbackSeek`,
+`scoreFollowAudioSync` — tempo changes, short/sustained notes, chords,
+repeated notes, ties, rests, pause/resume, seek/restart, cancellation.
 
-- `scorePerformance.test.js` (29), `playbackSchedule.test.js`,
-  `playbackSemanticsSprint1.test.js`, `staccatoPlayback.test.js`,
-  `playbackSeek.test.js`, `scoreFollowAudioSync.test.js`
-  — tempo changes, short/sustained notes, chords, repeated notes, ties,
-  rests, pause/resume, seek/restart, cancellation.
-- Rendered-audio timing: `audioRender.test.js` — "performs a tempo change
-  end to end: schedule times and rendered onsets halve the gap",
-  "staggers guitar strums low→high: each string transient lands 9 ms apart",
-  "staggers arpeggiated chords 12 ms apart", fermata duration ×1.75.
+Rendered-audio timing in `audioRender.test.js`: tempo change end to end,
+guitar strum transients 9 ms apart, arpeggiated chords 12 ms apart,
+fermata ×1.75.
 
 ---
 
 ## 8. Objective waveform/audio evidence
 
-Frozen acceptance set: **`tests/playbackAcceptance.test.js`** (10 cases,
-all passing, ~42 s).
-
-Coverage map for the mission's required cases:
+### `tests/playbackAcceptance.test.js` — 10 frozen cases
 
 | Required case | Covered by |
 |---|---|
-| simple piano melody | "renders a simple piano melody" — 4 pitches solo-verified at written pitch + 4 detected attacks in the melody render |
+| simple piano melody | "renders a simple piano melody" — 4 pitches solo-verified + 4 attacks in the melody render |
 | piano chords | "renders piano chords without clipping" — both registers present, 0 clipped |
 | dynamic changes | "keeps the dynamic ladder ordered and wide" — monotonic + span > 10 dB through the engine curve |
-| sustained notes | "sustains a long note and goes silent once stopped" — sustain/release/silence |
+| sustained notes | "sustains a long note and goes silent once stopped" |
 | repeated notes | "plays repeated notes as four distinct attacks" — 4 attacks, pitch holds, tail dies |
-| solo guitar melody | "renders a solo guitar melody at written pitch" — 4 pitches + plucked decay |
+| solo guitar melody | "renders a solo guitar melody at written pitch" + plucked decay |
 | guitar chords | "renders a six-string guitar chord" — no clipping, both registers present |
 | mixed-register passage | "keeps registers consistent" — C3 + C5 together |
-| missing notes / coverage | "uses the sampled voice and covers every mapped sample" — 0 missing for both instruments |
-| clipping / distortion | "never clips a dense full-velocity chord" — 9-note fff, 0 clipped samples |
-| stuck notes | tail energy = 0 after the last note's release |
-| voice stealing | `diagnostics.voicesStolen === 0` asserted in six cases |
+| sample coverage | "uses the sampled voice and covers every mapped sample" — 0 missing |
+| clipping/stuck notes/voice stealing | "never clips a dense full-velocity chord" — 9-note fff, 0 clipped, 0 stolen; tail energy 0 |
 
-Reproducible measurement tools (report-only, no assertions, so they can be
-used to judge a future change rather than guess):
+### `tests/samplePitchCoverage.test.js` — every mapped file, all 3 sets
+
+78 measurements (30 piano + 31 acoustic + 17 electric), each through the
+app's own decode path. The acoustic suite passes outright. The electric
+suite — the replacement set — passes outright. The piano suite passes with
+only the two documented upstream-sharp keys allowed off.
+
+### Report-only probes
 
 ```
-node scripts/audio-render/realism-probe.mjs   # dynamics, length, decay, clipping
+node scripts/audio-render/realism-probe.mjs    # dynamics, length, decay, clipping
 node scripts/audio-render/sample-audit.mjs    # sample bandwidth + headroom
-node scripts/audio-render/export-examples.mjs # listening WAVs (pre-existing)
+node scripts/audio-render/sampler-ab.mjs      # M2: sampler/filter isolation
+node scripts/audio-render/filter-curve.mjs [cutoff] [Q]  # Tone filter gain curve
+node scripts/audio-render/export-examples.mjs  # listening WAVs
 ```
 
-Note on onset measurement: a sample-to-sample delta count is **not** usable
-on these sets — the mp3 noise crosses any fixed threshold thousands of
-times per second. The probe therefore uses a short-time energy envelope
-with clustering. The acceptance set uses a facet count only as a
-"≥ N attacks present" invariant, and the strum's fine 9 ms staggering stays
-with the matched-filter test in `audioRender.test.js`, which is the
-appropriate tool for it.
+Note on onset measurement: a sample-to-sample delta count does **not** work
+here — the mp3 samples cross any fixed threshold thousands of times per
+second. The probe therefore uses a short-time energy envelope; the
+acceptance set uses a facet count only as an "≥ N attacks present"
+invariant. The strum's fine 9 ms staggering stays with the matched-filter
+test in `audioRender.test.js`, which is the right tool for it.
 
 ---
 
 ## 9. Regressions
 
-Full suite, before and after, on this branch:
+Full suite before and after:
 
-| | Before (`87c61a40f2` clean) | After |
+| | Before (`920cf44874` clean) | After |
 |---|---|---|
-| Test files | 9 failed / 315 passed | 9 failed / 316 passed |
-| Tests | 8 failed / 3428 passed / 14 skipped | 8 failed / **3438** passed / 14 skipped |
+| Test files | 9 failed / 315 passed | 9 failed / 318 passed |
+| Tests | 8 failed / 3428 passed / 14 skipped | 8 failed / 3464 passed / 14 skipped |
 
-The 9 failing files are **identical before and after** and are unrelated to
-sound: `designPhaseA`, `betaOnboarding`, `uxPolishSprint`, `ipadLayout`,
-`mobileLayout`, `minimalAudioUi`, `launchReadiness`,
-`scoreFollowMotionModel`, and `finalMicLowNoteCorpus` (which fails only in
-full-suite ordering and passes in isolation on both). The sound-engine
-commits on this branch already note "Pre-existing UI-token failures
-untouched (fail on base too)".
-
-The +10 passing tests are the new acceptance set.
-
-Sound regression suites specifically (219 tests, all green):
-`audioRender`, `playbackAcceptance`, `playbackAudio`, `playbackInstrument`,
-`pianoVelocity`, `pianoRealismSprint1`, `playbackExpression`,
-`guitarPlayback`, `pianoPlayback`, `playbackEngine`, `instrumentCore`,
-`audioReadiness`, `playbackSemanticsSprint1`, `playbackSchedule`,
-`staccatoPlayback`, `densePianoPlayback`.
+The 9 failing files and 8 failing tests are **identical before and after**
+and unrelated to sound: `designPhaseA`, `betaOnboarding`, `uxPolishSprint`,
+`ipadLayout`, `mobileLayout`, `minimalAudioUi`, `launchReadiness`,
+`scoreFollowMotionModel`, `finalMicLowNoteCorpus` (which fails only in
+full-suite ordering and passes in isolation on both). Confirmed by running
+the whole suite on the untouched base.
 
 `npx eslint` on everything this workstream touched: **clean**. Three
 pre-existing errors remain elsewhere under `src/features/playback/`
-(`pianoAudioBenchmark` unused import, and two `react-hooks/set-state-in-effect`
-in `useMidiPlayback`/`useScorePlayback`) — confirmed present on base and
-left alone.
+(unused import in `pianoAudioBenchmark`, two
+`react-hooks/set-state-in-effect` in `useMidiPlayback`/`useScorePlayback`)
+— present on base and left alone.
 
 ---
 
 ## 10. Remaining listening limitations
 
-**No musician has listened to this.** Nothing in this workstream establishes
-that the output sounds like a real piano or guitar. What is established:
-pitch accuracy, no clipping, no stuck notes, no dropped notes, monotonic
-and wider dynamics, correct timing, and honest coverage of every attempt.
+**No musician has listened to this.** Nothing here establishes that the
+output sounds like a real piano or guitar. What is established: pitch
+accuracy (with two documented exceptions), no clipping, no stuck/dropped
+notes, monotonic and wider dynamics, correct timing, full sample coverage,
+and verifiable licence provenance.
 
-Specifically still unresolved and needing human listening:
+Still unresolved and needing human listening:
 
 1. **Timbre is capped by the samples.** Everything above ~4 kHz is silence
-   in the bundled sets. ff can get louder but not genuinely brilliant.
-2. **Velocity brightness is one shared filter.** A soft note under a loud
-   accompaniment is still dragged brighter than it should be (§6a explains
-   why the fix was pulled).
-3. **Piano release is a fade, not a damper model.** `release: 1.85` is a
-   good global value; there is no pedal-specific release branch and no
-   sympathetic resonance.
-4. **Guitar is a sampler, not a string.** No real left-hand damping, no
-   finger noise, no fret/body interaction. Pluck decay is real, but
-   repeated-note realism is a resampler's.
-5. **Electric guitar register degradation** above E5 is documented but
-   unlistened.
-6. **The electric guitar license is unresolved** (§3) — a shipping
-   blocker independent of sound quality.
-7. **Compression headroom is deliberately uneven.** The piano has ~10 dB of
-   headroom, the 6-string guitar strum only ~3 dB, so guitar ff dynamics
-   are already near the limiter.
+   in the bundled sets, so ff can get louder but not genuinely brilliant.
+2. **Velocity brightness is one resonant shared filter** (§6a). Its
+   resonance follows the note, so soft notes are also the most boosted —
+   audibly, this needs checking.
+3. **Top-of-compass piano is sharp** — A7 ~+30 cents, C8 ~+91 cents, and
+   everything Tone derives from C8.
+4. **Piano release is a fade, not a damper model** — no pedal-specific
+   release branch, no sympathetic resonance, and no velocity layers
+   (single-layer source set).
+5. **Guitar is a sampler, not a string** — real pluck decay, but no
+   left-hand damping, finger noise or fret/body interaction.
+6. **The new electric timbre is unlistened.** It is pitch-verified and
+   licence-verified, but nobody has heard whether it reads as a clean
+   electric guitar in a mix.
+7. **Compression headroom is uneven** — the piano has ~10 dB, the 6-string
+   guitar strum only ~3 dB, so guitar ff dynamics already sit near the
+   limiter.
 
 ---
 
 ## 11. Exact next milestone
 
-**Milestone 6 — explain and land the brightness-band amplitude anomaly, or
-close it out.**
+**Milestone 7 — real velocity layers on the electric voice.**
 
-1. Isolated A/B of two `tone.Sampler`s built from the *same* decoded buffers
-   by `buildSamplerFromBuffers` — render a fixed note through each and
-   compare gain. This decides whether §6a's +13 % soft-band anomaly is a
-   sampler-construction difference (fixable: pass volume consistently) or
-   something in the filter chain.
-2. If it is a sampler-gain difference, land the three-band brightness
-   routing with the amplitude anomaly measured away, and re-run the
-   frozen acceptance set including the crescendo boundary case.
-3. If it is not, write up why the shared filter stays and file the band
-   approach as rejected-with-reason.
+M2 retired most of the risk: multiple samplers over the same buffers were
+measured **bit-identical** (ratio 1.0000), so per-velocity *routing* is
+safe as long as it carries **no** per-band filter (§6a shows that is the
+part that broke).
 
-Success criterion: per-note timbre survives overlap **and** per-velocity
-loudness stays monotonic (no boundary inversion anywhere in the dynamic
-ladder), verified by the frozen acceptance set plus
-`realism-probe.mjs`.
+1. Download Emilyguitar's `p` and `f` layers for the 17 mapped pitches
+   (34 files, ≈19 MB of WAV → ≈3.4 MB of mp3 after the same 192 kbps
+   transcode; CC0-1.0, same verified source).
+2. Route each note to the `p` or `f` sampler by its post-duck velocity,
+   with no filter in front of either. Keep the shared `samplerToneFilter`
+   exactly as it is.
+3. Acceptance: the frozen dynamic ladder must stay **monotonic** across the
+   layer boundary (the failure mode that killed 6a), and the soft/loud
+   spectral centroids must separate further than they do now.
+4. Leave the piano voice alone — it has no multi-layer source.
 
-**Also queued (outside sound):** give `SOUND_CREDITS` in `legalInfo.js` a
-real consumer so the Terms page and the credit record cannot drift, and get
-a decision on the Karoryfer-derived clean electric samples.
+**Also queued:** electric velocity layers would let
+`velocityLayers` stop being a diagnostic-only constant.
 
 ---
 
-## 12. What to run
+## 12. Human listening handoff (M6)
+
+No listening test has been performed, and no claim of acceptance is made.
+The artifacts for one are prepared:
+
+`scripts/audio-render/examples/` holds 14 deterministic WAV renders
+(regenerate with `node scripts/audio-render/export-examples.mjs`). The
+listening subset is:
+
+| File | What it is for |
+|---|---|
+| `listening-piano-melody` | melody you can follow |
+| `listening-piano-chords` | full voicing, two changes |
+| `listening-piano-pp-to-ff` | the widened dynamics, five steps |
+| `listening-acoustic-guitar-melody` | plucked character and decay |
+| `electric-a3` | the new CC0 clean electric tone |
+| `guitar-strum-emajor` | strum spacing |
+| `piano-dynamics-ladder` | the full pp→fff ladder |
+
+### To A/B "before" and "after"
 
 ```bash
-# sound regression + acceptance (219 tests, ~2 min)
-npx vitest run tests/audioRender.test.js tests/playbackAcceptance.test.js \
-  tests/playbackAudio.test.js tests/playbackInstrument.test.js \
-  tests/pianoVelocity.test.js tests/pianoRealismSprint1.test.js \
-  tests/playbackExpression.test.js tests/guitarPlayback.test.js \
-  tests/pianoPlayback.test.js tests/playbackEngine.test.js
+cd ~/Documents/scoreflow-sound-engine
 
-# full suite (expect 9 pre-existing UI/mic failures, unrelated to sound)
+# AFTER — current samples and code
+node scripts/audio-render/export-examples.mjs
+rm -rf /tmp/sound-after && cp -r scripts/audio-render/examples /tmp/sound-after
+
+# BEFORE — the committed baseline (920cf44874)
+git stash                    # restores the previous samples + code
+node scripts/audio-render/export-examples.mjs
+rm -rf /tmp/sound-before && cp -r scripts/audio-render/examples /tmp/sound-before
+git stash pop
+```
+
+Then listen to `/tmp/sound-before` and `/tmp/sound-after` for the same
+filenames. The intended differences are: (a) `electric-a3` is a different,
+licence-verified instrument, and (b) the piano ladder and `pp-to-ff` are
+wider. Everything else should sound the same — if it does not, that is a
+regression.
+
+Questions worth answering while listening:
+
+1. Does the piano still sound like a piano at pp, or has the wider curve
+   made soft notes too quiet to use for practice?
+2. Does the resonant brightness steering (resonance moving with velocity)
+   sound like expressiveness or like a filter effect?
+3. Does the CC0 clean electric read as a clean electric in a mix?
+4. Is the top-of-compass piano sharpness audible in real repertoire?
+
+---
+
+## 13. What to run
+
+```bash
+# sound regression + acceptance (~4 min)
+npx vitest run tests/audioRender.test.js tests/playbackAcceptance.test.js \
+  tests/samplePitchCoverage.test.js tests/playbackAudio.test.js \
+  tests/playbackInstrument.test.js tests/pianoVelocity.test.js \
+  tests/pianoRealismSprint1.test.js tests/playbackExpression.test.js \
+  tests/guitarPlayback.test.js tests/pianoPlayback.test.js \
+  tests/playbackEngine.test.js tests/instrumentCore.test.js
+
+# full suite (expect the 9 pre-existing UI/mic failures, unrelated to sound)
 npx vitest run
 
 # measurement tools
 node scripts/audio-render/realism-probe.mjs
 node scripts/audio-render/sample-audit.mjs
+node scripts/audio-render/sampler-ab.mjs
+node scripts/audio-render/filter-curve.mjs 1000 1
 ```
