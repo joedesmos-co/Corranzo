@@ -119,9 +119,12 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   }
   const imported = await importAudioFile(file, arrayBuffer, stages.decodeAudioDataImpl)
   if (!imported.ok) return { ok: false, ...imported }
-  // A12 silence gate: never arrange room tone. Floor mirrors the neural
-  // silence-skip measurement (true silence ~0.00014, softest real note 0.004+).
-  if (!(imported.rms >= 0.002)) {
+  // A12 silence gate: never arrange room tone. Measured on the same recording
+  // at controlled gains, AFTER the import's peak normalization: true digital
+  // silence lands near 1e-5 RMS while real music at -40 dB still reads 1.1e-3.
+  // The old 2e-3 floor refused that quiet-but-real material, so the gate now
+  // sits an order of magnitude below quiet music and an order above silence.
+  if (!(imported.rms >= 1e-5)) {
     return {
       ok: false,
       code: 'empty-audio',
@@ -172,6 +175,21 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
         spaciousness: views.stereo?.spaciousness ?? null,
       }
     : null
+  // A12 structural gate (after analysis, on evidence not energy): measured on
+  // controlled inputs, RMS cannot separate quiet music from noise (noise at
+  // -40 dB actually reads LOUDER than the music), but musical content is
+  // unambiguous - real music at -40 dB yields ~226 onsets while noise and
+  // digital silence yield 0. Refuse on the absence of musical events.
+  if (!analysis.onsets.length || !analysis.melody?.length) {
+    return {
+      ok: false,
+      code: 'empty-audio',
+      message: 'No musical content was found in that recording (silence, room tone, or pure noise). Corranzo would rather refuse than invent sheet music.',
+      confidence: { overall: 0, provenance: PROVENANCE.INFERRED },
+      warnings: [],
+      excerpt: null,
+    }
+  }
   // §5 — independent second opinion (model-free spectral peaks on the
   // harmonic view) and windowed agreement against the primary model.
   // Agreement is evidence of transcription reliability at runtime; the

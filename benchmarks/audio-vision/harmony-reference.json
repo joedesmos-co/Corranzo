@@ -73,7 +73,7 @@
       "s3BassAccuracy": 0.769,
       "s3BassWindows": 26,
       "s4VoicingAccuracy": 1,
-      "s4VoicingNotes": 40,
+      "s4VoicingNotes": 39,
       "timingMaeSeconds": 0.645,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
@@ -192,7 +192,7 @@
       "s1MissingTones": 10,
       "s3BassAccuracy": 1,
       "s3BassWindows": 8,
-      "s4VoicingAccuracy": 0.708,
+      "s4VoicingAccuracy": 0.625,
       "s4VoicingNotes": 24,
       "timingMaeSeconds": 0.94,
       "seventhGuard": {
@@ -481,7 +481,7 @@
       "s1MissingTones": 14,
       "s3BassAccuracy": 0.333,
       "s3BassWindows": 12,
-      "s4VoicingAccuracy": 0.579,
+      "s4VoicingAccuracy": 0.632,
       "s4VoicingNotes": 38,
       "timingMaeSeconds": 1.352,
       "seventhGuard": {
@@ -1344,8 +1344,8 @@
       "s1MissingTones": 0,
       "s3BassAccuracy": 0.833,
       "s3BassWindows": 12,
-      "s4VoicingAccuracy": 0.95,
-      "s4VoicingNotes": 40,
+      "s4VoicingAccuracy": 0.946,
+      "s4VoicingNotes": 37,
       "timingMaeSeconds": 1.619,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
@@ -1407,16 +1407,16 @@
       "s1MissingTones": 6,
       "s3BassAccuracy": 0.9,
       "s3BassWindows": 20,
-      "s4VoicingAccuracy": 0.964,
-      "s4VoicingNotes": 55,
-      "timingMaeSeconds": 0.672,
+      "s4VoicingAccuracy": 0.961,
+      "s4VoicingNotes": 51,
+      "timingMaeSeconds": 0.666,
       "seventhGuard": {
         "labelledSeventhsTotal": 2,
         "heardAndKept": 1,
         "heard": 2,
         "unheardStillClaimed": 0,
         "triadLabels": 8,
-        "triadLabelsClaimedSeventh": 5
+        "triadLabelsClaimedSeventh": 4
       },
       "perChord": [
         {
@@ -1473,7 +1473,7 @@
         {
           "seconds": 23.6,
           "label": "B:maj",
-          "analyzed": "Gmaj7",
+          "analyzed": "F#",
           "pianoBass": 11
         },
         {
@@ -1496,7 +1496,7 @@
         {
           "seconds": 33.6,
           "label": "G#:min",
-          "analyzed": "Am",
+          "analyzed": "Esus4",
           "pianoBass": 8
         }
       ]

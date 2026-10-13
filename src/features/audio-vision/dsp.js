@@ -310,7 +310,12 @@ export function recognizeChord(chroma) {
 }
 
 /** Autocorrelation tempo from onset envelope. Returns { bpm, confidence, octaveAlternative }. */
-export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 60, maxBpm = 200 } = {}) {
+// Tempo search range. 200 BPM halved a 202 BPM recording to 99 (measured),
+// silently writing every duration twice as long. Raised to 240 so double-time
+// and fast electronic genres are not octave-halved. Lower bound stays 55 BPM:
+// slower material is reported at its double-time pulse (see the octave note in
+// estimateTempoFromEnvelope) with the original reading in octaveAlternative.
+export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55, maxBpm = 240 } = {}) {
   const n = envelope.length
   if (n < 8 || !(frameSeconds > 0)) {
     return { bpm: 120, confidence: 0, octaveAlternative: null, method: 'default' }
@@ -335,19 +340,29 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 60,
   const bpm = 60 / (bestLag * frameSeconds)
   const half = scores.get(bestLag * 2) ?? -Infinity
   const dbl = scores.get(Math.round(bestLag / 2)) ?? -Infinity
-  // Prefer the 90–160 pocket when a harmonic lag scores within 12%.
+  // Octave handling, now documented rather than hidden:
+  //  * HALVING REMOVED: the old `bpm > 170` rule turned a real 202 BPM
+  //    recording into 99 BPM, writing every duration twice as long. With the
+  //    ceiling at 240, a reading above it is corrected down; anything inside
+  //    the searched range is trusted.
+  //  * DOUBLING KEPT for sub-90 BPM readings: it fixes the very common case
+  //    where the autocorrelation locks onto the half-note pulse (a clean
+  //    120 BPM pulse reads 60 without it). Consequence, documented as a V1
+  //    limit: material genuinely slower than ~90 BPM is reported at its
+  //    double-time pulse (a 43 BPM ballad reads 86). `octaveAlternative` always
+  //    carries the other reading.
   let chosen = bpm
   let alt = null
   const altBpm = 60 / (Math.round(bestLag / 2) * frameSeconds)
-  if (bpm < 90 && dbl > bestVal * 0.88 && altBpm <= maxBpm) {
-    alt = Math.round(bpm)
-    chosen = altBpm
-  } else if (bpm > 170) {
+  if (bpm > maxBpm) {
     const halfBpm = 60 / (bestLag * 2 * frameSeconds)
     if (half > bestVal * 0.8 && halfBpm >= minBpm) {
       alt = Math.round(bpm)
       chosen = halfBpm
     }
+  } else if (bpm < 90 && dbl > bestVal * 0.88 && altBpm <= maxBpm) {
+    alt = Math.round(bpm)
+    chosen = altBpm
   }
   const variance = scores.size
     ? [...scores.values()].reduce((a, b) => a + (b - bestVal) ** 2, 0) / scores.size

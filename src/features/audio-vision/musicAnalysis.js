@@ -32,7 +32,11 @@ export const PROVENANCE = {  DETECTED: 'detected', // direct DSP evidence (onset
   ARRANGED: 'arranged', // arrangement decision for playability
 }
 
-function dominantMelodyMidi(spectrum, fftSize, sampleRate, { minHz = 180, maxHz = 1400 } = {}) {
+// Melody search band. The 1400 Hz cap hid 22-27% of TRIOS viola frames (real
+// high-register melodic content); widened to 3500 Hz so violin/flute/oboe and
+// harmonics of guitar/piano leads are visible. The bass band below stays
+// separate so the two never compete for the same partials.
+function dominantMelodyMidi(spectrum, fftSize, sampleRate, { minHz = 130, maxHz = 3500 } = {}) {
   let bestBin = -1
   let bestVal = 0
   for (let b = 1; b < spectrum.length; b += 1) {
