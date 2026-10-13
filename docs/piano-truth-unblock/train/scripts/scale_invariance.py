@@ -70,7 +70,7 @@ def main():
                                             int(gray.shape[0] * scale)),
                                       interpolation=cv2.INTER_AREA)
                 lines, dark = staff_lines(gray)
-                frames = group_staves(lines)
+                frames = group_staves(lines, dark)
                 if not frames:
                     continue
                 gaps = [(f[-1] - f[0]) / 4 for f in frames]

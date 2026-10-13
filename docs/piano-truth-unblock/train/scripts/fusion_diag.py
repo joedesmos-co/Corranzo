@@ -55,7 +55,7 @@ def main():
             lines, dark = staff_lines(gray)
             heads = detect_noteheads(gray, lines, gap)
             nh = notehead_map(svg)
-            frames = group_staves(lines)
+            frames = group_staves(lines, dark)
             # healed mask for stage tracing
             m = build_mask(dark, gap)
             kw = max(2, int(round(0.55 * gap)))
