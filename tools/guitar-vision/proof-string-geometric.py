@@ -86,9 +86,12 @@ def page_spacing(arr):
     from collections import Counter
     ink = arr < 128
     h, w = ink.shape
-    x0, x1 = int(w * 0.1), int(w * 0.9)
+    # Same window/threshold as the decoder's estimate_staff_gap (0.2/0.8,
+    # >0.3): a wider window admits system-start content and skews the
+    # median toward inter-staff gaps (Qmek read 45 instead of 26).
+    x0, x1 = int(w * 0.2), int(w * 0.8)
     row_frac = ink[:, x0:x1].mean(axis=1)
-    rows = np.nonzero(row_frac > 0.25)[0]
+    rows = np.nonzero(row_frac > 0.3)[0]
     if len(rows) < 5:
         return None
     bands, start, prev = [], rows[0], rows[0]
@@ -99,41 +102,20 @@ def page_spacing(arr):
         prev = r
     bands.append((start, prev))
     mids = [(a + b) / 2 for a, b in bands]
+    # <100 only: inter-staff and inter-system gaps (100-200px) are not
+    # staff-line spacing and were skewing the median (Qmek read 45).
     diffs = [mids[i + 1] - mids[i] for i in range(len(mids) - 1)
-             if 8 <= mids[i + 1] - mids[i] <= 200]
+             if 8 <= mids[i + 1] - mids[i] < 100]
     # A single 6-line TAB staff yields exactly 5 gaps; >=4 admits
     # single-staff TAB-only pages (bravura etudes) while still requiring
     # a multi-band staff.
     if len(diffs) < 4:
         return None
-    bins = Counter(int(d) for d in diffs)
-    # Candidate spacings: top modes plus their halves (2x-ambiguity:
-    # faint alternate lines). Score each by longest run of consecutive
-    # bands at that spacing (a staff has 6 lines; 2x aliases explain
-    # only alternate bands -> shorter runs). Image-only, no supervision.
-    cands = set()
-    for mode, cnt in bins.most_common(4):
-        if cnt >= 3:
-            cands.add(float(mode))
-            if mode / 2 >= 8:
-                cands.add(mode / 2)
-    best, best_key = None, None
-    for sp in cands:
-        run, maxrun, total = 1, 1, 0
-        for d in diffs:
-            if abs(d - sp) <= 3:
-                run += 1
-                total += 1
-                maxrun = max(maxrun, run)
-            else:
-                run = 1
-        key = (maxrun, total, -sp)
-        if best_key is None or key > best_key:
-            best_key, best = key, sp
-    if best is None:
-        return None
-    near = [d for d in diffs if abs(d - best) <= 2]
-    return sum(near) / len(near)
+    # Median of in-system gaps. The candidate/longest-run scoring preferred
+    # a small gap sitting inside a dense cluster (Txo p2 read 14 instead of
+    # 26; Qmek read 45), which silently broke every downstream margin that
+    # scales with the spacing. Matches the decoder's estimate_staff_gap.
+    return float(np.median(diffs))
 
 def estimate_spacing(peaks):
     """Robust staff spacing from peak-gap histogram (8..100px)."""

@@ -463,3 +463,32 @@ the least labelled data (28 TAB digits on the only carrier score).
   of the newly-detected digits, so end-to-end note count and semantic
   score fell. The transcriber's filters are now the bottleneck, not the
   detector.
+
+### R8 — Filter attrition ledger (task 1) + true-loss fixes
+proof-transcribe.py --ledger now records per-page: digits, lost at
+TAB-span, lost at TAU, emitted, with x/y/confidence/geometry detail.
+
+TXO LEDGER (corrected renders):
+  page1: 181 digits -> 0 tabspan / 4 tau -> 177 emitted
+  page2: 132 digits -> 124 TABSPAN / 0 tau -> 8 emitted
+  TOTAL: 313 detected -> 124 lost at TAB-span (94% of page 2), 4 at TAU, 185 emitted
+So the dominant loss is NOT confidence abstention - it is the TAB-span
+filter, and only on page 2. Its spans came from the digit-cluster
+fallback, which produced a SINGLE span [[1699,1830]] instead of one per
+TAB system, so 124 digits 1300px from that span were dropped.
+
+ROOT CAUSE: `page_spacing` (row-profile candidate/longest-run scoring)
+mis-measured page 2's staff gap as 14 instead of 26, and Qmek's as 45.
+Every margin and cluster threshold that scales with the spacing then
+broke. Fixed: median of in-system gaps with the decoder's window
+(0.2/0.8, >0.3, gaps <100) - matches decode.estimate_staff_gap.
+Verified on ink-cropped rasters: Txo p1/p2 = 26.0/26.0. transcribe now
+measures on the INK-CROPPED raster (raw render margins shifted the
+profile window).
+
+STILL BROKEN (not fixed): the digit-cluster fallback still emits one
+span on page 2, so page 2 remains at 8/132 emitted. The uncropped render
+is fed to the detector while the spacing is measured on the crop, and
+the fallback's own clustering is untested at this detection volume.
+Current Txo: 185 notes, all matched; string 100.0% / fret 92.4% /
+measure 78.4% / triple 71.9% OF MATCHED; 51% of GT covered (was 50%).

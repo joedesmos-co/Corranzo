@@ -73,6 +73,8 @@ def main() -> int:
     parser.add_argument("--detector", default=None)
     parser.add_argument("--upscale", type=float, default=None,
                         help="input upscale (default 1.3 for large, else 1.0)")
+    parser.add_argument("--ledger", default=None,
+                        help="write a JSON filter-attrition ledger")
     args = parser.parse_args()
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -105,6 +107,7 @@ def main() -> int:
     _suf = "" if args.layout == "standard" else f"-{args.layout}"
     _jname = "joins.json" if args.layout == "standard" else f"joins-{args.layout}.json"
     man = json.load(open(_hires / f"{sample}{_suf}-manifest.json"))
+    ledger = []
     joins = None
     for root in ws:
         for cand in (f"{root}/{sample}/{_jname}",
@@ -176,12 +179,23 @@ def main() -> int:
             # otherwise mint phantom measures). Margin scales with page_sp.
             _tabspans = [(s["top"], s["bot"]) for s in sys_bars if s.get("tab")]
             events = []
+            _led = {"digits": len(digits), "tabspan": 0, "tau": 0,
+                    "tau_gt": 0, "emitted": 0,
+                    "tau_detail": [], "page": pno}
             for det in digits:
                 cx, cy = det["x"], det["y"]
                 if _tabspans and _page_sp:
                     _dtab = min([0 if top <= cy <= bot else min(abs(cy - top), abs(cy - bot))
                                  for top, bot in _tabspans])
                     if _dtab > 0.75 * _page_sp:
+                        _led["tabspan"] += 1
+                        if len(_led.setdefault("tabspan_detail", [])) < 200:
+                            _led["tabspan_detail"].append({
+                                "x": round(cx, 1), "y": round(cy, 1),
+                                "dtab": round(float(_dtab), 1),
+                                "margin": round(float(0.75 * _page_sp), 1),
+                                "spans": [[int(a), int(b)] for a, b in _tabspans],
+                                "nsys": len(sys_bars)})
                         continue
                 w, h = det["box"][2] - det["box"][0], det["box"][3] - det["box"][1]
                 side = max(w, h) * 0.8
@@ -263,7 +277,15 @@ def main() -> int:
                 if args.string_mode == "geometric" and _geo is None:
                     continue
                 if min(s_conf, f_conf) < TAU:
+                    _led["tau"] += 1
+                    if len(_led["tau_detail"]) < 400:
+                        _led["tau_detail"].append({
+                            "x": round(cx, 1), "y": round(cy, 1), "v": round(det.get("v", 0), 3),
+                            "s": s_pred, "sconf": round(s_conf, 3),
+                            "f": f_pred, "fconf": round(f_conf, 3),
+                            "geo": _geo, "geoconf": round(_geoconf or 0, 3)})
                     continue
+                _led["emitted"] += 1
                 events.append({"x": cx, "y": cy, "string": s_pred + 1, "fret": f_pred,
                                "midi": TUNING[s_pred] + f_pred})
             # Onset columns (<12px) PER SYSTEM: x-only clustering merges
@@ -387,6 +409,8 @@ def main() -> int:
                     notes_out.append({"page": pno, "sys": own, "x": e["x"], "y": e["y"], "interval": interval,
                                       "string": e["string"], "fret": e["fret"],
                                       "midi": e["midi"], "dur": dur, "defaulted": defaulted})
+            if args.ledger:
+                ledger.append(_led)
     # Measures: per (page, system, interval) -> running measure numbers.
     keys = sorted(set((n["page"], n["sys"], n["interval"]) for n in notes_out))
     mapping = {k: i + 1 for i, k in enumerate(keys)}
@@ -442,6 +466,8 @@ def main() -> int:
                "measures": len(by_measure),
                "xml": str(out_xml)}
     (out_dir / f"{sample}{_suf}-summary.json").write_text(json.dumps(summary, indent=1))
+    if args.ledger:
+        (out_dir / f"{sample}{_suf}-ledger.json").write_text(json.dumps(ledger, indent=1))
     json.dump(notes_out, open(out_dir / f"{sample}{_suf}-notes.json", "w"))
     print(json.dumps(summary, indent=1))
     return 0
