@@ -388,3 +388,38 @@ No oracle boxes; GT from joins core boxes; both layouts rendered at gap 26.
   Geometry is now ruled out: the residual is GLYPH APPEARANCE at the
   trained scale (this engraver punctuates TAB digits with dashes and
   prints the digit over the staff line), not scale or mapping.
+
+### R6-M1/M2 — TAB digit recognition: font-dependent rasterization (FIXED)
+M1 hypothesis "staff lines cross the digits" was TESTED AND REJECTED:
+masking detected staff rows inside GT digit boxes LOWERS tabdigit
+response (heat p50 0.408 -> 0.123; peaks 92 -> 54). The crossing lines
+help rather than hurt.
+
+Root cause found instead: TAB digits and fret numbers are `<text>`
+elements in the document serif (`<text font-size="0px"><tspan
+font-size="324px">3</tspan></text>` inside `<g class="tabGrp">`), so
+their GLYPH SHAPES ARE FONT-DEPENDENT AT RASTER TIME. The detector was
+trained against Palatino-shaped digits; Times-shaped glyphs roughly
+halve the response (a contact sheet showed the model firing at 0.9+ on
+"0" but 0.03-0.16 on "3"/"4" - a pure glyph-appearance mismatch).
+
+Fix: render_at_gap takes a `font` override (documented; default
+Palatino, TRAIN-selected over 10 candidate serif families).
+- Txo: P 0.858->0.867, R 0.610->0.783, F1 0.713->0.823
+- Qmek: P 0.775->0.744, R 0.622->0.743, F1 0.690->0.744
+
+### R6-M2 — Dangerous assumptions found and fixed
+1. LETTERBOXING (fixed): committed PNGs render at the SVG's natural
+   878px inside a 2100px canvas -> 40% fill.
+2. FONT-DEPENDENT RASTERIZATION (fixed, above): fixed-page-geometry
+   users are not affected, but any re-render path is.
+3. ROW-PROFILE STAFF GAP (fixed): the "<100px gaps, take the median"
+   rule aliases inter-system gaps on dense layouts -> compact rendered
+   at 13px gap instead of 26, clamp kicked in, and detection returned
+   ZERO objects. Replaced with an exact read of the staff-line
+   coordinates from the SVG (`svg_staff_gap`): 315 units for standard,
+   compact AND large, with 193/56/325 samples. Compact F1 0.000 -> 0.674.
+4. GATE WINDOW (resolved by construction): the TAB staff-comb gate's
+   fixed +-130px window equals 5x the staff gap only at gap=26; once the
+   gap is targeted, the gate is calibrated by construction and is
+   ~neutral (3 tp / 16 fp) instead of rejecting ~80% of digits.

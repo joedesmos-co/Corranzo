@@ -48,7 +48,7 @@ def det():
     return _DET
 
 
-def run(workdir, pages, layout, target_gap, detector=None):
+def run(workdir, pages, layout, target_gap, detector=None, font=None):
     jn = 'joins.json' if layout == 'standard' else f'joins-{layout}.json'
     joins = json.loads((W / workdir / jn).read_text())
     if detector is None:
@@ -62,7 +62,7 @@ def run(workdir, pages, layout, target_gap, detector=None):
     tot = Counter()
     per_page = {}
     for pg in pages:
-        r = ps.render_at_gap(workdir, layout, pg, target_gap=target_gap)
+        r = ps.render_at_gap(workdir, layout, pg, target_gap=target_gap, font=font)
         if r is None:
             continue
         u8, fx = r['image'], r['fx']
@@ -89,9 +89,10 @@ def main():
     ap.add_argument('--layout', default='standard')
     ap.add_argument('--target-gap', type=float, default=26.0)
     ap.add_argument('--detector', default=None)
+    ap.add_argument('--font', default=None)
     args = ap.parse_args()
     pages = [int(p) for p in args.pages.split(',') if p.strip()]
-    tot, per_page = run(args.work, pages, args.layout, args.target_gap, args.detector)
+    tot, per_page = run(args.work, pages, args.layout, args.target_gap, args.detector, args.font)
     print('work=%s layout=%s gap=%.1f' % (Path(args.work).name, args.layout, args.target_gap))
     for pg in sorted(per_page):
         tp, fp, fn, npred, ngt, gap, sc = per_page[pg]

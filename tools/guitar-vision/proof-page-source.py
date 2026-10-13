@@ -115,6 +115,11 @@ const { chromium } = require('playwright');
   // svg has no width/height of its own so it inherits the outer viewport
   // and its viewBox scales the units to W. No content is rewritten.
   svg = svg.replace(/<svg width="\d+px" height="\d+px"/, `<svg width="${W}px" height="${H}px"`);
+  if (process.argv[5]) {
+    // TAB digits and fret numbers are <text> in the document serif, so the
+    // glyph shapes are font-dependent at raster time.
+    svg = svg.replace(/font-family="[^"]*"/g, `font-family="${process.argv[5]}"`);
+  }
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 100, height: 100 } });
   await page.setContent(`<html><body style="margin:0;background:#fff;line-height:0">` +
@@ -172,9 +177,40 @@ def _node_env() -> dict:
     return env
 
 
+def svg_staff_gap(svg_path: Path) -> tuple[float, int] | None:
+    """Median consecutive staff-line gap, in SVG units, read from the source.
+
+    Each `<g class="staff">` holds the staff's line paths; the gap is the
+    median difference of their y coordinates. This is exact, needs no
+    rasterisation, and is immune to the row-profile drift that mis-reads
+    dense layouts (compact renders confuse inter-system gaps for staff
+    gaps). Returns (gap_units, n_samples).
+    """
+    s = svg_path.read_text(errors='ignore')[:2_000_000]
+    gaps = []
+    for m in re.finditer(r'<g[^>]*class="staff"[^>]*>(.*?)</g>', s, re.S):
+        ys = []
+        for p in re.finditer(r'd="M([\d.]+) ([\d.]+) L[\d.]+ ([\d.]+)"', m.group(1)):
+            y1, y2 = float(p.group(2)), float(p.group(3))
+            if abs(y1 - y2) < 0.5:
+                ys.append(y1)
+        ys = sorted(set(round(y, 1) for y in ys))
+        gaps += [b - a for a, b in zip(ys, ys[1:]) if 100 < b - a < 1500]
+    if not gaps:
+        return None
+    return float(np.median(gaps)), len(gaps)
+
+
 def render_at_gap(workdir: str, layout: str, page_no: int, target_gap: float = 26.0,
-                  cache_root: str = '/tmp/proof/gv-render') -> dict | None:
+                  cache_root: str = '/tmp/proof/gv-render',
+                  font: str | None = 'Palatino') -> dict | None:
     """Render the committed SVG so the measured staff gap == target_gap.
+
+    `font` selects the document font-family for the raster. TAB digits and
+    fret numbers are <text>, so their glyph shapes are FONT-DEPENDENT at
+    raster time, and the detector was trained against Palatino-shaped
+    digits: Times-shaped glyphs roughly halve tabdigit recall
+    (Txo heat-in-GT-box 0.507 vs 0.896; F1 0.713 vs 0.823).
 
     Returns dict(image, fx, fy, ox, oy, gap, width). Deterministic: the
     same inputs always produce the same raster width, so the cache key is
@@ -193,23 +229,31 @@ def render_at_gap(workdir: str, layout: str, page_no: int, target_gap: float = 2
     if su is None:
         return None
     svgw, vbw = su
-    # Measure the staff gap on the RE-FRAMED raster (content fills the
-    # frame there, so the row profile is reliable; on the letterbox
-    # original the systems are tiny and the estimator drifts).
-    reframed = load_page(workdir, layout, page_no, reframe=True)
-    if reframed is None:
-        return None
-    gap_px = measure_gap(reframed['image'])
-    if gap_px is None:
-        return None
-    gap_units = gap_px / reframed['fx']    # staff gap in layout units
+    # Staff gap in layout units, read from the SVG's own staff geometry
+    # (exact + layout independent). Raster profiling is the fallback and
+    # is unreliable on dense layouts (compact inter-system gaps alias).
+    g = svg_staff_gap(svg)
+    if g is not None:
+        gap_units = g[0]
+    else:
+        reframed = load_page(workdir, layout, page_no, reframe=True)
+        if reframed is None:
+            return None
+        gap_px = measure_gap(reframed['image'])
+        if gap_px is None:
+            return None
+        gap_units = gap_px / reframed['fx']
     width = int(round(target_gap * vbw / gap_units))
     layout_dir = Path(cache_root) / layout / Path(workdir).name
+    if font:
+        layout_dir = layout_dir / font.replace(' ', '_')
     layout_dir.mkdir(parents=True, exist_ok=True)
     out = layout_dir / f'p{page_no}-g{target_gap:g}.png'
     if not out.exists():
-        r = subprocess.run(['node', str(_node_script()), str(svg), str(out), str(width)],
-                           capture_output=True, text=True, cwd=str(W), env=_node_env())
+        cmd = ['node', str(_node_script()), str(svg), str(out), str(width)]
+        if font:
+            cmd.append(font)
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(W), env=_node_env())
         if r.returncode != 0 or not out.exists():
             return None
     u8 = np.asarray(Image.open(out).convert('L')).astype(np.uint8)
