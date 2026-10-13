@@ -214,7 +214,14 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
           <p className="cz-edition-label" role="status">Your arrangement is ready</p>
           <h3>{TARGET_LABELS[result.model.targetPart]} · <span style={{ textTransform: 'capitalize' }}>{result.model.difficulty}</span></h3>
           <ul className="audio-vision-facts">
-            <li>Tempo <strong>{result.transcribed.tempo.bpm} BPM</strong>{result.transcribed.tempo.varies ? ' (varies)' : ''}</li>
+            <li>Tempo <strong>{result.transcribed.tempo.bpm} BPM</strong>{result.transcribed.tempo.varies ? ' (varies)' : ''}{result.transcribed.tempo.ambiguousTempo ? ' (approximate)' : ''}</li>
+            {result.transcribed.tempo.ambiguousTempo && (
+              <li className="audio-vision-hint">
+                Tempo is approximate — the pulse could be half or double
+                {result.transcribed.tempo.octaveAlternative ? ` (${result.transcribed.tempo.octaveAlternative} BPM)` : ''}.
+                Listen to the preview to check the tempo before practicing.
+              </li>
+            )}
             <li>Notes <strong>{result.model.parts[0].events.length}</strong> · Measures <strong>{new Set(result.model.parts[0].events.map((e) => e.measureIndex)).size}</strong></li>
             <li>Recognized with <strong>{result.confidence.pitchSource === 'basic-pitch' ? 'neural pitch recognition' : 'on-device pitch analysis'}</strong></li>
             <li>Confidence <strong>{Math.round(result.confidence.overall * 100)}%</strong></li>
