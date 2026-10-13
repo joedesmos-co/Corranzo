@@ -492,3 +492,24 @@ is fed to the detector while the spacing is measured on the crop, and
 the fallback's own clustering is untested at this detection volume.
 Current Txo: 185 notes, all matched; string 100.0% / fret 92.4% /
 measure 78.4% / triple 71.9% OF MATCHED; 51% of GT covered (was 50%).
+
+### R9 — TAB-span fix: page 2 notes 8 -> 130 (M1)
+ROOT CAUSE: `detect_barline_systems` found a SPURIOUS 6-line band group in
+the notation on Txo page 2 and flagged it `tab=True`. That (a) blocked the
+digit-cluster fallback (its guard is `if not any(s.get("tab"))`) and (b)
+left a single span at y 1699-1830 while the real TAB staves sit at
+283/729/1192/1656 - so 124 of 132 digits were ~1300px from the only span
+and were dropped. Page 1 was unaffected (6 real spans, 0 losses).
+
+FIX: validate the band-detected TAB spans against the actual digit
+positions. When the band spans cover <50% of the detected digits, rebuild
+one span per digit cluster (a TAB staff is 5 gaps tall; the cluster gap is
+`max(6*page_sp, 120)`), i.e. one region per visible TAB system.
+
+TXO (corrected renders, ledger per page):
+  before: p1 181 det -> 177 emit | p2 132 det -> 124 LOST -> 8 emit (185 total)
+  after:  p1 181 det -> 0 lost  -> 177 emit | p2 132 det -> 0 lost -> 130 emit (307 total)
+Accuracy of matched: string 100.0%, fret 93.8%, measure 47.4%, triple 43.5%
+Coverage 181/362=50% -> 306/362 = 84.8% of GT.
+Corrected semantic 48% -> 52% (precision 22% -> 40%, recall 65%, align 89%).
+Remaining: measure assignment (47.4% of matched) is now the largest loss.

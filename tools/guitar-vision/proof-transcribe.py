@@ -182,6 +182,43 @@ def main() -> int:
             _led = {"digits": len(digits), "tabspan": 0, "tau": 0,
                     "tau_gt": 0, "emitted": 0,
                     "tau_detail": [], "page": pno}
+            # Validate the band-detected TAB spans against the ACTUAL digit
+            # positions. A spurious 6-line group in the notation (page 2 of
+            # Txo yields one span at y 1699-1830 while the real TAB staves
+            # sit at 283/729/1192/1656) marks tab=True and both blocks the
+            # digit-cluster fallback and drops ~94% of the page's digits.
+            # When the band spans do not cover the digits, rebuild one span
+            # per digit cluster - i.e. per visible TAB system.
+            if digits and _page_sp:
+                _cov = sum(1 for d in digits
+                           if any(0 if t <= d["y"] <= b else
+                                  min(abs(d["y"] - t), abs(d["y"] - b))
+                                  <= 0.75 * _page_sp for t, b in _tabspans))
+                if _tabspans and _cov < 0.5 * len(digits):
+                    _led["respan_from"] = len(_tabspans)
+                    _cys = sorted(d["y"] for d in digits)
+                    # a TAB staff is 5 gaps tall; systems are further apart
+                    _ggap = max(6 * _page_sp, 120.0)
+                    _cl, _cur = [], [_cys[0]]
+                    for _a, _b in zip(_cys, _cys[1:]):
+                        if _b - _a > _ggap:
+                            _cl.append(_cur)
+                            _cur = [_b]
+                        else:
+                            _cur.append(_b)
+                    _cl.append(_cur)
+                    _fb = []
+                    for _cc in _cl:
+                        _t = int(min(_cc) - 3 * _page_sp)
+                        _bo = int(max(_cc) + 3 * _page_sp)
+                        _bt, _bb = int(min(_cc) - 0.5 * _page_sp), int(max(_cc) + 0.5 * _page_sp)
+                        _xs = mbars.bars_in_span(u8, _bt, _bb, min_cover=0.5)
+                        _dx = [d["x"] for d in digits if _t <= d["y"] <= _bo]
+                        _xs = sorted(set(_xs + ([min(_dx) - 30] if _dx else [])))
+                        _fb.append({"top": _t, "bot": _bo, "xs": _xs, "tab": True})
+                    if _fb:
+                        _tabspans = [(s["top"], s["bot"]) for s in _fb]
+                        _led["respan_to"] = len(_fb)
             for det in digits:
                 cx, cy = det["x"], det["y"]
                 if _tabspans and _page_sp:
