@@ -513,3 +513,20 @@ Accuracy of matched: string 100.0%, fret 93.8%, measure 47.4%, triple 43.5%
 Coverage 181/362=50% -> 306/362 = 84.8% of GT.
 Corrected semantic 48% -> 52% (precision 22% -> 40%, recall 65%, align 89%).
 Remaining: measure assignment (47.4% of matched) is now the largest loss.
+
+### R9b — TAB-span fix verified on Qmek; measure numbering is the new blocker
+Qmek (3 pages, corrected renders, same respan fix):
+  458 notes emitted, 423 matched (81.3% of 520 GT), string 100.0% / fret
+  92.0% of matched - BUT measure_ok = 0.0% (72 measures emitted vs 49 GT).
+
+M3 (Qmek spacing) - diagnosed, not a bug: the band structure is
+`26,26,26,26 | 280,108 | 46,46,46,46,46 | 311 | ...`. Qmek's TAB staves are
+engraved with ~46px line spacing while its notation staves use ~26px, so
+`page_spacing` correctly returns the TAB gap (46). That is the relevant
+scale for TAB spans/margins, and the new digit-validated respan makes the
+transcriber tolerant of it (Qmek recovers 81% of GT digits).
+
+Measure numbering is now the single largest loss: Txo 47.4% of matched,
+Qmek 0%. Cause (Qmek): the respan produces a different system count than
+the GT's, so the per-(page,system,interval) monotonic numbering renumbers
+measures against a different system partition.
