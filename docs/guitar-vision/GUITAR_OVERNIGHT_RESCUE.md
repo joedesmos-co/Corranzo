@@ -423,3 +423,14 @@ Palatino, TRAIN-selected over 10 candidate serif families).
    fixed +-130px window equals 5x the staff gap only at gap=26; once the
    gap is targeted, the gate is calibrated by construction and is
    ~neutral (3 tp / 16 fp) instead of rejecting ~80% of digits.
+
+### R6-M3 — Cross-style detection matrix (reproducible, real inference)
+All layouts rendered at targeted gap 26 with the corrected font and
+scored against joins core boxes (no oracle):
+- standard  Txo    P=0.867 R=0.783 F1=0.823
+- Qmek      std    P=0.744 R=0.743 F1=0.744
+- compact   Txo    P=0.820 R=0.573 F1=0.674   (was 0.000 before the fix)
+- large     Txo    P=0.867 R=0.612 F1=0.717
+- bravura   Ode    P=0.756 R=0.554 F1=0.639
+Worst case: bravura F1=0.639. Bravura is still the weakest style and has
+the least labelled data (28 TAB digits on the only carrier score).
