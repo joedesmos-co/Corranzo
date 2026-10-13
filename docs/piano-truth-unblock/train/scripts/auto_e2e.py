@@ -120,6 +120,15 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
         # the frozen detector recipe in detector.py superseded it).
         if False:
             pass
+        # key signature per frame (render-supervised templates; scans detect
+        # 0 harmlessly). Applied to the diatonic mapping below.
+        from keysig2 import _keysig_templates_auto as _ksl
+        ks = _ksl()
+        fifths_by_frame = {}
+        if ks:
+            from keysig2 import detect_keysig as _dks
+            for fi, fr in enumerate(frames):
+                fifths_by_frame[fi] = _dks(gray, dark, fr, gap, ks)[0]
         boxes = []
         for h in heads:
             # cy = dark centroid inside the CC box (bbox center is biased by
@@ -131,7 +140,8 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
             steps = int(round(2 * (frames[fi][-1] - cy) / gap))
             boxes.append({"page": pg, "frame": fi, "x": cx, "y": cy,
                           "bx": h["x"], "by": h["y"], "w": h["w"], "h": h["h"],
-                          "midi": pitch_of(steps, bottom)})
+                          "midi": pitch_of(steps, bottom),
+                          "fifths": fifths_by_frame.get(fi, 0)})
         if boxes:
             crops = []
             for bi, b in enumerate(boxes):
@@ -399,6 +409,10 @@ def main():
                 e = truth_px[bi][2]
                 C["note_tp"] += 1
                 C["meas_covered"].add((sid, e.get("measure_index")))
+                # key-signature application is GATED OFF: measured 0.75 key
+                # accuracy, and a wrong key shifts a whole staff (pitch
+                # 0.9073 -> 0.7625 when applied). Kept wired for the
+                # accuracy milestone; see reports/keysig2.json.
                 C["pitch_ok"] += (a["midi"] == e.get("midi_printed"))
                 C["dur_ok"] += (str(a.get("dur")) == str(e.get("dur"))
                                 and a.get("dots", 0) == (e.get("dots") or 0))

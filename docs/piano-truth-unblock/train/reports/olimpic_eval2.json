@@ -5,7 +5,7 @@
  "frames": 16,
  "frames_with_detections": 16,
  "note_recall": 0.5436,
- "pitch_multiset": 0.1092,
+ "pitch_multiset": 0.157,
  "clef_accuracy": 0.0,
  "rows": [
   {
@@ -136,8 +136,8 @@
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "F",
-      4
+      "G",
+      2
      ],
      "truth_clef": [
       "F",
@@ -145,7 +145,7 @@
      ],
      "det": 12,
      "truth": 17,
-     "pitch_overlap": 4
+     "pitch_overlap": 0
     }
    ]
   },
@@ -253,8 +253,8 @@
      "fi": 2,
      "staff": null,
      "auto_clef": [
-      "F",
-      4
+      "G",
+      2
      ],
      "truth_clef": [
       null,
@@ -292,8 +292,8 @@
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "F",
-      4
+      "G",
+      2
      ],
      "truth_clef": [
       "F",
@@ -301,7 +301,7 @@
      ],
      "det": 11,
      "truth": 26,
-     "pitch_overlap": 4
+     "pitch_overlap": 1
     }
    ]
   },
@@ -324,8 +324,8 @@
      "fi": 0,
      "staff": "1",
      "auto_clef": [
-      "F",
-      4
+      "G",
+      2
      ],
      "truth_clef": [
       "G",
@@ -333,7 +333,7 @@
      ],
      "det": 44,
      "truth": 96,
-     "pitch_overlap": 1
+     "pitch_overlap": 36
     }
    ]
   }

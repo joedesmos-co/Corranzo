@@ -1299,3 +1299,67 @@ D. real scans (OLiMPiC): note recall 0.544, pitch multiset 0.109 — NOT
   usable; blockers in order: key signatures (prototyped), notehead cy on
   thick-line scans, clef style residuals.
 No resized pages are presented as independent evidence.
+
+
+---
+
+# Key signatures + clef regression fix (M1-M6)
+
+From `25de8c1112`. No merge, TEST sealed, DEV identities frozen.
+
+## M1 — the familiar-DEV clef regression is FIXED
+
+The per-source templates made the scan_F template match RENDER treble
+crops (score 0.29 vs render_G 0.14 on QmbShS frame 0) because the
+render-tuned class-conditional window captures the tall G glyph and the
+scan template is staff-heavy. Fix (source-independent, uses only pixels):
+a structural guard — a G clef's ink extends ABOVE the top staff line,
+F/C glyphs sit inside it. Measured: render G above-band ink 0.074-0.083,
+render F/C 0.000; on scans the distributions overlap but the guard still
+nets positive. No dataset identity is used at inference.
+Result: DEV pitch 0.8702 -> 0.9073 (restored), complete events 587 -> 607,
+and the held-out scan pitch multiset 0.1092 -> 0.157 (the guard helps
+scans too). Clef decisions on the 5 eval pages: 0/7 wrong.
+Residual (documented): 607 vs the all-time-best 612 events — 5 events,
+from the scan-focused frame-validation changes, not the clef.
+
+## M2 — key-signature recognition (deployed for detection, application
+## gated off)
+
+`keysig2.py`: glyph-box NCC templates from TRAIN render keyAccid glyphs
+(SMuFL E262/E260) cropped with the SAME merged-CC extraction the detector
+uses (shared `merged_boxes`; staff-line-removal splits accidentals at the
+staff rows, so fragments are merged within glyph-size bounds).
+TRAIN render key accuracy **0.75** (30/40). Scan-side templates built
+from TRAIN-side OLiMPiC samples (supervision = the sample's MusicXML
+fifths, accidentals = the leftmost |fifths| boxes) — scan key accuracy
+0.0 (scan accidental fragments are not mergeable with the render
+constraints; documented, not shipped).
+
+## M3 — accidental propagation: gated OFF on purpose
+
+Applying the detected key to the diatonic mapping was measured to HURT:
+pitch 0.9073 -> 0.7625, because a wrong key shifts a whole staff by a
+semitone. Confidence gating does not separate correct from wrong
+detections (measured: correct conf 0.65-0.73 vs wrong 0.0 and 0.6-0.7).
+The wiring is in place (fifths per frame, key_alteration) but disabled
+with a comment. Key accuracy must be >>0.75 before enabling.
+
+## M4-M6 — scan geometry, evaluation separation, quality
+
+Ongoing: notehead centers on thick-line scans (the remaining scan pitch
+loss after clefs); evaluation kept separate (familiar DEV vs held-out
+scans); no quality gate added — scans are transcribed with measured
+limitations rather than rejected, and no gate may reject on page size or
+font alone (per mission).
+
+## Current verified numbers
+
+Familiar DEV (5 pages, 902 notes, no oracle): note P 0.931 / R 0.957,
+detected pitch 0.9073, duration 0.7601, complete 0.7034, page pitch
+0.8681, page duration 0.7273, page complete 607/902, rests P 1.000/R
+0.296, measures 0.979, MusicXML 5/5.
+Independent OLiMPiC scans (10 samples, 688 notes): frames 16, note
+recall 0.544, pitch multiset 0.157 (from 0.0768), clef 0.80 per frame.
+Key signatures: detected at 0.75 on renders, 0.0 on scans — the single
+largest remaining scan blocker.

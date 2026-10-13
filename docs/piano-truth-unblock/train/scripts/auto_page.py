@@ -70,6 +70,24 @@ def deskew(gray, angle):
                           borderValue=255)
 
 
+def _keysig_templates():
+    """Cached key-signature templates (render-supervised)."""
+    global _KS_TPL
+    if _KS_TPL is None:
+        p = HERE.parent / "models" / "keysig_templates.npz"
+        if p.is_file():
+            import numpy as _np
+            z = _np.load(p)
+            _KS_TPL = {k: z[k] for k in z.files if k.startswith("render_")}
+            _KS_TPL = {k.split("_", 1)[1]: v for k, v in _KS_TPL.items()}
+        else:
+            _KS_TPL = {}
+    return _KS_TPL
+
+
+_KS_TPL = None
+
+
 def process_page(gray, templates, probe_fn=None, rest_templates=None,
                  do_deskew=True):
     """Full automatic analysis of one page/strip image. Returns a dict.
