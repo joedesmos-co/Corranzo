@@ -15,7 +15,7 @@
       "s3BassWindows": 4,
       "s4VoicingAccuracy": null,
       "s4VoicingNotes": 0,
-      "timingMaeSeconds": 0.295,
+      "timingMaeSeconds": 0.304,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
@@ -65,23 +65,23 @@
       "labelledWindows": 16,
       "usableWindows": 13,
       "ambiguousWindows": 3,
-      "rootAccuracy": 0.769,
-      "qualityAccuracy": 0.923,
+      "rootAccuracy": 0.846,
+      "qualityAccuracy": 0.846,
       "rootAndQualityAccuracy": 0.769,
       "s1ChordTonesPresentRate": 0.846,
       "s1MissingTones": 6,
-      "s3BassAccuracy": 0.769,
+      "s3BassAccuracy": 0.692,
       "s3BassWindows": 26,
       "s4VoicingAccuracy": 1,
-      "s4VoicingNotes": 39,
-      "timingMaeSeconds": 0.645,
+      "s4VoicingNotes": 40,
+      "timingMaeSeconds": 0.621,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 13,
-        "triadLabelsClaimedSeventh": 0
+        "triadLabelsClaimedSeventh": 1
       },
       "perChord": [
         {
@@ -168,8 +168,8 @@
         {
           "seconds": 41.4,
           "label": "D#:maj",
-          "analyzed": "A#",
-          "pianoBass": 3
+          "analyzed": "D#maj7",
+          "pianoBass": 7
         },
         {
           "seconds": 44.3,
@@ -192,9 +192,9 @@
       "s1MissingTones": 10,
       "s3BassAccuracy": 1,
       "s3BassWindows": 8,
-      "s4VoicingAccuracy": 0.625,
-      "s4VoicingNotes": 24,
-      "timingMaeSeconds": 0.94,
+      "s4VoicingAccuracy": 0.714,
+      "s4VoicingNotes": 28,
+      "timingMaeSeconds": 0.894,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
@@ -246,16 +246,16 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.4,
+      "rootAccuracy": 0.5,
       "qualityAccuracy": 0.1,
       "rootAndQualityAccuracy": 0.1,
       "s1ChordTonesPresentRate": 0.563,
       "s1MissingTones": 14,
-      "s3BassAccuracy": 0.8,
+      "s3BassAccuracy": 0.9,
       "s3BassWindows": 20,
-      "s4VoicingAccuracy": 0.73,
+      "s4VoicingAccuracy": 0.716,
       "s4VoicingNotes": 74,
-      "timingMaeSeconds": 0.384,
+      "timingMaeSeconds": 0.381,
       "seventhGuard": {
         "labelledSeventhsTotal": 2,
         "heardAndKept": 2,
@@ -291,8 +291,8 @@
         {
           "seconds": 8.2,
           "label": "C#:hdim7",
-          "analyzed": "Cmaj7",
-          "pianoBass": 9
+          "analyzed": "C#m7",
+          "pianoBass": 1
         },
         {
           "seconds": 10.1,
@@ -354,22 +354,22 @@
       "usableWindows": 14,
       "ambiguousWindows": 2,
       "rootAccuracy": 0.286,
-      "qualityAccuracy": 0.286,
+      "qualityAccuracy": 0.429,
       "rootAndQualityAccuracy": 0.286,
       "s1ChordTonesPresentRate": 0.524,
       "s1MissingTones": 20,
       "s3BassAccuracy": 0.571,
       "s3BassWindows": 28,
-      "s4VoicingAccuracy": 0.788,
+      "s4VoicingAccuracy": 0.846,
       "s4VoicingNotes": 52,
-      "timingMaeSeconds": 0.288,
+      "timingMaeSeconds": 0.294,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 14,
-        "triadLabelsClaimedSeventh": 2
+        "triadLabelsClaimedSeventh": 1
       },
       "perChord": [
         {
@@ -381,13 +381,13 @@
         {
           "seconds": 3,
           "label": "D:maj",
-          "analyzed": "D",
+          "analyzed": "F#m",
           "pianoBass": 9
         },
         {
           "seconds": 5,
           "label": "E:min",
-          "analyzed": "D",
+          "analyzed": "Dm",
           "pianoBass": 4
         },
         {
@@ -398,7 +398,7 @@
         {
           "seconds": 9.1,
           "label": "C:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "G",
           "pianoBass": 7
         },
         {
@@ -457,7 +457,7 @@
         {
           "seconds": 29.2,
           "label": "C:maj",
-          "analyzed": "Am7",
+          "analyzed": "C",
           "pianoBass": 0
         },
         {
@@ -537,16 +537,16 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.3,
+      "rootAccuracy": 0.4,
       "qualityAccuracy": 0.3,
       "rootAndQualityAccuracy": 0.2,
       "s1ChordTonesPresentRate": 0.656,
       "s1MissingTones": 11,
-      "s3BassAccuracy": 0.4,
+      "s3BassAccuracy": 0.5,
       "s3BassWindows": 20,
-      "s4VoicingAccuracy": 0.688,
-      "s4VoicingNotes": 48,
-      "timingMaeSeconds": 0.54,
+      "s4VoicingAccuracy": 0.88,
+      "s4VoicingNotes": 50,
+      "timingMaeSeconds": 0.52,
       "seventhGuard": {
         "labelledSeventhsTotal": 2,
         "heardAndKept": 0,
@@ -577,7 +577,7 @@
           "seconds": 7.8,
           "label": "B:maj",
           "analyzed": "F#",
-          "pianoBass": 6
+          "pianoBass": 11
         },
         {
           "seconds": 10,
@@ -622,7 +622,7 @@
         {
           "seconds": 27.8,
           "label": "F:hdim7",
-          "analyzed": "B",
+          "analyzed": "Fdim",
           "pianoBass": 5
         },
         {
@@ -634,7 +634,7 @@
           "seconds": 33.3,
           "label": "D#:min",
           "analyzed": "A#",
-          "pianoBass": 7
+          "pianoBass": 10
         }
       ]
     },
@@ -828,22 +828,22 @@
       "usableWindows": 6,
       "ambiguousWindows": 8,
       "rootAccuracy": 0.5,
-      "qualityAccuracy": 0.167,
+      "qualityAccuracy": 0.333,
       "rootAndQualityAccuracy": 0.167,
       "s1ChordTonesPresentRate": 0.789,
       "s1MissingTones": 4,
       "s3BassAccuracy": 0.667,
       "s3BassWindows": 12,
-      "s4VoicingAccuracy": 0.909,
-      "s4VoicingNotes": 22,
-      "timingMaeSeconds": 0.724,
+      "s4VoicingAccuracy": 0.778,
+      "s4VoicingNotes": 27,
+      "timingMaeSeconds": 0.706,
       "seventhGuard": {
         "labelledSeventhsTotal": 1,
         "heardAndKept": 0,
         "heard": 1,
         "unheardStillClaimed": 0,
         "triadLabels": 5,
-        "triadLabelsClaimedSeventh": 4
+        "triadLabelsClaimedSeventh": 3
       },
       "perChord": [
         {
@@ -871,7 +871,7 @@
           "seconds": 9.8,
           "label": "C:hdim7",
           "analyzed": "A#",
-          "pianoBass": 3
+          "pianoBass": 10
         },
         {
           "seconds": 12,
@@ -887,7 +887,7 @@
         {
           "seconds": 18.5,
           "label": "D#:min",
-          "analyzed": "A#7",
+          "analyzed": "A#m",
           "pianoBass": 3
         },
         {
@@ -930,16 +930,16 @@
       "labelledWindows": 16,
       "usableWindows": 7,
       "ambiguousWindows": 9,
-      "rootAccuracy": 0.429,
-      "qualityAccuracy": 0.286,
-      "rootAndQualityAccuracy": 0.286,
+      "rootAccuracy": 0.571,
+      "qualityAccuracy": 0.429,
+      "rootAndQualityAccuracy": 0.429,
       "s1ChordTonesPresentRate": 0.762,
       "s1MissingTones": 5,
-      "s3BassAccuracy": 0.429,
+      "s3BassAccuracy": 0.357,
       "s3BassWindows": 14,
       "s4VoicingAccuracy": 0.667,
       "s4VoicingNotes": 30,
-      "timingMaeSeconds": 0.19,
+      "timingMaeSeconds": 0.112,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
@@ -979,7 +979,7 @@
         {
           "seconds": 9.6,
           "label": "D#:maj",
-          "analyzed": "D#maj7",
+          "analyzed": "D#",
           "pianoBass": 7
         },
         {
@@ -1011,8 +1011,8 @@
         {
           "seconds": 20.1,
           "label": "G:min",
-          "analyzed": "A#",
-          "pianoBass": 7
+          "analyzed": "Gm7",
+          "pianoBass": 10
         },
         {
           "seconds": 21.9,
@@ -1052,8 +1052,8 @@
       "s3BassAccuracy": 0.833,
       "s3BassWindows": 12,
       "s4VoicingAccuracy": 1,
-      "s4VoicingNotes": 40,
-      "timingMaeSeconds": 1.017,
+      "s4VoicingNotes": 33,
+      "timingMaeSeconds": 1.121,
       "seventhGuard": {
         "labelledSeventhsTotal": 0,
         "heardAndKept": 0,
