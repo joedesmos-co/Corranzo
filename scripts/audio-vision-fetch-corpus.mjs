@@ -117,7 +117,7 @@ for (const src of REAL_CORPUS.sources) {
   // Rock1-3, SS1-3) -> independent labeled recordings, not adjacent windows.
   const gsTracks = [
     { id: 'guitarset-jazz-solo', wav: '/tmp/guitarset/tracks/04_Jazz1-200-B_solo_mic.wav', jams: '/tmp/guitarset/jams/04_Jazz1-200-B_solo.jams' },
-    { id: 'guitarset-ss-comp', wav: '/tmp/guitarset/tracks/00_SS3-84-Bb_comp_mic.wav', jams: '/tmp/guitarset/jams/00_SS3-84-Bb_comp.jams' },
+    { id: 'guitarset-ss-comp', wav: '/tmp/guitarset/00_SS3-84-Bb_comp_mic.wav', jams: '/tmp/guitarset/jams/00_SS3-84-Bb_comp.jams' },
     ...['00_BN1-129-Eb', '00_BN2-131-B', '00_BN3-119-G', '00_Funk1-114-Ab', '00_Funk2-108-Eb', '00_Funk3-112-C#', '00_Jazz1-130-D', '00_Jazz2-110-Bb', '00_Jazz3-137-Eb', '00_Rock1-130-A', '00_Rock2-142-D', '00_Rock3-117-Bb', '00_SS1-100-C#', '00_SS2-107-Ab']
       .map((base) => ({ id: `guitarset-${base.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}`, wav: `/tmp/guitarset/${base}_comp_mic.wav`, jams: `/tmp/guitarset/jams/${base}_comp.jams` })),
   ]
