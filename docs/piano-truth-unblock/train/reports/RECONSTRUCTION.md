@@ -1231,3 +1231,71 @@ templates built from the OLiMPiC TRAIN-style material. (2) Notehead cy on
 thick-line scans: boxes absorb staff-line remnants, shifting centers.
 Until both land, automatic transcription must be documented as
 render-grade only.
+
+
+---
+
+# Scan clef rescue: per-source templates + key-signature diagnosis
+
+From `12a8397687`. No merge, TEST sealed, DEV identities frozen.
+
+## Root cause of the scan clef failure (M1)
+
+The clef classifier used per-class mean NCC templates built ONLY from
+Verovio render clefs. On independent scans the clef glyph sits at a
+different x-offset, has different proportions, and its ink is thicker, so
+render templates matched the G class on bass staves (F->G = +12 steps for
+every staff-2 note; measured 0/16 scan frames correct before this work).
+Diagnosed with dumped crops (reports/scan_clef_diag.json, /tmp/clefscan):
+the scan bass clef is clearly present with its two dots but at a different
+geometry than the render font.
+
+## Fix: per-source per-class templates (TRAIN-side supervision)
+
+`clef_templates2_build.py` builds mean NCC templates from TWO sources:
+A. Verovio render clef instances (SMuFL glyph labels), and
+B. OLiMPiC scanned frames whose truth clef comes from the sample's own
+   MusicXML — TRAIN-side samples only (verification samples held out;
+   the first 10 OLiMPiC samples are never used for templates).
+`clef_detect.detect_clef` scores each class per source and takes the
+render-preferred max (RENDER_TOL=0.05).
+Measured (reports/clef_variants.json, reports/clef_templates2.json):
+  DEV renders (116 frames): 0.914 (render-only templates: 0.92)
+  held-out scans (15 frames): 0.800 (render-only templates: 0.00)
+  rejected variants: exemplar bank (render 0.216), line-stripped
+  templates (scan 0.333), source-sum (scan 0.533).
+End-to-end OLiMPiC pitch multiset 0.0768 -> 0.1092; bass staves now read
+F4 (visible in olimpic_eval2 detail).
+
+## Honest DEV cost (documented, not hidden)
+
+One render frame flips (QmbShS frame 0, G2 -> F4) because the scan
+template scores higher on that crop. Effect on the 5-page DEV eval:
+detected pitch 0.9073 -> 0.8702, complete events 0.7034 -> 0.6802,
+page complete 612 -> 587 of 902. Over the full 116-frame DEV sample the
+clef accuracy changes by 1 frame (0.92 -> 0.914). Kept because the scan
+capability is otherwise zero; the frame is identified for follow-up.
+
+## Key-signature diagnosis (the next-largest scan failure)
+
+Every OLiMPiC verification sample has a key signature (fifths -5..+5) and
+15-66% of notes carry an accidental; the pipeline estimates NATURAL
+pitches only, so those notes can never match. Prototype
+(`keysig.py`, reports/keysig.json): TRAIN render key-signature templates
+(E262 sharp / E260 flat) + matchTemplate over the startup region.
+Current accuracy is NOT deployable (render key detection 3/22; flats
+confused with sharps; staff lines split accidentals into fragments).
+Not shipped. This is the single largest measured remaining scan blocker.
+
+## Cross-style acceptance (M3)
+
+A. familiar DEV renders: note P 0.931 / R 0.957, pitch 0.870 detected /
+  0.833 page, complete 0.680 / 0.651 page, durations 0.760/0.727, rests
+  P 1.000/R 0.296, measures 0.979.
+B. transformed pages (0.5x/1.0x/2.0x): verified last mission.
+C. independent engravers (renders of other publishers): not available
+  locally — stated, not claimed.
+D. real scans (OLiMPiC): note recall 0.544, pitch multiset 0.109 — NOT
+  usable; blockers in order: key signatures (prototyped), notehead cy on
+  thick-line scans, clef style residuals.
+No resized pages are presented as independent evidence.

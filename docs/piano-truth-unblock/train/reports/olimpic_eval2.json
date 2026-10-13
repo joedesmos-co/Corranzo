@@ -5,7 +5,7 @@
  "frames": 16,
  "frames_with_detections": 16,
  "note_recall": 0.5436,
- "pitch_multiset": 0.0768,
+ "pitch_multiset": 0.1092,
  "clef_accuracy": 0.0,
  "rows": [
   {
@@ -34,8 +34,8 @@
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -82,8 +82,8 @@
      "fi": 0,
      "staff": "1",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "G",
@@ -91,14 +91,14 @@
      ],
      "det": 11,
      "truth": 46,
-     "pitch_overlap": 2
+     "pitch_overlap": 0
     },
     {
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -136,8 +136,8 @@
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -145,7 +145,7 @@
      ],
      "det": 12,
      "truth": 17,
-     "pitch_overlap": 0
+     "pitch_overlap": 4
     }
    ]
   },
@@ -175,8 +175,8 @@
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -184,7 +184,7 @@
      ],
      "det": 14,
      "truth": 16,
-     "pitch_overlap": 0
+     "pitch_overlap": 6
     }
    ]
   },
@@ -223,8 +223,8 @@
      "fi": 0,
      "staff": "1",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "G",
@@ -232,14 +232,14 @@
      ],
      "det": 3,
      "truth": 75,
-     "pitch_overlap": 1
+     "pitch_overlap": 0
     },
     {
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -247,14 +247,14 @@
      ],
      "det": 53,
      "truth": 47,
-     "pitch_overlap": 0
+     "pitch_overlap": 14
     },
     {
      "fi": 2,
      "staff": null,
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       null,
@@ -277,8 +277,8 @@
      "fi": 0,
      "staff": "1",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -286,14 +286,14 @@
      ],
      "det": 13,
      "truth": 38,
-     "pitch_overlap": 7
+     "pitch_overlap": 2
     },
     {
      "fi": 1,
      "staff": "2",
      "auto_clef": [
-      "G",
-      2
+      "F",
+      4
      ],
      "truth_clef": [
       "F",
@@ -301,7 +301,7 @@
      ],
      "det": 11,
      "truth": 26,
-     "pitch_overlap": 1
+     "pitch_overlap": 4
     }
    ]
   },

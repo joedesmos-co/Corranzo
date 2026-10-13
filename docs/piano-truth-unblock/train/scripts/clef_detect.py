@@ -19,10 +19,13 @@ crop). With the correct clef, page pitch accuracy rises to ~0.97
 (oracle-geometry ceiling); the old recipe gave ~0.78.
 """
 from __future__ import annotations
+from pathlib import Path
+
 import cv2
 import numpy as np
 
 SIZE = 32
+RENDER_TOL = 0.05
 G_HALF_GAPS = 4.8
 FC_HALF_GAPS = 2.0
 XCENTER_GAPS = 2.2
@@ -66,9 +69,23 @@ def _sq(gray, cx, cy, half):
     return _norm_patch(patch)
 
 
+def _load_templates2():
+    """Per-source per-class NCC templates (render + independent scan),
+    built from TRAIN-side supervision only (clef_templates2_build.py).
+    Keys look like render_G / scan_F. Returns None if not built yet."""
+    p = Path(__file__).resolve().parent.parent / "models" / "clef_templates2.npz"
+    if not p.is_file():
+        return None
+    z = np.load(p)
+    return {k: z[k] for k in z.files}
+
+
 def detect_clef(gray, dark, fr, gap, templates):
     """(shape, line) for one frame; falls back to ('G', 2) only when no
-    window can be cropped at all."""
+    window can be cropped at all. `templates` may be the per-source dict
+    from _load_templates2 (keys <source>_<CLS>) or the flat per-class
+    render dict; either way each class is scored by the max over its
+    templates so neither engraving source dominates."""
     fx0 = frame_left_edge(dark, fr)
     if fx0 is None:
         return ("G", 2), 0.0
@@ -82,7 +99,24 @@ def detect_clef(gray, dark, fr, gap, templates):
         cr = _sq(gray, cen[0], cen[1], int(round(half)))
         if cr is None:
             continue
-        v = float((cr * templates[cls]).sum())
+        # render-preferred per-source max: the render source wins unless the
+        # scan source beats it by more than RENDER_TOL (calibrated below)
+        v_r = -9.0
+        v_s = -9.0
+        for key, tmpl in templates.items():
+            if key.split("_")[-1] != cls:
+                continue
+            sc = float((cr * tmpl).sum())
+            if key.startswith("render"):
+                v_r = max(v_r, sc)
+            else:
+                v_s = max(v_s, sc)
+        if v_r > -8.0 and v_r >= v_s - RENDER_TOL:
+            v = v_r
+        elif v_s > -8.0:
+            v = v_s
+        else:
+            v = max(v_r, v_s)
         if v > best[1]:
             best = (cls, v)
     if best[0] is None:

@@ -37,6 +37,7 @@ from clef_detect import detect_clef  # noqa: E402
 from auto_rest import page_ctx  # noqa: E402
 from clef_vision import classify as clef_classify  # noqa: E402
 from clef_map import load_templates  # noqa: E402
+from clef_detect import _load_templates2  # noqa: E402
 
 TYPE_OF_DUR = {"64": "64th", "32": "32nd", "16": "16th", "8": "eighth",
                "4": "quarter", "2": "half", "1": "whole"}
@@ -304,7 +305,7 @@ from fractions import Fraction  # noqa: E402
 
 def main():
     splits = json.loads((PILOT / "manifests" / "splits.json").read_text())
-    templates = load_templates()
+    templates = _load_templates2() or load_templates()
     from auto_rest import build_templates as _build_rest_templates
     rest_templates, _rc = _build_rest_templates(splits, n_train=150)
     print("[e2e] rest templates:", sorted(rest_templates), flush=True)

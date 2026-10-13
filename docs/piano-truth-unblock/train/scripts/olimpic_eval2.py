@@ -28,6 +28,7 @@ from auto_page import (deskew, detect_noteheads_full_page, estimate_skew,  # noq
                        _pitch)
 from auto_rest import build_templates  # noqa: E402
 from clef_detect import detect_clef  # noqa: E402
+from clef_detect import _load_templates2  # noqa: E402
 from clef_map import load_templates  # noqa: E402
 
 STEP_TO_PC = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
@@ -53,7 +54,7 @@ def truth(mx):
 
 def main():
     splits = json.loads((PILOT / "manifests" / "splits.json").read_text())
-    templates = load_templates()
+    templates = _load_templates2() or load_templates()
     rest_templates, _rc = build_templates(splits, n_train=40)
     dirs = sorted(p for p in OLIMPIC.iterdir() if p.is_dir())
     C = Counter()
