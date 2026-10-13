@@ -12,6 +12,7 @@ import {
   chromaOfSpectrum,
   recognizeChord,
   recognizeChordWithRoot,
+  inferMeter,
   downgradeUnheardExtension,
   hzToMidi,
   binToHz,
@@ -103,6 +104,10 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   const tempoVaries = Math.max(...sectionTempos) - Math.min(...sectionTempos) >= 8
   report('beats', 0.45)
   const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: tempo.bpm, totalSeconds })
+  // M3 meter: infer instead of assuming 4/4. An unverified meter keeps the 4/4
+  // default for engraving but is reported as uncertain, so callers can say so.
+  const meterReading = inferMeter(onsetFrames, frameSeconds, tempo.bpm)
+  const beatsPerMeasure = meterReading.uncertain ? 4 : meterReading.meter
   report('harmony', 0.6)
   // Chord per beat window from harmonic-view chroma. A3: windows span at
   // least ~1.2 s (fast-tempo beats are melody-dominated alone) and a
@@ -234,7 +239,19 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   return {
     totalSeconds: Math.round(totalSeconds * 1000) / 1000,
     sampleRate,
-    tempo: { ...tempo, varies: tempoVaries, sectionTempos, provenance: PROVENANCE.INFERRED },
+    tempo: {
+      ...tempo,
+      ambiguousTempo: tempo.ambiguousTempo ?? false,
+      varies: tempoVaries,
+      sectionTempos,
+      provenance: PROVENANCE.INFERRED,
+    },
+    meter: {
+      beatsPerMeasure,
+      uncertain: meterReading.uncertain,
+      scores: meterReading.scores ?? {},
+      provenance: PROVENANCE.INFERRED,
+    },
     beats: { beats, beatPeriodSeconds, provenance: PROVENANCE.INFERRED },
     onsets,
     chords,

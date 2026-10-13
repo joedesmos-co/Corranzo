@@ -408,3 +408,51 @@ export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, an
   }
   return { beats, beatPeriodSeconds: period, anchorSeconds: anchor }
 }
+
+/**
+ * Meter inference from accent pattern (M3).
+ *
+ * V1 emitted everything in 4/4. Instead of assuming, score each candidate
+ * meter by how well the strongest beats land on its downbeats: beat i is a
+ * downbeat of meter m when i mod m === 0, so meter m explains the accents
+ * when onsets cluster at those positions. A meter is only accepted if it beats
+ * the runner-up by a clear margin; otherwise the result is `uncertain` and the
+ * caller keeps 4/4 while SAYING the meter is unverified.
+ *
+ * @param onsetFrames detected onset frame indices
+ * @param frameSeconds seconds per analysis frame
+ * @param bpm chosen tempo (only used to place beats; meters are relative)
+ * @param candidates meters to consider (default 2,3,4,6)
+ */
+export function inferMeter(onsetFrames = [], frameSeconds, bpm, { candidates = [3, 4], margin = 0.15 } = {}) {
+  const period = 60 / Math.max(1, bpm)
+  const anchor = (onsetFrames[0] ?? 0) * frameSeconds
+  const beatStrengths = []
+  for (let t = anchor % period, i = 0; t <= (onsetFrames.length ? onsetFrames[onsetFrames.length - 1] * frameSeconds : 0); t += period, i += 1) {
+    let strength = 0
+    for (const frame of onsetFrames) {
+      if (Math.abs(frame * frameSeconds - t) <= period * 0.2) strength += 1
+    }
+    beatStrengths.push(strength)
+  }
+  if (beatStrengths.length < candidates.length * 2) {
+    return { meter: 4, uncertain: true, scores: {} }
+  }
+  const scores = {}
+  for (const m of candidates) {
+    let down = 0
+    let off = 0
+    beatStrengths.forEach((s, i) => {
+      if (i % m === 0) down += s
+      else off += s
+    })
+    const downCount = Math.ceil(beatStrengths.length / m)
+    const offCount = beatStrengths.length - downCount
+    scores[m] = down / Math.max(1, downCount) - off / Math.max(1, offCount)
+  }
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1])
+  const [bestMeter, bestScore] = ranked[0]
+  const runnerUp = ranked[1]?.[1] ?? -Infinity
+  const uncertain = !(bestScore - runnerUp >= margin)
+  return { meter: Number(uncertain ? bestMeter : bestMeter), scores, uncertain, best: Number(bestMeter) }
+}

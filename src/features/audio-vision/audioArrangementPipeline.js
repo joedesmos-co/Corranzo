@@ -281,7 +281,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     events: simplified,
     targetPart,
     bpm: analysis.tempo.bpm,
-    beatsPerMeasure: 4,
+    beatsPerMeasure: analysis.meter?.beatsPerMeasure ?? 4,
     title: title ?? file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement',
     warnings: model.parts[0].warnings,
   })
