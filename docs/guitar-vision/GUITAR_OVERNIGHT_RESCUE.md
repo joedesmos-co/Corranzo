@@ -434,3 +434,32 @@ scored against joins core boxes (no oracle):
 - bravura   Ode    P=0.756 R=0.554 F1=0.639
 Worst case: bravura F1=0.639. Bravura is still the weakest style and has
 the least labelled data (28 TAB digits on the only carrier score).
+
+### R7 — Full pipeline connected to the corrected render path
+- make-pipeline-manifests.py emits chain-eval/transcribe manifests that
+  point at the corrected renders (measured gap, selected font), retiring
+  the obsolete /tmp/proof/hires staging. Chain models re-linked from the
+  committed datasets/guitar-vision/proof/{proof-model.pt,proof-context/stringnet.pt}.
+- RENDER BUG FOUND: the rasteriser clipped pages at ~1000px because
+  `boundingBox()` was measured against a 100px viewport under
+  `overflow:hidden`. Viewport is now sized from the SVG geometry first.
+  Txo p1 went 1810x986 (clipped) -> 1810x2375 (full).
+- Chain results (corrected pipeline, 3 real scores, no oracle):
+  standard 733 det / 642 decoded, string .967 / fret .932 / pitch .901,
+             coverage decoded .705 / pitch .623
+  compact  700 det / 602 decoded, string .971 / fret .922 / pitch .896,
+             coverage .731 / .637
+  large    720 det / 688 decoded, string 1.000 / fret .947,
+             coverage .756 / .705
+  (vs the pre-fix DEV pitch coverage .129/.338/.124 -> 5.5x/2.2x/5.7x)
+- Transcribe Txo (corrected pipeline): 181 notes, all matched;
+  string 99.4% / fret 92.3% / measure 80.1% / triple 73.5% OF MATCHED,
+  but only 181/362 GT digits = 50% coverage (old pipeline: 349 notes,
+  96% coverage, triple 95.9% of GT). Semantic (corrected, single-part
+  truth) 53% -> 48%.
+  HONEST REGRESSION: per-note accuracy held up (string 99.4%) and
+  detection coverage rose 5.5x, but the transcriber's own filters
+  (TAB-span margin, TAU abstention, onset-column merging) discard most
+  of the newly-detected digits, so end-to-end note count and semantic
+  score fell. The transcriber's filters are now the bottleneck, not the
+  detector.

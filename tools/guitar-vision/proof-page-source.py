@@ -121,11 +121,12 @@ const { chromium } = require('playwright');
     svg = svg.replace(/font-family="[^"]*"/g, `font-family="${process.argv[5]}"`);
   }
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 100, height: 100 } });
+  // Size the viewport from the SVG's own geometry BEFORE measuring: with a
+  // small initial viewport, `overflow:hidden` clips #wrap's bounding box
+  // and the screenshot would capture only the top of the page.
+  const page = await browser.newPage({ viewport: { width: W, height: H } });
   await page.setContent(`<html><body style="margin:0;background:#fff;line-height:0">` +
-    `<div id="wrap" style="width:${W}px;overflow:hidden">${svg}</div></html>`);
-  const box = await page.locator('#wrap').boundingBox();
-  await page.setViewportSize({ width: Math.ceil(box.width), height: Math.ceil(box.height) });
+    `<div id="wrap" style="width:${W}px;height:${H}px;overflow:hidden">${svg}</div></html>`);
   await page.locator('#wrap').screenshot({ path: pngPath });
   await browser.close();
 })();
@@ -273,3 +274,65 @@ def render_at_gap(workdir: str, layout: str, page_no: int, target_gap: float = 2
     return {'image': np.asarray(img, dtype=np.uint8), 'fx': fx, 'fy': fx,
             'ox': ox, 'oy': oy, 'gap': measure_gap(np.asarray(img, dtype=np.uint8)) or target_gap,
             'width': width}
+
+
+def write_manifests(workdirs, layouts=("standard",), target_gap=26.0,
+                    font="Palatino", out_root="/tmp/proof/hires-fixed",
+                    pages_by_sample=None):
+    """Emit manifests in the format chain-eval/transcribe already consume.
+
+    Each entry is {"file": <rendered png>, "cssWidth": <render width>,
+    "viewBox": [vbW, vbH], "height": <render height>, "layout": layout} so
+    cssWidth/viewBox[0] reproduces the exact render scale. This retires the
+    obsolete /tmp/proof/hires staging without touching either consumer.
+    """
+    import json as _json
+    manifests = 0
+    for layout in layouts:
+        out_dir = Path(out_root) / ("hires" if layout == "standard" else f"hires-{layout}")
+        out_dir.mkdir(parents=True, exist_ok=True)
+        for wd in workdirs:
+            sample = Path(wd).name
+            pages = (pages_by_sample or {}).get(sample)
+            man = {}
+            for pg in range(1, 8):
+                if pages and pg not in pages:
+                    continue
+                r = render_at_gap(wd, layout, pg, target_gap=target_gap, font=font)
+                if r is None:
+                    continue
+                su = svg_units(svg_path(wd, layout, pg))
+                if su is None:
+                    continue
+                vbW, vbH = su[1], su[1]
+                # the outer tag carries only width; the height comes from
+                # the definition-scale viewBox
+                head = svg_path(wd, layout, pg).read_text(errors="ignore")[:30000]
+                import re as _re
+                _m = _re.search(r'viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"', head)
+                if _m:
+                    vbW, vbH = float(_m.group(1)), float(_m.group(2))
+                man[f"page{pg}"] = {
+                    "file": str((Path("/tmp/proof/gv-render") / layout / sample /
+                                 (font.replace(" ", "_") if font else "") /
+                                 f"p{pg}-g{target_gap:g}.png")),
+                    "cssWidth": r["width"],
+                    "viewBox": [vbW, vbH],
+                    "height": int(round(r["width"] * vbH / vbW)),
+                    "layout": layout,
+                }
+                if pages and pg == max(pages):
+                    break
+                if pages is None and pg > 1:
+                    # keep scanning: stop after two consecutive misses
+                    if f"page{pg-1}" not in man and f"page{pg-2}" not in man:
+                        break
+            if not man:
+                continue
+            # viewBox height must round-trip fy; recompute from the svg
+            su = svg_units(svg_path(wd, layout, 1))
+            vbW = su[1]
+            (out_dir / f"{sample}-manifest.json").write_text(
+                _json.dumps(man, indent=1))
+            manifests += 1
+    return manifests
