@@ -36,8 +36,51 @@ def frame_gap(fr):
     return (fr[-1] - fr[0]) / 4.0
 
 
-def process_page(gray, templates, probe_fn=None, rest_templates=None):
-    """Full automatic analysis of one page/strip image. Returns a dict."""
+def estimate_skew(gray, limit=4.0, step=0.25, max_dim=1000):
+    """Estimate page skew (degrees) by maximizing the sharpest row-ink
+    profile over small rotations. Deterministic; runs on a downscaled copy
+    so the cost is independent of the input resolution."""
+    h, w = gray.shape[:2]
+    sc = 1.0
+    if max(h, w) > max_dim:
+        sc = max_dim / max(h, w)
+        small = cv2.resize(gray, (int(w * sc), int(h * sc)),
+                           interpolation=cv2.INTER_AREA)
+    else:
+        small = gray
+    best = (0.0, -1.0)
+    for ang in np.arange(-limit, limit + 1e-9, step):
+        M = cv2.getRotationMatrix2D((small.shape[1] / 2, small.shape[0] / 2),
+                                    float(ang), 1.0)
+        rot = cv2.warpAffine(small, M, (small.shape[1], small.shape[0]),
+                             flags=cv2.INTER_LINEAR, borderValue=255)
+        dark = (rot < 128).astype(np.uint8)
+        score = float(dark.sum(axis=1).max())
+        if score > best[1]:
+            best = (float(ang), score)
+    return best[0]
+
+
+def deskew(gray, angle):
+    if abs(angle) < 1e-6:
+        return gray
+    h, w = gray.shape[:2]
+    M = cv2.getRotationMatrix2D((w / 2, h / 2), float(angle), 1.0)
+    return cv2.warpAffine(gray, M, (w, h), flags=cv2.INTER_LINEAR,
+                          borderValue=255)
+
+
+def process_page(gray, templates, probe_fn=None, rest_templates=None,
+                 do_deskew=True):
+    """Full automatic analysis of one page/strip image. Returns a dict.
+    With do_deskew (default) the page is first deskewed: real scans are
+    rotated by 1-4 degrees and horizontal run-length staff detection cannot
+    see a tilted line (measured on OLiMPiC scans: 0 staff lines at native
+    tilt, 15 after deskew)."""
+    if do_deskew:
+        angle = estimate_skew(gray)
+        if abs(angle) > 0.05:
+            gray = deskew(gray, angle)
     lines, dark = staff_lines(gray)
     frames = group_staves(lines)
     if not frames:

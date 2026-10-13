@@ -1075,3 +1075,78 @@ diatonic steps, i.e. half-gap rounding and multi-staff assignment).
 Exact next milestone: pitch accuracy on detected noteheads (frame
 assignment + half-gap rounding), then rest recall (precision-preserving),
 then duration on detected boxes.
+
+
+---
+
+# Pitch rescue + robustness audit + cross-engraver reality check (M1-M6)
+
+From `e3631607c4`. No merge, TEST sealed, DEV identities frozen. Commits:
+`60986c5669` (clef fix + audit + scale), this one (deskew + OLiMPiC).
+
+## M1 pitch error ledger (reports/pitch_ledger.json, 870 matched notes)
+
+Of 139 pitch errors: 134 (96%) are OCTAVE displacements (117 of +12 steps,
+17 of -12); 132 (95%) are chord tones; 0 are octave-free step errors from
+ledger notes; the detected notehead centers match truth exactly (dy=0).
+Root cause: auto CLEF misclassification. F read as G shifts by exactly 12
+steps. The first diagnostic pass undercounted clef errors (per-measure clef
+lookup fails when clefs appear only in the first measure) — fixed by
+voting the truth clef per frame.
+
+## M1/M2 fixes (verified)
+
+- Clef detection rewritten (scripts/clef_detect.py): frame-local left edge
+  (longest run on the frame's own staff line) + class-conditional
+  gap-relative windows matching the training crop convention. Clef accuracy
+  19/25 -> 23/25 frames; with the oracle clef the pitch ceiling is 97.5%,
+  measured auto-clef pitch now 90.8% on detected notes.
+- Binarization: fixed gray<128 -> Otsu with a degenerate-image guard
+  (already-binary scans: Otsu returns 0 and the pipeline produced ZERO ink).
+- Staff grouping: fixed +4px tolerance -> gap-relative (0.5x scale went
+  from 0 frames to working); 4-line frames repaired by interpolation.
+- Deskew stage (auto_page.process_page): estimate by maximizing the
+  sharpest row-ink profile over +-4 degrees on a downscaled copy, then
+  rotate. Real scans are tilted 1-4 degrees; measured on OLiMPiC: 0 staff
+  lines at native tilt, 15 after deskew.
+- Meta-free page processor (auto_page.py): gap from the detected frames,
+  pixel-native; the fixture meta.json (page width, median gap) and SVG
+  margins are no longer used by the automatic path.
+
+## DEV end-to-end (5 pages, 902 notes, no oracle at inference)
+
+| metric | mission start | now |
+|---|---|---|
+| detected pitch | 0.796 | **0.907** |
+| detected complete | 0.634 | **0.703** |
+| page pitch | 0.754 | **0.868** |
+| page complete | 0.591 | **0.679** (612 events) |
+| note P / R | 0.932 / 0.965 | 0.931 / 0.965 |
+| rest P / R | 1.000 / 0.296 | 1.000 / 0.296 |
+| MusicXML | 5/5 | 5/5 |
+
+## M3 cross-layout evidence (reports/scale_invariance.json)
+
+Same 5 DEV pages at different rasterization scales: 1.0x P .929 R .968
+pitch .847; 2.0x P .958 R .916 pitch .897; 0.5x P .845 R .813 pitch .547
+(previously 0 TP: total failure). DPI invariance holds by construction
+(all windows are in staff-gap units); below ~10px staff gap the line
+detection jitter costs accuracy — measured, documented, not hidden.
+
+## M3b different-engraver evidence (reports/olimpic_eval.json) — NEGATIVE
+
+OLiMPiC scanned piano strips (an independent engraver; real scans; truth =
+paired MusicXML; 8 samples, 528 notes): before fixes 2 frames / 41
+detections; after Otsu-guard + deskew: 9 frames detected, 212 detections
+for 528 truth notes, pitch multiset overlap 0.20. Honest conclusion:
+GENERALIZATION TO SCANS/OTHER ENGRAVERS IS NOT ESTABLISHED. The blockers
+measured on this set are (a) skew (now handled), (b) staff-line detection
+on noisy scans (9 frames for 16 systems), (c) clef style differences,
+(d) notehead shape differences. No claims beyond the DEV renders.
+
+## M5/M6 remaining
+
+Next largest page-level loss on DEV: duration (267 wrong of 902), then
+pitch (118), then rests (19 FN of 27). M6: skew handled; blur/low-res/
+contrast/inverted inputs are untested and rejected-by-default behaviour
+is not yet implemented (no quality gate exists in this branch).
