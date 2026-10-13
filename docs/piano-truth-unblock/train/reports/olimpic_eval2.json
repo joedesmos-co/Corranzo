@@ -1,0 +1,341 @@
+{
+ "samples": 10,
+ "truth_notes": 688,
+ "detections": 374,
+ "frames": 16,
+ "frames_with_detections": 16,
+ "note_recall": 0.5436,
+ "pitch_multiset": 0.0768,
+ "clef_accuracy": 0.0,
+ "rows": [
+  {
+   "sample": "4919798",
+   "skew": 0.75,
+   "frames": 2,
+   "det": 59,
+   "truth": 85,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 51,
+     "truth": 75,
+     "pitch_overlap": 13
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 8,
+     "truth": 10,
+     "pitch_overlap": 0
+    }
+   ]
+  },
+  {
+   "sample": "4945954",
+   "skew": 0.0,
+   "frames": 1,
+   "det": 45,
+   "truth": 42,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 45,
+     "truth": 22,
+     "pitch_overlap": 6
+    }
+   ]
+  },
+  {
+   "sample": "4976604",
+   "skew": -0.75,
+   "frames": 2,
+   "det": 13,
+   "truth": 75,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 11,
+     "truth": 46,
+     "pitch_overlap": 2
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 2,
+     "truth": 29,
+     "pitch_overlap": 0
+    }
+   ]
+  },
+  {
+   "sample": "4978393",
+   "skew": 0.25,
+   "frames": 2,
+   "det": 33,
+   "truth": 38,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 21,
+     "truth": 21,
+     "pitch_overlap": 5
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 12,
+     "truth": 17,
+     "pitch_overlap": 0
+    }
+   ]
+  },
+  {
+   "sample": "4978397",
+   "skew": 0.0,
+   "frames": 2,
+   "det": 43,
+   "truth": 48,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 29,
+     "truth": 32,
+     "pitch_overlap": 4
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 14,
+     "truth": 16,
+     "pitch_overlap": 0
+    }
+   ]
+  },
+  {
+   "sample": "4978492",
+   "skew": 0.5,
+   "frames": 1,
+   "det": 26,
+   "truth": 54,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 26,
+     "truth": 36,
+     "pitch_overlap": 5
+    }
+   ]
+  },
+  {
+   "sample": "4982465",
+   "skew": 0.0,
+   "frames": 3,
+   "det": 87,
+   "truth": 122,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 3,
+     "truth": 75,
+     "pitch_overlap": 1
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 53,
+     "truth": 47,
+     "pitch_overlap": 0
+    },
+    {
+     "fi": 2,
+     "staff": null,
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      null,
+      null
+     ],
+     "det": 31,
+     "truth": 0,
+     "pitch_overlap": 0
+    }
+   ]
+  },
+  {
+   "sample": "4982505",
+   "skew": 0.0,
+   "frames": 2,
+   "det": 24,
+   "truth": 64,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 13,
+     "truth": 38,
+     "pitch_overlap": 7
+    },
+    {
+     "fi": 1,
+     "staff": "2",
+     "auto_clef": [
+      "G",
+      2
+     ],
+     "truth_clef": [
+      "F",
+      "4"
+     ],
+     "det": 11,
+     "truth": 26,
+     "pitch_overlap": 1
+    }
+   ]
+  },
+  {
+   "sample": "4985973",
+   "skew": 0.0,
+   "frames": 0,
+   "det": 0,
+   "truth": 49,
+   "frame_rows": []
+  },
+  {
+   "sample": "4985990",
+   "skew": 0.0,
+   "frames": 1,
+   "det": 44,
+   "truth": 111,
+   "frame_rows": [
+    {
+     "fi": 0,
+     "staff": "1",
+     "auto_clef": [
+      "F",
+      4
+     ],
+     "truth_clef": [
+      "G",
+      "2"
+     ],
+     "det": 44,
+     "truth": 96,
+     "pitch_overlap": 1
+    }
+   ]
+  }
+ ]
+}

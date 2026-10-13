@@ -75,7 +75,7 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
     for pg in pages:
         meta, gray, sx, gap, svg, tx, ty = page_ctx(sid, pg)
         lines, dark = staff_lines(gray)
-        frames = group_staves(lines)
+        frames = group_staves(lines, dark)
         if not frames:
             continue
         from detector import detect_noteheads_full

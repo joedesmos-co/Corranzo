@@ -119,6 +119,8 @@ def detect_chord_tones(gray, lines, frames, gap, mask, heads):
 
 
 def detect_noteheads(gray, lines, gap):
+    if not np.isfinite(gap) or gap < 2.0:
+        return []
     dark = (gray < 128).astype(np.uint8)
     m = build_mask(dark, gap)
     kw = max(2, int(round(OPEN_KERNEL_GAPS * gap)))

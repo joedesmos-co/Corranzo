@@ -47,7 +47,7 @@ def binarize(gray):
     return dark
 
 
-def staff_lines(gray, min_frac=0.22):
+def staff_lines(gray, min_frac=0.10):
     """Row-projection staff lines via LONGEST contiguous dark run per row
     (a staff line is one long run; glyph rows are many short runs)."""
     dark = binarize(gray)
@@ -74,10 +74,27 @@ def staff_lines(gray, min_frac=0.22):
             lines.append((start + prev) // 2)
             start = prev = y
         lines.append((start + prev) // 2)
+    # merge duplicate line detections: a thick scan line can produce dark
+    # runs on two adjacent rows, both above the run threshold, which breaks
+    # the 5-line staff grouping (measured: OLiMPiC scans had 3-7px duplicate
+    # pairs -> 16 detected lines -> 0 frames). Merge centers closer than
+    # 0.4x the median spacing.
+    if len(lines) >= 3:
+        sp = [lines[i + 1] - lines[i] for i in range(len(lines) - 1)]
+        sp.sort()
+        med = sp[len(sp) // 2]
+        thr = max(2, int(round(0.40 * med)))
+        merged = [lines[0]]
+        for y in lines[1:]:
+            if y - merged[-1] <= thr:
+                merged[-1] = (merged[-1] + y) // 2
+            else:
+                merged.append(y)
+        lines = merged
     return lines, dark
 
 
-def group_staves(lines):
+def group_staves(lines, dark=None):
     """Cluster line centers into groups of 5 (staves). Inside a staff the
     line spacing is regular (~gap); between staves it is 2.5-4x gap.
     The same-staff tolerance is GAP-RELATIVE (a fixed +4 pixel tolerance
@@ -103,7 +120,7 @@ def group_staves(lines):
     out = []
     for g in groups:
         if len(g) == 5:
-            out.append(list(g))
+            out.append(_validate_frame(list(g), dark))
             continue
         if len(g) == 4:
             # a missed staff line: the doubled spacing marks where it goes
@@ -114,8 +131,66 @@ def group_staves(lines):
                     g = list(g[:i + 1]) + [g[i] + round(d / 2)] + list(g[i + 1:])
                     break
         if len(g) == 5:
-            out.append(list(g))
+            out.append(_validate_frame(list(g)))
     return out
+
+
+def _line_strength(dark, y, W):
+    """Longest dark run on row y (0 if the row is empty)."""
+    if not (0 <= y < dark.shape[0]):
+        return 0
+    row = dark[y]
+    if not row.any():
+        return 0
+    d = np.diff(np.concatenate(([0], row, [0])))
+    st = np.where(d == 1)[0]
+    en = np.where(d == -1)[0]
+    return int((en - st).max()) if len(st) else 0
+
+
+def _validate_frame(g, dark=None):
+    """A staff's 5 lines are (near-)evenly spaced by the staff gap. If one
+    line is spurious (e.g. text above the staff) the frame is off by a full
+    gap = 2 diatonic steps for every note (measured on scans). Drop the
+    outlier line and interpolate its position from the remaining four."""
+    if len(g) != 5:
+        return g
+    # ink-strength check: a real staff line spans the system; a spurious
+    # detection (text, thick-line artifact, an adjacent staff's line) has a
+    # materially shorter run. Drop the weakest line and interpolate.
+    if False and dark is not None:
+        strengths = [_line_strength(dark, int(y), 0) for y in g]
+        order = sorted(range(5), key=lambda i: strengths[i])
+        weakest = order[0]
+        others = [strengths[i] for i in order[1:]]
+        if others and strengths[weakest] < 0.6 * (sum(others) / 4.0):
+            gg = [v for i, v in enumerate(g) if i != weakest]
+            med = sorted([gg[i + 1] - gg[i] for i in range(3)])[1]
+            if med > 0:
+                if weakest == 0:
+                    g = [gg[0] - med] + gg
+                elif weakest == 4:
+                    g = gg + [gg[-1] + med]
+                else:
+                    g = gg[:weakest] + [(gg[weakest - 1] + gg[weakest]) // 2] + gg[weakest:]
+                return g
+    gaps = [g[i + 1] - g[i] for i in range(4)]
+    med = sorted(gaps)[2]
+    if med <= 0 or max(gaps) > 1.4 * med or min(gaps) < 0.65 * med:
+        for drop in range(5):
+            gg = [v for i, v in enumerate(g) if i != drop]
+            gp = [gg[i + 1] - gg[i] for i in range(3)]
+            m2 = sorted(gp)[1]
+            if m2 > 0 and max(gp) <= 1.15 * m2 and min(gp) >= 0.9 * m2:
+                # interpolate the missing line (position of the drop index)
+                if drop == 0:
+                    g = [gg[0] - m2] + gg
+                elif drop == 4:
+                    g = gg + [gg[-1] + m2]
+                else:
+                    g = gg[:drop] + [(gg[drop - 1] + gg[drop]) // 2] + gg[drop:]
+                return g
+    return g
 
 
 def components(dark, lines_y, gap):

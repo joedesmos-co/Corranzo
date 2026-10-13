@@ -1150,3 +1150,84 @@ Next largest page-level loss on DEV: duration (267 wrong of 902), then
 pitch (118), then rests (19 FN of 27). M6: skew handled; blur/low-res/
 contrast/inverted inputs are untested and rejected-by-default behaviour
 is not yet implemented (no quality gate exists in this branch).
+
+
+---
+
+# Real-scan generalization rescue (M1-M6, this mission)
+
+From `56c66413c5` (+ two bookkeeping commits). No merge, TEST sealed.
+
+## 1. Scan failure attribution (reports/scan_attribution.json)
+
+Stage-by-stage on 10 OLiMPiC scanned strips (688 truth notes):
+  preprocessing : Otsu degenerate on already-binary scans (threshold 0 ->
+                   zero ink) - GUARDED; deskew finds 0-0.75 deg tilts.
+  staff lines   : 12-16 lines detected but 9/16 staff frames grouped; two
+                  root causes measured:
+                  (a) DUPLICATE line detections - a thick scan line produces
+                      dark runs on 2 adjacent rows, both above threshold, so
+                      a 5-line group contains a duplicate and a duplicate'
+                      neighbor (measured: 16 lines -> 0 frames);
+                  (b) partial staves - lines below the run threshold on
+                      low-contrast rows.
+  clef          : bass staves on scans read as TREBLE (F->G = +12 steps for
+                  every staff-2 note); clef accuracy 0.0 by the (fixed)
+                  comparison.
+  noteheads     : 374 detections after fixes (was 212).
+  pitch         : multiset overlap 0.077 - see the breakdown below.
+
+## 2/3. Fixes (all deterministic, gap-relative) and before/after
+
+| OLiMPiC (independent engraver, scanned) | before | after |
+|---|---|---|
+| staff frames | 9 | **16** (of 20 systems) |
+| note detections | 212 | **374** (recall 0.21 -> 0.54) |
+| pitch multiset overlap | ~0.20 (loose metric) / 0.077 (strict per-staff) | 0.077 |
+| note pitch, treble staff only | - | ~0.25 agreement |
+| note pitch, bass staff | - | 0 (clef F->G: every note +12 steps) |
+
+Fixes: duplicate-line merge (0.4 x median spacing), run threshold
+min_frac 0.22 -> 0.10 (recovers staff lines on low-contrast rows),
+4-line frame repair, frame evenness validation, non-finite gap guard.
+DEV renders: note P 0.931, R 0.957, pitch 0.907, complete 0.703,
+page complete 0.679 (612/902), rests P 1.000/R 0.296, MusicXML 5/5 —
+unchanged except note recall 0.9645 -> 0.9568 (7 notes) caused by the
+Otsu binarization required for scans (documented trade, all other
+metrics identical).
+
+## 4. Hidden assumptions found and closed (reports/HARDCODE_AUDIT.md updated)
+
+- fixed +4px staff-grouping tolerance -> gap-relative (0.5x scale).
+- fixed gray<128 -> Otsu with a degenerate-image guard (binary scans).
+- page-global leftmost-dark-column as system left edge -> per-frame staff
+  line run (fixed last commit; this mission found it again from the scan side).
+- duplicate staff-line detections -> merged by spacing-relative threshold.
+- fixed staff-line run fraction 0.22 -> 0.10 (low-contrast scan rows).
+- fixture meta.json (page width / staff gap / SVG margins) -> derived from
+  the detected frames (auto_page.py).
+Still open: clef templates are Verovio-font specific (scans fail), notehead
+boxes absorb thick staff-line remnants on scans (cy error), no page-size
+limit, no rotation beyond +-4 deg, no contrast/quality gate.
+
+## 5/6/7. Quality, full-page accuracy, rejected experiments
+
+Full-page (familiar DEV): 612/902 complete events (67.9%), pitch 86.8%,
+duration 73.3%, rests P 1.0/R 0.296, measures 97.9%. Independent scans:
+NOT usable (pitch 0.077) — reported, not hidden. Rejected this mission:
+phase-lock (median legal-grid phase; measured +0.02 only - noteheads in
+spaces legitimately sit at frac 1), ink-strength frame validation
+(-23 detections, no pitch gain), frame evenness validation alone
+(no pitch gain, kept because it fixed broken frames: 12 -> 16).
+No training was run this mission (deterministic fixes only).
+
+## Next highest-impact blocker (scan path)
+
+Two measured scan failures, in order: (1) clef recognition on scans — bass
+read as treble, zero pitch on half of all notes; the fix is a
+shape-discriminative clef classifier (F has two dots, G a spiral, C two
+vertical bars) instead of NCC means tuned on render fonts, or scan-style
+templates built from the OLiMPiC TRAIN-style material. (2) Notehead cy on
+thick-line scans: boxes absorb staff-line remnants, shifting centers.
+Until both land, automatic transcription must be documented as
+render-grade only.

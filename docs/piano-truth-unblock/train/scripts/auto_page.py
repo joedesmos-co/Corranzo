@@ -82,7 +82,7 @@ def process_page(gray, templates, probe_fn=None, rest_templates=None,
         if abs(angle) > 0.05:
             gray = deskew(gray, angle)
     lines, dark = staff_lines(gray)
-    frames = group_staves(lines)
+    frames = group_staves(lines, dark)
     if not frames:
         return {"frames": [], "notes": [], "rests": [], "clefs": [],
                 "measures": [], "gap": 0.0}
