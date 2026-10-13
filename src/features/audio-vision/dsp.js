@@ -257,7 +257,8 @@ const SEVENTH_TO_TRIAD = {
   dominant7: { quality: 'major', suffix: '' },
 }
 
-export function downgradeUnheardExtension(recognition, heardPcs) {
+export function downgradeUnheardExtension(recognition, heardPcs, { enabled = true } = {}) {
+  if (!enabled) return recognition
   if (!recognition || !Array.isArray(heardPcs)) return recognition
   const ext = EXTENSION_PC[recognition.quality]
   const target = SEVENTH_TO_TRIAD[recognition.quality]

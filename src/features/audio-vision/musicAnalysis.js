@@ -17,6 +17,15 @@ import {
   binToHz,
 } from './dsp.js'
 
+/**
+ * Downgrade claimed sevenths the transcription did not hear. A/B on 16
+ * independent GuitarSet recordings (139 usable chord windows): quality 0.338
+ * -> 0.468 and root+quality 0.309 -> 0.417, with no recording regressing and
+ * root accuracy untouched (the guard never re-roots). Set false to re-measure
+ * the guard's effect without editing call sites.
+ */
+export const SEVENTH_GUARD_ENABLED = true
+
 export const PROVENANCE = {  DETECTED: 'detected', // direct DSP evidence (onsets, spectral peaks)
   PREDICTED: 'predicted', // neural model output (Basic Pitch note events)
   INFERRED: 'inferred', // musical inference from evidence (chords, sections, quantization)
@@ -208,7 +217,7 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   // (chroma smearing alone must not invent extensions).
   for (const chord of chords) {
     if (!Array.isArray(chord.heardPcs) || !chord.heardPcs.length) continue
-    const revised = downgradeUnheardExtension(chord, chord.heardPcs)
+    const revised = downgradeUnheardExtension(chord, chord.heardPcs, { enabled: SEVENTH_GUARD_ENABLED })
     if (revised !== chord) {
       chord.root = revised.root
       chord.quality = revised.quality

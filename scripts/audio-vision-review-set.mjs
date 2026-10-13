@@ -16,6 +16,8 @@ import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readWavPcm } from './lib/readWavPcm.mjs'
 import { writeSmf } from './lib/writeSmf.mjs'
+import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
+import { mergeTiedContinuations } from '../src/features/practice/waitForYouCheckpoints.js'
 import { predictBasicPitchNode, closeBasicPitchNode } from './lib/basicPitchNode.mjs'
 import { runAudioArrangementPipeline } from '../src/features/audio-vision/audioArrangementPipeline.js'
 import { resampleLinear } from '../src/features/audio-vision/audioImport.js'
@@ -82,23 +84,31 @@ for (const item of ITEMS) {
       }
       const file = `${item.id}--${targetPart}--${difficulty}.musicxml`
       writeFileSync(join(outDir, file), out.musicXml)
-      // Playable preview: a dependency-free format-0 SMF of the SAME events.
-      // Tempo comes from the analysis, notes from the arranged part, so a
-      // musician can audition without a notation program.
+      // Playable preview: derived FROM THE ENGRAVED SCORE (parseMusicXml), not
+      // from a recomputed event list, so preview and score cannot disagree by
+      // construction. Tied barline segments are merged like the practice engine
+      // does. scripts/audio-vision-preview-verify.mjs proves the round trip.
       const midiFile = file.replace('.musicxml', '.mid')
       try {
-        const beatPeriod = 60 / Math.max(1, out.transcribed.tempo.bpm)
-        const events = out.model.parts[0].events.map((e) => ({
-          timeSeconds: (out.transcribed.beats[0] ?? 0) + e.startBeat * beatPeriod,
-          midi: e.midi,
-          durationSeconds: Math.max(0.1, e.durBeats * beatPeriod),
-          velocity: e.role === 'melody' ? 84 : 64,
+        const timingMap = parseMusicXml(out.musicXml, file)
+        const bpm = timingMap.tempoChanges?.[0]?.bpm ?? out.transcribed.tempo.bpm
+        const notes = mergeTiedContinuations(
+          (timingMap.notes ?? []).filter((n) => !n.isRest && Number.isFinite(n.midi) && Number.isFinite(n.timeSeconds)),
+        )
+        const events = notes.map((n) => ({
+          timeSeconds: n.timeSeconds,
+          midi: n.midi,
+          durationSeconds: Math.max(0.05, (n.durationSeconds ?? 0.25)),
+          velocity: Number.isFinite(n.velocity)
+            ? (n.velocity <= 1 ? Math.max(1, Math.round(n.velocity * 127)) : n.velocity)
+            : 64,
         }))
         if (events.length) {
-          writeFileSync(join(outDir, midiFile), writeSmf(events, { tempoBpm: out.transcribed.tempo.bpm }))
+          writeFileSync(join(outDir, midiFile), writeSmf(events, { tempoBpm: bpm }))
         }
-      } catch {
+            } catch (error) {
         // Previews are a convenience; never fail the score over one.
+        console.warn(`preview skipped for ${file}: ${String(error?.message ?? error).slice(0, 100)}`)
       }
       entry.variants.push({
         targetPart,

@@ -44,9 +44,6 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   const beats = Math.max(1, Math.round(beatsPerMeasure))
   const totalBeats = events.length ? Math.max(...events.map((e) => e.startBeat + e.durBeats)) : beats
   const measureCount = Math.max(1, Math.ceil(totalBeats / beats))
-  // Pre-split barline-crossing notes globally so remainders land in the
-  // correct following measure (per-measure splitting alone loses them).
-  const pieces = events.flatMap((e) => splitNoteAcrossBarlines(e, beats))
   const byMeasure = Array.from({ length: measureCount }, () => [])
   const isPiano = targetPart === PART_INSTRUMENTS.SOLO_PIANO
   const partId = isPiano ? 'P1' : 'G1'
@@ -57,25 +54,7 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   // be written back-to-back, overrun the barline, and shift the parsed time of
   // every later note. Clip each note to the next onset in the same voice; the
   // remaining sustain is expressed by ties across barlines, not by overlap.
-  const clipped = []
-  {
-    const byVoice = new Map()
-    for (const piece of pieces) {
-      const key = `${piece.measureIndex}:${isPiano ? (piece.hand ?? 'RH') : 'V1'}`
-      if (!byVoice.has(key)) byVoice.set(key, [])
-      byVoice.get(key).push(piece)
-    }
-    for (const group of byVoice.values()) {
-      const sorted = [...group].sort((a, b) => a.startBeat - b.startBeat)
-      for (let i = 0; i < sorted.length; i += 1) {
-        const e = sorted[i]
-        const next = sorted[i + 1]
-        const limit = next ? next.startBeat : (e.measureIndex + 1) * beats
-        clipped.push({ ...e, durBeats: Math.max(1 / 16, Math.min(e.durBeats, limit - e.startBeat)) })
-      }
-    }
-    clipped.sort((a, b) => a.measureIndex - b.measureIndex || a.startBeat - b.startBeat)
-  }
+  const clipped = prepareEventsForNotation(events, beats, isPiano)
   for (const e of clipped) {
     const m = Math.min(measureCount - 1, Math.max(0, measureIndexOf(e.startBeat, beats)))
     byMeasure[m].push(e)
@@ -118,6 +97,43 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
   void warnings
   void STEP_NAMES
   return xml
+}
+
+/**
+ * Clip events so each staff/voice stays monophonic (shared with preview MIDI
+ * generation so a playable preview and its engraved score always agree).
+ * A note lasting under the next onset in the same voice is split; sustains
+ * crossing barlines are tied by the barline splitter upstream.
+ */
+export function clipEventsForVoices(pieces, beats, isPiano) {
+  const byVoice = new Map()
+  for (const piece of pieces) {
+    const key = `${piece.measureIndex}:${isPiano ? (piece.hand ?? 'RH') : 'V1'}`
+    if (!byVoice.has(key)) byVoice.set(key, [])
+    byVoice.get(key).push(piece)
+  }
+  const clipped = []
+  for (const group of byVoice.values()) {
+    const sorted = [...group].sort((a, b) => a.startBeat - b.startBeat)
+    for (let i = 0; i < sorted.length; i += 1) {
+      const e = sorted[i]
+      const next = sorted[i + 1]
+      const limit = next ? next.startBeat : (e.measureIndex + 1) * beats
+      clipped.push({ ...e, durBeats: Math.max(1 / 16, Math.min(e.durBeats, limit - e.startBeat)) })
+    }
+  }
+  clipped.sort((a, b) => a.measureIndex - b.measureIndex || a.startBeat - b.startBeat)
+  return clipped
+}
+
+/**
+ * Full notation preparation: split barline crossings (tied), then clip per
+ * voice. Used by the engraver AND by preview-MIDI generation so the engraved
+ * score and the playable preview contain the same notated events.
+ */
+export function prepareEventsForNotation(events, beats, isPiano) {
+  const split = events.flatMap((e) => splitNoteAcrossBarlines(e, beats))
+  return clipEventsForVoices(split, beats, isPiano)
 }
 
 /** Measure owning an onset: exact barline hits belong to the NEW measure. */

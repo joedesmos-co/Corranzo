@@ -124,6 +124,9 @@ for (const entry of manifest.entries) {
     s4VoicingHit: 0, s4VoicingTotal: 0,
     timingErr: 0, timingN: 0,
     ambiguous: 0, matchedWindows: 0,
+    seventhLabelHeard: 0, seventhLabelHeardKept: 0,
+    seventhLabelNotHeard: 0, seventhLabelNotHeardStillClaimed: 0,
+    triadLabels: 0, triadLabelClaimedSeventh: 0,
   }
 
   const modelledNotes = analysis.predictedNotes
@@ -191,6 +194,27 @@ for (const entry of manifest.entries) {
     sums.s1TonesPresent += tones.size - missing.length
     sums.s1Missing += missing.length
 
+    // SEVENTH GUARD: did the label contain a seventh, did the transcription
+    // hear it, and what did the analysis finally claim?
+    const labelIsSeventh = /7/.test(String(label.label))
+    if (labelIsSeventh) {
+      const extTone = (parsed.rootPc + (QUALITY_INTERVALS[parsed.quality] ?? MAJOR)[1] + 1) % 12
+      const seventhHeard = heard.has((parsed.rootPc + 10) % 12) || heard.has((parsed.rootPc + 11) % 12)
+      if (seventhHeard) {
+        sums.seventhLabelHeard += 1
+        if (chord && /7/.test(chord.label)) sums.seventhLabelHeardKept += 1
+      } else {
+        sums.seventhLabelNotHeard += 1
+        // If the transcription could not hear the 7th, any seventh we claim is
+        // unsupported; count how often we still claim one (false extension).
+        if (chord && /7/.test(chord.label)) sums.seventhLabelNotHeardStillClaimed += 1
+      }
+      void extTone
+    } else {
+      sums.triadLabels += 1
+      if (chord && /7/.test(chord.label)) sums.triadLabelClaimedSeventh += 1
+    }
+
     // S2 chord estimate.
     if (chord) {
       row.analyzed = chord.label
@@ -248,11 +272,20 @@ for (const entry of manifest.entries) {
     s4VoicingAccuracy: sums.s4VoicingTotal ? Math.round((sums.s4VoicingHit / sums.s4VoicingTotal) * 1000) / 1000 : null,
     s4VoicingNotes: sums.s4VoicingTotal,
     timingMaeSeconds: sums.timingN ? Math.round((sums.timingErr / sums.timingN) * 1000) / 1000 : null,
+    seventhGuard: {
+      labelledSeventhsTotal: sums.seventhLabelHeard + sums.seventhLabelNotHeard,
+      heardAndKept: sums.seventhLabelHeardKept,
+      heard: sums.seventhLabelHeard,
+      unheardStillClaimed: sums.seventhLabelNotHeardStillClaimed,
+      triadLabels: sums.triadLabels,
+      triadLabelsClaimedSeventh: sums.triadLabelClaimedSeventh,
+    },
     perChord,
   })
   const r = rows[rows.length - 1]
   console.log(`  usable=${r.usableWindows} ambiguous=${r.ambiguousWindows} root=${r.rootAccuracy} quality=${r.qualityAccuracy} both=${r.rootAndQualityAccuracy}`)
   console.log(`  S1 tones present rate=${r.s1ChordTonesPresentRate} (missing ${r.s1MissingTones}) S3 bass=${r.s3BassAccuracy} S4 voicing=${r.s4VoicingAccuracy} timingMAE=${r.timingMaeSeconds}`)
+  console.log(`  seventhGuard: ${JSON.stringify(r.seventhGuard)}`)
   if (global.gc) global.gc()
 }
 await closeBasicPitchNode()

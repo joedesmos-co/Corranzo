@@ -32,7 +32,7 @@ export function writeSmf(events, { tempoBpm = 120, ticksPerQuarter = TICKS_PER_Q
   for (const event of sorted) {
     const startSeconds = Math.max(0, event.timeSeconds)
     const durationSeconds = Math.max(0.05, event.durationSeconds)
-    raw.push({ tick: secondsToTicks(startSeconds, tempoMpq, ticksPerQuarter), status: 0x90, midi: clampMidi(event.midi), velocity: event.velocity ?? 72 })
+    raw.push({ tick: secondsToTicks(startSeconds, tempoMpq, ticksPerQuarter), status: 0x90, midi: clampMidi(event.midi), velocity: clampVelocity(event.velocity ?? 72) })
     raw.push({ tick: secondsToTicks(startSeconds + durationSeconds, tempoMpq, ticksPerQuarter), status: 0x80, midi: clampMidi(event.midi), velocity: 0 })
   }
   raw.sort((a, b) => a.tick - b.tick || a.status - b.status)
@@ -72,6 +72,13 @@ function secondsToTicks(seconds, tempoMpq, ticksPerQuarter) {
 
 function clampMidi(midi) {
   return Math.max(0, Math.min(127, Math.round(midi)))
+}
+
+/** 0..1 velocities (MusicXML parser) or 1..127 both map to an audible 1..127. */
+function clampVelocity(velocity) {
+  const value = Number.isFinite(velocity) ? velocity : 64
+  const scaled = value <= 1 ? value * 127 : value
+  return Math.max(1, Math.min(127, Math.round(scaled)))
 }
 
 export { TICKS_PER_QUARTER }

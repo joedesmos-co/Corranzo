@@ -113,7 +113,7 @@ function sameTieVoice(left, right) {
 }
 
 /** Fold tied continuations into their attack note so WFY/visual keep one target. */
-function mergeTiedContinuations(notes) {
+export function mergeTiedContinuations(notes) {
   const sorted = [...notes].sort(
     (left, right) =>
       left.timeSeconds - right.timeSeconds ||

@@ -112,9 +112,14 @@ for (const src of REAL_CORPUS.sources) {
 // Only added when the local archive has been extracted (see realCorpus.mjs).
 {
   const PC = { C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5, 'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11 }
+  // Solo baselines previously validated, plus every comp track whose JAMS
+  // carries chord labels (one recording per style: BN1-3, Funk1-3, Jazz1-3,
+  // Rock1-3, SS1-3) -> independent labeled recordings, not adjacent windows.
   const gsTracks = [
     { id: 'guitarset-jazz-solo', wav: '/tmp/guitarset/tracks/04_Jazz1-200-B_solo_mic.wav', jams: '/tmp/guitarset/jams/04_Jazz1-200-B_solo.jams' },
     { id: 'guitarset-ss-comp', wav: '/tmp/guitarset/tracks/00_SS3-84-Bb_comp_mic.wav', jams: '/tmp/guitarset/jams/00_SS3-84-Bb_comp.jams' },
+    ...['00_BN1-129-Eb', '00_BN2-131-B', '00_BN3-119-G', '00_Funk1-114-Ab', '00_Funk2-108-Eb', '00_Funk3-112-C#', '00_Jazz1-130-D', '00_Jazz2-110-Bb', '00_Jazz3-137-Eb', '00_Rock1-130-A', '00_Rock2-142-D', '00_Rock3-117-Bb', '00_SS1-100-C#', '00_SS2-107-Ab']
+      .map((base) => ({ id: `guitarset-${base.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}`, wav: `/tmp/guitarset/${base}_comp_mic.wav`, jams: `/tmp/guitarset/jams/${base}_comp.jams` })),
   ]
   for (const t of gsTracks) {
     if (!existsSync(t.wav) || !existsSync(t.jams)) continue
