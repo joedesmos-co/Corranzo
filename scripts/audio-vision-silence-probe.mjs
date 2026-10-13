@@ -73,6 +73,24 @@ async function analyse(samples, sampleRate) {
   }
 }
 
+function residualMedianMs(baseline, other, shift) {
+  const residuals = []
+  for (const b of baseline) {
+    let best = null
+    for (const o of other) {
+      if (o.midi !== b.midi) continue
+      const delta = o.startSeconds - (b.startSeconds + shift)
+      if (Math.abs(delta) > 0.5) continue
+      if (best == null || Math.abs(delta) < Math.abs(best)) best = delta
+    }
+    if (best != null) residuals.push(best)
+  }
+  if (!residuals.length) return null
+  residuals.sort((a, b) => a - b)
+  const mid = residuals[Math.floor(residuals.length / 2)]
+  return Math.round(mid * 1000)
+}
+
 // Compare a padded result against the UNSHIFTED baseline: every baseline event
 // should appear in the padded result at exactly `shift` seconds later.
 function onsetRecall(baseline, other, shift) {
@@ -126,12 +144,14 @@ for (const padSeconds of PADS) {
     noteCount: result.notes.length,
     noteRecall: noteRecall(baselineResult.notes, result.notes, padSeconds),
     firstNoteTime: result.notes[0]?.startSeconds ?? null,
-    expectedFirstNoteTime: (baselineResult.notes[0]?.startSeconds ?? 0) + padSeconds,
+    // Residual over MATCHED notes (not just the first): the first note in each
+    // variant can be a different musical event, so comparing first notes
+    // measures nothing about phase. Matched notes measure the real phase error.
+    residualMedianMs: residualMedianMs(baselineResult.notes, result.notes, padSeconds),
     rms: Number(result.imported.rms.toFixed(6)),
   }
   rows.push(row)
-  const residual = row.firstNoteTime != null ? (row.firstNoteTime - row.expectedFirstNoteTime).toFixed(3) : '—'
-  console.log(`PAD ${String(padSeconds).padStart(4)}s: tempo=${row.tempo} onsets=${row.onsetCount} (recall ${row.onsetRecall}) beats=${row.beatCount} firstBeat=${row.firstBeat} notes=${row.noteCount} (recall ${row.noteRecall}) residual-shift=${residual} (expect 0)`)
+  console.log(`PAD ${String(padSeconds).padStart(4)}s: tempo=${row.tempo} onsets=${row.onsetCount} (recall ${row.onsetRecall}) notes=${row.noteCount} (recall ${row.noteRecall}) median-phase-residual=${row.residualMedianMs}ms (expect 0)`)
 }
 
 writeFileSync('/tmp/av-silence/report.json', JSON.stringify({ source: SOURCE, rows }, null, 2))

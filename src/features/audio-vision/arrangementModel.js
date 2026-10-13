@@ -30,7 +30,13 @@ export function quantizeToBeats(notes, beats, { beatsPerMeasure = 4, subdivision
   const step = period / subdivisions
   return notes.map((n) => {
     const beatFloat = (n.startSeconds - beats[0]) / period
-    const beatQuant = Math.round(beatFloat * subdivisions) / subdivisions
+    // Notes that precede the first detected beat (a pickup, or an onset the
+    // detector's silence-invariant threshold missed) must not quantize to a
+    // NEGATIVE beat: that produced a note time before zero, which the emitter
+    // clamped into measure 0 while the preview MIDI did not, and it is what
+    // made the padded variants differ from the baseline by a small constant.
+    // Such a note is on (or just before) the first beat, so it snaps to beat 0.
+    const beatQuant = Math.max(0, Math.round(beatFloat * subdivisions) / subdivisions)
     const durBeats = Math.max(1 / subdivisions, Math.round(((n.endSeconds - n.startSeconds) / step)) / subdivisions)
     return {
       ...n,
