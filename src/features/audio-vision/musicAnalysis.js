@@ -230,7 +230,7 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   // model actually attached time to are better evidence: a comping voicing is
   // sustained, a bass line and melodic passing tones are not. Spectral chroma
   // remains the fallback where the transcription heard nothing.
-  reRecognizeFromHeardChromas(chords, predictedNotes)
+  reRecognizeFromHeardChromas(chords, predictedNotes, CHORD_CHROMA_FROM_NOTES)
   // Downgrade claimed sevenths the transcription did not actually hear
   // (chroma smearing alone must not invent extensions).
   for (const chord of chords) {
@@ -308,10 +308,17 @@ function attachHeardVoicings(chords, notes) {
 
 /**
  * Re-recognize chords from duration-weighted transcribed pitch classes.
+ * Toggle so the effect can be A/B measured end to end (tests, probes).
+ */
+export const CHORD_CHROMA_FROM_NOTES = true
+
+/**
+ * Re-recognize chords from duration-weighted transcribed pitch classes.
  * One pass over the chord windows, using only notes the model transcribed;
  * a window with no notes keeps its spectral recognition untouched.
  */
-function reRecognizeFromHeardChromas(chords, notes) {
+function reRecognizeFromHeardChromas(chords, notes, enabled = CHORD_CHROMA_FROM_NOTES) {
+  if (!enabled) return
   for (const chord of chords) {
     const inWindow = notes.filter((n) => n.startSeconds < chord.endSeconds - 1e-9 && n.endSeconds > chord.startSeconds + 1e-9)
     if (!inWindow.length) continue

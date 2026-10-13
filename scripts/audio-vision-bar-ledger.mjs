@@ -38,6 +38,10 @@ function argValue(flag, fallback = null) {
 const jsonOut = argValue('--json', 'benchmarks/audio-vision/bar-ledger.json')
 const mdOut = argValue('--md', 'benchmarks/audio-vision/bar-ledger.md')
 const manifest = JSON.parse(readFileSync('/tmp/realcorpus/manifest.json', 'utf8'))
+// M1: default to the HOLDOUT set never used for tuning, unless --dev is asked.
+const useDev = args.includes('--dev')
+const targetEntries = useDev ? (manifest.entries ?? []) : (manifest.holdoutEntries ?? manifest.entries ?? [])
+const SPLIT_LABEL = useDev ? 'development' : 'holdout'
 
 function pc(midi) {
   return ((midi % 12) + 12) % 12
@@ -58,7 +62,7 @@ function labelQualityKind(label) {
 }
 
 const rows = []
-for (const entry of manifest.entries) {
+for (const entry of targetEntries) {
   if (!entry.truthBars?.length) continue
   console.log(`--- ${entry.id} (${entry.truthBars.length} bars)`)
   const wav = readWavPcm(entry.audio)
@@ -172,7 +176,7 @@ const totals = rows.reduce((acc, r) => {
 }, { bars: 0, missedBars: 0, segmentationBars: 0, rootOnlyBars: 0, qualityOnlyBars: 0, bothWrongBars: 0, bassEvidenceBars: 0, bassAgreesWithRootBars: 0 })
 
 writeFileSync(join(root, jsonOut), JSON.stringify({ rows, totals }, null, 2))
-const lines = ['# Bar-aligned chord ledger (GuitarSet JAMS, measure-level truth)', '',
+const lines = [`# Bar-aligned chord ledger (${SPLIT_LABEL} split)`, '',
   `bars=${totals.bars} · root=weighted below`, '',
   '| recording | bars | root | quality | both | missed | segmentation | rootOnly | qualityOnly | bothWrong | bass evidence | bass=root |',
   '|---|---|---|---|---|---|---|---|---|---|---|---|']
@@ -190,5 +194,5 @@ lines.push('', `**Weighted**: root=${(weightedRoot / n).toFixed(3)} quality=${(w
 lines.push('', `**Attribution (bars)**: missed=${totals.missedBars} segmentation=${totals.segmentationBars} rootOnly=${totals.rootOnlyBars} qualityOnly=${totals.qualityOnlyBars} bothWrong=${totals.bothWrongBars}`)
 lines.push('', `**Bass**: evidence on ${totals.bassEvidenceBars} bars; agrees with label root on ${totals.bassAgreesWithRootBars} (${totals.bassEvidenceBars ? Math.round((100 * totals.bassAgreesWithRootBars) / totals.bassEvidenceBars) : 0}% of bars with evidence)`)
 writeFileSync(join(root, mdOut), lines.join('\n') + '\n')
-console.log(`\nTOTAL bars=${totals.bars} root=${(weightedRoot / n).toFixed(3)} quality=${(weightedQuality / n).toFixed(3)} both=${(weightedBoth / n).toFixed(3)}`)
+console.log(`\nTOTAL (${SPLIT_LABEL}) bars=${totals.bars} root=${(weightedRoot / n).toFixed(3)} quality=${(weightedQuality / n).toFixed(3)} both=${(weightedBoth / n).toFixed(3)}`)
 console.log('done')

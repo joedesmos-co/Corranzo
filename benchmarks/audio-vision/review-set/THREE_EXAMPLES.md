@@ -35,9 +35,9 @@ Listen in this order. If our numbers are lying, these are the files that show it
   excerpt 20–65 s, vocals + guitar + bass + drums + piano. 200 BPM.
 - **License:** CC BY-NC — local evaluation only, **never a commercial asset**.
 - **Corpus audio:** `/tmp/realcorpus/bag-of-motifs-excerpt.wav`.
-- **What our checks say:** this is our weakest and most honest case —
-  agreement 0.39, **8 of 23 windows flagged uncertain**, melody recall 0.61,
-  bass 0.55. Our own uncertainty check is already telling you to distrust it.
+- **What our checks say:** our weakest and most honest case — agreement 0.39,
+  **8 of 23 windows flagged uncertain**, melody recall 0.61, bass 0.55. Our own
+  uncertainty check is already telling you to distrust it.
 - **Listen for:** what breaks first — the melody, the feel, or the harmony.
   If it is unusable, the correct product response is a partial arrangement or
   a refusal, not a confident score.

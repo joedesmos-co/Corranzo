@@ -231,5 +231,56 @@ for (const src of REAL_CORPUS.sources) {
   }
 }
 
-writeFileSync(manifestOut, JSON.stringify({ version: 1, entries }, null, 2))
-console.log(`manifest: ${manifestOut} (${entries.length} entries)`)
+// HOLDOUT (M1): recordings 01-03 of each style - separate takes, performers
+// and tempos from the development tracks (recording 00 + the two baselines).
+// Kept in a separate manifest section so nothing here is used for tuning; the
+// development ledgers never read it.
+const holdoutEntries = [];
+{
+  const PC = { C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5, 'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11 }
+  try {
+    const { readFileSync } = await import('node:fs')
+    const picked = readFileSync('/tmp/guitarset/holdout.txt', 'utf8').split('\n').filter(Boolean)
+    for (const base of picked) {
+      const wav = `/tmp/guitarset/${base}_mic.wav`
+      const jamsPath = `/tmp/guitarset/jams/${base}.jams`
+      if (!existsSync(wav) || !existsSync(jamsPath)) continue
+      const jams = JSON.parse(readFileSync(jamsPath, 'utf8'))
+      const truthChords = []
+      const truthBars = []
+      for (const a of jams.annotations) {
+        if (a.namespace !== 'chord' || !Array.isArray(a.data)) continue
+        for (const c of a.data) {
+          const m = String(c.value ?? '').match(/^([A-G][#b]?):(maj|min|dim|aug|sus|7|maj7|min7|hdim)?/)
+          if (!m) continue
+          const entry = {
+            startSeconds: c.time,
+            endSeconds: c.time + (c.duration ?? 0),
+            root: PC[m[1]] ?? 0,
+            quality: m[2] === 'min' || m[2] === 'min7' ? 'minor' : 'major',
+            label: c.value,
+          }
+          truthChords.push(entry)
+          truthBars.push({ measure: null, ...entry })
+        }
+        if (truthChords.length) break
+      }
+      holdoutEntries.push({
+        id: `holdout-${base.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}`,
+        audio: wav,
+        holdout: true,
+        truthNotes: [],
+        truthChords,
+        truthBars,
+        license: 'CC-BY-4.0 (local evaluation only)',
+        attribution: 'GuitarSet (Xi et al., ISMIR 2018), Zenodo record 3371780 - HOLDOUT recording, never used for tuning',
+        difficulties: ['easy', 'intermediate', 'advanced'],
+      })
+    }
+  } catch (error) {
+    console.warn(`holdout materialization skipped: ${String(error?.message ?? error).slice(0, 100)}`)
+  }
+}
+
+writeFileSync(manifestOut, JSON.stringify({ version: 1, entries, holdoutEntries }, null, 2))
+console.log(`manifest: ${manifestOut} (${entries.length} dev entries, ${holdoutEntries.length} holdout entries)`)
