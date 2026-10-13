@@ -28,10 +28,21 @@ RENDER = PILOT / "data" / "render"
 EVENTS = TRAIN / "data" / "events"
 
 
+def binarize(gray):
+    """Adaptive binarization (Otsu). A fixed gray<128 threshold assumed
+    high-contrast renders: at 0.5x downscale thin staff lines anti-alias
+    above 128 and 7/30 lines vanish (measured); scans are lower-contrast
+    still. Otsu is deterministic and scale/contrast-adaptive."""
+    if gray.dtype != np.uint8:
+        gray = gray.astype(np.uint8)
+    t, _ = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return (gray < t).astype(np.uint8)
+
+
 def staff_lines(gray, min_frac=0.22):
     """Row-projection staff lines via LONGEST contiguous dark run per row
     (a staff line is one long run; glyph rows are many short runs)."""
-    dark = (gray < 128).astype(np.uint8)
+    dark = binarize(gray)
     # longest run per row via diff trick
     best = np.zeros(gray.shape[0], np.int32)
     for y in range(gray.shape[0]):
@@ -60,14 +71,16 @@ def staff_lines(gray, min_frac=0.22):
 
 def group_staves(lines):
     """Cluster line centers into groups of 5 (staves). Inside a staff the
-    line spacing is regular (~gap); between staves it is 2.5-4x gap."""
+    line spacing is regular (~gap); between staves it is 2.5-4x gap.
+    The same-staff tolerance is GAP-RELATIVE (a fixed +4 pixel tolerance
+    broke at half scale: measured 23 lines -> 0 frames at 0.5x)."""
     groups = []
     cur = [lines[0]] if lines else []
     for y in lines[1:]:
         d = y - cur[-1]
         if len(cur) > 1:
             spacing = cur[-1] - cur[-2]
-            same = d <= spacing + 4
+            same = d <= spacing * 1.5 + 1
         else:
             same = True
         if same and len(cur) < 5:
@@ -79,7 +92,22 @@ def group_staves(lines):
             cur = [y]
     if cur:
         groups.append(cur)
-    return [g[:5] for g in groups if len(g) >= 5]
+    out = []
+    for g in groups:
+        if len(g) == 5:
+            out.append(list(g))
+            continue
+        if len(g) == 4:
+            # a missed staff line: the doubled spacing marks where it goes
+            sp = [g[i + 1] - g[i] for i in range(3)]
+            med = sorted(sp)[1]
+            for i, d in enumerate(sp):
+                if d > med * 1.6:
+                    g = list(g[:i + 1]) + [g[i] + round(d / 2)] + list(g[i + 1:])
+                    break
+        if len(g) == 5:
+            out.append(list(g))
+    return out
 
 
 def components(dark, lines_y, gap):

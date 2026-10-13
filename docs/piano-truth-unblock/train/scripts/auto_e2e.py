@@ -32,7 +32,8 @@ EVENTS = TRAIN / "data" / "events"
 sys.path.insert(0, str(HERE))
 from auto_locate import (staff_lines, group_staves, components, classify,  # noqa: E402
                          scale_meta)
-from auto_pitch2 import clef_crop, bottom_of, pitch_of  # noqa: E402
+from auto_pitch2 import bottom_of, pitch_of  # noqa: E402
+from clef_detect import detect_clef  # noqa: E402
 from auto_rest import page_ctx  # noqa: E402
 from clef_vision import classify as clef_classify  # noqa: E402
 from clef_map import load_templates  # noqa: E402
@@ -102,12 +103,8 @@ def run_detections(sid, templates, models, voc, rest_templates=None):
         x0 = int(xs[0]) if len(xs) else 0
         clefs = []
         for fr in frames:
-            cr = clef_crop(gray, x0, fr, gap, sx)
-            if cr is None:
-                clefs.append(("G", 2))
-                continue
-            shape, _ = clef_classify(cr, templates)
-            clefs.append((shape, 2 if shape == "G" else (4 if shape == "F" else 3)))
+            (shape, _line), _score = detect_clef(gray, dark, fr, gap, templates)
+            clefs.append((shape, _line))
         clefs_by_page[pg] = (list(frames), clefs)
         # Notehead completion (MEASURED, kept for the record): a mean
         # template from confirmed heads + matchTemplate over the page.
