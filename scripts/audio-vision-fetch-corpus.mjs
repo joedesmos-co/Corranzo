@@ -126,7 +126,11 @@ for (const src of REAL_CORPUS.sources) {
     const jams = JSON.parse(readFileSync(t.jams, 'utf8'))
     const truthNotes = []
     const truthOffsets = []
+    const beatIndex = []
     for (const a of jams.annotations) {
+      if (a.namespace === 'beat_position' && Array.isArray(a.data)) {
+        for (const b of a.data) if (b.value && b.value.measure) beatIndex.push(b)
+      }
       if (a.namespace !== 'note_midi' || !Array.isArray(a.data)) continue
       for (const n of a.data) {
         if (!Number.isFinite(n.time) || !Number.isFinite(n.value)) continue
@@ -135,6 +139,7 @@ for (const src of REAL_CORPUS.sources) {
       }
     }
     const truthChords = []
+    const truthBars = []
     for (const a of jams.annotations) {
       if (a.namespace !== 'chord' || !Array.isArray(a.data)) continue
       for (const c of a.data) {
@@ -146,6 +151,17 @@ for (const src of REAL_CORPUS.sources) {
           root: PC[m[1]] ?? 0,
           quality: m[2] === 'min' || m[2] === 'min7' ? 'minor' : 'major',
           label: c.value,
+        })
+        // JAMS also gives the bar each chord starts on: a bar-aligned chord
+        // reference (each label covers exactly one 4-beat bar in GuitarSet).
+        const beat = beatIndex.find((b) => Math.abs(b.time - c.time) < 1e-6)
+        truthBars.push({
+          measure: beat?.value?.measure ?? null,
+          startSeconds: c.time,
+          endSeconds: c.time + (c.duration ?? 0),
+          label: c.value,
+          root: PC[m[1]] ?? 0,
+          quality: m[2] === 'min' || m[2] === 'min7' ? 'minor' : 'major',
         })
       }
       if (truthChords.length) break
@@ -164,6 +180,7 @@ for (const src of REAL_CORPUS.sources) {
       truthNotes,
       truthOffsets,
       truthChords,
+      truthBars,
       truthTempo,
       license: 'CC-BY-4.0',
       attribution: 'GuitarSet (Xi et al., ISMIR 2018), Zenodo record 3371780',

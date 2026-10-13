@@ -22,7 +22,7 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 2,
-        "triadLabelsClaimedSeventh": 0
+        "triadLabelsClaimedSeventh": 1
       },
       "perChord": [
         {
@@ -48,13 +48,13 @@
         {
           "seconds": 11.4,
           "label": "E:maj",
-          "analyzed": "Bm",
+          "analyzed": "F#sus4",
           "pianoBass": 6
         },
         {
           "seconds": 13.2,
           "label": "B:maj",
-          "analyzed": "Bm",
+          "analyzed": "Bmaj7",
           "pianoBass": 10
         }
       ]
@@ -65,9 +65,9 @@
       "labelledWindows": 16,
       "usableWindows": 13,
       "ambiguousWindows": 3,
-      "rootAccuracy": 0.846,
-      "qualityAccuracy": 0.846,
-      "rootAndQualityAccuracy": 0.769,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
       "s1ChordTonesPresentRate": 0.846,
       "s1MissingTones": 6,
       "s3BassAccuracy": 0.692,
@@ -81,7 +81,7 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 13,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 0
       },
       "perChord": [
         {
@@ -99,7 +99,7 @@
         {
           "seconds": 7.1,
           "label": "G:min",
-          "analyzed": "Dsus4",
+          "analyzed": "Gm",
           "pianoBass": 2
         },
         {
@@ -122,7 +122,7 @@
         {
           "seconds": 18.6,
           "label": "D#:maj",
-          "analyzed": "A#",
+          "analyzed": "D#",
           "pianoBass": 3
         },
         {
@@ -168,7 +168,7 @@
         {
           "seconds": 41.4,
           "label": "D#:maj",
-          "analyzed": "D#maj7",
+          "analyzed": "D#",
           "pianoBass": 7
         },
         {
@@ -185,7 +185,7 @@
       "labelledWindows": 6,
       "usableWindows": 4,
       "ambiguousWindows": 2,
-      "rootAccuracy": 0.25,
+      "rootAccuracy": 0.5,
       "qualityAccuracy": 0.25,
       "rootAndQualityAccuracy": 0.25,
       "s1ChordTonesPresentRate": 0.167,
@@ -201,7 +201,7 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 4,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 3
       },
       "perChord": [
         {
@@ -212,13 +212,13 @@
         {
           "seconds": 9.3,
           "label": "G#:maj",
-          "analyzed": "Am7",
+          "analyzed": "Fm7",
           "pianoBass": 8
         },
         {
           "seconds": 13,
           "label": "D#:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "D#maj7",
           "pianoBass": 3
         },
         {
@@ -235,7 +235,7 @@
         {
           "seconds": 20.5,
           "label": "D#:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "Gm7",
           "pianoBass": 3
         }
       ]
@@ -246,9 +246,9 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.5,
-      "qualityAccuracy": 0.1,
-      "rootAndQualityAccuracy": 0.1,
+      "rootAccuracy": 0.8,
+      "qualityAccuracy": 0.3,
+      "rootAndQualityAccuracy": 0.3,
       "s1ChordTonesPresentRate": 0.563,
       "s1MissingTones": 14,
       "s3BassAccuracy": 0.9,
@@ -262,13 +262,13 @@
         "heard": 2,
         "unheardStillClaimed": 0,
         "triadLabels": 8,
-        "triadLabelsClaimedSeventh": 4
+        "triadLabelsClaimedSeventh": 3
       },
       "perChord": [
         {
           "seconds": 0.9,
           "label": "E:min",
-          "analyzed": "Dsus4",
+          "analyzed": "Em7",
           "pianoBass": 4
         },
         {
@@ -285,7 +285,7 @@
         {
           "seconds": 6.4,
           "label": "G:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "G",
           "pianoBass": 7
         },
         {
@@ -302,7 +302,7 @@
         {
           "seconds": 12.8,
           "label": "B:min",
-          "analyzed": "D",
+          "analyzed": "Bm",
           "pianoBass": 11
         },
         {
@@ -319,7 +319,7 @@
         {
           "seconds": 19.2,
           "label": "D:maj",
-          "analyzed": "Bm7",
+          "analyzed": "F#sus4",
           "pianoBass": 7
         },
         {
@@ -342,7 +342,7 @@
         {
           "seconds": 27.5,
           "label": "B:min",
-          "analyzed": "Gmaj7",
+          "analyzed": "F#sus4",
           "pianoBass": 11
         }
       ]
@@ -353,9 +353,9 @@
       "labelledWindows": 16,
       "usableWindows": 14,
       "ambiguousWindows": 2,
-      "rootAccuracy": 0.286,
+      "rootAccuracy": 0.357,
       "qualityAccuracy": 0.429,
-      "rootAndQualityAccuracy": 0.286,
+      "rootAndQualityAccuracy": 0.214,
       "s1ChordTonesPresentRate": 0.524,
       "s1MissingTones": 20,
       "s3BassAccuracy": 0.571,
@@ -369,25 +369,25 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 14,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 3
       },
       "perChord": [
         {
           "seconds": 1,
           "label": "G:maj",
-          "analyzed": "Bm7",
+          "analyzed": "Gmaj7",
           "pianoBass": 7
         },
         {
           "seconds": 3,
           "label": "D:maj",
-          "analyzed": "F#m",
+          "analyzed": "D",
           "pianoBass": 9
         },
         {
           "seconds": 5,
           "label": "E:min",
-          "analyzed": "Dm",
+          "analyzed": "Asus4",
           "pianoBass": 4
         },
         {
@@ -410,7 +410,7 @@
         {
           "seconds": 13.1,
           "label": "C:maj",
-          "analyzed": "Gsus4",
+          "analyzed": "G",
           "pianoBass": 0
         },
         {
@@ -421,13 +421,13 @@
         {
           "seconds": 17.1,
           "label": "G:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "Em",
           "pianoBass": 7
         },
         {
           "seconds": 19.2,
           "label": "D:maj",
-          "analyzed": "D",
+          "analyzed": "Bm7",
           "pianoBass": 2
         },
         {
@@ -439,7 +439,7 @@
         {
           "seconds": 23.2,
           "label": "B:min",
-          "analyzed": "D",
+          "analyzed": "Bm7",
           "pianoBass": 9
         },
         {
@@ -451,7 +451,7 @@
         {
           "seconds": 27.2,
           "label": "G:maj",
-          "analyzed": "G",
+          "analyzed": "C",
           "pianoBass": 7
         },
         {
@@ -474,9 +474,9 @@
       "labelledWindows": 6,
       "usableWindows": 6,
       "ambiguousWindows": 0,
-      "rootAccuracy": 0.167,
-      "qualityAccuracy": 0.167,
-      "rootAndQualityAccuracy": 0.167,
+      "rootAccuracy": 0.333,
+      "qualityAccuracy": 0.333,
+      "rootAndQualityAccuracy": 0.333,
       "s1ChordTonesPresentRate": 0.222,
       "s1MissingTones": 14,
       "s3BassAccuracy": 0.333,
@@ -508,13 +508,13 @@
         {
           "seconds": 14.7,
           "label": "G#:maj",
-          "analyzed": "Am",
+          "analyzed": "G#",
           "pianoBass": 3
         },
         {
           "seconds": 17.9,
           "label": "D#:maj",
-          "analyzed": "Gdim",
+          "analyzed": "A#dim",
           "pianoBass": 6
         },
         {
@@ -526,7 +526,7 @@
         {
           "seconds": 23.2,
           "label": "G#:maj",
-          "analyzed": "Am",
+          "analyzed": "Fm",
           "pianoBass": 8
         }
       ]
@@ -537,9 +537,9 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.4,
-      "qualityAccuracy": 0.3,
-      "rootAndQualityAccuracy": 0.2,
+      "rootAccuracy": 0.6,
+      "qualityAccuracy": 0.4,
+      "rootAndQualityAccuracy": 0.3,
       "s1ChordTonesPresentRate": 0.656,
       "s1MissingTones": 11,
       "s3BassAccuracy": 0.5,
@@ -553,13 +553,13 @@
         "heard": 2,
         "unheardStillClaimed": 0,
         "triadLabels": 8,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 2
       },
       "perChord": [
         {
           "seconds": 1.1,
           "label": "G#:min",
-          "analyzed": "B",
+          "analyzed": "G#m7",
           "pianoBass": 6
         },
         {
@@ -582,7 +582,7 @@
         {
           "seconds": 10,
           "label": "F:hdim7",
-          "analyzed": "B",
+          "analyzed": "G#m",
           "pianoBass": 8
         },
         {
@@ -593,13 +593,13 @@
         {
           "seconds": 15.6,
           "label": "D#:min",
-          "analyzed": "A#",
+          "analyzed": "F#",
           "pianoBass": 10
         },
         {
           "seconds": 18.9,
           "label": "G#:min",
-          "analyzed": "C#sus4",
+          "analyzed": "G#m7",
           "pianoBass": 8
         },
         {
@@ -616,7 +616,7 @@
         {
           "seconds": 25.6,
           "label": "B:maj",
-          "analyzed": "Bmaj7",
+          "analyzed": "B",
           "pianoBass": 6
         },
         {
@@ -633,7 +633,7 @@
         {
           "seconds": 33.3,
           "label": "D#:min",
-          "analyzed": "A#",
+          "analyzed": "Fsus4",
           "pianoBass": 10
         }
       ]
@@ -644,9 +644,9 @@
       "labelledWindows": 16,
       "usableWindows": 16,
       "ambiguousWindows": 0,
-      "rootAccuracy": 0.813,
-      "qualityAccuracy": 0.563,
-      "rootAndQualityAccuracy": 0.563,
+      "rootAccuracy": 0.75,
+      "qualityAccuracy": 0.5,
+      "rootAndQualityAccuracy": 0.5,
       "s1ChordTonesPresentRate": 0.75,
       "s1MissingTones": 12,
       "s3BassAccuracy": 0.875,
@@ -672,25 +672,25 @@
         {
           "seconds": 3.2,
           "label": "G#:maj",
-          "analyzed": "G#",
+          "analyzed": "Fm",
           "pianoBass": 8
         },
         {
           "seconds": 5.4,
           "label": "A#:min",
-          "analyzed": "A#maj7",
+          "analyzed": "A#",
           "pianoBass": 10
         },
         {
           "seconds": 7.5,
           "label": "F:min",
-          "analyzed": "Fm",
+          "analyzed": "Fm7",
           "pianoBass": 5
         },
         {
           "seconds": 9.6,
           "label": "F#:maj",
-          "analyzed": "C#sus4",
+          "analyzed": "C#m",
           "pianoBass": 6
         },
         {
@@ -720,13 +720,13 @@
         {
           "seconds": 20.4,
           "label": "G#:maj",
-          "analyzed": "G#",
+          "analyzed": "Fm",
           "pianoBass": 8
         },
         {
           "seconds": 22.5,
           "label": "A#:min",
-          "analyzed": "A#",
+          "analyzed": "A#m",
           "pianoBass": 10
         },
         {
@@ -750,7 +750,7 @@
         {
           "seconds": 31.1,
           "label": "F#:maj",
-          "analyzed": "C#sus4",
+          "analyzed": "F#",
           "pianoBass": 6
         },
         {
@@ -768,7 +768,7 @@
       "usableWindows": 3,
       "ambiguousWindows": 3,
       "rootAccuracy": 0.333,
-      "qualityAccuracy": 0.667,
+      "qualityAccuracy": 0.333,
       "rootAndQualityAccuracy": 0.333,
       "s1ChordTonesPresentRate": 0.667,
       "s1MissingTones": 3,
@@ -800,7 +800,7 @@
         {
           "seconds": 12.9,
           "label": "D:maj",
-          "analyzed": "A",
+          "analyzed": "F#dim",
           "pianoBass": 7
         },
         {
@@ -827,8 +827,8 @@
       "labelledWindows": 14,
       "usableWindows": 6,
       "ambiguousWindows": 8,
-      "rootAccuracy": 0.5,
-      "qualityAccuracy": 0.333,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 0.167,
       "rootAndQualityAccuracy": 0.167,
       "s1ChordTonesPresentRate": 0.789,
       "s1MissingTones": 4,
@@ -839,11 +839,11 @@
       "timingMaeSeconds": 0.706,
       "seventhGuard": {
         "labelledSeventhsTotal": 1,
-        "heardAndKept": 0,
+        "heardAndKept": 1,
         "heard": 1,
         "unheardStillClaimed": 0,
         "triadLabels": 5,
-        "triadLabelsClaimedSeventh": 3
+        "triadLabelsClaimedSeventh": 4
       },
       "perChord": [
         {
@@ -870,7 +870,7 @@
         {
           "seconds": 9.8,
           "label": "C:hdim7",
-          "analyzed": "A#",
+          "analyzed": "Cm7",
           "pianoBass": 10
         },
         {
@@ -887,7 +887,7 @@
         {
           "seconds": 18.5,
           "label": "D#:min",
-          "analyzed": "A#m",
+          "analyzed": "D#m7",
           "pianoBass": 3
         },
         {
@@ -903,7 +903,7 @@
         {
           "seconds": 25.1,
           "label": "F#:maj",
-          "analyzed": "Amaj7",
+          "analyzed": "F#7",
           "pianoBass": 6
         },
         {
@@ -930,7 +930,7 @@
       "labelledWindows": 16,
       "usableWindows": 7,
       "ambiguousWindows": 9,
-      "rootAccuracy": 0.571,
+      "rootAccuracy": 0.429,
       "qualityAccuracy": 0.429,
       "rootAndQualityAccuracy": 0.429,
       "s1ChordTonesPresentRate": 0.762,
@@ -946,7 +946,7 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 7,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 0
       },
       "perChord": [
         {
@@ -957,7 +957,7 @@
         {
           "seconds": 2.6,
           "label": "A#:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "Gm",
           "pianoBass": 7
         },
         {
@@ -968,7 +968,7 @@
         {
           "seconds": 6.1,
           "label": "G:min",
-          "analyzed": "Gm",
+          "analyzed": "A#",
           "pianoBass": 10
         },
         {
@@ -990,7 +990,7 @@
         {
           "seconds": 13.1,
           "label": "A#:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "Gm",
           "pianoBass": 7
         },
         {
@@ -1011,7 +1011,7 @@
         {
           "seconds": 20.1,
           "label": "G:min",
-          "analyzed": "Gm7",
+          "analyzed": "Gm",
           "pianoBass": 10
         },
         {
@@ -1033,7 +1033,7 @@
         {
           "seconds": 27.2,
           "label": "A#:maj",
-          "analyzed": "Dsus4",
+          "analyzed": "Gm",
           "pianoBass": 10
         }
       ]
@@ -1044,9 +1044,9 @@
       "labelledWindows": 6,
       "usableWindows": 6,
       "ambiguousWindows": 0,
-      "rootAccuracy": 0.667,
-      "qualityAccuracy": 0.667,
-      "rootAndQualityAccuracy": 0.667,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
       "s1ChordTonesPresentRate": 0.944,
       "s1MissingTones": 1,
       "s3BassAccuracy": 0.833,
@@ -1072,7 +1072,7 @@
         {
           "seconds": 9.2,
           "label": "D:maj",
-          "analyzed": "Asus4",
+          "analyzed": "D",
           "pianoBass": 9
         },
         {
@@ -1090,7 +1090,7 @@
         {
           "seconds": 17.5,
           "label": "D:maj",
-          "analyzed": "Asus4",
+          "analyzed": "D",
           "pianoBass": 2
         },
         {
@@ -1107,9 +1107,9 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.7,
-      "qualityAccuracy": 0.6,
-      "rootAndQualityAccuracy": 0.5,
+      "rootAccuracy": 0.9,
+      "qualityAccuracy": 0.7,
+      "rootAndQualityAccuracy": 0.6,
       "s1ChordTonesPresentRate": 0.844,
       "s1MissingTones": 5,
       "s3BassAccuracy": 0.7,
@@ -1119,7 +1119,7 @@
       "timingMaeSeconds": 0.268,
       "seventhGuard": {
         "labelledSeventhsTotal": 2,
-        "heardAndKept": 1,
+        "heardAndKept": 0,
         "heard": 2,
         "unheardStillClaimed": 0,
         "triadLabels": 8,
@@ -1152,7 +1152,7 @@
         {
           "seconds": 7.6,
           "label": "E:hdim7",
-          "analyzed": "Em7",
+          "analyzed": "Edim",
           "pianoBass": 4
         },
         {
@@ -1186,13 +1186,13 @@
         {
           "seconds": 19.4,
           "label": "A#:maj",
-          "analyzed": "Dm",
+          "analyzed": "A#",
           "pianoBass": 10
         },
         {
           "seconds": 21.1,
           "label": "E:hdim7",
-          "analyzed": "Gm",
+          "analyzed": "Edim",
           "pianoBass": 4
         },
         {
@@ -1214,9 +1214,9 @@
       "labelledWindows": 16,
       "usableWindows": 16,
       "ambiguousWindows": 0,
-      "rootAccuracy": 0.813,
-      "qualityAccuracy": 0.813,
-      "rootAndQualityAccuracy": 0.813,
+      "rootAccuracy": 0.875,
+      "qualityAccuracy": 0.875,
+      "rootAndQualityAccuracy": 0.875,
       "s1ChordTonesPresentRate": 0.917,
       "s1MissingTones": 4,
       "s3BassAccuracy": 0.875,
@@ -1230,7 +1230,7 @@
         "heard": 0,
         "unheardStillClaimed": 0,
         "triadLabels": 16,
-        "triadLabelsClaimedSeventh": 1
+        "triadLabelsClaimedSeventh": 0
       },
       "perChord": [
         {
@@ -1242,7 +1242,7 @@
         {
           "seconds": 3.1,
           "label": "F:maj",
-          "analyzed": "F",
+          "analyzed": "Dm",
           "pianoBass": 5
         },
         {
@@ -1260,7 +1260,7 @@
         {
           "seconds": 9.2,
           "label": "D#:maj",
-          "analyzed": "Gm",
+          "analyzed": "D#",
           "pianoBass": 3
         },
         {
@@ -1272,7 +1272,7 @@
         {
           "seconds": 13.3,
           "label": "D#:maj",
-          "analyzed": "Gm",
+          "analyzed": "D#",
           "pianoBass": 10
         },
         {
@@ -1290,7 +1290,7 @@
         {
           "seconds": 19.5,
           "label": "F:maj",
-          "analyzed": "F",
+          "analyzed": "Dm",
           "pianoBass": 5
         },
         {
@@ -1320,7 +1320,7 @@
         {
           "seconds": 29.7,
           "label": "D#:maj",
-          "analyzed": "Gm7",
+          "analyzed": "D#",
           "pianoBass": 3
         },
         {
@@ -1337,9 +1337,9 @@
       "labelledWindows": 6,
       "usableWindows": 6,
       "ambiguousWindows": 0,
-      "rootAccuracy": 0.333,
-      "qualityAccuracy": 0.5,
-      "rootAndQualityAccuracy": 0.333,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
       "s1ChordTonesPresentRate": 1,
       "s1MissingTones": 0,
       "s3BassAccuracy": 0.833,
@@ -1359,7 +1359,7 @@
         {
           "seconds": 4.8,
           "label": "C#:maj",
-          "analyzed": "Fm",
+          "analyzed": "C#",
           "pianoBass": 1
         },
         {
@@ -1371,13 +1371,13 @@
         {
           "seconds": 16.8,
           "label": "C#:maj",
-          "analyzed": "F",
+          "analyzed": "C#",
           "pianoBass": 8
         },
         {
           "seconds": 20.4,
           "label": "G#:maj",
-          "analyzed": "Am",
+          "analyzed": "G#",
           "pianoBass": 8
         },
         {
@@ -1389,7 +1389,7 @@
         {
           "seconds": 26.4,
           "label": "C#:maj",
-          "analyzed": "Fm",
+          "analyzed": "C#",
           "pianoBass": 1
         }
       ]
@@ -1400,9 +1400,9 @@
       "labelledWindows": 14,
       "usableWindows": 10,
       "ambiguousWindows": 4,
-      "rootAccuracy": 0.3,
-      "qualityAccuracy": 0.3,
-      "rootAndQualityAccuracy": 0.2,
+      "rootAccuracy": 0.9,
+      "qualityAccuracy": 0.8,
+      "rootAndQualityAccuracy": 0.8,
       "s1ChordTonesPresentRate": 0.813,
       "s1MissingTones": 6,
       "s3BassAccuracy": 0.9,
@@ -1412,17 +1412,17 @@
       "timingMaeSeconds": 0.666,
       "seventhGuard": {
         "labelledSeventhsTotal": 2,
-        "heardAndKept": 1,
+        "heardAndKept": 0,
         "heard": 2,
         "unheardStillClaimed": 0,
         "triadLabels": 8,
-        "triadLabelsClaimedSeventh": 4
+        "triadLabelsClaimedSeventh": 0
       },
       "perChord": [
         {
           "seconds": 1.1,
           "label": "C#:min",
-          "analyzed": "Amaj7",
+          "analyzed": "C#m",
           "pianoBass": 1
         },
         {
@@ -1433,7 +1433,7 @@
         {
           "seconds": 5.6,
           "label": "B:maj",
-          "analyzed": "Bmaj7",
+          "analyzed": "B",
           "pianoBass": 11
         },
         {
@@ -1445,7 +1445,7 @@
         {
           "seconds": 10.1,
           "label": "A#:hdim7",
-          "analyzed": "Esus4",
+          "analyzed": "A#dim",
           "pianoBass": 10
         },
         {
@@ -1456,13 +1456,13 @@
         {
           "seconds": 15.7,
           "label": "G#:min",
-          "analyzed": "Amaj7",
+          "analyzed": "G#m",
           "pianoBass": 8
         },
         {
           "seconds": 19.1,
           "label": "C#:min",
-          "analyzed": "Amaj7",
+          "analyzed": "C#m",
           "pianoBass": 1
         },
         {
@@ -1473,7 +1473,7 @@
         {
           "seconds": 23.6,
           "label": "B:maj",
-          "analyzed": "F#",
+          "analyzed": "B",
           "pianoBass": 11
         },
         {
@@ -1485,7 +1485,7 @@
         {
           "seconds": 28,
           "label": "A#:hdim7",
-          "analyzed": "Amaj7",
+          "analyzed": "D#sus4",
           "pianoBass": 10
         },
         {
@@ -1496,7 +1496,7 @@
         {
           "seconds": 33.6,
           "label": "G#:min",
-          "analyzed": "Esus4",
+          "analyzed": "G#m",
           "pianoBass": 8
         }
       ]

@@ -88,6 +88,14 @@ export function resolveSimultaneous(events, { maxVoices, melodyMidi = null }) {
   })
   scored.sort((a, b) => b.score - a.score)
   const keep = new Set(scored.slice(0, maxVoices).map((s) => s.e))
+  // The melody and bass root are structural, not a budget competition: they
+  // survive an over-full onset regardless of chord-tone scoring. Without this,
+  // changing which pitch classes count as chord tones (e.g. when chord labels
+  // improve) can silently drop a melody note, so the two features would be
+  // coupled when they need not be.
+  for (const { e } of scored) {
+    if (e.isMelody || e.isBassRoot) keep.add(e)
+  }
   return events.map((e) => ({ ...e, kept: keep.has(e), provenance: PROVENANCE.ARRANGED }))
 }
 
