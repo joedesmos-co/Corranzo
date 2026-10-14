@@ -128,12 +128,18 @@ supported corpus (overflow class reported separately, never averaged).
    (≈1 staff space incl. sampling lag) vs the 0.5 staff-space aspiration.
    Remaining error is dominated by sampling latency and glide-curve shape,
    not misplacement (zero wrong-page/system across all suites).
-4. **Tie duration double-merge (F1, pre-existing).** Parser-level tie heads
+4. **Tie duration double-merge (F1, pre-existing).** ~~Parser-level tie heads
    carry the correct merged duration, but `mergeTiedContinuations` adds the
    continuation a second time when building WFY checkpoints (2q + 2q tie →
    checkpoint head reports 6q). Affects WFY hold math and reference playback
    on tied scores; deliberately untouched during the H1/H2 round to keep the
-   before/after evidence clean. Next focused blocker.
+   before/after evidence clean. Next focused blocker.~~
+   **RESOLVED 2026-10-14** — see `docs/tied-note-timing-integrity.md`.
+   Tie chains now report one duration at every layer (parser == WFY == visual
+   lane == playback), chain identity is exclusive (`tieChainId`), and
+   voice-less tie-stops pair with their voice-2 head instead of re-attacking.
+   Next blockers moved to the practice-clock render-thrash and the 13
+   flagged library files.
 
 ## S10 — Timing integrity round (2026-10-13, H1/H2)
 
