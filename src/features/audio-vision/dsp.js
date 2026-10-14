@@ -382,6 +382,15 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
   // occurring interval, which is an eighth-note gap rather than the beat, and
   // turned correct readings into 2-3x errors (ss-comp 86 -> 172, funk3
   // 74 -> 221, jazz3 68 -> 204). The autocorrelation's own octave rules stay.
+  // REJECTED, TWICE MEASURED. Accent-contrast pulse selection:
+  //   run 1 (family-wide maximisation): funk3 74->56, jazz2 112->84 - two
+  //     correct recordings broken, none fixed.
+  //   run 2 (narrow 1.5 / 0.667 only): ss-comp 86 (kept correct), funk3 74
+  //     (still a 2/3 lock), rock2 96 (still a 2/3 lock), bn2 129 (kept
+  //     correct), jazz2 112->168 - broke a correct recording to a 3/2 lock.
+  // Both forms move correct recordings and fix none, so the 2/3 lock is not
+  // fixable from onset-phase accent structure. Left in place as documented
+  // evidence rather than removed, with the call opt-in only.
   const chosenTempo = Math.round(Math.max(minBpm, Math.min(maxBpm, chosen)))
   // Tempo ambiguity, reported instead of implied. Slow material is the usual
   // victim: a genuine ~45 BPM ballad and its double-time pulse are frequently
