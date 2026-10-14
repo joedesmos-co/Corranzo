@@ -94,16 +94,24 @@ export default function useScorePlayback({
       pendingDuration = total
       pendingIsPlaying = engine.isPlaying()
       const now = performance.now()
-      if (now - lastTimeEmit >= TIME_UPDATE_INTERVAL_MS) {
+      const elapsed = now - lastTimeEmit
+      if (elapsed >= TIME_UPDATE_INTERVAL_MS) {
         lastTimeEmit = now
         flushTimeUpdate()
         return
       }
+      // Defer the remainder of the display interval. A rAF callback used to be
+      // used here, but it also reset `lastTimeEmit`, so every animation frame
+      // produced a fresh React render and the documented 10 Hz display rate
+      // silently became ~60 Hz. That sustained dispatch rate is what kept React
+      // re-entering its passive-effect flush and eventually tripping
+      // "Maximum update depth exceeded" during playback.
       if (timeFlushId == null) {
-        timeFlushId = requestAnimationFrame(() => {
+        timeFlushId = setTimeout(() => {
+          timeFlushId = null
           lastTimeEmit = performance.now()
           flushTimeUpdate()
-        })
+        }, TIME_UPDATE_INTERVAL_MS - elapsed)
       }
     }
     engine.onInstrumentStatus = (status) => {
@@ -135,7 +143,8 @@ export default function useScorePlayback({
     return () => {
       mountedRef.current = false
       if (timeFlushId != null) {
-        cancelAnimationFrame(timeFlushId)
+        clearTimeout(timeFlushId)
+        timeFlushId = null
       }
       engine.dispose()
       engineRef.current = null
