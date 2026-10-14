@@ -648,3 +648,27 @@ intervals remain, one on p1 system 1 and one on p2 system 4 (the sparse
 system). They are the last cause of the 47.4% measure accuracy.
 No even-spacing completion was revived, and no GT measure count is used
 at inference.
+
+### R15 — GENUINE RASTER BASELINE RUN (M1/M2) — poor quality, path proven
+`proof-raster-baseline.py` PDF/page -> raster -> pixels -> detection,
+with geometry inferred from PIXELS ONLY:
+  - staff lines by contiguous horizontal run (no viewBox)
+  - canonical units-per-pixel = measured_staff_gap / 315 (no page dims)
+  - NO font override: the document's own embedded font is used
+  - NO fixture manifest, no GT staff coordinates, no GT at inference
+  - the raster is produced at an arbitrary width unrelated to the
+    controlled renders; a real PDF is emitted via chromium page.pdf()
+
+HELDOUT score pdmx-QmTJRwrHUET3 p1 (never tuned on), raster 1700x2306,
+measured gap 26.0, fx 0.08254:
+  note     preds 246 gt 263 tp 108 fp 138  P 0.439 R 0.411 F1 0.424
+  rest     preds 4   gt 6   tp 0   fp 4    P 0.000 R 0.000 F1 0.000
+  tabdigit preds 118 gt 255 tp 57  fp 61   P 0.483 R 0.224 F1 0.306
+
+This is the first genuine end-to-end raster evidence: the path WORKS
+mechanically (geometry derived, detection executed, scoring ran), but
+native-font quality is far below the controlled Palatino renders
+(tabdigit F1 0.306 vs 0.823; recall 0.224 vs 0.94). The gap is
+font/glyph-shape driven, NOT geometry: the raster path's own geometry
+pipeline is the same one that produces the controlled results.
+Rests are entirely unrecalled (0/6, all 4 predictions false).
