@@ -995,6 +995,10 @@ function walkPart({
               stemDirection,
               beams,
               voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
+              // True when the source omitted <voice> (MusicXML allows it).
+              // Tie pairing needs this to continue a voice-2 chain from a
+              // voice-less tie-stop; the normalized voice stays 1 elsewhere.
+              voiceDefaulted: !(Number.isFinite(voice) && voice > 0),
               velocity: resolveNoteVelocity(activeVelocity, velocityByStaff, layout.staff),
               ...layout,
             })
