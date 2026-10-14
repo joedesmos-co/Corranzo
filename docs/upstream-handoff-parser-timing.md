@@ -2,9 +2,10 @@
 
 To: MusicXML parser / practice-engine owner.
 From: score-follow precision track (`codex/score-follow-precision`, commit 8d1f7b3b3f+).
-Status: **Documented, not fixed** — these live outside the follow layer.
-The follow layer tracks the canonical clock exactly; the issues below are
-in what the clock is computed FROM.
+Status: **H1/H2 root-caused; 3 files repaired from the authoritative bundled
+MIDI (2026-10-13); the remaining flagged files still need an authoritative
+re-export.** The follow layer tracks the canonical clock exactly; the issues
+below are in what the clock is computed FROM.
 
 ## H1 — Overfull measures drift the canonical timeline (affects WFY grouping)
 
@@ -25,13 +26,36 @@ measures) and La Campanella m87 (tremolo overflow across a system break).
 **Follow-layer handling (done).** Orphan adoption (`onsetOwnedByWindow`),
 cross-measure marker rule, overflow flagging, approximate labels.
 
-**Requested upstream work.** Voice-aware timing for multi-voice parts
-without `<backup>` (overlap same-measure voices instead of sequencing),
-and/or a validation warning when a measure's written content exceeds its
-nominal duration by more than a threshold.
+**RESOLVED 2026-10-13 for the three MIDI-consistent files.** Root cause is
+upstream of the parser: the practice-library MusicXML files are music21
+conversions OF THE BUNDLED MUTOPIA MIDI (`scripts/import-practice-library.mjs`),
+and music21 flattens the two-voice texture into one sequential stream.
+Repaired from that authoritative MIDI
+(`scripts/repair-flattened-practice-musicxml.mjs`; pitches/written
+durations preserved 1:1, onsets restored, provenance comment kept):
+`piano-bach-prelude-bwv846` (34 measures), `guitar-aguado-a-minor-study`
+(16), `guitar-bach-prelude-bwv999` (42). WFY cross-measure checkpoints for
+those: 34/39/42 → 0; overflow flags → 0; BWV 846 cross-engraving onset error
+0.623 → 0.0208 page. Every other overfull score is now flagged by the new
+`timingValidation` and gets the honest per-written-measure WFY fallback
+(impossible requirements removed), but its timeline stays exactly what the
+file says until re-exported.
+
+**Requested upstream work (still open for the 13 flagged files).** Re-export
+the practice library from authoritative notation sources (Mutopia LilyPond
+originals, not MIDI-derived conversions): 13 scores still carry overfull
+measures (47 total; list in `docs/timing-integrity-investigation.md` §7),
+including partially-flattened voice/backup files (Aguado op03-*, Chopin
+mazurka, Tchaikovsky, Handel, Für Elise m26, fugue BWV 846). Voice-aware
+timing for multi-voice parts without `<backup>` and/or a validation warning
+when written content exceeds the nominal duration remain the right upstream
+guard; the follow layer now implements the warning side itself
+(`timingValidation.status === 'invalid'`).
 
 Repro: `node scripts/measure-score-follow-precision.mjs` (overflow counts),
-`DEBUG_MEASURE=87 node scripts/debug-cross.mjs` (removed; see git history).
+`node scripts/measure-timing-integrity.mjs --label before|after` (frozen-set
+trace), `node scripts/repair-flattened-practice-musicxml.mjs --check-all`
+(MIDI consistency audit).
 
 ## H2 — music21-processed library files carry voice-flattening artifacts
 
@@ -39,8 +63,17 @@ Repro: `node scripts/measure-score-follow-precision.mjs` (overflow counts),
 Mutopia…`, `software: music21 v.10.1.0`) contain overlapping voices
 flattened into single parts (durations 2.0 + 1.75 quarters, no voice tags).
 These are FILE defects, not parser defects — but they flow into H1 drift.
-Recommend re-exporting practice-library MusicXML with voices preserved, or
-annotating affected pieces in the manifest.
+
+**RESOLVED 2026-10-13 for the three MIDI-consistent files.** The bundled
+`.mid` next to each file is the source music21 converted FROM (see
+`scripts/import-practice-library.mjs`) and still holds the true onsets;
+`piano-bach-prelude-bwv846`, `guitar-aguado-a-minor-study`, and
+`guitar-bach-prelude-bwv999` were repaired from it with provenance preserved
+and independently verified (offsets/durations match the MIDI note-for-note).
+Recommendation for the remaining library pieces: re-export with voices
+preserved from the notation source, or annotate affected pieces in the
+manifest — the follow layer now flags them (`timingValidation`) and applies
+the per-measure WFY fallback in the meantime.
 
 ## H3 — No gradual-tempo support (documented limitation, not a bug)
 
