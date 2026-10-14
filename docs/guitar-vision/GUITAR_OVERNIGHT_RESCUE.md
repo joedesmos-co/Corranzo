@@ -572,3 +572,26 @@ Page-2 recovery cost 8 digits (122 vs 130 emitted) because the tighter
 staff-derived spans clip the outermost digits of each system - the span
 margin (3 * page_sp) needs widening to the staff half-gap plus digit
 height.
+
+### R12 — Staff-group candidate-run scoring (tasks 1-3)
+Diagnostic proof-staff-groups.py records, for EVERY candidate six-line
+run, its spacing/CV/thickness and detected-digit support, plus the GT tab
+systems derived independently from the joins. It showed the greedy
+first-passing-run loop (step +6) SKIPS whole systems when the band phase
+drifts.
+
+FIX: candidates are now scored by digit support and a non-overlapping set
+is taken greedily (regularity + thinness remain hard gates; zero-support
+runs are rejected because notation staves never carry tabdigit peaks).
+
+QMEK (3 pages): 423 notes emitted, 423 matched, 0 unmatched.
+  measure accuracy 0% -> 100% (423/423 of GT; 81.3% reference coverage)
+  string 100% / fret 92.0% / triple 92.0% OF MATCHED
+  bars_per_sys p1 [6,4,5,6], p2 [4,5,5,5], p3 [4,4,6]
+TXO (2 pages): 299 emitted, 298 matched, 1 unmatched.
+  measure 48.7% of matched (unchanged) - its barrier is now a DIFFERENT
+  one: bars_per_sys p1 [5,4,4,4,6] (one over-split + one extra barline),
+  p2 [4,4,4] (structurally exact). Corrected semantic 51% (52% before).
+
+NOT DONE: the eight previously-lost page-2 digits (Txo p2 emitted 122 of
+130 candidates; tabspan losses 8) and Txo's barline over-split remain.

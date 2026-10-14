@@ -229,7 +229,14 @@ def main() -> int:
                             _pv = _r
                         _lb.append((_st, _pv))
                         _lineb = [((a + b) / 2, b - a + 1) for a, b in _lb]
-                    _staff_runs = []
+                    # Candidate-run SELECTION (was: first passing run, step 6).
+                    # Every 6-line band-window that is thin + regular is a
+                    # candidate; the greedy first-pass scheme steps a fixed +6
+                    # and therefore SKIPS whole systems when the band phase
+                    # drifts (Txo p1 has 5 valid runs and picked 4; p2 has 4 and
+                    # picked 2). Now: score candidates by detected-digit
+                    # support and take a non-overlapping set greedily.
+                    _cand = []
                     _i = 0
                     while _i + 6 <= len(_lineb):
                         _mids = [m for m, _ in _lineb[_i:_i + 6]]
@@ -238,10 +245,27 @@ def main() -> int:
                         _thick = max(w for _, w in _lineb[_i:_i + 6])
                         _cv = (sum((x - _mg) ** 2 for x in _gaps) / 5.0) ** 0.5 / _mg
                         if _mg > 0 and _thick <= 0.35 * _mg and _cv <= 0.18:
-                            _staff_runs.append((_mids[0], _mids[-1]))
-                            _i += 6
-                        else:
-                            _i += 1
+                            _cand.append((_mids[0], _mids[-1], _mg))
+                        _i += 1
+                    _dys = np.array([d["y"] for d in digits]) if digits else np.array([])
+                    def _support(run):
+                        if not len(_dys):
+                            return 0
+                        return int(((_dys >= run[0] - 3) & (_dys <= run[1] + 3)).sum())
+                    _scored = sorted((( _support(r), r[0], r) for r in _cand), key=lambda z: -z[0])
+                    _staff_runs = []
+                    for _s, _t0, _r in _scored:
+                        # non-overlap against already-selected staves
+                        if any(not (_r[1] < a - 0.5 * _r[2] or _r[0] > b + 0.5 * _r[2])
+                               for a, b in _staff_runs):
+                            continue
+                        # a TAB staff must actually carry digits; without support
+                        # the run is a notation staff (notation never carries
+                        # tabdigit peaks)
+                        if _s == 0:
+                            continue
+                        _staff_runs.append((_r[0], _r[1]))
+                    _staff_runs.sort()
                     _groups = [(_a, _b) for _a, _b in _staff_runs] or                               [(min(_cc), max(_cc)) for _cc in _cl]
                     _fb = []
                     for _a, _b in _groups:
