@@ -663,7 +663,10 @@ async function main() {
       await ensureMidiInputSource(page)
       await sleep(1000)
       const changed = await scoreState(page)
-      if (changed.yourTurnText && /1 of 479/.test(changed.yourTurnText)) {
+      // 545 = the BWV 846 prelude checkpoint count AFTER its voice-flattening
+      // repair (scripts/repair-flattened-practice-musicxml.mjs; was 479 when
+      // the flattening merged onsets across written measures).
+      if (changed.yourTurnText && /1 of 545/.test(changed.yourTurnText)) {
         pass('changing scores resets Wait For You', changed.yourTurnText.slice(0, 60))
       } else {
         fail('changing scores resets Wait For You', changed.yourTurnText)
