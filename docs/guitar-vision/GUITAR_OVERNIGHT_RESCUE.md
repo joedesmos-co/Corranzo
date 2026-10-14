@@ -610,3 +610,22 @@ the TAB-span filter sit at y 1696-1800, i.e. the 4th TAB system
 all there, so neither a 6-line nor a 5-line group can be formed - the
 staff lines of that system do not span the middle 60% of the page width.
 That is a line-detection failure, not a grouping one.
+
+### R13 — Staff lines by contiguous run (M1): Txo p2 system recovered
+ROOT CAUSE: Txo page 2's 4th TAB system is mostly empty, so its six staff
+lines run 178-340px on a 1643px page. The row-profile detector (mean ink
+over a window) read 0.11-0.21, below the 0.3 gate, so the ENTIRE system
+vanished: no span, 9 digits dropped, and the monotonic numbering shifted
+every later measure.
+
+FIX: detect staff lines by longest CONTIGUOUS horizontal run (>= 4*page_sp
+px, min 100px) instead of row ink fraction. A line is a line regardless of
+what share of the page width it covers. All 6 lines of that system are
+recovered at y 1656/1682/1708/1734/1760/1786 (runs 178-340).
+
+TXO: emitted 299 -> 307, matched 298 -> 306, unmatched 1.
+  reference coverage 306/362 = 82.6% -> 84.5%
+  page 2 tabspan losses 8 -> 0; bars_per_sys [4,1,4,3] -> [4,4,4,3]
+  page 1 bars_per_sys still [5,4,4,4,6] (open, M2)
+  corrected semantic 51% -> 52%
+QMek unchanged: 423/423 matched, measure 100%, triple 389/423 = 92.0%.

@@ -215,11 +215,29 @@ def main() -> int:
                     # TAB staff IS a 6-line group with a consistent gap, so
                     # detect those directly; digits remain the fallback.
                     _sp = (_page_sp or 32)
+                    # STAFF LINES by contiguous horizontal run, not by row ink
+                    # fraction. A full-width row profile fails when a staff
+                    # spans only part of the page: Txo p2's 4th TAB system is
+                    # mostly empty, so its six lines run 178-340px on a 1643px
+                    # page -> row fraction 0.11-0.21, below the 0.3 gate, and
+                    # the whole system vanished (9 digits lost). A line is a
+                    # long CONTIGUOUS horizontal run, which is independent of
+                    # how much of the page width it covers.
                     _lineb = []
                     _ink2 = u8 < 128
                     _hh, _ww = _ink2.shape
-                    _rf = _ink2[:, int(_ww * 0.2):int(_ww * 0.8)].mean(axis=1)
-                    _lrows = np.nonzero(_rf > 0.3)[0]
+                    _minrun = max(4.0 * (_page_sp or 26), 100.0)
+                    _runs = np.zeros(_hh, dtype=np.int32)
+                    for _y in range(_hh):
+                        _row = _ink2[_y]
+                        _ch = np.flatnonzero(_row)
+                        if not len(_ch):
+                            continue
+                        _brk = np.flatnonzero(np.diff(_ch) > 1)
+                        _starts = np.concatenate(([0], _brk + 1))
+                        _ends = np.concatenate((_brk, [len(_ch) - 1]))
+                        _runs[_y] = int((_ch[_ends] - _ch[_starts] + 1).max())
+                    _lrows = np.nonzero(_runs >= _minrun)[0]
                     if len(_lrows) >= 6:
                         _lb, _st, _pv = [], _lrows[0], _lrows[0]
                         for _r in _lrows[1:]:
