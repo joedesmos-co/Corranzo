@@ -179,8 +179,8 @@ def main() -> int:
             # otherwise mint phantom measures). Margin scales with page_sp.
             _tabspans = [(s["top"], s["bot"]) for s in sys_bars if s.get("tab")]
             events = []
-            _led = {"digits": len(digits), "tabspan": 0, "tau": 0,
-                    "tau_gt": 0, "emitted": 0,
+            _led = {"digits": len(digits), "tabspan": 0, "tau": 0, "tau_gt": 0, "emitted": 0,
+                    "sys_src": "", "n_sys": 0,
                     "tau_detail": [], "page": pno}
             # Validate the band-detected TAB spans against the ACTUAL digit
             # positions. A spurious 6-line group in the notation (page 2 of
@@ -207,11 +207,47 @@ def main() -> int:
                         else:
                             _cur.append(_b)
                     _cl.append(_cur)
+                    # TAB SYSTEM detection from detected STAFF LINES.
+                    # Digit y-clusters are a poor proxy: detections spread
+                    # unevenly, so clusters merge/split real staves (Txo
+                    # bars_per_sys [1,4,4,4,6] vs a true [4,4,4,4,4]) and the
+                    # monotonic numbering then shifts every later measure. A
+                    # TAB staff IS a 6-line group with a consistent gap, so
+                    # detect those directly; digits remain the fallback.
+                    _sp = (_page_sp or 32)
+                    _lineb = []
+                    _ink2 = u8 < 128
+                    _hh, _ww = _ink2.shape
+                    _rf = _ink2[:, int(_ww * 0.2):int(_ww * 0.8)].mean(axis=1)
+                    _lrows = np.nonzero(_rf > 0.3)[0]
+                    if len(_lrows) >= 6:
+                        _lb, _st, _pv = [], _lrows[0], _lrows[0]
+                        for _r in _lrows[1:]:
+                            if _r - _pv > 3:
+                                _lb.append((_st, _pv))
+                                _st = _r
+                            _pv = _r
+                        _lb.append((_st, _pv))
+                        _lineb = [((a + b) / 2, b - a + 1) for a, b in _lb]
+                    _staff_runs = []
+                    _i = 0
+                    while _i + 6 <= len(_lineb):
+                        _mids = [m for m, _ in _lineb[_i:_i + 6]]
+                        _gaps = [b - a for a, b in zip(_mids, _mids[1:])]
+                        _mg = sum(_gaps) / 5.0
+                        _thick = max(w for _, w in _lineb[_i:_i + 6])
+                        _cv = (sum((x - _mg) ** 2 for x in _gaps) / 5.0) ** 0.5 / _mg
+                        if _mg > 0 and _thick <= 0.35 * _mg and _cv <= 0.18:
+                            _staff_runs.append((_mids[0], _mids[-1]))
+                            _i += 6
+                        else:
+                            _i += 1
+                    _groups = [(_a, _b) for _a, _b in _staff_runs] or                               [(min(_cc), max(_cc)) for _cc in _cl]
                     _fb = []
-                    for _cc in _cl:
-                        _t = int(min(_cc) - 3 * _page_sp)
-                        _bo = int(max(_cc) + 3 * _page_sp)
-                        _bt, _bb = int(min(_cc) - 0.5 * _page_sp), int(max(_cc) + 0.5 * _page_sp)
+                    for _a, _b in _groups:
+                        _t = int(_a - 3 * _sp)
+                        _bo = int(_b + 3 * _sp)
+                        _bt, _bb = int(_a - 0.5 * _sp), int(_b + 0.5 * _sp)
                         _xs = mbars.bars_in_span(u8, _bt, _bb, min_cover=0.5)
                         _dx = [d["x"] for d in digits if _t <= d["y"] <= _bo]
                         _xs = sorted(set(_xs + ([min(_dx) - 30] if _dx else [])))
@@ -248,7 +284,8 @@ def main() -> int:
                         _tabspans = [(s["top"], s["bot"]) for s in _fb]
                         _led["respan_to"] = len(_fb)
                         _led["modal_bars"] = _modal
-                        _led["bars_per_sys"] = [len(x) for x in _xs]
+                        _led["bars_per_sys"] = [len(s["xs"]) for s in _fb]
+                        _led["sys_src"] = "staff" if _staff_runs else "digits"
             for det in digits:
                 cx, cy = det["x"], det["y"]
                 if _tabspans and _page_sp:

@@ -552,3 +552,23 @@ cannot help because the deficit is not a missing barline inside a system
 Correct fix (next): derive TAB systems from detected STAFF LINES (a TAB
 staff is a 6-line group with a measured gap), not from the y-clustering of
 digit detections. Digit clusters are then only a fallback/validator.
+
+### R11 — TAB systems now detected from STAFF LINES (M2)
+Replaced the respan's digit-y clustering with 6-line staff-group
+detection (row profile -> line bands -> consistent-gap runs of 6, thin
+lines). Digits remain the fallback when no 6-line group is found.
+
+TXO ledger, bars_per_sys (GT = 5 systems x 4 measures):
+  before (digit clusters): p1 [1,4,4,4,6]   p2 [4,1,4,3]
+  after  (staff groups):  p1 [5,4,4,4,6]   p2 [4,4,4]
+Page 2 is now structurally exact. Page 1 still over-splits its first and
+last systems (5 and 6 barlines): the row profile on page 1 admits extra
+bands, so a 6-line run is chosen at a phase that mixes the notation
+staff's tail with the TAB staff's head.
+
+Measure accuracy 47.4% -> 48.7% of matched; Txo 299 notes emitted,
+string 100% / fret 93.6% / triple 44.6% of matched, 82.6% of GT covered.
+Page-2 recovery cost 8 digits (122 vs 130 emitted) because the tighter
+staff-derived spans clip the outermost digits of each system - the span
+margin (3 * page_sp) needs widening to the staff half-gap plus digit
+height.
