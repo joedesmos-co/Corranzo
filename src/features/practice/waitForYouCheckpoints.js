@@ -112,7 +112,58 @@ function sameTieVoice(left, right) {
   )
 }
 
-/** Fold tied continuations into their attack note so WFY/visual keep one target. */
+/**
+ * Resolve the attack note a continuation belongs to.
+ *
+ * Identity is the parser's `tieChainId` when present. Chain identity is
+ * EXCLUSIVE: a tie-stop whose chain head is not in this list (loop started
+ * inside the tie, or a timing map built without parser merging) must NOT be
+ * folded into a same-pitch note from a DIFFERENT chain — repeated tied notes
+ * on one pitch are common (Aguado op03-4/5, Chopin mazurka, fugue BWV 846),
+ * and a same-pitch fallback silently attached another chain's continuation,
+ * drawing a sustain bar across unrelated measures.
+ * Only timing maps without chain ids use the part/voice/pitch search.
+ */
+function findTieChainHead(merged, note) {
+  const chainId = note.tieChainId
+  if (chainId != null) {
+    return (
+      [...merged]
+        .reverse()
+        .find(
+          (candidate) =>
+            candidate.tieChainId === chainId &&
+            candidate.tieStart &&
+            !candidate.suppressPlaybackAttack,
+        ) ?? null
+    )
+  }
+  // Legacy timing maps built without parser chain ids. A chain head from a
+  // real (parser-built) chain always carries a tieChainId, so requiring the
+  // head to lack one too keeps a dangling tie-stop — a source defect with no
+  // resolvable attack — from being folded into an unrelated same-pitch chain.
+  return [...merged]
+    .reverse()
+    .find(
+      (candidate) =>
+        candidate.tieStart &&
+        candidate.tieChainId == null &&
+        sameTieVoice(candidate, note) &&
+        !candidate.suppressPlaybackAttack,
+    )
+}
+
+/**
+ * Fold tied continuations into their attack note so WFY/visual keep one target.
+ *
+ * DURATIONS ARE NOT ADDED HERE. The parser (`applyTieSustainToNotes`) already
+ * merged every continuation into the chain head's `durationQuarters` /
+ * `durationSeconds` (sounding duration) and recorded the chain total in
+ * `tiedChainDurationQuarters`. Adding again double-counted a 2q+2q tie as 6q.
+ * This fold only attaches continuation metadata (for display) and re-states
+ * the head duration from the chain record, which makes it idempotent and safe
+ * for timing maps whose chain record is missing (duration left untouched).
+ */
 function mergeTiedContinuations(notes) {
   const sorted = [...notes].sort(
     (left, right) =>
@@ -127,20 +178,12 @@ function mergeTiedContinuations(notes) {
       note.suppressPlaybackAttack || (note.tieStop && !note.tieStart),
     )
     if (isTieContinuation) {
-      const head = [...merged]
-        .reverse()
-        .find(
-          (candidate) =>
-            candidate.tieStart &&
-            sameTieVoice(candidate, note) &&
-            !candidate.suppressPlaybackAttack,
-        )
+      const head = findTieChainHead(merged, note)
       if (head) {
-        const addedQuarters = Number.isFinite(note.durationQuarters) ? note.durationQuarters : 0
-        const addedSeconds = Number.isFinite(note.durationSeconds) ? note.durationSeconds : 0
-        head.durationQuarters = (Number.isFinite(head.durationQuarters) ? head.durationQuarters : 0) + addedQuarters
-        if (Number.isFinite(head.durationSeconds) || addedSeconds > 0) {
-          head.durationSeconds = (Number.isFinite(head.durationSeconds) ? head.durationSeconds : 0) + addedSeconds
+        // Re-state (never accumulate) the sounding duration from the chain
+        // record; the parser already merged it.
+        if (Number.isFinite(head.tiedChainDurationQuarters)) {
+          head.durationQuarters = head.tiedChainDurationQuarters
         }
         head.tieStop = Boolean(head.tieStop || note.tieStop)
         head.hasTiedSustain = true
