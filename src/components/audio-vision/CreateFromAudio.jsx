@@ -217,6 +217,17 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
             <li>Tempo <strong>{result.transcribed.tempo.bpm} BPM</strong>{result.transcribed.tempo.varies ? ' (varies)' : ''}{result.transcribed.tempo.ambiguousTempo ? ' (approximate)' : ''}</li>
             {result.transcribed.tempo.ambiguousTempo && (
               <li className="audio-vision-hint">
+                The pulse could be read differently
+                {result.transcribed.tempo.alternativeTempo
+                  ? ` (${result.transcribed.tempo.alternativeTempo} BPM)`
+                  : result.transcribed.tempo.octaveAlternative
+                    ? ` (${result.transcribed.tempo.octaveAlternative} BPM)`
+                    : ''}
+                {' '}— durations in this arrangement may be half or double what you expect. Check the preview before practicing.
+              </li>
+            )}
+            {result.transcribed.tempo.ambiguousTempo && (
+              <li className="audio-vision-hint">
                 Tempo is approximate — the pulse could be half or double
                 {result.transcribed.tempo.octaveAlternative ? ` (${result.transcribed.tempo.octaveAlternative} BPM)` : ''}.
                 Listen to the preview to check the tempo before practicing.

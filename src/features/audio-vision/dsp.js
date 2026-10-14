@@ -390,6 +390,21 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
   // rather than present one confident number.
   // Any sub-90 BPM reading in this pipeline is a stylistic preference (we
   // prefer the double-time pulse), not a certainty, so it is flagged.
+  //
+  // REJECTED EXPERIMENT (measured on the frozen timing benchmark, then
+  // removed): flagging ambiguity from the comb-salience of the octave/multiple
+  // family. The benchmark's two wrong readings are a 2/3 ratio (period = 1.5
+  // beats), which the octave rules never catch. Salience was a promising
+  // discriminator, but the measurement says it cannot decide these cases:
+  //   ss-comp  (correct, 84):  own 6.14, best family member 5.29  (ratio 0.86)
+  //   jazz2    (correct, 112): own 4.40, 2x member 4.40           (ratio 1.00)
+  //   rock2    (WRONG, 96 vs 142): own 3.33, true 3.24            (ratio 0.97)
+  //   funk3    (WRONG, 74 vs 112): own 5.47, true 4.40            (ratio 0.80)
+  // i.e. a correct reading and a wrong reading can have the SAME family
+  // profile (jazz2 correct at ratio 1.00; rock2 wrong at 0.97), so no threshold
+  // separates them. The flag added false ambiguity to two correct recordings
+  // and still missed the funk3 case, so it is removed. The 2/3 tempo lock
+  // remains an open, documented blocker rather than a fixed one.
   const ambiguous = alt != null || chosenTempo < 90
   return {
     bpm: chosenTempo,
@@ -399,6 +414,8 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
     method: 'autocorr-onset',
   }
 }
+
+
 
 /** Beat grid from tempo + first strong onset anchor. */
 export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, anchorFrame = null, flux = null }) {

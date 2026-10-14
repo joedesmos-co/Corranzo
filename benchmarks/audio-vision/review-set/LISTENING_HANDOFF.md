@@ -14,8 +14,11 @@ claim that these scores sound good. Only a listener can say that.
 ## How to listen (about 15 minutes)
 
 1. Open the **original recording** in QuickTime Player (or VLC) so you know the piece.
-2. Open the matching **`.mid` preview** — double-click it and it plays in QuickTime
-   Player or GarageBand. It is the same music as the score.
+2. Play the matching **`.mid` preview**. Verified route on this Mac: **GarageBand**
+   (double-click the `.mid`, or drag it onto an empty GarageBand window) renders
+   and plays the file as-is. MuseScore, Dorico, Finale and VLC also play `.mid`.
+   *QuickTime Player does not open `.mid` files* — checked, so do not use it for
+   the preview. It is the same music as the score.
 3. Open the **`.musicxml`** in MuseScore, Dorico or Finale if you want the notation
    and TAB.
 4. Answer the three questions in the checklist below.
