@@ -170,3 +170,9 @@ competing with tab underlines. Pill boxes stay on the dark desk. */
 .audio-vision-facts { list-style: none; padding: 0; margin: 12px 0; }
 .audio-vision-facts li { padding: 4px 0; }
 @media (max-width: 640px) { .audio-vision-options { grid-template-columns: 1fr; } }
+
+/* A9/M3 — tempo correction (smallest safe path: one number, one button). */
+.audio-vision-tempo-fix { border-left: 3px solid var(--cz-ink); padding: 8px 12px; margin: 12px 0; }
+.audio-vision-tempo-fix label { display: block; font-size: 13px; margin-bottom: 6px; }
+.audio-vision-tempo-fix-row { display: flex; gap: 8px; align-items: center; }
+.audio-vision-tempo-fix-row input { width: 88px; }

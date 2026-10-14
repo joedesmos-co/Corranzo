@@ -77,7 +77,7 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
  * Analyze mono 22050 Hz samples. views: { harmonic, percussive } magnitude frames (optional).
  * predictNotes: async (samples) => [{ midi, startSeconds, endSeconds }] | null (Basic Pitch).
  */
-export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null } = {}) {
+export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null } = {}) {
   const totalSeconds = samples.length / sampleRate
   const report = (stage, fraction) => {
     try { onProgress?.({ stage, fraction }) } catch { /* noop */ }
@@ -103,7 +103,14 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   })
   const tempoVaries = Math.max(...sectionTempos) - Math.min(...sectionTempos) >= 8
   report('beats', 0.45)
-  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: tempo.bpm, totalSeconds })
+  // M3: an explicit tempo override (from the review UI) replaces the estimated
+  // beat period. It is carried as the *tempo used*, so everything downstream -
+  // beats, quantization, arrangement, MusicXML, preview, checkpoints - follows
+  // the corrected value rather than a display label.
+  const effectiveTempo = Number.isFinite(tempoOverride) && tempoOverride > 0
+    ? { ...tempo, bpm: Math.round(tempoOverride), source: 'user-override', estimatedBpm: tempo.bpm, octaveAlternative: null }
+    : { ...tempo, source: 'estimate' }
+  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: effectiveTempo.bpm, totalSeconds })
   // M3 meter: infer instead of assuming 4/4. An unverified meter keeps the 4/4
   // default for engraving but is reported as uncertain, so callers can say so.
   const meterReading = inferMeter(onsetFrames, frameSeconds, tempo.bpm)
@@ -249,8 +256,8 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     totalSeconds: Math.round(totalSeconds * 1000) / 1000,
     sampleRate,
     tempo: {
-      ...tempo,
-      ambiguousTempo: tempo.ambiguousTempo ?? false,
+      ...effectiveTempo,
+      ambiguousTempo: effectiveTempo.source === 'user-override' ? false : (tempo.ambiguousTempo ?? false),
       varies: tempoVaries,
       sectionTempos,
       provenance: PROVENANCE.INFERRED,

@@ -113,7 +113,7 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
  * long recording is never silently truncated (Phase 7).
  */
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
-  const { targetPart, difficulty, title, excerpt = null } = options
+  const { targetPart, difficulty, title, excerpt = null, tempoOverride = null } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
@@ -168,6 +168,9 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: stages.predictNotes ?? null,
     onProgress: progress,
+    // M3: reviewer's tempo correction propagates to beats -> quantization ->
+    // arrangement -> MusicXML -> preview -> practice checkpoints.
+    tempoOverride: Number.isFinite(tempoOverride) && tempoOverride > 0 ? tempoOverride : null,
   })
   analysis.stereo = stereoSlice
     ? {
@@ -301,6 +304,8 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       pitchSource: analysis.pitchSource,
       totalSeconds: analysis.totalSeconds,
       stereo: analysis.stereo ?? null,
+      tempoSource: analysis.tempo.source ?? 'estimate',
+      tempoEstimatedBpm: analysis.tempo.estimatedBpm ?? null,
     },
     confidence,
     partial: verdict.partial,

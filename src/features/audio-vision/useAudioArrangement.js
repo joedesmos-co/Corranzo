@@ -93,7 +93,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
     }
   }, [])
 
-  const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null }) => {
+  const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null, tempoOverride = null }) => {
     cancelledRef.current = false
     setError(null)
     setResult(null)
@@ -108,7 +108,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
       const outcome = await runAudioArrangementPipeline(
         file,
         arrayBuffer,
-        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt },
+        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt, tempoOverride },
         {
           decodeAudioDataImpl: cachedDecode ? (async () => cachedDecode) : decodeWithWebAudio,
           predictNotes: predictWithBasicPitch,
@@ -159,6 +159,23 @@ export function useAudioArrangement({ onReady = null } = {}) {
     return payload
   }, [result, onReady])
 
+  // M3: re-run with a corrected tempo, reusing the already decoded audio (no
+  // re-upload). The last successful options are remembered so the reviewer only
+  // needs to supply the tempo.
+  const lastOptionsRef = useRef(null)
+  const arrangeWithTempo = useCallback(async (tempo) => {
+    const previous = lastOptionsRef.current
+    if (!previous) return null
+    const value = Number(tempo)
+    if (!Number.isFinite(value) || value <= 0) return null
+    return arrange(previous.file, { ...previous.options, tempoOverride: value })
+  }, [arrange])
+
+  const arrangeRemembering = useCallback(async (file, options) => {
+    lastOptionsRef.current = { file, options }
+    return arrange(file, options)
+  }, [arrange])
+
   return {
     phase,
     progress,
@@ -166,7 +183,8 @@ export function useAudioArrangement({ onReady = null } = {}) {
     error,
     probe,
     probeFile,
-    arrange,
+    arrange: arrangeRemembering,
+    arrangeWithTempo,
     cancel,
     openInPractice,
     reset: () => {
