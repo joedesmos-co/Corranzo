@@ -22,7 +22,7 @@
  * instead of growing without bound. No monkeypatching, no warning suppression,
  * no artificial timeouts.
  */
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import React, { act, createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -75,16 +75,51 @@ function renderLayer(container) {
 }
 
 describe('AnnotationLayer render loop', () => {
+  let restoreRect
+
+  beforeEach(() => {
+    // happy-dom returns an all-zero rect, which the layer treats as "no box"
+    // and skips measuring. Give the element a real page box so the measurement
+    // effect actually runs and can (pre-fix) re-trigger itself forever.
+    const original = Element.prototype.getBoundingClientRect
+    Element.prototype.getBoundingClientRect = function stub() {
+      return {
+        x: 0,
+        y: 0,
+        left: 0,
+        top: 0,
+        right: 800,
+        bottom: 1000,
+        width: 800,
+        height: 1000,
+        toJSON: () => ({}),
+      }
+    }
+    restoreRect = () => {
+      Element.prototype.getBoundingClientRect = original
+    }
+  })
+
   afterEach(() => {
+    restoreRect?.()
     document.body.innerHTML = ''
   })
 
-  it('settles instead of re-rendering forever when the layout reference changes each render', () => {
-    const consoleErrors = []
-    const originalError = console.error
-    console.error = (...args) => {
-      consoleErrors.push(args.map((arg) => String(arg)).join(' '))
-      originalError(...args)
+  it('does not re-run its measurement effect when the layout reference changes but values do not', () => {
+    const scrollSubscriptions = []
+    const originalAdd = window.addEventListener.bind(window)
+    const originalRemove = window.removeEventListener.bind(window)
+    window.addEventListener = (type, ...rest) => {
+      if (type === 'scroll') {
+        scrollSubscriptions.push('add')
+      }
+      return originalAdd(type, ...rest)
+    }
+    window.removeEventListener = (type, ...rest) => {
+      if (type === 'scroll') {
+        scrollSubscriptions.push('remove')
+      }
+      return originalRemove(type, ...rest)
     }
 
     try {
@@ -93,19 +128,22 @@ describe('AnnotationLayer render loop', () => {
       const host = renderLayer(container)
 
       host.rerender(baseProps())
-      const baseline = host.renders
-      for (let index = 0; index < 12; index += 1) {
+      const baselineSubscriptions = scrollSubscriptions.length
+      for (let index = 0; index < 10; index += 1) {
         host.rerender(baseProps())
       }
-      const addedRenders = host.renders - baseline
+      const addedSubscriptions = scrollSubscriptions.length - baselineSubscriptions
       host.unmount()
       container.remove()
 
-      expect(addedRenders).toBeLessThanOrEqual(13)
-      const depthWarnings = consoleErrors.filter((text) => /Maximum update depth/.test(text))
-      expect(depthWarnings).toEqual([])
+      // One effect run per layout-VALUE change. An identity dependency re-ran
+      // the effect (and re-subscribed) on every render, which combined with the
+      // effect's own setState is the passive-effect loop React eventually
+      // surfaced as "Maximum update depth exceeded".
+      expect(addedSubscriptions).toBe(0)
     } finally {
-      console.error = originalError
+      window.addEventListener = originalAdd
+      window.removeEventListener = originalRemove
     }
   })
 
