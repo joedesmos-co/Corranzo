@@ -672,3 +672,20 @@ native-font quality is far below the controlled Palatino renders
 font/glyph-shape driven, NOT geometry: the raster path's own geometry
 pipeline is the same one that produces the controlled results.
 Rests are entirely unrecalled (0/6, all 4 predictions false).
+
+### R15b — FONT-ISOLATION CONTROL (M2)
+Same heldout page (pdmx-QmTJRwrHUET3 p1), same rasterizer, same measured
+staff gap (26.0 -> no scale difference), ONLY the font differs:
+
+  native document font  : aggregate tp 165 fp 203 fn 359
+                          P 0.448 R 0.315 F1 0.371
+                          tabdigit P 0.483 R 0.224 F1 0.306
+  forced Palatino render: aggregate P 0.836 R 0.603 F1 0.700
+
+So the raster/geometry pipeline is NOT the limiting factor - the embedded
+font's digit glyph shapes are. The raster path's own geometry (staff
+lines by contiguous run, measured gap, derived units-per-px) works; what
+fails is TAB glyph recognition under an unseen font. Rests are entirely
+unrecalled (0/6 gt, 0 true positives). A bounded TRAIN-only font
+augmentation is the justified next experiment and must be preregistered
+before running.
