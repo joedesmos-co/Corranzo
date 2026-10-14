@@ -595,3 +595,18 @@ TXO (2 pages): 299 emitted, 298 matched, 1 unmatched.
 
 NOT DONE: the eight previously-lost page-2 digits (Txo p2 emitted 122 of
 130 candidates; tabspan losses 8) and Txo's barline over-split remain.
+
+### R12b — sparse-system rescue TRIED AND REVERTED (regression)
+Accepting 5-of-6-line staff groups (for a TAB staff whose 6th line is
+faint) REGRESSED Qmek: measure accuracy 100% -> 45.9% of matched and 11
+false spans (434 emitted, 423 matched, 11 unmatched). The relaxation
+creates spurious groups in notation. Reverted; Qmek restored to 423/423
+matched, measure 100%, 49 measures. Txo unchanged (299 emitted, 298
+matched, 1 unmatched, measure 48.7%).
+
+Residual defect (open, diagnosed exactly): the 8 Txо p2 digits lost to
+the TAB-span filter sit at y 1696-1800, i.e. the 4th TAB system
+(GT 1656-1786, only 9 digits). The row profile finds NO staff bands at
+all there, so neither a 6-line nor a 5-line group can be formed - the
+staff lines of that system do not span the middle 60% of the page width.
+That is a line-detection failure, not a grouping one.
