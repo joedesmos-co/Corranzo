@@ -328,7 +328,13 @@ def main():
     C = Counter()
     C["meas_covered"] = set()
     per_score = {}
+    _prev = {}
+
+    def _snap():
+        return {k: v for k, v in C.items() if k != "meas_covered"}
+
     for sid in sids:
+        _prev = _snap()
         evs = json.load(gzip.open(EVENTS / f"{sid}.events.json.gz", "rt"))["events"]
         pages = sorted({int(e["bbox"]["page"]) for e in evs if e.get("bbox")})
         for pg in pages:
@@ -450,6 +456,21 @@ def main():
                     used.add(bi)
                     C["rest_tp"] += 1
             C["rest_fn"] += len(trp) - len(used)
+        per_score[sid] = {
+            "auto_notes": len(notes), "auto_rests": len(rests),
+            "note_tp": C["note_tp"] - _prev.get("note_tp", 0),
+            "note_fp": C["note_fp"] - _prev.get("note_fp", 0),
+            "note_fn": C["note_fn"] - _prev.get("note_fn", 0),
+            "pitch_ok": C["pitch_ok"] - _prev.get("pitch_ok", 0),
+            "dur_ok": C["dur_ok"] - _prev.get("dur_ok", 0),
+            "complete": C["complete"] - _prev.get("complete", 0),
+            "rest_tp": C["rest_tp"] - _prev.get("rest_tp", 0),
+            "rest_fp": C["rest_fp"] - _prev.get("rest_fp", 0),
+            "rest_fn": C["rest_fn"] - _prev.get("rest_fn", 0),
+            "truth_notes": C["truth_notes"] - _prev.get("truth_notes", 0),
+            "truth_rests": C["truth_rests"] - _prev.get("truth_rests", 0),
+        }
+        print(f"[e2e] {sid[:8]} " + json.dumps(per_score[sid]), flush=True)
     _tm = {(sid2, mi) for sid2 in [] for mi in []}
     all_meas = set()
     for sid2 in sids:
