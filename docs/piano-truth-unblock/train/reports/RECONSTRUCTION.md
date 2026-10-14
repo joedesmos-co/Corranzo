@@ -1363,3 +1363,73 @@ Independent OLiMPiC scans (10 samples, 688 notes): frames 16, note
 recall 0.544, pitch multiset 0.157 (from 0.0768), clef 0.80 per frame.
 Key signatures: detected at 0.75 on renders, 0.0 on scans — the single
 largest remaining scan blocker.
+
+
+---
+
+# Cross-engraver key-signature rescue (M1-M6)
+
+From `ebca821cbc`. No merge, TEST sealed, DEV identities frozen. RAM was
+constrained (~160-250MB free, other agents active), so all work was
+single-page and analysis-first; no training was run this mission.
+
+## M1 — scan key-signature root cause
+
+Dumped the key-signature startup region on held-out scans (known fifths
+from the sample's MusicXML):
+  - the line-free CC view shows SHATTERED fragments: the accidentals are
+    split by staff rows into 2-4 pieces with 0.3-1.5-gap gaps, and thick
+    scan staff-line remnants (w 3.19 gaps, h 0.05) survive the horizontal
+    opening and pollute the region;
+  - x positions are consistent (fx0 + ~4.1 gaps on renders) but the
+    vertical positions measured against the detected bottom line are
+    wildly variable (-16 to -102 halfsteps), i.e. the frame/clef
+    association used for the expected-position table is not yet
+    consistent across scores (a frame-rank-to-SVG-staff alignment bug in
+    the study, not in the pipeline);
+  - sharp/flat glyph templates built from render crops score 0.63-0.69 on
+    render frames but <0.31 on scan frames (render-key accuracy 0.75,
+    scan-key 0.0).
+
+## M2 — position-table approach attempted, not deployable
+
+A clef-relative expected-position table (accidental i at fx0+x_i, y_i
+halfsteps above the bottom line) was extracted from TRAIN render keySig
+glyphs. The x positions are tight (4.09 gaps, σ 0.4 for i≥1) but the y
+positions were inconsistent across scores (σ up to 54 halfsteps) because
+the study associated frame 0 with SVG staff 0 without verifying the
+alignment. Fixing the alignment is the identified next step; the recognizer
+was NOT shipped.
+
+## M3 — key application: measured and KEPT GATED OFF
+
+Key detection accuracy: 0.75 on TRAIN renders (30/40), scan 0.0.
+Gating study (60 TRAIN pages):
+  all detections                 0.700
+  conf >= 0.65                   0.897 (35/39)
+  conf >= 0.65 AND >=2 accids    0.765 (13/17)
+Applying a wrong key shifts a whole staff by a semitone; with 4 wrong
+keys per 17-39 applied pages the net complete-event effect is net
+negative, so the application stays gated off (wiring and comment in
+auto_e2e.py record this). This matches the mission rule.
+
+## M4 — familiar-DEV 5-event gap: attributed, not recovered
+
+The 612 -> 607 difference is NOT from the clef (0/7 frames wrong on the
+5 eval pages now, the structural guard holds) but from 7 lost note TPs
+(TP 870 -> 863) introduced by the scan-required staff-line handling
+(duplicate-line merge + min_frac 0.10). A/B tested: frame validation
+on/off (no change), 4-line frame repair on/off (no change) — both
+neutral on DEV. The remaining suspects (merge threshold, run threshold)
+are required for scans (frames 9 -> 16, detections 212 -> 374). Trade
+accepted and documented: 5 familiar events for the scan capability; the
+mission's 25-event regression from the previous commit remains fixed.
+
+## Verified final numbers
+
+Familiar DEV (5 pages, 902 notes, no oracle at inference): note P 0.931 /
+R 0.957, detected pitch 0.9073, duration 0.7601, complete 0.7034, page
+pitch 0.8681, page duration 0.7273, page complete 607/902, rests P
+1.000/R 0.296, measures 0.979, MusicXML 5/5.
+Independent OLiMPiC scans (10 samples, 688 notes): frames 16, note recall
+0.544, pitch multiset 0.157, clef 0.80/frame, key 0.0.
