@@ -1524,3 +1524,70 @@ samples' own MusicXML keys, disjoint from the 10 verification samples),
 plus a joint sharp/flat likelihood over the vertical ink profile instead
 of independent per-position tests. Only then re-measure the key-application
 gate with the same wrong-key accounting as the candidate detector.
+
+
+---
+
+# Scan accidental recognition rescue: NEGATIVE result, key stays OFF
+
+From `4e3faddaa8`. Commit `d03eb04688`. No merge, TEST sealed. All
+calibration on TRAIN-side material; the 10 held-out OLiMPiC samples are
+used exactly once, at the end.
+
+## M1 scan-side calibration (reports/scan_accid_fit.json)
+
+161 TRAIN-side scan samples (disjoint from the 10 verification samples),
+first frame per page, production clef detection, ORIGINAL-INK windows at
+the aligned table positions:
+  present_f0 ink 0.156 vs absent_f0 0.171 — INVERTED (no separation)
+  present_s1 0.287 vs absent_s1  0.235 — 1.2x only
+Cause (measured): scan accidentals are vertically offset from the
+render-derived table positions — median offset 0.42 gaps, p90 0.83 gaps,
+only 25% within 0.3 gaps (horizontal is fine: median 0.02). The aligned
+table is a render-geometry table; this engraving places accidentals
+differently, so fixed-position windows measure background.
+
+## M2 joint classifier (reports/scan_profile_keysig.json)
+
+Staff-relative 28-bin vertical ink profile over the key-signature x-band
+(fx0+2.9..6.6 gaps, 2.5 gaps above the top line to 3 below), measured on
+original ink with staff rows masked (keeps ~90% of accidental strokes,
+removes the lines that dominate the raw profile). Nearest-centroid over
+per-(clef, fifths) centroids learned from TRAIN-side scans (19 classes,
+each 1-17 samples). Held-out verification: 1/9 exact, 5 WRONG, 3
+abstentions (decided accuracy 0.167). Classes with few samples and small
+inter-class margins make centroid assignment unreliable.
+
+## M4 safety measurement
+
+One wrong key corrupts 7.0% of notes on the familiar DEV set (every
+F-letter note shifts); 5 wrong keys per 9 scan samples would corrupt
+roughly a third of those scores. Net effect of enabling: decisively
+negative. Key application remains GATED OFF (unchanged from before).
+
+## M5 hidden assumptions found
+
+  - the aligned position table is render-geometry, not engraving-
+    independent: scan accidental vertical placement deviates by 0.42 gaps
+    (median) — position transfer is a hidden assumption and it fails;
+  - raw vertical profiles are dominated by staff lines (masking them
+    reintroduces the partial-fragmentation tradeoff: ~10% stroke loss
+    accepted in the profile test);
+  - centroid classes need more samples per (clef, fifths) — 19 classes
+    over ~160 samples is too fragmented.
+
+## M6 baseline preserved (re-verified after all changes)
+
+Familiar DEV: 607/902 complete events, page pitch 0.8681, duration
+0.7273, rest P 1.000/R 0.296, measure coverage 0.979, MusicXML 5/5,
+note P 0.931/R 0.957. Independent scans: 374 detections, 16 frames,
+recall 0.544, pitch multiset 0.157. No regressions.
+
+## Honest conclusion
+
+Scan key-signature recognition is NOT solved: two independent approaches
+(fixed positions, joint profiles) both fail on held-out scans with
+dangerous failure modes (silent wrong keys). Key application stays off;
+the natural-pitch pipeline is unchanged and safe. The measurement
+foundation from the previous mission (frame/staff correspondence,
+aligned table, overlays, per-score reporting) is the durable asset.
