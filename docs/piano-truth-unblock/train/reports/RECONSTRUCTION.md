@@ -1591,3 +1591,79 @@ dangerous failure modes (silent wrong keys). Key application stays off;
 the natural-pitch pipeline is unchanged and safe. The measurement
 foundation from the previous mission (frame/staff correspondence,
 aligned table, overlays, per-score reporting) is the durable asset.
+
+
+---
+
+# Small learned scan-symbol detector: NEGATIVE on scans, strong on renders
+
+From `ca75fb8682`. No merge, TEST sealed, baseline untouched (git diff
+empty; all work in new experiment scripts).
+
+## M1 training-evidence audit (reports/train_evidence_audit.json)
+
+  180 TRAIN-side scan samples carry a usable key label (score-level
+  MusicXML fifths only — NO symbol-level scan supervision exists locally)
+  787 render symbol boxes with EXACT glyph labels (E262 sharp 666 /
+  E260 flat 121) across 238 trainable scores
+  the 10 verification samples have now been measured in four missions and
+  are explicitly not pristine untouched evidence
+  class balance (scans): -6..+6, the largest classes 16-29 samples
+
+Decision: train the symbol classifier on render symbol boxes only (exact
+labels), use scans strictly for validation with weak score-level sign
+labels.
+
+## M2 architecture and training
+
+TallCNN (222k params, vertical-preserving, width-only pooling) on 32x64
+staff-relative crops. Training set: 1,429 render positives + ~3,080
+render negatives (table positions with no accidental). Score-disjoint
+split: 190 train / 48 held-out render scores. AdamW 3e-4, batch 256,
+seed 0, 10 epochs, CPU (~3.5 min).
+
+## Results
+
+  render held-out (score-disjoint) symbol accuracy: 0.9945-0.9989
+      -> the classifier is excellent and transfers across SCORES
+  TRAIN-side scan key accuracy: 0.000 decided (128/151 abstain);
+      forced per-sample majority vote 0.586 (weakly better than chance)
+  held-out verification: same abstention pattern
+
+## Root cause of the scan failure (the useful finding)
+
+  foreground confidence on scan crops: median 0.002, p99 0.031 — the
+  classifier is certain every scan crop is background
+  confidence does not correlate with the true key sign (sharp-sign 0.0132
+  vs flat-sign 0.0164) — no usable signal
+  visual diagnosis (crop montages): render positives are clean 1-2px
+  strokes; scan crops carry 4-5px staff-line remnants (measured: median
+  4px, up to 22px) that reconnect glyphs into single blobs, plus faded
+  speckled ink. Three masking variants were tried (+-1 row, uniform
+  masked, thickness-aware) — the crops still differ enough that a
+  render-trained classifier abstains on all of them.
+
+## M3-M5 integration decision
+
+Key application remains DISABLED. The render-domain result (0.99) is not
+extrapolated to scans; enabling application would corrupt whole staves
+(per the earlier measurement, one wrong key shifts 7% of notes and 5 of
+9 scan samples would be wrong).
+
+## M6 baseline preservation (re-verified)
+
+  familiar DEV: 607/902 complete events, page pitch 0.8681, duration
+    0.7273, rest P 1.000/R 0.296, measures 0.979, MusicXML 5/5
+  independent scans: 374 detections, 16 frames, recall 0.544, pitch
+    multiset 0.157 — all unchanged
+
+## Honest conclusion and next blocker
+
+Three independent approaches to scan key signatures have now failed
+honestly (fixed positions, vertical profiles, cross-font learning). The
+blocker is a genuine domain gap that cannot be closed without scan
+symbol-level supervision. The single next step: obtain scan key-signature
+symbol boxes (weak supervision via alignment of the OLiMPiC MusicXML to
+the scan frames — expensive) OR restrict the risk by reporting key
+signatures as "unknown" on scanned input while shipping the natural-pitch
+pipeline. No further training is justified on the current evidence.

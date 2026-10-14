@@ -1,0 +1,42 @@
+{
+ "scan_train_usable": 190,
+ "scan_train_key_dist": {
+  "-6": 3,
+  "-5": 6,
+  "-4": 22,
+  "-3": 23,
+  "-2": 16,
+  "-1": 21,
+  "0": 29,
+  "1": 16,
+  "2": 16,
+  "3": 17,
+  "4": 13,
+  "5": 7,
+  "6": 1
+ },
+ "scan_verify_usable": 10,
+ "scan_verify_note": "the 10 verification samples have been measured in three missions; not pristine untouched data",
+ "render_symbol_boxes_120_scores": {
+  "sharp": 666,
+  "flat": 121
+ },
+ "render_keysig_boxes_120_scores": {},
+ "render_key_dist_120": {
+  "-4": 1,
+  "-2": 7,
+  "-1": 7,
+  "0": 11,
+  "1": 55,
+  "2": 26,
+  "3": 11,
+  "4": 2
+ },
+ "label_granularity": "scans: score-level fifths only (no symbol boxes); renders: exact symbol boxes with glyph ids",
+ "log_reference": [
+  "held_out_measurements_in_log",
+  12
+ ],
+ "verdict": "symbol-level scan supervision does not exist locally; render symbol boxes + score-level scan keys are the only available evidence",
+ "scope": "TRAIN-side only; sealed TEST untouched"
+}
