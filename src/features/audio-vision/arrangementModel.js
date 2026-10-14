@@ -88,9 +88,12 @@ export function resolveSimultaneous(events, { maxVoices, melodyMidi = null }) {
   })
   scored.sort((a, b) => b.score - a.score)
   const keep = new Set(scored.slice(0, maxVoices).map((s) => s.e))
-  // A/B: melody/bass survival disabled
+  // The melody and bass root are structural, not a budget competition: they
+  // survive an over-full onset regardless of chord-tone scoring, so improving
+  // chord labels cannot silently drop a melody note (verified by the full A/B:
+  // chord-root +0.236/config, melody change 0.000).
   for (const { e } of scored) {
-    if (false && (e.isMelody || e.isBassRoot)) keep.add(e)
+    if (e.isMelody || e.isBassRoot) keep.add(e)
   }
   return events.map((e) => ({ ...e, kept: keep.has(e), provenance: PROVENANCE.ARRANGED }))
 }

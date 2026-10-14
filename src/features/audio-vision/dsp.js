@@ -377,6 +377,11 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
     ? [...scores.values()].reduce((a, b) => a + (b - bestVal) ** 2, 0) / scores.size
     : 1
   const confidence = Math.max(0, Math.min(1, bestVal / (Math.sqrt(Math.max(variance, 1e-12)) * 6 + 1e-9)))
+  // REJECTED EXPERIMENT (measured, then removed): octave disambiguation from
+  // the inter-onset interval histogram. It chose the shortest commonly
+  // occurring interval, which is an eighth-note gap rather than the beat, and
+  // turned correct readings into 2-3x errors (ss-comp 86 -> 172, funk3
+  // 74 -> 221, jazz3 68 -> 204). The autocorrelation's own octave rules stay.
   const chosenTempo = Math.round(Math.max(minBpm, Math.min(maxBpm, chosen)))
   // Tempo ambiguity, reported instead of implied. Slow material is the usual
   // victim: a genuine ~45 BPM ballad and its double-time pulse are frequently
@@ -396,7 +401,16 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
 }
 
 /** Beat grid from tempo + first strong onset anchor. */
-export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, anchorFrame = null }) {
+export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, anchorFrame = null, flux = null }) {
+  // REJECTED EXPERIMENT (measured, then removed): flux-based phase refinement.
+  // It searched for the grid phase that puts the most onset energy on beats, but
+  // the median residual against MIDI truth got slightly worse on two of three
+  // recordings (0.406 -> 0.475, 0.394 -> 0.563) and no better on the third, so
+  // it is removed rather than kept as an unproven heuristic. The residual turns
+  // out NOT to be a transcription defect: the MEDIAN residual of the truth's own
+  // onsets to this grid (0.243-0.260) matches the transcriptions' (0.227-0.238),
+  // i.e. transcription is faithful and the remaining offset is grid phase.
+  void flux
   const period = 60 / bpm
   const anchor = ((anchorFrame ?? onsetFrames[0] ?? 0) * frameSeconds) || 0
   const beats = []
@@ -407,6 +421,59 @@ export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, an
     if (t >= -1e-6) beats.push(Math.round(Math.max(0, t) * 1000) / 1000)
   }
   return { beats, beatPeriodSeconds: period, anchorSeconds: anchor }
+}
+
+/**
+ * Choose between a tempo and its simple multiples using the inter-onset
+ * interval histogram. Returns the candidate whose beat period best matches the
+ * shortest commonly-occurring onset interval in the same octave family, or
+ * null when the evidence does not separate them.
+ */
+export function preferTempoByOnsetIntervals(bpm, envelope, frameSeconds, { minBpm, maxBpm } = {}) {
+  const onsets = []
+  let previous = null
+  const mean = envelope.reduce((a, b) => a + b, 0) / Math.max(1, envelope.length)
+  for (let i = 1; i < envelope.length; i += 1) {
+    const value = envelope[i]
+    if (previous != null && value < previous * 0.7 && previous > mean * 1.4) {
+      onsets.push(i * frameSeconds)
+      previous = null
+    } else if (value > mean * 1.4) {
+      previous = value
+    }
+  }
+  if (onsets.length < 4) return null
+  const intervals = []
+  for (let i = 1; i < onsets.length; i += 1) {
+    const d = onsets[i] - onsets[i - 1]
+    if (d > 0.15) intervals.push(d)
+  }
+  if (intervals.length < 4) return null
+  intervals.sort((a, b) => a - b)
+  // The beat period is close to a low order statistic of the IOIs: the
+  // shortest recurring gap that still spans the phrase (use the 15-35% band).
+  const lo = intervals[Math.floor(intervals.length * 0.15)]
+  const hi = intervals[Math.floor(intervals.length * 0.35)]
+  const reference = (lo + hi) / 2
+  const candidates = [bpm]
+  for (const factor of [2, 3, 1.5]) candidates.push(bpm * factor)
+  for (const factor of [2, 3, 1.5]) candidates.push(bpm / factor)
+  let best = null
+  let bestScore = Infinity
+  for (const candidate of candidates) {
+    if (!(candidate >= minBpm && candidate <= maxBpm)) continue
+    const period = 60 / candidate
+    // Score = how close the reference IOI is to an integer number of beats.
+    const beats = Math.max(1, Math.round(reference / period))
+    const score = Math.abs(reference / period - beats)
+    if (score < bestScore - 1e-6) {
+      bestScore = score
+      best = candidate
+    }
+  }
+  // Only override when the evidence clearly favours another multiple.
+  if (best == null || Math.abs(best - bpm) < 1) return null
+  return best
 }
 
 /**
