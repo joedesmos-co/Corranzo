@@ -293,7 +293,19 @@ def main() -> int:
                         _xs = mbars.bars_in_span(u8, _bt, _bb, min_cover=0.5)
                         _dx = [d["x"] for d in digits if _t <= d["y"] <= _bo]
                         _xs = sorted(set(_xs + ([min(_dx) - 30] if _dx else [])))
-                        _fb.append({"top": _t, "bot": _bo, "xs": _xs, "tab": True})
+                        # Merge barline detections closer than 1.5 staff gaps.
+                        # A repeat/final double barline prints two verticals
+                        # 13px apart (Txo p1 system 5: [254,267,343,...]) and
+                        # counts as two measure boundaries, splitting one
+                        # measure and shifting the monotonic numbering. Real
+                        # measures here are ~3-5 gaps wide, so 1.5 gaps is a
+                        # safe staff-relative merge distance.
+                        _mg = []
+                        for _x in _xs:
+                            if _mg and _x - _mg[-1] < 1.5 * _sp:
+                                continue
+                            _mg.append(_x)
+                        _fb.append({"top": _t, "bot": _bo, "xs": _mg, "tab": True})
                     # Barline completion: a measure boundary missed inside a
                     # system merges two measures into one interval, and the
                     # monotonic numbering then shifts EVERY later measure by

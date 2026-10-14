@@ -629,3 +629,22 @@ TXO: emitted 299 -> 307, matched 298 -> 306, unmatched 1.
   page 1 bars_per_sys still [5,4,4,4,6] (open, M2)
   corrected semantic 51% -> 52%
 QMek unchanged: 423/423 matched, measure 100%, triple 389/423 = 92.0%.
+
+### R14 — barline merge (M2/M3 partial)
+A repeat/final double barline prints two verticals 13px apart and was
+counted as two measure boundaries (Txo p1 system 5: [254,267,343,...]),
+splitting one measure. Barlines closer than 1.5 staff gaps are now
+merged (measures here are ~3-5 gaps wide, so this is staff-relative).
+
+Txo p1 bars_per_sys [5,4,4,4,6] -> [5,4,4,4,4]; emitted 307, matched 306,
+coverage 84.5%; corrected semantic 52%.
+Qmek unchanged: 423/423 matched, measure 100%, triple 92.0%.
+
+Residual (exactly located): the TOTAL interval count must equal the
+measure count for the monotonic numbering to stay aligned. Qmek's totals
+match its GT (49), which is why Qmek is 100%. Txо's totals are
+p1 5+4+4+4+4=21, p2 4+4+4+2=14 -> 35 vs a GT of 33: two surplus
+intervals remain, one on p1 system 1 and one on p2 system 4 (the sparse
+system). They are the last cause of the 47.4% measure accuracy.
+No even-spacing completion was revived, and no GT measure count is used
+at inference.
