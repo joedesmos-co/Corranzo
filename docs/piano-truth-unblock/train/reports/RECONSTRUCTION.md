@@ -1433,3 +1433,94 @@ pitch 0.8681, page duration 0.7273, page complete 607/902, rests P
 1.000/R 0.296, measures 0.979, MusicXML 5/5.
 Independent OLiMPiC scans (10 samples, 688 notes): frames 16, note recall
 0.544, pitch multiset 0.157, clef 0.80/frame, key 0.0.
+
+
+---
+
+# Key-evidence repair mission (measurement foundation + gated key application)
+
+From `564a180432`. Commits: `1b44089414` (+ bookkeeping). No merge, TEST
+sealed. All calibration on TRAIN; DEV used for regression only.
+
+## 1. Frame-to-reference-staff correspondence: REPAIRED
+
+The earlier position study assumed detected frame[0] == SVG staff rank 0,
+which produced the absurd y-spreads (-16 to -103 halfsteps). New
+`ref_staff.py` matches each detected frame to the reference staff in PIXEL
+space with the same transform inference uses ((svg_y + ty)/10 * sx);
+25/25 frames matched on the 5 eval pages at <= 6px mean line distance.
+With the correspondence fixed, the aligned table (660 TRAIN scores, 2,382
+frames) is tight: x sd <= 0.16 gaps, y sd <= 0.05 halfsteps, and
+clef-dependent exactly as notation requires (G vs F positions differ).
+
+## 2. Original ink vs line-removed: DEFINITIVE (the core question)
+
+Position-based accidental detection (windows at the table positions, ink
+test vs an above-staff control band):
+  TRAIN renders, source=original ink   : 27/36 = 0.750
+  TRAIN renders, source=line-removed   : 0/36  = 0.000
+Preserving accidental strokes across staff rows is REQUIRED; line removal
+destroys them (the accidentals' bodies sit on the staff rows). No
+glyph-template decision is involved in this conclusion - it is measured
+against the aligned positions.
+
+## 3. Key-signature accuracy
+
+  renders (TRAIN, 36 keyed scores): 0.750 (same as the previous NCC method)
+  held-out scans (9 samples):        1/9 correct, 2 abstentions
+False-key examples from the held-out set (kept as evidence,
+reports/keysig_pos_detect.json):
+  4976604 truth -5 -> -3  (silent: count capped by table coverage)
+  4978397 truth +5 -> abstain (both types supported)
+  4978393 truth -3 -> +2  (silent: flat/sharp positions both inked)
+  4982505 truth +2 -> abstain
+  4945954 truth -4 -> 0   (ink below the absolute threshold)
+Consequence: 1/9 correct with silent failures is NOT deployable, and the
+mission rule applies - key application stays GATED OFF (unchanged).
+
+## 4. Per-score before/after (auto_e2e.py, previously unpopulated)
+
+QmPVDdky tp203/fp15/fn10 complete135 (213 truth)
+QmPyTcVQ tp352/fp33/fn19 complete232 (371 truth)
+QmVjQbrG tp69/fp5/fn2 complete39 (71 truth)
+QmbShSji tp127/fp5/fn0 complete115 (127 truth)
+QmYkUNDS tp112/fp6/fn8 complete86 (120 truth)
+Totals unchanged: 863/902 TP, 607/902 complete, page pitch .868,
+duration .727, rest 8/27 with 0 FP, measure coverage .979, MusicXML 5/5.
+The familiar 607/902 baseline is preserved exactly; no unexplained
+regression below it.
+
+## 5. Regressions re-run
+
+  clef guard : 24/25 reference-matched eval frames (1 misfire: QmPyTc
+              frame 5, an F clef read as G - documented)
+  scan frames: 16 frames / 374 detections / recall 0.544 / pitch
+              multiset 0.157 (unchanged)
+
+## 6. Overlays
+
+reports/overlays/*.png show staff identity (frame -> reference measure,
+staff rank, clef, pixel match distance), the clef crop box, the
+key-signature search window, and the expected accidental positions.
+
+## 7. Rejected experiments (this mission)
+
+  window tuning: 0.9/0.6 gaps (dilution), 0.55/0.35 (over-discrimination:
+    sharps/flats interleave within 0.5 gaps) - reverted
+  median-over-all-windows baseline (time-signature windows inflate it)
+  control region past the time signature (it IS the time signature ->
+    background 0.21) - replaced by an above-staff control band
+  5-7 accidental counts: no TRAIN table entries (only 2 scores have 5+
+    sharps) -> coverage abstention added, not guessed
+
+## 8. Single next blocker
+
+Scan key signatures: the aligned table proves the positions are stable on
+renders (sd 0.05 halfsteps) but scan accidental ink is fainter and its
+windows overlap between sharps and flats, so the position test is not yet
+discriminative there (1/9 with silent failures). Next: a scan-side
+position calibration on TRAIN-side OLiMPiC material (supervised by the
+samples' own MusicXML keys, disjoint from the 10 verification samples),
+plus a joint sharp/flat likelihood over the vertical ink profile instead
+of independent per-position tests. Only then re-measure the key-application
+gate with the same wrong-key accounting as the candidate detector.
