@@ -344,6 +344,21 @@ export function measureCursorOnsetAlignment({
 }
 
 /**
+ * Start time of a written measure's own performed window, or null when the
+ * timing map is unavailable. Used to classify barline-exact checkpoint labels
+ * (ms-quantized onsets landing on a window start) as dust, not overflow.
+ */
+function ownWindowStartFor(timingMap, measureNumber) {
+  if (!timingMap || measureNumber == null) {
+    return null
+  }
+  const measure = (timingMap.measures ?? []).find(
+    (candidate) => candidate.number === measureNumber,
+  )
+  return measure ? measure.startTimeSeconds : null
+}
+
+/**
  * Cursor-vs-highlight agreement: the two INDEPENDENT visual paths for one
  * musical event must coincide on the page.
  *
@@ -364,6 +379,7 @@ export function measureCursorHighlightAgreement({
   checkpoints = [],
   resolveCursorAt,
   resolveTarget,
+  timingMap = null,
   staffSpacing = null,
   sampleEvery = 1,
 }) {
@@ -446,14 +462,20 @@ export function measureCursorHighlightAgreement({
     // Split-brain overflow: the sounding notes are written in a different
     // measure than the performed window they sound in (overfull measures).
     // Cursor follows time, highlight follows notation — neither is a
-    // misplacement. Flagged, not averaged away. A measure label that
-    // differs only because ms-quantized checkpoint time landed within the
-    // boundary epsilon of the next phrase is dust, not overflow.
+    // misplacement. Flagged, not averaged away. A measure label that differs
+    // only because ms-quantized checkpoint time landed within the boundary
+    // epsilon of the next phrase is dust, not overflow; the same holds at a
+    // written measure's own window start (a checkpoint exactly on a barline).
     const boundaryDust =
       Number.isFinite(Number(cursor.phraseStartTime)) &&
       Math.abs(time - cursor.phraseStartTime) <= 0.011
+    const ownWindowStart =
+      ownWindowStartFor(timingMap, checkpoint.measureNumber)
+    const barlineDust =
+      ownWindowStart != null && Math.abs(time - ownWindowStart) <= 0.011
     const measureMismatch =
       !boundaryDust &&
+      !barlineDust &&
       Number.isFinite(Number(checkpoint.measureNumber)) &&
       Number.isFinite(Number(cursor.measureNumber)) &&
       Number(checkpoint.measureNumber) !== Number(cursor.measureNumber)

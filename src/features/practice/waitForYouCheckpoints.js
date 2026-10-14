@@ -1,6 +1,10 @@
 import { getBeatAtTime } from '../musicxml/timingQuery.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
+import {
+  getTimingValidation,
+  TIMING_VALIDATION_STATUS,
+} from '../musicxml/timingValidation.js'
 import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
 import { filterNotesForPracticeScope } from './practiceScope.js'
 import { resolveGroupChordSymbol } from './guitarChordShapeCheckpoint.js'
@@ -58,6 +62,53 @@ function groupNotesByTime(notes) {
   }
 
   return groups
+}
+
+/**
+ * Overfull-measure fallback: an invalidated timeline (voice-flattened source)
+ * can merge notes written in DIFFERENT measures into one checkpoint, because
+ * measure N's overflow sounds inside measure N+1's window. A player reading
+ * the print cannot play two separated written notes simultaneously, so such a
+ * checkpoint never advances — an impossible Wait For You requirement.
+ *
+ * When timing validation fails, split every simultaneous group by WRITTEN
+ * MEASURE only (both staves of a piano grand staff share a measure number, so
+ * same-measure cross-staff notes stay one playable target): each checkpoint
+ * then requires only notes printed in one measure. Nothing is re-timed,
+ * truncated, or dropped — the performed times stay exactly as parsed (and stay
+ * visibly wrong, flagged by the follow layer's measureMismatch diagnostics).
+ * Valid scores are untouched: legitimate cross-measure simultaneity (tremolo
+ * across a barline, tied repeats) keeps its single checkpoint.
+ */
+function splitCrossWrittenMeasureGroups(groups) {
+  const split = []
+  for (const group of groups) {
+    const writtenMeasures = new Set(
+      group.notes.map((note) => `${note.measureNumber ?? ''}`),
+    )
+    if (writtenMeasures.size <= 1) {
+      split.push(group)
+      continue
+    }
+    const byWritten = new Map()
+    for (const note of group.notes) {
+      const key = `${note.measureNumber ?? ''}`
+      const bucket = byWritten.get(key)
+      if (bucket) {
+        bucket.push(note)
+      } else {
+        byWritten.set(key, [note])
+      }
+    }
+    for (const notes of byWritten.values()) {
+      split.push({
+        timeSeconds: group.timeSeconds,
+        notes,
+        splitFromCrossMeasureGroup: true,
+      })
+    }
+  }
+  return split
 }
 
 function isAttackNote(note) {
@@ -272,7 +323,12 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
 
   notes = mergeTiedContinuations(notes)
 
-  const groups = groupNotesByTime(notes)
+  const timingValidation = getTimingValidation(timingMap)
+  const timingValidated = timingValidation.status !== TIMING_VALIDATION_STATUS.INVALID
+  let groups = groupNotesByTime(notes)
+  if (!timingValidated) {
+    groups = splitCrossWrittenMeasureGroups(groups)
+  }
   const harmonyEvents = options.harmonyEvents ?? timingMap?.harmonyEvents ?? []
 
   return groups.map((group, index) => {
@@ -314,6 +370,11 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
       rollingWindowMs: checkpointModel.rollingWindowMs,
       isTiedContinuation: checkpointModel.isTiedContinuation,
       isChord: midis.length > 1,
+      // Timing-fidelity provenance: false when the source has overfull
+      // measures (see timingValidation). A split checkpoint was separated from
+      // a cross-written-measure simultaneity by the honest fallback.
+      timingValidated,
+      splitFromCrossMeasureGroup: Boolean(group.splitFromCrossMeasureGroup),
       notes: group.notes,
     }
   })

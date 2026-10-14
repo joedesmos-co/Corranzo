@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PRACTICE_MODE } from './practiceMode.js'
 import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
+import { getTimingValidation, timingNoticeFor } from '../musicxml/timingValidation.js'
 import {
   buildCheckpoints,
   findCheckpointIndexAtTime,
@@ -295,6 +296,7 @@ export default function useWaitForYou({
   })
 
   const displayLabel = labelForWfyDisplayStatus(displayStatus)
+  const timingValidation = useMemo(() => getTimingValidation(timingMap), [timingMap])
 
   return {
     active,
@@ -313,5 +315,7 @@ export default function useWaitForYou({
     onPlayerInputMatched,
     restart,
     syncToNearestCheckpoint,
+    timingValidation,
+    timingNotice: timingNoticeFor(timingMap),
   }
 }

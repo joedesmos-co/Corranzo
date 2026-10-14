@@ -38,6 +38,7 @@
  */
 import { getTimeline } from '../musicxml/timeline.js'
 import { getBeatAtTime, getMeasureAtTime } from '../musicxml/timingQuery.js'
+import { TIMING_VALIDATION_STATUS } from '../musicxml/timingValidation.js'
 import { buildNoteCheckpoints } from './waitForYouCheckpoints.js'
 import { buildVisualLaneGroups } from './visualPracticeLane.js'
 
@@ -150,12 +151,23 @@ export function describeSourceFidelity(timingMap) {
   if (diagnostics.unsupportedNavigation) unsupported.push('unsupported-navigation:written-order-fallback')
   if (timingMap?.hasApproximateTabRhythm) unsupported.push('tab-approximate-even-rhythm')
   if (diagnostics.defaultTempoUsed) unsupported.push('default-tempo-120-used')
+  // Overfull measures (voice-flattened source): the performed timeline is
+  // faithfully what the file says, but it cannot agree with the print. Wait
+  // For You groups per written measure instead of requiring impossible
+  // simultaneities; the follow layer keeps flagging the split-brain.
+  const timingValidation = timingMap?.timingValidation
+  if (timingValidation?.status === TIMING_VALIDATION_STATUS.INVALID) {
+    unsupported.push(
+      `timing-invalid:overfull-measures:${timingValidation.summary?.overfullMeasureCount ?? timingValidation.overfullMeasures?.length ?? 0}`,
+    )
+  }
   return {
     contractVersion: CANONICAL_TIMING_CONTRACT_VERSION,
     usesPerformedTimeline: Boolean(timingMap?.performedMeasureTimeline),
     durationSeconds: timingMap?.durationSeconds ?? null,
     noteCount: timingMap?.noteCount ?? timingMap?.notes?.length ?? null,
     unsupported,
+    timingValidation: timingValidation ?? null,
     diagnostics,
   }
 }
