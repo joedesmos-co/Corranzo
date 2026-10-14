@@ -216,9 +216,39 @@ def main() -> int:
                         _dx = [d["x"] for d in digits if _t <= d["y"] <= _bo]
                         _xs = sorted(set(_xs + ([min(_dx) - 30] if _dx else [])))
                         _fb.append({"top": _t, "bot": _bo, "xs": _xs, "tab": True})
+                    # Barline completion: a measure boundary missed inside a
+                    # system merges two measures into one interval, and the
+                    # monotonic numbering then shifts EVERY later measure by
+                    # one (Txo system 5 dropped one barline -> all of page 2
+                    # wrong). Measures within a system are separated by the
+                    # page's modal inter-barline distance, so a missing
+                    # boundary is recoverable from the neighbours' spacing.
                     if _fb:
+                        _xs = [s["xs"] for s in _fb]
+                        _counts = [len(x) for x in _xs]
+                        _modal = max(set(_counts), key=_counts.count) if _counts else 0
+                        for _si, _x in enumerate(_xs):
+                            if len(_x) >= _modal or len(_x) < 2:
+                                continue
+                            _gaps = [b - a for a, b in zip(_x, _x[1:])]
+                            _med = sorted(_gaps)[len(_gaps) // 2] if _gaps else 0
+                            if _med <= 0:
+                                continue
+                            _newx = list(_x)
+                            while len(_newx) < _modal:
+                                _g2 = [b - a for a, b in zip(_newx, _newx[1:])]
+                                if not _g2:
+                                    break
+                                _w = max(range(len(_g2)), key=lambda i: _g2[i])
+                                if _g2[_w] < 1.6 * _med:
+                                    break  # no suspiciously wide gap
+                                _newx.insert(_w + 1, _newx[_w] + _med)
+                            _xs[_si] = sorted(_newx)
+                        _fb = [dict(s, xs=_xs[i]) for i, s in enumerate(_fb)]
                         _tabspans = [(s["top"], s["bot"]) for s in _fb]
                         _led["respan_to"] = len(_fb)
+                        _led["modal_bars"] = _modal
+                        _led["bars_per_sys"] = [len(x) for x in _xs]
             for det in digits:
                 cx, cy = det["x"], det["y"]
                 if _tabspans and _page_sp:

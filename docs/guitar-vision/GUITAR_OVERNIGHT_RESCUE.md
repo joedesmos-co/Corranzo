@@ -530,3 +530,25 @@ Measure numbering is now the single largest loss: Txo 47.4% of matched,
 Qmek 0%. Cause (Qmek): the respan produces a different system count than
 the GT's, so the per-(page,system,interval) monotonic numbering renumbers
 measures against a different system partition.
+
+### R10 — Measure error ledger (M1): the cause is system mis-clustering
+Instrumented the respan so the ledger reports `bars_per_sys` (barlines per
+rebuilt span) and `modal_bars`.
+
+TXO p1 bars_per_sys = [1, 4, 4, 4, 6]; p2 = [4, 1, 4, 3]; modal = 4.
+The GT has 5 TAB systems x 4 measures per page, so the expected pattern is
+[4,4,4,4,4]. The first span having 1 barline and the last 6 means the
+digit clusters do NOT align to real TAB systems - the y-clustering of
+detected digits merges/splits real systems. Since measure numbers are a
+monotonic count over (page, sys, interval), a wrong system partition
+shifts every downstream measure: that is the 47.4% (Txo) / 0% (Qmek).
+
+Tried and rejected: even-spacing barline completion (insert missing
+boundaries when a system has fewer barlines than the page mode). It
+cannot help because the deficit is not a missing barline inside a system
+- it is the system partition itself (bars_per_sys is [1,4,4,4,6], not
+[3,4,4,4,4]). No change: 47.4% both before and after.
+
+Correct fix (next): derive TAB systems from detected STAFF LINES (a TAB
+staff is a 6-line group with a measured gap), not from the y-clustering of
+digit detections. Digit clusters are then only a fallback/validator.
