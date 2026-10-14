@@ -178,6 +178,22 @@ const EXAMPLES = [
     ],
     tailSeconds: 2.5,
   },
+  // The top two piano keys used to emit ~+150 cents because the bundled
+  // C8 sample is sharp and both notes derived from it. They now shift up
+  // from A7 and land near +39 cents. Listen against these keys on a known
+  // instrument.
+  {
+    name: 'listening-piano-top-octave',
+    voice: 'piano',
+    notes: [
+      { name: 'G#7', time: 0.2, duration: 0.8, velocity: 0.8 },
+      { name: 'A7', time: 1.1, duration: 0.8, velocity: 0.8 },
+      { name: 'A#7', time: 2.0, duration: 0.8, velocity: 0.8 },
+      { name: 'B7', time: 2.9, duration: 1.0, velocity: 0.8 },
+      { name: 'C8', time: 4.2, duration: 1.2, velocity: 0.8 },
+    ],
+    tailSeconds: 2.5,
+  },
 ]
 
 function writeWavMono16(filePath, samples, sampleRate) {

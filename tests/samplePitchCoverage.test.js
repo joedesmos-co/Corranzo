@@ -164,26 +164,28 @@ describe('sample pitch coverage', () => {
  * pinned so drift in either direction is caught.
  *
  * Measured with an interpolated FFT over three independent analysis
- * windows, A7 reads ~+30 cents and C8 ~+91 cents consistently, while every
- * mid-register key sits within +23 cents. Both files are byte-identical
- * (md5) to `tonejs.github.io/audio/salamander/`, so the project did not
- * introduce this and cannot fix it without re-sourcing the set, which is
- * out of scope (the full set is 394 MB).
+ * windows, A7 reads ~+30 cents consistently, while every mid-register key
+ * sits within +23 cents. The file is byte-identical (md5) to
+ * `tonejs.github.io/audio/salamander/`, so the project did not introduce
+ * this and cannot fix it without re-sourcing the set, which is out of
+ * scope (the full set is 394 MB).
+ *
+ * C8 used to be in this list too (~+91 cents, byte-identical to upstream).
+ * It is no longer mapped - see the comment on PIANO_SAMPLE_URLS - because
+ * every note Tone derived from it was ~+150 cents off, i.e. the wrong
+ * note. Emitted playback for B7 and C8 now reads ~+38/+39 cents after
+ * letting them shift up from A7.
  *
  * The allowances below are deliberately wider than the FFT readings
  * because the autocorrelation used IN this suite disagrees with the FFT at
- * the very top of the compass - C8's note is so short and quiet that lags
- * resolve differently by method (autocorrelation reads +176 cents, the
- * interpolated FFT +91). The value of this suite is the KEY SET: only these
- * two keys may be off, so a new mislabel (the octave errors already found
- * in the guitar-acoustic set) fails it. The exact cents figure for C8 is
- * not trustworthy from either method and is not asserted tightly.
- *
- * Consequence for playback: Tone.Sampler pitch-shifts each played note
- * from the nearest sample by an exact semitone count, so anything derived
- * from C8 - B7 and the notes above it - sounds sharp.
+ * the very top of the compass - A7's note is short enough that lags
+ * resolve differently by method (autocorrelation reads +39 cents, the
+ * interpolated FFT +30). The value of this suite is the KEY SET: only the
+ * documented keys may be off, so a new mislabel (the octave errors already
+ * found in the guitar-acoustic set) fails it. The exact cents figure is not
+ * trustworthy from either method and is not asserted tightly.
  */
-const KNOWN_SHARP_SALAMANDER = { A7: 150, C8: 250 }
+const KNOWN_SHARP_SALAMANDER = { A7: 150 }
 
 const suites = [
   ['electric guitar (CC0, Karoryfer Emilyguitar)', 'guitar-electric', ELECTRIC_GUITAR_SAMPLE_URLS, {}],

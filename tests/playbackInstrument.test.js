@@ -391,7 +391,10 @@ describe('piano instrument — release, dispose, labels', () => {
   it('ships a sensible default sample set (Salamander grand piano)', () => {
     expect(DEFAULT_PIANO_SAMPLE_BASE_URL).toMatch(/salamander/)
     expect(PIANO_SAMPLE_URLS.A0).toBeTruthy()
-    expect(PIANO_SAMPLE_URLS.C8).toBeTruthy()
+    // C8 is deliberately NOT mapped - its file is ~1.4 semitones sharp and
+    // dragged B7/C8 to ~+150 cents. Leaving it out lets those notes shift
+    // from A7 instead. See the comment on PIANO_SAMPLE_URLS.
+    expect(PIANO_SAMPLE_URLS.C8).toBeUndefined()
     expect(PIANO_SAMPLE_URLS.C4).toBe('C4.mp3')
     // The Salamander recordings are at A, C, D# and F#. The key MUST be the
     // sample's true pitch (D#4 → Ds4.mp3), or Tone.Sampler resamples notes off

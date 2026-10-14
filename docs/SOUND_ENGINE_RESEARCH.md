@@ -8,7 +8,8 @@ Workstreams on this branch:
 |---|---|
 | `87c61a40f2` | real bends/slides/vibrato, ornaments, deterministic room, fermata sync proof |
 | `920cf44874` | widened piano dynamics + frozen playback acceptance set |
-| (this work) | M1 sample-licence rescue, M2 brightness-band root cause, M3–M6 |
+| (M1–M6) | sample-licence rescue, brightness-band root cause, top-octave pitch fix, provenance proof, listening handoff |
+| (final) | high-register pitch correction, provenance guard suite, listening handoff |
 
 This document records what was **measured**, what was **changed**, and what
 was **rejected on evidence**. It deliberately stops short of claiming the
@@ -151,7 +152,32 @@ tree.
   by** `TermsOfServicePage`, removing the two-sources-of-truth drift
   documented in the previous workstream.
 
-### New defect found while verifying: top-octave Salamander keys are sharp
+### Provenance is proven, not inferred (M2)
+
+`scripts/audio-render/verify-provenance.py` re-downloads each upstream
+Emilyguitar WAV, re-runs the **exact** ffmpeg command that produced the
+bundled mp3, and compares md5 — plus an independent PCM correlation:
+
+```
+key    bundled md5          re-encode md5 match  PCM corr
+E2     b8f4f3fd0d6477d326   YES                 1.00000
+...    ...                  ...                 ...
+C6     69e75b3da0e30c0bd4   YES                 1.00000
+
+17 files checked: 17 byte-identical to an upstream re-encode,
+17 with PCM correlation > 0.99999
+VERDICT: every bundled file is provably the documented CC0 source, re-encoded.
+```
+
+Byte-identity is deterministic proof; a spectral comparison could not
+distinguish two takes of the same note, so this is strictly stronger.
+
+`tests/sampleProvenance.test.js` pins the properties that do not need the
+network, so a future change cannot silently undo them: the source URL points
+at the CC0 owner repo, the cross-origin fallback stays `null` (it used to
+point at the unverified set), every credit names an owner/licence/
+verifiedFrom, the electric credit is CC0 and attributed to Karoryfer rather
+than the wrapper, and every mapped file exists on disk.
 
 `tests/samplePitchCoverage.test.js` measures every mapped file through the
 app's own decode path. Mid-register keys are within +23 cents, but:
@@ -165,10 +191,62 @@ app's own decode path. Mid-register keys are within +23 cents, but:
   the nearest sample by an exact semitone count, so anything derived from
   C8 — B7 and every note above it — sounds a semitone sharp.
 
-The test pins this as a **characterisation**: only these two keys are
-allowed to be off, and the exact key set is asserted, so a new mislabel
-(the octave errors an earlier guitar-acoustic audit found) fails the suite
-while the known upstream defect does not mask it.
+The test pins this as a **characterisation**: only this key is allowed to
+be off, and the exact key set is asserted, so a new mislabel (the octave
+errors an earlier guitar-acoustic audit found) fails the suite while the
+known upstream defect does not mask it.
+
+### Emitted-pitch compass — measuring what comes out, not what is stored
+
+The audit above measures the **source samples**. That answers "is the file
+labelled correctly" but not "what does the player hear", because
+`Sampler` pitch-shifts every played note from the nearest sample by an
+exact semitone count — so a bad sample drags the notes derived from it.
+
+`scripts/audio-render/pitch-compass.mjs` renders every MIDI note through
+the real voice and measures the emitted fundamental:
+
+| Voice | Range measured | Result |
+|---|---|---|
+| piano | MIDI 21–108 (A0–C8) | 21–100 within **−14…+22 cents**; 101–106 **+30…+39**; **107–108 were +152/+144** |
+| acoustic guitar | MIDI 40–79 (E2–G5) | all within **±12 cents** |
+| clean electric | MIDI 40–84 (E2–C6) | all within **±13 cents** |
+
+Both guitars are clean. The piano's defect was the top two keys only.
+
+### The correction: `C8` is deliberately not in the sample map
+
+B7 (107) shifts down from `C8`, and C8 (108) *is* `C8`, so both inherited
+its error. Removing `C8` from `PIANO_SAMPLE_URLS` makes them shift up from
+`A7` instead:
+
+| Note | Before | After |
+|---|---|---|
+| B7 | **+152 cents** | **+38 cents** |
+| C8 | **+144 cents** | **+39 cents** |
+
+The cost is a 2–3 semitone shift rather than the 1.5-semitone bar that
+`pianoSampleCoverage.MAX_REASONABLE_TRANSPOSE_SEMITONES` enforces
+elsewhere, so `reportPianoKeyboardCoverage().extremeTranspose` now reports
+exactly `[107, 108]` — a deliberate, bounded exception rather than
+something that can quietly grow, asserted by the sprint-1 suite.
+
+The cost was measured before choosing (`top-octave-cost.mjs` compares the
+direct C8 recording against A7 shifted up to C8):
+
+```
+source                        <1 kHz  1-4 kHz  4-10 kHz  >10 kHz
+C8 direct (rate 1.0)           0.599    0.283    0.114     0.004
+A7 -> C8 (+3 semitones)        0.372    0.295    0.325     0.008
+```
+
+The shifted substitute is **brighter**, not duller — the direct C8 file is
+low-heavy, consistent with it being a mislabelled recording rather than a
+real C8. So this trades an inaudible-in-name mislabel for a larger, honest
+shift with better spectral balance *and* correct pitch.
+
+Only B7 and C8 change; every other note already resolved to A7 or below,
+which the full-compass measurement confirms.
 
 ---
 
@@ -498,7 +576,7 @@ part that broke).
 No listening test has been performed, and no claim of acceptance is made.
 The artifacts for one are prepared:
 
-`scripts/audio-render/examples/` holds 14 deterministic WAV renders
+`scripts/audio-render/examples/` holds 15 deterministic WAV renders (regenerate with `node scripts/audio-render/export-examples.mjs`; the electric and top-octave clips were re-rendered from the current engine and current sample set)
 (regenerate with `node scripts/audio-render/export-examples.mjs`). The
 listening subset is:
 
@@ -564,4 +642,15 @@ node scripts/audio-render/realism-probe.mjs
 node scripts/audio-render/sample-audit.mjs
 node scripts/audio-render/sampler-ab.mjs
 node scripts/audio-render/filter-curve.mjs 1000 1
+
+# emitted-pitch compass (piano / guitar / electric)
+node scripts/audio-render/pitch-compass.mjs piano 21 108
+node scripts/audio-render/pitch-compass.mjs guitar 40 79
+node scripts/audio-render/pitch-compass.mjs electric 40 84
+
+# top-of-compass correction cost
+node scripts/audio-render/top-octave-cost.mjs
+
+# licence provenance proof (needs network)
+python3 scripts/audio-render/verify-provenance.py
 ```
