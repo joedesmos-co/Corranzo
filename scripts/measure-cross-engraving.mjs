@@ -98,6 +98,7 @@ async function analyzePair(pair) {
     timingMap, trustedAnchors: trusted, trust: trustArg, motionTimeline,
   })
   const agreement = measureCursorHighlightAgreement({
+    timingMap,
     checkpoints,
     resolveCursorAt: (time) => resolveDisplayCursorAtTime({
       timingMap, trustedAnchors: trusted, trust: trustArg, practiceTime: time, motionTimeline,

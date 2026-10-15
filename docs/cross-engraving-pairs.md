@@ -22,9 +22,13 @@ Download URLs + license evidence below so anyone can reproduce.
 ## Pair 2 — BWV 846 Prelude (Bach WTC I)
 
 - MusicXML: `public/fixtures/practice-library/piano-bach-prelude-bwv846/…`
-  music21-processed Mutopia #5, 35 measures. Contains voice-flattening
-  artifacts (7.5 quarters of sequential content in 4/4 bars) — a FILE
-  defect, see `docs/upstream-handoff-parser-timing.md` H2.
+  music21-processed Mutopia #5, 35 measures. **Voice-flattening artifacts
+  repaired 2026-10-13** from the bundled Mutopia MIDI (the authoritative
+  source the file was derived from): onsets restored, two voices
+  reconstructed, pitches/durations/provenance preserved, verified
+  note-for-note against the MIDI — see
+  `docs/timing-integrity-investigation.md` §4. (Was: 7.5 quarters of
+  sequential content in 4/4 bars — file defect H2.)
 - PDF: `bwv846-opengoldberg-cc0.pdf` (129,322 bytes, 6 pages, `%PDF-1.4`).
   OpenGoldberg (musescore.com/opengoldberg) engraving, uploaded 2015,
   license CC0.

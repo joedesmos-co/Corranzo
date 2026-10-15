@@ -12,6 +12,7 @@ import {
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
 import { applyTieSustainToNotes } from './mergeTiedNotesForPlayback.js'
+import { validateMeasureTiming } from './timingValidation.js'
 import {
   analyzeChordSheetScore,
   buildChordSheetNoteEvents,
@@ -770,6 +771,7 @@ function walkPart({
   partNotation = null,
   wedgeSpans = null,
   pedalSpans = null,
+  partMeasureNoteEnds = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -798,6 +800,14 @@ function walkPart({
     let cursorDivisions = 0
     let lastNoteStartDivisions = 0
     let maxCursorDivisions = 0
+    // Written note content extent for this measure (pre-tie-merge durations):
+    // the furthest cursor position reached by a NOTE advance. Chords and grace
+    // notes do not advance the cursor. Used by timing validation to detect
+    // measures whose written notes cannot fit the time-signature window.
+    let maxNoteEndDivisions = 0
+    let measureNoteCount = 0
+    const measureVoiceTags = new Set()
+    let measureBackups = 0
     let measureBeats = beats
     let measureBeatType = beatType
 
@@ -951,6 +961,7 @@ function walkPart({
           const duration = numberOf(childText(child, 'duration'), 0)
           cursorDivisions = Math.max(0, cursorDivisions - duration)
           lastNoteStartDivisions = cursorDivisions
+          measureBackups += 1
           break
         }
 
@@ -984,6 +995,13 @@ function walkPart({
           const startDivisions = isChord ? lastNoteStartDivisions : cursorDivisions
           const quarterTime = measureStartQuarters + startDivisions / divisions
           const durationQuarters = duration / divisions
+
+          if (!isChord && !isGrace) {
+            measureNoteCount += 1
+          }
+          if (Number.isFinite(voice) && voice > 0) {
+            measureVoiceTags.add(voice)
+          }
 
           if (!isGrace) {
             const layout = readNoteLayoutOrdered(child)
@@ -1084,6 +1102,7 @@ function walkPart({
             lastNoteStartDivisions = cursorDivisions
             cursorDivisions += duration
             maxCursorDivisions = Math.max(maxCursorDivisions, cursorDivisions)
+            maxNoteEndDivisions = Math.max(maxNoteEndDivisions, cursorDivisions)
           }
           break
         }
@@ -1091,6 +1110,20 @@ function walkPart({
         default:
           break
       }
+    }
+
+    // Written note-content extent per (part, measure) for timing validation.
+    if (partMeasureNoteEnds) {
+      const entries = partMeasureNoteEnds.get(partId) ?? []
+      entries.push({
+        index,
+        number: measureNumber,
+        endQuarters: maxNoteEndDivisions / divisions,
+        noteCount: measureNoteCount,
+        voices: [...measureVoiceTags].sort((left, right) => left - right),
+        hasBackup: measureBackups > 0,
+      })
+      partMeasureNoteEnds.set(partId, entries)
     }
 
     if (isPrimary) {
@@ -1131,6 +1164,9 @@ function walkPart({
         // detection see a short first bar even when implicit is absent. Does NOT
         // affect timing (lengthQuarters is unchanged).
         notatedLengthQuarters,
+        // Written NOTE content extent for this measure (pre-tie-merge), used by
+        // timing validation: notes cannot sound past this barline.
+        notatedNoteEndQuarters: maxNoteEndDivisions / divisions,
         // Engraved measure width in tenths (<measure width>), if present — used
         // to map MusicXML horizontal layout onto detected PDF barline spans.
         engravedWidth: Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
@@ -1203,6 +1239,9 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const wedgeSpans = []
   const pedalMarks = []
   const partNotationById = new Map()
+  // Written note-content extents per (part, measure) — evidence for timing
+  // validation (overfull measures), not a timing change.
+  const partMeasureNoteEnds = new Map()
 
   const notationForPart = (partId) => {
     let info = partNotationById.get(partId)
@@ -1230,6 +1269,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     partNotation: notationForPart(primaryId),
     wedgeSpans,
     pedalSpans: pedalMarks,
+    partMeasureNoteEnds,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -1248,6 +1288,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       partNotation: notationForPart(partId),
       wedgeSpans,
       pedalSpans: pedalMarks,
+      partMeasureNoteEnds,
     })
   })
 
@@ -1394,6 +1435,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     pageBreakBefore: boundary.pageBreakBefore,
     implicit: boundary.implicit,
     notatedLengthQuarters: boundary.notatedLengthQuarters,
+    notatedNoteEndQuarters: boundary.notatedNoteEndQuarters,
     engravedWidth: boundary.engravedWidth,
     // Repeat / volta markings for written-score evaluation (not playback expansion).
     marking: boundary.marking ?? null,
@@ -1497,6 +1539,13 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const markings = measureBoundaries.map((boundary) => boundary.marking)
   const performedMeasureTimeline = buildPerformedMeasureTimeline(measures, markings, beats)
 
+  // Timing validation: are there measures whose WRITTEN note content cannot
+  // fit the time-signature window (overfull / voice-flattened files)? This is
+  // a source-fidelity verdict, not a timing change — the performed timeline
+  // above stays exactly as parsed, and consumers (Wait For You grouping)
+  // decide honestly what to do with an invalidated score.
+  const timingValidation = validateMeasureTiming(measures, partMeasureNoteEnds)
+
   // Prefer written duration when repeat expansion was aborted or not used —
   // never ship a pathological performed clock as the score duration.
   const durationSeconds = performedMeasureTimeline.diagnostics?.usesPerformedTimeline
@@ -1532,6 +1581,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     measures,
     beats,
     performedMeasureTimeline,
+    timingValidation,
+    partMeasureNoteEnds,
     tempoChanges,
     timeSignatures,
     keySignatures,

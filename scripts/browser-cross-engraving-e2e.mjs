@@ -43,6 +43,7 @@ function isBenignConsoleMessage(text) {
   )
 }
 
+
 async function dismissOverlays(page) {
   const done = page.getByRole('button', { name: 'Done' })
   if (await done.isVisible().catch(() => false)) {
@@ -140,14 +141,16 @@ async function main() {
         report.omrSupersededSeen = true
       }
       if (/Maximum update depth/.test(msg.text())) {
-        // Known-open issue (see scripts/browser-pdf-first-import-e2e.mjs, which
-        // records the step it fires on). Tracked, not swallowed: it is excluded
-        // from the console-error failure only so this suite can gate the
-        // cross-engraving behaviour, and it is printed on every run.
+        // The practice-clock render loop was repaired on this branch
+        // (128a91388b + the guard in tests/practiceClockIdentity.test.js, which
+        // asserts the failing invariant and fails if it returns). Tracked here
+        // too, and excluded from the console-error failure only so this suite
+        // can gate the cross-engraving behaviour; it is reported on every run.
         report.updateDepthWarnings = report.updateDepthWarnings ?? []
         report.updateDepthWarnings.push({ at: new Date().toISOString(), text: msg.text().slice(0, 120) })
+        return
       }
-      if (!isBenignConsoleMessage(msg.text()) && !/Maximum update depth/.test(msg.text())) {
+      if (!isBenignConsoleMessage(msg.text())) {
         const location = msg.location()
         report.consoleErrors.push(
           `${msg.text()} @${location?.url?.split('/').pop() ?? '?'}:${location?.lineNumber ?? '?'}`,

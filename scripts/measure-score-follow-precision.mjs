@@ -178,6 +178,7 @@ function summarizeScore(name, timingMap, anchors, checkpoints, motionTimeline) {
     sampleEvery: 1,
   })
   const agreement = measureCursorHighlightAgreement({
+    timingMap,
     checkpoints,
     resolveCursorAt: (time) =>
       resolveDisplayCursorAtTime({
