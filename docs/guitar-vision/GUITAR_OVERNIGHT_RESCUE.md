@@ -708,3 +708,30 @@ semantic 52% -> 51% but precision 40% -> 71%, recall 65% -> 70%, align
 89% -> 93%, defects 496 -> 371.
 QMek PRESERVED: 423/423 matched, measure 423/423=100%, triple 389/423=92.0%,
 49 measures (GT 49). No regression.
+
+### R17 — raster scale normalization; page-2/3 + second heldout score
+The raster baseline now normalizes to the detector's trained staff gap
+before inference (measured gap -> scale, boxes mapped back), so page
+width/DPI no longer changes the scale the detector sees. Verified
+non-regressing: the width-1700 page (gap already 26) gives identical
+numbers at scale 1.0.
+
+Multi-page / multi-score raster evidence (native fonts, no overrides):
+  QmTJRwrHUET3 p1 (w1700, gap 26.0, scale 1.0):
+    note P 0.439 R 0.411 | rest P 0 R 0 | tabdigit P 0.483 R 0.224
+  QmTJRwrHUET3 p2 (w1400, gap 21.5, scale 1.209):
+    note P 0.055 R 0.049 | rest P 0 R 0 | tabdigit P 0 R 0
+  QmTJRwrHUET3 p3 (w1400, gap 22.0, scale 1.182):
+    note P 0.023 R 0.022 | rest P 0 R 0 | tabdigit P 0 R 0
+  QmZ5K3BV9FDR p1/2 (w1900, gap 15.5, scale 1.6, clamp-hit):
+    note P 0.005 R 0.005 | tabdigit P 0 R 0 (p2: no preds at all)
+
+Rest recognition is separately measured and ZERO on every raster page
+(0/32, 0/12, 0/6 true positives; all predictions false).
+
+CONCLUSION: geometry normalization is now in place and harmless, but it
+does not by itself recover accuracy. Because p1 (gap 26) still reaches
+tabdigit R 0.224 while p2/p3 (gap 21.5/22 after normalization to 26)
+reach 0, the difference is NOT scale — it is glyph appearance. This is
+consistent with the R15b font-isolation control (same page, same gap,
+only font differs: aggregate F1 0.371 vs 0.700).

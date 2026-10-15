@@ -180,10 +180,21 @@ def score_detection(png, fx, workdir, page_no):
             continue
         for b in v['boxes']:
             gt.append({'cls': cls, 'box': [b[0]*fx, b[1]*fx, b[2]*fx, b[3]*fx]})
+    # SCALE NORMALIZATION to the detector's trained staff gap. A real PDF
+    # rasterised at an arbitrary width/DPI has a staff gap far from the
+    # trained 26px (measured 15.5-22px at other widths), and the frozen
+    # detector is scale-sensitive: without this, detection collapses to
+    # near-zero (0-7 tp of 200+). Everything is derived from the measured
+    # gap, so any page size becomes irrelevant.
+    from proof_heatmap_decode import normalize_scale as _norm
+    img2, _scale = _norm(img)
     with torch.no_grad():
-        heat = det(torch.from_numpy(img.astype(np.float32)/255.0).unsqueeze(0).unsqueeze(0).to(dev))[0]
-    preds = dec.decode_page(heat, img, fx, fx, staff_gate=False)
-    res = {}
+        heat = det(torch.from_numpy(img2.astype(np.float32)/255.0).unsqueeze(0).unsqueeze(0).to(dev))[0]
+    preds = dec.decode_page(heat, img2, fx * _scale, fx * _scale, staff_gate=False)
+    gt = [dict(g, box=[v * _scale for v in g['box']]) for g in gt]
+    _raster_scale = _scale
+    res = {'raster_scale_to_trained_gap': round(float(_scale), 3),
+           'trained_gap_px': 26.0}
     for cls in ['note', 'rest', 'tabdigit']:
         P = [p for p in preds if p['cls'] == cls]
         G = [g for g in gt if g['cls'] == cls]

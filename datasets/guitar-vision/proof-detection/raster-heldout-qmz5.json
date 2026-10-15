@@ -1,0 +1,64 @@
+{
+  "p1": {
+    "raster_scale_to_trained_gap": 1.6,
+    "trained_gap_px": 26.0,
+    "note": {
+      "preds": 200,
+      "gt": 205,
+      "tp": 1,
+      "fp": 199,
+      "precision": 0.005,
+      "recall": 0.005,
+      "f1": 0.005
+    },
+    "rest": {
+      "preds": 0,
+      "gt": 0,
+      "tp": 0,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "tabdigit": {
+      "preds": 2,
+      "gt": 119,
+      "tp": 0,
+      "fp": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "p2": {
+    "raster_scale_to_trained_gap": 1.6,
+    "trained_gap_px": 26.0,
+    "note": {
+      "preds": 77,
+      "gt": 79,
+      "tp": 0,
+      "fp": 77,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "rest": {
+      "preds": 1,
+      "gt": 6,
+      "tp": 0,
+      "fp": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "tabdigit": {
+      "preds": 0,
+      "gt": 49,
+      "tp": 0,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  }
+}
