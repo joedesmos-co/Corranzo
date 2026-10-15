@@ -735,3 +735,25 @@ tabdigit R 0.224 while p2/p3 (gap 21.5/22 after normalization to 26)
 reach 0, the difference is NOT scale — it is glyph appearance. This is
 consistent with the R15b font-isolation control (same page, same gap,
 only font differs: aggregate F1 0.371 vs 0.700).
+
+### R18 — FROZEN native-font eval set + baseline (M1)
+`docs/guitar-vision/NATIVE_EVAL_SET.md` freezes 4 score-disjoint heldout
+scores (QmTJRwrHUET3, QmZ5K3BV9FDR, QmVDaX5YmZCx, ode-to-joy; all
+`heldout` split, none used for tuning). `proof-native-eval.py` runs them:
+each score rasterised at a documented width with its OWN embedded font,
+geometry from pixels (contiguous-run staff lines, gap/315 units-per-px,
+scale-normalised to the trained 26px), no SVG/viewBox/metadata/GT at
+inference. Baseline (frozen detector, native fonts), committed:
+  note     tp 192 fp 896 fn 909  P 0.176 R 0.174 F1 0.175
+  rest     tp 3   fp 56  fn 63   P 0.051 R 0.045 F1 0.048
+  tabdigit tp 72  fp 275 fn 879  P 0.207 R 0.076 F1 0.111
+Per-page spread is extreme and correlates with measured gap/scale:
+  ode-to-joy  gap 25.0 scale 1.0   tabdigit P 0.857 R 0.214
+  QmTJ p1     gap 26.0 scale 1.0   tabdigit P 0.483 R 0.224
+  QmTJ p2     gap 26.0 scale 1.0   tabdigit P 0.007 R 0.004
+  QmTJ p3     gap 27.0 scale 1.0   tabdigit P 0.119 R 0.062
+  QmVDaX5     gap 24.0 scale 1.083 tabdigit P 0.000 R 0.000
+  QmZ5K3B     gap 15.5 scale 1.6   tabdigit P 0.000 R 0.000  (clamp-hit)
+Pages at the same normalised scale still differ 0.857 vs 0.007 precision,
+so scale is NOT the discriminator - per-score/per-page glyph appearance
+is. This quantifies M2's target: the per-PAGE spread, not just the mean.

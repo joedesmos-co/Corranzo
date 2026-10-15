@@ -1,0 +1,227 @@
+{
+ "guitar-ode-to-joy": {
+  "p1": {
+   "raster_scale_to_trained_gap": 1.0,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 28,
+    "gt": 28,
+    "tp": 28,
+    "fp": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+   },
+   "rest": {
+    "preds": 2,
+    "gt": 0,
+    "tp": 0,
+    "fp": 2,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 7,
+    "gt": 28,
+    "tp": 6,
+    "fp": 1,
+    "precision": 0.857,
+    "recall": 0.214,
+    "f1": 0.343
+   }
+  }
+ },
+ "pdmx-QmTJRwrHUET3": {
+  "p1": {
+   "raster_scale_to_trained_gap": 1.0,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 246,
+    "gt": 263,
+    "tp": 108,
+    "fp": 138,
+    "precision": 0.439,
+    "recall": 0.411,
+    "f1": 0.424
+   },
+   "rest": {
+    "preds": 4,
+    "gt": 6,
+    "tp": 0,
+    "fp": 4,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 118,
+    "gt": 255,
+    "tp": 57,
+    "fp": 61,
+    "precision": 0.483,
+    "recall": 0.224,
+    "f1": 0.306
+   }
+  },
+  "p2": {
+   "raster_scale_to_trained_gap": 1.0,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 224,
+    "gt": 244,
+    "tp": 10,
+    "fp": 214,
+    "precision": 0.045,
+    "recall": 0.041,
+    "f1": 0.043
+   },
+   "rest": {
+    "preds": 29,
+    "gt": 32,
+    "tp": 0,
+    "fp": 29,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 135,
+    "gt": 228,
+    "tp": 1,
+    "fp": 134,
+    "precision": 0.007,
+    "recall": 0.004,
+    "f1": 0.006
+   }
+  },
+  "p3": {
+   "raster_scale_to_trained_gap": 1.0,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 130,
+    "gt": 139,
+    "tp": 43,
+    "fp": 87,
+    "precision": 0.331,
+    "recall": 0.309,
+    "f1": 0.32
+   },
+   "rest": {
+    "preds": 13,
+    "gt": 12,
+    "tp": 3,
+    "fp": 10,
+    "precision": 0.231,
+    "recall": 0.25,
+    "f1": 0.24
+   },
+   "tabdigit": {
+    "preds": 67,
+    "gt": 130,
+    "tp": 8,
+    "fp": 59,
+    "precision": 0.119,
+    "recall": 0.062,
+    "f1": 0.081
+   }
+  }
+ },
+ "pdmx-QmZ5K3BV9FDR": {
+  "p1": {
+   "raster_scale_to_trained_gap": 1.6,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 200,
+    "gt": 205,
+    "tp": 1,
+    "fp": 199,
+    "precision": 0.005,
+    "recall": 0.005,
+    "f1": 0.005
+   },
+   "rest": {
+    "preds": 0,
+    "gt": 0,
+    "tp": 0,
+    "fp": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 2,
+    "gt": 119,
+    "tp": 0,
+    "fp": 2,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  },
+  "p2": {
+   "raster_scale_to_trained_gap": 1.6,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 77,
+    "gt": 79,
+    "tp": 0,
+    "fp": 77,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "rest": {
+    "preds": 1,
+    "gt": 6,
+    "tp": 0,
+    "fp": 1,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 0,
+    "gt": 49,
+    "tp": 0,
+    "fp": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  }
+ },
+ "pdmx2-QmVDaX5YmZCx": {
+  "p1": {
+   "raster_scale_to_trained_gap": 1.083,
+   "trained_gap_px": 26.0,
+   "note": {
+    "preds": 183,
+    "gt": 143,
+    "tp": 2,
+    "fp": 181,
+    "precision": 0.011,
+    "recall": 0.014,
+    "f1": 0.012
+   },
+   "rest": {
+    "preds": 10,
+    "gt": 10,
+    "tp": 0,
+    "fp": 10,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "tabdigit": {
+    "preds": 18,
+    "gt": 142,
+    "tp": 0,
+    "fp": 18,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  }
+ }
+}
