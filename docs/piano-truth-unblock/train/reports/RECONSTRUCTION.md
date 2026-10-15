@@ -1667,3 +1667,89 @@ symbol boxes (weak supervision via alignment of the OLiMPiC MusicXML to
 the scan frames — expensive) OR restrict the risk by reporting key
 signatures as "unknown" on scanned input while shipping the natural-pitch
 pipeline. No further training is justified on the current evidence.
+
+
+---
+
+# Real-scan supervision foundation: alignment works partially, labels insufficient
+
+From `de3171f770`. Commit (this mission). No merge, TEST sealed, baseline
+untouched (verified by re-running the full evaluation).
+
+## Alignment method (mission item 1)
+
+Each OLiMPiC sample contains per-system strips (p1-s1.png,
+p1-s1.musicxml, p1-s1.lmx), so the key signature is annotated per strip.
+Alignment exploits the one hard notational fact: the key signature is the
+only symbol run between the clef and the time signature, so:
+  1. glyph candidates are generated from the horizontal ink profile of the
+     key-signature window (fx0+2.9..6.4 gaps — measured to end before the
+     time signature), staff-line rows masked by their MEASURED thickness
+     (median scan 4px vs render 1.5px; masking was required for the
+     profiles to separate at all);
+  2. the |fifths| leftmost candidates are labelled with the key's sign
+     (count constrained by the strip's own annotation);
+  3. each label is verified INDEPENDENTLY of the key: the crop must match
+     the render accidental template of the labelled class by an NCC
+     margin, and must contain a single ink mass (adjacent accidentals 1
+     gap apart merge and would otherwise produce corrupted labels).
+
+## Alignment uncertainty (mission item 2)
+
+measured on 180 TRAIN-side strips:
+  128 had usable frames (25 no_frame, 27 no_key)
+  count agreement (peaks found == |fifths|): 51/128 = 0.398
+  77 strips (60%) produced FEWER candidates than the key requires
+  27 labels passed all three checks (13 sharp / 14 flat) over 21 strips
+  31 candidates rejected as appearance-ambiguous
+  28 rejected as multi-symbol (merged accidentals)
+  visual inspection of the surviving montage
+  (reports/scan_sym_montage.png) shows roughly half of the survivors are
+  clean single accidentals; the rest remain clef/time-signature fragments
+  that pass the automated checks
+
+## Trustworthy symbol labels (mission items 3-4)
+
+  27 candidate labels (visually ~15 clean) from 21 strips
+  This is NOT sufficient to train a reliable scan-specific detector: at
+  ~15 reliable positives with unbounded residual noise, any trained model
+  would overfit and its error rate could not be established. Per the
+  mission rule ("only train if the labels are sufficiently trustworthy"),
+  NO TRAINING WAS PERFORMED in this mission.
+
+## Scan accuracy and false-key rate (mission items 7-8)
+
+  Unchanged: no new model, so the baseline stands — render-trained
+  classifier abstains on scans (fg median 0.002), per-sample vote 0.586,
+  key signature correct 1/9 on the held-out set.
+  Key application remains DISABLED (no downstream change to measure).
+
+## Baseline preservation (mission item 9)
+
+  familiar DEV: 607/902 complete events, page pitch 0.8681, duration
+    0.7273, rest P 1.000/R 0.296, measures 0.979, MusicXML 5/5
+  independent scans: 374 detections, 16 frames, recall 0.544, pitch
+    multiset 0.157
+  All re-verified after this mission's work.
+
+## Font / page-size / coordinate assumptions audited (mission item 10)
+
+  all geometry staff-relative (gaps), no page dimensions, no fixed pixel
+  positions; crop extent GW/GH in gaps; line masking is thickness-
+  measured not assumed; candidate generation is profile-based (no fixed
+  accidental count assumption — the count comes from the strip's own
+  annotation and is verified, not assumed); verification templates come
+  from labelled render boxes but are used only to REJECT labels, never to
+  create them.
+
+## Remaining blockers
+
+  The binding constraint is symbol-level scan supervision: 60% of strips
+  fail count alignment and the surviving labels cannot be independently
+  verified well enough to bound their error. The next step is not another
+  training round: it is to improve alignment quality (accidental
+  separation at 1-gap spacing is the failure mode) — e.g. a strip-level
+  accidental-position detector trained on RENDERED positions of the same
+  MusicXML (render + scan domain pair), which would give per-strip symbol
+  boxes without needing scan annotations. Until then key signatures on
+  scans stay unrecognized and key application stays off.
