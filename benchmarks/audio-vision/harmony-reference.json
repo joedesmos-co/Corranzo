@@ -1,65 +1,6 @@
 {
   "rows": [
     {
-      "id": "guitarset-jazz-solo",
-      "license": "CC-BY-4.0",
-      "labelledWindows": 6,
-      "usableWindows": 2,
-      "ambiguousWindows": 4,
-      "rootAccuracy": 0.5,
-      "qualityAccuracy": 0,
-      "rootAndQualityAccuracy": 0,
-      "s1ChordTonesPresentRate": 0,
-      "s1MissingTones": 6,
-      "s3BassAccuracy": 0,
-      "s3BassWindows": 4,
-      "s4VoicingAccuracy": null,
-      "s4VoicingNotes": 0,
-      "timingMaeSeconds": 0.304,
-      "seventhGuard": {
-        "labelledSeventhsTotal": 0,
-        "heardAndKept": 0,
-        "heard": 0,
-        "unheardStillClaimed": 0,
-        "triadLabels": 2,
-        "triadLabelsClaimedSeventh": 1
-      },
-      "perChord": [
-        {
-          "seconds": 2.4,
-          "label": "B:maj",
-          "status": "ambiguous-reference"
-        },
-        {
-          "seconds": 6,
-          "label": "E:maj",
-          "status": "ambiguous-reference"
-        },
-        {
-          "seconds": 8.4,
-          "label": "B:maj",
-          "status": "ambiguous-reference"
-        },
-        {
-          "seconds": 10.2,
-          "label": "F#:maj",
-          "status": "ambiguous-reference"
-        },
-        {
-          "seconds": 11.4,
-          "label": "E:maj",
-          "analyzed": "F#sus4",
-          "pianoBass": 6
-        },
-        {
-          "seconds": 13.2,
-          "label": "B:maj",
-          "analyzed": "Bmaj7",
-          "pianoBass": 10
-        }
-      ]
-    },
-    {
       "id": "guitarset-ss-comp",
       "license": "CC-BY-4.0",
       "labelledWindows": 16,

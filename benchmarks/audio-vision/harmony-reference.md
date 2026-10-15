@@ -2,7 +2,6 @@
 
 | recording | labelled | usable | ambiguous | root | quality | both | S1 tones | S3 bass | S4 voicing | timing MAE |
 |---|---|---|---|---|---|---|---|---|---|---|
-| guitarset-jazz-solo | 6 | 2 | 4 | 0.5 | 0 | 0 | 0 | 0 | null | 0.304 |
 | guitarset-ss-comp | 16 | 13 | 3 | 1 | 1 | 1 | 0.846 | 0.692 | 1 | 0.621 |
 | guitarset-00-bn1-129-eb | 6 | 4 | 2 | 0.5 | 0.25 | 0.25 | 0.167 | 1 | 0.714 | 0.894 |
 | guitarset-00-bn2-131-b | 14 | 10 | 4 | 0.8 | 0.3 | 0.3 | 0.563 | 0.9 | 0.716 | 0.381 |

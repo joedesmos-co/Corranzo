@@ -214,6 +214,9 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
           <p className="cz-edition-label" role="status">Your arrangement is ready</p>
           <h3>{TARGET_LABELS[result.model.targetPart]} · <span style={{ textTransform: 'capitalize' }}>{result.model.difficulty}</span></h3>
           <ul className="audio-vision-facts">
+            {flow.rememberedTempo && (
+              <li className="audio-vision-hint">Using your saved correction of {flow.rememberedTempo.bpm} BPM for this recording.</li>
+            )}
             <li>
               Tempo <strong>{result.transcribed.tempo.bpm} BPM</strong>
               {result.transcribed.tempo.varies ? ' (varies)' : ''}
@@ -276,37 +279,39 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
               </ul>
             </details>
           )}
-          {!result.transcribed.tempo.ambiguousTempo && !result.transcribed.tempo.varies ? null : (
-            <div className="audio-vision-tempo-fix">
-              <label htmlFor="audio-vision-tempo">
-                <strong>Tempo not certain?</strong> Correct it and the whole arrangement is rebuilt —
-                notes, timing, MusicXML, preview and practice follow the corrected value.
-              </label>
-              <div className="audio-vision-tempo-fix-row">
-                <input
-                  id="audio-vision-tempo"
-                  type="number"
-                  min={30}
-                  max={300}
-                  step={1}
-                  defaultValue={result.transcribed.tempo.bpm}
-                  aria-label="Corrected tempo in BPM"
-                />
-                <span className="audio-vision-hint">BPM</span>
-                <button
-                  className="cz-collection-button"
-                  disabled={busy}
-                  onClick={() => {
-                    const input = document.getElementById('audio-vision-tempo')
-                    const value = Number(input?.value)
-                    if (Number.isFinite(value) && value >= 30 && value <= 300) flow.arrangeWithTempo(value)
-                  }}
-                >
-                  {busy ? 'Rebuilding…' : 'Rebuild with this tempo'}
-                </button>
-              </div>
+          {/* PRIORITY 2: tempo correction is available for EVERY arrangement, not
+              only when automatic analysis flags uncertainty. A confidently wrong
+              estimate must also be correctable. */}
+          <div className="audio-vision-tempo-fix">
+            <label htmlFor="audio-vision-tempo">
+              <strong>Tempo wrong?</strong> Correct it and the whole arrangement is rebuilt —
+              notes, timing, MusicXML, preview and practice checkpoints all follow the
+              corrected value. Already perfect? Leave it as is.
+            </label>
+            <div className="audio-vision-tempo-fix-row">
+              <input
+                id="audio-vision-tempo"
+                type="number"
+                min={30}
+                max={300}
+                step={1}
+                defaultValue={result.transcribed.tempo.bpm}
+                aria-label="Corrected tempo in BPM"
+              />
+              <span className="audio-vision-hint">BPM</span>
+              <button
+                className="cz-collection-button"
+                disabled={busy}
+                onClick={() => {
+                  const input = document.getElementById('audio-vision-tempo')
+                  const value = Number(input?.value)
+                  if (Number.isFinite(value) && value >= 30 && value <= 300) flow.arrangeWithTempo(value)
+                }}
+              >
+                {busy ? 'Rebuilding…' : 'Rebuild with this tempo'}
+              </button>
             </div>
-          )}
+          </div>
           <button className="cz-collection-button" onClick={flow.openInPractice}>Open in Corranzo Practice</button>
           <p className="audio-vision-hint">Opens as normal sheet music with Preview, Play Along and Wait For You.</p>
           <button className="cz-text-link" onClick={flow.reset}>Arrange something else</button>

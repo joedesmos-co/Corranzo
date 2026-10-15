@@ -145,6 +145,11 @@ function beatsToDiv(beatsValue) {
   return Math.max(1, Math.round(beatsValue * ARR_DIVISIONS))
 }
 
+/** Inverse of beatsToDiv, for advancing the written cursor in whole divisions. */
+function divisionsToBeats(divisions) {
+  return divisions / ARR_DIVISIONS
+}
+
 function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = false, tieStart = false, tieStop = false }) {
   const { step, alter, octave } = pitch
   let s = `      <note>${chord ? '<chord/>' : ''}<pitch><step>${step}</step>`
@@ -237,6 +242,7 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
     let cursor = 0
     const sorted = [...handEvents].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
     let lastOnset = null
+    let lastDivisions = 0
     for (const e of sorted) {
       const localStart = Math.max(0, e.startBeat - m * beats)
       const gap = localStart - cursor
@@ -245,16 +251,25 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
         cursor = localStart
       }
       const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
+      // A <chord/> note MUST reuse its parent onset's duration; a chord note
+      // with a different duration is invalid MusicXML and is exactly what made
+      // measures read as overfull (parent 4 + chord 1 ⇒ the voice total runs
+      // past the barline). Divisions are whole numbers, so the running total
+      // for the voice can never drift.
+      const divisions = chord ? lastDivisions : beatsToDiv(Math.min(e.durBeats, beats - localStart))
       s += noteXml({
         pitch: midiToPitch(e.midi),
-        divisions: beatsToDiv(Math.min(e.durBeats, beats - localStart)),
+        divisions,
         voice,
         staff,
         chord,
         tieStart: e.tieStart,
         tieStop: e.tieStop,
       })
-      if (!chord) cursor = localStart + Math.min(e.durBeats, beats - localStart)
+      if (!chord) {
+        cursor = localStart + divisionsToBeats(divisions)
+        lastDivisions = divisions
+      }
       lastOnset = e.startBeat
     }
     const tail = beats - cursor
@@ -270,6 +285,7 @@ function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
   let cursor = 0
   const sorted = [...split].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
   let lastOnset = null
+  let lastDivisions = 0
   for (const e of sorted) {
     const localStart = Math.max(0, Math.min(beats, e.startBeat - m * beats))
     const gap = localStart - cursor
@@ -278,9 +294,12 @@ function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
       cursor = localStart
     }
     const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
+    // Chord notes reuse the parent's duration (see emitGrandStaffMeasure): a
+    // <chord/> with its own duration is invalid MusicXML and overran measures.
+    const divisions = chord ? lastDivisions : beatsToDiv(Math.min(e.durBeats, Math.max(1 / 4, beats - localStart)))
     s += noteXml({
       pitch: midiToPitch(e.midi),
-      divisions: beatsToDiv(Math.min(e.durBeats, Math.max(1 / 4, beats - localStart))),
+      divisions,
       voice: 1,
       staff: null,
       stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
@@ -288,7 +307,10 @@ function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
       tieStart: e.tieStart,
       tieStop: e.tieStop,
     })
-    if (!chord) cursor = localStart + Math.min(e.durBeats, Math.max(1 / 4, beats - localStart))
+    if (!chord) {
+      cursor = localStart + divisionsToBeats(divisions)
+      lastDivisions = divisions
+    }
     lastOnset = e.startBeat
   }
   const tail = beats - cursor
