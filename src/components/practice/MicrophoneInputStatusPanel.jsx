@@ -10,6 +10,7 @@ import {
 } from '../../features/microphone-input/micCalibration.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
 import { MIC_CHORD_MODES } from '../../features/practice/waitForYouMatchSettings.js'
+import { useMicLiveFrame } from '../../features/microphone-input/micLiveFrameRuntime.js'
 import MicTestPanel from './MicTestPanel.jsx'
 
 const MIC_CHORD_MODE_HINTS = {
@@ -59,7 +60,6 @@ export default function MicrophoneInputStatusPanel({
   isGranted,
   isListening,
   lastHeardMidi,
-  liveFrame = null,
   calibration = null,
   inputFeedback = null,
   isChordCheckpoint = false,
@@ -71,6 +71,9 @@ export default function MicrophoneInputStatusPanel({
   onExportMicTrace,
   compact = false,
 }) {
+  // Live mic frames come from the imperative runtime (a per-frame level meter
+  // must not re-render the practice tree). See micLiveFrameRuntime.js.
+  const liveFrame = useMicLiveFrame()
   const supported = support === MIC_SUPPORT.SUPPORTED
   const showIosSafari = isMicSafariOrIos()
   const calibrating = Boolean(isListening && (liveFrame?.calibrating || !calibration))
@@ -207,7 +210,6 @@ export default function MicrophoneInputStatusPanel({
         )}
 
         <MicTestPanel
-          liveFrame={liveFrame}
           lastStableMidi={lastHeardMidi}
           isListening={isListening}
         />

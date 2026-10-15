@@ -57,8 +57,14 @@ import {
   updateMicAttackRelease,
 } from './micAttackLatch.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
-import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
-import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
+import {
+  MIC_CALIBRATION_STATUS,
+  MIC_CALIBRATION_STATUS_LABELS,
+} from '../microphone-input/micCalibration.js'
+import {
+  getMicLiveFrameSnapshot,
+  publishMicLiveFrame,
+} from '../microphone-input/micLiveFrameRuntime.js'
 import {
   buildExpectedStringByMidi,
   guitarStringPickLabel,
@@ -362,7 +368,9 @@ export default function useWaitForYouMicInput({
     }),
   )
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
-  const [liveFrame, setLiveFrame] = useState(null)
+  // Live frames no longer live in React state: they publish to the mic
+  // live-frame runtime so a per-frame level meter does not re-render the whole
+  // practice session. See micLiveFrameRuntime.js.
   const [calibration, setCalibration] = useState(null)
   const [calibrationKey, setCalibrationKey] = useState(0)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
@@ -469,7 +477,7 @@ export default function useWaitForYouMicInput({
       }),
     )
     setLastHeardMidi(null)
-    setLiveFrame(null)
+    publishMicLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
     resetGuitarChordShapeBufferState(guitarChordShapeBufferRef.current)
     lastStableChordKeyRef.current = ''
@@ -869,7 +877,7 @@ export default function useWaitForYouMicInput({
         frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING
       ) {
         liveFramePublishCounterRef.current = 0
-        setLiveFrame({
+        publishMicLiveFrame({
           ...frame,
           diagnostic,
           diagnosticLabel,
@@ -1340,6 +1348,7 @@ export default function useWaitForYouMicInput({
     analysisKey: performanceExpectation?.id ?? currentCheckpoint?.id ?? '',
   })
 
+  const liveFrame = getMicLiveFrameSnapshot()
   const micCalibrating = Boolean(
     detectEnabled &&
       (liveFrame?.calibrating ||

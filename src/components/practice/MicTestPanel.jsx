@@ -1,7 +1,15 @@
 import { MIC_SIGNAL_QUALITY_LABELS } from '../../features/microphone-input/micSignalQuality.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
+import { useMicLiveFrame } from '../../features/microphone-input/micLiveFrameRuntime.js'
 
-export default function MicTestPanel({ liveFrame, lastStableMidi, isListening }) {
+/**
+ * Live microphone readout. It subscribes to the imperative mic live-frame
+ * runtime rather than taking the frame as a prop: the detector publishes one
+ * frame per animation frame, and routing that through the practice session's
+ * React state re-rendered the whole practice tree for a level meter.
+ */
+export default function MicTestPanel({ lastStableMidi, isListening }) {
+  const liveFrame = useMicLiveFrame()
   if (!isListening) {
     return (
       <div className="mic-test mic-test--idle">
