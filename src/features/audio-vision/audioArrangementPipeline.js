@@ -113,15 +113,18 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
  * long recording is never silently truncated (Phase 7).
  */
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
-  const { targetPart, difficulty, title, excerpt = null } = options
+  const { targetPart, difficulty, title, excerpt = null, tempoOverride = null } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
   const imported = await importAudioFile(file, arrayBuffer, stages.decodeAudioDataImpl)
   if (!imported.ok) return { ok: false, ...imported }
-  // A12 silence gate: never arrange room tone. Floor mirrors the neural
-  // silence-skip measurement (true silence ~0.00014, softest real note 0.004+).
-  if (!(imported.rms >= 0.002)) {
+  // A12 silence gate: never arrange room tone. Measured on the same recording
+  // at controlled gains, AFTER the import's peak normalization: true digital
+  // silence lands near 1e-5 RMS while real music at -40 dB still reads 1.1e-3.
+  // The old 2e-3 floor refused that quiet-but-real material, so the gate now
+  // sits an order of magnitude below quiet music and an order above silence.
+  if (!(imported.rms >= 1e-5)) {
     return {
       ok: false,
       code: 'empty-audio',
@@ -165,6 +168,9 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: stages.predictNotes ?? null,
     onProgress: progress,
+    // M3: reviewer's tempo correction propagates to beats -> quantization ->
+    // arrangement -> MusicXML -> preview -> practice checkpoints.
+    tempoOverride: Number.isFinite(tempoOverride) && tempoOverride > 0 ? tempoOverride : null,
   })
   analysis.stereo = stereoSlice
     ? {
@@ -172,6 +178,21 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
         spaciousness: views.stereo?.spaciousness ?? null,
       }
     : null
+  // A12 structural gate (after analysis, on evidence not energy): measured on
+  // controlled inputs, RMS cannot separate quiet music from noise (noise at
+  // -40 dB actually reads LOUDER than the music), but musical content is
+  // unambiguous - real music at -40 dB yields ~226 onsets while noise and
+  // digital silence yield 0. Refuse on the absence of musical events.
+  if (!analysis.onsets.length || !analysis.melody?.length) {
+    return {
+      ok: false,
+      code: 'empty-audio',
+      message: 'No musical content was found in that recording (silence, room tone, or pure noise). Corranzo would rather refuse than invent sheet music.',
+      confidence: { overall: 0, provenance: PROVENANCE.INFERRED },
+      warnings: [],
+      excerpt: null,
+    }
+  }
   // §5 — independent second opinion (model-free spectral peaks on the
   // harmonic view) and windowed agreement against the primary model.
   // Agreement is evidence of transcription reliability at runtime; the
@@ -273,7 +294,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     events: simplified,
     targetPart,
     bpm: analysis.tempo.bpm,
-    beatsPerMeasure: 4,
+    beatsPerMeasure: analysis.meter?.beatsPerMeasure ?? 4,
     title: title ?? file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement',
     warnings: model.parts[0].warnings,
   })
@@ -293,6 +314,8 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       pitchSource: analysis.pitchSource,
       totalSeconds: analysis.totalSeconds,
       stereo: analysis.stereo ?? null,
+      tempoSource: analysis.tempo.source ?? 'estimate',
+      tempoEstimatedBpm: analysis.tempo.estimatedBpm ?? null,
     },
     confidence,
     partial: verdict.partial,

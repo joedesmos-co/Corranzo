@@ -1,0 +1,174 @@
+{
+  "rows": [
+    {
+      "id": "guitarset-ss-comp",
+      "referenceTempo": 84,
+      "measuredReferenceTempo": 84,
+      "tempoAnnotationMatchesBeats": true,
+      "beatUnits": 4,
+      "numBeats": 4,
+      "referenceBeatCount": 64,
+      "referenceDownbeatCount": 16,
+      "medianDownbeatGap": 2.8571,
+      "audioSeconds": 45.71,
+      "estimatedTempo": 86,
+      "estimatedPeriod": 0.6977,
+      "ambiguousTempo": true,
+      "octaveAlternative": null,
+      "tempoErrorBpm": 2,
+      "ratio": {
+        "ratio": 1.0238,
+        "class": "1",
+        "relativeError": 0.0238
+      },
+      "meter": {
+        "beatsPerMeasure": 4,
+        "uncertain": false
+      },
+      "phaseMeanBeats": -0.192,
+      "downbeatHitsOf8": 2,
+      "onsetMissed": 1,
+      "referenceOnsetCount": 184,
+      "onsetMissRate": 0.005,
+      "quantResidualMedian": 0.1725,
+      "meanNoteDurationReferenceBeats": 0.551,
+      "transcribedNotes": 275
+    },
+    {
+      "id": "guitarset-funk3",
+      "referenceTempo": 112,
+      "measuredReferenceTempo": 112,
+      "tempoAnnotationMatchesBeats": true,
+      "beatUnits": 4,
+      "numBeats": 4,
+      "referenceBeatCount": 64,
+      "referenceDownbeatCount": 16,
+      "medianDownbeatGap": 2.1429,
+      "audioSeconds": 34.28,
+      "estimatedTempo": 74,
+      "estimatedPeriod": 0.8108,
+      "ambiguousTempo": true,
+      "octaveAlternative": null,
+      "tempoErrorBpm": -38,
+      "ratio": {
+        "ratio": 0.6607,
+        "class": "2/3",
+        "relativeError": 0.0089
+      },
+      "meter": {
+        "beatsPerMeasure": 3,
+        "uncertain": false
+      },
+      "phaseMeanBeats": 0.1099,
+      "downbeatHitsOf8": 1,
+      "onsetMissed": 6,
+      "referenceOnsetCount": 492,
+      "onsetMissRate": 0.012,
+      "quantResidualMedian": 0.2517,
+      "meanNoteDurationReferenceBeats": 0.471,
+      "transcribedNotes": 449
+    },
+    {
+      "id": "guitarset-rock2",
+      "referenceTempo": 142,
+      "measuredReferenceTempo": 142,
+      "tempoAnnotationMatchesBeats": true,
+      "beatUnits": 4,
+      "numBeats": 4,
+      "referenceBeatCount": 64,
+      "referenceDownbeatCount": 16,
+      "medianDownbeatGap": 1.6901,
+      "audioSeconds": 27.04,
+      "estimatedTempo": 96,
+      "estimatedPeriod": 0.625,
+      "ambiguousTempo": false,
+      "octaveAlternative": null,
+      "tempoErrorBpm": -46,
+      "ratio": {
+        "ratio": 0.6761,
+        "class": "2/3",
+        "relativeError": 0.0141
+      },
+      "meter": {
+        "beatsPerMeasure": 4,
+        "uncertain": true
+      },
+      "phaseMeanBeats": -0.0524,
+      "downbeatHitsOf8": 0,
+      "onsetMissed": 5,
+      "referenceOnsetCount": 547,
+      "onsetMissRate": 0.009,
+      "quantResidualMedian": 0.2301,
+      "meanNoteDurationReferenceBeats": 0.527,
+      "transcribedNotes": 513
+    },
+    {
+      "id": "guitarset-bn2",
+      "referenceTempo": 131,
+      "measuredReferenceTempo": 131,
+      "tempoAnnotationMatchesBeats": true,
+      "beatUnits": 4,
+      "numBeats": 4,
+      "referenceBeatCount": 64,
+      "referenceDownbeatCount": 16,
+      "medianDownbeatGap": 1.8321,
+      "audioSeconds": 29.31,
+      "estimatedTempo": 129,
+      "estimatedPeriod": 0.4651,
+      "ambiguousTempo": false,
+      "octaveAlternative": null,
+      "tempoErrorBpm": -2,
+      "ratio": {
+        "ratio": 0.9847,
+        "class": "1",
+        "relativeError": 0.0153
+      },
+      "meter": {
+        "beatsPerMeasure": 4,
+        "uncertain": true
+      },
+      "phaseMeanBeats": -0.0918,
+      "downbeatHitsOf8": 0,
+      "onsetMissed": 1,
+      "referenceOnsetCount": 239,
+      "onsetMissRate": 0.004,
+      "quantResidualMedian": 0.4,
+      "meanNoteDurationReferenceBeats": 0.533,
+      "transcribedNotes": 248
+    },
+    {
+      "id": "guitarset-jazz2",
+      "referenceTempo": 110,
+      "measuredReferenceTempo": 110,
+      "tempoAnnotationMatchesBeats": true,
+      "beatUnits": 4,
+      "numBeats": 4,
+      "referenceBeatCount": 64,
+      "referenceDownbeatCount": 16,
+      "medianDownbeatGap": 2.1818,
+      "audioSeconds": 34.9,
+      "estimatedTempo": 112,
+      "estimatedPeriod": 0.5357,
+      "ambiguousTempo": false,
+      "octaveAlternative": null,
+      "tempoErrorBpm": 2,
+      "ratio": {
+        "ratio": 1.0182,
+        "class": "1",
+        "relativeError": 0.0182
+      },
+      "meter": {
+        "beatsPerMeasure": 3,
+        "uncertain": false
+      },
+      "phaseMeanBeats": -0.1597,
+      "downbeatHitsOf8": 2,
+      "onsetMissed": 10,
+      "referenceOnsetCount": 252,
+      "onsetMissRate": 0.04,
+      "quantResidualMedian": 0.1563,
+      "meanNoteDurationReferenceBeats": 0.686,
+      "transcribedNotes": 333
+    }
+  ]
+}

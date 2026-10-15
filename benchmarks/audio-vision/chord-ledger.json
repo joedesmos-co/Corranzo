@@ -1,0 +1,3134 @@
+{
+  "rows": [
+    {
+      "take": "mozart",
+      "windows": 61,
+      "rootAccuracy": 0.525,
+      "rootOrFifthAccuracy": 0.59,
+      "qualityAccuracy": 0.262,
+      "qualityWindows": 42,
+      "perWindow": [
+        {
+          "seconds": 1.6,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 2.1,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 2.6,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 3.1,
+          "analyzed": "Dm",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.57
+        },
+        {
+          "seconds": 3.6,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 4.1,
+          "analyzed": "Adim",
+          "root": 9,
+          "truthRoot": 9,
+          "rootOk": true,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 4.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 5.2,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.86
+        },
+        {
+          "seconds": 5.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 6.2,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 9,
+          "rootOk": true,
+          "confidence": 0.58
+        },
+        {
+          "seconds": 6.7,
+          "analyzed": "F",
+          "root": 5,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 7.2,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.62
+        },
+        {
+          "seconds": 7.7,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 8.2,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 8.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 9.3,
+          "analyzed": "F",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 9.8,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 10.3,
+          "analyzed": "F",
+          "root": 5,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 10.8,
+          "analyzed": "F",
+          "root": 5,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 11.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 11.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 12.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.63
+        },
+        {
+          "seconds": 12.9,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 13.4,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 13.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 14.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 14.9,
+          "analyzed": "Fsus4",
+          "root": 5,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 15.4,
+          "analyzed": "Adim",
+          "root": 9,
+          "truthRoot": 9,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 15.9,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 16.4,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 17,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 17.5,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 18,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 18.5,
+          "analyzed": "F",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 19,
+          "analyzed": "Adim",
+          "root": 9,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 19.5,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 2,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 20,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 20.5,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 21.1,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 21.6,
+          "analyzed": "Gmaj7",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 22.1,
+          "analyzed": "G7",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 22.6,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 23.1,
+          "analyzed": "C7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 23.6,
+          "analyzed": "C7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 24.1,
+          "analyzed": "Adim",
+          "root": 9,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 24.7,
+          "analyzed": "Adim",
+          "root": 9,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 25.2,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 25.7,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 26.2,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 26.7,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 27.2,
+          "analyzed": "Fsus4",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 27.7,
+          "analyzed": "Fsus4",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 28.2,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 28.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 29.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.85
+        },
+        {
+          "seconds": 29.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 30.3,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 2,
+          "rootOk": true,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 30.8,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 31.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 31.8,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 32.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.79
+        }
+      ]
+    },
+    {
+      "take": "schubert",
+      "windows": 81,
+      "rootAccuracy": 0.37,
+      "rootOrFifthAccuracy": 0.494,
+      "qualityAccuracy": 0.131,
+      "qualityWindows": 61,
+      "perWindow": [
+        {
+          "seconds": 1.2,
+          "analyzed": "C",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 1.8,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.87
+        },
+        {
+          "seconds": 2.5,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 3.1,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 3.7,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 4.3,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 5,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 5.6,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 6.2,
+          "analyzed": "G",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 6.8,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 7.5,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.92
+        },
+        {
+          "seconds": 8.1,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 8.7,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 9.3,
+          "analyzed": "Fm",
+          "root": 5,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 10,
+          "analyzed": "Fsus4",
+          "root": 5,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 10.6,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 11.2,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 11.8,
+          "analyzed": "G#maj7",
+          "root": 8,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 12.5,
+          "analyzed": "G7",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 13.1,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 13.7,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.9
+        },
+        {
+          "seconds": 14.3,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 15,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 15.6,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 16.2,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 16.8,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 17.5,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 18.1,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 18.7,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.63
+        },
+        {
+          "seconds": 19.3,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 20,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 20.6,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 21.2,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 21.8,
+          "analyzed": "G#maj7",
+          "root": 8,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 22.5,
+          "analyzed": "G#dim",
+          "root": 8,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 23.1,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 23.7,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.91
+        },
+        {
+          "seconds": 24.3,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 25,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 25.6,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 26.2,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 26.8,
+          "analyzed": "G",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.85
+        },
+        {
+          "seconds": 27.5,
+          "analyzed": "G",
+          "root": 7,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 28.1,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 28.7,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 29.3,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 30,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 30.6,
+          "analyzed": "Gm",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 31.2,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 31.8,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 32.5,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.88
+        },
+        {
+          "seconds": 33.1,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 33.7,
+          "analyzed": "Bm7",
+          "root": 11,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 34.3,
+          "analyzed": "Bm",
+          "root": 11,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.87
+        },
+        {
+          "seconds": 35,
+          "analyzed": "Bm",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 35.6,
+          "analyzed": "G",
+          "root": 7,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.86
+        },
+        {
+          "seconds": 36.2,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 36.8,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 37.5,
+          "analyzed": "Bm",
+          "root": 11,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 38.1,
+          "analyzed": "G",
+          "root": 7,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 38.7,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 39.3,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 40,
+          "analyzed": "Dm",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 40.6,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 41.2,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 41.8,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 42.5,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 43.1,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 43.7,
+          "analyzed": "Ddim",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 44.3,
+          "analyzed": "G#maj7",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 45,
+          "analyzed": "G7",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 45.6,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 46.2,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.85
+        },
+        {
+          "seconds": 46.8,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 47.5,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 48.1,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 48.7,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 49.3,
+          "analyzed": "G#maj7",
+          "root": 8,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.62
+        },
+        {
+          "seconds": 50,
+          "analyzed": "G7",
+          "root": 7,
+          "truthRoot": 7,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 50.6,
+          "analyzed": "F7",
+          "root": 5,
+          "truthRoot": 7,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 51.2,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.69
+        }
+      ]
+    },
+    {
+      "take": "brahms",
+      "windows": 109,
+      "rootAccuracy": 0.284,
+      "rootOrFifthAccuracy": 0.367,
+      "qualityAccuracy": 0.07,
+      "qualityWindows": 71,
+      "perWindow": [
+        {
+          "seconds": 0.9,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 1.3,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 1.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 2.1,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 2.4,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 2.8,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 3.2,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 3.6,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 3.9,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 4.3,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 4.7,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 5,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 5.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 5.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.92
+        },
+        {
+          "seconds": 6.2,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.94
+        },
+        {
+          "seconds": 6.5,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.86
+        },
+        {
+          "seconds": 7.3,
+          "analyzed": "Cm7",
+          "root": 0,
+          "truthRoot": 0,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 7.7,
+          "analyzed": "G#",
+          "root": 8,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 8,
+          "analyzed": "Fm7",
+          "root": 5,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 8.4,
+          "analyzed": "Fm7",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 8.8,
+          "analyzed": "Fm",
+          "root": 5,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 9.1,
+          "analyzed": "Fm",
+          "root": 5,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 9.5,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 9.9,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 10.3,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 10.6,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 11,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 11.4,
+          "analyzed": "Cm",
+          "root": 0,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 11.8,
+          "analyzed": "Cdim",
+          "root": 0,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 12.1,
+          "analyzed": "Cdim",
+          "root": 0,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 12.5,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 12.9,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 13.2,
+          "analyzed": "Fsus4",
+          "root": 5,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 13.6,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 14,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 14.4,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 14.7,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 15.1,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 15.5,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 15.9,
+          "analyzed": "G#sus4",
+          "root": 8,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 16.2,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 16.6,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 17,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 17.3,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 17.7,
+          "analyzed": "F#sus4",
+          "root": 6,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 18.1,
+          "analyzed": "C#7",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 18.5,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 18.8,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 19.2,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 19.6,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.87
+        },
+        {
+          "seconds": 20,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 20.3,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 20.7,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 21.1,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 21.4,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 22.2,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 22.6,
+          "analyzed": "A#m",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 22.9,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 23.3,
+          "analyzed": "Fdim",
+          "root": 5,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 23.7,
+          "analyzed": "Fdim",
+          "root": 5,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 24.1,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 24.4,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 24.8,
+          "analyzed": "A#7",
+          "root": 10,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 25.2,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 25.5,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 25.9,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 26.3,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 26.7,
+          "analyzed": "B",
+          "root": 11,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 27,
+          "analyzed": "G#m7",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 27.4,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 27.8,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 28.2,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 28.5,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 28.9,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.83
+        },
+        {
+          "seconds": 29.3,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 29.6,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 30,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 30.4,
+          "analyzed": "G#sus4",
+          "root": 8,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 30.8,
+          "analyzed": "G#sus4",
+          "root": 8,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 31.1,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 31.5,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 31.9,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 32.3,
+          "analyzed": "C#sus4",
+          "root": 1,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.6
+        },
+        {
+          "seconds": 32.6,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 33,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 33.4,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 33.7,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 34.1,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 34.5,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 34.9,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 35.2,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 35.6,
+          "analyzed": "D#m",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 36,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 36.4,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 36.7,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 37.1,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 37.5,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 37.8,
+          "analyzed": "C#maj7",
+          "root": 1,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 38.2,
+          "analyzed": "C#maj7",
+          "root": 1,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 38.6,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 39,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 39.3,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 39.7,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 40.1,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 40.5,
+          "analyzed": "Dm7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 40.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 41.2,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.89
+        },
+        {
+          "seconds": 41.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.9
+        },
+        {
+          "seconds": 41.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.87
+        }
+      ]
+    },
+    {
+      "take": "lussier",
+      "windows": 30,
+      "rootAccuracy": 0.2,
+      "rootOrFifthAccuracy": 0.4,
+      "qualityAccuracy": 0.063,
+      "qualityWindows": 16,
+      "perWindow": [
+        {
+          "seconds": 1.1,
+          "analyzed": "Cmaj7",
+          "root": 0,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 1.6,
+          "analyzed": "Esus4",
+          "root": 4,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 2.2,
+          "analyzed": "Esus4",
+          "root": 4,
+          "truthRoot": 9,
+          "rootOk": false,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 2.7,
+          "analyzed": "Esus4",
+          "root": 4,
+          "truthRoot": 4,
+          "rootOk": true,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 3.3,
+          "analyzed": "Cmaj7",
+          "root": 0,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 3.8,
+          "analyzed": "Csus4",
+          "root": 0,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 4.4,
+          "analyzed": "Bm7",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.63
+        },
+        {
+          "seconds": 5,
+          "analyzed": "Esus4",
+          "root": 4,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 5.5,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 6.1,
+          "analyzed": "Asus4",
+          "root": 9,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 6.6,
+          "analyzed": "Asus4",
+          "root": 9,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 7.2,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 4,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 7.7,
+          "analyzed": "C",
+          "root": 0,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 8.3,
+          "analyzed": "Gsus4",
+          "root": 7,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 8.8,
+          "analyzed": "Bdim",
+          "root": 11,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.58
+        },
+        {
+          "seconds": 9.4,
+          "analyzed": "Esus4",
+          "root": 4,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.56
+        },
+        {
+          "seconds": 10,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 10.5,
+          "analyzed": "E",
+          "root": 4,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.87
+        },
+        {
+          "seconds": 11.1,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.85
+        },
+        {
+          "seconds": 11.6,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 4,
+          "rootOk": true,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 12.2,
+          "analyzed": "Bdim",
+          "root": 11,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 12.7,
+          "analyzed": "Dm",
+          "root": 2,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 13.3,
+          "analyzed": "G#dim",
+          "root": 8,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 13.8,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 4,
+          "rootOk": true,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 14.4,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.79
+        },
+        {
+          "seconds": 15,
+          "analyzed": "E7",
+          "root": 4,
+          "truthRoot": 2,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 15.5,
+          "analyzed": "E",
+          "root": 4,
+          "truthRoot": 0,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 16.1,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 16.6,
+          "analyzed": "Am",
+          "root": 9,
+          "truthRoot": 9,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 17.2,
+          "analyzed": "A7",
+          "root": 9,
+          "truthRoot": 9,
+          "rootOk": true,
+          "confidence": 0.81
+        }
+      ]
+    },
+    {
+      "take": "take_five",
+      "windows": 104,
+      "rootAccuracy": 0.452,
+      "rootOrFifthAccuracy": 0.721,
+      "qualityAccuracy": 0.015,
+      "qualityWindows": 65,
+      "perWindow": [
+        {
+          "seconds": 7.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 7.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 8.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 8.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 9.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.75
+        },
+        {
+          "seconds": 9.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.82
+        },
+        {
+          "seconds": 10,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 10.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 10.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 11,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 11.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.81
+        },
+        {
+          "seconds": 11.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 11.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 12.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 12.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 12.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 13.2,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 13.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 13.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 14.2,
+          "analyzed": "D#dim",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.58
+        },
+        {
+          "seconds": 14.5,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.59
+        },
+        {
+          "seconds": 14.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 15.2,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 15.5,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 15.8,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 16.1,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.73
+        },
+        {
+          "seconds": 16.5,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 16.8,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.62
+        },
+        {
+          "seconds": 17.1,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 17.4,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.63
+        },
+        {
+          "seconds": 17.8,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 18.1,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 18.4,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 18.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 19.1,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 19.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.76
+        },
+        {
+          "seconds": 19.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.84
+        },
+        {
+          "seconds": 20.4,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 20.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.59
+        },
+        {
+          "seconds": 21,
+          "analyzed": "D#dim",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.59
+        },
+        {
+          "seconds": 21.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 21.7,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 22,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 22.3,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 22.6,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 23,
+          "analyzed": "D#maj7",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 23.3,
+          "analyzed": "D#sus4",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 23.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.7
+        },
+        {
+          "seconds": 23.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 24.3,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.74
+        },
+        {
+          "seconds": 24.6,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 24.9,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 25.2,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 25.6,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.63
+        },
+        {
+          "seconds": 25.9,
+          "analyzed": "D#",
+          "root": 3,
+          "truthRoot": 3,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 26.2,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 26.5,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.72
+        },
+        {
+          "seconds": 26.8,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 27.2,
+          "analyzed": "A#sus4",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 27.5,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 27.8,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.71
+        },
+        {
+          "seconds": 28.1,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 28.5,
+          "analyzed": "G#m",
+          "root": 8,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.57
+        },
+        {
+          "seconds": 28.8,
+          "analyzed": "Fdim",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 29.1,
+          "analyzed": "C#maj7",
+          "root": 1,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 29.4,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 29.8,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.62
+        },
+        {
+          "seconds": 30.1,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.6
+        },
+        {
+          "seconds": 30.4,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 30.7,
+          "analyzed": "G#m7",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 31.1,
+          "analyzed": "G#m7",
+          "root": 8,
+          "truthRoot": 8,
+          "rootOk": true,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 31.4,
+          "analyzed": "G#m7",
+          "root": 8,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 31.7,
+          "analyzed": "Fdim",
+          "root": 5,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.6
+        },
+        {
+          "seconds": 32,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.57
+        },
+        {
+          "seconds": 32.4,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.57
+        },
+        {
+          "seconds": 32.7,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 33,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 33.3,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.6
+        },
+        {
+          "seconds": 33.7,
+          "analyzed": "Dmaj7",
+          "root": 2,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.61
+        },
+        {
+          "seconds": 34,
+          "analyzed": "D#m7",
+          "root": 3,
+          "truthRoot": 10,
+          "rootOk": false,
+          "confidence": 0.57
+        },
+        {
+          "seconds": 34.3,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 11,
+          "rootOk": true,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 34.6,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 35,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.6
+        },
+        {
+          "seconds": 35.3,
+          "analyzed": "Fdim",
+          "root": 5,
+          "truthRoot": 5,
+          "rootOk": true,
+          "confidence": 0.62
+        },
+        {
+          "seconds": 35.6,
+          "analyzed": "C#maj7",
+          "root": 1,
+          "truthRoot": 5,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 35.9,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 36.3,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 36.6,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.58
+        },
+        {
+          "seconds": 36.9,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.56
+        },
+        {
+          "seconds": 37.2,
+          "analyzed": "Bmaj7",
+          "root": 11,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.64
+        },
+        {
+          "seconds": 37.6,
+          "analyzed": "B7",
+          "root": 11,
+          "truthRoot": 8,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 37.9,
+          "analyzed": "G#m7",
+          "root": 8,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 38.2,
+          "analyzed": "C#7",
+          "root": 1,
+          "truthRoot": 11,
+          "rootOk": false,
+          "confidence": 0.66
+        },
+        {
+          "seconds": 38.5,
+          "analyzed": "C#7",
+          "root": 1,
+          "truthRoot": 1,
+          "rootOk": true,
+          "confidence": 0.67
+        },
+        {
+          "seconds": 38.8,
+          "analyzed": "A#m7",
+          "root": 10,
+          "truthRoot": 1,
+          "rootOk": false,
+          "confidence": 0.65
+        },
+        {
+          "seconds": 39.2,
+          "analyzed": "F#",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.68
+        },
+        {
+          "seconds": 39.5,
+          "analyzed": "F#maj7",
+          "root": 6,
+          "truthRoot": 6,
+          "rootOk": true,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 39.8,
+          "analyzed": "A#",
+          "root": 10,
+          "truthRoot": 6,
+          "rootOk": false,
+          "confidence": 0.69
+        },
+        {
+          "seconds": 40.1,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.77
+        },
+        {
+          "seconds": 40.5,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 10,
+          "rootOk": true,
+          "confidence": 0.8
+        },
+        {
+          "seconds": 40.8,
+          "analyzed": "A#maj7",
+          "root": 10,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.78
+        },
+        {
+          "seconds": 41.1,
+          "analyzed": "Dsus4",
+          "root": 2,
+          "truthRoot": 3,
+          "rootOk": false,
+          "confidence": 0.78
+        }
+      ]
+    }
+  ]
+}

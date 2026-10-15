@@ -114,13 +114,25 @@ describe('arrangement MusicXML engraving data', () => {
   })
 
   it('generated arrangement XML survives a full parse for both targets', () => {
-    for (const [file, expectedCheckpoints] of [['piano', 8], ['guitar', 8]]) {
+    // NOTE (2026-10-15): with the invalid-chord-duration fix, notes that share
+    // an onset now correctly merge into ONE chord checkpoint (the bogus
+    // per-chord-note duration previously pushed them onto separate onsets), so
+    // the count is 7 rather than 8: 8 sounding attacks whose first two form a
+    // chord. The piano generator still writes more content than one 4/4
+    // measure holds (flagged by timingValidation, never hidden) — exactly the
+    // case the validator exists to catch.
+    for (const [file, expectedCheckpoints] of [['piano', 7], ['guitar', 7]]) {
       const xml = readFileSync(join(root, 'tmp', 'audio-vision-staging', `${file}.musicxml`), 'utf8')
       const timingMap = parseMusicXml(xml)
       const checkpoints = buildNoteCheckpoints(timingMap, null, {})
       const notes = timingMap.notes.filter((note) => !note.isRest && note.midi != null)
       expect(checkpoints, file).toHaveLength(expectedCheckpoints)
-      expect(notes.filter((note) => note.isTabMirror).length, file).toBe(file === 'guitar' ? 9 : 0)
+      // Every checkpoint requires only notes printed in one written measure.
+      const crossMeasure = checkpoints.filter(
+        (checkpoint) => new Set((checkpoint.notes ?? []).map((note) => note.measureNumber)).size > 1,
+      )
+      expect(crossMeasure, file).toHaveLength(0)
+      expect(notes.filter((note) => note.isTabMirror).length, file).toBe(file === 'guitar' ? 8 : 0)
       expect(timingMap.writtenDurationSeconds, file).toBeGreaterThan(4)
       expect(timingMap.writtenDurationSeconds, file).toBeLessThan(4.5)
     }

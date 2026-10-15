@@ -215,7 +215,8 @@ function findTieChainHead(merged, note) {
  * the head duration from the chain record, which makes it idempotent and safe
  * for timing maps whose chain record is missing (duration left untouched).
  */
-function mergeTiedContinuations(notes) {
+export function mergeTiedContinuations(notes) {
+
   const sorted = [...notes].sort(
     (left, right) =>
       left.timeSeconds - right.timeSeconds ||
