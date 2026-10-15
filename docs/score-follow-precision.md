@@ -32,15 +32,18 @@ own measure; every required box still renders (`crossMeasure` flag).
 | Anchor gaps | interpolation/hold | `gap` | Supported, labeled |
 | OMR source noteheads (`experimentalOmrPlayback`) | printed notehead boxes | `notehead` (WFY lock) | Supported where OMR succeeds |
 | PDF without exact mapping | measure/system navigation only | `gap` + needs-setup states | Documented fallback, no invented positions |
-| Overfull-measure overflow across system breaks | time truth vs notation truth diverge structurally | flagged `measureMismatch` | Known limitation (parser timing dependency, see below) |
+| Overfull measures (voice-flattened files) | time truth vs notation truth diverge structurally | flagged `timingValidation: invalid`; WFY groups per written measure | 3 MIDI-consistent files **repaired** 2026-10-13 (BWV 846 prelude, Aguado a-minor, BWV 999); 13 files flagged with the honest per-measure fallback (docs/timing-integrity-investigation.md) |
 
 ## S8/S9 — Measurements (2026-10-09)
 
 Node harness `scripts/measure-score-follow-precision.mjs` (synthetic
 anchors from each score's own system breaks — consistency/robustness, not
-printed-ink truth): **24/24 scores, 8843 checkpoints, 0 NaN, 0 wrong-page,
+printed-ink truth): **24/24 scores, 9046 checkpoints, 0 NaN, 0 wrong-page,
 0 wrong-system, 0 backward steps, 107/107 jumps explained
-(page/system/repeat/volta), 0 mid-system teleports.**
+(page/system/repeat/volta), 0 mid-system teleports.** (8843 before the
+2026-10-13 H1/H2 repair re-separated falsely merged onsets; per-score
+before/after in
+docs/timing-integrity-investigation.md §5.)
 
 Browser pixel pass `scripts/browser-score-follow-precision-e2e.mjs`
 (real demo PDF + bundled anchors, 1280×800):
@@ -73,9 +76,12 @@ Results:
   before the geometry-exact-anchor fix), 0 teleports, 0 wrong-page.
 - Browser on the Breitkopf pair: 20/20 same-page, WFY lock co-located,
   seek/zoom stable, ♩=72 (MusicXML-driven, OMR superseded), zero errors.
-- BWV 846 exposes file defect H2 (7.5 quarters in 4/4) → systematic drift;
-  follow layer flags it (overflow) and stays crash/jump-free. No mapping
-  can align a drifted timeline to print; documented as upstream H1/H2.
+- BWV 846: the file defect H2 (7.5 quarters in 4/4) was **repaired
+  2026-10-13** from the bundled Mutopia MIDI (see
+  docs/timing-integrity-investigation.md); onset max is now **0.0208 page**
+  (was 0.623 with systematic drift), overflow flags 32 → 0, 0 teleports, 0
+  wrong-page. The mapping stays `approximate` by nature — the improvement
+  is the file agreeing with its own source, not a new precision claim.
 
 A1 start: START_LOCK ≤0.05 s at first anchor; pickup/implicit, opening
 rests (leading-rest engraved origin), multi-staff, pause-frozen,
@@ -106,13 +112,14 @@ supported corpus (overflow class reported separately, never averaged).
 
 ## Remaining limitations (not follow bugs; upstream dependencies)
 
-1. **Parser overfull-measure timing.** Several practice-library guitar
-   pieces (e.g. Aguado a-minor: ~96/196 checkpoints) pack more sequential
-   content per measure than the nominal duration; the parser places the
-   excess past the barline, pairing notes from adjacent measures into one
-   checkpoint. The follow layer tracks sound-time correctly and flags
-   these (`measureMismatch`), but WFY then requires both notes to advance.
-   Fix belongs in MusicXML timing/measure allocation, not the cursor.
+1. **Flagged overfull files (13 practice-library scores).** Voice-flattened
+   or partially flattened sources whose bundled MIDI is NOT authoritative for
+   the file (voice-interleaved document order or performance-quantized
+   durations). The follow layer validates them
+   (`timingValidation.status === 'invalid'`), applies the per-written-
+   measure WFY fallback (no impossible simultaneities), and reports them
+   separately from supported scores. Fix belongs upstream: re-export with
+   voices preserved (docs/timing-integrity-investigation.md §7).
 2. **Cross-engraving PDF+MusicXML pairs.** When the PDF was not rendered
    from the uploaded MusicXML, `engraved-mapped` is approximate by nature.
    The system labels it and never claims notehead precision; true
@@ -121,3 +128,26 @@ supported corpus (overflow class reported separately, never averaged).
    (≈1 staff space incl. sampling lag) vs the 0.5 staff-space aspiration.
    Remaining error is dominated by sampling latency and glide-curve shape,
    not misplacement (zero wrong-page/system across all suites).
+4. **Tie duration double-merge (F1, pre-existing).** ~~Parser-level tie heads
+   carry the correct merged duration, but `mergeTiedContinuations` adds the
+   continuation a second time when building WFY checkpoints (2q + 2q tie →
+   checkpoint head reports 6q). Affects WFY hold math and reference playback
+   on tied scores; deliberately untouched during the H1/H2 round to keep the
+   before/after evidence clean. Next focused blocker.~~
+   **RESOLVED 2026-10-14** — see `docs/tied-note-timing-integrity.md`.
+   Tie chains now report one duration at every layer (parser == WFY == visual
+   lane == playback), chain identity is exclusive (`tieChainId`), and
+   voice-less tie-stops pair with their voice-2 head instead of re-attacking.
+   Next blockers moved to the practice-clock render-thrash and the 13
+   flagged library files.
+
+## S10 — Timing integrity round (2026-10-13, H1/H2)
+
+Frozen-set trace, validation, fallback, MIDI-authoritative repair, and
+before/after evidence: `docs/timing-integrity-investigation.md`. Code:
+`src/features/musicxml/timingValidation.js`, fallback in
+`src/features/practice/waitForYouCheckpoints.js`, diagnostics barline-dust
+rule, repair via `scripts/repair-flattened-practice-musicxml.mjs`, trace via
+`scripts/measure-timing-integrity.mjs`. The three repaired fixtures are
+git-tracked with provenance comments; the eight pre-existing untracked
+`tmp/` artifact directories were preserved byte-for-byte.

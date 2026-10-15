@@ -166,6 +166,7 @@ export default memo(function PracticeControlPanel({
           onRequestMicAccess={session.microphone.requestAccess}
           showMatchSettings={false}
           compact
+          timingNotice={session.waitForYou.timingNotice}
         />
 
         <PracticeScoreCursorSection

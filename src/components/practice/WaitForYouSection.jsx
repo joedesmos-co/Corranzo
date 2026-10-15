@@ -124,6 +124,7 @@ export default function WaitForYouSection({
   noteTargetWrongPage = false,
   showMatchSettings = true,
   compact = false,
+  timingNotice = null,
 }) {
   if (!active) {
     return null
@@ -374,6 +375,13 @@ export default function WaitForYouSection({
       {referenceError && (
         <p className="wait-for-you__reference-error" role="alert">
           {referenceError}
+        </p>
+      )}
+
+      {/* Honest source-timing notice: the FILE has overfull measures. */}
+      {timingNotice && (
+        <p className="wait-for-you__timing-notice" role="status">
+          {timingNotice}
         </p>
       )}
 
