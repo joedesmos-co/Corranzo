@@ -1,0 +1,5098 @@
+{
+  "schemaVersion": 2,
+  "evaluatorVersion": "2.1.0",
+  "kind": "semantic-musicxml-evaluation",
+  "mode": "both",
+  "gitCommit": "f10d02d897",
+  "scores": {
+    "pitch": 0.7081,
+    "rhythm": 0.6973,
+    "sustain": 0,
+    "articulation": 1,
+    "measureStructure": 0.6364,
+    "interpretation": 0.5,
+    "playback": 0
+  },
+  "scorePercents": {
+    "pitch": "71%",
+    "rhythm": "70%",
+    "sustain": "0%",
+    "articulation": "100%",
+    "measureStructure": "64%",
+    "interpretation": "50%",
+    "playback": "0%"
+  },
+  "classes": {
+    "pitch": {
+      "numerator": 262,
+      "denominator": 370,
+      "truePositives": 262,
+      "falsePositives": 8,
+      "falseNegatives": 100,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 362,
+      "compared": 370,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.7081,
+      "percent": "71%",
+      "reliable": true,
+      "displayPercent": "71%"
+    },
+    "rhythm": {
+      "numerator": 417,
+      "denominator": 598,
+      "truePositives": 417,
+      "falsePositives": 0,
+      "falseNegatives": 181,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 598,
+      "compared": 598,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.6973,
+      "percent": "70%",
+      "reliable": true,
+      "displayPercent": "70%"
+    },
+    "sustain": {
+      "numerator": 0,
+      "denominator": 10,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 10,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 10,
+      "compared": 10,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0,
+      "percent": "0%",
+      "reliable": true,
+      "displayPercent": "0%"
+    },
+    "articulation": {
+      "numerator": 0,
+      "denominator": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 0,
+      "compared": 0,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 1,
+      "percent": "100%",
+      "reliable": true,
+      "displayPercent": "100%"
+    },
+    "measureStructure": {
+      "numerator": 63,
+      "denominator": 99,
+      "truePositives": 63,
+      "falsePositives": 0,
+      "falseNegatives": 36,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 99,
+      "compared": 99,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.6364,
+      "percent": "64%",
+      "reliable": true,
+      "displayPercent": "64%"
+    },
+    "interpretation": {
+      "numerator": 1,
+      "denominator": 2,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 2,
+      "compared": 2,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0.5,
+      "percent": "50%",
+      "reliable": true,
+      "displayPercent": "50%"
+    },
+    "playback": {
+      "numerator": 0,
+      "denominator": 35,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 35,
+      "ignored": 0,
+      "unsupported": 0,
+      "presentInTruth": 35,
+      "compared": 35,
+      "coverage": 1,
+      "coveragePercent": "100%",
+      "score": 0,
+      "percent": "0%",
+      "reliable": true,
+      "displayPercent": "0%"
+    }
+  },
+  "overall": 0.506,
+  "overallPercent": "51%",
+  "labels": {
+    "pitch": "Pitch",
+    "rhythm": "Rhythm",
+    "sustain": "Sustain (ties)",
+    "articulation": "Articulation",
+    "measureStructure": "Measure structure",
+    "interpretation": "Interpretation",
+    "playback": "Playback"
+  },
+  "alignment": {
+    "confidence": 0.9319,
+    "matchedCount": 32,
+    "unmatchedTruthCount": 0,
+    "unmatchedGeneratedCount": 0,
+    "totalCost": 31.1102,
+    "pairs": [
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          1
+        ],
+        "generatedMeasureNumbers": [
+          1
+        ],
+        "cost": 2.15
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          2
+        ],
+        "generatedMeasureNumbers": [
+          2
+        ],
+        "cost": 0.3333
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          3
+        ],
+        "generatedMeasureNumbers": [
+          3
+        ],
+        "cost": 1.2
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          4
+        ],
+        "generatedMeasureNumbers": [
+          4
+        ],
+        "cost": 0.7564
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          5
+        ],
+        "generatedMeasureNumbers": [
+          5
+        ],
+        "cost": 0.9641
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          6
+        ],
+        "generatedMeasureNumbers": [
+          6
+        ],
+        "cost": 0.9641
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          7
+        ],
+        "generatedMeasureNumbers": [
+          7
+        ],
+        "cost": 1.3026
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          8
+        ],
+        "generatedMeasureNumbers": [
+          8
+        ],
+        "cost": 1.9333
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          9
+        ],
+        "generatedMeasureNumbers": [
+          9
+        ],
+        "cost": 0.7667
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          10
+        ],
+        "generatedMeasureNumbers": [
+          10
+        ],
+        "cost": 0.5487
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          11
+        ],
+        "generatedMeasureNumbers": [
+          11
+        ],
+        "cost": 0.9833
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          12
+        ],
+        "generatedMeasureNumbers": [
+          12
+        ],
+        "cost": 0.9641
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          13
+        ],
+        "generatedMeasureNumbers": [
+          13
+        ],
+        "cost": 0.7564
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          14
+        ],
+        "generatedMeasureNumbers": [
+          14
+        ],
+        "cost": 0.7564
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          15
+        ],
+        "generatedMeasureNumbers": [
+          15
+        ],
+        "cost": 0.9333
+      },
+      {
+        "kind": "merge",
+        "truthMeasureNumbers": [
+          16,
+          17
+        ],
+        "generatedMeasureNumbers": [
+          16
+        ],
+        "cost": 1.8708
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          18
+        ],
+        "generatedMeasureNumbers": [
+          17
+        ],
+        "cost": 0.3333
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          19
+        ],
+        "generatedMeasureNumbers": [
+          18
+        ],
+        "cost": 1.0367
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          20
+        ],
+        "generatedMeasureNumbers": [
+          19
+        ],
+        "cost": 0.55
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          21
+        ],
+        "generatedMeasureNumbers": [
+          20
+        ],
+        "cost": 0.7564
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          22
+        ],
+        "generatedMeasureNumbers": [
+          21
+        ],
+        "cost": 1.3333
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          23
+        ],
+        "generatedMeasureNumbers": [
+          22
+        ],
+        "cost": 0.5933
+      },
+      {
+        "kind": "split",
+        "truthMeasureNumbers": [
+          24
+        ],
+        "generatedMeasureNumbers": [
+          23,
+          24
+        ],
+        "cost": 3.3128
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          25
+        ],
+        "generatedMeasureNumbers": [
+          25
+        ],
+        "cost": 0
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          26
+        ],
+        "generatedMeasureNumbers": [
+          26
+        ],
+        "cost": 0.7667
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          27
+        ],
+        "generatedMeasureNumbers": [
+          27
+        ],
+        "cost": 0.7987
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          28
+        ],
+        "generatedMeasureNumbers": [
+          28
+        ],
+        "cost": 0.7564
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          29
+        ],
+        "generatedMeasureNumbers": [
+          29
+        ],
+        "cost": 0.55
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          30
+        ],
+        "generatedMeasureNumbers": [
+          30
+        ],
+        "cost": 0.7667
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          31
+        ],
+        "generatedMeasureNumbers": [
+          31
+        ],
+        "cost": 0.7667
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          32
+        ],
+        "generatedMeasureNumbers": [
+          32
+        ],
+        "cost": 0.9833
+      },
+      {
+        "kind": "match",
+        "truthMeasureNumbers": [
+          33
+        ],
+        "generatedMeasureNumbers": [
+          33
+        ],
+        "cost": 0.6222
+      }
+    ]
+  },
+  "measures": [
+    {
+      "measureNumber": 1,
+      "truthMeasureNumbers": [
+        1
+      ],
+      "generatedMeasureNumbers": [
+        1
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 2.15,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 1
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 0.25q)",
+          "measureNumber": 1
+        },
+        {
+          "code": "key-signature-mismatch",
+          "class": "measure-structure",
+          "message": "Key signature 0 fifths (expected -1)",
+          "measureNumber": 1
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 1 timing mismatch",
+          "measureNumber": 1
+        }
+      ],
+      "summary": [
+        "16th detected as quarter",
+        "Incorrect barline / measure length (4q; expected 0.25q)",
+        "Key signature 0 fifths (expected -1)",
+        "Measure 1 timing mismatch"
+      ],
+      "severity": 11
+    },
+    {
+      "measureNumber": 2,
+      "truthMeasureNumbers": [
+        2
+      ],
+      "generatedMeasureNumbers": [
+        2
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.3333,
+      "defects": [
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as eighth",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 2
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 2
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 2 timing mismatch",
+          "measureNumber": 2
+        }
+      ],
+      "summary": [
+        "16th detected as eighth",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 2 timing mismatch"
+      ],
+      "severity": 40
+    },
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        3
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.2,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 3
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D3 (expected C#3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as 16th",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected C#3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected D3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 3
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 3 timing mismatch",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Missing note G3",
+        "Missing note F3",
+        "Missing note G3",
+        "Missing note E3",
+        "Extra note G3",
+        "Onset off by 0.75 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D3 (expected C#3)",
+        "1.25q detected as 16th",
+        "Missing tie",
+        "Incorrect pitch E3 (expected C#3)",
+        "Onset off by 0.75 quarters",
+        "Missing tie",
+        "Incorrect pitch F3 (expected D3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 3 timing mismatch"
+      ],
+      "severity": 60
+    },
+    {
+      "measureNumber": 4,
+      "truthMeasureNumbers": [
+        4
+      ],
+      "generatedMeasureNumbers": [
+        4
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7564,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch C#3 (expected A#2)",
+          "measureNumber": 4
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 4
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 4
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 4 timing mismatch",
+          "measureNumber": 4
+        }
+      ],
+      "summary": [
+        "Missing note A#2",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch C#3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 4 timing mismatch"
+      ],
+      "severity": 38
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        5
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9641,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 5
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected F3)",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 5
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 5 timing mismatch",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Missing note C#3",
+        "Missing note C#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch E3 (expected F3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 5 timing mismatch"
+      ],
+      "severity": 53
+    },
+    {
+      "measureNumber": 6,
+      "truthMeasureNumbers": [
+        6
+      ],
+      "generatedMeasureNumbers": [
+        6
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9641,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 6
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 6
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 6
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 6
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected F3)",
+          "measureNumber": 6
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 6
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 6 timing mismatch",
+          "measureNumber": 6
+        }
+      ],
+      "summary": [
+        "Missing note D4",
+        "Missing note C4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E3 (expected F3)",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 6 timing mismatch"
+      ],
+      "severity": 21
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.3026,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 7
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 7 timing mismatch",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing note F3",
+        "Missing note D#3",
+        "Missing note D#3",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D#4 (expected C4)",
+        "Missing tie",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 7 timing mismatch"
+      ],
+      "severity": 53
+    },
+    {
+      "measureNumber": 8,
+      "truthMeasureNumbers": [
+        8
+      ],
+      "generatedMeasureNumbers": [
+        8
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.9333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch C#3 (expected D3)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected A#2)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected A#2)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 8
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 8 timing mismatch",
+          "measureNumber": 8
+        }
+      ],
+      "summary": [
+        "Missing note A#2",
+        "Missing note A#2",
+        "Missing note F3",
+        "Missing note A#2",
+        "Missing note F3",
+        "Missing note A#2",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch C#3 (expected D3)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch F3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 8 timing mismatch"
+      ],
+      "severity": 51
+    },
+    {
+      "measureNumber": 9,
+      "truthMeasureNumbers": [
+        9
+      ],
+      "generatedMeasureNumbers": [
+        9
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7667,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E2",
+          "measureNumber": 9
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A#3 (expected A3)",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A3 (expected D3)",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 9
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 9 timing mismatch",
+          "measureNumber": 9
+        }
+      ],
+      "summary": [
+        "Missing note E2",
+        "Missing note A#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch A#3 (expected A3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch A3 (expected D3)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 9 timing mismatch"
+      ],
+      "severity": 48
+    },
+    {
+      "measureNumber": 10,
+      "truthMeasureNumbers": [
+        10
+      ],
+      "generatedMeasureNumbers": [
+        10
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.5487,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 10
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 10
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 10
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 10
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 10
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 10
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 10
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 10
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 10 timing mismatch",
+          "measureNumber": 10
+        }
+      ],
+      "summary": [
+        "Missing note F3",
+        "Extra note F3",
+        "Onset off by 0.25 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch D#4 (expected C4)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 10 timing mismatch"
+      ],
+      "severity": 29
+    },
+    {
+      "measureNumber": 11,
+      "truthMeasureNumbers": [
+        11
+      ],
+      "generatedMeasureNumbers": [
+        11
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9833,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G4",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G4 (expected F4)",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 11
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 11 timing mismatch",
+          "measureNumber": 11
+        }
+      ],
+      "summary": [
+        "Missing note C#3",
+        "Missing note F4",
+        "Missing note G4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch G4 (expected F4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 11 timing mismatch"
+      ],
+      "severity": 52
+    },
+    {
+      "measureNumber": 12,
+      "truthMeasureNumbers": [
+        12
+      ],
+      "generatedMeasureNumbers": [
+        12
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9641,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note B3",
+          "measureNumber": 12
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 12
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 12
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch B3 (expected C4)",
+          "measureNumber": 12
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 12
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected F4)",
+          "measureNumber": 12
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A3 (expected C4)",
+          "measureNumber": 12
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 12
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 12 timing mismatch",
+          "measureNumber": 12
+        }
+      ],
+      "summary": [
+        "Missing note B3",
+        "Missing note A3",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch B3 (expected C4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G#4 (expected F4)",
+        "Incorrect pitch A3 (expected C4)",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 12 timing mismatch"
+      ],
+      "severity": 27
+    },
+    {
+      "measureNumber": 13,
+      "truthMeasureNumbers": [
+        13
+      ],
+      "generatedMeasureNumbers": [
+        13
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7564,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D3",
+          "measureNumber": 13
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 13
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 13
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F#3 (expected D3)",
+          "measureNumber": 13
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 13
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 13 timing mismatch",
+          "measureNumber": 13
+        }
+      ],
+      "summary": [
+        "Missing note D3",
+        "16th detected as quarter",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch F#3 (expected D3)",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 13 timing mismatch"
+      ],
+      "severity": 18
+    },
+    {
+      "measureNumber": 14,
+      "truthMeasureNumbers": [
+        14
+      ],
+      "generatedMeasureNumbers": [
+        14
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7564,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G#3",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch B3 (expected C4)",
+          "measureNumber": 14
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 14
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 14
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 14 timing mismatch",
+          "measureNumber": 14
+        }
+      ],
+      "summary": [
+        "Missing note G#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch B3 (expected C4)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 14 timing mismatch"
+      ],
+      "severity": 42
+    },
+    {
+      "measureNumber": 15,
+      "truthMeasureNumbers": [
+        15
+      ],
+      "generatedMeasureNumbers": [
+        15
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G#3",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch B3 (expected C4)",
+          "measureNumber": 15
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 15
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F#3 (expected D#3)",
+          "measureNumber": 15
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 15
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 15 timing mismatch",
+          "measureNumber": 15
+        }
+      ],
+      "summary": [
+        "Missing note G#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch B3 (expected C4)",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch F#3 (expected D#3)",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 15 timing mismatch"
+      ],
+      "severity": 45
+    },
+    {
+      "measureNumber": 16,
+      "truthMeasureNumbers": [
+        16,
+        17
+      ],
+      "generatedMeasureNumbers": [
+        16
+      ],
+      "alignment": "merge",
+      "unmatched": false,
+      "alignmentCost": 1.8708,
+      "defects": [
+        {
+          "code": "merged-measure",
+          "class": "measure-structure",
+          "message": "Merged measures 16,17 → 16",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 16
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 16
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 16
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 16
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 16
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A3 (expected G#3)",
+          "measureNumber": 16
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 16
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 16 timing mismatch",
+          "measureNumber": 16
+        }
+      ],
+      "summary": [
+        "Merged measures 16,17 → 16",
+        "Missing note C#3",
+        "Missing note C#3",
+        "Missing note A3",
+        "Missing note E4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch A3 (expected G#3)",
+        "Onset off by 0.5 quarters",
+        "Measure 16 timing mismatch"
+      ],
+      "severity": 35
+    },
+    {
+      "measureNumber": 18,
+      "truthMeasureNumbers": [
+        18
+      ],
+      "generatedMeasureNumbers": [
+        17
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.3333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 18
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 18
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 18 timing mismatch",
+          "measureNumber": 18
+        }
+      ],
+      "summary": [
+        "Missing note G3",
+        "Extra note G3",
+        "Onset off by 0.25 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 18 timing mismatch"
+      ],
+      "severity": 38
+    },
+    {
+      "measureNumber": 19,
+      "truthMeasureNumbers": [
+        19
+      ],
+      "generatedMeasureNumbers": [
+        18
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.0367,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected F4)",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected A3)",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 19
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 19 timing mismatch",
+          "measureNumber": 19
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D#4 (expected F4)",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch G#4 (expected A3)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 19 timing mismatch"
+      ],
+      "severity": 49
+    },
+    {
+      "measureNumber": 20,
+      "truthMeasureNumbers": [
+        20
+      ],
+      "generatedMeasureNumbers": [
+        19
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.55,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D3",
+          "measureNumber": 20
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 20
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 20
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 20
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 20
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 20 timing mismatch",
+          "measureNumber": 20
+        }
+      ],
+      "summary": [
+        "Missing note D3",
+        "Missing note F3",
+        "Extra note F3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 20 timing mismatch"
+      ],
+      "severity": 45
+    },
+    {
+      "measureNumber": 21,
+      "truthMeasureNumbers": [
+        21
+      ],
+      "generatedMeasureNumbers": [
+        20
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7564,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C3",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 21
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 21
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 21
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 21 timing mismatch",
+          "measureNumber": 21
+        }
+      ],
+      "summary": [
+        "Missing note C3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D#4 (expected C4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 21 timing mismatch"
+      ],
+      "severity": 46
+    },
+    {
+      "measureNumber": 22,
+      "truthMeasureNumbers": [
+        22
+      ],
+      "generatedMeasureNumbers": [
+        21
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.3333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 22
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 22
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F#3 (expected D#3)",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 22
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 22 timing mismatch",
+          "measureNumber": 22
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing note G3",
+        "Missing note D#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch F#3 (expected D#3)",
+        "Incorrect pitch D#4 (expected C4)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 22 timing mismatch"
+      ],
+      "severity": 47
+    },
+    {
+      "measureNumber": 23,
+      "truthMeasureNumbers": [
+        23
+      ],
+      "generatedMeasureNumbers": [
+        22
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.5933,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 23
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 23
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 23
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 23
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 23
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 23
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 23 timing mismatch",
+          "measureNumber": 23
+        }
+      ],
+      "summary": [
+        "Missing note A#2",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "Incorrect chord",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 23 timing mismatch"
+      ],
+      "severity": 22
+    },
+    {
+      "measureNumber": 24,
+      "truthMeasureNumbers": [
+        24
+      ],
+      "generatedMeasureNumbers": [
+        23,
+        24
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 3.3128,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 24 → 23,24",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 24
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G2 (expected A2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E2 (expected G2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected A#2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected A2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 24 timing mismatch",
+          "measureNumber": 24
+        }
+      ],
+      "summary": [
+        "Split measure 24 → 23,24",
+        "Missing note F2",
+        "Missing note E2",
+        "Missing note G2",
+        "Missing note F3",
+        "Missing note E3",
+        "Extra note G3",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G2 (expected A2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E2 (expected G2)",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch F3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E3 (expected A2)",
+        "Onset off by 0.5 quarters",
+        "Measure 24 timing mismatch"
+      ],
+      "severity": 54
+    },
+    {
+      "measureNumber": 25,
+      "truthMeasureNumbers": [
+        25
+      ],
+      "generatedMeasureNumbers": [
+        25
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 25
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 25 timing mismatch",
+          "measureNumber": 25
+        }
+      ],
+      "summary": [
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 25 timing mismatch"
+      ],
+      "severity": 4
+    },
+    {
+      "measureNumber": 26,
+      "truthMeasureNumbers": [
+        26
+      ],
+      "generatedMeasureNumbers": [
+        26
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7667,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 26
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G3 (expected C#3)",
+          "measureNumber": 26
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 26
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 26
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 26 timing mismatch",
+          "measureNumber": 26
+        }
+      ],
+      "summary": [
+        "Missing note C#3",
+        "Missing note G3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch G3 (expected C#3)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 26 timing mismatch"
+      ],
+      "severity": 45
+    },
+    {
+      "measureNumber": 27,
+      "truthMeasureNumbers": [
+        27
+      ],
+      "generatedMeasureNumbers": [
+        27
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7987,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 27
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 27
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A#3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note D3",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D4 (expected F4)",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected D3)",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 27
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 27 timing mismatch",
+          "measureNumber": 27
+        }
+      ],
+      "summary": [
+        "Missing note D4",
+        "Missing note A#3",
+        "Missing note F3",
+        "Extra note A#3",
+        "Extra note F3",
+        "Extra note D3",
+        "Onset off by 0.25 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch D4 (expected F4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G#4 (expected D3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 27 timing mismatch"
+      ],
+      "severity": 56
+    },
+    {
+      "measureNumber": 28,
+      "truthMeasureNumbers": [
+        28
+      ],
+      "generatedMeasureNumbers": [
+        28
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7564,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected G4)",
+          "measureNumber": 28
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 28
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 28
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 28 timing mismatch",
+          "measureNumber": 28
+        }
+      ],
+      "summary": [
+        "Missing note F4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G#4 (expected G4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 28 timing mismatch"
+      ],
+      "severity": 34
+    },
+    {
+      "measureNumber": 29,
+      "truthMeasureNumbers": [
+        29
+      ],
+      "generatedMeasureNumbers": [
+        29
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.55,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E4",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 29
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 29
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 29 timing mismatch",
+          "measureNumber": 29
+        }
+      ],
+      "summary": [
+        "Missing note E4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 29 timing mismatch"
+      ],
+      "severity": 43
+    },
+    {
+      "measureNumber": 30,
+      "truthMeasureNumbers": [
+        30
+      ],
+      "generatedMeasureNumbers": [
+        30
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7667,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 30
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 30
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 30
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 30 timing mismatch",
+          "measureNumber": 30
+        }
+      ],
+      "summary": [
+        "Missing note F4",
+        "Missing note D4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 30 timing mismatch"
+      ],
+      "severity": 34
+    },
+    {
+      "measureNumber": 31,
+      "truthMeasureNumbers": [
+        31
+      ],
+      "generatedMeasureNumbers": [
+        31
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7667,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 31
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 31
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 31
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 31 timing mismatch",
+          "measureNumber": 31
+        }
+      ],
+      "summary": [
+        "Missing note F4",
+        "Missing note D4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 31 timing mismatch"
+      ],
+      "severity": 34
+    },
+    {
+      "measureNumber": 32,
+      "truthMeasureNumbers": [
+        32
+      ],
+      "generatedMeasureNumbers": [
+        32
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9833,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G#3",
+          "measureNumber": 32
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 32
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A3",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D4 (expected F4)",
+          "measureNumber": 32
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A3 (expected D4)",
+          "measureNumber": 32
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 32
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 32
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 32 timing mismatch",
+          "measureNumber": 32
+        }
+      ],
+      "summary": [
+        "Missing note G#3",
+        "Missing note D4",
+        "Missing note A3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.75 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch D4 (expected F4)",
+        "Incorrect pitch A3 (expected D4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 32 timing mismatch"
+      ],
+      "severity": 43
+    },
+    {
+      "measureNumber": 33,
+      "truthMeasureNumbers": [
+        33
+      ],
+      "generatedMeasureNumbers": [
+        33
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.6222,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E2",
+          "measureNumber": 33
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 33
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 33
+        },
+        {
+          "code": "repeat-mismatch",
+          "class": "interpretation",
+          "message": "Repeat mismatch",
+          "measureNumber": 33
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 33 timing mismatch",
+          "measureNumber": 33
+        }
+      ],
+      "summary": [
+        "Missing note E2",
+        "16th detected as quarter",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Repeat mismatch",
+        "Measure 33 timing mismatch"
+      ],
+      "severity": 13
+    },
+    {
+      "measureNumber": 17,
+      "truthMeasureNumbers": [
+        17
+      ],
+      "generatedMeasureNumbers": [],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0,
+      "defects": [
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 17 timing mismatch",
+          "measureNumber": 17
+        }
+      ],
+      "summary": [
+        "Measure 17 timing mismatch"
+      ],
+      "severity": 1
+    }
+  ],
+  "worstMeasures": [
+    {
+      "measureNumber": 3,
+      "truthMeasureNumbers": [
+        3
+      ],
+      "generatedMeasureNumbers": [
+        3
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.2,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 3
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D3 (expected C#3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as 16th",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected C#3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected D3)",
+          "measureNumber": 3
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 3
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 3
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 3 timing mismatch",
+          "measureNumber": 3
+        }
+      ],
+      "summary": [
+        "Missing note G3",
+        "Missing note F3",
+        "Missing note G3",
+        "Missing note E3",
+        "Extra note G3",
+        "Onset off by 0.75 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D3 (expected C#3)",
+        "1.25q detected as 16th",
+        "Missing tie",
+        "Incorrect pitch E3 (expected C#3)",
+        "Onset off by 0.75 quarters",
+        "Missing tie",
+        "Incorrect pitch F3 (expected D3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 3 timing mismatch"
+      ],
+      "severity": 60
+    },
+    {
+      "measureNumber": 27,
+      "truthMeasureNumbers": [
+        27
+      ],
+      "generatedMeasureNumbers": [
+        27
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7987,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D4",
+          "measureNumber": 27
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 27
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note A#3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note F3",
+          "measureNumber": 27
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note D3",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "16th detected as quarter",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D4 (expected F4)",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected D3)",
+          "measureNumber": 27
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 27
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 27
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 27 timing mismatch",
+          "measureNumber": 27
+        }
+      ],
+      "summary": [
+        "Missing note D4",
+        "Missing note A#3",
+        "Missing note F3",
+        "Extra note A#3",
+        "Extra note F3",
+        "Extra note D3",
+        "Onset off by 0.25 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "16th detected as quarter",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch D4 (expected F4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G#4 (expected D3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 27 timing mismatch"
+      ],
+      "severity": 56
+    },
+    {
+      "measureNumber": 24,
+      "truthMeasureNumbers": [
+        24
+      ],
+      "generatedMeasureNumbers": [
+        23,
+        24
+      ],
+      "alignment": "split",
+      "unmatched": false,
+      "alignmentCost": 3.3128,
+      "defects": [
+        {
+          "code": "split-measure",
+          "class": "measure-structure",
+          "message": "Split measure 24 → 23,24",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G2",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 24
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E3",
+          "measureNumber": 24
+        },
+        {
+          "code": "extra-note",
+          "class": "pitch",
+          "message": "Extra note G3",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G2 (expected A2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E2 (expected G2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected A#2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected A2)",
+          "measureNumber": 24
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 24
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 24 timing mismatch",
+          "measureNumber": 24
+        }
+      ],
+      "summary": [
+        "Split measure 24 → 23,24",
+        "Missing note F2",
+        "Missing note E2",
+        "Missing note G2",
+        "Missing note F3",
+        "Missing note E3",
+        "Extra note G3",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch G2 (expected A2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E2 (expected G2)",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch F3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E3 (expected A2)",
+        "Onset off by 0.5 quarters",
+        "Measure 24 timing mismatch"
+      ],
+      "severity": 54
+    },
+    {
+      "measureNumber": 5,
+      "truthMeasureNumbers": [
+        5
+      ],
+      "generatedMeasureNumbers": [
+        5
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9641,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 5
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected F3)",
+          "measureNumber": 5
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 5
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 5
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 5 timing mismatch",
+          "measureNumber": 5
+        }
+      ],
+      "summary": [
+        "Missing note C#3",
+        "Missing note C#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch E3 (expected F3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 5 timing mismatch"
+      ],
+      "severity": 53
+    },
+    {
+      "measureNumber": 7,
+      "truthMeasureNumbers": [
+        7
+      ],
+      "generatedMeasureNumbers": [
+        7
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.3026,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 7
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-chord",
+          "class": "measure-structure",
+          "message": "Incorrect chord",
+          "measureNumber": 7
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 7
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 7 timing mismatch",
+          "measureNumber": 7
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing note F3",
+        "Missing note D#3",
+        "Missing note D#3",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D#4 (expected C4)",
+        "Missing tie",
+        "Incorrect chord",
+        "Incorrect chord",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 7 timing mismatch"
+      ],
+      "severity": 53
+    },
+    {
+      "measureNumber": 11,
+      "truthMeasureNumbers": [
+        11
+      ],
+      "generatedMeasureNumbers": [
+        11
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.9833,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C#3",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F4",
+          "measureNumber": 11
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G4",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G4 (expected F4)",
+          "measureNumber": 11
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 11
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 11
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 11 timing mismatch",
+          "measureNumber": 11
+        }
+      ],
+      "summary": [
+        "Missing note C#3",
+        "Missing note F4",
+        "Missing note G4",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch G4 (expected F4)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 11 timing mismatch"
+      ],
+      "severity": 52
+    },
+    {
+      "measureNumber": 8,
+      "truthMeasureNumbers": [
+        8
+      ],
+      "generatedMeasureNumbers": [
+        8
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.9333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note F3",
+          "measureNumber": 8
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#2",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch C#3 (expected D3)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch E3 (expected A#2)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F3 (expected A#2)",
+          "measureNumber": 8
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 8
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 8
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 8 timing mismatch",
+          "measureNumber": 8
+        }
+      ],
+      "summary": [
+        "Missing note A#2",
+        "Missing note A#2",
+        "Missing note F3",
+        "Missing note A#2",
+        "Missing note F3",
+        "Missing note A#2",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch C#3 (expected D3)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch E3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch F3 (expected A#2)",
+        "Onset off by 0.25 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 8 timing mismatch"
+      ],
+      "severity": 51
+    },
+    {
+      "measureNumber": 19,
+      "truthMeasureNumbers": [
+        19
+      ],
+      "generatedMeasureNumbers": [
+        18
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.0367,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "duration-mismatch",
+          "class": "rhythm",
+          "message": "1.25q detected as quarter",
+          "measureNumber": 19
+        },
+        {
+          "code": "missing-tie",
+          "class": "sustain",
+          "message": "Missing tie",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected F4)",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch G#4 (expected A3)",
+          "measureNumber": 19
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 19
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 19
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 19 timing mismatch",
+          "measureNumber": 19
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing tie",
+        "1.25q detected as quarter",
+        "Missing tie",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Incorrect pitch D#4 (expected F4)",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch G#4 (expected A3)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 19 timing mismatch"
+      ],
+      "severity": 49
+    },
+    {
+      "measureNumber": 9,
+      "truthMeasureNumbers": [
+        9
+      ],
+      "generatedMeasureNumbers": [
+        9
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 0.7667,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note E2",
+          "measureNumber": 9
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note A#3",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A#3 (expected A3)",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch A3 (expected D3)",
+          "measureNumber": 9
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 9
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 9
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 9 timing mismatch",
+          "measureNumber": 9
+        }
+      ],
+      "summary": [
+        "Missing note E2",
+        "Missing note A#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Incorrect pitch A#3 (expected A3)",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch A3 (expected D3)",
+        "Onset off by 0.5 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 9 timing mismatch"
+      ],
+      "severity": 48
+    },
+    {
+      "measureNumber": 22,
+      "truthMeasureNumbers": [
+        22
+      ],
+      "generatedMeasureNumbers": [
+        21
+      ],
+      "alignment": "match",
+      "unmatched": false,
+      "alignmentCost": 1.3333,
+      "defects": [
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note C4",
+          "measureNumber": 22
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note G3",
+          "measureNumber": 22
+        },
+        {
+          "code": "missing-note",
+          "class": "pitch",
+          "message": "Missing note D#3",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.25 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.5 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch F#3 (expected D#3)",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-pitch",
+          "class": "pitch",
+          "message": "Incorrect pitch D#4 (expected C4)",
+          "measureNumber": 22
+        },
+        {
+          "code": "onset-mismatch",
+          "class": "rhythm",
+          "message": "Onset off by 0.75 quarters",
+          "measureNumber": 22
+        },
+        {
+          "code": "incorrect-barline",
+          "class": "measure-structure",
+          "message": "Incorrect barline / measure length (4q; expected 3q)",
+          "measureNumber": 22
+        },
+        {
+          "code": "measure-timing-mismatch",
+          "class": "playback",
+          "message": "Measure 22 timing mismatch",
+          "measureNumber": 22
+        }
+      ],
+      "summary": [
+        "Missing note C4",
+        "Missing note G3",
+        "Missing note D#3",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.25 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.5 quarters",
+        "Onset off by 0.75 quarters",
+        "Incorrect pitch F#3 (expected D#3)",
+        "Incorrect pitch D#4 (expected C4)",
+        "Onset off by 0.75 quarters",
+        "Incorrect barline / measure length (4q; expected 3q)",
+        "Measure 22 timing mismatch"
+      ],
+      "severity": 47
+    }
+  ],
+  "firstDivergence": {
+    "measureNumber": 1,
+    "truthMeasureNumbers": [
+      1
+    ],
+    "generatedMeasureNumbers": [
+      1
+    ],
+    "alignment": "match",
+    "unmatched": false,
+    "defectCount": 4
+  },
+  "topDefects": [
+    {
+      "code": "onset-mismatch",
+      "class": "rhythm",
+      "label": "Onset timing difference",
+      "count": 166
+    },
+    {
+      "code": "missing-note",
+      "class": "pitch",
+      "label": "Missing note",
+      "count": 63
+    },
+    {
+      "code": "incorrect-pitch",
+      "class": "pitch",
+      "label": "Incorrect pitch",
+      "count": 37
+    },
+    {
+      "code": "measure-timing-mismatch",
+      "class": "playback",
+      "label": "Measure timing mismatch",
+      "count": 33
+    },
+    {
+      "code": "incorrect-barline",
+      "class": "measure-structure",
+      "label": "Incorrect barline",
+      "count": 30
+    },
+    {
+      "code": "duration-mismatch",
+      "class": "rhythm",
+      "label": "Duration mismatch",
+      "count": 15
+    },
+    {
+      "code": "missing-tie",
+      "class": "sustain",
+      "label": "Missing tie",
+      "count": 10
+    },
+    {
+      "code": "extra-note",
+      "class": "pitch",
+      "label": "Extra note",
+      "count": 8
+    },
+    {
+      "code": "incorrect-chord",
+      "class": "measure-structure",
+      "label": "Incorrect chord",
+      "count": 3
+    },
+    {
+      "code": "key-signature-mismatch",
+      "class": "measure-structure",
+      "label": "Key signature mismatch",
+      "count": 1
+    },
+    {
+      "code": "merged-measure",
+      "class": "measure-structure",
+      "label": "Merged measure",
+      "count": 1
+    },
+    {
+      "code": "playback-duration-mismatch",
+      "class": "playback",
+      "label": "Playback duration mismatch",
+      "count": 1
+    },
+    {
+      "code": "repeat-mismatch",
+      "class": "interpretation",
+      "label": "Repeat mismatch",
+      "count": 1
+    },
+    {
+      "code": "split-measure",
+      "class": "measure-structure",
+      "label": "Split measure",
+      "count": 1
+    },
+    {
+      "code": "timeline-mismatch",
+      "class": "playback",
+      "label": "Timeline mismatch",
+      "count": 1
+    }
+  ],
+  "topDefectClasses": [
+    {
+      "class": "rhythm",
+      "label": "Rhythm",
+      "count": 181
+    },
+    {
+      "class": "pitch",
+      "label": "Pitch",
+      "count": 108
+    },
+    {
+      "class": "measure-structure",
+      "label": "Measure structure",
+      "count": 36
+    },
+    {
+      "class": "playback",
+      "label": "Playback",
+      "count": 35
+    },
+    {
+      "class": "sustain",
+      "label": "Sustain (ties)",
+      "count": 10
+    },
+    {
+      "class": "interpretation",
+      "label": "Interpretation",
+      "count": 1
+    }
+  ],
+  "totals": {
+    "truthNoteCount": 362,
+    "generatedNoteCount": 307,
+    "truthRestCount": 0,
+    "generatedRestCount": 0,
+    "truthMeasureCount": 33,
+    "generatedMeasureCount": 33,
+    "defectCount": 371
+  },
+  "tolerances": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "units": "Primary comparison uses normalized quarter-note units (MusicXML duration/divisions). Seconds are used only in performed-playback mode."
+  },
+  "unsupportedFeatures": [
+    "ornaments (trills, turns, mordents)",
+    "fermata / breath marks",
+    "dynamics as scored values (p/f continuum)",
+    "hairpins / wedges",
+    "octave-shift (ottava)",
+    "cue notes / grace-note playback semantics",
+    "cross-staff beaming encoding details",
+    "figured bass / harmony realization",
+    "lyrics / text directions (except D.C./D.S./Fine words)",
+    "multiple <part> alignment beyond primary written sequence",
+    "score-timewise documents",
+    "microtonal / non-MIDI pitch systems"
+  ],
+  "playback": {
+    "truthDurationSeconds": 93.5,
+    "generatedDurationSeconds": 66,
+    "truthWrittenDurationSeconds": 46.75,
+    "generatedWrittenDurationSeconds": 66
+  },
+  "options": {
+    "onsetToleranceQuarters": 0.125,
+    "durationToleranceQuarters": 0.125,
+    "matchWindowQuarters": 0.75,
+    "restMatchWindowQuarters": 0.5,
+    "chordOnsetToleranceQuarters": 0.08,
+    "measureLengthToleranceQuarters": 0.125,
+    "tempoToleranceBpm": 2,
+    "tempoOnsetToleranceQuarters": 0.5,
+    "playbackDurationToleranceSeconds": 0.35,
+    "measureTimingToleranceSeconds": 0.2,
+    "quarterEpsilon": 0.000001,
+    "alignmentGapPenalty": 2.5,
+    "alignmentMaxPairCost": 4.5,
+    "minReliableCoverage": 0.25,
+    "mode": "both",
+    "topDefectLimit": 20,
+    "worstMeasureLimit": 10,
+    "enharmonicPolicy": "midi"
+  }
+}

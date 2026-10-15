@@ -336,6 +336,14 @@ def main() -> int:
                             _xs[_si] = sorted(_newx)
                         _fb = [dict(s, xs=_xs[i]) for i, s in enumerate(_fb)]
                         _tabspans = [(s["top"], s["bot"]) for s in _fb]
+                        # The measure-numbering step indexes sys_bars by the
+                        # `own` system index attached to each note, so the
+                        # respanned list must REPLACE sys_bars, not just the
+                        # span filter. Without this, notes on a page where the
+                        # band detector found a spurious TAB are numbered
+                        # against the band list's intervals - which collapse to
+                        # interval 0 and discard every internal barline.
+                        sys_bars = _fb
                         _led["respan_to"] = len(_fb)
                         _led["modal_bars"] = _modal
                         _led["bars_per_sys"] = [len(s["xs"]) for s in _fb]

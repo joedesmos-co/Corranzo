@@ -689,3 +689,22 @@ fails is TAB glyph recognition under an unseen font. Rests are entirely
 unrecalled (0/6 gt, 0 true positives). A bounded TRAIN-only font
 augmentation is the justified next experiment and must be preregistered
 before running.
+
+### R16 — system-index mismatch FIXED: Txo measures 47.4% -> 77.8%
+DEFECT: the respan block set `_tabspans` (used by the span filter) but
+never replaced `sys_bars`, while measure-numbering indexes sys_bars by the
+`own` system index attached to each note. On a page where the band
+detector found a spurious TAB (blocking the earlier fallback), notes were
+numbered against the BAND list's intervals, which collapse to interval 0 -
+discarding every internal barline. Evidence: p2 systems 1/3/5 each put all
+36-45 notes in interval 0 spanning the full 1400px page.
+
+FIX: `sys_bars = _fb` in the respan, so numbering uses the respanned spans.
+
+TXO: measures 145/306=47.4% -> 238/306=77.8% of matched (238/362=65.7% of
+reference); triple 133/362=36.7% -> 224/362=61.9%; measures emitted 24 -> 33
+(GT has 33); string 100% / fret 93.8% of matched unchanged; corrected
+semantic 52% -> 51% but precision 40% -> 71%, recall 65% -> 70%, align
+89% -> 93%, defects 496 -> 371.
+QMek PRESERVED: 423/423 matched, measure 423/423=100%, triple 389/423=92.0%,
+49 measures (GT 49). No regression.
