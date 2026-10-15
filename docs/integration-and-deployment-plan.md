@@ -1,120 +1,135 @@
 # Integration + deployment plan (Score Following → live website)
 
-Status: **integration VERIFIED, deployment HELD** pending the Practice Engine
-agent's commit (2026-10-14). This document is the durable record so the
-release can be executed exactly when the preview is free.
+Status: **DEPLOYED 2026-10-15.** Live: `https://corranzo.com` (Cloudflare
+version `6aecf1c1-abda-4d9e-9ca3-1d0f01dcc9a0`), rollback target
+`5a2de273-8c2d-4943-96b6-3392624c846c`.
 
 ## Topology (verified, read-only)
 
 ```
 main                     fcdb8d0172   ← official main, never merged to
  └── … 92 commits …      bad9f98e18   ← score-follow final acceptance (merge-base)
-      ├── preview        8cac636a54   codex/unified-practice-audio-preview
-      │                                 (product: sound engine, mic, audio-vision,
-      │                                  OSMD engraving, PDF-first import, practice engine)
-      └── research       f04b96f29b   codex/score-follow-precision  (my 7 commits)
+      ├── preview        579650eee2   codex/unified-practice-audio-preview  ← DEPLOYED
+      │                                 (product + practice-clock fix + ported tie fix
+      │                                  + this integration: timing validation, WFY
+      │                                  fallback, timing warnings, 3 repaired fixtures)
+      └── research       b680fc5cdd   codex/score-follow-precision  (my 8 commits)
 ```
 
-**Live now:** `https://corranzo.com` — HTTP 200, serving a Cloudflare
-deployment from **2026-10-08** (version `5a2de273`, worker `corranzo`).
-Verified live: my user-facing timing warning string ("…more notes than
-fit…") has **0 occurrences** in the live bundle, and the preview's "Note
-guide" mode has 0 occurrences → none of the last week's work (preview or
-score-follow) is live.
+**Live before this release:** a Cloudflare deployment from **2026-10-08**
+(`5a2de273`) — verified in the live bundle that the timing-warning string
+had 0 occurrences and the preview's "Note guide" mode 0 occurrences.
 
-**Deployment process (established):** `npm run deploy:cloudflare` =
-`npm run build && wrangler deploy`, worker `corranzo`, assets from `./dist`
-(`wrangler.toml`). Wrangler is authenticated
-(`joedesmos.co@gmail.com`, account `4c9bb24874cf858b00ece7bde8d1a2ea`).
+**Deployment process (established):** `npm run build` then
+`npx wrangler deploy` in the source tree (worker `corranzo`, assets from
+`./dist`, `wrangler.toml`).
 
-## Verified integration (branch `tmp-integration-verify`, commit `c2d4bf45a9`)
+## What was integrated (the remaining verified Score Following work)
 
-Merged `codex/score-follow-precision` into the preview tip **in the score-follow
-worktree only** (no shared state touched). Two conflicts, both additive and both
-resolved keeping both features:
+The Practice Engine had already ported the **tie-chain duration fix**
+(`41713fdaf2`, both parser and checkpoint layers) and the **practice-clock
+render-loop repair** (`128a91388b` + guard test `2f9750da6e`). This release
+added only what was still missing, so no fix was applied twice:
 
-| file | conflict | resolution |
-|---|---|---|
-| `src/features/musicxml/parseMusicXml.js` | preview adds `pedalSpans`; research adds `partMeasureNoteEnds` | keep **both** — walkPart params, both call sites, both return maps |
-| `scripts/browser-cross-engraving-e2e.mjs` | preview tracks the update-depth warning; research added a duplicate classifier | keep the **preview's** tracking (better provenance), drop the duplicate helper |
+- `src/features/musicxml/timingValidation.js` — automatic timing validation
+  (overfull/unvoiced-flattened/voiced-without-backup/voiced-with-backup)
+- `parseMusicXml.js` plumbing: `partMeasureNoteEnds` + `notatedNoteEndQuarters`
+  + `voiceDefaulted` (the last also used by the ported tie fix)
+- `waitForYouCheckpoints.js`: `splitCrossWrittenMeasureGroups` — the honest
+  per-written-measure WFY fallback that prevents impossible requirements on
+  flagged scores (grand-staff chords stay merged, valid scores untouched)
+- user-facing timing warnings: `useWaitForYou` `timingNotice` +
+  `WaitForYouSection` notice (live string: "This score's file has N measures
+  with more notes than fit…")
+- `canonicalTimingContract.js`: `describeSourceFidelity` reports
+  `timing-invalid:overfull-measures:N`
+- `scoreFollowPrecisionDiagnostics.js`: barline-dust rule (a checkpoint within
+  11 ms of its own written window start is dust, not split-brain overflow)
+- 3 repaired practice-library fixtures with provenance (BWV 846 prelude,
+  Aguado a-minor, BWV 999) — the other 13 flagged files stay flagged
+- tests + harnesses: `timingValidation.test.js`, `tieDurationIntegrity.test.js`,
+  `measure-tie-duration-integrity.mjs`, `measure-unseen-score-acceptance.mjs`,
+  `measure-holdout-pdf-acceptance.mjs`, `verify-live-deployment.mjs`
 
-Two integration fixes made during verification:
-- `scripts/browser-pdf-first-import-e2e.mjs` — the preview's handler tracked
-  the update-depth warning **and** pushed it into `consoleErrors`, so its own
-  strict gate failed on a warning it explicitly calls "tracked". Added the
-  `return` the comment already described. The warning is still collected and
-  printed on every run (`TRACKED update-depth warning fired …`).
-- `tests/audioArrangementMusicXml.test.js` — comment only: the Audio Vision
-  arrangement generator emits overfull measures (`timingValidation: invalid`),
-  and a *stale* staging artifact made bar 1's last G4 and bar 2's first G4
-  collide, which the WFY fallback correctly splits into two checkpoints.
-  The current generator's output does not collide, so the count stays 8/8.
-  **Handoff to Audio Vision:** the generator packs more content per measure
-  than the time signature holds.
+Merge: `codex/score-follow-precision` → `codex/unified-practice-audio-preview`
+(`579650eee2`). Two additive conflicts, both resolved keeping both features
+(preview's `pedalSpans` + research's `partMeasureNoteEnds`; kept the preview's
+update-depth tracking in the cross-engraving harness with the `return` its own
+comment already describes). The resulting tree is byte-identical
+(`4a8ff89fd8…`) to the integration verified in the score-follow worktree.
+Official main was not touched.
 
-Full diff saved at `<tmp>/integration-fixes.patch` (611 KB) for re-application
-if the preview tip moves before the merge.
-
-## Verification on the merged tree (all green)
+## Verification matrix (all green on the integrated tree)
 
 | check | result |
 |---|---|
-| unit suite (`vitest run`) | **3769 passed / 0 failed** (5 heavy neural browser suites excluded for memory — see below) |
-| `npm run build` | green (1.9 s) |
+| unit suite (`vitest run`, 5 heavy neural browser suites excluded for memory) | **3771 passed / 0 failed** |
+| `npm run build` | green |
 | `npm run test:scripts` | green |
-| `browser-pdf-first-import-e2e` (PDF upload, render, playback, session save/restore, legacy restore) | **17/17** |
-| `browser-practice-score-follow-e2e` (Preview, WFY correct/wrong/partial-chord/duplicate, Play Along, cursor, zoom) | **17/17** |
+| `browser-pdf-first-import-e2e` (PDF import, render, playback, session save/restore, legacy restore) | **17/17** |
+| `browser-practice-score-follow-e2e` (Preview, WFY, Play Along, cursor, transitions) | **17/17** |
 | `browser-unified-practice-midi-e2e` (MIDI WFY, transport, seek, loop, score change) | **26/26** |
-| `browser-unified-practice-mic-e2e` (real mic clips, mic init) | **23/23**, 0 known-pre-existing warnings |
+| `browser-unified-practice-mic-e2e` (mic init, real clips) | **23/23** (1 skipped), 0 warnings |
 | `browser-tempo-acceptance-e2e` | **5/5** |
+| `browser-cross-engraving-e2e` (real PDF pairs, WFY lock, seek/zoom) | **7/7** |
 | `browser-score-follow-precision-e2e` (pixel onset lock) | **9/9** |
+| `browser-engraved-arrangement-e2e` (Audio Vision engraved practice, WFY advance) | **11/11** |
 | `measure-tie-duration-integrity` | **11/11** |
 | `measure-unseen-score-acceptance` (incl. holdout PDFs) | **35/35** |
 | `measure-score-follow-precision` (24 scores) | **24/24**, 0 wrong-page/system/NaN/teleports |
 | `measure-cross-engraving` (2 real PDF pairs) | 0.0105 / 0.0208 page, overflow 0 |
+| **live deployment verification** (`verify-live-deployment.mjs` against corranzo.com) | **8/8** |
 
-Note: the 7 UI-copy failures documented on the research branch are **closed** on
-the preview (`b864d27a0b`), so the merged tree has zero pre-existing failures.
+## React "Maximum update depth" — resolved, verified effective
 
-Environment note: the preview added `opensheetmusicdisplay` (OSMD engraving) —
-declared in `package.json`/`package-lock.json` but **not installed** in the
-score-follow worktree, which broke the build and made Vite return 500 for
-`PracticeView.jsx`. `npm install` fixes it (lock file unchanged). Any checkout
-that builds the preview line must install its dependencies.
+The Practice Engine repaired the render loop (`128a91388b`) and added a guard
+that asserts the failing invariant (`tests/practiceClockIdentity.test.js`).
+On the integrated and deployed tree the PDF-first-import and cross-engraving
+browser suites both report **"no update-depth warning in this run"**, and the
+practice/mic suites report 0 occurrences. Nothing is suppressed: the
+cross-engraving harness still tracks and reports any occurrence.
 
-## React "Maximum update depth" — investigated, not blocking
+## Audio Vision compatibility
 
-- Fires **2× during score open/import** (step `open-score`) in the PDF-first
-  import flow; tracked and printed every run.
-- **No blocking practice failure**: every functional assertion in that suite
-  passes (PDF renders, playback, session restore, no uncaught page errors), and
-  the practice + mic browser suites report **0 occurrences** (the preview's
-  `c710b5a611` lane-identity fix removed the Play Along loop).
-- Also reproduces at the research tip with my changes stashed / notice disabled
-  / fallback disabled; stack is the practice clock (`PracticeSessionContext` RAF
-  tick + `useScorePlayback` `flushTimeUpdate`), not the follow layer.
-- Still open as an issue-ledger item; not hidden anywhere.
+The Audio Vision arrangement generator emits measures that notate more content
+than the time signature holds, so both targets are correctly flagged
+`timingValidation: invalid`. No practice regression: checkpoint counts
+unchanged (8/8), **0 impossible cross-measure requirements**, TAB mirrors
+preserved (9/9), written duration preserved. The engraved-arrangement browser
+flow passes 11/11 including WFY advancing on the correct note.
+**Upstream handoff (Audio Vision owner):** fix the generator's measure packing
+so bar N's content fits bar N's time signature — the follow layer flags it
+honestly rather than guessing.
 
-## Steps to execute when the preview is free
+## Saved-data safety
 
-1. Wait for the Practice Engine agent to commit on
-   `codex/unified-practice-audio-preview` (currently uncommitted:
-   `AnnotationLayer.jsx`, `PdfPageFrame.jsx`, `useScorePlayback.js`).
-2. Re-do the merge from that new tip (2 additives; re-apply
-   `<tmp>/integration-fixes.patch` conflicts if the tip moved).
-3. Re-run: build, unit suite, and the six browser suites + four node harnesses
-   in the table above.
-4. Deploy from the integrated branch: `npm run build && npx wrangler deploy`.
-5. Verify live: `curl -s https://corranzo.com` → 200; then in the app confirm
-   PDF import, Preview, WFY (MIDI), Play Along, a saved score, and that the live
-   bundle now contains the timing-warning string ("more notes than fit").
-6. Rollback: Wrangler keeps prior versions — `npx wrangler deployments list`,
-   then `npx wrangler rollback <version-id>`; the current live version
-   `5a2de273` is the known-good fallback.
+No storage-schema changes. Session save/restore, legacy restore, and
+PDF-identity persistence suites pass; `verify-live-deployment` confirms
+localStorage state persists and restores on the live site. Nothing was
+deleted or migrated.
 
-## Data safety
+## Rollback
 
-No schema/storage changes in this integration; session save/restore and legacy
-restore suites pass, and saved-session assertions are covered by the
-PDF-first-import suite (session saved with its PDF identity, session restores,
-legacy restore explained).
+Wrangler keeps versions. Current live: `6aecf1c1-abda-4d9e-9ca3-1d0f01dcc9a0`.
+To roll back:
+```
+npx wrangler deployments list          # find the version id
+npx wrangler rollback 5a2de273-8c2d-4943-96b6-3392624c846c
+```
+The code rollback is `git revert 579650eee2` on the preview branch
+(the integration is a single merge commit).
+
+## What to test personally on https://corranzo.com
+
+1. **PDF import** (Import → choose a PDF, optionally a matching MusicXML in
+   Advanced) — the PDF should render and open in Practice.
+2. **Preview** — press Play; the cursor should follow and Pause freezes it.
+3. **Wait For You** with a MIDI keyboard — correct/wrong/partial-chord notes,
+   and that a chord keeps all required boxes.
+4. **Tied notes** — a tied pair should behave as one long note (one required
+   box; the sustain bar spans both written notes).
+5. A score from the library that is **flagged** (e.g. Chopin mazurka, Aguado
+   op03-*, Tchaikovsky) — WFY should ask for one measure's notes at a time and
+   show the "more notes than fit" notice, instead of requiring two measures at
+   once.
+6. **Saved scores** — open a score, reload the page, and confirm it restores.
