@@ -1753,3 +1753,78 @@ measured on 180 TRAIN-side strips:
   MusicXML (render + scan domain pair), which would give per-strip symbol
   boxes without needing scan annotations. Until then key signatures on
   scans stay unrecognized and key application stays off.
+
+
+---
+
+# Scan-to-notation alignment: render registration reaches ~1-gap precision; supervision still insufficient
+
+From `5e1b63a54e`. No merge, TEST sealed, baseline untouched (re-verified:
+607/902 complete events, page pitch 0.8681, duration 0.7273, rest P
+1.000/R 0.296, measures 0.979, MusicXML 5/5). Per M5 no training was run.
+
+## M1 render of matched MusicXML
+
+Each OLiMPiC strip (p1-s1.musicxml) renders with the local Verovio
+toolkit; the render exposes EXACT key-signature accidental positions in
+keyAccid groups plus staff line geometry.
+
+## M2 staff-relative alignment
+
+Per strip: render staves vs scan frames matched per-staff (the render
+packs several staves per page while a scan strip is one system, so plain
+index matching abstained 26/28 - fixed by grouping the render's accidentals
+per staff and mapping render staff i to scan frame i). Each scan staff gets
+a per-line curvature model (y sampled at 64 x-offsets), so skew/curvature is
+handled for the vertical mapping. The horizontal mapping was rebuilt twice:
+  1. u-fraction over each frame's x-extent: failed badly (dx median 15.3
+     gaps) because render frames are wide incl. indent while scan strips
+     are tightly cropped and the key signature sits at 15% of the render
+     width vs 2% of the scan width.
+  2. clef-relative gap units: dx median 15.3 -> 0.866 gaps.
+
+## M3 ink-verified transfer
+
+Labels transfer only when the mapped scan window contains ink (>= 0.12);
+46 candidates passed before the per-staff mapping, 30 after; 18-7 rejected
+as no-ink. MusicXML accidentals never create invisible symbols.
+
+## M4 confidence ledger (reports/align_precision.json, 36 TRAIN-side strips)
+
+  count agreement (render accidental count == scan blob count): 8/36 strips
+  abstentions: 63 candidates had no corresponding scan frame
+  localization error on the 17 paired labels: dx median 0.87 gaps
+    (p90 1.57), dy median 0.97 gaps (p90 1.97)
+  within 0.5 gap: 11.8%; within 1.0 gap: 23.5%
+  Usable trustworthy labels: 0 at the required precision (a symbol crop
+    needs < ~0.4 gaps since neighbouring accidentals sit 1 gap apart)
+
+Overlays: reports/align_overlays/*.png show the mapped windows landing
+within about one accidental of the true glyph - direction right, precision
+not.
+
+## M5 stop-and-report (per the mission rule)
+
+  Trustworthy scan symbol labels remain ~0: count alignment holds on only
+  22% of strips and positional error is ~1 gap. NO TRAINING on this
+  supervision. The previous 27-label set stands as the best available and
+  remains unused.
+
+## M6 layout/quality assumptions audited
+
+  all geometry staff-relative (gaps), no page dimensions; clef-relative
+  horizontal mapping removes the indent/crop assumption; curvature models
+  absorb non-linear distortion; staff-count and frame mismatches abstain
+  rather than guess; unreliably aligned strips are reported as abstentions
+  (63 this run) instead of being transcribed silently. Key-signature
+  application remains OFF.
+
+## Remaining blockers
+
+  The binding constraint is now precise: render-to-scan registration
+  precision (~1 gap) and count agreement (22%). Closing it needs either
+  (a) optical-flow/point registration over the whole staff (beyond a
+  bounded session) or (b) scan-style augmentation of the render symbol
+  crops (measured 4px lines, speckle, curvature) to attack the domain gap
+  without scan supervision. Next milestone: (b) as a bounded,
+  preregistered experiment.
