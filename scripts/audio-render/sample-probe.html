@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>sample probe</title>
+</head>
+<body>
+  <main>bundled sample bandwidth probe</main>
+  <script type="module">
+    import * as Tone from 'tone'
+    window.__Tone = Tone
+
+    /**
+     * Raw PCM for one sample, for pitch verification. Returns a plain
+     * array so the Node side can measure it with the same f0 routine the
+     * render suite uses.
+     */
+    window.__samplePcm = async function (set, note) {
+      const dir = set === 'piano' ? 'salamander' : set
+      const holder = await new Promise((resolve, reject) => {
+        const b = new Tone.ToneAudioBuffers({
+          urls: { [note]: `${note}.mp3` },
+          baseUrl: `/audio/${dir}/`,
+          onload: () => resolve(b),
+          onerror: reject,
+        })
+        setTimeout(() => reject(new Error('timeout')), 20000)
+      })
+      const buffer = holder.get(note).get()
+      const channel = buffer.getChannelData(0)
+      return {
+        sampleRate: buffer.sampleRate,
+        durationSeconds: buffer.duration,
+        samples: Array.from(channel),
+      }
+    }
+
+    window.__sampleProbe = async function (sets) {
+      const out = {}
+      for (const [set, notes] of Object.entries(sets)) {
+        out[set] = []
+        for (const note of notes) {
+          const holder = await new Promise((resolve, reject) => {
+            const b = new Tone.ToneAudioBuffers({
+              urls: { [note]: `${note}.mp3` },
+              baseUrl: `/audio/${set === 'piano' ? 'salamander' : set}/`,
+              onload: () => resolve(b),
+              onerror: reject,
+            })
+            setTimeout(() => reject(new Error('timeout')), 15000)
+          })
+          const buffer = holder.get(note).get()
+          const channel = buffer.getChannelData(0)
+          const sr = buffer.sampleRate
+          const start = Math.floor(0.15 * sr)
+          const n = Math.min(8192, channel.length - start)
+          const real = new Float64Array(n)
+          for (let i = 0; i < n; i += 1) {
+            const phase = i / (n - 1)
+            real[i] = channel[start + i] * (0.5 - 0.5 * Math.cos(2 * Math.PI * phase))
+          }
+          const powerAt = (freq) => {
+            let re = 0
+            let im = 0
+            for (let i = 0; i < n; i += 1) {
+              const angle = (-2 * Math.PI * freq * i) / sr
+              re += real[i] * Math.cos(angle)
+              im += real[i] * Math.sin(angle)
+            }
+            return Math.sqrt(re * re + im * im)
+          }
+          const freqs = [100, 200, 400, 800, 1200, 2000, 3000, 4000, 6000, 8000, 10000, 12000, 14000, 16000]
+          const powers = freqs.map(powerAt)
+          const total = powers.reduce((a, b) => a + b, 0)
+          const beyond = (cutoff) =>
+            freqs.reduce((sum, f, index) => (f >= cutoff ? sum + powers[index] / total : sum), 0)
+
+          let peak = 0
+          for (let i = 0; i < Math.min(channel.length, 200000); i += 1) {
+            const a = Math.abs(channel[i])
+            if (a > peak) peak = a
+          }
+          out[set].push({
+            note,
+            sampleRate: sr,
+            durationSeconds: Number(buffer.duration.toFixed(2)),
+            peak: Number(peak.toFixed(4)),
+            energyBelow4k: Number((1 - beyond(4000)).toFixed(3)),
+            energyAbove8k: Number(beyond(8000).toFixed(3)),
+            energyAbove12k: Number(beyond(12000).toFixed(3)),
+          })
+        }
+      }
+      return out
+    }
+  </script>
+</body>
+</html>

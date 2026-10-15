@@ -2,13 +2,32 @@
  * Electric guitar playback voice (clean tone) — configuration over the
  * shared sampled-voice engine.
  *
+/**
  * Same architecture as the acoustic voice: a plucked synth fallback
- * sounds immediately; sampled clean electric guitar loads lazily from
- * the same-origin mirror (CDN fallback) and takes over when decoded.
+ * sounds immediately; sampled clean electric guitar loads lazily from the
+ * same-origin mirror (CDN fallback) and takes over when decoded.
  *
- * Samples: nbrosowsky/tonejs-instruments guitar-electric, CC-BY-3.0
- * (see app credits). Only a CLEAN tone is provided — crunch and
- * distortion are documented as unsupported (no honest sample source).
+ * Samples: "Emilyguitar" by Karoryfer Lecolds (D. Smolken, 2014),
+ * published under the CC0-1.0 public domain dedication at
+ * github.com/sfzinstruments/karoryfer.emilyguitar. CC0 needs no
+ * attribution and permits commercial redistribution; it is credited in the
+ * Terms page anyway, as courtesy.
+ *
+ * License history: these files previously came from nbrosowsky/
+ * tonejs-instruments, whose repository labels its samples CC-BY-3.0 but
+ * whose own sample-source-info.txt credits the electric guitar set to
+ * Karoryfer — a commercial sample vendor whose terms for that specific set
+ * could not be confirmed. A wrapper's blanket license claim does not
+ * override the originating owner's terms, so the set was replaced with one
+ * whose licence is verifiable directly from the owner. Docs in
+ * docs/SOUND_ENGINE_RESEARCH.md record the evidence chain.
+ *
+ * All 17 keys below are Emilyguitar pitches used unshifted — verified by
+ * tests/samplePitchCoverage.test.js, which measures every mapped file
+ * through the app's own decode path and fails on an octave-style
+ * mislabel (the defect class an earlier guitar-acoustic audit found).
+ * Only a CLEAN tone is provided — crunch and distortion are documented as
+ * unsupported (no honest sample source).
  */
 
 import {
@@ -31,16 +50,22 @@ export const VOICE_ID = 'electric-guitar'
 export const LOCAL_ELECTRIC_GUITAR_SAMPLE_BASE_URL = '/audio/guitar-electric/'
 
 /**
- * Public, CORS-enabled clean electric guitar samples
- * (nbrosowsky/tonejs-instruments, CC-BY-3.0 — see app credits).
+ * CC0-1.0 source of the bundled files, for provenance only.
  *
- * Verified 2026-10-09 by spectral analysis of every file: all 17 keys
- * below are true pitches (±6¢, Fs5 +17¢). Missing E3/E4/E5/G/B notes
- * pitch-shift from neighbors (≤2 semitones below E5; E5+ shifts from
- * the top keys — disclosed high-register degradation).
+ * The upstream WAVs are NOT a drop-in replacement for the bundled mp3s:
+ * they are named by pitch AND velocity layer (`a3_mf_rr1.wav`) and hold
+ * every round robin, so they cannot be addressed by our note-keyed map.
+ * No cross-origin fallback is therefore configured.
+ *
+ * That is deliberate and load-bearing: the previous fallback pointed at
+ * nbrosowsky/tonejs-instruments, the set whose Karoryfer provenance could
+ * not be verified, so a same-origin load failure would have silently
+ * re-introduced the unverified samples. Without a fallback the voice stays
+ * on the synthesised plucked tone and reports SYNTH status honestly, which
+ * is the correct trade for an uncertain licence.
  */
-export const DEFAULT_ELECTRIC_GUITAR_SAMPLE_BASE_URL =
-  'https://nbrosowsky.github.io/tonejs-instruments/samples/guitar-electric/'
+export const ELECTRIC_GUITAR_SAMPLE_SOURCE_URL =
+  'https://github.com/sfzinstruments/karoryfer.emilyguitar'
 
 export const ELECTRIC_GUITAR_SAMPLE_URLS = {
   E2: 'E2.mp3',
@@ -87,8 +112,12 @@ export function resolveElectricGuitarSampleBaseUrl(explicit) {
   return resolveSampleBaseUrl(explicit)
 }
 
+/**
+ * Intentionally null — see ELECTRIC_GUITAR_SAMPLE_SOURCE_URL. There is no
+ * cross-origin fallback for this set by design.
+ */
 export function getElectricGuitarSampleFallbackBaseUrl() {
-  return DEFAULT_ELECTRIC_GUITAR_SAMPLE_BASE_URL
+  return null
 }
 
 /**
@@ -173,7 +202,7 @@ export const preloadSampleBuffers = preloadElectricGuitarSampleBuffers
 export function createElectricGuitarInstrument(options = {}) {
   const {
     sampleBaseUrl,
-    sampleFallbackBaseUrl = getElectricGuitarSampleFallbackBaseUrl(),
+    sampleFallbackBaseUrl,
     sampleUrls = ELECTRIC_GUITAR_SAMPLE_URLS,
     sampledVolume = SAMPLED_VOLUME_DB,
     synthVolume = SYNTH_VOLUME_DB,
@@ -185,7 +214,7 @@ export function createElectricGuitarInstrument(options = {}) {
     sampleBaseUrl: resolveSampleBaseUrl(sampleBaseUrl),
     sampleFallbackBaseUrl,
     sampleUrls,
-    sampleSetName: 'guitar-electric-clean-verified',
+    sampleSetName: 'emilyguitar-cc0',
     voiceId: VOICE_ID,
     sampledVolume,
     synthVolume,

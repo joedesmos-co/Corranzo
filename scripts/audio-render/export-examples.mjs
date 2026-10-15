@@ -125,6 +125,75 @@ const EXAMPLES = [
     ),
     instrumentId: 'piano',
   },
+  // ── Human listening set ───────────────────────────────────────────────────
+  // The categories a musician actually asks about: a melody they can follow,
+  // chords, and the two guitars. Rendered from the CURRENT samples, so these
+  // files always describe what is shipped.
+  {
+    name: 'listening-piano-melody',
+    voice: 'piano',
+    notes: [
+      { name: 'C4', time: 0.2, duration: 0.5, velocity: 0.72 },
+      { name: 'E4', time: 0.7, duration: 0.5, velocity: 0.72 },
+      { name: 'G4', time: 1.2, duration: 0.5, velocity: 0.78 },
+      { name: 'C5', time: 1.7, duration: 1.0, velocity: 0.86 },
+    ],
+    tailSeconds: 2.0,
+  },
+  {
+    name: 'listening-piano-chords',
+    voice: 'piano',
+    notes: [
+      { name: 'C4', time: 0.2, duration: 1.0, velocity: 0.85 },
+      { name: 'E4', time: 0.2, duration: 1.0, velocity: 0.85 },
+      { name: 'G4', time: 0.2, duration: 1.0, velocity: 0.85 },
+      { name: 'C5', time: 0.2, duration: 1.0, velocity: 0.85 },
+      { name: 'F4', time: 1.6, duration: 1.0, velocity: 0.7 },
+      { name: 'A4', time: 1.6, duration: 1.0, velocity: 0.7 },
+      { name: 'C5', time: 1.6, duration: 1.0, velocity: 0.7 },
+      { name: 'F5', time: 1.6, duration: 1.0, velocity: 0.7 },
+    ],
+    tailSeconds: 2.5,
+  },
+  {
+    name: 'listening-piano-pp-to-ff',
+    voice: 'piano',
+    notes: [
+      { name: 'C4', time: 0.2, duration: 0.8, velocity: 0.36 },
+      { name: 'C4', time: 1.1, duration: 0.8, velocity: 0.58 },
+      { name: 'C4', time: 2.0, duration: 0.8, velocity: 0.75 },
+      { name: 'C4', time: 2.9, duration: 0.8, velocity: 0.92 },
+      { name: 'C4', time: 3.8, duration: 1.2, velocity: 0.98 },
+    ],
+    tailSeconds: 2.5,
+  },
+  {
+    name: 'listening-acoustic-guitar-melody',
+    voice: 'guitar',
+    notes: [
+      { name: 'E3', time: 0.2, duration: 0.7, velocity: 0.8 },
+      { name: 'G3', time: 1.0, duration: 0.7, velocity: 0.8 },
+      { name: 'B3', time: 1.8, duration: 0.7, velocity: 0.8 },
+      { name: 'E4', time: 2.6, duration: 1.4, velocity: 0.88 },
+    ],
+    tailSeconds: 2.5,
+  },
+  // The top two piano keys used to emit ~+150 cents because the bundled
+  // C8 sample is sharp and both notes derived from it. They now shift up
+  // from A7 and land near +39 cents. Listen against these keys on a known
+  // instrument.
+  {
+    name: 'listening-piano-top-octave',
+    voice: 'piano',
+    notes: [
+      { name: 'G#7', time: 0.2, duration: 0.8, velocity: 0.8 },
+      { name: 'A7', time: 1.1, duration: 0.8, velocity: 0.8 },
+      { name: 'A#7', time: 2.0, duration: 0.8, velocity: 0.8 },
+      { name: 'B7', time: 2.9, duration: 1.0, velocity: 0.8 },
+      { name: 'C8', time: 4.2, duration: 1.2, velocity: 0.8 },
+    ],
+    tailSeconds: 2.5,
+  },
 ]
 
 function writeWavMono16(filePath, samples, sampleRate) {

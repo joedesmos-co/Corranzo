@@ -37,11 +37,37 @@ export const DEFAULT_PIANO_SAMPLE_BASE_URL = LOCAL_PIANO_SAMPLE_BASE_URL
  * The recorded sample pitches in the Salamander set are A, C, D# (`Ds`) and F#
  * (`Fs`). The KEY of each entry must be the sample's TRUE pitch, because
  * Tone.Sampler pitch-shifts every played note from its nearest key. A previous
- * map mislabeled the D# recordings (`Ds*.mp3`) as `C#`, so a quarter of the
- * keyboard was resampled up to ~2 semitones off-pitch — the piano sounded
- * detuned. Keys now match the filenames (`D#n` → `Dsn.mp3`), so playback is in
- * tune again. Every played note is still within ~1.5 semitones of a recording,
- * and the set stays lazy-loaded (not in the JS bundle).
+  * map mislabeled the D# recordings (`Ds*.mp3`) as `C#`, so a quarter of the
+  * keyboard was resampled up to ~2 semitones off-pitch — the piano sounded
+  * detuned. Keys now match the filenames (`D#n` → `Dsn.mp3`), so playback is in
+  * tune again. Every played note is still within ~1.5 semitones of a recording,
+  * and the set stays lazy-loaded (not in the JS bundle).
+  *
+  * EXCEPTION — `C8` is deliberately NOT mapped. See below.
+  */
+
+/**
+ * `C8.mp3` exists on disk but is intentionally absent from this map.
+ *
+ * Measured emitted-playback pitch across the whole compass
+ * (`scripts/audio-render/pitch-compass.mjs`): MIDI 21–100 all land within
+ * −14…+22 cents, and the top is wrong. `C8.mp3`'s own content sits ~1.4
+ * semitones above its label, so the sample is sharp AND it drags every
+ * note Tone derives from it — B7 and C8 both emitted at roughly +150
+ * cents, i.e. the wrong note.
+ *
+ * With `C8` unmapped, those two notes shift up from `A7` instead (+2 and
+ * +3 semitones) and land near +39 cents. That costs more pitch-shifting
+ * than the 1.5-semitone bar `pianoSampleCoverage` enforces elsewhere, so
+ * `reportPianoKeyboardCoverage().extremeTranspose` now flags the top of
+ * the compass by design rather than silently.
+ *
+ * The cost was measured before choosing: `top-octave-cost.mjs` compares
+ * the direct C8 recording against A7 shifted up to C8. The shifted
+ * substitute is actually BRIGHTER (4–10 kHz share 0.325 vs 0.114) because
+ * the direct file is low-heavy — consistent with it being a mislabelled
+ * recording rather than a real C8. So this trades an inaudible-in-name
+ * mislabel for a larger, honest shift with better spectral balance.
  */
 export const PIANO_SAMPLE_URLS = {
   A0: 'A0.mp3',
@@ -73,7 +99,6 @@ export const PIANO_SAMPLE_URLS = {
   'D#7': 'Ds7.mp3',
   'F#7': 'Fs7.mp3',
   A7: 'A7.mp3',
-  C8: 'C8.mp3',
 }
 
 const SAMPLED_VOLUME_DB = -10

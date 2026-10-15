@@ -86,6 +86,10 @@ window.__renderApi = {
     window.__renderVoice = null
     const engineType = voice?.isUsingSampler?.() ? 'sampler' : 'synth'
     const techniqueError = voice?.getLastTechniqueError?.() ?? null
+    // Captured BEFORE dispose — dispose tears the voice down and would
+    // report an empty/edge state.
+    const voiceDiagnostics = voice?.getVoiceDiagnostics?.() ?? null
+    const sampleCoverage = voice?.getSampleCoverage?.() ?? null
     try {
       voice?.dispose?.()
     } catch {
@@ -96,6 +100,8 @@ window.__renderApi = {
       samples: Array.from(channel),
       engineType,
       techniqueError,
+      voiceDiagnostics,
+      sampleCoverage,
     }
   },
 

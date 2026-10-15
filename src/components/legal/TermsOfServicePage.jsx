@@ -1,5 +1,24 @@
 import LegalPage from './LegalPage.jsx'
 import { BETA_LABEL } from '../../features/beta/betaInfo.js'
+import { SOUND_CREDITS } from '../../features/legal/legalInfo.js'
+
+function renderCredits() {
+  if (!SOUND_CREDITS?.length) {
+    return null
+  }
+  return (
+    <ul>
+      {SOUND_CREDITS.map((credit) => (
+        <li key={credit.work}>
+          {credit.work} by {credit.author} — {credit.license}.
+          {credit.attributionRequired
+            ? ' Used under its attribution licence.'
+            : ' Redistributed with thanks.'}
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 export default function TermsOfServicePage() {
   return (
@@ -47,21 +66,18 @@ export default function TermsOfServicePage() {
         <h2>Sound credits</h2>
         <p>
           Corranzo&apos;s instrument playback uses the following third-party sample
-          libraries, each under a Creative Commons Attribution 3.0 Unported
-          (CC&nbsp;BY&nbsp;3.0) license. We thank their creators; the samples may
-          have been trimmed, level-matched, or transcoded for playback, which
-          does not change their license.
+          libraries. We thank their creators; the samples may have been trimmed,
+          level-matched, or transcoded for playback, which does not change
+          their license.
         </p>
-        <ul>
-          <li>
-            Salamander Grand Piano by Alexander Holm (Yamaha C5 recordings) —
-            CC&nbsp;BY&nbsp;3.0.
-          </li>
-          <li>
-            Acoustic and clean electric guitar samples by Nicholaus P. Brosowsky,
-            from the tonejs-instruments project — CC&nbsp;BY&nbsp;3.0 (code MIT).
-          </li>
-        </ul>
+        {renderCredits()}
+        <p>
+          Clean electric guitar samples come from &ldquo;Emilyguitar&rdquo;, an
+          Epiphone Emily the Strange guitar played and mapped by D.&nbsp;Smolken
+          for Karoryfer Lecolds, released under the CC0&nbsp;1.0 public domain
+          dedication. Acoustic guitar samples were recorded by the University
+          of Iowa Electronic Music Studios and published without restriction.
+        </p>
       </section>
 
       <section>
