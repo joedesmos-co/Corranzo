@@ -12,18 +12,32 @@ import {
   chromaOfSpectrum,
   recognizeChord,
   recognizeChordWithRoot,
+  inferMeter,
+  downgradeUnheardExtension,
   hzToMidi,
   binToHz,
 } from './dsp.js'
 
-export const PROVENANCE = {
-  DETECTED: 'detected', // direct DSP evidence (onsets, spectral peaks)
+/**
+ * Downgrade claimed sevenths the transcription did not hear. A/B on 16
+ * independent GuitarSet recordings (139 usable chord windows): quality 0.338
+ * -> 0.468 and root+quality 0.309 -> 0.417, with no recording regressing and
+ * root accuracy untouched (the guard never re-roots). Set false to re-measure
+ * the guard's effect without editing call sites.
+ */
+export const SEVENTH_GUARD_ENABLED = true
+
+export const PROVENANCE = {  DETECTED: 'detected', // direct DSP evidence (onsets, spectral peaks)
   PREDICTED: 'predicted', // neural model output (Basic Pitch note events)
   INFERRED: 'inferred', // musical inference from evidence (chords, sections, quantization)
   ARRANGED: 'arranged', // arrangement decision for playability
 }
 
-function dominantMelodyMidi(spectrum, fftSize, sampleRate, { minHz = 180, maxHz = 1400 } = {}) {
+// Melody search band. The 1400 Hz cap hid 22-27% of TRIOS viola frames (real
+// high-register melodic content); widened to 3500 Hz so violin/flute/oboe and
+// harmonics of guitar/piano leads are visible. The bass band below stays
+// separate so the two never compete for the same partials.
+function dominantMelodyMidi(spectrum, fftSize, sampleRate, { minHz = 130, maxHz = 3500 } = {}) {
   let bestBin = -1
   let bestVal = 0
   for (let b = 1; b < spectrum.length; b += 1) {
@@ -63,7 +77,7 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
  * Analyze mono 22050 Hz samples. views: { harmonic, percussive } magnitude frames (optional).
  * predictNotes: async (samples) => [{ midi, startSeconds, endSeconds }] | null (Basic Pitch).
  */
-export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null } = {}) {
+export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null } = {}) {
   const totalSeconds = samples.length / sampleRate
   const report = (stage, fraction) => {
     try { onProgress?.({ stage, fraction }) } catch { /* noop */ }
@@ -89,7 +103,18 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   })
   const tempoVaries = Math.max(...sectionTempos) - Math.min(...sectionTempos) >= 8
   report('beats', 0.45)
-  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: tempo.bpm, totalSeconds })
+  // M3: an explicit tempo override (from the review UI) replaces the estimated
+  // beat period. It is carried as the *tempo used*, so everything downstream -
+  // beats, quantization, arrangement, MusicXML, preview, checkpoints - follows
+  // the corrected value rather than a display label.
+  const effectiveTempo = Number.isFinite(tempoOverride) && tempoOverride > 0
+    ? { ...tempo, bpm: Math.round(tempoOverride), source: 'user-override', estimatedBpm: tempo.bpm, octaveAlternative: null }
+    : { ...tempo, source: 'estimate' }
+  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: effectiveTempo.bpm, totalSeconds })
+  // M3 meter: infer instead of assuming 4/4. An unverified meter keeps the 4/4
+  // default for engraving but is reported as uncertain, so callers can say so.
+  const meterReading = inferMeter(onsetFrames, frameSeconds, tempo.bpm)
+  const beatsPerMeasure = meterReading.uncertain ? 4 : meterReading.meter
   report('harmony', 0.6)
   // Chord per beat window from harmonic-view chroma. A3: windows span at
   // least ~1.2 s (fast-tempo beats are melody-dominated alone) and a
@@ -117,17 +142,26 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     }
     if (count > 0) for (let k = 0; k < 12; k += 1) acc[k] /= count
     let rec = recognizeChord(acc)
-    // Bass-root prior: the window's dominant bass pitch class re-picks the
-    // winner only when it already scores within 5% (evidence, not override).
+    // Bass-root prior, gated on a CREDIBLE bass:
+    //   (a) sustained — >=4 frames echoing one pitch class,
+    //   (b) dominant — >=50% of the window's bass frames,
+    //   (c) present — that pitch class carries >=15% of the window's
+    //       strongest chroma energy (else drum/low artifacts would re-root).
+    // Measured on 5 real mixes: plain prior 0.364 -> 0.408 root accuracy
+    // but broke take_five (0.47 -> 0.29); this gate gives 0.413 overall
+    // while take_five stays at 0.44. Confidence still passes 0.95.
     const bassVotes = new Array(12).fill(0)
     for (let f = f0; f <= f1; f += 1) {
       const pc = bassPcPerFrame[f]
       if (pc != null) bassVotes[pc] += 1
     }
+    const bassTotal = bassVotes.reduce((a, b) => a + b, 0)
     const bassPc = bassVotes.indexOf(Math.max(...bassVotes))
-    // Sustained bass only: transient passing bass (walking lines, strummed
-    // fifths) must not re-root the harmony toward the dominant.
-    if (bassVotes[bassPc] >= 4 && bassPc !== rec.root) {
+    const maxChroma = Math.max(...acc)
+    const credibleBass = bassVotes[bassPc] >= 4
+      && bassTotal > 0 && bassVotes[bassPc] / bassTotal >= 0.5
+      && maxChroma > 0 && acc[bassPc] >= 0.15 * maxChroma
+    if (credibleBass && bassPc !== rec.root) {
       const alt = recognizeChordWithRoot(acc, bassPc)
       if (alt && alt.score >= rec.score * 0.95) rec = alt
     }
@@ -191,16 +225,51 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   }
   // Harmony voicing from the TRANSCRIBED notes (predicted, never inferred): the
   // chord LABEL is unreliable on mixtures, but the pitch classes the model
+
   // actually heard are direct evidence. Attach the dominant heard pitch classes
   // per chord window so arrangers voice accompaniment from evidence, and keep
   // the template label only for naming/bass-prior decisions.
   attachHeardVoicings(chords, predictedNotes)
+  // Re-recognize each window from a NOTE-DURATION-WEIGHTED chroma when the
+  // transcription heard something. Measured on 16 GuitarSet recordings with
+  // bar-aligned chord labels: the detected bass agrees with the label root on
+  // only 32% of bars (guitar voicings invert), so the spectral chroma - which
+  // is dominated by the loudest low partials - is poor root evidence. Notes the
+  // model actually attached time to are better evidence: a comping voicing is
+  // sustained, a bass line and melodic passing tones are not. Spectral chroma
+  // remains the fallback where the transcription heard nothing.
+  reRecognizeFromHeardChromas(chords, predictedNotes, CHORD_CHROMA_FROM_NOTES)
+  // Downgrade claimed sevenths the transcription did not actually hear
+  // (chroma smearing alone must not invent extensions).
+  for (const chord of chords) {
+    if (!Array.isArray(chord.heardPcs) || !chord.heardPcs.length) continue
+    const revised = downgradeUnheardExtension(chord, chord.heardPcs, { enabled: SEVENTH_GUARD_ENABLED })
+    if (revised !== chord) {
+      chord.root = revised.root
+      chord.quality = revised.quality
+      chord.label = revised.label
+      chord.downgradedFrom = revised.downgradedFrom
+    }
+  }
+
   report('done', 1)
   const hopSeconds = hop / sampleRate
   return {
     totalSeconds: Math.round(totalSeconds * 1000) / 1000,
     sampleRate,
-    tempo: { ...tempo, varies: tempoVaries, sectionTempos, provenance: PROVENANCE.INFERRED },
+    tempo: {
+      ...effectiveTempo,
+      ambiguousTempo: effectiveTempo.source === 'user-override' ? false : (tempo.ambiguousTempo ?? false),
+      varies: tempoVaries,
+      sectionTempos,
+      provenance: PROVENANCE.INFERRED,
+    },
+    meter: {
+      beatsPerMeasure,
+      uncertain: meterReading.uncertain,
+      scores: meterReading.scores ?? {},
+      provenance: PROVENANCE.INFERRED,
+    },
     beats: { beats, beatPeriodSeconds, provenance: PROVENANCE.INFERRED },
     onsets,
     chords,
@@ -229,6 +298,7 @@ export function attachHeardVoicings(chords, notes) {
     const heard = notes.filter(
       (note) => note.startSeconds <= window.end - 0.01 && note.endSeconds >= window.start + 0.01,
     )
+
     if (!heard.length) {
       chord.heardPcs = []
       chord.provenanceVoicing = PROVENANCE.INFERRED
@@ -239,6 +309,7 @@ export function attachHeardVoicings(chords, notes) {
       const pitchClass = (((note.midi % 12) + 12) % 12)
       const overlap = Math.min(note.endSeconds, window.end) - Math.max(note.startSeconds, window.start)
       weight.set(pitchClass, (weight.get(pitchClass) ?? 0) + Math.max(0.05, overlap))
+
     }
     const ranked = [...weight.entries()].sort((a, b) => b[1] - a[1]).map(([pc]) => pc)
     // Keep the strongest classes that still leave the top note (usually the
@@ -248,6 +319,49 @@ export function attachHeardVoicings(chords, notes) {
     chord.provenanceVoicing = PROVENANCE.PREDICTED
   }
   return chords
+}
+/**
+ * Re-recognize chords from duration-weighted transcribed pitch classes.
+ * Toggle so the effect can be A/B measured end to end (tests, probes).
+ */
+export const CHORD_CHROMA_FROM_NOTES = true
+
+/**
+ * Re-recognize chords from duration-weighted transcribed pitch classes.
+ * One pass over the chord windows, using only notes the model transcribed;
+ * a window with no notes keeps its spectral recognition untouched.
+ */
+function reRecognizeFromHeardChromas(chords, notes, enabled = CHORD_CHROMA_FROM_NOTES) {
+  if (!enabled) return
+  for (const chord of chords) {
+    const inWindow = notes.filter((n) => n.startSeconds < chord.endSeconds - 1e-9 && n.endSeconds > chord.startSeconds + 1e-9)
+    if (!inWindow.length) continue
+    const weights = new Array(12).fill(0)
+    let total = 0
+    for (const n of inWindow) {
+      const p = ((n.midi % 12) + 12) % 12
+      const overlap = Math.min(n.endSeconds, chord.endSeconds) - Math.max(n.startSeconds, chord.startSeconds)
+      const weight = Math.max(0.05, overlap)
+      weights[p] += weight
+      total += weight
+    }
+    if (!(total > 0)) continue
+    for (let i = 0; i < 12; i += 1) weights[i] /= total
+    const revised = recognizeChord(weights)
+    if (!revised) continue
+    chord.spectralLabel = chord.label
+    chord.spectralRoot = chord.root
+    chord.spectralQuality = chord.quality
+    chord.root = revised.root
+    chord.quality = revised.quality
+    chord.label = revised.label
+    chord.chromaSource = 'notes'
+    // Keep the SPECTRAL recognition's confidence for downstream texture
+    // decisions: re-scoring the same window with a different chroma changes the
+    // template score's meaning, and selectTexture keys off it. Preserving the
+    // original score means improving chord labels cannot silently change the
+    // arrangement's texture (and with it, which notes survive).
+  }
 }
 
 export function detectSections(frames, frameSeconds, totalSeconds) {

@@ -5,6 +5,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { runAudioArrangementPipeline } from './audioArrangementPipeline.js'
 import { PART_INSTRUMENTS, DIFFICULTIES } from './arrangementModel.js'
+import { getAudioFingerprint, loadTempoCorrection, saveTempoCorrection } from './tempoCorrectionStorage.js'
 
 export const AUDIO_ARRANGEMENT_SOURCE = 'audio-arrangement'
 
@@ -61,11 +62,24 @@ export function useAudioArrangement({ onReady = null } = {}) {
   const cancelledRef = useRef(false)
   const decodedRef = useRef(null) // cached Web Audio decode: { channelData, sampleRate, ... }
   const bufferRef = useRef(null)
+  const fingerprintRef = useRef(null)
+  const rememberedRef = useRef(null)
+  const [rememberedTempo, setRememberedTempo] = useState(null)
 
   const cancel = useCallback(() => {
     cancelledRef.current = true
     setPhase('idle')
     setProgress(null)
+  }, [])
+
+  /** Persist a reviewer-approved tempo for the current recording. */
+  const rememberTempoCorrection = useCallback((value) => {
+    const fingerprint = fingerprintRef.current
+    if (!fingerprint) return
+    saveTempoCorrection(fingerprint, value)
+    const rounded = Math.round(value)
+    rememberedRef.current = rounded
+    setRememberedTempo({ bpm: rounded, updatedAt: Date.now() })
   }, [])
 
   // Phase 7: decode once on file select to learn the true duration (drives
@@ -75,6 +89,15 @@ export function useAudioArrangement({ onReady = null } = {}) {
     setProbe(null)
     decodedRef.current = null
     bufferRef.current = null
+    rememberedRef.current = null
+    setRememberedTempo(null)
+    fingerprintRef.current = getAudioFingerprint(file)
+    // PRIORITY 3: recover a previously approved correction for THIS recording.
+    const remembered = loadTempoCorrection(fingerprintRef.current)
+    if (remembered) {
+      rememberedRef.current = remembered.bpm
+      setRememberedTempo(remembered)
+    }
     if (!file) return null
     try {
       const arrayBuffer = await file.arrayBuffer()
@@ -93,7 +116,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
     }
   }, [])
 
-  const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null }) => {
+  const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null, tempoOverride = null }) => {
     cancelledRef.current = false
     setError(null)
     setResult(null)
@@ -103,12 +126,17 @@ export function useAudioArrangement({ onReady = null } = {}) {
       const arrayBuffer = bufferRef.current ?? await file.arrayBuffer()
       bufferRef.current = arrayBuffer
       const cachedDecode = decodedRef.current
+      // PRIORITY 3: fall back to a remembered correction for this recording
+      // unless the caller is explicitly overriding it.
+      const effectiveTempoOverride = tempoOverride != null
+        ? tempoOverride
+        : rememberedRef.current
       if (cancelledRef.current) return null
       setPhase('analyzing')
       const outcome = await runAudioArrangementPipeline(
         file,
         arrayBuffer,
-        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt },
+        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt, tempoOverride: effectiveTempoOverride },
         {
           decodeAudioDataImpl: cachedDecode ? (async () => cachedDecode) : decodeWithWebAudio,
           predictNotes: predictWithBasicPitch,
@@ -159,6 +187,28 @@ export function useAudioArrangement({ onReady = null } = {}) {
     return payload
   }, [result, onReady])
 
+  // M3: re-run with a corrected tempo, reusing the already decoded audio (no
+  // re-upload). The last successful options are remembered so the reviewer only
+  // needs to supply the tempo. An approved correction is persisted per
+  // recording fingerprint (PRIORITY 3).
+  const lastOptionsRef = useRef(null)
+  // Split into a pure lookup + an effect so no ref written inside a callback is
+  // later handed to another hook as an argument.
+  const lastArrangeOptions = useCallback(() => lastOptionsRef.current, [])
+  const arrangeWithTempo = useCallback(async (tempo) => {
+    const previous = lastArrangeOptions()
+    if (!previous) return null
+    const value = Number(tempo)
+    if (!Number.isFinite(value) || value <= 0) return null
+    rememberTempoCorrection(value)
+    return arrange(previous.file, { ...previous.options, tempoOverride: value })
+  }, [arrange, lastArrangeOptions, rememberTempoCorrection])
+
+  const arrangeRemembering = useCallback(async (file, options) => {
+    lastOptionsRef.current = { file, options }
+    return arrange(file, options)
+  }, [arrange])
+
   return {
     phase,
     progress,
@@ -166,7 +216,9 @@ export function useAudioArrangement({ onReady = null } = {}) {
     error,
     probe,
     probeFile,
-    arrange,
+    rememberedTempo,
+    arrange: arrangeRemembering,
+    arrangeWithTempo,
     cancel,
     openInPractice,
     reset: () => {
@@ -176,8 +228,11 @@ export function useAudioArrangement({ onReady = null } = {}) {
       setResult(null)
       setError(null)
       setProbe(null)
+      setRememberedTempo(null)
       decodedRef.current = null
       bufferRef.current = null
+      rememberedRef.current = null
+      fingerprintRef.current = null
     },
     targets: [PART_INSTRUMENTS.SOLO_PIANO, PART_INSTRUMENTS.SOLO_GUITAR],
     difficulties: [DIFFICULTIES.EASY, DIFFICULTIES.INTERMEDIATE, DIFFICULTIES.ADVANCED],

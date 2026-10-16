@@ -57,6 +57,8 @@ export function simplifyForDifficulty(events, difficulty) {
   // arrangement: the cap may thin harmony/bass, never the melody (except
   // exact same-pitch duplicates on the same beat). Dropping melody to meet a
   // budget is what makes Easy feel like a damaged copy instead of a simple one.
+  // The bass ROOT is protected alongside the melody: Easy is then
+  // melody + root (2 voices), the classic simple texture — not a bare melody.
   const budgetBase = params.maxVoicesPerOnset
   const byBeat = new Map()
   for (const e of out) {
@@ -66,22 +68,22 @@ export function simplifyForDifficulty(events, difficulty) {
   }
   const thinned = []
   for (const [, group] of byBeat) {
-    const seenMelody = new Set()
-    const melodies = group.filter((e) => e.isMelody && (() => {
+    const seenEssential = new Set()
+    const essential = group.filter((e) => (e.isMelody || e.isBassRoot) && (() => {
       const k = `${e.midi}:${Math.round((e.quantizedStartBeat ?? 0) * 4)}`
-      if (seenMelody.has(k)) return false
-      seenMelody.add(k)
+      if (seenEssential.has(k)) return false
+      seenEssential.add(k)
       return true
     })())
-    const others = group.filter((e) => !e.isMelody)
-    // Harmony priority when over budget: bass root first, then strength.
+    const others = group.filter((e) => !e.isMelody && !e.isBassRoot)
+    // Harmony priority when over budget: bass-root-ish first, then strength.
     const sortedOthers = others.sort((a, b) => {
       const av = (a.isBassRoot ? 2 : 0) + Math.min(1.5, (a.strength ?? 0.5))
       const bv = (b.isBassRoot ? 2 : 0) + Math.min(1.5, (b.strength ?? 0.5))
       return bv - av
     })
-    const othersBudget = Math.max(0, budgetBase - melodies.length)
-    thinned.push(...melodies, ...sortedOthers.slice(0, othersBudget))
+    const othersBudget = Math.max(0, budgetBase - essential.length)
+    thinned.push(...essential, ...sortedOthers.slice(0, othersBudget))
   }
   thinned.sort((a, b) => (a.quantizedStartBeat ?? 0) - (b.quantizedStartBeat ?? 0))
   return thinned

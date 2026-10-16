@@ -157,7 +157,7 @@ for (const entry of ENTRIES) {
     row.targets[targetPart] = {}
     for (const difficulty of ['easy', 'advanced']) {
       const arranged = targetPart === 'solo-piano'
-        ? arrangeSoloPiano({ quantizedNotes: quantized, chords: analysis.chords, melodyByBeat, difficulty, melodyContour: contour })
+        ? arrangeSoloPiano({ quantizedNotes: quantized, chords: analysis.chords, melodyByBeat, difficulty, melodyContour: contour, beat0, beatPeriod: period })
         : arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty, melodyContour: contour })
       const toSec = (e) => beat0 + e.startBeat * period
       // S3: arrangement (pre-simplify).

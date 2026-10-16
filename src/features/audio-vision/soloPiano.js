@@ -31,6 +31,7 @@ export function arrangeSoloPiano({
   beat0 = 0,
   beatPeriod = 0.5,
 }) {
+
   const params = paramsForDifficulty(difficulty)
   const maxSpan = params.maxHandSpanSemitones
   // Group by onset beat.
@@ -150,6 +151,7 @@ export function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPer
     }
   }
   const byMeasure = resolved
+
   if (!byMeasure) return null
   const intervalsByQuality = {
     major: [0, 4, 7],
@@ -160,10 +162,11 @@ export function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPer
     diminished: [0, 3, 6],
     suspended4: [0, 5, 7],
   }
-  const intervals = intervalsByQuality[byMeasure.quality] ?? [0, 4, 7]
   // Voicing from the pitch classes the model actually heard (predicted
   // evidence); the template is only a fallback when nothing was heard.
   const heard = Array.isArray(byMeasure.heardPcs) && byMeasure.heardPcs.length ? byMeasure.heardPcs : null
+  const intervals = intervalsByQuality[byMeasure.quality] ?? [0, 4, 7]
+
   const tones = heard ?? intervals.map((iv) => (byMeasure.root + iv) % 12)
   return { ...byMeasure, tones, voicingSource: heard ? 'heard' : 'template' }
 }

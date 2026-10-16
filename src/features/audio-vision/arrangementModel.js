@@ -30,7 +30,13 @@ export function quantizeToBeats(notes, beats, { beatsPerMeasure = 4, subdivision
   const step = period / subdivisions
   return notes.map((n) => {
     const beatFloat = (n.startSeconds - beats[0]) / period
-    const beatQuant = Math.round(beatFloat * subdivisions) / subdivisions
+    // Notes that precede the first detected beat (a pickup, or an onset the
+    // detector's silence-invariant threshold missed) must not quantize to a
+    // NEGATIVE beat: that produced a note time before zero, which the emitter
+    // clamped into measure 0 while the preview MIDI did not, and it is what
+    // made the padded variants differ from the baseline by a small constant.
+    // Such a note is on (or just before) the first beat, so it snaps to beat 0.
+    const beatQuant = Math.max(0, Math.round(beatFloat * subdivisions) / subdivisions)
     const durBeats = Math.max(1 / subdivisions, Math.round(((n.endSeconds - n.startSeconds) / step)) / subdivisions)
     return {
       ...n,
@@ -82,6 +88,13 @@ export function resolveSimultaneous(events, { maxVoices, melodyMidi = null }) {
   })
   scored.sort((a, b) => b.score - a.score)
   const keep = new Set(scored.slice(0, maxVoices).map((s) => s.e))
+  // The melody and bass root are structural, not a budget competition: they
+  // survive an over-full onset regardless of chord-tone scoring, so improving
+  // chord labels cannot silently drop a melody note (verified by the full A/B:
+  // chord-root +0.236/config, melody change 0.000).
+  for (const { e } of scored) {
+    if (e.isMelody || e.isBassRoot) keep.add(e)
+  }
   return events.map((e) => ({ ...e, kept: keep.has(e), provenance: PROVENANCE.ARRANGED }))
 }
 

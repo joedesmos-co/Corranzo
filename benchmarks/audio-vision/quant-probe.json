@@ -1,0 +1,61 @@
+{
+  "rows": [
+    {
+      "id": "guitarset-ss-comp",
+      "truthNotes": 184,
+      "matched": 158,
+      "truthTempo": 84,
+      "estimatedTempo": 86,
+      "tempoError": 2,
+      "beatPeriod": 0.6977,
+      "residualMedian": 0.475,
+      "residualP90": 0.858,
+      "residualMax": 0.996,
+      "attributed": {
+        "swing": 44,
+        "rubato": 96,
+        "beatError": 0,
+        "onsetError": 26,
+        "fine": 18
+      }
+    },
+    {
+      "id": "guitarset-funk3",
+      "truthNotes": 492,
+      "matched": 434,
+      "truthTempo": 112,
+      "estimatedTempo": 74,
+      "tempoError": 38,
+      "beatPeriod": 0.8108,
+      "residualMedian": 0.525,
+      "residualP90": 0.907,
+      "residualMax": 0.998,
+      "attributed": {
+        "swing": 123,
+        "rubato": 274,
+        "beatError": 0,
+        "onsetError": 58,
+        "fine": 37
+      }
+    },
+    {
+      "id": "holdout-jazz3",
+      "truthNotes": 184,
+      "matched": 177,
+      "truthTempo": 137,
+      "estimatedTempo": 68,
+      "tempoError": 69,
+      "beatPeriod": 0.8824,
+      "residualMedian": 0.563,
+      "residualP90": 0.822,
+      "residualMax": 0.978,
+      "attributed": {
+        "swing": 83,
+        "rubato": 86,
+        "beatError": 0,
+        "onsetError": 7,
+        "fine": 8
+      }
+    }
+  ]
+}
