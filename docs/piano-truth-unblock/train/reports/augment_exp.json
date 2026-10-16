@@ -1,0 +1,19 @@
+{
+ "acc_heldout": 0.9938271641731262,
+ "train": {
+  "ok": 13,
+  "wrong": 3,
+  "abstain": 112,
+  "acc": 0.8125,
+  "cov": 0.125
+ },
+ "verify": {
+  "ok": 0,
+  "wrong": 0,
+  "abstain": 9
+ },
+ "gates": {
+  "G1": true,
+  "G2": false
+ }
+}

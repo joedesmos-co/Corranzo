@@ -1828,3 +1828,39 @@ not.
   crops (measured 4px lines, speckle, curvature) to attack the domain gap
   without scan supervision. Next milestone: (b) as a bounded,
   preregistered experiment.
+
+
+## M1-M6 bounded augmentation experiment (this session)
+
+  M1 measured domain differences (reports/domain_diff.json, 13 scan
+   strips + 12 render pages):
+    staff thickness: render constant 2px vs scan 3-22 (med 4)
+    ink fraction in key-region window: render 0.136 vs scan 0.195
+    blur (mean gradient): render 130.5 vs scan 113.3
+    glyphs merge into ~4.5-gap blobs on scan vs ~1.0 gap on render;
+      glyph contrast std render ~45 vs scan 0-35.
+
+  M2 one predefined, measured augmentation only (no arbitrary noise):
+    3px dilation, Gaussian noise sigma 15 + Otsu re-binarize, horizontal
+    shear +/- 5 pct, 40 pct probability of 3/5 Gaussian blur; applied to
+    positives and negatives identically (64x32 crops).
+
+  M3 result (reports/augment_exp.json):
+    G1 render held-out symbol accuracy = 0.9938   -> PASS
+    TRAIN-side scan: 13 correct / 16 decided / 112 abstain over 128 groups
+      (decided acc 0.8125, coverage 0.1250)   -> G2 FAIL
+    VERIFICATION strips: 0 decided groups.
+
+  M5 stop condition: augmentation did NOT increase scan coverage past the
+   current regime. No model artifact (models/clefsym_aug.pt not saved).
+   Key-signature application stays OFF. Bottleneck recorded: scan accidentals
+   fuse into ~4.5 gap blobs, not reproducible by render-side thickening+
+   noise; further NN training on these crops is not justified.
+
+  M6 unknown-key safety communication:
+    Never apply a key signature when G2/G3 fail. Emit MusicXML with no
+    <key> element, explicit <accidental> for every affected note, and a
+    credit: "Key signature undetermined; review accidentals manually."
+    Report field key_status=unknown in accompanying JSON; do not infer a
+    key from PDF crop dimensions; block downloadable MIDI/perform-score
+    export until the user attests key signature or per-part override.
