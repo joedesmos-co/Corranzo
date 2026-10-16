@@ -117,13 +117,18 @@ export function clipEventsForVoices(pieces, beats, isPiano) {
     const sorted = [...group].sort((a, b) => a.startBeat - b.startBeat)
     for (let i = 0; i < sorted.length; i += 1) {
       const e = sorted[i]
-      const next = sorted[i + 1]
+      // Find the next note with a DIFFERENT onset: notes sharing an onset are
+      // one chord group and must not clip each other (that is what turned a
+      // 0.5-beat chord root into a 32nd-note stub).
+      let j = i + 1
+      while (j < sorted.length && Math.abs(sorted[j].startBeat - e.startBeat) < 1e-6) j += 1
+      const next = sorted[j]
       const limit = next ? next.startBeat : (e.measureIndex + 1) * beats
       clipped.push({ ...e, durBeats: Math.max(1 / 16, Math.min(e.durBeats, limit - e.startBeat)) })
     }
   }
   clipped.sort((a, b) => a.measureIndex - b.measureIndex || a.startBeat - b.startBeat)
-  return clipped
+  return clipped.map((c) => ({ ...c, prepared: true }))
 }
 
 /**
@@ -143,11 +148,6 @@ function measureIndexOf(startBeat, beats) {
 
 function beatsToDiv(beatsValue) {
   return Math.max(1, Math.round(beatsValue * ARR_DIVISIONS))
-}
-
-/** Inverse of beatsToDiv, for advancing the written cursor in whole divisions. */
-function divisionsToBeats(divisions) {
-  return divisions / ARR_DIVISIONS
 }
 
 function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = false, tieStart = false, tieStop = false }) {
@@ -236,86 +236,87 @@ function emitGrandStaffMeasure(measureEvents, m, beats) {
   let s = ''
   for (const [staff, voice, hand] of [[1, 1, 'RH'], [2, 2, 'LH']]) {
     const handEvents = measureEvents.filter((e) => (e.hand ?? 'RH') === hand)
-      .flatMap((e) => splitAcrossMeasures([e], m, beats))
+      .map((e) => (e.prepared ? [e] : splitAcrossMeasures([e], m, beats)))
+      .flat()
       .filter((e) => measureIndexOf(e.startBeat, beats) === m)
-    if (hand === 'LH' && handEvents.length) s += `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
-    let cursor = 0
-    const sorted = [...handEvents].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
-    let lastOnset = null
-    let lastDivisions = 0
-    for (const e of sorted) {
-      const localStart = Math.max(0, e.startBeat - m * beats)
-      const gap = localStart - cursor
-      if (gap > 0.01) {
-        s += restXml(beatsToDiv(gap), voice, staff)
-        cursor = localStart
-      }
-      const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
-      // A <chord/> note MUST reuse its parent onset's duration; a chord note
-      // with a different duration is invalid MusicXML and is exactly what made
-      // measures read as overfull (parent 4 + chord 1 ⇒ the voice total runs
-      // past the barline). Divisions are whole numbers, so the running total
-      // for the voice can never drift.
-      const divisions = chord ? lastDivisions : beatsToDiv(Math.min(e.durBeats, beats - localStart))
-      s += noteXml({
-        pitch: midiToPitch(e.midi),
-        divisions,
-        voice,
-        staff,
-        chord,
-        tieStart: e.tieStart,
-        tieStop: e.tieStop,
-      })
-      if (!chord) {
-        cursor = localStart + divisionsToBeats(divisions)
-        lastDivisions = divisions
-      }
-      lastOnset = e.startBeat
-    }
-    const tail = beats - cursor
-    if (tail > 0.01) s += restXml(beatsToDiv(tail), voice, staff)
+    // Always emit the backup: even an empty LH produces a full-bar rest, and
+    // without the backup the parser continues the voice-1 timeline into it
+    // (64 + 64 = 128 divisions), which is exactly what read as overfull.
+    if (hand === 'LH') s += `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
+    s += emitStaffVoice(handEvents, { measureIndex: m, beats, voice, staff, withTab: false })
   }
   return s
 }
 
-function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
-  let s = ''
-  const split = measureEvents.flatMap((e) => splitAcrossMeasures([e], m, beats))
-    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
-  let cursor = 0
-  const sorted = [...split].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
-  let lastOnset = null
-  let lastDivisions = 0
+/**
+ * Emit one staff's voice so its written total is EXACTLY beats * ARR_DIVISIONS.
+ *
+ * Notes are laid out on a division grid: an onset occupies a whole number of
+ * divisions, a note's duration is clipped to the remaining divisions in this
+ * measure, a <chord/> note reuses its parent's duration (invalid MusicXML
+ * otherwise — the original overfull-measure cause), and the deficit is filled
+ * with a single rest. An explicit accumulator makes the total exact by
+ * construction rather than by cursor arithmetic.
+ */
+function emitStaffVoice(events, { measureIndex, beats, voice, staff, withTab }) {
+  const endDiv = beats * ARR_DIVISIONS
+  const sorted = [...events].sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
+  // Group notes sharing an onset; a group member never clips the group's parent.
+  const groups = []
   for (const e of sorted) {
-    const localStart = Math.max(0, Math.min(beats, e.startBeat - m * beats))
-    const gap = localStart - cursor
-    if (gap > 0.01) {
-      s += restXml(beatsToDiv(gap), 1)
-      cursor = localStart
+    const onsetDiv = Math.max(0, Math.min(endDiv, Math.round((e.startBeat - measureIndex * beats) * ARR_DIVISIONS)))
+    const prev = groups[groups.length - 1]
+    if (prev && prev.onsetDiv === onsetDiv) {
+      prev.members.push(e)
+    } else {
+      groups.push({ onsetDiv, members: [e] })
     }
-    const chord = lastOnset != null && Math.abs(e.startBeat - lastOnset) < 1e-6
-    // Chord notes reuse the parent's duration (see emitGrandStaffMeasure): a
-    // <chord/> with its own duration is invalid MusicXML and overran measures.
-    const divisions = chord ? lastDivisions : beatsToDiv(Math.min(e.durBeats, Math.max(1 / 4, beats - localStart)))
-    s += noteXml({
-      pitch: midiToPitch(e.midi),
-      divisions,
-      voice: 1,
-      staff: null,
-      stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
-      chord,
-      tieStart: e.tieStart,
-      tieStop: e.tieStop,
-    })
-    if (!chord) {
-      cursor = localStart + divisionsToBeats(divisions)
-      lastDivisions = divisions
-    }
-    lastOnset = e.startBeat
   }
-  const tail = beats - cursor
-  if (tail > 0.01) s += restXml(beatsToDiv(tail), 1)
+  let s = ''
+  let cursorDiv = 0
+  for (let gi = 0; gi < groups.length; gi += 1) {
+    const group = groups[gi]
+    if (group.onsetDiv < cursorDiv || group.onsetDiv >= endDiv) continue
+    if (group.onsetDiv > cursorDiv) {
+      s += restXml(group.onsetDiv - cursorDiv, voice, staff)
+    }
+    // Duration: intended length, clipped to the barline.
+    const nextOnsetDiv = gi + 1 < groups.length ? groups[gi + 1].onsetDiv : endDiv
+    const maxDur = Math.max(1, endDiv - group.onsetDiv)
+    const dur = Math.max(1, Math.min(maxDur, beatsToDiv(group.members[0].durBeats ?? 0.5)))
+    const tieStart = group.members.some((e) => e.tieStart)
+    // Clip to the next onset only when the note is NOT tied forward; a tied
+    // note's remainder belongs to the continuation in the next measure.
+    const finalDur = tieStart ? dur : Math.min(dur, Math.max(1, nextOnsetDiv - group.onsetDiv))
+    group.members.forEach((e, mi) => {
+      s += noteXml({
+        pitch: midiToPitch(e.midi),
+        divisions: finalDur,
+        voice,
+        staff,
+        stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
+        chord: mi > 0,
+        tieStart: e.tieStart,
+        tieStop: e.tieStop,
+      })
+    })
+    cursorDiv = group.onsetDiv + finalDur
+  }
+  const deficit = endDiv - cursorDiv
+  if (deficit > 0) s += restXml(deficit, voice, staff)
   return s
+}
+
+function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
+  // Events arrive already prepared by prepareEventsForNotation (barline split +
+  // voice clipping carry tieStart/tieStop). Re-splitting them here would reset
+  // a tie-stop continuation's flag — which silently dropped ties before — so
+  // only split pieces that were NOT prepared (direct callers/tests).
+  const split = measureEvents
+    .map((e) => (e.prepared ? [e] : splitAcrossMeasures([e], m, beats)))
+    .flat()
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
+  return emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: null, withTab })
 }
 
 export function pitchStepForTest(midi) {

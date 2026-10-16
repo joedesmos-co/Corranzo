@@ -101,16 +101,20 @@ for (const targetPart of ['solo-piano', 'solo-guitar']) {
   const grouped = checkpoints.some((c) => (c.expectedMidis?.length ?? 0) > 1)
   check(`${targetPart} chord checkpoints grouped`, grouped || notes.length < 2, `${checkpoints.length} checkpoints`)
 
-  // Ties sustained: no note crosses its barline (a sustained note must be split
-  // and tied, which the parser merges back into one longer duration).
+  // Ties sustained: no note crosses its barline. A note that is tied
+  // (tieStart/tieStop) LEGITIMITELY crosses a barline — the parser merges the
+  // pair into one sounding note — so tied notes are excluded from this check
+  // and verified separately by tie-consistency assertions in the audit.
   const starts = (tm.measures ?? []).map((m) => m.startTimeSeconds)
+  const ends = (tm.measures ?? []).map((m) => m.endTimeSeconds)
   const bpm = out.transcribed.tempo.bpm || 120
   const fallbackBarline = 4 * (60 / bpm)
   let crossed = 0
   for (const n of notes) {
+    if (n.tieStart || n.tieStop) continue
     const idx = starts.findIndex((s, i) => n.timeSeconds >= s - 1e-9 && (i + 1 >= starts.length || n.timeSeconds < starts[i + 1] - 1e-9))
     if (idx < 0) continue
-    const next = idx + 1 < starts.length ? starts[idx + 1] : starts[idx] + fallbackBarline
+    const next = idx + 1 < starts.length ? starts[idx + 1] : (ends[idx] ?? starts[idx] + fallbackBarline)
     if (n.timeSeconds + n.durationSeconds > next + 1e-6) crossed += 1
   }
   check(`${targetPart} notes respect barlines (ties)`, crossed === 0, `${crossed} violations`)
