@@ -79,3 +79,39 @@ on acceptance.
 No architecture change, no threshold tuning on the benchmark, no
 rest-detector work (that is M5 and has its own budget), no lens on
 sealed TEST.
+
+
+## Verdict: REJECTED
+
+The bounded experiment was run exactly as preregistered (8 epochs, warm
+start, 9 non-control fonts, 40 font-variant pages, no external data).
+
+Result on the frozen 7-page eval set:
+  p1 tabdigit P 0.483 R 0.224 -> P 0.000 R 0.000
+  p2 tabdigit P 0.007 R 0.004 -> P 0.000 R 0.000
+  p3 tabdigit P 0.119 R 0.062 -> P 0.000 R 0.000
+  aggregate note/tabdigit F1 -> 0.000
+
+The ignore channel (class 3) dominated the training signal: the model
+learned to mark every peak as ignore, producing zero detections. This is
+the "ignore class dominates" failure mode, and it is not recoverable by
+threshold tuning without violating the prereg.
+
+Action: REJECTED. `datasets/guitar-vision/proof-detection/heatmap-ignore.pt`
+remains the frozen artifact; the font-augmented weights at
+`/tmp/proof/fontaug-model/heatmap-ignore.pt` are DISCARDED. No install.
+
+Root cause of the failure (not a code bug, but a training-set imbalance):
+the ignore model's patch plan is 3 object-centered + 2 ignore-centered +
+1 context per page; with only 40 font-variant pages the ignore channel
+(33% of patches) is over-represented relative to the original
+thousands-of-background-crops corpus, and the model collapses to veto.
+
+Next justified step is NOT another font experiment. It is to fix the
+detector's font-sensitivity at the ARCHITECTURE level: either (a) a
+normalised input representation (line-relative warping, already
+preregistered in GUITAR_GEOMETRIC_PREREG.md) so glyph shape is
+abstracted, or (b) a font-agnostic preprocessing step that thins/
+normalises glyphs before the CNN. Both are structural, not data-volume,
+fixes. No further TRAIN-only font experiments should be launched until
+the representation question is settled.
