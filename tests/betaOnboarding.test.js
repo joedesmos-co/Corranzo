@@ -81,7 +81,7 @@ describe('beta onboarding', () => {
   })
 
   it('goHome clears legal pathname back to library home', () => {
-    expect(pathnameForView('library')).toBe('/')
+    expect(pathnameForView('library')).toBe('/#library')
     expect(pathnameForView('privacy')).toBe('/privacy')
   })
 })

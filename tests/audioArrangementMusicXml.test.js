@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
@@ -113,7 +113,17 @@ describe('arrangement MusicXML engraving data', () => {
     expect(checkpoints.every((checkpoint) => (checkpoint.expectedStringFrets ?? []).length > 0)).toBe(true)
   })
 
-  it('generated arrangement XML survives a full parse for both targets', () => {
+  it('generated arrangement XML survives a full parse for both targets', (ctx) => {
+    // Re-check the fixture at run time: vitest runs test files in parallel, so
+    // a fixture that existed at module load may be gone (or never present in a
+    // fresh checkout) by the time this runs. Skip rather than fail in that case.
+    const stagingOk = ['piano', 'guitar'].every((name) =>
+      existsSync(join(root, 'tmp', 'audio-vision-staging', `${name}.musicxml`)),
+    )
+    if (!stagingOk) {
+      ctx.skip('staging fixture missing — run scripts/staging-generate-arrangements.mjs')
+      return
+    }
     // NOTE (2026-10-15): with the invalid-chord-duration fix, notes that share
     // an onset now correctly merge into ONE chord checkpoint (the bogus
     // per-chord-note duration previously pushed them onto separate onsets), so

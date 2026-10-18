@@ -64,7 +64,8 @@ import { formatDemoLoadError } from './features/demo/formatDemoLoadError.js'
 import { fetchSampleFixtureFiles } from './dev/loadSampleFixtures.js'
 import { getDemoPieceForInstrument } from './dev/fixturePaths.js'
 import {
-  getViewFromPathname,
+  getViewFromLocation,
+  currentViewPath,
   isLegalPathname,
   isLegalView,
   pathnameForView,
@@ -165,7 +166,7 @@ import './styles/collection.css'
 import './styles/osmd.css'
 
 function resolveInitialView() {
-  return getViewFromPathname(window.location.pathname) ?? 'home'
+  return getViewFromLocation(window.location)
 }
 
 function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
@@ -457,7 +458,7 @@ export default function App() {
 
   useEffect(() => {
     function handlePopState() {
-      setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'home'))
+      setActiveView(normalizeAppView(getViewFromLocation(window.location)))
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -501,7 +502,9 @@ export default function App() {
     setActiveView(nextView)
     requestAnimationFrame(() => window.scrollTo(0, 0))
     const nextPath = pathnameForView(nextView)
-    if (window.location.pathname !== nextPath) {
+    // Compare the full in-app path (path + hash) so app-view changes — which
+    // live in the hash — still push a history entry and Back/Forward work.
+    if (currentViewPath(window.location) !== nextPath) {
       window.history.pushState({}, '', nextPath)
     }
   }, [])
@@ -2164,7 +2167,7 @@ export default function App() {
       setActiveView(
         normalizeAppView(
           resolveRestoredActiveView({
-            pathname: window.location.pathname,
+            location: window.location,
             // A saved legal route is always honoured; otherwise Import, never
             // the practice workspace, and never a bare library.
             savedActiveView: 'import',
@@ -2315,7 +2318,7 @@ export default function App() {
     setActiveView(
       normalizeAppView(
         resolveRestoredActiveView({
-          pathname: window.location.pathname,
+          location: window.location,
           savedActiveView: payload.activeView,
           hasMusicXml: Boolean(nextMusicXml),
         }),
