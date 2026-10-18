@@ -1864,3 +1864,32 @@ not.
     Report field key_status=unknown in accompanying JSON; do not infer a
     key from PDF crop dimensions; block downloadable MIDI/perform-score
     export until the user attests key signature or per-part override.
+
+
+## Rhythm accuracy + uncertainty safety (this session)
+
+  M2 attribution (reports/audit_duration.json, 22299 notes, 4652 errors):
+    beamed duration errors 2892 (2023 in uniform-truth beam groups);
+    unbeamed 1760; dots 741; tuplets 212; chords 1757; voices 1/5 dominant.
+    Rests (reports/audit_rest.json, 698 truth rests): kind_not_rest 67,
+    dropped 40, staff 22, voice 173, dur 54, onset_only 178, duplicate 33,
+    exact key 195 (0.28).
+
+  M3 bounded correction (decode_score): rest voice assigned to the majority
+    predicted voice on the same (measure, staff), with staff-based fallback.
+    eval_reconstruction (10 DEV scores, visual clef + ctx dur + r1 rest):
+    B_rest_tp 9 -> 11 (+2), B_tp_exact unchanged (1785), B_tp_pitch
+    unchanged (1856). No regression in notes; rest voice accuracy measured
+    0.71 -> 0.77 on 631 rests. Beam-group duration voting was prototyped
+    but produced a small negative exact delta on the sample and is NOT
+    applied; documented as not justified.
+
+  M4 uncertainty safety:
+    auto_e2e MusicXML now carries <miscellaneous-field
+    name="croperscore_key_status">unknown</miscellaneous-field> plus a
+    <credit> "Key signature undetermined by automatic transcription;
+    review accidentals manually." and an explicit <key><fifths>0</fifths>
+    so unresolved keys cannot masquerade as confidently correct C major.
+    Key application remains OFF; no accidentals fabricated.
+
+  M5 evaluation: sealed TEST untouched; no model changes; no retraining.

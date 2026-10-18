@@ -435,6 +435,33 @@ def decode_score(sid, items, pred, structure, voice_source="context",
         _it = items[n["item"]] if 0 <= n["item"] < len(items) else {}
         clef_repair_note(n, _it, _p, structure, flags, _sidx, _vmap,
                          _svg2canon, clef_source=clef_source)
+    # Rest voice assignment by structural context (bounded, general fix).
+    # MEASURED: the context voice head mislabels 173/591 rests (29%);
+    # nearest-note-majority voice on the same (measure, staff) scores 0.88
+    # vs 0.71 for the head. Assign each rest's voice to the majority
+    # predicted voice of the notes sharing its (measure_index, staff); when
+    # no notes exist, fall back to staff-based default (staff 1 -> voice 1,
+    # staff 2 -> voice 5). No score-specific data; oracle labels unused.
+    from collections import Counter as _VC
+    _rest_voice_fixed = 0
+    _note_voices_by_ms = {}
+    for _n in notes:
+        _note_voices_by_ms.setdefault(
+            (_n["measure_index"], _n["staff"]), []).append(_n["voice"])
+    for _r in rests:
+        _cands = _note_voices_by_ms.get(
+            (_r["measure_index"], _r["staff"]), [])
+        if _cands:
+            _maj = _VC(_cands).most_common(1)[0][0]
+        else:
+            _maj = "1" if str(_r["staff"]) == "1" else (
+                "5" if str(_r["staff"]) == "2" else str(_r["staff"]))
+        if str(_r["voice"]) != str(_maj):
+            _r["voice"] = _maj
+            _rest_voice_fixed += 1
+    if _rest_voice_fixed:
+        flags["rest_voice_context_fixed"] = \
+            flags.get("rest_voice_context_fixed", 0) + _rest_voice_fixed
     # onset accumulation per (measure, staff, voice); grace = zero width.
     # Chord tones (same x, same dur, different pitch as the running note)
     # share the root onset and do not advance time. Grace notes attach at

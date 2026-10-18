@@ -244,6 +244,17 @@ def page_ctx_for(pg):
 def emit_musicxml(events, clefs_by_page):
     """score-partwise MusicXML, divisions=4, one voice per staff."""
     root = ET.Element("score-partwise", version="4.0")
+    # Machine- and human-readable uncertainty marker: key signature is NOT
+    # determined by the automatic pipeline (measured scan key accuracy 0.75,
+    # application gated OFF). Emitting fifths=0 alone would masquerade as
+    # C major; the credit + miscellaneous field make the unknown status
+    # explicit and importable by downstream tools.
+    misc = ET.SubElement(root, "miscellaneous")
+    mf = ET.SubElement(misc, "miscellaneous-field", name="croperscore_key_status")
+    mf.text = "unknown"
+    cr = ET.SubElement(root, "credit")
+    crw = ET.SubElement(cr, "credit-words")
+    crw.text = "Key signature undetermined by automatic transcription; review accidentals manually."
     pl = ET.SubElement(root, "part-list")
     sp = ET.SubElement(pl, "score-part", id="P1")
     ET.SubElement(sp, "part-name").text = "Piano"
@@ -261,6 +272,9 @@ def emit_musicxml(events, clefs_by_page):
             if mi == 0:
                 at = ET.SubElement(m, "attributes")
                 ET.SubElement(at, "divisions").text = "4"
+                key_el = ET.SubElement(at, "key")
+                ET.SubElement(key_el, "fifths").text = "0"
+                ET.SubElement(key_el, "mode").text = "major"
                 clef = clefs_by_page.get(pg, ([], []))[1]
                 shape, line = clef[st - 1] if st - 1 < len(clef) else ("G", 2)
                 cl = ET.SubElement(at, "clef")
