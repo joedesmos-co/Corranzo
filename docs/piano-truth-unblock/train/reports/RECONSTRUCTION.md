@@ -1931,3 +1931,28 @@ not.
     still depends on the per-note head (0.584). A trained beam-aware
     duration head on detected crops is the next justified step, but
     requires scan-side supervision that does not yet exist.
+
+
+## Image-based beam recognition (this session)
+
+  M1: simple CV beam counting on raster (row/column transitions) achieved
+    only 0.19-0.25 match to SVG truth beam count on clean renders; rejected
+    as insufficient.
+
+  M2: trained a 4-class beam-count CNN (0/1/2/3 beams) on 8000 render crops
+    with SVG-derived labels. Result (reports/beamcount.json):
+      heldout acc 0.823, dev20 acc 0.788 (n=4608).
+      class 0: 0.942, class 1: 0.694, class 2: 0.888, class 3: 0.000.
+    Gate (dev20>=0.80) FAILED. No model artifact saved (models/beamcount.pt
+    not created). Triple-beam class unusable (35 training samples).
+
+  M5 decision: image-based beam classifier REJECTED. Structural SVG method
+    remains the only path to 0.984 beamed dur accuracy. Automatic (no-SVG)
+    beamed dur remains 0.584. Honest gap preserved.
+
+  M4 unknown key safety: verified MusicXML markers present (credit +
+    miscellaneous-field croperscore_key_status=unknown + fifths=0). LIMITATION:
+    explicit fifths=0 can still be interpreted as C major by external
+    importers; Corranzo UI display of the uncertainty is not verified in
+    this session (no UI run). Recommend UI read the miscellaneous field and
+    block playable export until attested. Key recognition stays OFF.
