@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react'
 import PracticeStatusBar from './PracticeStatusBar.jsx'
 import AlignmentDiagnosticsSection from './AlignmentDiagnosticsSection.jsx'
 import CalibrationDebugPanel from './CalibrationDebugPanel.jsx'
+import { usePracticeSessionStable } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 
 const SmokeTestChecklist = import.meta.env.DEV
   ? lazy(() => import('../../dev/SmokeTestChecklist.jsx'))
@@ -19,6 +21,8 @@ export default function PracticeDiagnosticsPanel({
   pieceName = null,
   pdfPageNumber = 1,
 }) {
+  const stable = usePracticeSessionStable()
+  const tick = usePracticeTick()
   const { hasMidi, hasMusicXml } = session
   const alignment = session.alignment.diagnostics
 
@@ -42,7 +46,7 @@ export default function PracticeDiagnosticsPanel({
           <dl className="practice-diagnostics__kv">
             <div>
               <dt>Practice time</dt>
-              <dd>{session.clock.practiceTime.toFixed(2)}s</dd>
+              <dd>{tick.practiceTime.toFixed(2)}s</dd>
             </div>
             <div>
               <dt>Measures</dt>
@@ -54,7 +58,7 @@ export default function PracticeDiagnosticsPanel({
             </div>
             <div>
               <dt>Following MIDI clock</dt>
-              <dd>{session.clock.isFollowingMidi ? 'Yes' : 'No'}</dd>
+              <dd>{stable.isFollowingMidi ? 'Yes' : 'No'}</dd>
             </div>
           </dl>
           {session.timing.error && (

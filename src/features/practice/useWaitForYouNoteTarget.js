@@ -49,16 +49,19 @@ export default function useWaitForYouNoteTarget({
     return target.page === visiblePageNumber
   }, [active, checkpointMode, waitForYouStatus, target, visiblePageNumber, mode])
 
-  return {
-    target,
-    showOnPage,
-    wrongPage: Boolean(
-      active &&
-        mode !== 'play-along' &&
-        checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
-        waitForYouStatus === WFY_STATUS.WAITING &&
-        target?.visible &&
-        target.page !== visiblePageNumber,
-    ),
-  }
+  return useMemo(
+    () => ({
+      target,
+      showOnPage,
+      wrongPage: Boolean(
+        active &&
+          mode !== 'play-along' &&
+          checkpointMode === WFY_CHECKPOINT_MODE.NOTE &&
+          waitForYouStatus === WFY_STATUS.WAITING &&
+          target?.visible &&
+          target.page !== visiblePageNumber,
+      ),
+    }),
+    [active, checkpointMode, waitForYouStatus, target, visiblePageNumber, mode, showOnPage],
+  )
 }

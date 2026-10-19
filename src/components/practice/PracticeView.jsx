@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
 import {
   usePracticeSessionContext,
+  usePracticeSessionStable,
   usePracticeVisualSession,
 } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
 import {
   PRACTICE_VIEW_MODE,
@@ -52,6 +54,8 @@ export default function PracticeView({
   activeScoreSnapshot = null,
 }) {
   const { session, scoreFollow, practiceStats, practicePiece } = usePracticeSessionContext()
+  const stable = usePracticeSessionStable()
+  const tick = usePracticeTick()
   // Audio Vision arrangements have no PDF page, so they render their own
   // engraved surface. Every other source is named by its score: prefer the
   // title authored in the uploaded MusicXML companion (what the engraver prints
@@ -170,18 +174,18 @@ export default function PracticeView({
 
   usePracticeKeyboardShortcuts({
     enabled: Boolean(pdfFile || isPdflessNotationSource(musicXmlSource)),
-    isPlaying: session.playback.isPlaying,
+    isPlaying: tick.playbackIsPlaying,
     hasMidi: session.hasMidi,
     hasMusicXml: session.hasMusicXml,
     isWaitForYou: session.isWaitForYou,
     waitForYouStatus: session.waitForYou.status,
     alignmentMode: scoreFollow.alignmentMode || scoreFollow.semiAutoPreview,
-    playbackLoading: session.playback.isLoading,
+    playbackLoading: stable.playback.isLoading,
     allowPageKeys: !scoreFollow.alignmentMode && !scoreFollow.semiAutoPreview,
     canPrevPage,
     canNextPage,
-    canPrevMeasure: session.measure.canGoPrevious,
-    canNextMeasure: session.measure.canGoNext,
+    canPrevMeasure: tick.canGoPreviousMeasure,
+    canNextMeasure: tick.canGoNextMeasure,
     onTogglePlayPause: () => {
       const current = sessionRef.current
       if (current.playback.isPlaying) {

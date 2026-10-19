@@ -10,6 +10,7 @@
  */
 import { useMemo } from 'react'
 import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import { buildNoteCheckpoints } from '../../features/practice/waitForYouCheckpoints.js'
 import WaitForYouInputSourceSelector from '../practice/WaitForYouInputSourceSelector.jsx'
@@ -40,6 +41,7 @@ function describeTarget(checkpoint) {
 
 export default function ArrangementPracticeView({ musicXmlSource = null, onReturnToLibrary = null }) {
   const { session } = usePracticeSessionContext()
+  const tick = usePracticeTick()
   const arrangement = musicXmlSource?.omrMeta?.arrangement ?? null
   const timingMap = session.timing?.timingMap ?? null
   const checkpoints = useMemo(
@@ -47,7 +49,7 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
     [timingMap],
   )
   const waitForYou = session.waitForYou
-  const practiceTime = session.practiceTime ?? session.clock?.practiceTime ?? 0
+  const practiceTime = tick.practiceTime ?? 0
   const activeIndex = useMemo(() => {
     if (!checkpoints.length) return 0
     if (session.isWaitForYou && Number.isFinite(waitForYou?.checkpointIndex)) {
