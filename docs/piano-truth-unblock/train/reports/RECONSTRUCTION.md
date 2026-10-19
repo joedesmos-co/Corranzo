@@ -1893,3 +1893,41 @@ not.
     Key application remains OFF; no accidentals fabricated.
 
   M5 evaluation: sealed TEST untouched; no model changes; no retraining.
+
+
+## Beamed rhythm recognition (this session)
+
+  M1 attribution: 16,649 beamed notes; dur accuracy 0.584 for the per-note
+    head. Truth durations: 8th 8004, 16th 2780, dotted 8th 367, 32nd 206,
+    plus 5292 chord members (dur None). Beam-depth confusion dominates.
+
+  M2 correction: structural SVG beam-count recognition (1->8th, 2->16th,
+    3->32nd) using stem_x = content-bbox x + width, staff-relative
+    geometry only, no score IDs. Measured 0.984 dur accuracy on 13,056
+    beamed notes. Implemented in decode_score for in_beam notes. No training.
+
+  eval_reconstruction (10 DEV scores, visual clef + ctx dur + r1 rest):
+    B_tp_exact 1785 -> 1808 (+23), B_tp_pitch 1856 -> 1879 (+23),
+    B_timing_valid 133 -> 137 (+4), B_rest_tp 9 -> 9 (0). No regression.
+
+  M3 rest integrity: rest voice majority from predicted notes was prototyped
+    but did not improve voice_ok (418 either way) and is NOT applied; the
+    accepted head (voice_ok 418) is preserved. Rest voice accuracy 0.71
+    (unchanged). Complete rest exact_key 190.
+
+  M4 unknown key safety: MusicXML carries croperscore_key_status=unknown
+    credit + explicit fifths=0. LIMITATION: an explicit <fifths>0</fifths>
+    can still be read as C major by other applications; Corranzo's UI display
+    of the uncertainty is NOT verified in this session (no UI run). Recommend
+    the importer/UI surface the miscellaneous-field and credit text, and
+    block "playable MIDI export" until attested. Key recognition stays OFF.
+
+  M5: sealed TEST untouched; no retraining; no new downloads. Beam-count
+    fix relies on SVG render structure (oracle structure input), so it
+    benefits the reconstruction/decoded pipeline but NOT the fully
+    automatic (no-SVG) path, which remains unaffected.
+
+  Remaining limitation: beamed duration in the fully automatic path (no SVG)
+    still depends on the per-note head (0.584). A trained beam-aware
+    duration head on detected crops is the next justified step, but
+    requires scan-side supervision that does not yet exist.
