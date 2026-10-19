@@ -640,7 +640,8 @@ export function validateRestoredSession(meta, files) {
   const legacyNotationOnly =
     Boolean(musicXmlFileName && musicXmlBuffer) &&
     !meta?.pdfMeta?.fileName &&
-    meta?.musicXmlSourceKind !== 'omr'
+    meta?.musicXmlSourceKind !== 'omr' &&
+    meta?.musicXmlSourceKind !== 'audio-arrangement'
   if (legacyNotationOnly) {
     const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
     if (restored) {
@@ -653,6 +654,30 @@ export function validateRestoredSession(meta, files) {
         musicXmlSource: restored.musicXmlSource,
         legacyNotationOnly: true,
         partial: true,
+      }
+    }
+  }
+
+  // Audio Vision arrangements are MusicXML-only but first-class: they restore
+  // fully (no PDF-import guidance, lands on the saved view) rather than as a
+  // legacy notation-only session.
+  const audioArrangementSession =
+    Boolean(musicXmlFileName && musicXmlBuffer) &&
+    !meta?.pdfMeta?.fileName &&
+    meta?.musicXmlSourceKind === 'audio-arrangement'
+  if (audioArrangementSession) {
+    const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
+    if (restored) {
+      return {
+        ok: true,
+        issues: [],
+        pdfFile: null,
+        pdfMeta: null,
+        midiSource: restored.midiSource,
+        musicXmlSource: restored.musicXmlSource,
+        legacyNotationOnly: false,
+        audioArrangement: true,
+        partial: false,
       }
     }
   }
