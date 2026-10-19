@@ -355,6 +355,14 @@ export default function useNeuralMicInput({
 
   // Reset per-checkpoint confirmation + chord state (seek / loop / restart).
   useEffect(() => {
+    // An idle hook never reads this state: the model-load effect and the poll
+    // loop both early-return on `!active`, and the session only consumes this
+    // hook's output when the neural flag is on. Resetting while idle is dead
+    // work that still dispatches React state — 3.8 dispatches/s across the two
+    // idle instances, each re-rendering the whole practice tree.
+    if (!active) {
+      return
+    }
     if (checkpointIdRef.current === checkpointId) {
       return
     }
@@ -363,7 +371,7 @@ export default function useNeuralMicInput({
     chordStateRef.current = createChordMatchState()
     poolRef.current = []
     resetFeedback()
-  }, [checkpointId, resetFeedback])
+  }, [active, checkpointId, resetFeedback])
 
   // Lazy model load + hardware capability check (L3). Runs on every
   // activation (runtime cached, warmup re-measured); falls back (phase

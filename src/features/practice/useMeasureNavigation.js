@@ -86,20 +86,23 @@ export default function useMeasureNavigation(timingMap, practiceTime, onSeekToTi
     ? getMeasureListIndex(timingMap, currentMeasure) + 1
     : null
 
-  return {
-    currentMeasure,
-    currentMeasureIndex,
-    bounds,
-    previousMeasure,
-    nextMeasure,
-    canGoPrevious: usesPerformedTimeline(timingMap)
-      ? Boolean(getPerformedNeighborStartTime(timingMap, practiceTime, -1) ?? previousMeasure)
-      : Boolean(previousMeasure),
-    canGoNext: usesPerformedTimeline(timingMap)
-      ? Boolean(getPerformedNeighborStartTime(timingMap, practiceTime, 1) ?? nextMeasure)
-      : Boolean(nextMeasure),
-    goToPreviousMeasure,
-    goToNextMeasure,
-    goToMeasureNumber,
-  }
+  return useMemo(
+    () => ({
+      currentMeasure,
+      currentMeasureIndex,
+      bounds,
+      previousMeasure,
+      nextMeasure,
+      canGoPrevious: usesPerformedTimeline(timingMap)
+        ? Boolean(getPerformedNeighborStartTime(timingMap, practiceTime, -1) ?? previousMeasure)
+        : Boolean(previousMeasure),
+      canGoNext: usesPerformedTimeline(timingMap)
+        ? Boolean(getPerformedNeighborStartTime(timingMap, practiceTime, 1) ?? nextMeasure)
+        : Boolean(nextMeasure),
+      goToPreviousMeasure,
+      goToNextMeasure,
+      goToMeasureNumber,
+    }),
+    [timingMap, practiceTime, onSeekToTime],
+  )
 }
