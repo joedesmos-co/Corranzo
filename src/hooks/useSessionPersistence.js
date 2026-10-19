@@ -182,7 +182,7 @@ export default function useSessionPersistence({
 
       // A legacy notation-only session restores partial (its notation is kept
       // but it needs a PDF), so the bundle fallback is only for lost PDFs.
-      const bundleOnlyRestore = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly)
+      const bundleOnlyRestore = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly && !result.audioArrangement)
       // Last-known-good fallback: when the current generation fails
       // validation, retry the backup manifest + its generation blobs.
       if (bundleOnlyRestore && Object.keys(instrumentBundles).length === 0) {
@@ -214,7 +214,7 @@ export default function useSessionPersistence({
         }
       }
       if (!mountedRef.current || controller.signal.aborted) return
-      const stillBundleOnly = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly)
+      const stillBundleOnly = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly && !result.audioArrangement)
       const fallbackBundleEntry = stillBundleOnly
         ? Object.entries(instrumentBundles)[0] ?? null
         : null
@@ -317,8 +317,8 @@ export default function useSessionPersistence({
   }, [attemptRestore, restoreStatus, restoreSuspended])
 
   useEffect(() => {
-    if (restoreGateOpen && !restoreSuspended) updateSavedSessionView(activeView, pdfMeta, instrumentId)
-  }, [activeView, pdfMeta, instrumentId, restoreGateOpen, restoreSuspended])
+    if (restoreGateOpen && !restoreSuspended) updateSavedSessionView(activeView, pdfMeta, instrumentId, musicXmlSource)
+  }, [activeView, pdfMeta, musicXmlSource, instrumentId, restoreGateOpen, restoreSuspended])
 
   const scheduleSave = useCallback(() => {
     if (!restoreGateOpen) {
@@ -332,9 +332,13 @@ export default function useSessionPersistence({
       if (readSaveGeneration() !== generationAtSchedule) {
         return
       }
-      // A save always needs the PDF bytes it was written from: the PDF is the
-      // score, so a session without one is not something to persist.
-      if (!pdfMeta?.fileName || !pdfBuffer) {
+      // A save needs score bytes: either the PDF (the score) or a MusicXML-only
+      // score such as an Audio Vision arrangement. A session with neither is not
+      // something to persist.
+      if (pdfMeta?.fileName && !pdfBuffer) {
+        return
+      }
+      if (!pdfMeta?.fileName && !musicXmlSource?.data) {
         return
       }
 
@@ -444,7 +448,7 @@ export default function useSessionPersistence({
   ])
 
   useEffect(() => {
-    if (!pdfMeta?.fileName || !restoreGateOpen) {
+    if ((!pdfMeta?.fileName && !musicXmlSource?.data) || !restoreGateOpen) {
       return undefined
     }
     scheduleSave()
