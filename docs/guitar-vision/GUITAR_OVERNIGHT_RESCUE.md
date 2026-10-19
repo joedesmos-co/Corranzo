@@ -757,3 +757,23 @@ Per-page spread is extreme and correlates with measured gap/scale:
 Pages at the same normalised scale still differ 0.857 vs 0.007 precision,
 so scale is NOT the discriminator - per-score/per-page glyph appearance
 is. This quantifies M2's target: the per-PAGE spread, not just the mean.
+
+### R19 — PDF text-layer feasibility (M2)
+proof-pdf-text.py extracts text spans + bboxes via PyMuPDF and
+classifies digit-like spans (pure int 0-19, small). On a real user
+PDF (canon-in-d-pachelbel-guitar-tab.pdf, 595x842pt, 1 page):
+  text_spans=882  digit_like_spans=802  fonts={FreeSans}
+  96 digit-like spans sit on a detected staff line.
+
+Feasibility verdict:
+- Text-bearing PDFs: YES. fret digits appear as individual text spans with
+  precise bboxes in a standard font (FreeSans/Helvetica/etc.), and the
+  font is readable. A hybrid path (PDF text -> TAB recognition, raster
+  -> fallback) is viable and bypasses the font-dependence problem entirely.
+- Scanned/image PDFs: must fall back to visual recognition (one of the
+  sampled fixtures has textlen=0).
+- The probe's "digit_like_spans=802" over-counts (measure numbers,
+  fingerings, chord frets); "digits_on_staff_line=96" under-counts
+  because the naive row-profile (>0.3 over full width) misses sparse
+  TAB staves. A better filter (staff-line proximity per system) is the
+  natural next step in the hybrid implementation.
