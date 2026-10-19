@@ -502,10 +502,18 @@ export default function App() {
     setActiveView(nextView)
     requestAnimationFrame(() => window.scrollTo(0, 0))
     const nextPath = pathnameForView(nextView)
-    // Compare the full in-app path (path + hash) so app-view changes — which
-    // live in the hash — still push a history entry and Back/Forward work.
-    if (currentViewPath(window.location) !== nextPath) {
-      window.history.pushState({}, '', nextPath)
+    // Preserve any query string (e.g. the dev-only ?e2e-midi=1 flag) across
+    // view changes: pathnameForView returns path+hash, so splice the search in
+    // between pathname and hash.
+    const [nextPathname, nextHash] = nextPath.includes('#')
+      ? nextPath.split('#')
+      : [nextPath, '']
+    const search = window.location.search
+    const fullPath = `${nextPathname}${search}${nextHash ? '#' + nextHash : ''}`
+    // Compare the full in-app path (path + search + hash) so app-view changes
+    // still push a history entry and Back/Forward work.
+    if (currentViewPath(window.location) !== fullPath) {
+      window.history.pushState({}, '', fullPath)
     }
   }, [])
 

@@ -102,7 +102,6 @@ export default function useWaitForYouMidiInput({
     if (!matchingEnabled || !onPlayerInputMatched) {
       return undefined
     }
-
     return webMidi.subscribeNoteOn(handleNoteOn)
   }, [matchingEnabled, onPlayerInputMatched, webMidi, handleNoteOn])
 

@@ -16,7 +16,7 @@ const PATH_TO_VIEW = Object.fromEntries(
 // — which is what makes Back/Forward move between views instead of leaving the
 // app. (When every app view shared the bare "/" path, no entry was ever pushed
 // and the browser Back button dropped the user onto about:blank.)
-const APP_VIEWS = new Set(['home', 'library', 'import', 'practice', 'profile', 'settings'])
+export const APP_VIEWS = new Set(['home', 'library', 'import', 'practice', 'profile', 'settings'])
 
 export function isLegalView(view) {
   return LEGAL_VIEWS.includes(view)
@@ -65,9 +65,10 @@ export function getViewFromLocation(location = window.location) {
   return 'home'
 }
 
-/** Current in-app path (path + hash) for pushState change detection. */
+/** Current in-app path (path + search + hash) for pushState change detection. */
 export function currentViewPath(location = window.location) {
   const path = location?.pathname ?? '/'
+  const search = String(location?.search ?? '')
   const hash = String(location?.hash ?? '')
-  return hash ? `${path}${hash}` : path
+  return `${path}${search}${hash}`
 }
