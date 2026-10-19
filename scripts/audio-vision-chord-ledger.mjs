@@ -55,7 +55,7 @@ for (const [take, data] of Object.entries(trios)) {
   console.log(`--- ${take} (mix, ${data.mix.notes.length} truth notes)`)
   const wav = readWavPcm(join('/tmp/trios/TRIOS Dataset', take, 'mix.wav'))
   const mono = resampleLinear(Float32Array.from(wav.samples), wav.sampleRate, 22050)
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, { views: { harmonic: views.harmonic, percussive: views.percussive }, predictNotes: null })
   let rootHit = 0
   let familyHit = 0

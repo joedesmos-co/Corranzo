@@ -58,10 +58,10 @@ function synthMusic({ bpm, pickupBeats, bars, seed = 0 }) {
 }
 
 function analyse(samples, bpm) {
-  const { frames, frameSeconds } = magnitudeSpectrogram(samples, { sampleRate: SR })
+  const { frames, frameSeconds } = await magnitudeSpectrogram(samples, { sampleRate: SR })
   const flux = spectralFlux(frames)
   const picked = pickOnsetFrames(flux)
-  const tempo = estimateTempoFromEnvelope(flux, frameSeconds)
+  const tempo = await estimateTempoFromEnvelope(flux, frameSeconds)
   const grid = buildBeatGrid({ onsetFrames: picked, frameSeconds, bpm: tempo.bpm, totalSeconds: samples.length / SR })
   return { frames, frameSeconds, picked, tempo, grid }
 }

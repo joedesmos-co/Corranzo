@@ -32,7 +32,7 @@ function ffmpeg(args) {
 async function analyze(fileOrImported) {
   const wav = fileOrImported?.samples ? fileOrImported : readWavPcm(fileOrImported)
   const mono = wav.samples
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: null,
@@ -63,9 +63,9 @@ const base = '/tmp/guitarset/00_SS3-84-Bb_comp_mic.wav'
     const file = join(out, `tempo-${v.id.replace(/[^a-z0-9]+/gi, '-')}.wav`)
     if (v.filter.length) ffmpeg(['-i', base, ...v.filter, '-ar', '44100', file])
     else ffmpeg(['-i', base, '-ar', '44100', file])
-    const { frames, frameSeconds } = magnitudeSpectrogram(resampleLinear(Float32Array.from(readWavPcm(file).samples), 44100, 22050), { sampleRate: 22050 })
+    const { frames, frameSeconds } = await magnitudeSpectrogram(resampleLinear(Float32Array.from(readWavPcm(file).samples), 44100, 22050), { sampleRate: 22050 })
     const flux = spectralFlux(frames)
-    const est = estimateTempoFromEnvelope(flux, frameSeconds)
+    const est = await estimateTempoFromEnvelope(flux, frameSeconds)
     rows.push({ variant: v.id, bpm: est.bpm, confidence: est.confidence, octaveAlternative: est.octaveAlternative })
     console.log(`TEMPO ${v.id}: ${est.bpm} BPM (conf ${est.confidence}, alt ${est.octaveAlternative})`)
   }
@@ -100,7 +100,7 @@ const base = '/tmp/guitarset/00_SS3-84-Bb_comp_mic.wav'
   if (existsSync(violin)) {
     const notes = []
     const { mono } = analyze(violin)
-    const { frames, fftSize } = magnitudeSpectrogram(mono, { sampleRate: 22050 })
+    const { frames, fftSize } = await magnitudeSpectrogram(mono, { sampleRate: 22050 })
     // Count frames whose strongest peak sits above 1400 Hz (invisible to the
     // current melody band).
     let above = 0

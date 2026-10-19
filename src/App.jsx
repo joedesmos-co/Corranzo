@@ -943,6 +943,25 @@ export default function App() {
     if (!payload?.musicXmlString) return
     clearDemoPiece()
     markDemoCardHidden()
+    // BUG 2 FIX: clear stale PDF state so the generated arrangement is the
+    // active score. Without this, pdfFile still points at the previously
+    // imported PDF and the practice view renders the old score (the user's
+    // reported "Menuet in F" symptom).
+    // The imported PDF itself is NOT deleted: it stays in the library and can
+    // be reopened from there. Only the in-memory "current score" moves to the
+    // arrangement.
+    setPdfFile((previous) => {
+      if (previous) URL.revokeObjectURL(previous)
+      return null
+    })
+    setPdfBuffer(null)
+    setPdfMeta(null)
+    setFileName(payload.fileName ?? 'audio-arrangement.musicxml')
+    if (liveBundleRef.current) {
+      liveBundleRef.current.pdfFile = null
+      liveBundleRef.current.pdfBuffer = null
+      liveBundleRef.current.pdfMeta = null
+    }
     const nextXml = createMusicXmlSource(payload.fileName ?? 'audio-arrangement.musicxml', payload.musicXmlString, {
       source: 'audio-arrangement',
       omrMeta: {

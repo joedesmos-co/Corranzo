@@ -189,7 +189,10 @@ describe('M1 — MusicXML semantics (independent reader + tonejs/midi)', () => {
       // Ties: compare the SOUNDING timeline. The app's parser already merges
       // tie continuations into their parent (dq 1.25 shown as one event), so
       // use that as the reference and check the independent + SMF readers agree.
-      const mergedNotes = parsed.notes.filter((n) => !n.isRest && !n.tieStop)
+      // TAB mirror notes (the guitar's six-line staff) are a visual copy of
+      // the notation staff, not an extra sounding voice, so they are excluded
+      // here exactly as the playback path excludes them.
+      const mergedNotes = parsed.notes.filter((n) => !n.isRest && !n.tieStop && !n.isTabMirror)
       const smfNotes = mergedNotes.filter((n) => Number.isFinite(n.midi))
       // Convert through seconds (the parser exposes time/duration in seconds)
       // back into quarters using the same reference clock as the SMF writer.

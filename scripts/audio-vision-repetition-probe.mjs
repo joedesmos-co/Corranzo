@@ -30,7 +30,7 @@ const TRACKS = [
 
 /** Chroma sequence downsampled to ~10 Hz frames. */
 function chromaSequence(mono) {
-  const { frames, fftSize, frameSeconds } = magnitudeSpectrogram(mono, {
+  const { frames, fftSize, frameSeconds } = await magnitudeSpectrogram(mono, {
     sampleRate: 22050,
     fftSize: 4096,
     hop: 2048,

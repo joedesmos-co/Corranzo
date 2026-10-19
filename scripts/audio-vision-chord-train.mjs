@@ -36,7 +36,7 @@ function renderChord(root, intervals, seconds = 2) {
 }
 
 function recognizeRendered(samples) {
-  const { frames, fftSize } = magnitudeSpectrogram(samples, { sampleRate: SR })
+  const { frames, fftSize } = await magnitudeSpectrogram(samples, { sampleRate: SR })
   // Average chroma over the stable middle second (skip attack).
   const acc = new Float64Array(12)
   const start = Math.floor(frames.length * 0.25)

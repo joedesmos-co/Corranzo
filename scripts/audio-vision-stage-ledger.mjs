@@ -124,7 +124,7 @@ for (const entry of ENTRIES) {
   // S1: model + suppression (the pipeline's actual S1).
   const s1 = suppressHarmonicDoubles(bpRaw)
   const s1Events = s1.notes.map((n) => ({ midi: n.midi, sec: n.startSeconds }))
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: async () => s1.notes.map((n) => ({ midi: n.midi, startSeconds: n.startSeconds, endSeconds: n.endSeconds, amplitude: n.amplitude })),

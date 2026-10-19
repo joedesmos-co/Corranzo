@@ -29,7 +29,7 @@ const manifest = JSON.parse(readFileSync(join(root, 'benchmarks/mic-real/manifes
 const excluded = new Set((manifest.excluded ?? []).map((e) => e.id))
 
 function energyPeaks(mono, sr) {
-  const { frames, frameSeconds } = magnitudeSpectrogram(mono, { sampleRate: sr })
+  const { frames, frameSeconds } = await magnitudeSpectrogram(mono, { sampleRate: sr })
   const flux = spectralFlux(frames)
   const mx = Math.max(...flux)
   const peaks = []

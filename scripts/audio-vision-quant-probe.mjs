@@ -67,7 +67,7 @@ for (const track of TRACKS) {
   const wav = readWavPcm(track.wav)
   const mono = resampleLinear(Float32Array.from(wav.samples), wav.sampleRate, 22050)
   const bp = await predictBasicPitchNode(mono, { modelDir: join(root, 'public/neural-model') })
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: async () => bp.notes.map((n) => ({ midi: n.midi, startSeconds: n.startSeconds, endSeconds: n.endSeconds, amplitude: n.amplitude })),

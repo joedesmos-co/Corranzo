@@ -48,7 +48,7 @@ async function run(label, transform) {
     console.log(`${label}: IMPORT FAILED (${imported.code}) ${imported.message?.slice(0, 80) ?? ''}`)
     return { label, failed: imported.code }
   }
-  const views = buildAnalysisViews(imported.samples, imported.sampleRate)
+  const views = await buildAnalysisViews(imported.samples, imported.sampleRate)
   const analysis = await analyzeMusic(imported.samples, imported.sampleRate, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: null,

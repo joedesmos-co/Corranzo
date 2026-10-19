@@ -45,12 +45,12 @@ async function trace(samples, sampleRate, label) {
     }),
   )
   const mono = imported.samples
-  const { frames, frameSeconds } = magnitudeSpectrogram(mono, { sampleRate: 22050 })
+  const { frames, frameSeconds } = await magnitudeSpectrogram(mono, { sampleRate: 22050 })
   const flux = spectralFlux(frames)
   const picked = pickOnsetFrames(flux)
-  const tempo = estimateTempoFromEnvelope(flux, frameSeconds)
+  const tempo = await estimateTempoFromEnvelope(flux, frameSeconds)
   const grid = buildBeatGrid({ onsetFrames: picked, frameSeconds, bpm: tempo.bpm, totalSeconds: mono.length / 22050 })
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: null,

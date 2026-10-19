@@ -34,15 +34,20 @@ function excerptCoverage(excerpt) {
 }
 const STAGE_LABELS = {
   validate: 'Checking your file',
-  spectrogram: 'Listening to the recording',
+  decode: 'Decoding your recording',
+  preparing: 'Preparing audio',
+  spectrogram: 'Analyzing the recording',
   onsets: 'Finding note beginnings',
-  tempo: 'Finding the tempo',
+  tempo: 'Detecting the rhythm',
   beats: 'Mapping the beats',
-  harmony: 'Hearing the chords',
+  harmony: 'Detecting the harmony',
   'melody-bass': 'Following the melody and bass',
   sections: 'Mapping song sections',
-  notes: 'Recognizing notes',
-  done: 'Finishing up',
+  notes: 'Analyzing notes',
+  arranging: 'Building the arrangement',
+  notation: 'Generating the notation',
+  practice: 'Preparing your practice score',
+  done: 'Finished',
 }
 
 export default function CreateFromAudio({ onArrangementReady = null, uploadsDisabled = false }) {
@@ -200,11 +205,19 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
 
       {busy && (
         <div className="audio-vision-progress" role="status" aria-live="polite">
-          <p><strong>{STAGE_LABELS[flow.progress?.stage] ?? 'Working'}</strong></p>
+          <p>
+            <strong>{STAGE_LABELS[flow.progress?.stage] ?? 'Working'}</strong>
+            {typeof flow.progress?.fraction === 'number' && flow.progress.fraction > 0
+              ? <span className="audio-vision-progress-pct"> · {Math.round(flow.progress.fraction * 100)}%</span>
+              : null}
+          </p>
           <div className="audio-vision-progress-bar" aria-hidden="true">
-            <div style={{ width: `${Math.round((flow.progress?.fraction ?? 0) * 100)}%` }} />
+            <div
+              className={flow.progress?.fraction ? 'audio-vision-progress-bar__determinate' : 'audio-vision-progress-bar__indeterminate'}
+              style={{ width: flow.progress?.fraction ? `${Math.round(flow.progress.fraction * 100)}%` : '30%' }}
+            />
           </div>
-          <p className="audio-vision-hint">Analyzing your recording — this can take a minute on long songs.</p>
+          <p className="audio-vision-hint">Analyzing your recording — this can take a minute on long songs. You can cancel at any time.</p>
           <button className="cz-text-link" onClick={flow.cancel}>Cancel</button>
         </div>
       )}

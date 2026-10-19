@@ -56,10 +56,12 @@ export function hannWindow(size) {
 }
 
 /** Magnitude spectrogram: frames × bins (bins = fftSize/2). */
-export function magnitudeSpectrogram(samples, { sampleRate = 22050, fftSize = 2048, hop = 512 } = {}) {
+export async function magnitudeSpectrogram(samples, { sampleRate = 22050, fftSize = 2048, hop = 512, onProgress = null } = {}) {
   const size = nextPow2(fftSize)
   const window = hannWindow(size)
   const frames = []
+  const totalFrames = Math.max(1, Math.ceil((samples.length - size) / hop) + 1)
+  let frameIndex = 0
   for (let start = 0; start + size <= samples.length + size; start += hop) {
     const real = new Float64Array(size)
     const imag = new Float64Array(size)
@@ -73,6 +75,13 @@ export function magnitudeSpectrogram(samples, { sampleRate = 22050, fftSize = 20
       mags[b] = Math.hypot(real[b], imag[b]) / (size / 2)
     }
     frames.push(mags)
+    frameIndex += 1
+    // Yield periodically so the browser main thread can paint progress instead
+    // of blocking on the whole FFT pass.
+    if (frameIndex % 64 === 0) {
+      try { onProgress?.(frameIndex / totalFrames) } catch { /* noop */ }
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    }
     if (start + size >= samples.length) break
   }
   return { frames, fftSize: size, hop, sampleRate, frameSeconds: hop / sampleRate }
@@ -133,12 +142,36 @@ export function median(values) {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
 }
 
+/**
+ * Median filter with a fixed radius.
+ *
+ * The window is tiny (radius 8 -> 17 samples) but this runs once per bin per
+ * frame, so it is the hottest loop in the analysis. Allocating and sorting a
+ * fresh array for every output sample cost seconds of main-thread time on a
+ * 30 s recording; a reused buffer with an insertion sort is the same result
+ * (a median is a median) at a fraction of the cost.
+ */
 function medianFilter1D(values, radius) {
-  const out = new Float64Array(values.length)
-  for (let i = 0; i < values.length; i += 1) {
+  const n = values.length
+  const out = new Float64Array(n)
+  const width = radius * 2 + 1
+  const window = new Float64Array(width)
+  for (let i = 0; i < n; i += 1) {
     const lo = Math.max(0, i - radius)
-    const hi = Math.min(values.length - 1, i + radius)
-    out[i] = median(Array.from(values.slice(lo, hi + 1)))
+    const hi = Math.min(n - 1, i + radius)
+    const count = hi - lo + 1
+    for (let k = 0; k < count; k += 1) window[k] = values[lo + k]
+    for (let a = 1; a < count; a += 1) {
+      const v = window[a]
+      let b = a - 1
+      while (b >= 0 && window[b] > v) {
+        window[b + 1] = window[b]
+        b -= 1
+      }
+      window[b + 1] = v
+    }
+    const mid = count >> 1
+    out[i] = count % 2 ? window[mid] : (window[mid - 1] + window[mid]) / 2
   }
   return out
 }
@@ -148,7 +181,7 @@ function medianFilter1D(values, radius) {
  * emphasizes time-continuity, percussive mask frequency-continuity.
  * Returns per-frame { harmonic: Float64Array, percussive: Float64Array } magnitudes.
  */
-export function hpssMasks(frames, { timeRadius = 8, freqRadius = 8, eps = 1e-10 } = {}) {
+export async function hpssMasks(frames, { timeRadius = 8, freqRadius = 8, eps = 1e-10, onProgress = null } = {}) {
   const nFrames = frames.length
   if (!nFrames) return []
   const nBins = frames[0].length
@@ -160,6 +193,12 @@ export function hpssMasks(frames, { timeRadius = 8, freqRadius = 8, eps = 1e-10 
     const traj = new Float64Array(nFrames)
     for (let f = 0; f < nFrames; f += 1) traj[f] = frames[f][b]
     timeMedByBin.push(medianFilter1D(traj, timeRadius))
+    // Yield so the browser can paint progress instead of blocking on the
+    // whole median-filter pass.
+    if (b % 64 === 0) {
+      try { onProgress?.(b / nBins) } catch { /* noop */ }
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    }
   }
   for (let f = 0; f < nFrames; f += 1) {
     const spectrum = frames[f]
@@ -178,6 +217,10 @@ export function hpssMasks(frames, { timeRadius = 8, freqRadius = 8, eps = 1e-10 
     }
     harm.push(h)
     perc.push(p)
+    if (f % 64 === 0) {
+      try { onProgress?.(0.5 + 0.5 * (f / nFrames)) } catch { /* noop */ }
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    }
   }
   return { harmonic: harm, percussive: perc }
 }
@@ -324,7 +367,7 @@ export function recognizeChord(chroma) {
 // and fast electronic genres are not octave-halved. Lower bound stays 55 BPM:
 // slower material is reported at its double-time pulse (see the octave note in
 // estimateTempoFromEnvelope) with the original reading in octaveAlternative.
-export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55, maxBpm = 240 } = {}) {
+export async function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55, maxBpm = 240 } = {}) {
   const n = envelope.length
   if (n < 8 || !(frameSeconds > 0)) {
     return { bpm: 120, confidence: 0, octaveAlternative: null, method: 'default' }
@@ -344,6 +387,7 @@ export function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm = 55,
       bestVal = s
       bestLag = lag
     }
+    if (lag % 8 === 0) await new Promise((resolve) => setTimeout(resolve, 0))
   }
   if (!bestLag) return { bpm: 120, confidence: 0, octaveAlternative: null, method: 'default' }
   const bpm = 60 / (bestLag * frameSeconds)

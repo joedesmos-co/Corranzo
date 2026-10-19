@@ -78,7 +78,11 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
       if (isPiano) {
         xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef>`
       } else {
-        xml += `<clef><sign>G</sign><line>2</line></clef>`
+        // Guitar: standard notation staff + a six-line TAB staff in standard
+        // tuning, so the arrangement shows BOTH the notes and the fingering.
+        xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef>` +
+          `<clef number="2"><sign>TAB</sign><line>6</line></clef>` +
+          guitarStaffDetails()
       }
       xml += `</attributes>\n`
       if (Number.isFinite(bpm)) {
@@ -89,7 +93,7 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
     if (isPiano) {
       xml += emitGrandStaffMeasure(measureEvents, m, beats)
     } else {
-      xml += emitSingleStaffMeasure(measureEvents, m, beats, true)
+      xml += emitGuitarMeasure(measureEvents, m, beats)
     }
     xml += `    </measure>\n`
   }
@@ -307,17 +311,52 @@ function emitStaffVoice(events, { measureIndex, beats, voice, staff, withTab }) 
   return s
 }
 
-function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
-  // Events arrive already prepared by prepareEventsForNotation (barline split +
-  // voice clipping carry tieStart/tieStop). Re-splitting them here would reset
-  // a tie-stop continuation's flag — which silently dropped ties before — so
-  // only split pieces that were NOT prepared (direct callers/tests).
-  const split = measureEvents
-    .map((e) => (e.prepared ? [e] : splitAcrossMeasures([e], m, beats)))
-    .flat()
-    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
-  return emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: null, withTab })
+/**
+ * TAB staff declaration: six lines with standard tuning. String 1 is the
+ * highest string (E4) — the same convention Corranzo's fretboard uses, so the
+ * generated string/fret numbers stay truthful on the TAB.
+ */
+function guitarStaffDetails() {
+  const tunings = [
+    { line: 1, step: 'E', octave: 4 },
+    { line: 2, step: 'B', octave: 3 },
+    { line: 3, step: 'G', octave: 3 },
+    { line: 4, step: 'D', octave: 3 },
+    { line: 5, step: 'A', octave: 2 },
+    { line: 6, step: 'E', octave: 2 },
+  ]
+  let s = `<staff-details number="1"><staff-lines>5</staff-lines></staff-details>`
+  s += `<staff-details number="2"><staff-lines>6</staff-lines>`
+  for (const t of tunings) {
+    s += `<staff-tuning line="${t.line}"><tuning-step>${t.step}</tuning-step><tuning-octave>${t.octave}</tuning-octave></staff-tuning>`
+  }
+  s += `</staff-details>`
+  return s
 }
+
+/**
+ * Guitar measure: standard notation staff (voice 1) then a matching TAB staff
+ * (voice 2 after the backup). Both carry the same pitch/duration/ties so the
+ * canonical timing map (and every practice mode) reads ONE musical truth; the
+ * TAB copy is a placement mirror for the eyes.
+ */
+function emitGuitarMeasure(measureEvents, m, beats) {
+  const split = measureEvents
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
+    .sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
+  const upper = emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: 1, withTab: true })
+  // emitStaffVoice always writes a full measure (beats * ARR_DIVISIONS), so
+  // the backup is exact and the TAB staff can never drift out of alignment.
+  const backupDivisions = beats * ARR_DIVISIONS
+  const lower = emitStaffVoice(split, { measureIndex: m, beats, voice: 2, staff: 2, withTab: true })
+  return (
+    upper +
+    `      <backup><duration>${backupDivisions}</duration></backup>\n` +
+    lower
+  )
+}
+
+
 
 export function pitchStepForTest(midi) {
   return midiToPitch(midi)

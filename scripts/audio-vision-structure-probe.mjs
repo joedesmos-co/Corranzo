@@ -47,7 +47,7 @@ for (const track of TRACKS) {
   }
   const wav = readWavPcm(track.wav)
   const mono = resampleLinear(Float32Array.from(wav.samples), wav.sampleRate, 22050)
-  const { frames, frameSeconds, fftSize } = magnitudeSpectrogram(mono, { sampleRate: 22050 })
+  const { frames, frameSeconds, fftSize } = await magnitudeSpectrogram(mono, { sampleRate: 22050 })
   const flux = spectralFlux(frames)
   const picked = pickOnsetFrames(flux)
   const truePeriod = 60 / track.truth

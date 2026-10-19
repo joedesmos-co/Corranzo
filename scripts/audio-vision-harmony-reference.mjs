@@ -93,7 +93,7 @@ for (const entry of manifest.entries) {
   const bp = await predictBasicPitchNode(mono, { modelDir: join(root, 'public/neural-model') })
   const bpRaw = bp.notes.map((n) => ({ midi: n.midi, startSeconds: n.startSeconds, endSeconds: n.endSeconds, amplitude: n.amplitude }))
   const s1 = suppressHarmonicDoubles(bpRaw)
-  const views = buildAnalysisViews(mono, 22050)
+  const views = await buildAnalysisViews(mono, 22050)
   const analysis = await analyzeMusic(mono, 22050, {
     views: { harmonic: views.harmonic, percussive: views.percussive },
     predictNotes: async () => s1.notes.map((n) => ({ midi: n.midi, startSeconds: n.startSeconds, endSeconds: n.endSeconds, amplitude: n.amplitude })),
