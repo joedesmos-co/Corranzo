@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { WFY_CHECKPOINT_MODE } from './waitForYouCheckpointMode.js'
 import {
   buildInputFeedback,
@@ -106,13 +106,16 @@ export default function useWaitForYouMidiInput({
     return webMidi.subscribeNoteOn(handleNoteOn)
   }, [matchingEnabled, onPlayerInputMatched, webMidi, handleNoteOn])
 
-  return {
-    matchingEnabled,
-    inputFeedback,
-    resetFeedback,
-    feedbackOutcome: inputFeedback.outcome,
-    isWaitingForChord:
-      inputFeedback.outcome === WFY_INPUT_OUTCOME.CHORD_PARTIAL ||
-      inputFeedback.outcome === WFY_INPUT_OUTCOME.CHORD_WAITING,
-  }
+  return useMemo(
+    () => ({
+      matchingEnabled,
+      inputFeedback,
+      resetFeedback,
+      feedbackOutcome: inputFeedback.outcome,
+      isWaitingForChord:
+        inputFeedback.outcome === WFY_INPUT_OUTCOME.CHORD_PARTIAL ||
+        inputFeedback.outcome === WFY_INPUT_OUTCOME.CHORD_WAITING,
+    }),
+    [matchingEnabled, inputFeedback, resetFeedback],
+  )
 }

@@ -21,8 +21,8 @@ function PracticeFullscreenHudTick({
 
   return (
     <PracticeFullscreenHud
-      measureNumber={session.beat.position?.measureNumber}
-      beatNumber={session.beat.position?.beatNumber}
+      measureNumber={tick.beatPosition?.measureNumber}
+      beatNumber={tick.beatPosition?.beatNumber}
       isPlaying={tick.playbackIsPlaying}
       hasMidi={session.hasMidi}
       isWaitForYou={session.isWaitForYou}

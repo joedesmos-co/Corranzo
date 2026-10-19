@@ -97,7 +97,7 @@ export function PracticeSessionProvider({
     return { id, title }
   }, [pdfMeta, pdfFileName, musicXmlSource?.fileName])
 
-  const session = usePracticeSession({
+  const { session, clock, practiceTime, measure, beat, playback } = usePracticeSession({
     midiSource,
     musicXmlSource,
     pdfSoftWarning,
@@ -119,8 +119,8 @@ export function PracticeSessionProvider({
   const practiceStatsTracker = usePracticeStatsTracker({
     active: activeView === 'practice' && Boolean(practicePiece?.id),
     piece: practicePiece,
-    measureNumber: session.measure.currentMeasure?.number ?? null,
-    tempoBpm: session.playback.effectiveTempo ?? null,
+    measureNumber: measure?.currentMeasure?.number ?? null,
+    tempoBpm: playback.effectiveTempo ?? null,
     onStatsFlush: refreshStats,
     instrumentId,
   })
@@ -132,19 +132,19 @@ export function PracticeSessionProvider({
       Boolean(session.timing.timingMap),
   )
 
-  const scoreFollow = useScoreFollow({
+  const rawScoreFollow = useScoreFollow({
     timingMap: session.timing.timingMap,
     timingLoading: session.timing.isLoading,
     timingSourceId: session.sources.timingFileName ?? session.timing.timingMap?.fileName ?? null,
-    practiceTime: session.clock.practiceTime,
-    getScoreTime: session.playback.getScoreTime,
+    practiceTime: practiceTime,
+    getScoreTime: playback.getScoreTime,
     pdfFingerprint,
     pdfFileName: pdfMeta?.fileName ?? pdfFileName ?? null,
     pdfSource: pdfFile ?? null,
     numPages,
     hasPdf,
     visiblePageNumber,
-    isPlaying: session.playback.isPlaying,
+    isPlaying: playback.isPlaying,
     sessionReady,
     isDemoPiece: resolvedDemoPiece,
     autoSetupGateOpen,
@@ -153,6 +153,49 @@ export function PracticeSessionProvider({
       ? musicXmlSource?.omrMeta?.measureGrid ?? null
       : null,
   })
+
+  // Tick-stable: `useScoreFollow` returns a fresh object each render, so the
+  // provider's `value` memo (and every full-session consumer) rebuilt on every
+  // tick even though the session identity is now stable. Exclude the
+  // tick-varying cursor fields from the memo key — they are delivered through
+  // the ScoreFollowCursorContext (imperative runtime + RAF) and through the
+  // `cursorValue` memo below, so nothing here depends on them at render time.
+  const scoreFollowKey = [
+    rawScoreFollow.enabled,
+    rawScoreFollow.alignmentMode,
+    rawScoreFollow.semiAutoPreview,
+    rawScoreFollow.showAnchorMarkers,
+    rawScoreFollow.showSystemBands,
+    rawScoreFollow.placementMeasureNumber,
+    rawScoreFollow.canFollow,
+    rawScoreFollow.followNeedsSetup,
+    rawScoreFollow.followApproximateLabel,
+    rawScoreFollow.experimentalOmrPlayback,
+    rawScoreFollow.autoSetupGateOpen,
+    rawScoreFollow.hasTiming,
+    rawScoreFollow.hasAnchors,
+    rawScoreFollow.anchors?.length,
+    rawScoreFollow.trustedAnchors?.length,
+    rawScoreFollow.anchorTrust?.level,
+    rawScoreFollow.anchorTrust?.showCursor,
+    rawScoreFollow.anchorTrust?.needsSetup,
+    rawScoreFollow.motionTimeline != null,
+    rawScoreFollow.guitarScoreTarget?.activeTarget,
+    rawScoreFollow.pageViewRotations != null,
+    rawScoreFollow.systemStartMode,
+    rawScoreFollow.systemStartMarks?.length,
+    rawScoreFollow.showNextGenCandidates,
+    rawScoreFollow.anchorSource,
+    rawScoreFollow.showCalibrationOverlay,
+    rawScoreFollow.calibrationOverlayPage,
+    rawScoreFollow.rotatePageView != null,
+    rawScoreFollow.applyAutoPageRotations != null,
+  ].join('|')
+
+  const scoreFollow = useMemo(() => rawScoreFollow, [scoreFollowKey])
+  if (import.meta.env?.DEV) {
+    globalThis.__SCOREFLOW_SCOREFOLLOW_KEY__ = scoreFollowKey
+  }
 
   useEffect(() => {
     if (
@@ -209,8 +252,8 @@ export function PracticeSessionProvider({
   // lags the bar by whole events. This loop re-renders ONLY when the event
   // index itself changes (a few times per second, like before) but timed
   // by the same canonical clock as the bar — one clock for cursor and box.
-  const playbackGetScoreTime = session.playback.getScoreTime
-  const playbackIsPlaying = session.playback.isPlaying
+  const playbackGetScoreTime = playback.getScoreTime
+  const playbackIsPlaying = playback.isPlaying
   const [audioTimelineIndex, setAudioTimelineIndex] = useState(null)
   useEffect(() => {
     if (
@@ -241,9 +284,9 @@ export function PracticeSessionProvider({
       cancelAnimationFrame(frameId)
     }
   }, [timelineHighlightActive, playbackIsPlaying, playbackGetScoreTime, scoreEventCheckpoints])
-  const timelineScoreTarget = useTimelineScoreTarget({
+  const rawTimelineScoreTarget = useTimelineScoreTarget({
     checkpoints: scoreEventCheckpoints,
-    practiceTime: session.clock.practiceTime,
+    practiceTime: practiceTime,
     timingMap: session.timing.timingMap,
     anchors: scoreFollow.anchors,
     sourceVisualMap: session.sourceVisualMap,
@@ -252,6 +295,14 @@ export function PracticeSessionProvider({
     enabled: timelineHighlightActive,
     indexOverride: audioTimelineIndex,
   })
+  const timelineScoreTarget = useMemo(
+    () => rawTimelineScoreTarget,
+    [
+      rawTimelineScoreTarget.index,
+      rawTimelineScoreTarget.checkpoint,
+      rawTimelineScoreTarget.target,
+    ],
+  )
 
   // Play Along accuracy on the score: lane outcomes (canonical bounded
   // evaluator, 150 ms early / 280 ms late) mapped onto score events by onset
@@ -418,28 +469,39 @@ export function PracticeSessionProvider({
     timelineScoreTarget.index,
   ])
 
-  const practiceNoteTarget = session.isWaitForYou
-    ? {
-        ...waitForYouNoteTarget,
-        active: Boolean(
-          session.waitForYou.status === WFY_STATUS.WAITING &&
-            waitForYouNoteTarget?.target?.visible,
-        ),
-        mode: 'wait-for-you',
-      }
-    : {
-        target: timelineHighlightActive ? timelineScoreTarget.target : null,
-        showOnPage: Boolean(
-          timelineHighlightActive &&
-            timelineScoreTarget.target?.visible &&
-            timelineScoreTarget.target.page === visiblePageNumber,
-        ),
-        active: Boolean(
-          timelineHighlightActive && timelineScoreTarget.target?.visible,
-        ),
-        mode: isPlayAlong ? 'play-along' : 'preview',
-      }
-
+  const practiceNoteTarget = useMemo(
+    () =>
+      session.isWaitForYou
+        ? {
+            ...waitForYouNoteTarget,
+            active: Boolean(
+              session.waitForYou.status === WFY_STATUS.WAITING &&
+                waitForYouNoteTarget?.target?.visible,
+            ),
+            mode: 'wait-for-you',
+          }
+        : {
+            target: timelineHighlightActive ? timelineScoreTarget.target : null,
+            showOnPage: Boolean(
+              timelineHighlightActive &&
+                timelineScoreTarget.target?.visible &&
+                timelineScoreTarget.target.page === visiblePageNumber,
+            ),
+            active: Boolean(
+              timelineHighlightActive && timelineScoreTarget.target?.visible,
+            ),
+            mode: isPlayAlong ? 'play-along' : 'preview',
+          },
+    [
+      session.isWaitForYou,
+      waitForYouNoteTarget,
+      session.waitForYou.status,
+      timelineHighlightActive,
+      timelineScoreTarget.target,
+      visiblePageNumber,
+      isPlayAlong,
+    ],
+  )
   const practiceNoteTargetVisible = wfyNoteTargetVisible || practiceNoteTarget.showOnPage
 
   const previousViewRef = useRef(activeView)
@@ -450,16 +512,16 @@ export function PracticeSessionProvider({
   const practicePrefsSnapshotRef = useRef(session.practicePrefsSnapshot)
   practicePrefsSnapshotRef.current = session.practicePrefsSnapshot
 
-  const pausedPracticeTime = session.playback.isPlaying ? null : session.practiceTime
+  const pausedPracticeTime = playback.isPlaying ? null : practiceTime
   useEffect(() => {
     onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
   }, [
     session.practiceMode,
-    session.playback.playbackRate,
-    session.playback.metronomeEnabled,
-    session.playback.metronomeLevel,
-    session.playback.metronomeSubdivision,
-    session.playback.metronomeCountIn,
+    playback.playbackRate,
+    playback.metronomeEnabled,
+    playback.metronomeLevel,
+    playback.metronomeSubdivision,
+    playback.metronomeCountIn,
     pausedPracticeTime,
     session.rawPracticeScope,
     session.checkpointMode,
@@ -474,7 +536,7 @@ export function PracticeSessionProvider({
   ])
 
   useEffect(() => {
-    if (!session.playback.isPlaying) {
+    if (!playback.isPlaying) {
       onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
       return undefined
     }
@@ -482,7 +544,7 @@ export function PracticeSessionProvider({
       onPracticePrefsChangeRef.current?.(practicePrefsSnapshotRef.current)
     }, 1000)
     return () => window.clearInterval(intervalId)
-  }, [session.playback.isPlaying])
+  }, [playback.isPlaying])
 
   useEffect(() => {
     return () => {
@@ -506,23 +568,30 @@ export function PracticeSessionProvider({
     previousViewRef.current = activeView
 
     if (previousView === 'practice' && activeView !== 'practice') {
-      session.playback.pause()
+      playback.pause()
       scoreFollow.setAlignmentMode(false)
     }
-  }, [activeView, session.playback.pause, scoreFollow.setAlignmentMode])
+  }, [activeView, playback.pause, scoreFollow.setAlignmentMode])
 
   const tickValue = useMemo(
     () => ({
-      practiceTime: quantizePracticeTime(session.clock.practiceTime),
-      playbackCurrentTime: quantizePracticeTime(session.playback.currentTime),
-      playbackDuration: session.playback.duration,
-      playbackIsPlaying: session.playback.isPlaying,
+      practiceTime: quantizePracticeTime(practiceTime),
+      playbackCurrentTime: quantizePracticeTime(playback.currentTime),
+      playbackDuration: playback.duration,
+      playbackIsPlaying: playback.isPlaying,
+      rawPracticeTime: practiceTime,
+      currentMeasureNumber: measure?.currentMeasure?.number ?? null,
+      canGoPreviousMeasure: Boolean(measure?.canGoPrevious),
+      canGoNextMeasure: Boolean(measure?.canGoNext),
+      beatPosition: beat?.position ?? null,
     }),
     [
-      session.clock.practiceTime,
-      session.playback.currentTime,
-      session.playback.duration,
-      session.playback.isPlaying,
+      practiceTime,
+      playback.currentTime,
+      playback.duration,
+      playback.isPlaying,
+      measure,
+      beat,
     ],
   )
 
@@ -645,7 +714,7 @@ export function PracticeSessionProvider({
       wfyCheckpoint: session.isWaitForYou ? session.waitForYou.currentCheckpoint : null,
       wfyCheckpointIndex: session.isWaitForYou ? session.waitForYou.checkpointIndex : -1,
       laneOutcomesByGroupId: session.laneOutcomesByGroupId,
-      getScoreTime: session.playback.getScoreTime,
+      getScoreTime: playback.getScoreTime,
       guitarScoreTarget: scoreFollow.guitarScoreTarget,
       pdfFile,
       pdfPageSizes: pdfPageSizesState,
@@ -666,7 +735,7 @@ export function PracticeSessionProvider({
       session.waitForYou.currentCheckpoint,
       session.waitForYou.checkpointIndex,
       session.laneOutcomesByGroupId,
-      session.playback.getScoreTime,
+      playback.getScoreTime,
       scoreFollow.guitarScoreTarget,
       pdfFile,
       pdfPageSizesState,
@@ -682,29 +751,29 @@ export function PracticeSessionProvider({
       isDemoPiece: session.isDemoPiece,
       sources: session.sources,
       playback: {
-        isLoading: session.playback.isLoading,
-        error: session.playback.error,
-        controlsDisabled: session.playback.controlsDisabled,
-        playDisabled: session.playback.playDisabled,
-        seekDisabled: session.playback.seekDisabled,
-        transportHint: session.playback.transportHint,
-        testSound: session.playback.testSound,
-        pause: session.playback.pause,
-        playbackRate: session.playback.playbackRate,
-        effectiveTempo: session.playback.effectiveTempo,
-        metronomeEnabled: session.playback.metronomeEnabled,
-        metronomeLevel: session.playback.metronomeLevel,
-        metronomeSubdivision: session.playback.metronomeSubdivision,
-        metronomeCountIn: session.playback.metronomeCountIn,
-        metronomeDisplay: session.playback.metronomeDisplay,
-        mappingWarning: session.playback.mappingWarning,
-        audioSource: session.playback.audioSource,
-        instrumentStatus: session.playback.instrumentStatus,
-        setPlaybackRate: session.playback.setPlaybackRate,
-        setMetronomeEnabled: session.playback.setMetronomeEnabled,
-        setMetronomeLevel: session.playback.setMetronomeLevel,
-        setMetronomeSubdivision: session.playback.setMetronomeSubdivision,
-        setMetronomeCountIn: session.playback.setMetronomeCountIn,
+        isLoading: playback.isLoading,
+        error: playback.error,
+        controlsDisabled: playback.controlsDisabled,
+        playDisabled: playback.playDisabled,
+        seekDisabled: playback.seekDisabled,
+        transportHint: playback.transportHint,
+        testSound: playback.testSound,
+        pause: playback.pause,
+        playbackRate: playback.playbackRate,
+        effectiveTempo: playback.effectiveTempo,
+        metronomeEnabled: playback.metronomeEnabled,
+        metronomeLevel: playback.metronomeLevel,
+        metronomeSubdivision: playback.metronomeSubdivision,
+        metronomeCountIn: playback.metronomeCountIn,
+        metronomeDisplay: playback.metronomeDisplay,
+        mappingWarning: playback.mappingWarning,
+        audioSource: playback.audioSource,
+        instrumentStatus: playback.instrumentStatus,
+        setPlaybackRate: playback.setPlaybackRate,
+        setMetronomeEnabled: playback.setMetronomeEnabled,
+        setMetronomeLevel: playback.setMetronomeLevel,
+        setMetronomeSubdivision: playback.setMetronomeSubdivision,
+        setMetronomeCountIn: playback.setMetronomeCountIn,
       },
       waitForYou: {
         active: session.waitForYou.active,
@@ -712,6 +781,7 @@ export function PracticeSessionProvider({
         displayStatus: session.waitForYou.displayStatus,
         markCorrectAndContinue: session.waitForYou.markCorrectAndContinue,
       },
+      isFollowingMidi: clock.isFollowingMidi,
       handlePlay: session.handlePlay,
       handleMidiStop: session.handleMidiStop,
       handleMidiSeek: session.handleMidiSeek,
@@ -721,33 +791,34 @@ export function PracticeSessionProvider({
       session.hasMusicXml,
       session.isDemoPiece,
       session.sources,
-      session.playback.isLoading,
-      session.playback.error,
-      session.playback.controlsDisabled,
-      session.playback.playDisabled,
-      session.playback.seekDisabled,
-      session.playback.transportHint,
-      session.playback.testSound,
-      session.playback.pause,
-      session.playback.playbackRate,
-      session.playback.effectiveTempo,
-      session.playback.metronomeEnabled,
-      session.playback.metronomeLevel,
-      session.playback.metronomeSubdivision,
-      session.playback.metronomeCountIn,
-      session.playback.metronomeDisplay,
-      session.playback.mappingWarning,
-      session.playback.audioSource,
-      session.playback.instrumentStatus,
-      session.playback.setPlaybackRate,
-      session.playback.setMetronomeEnabled,
-      session.playback.setMetronomeLevel,
-      session.playback.setMetronomeSubdivision,
-      session.playback.setMetronomeCountIn,
+      playback.isLoading,
+      playback.error,
+      playback.controlsDisabled,
+      playback.playDisabled,
+      playback.seekDisabled,
+      playback.transportHint,
+      playback.testSound,
+      playback.pause,
+      playback.playbackRate,
+      playback.effectiveTempo,
+      playback.metronomeEnabled,
+      playback.metronomeLevel,
+      playback.metronomeSubdivision,
+      playback.metronomeCountIn,
+      playback.metronomeDisplay,
+      playback.mappingWarning,
+      playback.audioSource,
+      playback.instrumentStatus,
+      playback.setPlaybackRate,
+      playback.setMetronomeEnabled,
+      playback.setMetronomeLevel,
+      playback.setMetronomeSubdivision,
+      playback.setMetronomeCountIn,
       session.waitForYou.active,
       session.waitForYou.status,
       session.waitForYou.displayStatus,
       session.waitForYou.markCorrectAndContinue,
+      clock.isFollowingMidi,
       session.handlePlay,
       session.handleMidiStop,
       session.handleMidiSeek,

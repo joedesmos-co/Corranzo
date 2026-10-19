@@ -18,7 +18,7 @@
  * Render-cycle discipline: every value the interval loop reads goes
  * through a ref mirror (props/state go stale inside timers).
  */
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import {
@@ -881,45 +881,66 @@ export default function useNeuralMicInput({
     ? 'Neural idle'
     : describePhase(phase)
 
-  return {
-    matchingEnabled: displayPhase === 'listening',
-    inputFeedback,
-    resetFeedback,
-    lastHeardMidi,
-    liveFrame: null,
-    calibration: null,
-    calibrationStatus: null,
-    micCalibrating: false,
-    micStatusLabel,
-    retryCalibration: () => {},
-    isChordCheckpoint,
-    isMicChordCollection: false,
-    isMicV2Polyphonic: false,
-    expectedCount: expectedMidis.length,
-    chordMicMode: 'neural-experimental',
-    feedbackOutcome: inputFeedback.outcome,
-    micEngineMode: 'neural-experimental',
-    micEngineV2Enabled: false,
-    micEngineV2Active: false,
-    micEngineV3Enabled: false,
-    performanceExpectation: null,
-    v2RuntimeError: phaseError,
-    exportDebugFrames: () => ({ phase, backend, warmedMs, error: phaseError }),
-    exportMicTrace: () => [],
-    neural: {
-      phase: displayPhase,
+  return useMemo(
+    () => ({
+      matchingEnabled: displayPhase === 'listening',
+      inputFeedback,
+      resetFeedback,
+      lastHeardMidi,
+      liveFrame: null,
+      calibration: null,
+      calibrationStatus: null,
+      micCalibrating: false,
+      micStatusLabel,
+      retryCalibration: () => {},
+      isChordCheckpoint,
+      isMicChordCollection: false,
+      isMicV2Polyphonic: false,
+      expectedCount: expectedMidis.length,
+      chordMicMode: 'neural-experimental',
+      feedbackOutcome: inputFeedback.outcome,
+      micEngineMode: 'neural-experimental',
+      micEngineV2Enabled: false,
+      micEngineV2Active: false,
+      micEngineV3Enabled: false,
+      performanceExpectation: null,
+      v2RuntimeError: phaseError,
+      exportDebugFrames: () => ({ phase, backend, warmedMs, error: phaseError }),
+      exportMicTrace: () => [],
+      neural: {
+        phase: displayPhase,
+        backend,
+        warmedMs,
+        error: phaseError,
+        level: inputLevel,
+        detectedNotes,
+        rejected,
+        silenceSkips,
+        noiseFlatSkips,
+        debug: debugSnapshot,
+        verdict: debugSnapshot?.lastVerdict ?? null,
+        decision: inputFeedback?.message ?? null,
+        outcome: inputFeedback?.outcome ?? null,
+      },
+    }),
+    [
+      displayPhase,
+      inputFeedback,
+      micStatusLabel,
+      isChordCheckpoint,
+      phaseError,
       backend,
       warmedMs,
-      error: phaseError,
-      level: inputLevel,
+      inputLevel,
       detectedNotes,
       rejected,
       silenceSkips,
       noiseFlatSkips,
-      debug: debugSnapshot,
-      verdict: debugSnapshot?.lastVerdict ?? null,
-      decision: inputFeedback?.message ?? null,
-      outcome: inputFeedback?.outcome ?? null,
-    },
-  }
+      debugSnapshot,
+      phase,
+      lastHeardMidi,
+      expectedMidis.length,
+      resetFeedback,
+    ],
+  )
 }

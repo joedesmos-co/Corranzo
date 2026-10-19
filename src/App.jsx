@@ -1,5 +1,5 @@
 import { normalizePracticeMode } from './features/practice/practiceMode.js'
-import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense, memo } from 'react'
 import AppShell from './components/shell/AppShell.jsx'
 import SettingsView from './components/shell/SettingsView.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
@@ -24,7 +24,7 @@ const loadPracticeModules = () => practiceModules ??= Promise.all([
   import('./components/practice/PracticeView.jsx'),
 ])
 const PracticeSessionProvider = lazy(async () => ({ default: (await loadPracticeModules())[0].PracticeSessionProvider }))
-const PracticeView = lazy(async () => ({ default: (await loadPracticeModules())[1].default }))
+const PracticeView = memo(lazy(async () => ({ default: (await loadPracticeModules())[1].default })))
 
 /** Phase A: dev-only design proof surface. Never linked from prod UI. */
 function isDesignSandboxPath() {
@@ -2075,13 +2075,32 @@ export default function App() {
     ],
   )
 
-  function handleDocumentLoadSuccess({ numPages: total }) {
+  const handleDocumentLoadSuccess = useCallback(({ numPages: total }) => {
     setNumPages(total)
     setPageNumber((page) => Math.min(Math.max(1, page), total))
     if (activeViewRef.current === 'practice') {
       setPracticePdfReady(true)
     }
-  }
+  }, [])
+
+  const handleReloadPractice = useCallback(() => {
+    setPracticeRemountKey((key) => key + 1)
+  }, [])
+
+  const handleReturnToLibrary = useCallback(() => {
+    navigateToView('library')
+  }, [])
+
+  const handleDismissOmrQualityWarning = useCallback((scoreId) => {
+    if (!scoreId) {
+      return
+    }
+    setOmrWarningDismissedScoreIds((prev) => {
+      const next = new Set(prev)
+      next.add(scoreId)
+      return next
+    })
+  }, [])
 
   function handlePrevPage() {
     setPageNumber((page) => Math.max(1, page - 1))
@@ -2883,8 +2902,8 @@ export default function App() {
           onGoToPage={handleGoToPage}
           onTogglePaper={togglePaperTheme}
           timingSourceKind={musicXmlSource?.source ?? null}
-          onReloadPractice={() => setPracticeRemountKey((key) => key + 1)}
-          onReturnToLibrary={() => navigateToView('library')}
+          onReloadPractice={handleReloadPractice}
+          onReturnToLibrary={handleReturnToLibrary}
           omrQuality={musicXmlSource?.omrMeta?.quality ?? null}
           omrOwnerScoreId={
             musicXmlSource?.omrMeta?.quality?.ownerScoreId ??
@@ -2893,16 +2912,7 @@ export default function App() {
             null
           }
           omrWarningDismissedScoreIds={omrWarningDismissedScoreIds}
-          onDismissOmrQualityWarning={(scoreId) => {
-            if (!scoreId) {
-              return
-            }
-            setOmrWarningDismissedScoreIds((prev) => {
-              const next = new Set(prev)
-              next.add(scoreId)
-              return next
-            })
-          }}
+          onDismissOmrQualityWarning={handleDismissOmrQualityWarning}
           musicXmlSource={musicXmlSource}
           activeScoreSnapshot={activeScoreRef.current}
         />
