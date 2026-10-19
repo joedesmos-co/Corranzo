@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { extractMidiProfile } from '../playback/extractMidiProfile.js'
 import { computeAlignmentDiagnostics } from './computeAlignmentDiagnostics.js'
 
@@ -50,5 +50,5 @@ export default function useAlignmentDiagnostics(midiSource, timingMap) {
     }
   }, [midiSource, timingMap])
 
-  return { diagnostics, isLoading, error }
+  return useMemo(() => ({ diagnostics, isLoading, error }), [diagnostics, isLoading, error])
 }
