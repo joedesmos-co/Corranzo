@@ -43,17 +43,17 @@ export function synthBandFixture({ seconds = 8, bpm = 120 } = {}) {
 }
 
 describe('A2 DSP + analysis on synthesized band fixture', () => {
-  it('estimates 120 BPM within tolerance', () => {
+  it('estimates 120 BPM within tolerance', async () => {
     const samples = synthBandFixture()
-    const { frames, frameSeconds } = magnitudeSpectrogram(samples, { sampleRate: SR })
+    const { frames, frameSeconds } = await magnitudeSpectrogram(samples, { sampleRate: SR })
     const flux = spectralFlux(frames)
-    const { bpm, confidence } = estimateTempoFromEnvelope(flux, frameSeconds)
+    const { bpm, confidence } = await estimateTempoFromEnvelope(flux, frameSeconds)
     expect(Math.abs(bpm - 120)).toBeLessThanOrEqual(8)
     expect(confidence).toBeGreaterThan(0)
   })
-  it('finds onsets near each beat', () => {
+  it('finds onsets near each beat', async () => {
     const samples = synthBandFixture()
-    const { frames } = magnitudeSpectrogram(samples, { sampleRate: SR })
+    const { frames } = await magnitudeSpectrogram(samples, { sampleRate: SR })
     const flux = spectralFlux(frames)
     const onsets = pickOnsetFrames(flux)
     expect(onsets.length).toBeGreaterThanOrEqual(10)
@@ -74,10 +74,10 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     for (const pc of [0, 4, 7]) tri[pc] = 1 // C E G
     expect(recognizeChord(tri).label).toBe('C')
   })
-  it('HPSS separates harmonic and percussive energy honestly', () => {
+  it('HPSS separates harmonic and percussive energy honestly', async () => {
     const samples = synthBandFixture({ seconds: 4 })
-    const { frames } = magnitudeSpectrogram(samples, { sampleRate: SR })
-    const { harmonic, percussive } = hpssMasks(frames.slice(0, 40))
+    const { frames } = await magnitudeSpectrogram(samples, { sampleRate: SR })
+    const { harmonic, percussive } = await hpssMasks(frames.slice(0, 40))
     expect(harmonic.length).toBe(40)
     expect(percussive.length).toBe(40)
   })
@@ -92,9 +92,9 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     expect(analysis.sections.length).toBeGreaterThanOrEqual(1)
     expect(analysis.predictedNotes.length).toBeGreaterThan(0)
   })
-  it('analysis views report whether separation helps', () => {
+  it('analysis views report whether separation helps', async () => {
     const samples = synthBandFixture({ seconds: 4 })
-    const views = buildAnalysisViews(samples, SR)
+    const views = await buildAnalysisViews(samples, SR)
     expect(views.quality.harmonicRatio).toBeGreaterThan(0)
     expect(typeof views.quality.helpsTranscription).toBe('boolean')
   })
@@ -120,14 +120,14 @@ describe('A2 DSP + analysis on synthesized band fixture', () => {
     const wideR = center.map((v, i) => v - amb[i])
     const wide = splitMidSide([Float32Array.from(wideL), Float32Array.from(wideR)])
     const monoOfWide = Float32Array.from(wideL.map((v, i) => (v + wideR[i]) / 2))
-    const wideViews = buildAnalysisViews(monoOfWide, SR, { stereoSide: wide.side })
+    const wideViews = await buildAnalysisViews(monoOfWide, SR, { stereoSide: wide.side })
     expect(wideViews.stereo.spaciousness).toBeGreaterThan(0.3)
-    const dryViews = buildAnalysisViews(Float32Array.from(center), SR, {
+    const dryViews = await buildAnalysisViews(Float32Array.from(center), SR, {
       stereoSide: splitMidSide([Float32Array.from(center), Float32Array.from(center)]).side,
     })
     expect(dryViews.stereo.spaciousness).toBeLessThan(0.05)
     // Mono input -> no stereo claims at all.
-    const monoViews = buildAnalysisViews(Float32Array.from(center), SR)
+    const monoViews = await buildAnalysisViews(Float32Array.from(center), SR)
     expect(monoViews.stereo).toBe(null)
   })
 })

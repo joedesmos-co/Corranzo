@@ -27,6 +27,17 @@ import {
  */
 export const SEVENTH_GUARD_ENABLED = true
 
+/**
+ * Yield the main thread so the host UI (React paint, progress bar) can update
+ * between expensive synchronous DSP stages. Resolves on a macrotask in both the
+ * browser and Node. Cheap enough to call at every stage boundary.
+ */
+async function yieldToUI() {
+  if (typeof setTimeout === 'function') {
+    await new Promise((resolve) => setTimeout(resolve, 0))
+  }
+}
+
 export const PROVENANCE = {  DETECTED: 'detected', // direct DSP evidence (onsets, spectral peaks)
   PREDICTED: 'predicted', // neural model output (Basic Pitch note events)
   INFERRED: 'inferred', // musical inference from evidence (chords, sections, quantization)
@@ -77,15 +88,39 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
  * Analyze mono 22050 Hz samples. views: { harmonic, percussive } magnitude frames (optional).
  * predictNotes: async (samples) => [{ midi, startSeconds, endSeconds }] | null (Basic Pitch).
  */
-export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null } = {}) {
+export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null } = {}) {
   const totalSeconds = samples.length / sampleRate
   const report = (stage, fraction) => {
     try { onProgress?.({ stage, fraction }) } catch { /* noop */ }
   }
+  // Cancellation is honoured at every stage boundary: a cancelled run stops
+  // doing expensive DSP work instead of running to completion in the background.
+  const cancelled = () => {
+    try { return Boolean(isCancelled?.()) } catch { return false }
+  }
+  const abort = () => {
+    const err = new Error('analysis-cancelled')
+    err.code = 'cancelled'
+    throw err
+  }
   report('spectrogram', 0.05)
-  const { frames, fftSize, hop, frameSeconds } = magnitudeSpectrogram(samples, { sampleRate })
+  await yieldToUI()
+  if (cancelled()) abort()
+  // The caller has usually already computed this exact spectrogram (the
+  // analysis views need it for HPSS). Reusing it halves the FFT work; a
+  // separately computed one is identical, so the result does not change.
+  // The reuse only happens when the view carries the full grid description —
+  // a partial view would silently change the tempo search.
+  const reusable = views?.mix?.length && Number.isFinite(views.frameSeconds) && Number.isFinite(views.fftSize)
+    ? views
+    : null
+  const { frames, fftSize, hop, frameSeconds } = reusable
+    ? { frames: reusable.mix, fftSize: reusable.fftSize, hop: reusable.hop, frameSeconds: reusable.frameSeconds }
+    : await magnitudeSpectrogram(samples, { sampleRate })
   const harmFrames = views?.harmonic ?? frames
   report('onsets', 0.2)
+  await yieldToUI()
+  if (cancelled()) abort()
   const flux = spectralFlux(frames)
   const onsetFrames = pickOnsetFrames(flux)
   const onsets = onsetFrames.map((f) => ({
@@ -94,15 +129,20 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     provenance: PROVENANCE.DETECTED,
   }))
   report('tempo', 0.35)
-  const tempo = estimateTempoFromEnvelope(flux, frameSeconds)
+  await yieldToUI()
+  if (cancelled()) abort()
+  const tempo = await estimateTempoFromEnvelope(flux, frameSeconds)
   // Sectional re-estimate for tempo variation: split in thirds, flag drift.
   const third = Math.floor(flux.length / 3)
-  const sectionTempos = [0, 1, 2].map((s) => {
+  const sectionTempos = []
+  for (let s = 0; s < 3; s += 1) {
     const seg = flux.slice(s * third, s === 2 ? flux.length : (s + 1) * third)
-    return estimateTempoFromEnvelope(seg, frameSeconds).bpm
-  })
+    sectionTempos.push((await estimateTempoFromEnvelope(seg, frameSeconds)).bpm)
+  }
   const tempoVaries = Math.max(...sectionTempos) - Math.min(...sectionTempos) >= 8
   report('beats', 0.45)
+  await yieldToUI()
+  if (cancelled()) abort()
   // M3: an explicit tempo override (from the review UI) replaces the estimated
   // beat period. It is carried as the *tempo used*, so everything downstream -
   // beats, quantization, arrangement, MusicXML, preview, checkpoints - follows
@@ -116,6 +156,8 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   const meterReading = inferMeter(onsetFrames, frameSeconds, tempo.bpm)
   const beatsPerMeasure = meterReading.uncertain ? 4 : meterReading.meter
   report('harmony', 0.6)
+  await yieldToUI()
+  if (cancelled()) abort()
   // Chord per beat window from harmonic-view chroma. A3: windows span at
   // least ~1.2 s (fast-tempo beats are melody-dominated alone) and a
   // detected bass root re-picks the winner when close (bass/harmony cue).
@@ -174,6 +216,8 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     })
   }
   report('melody-bass', 0.75)
+  await yieldToUI()
+  if (cancelled()) abort()
   const melody = []
   const bassLine = []
   for (let f = 0; f < harmFrames.length; f += 1) {
@@ -199,13 +243,23 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     }
   }
   report('sections', 0.85)
+  await yieldToUI()
+  if (cancelled()) abort()
   const sections = detectSections(frames, frameSeconds, totalSeconds)
   report('notes', 0.9)
+  await yieldToUI()
+  if (cancelled()) abort()
   let predictedNotes = []
   let pitchSource = 'spectral-fallback'
   if (typeof predictNotes === 'function') {
     try {
-      const events = await predictNotes(samples)
+      // The pitch estimator reports its real window progress when it can
+      // (Basic Pitch measures every window), so the progress bar shows measured
+      // progress instead of a frozen bar during the longest stage.
+      const events = await predictNotes(samples, (fraction) => {
+        const f = Number(fraction)
+        if (Number.isFinite(f) && f >= 0 && f <= 1) report('notes', 0.9 + 0.02 * f)
+      })
       if (Array.isArray(events) && events.length) {
         predictedNotes = events.map((e) => ({
           midi: Math.round(e.midi ?? e.pitchMidi ?? 0),
@@ -223,9 +277,8 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   if (!predictedNotes.length) {
     predictedNotes = contourToNotes(melody, onsets)
   }
-  // Harmony voicing from the TRANSCRIBED notes (predicted, never inferred): the
-  // chord LABEL is unreliable on mixtures, but the pitch classes the model
-
+  // Harmony voicing from the TRANSCRIBED notes (predicted, never inferred):
+  // the chord LABEL is unreliable on mixtures, but the pitch classes the model
   // actually heard are direct evidence. Attach the dominant heard pitch classes
   // per chord window so arrangers voice accompaniment from evidence, and keep
   // the template label only for naming/bass-prior decisions.
@@ -251,8 +304,9 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
       chord.downgradedFrom = revised.downgradedFrom
     }
   }
-
   report('done', 1)
+  await yieldToUI()
+  if (cancelled()) abort()
   const hopSeconds = hop / sampleRate
   return {
     totalSeconds: Math.round(totalSeconds * 1000) / 1000,
@@ -287,29 +341,24 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
 /** Novelty-based section boundaries (self-similarity drop). Inferred, low-stakes. */
 /**
  * Attach hearsay-free voicing evidence to each chord window: the pitch classes
- * the pitch model actually transcribed there (weighted by sounding overlap),
- * plus the lowest heard pitch class. Falls back to the template tones when the
- * model heard almost nothing (spectral path), so arrangers keep a sane default.
+ * the pitch model actually transcribed there (weighted by duration), plus the
+ * lowest heard pitch class. Falls back to the template tones when the model
+ * heard almost nothing (spectral path), so arrangers keep a sane default.
  */
 export function attachHeardVoicings(chords, notes) {
-  if (!chords?.length) return chords
   for (const chord of chords) {
     const window = { start: chord.startSeconds, end: chord.endSeconds }
-    const heard = notes.filter(
-      (note) => note.startSeconds <= window.end - 0.01 && note.endSeconds >= window.start + 0.01,
-    )
-
+    const heard = notes.filter((n) => n.startSeconds <= window.end - 0.01 && n.endSeconds >= window.start + 0.01)
     if (!heard.length) {
       chord.heardPcs = []
       chord.provenanceVoicing = PROVENANCE.INFERRED
       continue
     }
     const weight = new Map()
-    for (const note of heard) {
-      const pitchClass = (((note.midi % 12) + 12) % 12)
-      const overlap = Math.min(note.endSeconds, window.end) - Math.max(note.startSeconds, window.start)
-      weight.set(pitchClass, (weight.get(pitchClass) ?? 0) + Math.max(0.05, overlap))
-
+    for (const n of heard) {
+      const pc = ((n.midi % 12) + 12) % 12
+      const overlap = Math.min(n.endSeconds, window.end) - Math.max(n.startSeconds, window.start)
+      weight.set(pc, (weight.get(pc) ?? 0) + Math.max(0.05, overlap))
     }
     const ranked = [...weight.entries()].sort((a, b) => b[1] - a[1]).map(([pc]) => pc)
     // Keep the strongest classes that still leave the top note (usually the
@@ -320,6 +369,7 @@ export function attachHeardVoicings(chords, notes) {
   }
   return chords
 }
+
 /**
  * Re-recognize chords from duration-weighted transcribed pitch classes.
  * Toggle so the effect can be A/B measured end to end (tests, probes).
@@ -364,7 +414,7 @@ function reRecognizeFromHeardChromas(chords, notes, enabled = CHORD_CHROMA_FROM_
   }
 }
 
-export function detectSections(frames, frameSeconds, totalSeconds) {
+function detectSections(frames, frameSeconds, totalSeconds) {
   if (frames.length < 16) {
     return [{ startSeconds: 0, endSeconds: Math.round(totalSeconds * 1000) / 1000, label: 'A', provenance: PROVENANCE.INFERRED }]
   }

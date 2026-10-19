@@ -6,11 +6,15 @@
 import { magnitudeSpectrogram, hpssMasks, binToHz } from './dsp.js'
 import { PROVENANCE } from './musicAnalysis.js'
 
-export function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 512, stereoSide = null } = {}) {
-  const { frames, frameSeconds } = magnitudeSpectrogram(samples, { sampleRate, fftSize, hop })
-  const { harmonic, percussive } = hpssMasks(frames)
+export async function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 512, stereoSide = null } = {}) {
+  const { frames, frameSeconds } = await magnitudeSpectrogram(samples, { sampleRate, fftSize, hop })
+  // Yield between the heavy view passes so the browser can paint progress.
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  const { harmonic, percussive } = await hpssMasks(frames)
+  await new Promise((resolve) => setTimeout(resolve, 0))
   const bass = lowpassView(frames, fftSize, sampleRate, 300)
   const presence = bandView(frames, fftSize, sampleRate, 300, 3400)
+  await new Promise((resolve) => setTimeout(resolve, 0))
   const quality = measureSeparationGain(frames, harmonic, percussive)
   const views = {
     fftSize,
@@ -31,7 +35,7 @@ export function buildAnalysisViews(samples, sampleRate, { fftSize = 2048, hop = 
   // mixes vs dry centered recordings) and L/R balance, recorded as detected
   // evidence for confidence calibration (adopted only if it predicts quality).
   if (stereoSide?.length) {
-    const sideSpec = magnitudeSpectrogram(stereoSide, { sampleRate, fftSize, hop })
+    const sideSpec = await magnitudeSpectrogram(stereoSide, { sampleRate, fftSize, hop })
     const n = Math.min(frames.length, sideSpec.frames.length)
     let midE = 0
     let sideE = 0

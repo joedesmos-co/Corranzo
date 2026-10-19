@@ -579,6 +579,12 @@ export function PracticeSessionProvider({
       playbackCurrentTime: quantizePracticeTime(playback.currentTime),
       playbackDuration: playback.duration,
       playbackIsPlaying: playback.isPlaying,
+      // Transport facts the PDF-less arrangement surface needs. The session
+      // object is intentionally tick-stable, so these live here instead: they
+      // change only when playback starts, stops, loads or fails.
+      playbackIsLoading: playback.isLoading,
+      playbackError: playback.error,
+      playbackPlayDisabled: playback.playDisabled,
       rawPracticeTime: practiceTime,
       currentMeasureNumber: measure?.currentMeasure?.number ?? null,
       canGoPreviousMeasure: Boolean(measure?.canGoPrevious),
@@ -590,6 +596,9 @@ export function PracticeSessionProvider({
       playback.currentTime,
       playback.duration,
       playback.isPlaying,
+      playback.isLoading,
+      playback.error,
+      playback.playDisabled,
       measure,
       beat,
     ],

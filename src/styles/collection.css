@@ -176,3 +176,15 @@ competing with tab underlines. Pill boxes stay on the dark desk. */
 .audio-vision-tempo-fix label { display: block; font-size: 13px; margin-bottom: 6px; }
 .audio-vision-tempo-fix-row { display: flex; gap: 8px; align-items: center; }
 .audio-vision-tempo-fix-row input { width: 88px; }
+
+/* P0 — indeterminate progress (honest, no fake percentages). The bar slides
+   inside its track so the musician sees continuous motion while a stage is
+   still running and has no measurable fraction yet. */
+.audio-vision-progress-bar__indeterminate {
+  animation: audio-vision-progress-pulse 1.4s ease-in-out infinite;
+}
+@keyframes audio-vision-progress-pulse {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(360%); }
+}
+.audio-vision-progress-pct { font-weight: 400; opacity: 0.7; }

@@ -64,8 +64,13 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
     return idx
   }, [checkpoints, session.isWaitForYou, waitForYou, practiceTime])
   const current = checkpoints[activeIndex] ?? null
-  const isPlaying = Boolean(session.playback?.isPlaying)
-  const playDisabled = Boolean(session.playback?.playDisabled) || Boolean(session.timingDisabled)
+  // Transport state comes from the tick context: the practice session object
+  // is deliberately tick-stable, so reading playback state from it froze the
+  // Play/Pause button (it never showed "Pause") and hid sound errors.
+  const isPlaying = Boolean(tick?.playbackIsPlaying)
+  const playDisabled = Boolean(tick?.playbackPlayDisabled) || Boolean(session.timingDisabled)
+  const playbackError = tick?.playbackError ?? session.playback?.error ?? null
+  const playbackIsLoading = Boolean(tick?.playbackIsLoading ?? session.playback?.isLoading)
   const wfyReady = Boolean(session.wfyInputSourceReady)
 
   if (!session.hasMusicXml || session.timingDisabled || !checkpoints.length) {
@@ -138,10 +143,10 @@ export default function ArrangementPracticeView({ musicXmlSource = null, onRetur
         {isPlaying
           ? <button className="cz-collection-button" onClick={() => session.playback?.pause?.()}>Pause</button>
           : <button className="cz-collection-button" onClick={() => session.handlePlay?.()} disabled={playDisabled}>Play</button>}
-        {session.playback?.error && <span role="alert">Sound unavailable: {String(session.playback.error).slice(0, 160)}</span>}
+        {playbackError && <span role="alert">Sound unavailable: {String(playbackError).slice(0, 160)}</span>}
         <span className="audio-vision-hint" role="status">
           Target {activeIndex + 1} of {checkpoints.length}
-          {session.playback?.isLoading ? ' · loading sound…' : ''}
+          {playbackIsLoading ? ' · loading sound…' : ''}
         </span>
       </div>
 
