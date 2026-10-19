@@ -9,10 +9,13 @@ export function updateSavedSessionView(activeView, pdfMeta, instrumentId, musicX
   // Audio Vision arrangement with no PDF).
   const scoreFileName = pdfMeta?.fileName ?? musicXmlSource?.fileName ?? meta.musicXmlFileName
   const scoreSize = pdfMeta?.size ?? musicXmlSource?.data?.byteLength ?? meta.musicXmlSize
+  const scoreLastModified = pdfMeta?.lastModified
   if (!scoreFileName) return false
   const sameFile =
     meta.pdfMeta?.fileName
-      ? meta.pdfMeta.fileName === scoreFileName && meta.pdfMeta.size === scoreSize
+      ? meta.pdfMeta.fileName === scoreFileName &&
+        meta.pdfMeta.size === scoreSize &&
+        (scoreLastModified == null || meta.pdfMeta.lastModified === scoreLastModified)
       : meta.musicXmlFileName === scoreFileName && meta.musicXmlSize === scoreSize
   if (!sameFile || (meta.instrumentId ?? 'piano') !== (instrumentId ?? 'piano')) return false
   if (meta.activeView === activeView) return true
