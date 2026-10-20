@@ -125,12 +125,37 @@ observed onsets on an imported score, and 0 ms on three further scores.
 - The previously flaky MIDI test now passes **25/25**.
 
 ## 10. Deployed commit and Cloudflare version
-- Commit: `718cae089a` (cursor fix) + `4f7b322c5c` (test-only).
-- **Cloudflare version ID: `113c26ad-33d7-4dc4-baaa-69fff1ff4bb6`**
-- Live bundle: `index-CmvruQzG.js` (verified byte-identical to the local
+- Release commit: **`9272423a50`** (merge of the Audio Vision critical UX
+  repair into the red-cursor fix) — now also the official `main`.
+- **Cloudflare version ID: `2c928f59-51cf-4f7f-9c2a-8d0b60a3aaba`**
+- Live bundle: `index-CYtLcE3a.js` (verified byte-identical to the local
   build). All routes (`/`, `/privacy`, `/terms`, `/contact`) return HTTP 200.
-- The live site was re-verified after deployment: arrival p50/p90/max =
-  0/0/0 ms, and Preview shows the red line with no blue boxes.
+- The live site was re-verified after deployment:
+  - cursor arrival error **p50/p90/max = 0/0/0 ms**, no console errors;
+  - the Audio Vision acceptance suite run **against the deployed site**:
+    **19/19 pass** — including `C1 guitar arrangement carries a six-line TAB
+    staff`, `C2 TAB staff has six lines in standard tuning`, `A3 Open Score
+    opens the generated arrangement`, `G3 main thread stays responsive
+    (worst heartbeat gap 50 ms)` and `E1/E2 the arrangement survives a
+    browser restart byte-for-byte and reopens in practice`.
+
+### Audio Vision repair integrated in the same release
+The Audio Vision agent's verified repair (from `main`, commit `0581658f62`) was
+merged into this release so the site carries **both** fixes:
+- Basic Pitch inference moved into a **Web Worker** — the interface no longer
+  freezes while an arrangement is generated (worst main-thread block
+  3679 ms → 54 ms, zero long tasks).
+- **"Open Score" opens the generated arrangement**, not the previously
+  imported PDF (the stale PDF state is released; the file stays in the
+  library).
+- A **restored arrangement session reopens straight into the practice
+  workspace** instead of landing on Import asking for a matching PDF.
+- The arrangement **transport shows Pause** and surfaces sound errors.
+
+Merge was conflict-free; both sides were verified present afterwards (the
+guitar TAB staff in `arrangementMusicXml.js` is untouched, and the
+`sourceVisualMap` threading plus the Preview blue-box removal survive).
+
 
 ## 11. Remaining limitations
 - The ~33 px maximum position error on the imported score is a residual
@@ -147,27 +172,36 @@ observed onsets on an imported score, and 0 ms on three further scores.
   to time-proportional spacing (now identical to the note target's).
 
 ## 12. Rollback
-- Previous live version ID: `50b609d4-2834-485f-86c5-8fce88fe6eb4`
-  (bundle `index-O8iLLTnM.js`).
-- `npx wrangler rollback 50b609d4-2834-485f-86c5-8fce88fe6eb4`
-- Git: `git revert 718cae089a` (and the cursor commit) on
-  `bugfix/site-bug-hunt`, then redeploy.
+- Previous live version ID: `113c26ad-33d7-4dc4-baaa-69fff1ff4bb6`
+  (bundle `index-CmvruQzG.js` — the cursor fix without the Audio Vision
+  repair).
+- Earlier: `50b609d4-2834-485f-86c5-8fce88fe6eb4` (bundle
+  `index-O8iLLTnM.js`).
+- `npx wrangler rollback 113c26ad-33d7-4dc4-baaa-69fff1ff4bb6`
+- Git: `git revert 9272423a50` (the merge) on `bugfix/site-bug-hunt` /
+  `main`, then redeploy.
 
 ## 13. Ownership handoff (Practice Engine)
 - **Safe checkout:** `/Users/ryland/Documents/scoreflow-product-preview` on
-  `codex/unified-practice-audio-preview` (head `95180f4b25`; tracked tree
-  clean).
-- **Safe baseline:** `bugfix/site-bug-hunt` (now `4f7b322c5c`), which includes
-  the Practice Engine optimisation (cherry-picked as `c25f0c7e9e` /
-  `d755cbe893`), the navigation fix, the Audio Vision integration and this
-  cursor fix.
-- The Practice Engine's own perf commits are preserved on their branch and
-  already integrated into main; nothing of theirs was overwritten.
-- `src/features/score-follow/cursorMotionTimeline.js` and
-  `src/features/practice/engravedNoteX.js` now own the shared geometry — the
-  Practice Engine should keep its tick-context work in
-  `PracticeSessionContext` / `usePracticeSession` and not reintroduce a second
-  geometry mapping.
+  `codex/unified-practice-audio-preview` (head `bf397d5fd4`; tracked tree
+  clean — the reported "17 uncommitted files" are untracked `tmp/` e2e output
+  directories, not source changes).
+- **Their branch is intact and not overwritten.** The four commits unique to
+  it (`95180f4b25`, `956ee6a0bc`, `65b92119ae`, `bf397d5fd4`) are all still
+  there; the two code commits were integrated by cherry-pick
+  (`c25f0c7e9e`, `d755cbe893`) and the persistence cherry-pick equals
+  `c15310a6ed`.
+- **Safe baseline:** `bugfix/site-bug-hunt` = `main` = `9272423a50`, which is
+  exactly what is live. The Practice Engine can rebase/merge from it and will
+  be working against the newest deployed functionality.
+- **Coordination note:** `src/features/score-follow/cursorMotionTimeline.js`
+  and `src/features/practice/engravedNoteX.js` now own the shared
+  note-position geometry. The Practice Engine should keep its tick-context
+  work in `PracticeSessionContext` / `usePracticeSession` and must not
+  reintroduce a second default-x mapping — the cursor and the note target are
+  now required to agree (asserted by
+  `tests/cursorNoteTargetAgreement.test.js`).
+- No Piano/Guitar Vision research was merged.
 
 ## Bug ledger
 | ID | Feature | Severity | Status | Commit |
@@ -176,5 +210,6 @@ observed onsets on an imported score, and 0 ms on three further scores.
 | BH-002 | Test infra | P3 | Fixed | `cb5843196b` |
 | BH-003 | Audio Vision (MusicXML) | P1 | Fixed | `a7865d583b` |
 | BH-004 | Audio Vision (persistence) | P1 | Fixed | `c15310a6ed` |
-| BH-005 | Score Following (cursor alignment) | P1 | Fixed | `718cae089a` |
-| BH-006 | Score Following (blue boxes in Preview) | P2 | Fixed | `718cae089a` |
+| BH-005 | Score Following (cursor alignment) | P1 | Fixed | `2ad1a0b56b`, `718cae089a` |
+| BH-006 | Score Following (blue boxes in Preview) | P2 | Fixed | `2ad1a0b56b` |
+| BH-007 | Audio Vision (generation freeze / Open Score opened the wrong score) | P1 | Fixed (integrated) | `0581658f62` via `9272423a50` |
