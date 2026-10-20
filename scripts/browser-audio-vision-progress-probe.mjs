@@ -20,7 +20,7 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'audio-vision-progress-probe')
 const PORT = Number(process.env.E2E_PORT ?? 5612)
-const baseUrl = `http://127.0.0.1:${PORT}/`
+const baseUrl = process.env.E2E_BASE_URL ?? `http://127.0.0.1:${PORT}/`
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 /** 30 s of a repeating guitar figure — long enough to expose blocking. */
@@ -67,14 +67,17 @@ async function writeFigureWav(path, seconds = 30) {
 await mkdir(outDir, { recursive: true })
 const wavPath = await writeFigureWav(join(outDir, 'figure-30s.wav'))
 
-const vite = await createServer({
+const externalBase = Boolean(process.env.E2E_BASE_URL)
+const vite = externalBase ? null : await createServer({
   root,
   configFile: join(root, 'vite.config.js'),
   logLevel: 'silent',
   server: { host: '127.0.0.1', port: PORT, strictPort: true },
 })
-await vite.listen()
-await sleep(800)
+if (vite) {
+  await vite.listen()
+  await sleep(800)
+}
 
 const { chromium } = await import('playwright')
 const browser = await chromium.launch({ headless: true, args: ['--autoplay-policy=no-user-gesture-required'] })
@@ -155,7 +158,7 @@ try {
   result.error = String(error?.stack ?? error)
 } finally {
   try { await browser.close() } catch { /* noop */ }
-  try { await vite.close() } catch { /* noop */ }
+  try { await vite?.close() } catch { /* noop */ }
 }
 
 await writeFile(join(outDir, 'report.json'), JSON.stringify(result, null, 2))

@@ -32,7 +32,7 @@ const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'audio-vision-critical-ux')
 const profileDir = join(outDir, 'profile')
 const PORT = Number(process.env.E2E_PORT ?? 5611)
-const baseUrl = `http://127.0.0.1:${PORT}/`
+const baseUrl = process.env.E2E_BASE_URL ?? `http://127.0.0.1:${PORT}/`
 
 const report = {
   generatedAt: new Date().toISOString(),
@@ -384,14 +384,20 @@ if (!existsSync(pdfFixture)) {
   process.exit(1)
 }
 
-const vite = await createServer({
+// A live run (E2E_BASE_URL) uses the deployed site; a local run serves the
+// working tree. The live site is only read from - the browser profile is
+// isolated in a temporary directory.
+const externalBase = Boolean(process.env.E2E_BASE_URL)
+const vite = externalBase ? null : await createServer({
   root,
   configFile: join(root, 'vite.config.js'),
   logLevel: 'silent',
   server: { host: '127.0.0.1', port: PORT, strictPort: true },
 })
-await vite.listen()
-await sleep(800)
+if (vite) {
+  await vite.listen()
+  await sleep(800)
+}
 
 const { chromium } = await import('playwright')
 let context = await chromium.launchPersistentContext(profileDir, {
@@ -652,7 +658,7 @@ try {
   } catch { /* noop */ }
 } finally {
   try { await context?.close() } catch { /* noop */ }
-  try { await vite.close() } catch { /* noop */ }
+  try { await vite?.close() } catch { /* noop */ }
 }
 
 report.finishedAt = new Date().toISOString()
