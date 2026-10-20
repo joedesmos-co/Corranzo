@@ -2,9 +2,12 @@
 
 **Deployed to** https://corranzo.com
 **Commit** `0581658f62` (fix) + `c4c4039ef8` (live-run test hook)
-**Cloudflare version** `467bada0-d6df-40db-9769-223a84455eb8`
+**Cloudflare version** `467bada0-d6df-40db-9769-223a84455eb8` (this deploy;
+the site is now serving `022cc97c-1625-4392-a1ef-ba5b008f664c` from the same
+build — identical bundle `index-DAJyk8Ct.js`)
 **Rollback target** `250d5a82-d985-46bb-8073-3e7cbf00a5de` (the version that was
-live immediately before this deploy) — `npx wrangler rollback 250d5a82-d985-46bb-8073-3e7cbf00a5de`
+live immediately before this deploy) —
+`npx wrangler rollback 250d5a82-d985-46bb-8073-3e7cbf00a5de`
 
 ## Bug 1 — generation froze the interface, the progress bar appeared late
 
