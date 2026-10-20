@@ -12,10 +12,45 @@
  * same model, the same thresholds (onset 0.5, frame 0.3) and the same
  * 22 050 Hz mono input. The only difference is which thread did the work.
  */
+// MUST come first: it declares the worker `window` shim TF.js's browser
+// platform probes for (see audioVisionWorkerEnv.js). ESM evaluates imported
+// modules in order, so this runs before TF.js is evaluated.
+import './audioVisionWorkerEnv.js'
 import { BasicPitch, noteFramesToTime, outputToNotesPoly } from '@spotify/basic-pitch'
 import * as tf from '@tensorflow/tfjs'
 
 let modelPromise = null
+/** The job currently in flight, so an uncaught async failure can still answer it. */
+let activeJobId = null
+
+function post(message) {
+  try {
+    self.postMessage(message)
+  } catch (error) {
+    console.error('[audio-vision] pitch worker could not post its result:', String(error?.message ?? error))
+  }
+}
+
+/**
+ * Any error that escapes the message handler (a rejected promise from a
+ * library callback, for example) must still answer the job it belongs to.
+ * Without this the main thread waits forever and the generation stalls at the
+ * last reported percentage with no way out.
+ */
+function reportUncaught(jobId, error) {
+  const message = String(error?.message ?? error ?? 'unknown worker error')
+  console.error('[audio-vision] pitch worker failure:', message, error?.stack ?? '')
+  if (jobId != null) {
+    post({ jobId, ok: false, error: message })
+  }
+}
+
+self.addEventListener('error', (event) => {
+  reportUncaught(activeJobId, event.error ?? event.message)
+})
+self.addEventListener('unhandledrejection', (event) => {
+  reportUncaught(activeJobId, event.reason)
+})
 
 function loadModel(modelUrl) {
   if (!modelPromise) {
@@ -35,6 +70,7 @@ function appendAll(target, chunk) {
 
 self.onmessage = async (event) => {
   const { jobId, modelUrl, samples } = event.data ?? {}
+  activeJobId = jobId ?? null
   try {
     const model = await loadModel(modelUrl)
     const frames = []
@@ -50,7 +86,7 @@ self.onmessage = async (event) => {
       // The model reports its real window progress (0..1). Passing it on lets
       // the progress bar show measured progress instead of a frozen bar.
       (fraction) => {
-        try { self.postMessage({ jobId, progress: fraction }) } catch { /* noop */ }
+        post({ jobId, progress: fraction })
       },
     )
     const notes = noteFramesToTime(outputToNotesPoly(frames, onsets, 0.5, 0.3, 5)).map((note) => ({
@@ -58,8 +94,10 @@ self.onmessage = async (event) => {
       startOffsetSeconds: note.startTimeSeconds,
       endOffsetSeconds: note.startTimeSeconds + note.durationSeconds,
     }))
-    self.postMessage({ jobId, ok: true, notes })
+    post({ jobId, ok: true, notes })
   } catch (error) {
-    self.postMessage({ jobId, ok: false, error: String(error?.message ?? error) })
+    post({ jobId, ok: false, error: String(error?.message ?? error) })
+  } finally {
+    activeJobId = null
   }
 }

@@ -399,12 +399,16 @@ if (vite) {
   await sleep(800)
 }
 
-const { chromium } = await import('playwright')
-let context = await chromium.launchPersistentContext(profileDir, {
+// BROWSER=webkit runs the same acceptance suite in Safari's engine — the
+// Audio Vision pitch worker behaves differently there, so both must pass.
+const { chromium, webkit } = await import('playwright')
+const launcher = process.env.BROWSER === 'webkit' ? webkit : chromium
+const launchOptions = {
   headless: true,
   viewport: { width: 1280, height: 900 },
-  args: ['--autoplay-policy=no-user-gesture-required'],
-})
+  ...(process.env.BROWSER === 'webkit' ? {} : { args: ['--autoplay-policy=no-user-gesture-required'] }),
+}
+let context = await launcher.launchPersistentContext(profileDir, launchOptions)
 
 async function newPage() {
   const page = await context.newPage()
@@ -560,11 +564,7 @@ try {
   const beforeReload = await readPersistedMusicXml(page)
   await page.close()
   await context.close()
-  context = await chromium.launchPersistentContext(profileDir, {
-    headless: true,
-    viewport: { width: 1280, height: 900 },
-    args: ['--autoplay-policy=no-user-gesture-required'],
-  })
+  context = await launcher.launchPersistentContext(profileDir, launchOptions)
   page = await newPage()
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 60000 })
   await sleep(3000)
