@@ -37,7 +37,10 @@ await page.evaluate(() => {
 })
 await sleep(1200)
 await page.setInputFiles('input[type=file]', join(root, 'public', 'fixtures', 'practice-library', FIXTURE))
-await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Open score/.test((b.textContent ?? '').trim())), { timeout: 300000 })
+await page.waitForFunction(
+  () => [...document.querySelectorAll('button')].some((b) => /Open score/.test((b.textContent ?? '').trim())),
+  { timeout: 300000 },
+)
 await sleep(1500)
 await page.evaluate((m) => {
   const b = [...document.querySelectorAll('button')].find((e) => (e.textContent ?? '').trim().startsWith(m))
