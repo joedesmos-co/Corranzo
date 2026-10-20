@@ -179,7 +179,10 @@ describe('A1 start position', () => {
     const trusted = anchorsFor(1)
     const motionTimeline = buildCursorMotionTimeline({ timingMap, trustedAnchors: trusted })
     const atZero = resolveCursorMotion(motionTimeline, 0.0)
-    expect(atZero.x).toBeCloseTo(0.1, 6)
+    // The cursor starts ON the first notehead (default-x 10 of an 80-tenth
+    // measure, mapped across the measure's playable span [0.1, 0.2] → 0.1125).
+    // It must NOT sit at the bare measure start (0.1) or the page origin.
+    expect(atZero.x).toBeCloseTo(0.1125, 6)
     expect(atZero.measureNumber).toBe(1)
   })
 
@@ -198,7 +201,9 @@ describe('A1 start position', () => {
     const motionTimeline = buildCursorMotionTimeline({ timingMap, trustedAnchors: trusted })
     const atZero = resolveCursorMotion(motionTimeline, 0.0)
     expect(atZero.measureNumber).toBe(1)
-    expect(atZero.x).toBeCloseTo(0.1, 6)
+    // The pickup note is engraved at default-x 60 → it maps to its own
+    // notehead column, not to the measure's start.
+    expect(atZero.x).toBeCloseTo(0.16, 6)
   })
 
   it('parks at the measure start through an opening rest, then hits the note', () => {
@@ -226,6 +231,8 @@ describe('A1 start position', () => {
     const trusted = anchorsFor(2)
     const motionTimeline = buildCursorMotionTimeline({ timingMap, trustedAnchors: trusted })
     resolveCursorMotion(motionTimeline, 3.5)
-    expect(resolveCursorMotion(motionTimeline, 0.0).x).toBeCloseTo(0.1, 6)
+    // Seeking back returns to the FIRST NOTEHEAD's column, not the raw
+    // measure anchor.
+    expect(resolveCursorMotion(motionTimeline, 0.0).x).toBeCloseTo(0.1125, 6)
   })
 })

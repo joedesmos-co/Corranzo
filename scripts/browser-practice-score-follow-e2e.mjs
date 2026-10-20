@@ -291,7 +291,10 @@ async function main() {
     await dismissOverlays(page)
     await loadDemo(page)
 
-    // ---- Preview: shared cursor + current highlight on the same score ----
+    // ---- Preview: the red vertical cursor is the only indicator ----
+    // Preview intentionally draws NO blue notehead highlight boxes: the thin
+    // red line is the primary score-following indicator, and the blue boxes
+    // were visually redundant and drifted out of sync with it.
     await switchMode(page, 'Preview')
     await page.screenshot({ path: join(outDir, 'preview.png') })
     let preview = await scoreState(page)
@@ -300,10 +303,10 @@ async function main() {
     } else {
       fail('preview shows the shared score cursor', 'cursor hidden or missing')
     }
-    if (preview.boxes.some((box) => box.state === 'current')) {
-      pass('preview highlights the current score event')
+    if (preview.boxes.length === 0) {
+      pass('preview draws no blue notehead highlight boxes')
     } else {
-      fail('preview highlights the current score event', JSON.stringify(preview.boxes.slice(0, 3)))
+      fail('preview draws no blue notehead highlight boxes', JSON.stringify(preview.boxes.slice(0, 3)))
     }
 
     // ---- Wait For You: correct / wrong / partial via real evaluator ----

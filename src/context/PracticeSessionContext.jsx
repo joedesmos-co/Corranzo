@@ -152,6 +152,7 @@ export function PracticeSessionProvider({
     omrMeasureGrid: experimentalOmrPlayback
       ? musicXmlSource?.omrMeta?.measureGrid ?? null
       : null,
+    sourceVisualMap: session.sourceVisualMap,
   })
 
   // Tick-stable: `useScoreFollow` returns a fresh object each render, so the
@@ -446,15 +447,9 @@ export function PracticeSessionProvider({
     if (isPlayAlong) {
       return playAlongScoreStates
     }
-    if (isPreview && timelineScoreTarget.target?.visible && timelineScoreTarget.checkpoint) {
-      return [{
-        key: `preview:${timelineScoreTarget.checkpoint.id ?? timelineScoreTarget.index}`,
-        checkpoint: timelineScoreTarget.checkpoint,
-        target: timelineScoreTarget.target,
-        state: SCORE_NOTE_STATE.CURRENT,
-        toneStates: null,
-      }]
-    }
+    // Preview mode uses the red vertical cursor as its primary indicator;
+    // blue notehead highlight boxes are intentionally omitted there (they
+    // were visually redundant with the cursor and drifted out of sync).
     return []
   }, [
     wfyNoteMode,

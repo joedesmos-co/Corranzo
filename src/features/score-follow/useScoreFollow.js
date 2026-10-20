@@ -146,6 +146,10 @@ export default function useScoreFollow({
   autoSetupGateOpen = true,
   experimentalOmrPlayback = false,
   omrMeasureGrid = null,
+  // Exact printed-notehead geometry (OMR source map). The painted cursor
+  // resolves its onsets through the SAME source geometry the note target uses,
+  // so the line and the notehead it triggers can never disagree.
+  sourceVisualMap = null,
 }) {
   const isBundledDemoSession = isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
   const isDemoSession = isDemoPiece || isBundledDemoSession
@@ -524,9 +528,14 @@ export default function useScoreFollow({
   const motionTimeline = useMemo(
     () =>
       hasTiming && trustedAnchors.length > 0
-        ? buildCursorMotionTimeline({ timingMap, trustedAnchors })
+        ? buildCursorMotionTimeline({
+            timingMap,
+            trustedAnchors,
+            sourceVisualMap,
+            preferredRepresentation: activeGuitarScoreTarget,
+          })
         : null,
-    [hasTiming, timingMap, trustedAnchors],
+    [hasTiming, timingMap, trustedAnchors, sourceVisualMap, activeGuitarScoreTarget],
   )
 
   const resolved = useMemo(

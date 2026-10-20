@@ -8,11 +8,8 @@ import {
   resolveSourceVisualAnchorGeometry,
   SOURCE_VISUAL_COORDINATE_SPACE,
 } from '../omr/omrSourceVisualMap.js'
-import {
-  buildMeasureAnchorGeometry,
-  getMeasureLayoutExtents,
-  getMeasureTimingWindow,
-} from './noteTargetContext.js'
+import { buildMeasureAnchorGeometry, getMeasureLayoutExtents, getMeasureTimingWindow } from './noteTargetContext.js'
+import { resolveEngravedNoteXInMeasure } from './engravedNoteX.js'
 
 export const NOTE_TARGET_MARKER_OFFSET_Y = 0.036
 
@@ -104,19 +101,17 @@ function resolveNoteX({
 }) {
   const { xMeasureStart, xMeasureEnd } = geometry
 
-  if (layoutExtents.hasDefaultX && note.defaultX != null) {
-    // MusicXML default-x is tenths from the left of the measure. Map against the
-    // engraved measure width (or a modest estimate from the rightmost note) —
-    // never min/max-stretch the note cluster across the full PDF measure span,
-    // which parked early notes halfway across empty bars.
-    const engravedWidth = layoutExtents.engravedWidth
-    const maxX = layoutExtents.maxDefaultX ?? note.defaultX
-    const widthTenths =
-      Number.isFinite(engravedWidth) && engravedWidth > 0
-        ? engravedWidth
-        : Math.max(maxX + Math.max(40, maxX * 0.15), 80)
-    const ratio = clamp(note.defaultX / widthTenths, 0, 1)
-    return lerp(xMeasureStart, xMeasureEnd, ratio)
+  // Shared engraved mapping (see engravedNoteX.js): the note target and the
+  // painted red cursor resolve a note's x through this one function, so the
+  // line and the notehead it triggers can never drift apart.
+  const engravedX = resolveEngravedNoteXInMeasure({
+    defaultX: note.defaultX,
+    layoutExtents,
+    xStart: xMeasureStart,
+    xEnd: xMeasureEnd,
+  })
+  if (engravedX != null) {
+    return engravedX
   }
 
   if (timingWindow) {

@@ -6,6 +6,12 @@ import {
   usesPerformedTimeline,
 } from '../musicxml/performedTimeline.js'
 import { getTimeline } from '../musicxml/timeline.js'
+import { getMeasureLayoutExtents } from '../practice/noteTargetContext.js'
+import { resolveEngravedNoteXInMeasure } from '../practice/engravedNoteX.js'
+import {
+  getSourceVisualAnchorIndex,
+  resolveSourceVisualAnchorGeometry,
+} from '../omr/omrSourceVisualMap.js'
 
 /**
  * Score-follow Motion Engine v3 — precomputed, PLAYBACK-ORDERED motion timeline.
@@ -101,11 +107,19 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
     const bucket = Math.round(n.performedSeconds / CHORD_GROUP_SECONDS)
     const existing = groups.get(bucket)
     if (!existing) {
-      groups.set(bucket, { time: n.performedSeconds, defaultX: n.defaultX ?? null, count: 1 })
+      groups.set(bucket, {
+        time: n.performedSeconds,
+        defaultX: n.defaultX ?? null,
+        sourceNoteheadIds: n.sourceNoteheadId != null ? [n.sourceNoteheadId] : [],
+        count: 1,
+      })
     } else {
       existing.count += 1
       if (n.defaultX != null && (existing.defaultX == null || n.defaultX < existing.defaultX)) {
         existing.defaultX = n.defaultX
+      }
+      if (n.sourceNoteheadId != null) {
+        existing.sourceNoteheadIds.push(n.sourceNoteheadId)
       }
     }
   }
@@ -136,12 +150,53 @@ function getMeasureOnsets(timingMap, measureNumber, window) {
 }
 
 /**
- * Knots (time → x) for one measure, mapped into [startX, endX]. Uses engraved
- * default-x across the measure's estimated full width (barline extrapolated) so
- * the last note is NOT crammed to the edge; falls back to time spacing for
- * missing/non-monotonic geometry.
+ * Exact printed notehead x for an onset, when the score owns source geometry
+ * (OMR notehead centres). Returns null when there is no owned source notehead
+ * or the owned geometry is below the precision threshold.
  */
-function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber, leadingRestDX = null) {
+function sourceXForOnset(onset, measureGeometry) {
+  const index = measureGeometry?.sourceAnchorIndex
+  if (!index || !Array.isArray(onset.sourceNoteheadIds) || onset.sourceNoteheadIds.length === 0) {
+    return null
+  }
+  const preferred = measureGeometry?.preferredRepresentation ?? null
+  const xs = []
+  for (const sourceNoteheadId of onset.sourceNoteheadIds) {
+    const anchor = resolveSourceVisualAnchorGeometry(
+      index.get(sourceNoteheadId),
+      preferred,
+    )
+    const x = anchor?.sourceCenter?.x
+    if (Number.isFinite(x)) {
+      xs.push(x)
+    }
+  }
+  if (xs.length === 0) {
+    return null
+  }
+  // A chord's members share one onset: use their mean, exactly like the note
+  // target does when it averages a chord's placements.
+  return xs.reduce((sum, value) => sum + value, 0) / xs.length
+}
+
+/**
+ * Knots (time → x) for one measure, mapped into [startX, endX]. Uses the
+ * SHARED engraved mapping (engravedNoteX.js) over the measure's playable span,
+ * so each onset lands exactly on its notehead — the same x the note target
+ * uses. (This used to subtract the first onset's default-x and extrapolate the
+ * barline, which ran the line up to ~95 px ahead of the note it was meant to
+ * trigger.) Falls back to time spacing for missing/non-monotonic geometry.
+ */
+function buildMeasureKnots(
+  onsets,
+  mStart,
+  mEnd,
+  startX,
+  endX,
+  measureNumber,
+  leadingRestDX = null,
+  measureGeometry = null,
+) {
   const span = Math.max(endX - startX, 0)
   if (onsets.length === 0) {
     return {
@@ -158,30 +213,51 @@ function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber, le
   // strictly forward (mapped), or time-proportional fallback was used.
   const geometry = monotonic ? 'engraved' : 'time'
 
+  const spanStart = measureGeometry?.playableStartX ?? startX
+  const spanEnd = measureGeometry?.playableEndX ?? endX
+  const layoutExtents = measureGeometry?.layoutExtents ?? null
+  const dur = Math.max(mEnd - mStart, 1e-6)
+
+  // Exact printed notehead position when the score owns one (OMR source
+  // geometry). This is the SAME x the note target paints its box at, so the
+  // red line and the notehead it triggers can never disagree. OMR-imported
+  // scores have NO MusicXML default-x at all, so this is the only exact
+  // geometry they have — it must not be gated behind default-x monotonicity.
+  const sourceXs = onsets.map((o) => sourceXForOnset(o, measureGeometry))
+  const allHaveSource = sourceXs.length > 0 && sourceXs.every((x) => x != null)
+
   let xs
-  if (monotonic) {
-    // A leading rest's engraved position is the mapping origin, so the
-    // first sounding note lands right of the barline instead of on it.
-    const d0 =
-      leadingRestDX != null && leadingRestDX < onsets[0].defaultX
-        ? leadingRestDX
-        : onsets[0].defaultX
-    const dLast = onsets[onsets.length - 1].defaultX
-    let width
-    if (onsets.length >= 2 && onsets[onsets.length - 1].time - onsets[0].time > 1e-6) {
-      // Extrapolate the barline's default-x from the engraved velocity and the
-      // last note's remaining duration, so the measure's full width is used.
-      const vel = (dLast - d0) / (onsets[onsets.length - 1].time - onsets[0].time)
-      const barlineDX = dLast + Math.max(vel, 0) * Math.max(mEnd - onsets[onsets.length - 1].time, 0)
-      width = barlineDX - d0
-    } else {
-      width = Math.max(dLast - d0, 1)
-    }
-    if (!(width > 1e-6)) width = 1
-    xs = onsets.map((o) => startX + ((o.defaultX - d0) / width) * span)
+  if (allHaveSource) {
+    // Every onset owns its printed notehead: use those positions verbatim.
+    xs = sourceXs
+  } else if (monotonic) {
+    // Shared mapping: absolute default-x over the engraved measure width,
+    // across the measure's PLAYABLE span — identical to the note target's x.
+    xs = onsets.map((o, index) => {
+      const sourceX = sourceXs[index]
+      if (sourceX != null) {
+        return sourceX
+      }
+      const engraved = resolveEngravedNoteXInMeasure({
+        defaultX: o.defaultX,
+        layoutExtents,
+        xStart: spanStart,
+        xEnd: spanEnd,
+      })
+      if (engraved != null) {
+        return engraved
+      }
+      return spanStart + clamp((o.time - mStart) / dur, 0, 1) * Math.max(spanEnd - spanStart, 0)
+    })
   } else {
-    const dur = Math.max(mEnd - mStart, 1e-6)
-    xs = onsets.map((o) => startX + clamp((o.time - mStart) / dur, 0, 1) * span)
+    const dur2 = Math.max(mEnd - mStart, 1e-6)
+    xs = onsets.map((o, index) => {
+      const sourceX = sourceXs[index]
+      if (sourceX != null) {
+        return sourceX
+      }
+      return startX + clamp((o.time - mStart) / dur2, 0, 1) * span
+    })
   }
 
   const knots = []
@@ -191,7 +267,14 @@ function buildMeasureKnots(onsets, mStart, mEnd, startX, endX, measureNumber, le
   for (let i = 0; i < onsets.length; i += 1) {
     knots.push({
       t: onsets[i].time,
-      x: clamp(xs[i], startX, Math.max(startX, endX)),
+      // Keep the engraved x exactly as resolved (the notehead position). The
+      // clamp only guards against a degenerate span; it must not pull an onset
+      // off its notehead.
+      x: clamp(
+        xs[i],
+        Math.min(startX, measureGeometry?.playableStartX ?? startX),
+        Math.max(Math.max(startX, endX), measureGeometry?.playableEndX ?? endX),
+      ),
       measureNumber,
       kind: (onsets[i].count ?? 1) > 1 ? 'chord' : 'note',
     })
@@ -317,11 +400,17 @@ function finalizePhrase(phrase) {
 }
 
 /** Build the playback-ordered cursor motion timeline. */
-export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
+export function buildCursorMotionTimeline({
+  timingMap,
+  trustedAnchors,
+  sourceVisualMap = null,
+  preferredRepresentation = null,
+}) {
   const deduped = dedupeTrustedAnchorsByMeasure(trustedAnchors ?? [])
   if (!timingMap?.measures?.length || deduped.length === 0) {
     return { phrases: [], duration: getPlaybackDurationSeconds(timingMap) || 0, empty: true }
   }
+  const sourceAnchorIndex = getSourceVisualAnchorIndex(sourceVisualMap)
   const anchorByMeasure = new Map(deduped.map((a) => [a.measureNumber, a]))
   const performed = enumeratePerformedMeasures(timingMap)
   const phrases = []
@@ -390,7 +479,30 @@ export function buildCursorMotionTimeline({ timingMap, trustedAnchors }) {
 
     const window = { startTimeSeconds: pm.startTime, endTimeSeconds: pm.endTime }
     const { onsets, leadingRestDX } = getMeasureOnsets(timingMap, pm.measureNumber, window)
-    const built = buildMeasureKnots(onsets, pm.startTime, pm.endTime, anchor.x, endX, pm.measureNumber, leadingRestDX)
+    // The measure's PLAYABLE span is the same span the note target maps
+    // default-x into, so onset knots and noteheads share one geometry.
+    const playableStartX = Number.isFinite(anchor.meta?.playableStartX)
+      ? anchor.meta.playableStartX
+      : anchor.x
+    const playableEndX = Number.isFinite(anchor.meta?.playableEndX)
+      ? anchor.meta.playableEndX
+      : anchorPlayableEndX(anchor)
+    const built = buildMeasureKnots(
+      onsets,
+      pm.startTime,
+      pm.endTime,
+      anchor.x,
+      endX,
+      pm.measureNumber,
+      leadingRestDX,
+      {
+        playableStartX,
+        playableEndX,
+        layoutExtents: getMeasureLayoutExtents(timingMap, pm.measureNumber),
+        sourceAnchorIndex,
+        preferredRepresentation,
+      },
+    )
     current.knots.push(...built.knots)
     if (built.geometry === 'time') {
       current.geometryMode = current.geometryMode === 'engraved' ? 'mixed' : 'time'
