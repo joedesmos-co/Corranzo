@@ -250,13 +250,16 @@ function buildMeasureKnots(
       return spanStart + clamp((o.time - mStart) / dur, 0, 1) * Math.max(spanEnd - spanStart, 0)
     })
   } else {
+    // No engraved x: fall back to time-proportional spacing, but over the
+    // SAME playable span the note target uses, so the two still agree.
     const dur2 = Math.max(mEnd - mStart, 1e-6)
+    const fallbackSpan = Math.max(spanEnd - spanStart, 0)
     xs = onsets.map((o, index) => {
       const sourceX = sourceXs[index]
       if (sourceX != null) {
         return sourceX
       }
-      return startX + clamp((o.time - mStart) / dur2, 0, 1) * span
+      return spanStart + clamp((o.time - mStart) / dur2, 0, 1) * fallbackSpan
     })
   }
 
