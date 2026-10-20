@@ -35,10 +35,6 @@ function referenceTimeline(xml) {
   const divisions = Number(xml.match(/<divisions>(\d+)</)?.[1] ?? 1)
   const bpm = Number(xml.match(/<per-minute>(\d+)/)?.[1] ?? 120)
   const secondsPerQuarter = 60 / bpm
-  // A guitar TAB staff is a placement mirror of the notation staff: skip it in
-  // the independent timeline so the chord-duration/measure-timing checks count
-  // one musical truth, not two.
-  const hasTab = /<sign>TAB<\/sign>/.test(xml)
   const events = []
 
   const tag = (s, i) => {
@@ -94,13 +90,6 @@ function referenceTimeline(xml) {
       const isChord = /<chord\s*\/?>/.test(body)
       const voiceMatch = body.match(/<voice>(\d+)</)
       if (voiceMatch) voice = Number(voiceMatch[1])
-      const staffMatch = body.match(/<staff>(\d+)<\/staff>/)
-      const staff = staffMatch ? Number(staffMatch[1]) : null
-      // Skip TAB-staff notes: they mirror the notation staff.
-      if (hasTab && staff === 2) {
-        i = bodyEnd + 7
-        continue
-      }
       const stepMatch = body.match(/<step>([A-G])<\/step>(?:<alter>(-?\d)<\/alter>)?<octave>(\d)<\/octave>/)
       const midi = stepMatch ? refMidi(stepMatch) : null
       const tieStop = /<tie type="stop"\s*\/?>/.test(body)
@@ -180,7 +169,7 @@ describe('M1 — MusicXML semantics (independent reader + tonejs/midi)', () => {
       const xml = buildArrangementMusicXml({ events: config.events, targetPart: config.targetPart, bpm: 120, title: name })
       const ref = referenceTimeline(xml)
       const parsed = parseMusicXml(xml, 'sem.musicxml')
-      const engineNotes = parsed.notes.filter((n) => !n.isRest && !n.isTabMirror)
+      const engineNotes = parsed.notes.filter((n) => !n.isRest)
       const refNotes = ref.events.filter((e) => !e.isRest)
       expect(refNotes.length).toBe(engineNotes.length)
       // Onsets line up within one division. Compare like-for-like in quarters:
@@ -200,6 +189,9 @@ describe('M1 — MusicXML semantics (independent reader + tonejs/midi)', () => {
       // Ties: compare the SOUNDING timeline. The app's parser already merges
       // tie continuations into their parent (dq 1.25 shown as one event), so
       // use that as the reference and check the independent + SMF readers agree.
+      // TAB mirror notes (the guitar's six-line staff) are a visual copy of
+      // the notation staff, not an extra sounding voice, so they are excluded
+      // here exactly as the playback path excludes them.
       const mergedNotes = parsed.notes.filter((n) => !n.isRest && !n.tieStop && !n.isTabMirror)
       const smfNotes = mergedNotes.filter((n) => Number.isFinite(n.midi))
       // Convert through seconds (the parser exposes time/duration in seconds)

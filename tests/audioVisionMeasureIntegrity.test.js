@@ -20,13 +20,11 @@ describe('arrangement MusicXML measure integrity', () => {
     ]
     for (const targetPart of ['solo-piano', 'solo-guitar']) {
       const xml = buildArrangementMusicXml({ events, targetPart, bpm: 120, title: 'chord' })
-      const notes = [...xml.matchAll(/<note\b[^>]*>([\s\S]*?)<\/note>/g)].map((match) => match[1])
+      const notes = [...xml.matchAll(/<note>([\s\S]*?)<\/note>/g)]
       let parentDur = null
-      for (const body of notes) {
-        // A rest is not an onset: it never becomes a chord parent.
-        if (/<rest\s*\/>/.test(body)) continue
+      for (const [, body] of notes) {
         const dur = Number(body.match(/<duration>(\d+)</)[1])
-        if (/<chord\s*\/>/.test(body)) {
+        if (/<chord\/>/.test(body)) {
           expect(dur).toBe(parentDur) // invalid MusicXML if it differs
         } else {
           parentDur = dur

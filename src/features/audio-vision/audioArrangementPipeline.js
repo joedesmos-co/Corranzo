@@ -117,8 +117,22 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
+  // Cancellation is checked at every stage boundary so a cancelled run stops
+  // doing expensive work instead of finishing in the background.
+  const cancelled = () => {
+    try { return Boolean(stages.isCancelled?.()) } catch { return false }
+  }
+  const yieldToPaint = () => new Promise((resolve) => setTimeout(resolve, 0))
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
+  // Stage: decoding. Reported before the work starts so the UI can paint the
+  // label immediately instead of appearing to hang on an untouched 0%.
+  stages.onProgress?.({ stage: 'decode', fraction: 0 })
+  await yieldToPaint()
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   const imported = await importAudioFile(file, arrayBuffer, stages.decodeAudioDataImpl)
   if (!imported.ok) return { ok: false, ...imported }
+  // Yield so the UI can paint the 'Preparing audio' stage before DSP.
+  await yieldToPaint()
   // A12 silence gate: never arrange room tone. Measured on the same recording
   // at controlled gains, AFTER the import's peak normalization: true digital
   // silence lands near 1e-5 RMS while real music at -40 dB still reads 1.1e-3.
@@ -138,6 +152,9 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   // Phase 7: explicit excerpt — never a silent truncation. Default covers
   // the first EXCERPT_MAX_SECONDS and says so in the result.
   const { sliceExcerpt, EXCERPT_MAX_SECONDS } = await import('./audioImport.js')
+  stages.onProgress?.({ stage: 'preparing', fraction: 0.05 })
+  await yieldToPaint()
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   const cut = sliceExcerpt(imported.samples, imported.sampleRate, {
     startSeconds: excerpt?.startSeconds ?? 0,
     durationSeconds: excerpt?.durationSeconds ?? EXCERPT_MAX_SECONDS,
@@ -160,14 +177,18 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       centerRatio: imported.stereo.centerRatio,
     }
   }
-  const views = buildAnalysisViews(cut.samples, imported.sampleRate, { stereoSide: stereoSlice?.side ?? null })
+  const views = await buildAnalysisViews(cut.samples, imported.sampleRate, { stereoSide: stereoSlice?.side ?? null })
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   // A4: stereo is evidence only (mid == mono mix by construction; there is no
   // center-extracted stem). Onsets, tempo, chords and melody describe the mix.
   const analyzeSamples = cut.samples
   const analysis = await analyzeMusic(analyzeSamples, imported.sampleRate, {
-    views: { harmonic: views.harmonic, percussive: views.percussive },
+    // The whole view object: analyzeMusic reuses the mix spectrogram (the FFT
+    // pass is the same one) and needs the grid description with it.
+    views,
     predictNotes: stages.predictNotes ?? null,
     onProgress: progress,
+    isCancelled: () => cancelled(),
     // M3: reviewer's tempo correction propagates to beats -> quantization ->
     // arrangement -> MusicXML -> preview -> practice checkpoints.
     tempoOverride: Number.isFinite(tempoOverride) && tempoOverride > 0 ? tempoOverride : null,
@@ -232,6 +253,11 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   })
   transcribed.melodyContourBeats = melodyContour.size
   const quantized = quantizeToBeats(analysis.predictedNotes, analysis.beats.beats)
+  // Stage: building the arrangement. Yield first so the label paints before
+  // the arrangement pass runs.
+  stages.onProgress?.({ stage: 'arranging', fraction: 0.92 })
+  await yieldToPaint()
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   // Melody anchors for piano phrasing: strongest melody frame per onset beat.
   const melodyByBeat = (analysis.melody ?? []).map((m) => ({ beat: (m.seconds - (analysis.beats.beats[0] ?? 0)) / analysis.beats.beatPeriodSeconds, midi: m.midi }))
   let arranged
@@ -290,6 +316,10 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
       excerpt: excerptReport,
     }
   }
+  // Stage: generating the notation (MusicXML). Yield first so the label paints.
+  stages.onProgress?.({ stage: 'notation', fraction: 0.96 })
+  await yieldToPaint()
+  if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   const musicXml = buildArrangementMusicXml({
     events: simplified,
     targetPart,
@@ -299,6 +329,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     warnings: model.parts[0].warnings,
   })
   model.complexity = measureComplexity(simplified.map((e) => ({ ...e, startSeconds: e.startBeat })))
+  stages.onProgress?.({ stage: 'done', fraction: 1 })
   return {
     ok: true,
     code: verdict.partial ? 'partial' : 'ok',

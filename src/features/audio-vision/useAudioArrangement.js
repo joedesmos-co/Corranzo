@@ -3,6 +3,7 @@
  * decode via Web Audio, prediction via lazily-loaded Basic Pitch (fallback: null → spectral).
  */
 import { useCallback, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { runAudioArrangementPipeline } from './audioArrangementPipeline.js'
 import { PART_INSTRUMENTS, DIFFICULTIES } from './arrangementModel.js'
 import { getAudioFingerprint, loadTempoCorrection, saveTempoCorrection } from './tempoCorrectionStorage.js'
@@ -31,7 +32,28 @@ async function decodeWithWebAudio(arrayBuffer) {
   }
 }
 
-async function predictWithBasicPitch(samples) {
+/**
+ * Transcribe with Basic Pitch.
+ *
+ * The worker path is preferred: it keeps the main thread free, so the progress
+ * panel paints and the interface stays interactive while the model runs. If the
+ * worker cannot be used, the same model runs inline (same notes, less
+ * responsive interface). If the model cannot be used at all, the pipeline
+ * falls back to its spectral estimator — the arrangement is never invented
+ * from a failed inference.
+ */
+async function predictWithBasicPitch(samples, onNoteProgress = null) {
+  try {
+    const { inferNotesInWorker } = await import('./audioVisionPitchClient.js')
+    const events = await inferNotesInWorker(samples, { onProgress: onNoteProgress })
+    return (events ?? []).map((e) => ({
+      midi: e.midi,
+      startSeconds: e.startOffsetSeconds,
+      endSeconds: e.endOffsetSeconds,
+    }))
+  } catch {
+    // Fall through to the inline path.
+  }
   try {
     const [{ loadNeuralRuntime, runNeuralWindow }] = await Promise.all([
       import('../microphone-input/micNeuralTfAdapter.js'),
@@ -118,10 +140,15 @@ export function useAudioArrangement({ onReady = null } = {}) {
 
   const arrange = useCallback(async (file, { targetPart, difficulty, excerpt = null, tempoOverride = null }) => {
     cancelledRef.current = false
-    setError(null)
-    setResult(null)
-    setPhase('validating')
-    setProgress({ stage: 'validate', fraction: 0 })
+    // Flush the first state update synchronously so the progress panel is in the
+    // DOM before any heavy work starts. Without this the browser can paint the
+    // old frame for hundreds of milliseconds and the button looks dead.
+    flushSync(() => {
+      setError(null)
+      setResult(null)
+      setPhase('validating')
+      setProgress({ stage: 'validate', fraction: 0 })
+    })
     try {
       const arrayBuffer = bufferRef.current ?? await file.arrayBuffer()
       bufferRef.current = arrayBuffer
@@ -140,6 +167,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
         {
           decodeAudioDataImpl: cachedDecode ? (async () => cachedDecode) : decodeWithWebAudio,
           predictNotes: predictWithBasicPitch,
+          isCancelled: () => cancelledRef.current,
           onProgress: ({ stage, fraction }) => {
             if (!cancelledRef.current) setProgress({ stage, fraction })
           },
@@ -147,6 +175,11 @@ export function useAudioArrangement({ onReady = null } = {}) {
       )
       if (cancelledRef.current) return null
       if (!outcome.ok) {
+        if (outcome.code === 'cancelled') {
+          setPhase('idle')
+          setProgress(null)
+          return null
+        }
         if (outcome.code === 'low-confidence' || outcome.code === 'empty-audio') {
           setPhase('refused')
         } else {

@@ -974,6 +974,23 @@ export default function App() {
     if (!payload?.musicXmlString) return
     clearDemoPiece()
     markDemoCardHidden()
+    // The generated arrangement must become the active score. Without this the
+    // previously imported PDF was still the current score, so "Open Score"
+    // opened that PDF instead of the arrangement.
+    // The imported PDF itself is NOT deleted: it stays in the library and can
+    // be reopened from there. Only the in-memory "current score" moves.
+    setPdfFile((previous) => {
+      if (previous) URL.revokeObjectURL(previous)
+      return null
+    })
+    setPdfBuffer(null)
+    setPdfMeta(null)
+    setFileName(payload.fileName ?? 'audio-arrangement.musicxml')
+    if (liveBundleRef.current) {
+      liveBundleRef.current.pdfFile = null
+      liveBundleRef.current.pdfBuffer = null
+      liveBundleRef.current.pdfMeta = null
+    }
     const nextXml = createMusicXmlSource(payload.fileName ?? 'audio-arrangement.musicxml', payload.musicXmlString, {
       source: 'audio-arrangement',
       omrMeta: {
@@ -2185,20 +2202,34 @@ export default function App() {
       })
       practicePrefsRef.current = payload.practicePrefs ?? null
       setInitialPracticePrefs(payload.practicePrefs)
-      setLibraryFeedback({
-        type: 'info',
-        message: `This saved session was a notation-only score. Choose the matching PDF to open it — the attached notation is still used for score following.`,
-      })
-      // Land on Import: there is no PDF to practice from, and the Import view is
-      // the only place that renders the "add the matching PDF" guidance.
+      // An Audio Vision arrangement is a PDF-less score that IS playable: it
+      // restores straight into the practice workspace, exactly as it opened
+      // before the reload. A legacy notation-only session is a different
+      // thing: it needs its PDF, so it lands on Import with that guidance.
+      const isAudioArrangement = nextMusicXml?.source === 'audio-arrangement'
+      if (isAudioArrangement) {
+        setLibraryFeedback({
+          type: 'success',
+          message: 'Your arrangement is back — pick up where you left off.',
+        })
+      } else {
+        setLibraryFeedback({
+          type: 'info',
+          message: `This saved session was a notation-only score. Choose the matching PDF to open it — the attached notation is still used for score following.`,
+        })
+      }
+      // Land on Import for a legacy notation-only session (there is no PDF to
+      // practise from, and the Import view is the only place that renders the
+      // "add the matching PDF" guidance). An arrangement lands on the view it
+      // was saved on, so the musician returns to the score they were playing.
       setActiveView(
         normalizeAppView(
           resolveRestoredActiveView({
             location: window.location,
             // A saved legal route is always honoured; otherwise Import, never
             // the practice workspace, and never a bare library.
-            savedActiveView: 'import',
-            hasMusicXml: false,
+            savedActiveView: isAudioArrangement ? (payload.activeView ?? 'practice') : 'import',
+            hasMusicXml: isAudioArrangement,
           }),
         ),
       )
