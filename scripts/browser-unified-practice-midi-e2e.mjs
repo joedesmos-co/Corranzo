@@ -342,10 +342,13 @@ async function main() {
     } else {
       fail('preview shows the shared score cursor', 'cursor hidden or missing')
     }
-    if (preview.boxes.some((box) => box.state === 'current')) {
-      pass('preview highlights the current score event')
+    // Preview intentionally draws NO blue notehead highlight boxes: the thin
+    // red line is the primary score-following indicator, and the blue boxes
+    // were visually redundant and drifted out of sync with it.
+    if (preview.boxes.length === 0) {
+      pass('preview draws no blue notehead highlight boxes')
     } else {
-      fail('preview highlights the current score event', JSON.stringify(preview.boxes.slice(0, 3)))
+      fail('preview draws no blue notehead highlight boxes', JSON.stringify(preview.boxes.slice(0, 3)))
     }
 
     // ---- Wait For You: correct / wrong / partial via real evaluator ----
