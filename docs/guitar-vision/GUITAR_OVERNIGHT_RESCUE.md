@@ -777,3 +777,29 @@ Feasibility verdict:
   because the naive row-profile (>0.3 over full width) misses sparse
   TAB staves. A better filter (staff-line proximity per system) is the
   natural next step in the hybrid implementation.
+
+### R20 — PDF text-layer hybrid prototype (M2-M4)
+proof-pdf-hybrid.py: PyMuPDF text spans + raster TAB staff detection.
+Digit-like spans (pure int 0-19, small) kept only if on a detected TAB
+staff line (contiguous run, minrun 40).
+
+Per-PDF results:
+  canon-in-d-pachelbel (A4, 1 page): 882 spans, 802 digit-like, 0 on staff
+    (staff detection failed: minrun 40 too high for this DPI). font FreeSans
+  save-me-bts p0: 357 spans, 311 digit-like, 0 on staff (no staves)
+  save-me-bts p1: 350 spans, 312 digit-like, 66 on staff (2 staves)
+  guitar-paired-chords-vector: 217 spans, 124 digit-like, 116 on staff (93.5%)
+  guitar-tab-sparse-vector: 59 spans, 40 digit-like, 36 on staff (90%)
+
+Feasibility: text-bearing PDFs DO expose fret digits as individual
+spans with precise bboxes in standard fonts. The hybrid correctly
+distinguishes text-bearing from scanned PDFs (guitar-paired-scan: 0
+text spans, 3 staves still detected -> raster fallback path triggers).
+
+Licensing: PyMuPDF is AGPL/commercial. The repo already bundles
+pdfjs-dist (Apache 2.0) via react-pdf. Production integration should
+use pdfjs-dist; this probe uses PyMuPDF for research only.
+
+Remaining: staff-line detection minrun needs to be staff-relative
+(not fixed 40); digit-to-staff assignment needs fret-to-string logic;
+rest detection needs a separate path.
