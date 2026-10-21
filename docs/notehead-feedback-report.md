@@ -120,21 +120,25 @@ injection, real audio) and captures screenshots of all three modes into
   fix, persistence, PDF-first import, guitar TAB, score-following timing.
 
 ## 8. Deployed commit and Cloudflare version
-- **Commit:** `notehead feedback` on `bugfix/site-bug-hunt`, fast-forwarded
-  onto official `main`.
-- **Cloudflare version ID: `12740247-ec4d-45b0-bcbe-c1c1f0ee9087`**
-- **Live bundle:** `index-tKWzIQWL.js` (byte-identical to the local build);
+- **Commit:** `abe7f85f23` on `bugfix/site-bug-hunt`, fast-forwarded onto
+  official `main` (`abe7f85f23`). The release also carries the Practice
+  Engine's unified Audio Vision practice engine, which landed on `main` while
+  this work was in flight and was merged in (no conflicts).
+- **Cloudflare version ID: `9ba0a942-8394-4fa3-9ba5-c04fb747f979`**
+- **Live bundle:** `index-WAVIfkxz.js` (byte-identical to the local build);
   `/`, `/privacy`, `/terms`, `/contact` all return HTTP 200.
 - The live site was re-verified after deployment: Preview is clean, the
   floating markers are gone, the notehead feedback is present, and Play Along
-  shows a red notehead for a missed note.
+  shows a red notehead for a missed note. The Audio Vision critical-UX suite
+  passes **19/19 against the live site in WebKit** (including the guitar
+  six-line TAB staff and the arrangement surviving a browser restart).
 
 ## 9. Rollback
 - Previous live version ID: `50b609d4-2834-485f-86c5-8fce88fe6eb4` (bundle
-  `index-Czbeq01m.js`).
+  `index-Czbeq01m.js`, the release before the notehead feedback).
 - `npx wrangler rollback 50b609d4-2834-485f-86c5-8fce88fe6eb4`
-- Git: `git revert <notehead-feedback-commit>` on `bugfix/site-bug-hunt` /
-  `main`, then rebuild and redeploy.
+- Git: `git revert d12bdd653b` (the notehead feedback commit) on
+  `bugfix/site-bug-hunt` / `main`, then rebuild and redeploy.
 
 ## 10. Remaining limitations
 - For a score whose MusicXML carries no engraved layout, the notehead position
