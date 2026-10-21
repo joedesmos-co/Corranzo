@@ -240,27 +240,47 @@ function playability(arranged, { beatsPerMeasure = 4 } = {}) {
   }
 }
 
-/** MusicXML validity: every voice must fill its measures exactly. */
+/**
+ * MusicXML validity: the written position must fill every measure exactly.
+ * The check walks the measure the way a reader does - notes and rests move
+ * the cursor forward, a backup moves it back - so a two-voice score (grand
+ * staff, or notation + TAB) is judged per voice, not summed.
+ */
 function xmlValidity(xml) {
   const measures = [...xml.matchAll(/<measure number="(\d+)">([\s\S]*?)<\/measure>/g)]
   let overfull = 0
   let underfull = 0
+  const expected = 4 * 16 // 4/4 at 16 divisions
   for (const [, , body] of measures) {
-    const backups = [...body.matchAll(/<backup><duration>(\d+)<\/duration>/g)].map((m) => Number(m[1]))
-    const total = [...body.matchAll(/<duration>(\d+)<\/duration>/g)].reduce((sum, m) => sum + Number(m[1]), 0)
-    const expected = 4 * 16 // 4/4 at 16 divisions
-    for (const voice of [0, 1, 2, 3]) {
-      void voice
+    let cursor = 0
+    let maxCursor = 0
+    const tokens = body.matchAll(/<note>([\s\S]*?)<\/note>|<backup><duration>(\d+)<\/duration>|<forward><duration>(\d+)<\/duration>/g)
+    for (const token of tokens) {
+      if (token[2] != null) {
+        cursor -= Number(token[2])
+        continue
+      }
+      if (token[3] != null) {
+        cursor += Number(token[3])
+        maxCursor = Math.max(maxCursor, cursor)
+        continue
+      }
+      const body = token[1] ?? ''
+      const duration = Number(/<duration>(\d+)<\/duration>/.exec(body)?.[1] ?? 0)
+      // A <chord/> note sounds WITH the previous note: it does not move the
+      // written position.
+      if (/<chord\s*\/?>/.test(body)) continue
+      cursor += duration
+      maxCursor = Math.max(maxCursor, cursor)
     }
-    const perVoice = total - backups.reduce((sum, d) => sum + d, 0)
-    if (perVoice > expected) overfull += 1
-    if (perVoice < expected) underfull += 1
+    if (maxCursor > expected) overfull += 1
+    if (cursor !== expected) underfull += 1
   }
   return {
     measures: measures.length,
     overfullMeasures: overfull,
     underfullMeasures: underfull,
-    valid: overfull === 0,
+    valid: overfull === 0 && underfull === 0,
   }
 }
 
