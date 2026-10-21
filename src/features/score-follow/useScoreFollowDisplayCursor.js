@@ -21,7 +21,7 @@ const SNAP_THRESHOLD = 0.0005
  * cursor lands, only how it gets there.
  */
 const CHECKPOINT_GLIDE_MIN_DISTANCE = 0.0008
-const CHECKPOINT_GLIDE_BASE_MS = 180
+const CHECKPOINT_GLIDE_BASE_MS = 210
 const CHECKPOINT_GLIDE_MAX_MS = 420
 /** Page-normalised distance → extra milliseconds (a long gap takes longer). */
 const CHECKPOINT_GLIDE_MS_PER_UNIT = 2400

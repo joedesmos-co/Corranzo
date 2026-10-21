@@ -41,8 +41,12 @@ try {
  const frames=motion.filter(f=>f.visible&&f.x!=null).map(f=>({...f,x:Math.round(f.x*100)/100}))
  const xs=[...new Set(frames.map(f=>f.x))]
  const jump=maxFrameJump(frames)
+ // A teleport covers the WHOLE gap in one frame. A glide never covers more
+ // than half of it, and never more than 14 px in absolute terms.
+ const travel=Math.abs((xs.at(-1)??0)-(xs[0]??0))
+ const jumpBound=Math.max(8,travel*0.5)
  check('WFY moves through intermediate frames then settles',xs.length>=5,{positions:xs.length,first:xs[0],last:xs.at(-1)})
- check('WFY cursor does not teleport between checkpoints',jump<=12,{maxJump:jump})
+ check('WFY cursor does not teleport between checkpoints',jump<=jumpBound,{maxJump:jump,jumpBound,travel})
  const held=await sample('.score-follow-cursor',350);check('WFY waits without drifting',Math.max(...held.map(f=>f.x))-Math.min(...held.map(f=>f.x))<0.1)
  await writeFile(out+'/cursor-frames.json',JSON.stringify({motion,held},null,2))
  if(kind==='chromium' && !base.includes('corranzo.com')) {

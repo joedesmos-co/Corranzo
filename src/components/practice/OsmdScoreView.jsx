@@ -313,7 +313,7 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
             animate: lastLeft != null && distance > 0.5 }
         }
         if (tween.animate) {
-          const duration = Math.min(420, 180 + distance * 0.24)
+          const duration = Math.min(420, 210 + distance * 0.24)
           const p = Math.min(1, (now - tween.start) / duration)
           left = tween.from + (tween.target - tween.from) * p * p * (3 - 2 * p)
         }

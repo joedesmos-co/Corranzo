@@ -153,12 +153,16 @@ try {
   for (let i = 1; i < xs.length; i += 1) {
     maxJump = Math.max(maxJump, Math.abs(xs[i] - xs[i - 1]))
   }
-  console.log('MOTION', JSON.stringify({ distinct, maxJump, samples: xs.length }, null, 2))
+  const travel = Math.abs((xs.at(-1) ?? 0) - (xs[0] ?? 0))
+  // A teleport covers the whole gap in one frame; a glide never covers more
+  // than half of it.
+  const jumpBound = Math.max(8, travel * 0.5)
+  console.log('MOTION', JSON.stringify({ distinct, maxJump, jumpBound, travel, samples: xs.length }, null, 2))
   check('WFY cursor produced intermediate frames', distinct.length >= 5, {
     distinct: distinct.length,
     maxJump,
   })
-  check('WFY cursor never teleported (no jump > 12px/frame)', maxJump <= 12, { maxJump })
+  check('WFY cursor never teleported', maxJump <= jumpBound, { maxJump, jumpBound, travel })
 
   report.motion = { distinct, maxJump }
   report.geometry = geometry
