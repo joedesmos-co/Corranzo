@@ -144,9 +144,16 @@ try {
 
   // 6. Open score -> arrangement practice surface (modes, transport, targets).
   await page.getByRole('button', { name: /open score/i }).click()
-  await page.getByText(/all targets/i).first().waitFor({ timeout: 60000 })
-  const playBtn = page.getByRole('button', { name: /^play$/i })
-  const targetCard = page.getByText(/now (hear|play)/i).first()
+  // The arrangement now opens the normal Practice Engine: the engraved score
+  // inside the workspace, not the old separate surface.
+  await page.locator('.workspace-dock').first().waitFor({ state: 'visible', timeout: 60000 })
+  await page.locator('.osmd-score__container[data-osmd-ready="true"]').first().waitFor({ state: 'visible', timeout: 60000 })
+  const playBtn = page.getByRole('button', { name: /^play \(space\)$/i })
+  // The current target is announced in the workspace ("NOW HEAR · MEASURE n")
+  // and as a status line; the old surface's own target card is gone.
+  // The current position (bar + time) is the target readout in the unified
+  // workspace; the old surface's own "Now hear" card is gone.
+  const targetCard = page.locator('.workspace-position').first()
   const playCount = await playBtn.count()
   const targetCount = await targetCard.count()
   await shot(page, '05-practice')
@@ -158,7 +165,7 @@ try {
 
   // 7. Transport engages the shared playback engine (Pause appears = playing).
   await playBtn.first().click()
-  await page.getByRole('button', { name: /^pause$/i }).first().waitFor({ timeout: 30000 })
+  await page.getByRole('button', { name: /^pause \(space\)$/i }).first().waitFor({ timeout: 30000 })
   pass('practice transport plays arrangement')
   await shot(page, '06-playing')
 } catch (error) {
