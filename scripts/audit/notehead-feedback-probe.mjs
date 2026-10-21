@@ -193,20 +193,31 @@ if (!midiAvailable) {
 
   // The correct note(s) light the notehead(s) up blue. A chord needs every
   // member, so play the whole checkpoint.
+  let injected = 0
   for (const midi of expected) {
     const res = await injectMidi(midi)
     console.log('   injected', midi, JSON.stringify(res))
+    if (res.ok && res.delivered) injected += 1
     await sleep(350)
   }
   await sleep(1500)
+  if (injected === 0) {
+    // The MIDI injection hook is a development affordance (it is compiled out
+    // of a production build), so the live site cannot be driven this way.
+    // Report that honestly instead of calling it a pass or a failure.
+    midiAvailable = false
+    console.log('   NOTE: no MIDI injection hook in this build — the "correct note advances" check is untestable here.')
+  }
   const afterCorrect = await readState()
   const blue = afterCorrect.noteheads.filter((n) => (n.fill ?? '').toLowerCase() === '#1d4ed8')
   check('WFY: the correct note lights its notehead blue', blue.length > 0, `blue=${blue.length} shapes=${JSON.stringify(afterCorrect.noteheads.map((n) => n.shape))}`)
-  check(
-    'WFY: the correct note advances the requirement',
-    afterCorrect.requirement !== state.requirement,
-    `${state.requirement} -> ${afterCorrect.requirement}`,
-  )
+  if (midiAvailable) {
+    check(
+      'WFY: the correct note advances the requirement',
+      afterCorrect.requirement !== state.requirement,
+      `${state.requirement} -> ${afterCorrect.requirement}`,
+    )
+  }
   await page.screenshot({ path: join(outDir, `wfy-correct-${LABEL}.png`) })
   console.log('   noteheads:', JSON.stringify(afterCorrect.noteheads))
 }
