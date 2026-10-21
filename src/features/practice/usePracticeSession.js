@@ -220,9 +220,10 @@ export default function usePracticeSession({
   )
 
   const ensurePaused = useCallback(() => {
-    if (playbackRef.current.isPlaying) {
-      pausePlayback()
-    }
+    // Cancel pending starts even before isPlaying commits, without moving
+    // the manual WFY clock back to the idle audio engine's offset.
+    if (playbackRef.current.isPlaying) pausePlayback()
+    else playbackRef.current.pause()
   }, [pausePlayback])
 
   ensurePausedRef.current = ensurePaused

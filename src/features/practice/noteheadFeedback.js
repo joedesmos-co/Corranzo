@@ -94,6 +94,35 @@ export function feedbackColorForState(state, { assisted = false } = {}) {
 }
 
 /**
+ * A short, human description of one practice event's state.
+ *
+ * Shared by every surface that reports a note's state, so the engraved
+ * notehead, the PDF feedback layer and the practice controls all describe the
+ * same event in the same words. State is never conveyed by colour alone.
+ */
+export function describeScoreNoteEntry(entry) {
+  const checkpoint = entry?.checkpoint
+  const measure = checkpoint?.measureNumber ?? entry?.target?.measureNumber ?? ''
+  const label = checkpoint?.displayLabel ?? checkpoint?.detailsLabel ?? checkpoint?.label ?? ''
+  const suffix = label ? ` ${label}` : ''
+  switch (entry?.state) {
+    case 'completed':
+      return `Played${suffix} at measure ${measure}`
+    case 'current-partial': {
+      const tones = Array.isArray(entry?.toneStates) ? entry.toneStates : []
+      const done = tones.filter((tone) => tone.completed).length
+      return `Chord at measure ${measure}: ${done} of ${tones.length} tones played`
+    }
+    case 'wrong':
+      return `Try again${suffix ? `: ${label}` : ''} at measure ${measure}`
+    case 'missed':
+      return `Missed${suffix} at measure ${measure}`
+    default:
+      return `Play${suffix} at measure ${measure}`
+  }
+}
+
+/**
  * Map a notehead box back to the note it belongs to, so the drawn shape
  * matches the engraving. Boxes carry the source notehead id; the checkpoint's
  * notes carry the same id plus the written note type.

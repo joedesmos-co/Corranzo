@@ -41,11 +41,9 @@ function overlayProps(entries) {
 }
 
 describe('score overlay note states', () => {
-  it('renders WFY current + completed with distinct states', () => {
+  it('never fabricates a notehead shape on the PDF surface', () => {
     const timingMap = timingForMelody()
     const checkpoints = buildNoteCheckpoints(timingMap)
-    expect(checkpoints.length).toBeGreaterThanOrEqual(2)
-
     const entries = [0, 1].map((index) => {
       const checkpoint = checkpoints[index]
       const target = resolveNoteTargetPosition({
@@ -65,22 +63,49 @@ describe('score overlay note states', () => {
     })
 
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
+    // A PDF page is printed ink: the score pipeline's notehead geometry is an
+    // ESTIMATE, so any shape drawn here floats away from the printed note.
+    // The overlay must therefore draw NO replacement notehead at all.
+    expect(markup).not.toContain('cz-notehead')
+    expect(markup).not.toContain('<ellipse')
+    expect(markup).not.toContain('<svg')
+    // No floating marker above the staff either.
+    expect(markup).not.toContain('score-follow-overlay__note-target-ring')
+    expect(markup).not.toContain('score-follow-overlay__note-target-dot')
+    expect(markup).not.toContain('score-follow-overlay__now-tick')
+  })
+
+  it('keeps every practice state distinguishable for assistive tooling', () => {
+    const timingMap = timingForMelody()
+    const checkpoints = buildNoteCheckpoints(timingMap)
+    const entries = [0, 1].map((index) => {
+      const checkpoint = checkpoints[index]
+      const target = resolveNoteTargetPosition({
+        checkpoint,
+        timingMap,
+        anchors: anchors(),
+        mode: 'wait-for-you',
+      })
+      return {
+        key: `wfy:${checkpoint.id}`,
+        checkpoint,
+        target,
+        state: index === 0 ? SCORE_NOTE_STATE.COMPLETED : SCORE_NOTE_STATE.CURRENT,
+        toneStates: null,
+      }
+    })
+
+    const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
     expect(markup).toContain('data-score-note-state="completed"')
     expect(markup).toContain('data-score-note-state="current"')
-    // The feedback is painted on the NOTEHEAD itself: a played note is blue.
-    expect(markup).toContain('cz-notehead')
-    expect(markup).toContain('#1d4ed8')
-    // The required note keeps its black engraving and gains only a soft focus
-    // ring — no box, no floating marker above the staff.
-    expect(markup).toContain('cz-notehead__focus')
-    expect(markup).not.toContain('score-follow-overlay__now-tick')
-    expect(markup).not.toContain('score-follow-overlay__note-target-ring')
-    // Accessibility: state is announced, not color-only.
+    // The machine-readable pitch of each event stays available.
+    expect(markup).toMatch(/data-score-expected="\d+"/)
+    // Accessibility: state is announced, not colour-only.
     expect(markup).toContain('Played')
     expect(markup).toContain('Play')
   })
 
-  it('renders chord partials per tone only from owned source noteheads', () => {
+  it('reports a half-played chord as a chord, not as one note', () => {
     const timingMap = timingForMelody()
     const checkpoints = buildNoteCheckpoints(timingMap)
     const checkpoint = {
@@ -109,19 +134,12 @@ describe('score overlay note states', () => {
       },
     ]
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
-    // Approximate (non-source) highlights must NOT invent per-tone boxes.
-    // Chord members are painted individually on their own noteheads, whether
-    // the geometry is the exact printed head or the layout approximation.
-    expect(markup).toContain('cz-notehead')
-    expect(markup).toContain('#1d4ed8')
     expect(markup).toContain('data-score-note-state="current-partial"')
-    // Only the members the engine owns geometry for are painted, and only the
-    // recognised ones are blue.
-    const noteheads = markup.split('<div class="cz-notehead"').length - 1
-    expect(noteheads).toBe(checkpoint.notes.length)
-    const owned = checkpoint.notes.filter((note) => [60, 64, 67].includes(note.midi))
-    const completed = owned.filter((note) => [60, 64].includes(note.midi))
-    expect(markup.split('#1d4ed8').length - 1).toBe(completed.length)
+    // Every member of the chord is still expected until it is played.
+    expect(markup).toContain('data-score-expected="60,64,67"')
+    // The partial progress is reported: two of the three tones are played.
+    expect(markup).toContain('data-score-tone-completed="2"')
+    expect(markup).toContain('2 of 3 tones played')
   })
 
   it('renders play-along wrong flashes and muted past misses', () => {
@@ -142,10 +160,9 @@ describe('score overlay note states', () => {
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
     expect(markup).toContain('data-score-note-state="missed"')
     expect(markup).toContain('data-score-note-state="wrong"')
-    expect(markup).toContain('data-score-note-state="missed"')
-    expect(markup).toContain('data-score-note-state="wrong"')
-    // A missed or wrong note is red on the notehead itself.
-    expect(markup).toContain('#b91c1c')
+    // A wrong attempt and a miss read differently, in words.
+    expect(markup).toContain('Missed')
+    expect(markup).toContain('Try again')
   })
 
   it('renders nothing extra when states are disabled', () => {

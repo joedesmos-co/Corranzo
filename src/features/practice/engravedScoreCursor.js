@@ -1,3 +1,4 @@
+import { ownedNoteheadGlyphs } from './ownedNoteheadGlyphs.js'
 /**
  * Engraved score cursor geometry.
  *
@@ -22,7 +23,7 @@ export function engravedNoteheadBox(engraving) {
   if (!graphical) return null
   let element = null
   try {
-    const heads = graphical.getNoteheadSVGs?.() ?? []
+    const heads = ownedNoteheadGlyphs(engraving)
     element = heads[0] ?? null
   } catch {
     element = null
@@ -35,7 +36,7 @@ export function engravedNoteheadBox(engraving) {
     return null
   }
   if (!box || !Number.isFinite(box.x) || !Number.isFinite(box.y)) return null
-  return { x: box.x, y: box.y, width: box.width, height: box.height }
+  return { x: box.x, y: box.y, width: box.width, height: box.height, screenRect: element.getBoundingClientRect?.() }
 }
 
 /**
@@ -69,30 +70,17 @@ export function soundingEngravedNote(cursorNotes, seconds) {
   if (!cursorNotes.length || !Number.isFinite(seconds)) {
     return { current: null, next: null, previous: null, ratio: 1 }
   }
-  let current = null
-  for (const entry of cursorNotes) {
-    if (entry.note.timeSeconds <= seconds + 1e-6) {
-      current = entry
-    } else {
-      break
-    }
-  }
-  if (!current) {
-    // Before the first note: hold the first notehead.
-    return { current: cursorNotes[0], next: null, previous: null, ratio: 1 }
-  }
-  const index = cursorNotes.indexOf(current)
-  const next = cursorNotes[index + 1] ?? null
-  const previous = index > 0 ? cursorNotes[index - 1] : null
-  const previousEnd = previous
-    ? previous.note.timeSeconds + Number(previous.note.durationSeconds ?? 0)
-    : Number.NaN
-  const gapStart = Number.isFinite(previousEnd) ? previousEnd : current.note.timeSeconds
-  const gapLength = current.note.timeSeconds - gapStart
-  const ratio = gapLength > 1e-6
-    ? Math.max(0, Math.min(1, (seconds - gapStart) / gapLength))
-    : 1
-  return { current, next, previous, ratio }
+  // One column per onset, selected from standard notation (not TAB mirrors).
+  let index = 0
+  while (index + 1 < cursorNotes.length && cursorNotes[index + 1].note.timeSeconds <= seconds + 1e-6) index += 1
+  const current = cursorNotes[index]
+  let nextIndex = index + 1
+  while (nextIndex < cursorNotes.length && cursorNotes[nextIndex].note.timeSeconds <= current.note.timeSeconds + 1e-6) nextIndex += 1
+  const next = cursorNotes[nextIndex] ?? null
+  const span = next ? next.note.timeSeconds - current.note.timeSeconds : 0
+  const ratio = span > 0 ? Math.max(0, Math.min(1, (seconds - current.note.timeSeconds) / span)) : 0
+  return { current, next, previous: index ? cursorNotes[index - 1] : null, ratio }
+
 }
 
 /**
@@ -104,6 +92,12 @@ export function soundingEngravedNote(cursorNotes, seconds) {
  */
 export function noteheadPositionInContainer(box, svg, container) {
   if (!box || !svg || !container) return null
+  if (box.screenRect?.width > 0) {
+    const rect = container.getBoundingClientRect()
+    return { left: box.screenRect.left - rect.left + container.scrollLeft - container.clientLeft,
+      top: box.screenRect.top - rect.top + container.scrollTop - container.clientTop,
+      width: box.screenRect.width, height: box.screenRect.height }
+  }
   const svgRect = svg.getBoundingClientRect()
   const containerRect = container.getBoundingClientRect()
   if (!svgRect.width || !containerRect.width) return null

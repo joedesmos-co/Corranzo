@@ -5,6 +5,7 @@ import {
   resolvePracticeTargetToneRects,
 } from '../../features/practice/practiceNoteTargetOverlay.js'
 import { SCORE_NOTE_STATE } from '../../features/practice/scoreNoteStates.js'
+import { describeScoreNoteEntry } from '../../features/practice/noteheadFeedback.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
 import NoteheadFeedbackLayer from './NoteheadFeedbackLayer.jsx'
 import {
@@ -96,28 +97,6 @@ function toneCompletedForMidi(toneStates, midi) {
   }
   const match = toneStates.find((tone) => tone.midi === midi)
   return match ? Boolean(match.completed) : null
-}
-
-function describeScoreNoteEntry(entry) {
-  const checkpoint = entry?.checkpoint
-  const measure = checkpoint?.measureNumber ?? entry?.target?.measureNumber ?? ''
-  const label = checkpoint?.displayLabel ?? checkpoint?.detailsLabel ?? checkpoint?.label ?? ''
-  switch (entry?.state) {
-    case SCORE_NOTE_STATE.COMPLETED:
-      return `Played${label ? ` ${label}` : ''} at measure ${measure}`
-    case SCORE_NOTE_STATE.CURRENT_PARTIAL: {
-      const tones = Array.isArray(entry?.toneStates) ? entry.toneStates : []
-      const done = tones.filter((tone) => tone.completed).length
-      return `Chord at measure ${measure}: ${done} of ${tones.length} tones played`
-    }
-    case SCORE_NOTE_STATE.WRONG:
-      return `Try again${label ? `: ${label}` : ''} at measure ${measure}`
-    case SCORE_NOTE_STATE.MISSED:
-      return `Missed${label ? ` ${label}` : ''} at measure ${measure}`
-    case SCORE_NOTE_STATE.CURRENT:
-    default:
-      return `Play${label ? ` ${label}` : ''} at measure ${measure}`
-  }
 }
 
 /**

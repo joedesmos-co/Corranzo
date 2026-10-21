@@ -19,6 +19,8 @@ const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'audio-vision-unified-webkit')
 const PORT = Number(process.env.E2E_PORT ?? 5661)
 const baseUrl = process.env.E2E_BASE_URL ?? `http://127.0.0.1:${PORT}/`
+const BROWSER = process.env.BROWSER ?? 'webkit'
+const label = BROWSER
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const report = { passes: [], failures: [], consoleErrors: [], pageErrors: [] }
 const pass = (name, detail = '') => { report.passes.push({ name, detail }); console.log(`PASS  ${name} ${detail}`) }
@@ -74,10 +76,10 @@ const vite = externalBase ? null : await createServer({
 })
 if (vite) { await vite.listen(); await sleep(800) }
 
-const { webkit } = await import('playwright')
+const { chromium, webkit } = await import('playwright')
 let browser = null
 try {
-  browser = await webkit.launch({ headless: true })
+  browser = await ({ chromium, webkit }[BROWSER]).launch({ headless: true })
   const context = await browser.newContext({ viewport: { width: 1440, height: 960 } })
   const page = await context.newPage()
   page.on('console', (m) => { if (m.type() === 'error') report.consoleErrors.push(m.text()) })
@@ -95,11 +97,11 @@ try {
   await page.getByText('Create from audio', { exact: false }).first().waitFor({ timeout: 30000 })
   await page.locator('.audio-vision-card input[type="file"]').setInputFiles(wavPath)
   await page.getByText(/recording length/i).first().waitFor({ timeout: 90000 })
-  pass('webkit: the file probe works')
+  pass(`${label}: the file probe works`)
   await page.locator('.audio-vision-card input[name="audio-vision-target"][value="solo-guitar"]').check()
   await page.getByRole('button', { name: /arrange for/i }).click()
   await page.getByText('Your arrangement is ready', { exact: false }).first().waitFor({ timeout: 420000 })
-  pass('webkit: the arrangement is generated (Web Worker inference)')
+  pass(`${label}: the arrangement is generated (Web Worker inference)`)
   await page.getByRole('button', { name: /open in corranzo practice/i }).click()
   await page.getByText('Arranged from your recording', { exact: false }).first().waitFor({ timeout: 60000 })
   await page.getByRole('button', { name: /open score/i }).click()
@@ -115,14 +117,14 @@ try {
     hasArrangementSurface: Boolean(document.querySelector('.arrangement-practice')),
   }))
   if (surface.hasWorkspaceFrame && surface.hasDock && !surface.hasArrangementSurface) {
-    pass('webkit: the unified workspace is the normal Practice Engine')
+    pass(`${label}: the unified workspace is the normal Practice Engine`)
   } else {
-    fail('webkit: the unified workspace is the normal Practice Engine', JSON.stringify(surface))
+    fail(`${label}: the unified workspace is the normal Practice Engine`, JSON.stringify(surface))
   }
   if (surface.modes.length === 3) {
-    pass('webkit: all three practice modes', surface.modes.join(' · '))
+    pass(`${label}: all three practice modes`, surface.modes.join(' · '))
   } else {
-    fail('webkit: all three practice modes', JSON.stringify(surface.modes))
+    fail(`${label}: all three practice modes`, JSON.stringify(surface.modes))
   }
 
   // The red cursor must be on the engraved score and must move.
@@ -141,19 +143,134 @@ try {
     }
   })
   if (cursor.present && cursor.display !== 'none' && cursor.height > 4) {
-    pass('webkit: the red cursor is on the engraved score', JSON.stringify(cursor))
+    pass(`${label}: the red cursor is on the engraved score`, JSON.stringify(cursor))
   } else {
-    fail('webkit: the red cursor is on the engraved score', JSON.stringify(cursor))
+    fail(`${label}: the red cursor is on the engraved score`, JSON.stringify(cursor))
   }
   const before = cursor.left
   await sleep(1800)
   const after = await page.evaluate(() => Math.round(document.querySelector('[data-engraved-cursor="true"]')?.getBoundingClientRect().left ?? 0))
   if (before != null && Math.abs(after - before) > 0.5) {
-    pass('webkit: the cursor moves with the music', `${before} -> ${after}`)
+    pass(`${label}: the cursor moves with the music`, `${before} -> ${after}`)
   } else {
-    fail('webkit: the cursor moves with the music', `before=${before} after=${after}`)
+    fail(`${label}: the cursor moves with the music`, `before=${before} after=${after}`)
   }
   await page.screenshot({ path: join(outDir, '02-cursor.png') })
+
+  // ------------------------------------------------------------------
+  // Engraving quality: the three defects the interrupted repair fixed.
+  //   1. the cursor must follow the NOTATION staff, never the TAB copy;
+  //   2. a short score must keep its natural spacing (not be stretched
+  //      across the whole workspace);
+  //   3. only the noteheads the musician actually played may be coloured.
+  // ------------------------------------------------------------------
+  const engraving = await page.evaluate(() => {
+    const container = document.querySelector('.osmd-score__container')
+    const svg = container?.querySelector('svg')
+    const rect = svg?.getBoundingClientRect()
+    const viewBox = svg?.getAttribute('viewBox')?.split(/[\s,]+/).map(Number) ?? []
+    const intrinsicWidth = Number.isFinite(viewBox[2]) ? viewBox[2] : null
+    // OSMD tags the six-line TAB staff's notes separately from the notation.
+    const notationNotes = [...(svg?.querySelectorAll('g.vf-stavenote') ?? [])]
+      .filter((g) => !g.querySelector('.vf-tabnote') && !g.classList.contains('vf-tabnote'))
+    const tabNotes = [...(svg?.querySelectorAll('.vf-tabnote') ?? [])]
+    const band = (nodes) => {
+      if (!nodes.length) return null
+      let top = Infinity
+      let bottom = -Infinity
+      for (const n of nodes) {
+        const r = n.getBoundingClientRect()
+        if (!r.height) continue
+        top = Math.min(top, r.top)
+        bottom = Math.max(bottom, r.bottom)
+      }
+      return Number.isFinite(top) ? { top: Math.round(top), bottom: Math.round(bottom) } : null
+    }
+    const notationBand = band(notationNotes)
+    const tabBand = band(tabNotes)
+    const cursor = document.querySelector('[data-engraved-cursor="true"]')
+    const cursorRect = cursor?.getBoundingClientRect()
+    // How far the last system's ink reaches: a stretched short score pushes
+    // its final barline to the far edge of the canvas.
+    let lastInk = 0
+    for (const g of svg?.querySelectorAll('g.vf-measure, g.vf-stavenote') ?? []) {
+      lastInk = Math.max(lastInk, g.getBoundingClientRect().right)
+    }
+    return {
+      renderedWidth: rect ? Math.round(rect.width) : null,
+      intrinsicWidth,
+      notationBand,
+      tabBand,
+      cursor: cursorRect
+        ? {
+            top: Math.round(cursorRect.top),
+            bottom: Math.round(cursorRect.bottom),
+            centre: Math.round((cursorRect.top + cursorRect.bottom) / 2),
+            height: Math.round(cursorRect.height),
+          }
+        : null,
+      notationNoteCount: notationNotes.length,
+      tabNoteCount: tabNotes.length,
+      lastInkRight: Math.round(lastInk),
+      svgRight: rect ? Math.round(rect.right) : null,
+      // OSMD draws a staff's lines as many short segments; the number of
+      // DISTINCT line heights is the number of lines (5 notation, 6 TAB).
+      staffLines: [...(svg?.querySelectorAll('.staffline') ?? [])].map((g) => {
+        const ys = new Set()
+        for (const seg of g.querySelectorAll('path')) {
+          const box = seg.getBBox?.()
+          if (!box || !Number.isFinite(box.y)) continue
+          ys.add(Math.round(box.y * 2) / 2)
+        }
+        return ys.size
+      }),
+    }
+  })
+  if (engraving.cursor && engraving.notationBand) {
+    const onNotation =
+      engraving.cursor.centre >= engraving.notationBand.top - 6 &&
+      engraving.cursor.centre <= engraving.notationBand.bottom + 6
+    const onTab = engraving.tabBand
+      ? engraving.cursor.centre >= engraving.tabBand.top - 6 &&
+        engraving.cursor.centre <= engraving.tabBand.bottom + 6
+      : false
+    if (onNotation && !onTab) {
+      pass(`${label}: the cursor follows the notation staff, not the TAB copy`, JSON.stringify(engraving.cursor))
+    } else {
+      fail(`${label}: the cursor follows the notation staff, not the TAB copy`, JSON.stringify(engraving))
+    }
+  } else {
+    fail(`${label}: the cursor follows the notation staff, not the TAB copy`, JSON.stringify(engraving))
+  }
+  if (engraving.intrinsicWidth && engraving.renderedWidth) {
+    // The SVG is never scaled UP beyond its own engraving width.
+    if (engraving.renderedWidth <= engraving.intrinsicWidth * 1.02) {
+      pass(`${label}: the engraving keeps its natural width`, `${engraving.renderedWidth} <= ${engraving.intrinsicWidth}`)
+    } else {
+      fail(`${label}: the engraving keeps its natural width`, `${engraving.renderedWidth} > ${engraving.intrinsicWidth}`)
+    }
+  }
+  if (engraving.svgRight && engraving.lastInkRight) {
+    // A short score must not be stretched to the far edge of the canvas.
+    const slack = engraving.svgRight - engraving.lastInkRight
+    if (slack > 24) {
+      pass(`${label}: a short score is not stretched across the workspace`, `${slack}px of natural trailing space`)
+    } else {
+      fail(`${label}: a short score is not stretched across the workspace`, `slack=${slack}px`)
+    }
+  }
+  // The guitar arrangement must keep BOTH representations: the notation
+  // staff and a separate six-line TAB staff below it. (The six-line check at
+  // the MusicXML level lives in browser-audio-vision-critical-ux.mjs.)
+  if (engraving.notationNoteCount > 0 && engraving.tabNoteCount > 0 && engraving.tabBand && engraving.notationBand) {
+    if (engraving.tabBand.top >= engraving.notationBand.bottom - 2) {
+      pass(`${label}: the guitar arrangement keeps standard notation and a separate TAB staff`, `notation ${engraving.notationNoteCount} notes / TAB ${engraving.tabNoteCount} notes`)
+    } else {
+      fail(`${label}: the guitar arrangement keeps standard notation and a separate TAB staff`, JSON.stringify(engraving.notationBand) + ' ' + JSON.stringify(engraving.tabBand))
+    }
+  } else {
+    fail(`${label}: the guitar arrangement keeps standard notation and a separate TAB staff`, JSON.stringify({ notationNoteCount: engraving.notationNoteCount, tabNoteCount: engraving.tabNoteCount }))
+  }
 
   // Wait For You + seeking.
   await page.getByRole('radio', { name: /wait for you/i }).first().click()
@@ -163,9 +280,9 @@ try {
     yourTurn: Boolean(document.querySelector('.workspace-your-turn')),
   }))
   if (wfy.mode === 'wait-for-you' && wfy.yourTurn) {
-    pass('webkit: Wait For You initializes with a target')
+    pass(`${label}: Wait For You initializes with a target`)
   } else {
-    fail('webkit: Wait For You initializes with a target', JSON.stringify(wfy))
+    fail(`${label}: Wait For You initializes with a target`, JSON.stringify(wfy))
   }
   await page.getByRole('radio', { name: /preview/i }).first().click()
   await sleep(500)
@@ -175,16 +292,16 @@ try {
     await sleep(1000)
     const time = await page.evaluate(() => document.querySelector('.workspace-position')?.textContent?.replace(/\s+/g, ' ').trim() ?? '')
     if (/0:0[1-9]/.test(time)) {
-      pass('webkit: seeking moves the practice clock', time.slice(0, 50))
+      pass(`${label}: seeking moves the practice clock`, time.slice(0, 50))
     } else {
-      fail('webkit: seeking moves the practice clock', time.slice(0, 70))
+      fail(`${label}: seeking moves the practice clock`, time.slice(0, 70))
     }
   } else {
-    fail('webkit: seeking moves the practice clock', 'no seek control')
+    fail(`${label}: seeking moves the practice clock`, 'no seek control')
   }
   await page.screenshot({ path: join(outDir, '03-transport.png') })
 } catch (error) {
-  fail('webkit harness', String(error?.stack ?? error).slice(0, 500))
+  fail(`${label} harness`, String(error?.stack ?? error).slice(0, 500))
 } finally {
   try { await browser?.close() } catch { /* noop */ }
   try { await vite?.close() } catch { /* noop */ }

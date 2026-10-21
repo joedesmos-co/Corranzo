@@ -180,7 +180,7 @@ describe('A5/A6/A7 solo arrangement + difficulty', () => {
     ]
     const xml = buildArrangementMusicXml({ events, targetPart: 'solo-piano', bpm, title: 'Overlap' })
     const parsed = parseMusicXml(xml, 'overlap.musicxml')
-    const got = parsed.notes.filter((n) => !n.isRest).map((n) => Math.round(n.timeSeconds / period))
+    const got = parsed.notes.filter((n) => !n.isRest && !n.tieStop).map((n) => Math.round(n.timeSeconds / period))
     expect(got).toEqual([2, 3, 3, 3]) // beats 1.75→2, 2.5→3 (x2 voices), 2.75→3
     // No note may extend past the next barline after its own start.
     const barline = beatsPerMeasure * period

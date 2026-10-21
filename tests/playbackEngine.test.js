@@ -103,3 +103,26 @@ describe('playback engine scheduling invariants', () => {
     expect(engine.wallTimeForScoreTime(0.5)).toBeCloseTo(200.5, 6)
   })
 })
+
+describe('pending playback cancellation', () => {
+  for (const action of ['pause', 'stop', 'seek', 'dispose']) {
+    it(`does not start after ${action} while instrument loading is pending`, async () => {
+      let ready
+      const waiting = new Promise(resolve => { ready = resolve })
+      const engine = new ScorePlaybackEngine()
+      engine.duration = 10
+      engine.ensureVoices = vi.fn(async () => {})
+      engine.whenInstrumentReady = vi.fn(() => waiting)
+      engine.releaseAll = vi.fn()
+      engine.beginScorePlayback = vi.fn()
+      engine.startCountInThenPlayback = vi.fn()
+      const request = engine.playFromUserGesture(Promise.resolve())
+      await vi.waitFor(() => expect(engine.whenInstrumentReady).toHaveBeenCalled())
+      engine[action](0)
+      ready()
+      await request
+      expect(engine.beginScorePlayback).not.toHaveBeenCalled()
+      expect(engine.startCountInThenPlayback).not.toHaveBeenCalled()
+    })
+  }
+})

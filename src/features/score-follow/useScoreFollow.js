@@ -141,6 +141,7 @@ export default function useScoreFollow({
   hasPdf,
   visiblePageNumber,
   isPlaying = false,
+  smoothCheckpoints = false,
   sessionReady = false,
   isDemoPiece = false,
   autoSetupGateOpen = true,
@@ -613,6 +614,7 @@ export default function useScoreFollow({
 
   useScoreFollowCursorDriver({
     targetCursor: cursor,
+    smoothCheckpoints,
     active: realtimeCursorActive,
     resetSnapKey,
     lockExact: lockExactCursor,
@@ -621,11 +623,12 @@ export default function useScoreFollow({
   })
 
   useEffect(() => {
-    if (realtimeCursorActive || followNeedsSetup || !enabled || !cursor?.visible) {
+    if (smoothCheckpoints || realtimeCursorActive || followNeedsSetup || !enabled || !cursor?.visible) {
       return
     }
     publishScoreFollowCursor({ ...cursor, smoothed: false })
   }, [
+    smoothCheckpoints,
     realtimeCursorActive,
     followNeedsSetup,
     enabled,

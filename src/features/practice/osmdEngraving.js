@@ -23,15 +23,15 @@
  * These match the PDF overlay's native-notehead feedback.
  */
 export const OSMD_NOTE_COLORS = {
-  current: '#1d4ed8',
-  'current-partial': '#1d4ed8',
+  current: '#000000',
+  'current-partial': '#000000',
   completed: '#1d4ed8',
   assisted: '#a16207',
   wrong: '#b91c1c',
   missed: '#b91c1c',
   // Per-tone chord split inside a partial chord.
   toneDone: '#1d4ed8',
-  toneNeeded: '#1d4ed8',
+  toneNeeded: '#000000',
   /** Position marker only (Preview cursor note) — deliberately neutral. */
   cursor: '#1f2937',
 }
@@ -90,8 +90,8 @@ export function collectOsmdNotes(osmd) {
   // Distinct-object indices: OSMD's music model exposes voice/staff identity
   // through the VoiceEntry / StaffEntry objects themselves (no scalar ids),
   // so identity means "same object", captured as first-appearance indices.
-  const voiceIndexes = new WeakMap()
-  const staffIndexes = new WeakMap()
+  const voiceIndexes = new Map()
+  const staffIndexes = new Map()
   for (const line of lines) {
     for (const graphicalMeasure of line ?? []) {
       for (const staffEntry of graphicalMeasure?.staffEntries ?? []) {
@@ -99,7 +99,7 @@ export function collectOsmdNotes(osmd) {
           for (const graphicalNote of voiceEntry?.notes ?? []) {
             const source = graphicalNote?.sourceNote
             const quarterInMeasure = Number(
-              source?.voiceEntry?.Timestamp?.RealValue ?? Number.NaN,
+              (source?.voiceEntry?.Timestamp?.RealValue ?? Number.NaN) * 4,
             )
             const measureNumber = Number(source?.sourceMeasure?.MeasureNumber)
             const pitchModel = source?.pitch ?? null
@@ -115,9 +115,9 @@ export function collectOsmdNotes(osmd) {
               Number(source?.halfTone) + MIDI_OCTAVE_OFFSET,
             ].filter((value) => Number.isFinite(value))
             const midi = halfTones.length ? halfTones[0] : Number.NaN
-            const lengthQuarters = Number(source?.length?.RealValue)
-            const voiceRef = source?.voiceEntry ?? null
-            const staffRef = source?.parentStaffEntry ?? staffEntry?.sourceStaffEntry ?? null
+            const lengthQuarters = Number(source?.length?.RealValue) * 4
+            const voiceRef = source?.voiceEntry?.ParentVoice ?? null
+            const staffRef = (source?.parentStaffEntry ?? staffEntry?.sourceStaffEntry)?.ParentStaff ?? null
             if (voiceRef && !voiceIndexes.has(voiceRef)) voiceIndexes.set(voiceRef, voiceIndexes.size)
             if (staffRef && !staffIndexes.has(staffRef)) staffIndexes.set(staffRef, staffIndexes.size)
             if (!Number.isFinite(quarterInMeasure) || !Number.isFinite(measureNumber)) {
@@ -125,7 +125,7 @@ export function collectOsmdNotes(osmd) {
             }
             let isTab = false
             try {
-              isTab = typeof graphicalNote.isTabNote === 'function' ? graphicalNote.isTabNote() : false
+              isTab = typeof graphicalNote.isTabNote === 'function' ? graphicalNote.isTabNote() : Boolean(graphicalNote.isTabNote)
             } catch {
               isTab = false
             }

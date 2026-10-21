@@ -1,15 +1,17 @@
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import { formatTime } from '../../features/playback/formatTime.js'
-import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
+import { usePracticeTick, useScoreFollowCursorOptional } from '../../context/PracticeTickContext.jsx'
 import { workspaceStatus } from '../../features/practice/workspaceStatus.js'
 import Icon from '../../design/Icon.jsx'
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
+import ScoreFeedbackChips from './ScoreFeedbackChips.jsx'
 
 function ToolButton({ tool, onTool, id, icon, label, children }) { return <button className="workspace-tool-button" data-tour-id={id === 'input' ? 'practice-input-source' : id === 'settings' ? 'practice-advanced' : undefined} aria-label={label} title={label} aria-expanded={tool === id} aria-haspopup="dialog" onClick={() => onTool(id)}><Icon name={icon} size={20} /><span>{children || label}</span></button> }
 
 export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled, engraved = false }) {
   const tick = usePracticeTick()
+  const cursorState = useScoreFollowCursorOptional()
   const p = s.playback
   const status = workspaceStatus(s, scoreFollow, { engraved })
   const current = tick.practiceTime ?? s.practiceTime
@@ -37,6 +39,10 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
       <div className={`workspace-status workspace-status--${status.kind}`} data-tour-id="score-cursor" role="status" title={status.detail}><span className="workspace-status-dot" />{status.label}</div>
       {s.practiceMode !== PRACTICE_MODE.PREVIEW && <ToolButton tool={tool} onTool={onTool} id="input" icon={s.wfyInputSource === 'microphone' && s.wfyInputSourceReady ? 'mic' : 'keyboard'} label="Practice input">{s.wfyInputSourceReady && s.wfyInputSource !== 'manual' ? (s.wfyInputSource === 'microphone' ? 'Microphone' : 'MIDI keyboard') : 'Connect instrument'}</ToolButton>}
     </div>
+    {/* Practice feedback for surfaces that cannot paint the notehead itself
+        (a PDF page is printed ink, not addressable glyphs). The chips report
+        exactly what the recognition engine decided. */}
+    <ScoreFeedbackChips entries={cursorState?.scoreNoteStates ?? []} />
     {s.isWaitForYou && <div className="workspace-your-turn">
       <div>
         <span className="workspace-eyebrow">

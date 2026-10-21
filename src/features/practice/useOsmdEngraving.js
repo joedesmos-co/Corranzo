@@ -12,39 +12,34 @@ import {
   buildOsmdNoteIndex,
   collectOsmdNotes,
 } from './osmdEngraving.js'
-/** Inline style beats the VexFlow stylesheet (verified in-browser). */
+import { ownedNoteheadGlyphs } from './ownedNoteheadGlyphs.js'
+
+// Paint the paths themselves: VexFlow children have explicit black fills,
+// which override fill inherited from the notehead's group.
+const originalStyles = new WeakMap()
 function paintGraphicalNote(note, color) {
-  const graphical = note.graphicalNote
-  if (!graphical) return
-  try {
-    const heads = graphical.getNoteheadSVGs?.() ?? []
-    for (const head of heads) {
-      head.style.fill = color
-      head.setAttribute('data-cz-painted', '1')
+  for (const head of ownedNoteheadGlyphs(note)) {
+    const shapes = head.matches('path, text, ellipse') ? [head] : [...head.querySelectorAll('path, text, ellipse')]
+    for (const shape of shapes) {
+      if (!originalStyles.has(shape)) originalStyles.set(shape, shape.getAttribute('style'))
+      if (shape.getAttribute('fill') === 'none') shape.style.stroke = color
+      else shape.style.fill = color
+      shape.setAttribute('data-cz-painted', color)
+      shape.setAttribute('data-cz-midi', String(note.midi))
     }
-    const stem = graphical.getStemSVG?.()
-    if (stem) stem.style.stroke = color
-    const gl = graphical.getSVGGElement?.()
-    if (gl) gl.setAttribute('data-cz-score-note', '1')
-  } catch {
-    // A note OSMD could not expose glyphs for simply stays unpainted.
   }
 }
-
 function clearGraphicalNote(note) {
-  const graphical = note.graphicalNote
-  if (!graphical) return
-  try {
-    const heads = graphical.getNoteheadSVGs?.() ?? []
-    for (const head of heads) {
-      head.style.fill = ''
-      head.style.stroke = ''
-      head.removeAttribute('data-cz-painted')
+  for (const head of ownedNoteheadGlyphs(note)) {
+    for (const shape of [head, ...head.querySelectorAll('[data-cz-painted]')]) {
+      if (!originalStyles.has(shape)) continue
+      const style = originalStyles.get(shape)
+      if (style == null) shape.removeAttribute('style')
+      else shape.setAttribute('style', style)
+      originalStyles.delete(shape)
+      shape.removeAttribute('data-cz-painted')
+      shape.removeAttribute('data-cz-midi')
     }
-    const stem = graphical.getStemSVG?.()
-    if (stem) stem.style.stroke = ''
-  } catch {
-    // ignore
   }
 }
 
@@ -55,7 +50,6 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(null)
   const [noteIndex, setNoteIndex] = useState(null)
-  const [allNotes, setAllNotes] = useState(null)
 
   const dispose = useCallback(() => {
     const osmd = osmdRef.current
@@ -68,7 +62,6 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
     osmdRef.current = null
     paintedRef.current.clear()
     setNoteIndex(null)
-    setAllNotes(null)
     setReady(false)
   }, [])
 
@@ -77,6 +70,8 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
       return undefined
     }
     let disposed = false
+    let observer = null
+    let resizeFrame = 0
     setReady(false)
     setError(null)
     ;(async () => {
@@ -85,19 +80,21 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
         if (disposed || !containerRef.current) return
         const osmd = new OpenSheetMusicDisplay(containerRef.current, {
           backend: 'svg',
-          autoResize: true,
+          autoResize: false,
           pageFormat: 'Endless',
           drawingType: 'engraving',
           followCursor: false,
           // Presence, not perfection: the score must stay readable at phone
           // widths even when the layout has to compress.
-          renderSingleHorizontalStaffline: targetPart === 'solo-guitar',
+          renderSingleHorizontalStaffline: false,
+          stretchLastSystemLine: false,
         })
         await osmd.load(xml)
         if (disposed) {
           try { osmd.clear() } catch { /* ignore */ }
           return
         }
+        osmd.EngravingRules.LastSystemMaxScalingFactor = 1.25
         await osmd.render()
         if (disposed) {
           try { osmd.clear() } catch { /* ignore */ }
@@ -105,9 +102,23 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
         }
         osmdRef.current = osmd
         const collected = collectOsmdNotes(osmd)
-        setAllNotes(collected)
         setNoteIndex({ size: buildOsmdNoteIndex(collected).size, allNotes: collected })
         setReady(true)
+        let lastWidth = containerRef.current.clientWidth
+        observer = new ResizeObserver(() => {
+          const width = containerRef.current?.clientWidth ?? 0
+          if (disposed || width <= 0 || Math.abs(width - lastWidth) < 1) return
+          lastWidth = width
+          cancelAnimationFrame(resizeFrame)
+          resizeFrame = requestAnimationFrame(() => {
+            if (disposed) return
+            osmd.render()
+            paintedRef.current.clear()
+            const notes = collectOsmdNotes(osmd)
+            setNoteIndex({ size: buildOsmdNoteIndex(notes).size, allNotes: notes })
+          })
+        })
+        observer.observe(containerRef.current)
       } catch (loadError) {
         if (!disposed) {
           setError(loadError?.message ? String(loadError.message) : 'Engraving failed')
@@ -116,6 +127,8 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
     })()
     return () => {
       disposed = true
+      observer?.disconnect()
+      cancelAnimationFrame(resizeFrame)
       dispose()
     }
   }, [xml, targetPart, dispose])

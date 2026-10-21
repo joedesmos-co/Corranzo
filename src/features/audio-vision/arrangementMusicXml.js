@@ -29,13 +29,28 @@ function escapeXml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-function durationType(divisions) {
-  if (divisions >= 64) return 'whole'
-  if (divisions >= 32) return 'half'
-  if (divisions >= 16) return 'quarter'
-  if (divisions >= 8) return 'eighth'
-  if (divisions >= 4) return '16th'
-  return '32nd'
+// Every printed type/dot must agree with <duration>. An arbitrary 5/16
+// quarter duration cannot be labelled an eighth: engravers space by type.
+const WRITTEN_DURATIONS = [
+  [96, 'whole', true], [64, 'whole', false], [48, 'half', true],
+  [32, 'half', false], [24, 'quarter', true], [16, 'quarter', false],
+  [12, 'eighth', true], [8, 'eighth', false], [6, '16th', true],
+  [4, '16th', false], [3, '32nd', true], [2, '32nd', false], [1, '64th', false],
+]
+export function writtenDurationPieces(divisions) {
+  let remaining = Math.max(0, Math.round(divisions))
+  const pieces = []
+  for (const [duration, type, dot] of WRITTEN_DURATIONS) {
+    while (remaining >= duration) {
+      pieces.push({ divisions: duration, type, dot })
+      remaining -= duration
+    }
+  }
+  return pieces
+}
+function durationNotation(divisions) {
+  const piece = writtenDurationPieces(divisions)[0]
+  return `<type>${piece.type}</type>${piece.dot ? '<dot/>' : ''}`
 }
 
 /**
@@ -158,7 +173,7 @@ function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = fa
   let s = `      <note>${chord ? '<chord/>' : ''}<pitch><step>${step}</step>`
   if (alter !== 0) s += `<alter>${alter}</alter>`
   s += `<octave>${octave}</octave></pitch>`
-  s += `<duration>${divisions}</duration><voice>${voice}</voice><type>${durationType(divisions)}</type>`
+  s += `<duration>${divisions}</duration><voice>${voice}</voice>${durationNotation(divisions)}`
   if (staff != null) s += `<staff>${staff}</staff>`
   if (tieStart) s += `<tie type="start"/>`
   if (tieStop) s += `<tie type="stop"/>`
@@ -176,10 +191,9 @@ function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = fa
 }
 
 function restXml(divisions, voice, staff = null) {
-  let s = `      <note><rest/><duration>${divisions}</duration><voice>${voice}</voice><type>${durationType(divisions)}</type>`
-  if (staff != null) s += `<staff>${staff}</staff>`
-  s += `</note>\n`
-  return s
+  return writtenDurationPieces(divisions).map(piece =>
+    `      <note><rest/><duration>${piece.divisions}</duration><voice>${voice}</voice>${durationNotation(piece.divisions)}${staff != null ? `<staff>${staff}</staff>` : ''}</note>\n`
+  ).join('')
 }
 
 /** Split a note into per-measure pieces (ties across barlines preserved). */
@@ -291,18 +305,19 @@ function emitStaffVoice(events, { measureIndex, beats, voice, staff, withTab }) 
     // Clip to the next onset only when the note is NOT tied forward; a tied
     // note's remainder belongs to the continuation in the next measure.
     const finalDur = tieStart ? dur : Math.min(dur, Math.max(1, nextOnsetDiv - group.onsetDiv))
-    group.members.forEach((e, mi) => {
+    const pieces = writtenDurationPieces(finalDur)
+    pieces.forEach((piece, pi) => group.members.forEach((e, mi) => {
       s += noteXml({
         pitch: midiToPitch(e.midi),
-        divisions: finalDur,
+        divisions: piece.divisions,
         voice,
         staff,
         stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
         chord: mi > 0,
-        tieStart: e.tieStart,
-        tieStop: e.tieStop,
+        tieStart: pi < pieces.length - 1 || Boolean(e.tieStart),
+        tieStop: pi > 0 || Boolean(e.tieStop),
       })
-    })
+    }))
     cursorDiv = group.onsetDiv + finalDur
   }
   const deficit = endDiv - cursorDiv
@@ -334,7 +349,7 @@ function emitGuitarMeasure(measureEvents, m, beats) {
     .flat()
     .filter((e) => measureIndexOf(e.startBeat, beats) === m)
   const staffOne = emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: 1, withTab: true })
-  const backup = `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\\n`
+  const backup = `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
   const staffTwo = emitStaffVoice(split, { measureIndex: m, beats, voice: 2, staff: 2, withTab: true })
   return staffOne + backup + staffTwo
 }

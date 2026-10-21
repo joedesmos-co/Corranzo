@@ -164,6 +164,7 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
   // Paint canonical per-note states. Repaint only when the state signature
   // changes so the score is not touched on every clock tick.
   const lastSignatureRef = useRef('')
+  const lastIndexRef = useRef(null)
   const resolvedRef = useRef(new Map())
   useEffect(() => {
     if (!ready || !pairs) return
@@ -175,7 +176,8 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
         return `${entry.checkpoint?.id ?? 'none'}:${entry.state}:${tones}`
       })
       .join('|')
-    if (signature === lastSignatureRef.current) return
+    if (signature === lastSignatureRef.current && lastIndexRef.current === noteIndex) return
+    lastIndexRef.current = noteIndex
     lastSignatureRef.current = signature
     clearAll()
     for (const entry of scoreStates) {
@@ -210,9 +212,9 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
   const practiceTime = Number(tick?.practiceTime ?? 0)
   const cursorTime = useMemo(() => {
     if (!session.isWaitForYou) return practiceTime
-    const checkpoint = scoreStates[0]?.checkpoint
+    const checkpoint = session.waitForYou.currentCheckpoint
     return Number.isFinite(checkpoint?.timeSeconds) ? checkpoint.timeSeconds : practiceTime
-  }, [session.isWaitForYou, scoreStates, practiceTime])
+  }, [session.isWaitForYou, session.waitForYou.currentCheckpoint, practiceTime])
   // OSMD's own cursor is hidden: the practice surface shows ONE cursor - the
   // red line, positioned from the engraved noteheads. Two cursors on one score
   // would be ambiguous about which one is the truth.
@@ -259,6 +261,9 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
     if (!container || !element) return undefined
     let frameId = 0
     let lastSignature = ''
+    let tween = null
+    let lastLeft = null
+    let lastSystem = null
 
     const paint = () => {
       const svg = container.querySelector('svg')
@@ -273,38 +278,64 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
         : playing && typeof getScoreTime === 'function'
           ? getScoreTime()
           : Number(currentTick?.practiceTime ?? 0)
-      const { current, previous, ratio } = soundingEngravedNote(cursorNotes, seconds)
+      const { current, next, ratio } = soundingEngravedNote(cursorNotes, seconds)
       if (!svg || !current) {
         element.style.display = 'none'
         frameId = requestAnimationFrame(paint)
         return
       }
       const box = engravedNoteheadBox(current.engraving)
-      const previousBox = previous ? engravedNoteheadBox(previous.engraving) : null
+      const nextBox = next ? engravedNoteheadBox(next.engraving) : null
       const position = box ? noteheadPositionInContainer(box, svg, container) : null
       if (!position) {
         element.style.display = 'none'
         frameId = requestAnimationFrame(paint)
         return
       }
-      const previousPosition = previousBox
-        ? noteheadPositionInContainer(previousBox, svg, container)
-        : null
-      const left = previousPosition
-        ? previousPosition.left + (position.left - previousPosition.left) * ratio
-        : position.left
-      const centerY = position.top + position.height / 2
-      // The bar spans the staff the note is written on: a notehead is about one
-      // staff space tall, so five of them cover the staff it sits in.
-      const barHeight = Math.max(position.height * 5, 20)
-      const signature = `${Math.round(left * 2)}:${Math.round(centerY * 2)}:${Math.round(barHeight * 2)}`
+      const nextPosition = nextBox ? noteheadPositionInContainer(nextBox, svg, container) : null
+      const staffLine = current.engraving.graphicalNote?.parentVoiceEntry?.parentStaffEntry?.parentMeasure?.ParentStaffLine
+      const system = staffLine?.ParentMusicSystem ?? staffLine
+      const nextStaffLine = next?.engraving.graphicalNote?.parentVoiceEntry?.parentStaffEntry?.parentMeasure?.ParentStaffLine
+      const nextSystem = nextStaffLine?.ParentMusicSystem ?? nextStaffLine
+      const continuous = nextPosition && system && system === nextSystem && nextPosition.left > position.left
+      let left = !isWaitForYouRef.current && continuous
+        ? position.left + (nextPosition.left - position.left) * ratio : position.left
+      const now = performance.now()
+      if (isWaitForYouRef.current) {
+        // Wait For You moves the cursor from one checkpoint to the next. The
+        // checkpoint column is exact, so the bar glides to it — bounded and
+        // eased — and then holds on the note while the musician plays. A
+        // checkpoint can sit further LEFT (a repeat, a jump back), so the
+        // glide is not restricted to forward moves.
+        const distance = Math.abs(position.left - (lastLeft ?? position.left))
+        if (!tween || tween.target !== position.left || system !== lastSystem) {
+          tween = { target: position.left, from: lastLeft ?? position.left, start: now,
+            animate: lastLeft != null && distance > 0.5 }
+        }
+        if (tween.animate) {
+          const duration = Math.min(420, 180 + distance * 0.24)
+          const p = Math.min(1, (now - tween.start) / duration)
+          left = tween.from + (tween.target - tween.from) * p * p * (3 - 2 * p)
+        }
+      } else tween = null
+      lastLeft = left
+      lastSystem = system
+      // Use the staff's fixed extent, rather than following each pitch up/down.
+      const stave = current.engraving.graphicalNote?.parentVoiceEntry?.parentStaffEntry?.parentMeasure?.getVFStave?.()
+      const scale = svg.getBoundingClientRect().width / (svg.viewBox?.baseVal?.width || svg.getAttribute('width') || svg.clientWidth)
+      const staffY = stave?.getYForLine?.(0)
+      const staffBottom = stave?.getYForLine?.(4)
+      const barHeight = Number.isFinite(staffY) ? Math.max(20, (staffBottom - staffY + 12) * scale) : Math.max(position.height * 5, 20)
+      const svgTop = svg.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - container.clientTop
+      const barTop = Number.isFinite(staffY) ? svgTop + (staffY - 6) * scale : position.top - barHeight / 2
+      const signature = `${Math.round(left * 2)}:${Math.round(barTop * 2)}:${Math.round(barHeight * 2)}`
       if (signature !== lastSignature) {
         lastSignature = signature
         // The cursor is hidden by default in CSS, so it must be shown
         // explicitly (an empty inline display would fall back to the rule).
         element.style.display = 'block'
         element.style.left = `${left}px`
-        element.style.top = `${centerY - barHeight / 2}px`
+        element.style.top = `${barTop}px`
         element.style.height = `${barHeight}px`
         element.setAttribute('data-engraved-cursor-measure', String(current.note.measureNumber ?? ''))
         element.setAttribute('data-engraved-cursor-midi', String(current.note.midi ?? ''))

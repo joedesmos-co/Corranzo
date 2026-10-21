@@ -769,13 +769,18 @@ export class ScorePlaybackEngine {
       return
     }
 
+    const request = this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
+    const cancelled = () => request !== this.playRequestGeneration
     await awaitToneStarted(audioContextStart)
+    if (cancelled()) return
 
     await this.ensureVoices()
+    if (cancelled()) return
     // Wait briefly for the sampled piano so the first note is real piano, not
     // the synth fallback. Instant when samples were preloaded at score-load;
     // proceeds on the synth only if samples genuinely fail/time out.
     await this.whenInstrumentReady()
+    if (cancelled()) return
     this.releaseAll()
     this.scheduledEvents.clear()
 
@@ -808,6 +813,7 @@ export class ScorePlaybackEngine {
   }
 
   seek(scoreSeconds) {
+    this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
     const clamped = Math.max(0, Math.min(scoreSeconds, this.duration))
     const wasPlaying = this.playing
 
@@ -832,6 +838,7 @@ export class ScorePlaybackEngine {
   }
 
   stopInternal(resetOffset = false) {
+    this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
     this.playing = false
     this.cancelCountIn()
     this.stopProgressLoop()

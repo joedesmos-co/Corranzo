@@ -22,8 +22,6 @@ import {
   resolveChordToneStates,
 } from '../features/practice/scoreNoteStates.js'
 import { resolveNoteTargetPosition } from '../features/practice/noteTargetPosition.js'
-import { resolveWfyCheckpointCursor } from '../features/score-follow/wfyCheckpointCursor.js'
-import { publishScoreFollowCursor } from '../features/score-follow/scoreFollowCursorRuntime.js'
 
 /** Nearest lane group to a score onset (±11 ms): links lane outcomes to score events. */
 function groupAtOnset(groups, timeSeconds) {
@@ -145,6 +143,7 @@ export function PracticeSessionProvider({
     hasPdf,
     visiblePageNumber,
     isPlaying: playback.isPlaying,
+    smoothCheckpoints: session.isWaitForYou,
     sessionReady,
     isDemoPiece: resolvedDemoPiece,
     autoSetupGateOpen,
@@ -610,44 +609,9 @@ export function PracticeSessionProvider({
   // I2: while waiting on a note checkpoint, the cursor column locks to the
   // checkpoint's resolved notehead x (exact with OMR geometry); y stays
   // system-anchored so the bar still spans the staff.
-  const wfyCheckpointCursorTarget = practiceNoteTarget?.target ?? null
-  const wfyCheckpointCursor = useMemo(
-    () =>
-      resolveWfyCheckpointCursor({
-        practiceMode: session.practiceMode,
-        checkpointMode: session.checkpointMode,
-        waitForYouStatus: session.waitForYou.status,
-        currentCheckpoint: session.waitForYou.currentCheckpoint,
-        noteTarget: wfyCheckpointCursorTarget,
-        scoreFollowCursor: scoreFollow.displayCursor ?? scoreFollow.cursor ?? null,
-        // Source-normalized (exact OMR notehead) checkpoint columns must be
-        // converted into the analysis space the bar paints in.
-        pageViewRotations: scoreFollow.pageViewRotations ?? null,
-      }),
-    [
-      session.practiceMode,
-      session.checkpointMode,
-      session.waitForYou.status,
-      session.waitForYou.currentCheckpoint,
-      wfyCheckpointCursorTarget,
-      scoreFollow.displayCursor,
-      scoreFollow.cursor,
-      scoreFollow.pageViewRotations,
-    ],
-  )
-  // I2: publish the checkpoint-locked cursor to the cursor runtime so the
-  // painted bar (which reads the runtime snapshot, not React props) sits on
-  // the required notehead column while waiting. This runs after
-  // useScoreFollow's own publish effect, so on commits where both publish
-  // the lock wins; when the lock is null nothing publishes and the shared
-  // timeline cursor owns the bar.
-  useEffect(() => {
-    if (!wfyCheckpointCursor) {
-      return undefined
-    }
-    publishScoreFollowCursor({ ...wfyCheckpointCursor, smoothed: false })
-    return undefined
-  }, [wfyCheckpointCursor])
+  // The existing motion timeline owns PDF positions in all modes. A guessed
+  // note-target column must not override calibrated printed-score geometry.
+  const wfyCheckpointCursor = null
 
   const cursorValue = useMemo(
     () => ({
