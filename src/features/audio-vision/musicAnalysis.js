@@ -128,7 +128,84 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     strength: Math.round(flux[f] * 1e6) / 1e6,
     provenance: PROVENANCE.DETECTED,
   }))
-  report('tempo', 0.35)
+  report('melody-bass', 0.2)
+  await yieldToUI()
+  if (cancelled()) abort()
+  const melody = []
+  const bassLine = []
+  for (let f = 0; f < harmFrames.length; f += 1) {
+    const m = dominantMelodyMidi(harmFrames[f], fftSize, sampleRate)
+    if (m && m.strength > 1e-7) {
+      melody.push({
+        seconds: Math.round(f * frameSeconds * 1000) / 1000,
+        midiFloat: Math.round(m.midiFloat * 10) / 10,
+        midi: Math.round(m.midiFloat),
+        strength: m.strength,
+        provenance: PROVENANCE.DETECTED,
+      })
+    }
+    if (f % 2 === 0) {
+      const b = bassMidi(frames[f], fftSize, sampleRate)
+      if (b) {
+        bassLine.push({
+          seconds: Math.round(f * frameSeconds * 1000) / 1000,
+          midi: Math.round(b.midiFloat),
+          provenance: PROVENANCE.DETECTED,
+        })
+      }
+    }
+  }
+  // The pitch model runs BEFORE the beat grid: it is the longest step, and its
+  // first note is the earliest musical event we know exactly, so it anchors the
+  // grid's phase (a grid anchored on a missed first onset folds the recording's
+  // first beat into the second one).
+  report('notes', 0.3)
+  await yieldToUI()
+  if (cancelled()) abort()
+  let predictedNotes = []
+  let pitchSource = 'spectral-fallback'
+  if (typeof predictNotes === 'function') {
+    try {
+      // The pitch estimator reports its real window progress when it can
+      // (Basic Pitch measures every window), so the progress bar shows measured
+      // progress instead of a frozen bar during the longest stage.
+      const events = await predictNotes(samples, (fraction) => {
+        const f = Number(fraction)
+        if (Number.isFinite(f) && f >= 0 && f <= 1) report('notes', 0.3 + 0.25 * f)
+      })
+      if (Array.isArray(events) && events.length) {
+        predictedNotes = events.map((e) => ({
+          midi: Math.round(e.midi ?? e.pitchMidi ?? 0),
+          startSeconds: Number(e.startSeconds ?? e.startTimeSeconds ?? 0),
+          endSeconds: Number(e.endSeconds ?? (e.startTimeSeconds ?? 0) + (e.durationSeconds ?? 0)),
+          amplitude: Number.isFinite(e.amplitude) ? e.amplitude : null,
+          provenance: PROVENANCE.PREDICTED,
+        })).filter((e) => e.midi >= 21 && e.midi <= 108 && e.endSeconds > e.startSeconds)
+        pitchSource = 'basic-pitch'
+      }
+    } catch {
+      predictedNotes = []
+    }
+  }
+  if (predictedNotes.length) {
+    // ONSET CORROBORATION (independent evidence, not taste).
+    //
+    // The pitch model claims a note at a time. The spectral-flux onset detector
+    // independently claims where the music attacks. A short transcribed note
+    // that lands where nothing attacks is usually a harmonic artifact, and in
+    // the arrangement it is worse than useless: it lands between two real
+    // notes and CHOPS them (the voice can only hold one note, so the real note
+    // is cut to a stub).
+    //
+    // A note that is already sounding (legato) has no attack of its own, so
+    // only SHORT notes are judged: a sustained note is never dropped for
+    // lacking an onset.
+    predictedNotes = corroborateNotesByOnset(predictedNotes, onsets)
+  }
+  if (!predictedNotes.length) {
+    predictedNotes = contourToNotes(melody, onsets)
+  }
+  report('tempo', 0.6)
   await yieldToUI()
   if (cancelled()) abort()
   const tempo = await estimateTempoFromEnvelope(flux, frameSeconds)
@@ -140,7 +217,7 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     sectionTempos.push((await estimateTempoFromEnvelope(seg, frameSeconds)).bpm)
   }
   const tempoVaries = Math.max(...sectionTempos) - Math.min(...sectionTempos) >= 8
-  report('beats', 0.45)
+  report('beats', 0.7)
   await yieldToUI()
   if (cancelled()) abort()
   // M3: an explicit tempo override (from the review UI) replaces the estimated
@@ -150,12 +227,20 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
   const effectiveTempo = Number.isFinite(tempoOverride) && tempoOverride > 0
     ? { ...tempo, bpm: Math.round(tempoOverride), source: 'user-override', estimatedBpm: tempo.bpm, octaveAlternative: null }
     : { ...tempo, source: 'estimate' }
-  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: effectiveTempo.bpm, totalSeconds })
+  // The grid's phase: the earliest note the model heard (exact), otherwise the
+  // earliest detected onset.
+  const firstNoteSeconds = predictedNotes.length
+    ? Math.min(...predictedNotes.map((n) => n.startSeconds))
+    : null
+  const anchorSeconds = Number.isFinite(firstNoteSeconds)
+    ? firstNoteSeconds
+    : (onsets[0]?.seconds ?? 0)
+  const { beats, beatPeriodSeconds } = buildBeatGrid({ onsetFrames, frameSeconds, bpm: effectiveTempo.bpm, totalSeconds, anchorSeconds })
   // M3 meter: infer instead of assuming 4/4. An unverified meter keeps the 4/4
   // default for engraving but is reported as uncertain, so callers can say so.
   const meterReading = inferMeter(onsetFrames, frameSeconds, tempo.bpm)
   const beatsPerMeasure = meterReading.uncertain ? 4 : meterReading.meter
-  report('harmony', 0.6)
+  report('harmony', 0.78)
   await yieldToUI()
   if (cancelled()) abort()
   // Chord per beat window from harmonic-view chroma. A3: windows span at
@@ -215,68 +300,10 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
       provenance: PROVENANCE.INFERRED,
     })
   }
-  report('melody-bass', 0.75)
-  await yieldToUI()
-  if (cancelled()) abort()
-  const melody = []
-  const bassLine = []
-  for (let f = 0; f < harmFrames.length; f += 1) {
-    const m = dominantMelodyMidi(harmFrames[f], fftSize, sampleRate)
-    if (m && m.strength > 1e-7) {
-      melody.push({
-        seconds: Math.round(f * frameSeconds * 1000) / 1000,
-        midiFloat: Math.round(m.midiFloat * 10) / 10,
-        midi: Math.round(m.midiFloat),
-        strength: m.strength,
-        provenance: PROVENANCE.DETECTED,
-      })
-    }
-    if (f % 2 === 0) {
-      const b = bassMidi(frames[f], fftSize, sampleRate)
-      if (b) {
-        bassLine.push({
-          seconds: Math.round(f * frameSeconds * 1000) / 1000,
-          midi: Math.round(b.midiFloat),
-          provenance: PROVENANCE.DETECTED,
-        })
-      }
-    }
-  }
   report('sections', 0.85)
   await yieldToUI()
   if (cancelled()) abort()
   const sections = detectSections(frames, frameSeconds, totalSeconds)
-  report('notes', 0.9)
-  await yieldToUI()
-  if (cancelled()) abort()
-  let predictedNotes = []
-  let pitchSource = 'spectral-fallback'
-  if (typeof predictNotes === 'function') {
-    try {
-      // The pitch estimator reports its real window progress when it can
-      // (Basic Pitch measures every window), so the progress bar shows measured
-      // progress instead of a frozen bar during the longest stage.
-      const events = await predictNotes(samples, (fraction) => {
-        const f = Number(fraction)
-        if (Number.isFinite(f) && f >= 0 && f <= 1) report('notes', 0.9 + 0.02 * f)
-      })
-      if (Array.isArray(events) && events.length) {
-        predictedNotes = events.map((e) => ({
-          midi: Math.round(e.midi ?? e.pitchMidi ?? 0),
-          startSeconds: Number(e.startSeconds ?? e.startTimeSeconds ?? 0),
-          endSeconds: Number(e.endSeconds ?? (e.startTimeSeconds ?? 0) + (e.durationSeconds ?? 0)),
-          amplitude: Number.isFinite(e.amplitude) ? e.amplitude : null,
-          provenance: PROVENANCE.PREDICTED,
-        })).filter((e) => e.midi >= 21 && e.midi <= 108 && e.endSeconds > e.startSeconds)
-        pitchSource = 'basic-pitch'
-      }
-    } catch {
-      predictedNotes = []
-    }
-  }
-  if (!predictedNotes.length) {
-    predictedNotes = contourToNotes(melody, onsets)
-  }
   // Harmony voicing from the TRANSCRIBED notes (predicted, never inferred):
   // the chord LABEL is unreliable on mixtures, but the pitch classes the model
   // actually heard are direct evidence. Attach the dominant heard pitch classes
@@ -336,6 +363,35 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
     hopSeconds,
     spectrum: { fftSize, frameCount: frames.length },
   }
+}
+
+/**
+ * Drop transcribed notes that no independent detector heard attack.
+ *
+ * A note is judged only when it is SHORT (it claims to be a new attack): a
+ * sustained note inside a legato phrase has no attack of its own and must not
+ * be punished for it. The tolerance is generous enough for a soft attack to
+ * be seen by the flux detector, and small enough to reject a note that
+ * appears between two real attacks.
+ */
+export function corroborateNotesByOnset(notes, onsets, { maxSustainSeconds = 0.35, toleranceSeconds = 0.07 } = {}) {
+  const onsetTimes = (onsets ?? []).map((o) => o?.seconds).filter((s) => Number.isFinite(s))
+  if (!notes?.length || !onsetTimes.length) return notes ?? []
+  const kept = []
+  for (const note of notes) {
+    const duration = (note.endSeconds ?? 0) - (note.startSeconds ?? 0)
+    if (duration <= maxSustainSeconds) {
+      let nearest = Infinity
+      for (const onset of onsetTimes) {
+        const delta = Math.abs(onset - note.startSeconds)
+        if (delta < nearest) nearest = delta
+        if (nearest <= toleranceSeconds) break
+      }
+      if (nearest > toleranceSeconds) continue
+    }
+    kept.push(note)
+  }
+  return kept
 }
 
 /** Novelty-based section boundaries (self-similarity drop). Inferred, low-stakes. */

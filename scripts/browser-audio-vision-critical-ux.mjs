@@ -294,7 +294,12 @@ async function openArrangementInPractice(page) {
     bodyText: (document.querySelector('.score-import')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 400),
   }))
   await page.getByRole('button', { name: /open score/i }).click()
-  await page.getByText(/all targets/i).first().waitFor({ timeout: 90000 })
+  // The unified practice engine engraves the arrangement's own MusicXML in the
+  // normal workspace (there is no separate arrangement panel any more).
+  await page
+    .locator('.osmd-score__container[data-osmd-ready="true"]')
+    .first()
+    .waitFor({ timeout: 90000 })
   return importState
 }
 
@@ -355,12 +360,15 @@ async function readPersistedMusicXml(page, { waitMs = 8000 } = {}) {
 
 async function practiceSurfaceState(page) {
   return page.evaluate(() => ({
-    hasArrangementSurface: Boolean(document.querySelector('.arrangement-practice')),
+    // The arrangement is engraved in the shared practice workspace.
+    hasArrangementSurface: Boolean(
+      document.querySelector('.osmd-score, .osmd-container, svg.osmd'),
+    ),
     hasPdfCanvas: Boolean(document.querySelector('.workspace-frame canvas, .workspace-frame embed')),
     hasPdfFileCard: Boolean(document.querySelector('.score-import-file')),
     hasOsmdScore: Boolean(document.querySelector('.osmd-score, .osmd-container, svg.osmd')),
     svgCount: document.querySelectorAll('svg').length,
-    targets: (document.querySelector('.arrangement-practice')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 300),
+    targets: (document.querySelector('.osmd-score')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 300),
     practiceText: (document.querySelector('.practice-workspace')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 300),
   }))
 }
@@ -493,17 +501,23 @@ try {
   } else {
     fail('B1 piano arrangement opens its own practice surface', JSON.stringify(stateB).slice(0, 240))
   }
-  const playBtn = page.getByRole('button', { name: /^play$/i }).first()
+  // The unified transport labels the control "Play (Space)".
+  const playBtn = page.getByRole('button', { name: /^play(\s*\(space\))?$/i }).first()
   if (await playBtn.count()) {
     await playBtn.click()
-    const paused = await page.getByRole('button', { name: /^pause$/i }).first().waitFor({ timeout: 30000 }).then(() => true).catch(() => false)
+    const paused = await page
+      .getByRole('button', { name: /^pause(\s*\(space\))?$/i })
+      .first()
+      .waitFor({ timeout: 30000 })
+      .then(() => true)
+      .catch(() => false)
     if (paused) {
       pass('B2 piano arrangement preview playback engages')
       await shot(page, 'B2-piano-playing')
     } else {
       fail('B2 piano arrangement preview playback engages', 'no Pause button after Play')
     }
-    const pauseBtn = page.getByRole('button', { name: /^pause$/i }).first()
+    const pauseBtn = page.getByRole('button', { name: /^pause(\s*\(space\))?$/i }).first()
     if (await pauseBtn.count()) await pauseBtn.click()
   } else {
     fail('B2 piano arrangement preview playback engages', 'no Play button')

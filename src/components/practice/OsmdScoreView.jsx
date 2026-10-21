@@ -14,13 +14,15 @@ import { useEffect, useMemo, useRef } from 'react'
 import useOsmdEngraving from '../../features/practice/useOsmdEngraving.js'
 import {
   OSMD_NOTE_COLORS,
-  cursorPositionFor,
   matchCheckpointNotes,
-  measureStartsByNumber,
-  moveOsmdCursor,
-  musicalQuartersAtTime,
   pairOsmdNotes,
 } from '../../features/practice/osmdEngraving.js'
+import {
+  engravedCursorNotes,
+  engravedNoteheadBox,
+  noteheadPositionInContainer,
+  soundingEngravedNote,
+} from '../../features/practice/engravedScoreCursor.js'
 import { buildNoteCheckpoints } from '../../features/practice/waitForYouCheckpoints.js'
 import {
   SCORE_NOTE_STATE,
@@ -30,7 +32,7 @@ import {
   resolveWfyScoreNoteStates,
 } from '../../features/practice/scoreNoteStates.js'
 import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
-import { usePracticeSessionContext } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeSessionContext, usePracticeVisualSession } from '../../context/PracticeSessionContext.jsx'
 
 function stateColor(state) {
   switch (state) {
@@ -66,12 +68,13 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
   const xml = musicXmlSource?.data ? new TextDecoder().decode(musicXmlSource.data) : null
   const targetPart = musicXmlSource?.omrMeta?.arrangement?.targetPart ?? null
   const { session } = usePracticeSessionContext()
+  const visual = usePracticeVisualSession()
   const timingMap = session?.timing?.timingMap ?? null
   const tick = usePracticeTick()
-  const { containerRef, ready, error, noteIndex, paint, clearAll, scrollToNote, osmdRef } =
+  const cursorRef = useRef(null)
+  const { containerRef, ready, error, noteIndex, paint, clearAll, scrollToNote, osmdRef, getContainer } =
     useOsmdEngraving({ xml, targetPart })
 
-  const measureStarts = useMemo(() => measureStartsByNumber(timingMap), [timingMap])
   // Ordered pairing between canonical notes and engraved notes, rebuilt only
   // when either side changes (score render / new timing map).
   const pairs = useMemo(
@@ -210,17 +213,17 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
     const checkpoint = scoreStates[0]?.checkpoint
     return Number.isFinite(checkpoint?.timeSeconds) ? checkpoint.timeSeconds : practiceTime
   }, [session.isWaitForYou, scoreStates, practiceTime])
-  const lastQuarterRef = useRef(Number.NaN)
+  // OSMD's own cursor is hidden: the practice surface shows ONE cursor - the
+  // red line, positioned from the engraved noteheads. Two cursors on one score
+  // would be ambiguous about which one is the truth.
   useEffect(() => {
-    if (!ready || !osmdRef.current?.cursor) return
-    const { quarter } = musicalQuartersAtTime(timingMap, cursorTime, measureStarts)
-    if (!Number.isFinite(quarter)) return
-    const rounded = Math.round(quarter * 1000) / 1000
-    if (rounded === lastQuarterRef.current) return
-    lastQuarterRef.current = rounded
-    const position = cursorPositionFor(quarter, measureStarts)
-    moveOsmdCursor(osmdRef.current.cursor, position)
-  }, [ready, cursorTime, timingMap, measureStarts, osmdRef])
+    if (!ready) return
+    try {
+      osmdRef.current?.cursor?.hide?.()
+    } catch {
+      // A cursor-less OSMD build simply has no second cursor.
+    }
+  }, [ready, osmdRef])
 
   // Keep the current musical position visible while playing.
   const isPlaying = Boolean(tick?.playbackIsPlaying)
@@ -230,6 +233,88 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
     const matched = entry ? resolvedRef.current.get(entry.checkpoint?.id ?? '') : null
     if (matched?.notes?.length) scrollToNote(matched.notes[0])
   }, [isPlaying, practiceTime, ready, scoreStates, scrollToNote])
+
+  // Engraved cursor: the same red line the PDF surface shows, positioned from
+  // the engraved noteheads instead of PDF geometry. It reads the canonical
+  // clock (the audio clock while playing) - there is no second practice clock.
+  const cursorNotes = useMemo(() => (pairs ? engravedCursorNotes(pairs) : []), [pairs])
+  const cursorTickRef = useRef(tick)
+  const getScoreTimeRef = useRef(null)
+  const cursorTimeRef = useRef(cursorTime)
+  const isWaitForYouRef = useRef(session.isWaitForYou)
+  useEffect(() => {
+    cursorTickRef.current = tick
+  }, [tick])
+  useEffect(() => {
+    getScoreTimeRef.current = visual.getScoreTime ?? null
+  }, [visual.getScoreTime])
+  useEffect(() => {
+    cursorTimeRef.current = cursorTime
+    isWaitForYouRef.current = session.isWaitForYou
+  }, [cursorTime, session.isWaitForYou])
+  useEffect(() => {
+    if (!ready || !cursorNotes.length) return undefined
+    const container = getContainer()
+    const element = cursorRef.current
+    if (!container || !element) return undefined
+    let frameId = 0
+    let lastSignature = ''
+
+    const paint = () => {
+      const svg = container.querySelector('svg')
+      const currentTick = cursorTickRef.current
+      const playing = Boolean(currentTick?.playbackIsPlaying)
+      const getScoreTime = getScoreTimeRef.current
+      // Wait For You locks the line to the note the engine is waiting for;
+      // otherwise the line follows the canonical clock (the audio clock while
+      // the music plays).
+      const seconds = isWaitForYouRef.current
+        ? cursorTimeRef.current
+        : playing && typeof getScoreTime === 'function'
+          ? getScoreTime()
+          : Number(currentTick?.practiceTime ?? 0)
+      const { current, previous, ratio } = soundingEngravedNote(cursorNotes, seconds)
+      if (!svg || !current) {
+        element.style.display = 'none'
+        frameId = requestAnimationFrame(paint)
+        return
+      }
+      const box = engravedNoteheadBox(current.engraving)
+      const previousBox = previous ? engravedNoteheadBox(previous.engraving) : null
+      const position = box ? noteheadPositionInContainer(box, svg, container) : null
+      if (!position) {
+        element.style.display = 'none'
+        frameId = requestAnimationFrame(paint)
+        return
+      }
+      const previousPosition = previousBox
+        ? noteheadPositionInContainer(previousBox, svg, container)
+        : null
+      const left = previousPosition
+        ? previousPosition.left + (position.left - previousPosition.left) * ratio
+        : position.left
+      const centerY = position.top + position.height / 2
+      // The bar spans the staff the note is written on: a notehead is about one
+      // staff space tall, so five of them cover the staff it sits in.
+      const barHeight = Math.max(position.height * 5, 20)
+      const signature = `${Math.round(left * 2)}:${Math.round(centerY * 2)}:${Math.round(barHeight * 2)}`
+      if (signature !== lastSignature) {
+        lastSignature = signature
+        // The cursor is hidden by default in CSS, so it must be shown
+        // explicitly (an empty inline display would fall back to the rule).
+        element.style.display = 'block'
+        element.style.left = `${left}px`
+        element.style.top = `${centerY - barHeight / 2}px`
+        element.style.height = `${barHeight}px`
+        element.setAttribute('data-engraved-cursor-measure', String(current.note.measureNumber ?? ''))
+        element.setAttribute('data-engraved-cursor-midi', String(current.note.midi ?? ''))
+      }
+      frameId = requestAnimationFrame(paint)
+    }
+
+    frameId = requestAnimationFrame(paint)
+    return () => cancelAnimationFrame(frameId)
+  }, [ready, cursorNotes, getContainer])
 
 
   if (!xml) return null
@@ -250,7 +335,11 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
         data-osmd-target={targetPart ?? 'unknown'}
         role="img"
         aria-label={ready ? 'Engraved sheet music with practice highlights. The target list below states every note.' : 'Engraving sheet music…'}
-      />
+      >
+        <div ref={cursorRef} className="engraved-score-cursor" data-engraved-cursor="true" aria-hidden>
+          <span className="score-follow-bar__line engraved-score-cursor__line" />
+        </div>
+      </div>
       {pairs?.approximate && (
         <p className="audio-vision-hint osmd-score__approx" role="note">
           Highlight position is approximate on this score (repeats). Timing and practice are exact.

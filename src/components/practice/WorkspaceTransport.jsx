@@ -8,10 +8,10 @@ import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
 
 function ToolButton({ tool, onTool, id, icon, label, children }) { return <button className="workspace-tool-button" data-tour-id={id === 'input' ? 'practice-input-source' : id === 'settings' ? 'practice-advanced' : undefined} aria-label={label} title={label} aria-expanded={tool === id} aria-haspopup="dialog" onClick={() => onTool(id)}><Icon name={icon} size={20} /><span>{children || label}</span></button> }
 
-export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled }) {
+export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled, engraved = false }) {
   const tick = usePracticeTick()
   const p = s.playback
-  const status = workspaceStatus(s, scoreFollow)
+  const status = workspaceStatus(s, scoreFollow, { engraved })
   const current = tick.practiceTime ?? s.practiceTime
   const duration = tick.playbackDuration || p.duration
   const isPlaying = tick.playbackIsPlaying

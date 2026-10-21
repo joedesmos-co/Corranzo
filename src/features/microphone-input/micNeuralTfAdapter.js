@@ -252,5 +252,9 @@ export async function runNeuralWindow(modelOrRuntime, modelModule, samples22050)
     midi: Math.round(note.pitchMidi),
     startOffsetSeconds: note.startTimeSeconds,
     endOffsetSeconds: note.startTimeSeconds + note.durationSeconds,
+    // The model's own note strength. Callers that compare simultaneous notes
+    // (for example the arrangement's harmonic-double suppression) need it to
+    // tell the real note from its octave artifact.
+    amplitude: Number.isFinite(note.amplitude) ? note.amplitude : null,
   }))
 }

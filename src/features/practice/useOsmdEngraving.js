@@ -142,7 +142,13 @@ export default function useOsmdEngraving({ xml, targetPart = null }) {
     }
   }, [])
 
-  return { containerRef, ready, error, noteIndex, paint, clearAll, scrollToNote, osmdRef }
+  /**
+   * The engraved score's scroll container. Exposed as an accessor so callers
+   * can read the live DOM node without touching a ref during render.
+   */
+  const getContainer = useCallback(() => containerRef.current, [])
+
+  return { containerRef, ready, error, noteIndex, paint, clearAll, scrollToNote, osmdRef, getContainer }
 }
 
 export { paintGraphicalNote, clearGraphicalNote }

@@ -66,8 +66,22 @@ export function simplifyForDifficulty(events, difficulty) {
     if (!byBeat.has(key)) byBeat.set(key, [])
     byBeat.get(key).push(e)
   }
+  // Density caps. Two documented budgets, both applied:
+  //  * maxVoicesPerOnset  - how many notes may sound at the SAME moment
+  //                         (the size of one chord).
+  //  * maxNotesPerBeat    - how many notes one beat may carry (readability).
+  // The melody and the bass root are protected: the caps may thin the
+  // harmony, never the musical identity of the arrangement. Dropping the
+  // melody to meet a budget is what makes Easy feel like a damaged copy
+  // instead of a simple one.
+  const byOnset = new Map()
+  for (const e of out) {
+    const key = Math.round((e.quantizedStartBeat ?? 0) * 2) / 2
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(e)
+  }
   const thinned = []
-  for (const [, group] of byBeat) {
+  for (const [, group] of byOnset) {
     const seenEssential = new Set()
     const essential = group.filter((e) => (e.isMelody || e.isBassRoot) && (() => {
       const k = `${e.midi}:${Math.round((e.quantizedStartBeat ?? 0) * 4)}`
@@ -85,6 +99,28 @@ export function simplifyForDifficulty(events, difficulty) {
     const othersBudget = Math.max(0, budgetBase - essential.length)
     thinned.push(...essential, ...sortedOthers.slice(0, othersBudget))
   }
-  thinned.sort((a, b) => (a.quantizedStartBeat ?? 0) - (b.quantizedStartBeat ?? 0))
-  return thinned
+  // Per-beat readability cap (the documented maxNotesPerBeat). Applied AFTER
+  // the per-onset cap so a beat that carries several chords cannot smuggle
+  // in a dense texture. The melody and the bass root stay.
+  const beatGroups = new Map()
+  for (const e of thinned) {
+    const key = Math.floor((e.quantizedStartBeat ?? 0) + 1e-6)
+    if (!beatGroups.has(key)) beatGroups.set(key, [])
+    beatGroups.get(key).push(e)
+  }
+  const beatCapped = []
+  for (const [, group] of beatGroups) {
+    const seenEssential = new Set()
+    const essential = group.filter((e) => (e.isMelody || e.isBassRoot) && (() => {
+      const k = `${e.midi}:${Math.round((e.quantizedStartBeat ?? 0) * 4)}`
+      if (seenEssential.has(k)) return false
+      seenEssential.add(k)
+      return true
+    })())
+    const others = group.filter((e) => !e.isMelody && !e.isBassRoot)
+    const othersBudget = Math.max(0, params.maxNotesPerBeat - essential.length)
+    beatCapped.push(...essential, ...others.slice(0, Math.max(0, Math.floor(othersBudget))))
+  }
+  beatCapped.sort((a, b) => (a.quantizedStartBeat ?? 0) - (b.quantizedStartBeat ?? 0))
+  return beatCapped
 }
