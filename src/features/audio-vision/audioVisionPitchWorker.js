@@ -93,6 +93,10 @@ self.onmessage = async (event) => {
       midi: Math.round(note.pitchMidi),
       startOffsetSeconds: note.startTimeSeconds,
       endOffsetSeconds: note.startTimeSeconds + note.durationSeconds,
+      // The model's own note strength. Without it the arrangement cannot tell
+      // a real octave from a harmonic artifact, because the suppression rules
+      // need the amplitude to decide which of the two is the real note.
+      amplitude: Number.isFinite(note.amplitude) ? note.amplitude : null,
     }))
     post({ jobId, ok: true, notes })
   } catch (error) {

@@ -50,6 +50,7 @@ async function predictWithBasicPitch(samples, onNoteProgress = null) {
       midi: e.midi,
       startSeconds: e.startOffsetSeconds,
       endSeconds: e.endOffsetSeconds,
+      amplitude: Number.isFinite(e.amplitude) ? e.amplitude : null,
     }))
   } catch {
     // Fall through to the inline path.
@@ -69,6 +70,7 @@ async function predictWithBasicPitch(samples, onNoteProgress = null) {
       midi: e.midi,
       startSeconds: e.startOffsetSeconds,
       endSeconds: e.endOffsetSeconds,
+      amplitude: Number.isFinite(e.amplitude) ? e.amplitude : null,
     }))
   } catch {
     return null
