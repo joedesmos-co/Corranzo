@@ -67,10 +67,14 @@ describe('score overlay note states', () => {
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
     expect(markup).toContain('data-score-note-state="completed"')
     expect(markup).toContain('data-score-note-state="current"')
-    expect(markup).toContain('score-follow-overlay__note-highlight--state-completed')
-    expect(markup).toContain('score-follow-overlay__note-highlight--state-current')
-    // Non-color "play now" marker on the required event only.
-    expect(markup).toContain('score-follow-overlay__now-tick')
+    // The feedback is painted on the NOTEHEAD itself: a played note is blue.
+    expect(markup).toContain('cz-notehead')
+    expect(markup).toContain('#1d4ed8')
+    // The required note keeps its black engraving and gains only a soft focus
+    // ring — no box, no floating marker above the staff.
+    expect(markup).toContain('cz-notehead__focus')
+    expect(markup).not.toContain('score-follow-overlay__now-tick')
+    expect(markup).not.toContain('score-follow-overlay__note-target-ring')
     // Accessibility: state is announced, not color-only.
     expect(markup).toContain('Played')
     expect(markup).toContain('Play')
@@ -106,14 +110,18 @@ describe('score overlay note states', () => {
     ]
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
     // Approximate (non-source) highlights must NOT invent per-tone boxes.
-    if (target.highlight?.renderMode === 'individual-source-boxes') {
-      expect(markup).toContain('score-follow-overlay__note-highlight--tone-done')
-      expect(markup).toContain('score-follow-overlay__note-highlight--tone-needed')
-      expect(markup).toContain('2 of 3 tones played')
-    } else {
-      expect(markup).not.toContain('score-follow-overlay__note-highlight--tone-done')
-      expect(markup).toContain('data-score-note-state="current-partial"')
-    }
+    // Chord members are painted individually on their own noteheads, whether
+    // the geometry is the exact printed head or the layout approximation.
+    expect(markup).toContain('cz-notehead')
+    expect(markup).toContain('#1d4ed8')
+    expect(markup).toContain('data-score-note-state="current-partial"')
+    // Only the members the engine owns geometry for are painted, and only the
+    // recognised ones are blue.
+    const noteheads = markup.split('<div class="cz-notehead"').length - 1
+    expect(noteheads).toBe(checkpoint.notes.length)
+    const owned = checkpoint.notes.filter((note) => [60, 64, 67].includes(note.midi))
+    const completed = owned.filter((note) => [60, 64].includes(note.midi))
+    expect(markup.split('#1d4ed8').length - 1).toBe(completed.length)
   })
 
   it('renders play-along wrong flashes and muted past misses', () => {
@@ -134,8 +142,10 @@ describe('score overlay note states', () => {
     const markup = renderToStaticMarkup(createElement(ScoreFollowOverlay, overlayProps(entries)))
     expect(markup).toContain('data-score-note-state="missed"')
     expect(markup).toContain('data-score-note-state="wrong"')
-    expect(markup).toContain('score-follow-overlay__note-highlight--state-missed')
-    expect(markup).toContain('score-follow-overlay__note-highlight--state-wrong')
+    expect(markup).toContain('data-score-note-state="missed"')
+    expect(markup).toContain('data-score-note-state="wrong"')
+    // A missed or wrong note is red on the notehead itself.
+    expect(markup).toContain('#b91c1c')
   })
 
   it('renders nothing extra when states are disabled', () => {

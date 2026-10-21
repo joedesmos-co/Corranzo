@@ -141,10 +141,9 @@ export default function OsmdScoreView({ musicXmlSource = null }) {
       return entries
     }
 
-    // Preview: highlight the note currently sounding.
-    return index >= 0 && checkpoints[index]
-      ? [{ checkpoint: checkpoints[index], state: SCORE_NOTE_STATE.CURRENT, toneStates: null }]
-      : []
+    // Preview is a clean read of the score: the red cursor and the black
+    // engraving are the whole presentation, so no notehead is painted there.
+    return []
   }, [
     timingMap,
     session.isWaitForYou,

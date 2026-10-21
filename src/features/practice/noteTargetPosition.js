@@ -59,28 +59,32 @@ function finite(value) {
   return Number.isFinite(value)
 }
 
-function staffBandY(geometry, staff, midi, partId) {
+/**
+ * Vertical position of a notehead on its staff.
+ *
+ * When the score carries engraved layout (MusicXML default-y) the exact
+ * offset is used. When it does not — a real edition exported without layout,
+ * such as the bundled demo score — the note is placed by its PITCH within the
+ * pitch range of the notes on that staff, so a low note sits low on the staff
+ * and a high note sits high, instead of every note landing on one line.
+ */
+function staffBandY(geometry, staff, midi, partId, staffRange = null) {
   const { yTop, yBottom, staffSplitY } = geometry
+  const inBottom = staff === 2
+  const bandTop = inBottom ? staffSplitY : yTop
+  const bandBottom = inBottom ? yBottom : staffSplitY
 
-  if (staff === 1) {
-    return lerp(yTop, staffSplitY, 0.45)
-  }
-  if (staff === 2) {
-    return lerp(staffSplitY, yBottom, 0.45)
-  }
-
-  if (midi != null) {
+  let fraction = 0.45
+  if (midi != null && staffRange && staffRange.max > staffRange.min) {
+    // The top of the staff is the highest pitch; y grows downward.
+    fraction = 0.12 + 0.76 * (1 - (midi - staffRange.min) / (staffRange.max - staffRange.min))
+  } else if (midi != null && staff == null) {
     const lowerPart = partId && /P2|2|bass|left|LH/i.test(String(partId))
-    if (lowerPart) {
-      return lerp(staffSplitY, yBottom, 0.42)
-    }
-    if (midi >= 60) {
-      return lerp(yTop, staffSplitY, 0.42)
-    }
-    return lerp(staffSplitY, yBottom, 0.42)
+    fraction = 0.42
+    void lowerPart
   }
 
-  return staffSplitY
+  return lerp(bandTop, bandBottom, fraction)
 }
 
 /** MusicXML default-y: positive = below staff line (down on page). */
@@ -200,6 +204,7 @@ function resolveSingleNotePosition({
   checkpointTime,
   sourceAnchorIndex,
   preferredRepresentation,
+  staffRanges = null,
 }) {
   const sourcePlacement = resolveOwnedSourcePlacement(
     note,
@@ -228,7 +233,9 @@ function resolveSingleNotePosition({
   })
 
   const span = geometry.yBottom - geometry.yTop
-  let y = staffBandY(geometry, note.staff, note.midi, note.partId)
+  const staffKey =
+    note.staff ?? (note.partId && /P2|2|bass|left|LH/i.test(String(note.partId)) ? 2 : 1)
+  let y = staffBandY(geometry, staffKey, note.midi, note.partId, staffRanges?.get(staffKey) ?? null)
   y += layoutYOffsetTenths(note.defaultY, span)
   if (note.relativeY != null) {
     y += layoutYOffsetTenths(note.relativeY, span)
@@ -426,6 +433,16 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
     targetKey:
       checkpoint.id ??
       `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
+    // The printed noteheads this event owns. The notehead feedback layer draws
+    // the musician's feedback ON these, so the score itself reports what was
+    // played.
+    notePlacements: uniquePlacements.map((placement) => ({
+      x: placement.x,
+      y: placement.y,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+      sourceBBox: placement.sourceBBox ?? null,
+    })),
     page: uniquePlacements[0].page,
     crossMeasure,
     x: clamp(x, 0, 1),
@@ -550,6 +567,20 @@ export function resolveNoteTargetPosition({
   // Exact rendering is all-or-nothing for a semantic event. If ownership is
   // partial or below the precision threshold, resolve every member through the
   // conservative measure/layout hierarchy so coordinate spaces never mix.
+  // Pitch range per staff, so a note can be placed on its own line when the
+  // score carries no engraved vertical layout.
+  const staffRanges = new Map()
+  for (const note of notes) {
+    if (note?.midi == null) continue
+    const staff = note.staff ?? (note.partId && /P2|2|bass|left|LH/i.test(String(note.partId)) ? 2 : 1)
+    const range = staffRanges.get(staff)
+    if (!range) {
+      staffRanges.set(staff, { min: note.midi, max: note.midi })
+    } else {
+      range.min = Math.min(range.min, note.midi)
+      range.max = Math.max(range.max, note.midi)
+    }
+  }
   const placements = notes.map((note) =>
     resolveSingleNotePosition({
       note,
@@ -559,6 +590,7 @@ export function resolveNoteTargetPosition({
       checkpointTime,
       sourceAnchorIndex: new Map(),
       preferredRepresentation,
+      staffRanges,
     }),
   )
 
@@ -606,6 +638,12 @@ export function resolveNoteTargetPosition({
   }
 
   const noteAnchorY = clamp(y, 0.06, 0.94)
+  // The size of a printed notehead, derived from the staff it sits on (four
+  // staff spaces tall, a notehead is about one space high). The notehead
+  // feedback layer needs this to draw a notehead-sized shape when the exact
+  // printed head is not owned by the score.
+  const staffSpace = Math.max(0.004, (geometry.yBottom - geometry.yTop) / 4)
+  const noteheadSize = { width: staffSpace * 1.16, height: staffSpace * 0.98 }
   const markerY = clamp(
     Math.min(noteAnchorY, geometry.yTop + 0.008) - NOTE_TARGET_MARKER_OFFSET_Y,
     0.04,
@@ -615,6 +653,16 @@ export function resolveNoteTargetPosition({
   return {
     visible: true,
     targetKey: checkpoint.id ?? `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
+    // One placement per note of the event, in the same order as the notes.
+    // The notehead feedback layer draws the musician's feedback ON these, so
+    // the score itself reports what was played.
+    notePlacements: placements.map((placement) => ({
+      x: placement.x,
+      y: placement.y,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+      sourceBBox: placement.sourceBBox ?? null,
+    })),
     page: geometry.page,
     x: clamp(x, 0.03, 0.97),
     y: markerY,
@@ -636,5 +684,6 @@ export function resolveNoteTargetPosition({
     measureNumber,
     crossMeasure,
     placement: geometry.placement,
+    noteheadSize,
   }
 }

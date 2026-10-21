@@ -6,11 +6,25 @@ import {
 } from '../../features/practice/practiceNoteTargetOverlay.js'
 import { SCORE_NOTE_STATE } from '../../features/practice/scoreNoteStates.js'
 import useScoreFollowCursorElement from '../../features/score-follow/useScoreFollowCursorElement.js'
+import NoteheadFeedbackLayer from './NoteheadFeedbackLayer.jsx'
 import {
   ANCHOR_SOURCE,
   isAutomaticAnchorSource,
   normalizeAnchorSource,
 } from '../../features/score-follow/anchorUtils.js'
+
+/**
+ * The floating geometry markers (ring + dot above the staff) are diagnostics,
+ * not practice feedback. They are available only when explicitly asked for
+ * with ?debugNoteMarkers=1 in the URL.
+ */
+function areNoteMarkersEnabled() {
+  try {
+    return new URLSearchParams(window.location.search).has('debugNoteMarkers')
+  } catch {
+    return false
+  }
+}
 
 function clientToNormalized(clientX, clientY, rect) {
   return {
@@ -302,6 +316,7 @@ function ScoreFollowOverlay({
   const hasMarkers = showAnchorMarkers && markerAnchors.length > 0
   const hasSystemStartMarks = systemStartMode && pageSystemStartMarks.length > 0
   const cursorSmoothed = cursor?.smoothed ?? false
+  const showNoteMarkers = areNoteMarkersEnabled()
 
   const stateEntriesOnPage =
     showScoreNoteStates && Array.isArray(scoreNoteStates)
@@ -456,50 +471,36 @@ function ScoreFollowOverlay({
         </div>
       )}
 
-      {noteHighlightOverlays.map((noteHighlightOverlay, index) => (
-        <div
-          key={`${noteTarget.targetKey ?? 'note-target'}-box-${index}`}
-          className={`score-follow-overlay__note-highlight${
-            noteTarget.highlight.isChord ? ' score-follow-overlay__note-highlight--chord' : ''
-          }${
-            noteTarget.highlight.approximate ? ' score-follow-overlay__note-highlight--approximate' : ''
-          }${
-            noteTarget.highlight.renderMode === 'individual-source-boxes'
-              ? ' score-follow-overlay__note-highlight--source'
-              : ''
-          }${
-            noteTarget.mode === 'play-along'
-              ? ' score-follow-overlay__note-highlight--play-along'
-              : ''
-          }`}
-          style={{
-            left: `${noteHighlightOverlay.x0 * 100}%`,
-            top: `${noteHighlightOverlay.y0 * 100}%`,
-            width: `${(noteHighlightOverlay.x1 - noteHighlightOverlay.x0) * 100}%`,
-            height: `${(noteHighlightOverlay.y1 - noteHighlightOverlay.y0) * 100}%`,
-          }}
-          data-practice-note-target="true"
-          data-practice-note-target-key={noteTarget.targetKey ?? undefined}
-          data-practice-note-mode={noteTarget.mode ?? undefined}
-          role={index === 0 ? 'img' : undefined}
-          aria-hidden={index === 0 ? undefined : true}
-          aria-label={
-            index === 0
-              ? `Target note${noteTarget.isChord ? ' chord' : ''} highlight at measure ${noteTarget.measureNumber ?? ''}`
-              : undefined
-          }
-        />
-      ))}
+      {/* The floating geometry marker (ring + dot) is a diagnostic, not
+          practice feedback: it floats above the staff and reads as a separate
+          object. It is kept only behind the explicit debug flag. */}
+      {showNoteMarkers
+        ? noteHighlightOverlays.map((noteHighlightOverlay, index) => (
+            <div
+              key={`${noteTarget.targetKey ?? 'note-target'}-box-${index}`}
+              className={`score-follow-overlay__note-highlight score-follow-overlay__note-highlight--debug${
+                noteTarget.highlight.renderMode === 'individual-source-boxes'
+                  ? ' score-follow-overlay__note-highlight--source'
+                  : ''
+              }`}
+              style={{
+                left: `${noteHighlightOverlay.x0 * 100}%`,
+                top: `${noteHighlightOverlay.y0 * 100}%`,
+                width: `${(noteHighlightOverlay.x1 - noteHighlightOverlay.x0) * 100}%`,
+                height: `${(noteHighlightOverlay.y1 - noteHighlightOverlay.y0) * 100}%`,
+              }}
+              data-practice-note-target="true"
+              data-practice-note-target-key={noteTarget.targetKey ?? undefined}
+              data-practice-note-mode={noteTarget.mode ?? undefined}
+            />
+          ))
+        : null}
 
-      {stateEntriesOnPage.map((entry) => (
-        <ScoreNoteStateHighlight
-          key={entry.key ?? entry.target.targetKey}
-          entry={entry}
-          viewerRotation={viewerRotation}
-        />
-      ))}
+      {stateEntriesOnPage.length > 0 ? (
+        <NoteheadFeedbackLayer entries={stateEntriesOnPage} />
+      ) : null}
 
-      {noteFallbackOverlay && (
+      {showNoteMarkers && noteFallbackOverlay && (
         <div
           className={`score-follow-overlay__note-target score-follow-overlay__note-target--compact${
             noteTarget.isWideChord

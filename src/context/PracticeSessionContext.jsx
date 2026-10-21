@@ -477,8 +477,12 @@ export function PracticeSessionProvider({
           }
         : {
             target: timelineHighlightActive ? timelineScoreTarget.target : null,
+            // Preview is a clean read of the score: the red cursor and the
+            // black engraving are the whole presentation, so no note target is
+            // painted there. Play Along still marks the note being played.
             showOnPage: Boolean(
-              timelineHighlightActive &&
+              isPlayAlong &&
+                timelineHighlightActive &&
                 timelineScoreTarget.target?.visible &&
                 timelineScoreTarget.target.page === visiblePageNumber,
             ),

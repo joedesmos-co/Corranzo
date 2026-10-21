@@ -17,15 +17,21 @@
  */
 
 /** Engraved note states, mirroring the PDF overlay palette (see App.css). */
+/**
+ * Notehead feedback colours. A note the musician played is BLUE, a note
+ * completed with help is YELLOW, an expected note that was missed is RED.
+ * These match the PDF overlay's native-notehead feedback.
+ */
 export const OSMD_NOTE_COLORS = {
-  current: '#2563eb',
-  'current-partial': '#2563eb',
-  completed: '#3f9e5f',
-  wrong: '#e0494b',
-  missed: '#b56b6d',
+  current: '#1d4ed8',
+  'current-partial': '#1d4ed8',
+  completed: '#1d4ed8',
+  assisted: '#a16207',
+  wrong: '#b91c1c',
+  missed: '#b91c1c',
   // Per-tone chord split inside a partial chord.
-  toneDone: '#3f9e5f',
-  toneNeeded: '#2563eb',
+  toneDone: '#1d4ed8',
+  toneNeeded: '#1d4ed8',
   /** Position marker only (Preview cursor note) — deliberately neutral. */
   cursor: '#1f2937',
 }
