@@ -1997,3 +1997,22 @@ not.
 
   Integration recommendation: do NOT integrate; no measured improvement over
     live implementation.
+
+
+## 4-day launch sprint: pretrained OMR benchmark + quality gate (this session)
+
+  Benchmarked homr 0.7.0 (AGPL-3.0) on 5 DEV render pages:
+    Runtime ~15-44s/page on CPU; produces full MusicXML with key signatures,
+    voices, chords, rests, beams. AGPL -> isolated research evaluation only;
+    production implications unresolved. No integration this session.
+
+  Implemented input-quality gate in auto_e2e: if staff detection yields no
+    frames or no notes, emit a withheld-result MusicXML with credit
+    "Input quality too low for reliable transcription; result withheld."
+    instead of fabricating notation. (Safety net; not triggered on the 5
+    clean DEV renders.)
+
+  No measured accuracy improvement; baseline unchanged (607 complete,
+    rest recall .296, dur_acc .760). Deeper architecture review justified.
+
+  Sealed TEST untouched. Not merged to main.

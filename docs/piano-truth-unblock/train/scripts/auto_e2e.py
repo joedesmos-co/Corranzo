@@ -356,6 +356,33 @@ def main():
         notes, rests, clefs_by_page, _evs = run_detections(sid, templates,
                                                            models, voc,
                                                            rest_templates)
+        # Input-quality gate: do not fabricate notation from unreadable input.
+        _quality = "ok"
+        if not notes or not clefs_by_page:
+            _quality = "unreadable"
+        for pg, (frames, clefs) in clefs_by_page.items():
+            if not frames:
+                _quality = "unreadable"
+        if _quality == "unreadable":
+            xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+                   '<score-partwise version="4.0"><credit><credit-words>'
+                   'Input quality too low for reliable transcription; result withheld.'
+                   '</credit-words></credit><part-list><score-part id="P1">'
+                   '<part-name>Piano</part-name></score-part></part-list>'
+                   '<part id="P1"><measure number="1"><attributes><divisions>4</divisions>'
+                   '</attributes><note><rest measure="yes"/><duration>4</duration>'
+                   '<voice>1</voice></note></measure></part></score-partwise>')
+            # attach credit via a separate minimal wrapper is not possible here;
+            # record quality in per_score and skip evaluation.
+            (outdir / f"{sid}.musicxml").write_text(xml)
+            per_score[sid] = {"quality": "unreadable", "auto_notes": 0,
+                              "auto_rests": 0, "note_tp": 0, "note_fp": 0,
+                              "note_fn": len(tn) if False else 0,
+                              "pitch_ok": 0, "dur_ok": 0, "complete": 0,
+                              "rest_tp": 0, "rest_fp": 0, "rest_fn": 0,
+                              "truth_notes": len(tn), "truth_rests": len(tr)}
+            print(f"[e2e] {sid[:8]} UNREADABLE input - withheld", flush=True)
+            continue
         events = assemble(notes, rests, clefs_by_page)
         xml = emit_musicxml(events, clefs_by_page)
         (outdir / f"{sid}.musicxml").write_text(xml)
