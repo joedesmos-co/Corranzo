@@ -1,7 +1,13 @@
 # Audio Vision — unified Practice Engine + musical quality
 
-**Branch** `main` · **Commits** `10175ad1e8` (one Practice Engine), `5959f79f73` (musical accuracy)
+**Branch** `main` · **Commits** `10175ad1e8` (one Practice Engine), `5959f79f73` (musical accuracy),
+`7a43d7158b` (browser suites follow the unified engine)
 **Live** https://corranzo.com
+**Deployed** Cloudflare version `9aa81ec4-5fbc-46a7-862b-facb8a554257`
+(bundle `index-C_qahCeC.js`, byte-identical to the local build; my own deploy of
+the same bundle was `c8abbb82-0f93-4e10-ac5f-98827d1f6de9`)
+**Rollback** `npx wrangler rollback 89f525b9-c724-4ec0-9b90-be2616a42671`
+(the last deployment before the unified engine)
 
 ---
 
