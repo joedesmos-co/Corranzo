@@ -17,7 +17,7 @@ import { METRONOME_COUNT_IN_OPTIONS, METRONOME_SUBDIVISION_OPTIONS } from '../..
 
 const TITLES = { tempo: 'Find your tempo', loop: 'Work a passage', sound: 'Sound & accompaniment', input: 'Hear your playing', settings: 'Workspace settings' }
 
-export default function WorkspaceTools({ tool, onClose, returnFocusTo, session: s, scoreFollow, fileName, pageNumber, practiceStats, pieceId, onReport }) {
+export default function WorkspaceTools({ tool, onClose, returnFocusTo, session: s, scoreFollow, fileName, pageNumber, practiceStats, pieceId, engraved = false, onReport }) {
   const ref = useRef(null)
   useEffect(() => {
     const prior = returnFocusTo.current || document.activeElement
@@ -74,10 +74,18 @@ export default function WorkspaceTools({ tool, onClose, returnFocusTo, session: 
           <PracticeScopeSection visible={s.practiceScopeAvailable} practiceScope={s.rawPracticeScope} onPracticeScopeChange={s.setPracticeScope} disabled={s.timingDisabled} compact />
         </>}
         {tool === 'settings' && <>
-          <label className="workspace-check"><input type="checkbox" checked={scoreFollow.enabled} onChange={e => scoreFollow.setEnabled(e.target.checked)} /> Follow the score</label>
-          <p>Keep the current phrase in view as you play.</p>
+          {engraved ? (
+            <>
+              <p className="workspace-hint">This score is engraved, so it always follows the music — there is nothing to calibrate against a page.</p>
+            </>
+          ) : (
+            <>
+              <label className="workspace-check"><input type="checkbox" checked={scoreFollow.enabled} onChange={e => scoreFollow.setEnabled(e.target.checked)} /> Follow the score</label>
+              <p>Keep the current phrase in view as you play.</p>
+            </>
+          )}
           <details><summary>Advanced practice & score setup</summary>
-            <PracticeSetupPanel session={s} scoreFollow={scoreFollow} />
+            {!engraved && <PracticeSetupPanel session={s} scoreFollow={scoreFollow} />}
             <PracticeFilesSummary pdfFileName={fileName} hasMidi={s.hasMidi} hasMusicXml={s.hasMusicXml} playbackFileName={s.sources.playbackFileName} timingFileName={s.sources.timingFileName} timingError={s.timing.error} timingLoading={s.timing.isLoading} />
             <PracticeDiagnosticsPanel session={s} scoreFollow={scoreFollow} pieceName={fileName} pdfPageNumber={pageNumber} />
           </details>

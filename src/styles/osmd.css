@@ -1,12 +1,5 @@
 /* Engraved score surface (OSMD). The score is a bounded, scrollable region:
    practice needs the current measure on screen, not a document dump. */
-.arrangement-practice {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 0;
-}
-
 .osmd-score {
   flex: 1 1 auto;
   min-height: 220px;
@@ -24,12 +17,53 @@
   border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 10px;
   padding: 8px;
+  /* The engraved cursor is positioned against this box. */
+  position: relative;
+}
+
+/* The red practice cursor on an engraved score. It reuses the PDF surface's
+   bar styling (the same variables and colours), so both surfaces show the
+   same line. */
+.engraved-score-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 3;
+  display: none;
+}
+
+.engraved-score-cursor__line {
+  display: block;
+  width: 2px;
+  height: 100%;
+  margin: 0 0 0 -1px;
+  border-radius: 1px;
+  background: var(--score-follow-bar-color);
+  box-shadow:
+    0 0 6px var(--score-follow-bar-glow),
+    0 0 1px var(--score-follow-bar-edge);
+  transition: opacity 0.12s ease;
 }
 
 .osmd-score__container svg {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Inside the unified practice workspace the engraved score fills the score
+   area exactly like a PDF page does, and scrolls when the music is long. */
+.practice-workspace__score > .osmd-score {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.practice-workspace__score .osmd-score__container {
+  max-height: none;
+  min-height: 0;
 }
 
 .osmd-score__container--ready {
