@@ -1956,3 +1956,44 @@ not.
     importers; Corranzo UI display of the uncertainty is not verified in
     this session (no UI run). Recommend UI read the miscellaneous field and
     block playable export until attested. Key recognition stays OFF.
+
+
+## Automatic OMR accuracy rescue (this session)
+
+  M1 root-cause: auto_e2e baseline on 5 DEV renders (902 truth notes):
+    note P .931 / R .957; pitch_acc .907; dur_acc .760; complete .703 (607);
+    rest recall .296 (8/27). Largest error contributors: beamed durations
+    (0.584), rests (0.296 recall), note detection FP 64. Pitch already
+    strong. Timing_valid 0.333. Scan path remains separate and weak
+    (pitch overlap .157).
+
+  M2 real-image eval: existing 5 DEV renders + scan verification strips;
+    no new data added. Auto path is render-only (no scan pipeline in
+    auto_e2e). Sealed TEST untouched.
+
+  M3 attempted improvements:
+    (a) Beam-count image classifier: trained on 8000 render crops with
+        SVG-derived labels -> dev20 acc .788, class3 0.000. REJECTED.
+    (b) Rest detection staff-line removal: candidate coverage .296 -> .852,
+        but template recognition collapsed (scores .28, rest_tp 0). REVERTED.
+    No verified automatic improvement this session.
+
+  M4 input-quality gate: not implemented; auto path has no quality check.
+    Recommend adding resolution/staff-detection confidence thresholds and
+    abstention. Not done this session.
+
+  M5 notation completeness: tracked; key sig OFF; rests limited; beams
+    limited in auto path; chords/voices handled in reconstruction path.
+
+  M6 evaluation: no before/after improvement; baseline unchanged.
+
+  Remaining blockers: (1) beamed duration in image-only path (needs
+    beam-aware trained head with scan supervision); (2) rest detection
+    (needs better segmentation + recognition); (3) no scan auto pipeline;
+    (4) no input-quality gate. A deeper architecture review (Astra 6) is
+    justified: the existing per-note-head + frozen probe approach has
+    plateaued; progress requires either scan-side supervised data or a
+    joint detection+recognition model.
+
+  Integration recommendation: do NOT integrate; no measured improvement over
+    live implementation.
