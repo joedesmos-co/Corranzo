@@ -43,28 +43,33 @@ try {
   const hasMarkers = await page.locator('.cz-notehead').count()
   console.log('markers', hasMarkers, 'expected', JSON.stringify(expected))
 
-  const clip = await page.evaluate(() => {
-    const heads = [...document.querySelectorAll('.cz-notehead')]
-    if (!heads.length) return null
-    let x0 = Infinity
-    let y0 = Infinity
-    let x1 = -Infinity
-    let y1 = -Infinity
-    for (const el of heads) {
-      const r = el.getBoundingClientRect()
-      x0 = Math.min(x0, r.left)
-      y0 = Math.min(y0, r.top)
-      x1 = Math.max(x1, r.right)
-      y1 = Math.max(y1, r.bottom)
-    }
-    const pad = 90
-    return {
-      x: Math.max(0, x0 - pad),
-      y: Math.max(0, y0 - pad),
-      width: Math.min(1440, x1 - x0 + pad * 2),
-      height: Math.min(960, y1 - y0 + pad * 2),
-    }
-  })
+  const clip = process.env.CLIP
+    ? (() => {
+        const [x, y, width, height] = process.env.CLIP.split(',').map(Number)
+        return { x, y, width, height }
+      })()
+    : await page.evaluate(() => {
+      const heads = [...document.querySelectorAll('.cz-notehead')]
+      if (!heads.length) return null
+      let x0 = Infinity
+      let y0 = Infinity
+      let x1 = -Infinity
+      let y1 = -Infinity
+      for (const el of heads) {
+        const r = el.getBoundingClientRect()
+        x0 = Math.min(x0, r.left)
+        y0 = Math.min(y0, r.top)
+        x1 = Math.max(x1, r.right)
+        y1 = Math.max(y1, r.bottom)
+      }
+      const pad = 90
+      return {
+        x: Math.max(0, x0 - pad),
+        y: Math.max(0, y0 - pad),
+        width: Math.min(1440, x1 - x0 + pad * 2),
+        height: Math.min(960, y1 - y0 + pad * 2),
+      }
+    })
   if (clip) {
     await page.screenshot({ path: OUT, clip })
     console.log('clip', JSON.stringify(clip), '->', OUT)

@@ -118,7 +118,8 @@ distinct cursor positions across one checkpoint change : 2
 largest single-frame jump                               : 41.06 px
 ```
 
-That is a teleport: the cursor was on one note, then on the next.
+That is a teleport: the cursor was on one note, then on the next — it covered
+the **entire** 41.06 px gap in a single frame.
 
 ### The fix
 
@@ -136,13 +137,17 @@ That is a teleport: the cursor was on one note, then on the next.
 
 | surface | engine | distinct positions | largest frame jump |
 |---|---|---|---|
-| WFY checkpoint change | Chromium | 15–16 | 4.6–8.9 px |
-| WFY checkpoint change | WebKit | 16 | 4.64 px |
-| Play Along, continuous | Chromium | 157 frames in 2.6 s | **2.19 px**, 0 backward steps |
+| WFY checkpoint change (live, after deploy) | Chromium | 14 | 10.0 px |
+| WFY checkpoint change (live, after deploy) | WebKit | 10 | 8.8 px |
+| WFY checkpoint change (local) | Chromium | 14 | 11.1 px |
+| WFY checkpoint change (local) | WebKit | 8 | 16.8 px |
+| Play Along, continuous (live) | Chromium | 157 frames in 2.6 s | **2.09 px**, 0 backward steps |
 | WFY while waiting | Chromium + WebKit | held still (drift < 0.1 px) | — |
 
-The cursor **holds on the required note** while the musician plays, and the
-single canonical practice clock is unchanged.
+The journey is 41.06 px. Before the fix the cursor covered **all 41.06 px in a
+single frame**; after the fix no single frame covers more than half of it. The
+cursor **holds on the required note** while the musician plays, and the single
+canonical practice clock is unchanged.
 
 ## 4. Audio cancellation
 
@@ -181,14 +186,28 @@ Verified with the existing suites plus new engraving assertions:
 
 | suite | result |
 |---|---|
-| `npm test` (vitest, 389 files) | see §8 |
-| `browser-live-practice-rescue.mjs` (Chromium) | 14/14 pass |
-| `browser-live-practice-rescue.mjs` (WebKit) | 13/13 pass (MIDI-injection checks are Chromium-only — WebKit has no Web MIDI) |
-| `browser-practice-surface-regression.mjs` (Chromium) | 11/11 pass |
+| `npm test` (vitest, 389 files) | **3876 passed, 19 skipped, 0 failed** (EXIT=0) |
+| `browser-live-practice-rescue.mjs` (Chromium, local) | 14/14 pass |
+| `browser-live-practice-rescue.mjs` (WebKit, local) | 13/13 pass (the MIDI-injection checks are Chromium-only — WebKit has no Web MIDI) |
+| `browser-practice-surface-regression.mjs` (Chromium, local) | 11/11 pass |
 | `browser-audio-vision-critical-ux.mjs` | 19/19 pass |
 | `browser-audio-vision-unified-webkit.mjs` | 12/12 WebKit, 12/12 Chromium |
-| `browser-practice-reliability-e2e.mjs` | see §8 |
-| `browser-pdf-first-regression.mjs` | see §8 |
+| `browser-practice-reliability-e2e.mjs` | 18/18 pass (import, wrong note, partial chord, repeated notes, restart, mode switch, **switch songs**, no stale score data) |
+| `browser-pdf-first-regression.mjs` | 4/4 pass (PDF import → Open score → the PDF practice workspace, all three modes intact) |
+
+### Against the **live** site after deployment
+
+| suite | engine | result |
+|---|---|---|
+| `browser-live-practice-rescue.mjs` | Chromium | 7/7 pass — 0 drawn shapes, 14 intermediate cursor positions, largest frame jump **10.0 px** (bound 20.5 px), cursor holds while waiting, transport frozen in WFY |
+| `browser-live-practice-rescue.mjs` | WebKit | 7/7 pass — 0 drawn shapes, 10 intermediate positions, largest frame jump **8.8 px** |
+| `browser-practice-surface-regression.mjs` | Chromium | 11/11 pass — Play Along cursor 157 continuous frames, largest jump **2.09 px**, 0 backward steps; pause during instrument loading never starts the music; fit page / fit width / resize / scroll / tempo all clean |
+| `browser-audio-vision-critical-ux.mjs` | Chromium | **19/19 pass** (guitar six-line TAB, tempo correction, persistence across restart, all four failure modes) |
+| `browser-audio-vision-unified-webkit.mjs` | WebKit | **12/12 pass** (cursor on the notation staff, natural width, short score not stretched, separate TAB staff) |
+
+The MIDI-injection checks cannot run against a production build (the hook is a
+development affordance compiled out of production), so they are reported as
+*not applicable* on the live site rather than as passed.
 
 ## 7. Files changed
 
@@ -233,7 +252,50 @@ description),
 
 ## 8. Deployment
 
-*(filled in after the deploy)*
+**Ownership.** No other `wrangler` process was running, and no other agent
+session held the deploy; the deployment was made from the canonical `main`
+worktree (`/Users/ryland/Documents/scoreflow`) after the commit was fast-
+forwarded onto `main` and pushed, so the deployed tree and the published git
+tree are the same bytes.
+
+| | |
+|---|---|
+| Commit | `2c6fa3bbaf` — *fix(practice): lengthen the WFY checkpoint glide and judge it by travel distance* |
+| Branch history | `codex/live-practice-rescue` (`c2aa2fa223` → `2c6fa3bbaf`), fast-forwarded onto `main`, pushed to `origin/main` |
+| Cloudflare version ID | **`2dfa5472-b9d4-43aa-8d91-8af12b7f7760`** |
+| Live bundle | `assets/index-nKtwCllR.js` (byte-identical to the local build) |
+| Routes | `/`, `/privacy`, `/terms`, `/contact` → HTTP 200 |
+| Previous live version (rollback target) | `9ce1c710-96fc-4827-8bcb-53d8cf6a226b` (bundle `index-WAVIfkxz.js`) |
+| Intermediate version | `d82376f9-8de2-49e8-b578-d4392d069fab` (bundle `index-BzfNBIlm.js`) — the first deploy of this session, superseded by the glide refinement |
+
+```bash
+npx wrangler rollback 9ce1c710-96fc-4827-8bcb-53d8cf6a226b   # back to the pre-repair release
+git revert 2c6fa3bbaf c2aa2fa223                             # on main, then rebuild and redeploy
+```
+
+**Live verification** (all against `https://corranzo.com`, production build):
+
+| what | Chromium | WebKit |
+|---|---|---|
+| PDF score draws **no** fabricated note shape | 0 | 0 |
+| WFY cursor intermediate positions | 14 | 10 |
+| WFY cursor largest single-frame jump | 10.0 px | 8.8 px |
+| WFY cursor holds on the required note | yes | yes |
+| Play Along cursor | 157 continuous frames, 2.09 px max jump, 0 backward steps | — |
+| Pause during instrument loading | music never started | — |
+| Zoom (fit page / fit width), resize, scroll, tempo | clean | — |
+| Audio Vision critical UX | 19/19 | — |
+| Audio Vision unified + engraving | — | 12/12 |
+
+### Before / after, same pixels
+
+- `tmp/pdf-notehead-geometry/closeup-old.png` — **before**: two light-blue
+  rings floating in blank paper and over the `3/4` time signature.
+- `tmp/pdf-notehead-geometry/closeup-live-after.png` — **after (live)**: the
+  identical region shows only clean printed notation and the red cursor.
+- `tmp/live-rescue/chromium-after/pdf-controls-feedback.png` — the practice
+  controls reporting the recognition result (blue ticks for played notes, the
+  required note outlined).
 
 ## 9. Remaining limitations
 
