@@ -471,7 +471,7 @@ export async function estimateTempoFromEnvelope(envelope, frameSeconds, { minBpm
 
 
 /** Beat grid from tempo + first strong onset anchor. */
-export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, anchorFrame = null, flux = null }) {
+export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, anchorFrame = null, anchorSeconds = null, flux = null }) {
   // REJECTED EXPERIMENT (measured, then removed): flux-based phase refinement.
   // It searched for the grid phase that puts the most onset energy on beats, but
   // the median residual against MIDI truth got slightly worse on two of three
@@ -482,7 +482,14 @@ export function buildBeatGrid({ onsetFrames, frameSeconds, bpm, totalSeconds, an
   // i.e. transcription is faithful and the remaining offset is grid phase.
   void flux
   const period = 60 / bpm
-  const anchor = ((anchorFrame ?? onsetFrames[0] ?? 0) * frameSeconds) || 0
+  // The grid's PHASE decides where the bars fall. The first transcribed note
+  // is the earliest musical event we know exactly, so it anchors the grid: a
+  // grid that starts one beat late folds the recording's first beat into the
+  // second one (measured: the arrangement's first measure held two different
+  // beats, and every note sat one beat early).
+  const anchor = Number.isFinite(anchorSeconds)
+    ? anchorSeconds
+    : ((anchorFrame ?? onsetFrames[0] ?? 0) * frameSeconds) || 0
   const beats = []
   // Backfill to 0 then forward.
   let start = anchor

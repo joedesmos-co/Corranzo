@@ -262,7 +262,17 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   const melodyByBeat = (analysis.melody ?? []).map((m) => ({ beat: (m.seconds - (analysis.beats.beats[0] ?? 0)) / analysis.beats.beatPeriodSeconds, midi: m.midi }))
   let arranged
   if (targetPart === PART_INSTRUMENTS.SOLO_PIANO) {
-    arranged = arrangeSoloPiano({ quantizedNotes: quantized, chords: analysis.chords, melodyByBeat, difficulty, melodyContour })
+    arranged = arrangeSoloPiano({
+      quantizedNotes: quantized,
+      chords: analysis.chords,
+      melodyByBeat,
+      difficulty,
+      melodyContour,
+      // Chord windows are emitted per beat, so the arranger resolves them by
+      // time; it needs the beat grid's origin and period to do that.
+      beat0: analysis.beats.beats[0] ?? 0,
+      beatPeriod: analysis.beats.beatPeriodSeconds,
+    })
   } else {
     arranged = arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty, melodyContour })
   }

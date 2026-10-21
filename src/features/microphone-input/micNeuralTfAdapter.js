@@ -17,12 +17,49 @@ export const NEURAL_WARMUP_SECONDS = 0.5
 /**
  * Silence-skip floor (measured 2026-10-08 on real clips): true DAT
  * silence sits at rms 0.00014 while the softest verified real note
- * (pp piano) is 0.00445 and quiet electric 0.01276. Below 0.001 there
- * is no musical signal — skipping inference kills room-tone
+ * (pp piano) is 0.00445 and quiet electric 0.01276. Below the floor
+ * there is no musical signal — skipping inference kills room-tone
  * hallucinations at the source and saves the GPU for real audio.
+ *
+ * Calibrated 0.001 -> 0.003 (overnight reliability mission): the WebGL
+ * backend HALLUCINATES C4 + friends on real room tone at 0.0023 RMS
+ * (per-100 ms polls max 0.00233, flat) and completed a [60] checkpoint
+ * end to end — the CPU backend stays silent on the same audio. pp piano
+ * attack polls peak 0.024 with median 0.0042, so 0.003 keeps every
+ * attack inferring while sustained room tone (all polls below) never
+ * reaches the model. pp sustain tails below the floor skip inference;
+ * completion is attack-driven and unaffected. A hot mic preamp can push
+ * room tone above any fixed floor — adaptive floor is follow-up work.
  */
-export const NEURAL_SILENCE_SKIP_RMS = 0.001
+export const NEURAL_SILENCE_SKIP_RMS = 0.003
 export const NEURAL_SILENCE_SKIP_FRAMES = 5
+/**
+ * Frozen pre-play ambient calibration (M3): the neural skip floor adapts
+ * to the room ONCE from the first polls, then never drifts (music must
+ * never be learned as background — sustained notes would drag any
+ * continuous estimator upward and mute quiet playing).
+ *
+ * ambient = minimum of the first NEURAL_AMBIENT_POLLS poll RMS values
+ * (music only raises RMS, so the minimum is closest to the room even if
+ * the user starts playing immediately). Frozen afterwards by the caller.
+ * floor = clamp(ambient * NEURAL_AMBIENT_RATIO, NEURAL_SILENCE_SKIP_RMS,
+ * NEURAL_AMBIENT_MAX): the fixed floor is the stable fallback (never
+ * below — quiet rooms keep the validated behavior), the cap keeps loud
+ * rooms from muting pp attacks (pp attack polls peak 0.024).
+ */
+export const NEURAL_AMBIENT_POLLS = 10
+export const NEURAL_AMBIENT_RATIO = 1.5
+export const NEURAL_AMBIENT_MAX = 0.006
+
+export function calibrateNeuralFloor(ambientRms) {
+  if (!Number.isFinite(ambientRms) || ambientRms < 0) {
+    return NEURAL_SILENCE_SKIP_RMS
+  }
+  return Math.min(
+    NEURAL_AMBIENT_MAX,
+    Math.max(NEURAL_SILENCE_SKIP_RMS, ambientRms * NEURAL_AMBIENT_RATIO),
+  )
+}
 
 /**
  * Silence-skip decision (pure + tested): skip inference only when the
@@ -215,5 +252,9 @@ export async function runNeuralWindow(modelOrRuntime, modelModule, samples22050)
     midi: Math.round(note.pitchMidi),
     startOffsetSeconds: note.startTimeSeconds,
     endOffsetSeconds: note.startTimeSeconds + note.durationSeconds,
+    // The model's own note strength. Callers that compare simultaneous notes
+    // (for example the arrangement's harmonic-double suppression) need it to
+    // tell the real note from its octave artifact.
+    amplitude: Number.isFinite(note.amplitude) ? note.amplitude : null,
   }))
 }
