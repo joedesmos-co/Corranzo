@@ -18,7 +18,7 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = join(__dir, '..')
 const outDir = join(root, 'tmp', 'audio-vision-unified-webkit')
 const PORT = Number(process.env.E2E_PORT ?? 5661)
-const baseUrl = `http://127.0.0.1:${PORT}/`
+const baseUrl = process.env.E2E_BASE_URL ?? `http://127.0.0.1:${PORT}/`
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const report = { passes: [], failures: [], consoleErrors: [], pageErrors: [] }
 const pass = (name, detail = '') => { report.passes.push({ name, detail }); console.log(`PASS  ${name} ${detail}`) }
@@ -65,14 +65,14 @@ async function writeFigureWav(path, seconds = 4) {
 await mkdir(outDir, { recursive: true })
 const wavPath = await writeFigureWav(join(outDir, 'figure.wav'))
 
-const vite = await createServer({
+const externalBase = Boolean(process.env.E2E_BASE_URL)
+const vite = externalBase ? null : await createServer({
   root,
   configFile: join(root, 'vite.config.js'),
   logLevel: 'silent',
   server: { host: '127.0.0.1', port: PORT, strictPort: true },
 })
-await vite.listen()
-await sleep(800)
+if (vite) { await vite.listen(); await sleep(800) }
 
 const { webkit } = await import('playwright')
 let browser = null
@@ -187,7 +187,7 @@ try {
   fail('webkit harness', String(error?.stack ?? error).slice(0, 500))
 } finally {
   try { await browser?.close() } catch { /* noop */ }
-  try { await vite.close() } catch { /* noop */ }
+  try { await vite?.close() } catch { /* noop */ }
 }
 
 console.log(`\npass=${report.passes.length} fail=${report.failures.length} consoleErrors=${report.consoleErrors.length} pageErrors=${report.pageErrors.length}`)

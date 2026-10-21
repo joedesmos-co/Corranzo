@@ -293,13 +293,15 @@ async function openArrangementInPractice(page) {
     hasPdfPanel: Boolean(document.querySelector('.score-import-file')),
     bodyText: (document.querySelector('.score-import')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 400),
   }))
-  await page.getByRole('button', { name: /open score/i }).click()
-  // The unified practice engine engraves the arrangement's own MusicXML in the
-  // normal workspace (there is no separate arrangement panel any more).
-  await page
-    .locator('.osmd-score__container[data-osmd-ready="true"]')
-    .first()
-    .waitFor({ timeout: 90000 })
+  // The "Open score" button only exists once the arrangement's timing is
+  // ready; wait for it rather than racing the preparation.
+  const openScore = page.getByRole('button', { name: /^open score$/i }).first()
+  await openScore.waitFor({ state: 'visible', timeout: 90000 })
+  await openScore.click()
+  // The practice workspace is always mounted (hidden until it is the active
+  // view), so wait for the visible one.
+  await page.locator('.workspace-frame .workspace-dock').first().waitFor({ state: 'visible', timeout: 90000 })
+  await page.locator('.osmd-score__container[data-osmd-ready="true"]').first().waitFor({ state: 'visible', timeout: 90000 })
   return importState
 }
 
@@ -360,15 +362,14 @@ async function readPersistedMusicXml(page, { waitMs = 8000 } = {}) {
 
 async function practiceSurfaceState(page) {
   return page.evaluate(() => ({
-    // The arrangement is engraved in the shared practice workspace.
-    hasArrangementSurface: Boolean(
-      document.querySelector('.osmd-score, .osmd-container, svg.osmd'),
-    ),
+    // One Practice Engine: the workspace frame + the transport dock, with the
+    // engraved arrangement as the score surface.
+    hasUnifiedWorkspace: Boolean(document.querySelector('.workspace-frame .workspace-dock')),
+    hasEngravedScore: Boolean(document.querySelector('.osmd-score__container[data-osmd-ready="true"] svg')),
     hasPdfCanvas: Boolean(document.querySelector('.workspace-frame canvas, .workspace-frame embed')),
     hasPdfFileCard: Boolean(document.querySelector('.score-import-file')),
-    hasOsmdScore: Boolean(document.querySelector('.osmd-score, .osmd-container, svg.osmd')),
     svgCount: document.querySelectorAll('svg').length,
-    targets: (document.querySelector('.osmd-score')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 300),
+    modes: [...document.querySelectorAll('.workspace-modes [role="radio"]')].map((b) => b.textContent?.trim()),
     practiceText: (document.querySelector('.practice-workspace')?.textContent ?? '').replace(/\s+/g, ' ').slice(0, 300),
   }))
 }
@@ -474,8 +475,8 @@ try {
     pass('A2 import view shows the arrangement, not PDF A')
   }
   const stateA = await practiceSurfaceState(page)
-  if (stateA.hasArrangementSurface && !stateA.hasPdfCanvas) {
-    pass('A3 Open Score opens the generated arrangement', 'arrangement surface, no PDF canvas')
+  if (stateA.hasUnifiedWorkspace && stateA.hasEngravedScore && !stateA.hasPdfCanvas) {
+    pass('A3 Open Score opens the generated arrangement', 'the full Practice Engine with the engraved arrangement, no PDF canvas')
   } else {
     fail('A3 Open Score opens the generated arrangement', JSON.stringify(stateA).slice(0, 300))
   }
@@ -496,28 +497,37 @@ try {
   const genB = await generateArrangement(page, wavPath, { target: 'solo-piano', difficulty: 'easy', label: 'B' })
   await openArrangementInPractice(page)
   const stateB = await practiceSurfaceState(page)
-  if (stateB.hasArrangementSurface) {
-    pass('B1 piano arrangement opens its own practice surface')
+  if (stateB.hasUnifiedWorkspace && stateB.hasEngravedScore) {
+    pass('B1 piano arrangement opens the full Practice Engine')
   } else {
-    fail('B1 piano arrangement opens its own practice surface', JSON.stringify(stateB).slice(0, 240))
+    fail('B1 piano arrangement opens the full Practice Engine', JSON.stringify(stateB).slice(0, 240))
   }
-  // The unified transport labels the control "Play (Space)".
-  const playBtn = page.getByRole('button', { name: /^play(\s*\(space\))?$/i }).first()
+  const playBtn = page.getByRole('button', { name: /^play \(space\)$/i }).first()
   if (await playBtn.count()) {
+    // The transport is disabled while the sound engine loads; wait for it.
+    await page.waitForFunction(() => {
+      const button = [...document.querySelectorAll('button')].find((el) => /^play \(space\)$/i.test(el.getAttribute('aria-label') ?? ''))
+      return button && !button.disabled
+    }, null, { timeout: 30000 }).catch(() => {})
     await playBtn.click()
-    const paused = await page
-      .getByRole('button', { name: /^pause(\s*\(space\))?$/i })
-      .first()
-      .waitFor({ timeout: 30000 })
-      .then(() => true)
-      .catch(() => false)
+    const paused = await page.getByRole('button', { name: /^pause \(space\)$/i }).first().waitFor({ timeout: 30000 }).then(() => true).catch(() => false)
     if (paused) {
       pass('B2 piano arrangement preview playback engages')
       await shot(page, 'B2-piano-playing')
     } else {
-      fail('B2 piano arrangement preview playback engages', 'no Pause button after Play')
+      const state = await page.evaluate(() => {
+        const button = [...document.querySelectorAll('button')].find((el) => /^(play|pause)/i.test(el.getAttribute('aria-label') ?? ''))
+        const cursor = document.querySelector('[data-engraved-cursor="true"]')
+        return {
+          label: button?.getAttribute('aria-label') ?? null,
+          disabled: button?.disabled ?? null,
+          cursorLeft: Math.round(cursor?.getBoundingClientRect().left ?? -1),
+          status: document.querySelector('.workspace-status')?.textContent?.replace(/\s+/g, ' ').trim() ?? null,
+        }
+      })
+      fail('B2 piano arrangement preview playback engages', JSON.stringify(state))
     }
-    const pauseBtn = page.getByRole('button', { name: /^pause(\s*\(space\))?$/i }).first()
+    const pauseBtn = page.getByRole('button', { name: /^pause \(space\)$/i }).first()
     if (await pauseBtn.count()) await pauseBtn.click()
   } else {
     fail('B2 piano arrangement preview playback engages', 'no Play button')
@@ -566,7 +576,7 @@ try {
   await openArrangementInPractice(page)
   const xmlF = await readPersistedMusicXml(page)
   const stateF = await practiceSurfaceState(page)
-  if (stateF.hasArrangementSurface && xmlF && !/demo-minuet/.test(xmlF)) {
+  if (stateF.hasUnifiedWorkspace && stateF.hasEngravedScore && xmlF && !/demo-minuet/.test(xmlF)) {
     pass('F1 the second arrangement is the active score', 'previous arrangement did not replace it')
   } else {
     fail('F1 the second arrangement is the active score', JSON.stringify(stateF).slice(0, 200))
@@ -593,8 +603,8 @@ try {
   // PDF that was imported earlier in this run.
   await sleep(1500)
   const stateE = await practiceSurfaceState(page)
-  if (stateE.hasArrangementSurface) {
-    pass('E2 the restored arrangement reopens in practice', 'arrangement surface after restart')
+  if (stateE.hasUnifiedWorkspace && stateE.hasEngravedScore) {
+    pass('E2 the restored arrangement reopens in practice', 'the Practice Engine with the arrangement after restart')
   } else {
     fail('E2 the restored arrangement reopens in practice', JSON.stringify(stateE).slice(0, 240))
   }
