@@ -803,3 +803,26 @@ use pdfjs-dist; this probe uses PyMuPDF for research only.
 Remaining: staff-line detection minrun needs to be staff-relative
 (not fixed 40); digit-to-staff assignment needs fret-to-string logic;
 rest detection needs a separate path.
+
+### R21 — PDF text-layer hybrid (M2-M4, genuine prototype)
+proof-pdf-hybrid.py now uses pdfjs-dist (Apache 2.0, already in the repo
+via react-pdf) for BOTH text extraction and page rasterization. No
+PyMuPDF, no SVG metadata, no viewBox, no fixture manifests, no GT at
+inference. Geometry (staff lines, TAB staves) from pixels only.
+
+Results on genuine PDFs:
+  guitar-paired-chords-vector: 217 text items -> 124 digit-like -> 116 on TAB staff (93.5%)
+  guitar-tab-sparse-vector: 59 -> 40 -> 36 (90%)
+  guitar-paired-scan (scanned, textlen=0): 0 digit spans, 3 staves detected
+    -> raster fallback triggers cleanly
+  guitar-standard-chords-vector (notation-only, no TAB): 134 spans, 8 digit-like, 0 on staff
+    -> correctly abstains (no TAB staves)
+
+Licensing: PyMuPDF (AGPL/commercial) was useful for research but is NOT
+needed for production. pdfjs-dist (Apache 2.0) is already bundled via
+react-pdf and provides both text extraction and rasterization. The
+production hybrid should use pdfjs-dist exclusively.
+
+Remaining: fret-to-string assignment needs the actual notehead/staff
+geometry; measure/rhythm reconstruction needs the TAB system's barlines;
+multi-page and chord handling need testing on real multi-page scores.
