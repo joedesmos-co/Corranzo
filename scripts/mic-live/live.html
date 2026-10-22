@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>production mic live harness</title>
+</head>
+<body>
+  <main>production mic live harness (v2 score-informed, real capture) — results in window.__liveResults</main>
+  <script>
+    // The V3 performance-expectation engine is ON by default and owns the
+    // chord decision (it builds an expectation from the checkpoint).
+    // ?v3=0 exercises the v2 fallback path (chord collection) so both can
+    // be measured in the browser.
+    if (new URLSearchParams(location.search).get('v3') === '0') {
+      window.__SCOREFLOW_FLAGS__ = { ...(window.__SCOREFLOW_FLAGS__ || {}), micEngineV3: false }
+    }
+  </script>
+  <script type="module" src="/scripts/mic-live/live.js"></script>
+</body>
+</html>

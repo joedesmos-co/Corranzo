@@ -57,6 +57,7 @@ import {
   updateMicAttackRelease,
 } from './micAttackLatch.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
+import { chordCollectionEvidenceMidis } from '../microphone-input/micChordPolyphonyEvidence.js'
 import {
   MIC_CALIBRATION_STATUS,
   MIC_CALIBRATION_STATUS_LABELS,
@@ -972,6 +973,23 @@ export default function useWaitForYouMicInput({
         return
       }
 
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch: the
+      // v2 score-informed engine reports several expected tones in the same
+      // frame. The monophonic-only guards below dropped those frames before
+      // the chord collection could use them, so a real three-note chord never
+      // completed (browser-measured on the real C-major triad).
+      //
+      // The evidence is consumed ONLY by the chord collection — the V3-off /
+      // no-expectation fallback path. When V3 owns the decision (the default)
+      // the shipped behaviour is unchanged.
+      //
+      // Every fed tone is an EXPECTED pitch (the v2 scorer only scores
+      // expected notes), so this cannot introduce a non-expected tone.
+      const chordPolyphonicEvidence =
+        isMicChordCollection && !(micEngineV3Enabled && performanceExpectation)
+          ? chordCollectionEvidenceMidis(frame, expectedMidis)
+          : []
+
       const recognitionTimeMs = performanceMode === PERFORMANCE_MODE.PLAY_ALONG
         ? Math.max(0, Number(performanceTimeMs) || 0)
         : timestampMs
@@ -1008,8 +1026,13 @@ export default function useWaitForYouMicInput({
             })
             musicalTimingRef.current = timingOnly.state
           }
-          resetMatchConfirm()
-          return
+          // A ringing previous note must not swallow POLYPHONIC chord
+          // evidence: the collection's own per-tone stable-hit logic decides
+          // whether the chord is really there.
+          if (!chordPolyphonicEvidence.length) {
+            resetMatchConfirm()
+            return
+          }
         }
       }
 
@@ -1117,7 +1140,17 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      if ((frame.midi == null || !frame.gateOpen) && !guitarShapeQuietCollect && !rollingChordQuietCollect) {
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch (the
+      // v2 score-informed engine reports several expected tones at once). The
+      // old monophonic-only guard dropped those frames before the chord
+      // collection could use them, so real chords never completed
+      // (browser-measured on the real C-major triad).
+      if (
+        (frame.midi == null || !frame.gateOpen) &&
+        !chordPolyphonicEvidence.length &&
+        !guitarShapeQuietCollect &&
+        !rollingChordQuietCollect
+      ) {
         return
       }
 
@@ -1133,7 +1166,31 @@ export default function useWaitForYouMicInput({
       // sequential collector only when V3 is disabled or an expectation could
       // not be constructed, so the rollback path remains operational.
       if (isMicChordCollection && !v3Evaluation) {
-        const sequencePreview = evaluateMicMatch(frame.midi)
+        // The collection now consumes the v2 POLYPHONIC evidence for this
+        // frame (plus the monophonic pitch): the collection accumulates
+        // expected tones over a window, but it used to be fed ONE pitch per
+        // frame, so a real three-note chord never completed (browser-measured
+        // on the real C-major triad).
+        // Every fed tone is an EXPECTED pitch (the v2 scorer only scores
+        // expected notes), so the wrong-streak protection is unchanged.
+        const evidenceMidis = chordCollectionEvidenceMidis(frame, expectedMidis)
+        const playedMidis = evidenceMidis.length ? evidenceMidis : [frame.midi]
+        let sequencePreview = null
+        for (const playedMidi of playedMidis) {
+          const preview = evaluateMicMatch(playedMidi)
+          if (!preview) {
+            continue
+          }
+          // A complete chord wins immediately; otherwise keep the most
+          // informative outcome (progress beats wrong).
+          if (preview.outcome === MATCH_OUTCOME.COMPLETE) {
+            sequencePreview = preview
+            break
+          }
+          if (!sequencePreview || preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS) {
+            sequencePreview = preview
+          }
+        }
         matchResultForTrace = sequencePreview
         if (!sequencePreview) {
           return
@@ -1149,10 +1206,19 @@ export default function useWaitForYouMicInput({
         }
         if (sequencePreview.outcome === MATCH_OUTCOME.COMPLETE) {
           const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+          // A chord cannot be confirmed by MONOPHONIC clarity: the
+          // autocorrelation clarity of three simultaneous tones is low by
+          // construction, so the old gate rejected every real chord
+          // (browser-measured: the collection reaches "3/3 matched" and the
+          // checkpoint never advances). The collection's own per-tone stable
+          // hits plus the wrong-streak limit ARE the confidence for a chord;
+          // the key must also be stable, so it is built from the evidence set
+          // instead of the fluctuating monophonic pitch.
+          const chordEvidenceKey = [...new Set(evidenceMidis)].sort((left, right) => left - right).join(',')
           if (
             confirmConfidentMatch(
-              `${currentCheckpoint.id}:sequence:${frame.midi}`,
-              frameConfident,
+              `${currentCheckpoint.id}:sequence:${chordEvidenceKey}`,
+              frameConfident || (chordPolyphonicEvidence.length > 0 && isMusicalMicFrame(frame)),
               { pitchCents, threshold: 1 },
             )
           ) {
