@@ -113,7 +113,17 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
  * long recording is never silently truncated (Phase 7).
  */
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
-  const { targetPart, difficulty, title, excerpt = null, tempoOverride = null } = options
+  const {
+    targetPart, difficulty, title, excerpt = null, tempoOverride = null,
+    // The onset-corroboration gate: it drops a short transcribed note that no
+    // spectral-flux detector heard attack. Measured on real recordings it
+    // HURTS (-0.036 event F1 on the five GuitarSet performances, and it
+    // deletes 37 genuine notes on the densest one), because the flux
+    // detector misses a soft pick and the gate then drops a REAL note. The
+    // default follows the real recordings; `corroborateNotes: true`
+    // reproduces the older behaviour.
+    corroborateNotes = false,
+  } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
@@ -192,6 +202,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     // M3: reviewer's tempo correction propagates to beats -> quantization ->
     // arrangement -> MusicXML -> preview -> practice checkpoints.
     tempoOverride: Number.isFinite(tempoOverride) && tempoOverride > 0 ? tempoOverride : null,
+    corroborateNotes,
   })
   analysis.stereo = stereoSlice
     ? {
