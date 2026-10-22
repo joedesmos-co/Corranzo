@@ -826,3 +826,40 @@ production hybrid should use pdfjs-dist exclusively.
 Remaining: fret-to-string assignment needs the actual notehead/staff
 geometry; measure/rhythm reconstruction needs the TAB system's barlines;
 multi-page and chord handling need testing on real multi-page scores.
+
+### R22 — COMPLETE PDF -> TAB -> MusicXML, reference-scored (M1-M5)
+tools/guitar-vision/proof-pdf-tab.py: end-to-end pipeline using
+pdfjs-dist only (Apache 2.0, no PyMuPDF):
+  extract (pdfjs text + raster) -> 6-line TAB staff geometry -> string/
+  fret assignment -> measure ownership from visible barlines -> MusicXML
+  (explicit TAB clef + 6 staff lines).
+No SVG metadata, viewBox, fixture manifests, reference MusicXML or GT
+coordinates at inference. Only the PDF's own text layer + pixels.
+
+REFERENCE-SCORED RESULTS (exact string+fret events vs reference MusicXML):
+  guitar-paired-chords-vector : 116/116  P 1.00 R 1.00 F1 1.00  8/8 measures
+  guitar-tab-sparse-vector    :  32/32   P 1.00 R 1.00 F1 1.00  8/8 measures
+  guitar-techniques-paired    :  32/32   P 1.00 R 1.00 F1 1.00  8/8 measures
+  guitar-standard-chords      :   0 pred / 0 ref -> correctly abstains (no TAB)
+  guitar-paired-scan (scanned):   0 pred / 116 ref -> abstains; raster
+                                fallback required (text layer absent)
+
+Key discriminators that made this work (all data-driven):
+1. Isolated 6-line groups are ambiguous by one line; choose the group
+   with the LOWEST total digit-to-line residual (a one-line shift still
+   "aligns" but with larger residuals).
+2. Measure numbers are engraved in a different font/size from fret
+   digits; keep the dominant (font, size) cluster of digit spans.
+3. Barlines: cover >= 0.75 of the staff span, merged within 15px (repeat
+   barlines print as two verticals); the LAST barline closes the final
+   measure, so measures = bars - 1.
+4. Measures are numbered per staff from its own barlines then offset by
+   the measures spent on earlier staves (reading order).
+
+RHYTHM: the text layer carries no durations. Every note is emitted with
+an explicit default duration and the summary records
+`rhythm_recovered: false`. We do NOT claim rhythmic accuracy.
+
+Remaining blockers: canon-in-d style PDFs (stock-photo header, segmented
+staff lines, chord symbols) defeat contiguous-run line detection; raster
+fallback still has the native-font detector gap.

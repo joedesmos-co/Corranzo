@@ -1,0 +1,72 @@
+{
+ "events_pred": 116,
+ "events_ref": 116,
+ "exact_string_fret_tp": 116,
+ "fp": 0,
+ "fn": 0,
+ "precision": 1.0,
+ "recall": 1.0,
+ "f1": 1.0,
+ "measures_pred": 8,
+ "measures_ref": 8,
+ "measures_exact": 8,
+ "measure_exactness": 1.0,
+ "per_measure": {
+  "1": {
+   "tp": 10,
+   "fp": 0,
+   "fn": 0,
+   "pred": 10,
+   "ref": 10
+  },
+  "2": {
+   "tp": 13,
+   "fp": 0,
+   "fn": 0,
+   "pred": 13,
+   "ref": 13
+  },
+  "3": {
+   "tp": 16,
+   "fp": 0,
+   "fn": 0,
+   "pred": 16,
+   "ref": 16
+  },
+  "4": {
+   "tp": 19,
+   "fp": 0,
+   "fn": 0,
+   "pred": 19,
+   "ref": 19
+  },
+  "5": {
+   "tp": 10,
+   "fp": 0,
+   "fn": 0,
+   "pred": 10,
+   "ref": 10
+  },
+  "6": {
+   "tp": 13,
+   "fp": 0,
+   "fn": 0,
+   "pred": 13,
+   "ref": 13
+  },
+  "7": {
+   "tp": 16,
+   "fp": 0,
+   "fn": 0,
+   "pred": 16,
+   "ref": 16
+  },
+  "8": {
+   "tp": 19,
+   "fp": 0,
+   "fn": 0,
+   "pred": 19,
+   "ref": 19
+  }
+ }
+}

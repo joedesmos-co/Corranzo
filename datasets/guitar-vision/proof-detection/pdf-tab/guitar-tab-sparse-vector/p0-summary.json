@@ -1,0 +1,54 @@
+{
+ "pdf": "benchmarks/omr-fixtures/guitar-tab-sparse-vector/guitar-tab-sparse-vector.pdf",
+ "page": 0,
+ "dpi": 150,
+ "text_items": 61,
+ "staff_bands": 13,
+ "tab_staves": [
+  {
+   "top": 347.0,
+   "bot": 431.0,
+   "gap": 16.8,
+   "digit_support": 16,
+   "aligned": 16,
+   "resid": 48.600000000000136
+  },
+  {
+   "top": 847.0,
+   "bot": 931.0,
+   "gap": 16.8,
+   "digit_support": 16,
+   "aligned": 16,
+   "resid": 48.59999999999991
+  }
+ ],
+ "barlines_per_staff": {
+  "0": [
+   145,
+   399,
+   653,
+   907,
+   1161
+  ],
+  "1": [
+   145,
+   399,
+   653,
+   907,
+   1161
+  ]
+ },
+ "events": 32,
+ "events_by_measure": {
+  "1": 4,
+  "2": 4,
+  "3": 4,
+  "4": 4,
+  "5": 4,
+  "6": 4,
+  "7": 4,
+  "8": 4
+ },
+ "rhythm_recovered": false,
+ "rhythm_note": "PDF text layer carries fret digits, not durations; all notes are emitted with an explicit default duration."
+}

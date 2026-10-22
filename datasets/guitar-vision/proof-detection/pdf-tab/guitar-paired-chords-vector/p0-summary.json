@@ -1,0 +1,54 @@
+{
+ "pdf": "benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf",
+ "page": 0,
+ "dpi": 150,
+ "text_items": 259,
+ "staff_bands": 23,
+ "tab_staves": [
+  {
+   "top": 497.0,
+   "bot": 581.0,
+   "gap": 16.8,
+   "digit_support": 58,
+   "aligned": 58,
+   "resid": 176.64999999999964
+  },
+  {
+   "top": 1091.0,
+   "bot": 1174.5,
+   "gap": 16.7,
+   "digit_support": 58,
+   "aligned": 58,
+   "resid": 180.75000000000705
+  }
+ ],
+ "barlines_per_staff": {
+  "0": [
+   145,
+   399,
+   653,
+   907,
+   1161
+  ],
+  "1": [
+   145,
+   399,
+   653,
+   907,
+   1161
+  ]
+ },
+ "events": 116,
+ "events_by_measure": {
+  "1": 10,
+  "2": 13,
+  "3": 16,
+  "4": 19,
+  "5": 10,
+  "6": 13,
+  "7": 16,
+  "8": 19
+ },
+ "rhythm_recovered": false,
+ "rhythm_note": "PDF text layer carries fret digits, not durations; all notes are emitted with an explicit default duration."
+}
