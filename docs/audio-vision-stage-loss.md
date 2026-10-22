@@ -57,22 +57,50 @@ node --expose-gc scripts/audio-vision-real-acceptance.mjs   # real takes, A/B
 
 ### 1. The onset-corroboration gate is OFF by default
 
-The gate drops a short note that has no detected attack. On the synthesized
-reference that is right (+0.08 event F1 on the transcription). On real
-recordings it is wrong: the spectral-flux detector misses soft picking, so the
-gate deletes real notes.
+The gate drops a short transcribed note that has no detected attack. On the
+synthesized reference that is right (+0.08 event F1 on the transcription). On
+real recordings it is wrong: the spectral-flux detector misses soft picking,
+so the gate deletes REAL notes.
 
-| corpus | gate ON | gate OFF | |
-|---|---|---|---|
-| GuitarSet arrangements, event F1 | 0.667 | **0.692** | +0.025 |
-| GuitarSet arrangements, invented rate | 0.133 | **0.128** | better |
-| mic-real arrangements, event F1 | 0.519 | **0.535** | +0.016 |
-| mic-real arrangements, invented rate | 0.195 | 0.228 | worse on 3 s probes |
-| synthesized reference, event F1 | 0.696 | 0.700 | equal |
+The evidence is unambiguous - on **every** real performance the gate drops
+notes and the score gets worse:
 
-The arrangement-grade evidence (the real takes) improves on both metrics; the
-3-second detection probes trade a little invented-rate for a better F1. The
-default follows the real takes.
+| GuitarSet take | notes before the gate | notes after | event F1 before | event F1 after |
+|---|---|---|---|---|
+| jazz2-solo | 102 | 80 | 0.833 | **0.772** |
+| jazz1-solo | 66 | 51 | 0.916 | **0.828** |
+| ss3-comp | 246 | 207 | 0.684 | **0.665** |
+| bn2-comp | 225 | 182 | 0.741 | **0.694** |
+| funk3-comp | 399 | 352 | 0.759 | **0.749** |
+
+With the gate off, on the real recordings:
+
+| metric | GuitarSet (5 real takes) | mic-real (49 real clips) |
+|---|---|---|
+| arrangement **event F1** | 0.656 -> **0.692** (+0.036) | 0.519 -> **0.535** (+0.015) |
+| **melody** anchor recall | 0.624 -> **0.722** (+0.098) | 0.515 -> **0.609** (+0.094) |
+| **bass** anchor recall | 0.735 -> **0.847** (+0.112) | 0.632 -> **0.709** (+0.078) |
+| duration MAE | 121 ms -> 120 ms (flat) | 316 ms -> **295 ms** (-21 ms) |
+| invented-note rate | 0.109 -> 0.128 (-0.019) | 0.195 -> 0.228 (-0.034) |
+| note density | 3.91 -> 4.71 notes/s | 4.16 -> 4.90 notes/s |
+
+The melody and the bass - the two things a musician listens for - are
+measurably better, and the event F1 rises on both corpora. The honest cost:
+the gate was also removing some invented notes, so the invented rate and the
+density rise a little (and on the dense comps the arrangement gets busier).
+The trade is taken deliberately and recorded, because a deleted real note
+cannot be recovered by the reader, while an extra invented note is visible in
+the review panel and can be deleted by the user.
+
+The guitar path (solo guitar, Intermediate, the real-acceptance harness)
+improves as well, but less: event F1 0.667 -> 0.672, the invented rate 0.133
+-> 0.127, the melody recall unchanged at 0.722. The big piano-path gains
+above come from the two-hand arrangement: with the gate on, deleted guitar
+notes left the melody without its notes or pushed it into the wrong hand.
+
+The synthesized reference is the one place the gate still helps (its extra
+notes really are artifacts). It is kept as a reference, not as the arbiter:
+the product's input is a real recording.
 
 ### 2. Two candidate improvements were measured and REJECTED
 

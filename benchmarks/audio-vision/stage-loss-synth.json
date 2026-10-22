@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T21:39:24.448Z",
+  "generatedAt": "2026-10-22T12:52:28.390Z",
   "onsetTolerance": 0.12,
   "sources": "synth",
   "rows": [
@@ -10,91 +10,91 @@
       "truthNotes": 51,
       "melodyAnchors": 22,
       "s0": {
-        "predicted": 105,
+        "predicted": 106,
         "reference": 51,
         "matched": 51,
-        "falsePositives": 54,
+        "falsePositives": 55,
         "missed": 0,
-        "pitchPrecision": 0.486,
+        "pitchPrecision": 0.481,
         "pitchRecall": 1,
-        "eventF1": 0.654,
+        "eventF1": 0.65,
         "onsetMaeMs": 4,
         "onsetMedianMs": 3,
-        "durationMaeMs": 371,
-        "notes": 105
+        "durationMaeMs": 314,
+        "notes": 106
       },
       "s1": {
-        "predicted": 89,
+        "predicted": 88,
         "reference": 51,
-        "matched": 47,
-        "falsePositives": 42,
-        "missed": 4,
-        "pitchPrecision": 0.528,
-        "pitchRecall": 0.922,
-        "eventF1": 0.671,
-        "onsetMaeMs": 6,
+        "matched": 48,
+        "falsePositives": 40,
+        "missed": 3,
+        "pitchPrecision": 0.545,
+        "pitchRecall": 0.941,
+        "eventF1": 0.691,
+        "onsetMaeMs": 7,
         "onsetMedianMs": 3,
-        "durationMaeMs": 396,
-        "suppressed": 16
+        "durationMaeMs": 364,
+        "suppressed": 18
       },
       "suppressionAblation": {
         "off": {
-          "predicted": 105,
+          "predicted": 106,
           "reference": 51,
           "matched": 51,
-          "falsePositives": 54,
+          "falsePositives": 55,
           "missed": 0,
-          "pitchPrecision": 0.486,
+          "pitchPrecision": 0.481,
           "pitchRecall": 1,
-          "eventF1": 0.654,
+          "eventF1": 0.65,
           "onsetMaeMs": 4,
           "onsetMedianMs": 3,
-          "durationMaeMs": 371
+          "durationMaeMs": 314
         },
         "ratio1_5": {
-          "predicted": 89,
+          "predicted": 88,
           "reference": 51,
-          "matched": 47,
-          "falsePositives": 42,
-          "missed": 4,
-          "pitchPrecision": 0.528,
-          "pitchRecall": 0.922,
-          "eventF1": 0.671,
-          "onsetMaeMs": 6,
+          "matched": 48,
+          "falsePositives": 40,
+          "missed": 3,
+          "pitchPrecision": 0.545,
+          "pitchRecall": 0.941,
+          "eventF1": 0.691,
+          "onsetMaeMs": 7,
           "onsetMedianMs": 3,
-          "durationMaeMs": 396
+          "durationMaeMs": 364
         },
         "ratio3": {
-          "predicted": 105,
+          "predicted": 106,
           "reference": 51,
           "matched": 51,
-          "falsePositives": 54,
+          "falsePositives": 55,
           "missed": 0,
-          "pitchPrecision": 0.486,
+          "pitchPrecision": 0.481,
           "pitchRecall": 1,
-          "eventF1": 0.654,
+          "eventF1": 0.65,
           "onsetMaeMs": 6,
           "onsetMedianMs": 3,
-          "durationMaeMs": 392
+          "durationMaeMs": 358
         },
         "ratio6": {
-          "predicted": 105,
+          "predicted": 106,
           "reference": 51,
           "matched": 51,
-          "falsePositives": 54,
+          "falsePositives": 55,
           "missed": 0,
-          "pitchPrecision": 0.486,
+          "pitchPrecision": 0.481,
           "pitchRecall": 1,
-          "eventF1": 0.654,
+          "eventF1": 0.65,
           "onsetMaeMs": 6,
           "onsetMedianMs": 3,
-          "durationMaeMs": 392
+          "durationMaeMs": 358
         },
         "damage": {
           "ratio1_5": {
-            "dropped": 16,
-            "droppedGenuine": 4,
-            "droppedInvented": 12
+            "dropped": 18,
+            "droppedGenuine": 3,
+            "droppedInvented": 15
           },
           "ratio3": {
             "dropped": 0,
@@ -110,17 +110,17 @@
       },
       "cleanupAblation": {
         "off": {
-          "predicted": 89,
+          "predicted": 88,
           "reference": 51,
-          "matched": 47,
-          "falsePositives": 42,
-          "missed": 4,
-          "pitchPrecision": 0.528,
-          "pitchRecall": 0.922,
-          "eventF1": 0.671,
-          "onsetMaeMs": 6,
+          "matched": 48,
+          "falsePositives": 40,
+          "missed": 3,
+          "pitchPrecision": 0.545,
+          "pitchRecall": 0.941,
+          "eventF1": 0.691,
+          "onsetMaeMs": 7,
           "onsetMedianMs": 3,
-          "durationMaeMs": 396
+          "durationMaeMs": 364
         },
         "on": {
           "predicted": 72,
@@ -132,28 +132,29 @@
           "pitchRecall": 0.902,
           "eventF1": 0.748,
           "onsetMaeMs": 4,
-          "onsetMedianMs": 3,
-          "durationMaeMs": 342
+          "onsetMedianMs": 4,
+          "durationMaeMs": 292
         },
-        "removed": 17,
-        "droppedGenuine": 2,
-        "droppedInvented": 15
+        "removed": 16,
+        "droppedGenuine": 3,
+        "droppedInvented": 13
       },
+      "corroborate": true,
       "s1b": {
         "predicted": 72,
         "reference": 51,
-        "matched": 47,
-        "falsePositives": 25,
-        "missed": 4,
-        "pitchPrecision": 0.653,
-        "pitchRecall": 0.922,
-        "eventF1": 0.764,
-        "onsetMaeMs": 6,
+        "matched": 48,
+        "falsePositives": 24,
+        "missed": 3,
+        "pitchPrecision": 0.667,
+        "pitchRecall": 0.941,
+        "eventF1": 0.78,
+        "onsetMaeMs": 7,
         "onsetMedianMs": 3,
-        "durationMaeMs": 396,
+        "durationMaeMs": 364,
         "notes": 72,
         "falsePositiveKinds": {
-          "harmonic": 6,
+          "harmonic": 5,
           "duplicate": 0,
           "other": 18
         }
@@ -161,15 +162,15 @@
       "s2": {
         "predicted": 72,
         "reference": 51,
-        "matched": 47,
-        "falsePositives": 25,
-        "missed": 4,
-        "pitchPrecision": 0.653,
-        "pitchRecall": 0.922,
-        "eventF1": 0.764,
+        "matched": 48,
+        "falsePositives": 24,
+        "missed": 3,
+        "pitchPrecision": 0.667,
+        "pitchRecall": 0.941,
+        "eventF1": 0.78,
         "onsetMaeMs": 33,
         "onsetMedianMs": 24,
-        "durationMaeMs": 396,
+        "durationMaeMs": 365,
         "notes": 72,
         "gridShiftMs": 0
       },
@@ -180,7 +181,7 @@
           "anchors": 22
         },
         "chordWindows": 40,
-        "chordsWithHeardVoicing": 35,
+        "chordsWithHeardVoicing": 36,
         "bassFrames": 516,
         "sections": 2,
         "tempoBpm": 99,
@@ -204,7 +205,7 @@
                 "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 171
+                "durationMaeMs": 134
               },
               "on": {
                 "predicted": 43,
@@ -217,22 +218,22 @@
                 "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 149
+                "durationMaeMs": 160
               },
-              "changed": 6
+              "changed": 8
             },
             "s4": {
-              "predicted": 53,
+              "predicted": 54,
               "reference": 51,
-              "matched": 38,
+              "matched": 39,
               "falsePositives": 15,
-              "missed": 13,
-              "pitchPrecision": 0.717,
-              "pitchRecall": 0.745,
-              "eventF1": 0.731,
-              "onsetMaeMs": 35,
-              "onsetMedianMs": 36,
-              "durationMaeMs": 270
+              "missed": 12,
+              "pitchPrecision": 0.722,
+              "pitchRecall": 0.765,
+              "eventF1": 0.743,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 24,
+              "durationMaeMs": 300
             },
             "s5": {
               "predicted": 43,
@@ -245,7 +246,7 @@
               "eventF1": 0.681,
               "onsetMaeMs": 33,
               "onsetMedianMs": 30,
-              "durationMaeMs": 171
+              "durationMaeMs": 134
             },
             "melodyAnchorRecall": {
               "recall": 0.955,
@@ -263,7 +264,7 @@
             "inventedRate": 0.209,
             "handAccuracy": 1,
             "tinyDurations": 0,
-            "ledgerRisk": 1,
+            "ledgerRisk": 3,
             "validity": {
               "measures": 10,
               "overfull": 0,
@@ -288,7 +289,7 @@
                 "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 171
+                "durationMaeMs": 134
               },
               "on": {
                 "predicted": 43,
@@ -301,22 +302,22 @@
                 "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 149
+                "durationMaeMs": 160
               },
-              "changed": 6
+              "changed": 8
             },
             "s4": {
               "predicted": 60,
               "reference": 51,
-              "matched": 40,
-              "falsePositives": 20,
-              "missed": 11,
-              "pitchPrecision": 0.667,
-              "pitchRecall": 0.784,
-              "eventF1": 0.721,
-              "onsetMaeMs": 36,
-              "onsetMedianMs": 42,
-              "durationMaeMs": 302
+              "matched": 41,
+              "falsePositives": 19,
+              "missed": 10,
+              "pitchPrecision": 0.683,
+              "pitchRecall": 0.804,
+              "eventF1": 0.739,
+              "onsetMaeMs": 35,
+              "onsetMedianMs": 36,
+              "durationMaeMs": 333
             },
             "s5": {
               "predicted": 43,
@@ -329,7 +330,7 @@
               "eventF1": 0.681,
               "onsetMaeMs": 33,
               "onsetMedianMs": 30,
-              "durationMaeMs": 171
+              "durationMaeMs": 134
             },
             "melodyAnchorRecall": {
               "recall": 0.955,
@@ -337,8 +338,8 @@
               "anchors": 22
             },
             "bassAnchorRecall": {
-              "recall": 0.909,
-              "maeMs": 33,
+              "recall": 0.864,
+              "maeMs": 35,
               "anchors": 22
             },
             "xmlNotes": 43,
@@ -347,7 +348,7 @@
             "inventedRate": 0.209,
             "handAccuracy": 1,
             "tinyDurations": 0,
-            "ledgerRisk": 1,
+            "ledgerRisk": 3,
             "validity": {
               "measures": 10,
               "overfull": 0,
@@ -372,7 +373,7 @@
                 "eventF1": 0.748,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 24,
-                "durationMaeMs": 340
+                "durationMaeMs": 285
               },
               "on": {
                 "predicted": 64,
@@ -385,22 +386,22 @@
                 "eventF1": 0.748,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 24,
-                "durationMaeMs": 337
+                "durationMaeMs": 321
               },
-              "changed": 9
+              "changed": 10
             },
             "s4": {
-              "predicted": 67,
+              "predicted": 66,
               "reference": 51,
               "matched": 44,
-              "falsePositives": 23,
+              "falsePositives": 22,
               "missed": 7,
-              "pitchPrecision": 0.657,
+              "pitchPrecision": 0.667,
               "pitchRecall": 0.863,
-              "eventF1": 0.746,
+              "eventF1": 0.752,
               "onsetMaeMs": 34,
               "onsetMedianMs": 30,
-              "durationMaeMs": 369
+              "durationMaeMs": 341
             },
             "s5": {
               "predicted": 64,
@@ -413,7 +414,7 @@
               "eventF1": 0.748,
               "onsetMaeMs": 33,
               "onsetMedianMs": 24,
-              "durationMaeMs": 340
+              "durationMaeMs": 285
             },
             "melodyAnchorRecall": {
               "recall": 1,
@@ -431,7 +432,7 @@
             "inventedRate": 0.266,
             "handAccuracy": 0.926,
             "tinyDurations": 0,
-            "ledgerRisk": 4,
+            "ledgerRisk": 7,
             "validity": {
               "measures": 10,
               "overfull": 0,
@@ -448,58 +449,58 @@
           "easy": {
             "durationAblation": {
               "off": {
-                "predicted": 44,
+                "predicted": 43,
                 "reference": 51,
                 "matched": 32,
-                "falsePositives": 12,
+                "falsePositives": 11,
                 "missed": 19,
-                "pitchPrecision": 0.727,
+                "pitchPrecision": 0.744,
                 "pitchRecall": 0.627,
-                "eventF1": 0.674,
+                "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 171
+                "durationMaeMs": 134
               },
               "on": {
-                "predicted": 44,
+                "predicted": 43,
                 "reference": 51,
                 "matched": 32,
-                "falsePositives": 12,
+                "falsePositives": 11,
                 "missed": 19,
-                "pitchPrecision": 0.727,
+                "pitchPrecision": 0.744,
                 "pitchRecall": 0.627,
-                "eventF1": 0.674,
+                "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 168
+                "durationMaeMs": 179
               },
-              "changed": 3
+              "changed": 5
             },
             "s4": {
               "predicted": 56,
               "reference": 51,
-              "matched": 37,
-              "falsePositives": 19,
-              "missed": 14,
-              "pitchPrecision": 0.661,
-              "pitchRecall": 0.725,
-              "eventF1": 0.692,
-              "onsetMaeMs": 34,
-              "onsetMedianMs": 30,
-              "durationMaeMs": 277
-            },
-            "s5": {
-              "predicted": 44,
-              "reference": 51,
-              "matched": 32,
-              "falsePositives": 12,
-              "missed": 19,
-              "pitchPrecision": 0.727,
-              "pitchRecall": 0.627,
-              "eventF1": 0.674,
+              "matched": 38,
+              "falsePositives": 18,
+              "missed": 13,
+              "pitchPrecision": 0.679,
+              "pitchRecall": 0.745,
+              "eventF1": 0.71,
               "onsetMaeMs": 33,
               "onsetMedianMs": 30,
-              "durationMaeMs": 171
+              "durationMaeMs": 256
+            },
+            "s5": {
+              "predicted": 43,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 11,
+              "missed": 19,
+              "pitchPrecision": 0.744,
+              "pitchRecall": 0.627,
+              "eventF1": 0.681,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 134
             },
             "melodyAnchorRecall": {
               "recall": 0.955,
@@ -511,10 +512,10 @@
               "maeMs": 32,
               "anchors": 22
             },
-            "xmlNotes": 44,
-            "xmlParsedNotes": 106,
-            "densityPerSecond": 1.83,
-            "inventedRate": 0.227,
+            "xmlNotes": 43,
+            "xmlParsedNotes": 104,
+            "densityPerSecond": 1.79,
+            "inventedRate": 0.209,
             "handAccuracy": null,
             "tinyDurations": 0,
             "ledgerRisk": 0,
@@ -532,58 +533,58 @@
           "intermediate": {
             "durationAblation": {
               "off": {
-                "predicted": 44,
+                "predicted": 43,
                 "reference": 51,
                 "matched": 32,
-                "falsePositives": 12,
+                "falsePositives": 11,
                 "missed": 19,
-                "pitchPrecision": 0.727,
+                "pitchPrecision": 0.744,
                 "pitchRecall": 0.627,
-                "eventF1": 0.674,
+                "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 171
+                "durationMaeMs": 134
               },
               "on": {
-                "predicted": 44,
+                "predicted": 43,
                 "reference": 51,
                 "matched": 32,
-                "falsePositives": 12,
+                "falsePositives": 11,
                 "missed": 19,
-                "pitchPrecision": 0.727,
+                "pitchPrecision": 0.744,
                 "pitchRecall": 0.627,
-                "eventF1": 0.674,
+                "eventF1": 0.681,
                 "onsetMaeMs": 33,
                 "onsetMedianMs": 30,
-                "durationMaeMs": 168
+                "durationMaeMs": 179
               },
-              "changed": 3
+              "changed": 5
             },
             "s4": {
-              "predicted": 66,
+              "predicted": 67,
               "reference": 51,
-              "matched": 44,
-              "falsePositives": 22,
-              "missed": 7,
-              "pitchPrecision": 0.667,
-              "pitchRecall": 0.863,
-              "eventF1": 0.752,
-              "onsetMaeMs": 35,
-              "onsetMedianMs": 36,
-              "durationMaeMs": 343
-            },
-            "s5": {
-              "predicted": 44,
-              "reference": 51,
-              "matched": 32,
-              "falsePositives": 12,
-              "missed": 19,
-              "pitchPrecision": 0.727,
-              "pitchRecall": 0.627,
-              "eventF1": 0.674,
+              "matched": 46,
+              "falsePositives": 21,
+              "missed": 5,
+              "pitchPrecision": 0.687,
+              "pitchRecall": 0.902,
+              "eventF1": 0.78,
               "onsetMaeMs": 33,
               "onsetMedianMs": 30,
-              "durationMaeMs": 171
+              "durationMaeMs": 283
+            },
+            "s5": {
+              "predicted": 43,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 11,
+              "missed": 19,
+              "pitchPrecision": 0.744,
+              "pitchRecall": 0.627,
+              "eventF1": 0.681,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 134
             },
             "melodyAnchorRecall": {
               "recall": 0.955,
@@ -595,10 +596,10 @@
               "maeMs": 32,
               "anchors": 22
             },
-            "xmlNotes": 44,
-            "xmlParsedNotes": 106,
-            "densityPerSecond": 1.83,
-            "inventedRate": 0.227,
+            "xmlNotes": 43,
+            "xmlParsedNotes": 104,
+            "densityPerSecond": 1.79,
+            "inventedRate": 0.209,
             "handAccuracy": null,
             "tinyDurations": 0,
             "ledgerRisk": 0,
@@ -616,58 +617,58 @@
           "advanced": {
             "durationAblation": {
               "off": {
-                "predicted": 64,
+                "predicted": 65,
                 "reference": 51,
-                "matched": 44,
-                "falsePositives": 20,
-                "missed": 7,
-                "pitchPrecision": 0.688,
-                "pitchRecall": 0.863,
-                "eventF1": 0.765,
-                "onsetMaeMs": 35,
-                "onsetMedianMs": 36,
-                "durationMaeMs": 343
+                "matched": 46,
+                "falsePositives": 19,
+                "missed": 5,
+                "pitchPrecision": 0.708,
+                "pitchRecall": 0.902,
+                "eventF1": 0.793,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 283
               },
               "on": {
-                "predicted": 64,
+                "predicted": 65,
                 "reference": 51,
-                "matched": 44,
-                "falsePositives": 20,
-                "missed": 7,
-                "pitchPrecision": 0.688,
-                "pitchRecall": 0.863,
-                "eventF1": 0.765,
-                "onsetMaeMs": 35,
-                "onsetMedianMs": 36,
-                "durationMaeMs": 343
+                "matched": 46,
+                "falsePositives": 19,
+                "missed": 5,
+                "pitchPrecision": 0.708,
+                "pitchRecall": 0.902,
+                "eventF1": 0.793,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 313
               },
-              "changed": 4
+              "changed": 5
             },
             "s4": {
-              "predicted": 66,
+              "predicted": 67,
               "reference": 51,
-              "matched": 44,
-              "falsePositives": 22,
-              "missed": 7,
-              "pitchPrecision": 0.667,
-              "pitchRecall": 0.863,
-              "eventF1": 0.752,
-              "onsetMaeMs": 35,
-              "onsetMedianMs": 36,
-              "durationMaeMs": 343
+              "matched": 46,
+              "falsePositives": 21,
+              "missed": 5,
+              "pitchPrecision": 0.687,
+              "pitchRecall": 0.902,
+              "eventF1": 0.78,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 283
             },
             "s5": {
-              "predicted": 64,
+              "predicted": 65,
               "reference": 51,
-              "matched": 44,
-              "falsePositives": 20,
-              "missed": 7,
-              "pitchPrecision": 0.688,
-              "pitchRecall": 0.863,
-              "eventF1": 0.765,
-              "onsetMaeMs": 35,
-              "onsetMedianMs": 36,
-              "durationMaeMs": 343
+              "matched": 46,
+              "falsePositives": 19,
+              "missed": 5,
+              "pitchPrecision": 0.708,
+              "pitchRecall": 0.902,
+              "eventF1": 0.793,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 283
             },
             "melodyAnchorRecall": {
               "recall": 1,
@@ -679,10 +680,10 @@
               "maeMs": 32,
               "anchors": 22
             },
-            "xmlNotes": 64,
-            "xmlParsedNotes": 158,
-            "densityPerSecond": 2.67,
-            "inventedRate": 0.266,
+            "xmlNotes": 65,
+            "xmlParsedNotes": 160,
+            "densityPerSecond": 2.71,
+            "inventedRate": 0.246,
             "handAccuracy": null,
             "tinyDurations": 0,
             "ledgerRisk": 0,
@@ -704,15 +705,15 @@
   "summary": {
     "recordings": 1,
     "s0": {
-      "eventF1": 0.654,
+      "eventF1": 0.65,
       "pitchRecall": 1,
       "onsetMaeMs": 4
     },
     "s1": {
-      "eventF1": 0.671
+      "eventF1": 0.691
     },
     "s2": {
-      "eventF1": 0.764
+      "eventF1": 0.78
     },
     "pianoIntermediate": {
       "eventF1": 0.681,
@@ -720,7 +721,7 @@
       "invented": 0.209
     },
     "guitarIntermediate": {
-      "eventF1": 0.674
+      "eventF1": 0.681
     },
     "xmlValid": true
   }
